@@ -36,6 +36,7 @@
 // 22/02/2004: migrated from LISA-V04
 // 09/08/2004: Removed call by pointer of hadronics classes
 // 09/08/2004: Added MuNuclear interaction
+// 08/12/2005: changed particle construction
 //
 // ********************************************************************
 
@@ -92,21 +93,25 @@ LISAPhysicsList::~LISAPhysicsList()
 #include "G4IonConstructor.hh"
 
 void LISAPhysicsList::ConstructParticle() {
+
+  G4LeptonConstructor lepton;
+  lepton.ConstructParticle();
   
-  G4LeptonConstructor aC1;
-  G4BaryonConstructor aC2;
-  G4MesonConstructor aC3;
-  G4BosonConstructor aC4;
-  G4IonConstructor aC5;
-  G4ShortLivedConstructor aC6;
+  G4BosonConstructor boson;
+  boson.ConstructParticle();
   
-  aC1.ConstructParticle();
-  aC2.ConstructParticle();
-  aC3.ConstructParticle();
-  aC4.ConstructParticle();
-  aC5.ConstructParticle();
-  aC6.ConstructParticle();
+  G4MesonConstructor meson;
+  meson.ConstructParticle();
   
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
+  
+  G4ShortLivedConstructor shortLived;
+  shortLived.ConstructParticle();
+  
+  G4IonConstructor ion;
+  ion.ConstructParticle();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -264,9 +269,11 @@ void LISAPhysicsList::ElectroNuclearPhysics() {
   theHEModel_PN = new G4TheoFSGenerator;
   theCascade_PN = new G4StringChipsParticleLevelInterface;
   theHEModel_PN->SetTransport(theCascade_PN);
-  theHEModel_PN->SetHighEnergyGenerator(&theStringModel_PN);
+  theHEModel_PN->SetHighEnergyGenerator(theStringModel_PN);
   theStringDecay_PN = new G4ExcitedStringDecay(&theFragmentation_PN);
-  theStringModel_PN.SetFragmentationModel(theStringDecay_PN);
+
+  theStringModel_PN = new G4QGSModel<G4GammaParticipants>;
+  theStringModel_PN -> SetFragmentationModel(theStringDecay_PN);
   theHEModel_PN->SetMinEnergy(3.*GeV);
   theHEModel_PN->SetMaxEnergy(100*TeV);
   thePhotoNuclearProcess.RegisterMe(theHEModel_PN);
@@ -326,12 +333,15 @@ void LISAPhysicsList::HadronicPhysics() {
   theHandler->SetMultiFragmentation(theMF);
   theHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theHandler->SetMinEForMultiFrag(3.*MeV);
+
   // pre-equilibrium stage 
   thePreEquilib = new G4PreCompoundModel(theHandler);
   thePreEquilib->SetMaxEnergy(70*MeV);
+
   // a no-cascade generator-precompound interaface
   theCascade = new G4GeneratorPrecompoundInterface;
   theCascade->SetDeExcitation(thePreEquilib);
+
   // QGSP model
   theStringModel = new G4QGSModel<G4QGSParticipants>;
   theHEModel->SetTransport(theCascade);

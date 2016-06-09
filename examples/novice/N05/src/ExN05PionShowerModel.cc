@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.12 2005/06/27 15:28:03 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05PionShowerModel.cc,v 1.14 2005/12/06 10:54:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -37,7 +37,7 @@
 
 #include "G4Colour.hh"
 
-ExN05PionShowerModel::ExN05PionShowerModel(G4String modelName, G4LogicalVolume* envelope)
+ExN05PionShowerModel::ExN05PionShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
   fFakeStep          = new G4Step();
@@ -135,7 +135,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
     {
       z   = G4RandGauss::shoot(0,20*cm);
       r   = G4RandGauss::shoot(0,10*cm);
-      phi = RandFlat::shoot()*twopi;
+      phi = G4UniformRand()*twopi;
       ePoint = showerCenter +
 	z*zShower +
 	r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;

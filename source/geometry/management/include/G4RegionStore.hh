@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.6 2004/09/02 07:49:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RegionStore.hh,v 1.7 2005/08/18 16:51:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4RegionStore
 //
@@ -56,6 +56,7 @@
 
 class G4Region;
 class G4VStoreNotifier;
+class G4VPhysicalVolume;
 
 class G4RegionStore : public std::vector<G4Region*>
 {
@@ -80,7 +81,7 @@ class G4RegionStore : public std::vector<G4Region*>
       // to FALSE. Used by the run manager to notify that the
       // physics table has been updated.
 
-    void UpdateMaterialList();
+    void UpdateMaterialList(G4VPhysicalVolume* currentWorld);
       // Forces recomputation of material lists in all regions
       // in the store.
 
@@ -94,6 +95,11 @@ class G4RegionStore : public std::vector<G4Region*>
 
     virtual ~G4RegionStore();
       // Destructor: takes care to delete allocated regions.
+
+    void SetWorldVolume();
+      // Set a world volume pointer to a region that belongs to it.
+      // Scan over all world volumes.
+      // This method should be exclusively used by G4RunManagerKernel.
 
   protected:
 

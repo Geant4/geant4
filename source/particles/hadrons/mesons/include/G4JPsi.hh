@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.8 2002/12/16 11:15:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4JPsi.hh,v 1.10 2005/01/14 03:49:14 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,49 +31,31 @@
 //
 //      Created,             Hisaya Kurashige, 15 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
-// ------------------------------------------------------------
-
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
+//  New implementation as a utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------
 
 #ifndef G4JPsi_h
 #define G4JPsi_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
-// ###                         JPsi                             ###
+// ###                               JPsi                             ###
 // ######################################################################
 
-class G4JPsi : public G4VMeson
+class G4JPsi : public G4ParticleDefinition
 {
  private:
-   static G4JPsi theJPsi;
-
- private: // constructors are hide as private  
-   G4JPsi(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4JPsi* theInstance;
+   G4JPsi(){}
+   ~G4JPsi(){}
 
  public:
-   virtual ~G4JPsi(){}
-
+   static G4JPsi* Definition();
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
-
 };
 
 #endif

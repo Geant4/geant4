@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.7 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedBox.cc,v 1.11 2005/12/06 09:22:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -33,11 +33,7 @@
 //
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
-//
-// History:
-//
-//   10/11/2004 - Created.
+//   10/11/2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -51,6 +47,14 @@ G4TwistedBox::G4TwistedBox( const G4String& pName,
                                   G4double  pDz )
   : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
                        pDy, pDx, pDx, pDy, pDx, pDx,0. )
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedBox::G4TwistedBox( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 
@@ -77,15 +81,6 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedBox::CreatePolyhedron () const 
-{
-  // Normal box for now!!
-  //
-  return new G4PolyhedronBox (GetDx1(), GetDy1(), GetDz());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

@@ -21,26 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.1 2005/02/04 16:42:37 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisExecutive.hh,v 1.5 2005/11/22 16:57:16 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).
 //
 // Class description
 //
-// Concrete Visualization Manager that implements the virtual function
-//   RegisterGraphicsSystems.  This is executed when you Initialise()
-//   or Initialize() the vis manager.  It exploits C-pre-processor
-//   variables G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles
-//   if environment variables of the same name are set.
+// Concrete Visualization Manager that implements the virtual
+// functions RegisterGraphicsSystems and RegisterModelFactories.  This
+// is executed when you Initialise() or Initialize() the vis manager.
+// It exploits C-pre-processor variables G4VIS_USE_DAWN, etc., which
+// are set by the GNUmakefiles if environment variables of the same
+// name are set.
 //
 // Include this file and write code to instantiate G4VisExecutive just
-//   once as beginning of operations.  Before you compile, set
-//   appropriate environment variables.  If you change your
-//   environment you must force recompilation (the make files will not
-//   detect the need to do this).  Typically, your main program file
-//   will contain:
+// once as beginning of operations.  Before you compile, set
+// appropriate environment variables.  If you change your environment
+// you must force recompilation (the make files will not detect the
+// need to do this).  Typically, your main program file will contain:
 //
 // #ifdef G4VIS_USE
 // #include "G4VisExecutive.hh"
@@ -94,11 +94,11 @@ public: // With description
 
 private:
 
-  void RegisterGraphicsSystems ();
+  void RegisterGraphicsSystems();
+  void RegisterModelFactories();
 
 };
 
 #include "G4VisExecutive.icc"
 
 #endif
-

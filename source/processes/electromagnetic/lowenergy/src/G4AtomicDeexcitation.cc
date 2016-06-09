@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -43,8 +43,8 @@
 #include "G4FluoTransition.hh"
 
 G4AtomicDeexcitation::G4AtomicDeexcitation():
-  minGammaEnergy(250.*eV),
-  minElectronEnergy(250.*eV),
+  minGammaEnergy(100.*eV),
+  minElectronEnergy(100.*eV),
   fAuger(false)
 {}
 
@@ -310,6 +310,9 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
 
       // Now we have that shellnum is the shellIndex of the shell named ShellId
+
+      //      G4cout << " the index of the shell is: "<<shellNum<<G4endl;
+
       // But we have now to select two shells: one for the transition, 
       // and another for the auger emission.
 
@@ -317,6 +320,9 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       G4double partSum = 0;
       const G4AugerTransition* anAugerTransition = 
             transitionManager->ReachableAugerShell(Z,shellNum);
+
+      //      G4cout << " corresponding to the ID: "<< anAugerTransition->FinalShellId() << G4endl;
+
 
       G4int transitionSize = 
             (anAugerTransition->TransitionOriginatingShellIds())->size();
@@ -350,6 +356,27 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
       // Now we have the entire probability of an auger transition for the vacancy 
       // located in shellNum (index of shellId) 
+
+      // AM *********************** F I X E D **************************** AM
+      // Here we duplicate the previous loop, this time looking to the sum of the probabilities 
+      // to be under the random number shoot by G4 UniformRdandom. This could have been done in the 
+      // previuos loop, while integrating the probabilities. There is a bug that will be fixed 
+      // 5 minutes from now: a line:
+      // G4int numberOfPossibleAuger = (anAugerTransition->
+      // AugerTransitionProbabilities(transitionLoopShellId))->size();
+      // to be inserted.
+      // AM *********************** F I X E D **************************** AM
+
+      // Remains to get the same result with a single loop.
+
+      // AM *********************** F I X E D **************************** AM
+      // Another Bug: in EADL Auger Transition are normalized to all the transitions deriving from 
+      // a vacancy in one shell, but no alla of these are present in data tables. So if a transition 
+      // doesn't occur in the maoin onesm a local energy deposition must occur, instead of (like now) 
+      // generating the last transition present in EADL data.
+      // AM *********************** F I X E D **************************** AM
+
+
       G4double totalVacancyAugerProbability = partSum;
 
 
@@ -363,6 +390,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       
       G4int numberOfPossibleAuger = 
 	  (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+      G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {
 
@@ -371,11 +399,9 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
         transitionRandomShellId = *(pos+transitionRandomShellIndex);
         
-        //  G4int transitionRandomShellId = *(anAugerTransition->TransitionOriginatingShellIds())[transitionRandomShellIndex];
-
-
 	augerIndex = 0;
-
+	numberOfPossibleAuger = (anAugerTransition-> 
+				 AugerTransitionProbabilities(transitionRandomShellId))->size();
 
         while (augerIndex < numberOfPossibleAuger) {
 	  G4double thisProb =anAugerTransition->AugerTransitionProbability(augerIndex, 
@@ -383,7 +409,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
           partSum += thisProb;
           
-          if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
+          if (partSum >= (partialProb/totalVacancyAugerProbability) ) {
+	    foundFlag = true;
+	    break;
+	  }
           augerIndex++;
         }
         if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
@@ -391,8 +420,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       }
 
       // Now we have the index of the shell from wich comes the auger electron (augerIndex), 
-      // and the id of the shell, from which the transition e- come (transitionRandomShellid)  
-      
+      // and the id of the shell, from which the transition e- come (transitionRandomShellid)
+      // If no Transition has been found, 0 is returned.  
+
+      if (!foundFlag) {return 0;}      
       
       // Isotropic angular distribution for the outcoming e-
       G4double newcosTh = 1.-2.*G4UniformRand();

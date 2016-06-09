@@ -1,5 +1,5 @@
 
-$Id: History,v 1.52 2005/05/09 13:46:03 gcosmo Exp $
+$Id: History,v 1.55 2005/11/09 15:00:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 09, 2005  G.Cosmo                    geom-bool-V07-01-01
+  - Added fake default constructor for concrete solids types and relevant
+    utility classes, for usage of direct object persistency.
+
+ Sep 15, 2005  V.Grichine                 geom-bool-V07-01-00
+  - Added concrete implementation for GetPointOnSurface() to
+    G4BooleanSolid and G4DisplacedSolid.
+  - Updated unit tests testG4DisplacedSolid and testG4IntersectionSolid.
 
  May 04, 2005  V.Grichine                 geom-bool-V07-00-03
   - Make the new implementation of Inside() with surface-normal for

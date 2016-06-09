@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonMinus.hh,v 1.5 2001/10/15 10:06:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BMesonMinus.hh,v 1.7 2005/01/14 03:49:14 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,45 +31,29 @@
 //
 //      Created,             Hisaya Kurashige, 15 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4BMesonMinus_h
 #define G4BMesonMinus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         BMesonMinus                            ###
 // ######################################################################
 
-class G4BMesonMinus : public G4VMeson
+class G4BMesonMinus : public G4ParticleDefinition
 {
  private:
-   static G4BMesonMinus theBMesonMinus;
-
- private: // constructors are hide as private  
-   G4BMesonMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4BMesonMinus* theInstance;
+   G4BMesonMinus(){}
+   ~G4BMesonMinus(){}
 
  public:
-   virtual ~G4BMesonMinus(){}
-
+   static G4BMesonMinus* Definition();
    static G4BMesonMinus* BMesonMinusDefinition();
    static G4BMesonMinus* BMesonMinus();
 };

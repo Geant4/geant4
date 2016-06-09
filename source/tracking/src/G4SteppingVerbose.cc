@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingVerbose.cc,v 1.16 2004/07/08 03:46:43 amako Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------

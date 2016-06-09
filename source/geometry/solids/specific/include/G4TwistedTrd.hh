@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.2 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTrd.hh,v 1.5 2005/12/05 17:03:34 link Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,31 +58,37 @@
 
 class G4TwistedTrd : public G4VTwistedFaceted
 {
-public:  // with description
+  public:  // with description
 
-  G4TwistedTrd( const G4String& pName,
-                      G4double  pDx1,
-                      G4double  pDx2,
-                      G4double  pDy1, 
-                      G4double  pDy2,
-                      G4double  pDz,
-                      G4double  pPhiTwist );
+    G4TwistedTrd( const G4String& pName,
+                        G4double  pDx1,
+                        G4double  pDx2,
+                        G4double  pDy1, 
+                        G4double  pDy2,
+                        G4double  pDz,
+                        G4double  pPhiTwist );
 
-  virtual ~G4TwistedTrd();
+    virtual ~G4TwistedTrd();
 
-  // accessors
+    // accessors
 
-  inline G4double GetX1HalfLength() const { return GetDx1() ; }
-  inline G4double GetX2HalfLength() const { return GetDx3() ; }
-  inline G4double GetY1HalfLength() const { return GetDy1() ; }
-  inline G4double GetY2HalfLength() const { return GetDy2() ; }
-  inline G4double GetZHalfLength()  const { return GetDz()  ; }
-  inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
+    inline G4double GetX1HalfLength() const { return GetDx1() ; }
+    inline G4double GetX2HalfLength() const { return GetDx3() ; }
+    inline G4double GetY1HalfLength() const { return GetDy1() ; }
+    inline G4double GetY2HalfLength() const { return GetDy2() ; }
+    inline G4double GetZHalfLength()  const { return GetDz()  ; }
+    inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
-  G4GeometryType GetEntityType() const;
-  G4Polyhedron*  CreatePolyhedron   () const;
+    G4GeometryType GetEntityType() const;
 
-  std::ostream&  StreamInfo(std::ostream& os) const;
+    std::ostream&  StreamInfo(std::ostream& os) const;
+
+  public:  // without description
+
+    G4TwistedTrd(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
 } ;
 

@@ -1,12 +1,11 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-01 $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 12 *****
 
@@ -17,7 +16,7 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
  Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
@@ -54,6 +53,19 @@ G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 7
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /tracking/verbose 0
 #
 /testem/phys/setGCut 2.20 mm
@@ -63,8 +75,6 @@ Registering graphics systems...
 /run/initialize
 
  The Box is 10 m   of Aluminium
-
-phot:  Total cross sections from Sandia parametrisation. 
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /process/eLoss/StepFunction 0.183 1.70 micrometer
@@ -87,19 +97,22 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileName run0 
 /run/beamOn 200
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -125,13 +138,13 @@ brem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -151,7 +164,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -189,9 +202,9 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
  Production cuts :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
 
@@ -223,7 +236,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=57.93s Real=89.08s Sys=22.52s
+  User=143.37s Real=168.97s Sys=23.87s
 
  ======================== run summary ======================
 
@@ -231,47 +244,50 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.795 MeV
+ total energy deposit: 99.809 MeV
 
- nb tracks/event   neutral:     27.890   charged:    696.070
- nb  steps/event   neutral:    144.765   charged:   3551.890
+ nb tracks/event   neutral:     27.575   charged:    693.310
+ nb  steps/event   neutral:    138.115   charged:   3828.275
 
  nb of process calls per event: 
-          eIoni        brem       compt        phot        conv     annihilTransportation
-       3524.220      26.220     116.875      25.390       1.445       1.445       1.060
+          eIoni        brem         msc        phot       compt        conv     annihilTransportation
+       3144.490      25.910     656.495      25.180     110.540       1.380       1.380       1.015
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.931 cm    rms = 3.737 cm 
- proj Range = 9.336 cm    rms = 3.427 cm 
- proj/CSDA  = 0.854
- transverse dispersion at end = 1.736 cm 
-
- mass CSDA Range from simulation = 29.513 g/cm2
-               from PhysicsTable = 85.395 g/cm2
----------------------------------------------------------
+ CSDA Range = 10.761 cm    rms = 3.879 cm 
+ proj Range = 9.255 cm    rms = 3.650 cm 
+ proj/CSDA  = 0.860
+ transverse dispersion at end = 1.741 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1645379266, 900793937
+ Current couple of seeds = 1674441358, 1865268964
 ----------------------------------------
+
+ mass CSDA Range from simulation = 29.055 g/cm2
+               from PhysicsTable = 85.395 g/cm2
+---------------------------------------------------------
 #
 /testem/phys/setCuts 1 mm
 /testem/histo/setFileName run1
 /run/beamOn 200
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.0219981 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -297,13 +313,13 @@ brem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -323,7 +339,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -361,9 +377,9 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Materials : Aluminium 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -382,7 +398,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1645379266, 900793937
+ Current couple of seeds = 1674441358, 1865268964
 ----------------------------------------
 Start Run processing.
 
@@ -390,7 +406,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=20.13s Real=32.71s Sys=10.86s
+  User=45.28s Real=58.43s Sys=11.47s
 
  ======================== run summary ======================
 
@@ -398,30 +414,30 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.792 MeV
+ total energy deposit: 99.789 MeV
 
- nb tracks/event   neutral:     28.325   charged:    151.015
- nb  steps/event   neutral:    144.100   charged:   1127.410
+ nb tracks/event   neutral:     27.115   charged:    143.160
+ nb  steps/event   neutral:    136.270   charged:   1161.905
 
  nb of process calls per event: 
-           brem       eIoni        phot       compt        conv     annihilTransportation
-         26.780    1099.265      25.910     115.775       1.365       1.365       1.050
+           brem       eIoni       compt        phot         msc        conv     annihilTransportation
+         25.585    1022.685     109.155      24.920     112.355       1.280       1.280       0.915
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.607 cm    rms = 3.783 cm 
- proj Range = 9.158 cm    rms = 3.553 cm 
- proj/CSDA  = 0.863
- transverse dispersion at end = 1.603 cm 
-
- mass CSDA Range from simulation = 28.639 g/cm2
-               from PhysicsTable = 67.818 g/cm2
----------------------------------------------------------
+ CSDA Range = 11.292 cm    rms = 3.464 cm 
+ proj Range = 9.702 cm    rms = 3.120 cm 
+ proj/CSDA  = 0.859
+ transverse dispersion at end = 1.774 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 917965385, 895770852
+ Current couple of seeds = 1519444746, 431167489
 ----------------------------------------
+
+ mass CSDA Range from simulation = 30.488 g/cm2
+               from PhysicsTable = 67.818 g/cm2
+---------------------------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

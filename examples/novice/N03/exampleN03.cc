@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.22 2005/05/26 12:21:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: exampleN03.cc,v 1.25 2005/12/06 10:48:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
@@ -97,8 +97,9 @@ int main(int argc,char** argv) {
     
   // set user action classes
   runManager->SetUserAction(new ExN03PrimaryGeneratorAction(detector));
-  runManager->SetUserAction(new ExN03RunAction);
-  ExN03EventAction* eventaction = new ExN03EventAction;
+  ExN03RunAction* runaction = new ExN03RunAction;  
+  runManager->SetUserAction(runaction);
+  ExN03EventAction* eventaction = new ExN03EventAction(runaction);
   runManager->SetUserAction(eventaction);
   runManager->SetUserAction(new ExN03SteppingAction(detector, eventaction));
   
@@ -121,6 +122,9 @@ int main(int argc,char** argv) {
     }
   else           // Batch mode
     { 
+#ifdef G4VIS_USE
+      visManager->SetVerboseLevel("quiet");
+#endif
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochNoDeltaModel.hh,v 1.2 2005/05/18 11:02:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BetheBlochNoDeltaModel.hh,v 1.5 2005/10/29 20:09:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,7 +54,7 @@ class G4BetheBlochNoDeltaModel : public G4BetheBlochModel
 
 public:
 
-  G4BetheBlochNoDeltaModel(G4double ch = 1.0, const G4ParticleDefinition* p = 0,
+  G4BetheBlochNoDeltaModel(const G4ParticleDefinition* p = 0,
     const G4String& nam = "BetheBlochNoD");
 
   virtual ~G4BetheBlochNoDeltaModel();
@@ -76,30 +76,16 @@ private:
   G4BetheBlochNoDeltaModel & operator=(const  G4BetheBlochNoDeltaModel &right);
   G4BetheBlochNoDeltaModel(const  G4BetheBlochNoDeltaModel&);
 
-  G4double mcharge2;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4BetheBlochNoDeltaModel::G4BetheBlochNoDeltaModel(G4double ch,
-         const G4ParticleDefinition*p, const G4String& nam) :
-	 G4BetheBlochModel(p, nam), mcharge2(ch*ch)
-{}
-
-inline G4BetheBlochNoDeltaModel::~G4BetheBlochNoDeltaModel()
-{}
 
 inline G4double G4BetheBlochNoDeltaModel::ComputeDEDXPerVolume(
                             const G4Material* material,
 			    const G4ParticleDefinition* pd,
                             G4double kinEnergy, G4double)
 {
-  G4double dedx = G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
-  if(mcharge2 > 2.0) {
-    G4double m = pd->GetPDGMass();
-    dedx *= mcharge2*kinEnergy*(kinEnergy + 2.0*m)/((kinEnergy + m)*(kinEnergy + m));
-  }
+  G4double dedx = G4BetheBlochModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
   return dedx;
 }
 

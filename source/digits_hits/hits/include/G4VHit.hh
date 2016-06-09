@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VHit.hh,v 1.2 2005/06/01 17:15:35 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4VHit_h

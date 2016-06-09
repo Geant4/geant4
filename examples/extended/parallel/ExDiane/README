@@ -37,7 +37,7 @@ to know details about the functionality of the application:
     G4SYSTEM = linux-g++                                               
 
  - other environment variables which need to be set:                   
-    G4LEDATA: points to low energy data base - G4EMLOW2.3              
+    G4LEDATA: points to low energy data base - G4EMLOW3.0              
 
  - download DIANE
     You need to have python 2.2 or greater.
@@ -49,12 +49,13 @@ to know details about the functionality of the application:
     http://cern.ch/diane/download.html
 
   * MANUAL INSTALLATION OF DIANE
-    Make sure that you have AIDA 3.2.1, PI 1.2.1. Download them from
+    Make sure that you have AIDA 3.2.1, PI 1.3.3. Download them from
       http://aida.freehep.org/
       http://www.cern.ch/PI
-    Download DIANE executing this command:
-    > python2 diane.installation.manager DIANE-1.0.0 download
 
+    Download DIANE from www.cern.ch/diane
+    Documentation about how to "dianize" a Geant4 application can be found
+    at www.cern.ch/diane
 ------------------------------------------------------------------------
 ----> 3.How to compile the example.
                                        
@@ -91,4 +92,4 @@ Authors: Susanna Guatelli, Kuba Moscicki
 for comments, advices, doubts and questions: 
 guatelli@ge.infn.it, Jakub.Moscicki@cern.ch
 
-- last modified: Susanna Guatelli and Kuba Moscicki 25/5/2004
+- last modified: Susanna Guatelli and Kuba Moscicki 29/11/2005

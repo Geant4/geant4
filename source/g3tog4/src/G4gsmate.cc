@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsmate.cc,v 1.11 2005/06/27 15:28:30 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

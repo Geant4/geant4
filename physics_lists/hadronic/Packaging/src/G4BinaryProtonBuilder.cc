@@ -34,19 +34,19 @@ G4BinaryProtonBuilder()
 }
 
 void G4BinaryProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
-  aP.AddDataSet(&theXSec);  
+  aP->AddDataSet(&theXSec);  
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
+  aP->RegisterMe(theModel);
 }
 
 G4BinaryProtonBuilder::
 ~G4BinaryProtonBuilder() {}
 
 void G4BinaryProtonBuilder::
-Build(G4HadronElasticProcess & )
+Build(G4HadronElasticProcess * )
 {
 }
 

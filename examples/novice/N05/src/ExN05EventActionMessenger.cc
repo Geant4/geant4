@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EventActionMessenger.cc,v 1.5 2003/06/16 16:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05EventActionMessenger.cc,v 1.6 2005/11/16 08:33:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "ExN05EventActionMessenger.hh"
-#include "ExN05EventAction.hh"
 
-#include "globals.hh"
+#include <sstream>
+
+#include "ExN05EventAction.hh"
 #include "G4UIcmdWithABool.hh"
 
 ExN05EventActionMessenger::ExN05EventActionMessenger(ExN05EventAction* EA)
@@ -48,7 +49,7 @@ void ExN05EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newVa
   {
     G4int vl;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     EventAction->SetDrawFlag(vl!=0);
   }

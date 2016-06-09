@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.hh,v 1.8 2003/09/15 15:38:14 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN03RunAction.hh,v 1.9 2005/07/22 15:27:33 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -47,8 +47,16 @@ class ExN03RunAction : public G4UserRunAction
 
   public:
     void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    void   EndOfRunAction(const G4Run*);
+    
+    void fillPerEvent(G4double, G4double, G4double, G4double); 
 
+  private:
+    G4double sumEAbs, sum2EAbs;
+    G4double sumEGap, sum2EGap;
+    
+    G4double sumLAbs, sum2LAbs;
+    G4double sumLGap, sum2LGap;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

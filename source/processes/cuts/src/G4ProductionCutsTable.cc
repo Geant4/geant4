@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.11 2004/12/02 06:53:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ProductionCutsTable.cc,v 1.12 2005/08/18 16:52:52 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +37,7 @@
 #include "G4ParticleTable.hh"
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4RToEConvForElectron.hh"
 #include "G4RToEConvForGamma.hh"
 #include "G4RToEConvForPositron.hh"
@@ -91,7 +92,7 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
   }
 }
 
-void G4ProductionCutsTable::UpdateCoupleTable()
+void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 {
   if(firstUse)
   {
@@ -113,7 +114,12 @@ void G4ProductionCutsTable::UpdateCoupleTable()
   // Update Material-Cut-Couple
   typedef std::vector<G4Region*>::iterator regionIterator;
   for(regionIterator rItr=fG4RegionStore->begin();
-                rItr!=fG4RegionStore->end();rItr++){
+                rItr!=fG4RegionStore->end();rItr++)
+  {
+    // Material scan is to be done only for the regions appear in the 
+    // current tracking world.
+    if((*rItr)->GetWorldPhysical()!=currentWorld) continue;
+
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
     std::vector<G4Material*>::const_iterator mItr =
       (*rItr)->GetMaterialIterator();

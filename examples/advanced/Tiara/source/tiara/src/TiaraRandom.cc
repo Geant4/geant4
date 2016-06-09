@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraRandom.cc,v 1.3 2003/06/25 09:13:10 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: TiaraRandom.cc,v 1.4 2005/12/15 14:24:10 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "TiaraRandom.hh"
@@ -29,15 +29,15 @@
 #include "Randomize.hh"
 
 void setRandomSeed(long seed) {
-  HepRandom::setTheSeed(seed);
+  CLHEP::HepRandom::setTheSeed(seed);
 }
 
 void setRandomStatus(const char *filename){
-    HepRandom::restoreEngineStatus(filename);
+    CLHEP::HepRandom::restoreEngineStatus(filename);
 }
 
 void saveRandomStatus(const char *filename){
-  HepRandom::saveEngineStatus(filename);
+  CLHEP::HepRandom::saveEngineStatus(filename);
 }
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.5 2002/10/28 11:47:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PolyhedraSide.hh,v 1.7 2005/11/17 14:08:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,115 +58,124 @@
 
 class G4IntersectingCone;
 
-typedef struct
+struct G4PolyhedraSideRZ
 {
   G4double r, z;  // start of vector
-} G4PolyhedraSideRZ;
+};
 
 class G4PolyhedraSide : public G4VCSGface
 {
 
   public:
 
-  G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
-                   const G4PolyhedraSideRZ *tail,
-                   const G4PolyhedraSideRZ *head,
-                   const G4PolyhedraSideRZ *nextRZ,
-                         G4int    numSide,
-                         G4double phiStart, G4double phiTotal, 
-                         G4bool phiIsOpen,  G4bool isAllBehind=false );
-  virtual ~G4PolyhedraSide();
+    G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
+                     const G4PolyhedraSideRZ *tail,
+                     const G4PolyhedraSideRZ *head,
+                     const G4PolyhedraSideRZ *nextRZ,
+                           G4int    numSide,
+                           G4double phiStart, G4double phiTotal, 
+                           G4bool phiIsOpen,  G4bool isAllBehind=false );
+    virtual ~G4PolyhedraSide();
   
-  G4PolyhedraSide( const G4PolyhedraSide &source );
-  G4PolyhedraSide& operator=( const G4PolyhedraSide &source );
+    G4PolyhedraSide( const G4PolyhedraSide &source );
+    G4PolyhedraSide& operator=( const G4PolyhedraSide &source );
   
-  G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,  
-                          G4bool outgoing, G4double surfTolerance,
-                          G4double &distance, G4double &distFromSurface,
-                          G4ThreeVector &normal, G4bool &allBehind );
+    G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,  
+                            G4bool outgoing, G4double surfTolerance,
+                            G4double &distance, G4double &distFromSurface,
+                            G4ThreeVector &normal, G4bool &allBehind );
 
-  G4double Distance( const G4ThreeVector &p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector &p, G4bool outgoing );
   
-  EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-                        G4double *bestDistance );
+    EInside Inside( const G4ThreeVector &p, G4double tolerance, 
+                          G4double *bestDistance );
   
-  G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance );
 
-  G4double Extent( const G4ThreeVector axis );
+    G4double Extent( const G4ThreeVector axis );
   
-  void CalculateExtent( const EAxis axis, 
-                        const G4VoxelLimits &voxelLimit,
-                        const G4AffineTransform &tranform,
-                              G4SolidExtentList &extentList );
+    void CalculateExtent( const EAxis axis, 
+                          const G4VoxelLimits &voxelLimit,
+                          const G4AffineTransform &tranform,
+                                G4SolidExtentList &extentList );
 
-  G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
+    G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
   
+  public:  // without description
+
+    G4PolyhedraSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:
 
-  //
-  // A couple internal data structures
-  //
-  struct sG4PolyhedraSideVec;    // Secret recipe for allowing
-  friend struct sG4PolyhedraSideVec;  // protected nested structures
+    //
+    // A couple internal data structures
+    //
+    struct sG4PolyhedraSideVec;         // Secret recipe for allowing
+    friend struct sG4PolyhedraSideVec;  // protected nested structures
 
-  typedef struct sG4PolyhedraSideEdge
-  {
-    G4ThreeVector  normal;       // Unit normal to this edge
-    G4ThreeVector  corner[2];    // The two corners of this phi edge
-    G4ThreeVector  cornNorm[2];  // The normals of these corners
-  } G4PolyhedraSideEdge;
+    typedef struct sG4PolyhedraSideEdge
+    {
+      G4ThreeVector  normal;       // Unit normal to this edge
+      G4ThreeVector  corner[2];    // The two corners of this phi edge
+      G4ThreeVector  cornNorm[2];  // The normals of these corners
+    } G4PolyhedraSideEdge;
   
-  typedef struct sG4PolyhedraSideVec
-  {
-    G4ThreeVector  normal,   // Normal (point out of the shape)
-                   center,   // Point in center of side
-                   surfPhi,  // Unit vector on surface pointing along phi
-                   surfRZ;   // Unit vector on surface pointing along R/Z
-    G4PolyhedraSideEdge *edges[2];  // The phi boundary edges to this side 
-                                    //     [0]=low phi [1]=high phi
-    G4ThreeVector  edgeNorm[2];     // RZ edge normals [i] at {r[i],z[i]}
-  } G4PolyhedraSideVec;
+    typedef struct sG4PolyhedraSideVec
+    {
+      G4ThreeVector  normal,   // Normal (point out of the shape)
+                     center,   // Point in center of side
+                     surfPhi,  // Unit vector on surface pointing along phi
+                     surfRZ;   // Unit vector on surface pointing along R/Z
+      G4PolyhedraSideEdge *edges[2];  // The phi boundary edges to this side 
+                                      //     [0]=low phi [1]=high phi
+      G4ThreeVector  edgeNorm[2];     // RZ edge normals [i] at {r[i],z[i]}
+    } G4PolyhedraSideVec;
 
-  G4int   numSide;      // Number sides
-  G4double r[2], z[2];  // r, z parameters, in specified order
-  G4double startPhi,    // Start phi (0 to 2pi), if phiIsOpen
-           deltaPhi,    // Delta phi (0 to 2pi), if phiIsOpen
-           endPhi;      // End phi (>startPhi), if phiIsOpen
-  G4bool   phiIsOpen;   // True if there is a phi slice
-  G4bool   allBehind;   // True if the entire solid is "behind" this face
-  
-  G4IntersectingCone  *cone;  // Our intersecting cone
-  
-  G4PolyhedraSideVec  *vecs;    // Vector set for each facet of our face
-  G4PolyhedraSideEdge *edges;   // The edges belong to vecs
-  G4double    lenRZ,      // RZ length of each side
-              lenPhi[2];  // Phi dimensions of each side
-  G4double    edgeNorm;   // Normal in RZ/Phi space to each side
-  
-  G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
-                             const G4PolyhedraSideVec vec,
-                                   G4double normSign, 
-                                   G4double surfTolerance,
-                                   G4double &distance,
-                                   G4double &distFromSurface );
+    G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
+                               const G4PolyhedraSideVec vec,
+                                     G4double normSign, 
+                                     G4double surfTolerance,
+                                     G4double &distance,
+                                     G4double &distFromSurface );
 
-  G4int LineHitsSegments( const G4ThreeVector &p,
-                          const G4ThreeVector &v,
-                                G4int *i1, G4int *i2 );
+    G4int LineHitsSegments( const G4ThreeVector &p,
+                            const G4ThreeVector &v,
+                                  G4int *i1, G4int *i2 );
 
-  G4int ClosestPhiSegment( G4double phi );
+    G4int ClosestPhiSegment( G4double phi );
   
-  G4int PhiSegment( G4double phi );
+    G4int PhiSegment( G4double phi );
   
-  G4double DistanceToOneSide( const G4ThreeVector &p,
-                              const G4PolyhedraSideVec &vec,
-                                    G4double *normDist );
+    G4double DistanceToOneSide( const G4ThreeVector &p,
+                                const G4PolyhedraSideVec &vec,
+                                      G4double *normDist );
 
-  G4double DistanceAway( const G4ThreeVector &p,
-                         const G4PolyhedraSideVec &vec,
-                               G4double *normDist );
+    G4double DistanceAway( const G4ThreeVector &p,
+                           const G4PolyhedraSideVec &vec,
+                                 G4double *normDist );
              
-  void CopyStuff( const G4PolyhedraSide &source );
+    void CopyStuff( const G4PolyhedraSide &source );
+
+  protected:
+
+    G4int   numSide;      // Number sides
+    G4double r[2], z[2];  // r, z parameters, in specified order
+    G4double startPhi,    // Start phi (0 to 2pi), if phiIsOpen
+             deltaPhi,    // Delta phi (0 to 2pi), if phiIsOpen
+             endPhi;      // End phi (>startPhi), if phiIsOpen
+    G4bool   phiIsOpen;   // True if there is a phi slice
+    G4bool   allBehind;   // True if the entire solid is "behind" this face
+  
+    G4IntersectingCone  *cone;  // Our intersecting cone
+  
+    G4PolyhedraSideVec  *vecs;    // Vector set for each facet of our face
+    G4PolyhedraSideEdge *edges;   // The edges belong to vecs
+    G4double    lenRZ,      // RZ length of each side
+                lenPhi[2];  // Phi dimensions of each side
+    G4double    edgeNorm;   // Normal in RZ/Phi space to each side
 };
 
 #endif

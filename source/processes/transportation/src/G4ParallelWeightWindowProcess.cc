@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.11 2004/10/19 00:59:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.12 2005/11/21 21:41:29 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <strstream>
 #include "G4ParallelWeightWindowProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"

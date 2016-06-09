@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.21 2004/12/02 14:01:36 pia Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4hLowEnergyLoss.cc,v 1.22 2005/09/08 09:25:18 capra Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -68,19 +68,22 @@
 //  The NumberOfProcesses data member can be changed using the (public static)
 //  functions Get/Set/Plus/MinusNumberOfProcesses (see G4hLowEnergyLoss.hh)
 
+
+// The following vectors have a fixed dimension this means that if they are
+// filled in with more than 100 elements will corrupt the memory.
 G4int G4hLowEnergyLoss::NumberOfProcesses = 1 ;
 
 G4int            G4hLowEnergyLoss::CounterOfProcess = 0 ;
 G4PhysicsTable** G4hLowEnergyLoss::RecorderOfProcess =
-                                           new G4PhysicsTable*[10] ;
+                                           new G4PhysicsTable*[100] ;
 
 G4int            G4hLowEnergyLoss::CounterOfpProcess = 0 ;
 G4PhysicsTable** G4hLowEnergyLoss::RecorderOfpProcess =
-                                           new G4PhysicsTable*[10] ;
+                                           new G4PhysicsTable*[100] ;
 
 G4int            G4hLowEnergyLoss::CounterOfpbarProcess = 0 ;
 G4PhysicsTable** G4hLowEnergyLoss::RecorderOfpbarProcess =
-                                           new G4PhysicsTable*[10] ;
+                                           new G4PhysicsTable*[100] ;
 
 G4PhysicsTable* G4hLowEnergyLoss::theDEDXpTable = 0 ;
 G4PhysicsTable* G4hLowEnergyLoss::theDEDXpbarTable = 0 ;

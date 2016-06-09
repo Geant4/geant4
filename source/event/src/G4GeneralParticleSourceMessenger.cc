@@ -58,12 +58,6 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 
-//#include <iostream.h>
-#include <fstream>
-
-#include <iomanip>
-#include <strstream>
-
 #include "G4Tokenizer.hh"
 #include "G4GeneralParticleSourceMessenger.hh"
 #include "G4SingleParticleSource.hh"
@@ -166,7 +160,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
 
   ionCmd = new G4UIcommand("/gps/ion",this);
   ionCmd->SetGuidance("Set properties of ion to be generated.");
-  ionCmd->SetGuidance("[usage] /gun/ion Z A Q E");
+  ionCmd->SetGuidance("[usage] /gps/ion Z A Q E");
   ionCmd->SetGuidance("        Z:(int) AtomicNumber");
   ionCmd->SetGuidance("        A:(int) AtomicMass");
   ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.6 2002/12/05 00:24:24 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Em10DetectorMessenger.cc,v 1.9 2005/11/29 14:42:22 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -133,7 +133,31 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(G4State_Idle);  
+  MagFieldCmd->AvailableForStates(G4State_Idle); 
+  /* 
+  ElectronCutCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setElectronCut",this);
+  ElectronCutCmd->SetGuidance("Set electron cut in mm for vertex region");
+  ElectronCutCmd->SetParameterName("ElectronCut",false,false);
+  ElectronCutCmd->SetDefaultUnit("mm");
+  ElectronCutCmd->SetRange("ElectronCut>0.");
+  ElectronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  PositronCutCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setPositronCut",this);
+  PositronCutCmd->SetGuidance("Set positron cut in mm for vertex region");
+  PositronCutCmd->SetParameterName("PositronCut",false,false);
+  PositronCutCmd->SetDefaultUnit("mm");
+  PositronCutCmd->SetRange("PositronCut>0.");
+  PositronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  GammaCutCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setGammaCut",this);
+  GammaCutCmd->SetGuidance("Set gamma cut in mm for vertex region");
+  GammaCutCmd->SetParameterName("GammaCut",false,false);
+  GammaCutCmd->SetDefaultUnit("mm");
+  GammaCutCmd->SetRange("GammaCut>0.");
+  GammaCutCmd->AvailableForStates(G4State_Idle);
+  */
 
 }
 
@@ -162,9 +186,9 @@ Em10DetectorMessenger::~Em10DetectorMessenger()
 
 void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4int newValue)
 { 
-  if( command == ModelCmd )
+  if( command == ModelCmd && newValue == 0 )
     { 
-      Em10Detector->SetParametrisationModel(newValue);
+      //  Em10Detector->SetParametrisationModel(newValue);
       Em10Detector->Construct();
     }
 }
@@ -176,8 +200,8 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == ModelCmd )
   { 
-    Em10Detector->SetParametrisationModel(ModelCmd->GetNewIntValue(newValue));
-    Em10Detector->ParametrisationModel();
+    // Em10Detector->SetParametrisationModel(ModelCmd->GetNewIntValue(newValue));
+    // Em10Detector->ParametrisationModel();
   }
   if( command == FoilNumCmd )
   { 
@@ -220,7 +244,20 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == MagFieldCmd )
    { Em10Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-
+  /*
+  if( command == ElectronCutCmd )
+  { 
+    Em10Detector->SetElectronCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == PositronCutCmd )
+  { 
+    Em10Detector->SetPositronCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == GammaCutCmd )
+  { 
+    Em10Detector->SetGammaCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

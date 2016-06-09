@@ -10,9 +10,12 @@
 //MSH_include_end
 %}
 
+// This file is generated automatically from G4HCofThisEvent.hh .  It is an
+//   intermediate file useful for debugging, but otherwise may be deleted.
+
  marshaling class MarshaledG4HCofThisEvent (G4HCofThisEvent* param) {
 
-      G4std::vector<G4VHitsCollection*> * HC;
+      std::vector<G4VHitsCollection*> * HC;
     //FIELDMARSHAL:
     {
 	int copy_off = 0;

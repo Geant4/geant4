@@ -1,0 +1,21 @@
+/tracking/verbose 1
+
+/gun/energy    200 MeV
+/gun/particle e+
+/run/beamOn 1
+
+/gun/energy    1 TeV
+/gun/particle mu+
+/run/beamOn 1
+
+/tracking/verbose 0
+
+/gun/energy    200 MeV
+/gun/particle e+
+/run/beamOn 100
+
+/gun/energy    1 TeV
+/gun/particle mu+
+/run/beamOn 100
+
+exit

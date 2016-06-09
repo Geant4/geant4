@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.8 2003/06/16 16:56:54 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AntiProton.cc,v 1.10 2005/01/14 03:49:10 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,56 +32,56 @@
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
 // **********************************************************************
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4AntiProton.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                       ANTIPROTON                               ###
 // ######################################################################
-G4AntiProton::G4AntiProton(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VBaryon( aName,mass,width,charge,iSpin,iParity,
-              iConjugation,iIsospin,iIsospin3,gParity,pType,
-              lepton,baryon,encoding,stable,lifetime,decaytable )
-{
-   SetParticleSubType("nucleon");
-}
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-//
-G4AntiProton G4AntiProton::theAntiProton(
-        "anti_proton",   0.9382723*GeV,       0.0*MeV,  -1.0*eplus, 
+G4AntiProton* G4AntiProton::theInstance = 0;
+
+G4AntiProton* G4AntiProton::Definition()
+{
+  if (theInstance !=0) return theInstance;
+  const G4String name = "anti_proton";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+                 name,   0.9382723*GeV,       0.0*MeV,  -1.0*eplus, 
 		    1,              +1,             0,         
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -2212,
-		 true,            -1.0,          NULL
-);
+		 true,            -1.0,          NULL,
+             false,           "neucleon"
+              );
+  }
+  theInstance = reinterpret_cast<G4AntiProton*>(anInstance);
+  return theInstance;
+}
 
-G4AntiProton* G4AntiProton::AntiProtonDefinition(){return &theAntiProton;}
-G4AntiProton* G4AntiProton::AntiProton(){return &theAntiProton;}
+G4AntiProton*  G4AntiProton::AntiProtonDefinition()
+{
+  return Definition();
+}
 
-
-
-
+G4AntiProton*  G4AntiProton::AntiProton()
+{
+  return Definition();
+}
 

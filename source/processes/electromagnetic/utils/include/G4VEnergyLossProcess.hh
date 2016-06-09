@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.39 2005/04/12 18:31:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEnergyLossProcess.hh,v 1.43 2005/10/27 14:04:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -90,8 +90,8 @@ class G4VEmFluctuationModel;
 class G4DataVector;
 class G4PhysicsTable;
 class G4PhysicsVector;
-class G4VSubCutoffProcessor;
 class G4Region;
+class G4Navigator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -213,16 +213,14 @@ public:
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
                                 const G4Region* region = 0);
 
-  // Define new energy range for thhe model identified by the name
+  // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Add subcutoff processor for the region
-  void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
+  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
 
   // Activate deexcitation code
   virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
-
-  virtual void SetSubCutoff(G4bool);
 
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const;
@@ -299,6 +297,14 @@ public:
 
   G4bool IsIonisationProcess() const;
 
+  void AddCollaborativeProcess(G4VEnergyLossProcess*);
+
+  void AddSubCutoffSecondaries(std::vector<G4Track*>&, const G4Step&, 
+                               G4double& eloss, G4double& escaled); 
+
+  void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
+                               G4double& eloss, G4VEmModel* model); 
+
 protected:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -314,8 +320,6 @@ protected:
   G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   G4VEmModel* SelectModel(G4double kinEnergy);
-
-  G4VSubCutoffProcessor* SubCutoffProcessor(size_t index);
 
   size_t CurrentMaterialCutsCoupleIndex() const;
 
@@ -358,10 +362,12 @@ protected:
 private:
 
   G4EmModelManager*                     modelManager;
-  std::vector<G4VSubCutoffProcessor*>   scoffProcessors;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
-  std::vector<G4int>                    idxSCoffRegions;
+  G4int*                                idxSCoffRegions;
+  std::vector<G4Track*>                 scTracks;
+  std::vector<G4VEnergyLossProcess*>    scProcesses;
+  G4int                                 nProcesses;
 
   // tables and vectors
   G4PhysicsTable*             theDEDXTable;
@@ -378,10 +384,14 @@ private:
   G4double*                   theCrossSectionMax;
 
   const G4DataVector*         theCuts;
+  const G4DataVector*         theSubCuts;
+
+  G4Navigator*                navigator;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
   const G4ParticleDefinition* secondaryParticle;
+  const G4ParticleDefinition* thePositron;
 
   // cash
   const G4Material*           currentMaterial;
@@ -392,6 +402,7 @@ private:
   G4int    nDEDXBins;
   G4int    nDEDXBinsForRange;
   G4int    nLambdaBins;
+  G4int    nWarnings;
 
   G4double lowestKinEnergy;
   G4double minKinEnergy;
@@ -412,8 +423,6 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
-  G4double defaultRoverRange;
-  G4double defaultIntegralRange;
   G4double lambdaFactor;
   G4double mfpKinEnergy;
 
@@ -425,6 +434,7 @@ private:
   G4bool   meanFreePath;
   G4bool   aboveCSmax;
   G4bool   isIonisation;
+  G4bool   useSubCutoff;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -719,15 +729,6 @@ inline void G4VEnergyLossProcess::CorrectionsAlongStep(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VSubCutoffProcessor* G4VEnergyLossProcess::SubCutoffProcessor(size_t index)
-{
-  G4VSubCutoffProcessor* p = 0;
-  if( nSCoffRegions ) p = scoffProcessors[idxSCoffRegions[index]];
-  return p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTable() const
 {
   return theDEDXTable;
@@ -823,6 +824,23 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 {
   return fRange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::AddCollaborativeProcess(G4VEnergyLossProcess* p)
+{
+  scProcesses.push_back(p);
+  useSubCutoff = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::AddSubCutoffSecondaries(std::vector<G4Track*>& tracks, 
+       const G4Step& step, G4double& eloss, G4double& escaled)
+{
+  if(idxSCoffRegions[currentMaterialIndex]) 
+    SampleSubCutSecondaries(tracks, step, eloss, SelectModel(escaled));
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

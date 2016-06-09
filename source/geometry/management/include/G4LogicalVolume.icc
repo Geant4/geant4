@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.21 2005/05/22 16:41:57 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LogicalVolume.icc,v 1.23 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -92,7 +92,9 @@ G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
 inline
 G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const 
 {
-  return fFastSimulationManager;
+  G4FastSimulationManager* fFSM = 0;
+  if(fRegion) fFSM = fRegion->GetFastSimulationManager();
+  return fFSM;
 }
 
 // ********************************************************************
@@ -117,22 +119,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
   fMass = 0.;
   fDaughters.push_back(pNewDaughter);
 
-  // Propagates the mother's FastSimulationManager pointer. If we are in
-  // the World logical volume, propagates only if pointer != 0.
-  // (one could also parameterise all the World volume for a particle type!)
-
-  G4LogicalVolume* myLogical = pNewDaughter->GetMotherLogical();
   G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
-
-  if( myLogical !=0 )
-  {
-    if( pDaughterLogical->GetFastSimulationManager()!=fFastSimulationManager )
-      pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,false);
-  }
-  else
-  {
-    pDaughterLogical->SetFastSimulationManager(0, false);
-  }
 
   // Propagate the Field Manager, if the daughter has no field Manager.
   //
@@ -476,17 +463,6 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 }
 
 // ********************************************************************
-// BecomeEnvelopeForFastSimulation
-// ********************************************************************
-//
-inline
-void 
-G4LogicalVolume::BecomeEnvelopeForFastSimulation(G4FastSimulationManager* pPA)
-{
-  SetFastSimulationManager(pPA, true);
-}
-
-// ********************************************************************
 // SetBiasWeight
 // ********************************************************************
 //
@@ -505,3 +481,4 @@ G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
 }
+

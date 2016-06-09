@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.40 2005/06/07 17:03:17 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSceneHandler.cc,v 1.45 2005/11/22 17:09:12 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -31,7 +31,7 @@
 #include "G4VSceneHandler.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -75,10 +75,12 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (true), // Always clear and refesh first time.
-  fReadyForTransients    (false),
+  fMarkForClearingTransientStore (false),
+  fSecondPassRequested   (false),
+  fSecondPass            (false),
+  fReadyForTransients    (true),  // Only false while processing scene.
   fpModel                (0),
-  fpObjectTransformation (&G4Transform3D::Identity),
+  fpObjectTransformation (0),
   fNestingDepth          (0),
   fpVisAttribs           (0),
   fCurrentDepth          (0),
@@ -88,10 +90,9 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
   if (name == "") {
-    char charname [50];
-    std::ostrstream ost (charname, 50);
-    ost << fSystem.GetName () << '-' << fSceneHandlerId << std::ends;
-    fName = charname;
+    std::ostringstream ost;
+    ost << fSystem.GetName () << '-' << fSceneHandlerId;
+    fName = ost.str();
   }
   else {
     fName = name;
@@ -114,7 +115,7 @@ void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
 }
 
 void G4VSceneHandler::PostAddSolid () {
-  fpObjectTransformation = &G4Transform3D::Identity;
+  fpObjectTransformation = 0;
   fpVisAttribs = 0;
 }
 
@@ -220,7 +221,7 @@ void G4VSceneHandler::EndPrimitives () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
   fNestingDepth--;
-  fpObjectTransformation = &G4Transform3D::Identity;
+  fpObjectTransformation = 0;
 }
 
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
@@ -439,10 +440,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   const std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
-  /*
-  const std::vector<G4VModel*>& endOfEventModelList =
-    fpScene -> GetEndOfEventModelList ();
-  */
 
   if (runDurationModelList.size ()) {
     G4VisManager::Verbosity verbosity =
@@ -450,8 +447,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Traversing scene data..." << G4endl;
     }
+
     BeginModeling ();
+
+    // Create modeling parameters from view parameters...
     G4ModelingParameters* pMP = CreateModelingParameters ();
+
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       // Note: this is not the place to take action on
@@ -475,22 +476,28 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       pModel -> DescribeYourselfTo (*this);
       pModel -> SetModelingParameters (tempMP);
     }
-    /*
-    for (size_t i = 0; i < endOfEventModelList.size (); i++) {
-      G4VModel* pModel = endOfEventModelList[i];
-      const G4ModelingParameters* tempMP =
-	pModel -> GetModelingParameters ();
-      pModel -> SetModelingParameters (pMP);
-      SetModel (pModel);  // Store for use by derived class.
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters (tempMP);
+
+    // Repeat if required...
+    if (fSecondPassRequested) {
+      fSecondPass = true;
+      for (size_t i = 0; i < runDurationModelList.size (); i++) {
+	G4VModel* pModel = runDurationModelList[i];
+	const G4ModelingParameters* tempMP =
+	  pModel -> GetModelingParameters ();
+	pModel -> SetModelingParameters (pMP);
+	SetModel (pModel);  // Store for use by derived class.
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters (tempMP);
+      }
+      fSecondPass = false;
+      fSecondPassRequested = false;
     }
-    */
+
     delete pMP;
     SetModel (0);  // Flags invalid model.
     EndModeling ();
-  }
-  else {
+
+  } else {
     G4VisManager::Verbosity verbosity =
       G4VisManager::GetInstance()->GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
@@ -550,9 +557,9 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable vis attributes.
-  return fpViewer ->
-    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->
-    GetColour ();
+  const G4Colour& colour = fpViewer ->
+    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->  GetColour ();
+  return colour;
 }
 
 const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
@@ -560,7 +567,8 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   if (!pVA) {
     pVA = fpViewer -> GetViewParameters (). GetDefaultTextVisAttributes ();
   }
-  return pVA -> GetColour ();
+  const G4Colour& colour = pVA -> GetColour ();
+  return colour;
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle

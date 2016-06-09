@@ -1,31 +1,28 @@
-
-/control/verbose 2
+/PhysicsList/cut 0.2 mm
+/control/verbose 1
 /control/saveHistory
 /run/verbose 2
-
-
 /vis/scene/create
-#/vis/open OGLIX
-/vis/open DAWNFILE 
-#/vis/open VRML2FILE
-/vis/drawVolume
-/vis/viewer/update
-/vis/viewer/set/viewpointThetaPhi 90 0 deg
-/vis/viewer/zoom 1
-
+/vis/open DAWNFILE
 /vis/viewer/flush
-#
-# draw scene/
-#
-#
-# for drawing the tracks
-/run/initialize
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/zoom 1.4
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+/vis/viewer/update
 
+/run/initialize
+/tracking/storeTrajectory 1
 
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 150
+/Phantom/maxStep 0.2 mm
+
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 150
 
 #    Multi Leaf
+
 
 /MLC/leaf_selection  a1
 /MLC/position 0. cm
@@ -190,6 +187,8 @@
 /MLC/leaf_selection  b40
 /MLC/position 0. cm
 
+
+
 /Jaws/X1/DistanceFromAxis -4.2 cm
 /Jaws/X2/DistanceFromAxis 5.2 cm
 /Jaws/Y1/DistanceFromAxis -6.6 cm
@@ -198,6 +197,4 @@
 
 /energy 6.0 MeV
 /sourceType 0.127 MeV
-/vis/viewer/update
 /run/beamOn 1000
-

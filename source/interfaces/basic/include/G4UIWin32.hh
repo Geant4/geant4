@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIWin32.hh,v 1.13 2004/04/08 08:29:47 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 

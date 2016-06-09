@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4PenelopeCompton.hh,v 1.9 2004/06/03 08:17:52 pandola Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Luciano Pandola
 //

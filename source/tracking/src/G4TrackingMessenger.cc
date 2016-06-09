@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingMessenger.cc,v 1.9 2003/06/16 17:13:23 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TrackingMessenger.cc,v 1.10 2005/11/21 23:37:19 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -51,8 +51,6 @@
 #include "G4SteppingManager.hh"
 #include "G4TrackStatus.hh"
 #include "G4ios.hh"
-
-#include <strstream>
 
 ///////////////////////////////////////////////////////////////////
 G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
@@ -116,11 +114,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
 ///////////////////////////////////////////////////////////////////////////////
 {
   if( command == VerboseCmd ){
-    G4int vl;
-    const char* t = newValues;
-    std::istrstream is((char*)t);
-    is >> vl;
-    trackingManager->SetVerboseLevel(vl);
+    trackingManager->SetVerboseLevel(VerboseCmd->ConvertToInt(newValues));
   }
 
   if( command  == AbortCmd ){
@@ -133,11 +127,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   }
 
   if( command == StoreTrajectoryCmd ){
-    G4int vl;
-    const char* t = newValues;
-    std::istrstream is((char*)t);
-    is >> vl;
-    trackingManager->SetStoreTrajectory(vl!=0);
+    trackingManager->SetStoreTrajectory(StoreTrajectoryCmd->ConvertToBool(newValues));
   }
 }
 
@@ -147,10 +137,7 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
 ////////////////////////////////////////////////////////////////////
 {
   if( command == VerboseCmd ){
-    char line[100];
-    std::ostrstream os(line,100);
-    os << trackingManager->GetVerboseLevel() << '\0';
-    return G4String(line);
+    return VerboseCmd->ConvertToString(trackingManager->GetVerboseLevel());
   }
   else if( command == StoreTrajectoryCmd ){
     G4String ll = "0";

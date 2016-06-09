@@ -30,8 +30,8 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.hh,v 1.2 2004/06/18 09:17:46 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PurgMagPhysicsList.hh,v 1.3 2005/12/14 16:06:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

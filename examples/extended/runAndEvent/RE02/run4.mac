@@ -1,0 +1,47 @@
+# $Id: run4.mac,v 1.1 2005/11/24 01:44:18 asaim Exp $
+#
+# Macro file for "exampleRE02.cc"
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run2.mac
+#
+/control/verbose 2
+/run/verbose 2
+/event/verbose 0
+#/tracking/verbose 1
+# 
+# 
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+#/vis/open VRML2FILE
+#
+# viewer settings
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/zoom 1.4
+#
+# Store trajectory
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+#
+#
+#  Beam Parameters
+#  for electron
+#   UIcommands from G4ParticleGun.
+# 
+/gun/particle gamma
+#
+# Kinetic Energy.
+#/gun/energy 35. keV
+/gun/energy  60. keV
+#/gun/energy  356. keV
+#
+/gun/position  0 0 -100. cm
+/gun/direction 0 0 1
+#  
+/run/beamOn 10000
+#

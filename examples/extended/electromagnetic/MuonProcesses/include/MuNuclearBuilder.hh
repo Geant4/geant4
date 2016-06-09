@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: MuNuclearBuilder.hh,v 1.1 2004/08/17 18:07:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

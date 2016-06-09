@@ -43,8 +43,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "Randomize.hh"
-//#include <cmath>
-
 #include "G4SPSAngDistribution.hh"
 
 G4SPSAngDistribution::G4SPSAngDistribution()
@@ -54,9 +52,9 @@ G4SPSAngDistribution::G4SPSAngDistribution()
   particle_momentum_direction = G4ParticleMomentum(0,0,-1);
 
   AngDistType = "planar"; 
-  AngRef1 = HepXHat;
-  AngRef2 = HepYHat;
-  AngRef3 = HepZHat;
+  AngRef1 = CLHEP::HepXHat;
+  AngRef2 = CLHEP::HepYHat;
+  AngRef3 = CLHEP::HepZHat;
   MinTheta = 0.;
   MaxTheta = pi;
   MinPhi = 0.;

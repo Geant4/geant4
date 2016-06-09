@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2005/06/08 14:51:12 vnivanch Exp $
+$Id: History,v 1.69 2005/11/22 17:24:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22-11-05 G.Cosmo (materials-V07-01-03)
+- Additional minor changes needed for direct object persistency.
+
+18-11-05 G.Cosmo (materials-V07-01-02)
+- Additional minor changes needed for direct object persistency.
+  Temporary solution, pending improvements in the external client
+  persistency tool.
+
+15-11-05 mma (materials-V07-01-01)
+- G4bool warning=true in GetMaterial(), GetElement(), GetIsotope().
+  
+09-11-05 G.Cosmo (materials-V07-01-00)
+- Added fake default constructor for isotopes, elements, materials and
+  relevant related classes, for usage of direct object persistency of
+  detector description.
+
+31-10-05 V.Ivanchenko
+- G4NistMaterialBuilder: add chemical formulas for number of materials,
+  add temperature and presure explicitly for each material, that will
+  allow to have other than STP parameters for gases
+
+22-06-05 V.Ivanchenko (materials-V07-00-07)
+- change 1 -> 1.0 for water density
 
 08-06-05 V.Ivanchenko (materials-V07-00-06)
 - take the head of subdirectory - murge tags 04 and 05

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.5 2005/03/24 16:06:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4QIsotope.cc,v 1.6 2005/11/30 16:31:03 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -1561,31 +1561,18 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
 {
   G4int I=abund->size();
 #ifdef debug
-  G4cout<<"G4QIsotope::InitElement is called with nI="<<I<<" pairs"<<G4endl;
+  G4cout<<"G4QIsotope::InitElement: called with I="<<I<<" pairs,Z="<<Z<<",i="<<indexG4endl;
 #endif
   if(I<=0)
   {
     G4cerr<<"--Worning--G4QIsotope::InitEl:(-1)0VectorOfNewEl,Z="<<Z<<",i="<<index<<G4endl;
-    return -1;
+    return -2;
   }
-  G4int mind=0;                       // Prototype of the maximum existing index for this Z
-  G4bool found=false;                 // Prototype of the"ZWithTheSameIndex is found" event
-  G4int nE=newElems.size();           // A number of definitions in the newElements vector
-  if(nE) for(G4int i=0; i<nE; i++)    // LOOP over new UserDefinedElements
+  if(IsDefined(Z,index))              // This index is already defined
   {
-    G4int zin=newElems[i]->first;
-    G4int zi=zin%1000;                // Existing Z
-    G4int in=zin/1000;                // Existing index
-    if(Z==zi)                         // The new Element with the same Z is found
-	   {
-      if(in<=index) found=true;
-      if(in>mind) mind=in;
-    }
+    G4cerr<<"-Worning-G4QIsotope::InitEl:VONewEl,Z="<<Z<<",ind="<<index<<" exists"<<G4endl;
+    return index;
   }
-#ifdef debug
-  G4cout<<"G4QIsotope::InitElement: nE="<<nE<<",ind="<<index<<",found="<<found<<G4endl;
-#endif
-  if(found || index<=0) index=mind+1; // IndexExists or Small: mustBeSubstituted by 1stFree
   G4int ZInd=1000*index+Z;            // Fake Z increased by the UserDefinedIndex
   vector<pair<G4int,G4double>*>*A = new vector<pair<G4int,G4double>*>;
   vector<pair<G4int,G4double>*>*S = new vector<pair<G4int,G4double>*>;
@@ -1653,7 +1640,7 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
   return index;
 }
 
-  // The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
+// The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
 G4int G4QIsotope::GetLastIndex(G4int Z) // Returns theLastDefinedIndex (if onlyNatural: =0)
 //    =================================
 {
@@ -1671,6 +1658,30 @@ G4int G4QIsotope::GetLastIndex(G4int Z) // Returns theLastDefinedIndex (if onlyN
   }
   return mind;
 }
+
+// Indices can have differen numbers (not 1,2,3,...) & in different sequences (9,3,7,...)
+G4bool G4QIsotope::IsDefined(G4int Z, G4int Ind) // Ind is an index to be found (true)
+//    ==========================================
+{
+#ifdef debug
+  G4cout<<"G4QIsotope::IsDefined is called Z="<<Z<<", I="<<Ind<<G4endl;
+#endif
+  if(Ind<=0)
+  {
+    if(Ind<0) G4cerr<<"-W-G4QIsotope::IsDefined: Z="<<Z<<", Ind="<<Ind<<" < 0->=0"<<G4endl;
+    return true;                      // to avoid definition with the negative index
+  }
+  G4int nE=newElems.size();           // A number of definitions in the newElements vector
+  if(nE) for(G4int i=0; i<nE; i++)    // LOOP over new UserDefinedElements
+  {
+    G4int zin=newElems[i]->first;
+    G4int zi=zin%1000;                // Existing Z
+    G4int in=zin/1000;                // Existing index
+    if(Z==zi && Ind==in) return true;  // The index for the element Z is found
+  }
+  return false;                       // The index for the element Z is not found
+}
+
 // A#ofNeutrons in theElement with Z & UserDefIndex. Universal for Nat(index=0) & UserDefEl
 G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist, returns <0
 //    =============================================

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -74,6 +74,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 1
 #
 /testem/det/setMat Water
@@ -94,7 +96,7 @@ Absorber is 3.60564 m   of Water
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-/testem/phys/verbose  -1
+/testem/phys/verbose  0
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -134,20 +136,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=58.13s Real=60.09s Sys=0.92s
+  User=75.19s Real=80.12s Sys=4.01s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   15.05%       6.99%             0-> 1.11 radl:   15.05%     6.99% 
-    1.11-> 2.22 radl:   25.82%       9.85%             0-> 2.22 radl:   40.87%    13.91% 
-    2.22-> 3.33 radl:   22.14%       8.93%             0-> 3.33 radl:   63.00%    15.88% 
-    3.33-> 4.44 radl:   13.84%       7.58%             0-> 4.44 radl:   76.84%    15.82% 
-    4.44-> 5.55 radl:    7.76%       6.82%             0-> 5.55 radl:   84.60%    12.95% 
-    5.55-> 6.66 radl:    4.37%       5.19%             0-> 6.66 radl:   88.97%     9.93% 
-    6.66-> 7.77 radl:    2.50%       4.71%             0-> 7.77 radl:   91.47%     6.97% 
-    7.77-> 8.88 radl:    1.54%       3.28%             0-> 8.88 radl:   93.02%     4.92% 
-    8.88-> 9.99 radl:    0.90%       2.14%             0-> 9.99 radl:   93.92%     4.14% 
+    0.00-> 1.11 radl:   13.80%       5.17%             0-> 1.11 radl:   13.80%     5.17% 
+    1.11-> 2.22 radl:   25.15%       9.32%             0-> 2.22 radl:   38.95%    11.64% 
+    2.22-> 3.33 radl:   22.41%       8.61%             0-> 3.33 radl:   61.36%    13.79% 
+    3.33-> 4.44 radl:   14.23%       7.09%             0-> 4.44 radl:   75.60%    13.32% 
+    4.44-> 5.55 radl:    8.69%       6.14%             0-> 5.55 radl:   84.29%    11.30% 
+    5.55-> 6.66 radl:    4.85%       5.53%             0-> 6.66 radl:   89.14%     7.59% 
+    6.66-> 7.77 radl:    2.95%       4.05%             0-> 7.77 radl:   92.09%     5.85% 
+    7.77-> 8.88 radl:    0.94%       1.48%             0-> 8.88 radl:   93.02%     5.56% 
+    8.88-> 9.99 radl:    0.83%       2.09%             0-> 9.99 radl:   93.85%     4.83% 
 
 
 
@@ -155,29 +157,28 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   62.23%      11.82%             0-> 0.11 radl:   62.23%    11.82% 
-    0.11-> 0.22 radl:   17.27%       6.51%             0-> 0.22 radl:   79.50%     9.78% 
-    0.22-> 0.33 radl:    6.86%       4.16%             0-> 0.33 radl:   86.36%     7.83% 
-    0.33-> 0.44 radl:    3.54%       2.77%             0-> 0.44 radl:   89.90%     6.68% 
-    0.44-> 0.56 radl:    2.53%       2.59%             0-> 0.56 radl:   92.42%     4.99% 
-    0.56-> 0.67 radl:    1.50%       2.10%             0-> 0.67 radl:   93.92%     4.14% 
+    0.00-> 0.11 radl:   61.79%      10.22%             0-> 0.11 radl:   61.79%    10.22% 
+    0.11-> 0.22 radl:   17.45%       6.00%             0-> 0.22 radl:   79.24%     8.55% 
+    0.22-> 0.33 radl:    7.11%       3.87%             0-> 0.33 radl:   86.36%     7.32% 
+    0.33-> 0.44 radl:    4.03%       3.07%             0-> 0.44 radl:   90.38%     6.18% 
+    0.44-> 0.56 radl:    2.26%       1.87%             0-> 0.56 radl:   92.65%     5.34% 
+    0.56-> 0.67 radl:    1.21%       1.62%             0-> 0.67 radl:   93.85%     4.83% 
 
                               SUMMARY
-                         energy deposit :   93.92 % E0 +-    4.14 % E0
-                         charged traklen:   13.64 radl +-    0.61 radl
-                         neutral traklen:  194.44 radl +-   22.06 radl
+                         energy deposit :   93.85 % E0 +-    4.83 % E0
+                         charged traklen:   13.66 radl +-    0.70 radl
+                         neutral traklen:  195.69 radl +-   20.60 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1847571276, 486755118
+ Current couple of seeds = 838615949, 391507846
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.9392035  delEdep= -0.0019965033 nrms= -0.40661981
-Erms: 0.041390078  delErms= -0.0077099222 nrms= -1.5702489
+Edep: 0.93853143  delEdep= -0.0026685677 nrms= -0.54349647
+Erms: 0.04828026  delErms= -0.00081973999 nrms= -0.16695316
 <<<<END>>>>   IS ACCEPTED
 
-#
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

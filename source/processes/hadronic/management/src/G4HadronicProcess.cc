@@ -27,7 +27,7 @@
 #include "G4Types.hh"
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
@@ -71,8 +71,9 @@ EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
 void G4HadronicProcess::
 DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
 
-G4HadronicProcess::G4HadronicProcess( const G4String &processName) :
-G4VDiscreteProcess( processName )
+G4HadronicProcess::G4HadronicProcess( const G4String &processName,
+                                      G4ProcessType   aType ) :
+G4VDiscreteProcess( processName, aType)
 { 
   ModelingState = 0;
   isoIsOnAnyway = 0;
@@ -554,15 +555,20 @@ G4HadFinalState * aResult)
   }
   
   // prepare the IsoResult.
-  char the1[100] = {""};
-  std::ostrstream ost1(the1, 100, std::ios::out);
-  ost1 <<Z<<"_"<<A<<"\0";
-  G4String * biff = new G4String(the1);
-  G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);
-  
-  // cleaning up.
-  delete biff;
-  
+
+  std::ostringstream ost1;
+  ost1 <<Z<<"_"<<A;
+  G4String biff = ost1.str();
+  G4IsoResult * theResult = new G4IsoResult(biff, aNucleus);
+
+  //  char the1[100] = {""};
+  //  std::ostrstream ost1(the1, 100, std::ios::out);
+  //  ost1 <<Z<<"_"<<A<<"\0";
+  //  G4String * biff = new G4String(the1);
+  //  G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);
+  //  // cleaning up.
+  //  delete biff;
+
   return theResult;
 }
 

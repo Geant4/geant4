@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.hh,v 1.1 2003/03/10 01:43:35 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN07PhysicsList.hh,v 1.2 2005/11/22 22:20:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef ExN07PhysicsList_h

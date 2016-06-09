@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.hh,v 1.8 2003/06/16 16:49:59 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05EMShowerModel.hh,v 1.9 2005/11/16 07:39:03 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //----------------------------------------------
@@ -46,7 +46,7 @@ public:
   //-------------------------
   // Constructor, destructor
   //-------------------------
-  ExN05EMShowerModel (G4String, G4LogicalVolume*);
+  ExN05EMShowerModel (G4String, G4Region*);
   ExN05EMShowerModel (G4String);
   ~ExN05EMShowerModel ();
 

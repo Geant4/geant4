@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.13 2005/06/04 13:44:43 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NeutronHPNames.hh,v 1.14 2005/11/19 00:12:36 dennis Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4NeutronHPNames_h
 #define G4NeutronHPNames_h 1
 
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+// #include <strstream>
 #include <stdlib.h>
 #include "globals.hh"
 #include "G4NeutronHPDataUsed.hh"

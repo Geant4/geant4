@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventor.hh,v 1.7 2004/04/08 09:39:37 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.

@@ -34,19 +34,16 @@
 
 G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : wasActivated(false)
 {
-  theElectroReaction = new G4ElectroNuclearReaction;
-  theGammaReaction = new G4GammaNuclearReaction;
-  theModel = new G4TheoFSGenerator;
-  theCascade = new G4GeneratorPrecompoundInterface;
-  theModel->SetTransport(theCascade);
-  theModel->SetHighEnergyGenerator(&theStringModel);
-  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
 }
 
 G4ElectroNuclearBuilder::~G4ElectroNuclearBuilder() 
 {
+  delete theFragmentation;
   delete theStringDecay;
+  delete theStringModel;
+  delete thePhotoNuclearProcess; 
+  delete theElectronNuclearProcess;
+  delete thePositronNuclearProcess;
   delete theElectroReaction;
   delete theGammaReaction;
   delete theModel;
@@ -55,33 +52,52 @@ G4ElectroNuclearBuilder::~G4ElectroNuclearBuilder()
   {
     G4ProcessManager * pManager = 0;
     pManager = G4Gamma::Gamma()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(&thePhotoNuclearProcess);
+    if(pManager) pManager->RemoveProcess(thePhotoNuclearProcess);
     pManager = G4Electron::Electron()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(&theElectronNuclearProcess);
+    if(pManager) pManager->RemoveProcess(theElectronNuclearProcess);
     pManager = G4Positron::Positron()->GetProcessManager();
-    if(pManager) pManager->RemoveProcess(&thePositronNuclearProcess);
+    if(pManager) pManager->RemoveProcess(thePositronNuclearProcess);
   }
 }
 
 void G4ElectroNuclearBuilder::Build()
 {
+  wasActivated=true;
+  
+  thePhotoNuclearProcess = new G4PhotoNuclearProcess;
+  theElectronNuclearProcess = new G4ElectronNuclearProcess;
+  thePositronNuclearProcess = new G4PositronNuclearProcess;
+  theElectroReaction = new G4ElectroNuclearReaction;
+  theGammaReaction = new G4GammaNuclearReaction;
+
+  theModel = new G4TheoFSGenerator;
+
+  theStringModel = new G4QGSModel< G4GammaParticipants >;
+  theStringDecay = new G4ExcitedStringDecay(theFragmentation=new G4QGSMFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
+
+  theCascade = new G4GeneratorPrecompoundInterface;
+
+  theModel->SetTransport(theCascade);
+  theModel->SetHighEnergyGenerator(theStringModel);
+
   G4ProcessManager * aProcMan = 0;
   
   aProcMan = G4Gamma::Gamma()->GetProcessManager();
   theGammaReaction->SetMaxEnergy(3.5*GeV);
-  thePhotoNuclearProcess.RegisterMe(theGammaReaction);
+  thePhotoNuclearProcess->RegisterMe(theGammaReaction);
   theModel->SetMinEnergy(3.*GeV);
   theModel->SetMaxEnergy(100*TeV);
-  thePhotoNuclearProcess.RegisterMe(theModel);
-  aProcMan->AddDiscreteProcess(&thePhotoNuclearProcess);
+  thePhotoNuclearProcess->RegisterMe(theModel);
+  aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
   
   aProcMan = G4Electron::Electron()->GetProcessManager();
-  theElectronNuclearProcess.RegisterMe(theElectroReaction);
-  aProcMan->AddDiscreteProcess(&theElectronNuclearProcess);
+  theElectronNuclearProcess->RegisterMe(theElectroReaction);
+  aProcMan->AddDiscreteProcess(theElectronNuclearProcess);
   
   aProcMan = G4Positron::Positron()->GetProcessManager();
-  thePositronNuclearProcess.RegisterMe(theElectroReaction);
-  aProcMan->AddDiscreteProcess(&thePositronNuclearProcess);
+  thePositronNuclearProcess->RegisterMe(theElectroReaction);
+  aProcMan->AddDiscreteProcess(thePositronNuclearProcess);
 }
 
 

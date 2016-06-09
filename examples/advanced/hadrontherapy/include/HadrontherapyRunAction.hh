@@ -62,19 +62,17 @@ public:
   void EndOfRunAction(const G4Run* );
   void SelectEnergy(G4int); 
 
-private:
-  
-  G4String sensitiveDetectorName;
-  HadrontherapyDetectorConstruction* detector;
-  HadrontherapyRunMessenger* runMessenger;
-  HadrontherapyFactory *factory; 
-  G4int sourceChoice; //select primary particle 
+  void AddEMProcess();
+  // Counts the number of electromagnetic processes
+  // of primary particles in the phantom
 
- 
-  G4double matrix[80][80][80];
-  G4int indexI; 
-  G4int indexJ; 
-  G4int indexK;
+  void AddHadronicProcess();
+  // Counts the number of hadronic processes 
+  // of primary particles in the phantom
+
+private:  
+  G4int electromagnetic;
+  G4int hadronic;
 };
 #endif
 

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.6 2003/07/31 08:28:16 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.8 2005/12/09 17:17:10 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "globals.hh"
-#include <strstream>
+#include <sstream>
 
 #include "B02ImportanceDetectorConstruction.hh"
 
@@ -187,15 +187,13 @@ G4String B02ImportanceDetectorConstruction::ListPhysNamesAsG4String(){
 
 
 G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << "cell_";
   if (i<10) {
     os << "0";
   }
-  os << i 
-     << '\0';
-  G4String name(st);
+  os << i;
+  G4String name = os.str();
   return name;
 }
 

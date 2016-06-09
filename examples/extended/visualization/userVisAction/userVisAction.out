@@ -1,0 +1,2615 @@
+
+*************************************************************
+ Geant4 version Name: run-V07-00-05    (30-June-2005)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: XenonGas     density:  5.458 mg/cm3  temperature: 293.15 K  pressure:   1.00 atm  RadLength:  15.539 m  
+   --->  Element: XenonGas ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+Target is 5 cm of Lead
+There are 5 chambers in the tracker region. The chambers are 200 mm of XenonGas
+ The distance between chamber is 80 cm
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 990 eV     e- 8.07135 keV    e+ 8.07135 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 282.478 keV    e- 15.0137 MeV    e+ 13.9447 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : XenonGas
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 2.47072 keV    e- 40.2614 keV    e+ 39.2823 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 start.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.91 m     200 MeV     0 eV      0 fm      0 fm        World    initStep
+    1      0 fm      0 fm  -2.86 m     200 MeV  7.67 keV  4.79 cm   4.79 cm        World       eIoni
+    2   -326 mum   197 mum -2.45 m     200 MeV   110 keV  41.2 cm     46 cm        World  Transportation
+    3   -325 mum   197 mum -2.45 m     198 MeV   132 keV   113 mum    46 cm       Target       eBrem
+    4   -323 mum   209 mum -2.45 m     195 MeV   601 keV   487 mum  46.1 cm       Target       eBrem
+    5   -317 mum   190 mum -2.45 m     192 MeV  1.88 MeV  1.22 mm   46.2 cm       Target       eBrem
+    6   -302 mum   189 mum -2.45 m     161 MeV   540 keV   466 mum  46.2 cm       Target       eBrem
+    7  -9.77 mum   447 mum -2.45 m     156 MeV  2.53 MeV  2.21 mm   46.4 cm       Target       eBrem
+    8  -5.93 mum   454 mum -2.45 m     150 MeV   109 keV  80.2 mum  46.5 cm       Target       eBrem
+    9   10.7 mum   473 mum -2.45 m     147 MeV   403 keV   291 mum  46.5 cm       Target       eBrem
+   10   17.1 mum   560 mum -2.44 m    89.5 MeV  1.85 MeV  1.32 mm   46.6 cm       Target       eBrem
+   11   30.2 mum   605 mum -2.44 m    87.1 MeV  1.25 MeV   324 mum  46.7 cm       Target       eBrem
+   12   38.3 mum   692 mum -2.44 m    68.1 MeV  1.01 MeV   929 mum  46.7 cm       Target       eBrem
+   13   17.9 mum   761 mum -2.44 m    65.7 MeV   361 keV   354 mum  46.8 cm       Target       eBrem
+   14   1.52 mum   798 mum -2.44 m    65.1 MeV   197 keV   203 mum  46.8 cm       Target       eBrem
+   15  -5.87 mum   809 mum -2.44 m    54.5 MeV  91.5 keV  61.2 mum  46.8 cm       Target       eBrem
+   16  -47.4 mum   861 mum -2.44 m      53 MeV   288 keV   228 mum  46.8 cm       Target       eBrem
+   17  -89.4 mum   922 mum -2.44 m      51 MeV   212 keV   210 mum  46.8 cm       Target       eBrem
+   18   -288 mum  1.28 mm  -2.44 m    46.6 MeV  3.12 MeV   2.6 mm   47.1 cm       Target       eBrem
+   19   -383 mum  1.31 mm  -2.44 m    41.2 MeV   295 keV   194 mum  47.1 cm       Target       eBrem
+   20   -727 mum  1.43 mm  -2.44 m    39.2 MeV  1.34 MeV   786 mum  47.2 cm       Target       eBrem
+   21  -1.38 mm   1.61 mm  -2.44 m    12.7 MeV  3.05 MeV  1.03 mm   47.3 cm       Target       eBrem
+   22  -1.49 mm   1.63 mm  -2.44 m    12.2 MeV   193 keV   182 mum  47.3 cm       Target       eBrem
+   23  -2.54 mm   2.11 mm  -2.44 m    2.75 MeV  3.26 MeV  1.28 mm   47.5 cm       Target       eBrem
+   24  -2.86 mm   1.99 mm  -2.44 m       0 eV   2.75 MeV   2.2 mm   47.7 cm       Target       eIoni
+   25  -2.86 mm   1.99 mm  -2.44 m       0 eV      0 eV      0 fm   47.7 cm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 25,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.86 mm   1.99 mm  -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.05 mm   2.84 mm  -2.44 m     470 keV     0 eV   1.14 mm   1.14 mm       Target       compt
+    2  -6.49 mm   6.52 mm  -2.43 m     438 keV     0 eV   8.01 mm   9.15 mm       Target       compt
+    3   -1.1 cm   7.57 mm  -2.42 m     438 keV    88 keV  1.18 cm   2.09 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 28,   Parent ID = 25
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -1.1 cm   7.57 mm  -2.42 m     350 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -1.1 cm   7.58 mm  -2.42 m       0 eV    350 keV   185 mum   185 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 25
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -6.49 mm   6.52 mm  -2.43 m      32 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -6.49 mm   6.52 mm  -2.43 m       0 eV     32 keV  4.34 mum  4.34 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 26,   Parent ID = 25
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -3.05 mm   2.84 mm  -2.44 m    41.4 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.05 mm   2.85 mm  -2.44 m       0 eV   41.4 keV   6.6 mum   6.6 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 24,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.86 mm   1.99 mm  -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.35 mm  -4.81 mm  -2.44 m     372 keV     0 eV   9.01 mm   9.01 mm       Target       compt
+    2  -1.13 mm  -4.78 mm  -2.44 m     372 keV    88 keV   661 mum  9.67 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 30,   Parent ID = 24
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.13 mm  -4.78 mm  -2.44 m     284 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.13 mm  -4.79 mm  -2.44 m       0 eV    284 keV   137 mum   137 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 29,   Parent ID = 24
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.35 mm  -4.81 mm  -2.44 m     139 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.35 mm  -4.81 mm  -2.44 m       0 eV    139 keV  46.9 mum  46.9 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 23,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.54 mm   2.11 mm  -2.44 m    6.17 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.86 cm  -4.11 mm  -2.43 m    4.53 MeV     0 eV    1.9 cm    1.9 cm       Target       compt
+    2   -2.5 cm  -4.89 mm  -2.43 m    4.53 MeV     0 eV   6.79 mm   2.58 cm       Target  Transportation
+    3  -9.98 cm   -1.4 cm   -2.4 m    4.53 MeV     0 eV   7.99 cm   10.6 cm        World  Transportation
+    4   -2.4 m   -29.4 cm  -1.58 m    4.53 MeV     0 eV   2.46 m    2.56 m       Tracker  Transportation
+    5  -2.91 m   -35.6 cm   -1.4 m    4.53 MeV     0 eV   54.5 cm   3.11 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 31,   Parent ID = 23
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.86 cm  -4.11 mm  -2.43 m    1.64 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.87 cm   -4.2 mm  -2.43 m       0 eV   1.64 MeV  1.26 mm   1.26 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 22,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.49 mm   1.63 mm  -2.44 m     292 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.13 mm   1.76 mm  -2.44 m     246 keV     0 eV    884 mum   884 mum      Target       compt
+    2  -2.15 mm   1.76 mm  -2.44 m     246 keV    88 keV  19.9 mum   904 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 33,   Parent ID = 22
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.15 mm   1.76 mm  -2.44 m     158 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.15 mm   1.76 mm  -2.44 m       0 eV    158 keV    57 mum    57 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 22
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.13 mm   1.76 mm  -2.44 m    45.7 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.13 mm   1.76 mm  -2.44 m       0 eV   45.7 keV  7.76 mum  7.76 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 21,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.38 mm   1.61 mm  -2.44 m    23.5 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.43 cm   3.57 mm  -2.41 m    23.5 MeV     0 eV   3.42 cm   3.42 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 35,   Parent ID = 21
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.43 cm   3.57 mm  -2.41 m     3.9 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.45 cm    3.4 mm  -2.41 m    2.86 MeV   473 keV   438 mum   438 mum      Target       eBrem
+    2  -2.46 cm   3.77 mm  -2.41 m       0 eV   2.86 MeV  2.29 mm   2.72 mm       Target       eIoni
+    3  -2.46 cm   3.77 mm  -2.41 m       0 eV      0 eV      0 fm   2.72 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 38,   Parent ID = 35
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.46 cm   3.77 mm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.5 cm   3.14 mm  -2.41 m     511 keV     0 eV    790 mum   790 mum      Target  Transportation
+    2  -58.4 cm  -95.2 cm  -2.91 m     511 keV     0 eV   1.21 m    1.21 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 37,   Parent ID = 35
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.46 cm   3.77 mm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.15 cm   9.17 mm  -2.41 m     200 keV     0 eV   6.87 mm   6.87 mm       Target       compt
+    2  -2.18 cm   8.81 mm  -2.41 m     200 keV    88 keV   606 mum  7.48 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 37
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.18 cm   8.81 mm  -2.41 m     112 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.18 cm   8.81 mm  -2.41 m       0 eV    112 keV  33.4 mum  33.4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 37
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.15 cm   9.17 mm  -2.41 m     311 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.15 cm   9.18 mm  -2.41 m       0 eV    311 keV   156 mum   156 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 36,   Parent ID = 35
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.45 cm    3.4 mm  -2.41 m     561 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.5 cm   4.18 mm  -2.41 m     561 keV     0 eV    927 mum   927 mum      Target  Transportation
+    2  -21.8 cm   29.5 cm   -2.4 m     561 keV     0 eV   34.9 cm     35 cm        World  Transportation
+    3  -1.61 m     2.4 m   -2.31 m     561 keV     0 eV   2.53 m    2.88 m       Tracker  Transportation
+    4  -1.95 m    2.91 m   -2.29 m     561 keV     0 eV   61.2 cm   3.49 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 34,   Parent ID = 21
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.43 cm   3.57 mm  -2.41 m    18.6 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.44 cm   3.57 mm  -2.41 m    5.16 MeV  47.3 keV  34.1 mum  34.1 mum      Target       eBrem
+    2  -2.49 cm   3.44 mm  -2.41 m     823 keV  3.74 MeV  2.56 mm   2.59 mm       Target       eBrem
+    3  -2.49 cm   3.44 mm  -2.41 m     246 keV   577 keV   474 mum  3.07 mm       Target       eBrem
+    4  -2.49 cm   3.44 mm  -2.41 m       0 eV    246 keV   111 mum  3.18 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 42,   Parent ID = 34
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.49 cm   3.44 mm  -2.41 m     596 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.5 cm   3.46 mm  -2.41 m     596 keV     0 eV    153 mum   153 mum      Target  Transportation
+    2  -3.32 cm   5.31 mm   -2.4 m     596 keV     0 eV   1.44 cm   1.46 cm        World  Transportation
+    3   -2.4 m    53.9 cm   96.6 cm    596 keV     0 eV   4.15 m    4.16 m       Tracker  Transportation
+    4  -2.91 m    65.4 cm   1.69 m     596 keV     0 eV   89.4 cm   5.06 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 41,   Parent ID = 34
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.44 cm   3.57 mm  -2.41 m    13.3 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.5 cm    3.5 mm  -2.41 m    13.3 MeV     0 eV    975 mum   975 mum      Target  Transportation
+    2  -3.52 cm   2.31 mm   -2.4 m    13.3 MeV     0 eV   1.54 cm   1.64 cm        World  Transportation
+    3   -2.4 m   -27.4 cm   26.6 cm   13.3 MeV     0 eV   3.57 m    3.59 m       Tracker  Transportation
+    4  -2.91 m   -33.4 cm   84.2 cm   13.3 MeV     0 eV   77.1 cm   4.36 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 20,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -727 mum  1.43 mm  -2.44 m     686 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -933 mum  1.51 mm  -2.44 m     686 keV    88 keV   370 mum   370 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 20
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -933 mum  1.51 mm  -2.44 m     598 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -940 mum  1.53 mm  -2.44 m       0 eV    598 keV   382 mum   382 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 19,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -383 mum  1.31 mm  -2.44 m    5.13 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.5 cm   9.65 mm   -2.4 m    5.13 MeV     0 eV   4.68 cm   4.68 cm       Target  Transportation
+    2   -2.4 m    81.6 cm   1.36 m    5.13 MeV     0 eV   4.52 m    4.57 m       Tracker  Transportation
+    3  -2.91 m    98.9 cm   2.17 m    5.13 MeV     0 eV   97.1 cm   5.54 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 18,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -288 mum  1.28 mm  -2.44 m    1.19 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.93 mm   1.83 mm  -2.44 m     713 keV     0 eV   3.33 mm   3.33 mm       Target       compt
+    2  -5.28 mm   -692 mum -2.43 m     713 keV    88 keV  4.99 mm   8.32 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 45,   Parent ID = 18
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -5.28 mm   -692 mum -2.43 m     625 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -5.27 mm   -697 mum -2.43 m       0 eV    625 keV   404 mum   404 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 18
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.93 mm   1.83 mm  -2.44 m     482 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.93 mm   1.85 mm  -2.44 m       0 eV    482 keV   288 mum   288 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 17,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -89.4 mum   922 mum -2.44 m    1.86 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.82 mm   9.75 mm  -2.41 m    1.69 MeV     0 eV   3.16 cm   3.16 cm       Target       compt
+    2   -5.4 mm   1.06 cm   -2.4 m    1.69 MeV     0 eV   1.17 cm   4.33 cm       Target  Transportation
+    3  -4.54 cm    6.6 cm   -1.6 m    1.69 MeV     0 eV   80.3 cm   84.6 cm      Tracker  Transportation
+    4  -5.55 cm   7.99 cm   -1.4 m    1.69 MeV     0 eV   20.1 cm   1.05 m       Chamber  Transportation
+    5  -8.55 cm   12.1 cm    -80 cm   1.69 MeV     0 eV   60.2 cm   1.65 m       Tracker  Transportation
+    6  -9.55 cm   13.5 cm    -60 cm   1.69 MeV     0 eV   20.1 cm   1.85 m       Chamber  Transportation
+    7  -12.6 cm   17.7 cm  0.114 fm   1.69 MeV     0 eV   60.2 cm   2.45 m       Tracker  Transportation
+    8  -13.6 cm   19.1 cm     20 cm   1.69 MeV     0 eV   20.1 cm   2.65 m       Chamber  Transportation
+    9  -16.6 cm   23.2 cm     80 cm   1.69 MeV     0 eV   60.2 cm   3.25 m       Tracker  Transportation
+   10  -17.6 cm   24.6 cm      1 m    1.69 MeV     0 eV   20.1 cm   3.46 m       Chamber  Transportation
+   11  -20.6 cm   28.8 cm    1.6 m    1.69 MeV     0 eV   60.2 cm   4.06 m       Tracker  Transportation
+   12  -21.6 cm   30.2 cm    1.8 m    1.69 MeV     0 eV   20.1 cm   4.26 m       Chamber  Transportation
+   13  -24.6 cm   34.3 cm    2.4 m    1.69 MeV     0 eV   60.2 cm   4.86 m       Tracker  Transportation
+   14  -27.1 cm   37.9 cm   2.91 m    1.69 MeV     0 eV   51.2 cm   5.37 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 46,   Parent ID = 17
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.82 mm   9.75 mm  -2.41 m     174 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.82 mm   9.75 mm  -2.41 m       0 eV    174 keV  66.5 mum  66.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 16,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -47.4 mum   861 mum -2.44 m    1.19 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.59 mm   4.01 mm  -2.43 m     247 keV     0 eV   1.27 cm   1.27 cm       Target       compt
+    2  -2.09 mm   4.69 mm  -2.43 m     247 keV    88 keV  1.24 mm    1.4 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 16
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.09 mm   4.69 mm  -2.43 m     159 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.09 mm   4.69 mm  -2.43 m       0 eV    159 keV  57.2 mum  57.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 47,   Parent ID = 16
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.59 mm   4.01 mm  -2.43 m     943 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.6 mm   4.02 mm  -2.43 m       0 eV    943 keV   672 mum   672 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 15,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -5.87 mum   809 mum -2.44 m    10.5 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.8 mm   4.53 mm  -2.42 m    10.5 MeV     0 eV   1.84 cm   1.84 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 50,   Parent ID = 15
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -2.8 mm   4.53 mm  -2.42 m    5.28 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.01 mm   4.68 mm  -2.42 m       0 eV   5.28 MeV  4.15 mm   4.15 mm       Target       eIoni
+    2  -3.01 mm   4.68 mm  -2.42 m       0 eV      0 eV      0 fm   4.15 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 52,   Parent ID = 50
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -3.01 mm   4.68 mm  -2.42 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.48 mm  -2.54 mm  -2.42 m     511 keV    88 keV  7.44 mm   7.44 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 53,   Parent ID = 52
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.48 mm  -2.54 mm  -2.42 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.48 mm  -2.55 mm  -2.42 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 51,   Parent ID = 50
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -3.01 mm   4.68 mm  -2.42 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.9 mm   5.23 mm  -2.42 m     225 keV     0 eV    559 mum   559 mum      Target       compt
+    2  -2.52 mm   5.01 mm  -2.42 m     225 keV    88 keV   920 mum  1.48 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 55,   Parent ID = 51
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.52 mm   5.01 mm  -2.42 m     137 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.52 mm   5.01 mm  -2.42 m       0 eV    137 keV  45.8 mum  45.8 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 51
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -2.9 mm   5.23 mm  -2.42 m     286 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -2.9 mm   5.23 mm  -2.42 m       0 eV    286 keV   139 mum   139 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 49,   Parent ID = 15
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -2.8 mm   4.53 mm  -2.42 m    4.21 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.49 mm   4.93 mm  -2.42 m    1.33 MeV  2.44 MeV  1.04 mm   1.04 mm       Target       eBrem
+    2  -3.51 mm   4.86 mm  -2.42 m       0 eV   1.33 MeV   996 mum  2.04 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 56,   Parent ID = 49
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -3.49 mm   4.93 mm  -2.42 m     442 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.92 mm   2.86 mm  -2.42 m     442 keV    88 keV  3.79 mm   3.79 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 57,   Parent ID = 56
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.92 mm   2.86 mm  -2.42 m     354 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.93 mm   2.86 mm  -2.42 m       0 eV    354 keV   188 mum   188 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 14,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.52 mum   798 mum -2.44 m     396 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.06 mm   2.25 mm  -2.43 m     396 keV    88 keV  7.39 mm   7.39 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 58,   Parent ID = 14
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.06 mm   2.25 mm  -2.43 m     308 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.06 mm   2.25 mm  -2.43 m       0 eV    308 keV   154 mum   154 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 13,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   17.9 mum   761 mum -2.44 m    2.01 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -942 mum  2.37 mm  -2.43 m     242 keV     0 eV   8.64 mm   8.64 mm       Target       compt
+    2   -718 mum  2.32 mm  -2.43 m     242 keV    88 keV   370 mum  9.01 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 60,   Parent ID = 13
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -718 mum  2.32 mm  -2.43 m     154 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -721 mum  2.32 mm  -2.43 m       0 eV    154 keV  54.7 mum  54.7 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 59,   Parent ID = 13
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -942 mum  2.37 mm  -2.43 m    1.77 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.12 mm   2.83 mm  -2.43 m     876 keV   890 keV   788 mum   788 mum      Target       eBrem
+    2  -1.14 mm   2.83 mm  -2.43 m     390 keV   175 keV  95.9 mum   884 mum      Target       eBrem
+    3  -1.12 mm   2.84 mm  -2.43 m       0 eV    390 keV   215 mum   1.1 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 61,   Parent ID = 59
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.14 mm   2.83 mm  -2.43 m     311 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.07 mm   2.86 mm  -2.43 m     311 keV    88 keV    70 mum    70 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 62,   Parent ID = 61
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.07 mm   2.86 mm  -2.43 m     223 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.07 mm   2.86 mm  -2.43 m       0 eV    223 keV  96.5 mum  96.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 12,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   38.3 mum   692 mum -2.44 m      18 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -610 mum  2.07 mm  -2.43 m      18 MeV     0 eV   8.97 mm   8.97 mm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 64,   Parent ID = 12
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -610 mum  2.07 mm  -2.43 m    12.9 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -704 mum  2.23 mm  -2.43 m    11.7 MeV   547 keV   546 mum   546 mum      Target       eBrem
+    2   -636 mum  2.68 mm  -2.43 m    10.6 MeV   711 keV   673 mum  1.22 mm       Target       eBrem
+    3   -495 mum  3.15 mm  -2.43 m    9.91 MeV   721 keV   636 mum  1.86 mm       Target       eBrem
+    4    350 mum  2.92 mm  -2.43 m    7.78 MeV  1.73 MeV  1.21 mm   3.06 mm       Target       eBrem
+    5    358 mum  2.61 mm  -2.43 m    4.45 MeV   440 keV   356 mum  3.42 mm       Target       eBrem
+    6    789 mum  2.65 mm  -2.43 m    1.58 MeV  1.51 MeV  1.58 mm   5.01 mm       Target       eBrem
+    7    610 mum  2.91 mm  -2.43 m     479 keV   421 keV   435 mum  5.44 mm       Target       eBrem
+    8    589 mum  2.88 mm  -2.43 m       0 eV    479 keV   285 mum  5.73 mm       Target       eIoni
+    9    589 mum  2.88 mm  -2.43 m       0 eV      0 eV      0 fm   5.73 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 72,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    589 mum  2.88 mm  -2.43 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.48 mm   4.32 mm  -2.43 m     232 keV     0 eV   3.73 mm   3.73 mm       Target       compt
+    2   -3.4 mm    3.6 mm  -2.43 m     232 keV    88 keV  2.76 mm   6.49 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 74,   Parent ID = 72
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -3.4 mm    3.6 mm  -2.43 m     143 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -3.4 mm    3.6 mm  -2.43 m       0 eV    143 keV  49.1 mum  49.1 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 73,   Parent ID = 72
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.48 mm   4.32 mm  -2.43 m     279 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.48 mm   4.32 mm  -2.43 m       0 eV    279 keV   134 mum   134 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 71,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    589 mum  2.88 mm  -2.43 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.53 mm  -1.29 mm  -2.43 m     511 keV    88 keV  1.09 cm   1.09 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 75,   Parent ID = 71
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.53 mm  -1.29 mm  -2.43 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.54 mm  -1.31 mm  -2.43 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 70,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    610 mum  2.91 mm  -2.43 m     678 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.11 cm  -9.74 mm  -2.43 m     678 keV    88 keV  1.75 cm   1.75 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 76,   Parent ID = 70
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.11 cm  -9.74 mm  -2.43 m     590 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.11 cm  -9.76 mm  -2.43 m       0 eV    590 keV   375 mum   375 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 69,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    789 mum  2.65 mm  -2.43 m    1.36 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    680 mum  2.85 mm  -2.43 m    1.08 MeV     0 eV    231 mum   231 mum      Target       compt
+    2  -2.43 mm   5.58 mm  -2.43 m     410 keV     0 eV   4.15 mm   4.38 mm       Target       compt
+    3  -2.85 mm   6.33 mm  -2.42 m     410 keV    88 keV   5.8 mm   1.02 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 79,   Parent ID = 69
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.85 mm   6.33 mm  -2.42 m     322 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.84 mm   6.33 mm  -2.42 m       0 eV    322 keV   164 mum   164 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 78,   Parent ID = 69
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.43 mm   5.58 mm  -2.43 m     665 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.45 mm    5.6 mm  -2.43 m       0 eV    665 keV   438 mum   438 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 77,   Parent ID = 69
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    680 mum  2.85 mm  -2.43 m     288 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    682 mum  2.85 mm  -2.43 m       0 eV    288 keV   140 mum   140 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 68,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    358 mum  2.61 mm  -2.43 m    2.89 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.53 mm  -4.75 mm  -2.43 m    2.72 MeV     0 eV   8.35 mm   8.35 mm       Target       compt
+    2      5 mm  -1.03 cm  -2.42 m    2.72 MeV     0 eV   6.83 mm   1.52 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 82,   Parent ID = 68
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      5 mm  -1.03 cm  -2.42 m     295 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.01 mm  -1.03 cm  -2.42 m       0 eV    295 keV   142 mum   142 mum      Target       eIoni
+    2   5.01 mm  -1.03 cm  -2.42 m       0 eV      0 eV      0 fm    142 mum      Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 84,   Parent ID = 82
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.01 mm  -1.03 cm  -2.42 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.34 mm  -1.06 cm  -2.42 m     511 keV    88 keV   444 mum   444 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 85,   Parent ID = 84
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.34 mm  -1.06 cm  -2.42 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.35 mm  -1.06 cm  -2.42 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 83,   Parent ID = 82
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.01 mm  -1.03 cm  -2.42 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.07 mm  -6.63 mm  -2.42 m     511 keV    88 keV  5.36 mm   5.36 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 86,   Parent ID = 83
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.07 mm  -6.63 mm  -2.42 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.06 mm  -6.62 mm  -2.42 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 81,   Parent ID = 68
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      5 mm  -1.03 cm  -2.42 m     1.4 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.91 mm  -1.03 cm  -2.42 m     245 keV   567 keV   372 mum   372 mum      Target       eBrem
+    2   4.91 mm  -1.03 cm  -2.42 m       0 eV    245 keV   110 mum   482 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 87,   Parent ID = 81
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.91 mm  -1.03 cm  -2.42 m     590 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.62 mm  -8.42 mm  -2.43 m     215 keV     0 eV   2.85 mm   2.85 mm       Target       compt
+    2   6.99 mm  -7.47 mm  -2.42 m     215 keV    88 keV  4.39 mm   7.24 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 87
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.99 mm  -7.47 mm  -2.42 m     127 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.99 mm  -7.47 mm  -2.42 m       0 eV    127 keV  40.5 mum  40.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 88,   Parent ID = 87
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.62 mm  -8.42 mm  -2.43 m     374 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.62 mm  -8.41 mm  -2.43 m       0 eV    374 keV   204 mum   204 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 80,   Parent ID = 68
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.53 mm  -4.75 mm  -2.43 m     168 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.53 mm  -4.76 mm  -2.43 m       0 eV    168 keV  62.8 mum  62.8 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 67,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    350 mum  2.92 mm  -2.43 m     403 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    298 mum  2.31 mm  -2.43 m     372 keV     0 eV    818 mum   818 mum      Target       compt
+    2  -3.42 mm  -2.06 mm  -2.42 m     372 keV    88 keV  9.17 mm   9.98 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 91,   Parent ID = 67
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -3.42 mm  -2.06 mm  -2.42 m     284 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.42 mm  -2.07 mm  -2.42 m       0 eV    284 keV   138 mum   138 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 90,   Parent ID = 67
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    298 mum  2.31 mm  -2.43 m    30.4 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    298 mum  2.31 mm  -2.43 m       0 eV   30.4 keV     4 mum     4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 66,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -636 mum  2.68 mm  -2.43 m     388 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -537 mum  3.84 mm  -2.43 m     325 keV     0 eV   2.18 mm   2.18 mm       Target       compt
+    2    322 mum   4.3 mm  -2.43 m     325 keV    88 keV  1.23 mm    3.4 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 93,   Parent ID = 66
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    322 mum   4.3 mm  -2.43 m     237 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    323 mum   4.3 mm  -2.43 m       0 eV    237 keV   106 mum   106 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 92,   Parent ID = 66
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -537 mum  3.84 mm  -2.43 m      63 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -537 mum  3.84 mm  -2.43 m       0 eV     63 keV    13 mum    13 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 65,   Parent ID = 64
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -704 mum  2.23 mm  -2.43 m     663 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -1.3 mm   7.24 mm  -2.43 m     371 keV     0 eV   8.51 mm   8.51 mm       Target       compt
+    2  -2.63 mm   7.23 mm  -2.43 m     172 keV     0 eV   1.47 mm   9.98 mm       Target       compt
+    3  -2.35 mm   7.59 mm  -2.43 m     108 keV     0 eV   1.29 mm   1.13 cm       Target       compt
+    4  -2.27 mm   7.77 mm  -2.43 m     108 keV    88 keV   578 mum  1.18 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 97,   Parent ID = 65
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.27 mm   7.77 mm  -2.43 m    20.1 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.27 mm   7.77 mm  -2.43 m       0 eV   20.1 keV  2.06 mum  2.06 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 96,   Parent ID = 65
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.35 mm   7.59 mm  -2.43 m      64 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.35 mm   7.59 mm  -2.43 m       0 eV     64 keV  13.4 mum  13.4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 95,   Parent ID = 65
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.63 mm   7.23 mm  -2.43 m     198 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.63 mm   7.23 mm  -2.43 m       0 eV    198 keV  80.7 mum  80.7 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 94,   Parent ID = 65
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -1.3 mm   7.24 mm  -2.43 m     292 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.29 mm   7.25 mm  -2.43 m       0 eV    292 keV   144 mum   144 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 63,   Parent ID = 12
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -610 mum  2.07 mm  -2.43 m    4.05 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -612 mum  1.97 mm  -2.43 m    1.29 MeV  1.21 MeV   381 mum   381 mum      Target       eBrem
+    2   -632 mum  2.02 mm  -2.43 m       0 eV   1.29 MeV   962 mum  1.34 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 98,   Parent ID = 63
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -612 mum  1.97 mm  -2.43 m    1.55 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -5.92 mm    1.9 cm  -2.41 m    1.44 MeV     0 eV   3.08 cm   3.08 cm       Target       compt
+    2  -5.89 mm   2.32 cm   -2.4 m    1.44 MeV     0 eV   9.31 mm   4.01 cm       Target  Transportation
+    3   9.78 mm   2.04 m    1.69 m     257 keV     0 eV   4.56 m     4.6 m       Tracker       compt
+    4   9.07 cm   1.97 m    1.64 m     257 keV     0 eV   11.9 cm   4.72 m       Tracker  Transportation
+    5   16.1 cm    1.9 m     1.6 m     257 keV     0 eV   10.4 cm   4.83 m       Chamber  Transportation
+    6   1.15 m    1.01 m       1 m     257 keV     0 eV   1.47 m    6.29 m       Tracker  Transportation
+    7   1.49 m    70.8 cm     80 cm    257 keV     0 eV   48.9 cm   6.78 m       Chamber  Transportation
+    8    2.4 m   -11.8 cm   24.7 cm    257 keV     0 eV   1.35 m    8.13 m       Tracker  Transportation
+    9   2.91 m   -57.9 cm  -6.09 cm    257 keV     0 eV   75.3 cm   8.89 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 100,   Parent ID = 98
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.78 mm   2.04 m    1.69 m    1.19 MeV     0 eV      0 fm      0 fm      Tracker    initStep
+    1  -7.57 cm   2.32 m    2.26 m    1.07 MeV   114 keV  68.3 cm   68.3 cm      Tracker       eIoni
+    2  -5.05 cm   2.31 m     2.4 m    1.05 MeV  23.1 keV  14.4 cm   82.7 cm      Tracker  Transportation
+    3  -4.51 cm    2.3 m    2.48 m    1.02 MeV  16.1 keV  7.81 cm   90.5 cm        World       eIoni
+    4  -1.65 cm   2.35 m    2.91 m     955 keV  67.2 keV  45.7 cm   1.36 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 101,   Parent ID = 100
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.51 cm    2.3 m    2.48 m    10.8 keV     0 eV      0 fm      0 fm        World    initStep
+    1  -4.45 cm    2.3 m    2.48 m       0 eV   10.8 keV  2.58 mm   2.58 mm        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 99,   Parent ID = 98
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -5.92 mm    1.9 cm  -2.41 m     110 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -5.92 mm   1.91 cm  -2.41 m       0 eV    110 keV  32.3 mum  32.3 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 11,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   30.2 mum   605 mum -2.44 m    1.17 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -367 mum  5.65 mm   -2.4 m    1.17 MeV     0 eV   4.38 cm   4.38 cm       Target  Transportation
+    2  -7.66 mm   9.84 cm   -1.6 m    1.17 MeV     0 eV   80.5 cm   84.9 cm      Tracker  Transportation
+    3  -9.48 mm   12.2 cm   -1.4 m    1.17 MeV     0 eV   20.1 cm   1.05 m       Chamber  Transportation
+    4   -1.5 cm   19.1 cm    -80 cm   1.17 MeV     0 eV   60.4 cm   1.65 m       Tracker  Transportation
+    5  -1.68 cm   21.4 cm    -60 cm   1.17 MeV     0 eV   20.1 cm   1.86 m       Chamber  Transportation
+    6  -2.22 cm   28.4 cm      0 fm   1.17 MeV     0 eV   60.4 cm   2.46 m       Tracker  Transportation
+    7  -2.41 cm   30.7 cm     20 cm   1.17 MeV     0 eV   20.1 cm   2.66 m       Chamber  Transportation
+    8  -2.95 cm   37.7 cm     80 cm   1.17 MeV     0 eV   60.4 cm   3.27 m       Tracker  Transportation
+    9  -3.14 cm     40 cm      1 m    1.17 MeV     0 eV   20.1 cm   3.47 m       Chamber  Transportation
+   10  -3.68 cm   46.9 cm    1.6 m    1.17 MeV     0 eV   60.4 cm   4.07 m       Tracker  Transportation
+   11  -3.86 cm   49.2 cm    1.8 m    1.17 MeV     0 eV   20.1 cm   4.27 m       Chamber  Transportation
+   12  -4.41 cm   56.2 cm    2.4 m    1.17 MeV     0 eV   60.4 cm   4.88 m       Tracker  Transportation
+   13  -4.88 cm   62.1 cm   2.91 m    1.17 MeV     0 eV   51.3 cm   5.39 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 10,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   17.1 mum   560 mum -2.44 m    55.5 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   25.3 mum   591 mum -2.44 m    55.5 MeV     0 eV    261 mum   261 mum      Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 103,   Parent ID = 10
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   25.3 mum   591 mum -2.44 m    3.78 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -57.9 mum   944 mum -2.44 m       0 eV   3.78 MeV  3.01 mm   3.01 mm       Target       eIoni
+    2  -57.9 mum   944 mum -2.44 m       0 eV      0 eV      0 fm   3.01 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 105,   Parent ID = 103
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -57.9 mum   944 mum -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.27 mm    248 mum -2.45 m     511 keV    88 keV  3.21 mm   3.21 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 106,   Parent ID = 105
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.27 mm    248 mum -2.45 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.28 mm    244 mum -2.45 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 104,   Parent ID = 103
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -57.9 mum   944 mum -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.45 mm   3.25 mm  -2.43 m     511 keV    88 keV  1.07 cm   1.07 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 107,   Parent ID = 104
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.45 mm   3.25 mm  -2.43 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.44 mm   3.26 mm  -2.43 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 102,   Parent ID = 10
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   25.3 mum   591 mum -2.44 m    50.7 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   30.7 mum   611 mum -2.44 m    43.7 MeV   254 keV   193 mum   193 mum      Target       eBrem
+    2    150 mum   786 mum -2.44 m    41.5 MeV  1.44 MeV  1.16 mm   1.35 mm       Target       eBrem
+    3    488 mum   779 mum -2.44 m    34.7 MeV  1.27 MeV   965 mum  2.31 mm       Target       eBrem
+    4    651 mum   746 mum -2.44 m    33.6 MeV   431 keV   419 mum  2.73 mm       Target       eBrem
+    5    727 mum   742 mum -2.44 m    33.2 MeV   184 keV   185 mum  2.92 mm       Target       eBrem
+    6   1.15 mm    733 mum -2.44 m    30.7 MeV   958 keV   731 mum  3.65 mm       Target       eBrem
+    7   1.67 mm    585 mum -2.44 m    27.2 MeV 1e+03 keV   826 mum  4.48 mm       Target       eBrem
+    8   2.64 mm    617 mum -2.44 m    23.2 MeV   2.6 MeV  1.34 mm   5.81 mm       Target       eBrem
+    9   3.28 mm    326 mum -2.44 m    21.4 MeV  1.16 MeV   970 mum  6.78 mm       Target       eBrem
+   10   3.58 mm   38.4 mum -2.44 m    16.5 MeV   553 keV   441 mum  7.22 mm       Target       eBrem
+   11   4.63 mm   -314 mum -2.44 m    13.5 MeV  1.77 MeV  1.51 mm   8.73 mm       Target       eBrem
+   12   4.87 mm   -940 mum -2.44 m    10.6 MeV  2.32 MeV   730 mum  9.46 mm       Target       eBrem
+   13   5.14 mm  -1.08 mm  -2.44 m    9.23 MeV   390 keV   310 mum  9.77 mm       Target       eBrem
+   14   5.45 mm  -1.59 mm  -2.44 m    6.91 MeV   845 keV   632 mum  1.04 cm       Target       eBrem
+   15   5.88 mm  -1.66 mm  -2.44 m    4.25 MeV  2.22 MeV   446 mum  1.08 cm       Target       eBrem
+   16   6.94 mm    160 mum -2.44 m     592 keV  3.26 MeV   2.9 mm   1.37 cm       Target       eBrem
+   17   6.94 mm    185 mum -2.44 m       0 eV    592 keV   377 mum  1.41 cm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 123,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.94 mm    160 mum -2.44 m     398 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   8.44 mm   2.23 mm  -2.43 m     398 keV    88 keV  3.41 mm   3.41 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 124,   Parent ID = 123
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   8.44 mm   2.23 mm  -2.43 m     310 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   8.44 mm   2.24 mm  -2.43 m       0 eV    310 keV   156 mum   156 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 122,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.88 mm  -1.66 mm  -2.44 m     434 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.94 mm   -1.5 mm  -2.44 m     419 keV     0 eV    220 mum   220 mum      Target       compt
+    2   1.18 cm   6.11 mm  -2.44 m     419 keV    88 keV  1.07 cm    1.1 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 126,   Parent ID = 122
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.18 cm   6.11 mm  -2.44 m     331 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.19 cm   6.11 mm  -2.44 m       0 eV    331 keV   171 mum   171 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 125,   Parent ID = 122
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.94 mm   -1.5 mm  -2.44 m    15.8 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.94 mm   -1.5 mm  -2.44 m       0 eV   15.8 keV   1.4 mum   1.4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 121,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.45 mm  -1.59 mm  -2.44 m    1.48 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.09 cm  -1.05 cm  -2.43 m     800 keV     0 eV   1.85 cm   1.85 cm       Target       compt
+    2    2.5 cm   -1.9 cm  -2.43 m     800 keV     0 eV   9.77 mm   2.82 cm       Target  Transportation
+    3   82.6 cm  -1.68 m   -2.91 m     800 keV     0 eV   1.91 m    1.93 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 127,   Parent ID = 121
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.09 cm  -1.05 cm  -2.43 m     680 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.09 cm  -1.05 cm  -2.43 m       0 eV    680 keV   450 mum   450 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 120,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.14 mm  -1.08 mm  -2.44 m    1.01 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.31 mm   -5.8 mm  -2.44 m     262 keV     0 eV   6.32 mm   6.32 mm       Target       compt
+    2   9.16 mm  -5.31 mm  -2.44 m     262 keV    88 keV   906 mum  7.22 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 129,   Parent ID = 120
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.16 mm  -5.31 mm  -2.44 m     174 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.17 mm  -5.31 mm  -2.44 m       0 eV    174 keV  66.2 mum  66.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 128,   Parent ID = 120
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.31 mm   -5.8 mm  -2.44 m     745 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.33 mm  -5.83 mm  -2.44 m       0 eV    745 keV   505 mum   505 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 119,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.87 mm   -940 mum -2.44 m     557 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.13 cm  -3.63 mm  -2.44 m     557 keV    88 keV  7.04 mm   7.04 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 130,   Parent ID = 119
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.13 cm  -3.63 mm  -2.44 m     469 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.13 cm  -3.63 mm  -2.44 m       0 eV    469 keV   277 mum   277 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 118,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.63 mm   -314 mum -2.44 m    1.24 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.64 cm  -1.38 cm  -2.44 m     810 keV     0 eV   1.79 cm   1.79 cm       Target       compt
+    2   2.32 cm  -1.78 cm  -2.44 m     374 keV     0 eV   9.67 mm   2.76 cm       Target       compt
+    3   2.32 cm  -1.73 cm  -2.44 m     230 keV     0 eV    944 mum  2.85 cm       Target       compt
+    4   1.77 cm  -1.97 cm  -2.45 m     230 keV    88 keV  6.39 mm   3.49 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 134,   Parent ID = 118
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.77 cm  -1.97 cm  -2.45 m     142 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.77 cm  -1.97 cm  -2.45 m       0 eV    142 keV  48.5 mum  48.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 133,   Parent ID = 118
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.32 cm  -1.73 cm  -2.44 m     144 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.32 cm  -1.73 cm  -2.44 m       0 eV    144 keV  49.2 mum  49.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 132,   Parent ID = 118
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.32 cm  -1.78 cm  -2.44 m     436 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.33 cm  -1.78 cm  -2.44 m       0 eV    436 keV   251 mum   251 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 131,   Parent ID = 118
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.64 cm  -1.38 cm  -2.44 m     428 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.64 cm  -1.39 cm  -2.44 m       0 eV    428 keV   245 mum   245 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 117,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.58 mm   38.4 mum -2.44 m    4.29 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.11 cm  -1.87 cm  -2.41 m    4.29 MeV     0 eV   3.49 cm   3.49 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 136,   Parent ID = 117
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.11 cm  -1.87 cm  -2.41 m    2.43 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.13 cm  -1.89 cm  -2.41 m       0 eV   2.43 MeV  1.94 mm   1.94 mm       Target       eIoni
+    2   2.13 cm  -1.89 cm  -2.41 m       0 eV      0 eV      0 fm   1.94 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 138,   Parent ID = 136
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.13 cm  -1.89 cm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    2.5 cm  -1.69 cm  -2.41 m     511 keV     0 eV   5.92 mm   5.92 mm       Target  Transportation
+    2   3.39 cm  -1.21 cm   -2.4 m     511 keV     0 eV   1.42 cm   2.01 cm        World  Transportation
+    3    2.4 m    1.27 m    23.7 cm    511 keV     0 eV   3.77 m    3.79 m       Tracker  Transportation
+    4   2.91 m    1.55 m    80.6 cm    511 keV     0 eV   81.2 cm    4.6 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 137,   Parent ID = 136
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.13 cm  -1.89 cm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.24 cm  -2.37 cm  -2.42 m     355 keV     0 eV   1.42 cm   1.42 cm       Target       compt
+    2   1.04 cm  -2.13 cm  -2.43 m     277 keV     0 eV   4.14 mm   1.83 cm       Target       compt
+    3   1.08 cm  -2.12 cm  -2.43 m     277 keV    88 keV   1.5 mm   1.98 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 141,   Parent ID = 137
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.08 cm  -2.12 cm  -2.43 m     189 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.08 cm  -2.12 cm  -2.43 m       0 eV    189 keV  75.3 mum  75.3 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 140,   Parent ID = 137
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.04 cm  -2.13 cm  -2.43 m    78.2 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.04 cm  -2.13 cm  -2.43 m       0 eV   78.2 keV  18.5 mum  18.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 139,   Parent ID = 137
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.24 cm  -2.37 cm  -2.42 m     156 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.24 cm  -2.37 cm  -2.42 m       0 eV    156 keV  55.5 mum  55.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 135,   Parent ID = 117
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.11 cm  -1.87 cm  -2.41 m     846 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.11 cm  -1.87 cm  -2.41 m     458 keV  73.8 keV    56 mum    56 mum      Target       eBrem
+    2   2.11 cm  -1.87 cm  -2.41 m       0 eV    458 keV   269 mum   325 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 142,   Parent ID = 135
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.11 cm  -1.87 cm  -2.41 m     314 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.09 cm  -1.77 cm  -2.41 m     314 keV    88 keV  1.29 mm   1.29 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 143,   Parent ID = 142
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.09 cm  -1.77 cm  -2.41 m     226 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    2.1 cm  -1.77 cm  -2.41 m       0 eV    226 keV  98.5 mum  98.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 116,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.28 mm    326 mum -2.44 m     714 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.54 mm  -2.03 mm  -2.44 m     338 keV     0 eV   4.42 mm   4.42 mm       Target       compt
+    2   9.95 mm  -1.37 mm  -2.44 m     338 keV    88 keV  4.59 mm   9.01 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 145,   Parent ID = 116
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.95 mm  -1.37 mm  -2.44 m     250 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   9.96 mm  -1.37 mm  -2.44 m       0 eV    250 keV   114 mum   114 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 144,   Parent ID = 116
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.54 mm  -2.03 mm  -2.44 m     376 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.55 mm  -2.04 mm  -2.44 m       0 eV    376 keV   205 mum   205 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 115,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.64 mm    617 mum -2.44 m    1.38 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    2.5 cm  -4.09 mm  -2.42 m    1.38 MeV     0 eV   2.74 cm   2.74 cm       Target  Transportation
+    2   5.96 cm  -1.14 cm   -2.4 m    1.38 MeV     0 eV   4.25 cm   6.99 cm        World  Transportation
+    3    2.4 m   -50.4 cm  -81.1 cm   1.38 MeV     0 eV   2.87 m    2.94 m       Tracker  Transportation
+    4   2.91 m   -61.1 cm  -46.5 cm   1.38 MeV     0 eV   62.6 cm   3.57 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 114,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.67 mm    585 mum -2.44 m    2.45 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.53 mm    711 mum -2.44 m    2.45 MeV     0 eV   3.54 mm   3.54 mm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 147,   Parent ID = 114
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.53 mm    711 mum -2.44 m     390 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.55 mm    696 mum -2.44 m       0 eV    390 keV   213 mum   213 mum      Target       eIoni
+    2   3.55 mm    696 mum -2.44 m       0 eV      0 eV      0 fm    213 mum      Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 149,   Parent ID = 147
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.55 mm    696 mum -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.13 mm     75 mum -2.44 m     511 keV    88 keV   756 mum   756 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 150,   Parent ID = 149
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.13 mm     75 mum -2.44 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.12 mm   75.5 mum -2.44 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 148,   Parent ID = 147
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.55 mm    696 mum -2.44 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    4.5 mm   2.12 mm  -2.44 m     511 keV    88 keV  1.73 mm   1.73 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 151,   Parent ID = 148
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    4.5 mm   2.12 mm  -2.44 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.52 mm   2.13 mm  -2.44 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 146,   Parent ID = 114
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.53 mm    711 mum -2.44 m    1.04 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.54 mm    742 mum -2.44 m       0 eV   1.04 MeV   754 mum   754 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 113,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.15 mm    733 mum -2.44 m    1.55 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    5.9 mm    183 mum -2.43 m    1.48 MeV     0 eV   7.63 mm   7.63 mm       Target       compt
+    2    8.3 mm   -114 mum -2.43 m     299 keV     0 eV   3.19 mm   1.08 cm       Target       compt
+    3   8.41 mm    718 mum -2.43 m     299 keV    88 keV  1.02 mm   1.18 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 154,   Parent ID = 113
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   8.41 mm    718 mum -2.43 m     211 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   8.41 mm    722 mum -2.43 m       0 eV    211 keV  88.7 mum  88.7 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 153,   Parent ID = 113
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    8.3 mm   -114 mum -2.43 m    1.18 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   8.35 mm   -131 mum -2.43 m       0 eV   1.18 MeV   874 mum   874 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 152,   Parent ID = 113
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    5.9 mm    183 mum -2.43 m    73.9 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    5.9 mm    183 mum -2.43 m       0 eV   73.9 keV    17 mum    17 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 112,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    727 mum   742 mum -2.44 m     292 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.47 mm    821 mum -2.44 m     291 keV     0 eV    1.5 mm    1.5 mm       Target       compt
+    2   1.93 mm    867 mum -2.44 m     291 keV    88 keV   792 mum  2.29 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 156,   Parent ID = 112
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.93 mm    867 mum -2.44 m     203 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.93 mm    866 mum -2.44 m       0 eV    203 keV  83.6 mum  83.6 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 155,   Parent ID = 112
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.47 mm    821 mum -2.44 m    1.14 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.47 mm    821 mum -2.44 m       0 eV   1.14 keV    34 nm     34 nm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 111,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    651 mum   746 mum -2.44 m     647 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.91 mm    599 mum -2.44 m     223 keV     0 eV   2.41 mm   2.41 mm       Target       compt
+    2   1.84 mm    433 mum -2.44 m     223 keV    88 keV   200 mum  2.61 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 158,   Parent ID = 111
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.84 mm    433 mum -2.44 m     135 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.84 mm    434 mum -2.44 m       0 eV    135 keV  44.7 mum  44.7 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 157,   Parent ID = 111
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.91 mm    599 mum -2.44 m     424 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.92 mm    602 mum -2.44 m       0 eV    424 keV   242 mum   242 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 110,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    488 mum   779 mum -2.44 m    5.48 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.86 mm    1.2 mm  -2.43 m    1.78 MeV     0 eV   7.13 mm   7.13 mm       Target       compt
+    2   2.22 cm   -5.4 mm  -2.42 m    1.78 MeV    88 keV  2.57 cm   3.28 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 160,   Parent ID = 110
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.22 cm   -5.4 mm  -2.42 m     1.7 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.23 cm  -5.42 mm  -2.42 m       0 eV    1.7 MeV  1.31 mm   1.31 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 159,   Parent ID = 110
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.86 mm    1.2 mm  -2.43 m    3.69 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.67 mm   1.71 mm  -2.43 m     571 keV   2.8 MeV  2.31 mm   2.31 mm       Target       eBrem
+    2   4.68 mm   1.69 mm  -2.43 m       0 eV    571 keV   360 mum  2.67 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 161,   Parent ID = 159
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.67 mm   1.71 mm  -2.43 m     320 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   7.66 mm   1.41 mm  -2.43 m     173 keV     0 eV   3.03 mm   3.03 mm       Target       compt
+    2   7.08 mm    217 mum -2.43 m     173 keV    88 keV  1.36 mm   4.39 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 163,   Parent ID = 161
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.08 mm    217 mum -2.43 m    84.7 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   7.08 mm    215 mum -2.43 m       0 eV   84.7 keV  21.2 mum  21.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 162,   Parent ID = 161
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.66 mm   1.41 mm  -2.43 m     147 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   7.67 mm   1.41 mm  -2.43 m       0 eV    147 keV  51.1 mum  51.1 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 109,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    150 mum   786 mum -2.44 m     776 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.36 mm   1.45 mm  -2.44 m     593 keV     0 eV    6.4 mm    6.4 mm       Target       compt
+    2   3.46 mm  -1.16 mm  -2.43 m     593 keV    88 keV  5.11 mm   1.15 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 165,   Parent ID = 109
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.46 mm  -1.16 mm  -2.43 m     505 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.48 mm  -1.17 mm  -2.43 m       0 eV    505 keV   306 mum   306 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 164,   Parent ID = 109
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.36 mm   1.45 mm  -2.44 m     182 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.36 mm   1.45 mm  -2.44 m       0 eV    182 keV  71.2 mum  71.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 108,   Parent ID = 102
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   30.7 mum   611 mum -2.44 m    6.77 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.28 mm   2.89 mm  -2.41 m    6.77 MeV     0 eV   3.75 cm   3.75 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 167,   Parent ID = 108
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.28 mm   2.89 mm  -2.41 m     2.7 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.57 mm   3.02 mm  -2.41 m       0 eV    2.7 MeV  2.15 mm   2.15 mm       Target       eIoni
+    2   6.57 mm   3.02 mm  -2.41 m       0 eV      0 eV      0 fm   2.15 mm       Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 169,   Parent ID = 167
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.57 mm   3.02 mm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   7.96 mm   2.66 mm  -2.41 m     224 keV     0 eV    6.4 mm    6.4 mm       Target       compt
+    2   6.85 mm    2.9 mm  -2.41 m     176 keV     0 eV   1.14 mm   7.54 mm       Target       compt
+    3   6.61 mm   2.66 mm  -2.41 m     176 keV    88 keV   446 mum  7.99 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 172,   Parent ID = 169
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.61 mm   2.66 mm  -2.41 m    87.5 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.61 mm   2.66 mm  -2.41 m       0 eV   87.5 keV  22.4 mum  22.4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 171,   Parent ID = 169
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.85 mm    2.9 mm  -2.41 m    48.1 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.85 mm    2.9 mm  -2.41 m       0 eV   48.1 keV  8.41 mum  8.41 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 170,   Parent ID = 169
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.96 mm   2.66 mm  -2.41 m     287 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   7.97 mm   2.65 mm  -2.41 m       0 eV    287 keV   140 mum   140 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 168,   Parent ID = 167
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.57 mm   3.02 mm  -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.61 mm   3.28 mm   -2.4 m     511 keV    88 keV   4.4 mm    4.4 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 173,   Parent ID = 168
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.61 mm   3.28 mm   -2.4 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   5.62 mm   3.27 mm   -2.4 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 166,   Parent ID = 108
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.28 mm   2.89 mm  -2.41 m    3.06 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.16 mm    2.8 mm  -2.41 m    2.57 MeV   204 keV   174 mum   174 mum      Target       eBrem
+    2   6.15 mm   2.79 mm  -2.41 m    1.88 MeV    24 keV  27.7 mum   201 mum      Target       eBrem
+    3   6.38 mm   2.07 mm  -2.41 m      28 keV  1.85 MeV  1.34 mm   1.54 mm       Target       eBrem
+    4   6.38 mm   2.07 mm  -2.41 m       0 eV     28 keV  3.52 mum  1.55 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 175,   Parent ID = 166
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.15 mm   2.79 mm  -2.41 m     665 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.85 mm   2.47 mm   -2.4 m     538 keV     0 eV   7.17 mm   7.17 mm       Target       compt
+    2   2.84 mm   2.49 mm   -2.4 m     538 keV     0 eV   52.2 mum  7.23 mm       Target  Transportation
+    3  -43.1 cm   1.95 m     1.6 m     538 keV     0 eV   4.47 m    4.48 m       Tracker  Transportation
+    4  -43.5 cm   1.97 m    1.63 m     538 keV     0 eV   3.67 cm   4.51 m       Chamber  Transportation
+    5  -51.8 cm   2.34 m     2.4 m     538 keV     0 eV   85.8 cm   5.37 m       Tracker  Transportation
+    6  -57.3 cm   2.59 m    2.91 m     538 keV     0 eV     57 cm   5.94 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 176,   Parent ID = 175
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.85 mm   2.47 mm   -2.4 m     127 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.85 mm   2.47 mm   -2.4 m       0 eV    127 keV  40.4 mum  40.4 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 174,   Parent ID = 166
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.16 mm    2.8 mm  -2.41 m     284 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    313 mum  4.88 mm   -2.4 m     284 keV    88 keV  8.14 mm   8.14 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 177,   Parent ID = 174
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    313 mum  4.88 mm   -2.4 m     196 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    312 mum  4.88 mm   -2.4 m       0 eV    196 keV  79.5 mum  79.5 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   10.7 mum   473 mum -2.45 m    2.86 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   60.2 mum   587 mum -2.44 m    1.46 MeV     0 eV   1.32 mm   1.32 mm       Target       compt
+    2   1.04 mm  -1.69 cm  -2.41 m    1.03 MeV     0 eV   3.59 cm   3.73 cm       Target       compt
+    3   4.09 mm   -2.5 cm  -2.41 m    1.03 MeV     0 eV   1.02 cm   4.75 cm       Target  Transportation
+    4   8.11 mm  -3.57 cm   -2.4 m    1.03 MeV     0 eV   1.35 cm   6.09 cm        World  Transportation
+    5   89.5 cm   -2.4 m   -83.9 cm   1.03 MeV     0 eV   2.97 m    3.03 m       Tracker  Transportation
+    6   1.09 m   -2.91 m   -50.2 cm   1.03 MeV     0 eV     64 cm   3.67 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 179,   Parent ID = 9
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.04 mm  -1.69 cm  -2.41 m     430 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.03 mm  -1.69 cm  -2.41 m       0 eV    430 keV   246 mum   246 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 178,   Parent ID = 9
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   60.2 mum   587 mum -2.44 m     1.4 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   63.7 mum   636 mum -2.44 m       0 eV    1.4 MeV  1.06 mm   1.06 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -5.93 mum   454 mum -2.45 m    6.09 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    983 mum  2.45 mm  -2.42 m    2.17 MeV     0 eV   3.03 cm   3.03 cm       Target       compt
+    2  -1.72 mm    811 mum -2.41 m    2.17 MeV     0 eV   6.67 mm   3.69 cm       Target        conv
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 182,   Parent ID = 8
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.72 mm    811 mum -2.41 m     382 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.72 mm    799 mum -2.41 m       0 eV    382 keV   208 mum   208 mum      Target       eIoni
+    2  -1.72 mm    799 mum -2.41 m       0 eV      0 eV      0 fm    208 mum      Target     annihil
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 184,   Parent ID = 182
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.72 mm    799 mum -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -1.1 mm   -630 mum  -2.4 m     355 keV     0 eV   5.25 mm   5.25 mm       Target       compt
+    2   -893 mum  -461 mum  -2.4 m     355 keV    88 keV   352 mum  5.61 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 186,   Parent ID = 184
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -893 mum  -461 mum  -2.4 m     267 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -889 mum  -463 mum  -2.4 m       0 eV    267 keV   125 mum   125 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 185,   Parent ID = 184
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -1.1 mm   -630 mum  -2.4 m     156 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -1.1 mm   -633 mum  -2.4 m       0 eV    156 keV    56 mum    56 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 183,   Parent ID = 182
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.72 mm    799 mum -2.41 m     511 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.75 mm    861 mum -2.41 m     511 keV    88 keV   226 mum   226 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 187,   Parent ID = 183
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.75 mm    861 mum -2.41 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.75 mm    873 mum -2.41 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 181,   Parent ID = 8
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.72 mm    811 mum -2.41 m     767 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -1.74 mm    812 mum -2.41 m       0 eV    767 keV   523 mum   523 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 180,   Parent ID = 8
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    983 mum  2.45 mm  -2.42 m    3.91 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.09 mm   2.55 mm  -2.41 m       0 eV   3.91 MeV  3.07 mm   3.07 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -9.77 mum   447 mum -2.45 m    1.74 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.76 mm   3.08 mm  -2.42 m     972 keV     0 eV   3.07 cm   3.07 cm       Target       compt
+    2   -514 mum  7.06 mm  -2.41 m     972 keV    88 keV  6.82 mm   3.75 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 189,   Parent ID = 7
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -514 mum  7.06 mm  -2.41 m     884 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -543 mum  7.07 mm  -2.41 m       0 eV    884 keV   622 mum   622 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 188,   Parent ID = 7
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.76 mm   3.08 mm  -2.42 m     766 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.77 mm   3.07 mm  -2.42 m       0 eV    766 keV   522 mum   522 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -302 mum   189 mum -2.45 m    31.2 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.42 mm   1.24 mm  -2.43 m     732 keV     0 eV   1.35 cm   1.35 cm       Target       compt
+    2  -6.14 mm   5.55 mm  -2.43 m     575 keV     0 eV   9.45 mm   2.29 cm       Target       compt
+    3  -7.85 mm   9.61 mm  -2.43 m     575 keV    88 keV  4.58 mm   2.75 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 192,   Parent ID = 6
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -7.85 mm   9.61 mm  -2.43 m     487 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -7.85 mm   9.63 mm  -2.43 m       0 eV    487 keV   292 mum   292 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 191,   Parent ID = 6
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -6.14 mm   5.55 mm  -2.43 m     157 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -6.14 mm   5.55 mm  -2.43 m       0 eV    157 keV  56.2 mum  56.2 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 190,   Parent ID = 6
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.42 mm   1.24 mm  -2.43 m    30.5 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   2.39 mm    963 mum -2.43 m    26.4 MeV  3.13 MeV  2.58 mm   2.58 mm       Target       eBrem
+    2   2.42 mm    901 mum -2.43 m    23.3 MeV   548 keV   191 mum  2.77 mm       Target       eBrem
+    3   2.54 mm   -685 mum -2.43 m    16.7 MeV  6.59 MeV   2.3 mm   5.07 mm       Target       eBrem
+    4   2.46 mm   -935 mum -2.43 m    14.4 MeV   675 keV   533 mum   5.6 mm       Target       eBrem
+    5   1.88 mm  -1.18 mm  -2.43 m      10 MeV   990 keV   863 mum  6.47 mm       Target       eBrem
+    6    986 mum -1.55 mm  -2.43 m    8.32 MeV  1.39 MeV  1.31 mm   7.78 mm       Target       eBrem
+    7   -147 mum  2.02 mm  -2.43 m    3.13 MeV  4.87 MeV  3.83 mm   1.16 cm       Target       eBrem
+    8   -249 mum  2.34 mm  -2.43 m    1.31 MeV   516 keV   528 mum  1.21 cm       Target       eBrem
+    9   -212 mum   2.3 mm  -2.43 m       0 eV   1.31 MeV   985 mum  1.31 cm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 199,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -249 mum  2.34 mm  -2.43 m     1.3 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    948 mum  1.82 mm  -2.43 m     892 keV     0 eV   2.93 mm   2.93 mm       Target       compt
+    2   1.01 cm  -1.72 cm  -2.45 m     590 keV     0 eV   2.69 cm   2.99 cm       Target       compt
+    3   1.08 cm  -1.73 cm  -2.45 m     590 keV     0 eV   1.16 mm    3.1 cm       Target  Transportation
+    4   36.8 cm  -2.49 cm  -2.91 m     590 keV     0 eV   58.2 cm   61.3 cm   OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 201,   Parent ID = 199
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.01 cm  -1.72 cm  -2.45 m     302 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   1.01 cm  -1.73 cm  -2.45 m       0 eV    302 keV   150 mum   150 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 200,   Parent ID = 199
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    948 mum  1.82 mm  -2.43 m     412 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    952 mum  1.83 mm  -2.43 m       0 eV    412 keV   233 mum   233 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 198,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -147 mum  2.02 mm  -2.43 m     324 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -321 mum   2.1 mm  -2.43 m     324 keV    88 keV   993 mum   993 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 202,   Parent ID = 198
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -321 mum   2.1 mm  -2.43 m     236 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -318 mum  2.09 mm  -2.43 m       0 eV    236 keV   105 mum   105 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 197,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    986 mum -1.55 mm  -2.43 m     322 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.62 mm  -1.57 mm  -2.43 m     322 keV    88 keV  7.28 mm   7.28 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 203,   Parent ID = 197
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -4.62 mm  -1.57 mm  -2.43 m     234 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -4.62 mm  -1.58 mm  -2.43 m       0 eV    234 keV   103 mum   103 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 196,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.88 mm  -1.18 mm  -2.43 m    3.39 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -6.3 mm  -1.27 cm   -2.4 m    3.39 MeV     0 eV   3.22 cm   3.22 cm       Target  Transportation
+    2  -45.7 cm  -64.6 cm    -80 cm   3.39 MeV     0 eV   1.78 m    1.81 m       Tracker  Transportation
+    3  -47.6 cm  -67.2 cm  -73.4 cm   3.39 MeV     0 eV   7.38 cm   1.88 m       Chamber  Transportation
+    4  -68.3 cm  -96.2 cm      0 fm   3.39 MeV     0 eV   81.6 cm    2.7 m       Tracker  Transportation
+    5  -73.9 cm  -1.04 m      20 cm   3.39 MeV     0 eV   22.2 cm   2.92 m       Chamber  Transportation
+    6  -90.8 cm  -1.28 m      80 cm   3.39 MeV     0 eV   66.7 cm   3.59 m       Tracker  Transportation
+    7  -96.5 cm  -1.36 m       1 m    3.39 MeV     0 eV   22.2 cm   3.81 m       Chamber  Transportation
+    8  -1.13 m    -1.6 m     1.6 m    3.39 MeV     0 eV   66.7 cm   4.48 m       Tracker  Transportation
+    9  -1.19 m   -1.67 m     1.8 m    3.39 MeV     0 eV   22.2 cm    4.7 m       Chamber  Transportation
+   10  -1.36 m   -1.91 m     2.4 m    3.39 MeV     0 eV   66.7 cm   5.37 m       Tracker  Transportation
+   11   -1.5 m   -2.11 m    2.91 m    3.39 MeV     0 eV   56.7 cm   5.94 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 195,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.46 mm   -935 mum -2.43 m    1.63 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.57 mm  -8.37 mm  -2.42 m    1.24 MeV     0 eV   1.15 cm   1.15 cm       Target       compt
+    2  -4.65 mm   -2.5 cm  -2.41 m    1.24 MeV     0 eV   1.87 cm   3.03 cm       Target  Transportation
+    3   -8.1 mm  -5.26 cm   -2.4 m    1.24 MeV     0 eV   3.12 cm   6.14 cm        World  Transportation
+    4  -30.1 cm   -2.4 m   -1.21 m    1.24 MeV     0 eV   2.65 m    2.71 m       Tracker  Transportation
+    5  -36.5 cm  -2.91 m   -95.5 cm   1.24 MeV     0 eV   57.5 cm   3.28 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 204,   Parent ID = 195
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.57 mm  -8.37 mm  -2.42 m     388 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.58 mm  -8.37 mm  -2.42 m       0 eV    388 keV   214 mum   214 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 194,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.42 mm    901 mum -2.43 m    2.58 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.26 mm  -5.05 mm  -2.42 m    1.96 MeV     0 eV    1.6 cm    1.6 cm       Target       compt
+    2   1.08 mm  -1.72 cm   -2.4 m    1.96 MeV     0 eV   2.12 cm   3.72 cm       Target  Transportation
+    3  -62.1 cm   -2.4 m    93.8 cm   1.96 MeV     0 eV   4.15 m    4.19 m       Tracker  Transportation
+    4  -75.4 cm  -2.91 m    1.65 m    1.96 MeV     0 eV   88.8 cm   5.07 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 205,   Parent ID = 194
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.26 mm  -5.05 mm  -2.42 m     617 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   4.27 mm  -5.05 mm  -2.42 m       0 eV    617 keV   397 mum   397 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 193,   Parent ID = 190
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.39 mm    963 mum -2.43 m     904 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.57 mm   -2.2 mm  -2.42 m     904 keV    88 keV  8.32 mm   8.32 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 206,   Parent ID = 193
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.57 mm   -2.2 mm  -2.42 m     816 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   3.58 mm  -2.21 mm  -2.42 m       0 eV    816 keV   564 mum   564 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -317 mum   190 mum -2.45 m     304 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -191 mum   208 mum -2.44 m     304 keV    88 keV  4.29 mm   4.29 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 207,   Parent ID = 5
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -191 mum   208 mum -2.44 m     216 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -191 mum   206 mum -2.44 m       0 eV    216 keV  91.7 mum  91.7 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -323 mum   209 mum -2.45 m    3.27 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -305 mum   209 mum -2.45 m     686 keV     0 eV    631 mum   631 mum      Target       compt
+    2   -427 mum   231 mum -2.45 m     263 keV     0 eV    138 mum   769 mum      Target       compt
+    3   -303 mum   179 mum -2.45 m     263 keV    88 keV   218 mum   988 mum      Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 210,   Parent ID = 4
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -303 mum   179 mum -2.45 m     175 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -300 mum   176 mum -2.45 m       0 eV    175 keV  66.8 mum  66.8 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 209,   Parent ID = 4
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -427 mum   231 mum -2.45 m     423 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -443 mum   235 mum -2.45 m       0 eV    423 keV   241 mum   241 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 208,   Parent ID = 4
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -305 mum   209 mum -2.45 m    2.59 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -250 mum   200 mum -2.45 m       0 eV   2.59 MeV  1.99 mm   1.99 mm       Target       eBrem
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -325 mum   197 mum -2.45 m    1.34 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   -324 mum   200 mum -2.45 m     515 keV     0 eV    333 mum   333 mum      Target       compt
+    2   -3.2 mm  -1.22 cm  -2.44 m     210 keV     0 eV   1.38 cm   1.42 cm       Target       compt
+    3  -2.85 mm  -1.22 cm  -2.44 m     210 keV    88 keV   724 mum  1.49 cm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 213,   Parent ID = 3
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.85 mm  -1.22 cm  -2.44 m     122 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.85 mm  -1.22 cm  -2.44 m       0 eV    122 keV  37.9 mum  37.9 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 212,   Parent ID = 3
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -3.2 mm  -1.22 cm  -2.44 m     305 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -3.21 mm  -1.22 cm  -2.44 m       0 eV    305 keV   152 mum   152 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 211,   Parent ID = 3
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -324 mum   200 mum -2.45 m     830 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -461 mum   370 mum -2.45 m     245 keV   585 keV   421 mum   421 mum      Target       eBrem
+    2   -460 mum   368 mum -2.45 m       0 eV    245 keV   110 mum   531 mum      Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.86 m      11 keV     0 eV      0 fm      0 fm        World    initStep
+    1    398 mum  -1.2 mm  -2.86 m       0 eV     11 keV  2.69 mm   2.69 mm        World       eIoni
+>>> Event 0
+    0 trajectories stored in this event.
+### Run 1 start.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.91 m       1 TeV     0 eV      0 fm      0 fm        World    initStep
+    1   12.3 nm  -55.3 nm  -2.73 m   1e+03 GeV  50.6 keV  17.5 cm   17.5 cm        World      muIoni
+    2  -39.9 nm   -100 nm  -2.45 m   1e+03 GeV  61.9 keV  28.5 cm     46 cm        World  Transportation
+    3  -36.3 nm   -108 nm   -2.4 m   1e+03 GeV  80.2 MeV     5 cm     51 cm       Target  Transportation
+    4   21.3 mum  10.8 mum -2.17 m   1e+03 GeV  47.9 keV  23.4 cm   74.4 cm      Tracker      muIoni
+    5     73 mum  37.1 mum  -1.6 m   1e+03 GeV   145 keV  56.6 cm   1.31 m       Tracker  Transportation
+    6   91.4 mum  46.4 mum  -1.4 m   1e+03 GeV   139 keV    20 cm   1.51 m       Chamber  Transportation
+    7    147 mum  74.3 mum   -80 cm  1e+03 GeV   139 keV    60 cm   2.11 m       Tracker  Transportation
+    8    166 mum  83.5 mum   -60 cm  1e+03 GeV   162 keV    20 cm   2.31 m       Chamber  Transportation
+    9    221 mum   111 mum     0 fm  1e+03 GeV   136 keV    60 cm   2.91 m       Tracker  Transportation
+   10    235 mum   118 mum  16.4 cm  1e+03 GeV   101 keV  16.4 cm   3.07 m       Chamber      muIoni
+   11    239 mum   120 mum    20 cm  1e+03 GeV  17.4 keV  3.59 cm   3.11 m       Chamber  Transportation
+   12    246 mum   124 mum  27.6 cm  1e+03 GeV  22.2 keV  7.58 cm   3.19 m       Tracker      muIoni
+   13    263 mum   132 mum  46.5 cm  1e+03 GeV  41.4 keV  18.9 cm   3.37 m       Tracker      muIoni
+   14    277 mum   140 mum  61.4 cm  1e+03 GeV  36.4 keV  14.9 cm   3.52 m       Tracker      muIoni
+   15    295 mum   148 mum    80 cm  1e+03 GeV  40.7 keV  18.6 cm   3.71 m       Tracker  Transportation
+   16    314 mum   158 mum     1 m   1e+03 GeV   167 keV    20 cm   3.91 m       Chamber  Transportation
+   17    325 mum   164 mum  1.12 m   1e+03 GeV  29.6 keV  12.1 cm   4.03 m       Tracker      muIoni
+   18    369 mum   187 mum   1.6 m   1e+03 GeV   103 keV  47.9 cm   4.51 m       Tracker  Transportation
+   19    378 mum   192 mum  1.71 m   1e+03 GeV    61 keV  10.6 cm   4.62 m       Chamber      muIoni
+   20    387 mum   197 mum   1.8 m   1e+03 GeV  71.9 keV  9.37 cm   4.71 m       Chamber  Transportation
+   21    419 mum   213 mum  2.14 m   1e+03 GeV  77.3 keV  33.8 cm   5.05 m       Tracker      muIoni
+   22    443 mum   225 mum   2.4 m   1e+03 GeV  61.9 keV  26.2 cm   5.31 m       Tracker  Transportation
+   23    471 mum   239 mum   2.7 m   1e+03 GeV  72.3 keV  29.8 cm   5.61 m         World      muIoni
+   24    483 mum   245 mum  2.83 m   1e+03 GeV  31.1 keV  12.8 cm   5.74 m         World      muIoni
+   25    491 mum   249 mum  2.91 m   1e+03 GeV  17.3 keV  8.49 cm   5.82 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    483 mum   245 mum  2.83 m    9.64 keV     0 eV      0 fm      0 fm        World    initStep
+    1   -109 mum  -553 mum  2.83 m       0 eV   9.64 keV  2.13 mm   2.13 mm        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    471 mum   239 mum   2.7 m    12.7 keV     0 eV      0 fm      0 fm        World    initStep
+    1   -935 mum  -524 mum   2.7 m       0 eV   12.7 keV   3.4 mm    3.4 mm        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    419 mum   213 mum  2.14 m    13.8 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.21 mm    818 mum  2.14 m       0 eV   13.8 keV     4 mm      4 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    378 mum   192 mum  1.71 m      80 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   3.55 mm   1.43 mm   1.71 m       0 eV     80 keV  3.41 cm   3.41 cm      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    325 mum   164 mum  1.12 m    33.5 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1  -4.85 mm  -7.38 mm   1.12 m       0 eV   33.5 keV  1.95 cm   1.95 cm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    277 mum   140 mum  61.4 cm   14.3 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   -761 mum  1.84 mm   61.4 cm      0 eV   14.3 keV  4.22 mm   4.22 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    263 mum   132 mum  46.5 cm   15.4 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1  -6.27 mum -2.13 mm   46.5 cm      0 eV   15.4 keV  4.82 mm   4.82 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    246 mum   124 mum  27.6 cm    219 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1  -20.1 cm   9.48 cm   37.9 cm      0 eV    219 keV  51.9 cm   51.9 cm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    235 mum   118 mum  16.4 cm   46.1 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1  -1.19 mm     34 mum  16.4 cm      0 eV   46.1 keV  1.37 cm   1.37 cm      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   21.3 mum  10.8 mum -2.17 m    67.3 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1  -9.95 mm  -2.97 cm  -2.16 m       0 eV   67.3 keV  6.82 cm   6.82 cm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   12.3 nm  -55.3 nm  -2.73 m    17.7 keV     0 eV      0 fm      0 fm        World    initStep
+    1   -506 mum  2.89 mm  -2.73 m       0 eV   17.7 keV   6.2 mm    6.2 mm        World       eIoni
+>>> Event 0
+    0 trajectories stored in this event.
+### Run 2 start.
+>>> Event 0
+    0 trajectories stored in this event.
+>>> Event 1
+    0 trajectories stored in this event.
+>>> Event 2
+    0 trajectories stored in this event.
+>>> Event 3
+    0 trajectories stored in this event.
+>>> Event 4
+    0 trajectories stored in this event.
+>>> Event 5
+    0 trajectories stored in this event.
+>>> Event 6
+    0 trajectories stored in this event.
+>>> Event 7
+    0 trajectories stored in this event.
+>>> Event 8
+    0 trajectories stored in this event.
+>>> Event 9
+    0 trajectories stored in this event.
+>>> Event 10
+    0 trajectories stored in this event.
+>>> Event 11
+    0 trajectories stored in this event.
+>>> Event 12
+    0 trajectories stored in this event.
+>>> Event 13
+    0 trajectories stored in this event.
+>>> Event 14
+    0 trajectories stored in this event.
+>>> Event 15
+    0 trajectories stored in this event.
+>>> Event 16
+    0 trajectories stored in this event.
+>>> Event 17
+    0 trajectories stored in this event.
+>>> Event 18
+    0 trajectories stored in this event.
+>>> Event 19
+    0 trajectories stored in this event.
+>>> Event 20
+    0 trajectories stored in this event.
+>>> Event 21
+    0 trajectories stored in this event.
+>>> Event 22
+    0 trajectories stored in this event.
+>>> Event 23
+    0 trajectories stored in this event.
+>>> Event 24
+    0 trajectories stored in this event.
+>>> Event 25
+    0 trajectories stored in this event.
+>>> Event 26
+    0 trajectories stored in this event.
+>>> Event 27
+    0 trajectories stored in this event.
+>>> Event 28
+    0 trajectories stored in this event.
+>>> Event 29
+    0 trajectories stored in this event.
+>>> Event 30
+    0 trajectories stored in this event.
+>>> Event 31
+    0 trajectories stored in this event.
+>>> Event 32
+    0 trajectories stored in this event.
+>>> Event 33
+    0 trajectories stored in this event.
+>>> Event 34
+    0 trajectories stored in this event.
+>>> Event 35
+    0 trajectories stored in this event.
+>>> Event 36
+    0 trajectories stored in this event.
+>>> Event 37
+    0 trajectories stored in this event.
+>>> Event 38
+    0 trajectories stored in this event.
+>>> Event 39
+    0 trajectories stored in this event.
+>>> Event 40
+    0 trajectories stored in this event.
+>>> Event 41
+    0 trajectories stored in this event.
+>>> Event 42
+    0 trajectories stored in this event.
+>>> Event 43
+    0 trajectories stored in this event.
+>>> Event 44
+    0 trajectories stored in this event.
+>>> Event 45
+    0 trajectories stored in this event.
+>>> Event 46
+    0 trajectories stored in this event.
+>>> Event 47
+    0 trajectories stored in this event.
+>>> Event 48
+    0 trajectories stored in this event.
+>>> Event 49
+    0 trajectories stored in this event.
+>>> Event 50
+    0 trajectories stored in this event.
+>>> Event 51
+    0 trajectories stored in this event.
+>>> Event 52
+    0 trajectories stored in this event.
+>>> Event 53
+    0 trajectories stored in this event.
+>>> Event 54
+    0 trajectories stored in this event.
+>>> Event 55
+    0 trajectories stored in this event.
+>>> Event 56
+    0 trajectories stored in this event.
+>>> Event 57
+    0 trajectories stored in this event.
+>>> Event 58
+    0 trajectories stored in this event.
+>>> Event 59
+    0 trajectories stored in this event.
+>>> Event 60
+    0 trajectories stored in this event.
+>>> Event 61
+    0 trajectories stored in this event.
+>>> Event 62
+    0 trajectories stored in this event.
+>>> Event 63
+    0 trajectories stored in this event.
+>>> Event 64
+    0 trajectories stored in this event.
+>>> Event 65
+    0 trajectories stored in this event.
+>>> Event 66
+    0 trajectories stored in this event.
+>>> Event 67
+    0 trajectories stored in this event.
+>>> Event 68
+    0 trajectories stored in this event.
+>>> Event 69
+    0 trajectories stored in this event.
+>>> Event 70
+    0 trajectories stored in this event.
+>>> Event 71
+    0 trajectories stored in this event.
+>>> Event 72
+    0 trajectories stored in this event.
+>>> Event 73
+    0 trajectories stored in this event.
+>>> Event 74
+    0 trajectories stored in this event.
+>>> Event 75
+    0 trajectories stored in this event.
+>>> Event 76
+    0 trajectories stored in this event.
+>>> Event 77
+    0 trajectories stored in this event.
+>>> Event 78
+    0 trajectories stored in this event.
+>>> Event 79
+    0 trajectories stored in this event.
+>>> Event 80
+    0 trajectories stored in this event.
+>>> Event 81
+    0 trajectories stored in this event.
+>>> Event 82
+    0 trajectories stored in this event.
+>>> Event 83
+    0 trajectories stored in this event.
+>>> Event 84
+    0 trajectories stored in this event.
+>>> Event 85
+    0 trajectories stored in this event.
+>>> Event 86
+    0 trajectories stored in this event.
+>>> Event 87
+    0 trajectories stored in this event.
+>>> Event 88
+    0 trajectories stored in this event.
+>>> Event 89
+    0 trajectories stored in this event.
+>>> Event 90
+    0 trajectories stored in this event.
+>>> Event 91
+    0 trajectories stored in this event.
+>>> Event 92
+    0 trajectories stored in this event.
+>>> Event 93
+    0 trajectories stored in this event.
+>>> Event 94
+    0 trajectories stored in this event.
+>>> Event 95
+    0 trajectories stored in this event.
+>>> Event 96
+    0 trajectories stored in this event.
+>>> Event 97
+    0 trajectories stored in this event.
+>>> Event 98
+    0 trajectories stored in this event.
+>>> Event 99
+    0 trajectories stored in this event.
+### Run 3 start.
+>>> Event 0
+    0 trajectories stored in this event.
+>>> Event 1
+    0 trajectories stored in this event.
+>>> Event 2
+    0 trajectories stored in this event.
+>>> Event 3
+    0 trajectories stored in this event.
+>>> Event 4
+    0 trajectories stored in this event.
+>>> Event 5
+    0 trajectories stored in this event.
+>>> Event 6
+    0 trajectories stored in this event.
+>>> Event 7
+    0 trajectories stored in this event.
+>>> Event 8
+    0 trajectories stored in this event.
+>>> Event 9
+    0 trajectories stored in this event.
+>>> Event 10
+    0 trajectories stored in this event.
+>>> Event 11
+    0 trajectories stored in this event.
+>>> Event 12
+    0 trajectories stored in this event.
+>>> Event 13
+    0 trajectories stored in this event.
+>>> Event 14
+    0 trajectories stored in this event.
+>>> Event 15
+    0 trajectories stored in this event.
+>>> Event 16
+    0 trajectories stored in this event.
+>>> Event 17
+    0 trajectories stored in this event.
+>>> Event 18
+    0 trajectories stored in this event.
+>>> Event 19
+    0 trajectories stored in this event.
+>>> Event 20
+    0 trajectories stored in this event.
+>>> Event 21
+    0 trajectories stored in this event.
+>>> Event 22
+    0 trajectories stored in this event.
+>>> Event 23
+    0 trajectories stored in this event.
+>>> Event 24
+    0 trajectories stored in this event.
+>>> Event 25
+    0 trajectories stored in this event.
+>>> Event 26
+    0 trajectories stored in this event.
+>>> Event 27
+    0 trajectories stored in this event.
+>>> Event 28
+    0 trajectories stored in this event.
+>>> Event 29
+    0 trajectories stored in this event.
+>>> Event 30
+    0 trajectories stored in this event.
+>>> Event 31
+    0 trajectories stored in this event.
+>>> Event 32
+    0 trajectories stored in this event.
+>>> Event 33
+    0 trajectories stored in this event.
+>>> Event 34
+    0 trajectories stored in this event.
+>>> Event 35
+    0 trajectories stored in this event.
+>>> Event 36
+    0 trajectories stored in this event.
+>>> Event 37
+    0 trajectories stored in this event.
+>>> Event 38
+    0 trajectories stored in this event.
+>>> Event 39
+    0 trajectories stored in this event.
+>>> Event 40
+    0 trajectories stored in this event.
+>>> Event 41
+    0 trajectories stored in this event.
+>>> Event 42
+    0 trajectories stored in this event.
+>>> Event 43
+    0 trajectories stored in this event.
+>>> Event 44
+    0 trajectories stored in this event.
+>>> Event 45
+    0 trajectories stored in this event.
+>>> Event 46
+    0 trajectories stored in this event.
+>>> Event 47
+    0 trajectories stored in this event.
+>>> Event 48
+    0 trajectories stored in this event.
+>>> Event 49
+    0 trajectories stored in this event.
+>>> Event 50
+    0 trajectories stored in this event.
+>>> Event 51
+    0 trajectories stored in this event.
+>>> Event 52
+    0 trajectories stored in this event.
+>>> Event 53
+    0 trajectories stored in this event.
+>>> Event 54
+    0 trajectories stored in this event.
+>>> Event 55
+    0 trajectories stored in this event.
+>>> Event 56
+    0 trajectories stored in this event.
+>>> Event 57
+    0 trajectories stored in this event.
+>>> Event 58
+    0 trajectories stored in this event.
+>>> Event 59
+    0 trajectories stored in this event.
+>>> Event 60
+    0 trajectories stored in this event.
+>>> Event 61
+    0 trajectories stored in this event.
+>>> Event 62
+    0 trajectories stored in this event.
+>>> Event 63
+    0 trajectories stored in this event.
+>>> Event 64
+    0 trajectories stored in this event.
+>>> Event 65
+    0 trajectories stored in this event.
+>>> Event 66
+    0 trajectories stored in this event.
+>>> Event 67
+    0 trajectories stored in this event.
+>>> Event 68
+    0 trajectories stored in this event.
+>>> Event 69
+    0 trajectories stored in this event.
+>>> Event 70
+    0 trajectories stored in this event.
+>>> Event 71
+    0 trajectories stored in this event.
+>>> Event 72
+    0 trajectories stored in this event.
+>>> Event 73
+    0 trajectories stored in this event.
+>>> Event 74
+    0 trajectories stored in this event.
+>>> Event 75
+    0 trajectories stored in this event.
+>>> Event 76
+    0 trajectories stored in this event.
+>>> Event 77
+    0 trajectories stored in this event.
+>>> Event 78
+    0 trajectories stored in this event.
+>>> Event 79
+    0 trajectories stored in this event.
+>>> Event 80
+    0 trajectories stored in this event.
+>>> Event 81
+    0 trajectories stored in this event.
+>>> Event 82
+    0 trajectories stored in this event.
+>>> Event 83
+    0 trajectories stored in this event.
+>>> Event 84
+    0 trajectories stored in this event.
+>>> Event 85
+    0 trajectories stored in this event.
+>>> Event 86
+    0 trajectories stored in this event.
+>>> Event 87
+    0 trajectories stored in this event.
+>>> Event 88
+    0 trajectories stored in this event.
+>>> Event 89
+    0 trajectories stored in this event.
+>>> Event 90
+    0 trajectories stored in this event.
+>>> Event 91
+    0 trajectories stored in this event.
+>>> Event 92
+    0 trajectories stored in this event.
+>>> Event 93
+    0 trajectories stored in this event.
+>>> Event 94
+    0 trajectories stored in this event.
+>>> Event 95
+    0 trajectories stored in this event.
+>>> Event 96
+    0 trajectories stored in this event.
+>>> Event 97
+    0 trajectories stored in this event.
+>>> Event 98
+    0 trajectories stored in this event.
+>>> Event 99
+    0 trajectories stored in this event.
+Graphics systems deleted.
+Visualization Manager deleting...

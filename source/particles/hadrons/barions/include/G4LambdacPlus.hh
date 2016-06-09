@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LambdacPlus.hh,v 1.6 2001/10/15 10:09:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LambdacPlus.hh,v 1.8 2005/01/14 03:49:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,46 +31,29 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige,  12 June 1997
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4LambdacPlus_h
 #define G4LambdacPlus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
-// ###                          LambdacPlus                                ###
+// ###                     LambdacPlus                                ###
 // ######################################################################
 
-class G4LambdacPlus : public G4VBaryon
+class G4LambdacPlus : public G4ParticleDefinition
 {
  private:
-   static G4LambdacPlus theLambdacPlus;
-
- private:
-   G4LambdacPlus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4LambdacPlus* theInstance;
+   G4LambdacPlus(){}
+   ~G4LambdacPlus(){}
 
  public:
-   virtual ~G4LambdacPlus(){}
-
+   static G4LambdacPlus* Definition();
    static G4LambdacPlus* LambdacPlusDefinition();
    static G4LambdacPlus* LambdacPlus();
 };

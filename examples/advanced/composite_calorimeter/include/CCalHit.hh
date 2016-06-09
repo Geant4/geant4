@@ -62,8 +62,8 @@ public:
   
 public:
   
-  Hep3Vector   getEntry() const;
-  void         setEntry(Hep3Vector xyz);
+  CLHEP::Hep3Vector   getEntry() const;
+  void         setEntry(CLHEP::Hep3Vector xyz);
   
   double       getIncidentEnergy() const;
   void         setIncidentEnergy (double e);
@@ -85,7 +85,7 @@ public:
   
 private:
   
-  Hep3Vector   entry;             // Entry point
+  CLHEP::Hep3Vector   entry;             // Entry point
   double       theIncidentEnergy; // Energy of the primary particle
   int          theTrackID;        // Identification number of the primary particle
   unsigned int theUnitID;         // Calorimeter Unit Number

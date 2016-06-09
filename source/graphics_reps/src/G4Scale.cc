@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.7 2005/03/22 16:49:15 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Scale.cc,v 1.8 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  21st July 2001
@@ -40,31 +40,6 @@ G4Scale::G4Scale (G4double length, const G4String& annotation,
   fXmid(xmid), fYmid(ymid), fZmid(zmid) {}
 
 G4Scale::~G4Scale () {}
-
-G4Visible & G4Scale::operator = (const G4Visible &from) {
-  return G4Visible::operator = (from);
-}
-
-G4VVisPrim & G4Scale::operator = (const G4VVisPrim &from) {
-  return G4VVisPrim::operator = (from);
-}
-
-G4VMarker & G4Scale::operator = (const G4VMarker &from) {
-  return G4VMarker::operator = (from);
-}
-
-G4Scale & G4Scale::operator = (const G4Scale &from) {
-  if (&from == this) return *this;
-  G4VMarker::operator = (from);
-  fLength = from.fLength;
-  fAnnotation = from.fAnnotation;
-  fDirection = from.fDirection;
-  fAutoPlacing = from.fAutoPlacing;
-  fXmid = from.fXmid;
-  fYmid = from.fYmid;
-  fZmid = from.fZmid;
-  return *this;
-}
 
 const G4String G4Scale::GuidanceString
 (

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.3 2004/01/19 14:07:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AssemblyVolume.cc,v 1.4 2005/11/09 15:08:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -36,7 +36,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-#include <strstream>
+#include <sstream>
 
 unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
@@ -193,7 +193,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // XXX - assembly volume imprint number
     // YYY - the name of a log. volume we want to make a placement of
     // ZZZ - the log. volume index inside the assembly volume
-    std::strstream pvName;
+    std::stringstream pvName;
     pvName << "av_"
            << GetAssemblyID()
            << "_impr_"
@@ -269,7 +269,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // XXX - assembly volume imprint number
     // YYY - the name of a log. volume we want to make a placement of
     // ZZZ - the log. volume index inside the assembly volume
-    std::strstream pvName;
+    std::stringstream pvName;
     pvName << "av_"
            << GetAssemblyID()
            << "_impr_"

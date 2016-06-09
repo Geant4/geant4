@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomHit.hh,v 1.5 2003/05/22 17:20:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: BrachyPhantomHit.hh,v 1.6 2005/11/22 12:47:35 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //    ********************************
@@ -43,14 +43,11 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
-#include "G4RotationMatrix.hh"
 
 class BrachyPhantomHit : public G4VHit
 {
 public:
-  BrachyPhantomHit(G4LogicalVolume* ,G4int ,G4int ,G4int );
+  BrachyPhantomHit();
   ~BrachyPhantomHit();
   BrachyPhantomHit(const BrachyPhantomHit &right);
   const BrachyPhantomHit& operator = (const BrachyPhantomHit &right);
@@ -63,54 +60,30 @@ public:
   void Print();
 
 private:
-  const G4LogicalVolume* logicalVolume;// Logical volume where the hit happened
-  G4int xHitPosition; // Hit x coordinate 
-  G4int zHitPosition; // Hit z coordinate 
-  G4int yHitPosition; // Hit y coordinate 
-  G4ThreeVector hitPosition; //position of the hit 
-  G4RotationMatrix rotation; // rotation of the logical volume
+  G4double xHitPosition; // Hit x coordinate 
+  G4double zHitPosition; // Hit z coordinate 
+  G4double yHitPosition; // Hit y coordinate 
   G4double energyDeposit; // energy deposit associated with the hit
 
 public:
-  //...
-  // Set Hit position
-  inline void SetCellID(G4int XID,G4int YID,G4int ZID)
-  {xHitPosition = XID; zHitPosition = ZID;  yHitPosition = YID;  }
-  
-  inline G4int GetXID() // Get hit x coordinate 
+  inline G4double GetXID() // Get hit x coordinate 
   {return xHitPosition;}
 
-  inline G4int GetZID() // Get hit z coordinate   
+  inline G4double GetZID() // Get hit z coordinate   
   {return zHitPosition;}
 
-  inline G4int GetYID() // Get hit y coordinate  
+  inline G4double GetYID() // Get hit y coordinate  
   {return yHitPosition;}
    
   inline void SetEdep(G4double edep) //Set hit energy deposit
   {energyDeposit = edep;}
 
-  inline void AddEdep(G4double edep) // Add energy deposit
-  {energyDeposit += edep;}
-
   inline G4double GetEdep() // Get energy deposit
   {return energyDeposit;}
 
-  inline void SetPos(G4ThreeVector xyz) // Set hit position
-  {hitPosition = xyz;}
-
-  inline G4ThreeVector GetPos()  // Get hit position
-  {return hitPosition;}
-
-  inline void SetRot(G4RotationMatrix rmat) //set rotation
-  {rotation = rmat;}
-
-  inline G4RotationMatrix GetRot() //get rotation
-  {return rotation;}
-
-  //...
-  // It returns the logical volume where the hit happened
-  inline const G4LogicalVolume * GetLogicalVolume()
-  {return logicalVolume;}
+  inline void SetPosition(G4double xx, G4double yy, G4double zz) 
+  // Set hit position
+  { xHitPosition = xx; yHitPosition = yy; zHitPosition = zz;}
 };
 
 typedef G4THitsCollection<BrachyPhantomHit> BrachyPhantomHitsCollection;

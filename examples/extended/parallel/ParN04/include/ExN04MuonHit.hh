@@ -24,11 +24,16 @@
 #ifndef ExN04MuonHit_h
 #define ExN04MuonHit_h 1
 
+//MSH_include_begin
+#include "MarshaledG4String.h"
+//MSH_include_end
+
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
+//MSH_BEGIN
 class ExN04MuonHit : public G4VHit
 {
   public:
@@ -37,7 +42,7 @@ class ExN04MuonHit : public G4VHit
       ~ExN04MuonHit();
       ExN04MuonHit(const ExN04MuonHit &right);
       const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-      G4int operator==(const ExN04MuonHit &right) const;
+      int operator==(const ExN04MuonHit &right) const;
 
 
       inline void *operator new(size_t);
@@ -47,8 +52,18 @@ class ExN04MuonHit : public G4VHit
       void Print();
 
   private:
-      G4double edep;
-      G4ThreeVector pos;
+
+
+      G4double edep; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetEdep(); }]
+  [elementSet: { $THIS->SetEdep($ELEMENT); }]*/ 
+
+
+
+      G4ThreeVector pos; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetPos(); }]
+  [elementSet: { $THIS->SetPos($ELEMENT); }] */
+
 
   public:
       inline void SetEdep(G4double de)
@@ -63,6 +78,7 @@ class ExN04MuonHit : public G4VHit
       { return pos; }
 
 };
+//MSH_END
 
 typedef G4THitsCollection<ExN04MuonHit> ExN04MuonHitsCollection;
 

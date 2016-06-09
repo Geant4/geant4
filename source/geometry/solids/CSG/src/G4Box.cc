@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.39 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Box.cc,v 1.42 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //
@@ -77,6 +77,16 @@ G4Box::G4Box(const G4String& pName,
     G4Exception("G4Box::G4Box()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4Box::G4Box( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -942,33 +952,12 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 //
-// Methods for visualisation
-
-void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
-{
-  scene.AddSolid (*this);
-}
-
-G4VisExtent G4Box::GetExtent() const 
-{
-  return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
-}
-
-G4Polyhedron* G4Box::CreatePolyhedron () const 
-{
-  return new G4PolyhedronBox (fDx, fDy, fDz);
-}
-
-G4NURBS* G4Box::CreateNURBS () const 
-{
-  return new G4NURBSbox (fDx, fDy, fDz);
-}
-    
-/////////////////////////////////////////////////////////////////////////////
+// GetPointOnSurface
 //
-// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
+// Return a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
 
 G4ThreeVector G4Box::GetPointOnSurface() const
 {
@@ -1005,3 +994,26 @@ G4ThreeVector G4Box::GetPointOnSurface() const
   return G4ThreeVector(px,py,pz);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
+void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+{
+  scene.AddSolid (*this);
+}
+
+G4VisExtent G4Box::GetExtent() const 
+{
+  return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
+}
+
+G4Polyhedron* G4Box::CreatePolyhedron () const 
+{
+  return new G4PolyhedronBox (fDx, fDy, fDz);
+}
+
+G4NURBS* G4Box::CreateNURBS () const 
+{
+  return new G4NURBSbox (fDx, fDy, fDz);
+}

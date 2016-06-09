@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DAWNFILESceneHandler.cc,v 1.14 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.

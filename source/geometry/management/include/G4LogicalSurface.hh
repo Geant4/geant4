@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalSurface.hh,v 1.9 2003/12/01 14:41:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface

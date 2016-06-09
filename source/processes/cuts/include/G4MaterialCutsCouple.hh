@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MaterialCutsCouple.hh,v 1.2 2003/09/19 14:40:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------

@@ -34,7 +34,7 @@
 //    ****************************************
 //
 // $Id: BrachyDetectorConstructionI.cc,v 1.2 2004/05/25 08:36:18 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "globals.hh"
 #include "BrachyDetectorConstructionI.hh"

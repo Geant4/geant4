@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.4 2005/05/18 10:12:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eeToHadronsModel.cc,v 1.5 2005/11/23 19:17:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -127,7 +127,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
     }
     ComputeCMCrossSectionPerElectron();
   }
-  if(verbose>0) {
+  if(verbose>1) {
     G4cout << "G4eeToHadronsModel: Cross secsions per electron"
            << " nbins= " << nbins
            << " emin(MeV)= " << emin/MeV

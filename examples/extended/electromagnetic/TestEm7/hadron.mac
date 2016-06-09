@@ -1,4 +1,4 @@
-# $Id: hadron.mac,v 1.1 2004/11/26 15:30:49 maire Exp $
+# $Id: hadron.mac,v 1.2 2005/10/03 09:43:41 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -17,12 +17,12 @@
 /testem/phys/addPhysics  binary_ion		#hadronic physics
 /testem/phys/addPhysics  elastic		#hadronic physics
 #
-/testem/phys/setCuts 1 km
+/testem/phys/setCuts 0.2 mm
 #
 /run/initialize
 #
-/gun/particle proton
-/gun/energy 1 GeV
+/gun/particle pi-
+/gun/energy 0.2 GeV
 #
 /testem/event/printModulo 1000
 #

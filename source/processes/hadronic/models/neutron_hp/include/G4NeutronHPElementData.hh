@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPElementData.hh,v 1.8 2005/06/04 13:44:43 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97

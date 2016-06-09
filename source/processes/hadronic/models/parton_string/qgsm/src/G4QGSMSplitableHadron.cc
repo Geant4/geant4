@@ -420,20 +420,15 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
     if(y>ymax) ymax = y;
   }
   G4double y;
+  G4double xMax=1-(totalSea+1)*anXmin;
+  if(anXmin > xMax) 
+  {
+    G4cout << "anXmin = "<<anXmin<<" nSea = "<<nSea<<" totalSea = "<< totalSea<<G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, "G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
+  }
   do
   {
-    x1 = -1.;
-    G4int debcount=0;
-    while(x1<anXmin||x1>=1-(totalSea+1)*anXmin) 
-    {
-      debcount ++; 
-      if(debcount>10000) 
-      {
-        G4cout << "anXmin = "<<anXmin<<" nSea = "<<nSea<<" totalSea = "<< totalSea<<G4endl;
-        throw G4HadronicException(__FILE__, __LINE__, "G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
-      }
-      x1 = G4UniformRand();
-    }
+    x1 = CLHEP::RandFlat::shoot(anXmin, xMax);
     y = std::pow(x1, alpha);
     y *= std::pow( std::pow(1-x1-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
     y *= std::pow(1-x1-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);  

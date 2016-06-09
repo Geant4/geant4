@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FRFeatures.hh,v 1.5 2001/07/11 10:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #if !defined G4_FR_FEATURES_HH
 #define      G4_FR_FEATURES_HH

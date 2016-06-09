@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeViewer.cc,v 1.5 2003/06/16 17:13:53 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VTreeViewer.cc,v 1.6 2005/10/13 17:39:21 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4VTreeViewer.hh"
-
-#include "G4ios.hh"
-#include <strstream>
 
 #include "G4VSceneHandler.hh"
 

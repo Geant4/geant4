@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.10 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VPhysicalVolume.hh,v 1.12 2005/11/11 22:34:37 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4VPhysicalVolume
@@ -155,6 +155,20 @@ class G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const = 0;
       // Return replication information. No-op for no replicated volumes.
+    virtual G4bool  IsRegularStructure() const = 0;
+      // Returns true if the underlying volume structure is regular.
+    virtual G4int  GetRegularStructureId() const = 0;
+      // Returns non-zero code in case the underlying volume structure 
+      //  is regular, voxel-like.  Value is id for structure type.
+      //  If non-zero the volume is a candidate for specialised 
+      //  navigation such as 'nearest neighbour' directly on volumes.
+
+  public:  // without description
+
+    G4VPhysicalVolume(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.45 2005/03/16 17:55:02 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.53 2005/11/22 17:00:15 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -36,9 +36,10 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -127,9 +128,11 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   parameter = new G4UIparameter ("viewer-name", 's', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("window-size-hint", 'i', omitable = true);
-  parameter -> SetGuidance ("pixels");
-  parameter -> SetDefaultValue (600);
+  parameter = new G4UIparameter ("window-size-hint", 's', omitable = true);
+  parameter->SetGuidance
+    ("integer (pixels) for square window placed by window manager or"
+     " X-Windows-type geometry string, e.g. 600x600-100+100");
+  parameter->SetDefaultValue("600");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -138,19 +141,17 @@ G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
 }
 
 G4String G4VisCommandViewerCreate::NextName () {
-  const int charLength = 100;
-  char nextName [charLength];
-  std::ostrstream ost (nextName, charLength);
+  std::ostringstream oss;
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
-  ost << "viewer-" << fId << " (";
+  oss << "viewer-" << fId << " (";
   if (sceneHandler) {
-    ost << sceneHandler -> GetGraphicsSystem () -> GetName ();
+    oss << sceneHandler -> GetGraphicsSystem () -> GetName ();
   }
   else {
-    ost << "no_scene_handlers";
+    oss << "no_scene_handlers";
   }
-  ost << ")" << std::ends;
-  return nextName;
+  oss << ")";
+  return oss.str();
 }
 
 G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*) {
@@ -178,8 +179,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneHandlerName, newName;
-  G4int windowSizeHint;
-  std::istrstream is (newValue);
+  G4String windowSizeHintString;
+  std::istringstream is (newValue);
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -196,8 +197,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');
 
-  // Now get number of pixels...
-  is >> windowSizeHint;
+  // Now get window size hint...
+  is >> windowSizeHintString;
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
@@ -257,26 +258,61 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
+  // Parse windowSizeHintString to extract first field for backwards
+  // compatibility...
+  std::istringstream issw;
+  G4int windowSizeHint;
+  size_t i;
+  for (i = 0; i < windowSizeHintString.size(); ++i) {
+    char c = windowSizeHintString[i];
+    if (c == 'x' || c == 'X' || c == '+' || c == '-') break;
+  }
+  if (i != windowSizeHintString.size()) {
+    // x or X or + or - found - must be a X-Window-type geometry string...
+    // Pick out the first field for backwards compatibility...
+    issw.str(windowSizeHintString.substr(0,i));
+    issw >> windowSizeHint;
+  } else { // ...old-style integer...
+    issw.str(windowSizeHintString);
+    if (!(issw >> windowSizeHint)) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: Unrecognised geometry string \""
+	       << windowSizeHintString
+	       << "\".  Using 600."
+	       << G4endl;
+      }
+      windowSizeHint = 600;
+    }
+    // Reconstitute windowSizeHintString...
+    std::ostringstream ossw;
+    ossw << windowSizeHint << 'x' << windowSizeHint;
+    windowSizeHintString = ossw.str();
+  }
   fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
-  // These are picked up in the G4VViewer constructor.  The problem is
-  // these have to be set *before* construction, i.e., before we have
-  // a viewer.
+  fpVisManager->SetXGeometryString(windowSizeHintString);
+  // WindowSizeHint and XGeometryString are picked up from the vis
+  // manager in the G4VViewer constructor.  They have to be held by
+  // the vis manager until the viewer is contructed - next line...
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
-  if (newViewer -> GetName () == newName) {
+  if (newViewer && newViewer -> GetName () == newName) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
+      if (newViewer) {
+	G4cout << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
+      } else {
+	G4cout << "WARNING: No viewer created." << G4endl;
+      }
     }
   }
   // Refresh if appropriate...
-  SetViewParameters(newViewer, newViewer->GetViewParameters());
+  if (newViewer) SetViewParameters(newViewer, newViewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
@@ -446,7 +482,7 @@ G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =
@@ -614,6 +650,53 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
   SetViewParameters(currentViewer, vp);
 }
 
+////////////// /vis/viewer/rebuild ///////////////////////////////////////
+
+G4VisCommandViewerRebuild::G4VisCommandViewerRebuild () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/rebuild", this);
+  fpCommand -> SetGuidance ("Forces rebuild of graphical database.");
+  fpCommand -> SetGuidance 
+    ("By default, acts on current viewer.  \"/vis/viewer/list\""
+     "\nto see possible viewers.  Viewer becomes current.");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+}
+
+G4VisCommandViewerRebuild::~G4VisCommandViewerRebuild () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerRebuild::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (viewer) {
+    return viewer -> GetName ();
+  }
+  else {
+    return "none";
+  }
+}
+
+void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String& rebuildName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (rebuildName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << rebuildName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  viewer->SetNeedKernelVisit(true);
+  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
+}
+
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
 
 G4VisCommandViewerRefresh::G4VisCommandViewerRefresh () {
@@ -691,8 +774,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	   << G4endl;
   }
-  //??viewer -> SetView ();
-  //??viewer -> ClearView ();
+  viewer -> SetView ();
+  viewer -> ClearView ();
   viewer -> DrawView ();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
@@ -744,6 +827,86 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   SetViewParameters(viewer, viewer->GetDefaultViewParameters());
+}
+
+////////////// /vis/viewer/scale and scaleTo ////////////////////////////
+
+G4VisCommandViewerScale::G4VisCommandViewerScale ():
+  fScaleMultiplier (G4Vector3D (1., 1., 1.)),
+  fScaleTo         (G4Vector3D (1., 1., 1.))
+{
+  G4bool omitable, currentAsDefault;
+
+  fpCommandScale = new G4UIcmdWith3Vector
+    ("/vis/viewer/scale", this);
+  fpCommandScale -> SetGuidance ("Incremental (non-uniform) scaling.");
+  fpCommandScale -> SetGuidance
+    ("Multiplies components of current scaling by components of this factor."
+     "\n Scales (x,y,z) by corresponding components of the resulting factor.");
+  fpCommandScale -> SetGuidance
+    ("");
+  fpCommandScale -> SetParameterName
+    ("x-scale-multiplier","y-scale-multiplier","z-scale-multiplier",
+     omitable=true, currentAsDefault=true);
+
+  fpCommandScaleTo = new G4UIcmdWith3Vector
+    ("/vis/viewer/scaleTo", this);
+  fpCommandScaleTo -> SetGuidance ("Absolute (non-uniform) scaling.");
+  fpCommandScaleTo -> SetGuidance
+    ("Scales (x,y,z) by corresponding components of this factor.");
+  fpCommandScaleTo -> SetParameterName
+    ("x-scale-factor","y-scale-factor","z-scale-factor",
+     omitable=true, currentAsDefault=true);
+}
+
+G4VisCommandViewerScale::~G4VisCommandViewerScale () {
+  delete fpCommandScale;
+  delete fpCommandScaleTo;
+}
+
+G4String G4VisCommandViewerScale::GetCurrentValue (G4UIcommand* command) {
+  G4String currentValue;
+  if (command == fpCommandScale) {
+    currentValue = fpCommandScale->ConvertToString(G4ThreeVector(fScaleMultiplier));
+  }
+  else if (command == fpCommandScaleTo) {
+    currentValue = fpCommandScaleTo->ConvertToString(G4ThreeVector(fScaleTo));
+  }
+  return currentValue;
+}
+
+void G4VisCommandViewerScale::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VisCommandsViewerScale::SetNewValue: no current viewer."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandScale) {
+    fScaleMultiplier = fpCommandScale->GetNew3VectorValue(newValue);
+    vp.MultiplyScaleFactor(fScaleMultiplier);
+  }
+  else if (command == fpCommandScaleTo) {
+    fScaleTo = fpCommandScale->GetNew3VectorValue(newValue);
+    vp.SetScaleFactor(fScaleTo);
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Scale factor changed to " << vp.GetScaleFactor() << G4endl;
+  }
+
+  SetViewParameters(currentViewer, vp);
 }
 
 ////////////// /vis/viewer/select ///////////////////////////////////////
@@ -830,7 +993,16 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String& updateName = newValue;
+
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer."
+	     << G4endl;
+    }
+    return;
+  }
 
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
   if (!sceneHandler) {

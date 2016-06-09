@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.39 2005/06/15 13:59:59 gunter Exp $
+# $Id: common.gmk,v 1.41 2005/12/07 09:41:54 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -15,8 +15,10 @@ objects := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
 
    g4libraries_to_build :=
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).$(SHEXT)
+endif
 endif
 ifneq ($(G4LIB_BUILD_STATIC),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
@@ -33,6 +35,7 @@ GPPFLAGS := "-M"
 
 lib: $(g4libraries_to_build)
 
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
 $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
@@ -42,6 +45,7 @@ $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
 #      use architecture specific macro defined in sys/$(G4SYSTEM).gmk
 	$(build-granular-shared-lib)
 endif
+endif
 
 ifneq ($(G4LIB_BUILD_STATIC),)
 # Make static (archive) library.
@@ -50,7 +54,9 @@ $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a $(G4TMPDIR)/*.o
-	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
+	@if [ X$(G4SYSTEM) != XWIN32-VC ] ; then  \
+	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4LIBDIR)/lib$(name).a ; fi ; fi
 endif
 
 ###############################################################################

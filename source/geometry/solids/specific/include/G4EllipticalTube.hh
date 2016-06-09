@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.13 2004/10/10 10:39:11 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EllipticalTube.hh,v 1.16 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -88,12 +88,14 @@ class G4EllipticalTube : public G4VSolid
 
     G4double GetCubicVolume();
 
+    G4ThreeVector GetPointOnSurface() const;
+
     // Visualisation methods
 
     G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* GetPolyhedron () const;
     void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
     G4VisExtent GetExtent() const;
-    virtual G4Polyhedron* GetPolyhedron () const;
 
     // Accessors
 
@@ -105,6 +107,13 @@ class G4EllipticalTube : public G4VSolid
     inline void SetDy( const G4double newDy );
     inline void SetDz( const G4double newDz );
  
+  public:  // without description
+
+    G4EllipticalTube(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // without description
 
     G4double dx, dy, dz;

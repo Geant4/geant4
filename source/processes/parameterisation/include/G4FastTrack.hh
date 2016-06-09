@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.hh,v 1.5 2001/07/11 10:08:24 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastTrack.hh,v 1.6 2005/08/30 21:03:14 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // $Id:
 //---------------------------------------------------------------
@@ -44,6 +44,7 @@
 
 #include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Region.hh"
 #include "G4AffineTransform.hh"
 #include "G4Track.hh"
 #include "G4Navigator.hh"
@@ -51,7 +52,7 @@
 //---------------------------
 // For possible future needs:
 //---------------------------
-typedef G4LogicalVolume G4Envelope;
+typedef G4Region G4Envelope;
 
 
 //-------------------------------------------
@@ -61,11 +62,14 @@ typedef G4LogicalVolume G4Envelope;
 //-------------------------------------------
 
 // Class Description:
-//  The G4FastTrack provides you access to the current G4Track, gives simple access to envelope 
-//  related features (G4LogicalVolume, G4VSolid, G4AffineTransform references between the global 
-//  and the envelope local coordinates systems) and simple access to the position, momentum 
-//  expressed in the envelope coordinate system. Using those quantities and the G4VSolid methods, 
-//  you can for example easily check how far you are from the envelope boundary. 
+//  The G4FastTrack provides you access to the current G4Track,
+// gives simple access to envelope related features (G4Region,
+// G4LogicalVolume, G4VSolid, G4AffineTransform references between
+// the global and the envelope local coordinates systems) and
+// simple access to the position, momentum expressed in the
+// envelope coordinate system. Using those quantities and the
+// G4VSolid methods, you can for example easily check how far you
+// are from the envelope boundary. 
 //
 
 
@@ -107,6 +111,9 @@ public: // with Description
   // Returns the current G4Track.
 
   G4Envelope* GetEnvelope() const;
+  // Returns the Envelope G4Region pointer.
+
+  G4LogicalVolume* GetEnvelopeLogicalVolume() const;
   // Returns the Envelope G4LogicalVolume pointer.
 
   G4VPhysicalVolume* GetEnvelopePhysicalVolume() const;
@@ -160,6 +167,7 @@ private:
   G4bool fAffineTransformationDefined;
   G4Envelope* fEnvelope;
   G4bool fIsUnique;
+  G4LogicalVolume* fEnvelopeLogicalVolume;
   G4VPhysicalVolume* fEnvelopePhysicalVolume;
   G4VSolid* fEnvelopeSolid;
   G4ThreeVector fLocalTrackPosition, fLocalTrackMomentum, 
@@ -176,6 +184,11 @@ private:
 inline G4Envelope* G4FastTrack::GetEnvelope() const
 {
   return fEnvelope;
+}
+
+inline G4LogicalVolume* G4FastTrack::GetEnvelopeLogicalVolume() const
+{
+  return fEnvelopeLogicalVolume;
 }
 
 inline G4VPhysicalVolume* G4FastTrack::GetEnvelopePhysicalVolume() const

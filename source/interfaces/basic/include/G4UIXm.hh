@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIXm.hh,v 1.12 2003/06/16 16:55:55 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4UIXm_h
 #define G4UIXm_h 

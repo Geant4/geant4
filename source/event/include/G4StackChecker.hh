@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StackChecker.hh,v 1.1 2003/06/12 15:14:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4StackChecker_h

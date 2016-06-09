@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.7 2005/05/03 08:09:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmProcessOptions.cc,v 1.11 2005/12/05 12:13:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -80,14 +80,14 @@ void G4EmProcessOptions::SetLossFluctuations(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetSubCutoff(G4bool val)
+void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetSubCutoff(val);
+    if(p) p->ActivateSubCutoff(val, r);
   }
 }
 
@@ -330,6 +330,9 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
   if("all" == name) all = true;
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
+
+  if(all) theManager->SetVerbose(val);
+
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
@@ -392,6 +395,19 @@ void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
     if(q) q->ActivateDeexcitation(val,r);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, G4double factor)
+{
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    G4VMultipleScattering* s = *itm;
+    if(s) s->MscStepLimitation(algorithm, factor);
   }
 }
 

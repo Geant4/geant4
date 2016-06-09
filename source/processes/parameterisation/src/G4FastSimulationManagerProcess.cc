@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.9 2004/11/25 23:34:13 mverderi Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.12 2005/11/26 00:47:54 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -525,7 +525,7 @@ G4VParticleChange* G4FastSimulationManagerProcess::AtRestDoIt(
   return fFastSimulationManager->InvokeAtRestDoIt();
 }
 
-void G4FastSimulationManagerProcess::StartTracking() 
+void G4FastSimulationManagerProcess::StartTracking(G4Track*) 
 {
   fStartTracking = true;
 }

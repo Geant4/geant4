@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.7 2004/07/23 15:23:50 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLXmViewer.hh,v 1.8 2005/11/22 16:03:23 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -67,9 +67,10 @@ class G4OpenGLXmTextField;
 class G4OpenGLXmFramedBox;
 class G4OpenGLXmFourArrowButtons;
 class G4OpenGLXmSeparator;
+class G4OpenGLXmViewerMessenger;
 
 class G4OpenGLXmViewer: public G4OpenGLXViewer {
-  
+
 public:
   G4OpenGLXmViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLXmViewer ();
@@ -206,6 +207,7 @@ protected:
   G4OpenGLXmRadioButton*            fpprint_col_radio2;
   G4OpenGLXmRadioButton*            fpprint_style_radio1;
   G4OpenGLXmRadioButton*            fpprint_style_radio2;
+  G4OpenGLXmViewerMessenger*        fpMessenger;
 
 public:
 
@@ -382,8 +384,9 @@ public:
 
   static G4int  get_int_userData (Widget w);
 
-friend class G4OpenGLXmVWidgetObject;
-
+  friend class G4OpenGLXmVWidgetObject;
+  friend class G4OpenGLXmViewerMessenger;
+  
 private:
   G4OpenGLXmViewer (const G4OpenGLXmViewer&);
   G4OpenGLXmViewer& operator = (const G4OpenGLXmViewer&);

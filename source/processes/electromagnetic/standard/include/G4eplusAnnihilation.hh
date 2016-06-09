@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh,v 1.17 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eplusAnnihilation.hh,v 1.18 2005/12/05 16:44:43 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,7 +38,8 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 15-03-05 Update interface according to changings in G4VEmProcess (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
-// 04-05-05, Make class to be default (V.Ivanchenko)
+// 04-05-05 Make class to be default (V.Ivanchenko)
+// 04-12-05 SetProposedKineticEnergy(0.) for annihilated positron (mma)
 //
 //
 // Class Description:
@@ -122,6 +123,7 @@ inline std::vector<G4DynamicParticle*>* G4eplusAnnihilation::SecondariesPostStep
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp)
 {
+  fParticleChange.SetProposedKineticEnergy(0.);
   fParticleChange.ProposeTrackStatus(fStopAndKill);
   return model->SampleSecondaries(couple, dp);
 }

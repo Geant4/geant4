@@ -23,13 +23,15 @@
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.3 2003/12/09 15:30:54 gunter Exp $
+//   $Id: HepMCG4PythiaMessenger.cc,v 1.4 2005/11/15 15:02:26 gcosmo Exp $
 //
 // ====================================================================
 #include "HepMCG4PythiaMessenger.hh"
 #include "HepMCG4PythiaInterface.hh"
 
+#include <sstream>
 #include <fstream>
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -147,7 +149,7 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyinit) { // /pyinit ...
     const char* strvaluelist= newValues.c_str();
-    std::istrstream is((char*)strvaluelist);
+    std::istringstream is(strvaluelist);
     G4String sframe, sbeam, starget; G4double dwin;
     is >> sframe >> sbeam >> starget >> dwin;
     gen-> CallPyinit(sframe, sbeam, starget, dwin);
@@ -169,14 +171,14 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyrget) { // /pyrget ...
     const char* strvaluelist= newValues.c_str();
-    std::istrstream is((char*)strvaluelist);
+    std::istringstream is(strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrget(lun, move);
 
   } else if (command == cpyrset) { // /pyrset ...
     const char* strvaluelist= newValues.c_str();
-    std::istrstream is((char*)strvaluelist);
+    std::istringstream is(strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrset(lun, move);

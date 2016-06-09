@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion52.cc,v 1.1 2005/05/04 16:16:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4GammaConversion52.cc,v 1.2 2005/11/16 15:23:02 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //------------------ G4GammaConversion52 physics process -------------------------
 //                   by Michel Maire, 24 May 1996
@@ -57,6 +57,7 @@
 // 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma
 // 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
 // 04-05-05 Add 52 to class name (V.Ivanchenko)
+// 16-11-05 replace shootBit() by G4UniformRand()  mma
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion52.hh"
@@ -386,7 +387,7 @@ G4VParticleChange* G4GammaConversion52::PostStepDoIt(const G4Track& aTrack,
    //
 
    G4double ElectTotEnergy, PositTotEnergy;
-   if (RandBit::shootBit())
+   if (G4UniformRand() > 0.5)
      {
        ElectTotEnergy = (1.-epsil)*GammaEnergy;
        PositTotEnergy = epsil*GammaEnergy;

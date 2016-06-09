@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.14 2003/11/27 11:48:14 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Scene.cc,v 1.15 2005/09/16 01:26:19 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -44,12 +44,13 @@ G4Scene::G4Scene (const G4String& name):
 G4Scene::~G4Scene () {}
 
 G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
-  G4int i, nModels = fRunDurationModelList.size ();
-  for (i = 0; i < nModels; i++) {
+  std::vector<G4VModel*>::const_iterator i;
+  for (i = fRunDurationModelList.begin ();
+       i != fRunDurationModelList.end (); ++i) {
     if (pModel -> GetGlobalDescription () ==
-	fRunDurationModelList [i] -> GetGlobalDescription ()) break;
+	(*i) -> GetGlobalDescription ()) break;
   }
-  if (i < nModels) {
+  if (i != fRunDurationModelList.end ()) {
     if (warn) {
       G4cout << "G4Scene::AddRunDurationModel: model \""
 	     << pModel -> GetGlobalDescription ()

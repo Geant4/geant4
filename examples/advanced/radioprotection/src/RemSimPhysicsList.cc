@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.8 2004/11/23 15:43:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimPhysicsList.cc,v 1.9 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Susanna Guatelli
 
@@ -140,10 +140,11 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
-  // Register hadronic process for p and alpha particle, activating the
-  // Binary model
+ //  // Register hadronic process for p and alpha particle, activating the
+//   // Binary model
 
-  if (name == "hadronic-binary") 
+ 
+ if (name == "hadronic-binary") 
     {
       if (hadronicIsRegistered) 
 	{
@@ -163,7 +164,7 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
   // Register hadronic process for p and alpha particle, activating the
   // Bertini model
 
-  if (name == "hadronic-bertini") 
+if (name == "hadronic-bertini") 
     {
       if (hadronicIsRegistered) 
 	{

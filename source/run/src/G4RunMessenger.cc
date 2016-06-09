@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.20 2003/11/04 01:58:29 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RunMessenger.cc,v 1.21 2005/11/09 10:06:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4RunMessenger.hh"
@@ -37,7 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 :runManager(runMgr)
@@ -242,7 +242,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4int nev;
     G4int ns;
     const char* nv = (const char*)newValue;
-    std::istrstream is((char*)nv);
+    std::istringstream is(nv);
     is >> nev >> macroFileName >> ns;
     if(macroFileName=="***NULL***")
     { runManager->BeamOn(nev); }

@@ -1,3 +1,5 @@
+$Id: History,v 1.10 2005/12/06 14:26:35 gcosmo Exp $
+-------------------------------------------------------------------
 
      =========================================================
  		      Geant4 - DICOM example
@@ -5,6 +7,12 @@
 
                       Category History file
                       ---------------------
+
+06.12.2005 - Gabriele Cosmo
+             Trivial changes for support of CLHEP-2.0.X series.
+
+29.11.2005 - Susanna Guatelli (DICOM-V07-01-00)
+             Documentation update
 
 12.06.2005 - Stephane Chauvie (DICOM-V07-00-01)
              Added improvement by Akinori Kimura.

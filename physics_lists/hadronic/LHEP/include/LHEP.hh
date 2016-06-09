@@ -31,7 +31,7 @@ template<class T>
 class TLHEP: public T
 {
 public:
-  TLHEP();
+  TLHEP(G4int ver = 1);
   virtual ~TLHEP();
   
 public:

@@ -1,6 +1,6 @@
-# $Id: CLHEP.i,v 1.4 2004/12/08 15:37:14 daquinog Exp $
+# $Id: CLHEP.i,v 1.5 2005/12/15 14:23:31 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
 
@@ -11,6 +11,8 @@
 %}
 
 %include CLHEP/Units/SystemOfUnits.h
+
+namespace CLHEP {
 
 class Hep3Vector {
 
@@ -139,8 +141,8 @@ public:
   // Rotates around the axis specified by another Hep3Vector.
   // (Uses methods of HepRotation, forcing linking in of Rotation.cc.)
 
-  Hep3Vector & operator *= (const HepRotation &);
-  Hep3Vector & transform(const HepRotation &);
+  Hep3Vector & operator *= (const CLHEP::HepRotation &);
+  Hep3Vector & transform(const CLHEP::HepRotation &);
   // Transformation with a Rotation matrix.
 
 
@@ -312,10 +314,10 @@ public:
   Hep3Vector & rotate  (const Hep3Vector & axis, double delta);
   // Synonym for rotate (delta, axis)
 
-  Hep3Vector & rotate  (const HepAxisAngle & ax);
+  Hep3Vector & rotate  (const CLHEP::HepAxisAngle & ax);
   // HepAxisAngle is a struct holding an axis direction and an angle.
 
-  Hep3Vector & rotate (const HepEulerAngles & e);
+  Hep3Vector & rotate (const CLHEP::HepEulerAngles & e);
   Hep3Vector & rotate (double phi,
                         double theta,
                         double psi);
@@ -323,7 +325,11 @@ public:
   // those of Goldstein Classical Mechanics page 107.
 
 };
+
+}  // namespace CLHEP
+
+
 %inline %{
-  typedef Hep3Vector G4ThreeVector;
+  typedef CLHEP::Hep3Vector G4ThreeVector;
 %}
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.36 2005/04/18 17:31:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VMultipleScattering.cc,v 1.37 2005/10/27 11:33:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 15-04-05 optimize internal interface (V.Ivanchenko)
 // 15-04-05 remove boundary flag (V.Ivanchenko)
+// 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -294,6 +295,11 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
   }
   return yes;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::MscStepLimitation(G4bool, G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

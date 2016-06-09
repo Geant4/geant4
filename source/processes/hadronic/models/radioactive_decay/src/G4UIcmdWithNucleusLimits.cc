@@ -22,7 +22,7 @@
 //
 //
 #include "G4UIcmdWithNucleusLimits.hh"
-#include <strstream>
+#include <sstream>
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4UIcmdWithNucleusLimits::G4UIcmdWithNucleusLimits
@@ -54,8 +54,7 @@ G4NucleusLimits G4UIcmdWithNucleusLimits::
   G4int aMax;
   G4int zMin;
   G4int zMax;
-  const char* t = paramString;
-  std::istrstream is((char*)t);
+  std::istringstream is(paramString);
   is >> aMin >> aMax >> zMin >> zMax;
   return G4NucleusLimits(aMin,aMax,zMin,zMax);
 }
@@ -64,11 +63,10 @@ G4NucleusLimits G4UIcmdWithNucleusLimits::
 G4String G4UIcmdWithNucleusLimits::ConvertToString
 (G4NucleusLimits defLimits)
 {
-  char st[100];
-  std::ostrstream os(st,100);
+  std::ostringstream os;
   os << defLimits.GetAMin() << " " << defLimits.GetAMax()
-     << defLimits.GetZMin() << " " << defLimits.GetZMax()<< '\0';
-  G4String vl = st;
+     << defLimits.GetZMin() << " " << defLimits.GetZMax() ;
+  G4String vl = os.str();
   return vl;
 }                         
 ////////////////////////////////////////////////////////////////////////////////

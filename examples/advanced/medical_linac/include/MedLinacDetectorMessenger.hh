@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorMessenger.hh,v 1.2 2004/04/02 17:48:41 mpiergen Exp $
+// $Id: MedLinacDetectorMessenger.hh,v 1.3 2005/07/03 23:27:36 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -44,14 +44,14 @@ class G4UIcmdWithoutParameter;
 class MedLinacDetectorMessenger: public G4UImessenger
 {
   public:
-    MedLinacDetectorMessenger(MedLinacDetectorConstruction* );
+    MedLinacDetectorMessenger(MedLinacDetectorConstruction*);
    ~MedLinacDetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
     MedLinacDetectorConstruction* MedLinacDetector;
-    
+
     G4UIdirectory*             MedLinacDir;
     G4UIdirectory*             X1Dir;
     G4UIdirectory*             X2Dir;
@@ -61,6 +61,11 @@ class MedLinacDetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* JawX2PosCmd;
     G4UIcmdWithADoubleAndUnit* JawY1PosCmd;
     G4UIcmdWithADoubleAndUnit* JawY2PosCmd;
+
+    G4UIcmdWithADoubleAndUnit* PhantomDimCmd;
+    G4UIcmdWithAnInteger* NVoxelsCmd;
+    G4UIcmdWithADoubleAndUnit* MaxStepCmd;
+   
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

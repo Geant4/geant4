@@ -16,3 +16,10 @@ RE01
 primary particles and hits. It also utilize some user-information 
 classes.
 
+RE02
+----
+
+ This example demonstrates how to accumulate the physics quantities
+such as energy deposition and dose for a run. It also demonstrates
+the use of primitive scorers.
+

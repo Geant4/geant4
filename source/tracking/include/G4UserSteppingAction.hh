@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSteppingAction.hh,v 1.8 2003/05/21 20:41:21 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UserSteppingAction.hh,v 1.9 2005/11/22 21:04:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -56,8 +56,8 @@ public: // with description
 //--------
 
 // Constructor and destructors
-   G4UserSteppingAction(){;}
-   virtual ~G4UserSteppingAction(){;}
+   G4UserSteppingAction();
+   virtual ~G4UserSteppingAction();
 
 // Member functions
    void SetSteppingManagerPointer(G4SteppingManager* pValue);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.8 2003/06/16 16:57:21 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Alpha.cc,v 1.10 2005/01/14 03:49:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,59 +31,60 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added by J.L.Chuma, TRIUMF, 27 June 1996
-//  Added  G4Alpha::AlphaDefinition() by H.Kurashige 27 June 1996
-//  Fixed  parameters by H.Kurashige, 25 Apr 1998
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4Alpha.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                           ALPHA                                ###
 // ######################################################################
 
-G4Alpha::G4Alpha(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VIon( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable )
+G4Alpha* G4Alpha::theInstance = 0;
+
+G4Alpha* G4Alpha::Definition()
 {
-  SetParticleSubType("static");
+  if (theInstance !=0) return theInstance;
+  const G4String name = "alpha";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+                 name,   3.727417*GeV,       0.0*MeV,  +2.0*eplus,
+                    0,              +1,             0,
+                    0,               0,             0,
+            "nucleus",               0,            +4,           0,
+                 true,            -1.0,          NULL,
+             false,           "static"
+              );
+
+   anInstance->SetAtomicNumber(2);
+   anInstance->SetAtomicMass(4);
+  }
+  theInstance = reinterpret_cast<G4Alpha*>(anInstance);
+  return theInstance;
 }
 
-G4Alpha::~G4Alpha()
+G4Alpha*  G4Alpha::AlphaDefinition()
 {
+  return Definition();
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4Alpha*  G4Alpha::Alpha()
+{
+  return Definition();
+}
 
-G4Alpha G4Alpha::theAlpha(
-              "alpha",    3.727417*GeV,       0.0*MeV,  +2.0*eplus, 
-		    0,              +1,             0,          
-		    0,               0,             0,             
-	    "nucleus",               0,            +4,           0,
-		 true,            -1.0,          NULL
-);
 
-G4Alpha* G4Alpha::AlphaDefinition(){return &theAlpha;}
-G4Alpha* G4Alpha::Alpha(){return &theAlpha;}

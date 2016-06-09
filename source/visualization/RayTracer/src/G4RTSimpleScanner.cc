@@ -21,30 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.1 2003/09/18 11:14:04 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RTSimpleScanner.cc,v 1.2 2005/07/17 13:59:24 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
 #include "G4RTSimpleScanner.hh"
 
 G4RTSimpleScanner::G4RTSimpleScanner():
+  theGSName("RayTracer"), theGSNickname("RayTracer"),
   theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+
+const G4String& G4RTSimpleScanner::GetGSName() const
+{return theGSName;}
+
+const G4String& G4RTSimpleScanner::GetGSNickname() const
+{return theGSNickname;}
 
 void G4RTSimpleScanner::Initialize(G4int nRow, G4int nColumn) {
   theNRow = nRow;
   theNColumn = nColumn;
   theIRow = 0;
-  theIColumn = 0;
+  theIColumn = -1;
 }
 
-G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn) {
-  if (theIRow >= theNRow) return false;
-  iRow = theIRow;
-  iColumn = theIColumn;
-  if (++theIColumn >= theNColumn) {
+G4bool G4RTSimpleScanner::Coords(G4int& iRow, G4int& iColumn)
+{
+  // Increment column and, if necessary, increment row...
+  ++theIColumn;
+  if (theIColumn >= theNColumn) {
     theIColumn = 0;
     ++theIRow;
   }
+
+  // Return if finished...
+  if (theIRow >= theNRow) return false;
+
+  // Return current row and column...
+  iRow = theIRow;
+  iColumn = theIColumn;
   return true;
 }

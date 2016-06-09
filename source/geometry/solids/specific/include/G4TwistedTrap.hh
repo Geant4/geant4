@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.5 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTrap.hh,v 1.9 2005/12/06 09:22:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,7 +58,7 @@
  
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 #ifndef __G4TWISTEDTRAP__
@@ -68,50 +68,56 @@
 
 class G4TwistedTrap : public G4VTwistedFaceted
 {
-public:  // with description
+  public:  // with description
 
-  G4TwistedTrap(const G4String &pName,
-                      G4double  pPhiTwist,
-                      G4double  pDx1,  // half x length at -pDz,-pDy
-                      G4double  pDx2,  // half x length at -pDz,+pDy
-                      G4double  pDy,
-                      G4double  pDz);
+    G4TwistedTrap(const G4String &pName,
+                        G4double  pPhiTwist,
+                        G4double  pDx1,  // half x length at -pDz,-pDy
+                        G4double  pDx2,  // half x length at -pDz,+pDy
+                        G4double  pDy,
+                        G4double  pDz);
 
 
-  G4TwistedTrap(const G4String &pName,       // Name of instance
-                      G4double  pPhiTwist,   // twist angle
-                      G4double  pDz,     // half z length
-                      G4double  pTheta,  // direction between end planes
-                      G4double  pPhi,    // defined by polar and azim. angles
-                      G4double  pDy1,    // half y length at -pDz
-                      G4double  pDx1,    // half x length at -pDz,-pDy
-                      G4double  pDx2,    // half x length at -pDz,+pDy
-                      G4double  pDy2,    // half y length at +pDz
-                      G4double  pDx3,    // half x length at +pDz,-pDy
-                      G4double  pDx4,    // half x length at +pDz,+pDy
-                      G4double  pAlph    // tilt angle
-                );
+    G4TwistedTrap(const G4String &pName,       // Name of instance
+                        G4double  pPhiTwist,   // twist angle
+                        G4double  pDz,     // half z length
+                        G4double  pTheta,  // direction between end planes
+                        G4double  pPhi,    // defined by polar and azim. angles
+                        G4double  pDy1,    // half y length at -pDz
+                        G4double  pDx1,    // half x length at -pDz,-pDy
+                        G4double  pDx2,    // half x length at -pDz,+pDy
+                        G4double  pDy2,    // half y length at +pDz
+                        G4double  pDx3,    // half x length at +pDz,-pDy
+                        G4double  pDx4,    // half x length at +pDz,+pDy
+                        G4double  pAlph    // tilt angle
+                  );
  
-  virtual ~G4TwistedTrap();
+    virtual ~G4TwistedTrap();
 
-  // accessors
+    // accessors
 
-  inline G4double GetY1HalfLength() const { return GetDy1() ; }
-  inline G4double GetX1HalfLength() const { return GetDx1() ; }
-  inline G4double GetX2HalfLength() const { return GetDx2() ; }
-  inline G4double GetY2HalfLength() const { return GetDy2() ; }
-  inline G4double GetX3HalfLength() const { return GetDx3() ; }
-  inline G4double GetX4HalfLength() const { return GetDx4() ; }
-  inline G4double GetZHalfLength()  const { return GetDz()  ; }
-  inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
-  inline G4double GetTiltAngleAlpha()    const { return GetAlpha() ; }
-  inline G4double GetPolarAngleTheta()   const { return GetTheta() ; }
-  inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
+    inline G4double GetY1HalfLength() const { return GetDy1() ; }
+    inline G4double GetX1HalfLength() const { return GetDx1() ; }
+    inline G4double GetX2HalfLength() const { return GetDx2() ; }
+    inline G4double GetY2HalfLength() const { return GetDy2() ; }
+    inline G4double GetX3HalfLength() const { return GetDx3() ; }
+    inline G4double GetX4HalfLength() const { return GetDx4() ; }
+    inline G4double GetZHalfLength()  const { return GetDz()  ; }
+    inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
+    inline G4double GetTiltAngleAlpha()    const { return GetAlpha() ; }
+    inline G4double GetPolarAngleTheta()   const { return GetTheta() ; }
+    inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
 
-  G4GeometryType GetEntityType() const;
-  G4Polyhedron*  CreatePolyhedron() const;
+    G4GeometryType GetEntityType() const;
 
-  std::ostream &StreamInfo(std::ostream& os) const;
+    std::ostream &StreamInfo(std::ostream& os) const;
+
+  public:  // without description
+
+    G4TwistedTrap(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
 } ;
 

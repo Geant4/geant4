@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.14 2004/12/07 08:22:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastStep.cc,v 1.15 2005/11/02 09:22:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------
 //
@@ -92,7 +92,7 @@ void G4FastStep::KillPrimaryTrack()
 void 
 G4FastStep::
 ProposePrimaryTrackFinalPosition(const G4ThreeVector &position,
-				 G4bool localCoordinates)
+                                 G4bool localCoordinates)
 {
   // Compute the position coordinate in global
   // reference system if needed ...
@@ -107,7 +107,7 @@ ProposePrimaryTrackFinalPosition(const G4ThreeVector &position,
 void 
 G4FastStep::
 SetPrimaryTrackFinalPosition(const G4ThreeVector &position,
-			     G4bool localCoordinates)
+                             G4bool localCoordinates)
 {
   ProposePrimaryTrackFinalPosition(position, localCoordinates);
 }
@@ -118,7 +118,7 @@ SetPrimaryTrackFinalPosition(const G4ThreeVector &position,
 void 
 G4FastStep::
 ProposePrimaryTrackFinalMomentumDirection(const G4ThreeVector &momentum,
-					  G4bool localCoordinates)
+                                          G4bool localCoordinates)
 {
   // Compute the momentum in global reference
   // system if needed ...
@@ -133,7 +133,7 @@ ProposePrimaryTrackFinalMomentumDirection(const G4ThreeVector &momentum,
 void 
 G4FastStep::
 SetPrimaryTrackFinalMomentum(const G4ThreeVector &momentum,
-			     G4bool localCoordinates)
+                             G4bool localCoordinates)
 {
   ProposePrimaryTrackFinalMomentumDirection(momentum, localCoordinates);
 }
@@ -144,8 +144,8 @@ SetPrimaryTrackFinalMomentum(const G4ThreeVector &momentum,
 void 
 G4FastStep::
 ProposePrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
-						  const G4ThreeVector &direction,
-						  G4bool localCoordinates)
+                                                  const G4ThreeVector &direction,
+                                                  G4bool localCoordinates)
 {
   // Compute global direction if needed...
   G4ThreeVector globalDirection = direction;
@@ -160,8 +160,8 @@ ProposePrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
 void 
 G4FastStep::
 SetPrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
-					      const G4ThreeVector &direction,
-					      G4bool localCoordinates)
+                                              const G4ThreeVector &direction,
+                                              G4bool localCoordinates)
 {
   ProposePrimaryTrackFinalKineticEnergyAndDirection(kineticEnergy, direction, localCoordinates);
 }
@@ -172,7 +172,7 @@ SetPrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
 void 
 G4FastStep::
 ProposePrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
-				     G4bool localCoordinates)
+                                     G4bool localCoordinates)
 {
   // Compute polarization in global system if needed:
   G4ThreeVector globalPolarization(polarization);
@@ -186,7 +186,7 @@ ProposePrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
 void 
 G4FastStep::
 SetPrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
-				 G4bool localCoordinates)
+                                 G4bool localCoordinates)
 {
   ProposePrimaryTrackFinalPolarization(polarization, localCoordinates);
 }
@@ -196,10 +196,10 @@ SetPrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
 //--------------------
 G4Track* G4FastStep::
 CreateSecondaryTrack(const G4DynamicParticle& dynamics,
-		     G4ThreeVector polarization,
-		     G4ThreeVector position,
-		     G4double time,
-		     G4bool localCoordinates     )
+                     G4ThreeVector polarization,
+                     G4ThreeVector position,
+                     G4double time,
+                     G4bool localCoordinates     )
 {
   G4DynamicParticle dummyDynamics(dynamics);
   
@@ -207,8 +207,8 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
   // Add the polarization to the dummyDynamics:
   // ------------------------------------------
   dummyDynamics.SetPolarization(polarization.x(),
-				polarization.y(),
-				polarization.z());
+                                polarization.y(),
+                                polarization.z());
   
   return CreateSecondaryTrack(dummyDynamics, position, time, localCoordinates);
 }
@@ -218,9 +218,9 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
 //--------------------
 G4Track* G4FastStep::
 CreateSecondaryTrack(const G4DynamicParticle& dynamics,
-		     G4ThreeVector position,
-		     G4double time,
-		     G4bool localCoordinates     )
+                     G4ThreeVector position,
+                     G4double time,
+                     G4bool localCoordinates     )
 {
   // ----------------------------------------
   // Quantities in global coordinates system.
@@ -239,32 +239,32 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
     {
       // -- Momentum Direction:
       globalDynamics->SetMomentumDirection(fFastTrack->
-					   GetInverseAffineTransformation()->
-					   TransformAxis(globalDynamics->
-							 GetMomentumDirection()));
+                                           GetInverseAffineTransformation()->
+                                           TransformAxis(globalDynamics->
+                                                         GetMomentumDirection()));
       // -- Polarization:
       G4ThreeVector globalPolarization;
       globalPolarization = fFastTrack->GetInverseAffineTransformation()->
-	TransformAxis(globalDynamics->GetPolarization());
+        TransformAxis(globalDynamics->GetPolarization());
       globalDynamics->SetPolarization(
-				      globalPolarization.x(),
-				      globalPolarization.y(),
-				      globalPolarization.z()
-				      );
+                                      globalPolarization.x(),
+                                      globalPolarization.y(),
+                                      globalPolarization.z()
+                                      );
       
       // -- Position:
       globalPosition = fFastTrack->GetInverseAffineTransformation()->
-	TransformPoint(globalPosition);
+        TransformPoint(globalPosition);
     }
   
   //-------------------------------------
   // Create the G4Track of the secondary:
   //-------------------------------------
   G4Track* secondary = new G4Track(
-				   globalDynamics,
-				   time,
-				   globalPosition
-				   );
+                                   globalDynamics,
+                                   time,
+                                   globalPosition
+                                   );
   
   //-------------------------------
   // and feed the changes:
@@ -281,7 +281,8 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
 // but we must define it to avoid warnings.
 void G4FastStep::Initialize(const G4Track&)
 {
-  G4Exception("G4FastStep::Initialize(const G4Track&) should never be called,\nyou must use instead the G4FastStep::Initialize(const G4FastTrack&)\nmethod!");
+  G4Exception("G4FastStep::Initialize()", "InvalidCondition", FatalException,
+              "G4FastStep can be initialised only through G4FastTrack!");
 }
 
 G4FastStep::G4FastStep()
@@ -373,7 +374,7 @@ G4Step* G4FastStep::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetPosition( thePositionChange  );
   pPostStepPoint->SetGlobalTime( theTimeChange  );
   pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+                                 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight
@@ -406,7 +407,7 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->SetPosition( thePositionChange  );
   pPostStepPoint->SetGlobalTime( theTimeChange  );
   pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+                                 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight
@@ -493,49 +494,53 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   // Energy should not be larger than the initial value
   accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > GetAccuracyForWarning()) {
-    G4cout << "  G4FastStep::CheckIt    : ";
-    G4cout << "the energy becomes larger than the initial value !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+    G4cout << "ERROR - G4FastStep::CheckIt()" << G4endl
+           << "        The energy becomes larger than the initial value !!"
+           << G4endl
+           << "        Difference: " << accuracy << "[MeV] " << G4endl;
     itsOK = false;
-    if (accuracy > GetAccuracyForException()) exitWithError = true;
+    if (accuracy > GetAccuracyForException())  {exitWithError = true;}
   }
 
   G4bool itsOKforMomentum = true;
   if ( theEnergyChange >0.) {
     accuracy = std::abs(theMomentumChange.mag2()-1.0);
     if (accuracy > GetAccuracyForWarning()) {
-      G4cout << "  G4FastStep::CheckIt    : ";
-      G4cout << "the Momentum Change is not unit vector !!"
-	     << "  Difference:  " << accuracy << G4endl;
+      G4cout << "ERROR - G4FastStep::CheckIt()" << G4endl
+             << "        The Momentum Change is not unit vector !!" << G4endl
+             << "        Difference: " << accuracy << G4endl;
       itsOK = itsOKforMomentum = false;
-      if (accuracy > GetAccuracyForException()) exitWithError = true;
+      if (accuracy > GetAccuracyForException())  {exitWithError = true;}
     }
   }
   
   accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;  
   if (accuracy > GetAccuracyForWarning()) {
-    G4cout << "  G4FastStep::CheckIt    : ";
-    G4cout << "the global time goes back  !!"
-	   << " Difference:  " << accuracy << "[ns] " <<G4endl;
+    G4cout << "ERROR - G4FastStep::CheckIt()" << G4endl
+           << "        The global time goes back  !!" << G4endl
+           << "        Difference: " << accuracy << "[ns] " << G4endl;
     itsOK = false;
   }
   
   accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
   if (accuracy) {
-    G4cout << "  G4FastStep::CheckIt    : ";
-    G4cout << "the proper time goes back  !!"
-	   << " Difference:  " <<  accuracy  << "[ns] " <<G4endl;
+    G4cout << "ERROR - G4FastStep::CheckIt()" << G4endl
+           << "        The proper time goes back  !!" << G4endl
+           << "        Difference: " <<  accuracy << "[ns] " << G4endl;
     itsOK = false;
   }
   
   if (!itsOK) { 
-    G4cout << " G4FastStep::CheckIt " <<G4endl;
-    G4cout << " pointer : " << this <<G4endl ;
+    G4cout << "ERROR - G4FastStep::CheckIt() " << G4endl;
+    G4cout << "        Pointer : " << this << G4endl ;
     DumpInfo();
   }
   
   // Exit with error
-  if (exitWithError) G4Exception("G4ParticleChange::CheckIt");
+  if (exitWithError) {
+    G4Exception("G4FastStep::CheckIt()", "FatalError",
+                FatalException, "Error condition in G4ParticleChange.");
+  }
 
   //correction for Momentum only.
   if (!itsOKforMomentum) {

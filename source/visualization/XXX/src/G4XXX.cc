@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4XXX.cc,v 1.4 2005/06/02 17:00:11 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  5th April 2001

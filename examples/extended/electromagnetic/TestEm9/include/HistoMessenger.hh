@@ -23,7 +23,7 @@
 
 //
 // $Id: HistoMessenger.hh,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 

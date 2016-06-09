@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelHadronPhysics.cc,v 1.2 2003/06/16 16:46:27 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: GammaRayTelHadronPhysics.cc,v 1.3 2005/12/07 10:50:31 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "GammaRayTelHadronPhysics.hh"
-
+#include "G4ShortLivedConstructor.hh"
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
@@ -35,35 +35,13 @@
 GammaRayTelHadronPhysics::GammaRayTelHadronPhysics(const G4String& name)
                     :  G4VPhysicsConstructor(name)
 {
+ 
+
 }
 
 GammaRayTelHadronPhysics::~GammaRayTelHadronPhysics()
 {
-delete theStringDecay;
-}
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-
-// Nuclei
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-void GammaRayTelHadronPhysics::ConstructParticle()
-{
-  //  Construct all mesons
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  //  Construct all barions
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  //  Construct  resonaces and quarks
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-
+  delete theStringDecay;
 }
 
 
@@ -72,38 +50,46 @@ void GammaRayTelHadronPhysics::ConstructParticle()
 
 void GammaRayTelHadronPhysics::ConstructProcess()
 {
-  G4ProcessManager * pManager = 0;
 
-  /*  G4cout << "" << G4endl;
+  G4ProcessManager * pManager = 0;
+  /*
+  G4cout << "" << G4endl;
   G4cout << "You are using the GammaRayTelHadronPhysics" << G4endl;
   G4cout << " - Note that this hadronic physics list is not optimized for any particular usage" << G4endl;
   G4cout << " - If you wish to have a starting point tailored for a particular area of work," << G4endl;
   G4cout << "   please use one of the available physics lists by use-case." << G4endl;
   G4cout << "" << G4endl;
   */
+
   // Elastic Process
   theElasticModel = new G4LElastic();
   theElasticProcess.RegisterMe(theElasticModel);
 
-  // pi+ and pi-
+  // pi+ and pi-  
   
+  theCascade = new G4GeneratorPrecompoundInterface();
   thePreEquilib = new G4PreCompoundModel(&theHandler);
-  theCascade.SetDeExcitation(thePreEquilib);  
-  theTheoModel.SetTransport(&theCascade);
-  theTheoModel.SetHighEnergyGenerator(&theStringModel);
-  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
-  theTheoModel.SetMinEnergy(15*GeV);
-  theTheoModel.SetMaxEnergy(100*TeV);
+  theCascade -> SetDeExcitation(thePreEquilib);
+  
+  theStringModel = new G4QGSModel< G4QGSParticipants >;
+  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  theStringModel -> SetFragmentationModel(theStringDecay);
+ 
+  theModel = new G4TheoFSGenerator();
+  theModel -> SetTransport(theCascade);
+  theModel -> SetHighEnergyGenerator(theStringModel);
+  theModel -> SetMinEnergy(15*GeV);
+  theModel -> SetMaxEnergy(100*TeV);
 
   // PionPlus
-  pManager = G4PionPlus::PionPlus()->GetProcessManager();
+  G4ParticleDefinition* pion = G4PionPlus::PionPlusDefinition();
+  pManager = pion ->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEPionPlusModel = new G4LEPionPlusInelastic();
   thePionPlusInelastic.RegisterMe(theLEPionPlusModel);
-  thePionPlusInelastic.RegisterMe(&theTheoModel);
+  thePionPlusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&thePionPlusInelastic);
 
   pManager->AddProcess(&thePionPlusIonisation, ordInActive,2, 2);
@@ -113,13 +99,14 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&thePionPlusMult, idxPostStep, 1);
 
   // PionMinus
-  pManager = G4PionMinus::PionMinus()->GetProcessManager();
+ G4ParticleDefinition* pionMinus = G4PionMinus::PionMinusDefinition();
+  pManager = pionMinus -> GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEPionMinusModel = new G4LEPionMinusInelastic();
   thePionMinusInelastic.RegisterMe(theLEPionMinusModel);
-  thePionMinusInelastic.RegisterMe(&theTheoModel);
+  thePionMinusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&thePionMinusInelastic);
 
   pManager->AddProcess(&thePionMinusIonisation, ordInActive,2, 2);
@@ -131,14 +118,15 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager->AddRestProcess(&thePionMinusAbsorption, ordDefault);
 
   // KaonPlus
-  pManager = G4KaonPlus::KaonPlus()->GetProcessManager();
+  G4ParticleDefinition* kaonPlus = G4KaonPlus::KaonPlusDefinition();
+  pManager = kaonPlus->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
   theLEKaonPlusModel = new G4LEKaonPlusInelastic();
   theHEKaonPlusModel = new G4HEKaonPlusInelastic();
   theKaonPlusInelastic.RegisterMe(theLEKaonPlusModel);
-  theKaonPlusInelastic.RegisterMe(&theTheoModel);
+  theKaonPlusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theKaonPlusInelastic);
 
   pManager->AddProcess(&theKaonPlusIonisation, ordInActive,2, 2);
@@ -148,7 +136,8 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&theKaonPlusMult, idxPostStep, 1);
 
   // KaonMinus
-  pManager = G4KaonMinus::KaonMinus()->GetProcessManager();
+  G4ParticleDefinition* kaonMinus = G4KaonMinus::KaonMinusDefinition();
+  pManager = kaonMinus->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
@@ -196,7 +185,7 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   theLEProtonModel = new G4LEProtonInelastic();
   theHEProtonModel = new G4HEProtonInelastic();
   theProtonInelastic.RegisterMe(theLEProtonModel);
-  theProtonInelastic.RegisterMe(&theTheoModel);
+  theProtonInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theProtonInelastic);
 
   pManager->AddProcess(&theProtonIonisation, ordInActive,2, 2);
@@ -232,7 +221,7 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   theLENeutronModel = new G4LENeutronInelastic();
   theHENeutronModel = new G4HENeutronInelastic();
   theNeutronInelastic.RegisterMe(theLENeutronModel);
-  theNeutronInelastic.RegisterMe(&theTheoModel);
+  theNeutronInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theNeutronInelastic);
   
   theNeutronFissionModel = new G4LFission();

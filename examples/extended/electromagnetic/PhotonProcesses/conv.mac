@@ -1,4 +1,4 @@
-# $Id: conv.mac,v 1.5 2005/05/09 16:10:42 maire Exp $
+# $Id: conv.mac,v 1.6 2005/11/22 16:40:07 maire Exp $
 #
 # Macro file for "PhotonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -18,11 +18,11 @@
 /process/inactivate compt
 /process/inactivate GammaToMuPair
 #
-/gun/energy 100 MeV
+/gun/energy 20 MeV
 #
 /testem/histo/setFileName conv.std
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 3  200 0. 100. MeV	#energy  of ch. secondaries  
+/testem/histo/setHisto 3  200 0. 20. MeV	#energy  of ch. secondaries  
 /testem/histo/setHisto 4  200 0. +1.  none 	#costeta of ch. secondaries
 #
 /testem/event/printModulo 10000

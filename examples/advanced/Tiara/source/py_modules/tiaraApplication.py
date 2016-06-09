@@ -1,6 +1,6 @@
-# $Id: tiaraApplication.py,v 1.5 2004/12/08 15:37:14 daquinog Exp $
+# $Id: tiaraApplication.py,v 1.6 2005/12/15 16:23:56 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 #
 import string
@@ -205,6 +205,11 @@ class TiaraApplet(object):
             
         return
 
+    def setPhysics(self):
+        self.tiaraSim.SetPhysicsList(self.physicsList)
+        return
+
+
     def setPrimaryGenerator(self, primGen):
         self.primGen = primGen
         self.tiaraSim.SetPrimaryGenerator(self.primGen)
@@ -222,7 +227,6 @@ class TiaraApplet(object):
         
     def config(self):
 
-        self.tiaraSim.SetPhysicsList(self.physicsList)
         self.buildDetectors()
         self.tiaraSim.initialize()
 

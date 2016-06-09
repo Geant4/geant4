@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh,v 1.1 2003/10/03 10:10:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSensitiveDetector.hh,v 1.3 2005/09/22 22:21:36 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -34,6 +34,7 @@
 #include "G4VReadOutGeometry.hh"
 #include "G4TouchableHistory.hh"
 #include "G4CollectionNameVector.hh"
+#include "G4VSDFilter.hh"
 
 // class description:
 //
@@ -89,7 +90,7 @@ class G4VSensitiveDetector
       //  "ROhist" will be given only is a Readout geometry is defined to this
       // sensitive detector. The G4TouchableHistory object of the tracking geometry
       // is stored in the PreStepPoint object of G4Step.
-      G4int GetCollectionID(G4int i);
+      virtual G4int GetCollectionID(G4int i);
       //  This is a utility method which returns the hits collection ID of the
       // "i"-th collection. "i" is the order (starting with zero) of the collection
       // whose name is stored to the collectionName protected vector.
@@ -104,22 +105,19 @@ class G4VSensitiveDetector
       G4String fullPathName;          // path + detector name
       G4int verboseLevel;
       G4bool active;
-
-  private:
       G4VReadOutGeometry * ROgeometry;
+      G4VSDFilter* filter;
 
   public: // with description
       inline G4bool Hit(G4Step*aStep)
       {
-        G4bool ack = true; 
         G4TouchableHistory* ROhis = 0;
-        if(!isActive()) 
-        { ack = false; }
-        else if(ROgeometry)
-        { ack = ROgeometry->CheckROVolume(aStep,ROhis); }
-        if(ack)
-        { ack = ProcessHits(aStep,ROhis); }
-        return ack;
+        if(!isActive()) return false;
+        if(filter)
+        { if(!(filter->Accept(aStep))) return false; }
+        if(ROgeometry)
+        { if(!(ROgeometry->CheckROVolume(aStep,ROhis))) return false; }
+        return ProcessHits(aStep,ROhis);
       }
       //  This is the public method invoked by G4SteppingManager for generating
       // hit(s). The actual user's implementation for generating hit(s) must be
@@ -128,26 +126,31 @@ class G4VSensitiveDetector
       inline void SetROgeometry(G4VReadOutGeometry*value)
       { ROgeometry = value; }
       //  Register the Readout geometry.
+      inline void SetFilter(G4VSDFilter*value)
+      { filter = value; }
+      //  Register a filter
 
   public:
-      inline G4int GetNumberOfCollections()
+      inline G4int GetNumberOfCollections() const
       { return collectionName.size(); }
-      inline G4String GetCollectionName(G4int id)
+      inline G4String GetCollectionName(G4int id) const
       { return collectionName[id]; }
       inline void SetVerboseLevel(G4int vl)
       { verboseLevel = vl; }
       inline void Activate(G4bool activeFlag)
       { active = activeFlag; }
-      inline G4bool isActive()
+      inline G4bool isActive() const
       { return active; }
-      inline G4String GetName()
+      inline G4String GetName() const
       { return SensitiveDetectorName; }
-      inline G4String GetPathName()
+      inline G4String GetPathName() const
       { return thePathName; }
-      inline G4String GetFullPathName()
+      inline G4String GetFullPathName() const
       { return fullPathName; }
-      inline G4VReadOutGeometry* GetROgeometry()
+      inline G4VReadOutGeometry* GetROgeometry() const
       { return ROgeometry; }
+      inline G4VSDFilter* GetFilter() const
+      { return filter; }
 };
 
 

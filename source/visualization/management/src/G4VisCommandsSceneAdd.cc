@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.56 2005/06/27 15:32:46 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.59 2005/11/22 17:17:37 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -49,13 +49,14 @@
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4Polyhedron.hh"
+#include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 // Local function with some frequently used error printing...
 static void G4VisCommandsSceneAddUnsuccessful
@@ -117,7 +118,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String unitString;
   G4double x0, y0, z0, length;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
@@ -355,7 +356,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   G4bool booleans, voxels, readout;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> requestedDepthOfDescent >>  booleans >> voxels >> readout;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -370,6 +371,30 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: Logical volume " << name
 	     << " not found in logical volume Store." << G4endl;
+    }
+    return;
+  }
+
+  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4VModel*>::const_iterator i;
+  for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
+    if ((*i) -> GetGlobalDescription().find("Volume") != std::string::npos) break;
+  }
+  if (i != rdModelList.end()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "There is already a volume, \""
+             << (*i) -> GetGlobalDescription()
+             << "\",\n in the run-duration model list of scene \""
+             << pScene -> GetName()
+             << "\".\n Your logical volume must be the only volume in the scene."
+	     << "\n Create a new scene and try again:"
+	     << "\n  /vis/specify " << name
+	     << "\n or"
+	     << "\n  /vis/scene/create"
+	     << "\n  /vis/scene/add/logicalVolume " << name
+	     << "\n  /vis/sceneHandler/attach"
+	     << "\n (and also, if necessary, /vis/viewer/flush)"
+             << G4endl;
     }
     return;
   }
@@ -471,7 +496,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double userHeight, red, green, blue, xmid, ymid, zmid;
   G4String userHeightUnit, direction, auto_manual, positionUnit;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> userHeight >> userHeightUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -797,7 +822,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
   G4String userLengthUnit, direction, auto_manual, positionUnit;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> userLength >> userLengthUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -807,10 +832,9 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
-  char tempcharstring [50];
-  std::ostrstream ost (tempcharstring, 50);
-  ost << userLength << ' ' << userLengthUnit << std::ends;
-  G4String annotation(tempcharstring);
+  std::ostringstream oss;
+  oss << userLength << ' ' << userLengthUnit;
+  G4String annotation(oss.str());
 
   G4Scale::Direction scaleDirection (G4Scale::x);
   if (direction(0) == 'y') scaleDirection = G4Scale::y;
@@ -1123,16 +1147,31 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
 
   G4int drawingMode;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose = 0;
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+  UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+  UImanager->SetVerboseLevel(keepVerbose);
+
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Trajectories will be drawn with mode "
 	   << drawingMode
 	   << " in scene \""
 	   << currentSceneName << "\"."
+	   << G4endl;
+  }
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout << "WARNING: \"/tracking/storeTrajectory 1\" has been executed."
 	   << G4endl;
   }
 }
@@ -1208,7 +1247,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 
   G4String unitString;
   G4double xmin, xmax, ymin, ymax, zmin, zmax;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
   G4double unit = G4UIcommand::ValueOf(unitString);
   xmin *= unit; xmax *= unit;
@@ -1281,7 +1320,8 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue ("none");
   parameter -> SetGuidance
     ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
-     "\n Only \"box\" is programmed at present.");
+     // "\n Only \"box\" is programmed at present."); No '\n' for GAG (temp).
+     " Only \"box\" is programmed at present.");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("parameter-unit", 's', omitable = true);
   parameter -> SetDefaultValue ("m");
@@ -1331,7 +1371,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4String name, clipVolumeType, parameterUnit;
   G4int copyNo, requestedDepthOfDescent;
   G4double param1, param2, param3, param4, param5, param6;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> copyNo >> requestedDepthOfDescent
      >> clipVolumeType >> parameterUnit
      >> param1 >> param2 >> param3 >> param4 >> param5 >> param6;
@@ -1345,6 +1385,31 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4PhysicalVolumeModel* model = 0;
   G4VPhysicalVolume* foundVolume = 0;
   G4int foundDepth = 0;
+
+  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4VModel*>::const_iterator i;
+  for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
+    if ((*i) -> GetGlobalDescription().find("G4PhysicalVolumeModel")
+	!= std::string::npos) {
+      if (((G4PhysicalVolumeModel*)(*i)) -> GetTopPhysicalVolume () == world) break;
+    }
+  }
+  if (i != rdModelList.end()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: There is already a volume, \""
+             << (*i) -> GetGlobalDescription()
+             << "\",\n in the run-duration model list of scene \""
+             << pScene -> GetName()
+             << "\".\n To get a clean scene:"
+	     << "\n  /vis/drawVolume " << name
+	     << "\n or"
+	     << "\n  /vis/scene/create"
+	     << "\n  /vis/scene/add/volume " << name
+	     << "\n  /vis/sceneHandler/attach"
+	     << "\n (and also, if necessary, /vis/viewer/flush)"
+             << G4endl;
+    }
+  }
 
   if (name == "world") {
     if (world) {

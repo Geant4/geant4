@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.19 2005/12/06 14:01:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+Dec 6th, 2005  Gabriele Cosmo
+-----------------------------
+- Trivial changes for support of CLHEP-2.0.X series.
+
+Oct 13th, 2005  Vladimir Grichine  (fieldex03-V07-01-00)
+---------------------------------
+- Removed cluster models from detector construction.
+  Coworks with gpara-V07-01-00.
+
+May 3rd, 2005  John Allison  (examples-V07-00-03)
+---------------------------
 - Replaced vis manager with G4VisExecutive.
 
 Dec 3rd, 2004 Gabriele Cosmo
@@ -26,17 +36,17 @@ Dec 3rd, 2004 Vladimir Grichine
 -------------------------------
 - Removed dependency on old PAI and XTR models in PhysicsList.
 
-Sep 15rd, 2004 V.Ivanchenko (fieldex03-V06-02-00)
--------------------------------------------------
+Sep 15rd, 2004 Vladimir Ivanchenko (fieldex03-V06-02-00)
+----------------------------------
 - Minor cleanup of PhysicsList.
 
 Mar 23rd, 2004 John Apostolakis (fieldex03-V06-00-00)
------------------------------------------------------
+-------------------------------
 - F03FieldSetup: fixed SetFieldValue methods to update equation, fld-manager.
 - F03FieldMessenger: added printout of value after Set Command.
 
 Dec  1st, 2003 John Apostolakis (fieldex03-V05-02-00)
------------------------------------------------------
+-------------------------------
 - Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator, 
    not a field). 
 - FieldSetup is now called only in Detector Construction, not in main.

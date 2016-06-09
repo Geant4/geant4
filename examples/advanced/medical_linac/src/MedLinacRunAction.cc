@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacRunAction.cc,v 1.3 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacRunAction.cc,v 1.5 2005/11/25 22:02:04 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -42,17 +42,13 @@
 #endif
 
 
-MedLinacRunAction::MedLinacRunAction(G4String SDName)
+MedLinacRunAction::MedLinacRunAction()
 {
-
-  sensitiveDetectorName = SDName;
-  detector = MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
 }
 
 
 MedLinacRunAction::~MedLinacRunAction()
 { 
-  delete detector;
 }
 
 void MedLinacRunAction::BeginOfRunAction(const G4Run* aRun)
@@ -63,7 +59,7 @@ void MedLinacRunAction::BeginOfRunAction(const G4Run* aRun)
 #endif
 
 
-  G4cout << "Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
 }
 

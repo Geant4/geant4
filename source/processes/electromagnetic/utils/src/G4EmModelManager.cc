@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.28 2005/05/13 16:54:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmModelManager.cc,v 1.31 2005/11/29 08:06:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,8 @@
 // 26-01-04 Fix in energy range conditions (V.Ivanchenko)
 // 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
+// 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -187,7 +189,7 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
   regions.push_back(r);
   orderOfModels.push_back(num);
   p->DefineForRegion(r);
-  if (nEmModels) {
+  if (nEmModels>0) {
     G4int idx = nEmModels;
     do {idx--;} while (idx && num < orderOfModels[idx]);
     if (num >= orderOfModels[idx] && num <= orderOfModels[idx+1]) idx++;
@@ -252,10 +254,14 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   nRegions = 1;
   std::vector<const G4Region*> set;
   set.push_back(world);
+  G4bool isWorld = false;
 
   for (G4int ii=0; ii<nEmModels; ii++) {
     const G4Region* r = regions[ii];
-    if ( r && r != world) {
+    if ( r == 0 || r == world) {
+      isWorld = true;
+      regions[ii] = world;
+    } else {
       G4bool newRegion = true;
       if (nRegions>1) {
         for (G4int j=1; j<nRegions; j++) {
@@ -290,38 +296,49 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     eLow.clear();
     eHigh.clear();
 
-    for (G4int ii=0; ii<nEmModels; ii++) {
+    if(isWorld || 0 < reg) {
 
-      G4VEmModel* model = models[ii];
-      if ( 0 == regions[ii] || region == regions[ii] ) {
+      for (G4int ii=0; ii<nEmModels; ii++) {
 
-        G4double tmin = model->LowEnergyLimit();
-        G4double tmax = model->HighEnergyLimit();
-        if (n>0) tmin = std::max(tmin, eHigh[n-1]);
+	G4VEmModel* model = models[ii];
+	if ( region == regions[ii] ) {
 
-        if(1 < verboseLevel) {
-          G4cout << "Model # " << ii << " for region <";
-	  if (region) G4cout << region->GetName(); 
-          G4cout << ">  "
+	  G4double tmin = model->LowEnergyLimit();
+	  G4double tmax = model->HighEnergyLimit();
+	  if (n>0) tmin = std::max(tmin, eHigh[n-1]);
+
+	  if(1 < verboseLevel) {
+	    G4cout << "Model #" << ii << " <" << model->GetName() << "> for region <";
+	    if (region) G4cout << region->GetName();
+	    G4cout << ">  "
 	         << " tmin(MeV)= " << tmin/MeV
                  << "; tmax(MeV)= " << tmax/MeV
+		 << "; order= " << orderOfModels[ii]
                  << G4endl;
-        }
+	  }
 
-	if (tmin < tmax) {
-          modelAtRegion.push_back(ii);
- 	  eLow.push_back(tmin);
-	  eHigh.push_back(tmax);
-	  upperEkin[ii] = tmax;
-	  n++;
+	  if (tmin < tmax) {
+	    modelAtRegion.push_back(ii);
+	    eLow.push_back(tmin);
+	    eHigh.push_back(tmax);
+	    upperEkin[ii] = tmax;
+	    n++;
+	  }
 	}
       }
+    } else {
+      n = 1;
+      models.push_back(0);
+      modelAtRegion.push_back(nEmModels);
+      eLow.push_back(0.0);
+      eHigh.push_back(DBL_MAX);
+      upperEkin.push_back(DBL_MAX);
     }
     eLow[0] = 0.0;
 
     if(1 < verboseLevel) {
       G4cout << "New G4RegionModels set with " << n << " models for region <";
-      if (region) G4cout << region->GetName(); 
+      if (region) G4cout << region->GetName();
       G4cout << ">  Elow(MeV)= ";
       for(G4int ii=0; ii<n; ii++) {G4cout << eLow[ii]/MeV << " ";}
       G4cout << G4endl;
@@ -337,6 +354,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
+ 
     G4int reg = nRegions;
     do {reg--;} while (reg>0 && pcuts != (set[reg]->GetProductionCuts()));
     idxOfRegionModels[i] = reg;
@@ -349,13 +367,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
              << G4endl;
     }
 
-    G4double cut = 0.0;
-    G4double subcut = 0.0;
+    G4double cut = DBL_MAX;
+    G4double subcut = DBL_MAX;
     if(secondaryParticle) {
       size_t idx = 1;
       if( secondaryParticle == G4Gamma::Gamma() ) idx = 0;
       cut = (*theCoupleTable->GetEnergyCutsVector(idx))[i];
-      subcut = minSubRange*cut;
+      if( secondaryParticle == G4Positron::Positron() && cut < DBL_MAX )
+        cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 2.0*electron_mass_c2;
+      if( cut < DBL_MAX ) subcut = minSubRange*cut;
     }
 
     G4int nm = setOfRegionModels[reg]->NumberOfModels();
@@ -366,12 +386,12 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       G4double tcutmin = model->MinEnergyCut(particle, couple);
 
       cut = std::max(cut, tcutmin);
-      G4double x = std::max(cut*minSubRange, tcutmin);
-      subcut = std::max(subcut, x);
+      subcut = std::max(subcut, tcutmin);
       if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV
                    << "; tcut(MeV)= " << cut/MeV
+                   << "; tsubcut(MeV)= " << subcut/MeV
                     << G4endl;
       }
     }
@@ -442,7 +462,9 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   dedxLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
-  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(couple,particle,e,cut);
+  G4VEmModel* model = models[regModels->ModelIndex(0)]; 
+  dedxHigh[0] = 0.0;
+  if(model) dedxHigh[0] = model->ComputeDEDX(couple,particle,e,cut);
 
   if(nmod > 1) {
     for(j=1; j<nmod; j++) {
@@ -478,7 +500,9 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,cut)*fac;
+    model = models[regModels->ModelIndex(k)];
+    G4double dedx = 0.0;
+    if(model) dedx = model->ComputeDEDX(couple,particle,e,cut)*fac;
 
     if(dedx < 0.0) dedx = 0.0;
     if(2 < verboseLevel) {
@@ -510,7 +534,7 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
   size_t i = couple->GetIndex();
 
   if(2 < verboseLevel) {
-    G4cout << "G4EmModelManager::FillDEDXVector() for "
+    G4cout << "G4EmModelManager::FillDEDXVectorForPreciseRange() for "
            << couple->GetMaterial()->GetName()
            << G4endl;
   }
@@ -540,7 +564,9 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
   dedxLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
-  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(couple,particle,e,e);
+  G4VEmModel* model = models[regModels->ModelIndex(0)]; 
+  dedxHigh[0] = 0.0;
+  if(model) dedxHigh[0] = model->ComputeDEDX(couple,particle,e,e);
 
   if(nmod > 1) {
     for(j=1; j<nmod; j++) {
@@ -576,7 +602,9 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
       } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,e)*fac;
+    model = models[regModels->ModelIndex(k)];
+    G4double dedx = 0.0;
+    if(model) dedx = model->ComputeDEDX(couple,particle,e,e)*fac;
 
     if(dedx < 0.0) dedx = 0.0;
     if(2 < verboseLevel) {
@@ -635,7 +663,9 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   sigmaLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
-  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,cut,e);
+  G4VEmModel* model = models[regModels->ModelIndex(0)];
+  sigmaHigh[0] = 0.0;
+  if(model) sigmaHigh[0] = model->CrossSection(couple,particle,e,cut,e);
 
   if(2 < verboseLevel) {
       G4cout << "### For material " << couple->GetMaterial()->GetName()
@@ -685,7 +715,9 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double cross = models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,cut,e)*fac;
+    model = models[regModels->ModelIndex(k)];
+    G4double cross = 0.0;
+    if(model) cross = model->CrossSection(couple,particle,e,cut,e)*fac;
     if(j==0 && startFromNull) cross = 0.0;
 
     if(2 < verboseLevel) {
@@ -707,7 +739,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
    				           G4bool startFromNull)
 {
   if(1 < verboseLevel) {
-    G4cout << "G4EmModelManager::BuildLambdaSubTable() for particle "
+    G4cout << "G4EmModelManager::FillSubLambdaTable() for particle "
            << particle->GetParticleName() << G4endl;
   }
 
@@ -730,7 +762,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
   sigmaLow.resize(nmod);
   sigmaHigh.resize(nmod);
 
-  if(0 < verboseLevel) {
+  if(2 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
              << couple->GetMaterial()->GetName() << G4endl;
   }
@@ -754,7 +786,9 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
              << G4endl;
   }
 
-  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,subcut,cut);
+  G4VEmModel* model = models[regModels->ModelIndex(0)]; 
+  sigmaHigh[0] = 0.0;
+  if(model) sigmaHigh[0] = model->CrossSection(couple,particle,e,subcut,cut);
 
   if(nmod > 1) {
 
@@ -786,7 +820,9 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double cross=models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,subcut,cut)*fac;
+    model = models[regModels->ModelIndex(k)];
+    G4double cross = 0.0;
+    if(model) cross = model->CrossSection(couple,particle,e,subcut,cut)*fac;
     if(j==0 && startFromNull) cross = 0.0;
 
     if(2 < verboseLevel) {

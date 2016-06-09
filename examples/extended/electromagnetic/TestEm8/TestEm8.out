@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,6 +20,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #/tracking/verbose 2
 #
@@ -54,7 +56,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -103,13 +104,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -121,7 +122,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -135,7 +136,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -155,7 +156,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -193,13 +194,13 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Mylar 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
-Region VertexDetector
+Region <VertexDetector> -- appears in <World> world volume
  Materials : XeCH4C3H8 
  Production cuts :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
 
@@ -230,8 +231,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
+ Current couple of seeds = 752908830, 1734568202
 ----------------------------------------
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -256,54 +260,56 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.01s Real=1.09s Sys=0.04s
+  User=10.91s Real=11.03s Sys=0.1s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.4269 +- 0.282241  mm  
+    mean charged track length   in absorber=23.4958 +- 0.135687  mm  
 
-            mean energy deposit in absorber=0.0169125 +- 0.000450572  MeV 
+            mean energy deposit in absorber=0.0165436 +- 0.000357391  MeV 
 
- mean number of steps in absorber (charged) =0.005 +- 0.00223047      
+ mean number of steps in absorber (charged) =0.261 +- 0.0708299      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.004 +- 0.001996
+   mean number of charged secondaries = 0.016 +- 0.00396787
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.004  and e+s =0
+   mean number of e-s =0.016  and e+s =0
 
-(number) transmission coeff=0.514  reflection coeff=0
+(number) transmission coeff=0.492  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=15
+#entries=1000    #underflows=0    #overflows=17
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6          77       0.077
-    3         9         264       0.264
-    4        12         266       0.266
-    5        15         151       0.151
-    6        18          72       0.072
-    7        21          47       0.047
-    8        24          28       0.028
+    1         3           3       0.003
+    2         6         106       0.106
+    3         9         231       0.231
+    4        12         255       0.255
+    5        15         163       0.163
+    6        18          88       0.088
+    7        21          41       0.041
+    8        24          31       0.031
     9        27          15       0.015
-   10        30          17       0.017
-   11        33          10        0.01
-   12        36          10        0.01
-   13        39           6       0.006
-   14        42           7       0.007
+   10        30          13       0.013
+   11        33          13       0.013
+   12        36           6       0.006
+   13        39           3       0.003
+   14        42           3       0.003
    15        45           3       0.003
-   16        48           2       0.002
-   17        51           5       0.005
-   18        54           0           0
-   19        57           3       0.003
+   16        48           3       0.003
+   17        51           2       0.002
+   18        54           3       0.003
+   19        57           1       0.001
 
  Emp =           0.012   width=          0.006  MeV 
 
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486551451, 1187403336
+ Current couple of seeds = 489139027, 144897202
 ----------------------------------------
 #
 Graphics systems deleted.

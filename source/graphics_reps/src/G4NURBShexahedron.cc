@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBShexahedron.cc,v 1.5 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBShexahedron.cc,v 1.6 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // hexahedron implementation
 //  OC 17 9 96
@@ -58,16 +58,6 @@ G4NURBShexahedron::G4NURBShexahedron(const G4ThreeVector c [8])
   CP(mpCtrlPts[To1d(2,3)] ,  c[5].x(), c[5].y(), c[5].z(), 1 );
   CP(mpCtrlPts[To1d(3,3)] ,  c[4].x(), c[4].y(), c[4].z(), 1 );
   CP(mpCtrlPts[To1d(4,3)] ,  c[4].x(), c[4].y(), c[4].z(), 1 );
-}
-
-G4Visible & G4NURBShexahedron::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBShexahedron::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
 }
 
 const char* G4NURBShexahedron::Whoami() const

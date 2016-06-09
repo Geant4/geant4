@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.19 2004/07/09 15:44:26 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLViewer.cc,v 1.22 2005/10/13 17:31:47 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -32,6 +32,7 @@
 
 #include "G4ios.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
 
@@ -45,14 +46,16 @@
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-white_background (false),
-transparency_enabled (false),
+background (G4Colour(0.,0.,0.)),
+transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
+
+  G4OpenGLViewerDataStore::SetTransparencyEnabled(this, transparency_enabled);
 
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
@@ -120,6 +123,9 @@ void G4OpenGLViewer::SetView () {
   
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
+
+  const G4Vector3D scale = fVP.GetScaleFactor();
+  glScaled(scale.x(),scale.y(),scale.z());
   
   if (fVP.GetFieldHalfAngle() == 0.) {
     glOrtho (left, right, bottom, top, pnear, pfar);
@@ -169,7 +175,10 @@ void G4OpenGLViewer::SetView () {
     glDisable (GL_CLIP_PLANE0);
     glDisable (GL_CLIP_PLANE1);
   }
-  
+
+  // Background.
+  background = fVP.GetBackgroundColour ();
+
 }
 
 void G4OpenGLViewer::HaloingFirstPass () {

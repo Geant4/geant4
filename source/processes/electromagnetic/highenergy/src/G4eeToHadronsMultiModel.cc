@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.1 2005/05/18 10:12:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.2 2005/11/23 19:17:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,8 +66,8 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name
 G4eeToHadronsMultiModel::~G4eeToHadronsMultiModel()
 {
   G4int n = models.size();
-  if(n>1) {
-    for(G4int i=1; i<n; i++) {
+  if(n>0) {
+    for(G4int i=0; i<n; i++) {
       delete models[i];
     }
   }
@@ -103,9 +103,11 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition* p, const G4
 
 void G4eeToHadronsMultiModel::PrintInfo()
 {
-  G4cout << "      e+ annihilation into hadrons active above "
-         << thKineticEnergy/GeV << " GeV"
-         << G4endl;
+  if(verbose > 0) {
+    G4cout << "      e+ annihilation into hadrons active above "
+           << thKineticEnergy/GeV << " GeV"
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -114,8 +116,9 @@ void G4eeToHadronsMultiModel::SetCrossSecFactor(G4double fac)
 {
   if(fac > 1.0) {
     csFactor = fac;
-    G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel is  "
-           << "increased by the Factor= " << csFactor << G4endl;
+    if(verbose > 0)
+      G4cout << "### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel is  "
+             << "increased by the Factor= " << csFactor << G4endl;
   }
 }
 

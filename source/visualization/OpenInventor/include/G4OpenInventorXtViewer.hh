@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.12 2004/11/25 13:39:54 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenInventorXtViewer.hh,v 1.13 2005/11/15 08:39:03 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -42,6 +42,7 @@ class SoXtExaminerViewer;
 class G4OpenInventorXtViewer: public G4OpenInventorViewer {
 public: //G4VViewer
   virtual void FinishView();
+  virtual void SetView();
 protected:
   virtual void ViewerRender();
   virtual SoCamera* GetCamera();

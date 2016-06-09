@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh,v 1.6 2001/10/11 13:29:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UImessenger.hh,v 1.8 2005/11/09 10:09:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4UImessenger_h

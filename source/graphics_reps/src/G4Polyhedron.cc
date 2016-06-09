@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.14 2005/03/22 19:18:56 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Polyhedron.cc,v 1.18 2005/08/10 08:20:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4Polyhedron.hh"
 
@@ -32,27 +32,11 @@ G4Polyhedron::G4Polyhedron ():
 
 G4Polyhedron::~G4Polyhedron () {}
 
-G4Polyhedron::G4Polyhedron (const G4Polyhedron& from)
-  : HepPolyhedron(from), G4VVisPrim(from)
-{
-  fNumberOfRotationStepsAtTimeOfCreation =
-    from.fNumberOfRotationStepsAtTimeOfCreation;
-}
-
 G4Polyhedron::G4Polyhedron (const HepPolyhedron& from)
   : HepPolyhedron(from)
 {
   fNumberOfRotationStepsAtTimeOfCreation =
     from.fNumberOfRotationSteps;
-}
-
-G4Polyhedron& G4Polyhedron::operator = (const G4Polyhedron& from) {
-  if (&from == this) return *this;
-  HepPolyhedron::operator = (from);
-  G4VVisPrim::operator = (from);
-  fNumberOfRotationStepsAtTimeOfCreation =
-    from.fNumberOfRotationStepsAtTimeOfCreation;
-  return *this;
 }
 
 G4PolyhedronBox::G4PolyhedronBox (G4double dx, G4double dy, G4double dz):
@@ -143,3 +127,17 @@ G4PolyhedronTubs::G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz,
   G4Polyhedron (HepPolyhedronTubs (Rmin, Rmax, Dz, Phi1, Dphi)) {}
 
 G4PolyhedronTubs::~G4PolyhedronTubs () {}
+
+G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
+                                              G4double cz, 
+					      G4double zCut1, G4double zCut2):
+  G4Polyhedron (HepPolyhedronEllipsoid (ax, by, cz, zCut1, zCut2)) {}
+
+G4PolyhedronEllipsoid::~G4PolyhedronEllipsoid () {}
+
+G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax, G4double ay,
+                                                        G4double h, 
+					                G4double zCut1):
+  G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
+
+G4PolyhedronEllipticalCone::~G4PolyhedronEllipticalCone () {}

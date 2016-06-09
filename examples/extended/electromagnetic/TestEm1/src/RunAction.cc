@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.12 2004/12/02 14:53:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RunAction.cc,v 1.13 2005/12/06 11:25:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
   NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
   edep = 0.;
@@ -199,7 +199,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->save();
   
   // show Rndm status
-  HepRandom::showEngineStatus(); 
+  CLHEP::HepRandom::showEngineStatus(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.3 2005/05/13 11:46:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: HistoMessenger.cc,v 1.5 2005/11/17 08:21:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoMessenger.hh"
+
+#include <sstream>
 
 #include "Histo.hh"
 #include "G4UIdirectory.hh"
@@ -98,9 +100,9 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
     histo->setFileType(newValues);
     
   if (command == histoCmd)
-   { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
-     const char* t = newValues;
-     std::istrstream is((char*)t);
+   { G4int ih,nbBins; G4double vmin,vmax;
+     std::istringstream is(newValues);
+     G4String unts;
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;

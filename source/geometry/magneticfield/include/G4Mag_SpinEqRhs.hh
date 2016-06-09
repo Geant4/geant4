@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_SpinEqRhs.hh,v 1.10 2004/10/20 23:28:00 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4Mag_SpinEqRhs

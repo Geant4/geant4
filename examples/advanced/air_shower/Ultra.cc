@@ -52,11 +52,14 @@
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraPhysicsList.hh"
 #include "UltraEventAction.hh"
+//#include "CLHEP/Random/RanluxEngine.h"
 
 int main(int argc,char** argv) {
 
-//choose the Random engine from CLHEP (lets use C++ implementation of Jame's RANLUX generator)
-  HepRandom::setTheEngine(new RanluxEngine);
+//choose the Random engine from CLHEP 
+//(lets use C++ implementation of Jame's RANLUX generator)
+ 
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
   G4RunManager* runManager = new G4RunManager;
 
   // UserInitialization classes - mandatory

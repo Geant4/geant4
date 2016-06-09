@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.5 2002/02/05 11:06:37 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Em10DetectorConstruction.hh,v 1.8 2005/11/29 14:42:22 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -38,10 +38,11 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4Region;
 class G4UniformMagField;
 class Em10DetectorMessenger;
 class Em10CalorimeterSD;
-class G4VXrayTRmodel;
+class G4Region;
 
 
 class Em10DetectorConstruction : public G4VUserDetectorConstruction
@@ -52,8 +53,7 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
    ~Em10DetectorConstruction();
 
   public:
-     void SetParametrisationModel (G4int i){fModelNumber=i;};     
-     void ParametrisationModel ();     
+       
      
      void SetAbsorberMaterial (G4String);     
      void SetAbsorberThickness(G4double);     
@@ -72,6 +72,12 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
+
+  //  void SetGammaCut(G4double    cut){fGammaCut    = cut;};
+  // void SetElectronCut(G4double cut){fElectronCut = cut;};
+  //  void SetPositronCut(G4double cut){fPositronCut = cut;};
+
+
 
      void SetMagField(G4double);
      
@@ -176,16 +182,23 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
      
   G4UniformMagField* magField;      //pointer to the magnetic field
-     
+
+  // G4double fElectronCut, fGammaCut, fPositronCut;
+       
   Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
   Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
-  G4VXrayTRmodel*        fXTRModel ;
+  G4Region*             fRegGasDet;
+  G4Region*             fRadRegion;
+  
+
+
       
 private:
     
   void DefineMaterials();
   void ComputeCalorParameters();
   G4VPhysicalVolume* ConstructCalorimeter();     
+
 };
 
 ////////////////////////////////////////////////////////////////////////

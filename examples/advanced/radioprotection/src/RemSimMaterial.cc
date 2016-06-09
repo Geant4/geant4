@@ -29,15 +29,14 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimMaterial.cc,v 1.5 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimMaterial.cc,v 1.6 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4MaterialPropertiesTable.hh"
 #include "G4MaterialPropertyVector.hh"
 #include "globals.hh"
 #include "G4MaterialTable.hh"
-#include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"

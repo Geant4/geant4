@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh,v 1.6 2005/02/15 14:51:25 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LogicalVolumeModel.hh,v 1.7 2005/11/22 16:29:40 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  26th July 1999.
@@ -56,7 +56,7 @@ public: // With description
    G4bool booleans = true,
    G4bool voxels = true,
    G4bool readout = true,
-   const G4Transform3D& modelTransformation = G4Transform3D::Identity,
+   const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0);
 
   virtual ~G4LogicalVolumeModel ();

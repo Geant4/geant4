@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SurfaceList.cc,v 1.6 2001/07/11 09:59:48 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

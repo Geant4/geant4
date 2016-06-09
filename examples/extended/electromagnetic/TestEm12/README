@@ -1,0 +1,173 @@
+$Id: README,v 1.3 2005/11/22 16:48:28 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm12
+                            --------
+
+     This example is devoted to the energy deposited by particles which
+     across a given material.
+         
+     In addition, it illustrates how to use the concept of 'process' in order 
+     to implement a constraint on the step size of the particle trajectories.
+	
+ 1- GEOMETRY DEFINITION
+ 
+	The geometry consists of a single sphere of an homogenous material.
+	Optionally, the sphere can be divided in thin shells.
+     	
+	3 parameters define the geometry :
+ 	- the material of the sphere,
+	- the radius of the sphere (absorRadius),
+	- the number of shells (nbOfLayers)
+	 	
+ 	In addition a transverse uniform magnetic field can be applied.
+ 	
+ 	The default geometry is constructed in DetectorConstruction class,
+ 	but all of the above parameters can be changed interactively via
+ 	the commands defined in the DetectorMessenger class.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The particle list is the one of novice/exampleN02.
+ 	The physics list contains the 'standard' electromagnetic processes,
+ 	and decay.
+ 		
+ 	Few commands have been added to PhysicsList, in order to set the
+ 	production threshold for secondaries either in range for gamma, e-/e+.
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle randomly shooted at
+	the centre of the sphere. The type of the particle and its energy are set 
+ 	in the PrimaryGeneratorAction class, and can be changed via the G4 
+ 	build-in commands of ParticleGun class (see the macros provided with 
+ 	this example).
+	
+ 	In addition one can desactivate the randomness of the direction of the 
+	incident particle. The corresponding interactive command is built in
+ 	PrimaryGeneratorMessenger class.
+	 	
+ 	A RUN is a set of events.
+ 	
+ 				
+ 4- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the commands
+ 	/vis/... in the macro vis.mac. To get visualisation:
+ 	> /control/execute vis.mac
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	box.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+ 	Optionaly one can choose to draw all particles, only the charged one,
+ 	or none. This command is defined in EventActionMessenger class.
+ 	
+ 	
+ 5- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd geant4/examples/extended/electromagnetic/TestEm1
+ 		% gmake
+ 		
+ 	- execute TestEm12 in 'batch' mode from macro files
+ 		% TestEm12   run01.mac
+ 		
+ 	- execute TestEm12 in 'interactive mode' with visualization
+ 		% TestEm12
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+		
+ 6- TRACKING
+ 
+     Testem12 computes the total energy deposited along the trajectory of 
+     the incident particle : the so-called longitudinal energy profile,
+     or depth dose distribution
+     
+     In order to control the accuracy of the deposition, the user can limit
+     'by hand' the maximum  step size of charged particles.
+     As an example, this limitation is implemented as a 'full' process :
+     see StepMax class and its Messenger. The 'StepMax process' is registered
+     in the Physics List. 
+     	
+ 7- HISTOGRAMS
+ 
+   Testem12 has several predefined 1D histograms : 
+  
+      1 : energy profile dE/dr (in MeV/mm per event)
+      2 : total energy deposited in the absorber
+      3 : total track length of the primary track
+      4 : step size of the primary track      
+      5 : projected range of the primary track
+      6 : total track length of charged secondary tracks
+      7 : step size of charged secondary tracks      
+      8 : normalized energy profile d(E/E0)/d(r/r0), where r0 is the range of
+          the primary particle of energy E0
+            
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /testem/histo/setHisto id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /testem/histo/setFileName  name  (default testem12)
+   
+   It is possible to choose the format of the histogram file (hbook, root, XML)
+   with the command /testem/histo/setFileType (hbook by default)
+       
+   Note that, by default, histograms are disabled. To activate them, uncomment
+   the flag G4ANALYSIS_USE in GNUmakefile.
+   
+ 
+ 8- USING HISTOGRAMS
+
+  To use histograms, at least one of the AIDA implementations should be 
+  available (see http://aida.freehep.org).
+  
+ 8a - PI 
+
+  A package including AIDA and extended interfaces also using Python is PI, 
+  available from: http://cern.ch/pi
+
+  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
+  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
+  PI:
+  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+
+  CERN users can use the PATH to the LCG area on AFS.
+  Before running the example the command should be issued:
+  eval `aida-config --runtime csh`
+
+ 8b -  OpenScientist
+
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
+
+  You have to "setup" the OpenScientist AIDA implementation before compiling
+  (then with G4ANALYSIS_USE set) and running your Geant4 application.
+
+ On UNIX you setup, with a csh flavoured shell : 
+	csh> source <<OpenScientist install path>/aida-setup.csh 
+        or with a sh flavoured shell : 
+	sh> . <<OpenScientist install path>/aida-setup.sh
+ On Windows : 
+	DOS> call <<OpenScientist install path>/aida-setup.bat 
+
+  You can use various file formats for writing (AIDA-XML, hbook, root).
+  These formats are readable by the Lab onx interactive program
+  or the OpenPAW application. See the web pages.
+
+
+  With OpenPAW, on a run.hbook file, one can view the histograms
+  with something like :
+	OS> opaw 
+        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
+	opaw> zone 2 2 
+	opaw> h/plot 1 
+	opaw> h/plot 2

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.11 2005/06/27 15:29:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmCorrections.cc,v 1.13 2005/11/26 16:59:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -34,7 +34,8 @@
 // Creation date: 13.01.2005
 //
 // Modifications:
-// 05.05.2005 VI Fix misprint in Mott term
+// 05.05.2005 V.Ivanchenko Fix misprint in Mott term
+// 26.11.2005 V.Ivanchenko Fix effective charge for heavy ions using original paper
 //
 //
 // Class Description:
@@ -73,6 +74,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 //   Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
 //   and ICRU49 report
 //   valid for kineticEnergy < 0.5 MeV
+//   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
 
   G4double tau   = kineticEnergy / p->GetPDGMass();
   if(tau <= 0.0) return 0.0;
@@ -80,14 +82,21 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double gamma = 1.0 + tau;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gamma*gamma);
+  G4double beta  = std::sqrt(beta2);
 
-  G4double q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
+  G4double q  = p->GetPDGCharge()/eplus;
+  if(q > 2.5)      q *= (1.0 - std::exp(-130.0*beta/std::pow(q,0.66666667)));
+  else if(q > 1.5) q  = effCharge.EffectiveCharge(p,material,kineticEnergy)/eplus;
+
   G4double q2 = q*q;
   G4double ba = beta2/alpha2;
   G4double BarkasTerm = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* atomDensity  = material->GetAtomicNumDensityVector();
   G4int numberOfElements = material->GetNumberOfElements();
+
+  G4double Zeff = 0.0;
+  G4double norm = 0.0;
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
@@ -122,8 +131,12 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
       G4int iw = Index(W, engBarkas, 47);
       val = Value(W, engBarkas[iw], engBarkas[iw+1], corBarkas[iw], corBarkas[iw+1]);
     }
-    BarkasTerm += val*atomDensity[i] * std::sqrt(Z /X)/ X;
+    BarkasTerm += 1.29*val*atomDensity[i] * std::sqrt(Z /X)/ X;
+    Zeff += Z*atomDensity[i];
+    norm += atomDensity[i];
   }
+  Zeff /= norm; 
+
 
   BarkasTerm *= 2.0*q;
 
@@ -144,8 +157,10 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   }
   BlochTerm *= -2.0*y2;
 
-  G4double beta = std::sqrt(beta2);
-  G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
+  // Estimation of mean square root of the ionisation potential 
+  G4double ze  = 2.0*Zeff;
+  G4double ze1 = std::log(ze);
+  G4double eexc= material->GetIonisation()->GetMeanExcitationEnergy()*ze1*ze1/ze;
 
   G4double invbeta = 1.0/beta;
   G4double invbeta2= invbeta*invbeta;
@@ -168,7 +183,8 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
       + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)
       + za3*za2*(1.254*beta + 0.222*invbeta - 1.17*invbeta*invbeta2);
 
-  G4double eloss = (BarkasTerm + (BlochTerm + mterm)*material->GetElectronDensity()) * q2 *  twopi_mc2_rcl2 *invbeta2;
+  G4double eloss = (BarkasTerm + (BlochTerm + mterm)*material->GetElectronDensity()) * 
+    q2 *  twopi_mc2_rcl2 *invbeta2;
   return eloss;
 }
 

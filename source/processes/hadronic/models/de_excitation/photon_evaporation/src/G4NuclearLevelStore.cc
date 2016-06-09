@@ -23,7 +23,7 @@
 //
 
 #include "G4NuclearLevelStore.hh"
-#include <strstream>
+#include <sstream>
 
 std::map<G4String,G4NuclearLevelManager*> G4NuclearLevelStore::theManagers;
 G4String G4NuclearLevelStore::dirName("");
@@ -61,10 +61,9 @@ G4NuclearLevelStore::~G4NuclearLevelStore()
 
 G4String G4NuclearLevelStore::GenerateKey(const G4int Z, const G4int A)
 {
-    char chname[10] = {' '};
-    std::ostrstream streamName(chname, 10, std::ios::out);
+    std::ostringstream streamName; 
     streamName << 'z' << Z << ".a" << A;
-    G4String name(chname);
+    G4String name(streamName.str());
     return name;
 }
 

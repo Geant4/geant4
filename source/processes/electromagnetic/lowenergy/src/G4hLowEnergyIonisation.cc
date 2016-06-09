@@ -93,6 +93,8 @@
 //                          atom total cross section for the Empiric Model
 // 28 May   2004 V.Ivanchenko fix for ionisation of antiprotons in complex materials
 // 30 Aug   2004 V.Ivanchenko use energy limit for parameterisation from model
+// 03 Oct   2005 V.Ivanchenko change logic of definition of high energy limit for
+//               parametrised proton model: min(user value, model limit)
 
 
 // -----------------------------------------------------------------------
@@ -161,7 +163,7 @@ void G4hLowEnergyIonisation::InitializeMe()
   MinKineticEnergy     = 10.0*eV ; 
   TotBin               = 360 ;
   protonLowEnergy      = 1.*keV ;
-  protonHighEnergy     = 2.*MeV ;
+  protonHighEnergy     = 100.*MeV ;
   antiProtonLowEnergy  = 25.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
   minGammaEnergy       = 25.*keV;
@@ -231,7 +233,7 @@ void G4hLowEnergyIonisation::InitializeParametrisation()
   // Define models for parametrisation of electronic energy losses
   theBetheBlochModel = new G4hBetheBlochModel("Bethe-Bloch") ;
   theProtonModel = new G4hParametrisedLossModel(theProtonTable) ;
-  protonHighEnergy = theProtonModel->HighEnergyLimit(0, 0);
+  protonHighEnergy = std::min(protonHighEnergy,theProtonModel->HighEnergyLimit(0, 0));
   theAntiProtonModel = new G4QAOLowEnergyLoss(theAntiProtonTable) ;
   theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
@@ -332,12 +334,22 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     {
       {
         BuildLossTable(*theProton) ;
+
+//      The following vector has a fixed dimension (see src/G4hLowEnergyLoss.cc for more details)        
+//      It happended in the past that caused memory corruption errors. The problem is still pending, even if temporary solved
+//        G4cout << "[NOTE]: __LINE__=" << __LINE__ << ", aParticleType=" << aParticleType.GetParticleName() << ", theProton=" << theProton << ", theLossTable=" << theLossTable << ", CounterOfpProcess=" << CounterOfpProcess << G4endl;
+        
         RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
         CounterOfpProcess++;
       }
   } else {
       {
         BuildLossTable(*theAntiProton) ;
+        
+//      The following vector has a fixed dimension (see src/G4hLowEnergyLoss.cc for more details)        
+//      It happended in the past that caused memory corruption errors. The problem is still pending, even if temporary solved
+//        G4cout << "[NOTE]: __LINE__=" << __LINE__ << ", aParticleType=" << aParticleType.GetParticleName() << ", theAntiProton=" << theAntiProton << ", theLossTable=" << theLossTable << ", CounterOfpbarProcess=" << CounterOfpbarProcess << G4endl;
+        
         RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
         CounterOfpbarProcess++;
       }
@@ -832,7 +844,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
           * chargeSquare ;
 
     if(theBarkas && tscaled > highEnergy) { 
-        fBarkas = -BarkasTerm(material,tscaled)*std::sqrt(chargeSquare)*chargeSquare;
+        fBarkas = -BarkasTerm(material,tscaled)*std::sqrt(chargeSquare)*chargeSquare
                 + BlochTerm(material,tscaled,chargeSquare);
     }
   }
@@ -1264,17 +1276,20 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   //   G4cout << "Fluorescence is switched :" << theFluo << G4endl; 
 
   if(theFluo && Z > 5) {
-    
-    G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,
-                                             ParticleMass,DeltaKineticEnergy);
+
+
+
+    // Atom total cross section for the Empiric Model    
     if (expFlag) {    
-      // Atom total cross section for the Empiric Model    
-      shellCS->SetTotalCS(totalCrossSectionMap[Z]);
-      if (shell==1) {
-	aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
-	aParticleChange.ProposeEnergy(0);
-      }
+    shellCS->SetTotalCS(totalCrossSectionMap[Z]);    
     }
+    G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,ParticleMass,DeltaKineticEnergy);
+
+    if (expFlag && shell==1) {        
+      aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
+      aParticleChange.ProposeEnergy(0);      
+    }
+
 
     const G4AtomicShell* atomicShell =
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);

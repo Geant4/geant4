@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.8 2003/09/15 15:38:14 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN03EventAction.hh,v 1.9 2005/07/22 15:27:33 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -35,6 +35,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class ExN03RunAction;
 class ExN03EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +43,7 @@ class ExN03EventActionMessenger;
 class ExN03EventAction : public G4UserEventAction
 {
  public:
-   ExN03EventAction();
+   ExN03EventAction(ExN03RunAction*);
   ~ExN03EventAction();
 
  public:
@@ -56,6 +57,8 @@ class ExN03EventAction : public G4UserEventAction
    void SetPrintModulo(G4int    val)  {printModulo = val;};
     
  private:
+   ExN03RunAction*  runAct;
+   
    G4double  EnergyAbs, EnergyGap;
    G4double  TrackLAbs, TrackLGap;
                      

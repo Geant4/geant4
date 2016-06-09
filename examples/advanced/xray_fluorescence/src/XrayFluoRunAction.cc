@@ -41,10 +41,11 @@
 #include "G4DataVector.hh"
 #include "G4LogLogInterpolation.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include "XrayFluoNormalization.hh"
+#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
-
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4ANALYSIS_USE
@@ -144,9 +145,9 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 {
-
+#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-
+#endif
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
@@ -197,12 +198,11 @@ G4double XrayFluoRunAction::GetDataSum()
 
 void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 {
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
   
   ost << fileName <<".dat";
   
-  G4String name(nameChar);
+  G4String name = ost.str();
   char* path;
   
   if (!(getenv("XRAYDATA"))) { 

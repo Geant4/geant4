@@ -60,7 +60,6 @@
 #include <fstream>
 #include <iomanip>               
 #include "G4Tokenizer.hh"
-#include <strstream>
 
 ///////////////////////////////////////////////////////////////////////////////
 DMXParticleSourceMessenger::DMXParticleSourceMessenger

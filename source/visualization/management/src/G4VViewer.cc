@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.18 2005/02/23 11:35:58 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VViewer.cc,v 1.20 2005/11/13 15:31:51 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  27th March 1996
@@ -31,7 +31,7 @@
 #include "G4VViewer.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -48,10 +48,9 @@ fModified (true),
 fNeedKernelVisit (true)
 {
   if (name == "") {
-    char charname [50];
-    std::ostrstream ost (charname, 50);
-    ost << fSceneHandler.GetName () << '-' << fViewId << std::ends;
-    fName = charname;
+    std::ostringstream ost;
+    ost << fSceneHandler.GetName () << '-' << fViewId;
+    fName = ost.str();
   }
   else {
     fName = name;
@@ -62,8 +61,11 @@ fNeedKernelVisit (true)
   G4VisManager* pVisMan = G4VisManager::GetInstance();
   G4int xHint, yHint;
   pVisMan->GetWindowSizeHint(xHint, yHint);
+  const G4String& XGeometryString = pVisMan->GetXGeometryString();
   fVP.SetWindowSizeHint(xHint,yHint);
+  fVP.SetXGeometryString(XGeometryString);
   fDefaultVP.SetWindowSizeHint(xHint,yHint);
+  fDefaultVP.SetXGeometryString(XGeometryString);
 }
 
 G4VViewer::~G4VViewer () {}

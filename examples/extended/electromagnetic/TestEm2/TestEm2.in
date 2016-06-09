@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.17 2004/11/29 14:49:26 vnivanch Exp $
+# $Id: TestEm2.in,v 1.18 2005/11/22 17:11:31 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -24,7 +24,7 @@
 /testem/phys/setCuts 5.0 mm
 #
 /run/initialize
-/testem/phys/verbose  -1
+/testem/phys/verbose  0
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -32,5 +32,3 @@
 /testem/event/printModulo 20
 #
 /run/beamOn 100
-#
-

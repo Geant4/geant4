@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,6 +20,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
@@ -28,7 +30,7 @@ Current available graphics systems are:
 #
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52
+### /testem/phys/addPhysics  g4v71
 #
 /testem/phys/setGCut 2.13 mm
 /testem/phys/setECut 7.0  mum
@@ -48,7 +50,6 @@ userDetector->Construct() start.
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -78,13 +79,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.2
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -96,7 +97,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -110,7 +111,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -130,7 +131,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -168,9 +169,9 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Silicon 
  Production cuts :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
 
@@ -227,24 +228,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=93.65s Real=899.99s Sys=91.45s
+  User=170.9s Real=857.04s Sys=84.22s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
 
- Total energy deposit in absorber per event = 6.727 keV +- 21.94 eV 
+ Total energy deposit in absorber per event = 6.475 keV +- 16.97 eV 
 
- Mean dE/dx  = 3.281 MeV/cm	 stopping Power = 1.408 MeV*cm2/g
+ Mean dE/dx  = 3.159 MeV/cm	 stopping Power = 1.356 MeV*cm2/g
  (from Table = 2.807 MeV/cm)	 (from Table    = 1.205 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15 nm 
- Total track length (neutral) in absorber per event = 4.903 Ang +- 4.692 Ang
+ Total track length (charged) in absorber per event = 20.85 mum +- 10.19 nm 
+ Total track length (neutral) in absorber per event = 6.987 Ang +- 3.581 Ang
 
- Number of steps (charged) in absorber per event = 1.08 +- 1.225e-05
- Number of steps (neutral) in absorber per event = 3e-05 +- 1.225e-05
+ Number of steps (charged) in absorber per event = 5.212 +- 1.01e-05
+ Number of steps (neutral) in absorber per event = 4e-05 +- 1.01e-05
 
- Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03745;   positrons = 0
+ Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03633;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -252,12 +253,12 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.04132 mrad 
+ MultipleScattering: rms proj angle of transmit primary particle = 0.04448 mrad 
  MultipleScattering: computed theta0 (Highland formula)          = 0.02663 mrad
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 14803744, 1165747056
+ Current couple of seeds = 1142296491, 1659550969
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

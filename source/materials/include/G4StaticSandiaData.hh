@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StaticSandiaData.hh,v 1.6 2002/04/15 16:50:36 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

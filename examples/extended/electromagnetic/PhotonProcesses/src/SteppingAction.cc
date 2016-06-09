@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: SteppingAction.cc,v 1.6 2005/05/10 15:24:27 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

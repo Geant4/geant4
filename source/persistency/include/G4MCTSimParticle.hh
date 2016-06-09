@@ -30,7 +30,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "CLHEP/Vector/LorentzVector.h"
+#include "G4LorentzVector.hh"
 
 // ====================================================================
 //
@@ -52,16 +52,16 @@ protected:
   int trackID;
   int parentTrackID;
   G4bool primaryFlag;
-  HepLorentzVector momentumAtVertex;
+  G4LorentzVector momentumAtVertex;
   G4MCTSimVertex* vertex;
   G4bool storeFlag;
   
 public:
   G4MCTSimParticle();
   G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
-		 const HepLorentzVector& p);
+		 const G4LorentzVector& p);
   G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
-		 const HepLorentzVector& p, const G4MCTSimVertex* v);
+		 const G4LorentzVector& p, const G4MCTSimVertex* v);
   virtual ~G4MCTSimParticle();
  
   // copy constructor and assignment operator
@@ -87,8 +87,8 @@ public:
   void SetPrimaryFlag(G4bool q);
   G4bool GetPrimaryFlag() const;
 
-  void SetMomentumAtVertex(const HepLorentzVector& p);
-  const HepLorentzVector& GetMomentumAtVertex() const;
+  void SetMomentumAtVertex(const G4LorentzVector& p);
+  const G4LorentzVector& GetMomentumAtVertex() const;
 
   void SetVertex(const G4MCTSimVertex* v);
   G4MCTSimVertex* GetVertex() const;
@@ -162,10 +162,10 @@ inline void G4MCTSimParticle::SetParentTrackID(int id)
 inline  int G4MCTSimParticle::GetParentTrackID() const 
 { return parentTrackID; }
 
-inline  void G4MCTSimParticle::SetMomentumAtVertex(const HepLorentzVector& p)
+inline  void G4MCTSimParticle::SetMomentumAtVertex(const G4LorentzVector& p)
 { momentumAtVertex= p; }
 
-inline  const HepLorentzVector& G4MCTSimParticle::GetMomentumAtVertex() const
+inline  const G4LorentzVector& G4MCTSimParticle::GetMomentumAtVertex() const
 { return momentumAtVertex; }
 
 inline  void G4MCTSimParticle::SetVertex(const G4MCTSimVertex* v)

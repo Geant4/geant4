@@ -102,9 +102,11 @@
 #include "G4HadTmpUtil.hh"
 
 #include <vector>
-#include <strstream>
+#include <sstream>
 #include <algorithm>
 #include <fstream>
+
+using namespace CLHEP;
 
 const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
 
@@ -126,7 +128,7 @@ G4RadioactiveDecay::G4RadioactiveDecay
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
   theIsotopeTable              = new G4RIsotopeTable();
-  aPhysicsTable                = NULL;
+  aPhysicsTable                = 0;
   pParticleChange              = &fParticleChangeForRadDecay;
   
   //
@@ -171,7 +173,7 @@ G4RadioactiveDecay::G4RadioactiveDecay
 //
 G4RadioactiveDecay::~G4RadioactiveDecay()
 {
-  if (aPhysicsTable != NULL)
+  if (aPhysicsTable != 0)
     {
       aPhysicsTable->clearAndDestroy();
       delete aPhysicsTable;
@@ -543,7 +545,7 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack,
        pathlength = ( rKineticEnergy + 1.0)* aCtau;
      } else if ( rKineticEnergy > LowestBinValue) {
        // check if aPhysicsTable exists
-       if (aPhysicsTable == NULL) BuildPhysicsTable(*aParticleDef);
+       if (aPhysicsTable == 0) BuildPhysicsTable(*aParticleDef);
        // beta is in the range valid for PhysicsTable
        pathlength = aCtau *
 	 ((*aPhysicsTable)(0))-> GetValue(rKineticEnergy,isOutRange);
@@ -577,7 +579,7 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack,
 void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   // if aPhysicsTableis has already been created, do nothing
-  if (aPhysicsTable != NULL) return;
+  if (aPhysicsTable != 0) return;
 
   // create  aPhysicsTable
   if (GetVerboseLevel()>1) G4cerr <<" G4Decay::BuildPhysicsTable() "<< G4endl;
@@ -633,10 +635,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
   std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
   // sort needed to allow binary_search
 
-  char val[100];
-  std::ostrstream os(val,100);
+  std::ostringstream os;
   os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
-  G4String file(val);
+  G4String file = os.str();
 
   
   std::ifstream DecaySchemeFile(file);
@@ -649,7 +650,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
     //
     {
       G4cerr <<"G4RadoactiveDecay::LoadDecayTable() : cannot find ion radioactive decay file " <<G4endl;
-      theDecayTable = NULL;
+      theDecayTable = 0;
       return theDecayTable;
     }
   //
@@ -691,7 +692,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
       inputLine = inputLine.strip(1);
       if (inputChars[0] != '#' && inputLine.length() != 0)
 	{
-	  std::istrstream tmpStream(inputLine);
+	  std::istringstream tmpStream(inputLine);
 	  if (inputChars[0] == 'P')
 	    //
 	    //
@@ -923,8 +924,8 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
   // Go through the decay table and make sure that the branching ratios are
   // correctly normalised.
   //
-  G4VDecayChannel       *theChannel             = NULL;
-  G4NuclearDecayChannel *theNuclearDecayChannel = NULL;
+  G4VDecayChannel       *theChannel             = 0;
+  G4NuclearDecayChannel *theNuclearDecayChannel = 0;
   G4String mode                     = "";
   G4int j                           = 0;
   G4double theBR                    = 0.0;
@@ -1010,12 +1011,12 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
   G4bool stable = false;
   G4int i;
   G4int j;
-  G4VDecayChannel       *theChannel             = NULL;
-  G4NuclearDecayChannel *theNuclearDecayChannel = NULL;
-  G4ITDecayChannel *theITChannel = NULL;
-  G4BetaMinusDecayChannel *theBetaMinusChannel = NULL;
-  G4BetaPlusDecayChannel *theBetaPlusChannel = NULL;
-  G4AlphaDecayChannel *theAlphaChannel = NULL;
+  G4VDecayChannel       *theChannel             = 0;
+  G4NuclearDecayChannel *theNuclearDecayChannel = 0;
+  G4ITDecayChannel *theITChannel = 0;
+  G4BetaMinusDecayChannel *theBetaMinusChannel = 0;
+  G4BetaPlusDecayChannel *theBetaPlusChannel = 0;
+  G4AlphaDecayChannel *theAlphaChannel = 0;
   G4RadioactiveDecayMode theDecayMode;
   //  G4NuclearLevelManager levelManager;
   //const G4NuclearLevel* level;
@@ -1123,7 +1124,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    // Decay mode is beta-.
 	    //
 	    theBetaMinusChannel = new G4BetaMinusDecayChannel (0, aParentNucleus,
-							       brs[1], 0.*MeV, 0.*MeV, 1, false, NULL);
+							       brs[1], 0.*MeV, 0.*MeV, 1, false, 0);
 	    theDecayTable->Insert(theBetaMinusChannel);
 	    
 	    break;
@@ -1134,7 +1135,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    // Decay mode is beta+ + EC.
 	    //
 	    theBetaPlusChannel = new G4BetaPlusDecayChannel (GetVerboseLevel(), aParentNucleus,
-							     brs[2], 0.*MeV, 0.*MeV, 1, false, NULL);
+							     brs[2], 0.*MeV, 0.*MeV, 1, false, 0);
 	    theDecayTable->Insert(theBetaPlusChannel);
 	    break;		      
 	    
@@ -1372,7 +1373,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
     }
   G4DecayTable *theDecayTable = theParticleDef->GetDecayTable();
   
-  if  (theDecayTable == NULL || theDecayTable->entries() == 0 )
+  if  (theDecayTable == 0 || theDecayTable->entries() == 0 )
     {
       //
       //
@@ -1517,7 +1518,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	G4double currentTime = 0.;
 	G4int ndecaych;
 	G4DynamicParticle* asecondaryparticle;
-	//	G4DecayProducts* products = NULL;
+	//	G4DecayProducts* products = 0;
 	std::vector<G4DynamicParticle*> secondaryparticles;
 	std::vector<G4double> pw;
 	std::vector<G4double> ptime;
@@ -1583,7 +1584,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	      // a temprary products buffer and its contents is transfered to 
 	      // the products at the end of the loop
 	      //
-	      G4DecayProducts *tempprods = NULL;
+	      G4DecayProducts *tempprods = 0;
 	      
 	      // calculate the decay rate of the isotope
 	      // one need to fold the the source bias function with the decaytime
@@ -1615,7 +1616,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 		G4DecayTable *theDecayTable = parentNucleus->GetDecayTable();
 		ndecaych = G4int(theDecayTable->entries()*G4UniformRand());
 		G4VDecayChannel *theDecayChannel = theDecayTable->GetDecayChannel(ndecaych);
-		if (theDecayChannel == NULL)
+		if (theDecayChannel == 0)
 		  {
 		    // Decay channel not found.
 #ifdef G4VERBOSE

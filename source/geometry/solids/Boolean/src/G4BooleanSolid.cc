@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.16 2005/04/04 09:44:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BooleanSolid.cc,v 1.19 2005/11/09 15:00:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -36,6 +36,7 @@
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
+#include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////
 //
@@ -80,6 +81,18 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4BooleanSolid::G4BooleanSolid( __void__& a )
+  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
+    fCubVolStatistics(1000000), fCubVolEpsilon(0.001), 
+    fCubicVolume(0.), fpPolyhedron(0), createdDisplacedSolid(false)
+{
 }
 
 ///////////////////////////////////////////////////////////////
@@ -170,6 +183,34 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
 
   return os;
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Returns a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
+//
+
+G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
+{
+  G4bool condition = true;
+  G4double rand;
+  G4ThreeVector p;
+
+  while(condition)
+  {
+    rand = G4UniformRand();
+
+    if(rand > 0.5) { p = fPtrSolidA->GetPointOnSurface(); }
+    else           { p = fPtrSolidB->GetPointOnSurface(); }
+
+    if(Inside(p) == kSurface)  { break; }
+  }
+  return p;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Returns polyhedron for visualization
 
 G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
 {

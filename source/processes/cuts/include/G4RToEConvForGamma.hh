@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RToEConvForGamma.hh,v 1.1 2003/09/19 14:43:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // ------------------------------------------------------------

@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.72 2005/05/26 10:34:55 allison Exp $
+cvs log $Id: History,v 1.89 2005/11/10 21:30:13 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,59 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th November 2005  Jane Tinslay (greps-V07-01-09)
+- G4VVisManager: Fix Dispatch method name to "DispatchToModel".
+- G4Colour: Use public static member functions instead of public 
+  static data members to avoid problems with dynamic libraries.
+
+10th November 2005  John Allison
+- G4VVisManager and G4VGraphicsScene: Replaced default arguments
+  G4Transform3D::Identity by G4Transform3D().  (This is a avoid
+  initialisation problems with static objects with dynamic libraries.)
+
+9th November 2005  Gabriele Cosmo
+- Implemented migration to support CLHEP-2.0.X, adding explicit namespace
+  to CLHEP types. Affected files: HepPolyhedron[.h.cc], BooleanProcessor.src.
+
+24th October 2005  John Allison (greps-V07-01-08)
+- Moved G4VTrajectoryDrawer to modeling (renamed G4VTrajectoryModel).
+- G4VVisManager.hh: Changed DispatchToCurrentDrawer to DispatchToCurrentModel.
+
+21st October 2005 Jane Tinslay (greps-V07-01-07)
+- Add G4VTrajectoryDrawer, an abstract base class for trajectory drawers
+- Add "DispatchToCurrentDrawer" method to G4VVisManager
+
+20th October 2005  John Allison (greps-V07-01-06)
+- G4Colour.cc: Added #include <sstream>.
+
+17th October 2005 Jane Tinslay (greps-V07-01-05)
+- intercoms->graphics_reps migration for G4VGraphicsScene and G4VVisManager  
+
+13th October 2005 Jane Tinslay  (greps-V07-01-04)
+- Additions to G4Colour
+  o Add static data members for common colours.
+  o Add G4String->G4Colour colour map.
+
+3rd October 2005  John Allison
+- G4NURBStubesector.cc: Replaced <strstream> by <sstream>.
+
+16th September 2005  John Allison  (greps-V07-01-03)
+- G4AttCheck.cc: Added time to legal G4AttValues.
+
+10th August 2005  Gabriele Cosmo  (greps-V07-01-02)
+- Added Polyhedron description for new G4EllipticalCone shape.
+  Implementation by D.Anninos (CERN).
+  Requires tag "geom-specific-V07-01-03" for geometry/solids/specific module.
+
+5th July 2005  John Allison  (greps-V07-01-01)
+- Big clean-up:
+  o Removed redundant intermediate class, G4VVisPrim.
+  o Removed redundant virtual assignments and similar oddities.
+
+20th Jun 2005  Gabriele Cosmo  (greps-V07-01-00)
+- Added Polyhedron description for new G4Ellipsoid shape.
+  Contribution of G.Guerrieri (INFN Genova).
 
 26th May 2005  John Allison  (greps-V07-00-07)
 - Fixed bug introduced in greps-V07-00-05.

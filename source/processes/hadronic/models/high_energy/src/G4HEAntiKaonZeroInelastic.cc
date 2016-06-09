@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEAntiKaonZeroInelastic.cc,v 1.13 2005/06/04 13:32:52 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 

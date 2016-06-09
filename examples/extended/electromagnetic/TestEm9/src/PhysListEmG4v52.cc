@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.cc,v 1.4 2005/05/13 11:46:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysListEmG4v52.cc,v 1.5 2005/10/03 02:45:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,24 +80,24 @@ void PhysListEmG4v52::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
+      pmanager->AddProcess(new G4MultipleScattering52, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation52,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1, 3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation52,   0,-1,4);
+      pmanager->AddProcess(new G4MultipleScattering52, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation52,        -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation52,   0,-1, 4);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering52,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation52,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung52,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction52,  -1,-1,4);       
+      pmanager->AddProcess(new G4MultipleScattering52,-1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation52,      -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung52,  -1,-1, 3);
+      pmanager->AddProcess(new G4MuPairProduction52,  -1,-1, 4);       
      
     } else if( particleName == "GenericIon" ) {
  

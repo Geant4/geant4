@@ -38,6 +38,7 @@
 // 24/11/2004: inner elec boxes made invisible
 // 24/11/2004: tweaked TelPriMir_phys (17 to 18mm) to avoid solid problem
 // 24/11/2004: G4Torus in SupportRing_sol still problematic!
+// 08/12/2005: removed compilation warnings
 //
 // ********************************************************************
 
@@ -87,7 +88,8 @@
     new G4LogicalVolume(uni2_o_sol, CFRP, "arms_o_log");
   G4RotationMatrix ytube_rot3; 
   ytube_rot3.rotateX(90.*deg); ytube_rot3.rotateZ(90.*deg);
-  G4VPhysicalVolume* arms_o_phys = new G4PVPlacement 
+  G4VPhysicalVolume* arms_o_phys;
+  arms_o_phys = new G4PVPlacement 
     (G4Transform3D(ytube_rot3, spacecraft_pos + G4ThreeVector(YTube_xoff,0,0)),
     "arms_o_phys", arms_o_log, wld_phys, false, 0);
   arms_o_log->SetVisAttributes(yellow_vat);
@@ -104,7 +106,8 @@
     arm3_i_sol, G4Transform3D(ytube_rot2, G4ThreeVector(-tune_y,0,tune_x)));
   G4LogicalVolume* arms_i_log = 
     new G4LogicalVolume(uni2_i_sol, vacuum, "arms_i_log");
-  G4VPhysicalVolume* arms_i_phys = new G4PVPlacement(0, G4ThreeVector(0,0,0),
+  G4VPhysicalVolume* arms_i_phys;
+  arms_i_phys = new G4PVPlacement(0, G4ThreeVector(0,0,0),
     "arms_i_phys", arms_i_log, arms_o_phys, false, 0);
   arms_i_log->SetVisAttributes(yellow_vat);
 
@@ -246,7 +249,8 @@
     G4Transform3D(cutout_rot, G4ThreeVector()));
   G4LogicalVolume* OpticalBench_log = 
     new G4LogicalVolume(OpticalBench_sol, ULEglass, "OpticalBench_log");
-  G4VPhysicalVolume* OpticalBench_phys= 
+  G4VPhysicalVolume* OpticalBench_phys;
+  OpticalBench_phys= 
     new G4PVPlacement(0, G4ThreeVector(0,0, OpticalBench_off),
     "OpticalBench_phys", OpticalBench_log, TelBox_phys, false, 0);
   OpticalBench_log->SetVisAttributes(sol_white_vat);
@@ -271,7 +275,8 @@
     0.5*(SupportRing_od-SupportRing_dia_o), 0.,360.*deg);
   G4LogicalVolume* SupportRing_log = 
     new G4LogicalVolume(SupportRing_sol, ULEglass, "SupportRing_log");
-  G4VPhysicalVolume* SupportRing_phys= 
+  G4VPhysicalVolume* SupportRing_phys;
+  SupportRing_phys= 
     new G4PVPlacement(0, G4ThreeVector(0.,0.,OpticalBench_off),
     "SupportRing_phys", SupportRing_log, TelBox_phys, false, 0);
   SupportRing_log->SetVisAttributes(sol_red_vat);
@@ -347,7 +352,8 @@
    0.5*ShieldTube_len, 0., 360.*deg);
   G4LogicalVolume* ShieldTube_log = 
     new G4LogicalVolume(ShieldTube_sol, CFRP, "ShieldTube_log");
-  G4VPhysicalVolume* ShieldTube_phys = new G4PVPlacement(0, 
+  G4VPhysicalVolume* ShieldTube_phys;
+  ShieldTube_phys = new G4PVPlacement(0, 
     G4ThreeVector(0,0,OpticalBench_off-ShieldTube_off),
     "ShieldTube_phys", ShieldTube_log, TelBox_phys, false, 0);
   ShieldTube_log->SetVisAttributes(G4VisAttributes::Invisible);
@@ -389,7 +395,8 @@
    0., 0.5*ShieldPlate_dia, 0.5*ShieldPlate_thi, 0., 360.*deg);
   G4LogicalVolume* ShieldPlate_log = 
     new G4LogicalVolume(ShieldPlate_sol, CFRP, "ShieldPlate_log");
-  G4VPhysicalVolume* ShieldPlate_phys = new G4PVPlacement(0, 
+  G4VPhysicalVolume* ShieldPlate_phys;
+  ShieldPlate_phys = new G4PVPlacement(0, 
     G4ThreeVector(0,0,OpticalBench_off + ShieldPlate_off),
     "ShieldPlate_phys", ShieldPlate_log, TelBox_phys, false, 0);
   ShieldPlate_log->SetVisAttributes(sol_white_vat);
@@ -427,7 +434,8 @@
     s*0.5*TelElecBox_hei, s*0.5*TelElecBox_len);
   G4LogicalVolume* TelElecBoxIn_log = 
     new G4LogicalVolume(TelElecBoxIn_sol, vacuum, "TelElecBoxIn_log");
-  G4VPhysicalVolume* TelElecBoxIn_phys = new G4PVPlacement
+  G4VPhysicalVolume* TelElecBoxIn_phys;
+  TelElecBoxIn_phys = new G4PVPlacement
     (0, 0, "TelElecBoxIn_i", TelElecBoxIn_log, TelElecBox_phys, false, 0);
   TelElecBoxIn_log->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -454,7 +462,8 @@
   G4LogicalVolume* FrontThermalShield_log = 
     new G4LogicalVolume(FrontThermalShield_sol, CFRP, 
     "FrontThermalShield_log");
-  G4VPhysicalVolume* FrontThermalShield_phys = new G4PVPlacement
+  G4VPhysicalVolume* FrontThermalShield_phys;
+  FrontThermalShield_phys = new G4PVPlacement
     (0, G4ThreeVector(0, 0, OpticalBench_off-FrontThermalShield_off),
     "FrontThermalShield_phys", FrontThermalShield_log, TelBox_phys, false, 0);
   FrontThermalShield_log->SetVisAttributes(sol_white_vat);
@@ -504,7 +513,8 @@
      G4ThreeVector(0., -TelPriMirMountCutout2_yoff, 0.)));
   G4LogicalVolume* TelPriMirMount_log = 
     new G4LogicalVolume(TelPriMirMount_sol2, Al6061, "TelPriMirMount_log");
-  G4VPhysicalVolume* TelPriMirMount_phys = new G4PVPlacement(0, 
+  G4VPhysicalVolume* TelPriMirMount_phys;
+  TelPriMirMount_phys = new G4PVPlacement(0, 
     G4ThreeVector(0.,TelPriMirMount_yoff, OpticalBench_off-TelPriMirMount_off),
     "TelPriMirMount_phys", TelPriMirMount_log, TelBox_phys, false, 0);
   TelPriMirMount_log->SetVisAttributes(sol_blue_vat);
@@ -526,7 +536,8 @@
     0.5*TelPriMirHol_len, 0., 360.*deg);
   G4LogicalVolume* TelPriMirCyl_log = 
     new G4LogicalVolume(TelPriMirCyl_sol, SiC, "TelPriMirCyl_log");
-  G4VPhysicalVolume* TelPriMirCyl_phys= new G4PVPlacement(0, G4ThreeVector
+  G4VPhysicalVolume* TelPriMirCyl_phys;
+  TelPriMirCyl_phys= new G4PVPlacement(0, G4ThreeVector
     (0,TelPriMir_yoff,OpticalBench_off-TelPriMir_off+0.5*TelPriMirMount_thi),
     "TelPriMirCyl_phys", TelPriMirCyl_log, TelBox_phys, false, 0);
   TelPriMirCyl_log->SetVisAttributes(sol_green_vat);
@@ -539,7 +550,8 @@
     std::atan(0.5*TelPriMirHol_dia/TelPriMir_rad));
   G4LogicalVolume* TelPriMir_log = 
     new G4LogicalVolume(TelPriMir_sol, SiC, "TelPriMir_log");
-  G4VPhysicalVolume* TelPriMir_phys= new G4PVPlacement(0, G4ThreeVector
+  G4VPhysicalVolume* TelPriMir_phys;
+  TelPriMir_phys= new G4PVPlacement(0, G4ThreeVector
     (0,TelPriMir_yoff, OpticalBench_off-TelPriMir_off-TelPriMir_rad-18.*mm),
     "TelPriMir_phys", TelPriMir_log, TelBox_phys, false, 0);
   TelPriMir_log->SetVisAttributes(sol_green_vat);
@@ -562,7 +574,8 @@
     0.5*TelMast_len, 0., 360.*deg);
   G4LogicalVolume* TelMast_log = 
     new G4LogicalVolume(TelMast_sol, SiC, "TelMast_log");
-  G4VPhysicalVolume* TelMast_phys= new G4PVPlacement(0, offset+G4ThreeVector
+  G4VPhysicalVolume* TelMast_phys;
+  TelMast_phys= new G4PVPlacement(0, offset+G4ThreeVector
     (0,-0.5*TelPriMir_dia - 0.5*TelMast_dia + TelPriMir_yoff, -TelMast_off),
     "TelMastTel_phys", TelMast_log, TelShield_phys, false, 0);
   TelMast_log->SetVisAttributes(sol_grey_vat);
@@ -579,7 +592,8 @@
      0.5*TelSecMir_len, 0., 360.*deg);
   G4LogicalVolume* TelSecMir_log = 
     new G4LogicalVolume(TelSecMir_sol, SiC, "TelSecMir_log");
-  G4VPhysicalVolume* TelSecMir_phys= new G4PVPlacement
+  G4VPhysicalVolume* TelSecMir_phys;
+  TelSecMir_phys= new G4PVPlacement
     (0, offset+G4ThreeVector(0,TelPriMir_yoff, -TelSecMir_off),
     "TelSecMir_phys", TelSecMir_log, TelShield_phys, false, 0);
   TelSecMir_log->SetVisAttributes(sol_green_vat);
@@ -604,7 +618,8 @@
   tel_rot11.rotateY(-90.*deg); tel_rot11.rotateX(-90.*deg);
   G4LogicalVolume* TelSecHol_log = 
     new G4LogicalVolume(TelSecHol_sol, SiC, "TelSecHol_log");
-  G4VPhysicalVolume* TelSecHol_phys= new G4PVPlacement(G4Transform3D
+  G4VPhysicalVolume* TelSecHol_phys;
+  TelSecHol_phys= new G4PVPlacement(G4Transform3D
     (tel_rot11, offset + G4ThreeVector(0, 
     TelPriMir_yoff-0.5*TelSecHol_len-0.5*TelSecMir_dia-TelSecHolCap2_thi,
     -TelMast_off-0.5*TelMast_len+TelSecHol_top)),
@@ -616,7 +631,8 @@
     0.5*TelMast_dia+TelSecHolCap1_thi, 0.5*TelSecHolCap1_len, 0., 360.*deg);
   G4LogicalVolume* TelSecHolCap1_log = 
     new G4LogicalVolume(TelSecHolCap1_sol, SiC, "TelSecHolCap1_log");
-  G4VPhysicalVolume* TelSecHolCap1_phys= new G4PVPlacement(0, 
+  G4VPhysicalVolume* TelSecHolCap1_phys;
+  TelSecHolCap1_phys= new G4PVPlacement(0, 
     offset + G4ThreeVector(0,-0.5*TelPriMir_dia-0.5*TelMast_dia+TelPriMir_yoff,
     -TelMast_off-0.5*TelMast_len+0.5*TelSecHol_bot),
     "TelSecHolCap1_phys", TelSecHolCap1_log, TelShield_phys, false, 0);
@@ -627,7 +643,8 @@
     0.5*TelSecMir_dia+TelSecHolCap2_thi, 0.5*TelSecHolCap2_len, 0., 360.*deg);
   G4LogicalVolume* TelSecHolCap2_log = 
     new G4LogicalVolume(TelSecHolCap2_sol, SiC, "TelSecHolCap2_log");
-  G4VPhysicalVolume* TelSecHolCap2_phys= new G4PVPlacement(0, 
+  G4VPhysicalVolume* TelSecHolCap2_phys;
+  TelSecHolCap2_phys= new G4PVPlacement(0, 
     offset + G4ThreeVector(0,TelPriMir_yoff,
     -TelMast_off-0.5*TelMast_len+0.5*TelSecHol_top),
     "TelSecHolCap2_phys", TelSecHolCap2_log, TelShield_phys, false, 0);

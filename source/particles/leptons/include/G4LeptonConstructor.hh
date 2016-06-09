@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LeptonConstructor.hh,v 1.3 2001/07/11 10:01:52 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LeptonConstructor.hh,v 1.5 2005/09/30 22:59:05 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,19 +37,18 @@
 class G4LeptonConstructor
 {
   //This class is a utility class for constructLepton 
-  //short lived particles
 
   public:
     G4LeptonConstructor();
     ~G4LeptonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 
   protected:
-    void ConstructELeptons();
-    void ConstructMuLeptons();
-    void ConstructTauLeptons();
+    static void ConstructELeptons();
+    static void ConstructMuLeptons();
+    static void ConstructTauLeptons();
 };
 
 #endif

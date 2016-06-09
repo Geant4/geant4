@@ -22,15 +22,15 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.8 2005/04/25 07:09:01 gcosmo Exp $
-// $Name: geant4-07-01 $
+// $Id: G4UIGainServer.cc,v 1.9 2005/11/21 13:44:09 hajime Exp $
+// $Name: geant4-08-00 $
 //
 #ifndef WIN32
 
 #include "G4UIGainServer.hh"
 #include <netdb.h>
 
-#include <strstream>
+#include <sstream>
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
@@ -262,7 +262,7 @@ G4String G4UIGainServer::GetCommand()
       G4String ss = nC(1,nC.length()-1);
       G4int vl;
       const char* tt = ss;
-      std::istrstream is((char*)tt);
+      std::istringstream is((char*)tt);
       is >> vl;
       G4int nh = UI->GetNumberOfHistory();
       if(vl>=0 && vl<nh)

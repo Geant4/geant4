@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.hh,v 1.4 2004/11/24 16:53:29 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.hh,v 1.6 2005/11/25 22:02:04 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -59,6 +59,9 @@ public:
   void SetJawX2Pos_x (G4double);
   void SetJawY1Pos_y (G4double);
   void SetJawY2Pos_y (G4double);
+  void SetPhantomDim (G4double);
+  void SetNumberOfVoxels (G4int);
+  void SetMaxStep (G4double);
 
     G4VPhysicalVolume* Construct();
   
@@ -70,9 +73,6 @@ public:
   const G4int   GetNumVoxelX()  {return  numberOfVoxelsAlongX;}
   const G4int   GetNumVoxelY()  {return  numberOfVoxelsAlongY;}
   const G4int   GetNumVoxelZ()  {return numberOfVoxelsAlongZ;}
-  //const G4double GetDimX()      {return PhantomDimensionX;}
-  //const G4double GetDimy()      {return PhantomDimensionY;}
-  //const G4double GetBoxDim_Z()  {return PhantomDimensionZ;}
   const G4double VoxelWidth_X(){return phantomDim_x/numberOfVoxelsAlongX;}
   const G4double VoxelWidth_Y(){return phantomDim_y/numberOfVoxelsAlongY;}
   const G4double VoxelWidth_Z(){return phantomDim_z/numberOfVoxelsAlongZ;}
@@ -89,6 +89,9 @@ public:
   G4double GetJawX2Pos_x()  {return fieldX2;}; 
   G4double GetJawY1Pos_y()  {return fieldY1;}; 
   G4double GetJawY2Pos_y()  {return fieldY2;}; 
+  G4double GetPhantomDim()  {return phantomDim;};
+  G4int GetNumberOfVoxels()  {return numberOfVoxels;};
+  G4double GetMaxStep()  {return maxStep;};
 
   private:
 
@@ -96,8 +99,12 @@ public:
   G4double  fieldX2;
   G4double  fieldY1;
   G4double  fieldY2;
+  G4double  phantomDim;
+  G4int  numberOfVoxels;
+  G4double  maxStep;
 
   G4VPhysicalVolume* ConstructGeom();
+
   MedLinacVGeometryComponent* pHead;
   MedLinacDetectorMessenger* detectorMessenger; 
   MedLinacDecorator* decorator;
@@ -109,7 +116,7 @@ public:
   MedLinacPhantomSD* phantomSD;//pointer to sensitive detector
   MedLinacPhantomROGeometry* phantomROGeometry;//pointer to ROGeometry
 
-  G4double phantomDim_x;  //Phantom XDimension
+  G4double phantomDim_x; //Phantom XDimension
   G4double phantomDim_y; //Phantom YDimension
   G4double phantomDim_z; //Phantom ZDimension 
 
@@ -141,7 +148,8 @@ public:
   //Vis
   //
   G4VisAttributes* simpleH2OVisAtt;
-  G4VisAttributes* simpleLeadSVisAtt;
+  G4VisAttributes* simpleTungstenWVisAtt;
+  G4VisAttributes* simpleTungstenSVisAtt;
   G4VisAttributes* simpleWorldVisAtt;
 
 };

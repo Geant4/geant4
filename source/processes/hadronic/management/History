@@ -1,0 +1,20 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for hadronic/management directory
+            ----------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+18 Nov 2005 Dennis Wright (hadr-man-V07-01-00)
+----------------------------------------------
+
+- G4HadronicProcess.cc: <sstream> migration 

@@ -67,8 +67,8 @@ void LISAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   energy_pri = 0.;
 
   // seeds
-  seeds[0] = *HepRandom::getTheSeeds();
-  seeds[1] = *(HepRandom::getTheSeeds()+1);
+  seeds[0] = *CLHEP::HepRandom::getTheSeeds();
+  seeds[1] = *(CLHEP::HepRandom::getTheSeeds()+1);
   //  G4cout << " 1st seed: " << *seeds << G4endl;;
   //  G4cout << " 2nd seed: " << *(seeds+1) << G4endl;
   // HepRandom::showEngineStatus();

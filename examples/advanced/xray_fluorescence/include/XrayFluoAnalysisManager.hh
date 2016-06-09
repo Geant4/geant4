@@ -38,6 +38,7 @@
 
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
+#ifdef G4ANALYSIS_USE
 
 #include "globals.hh"
 #include <vector>
@@ -49,7 +50,7 @@
 class G4Step;
 class XrayFluoAnalysisMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOoo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 class XrayFluoAnalysisManager
 {
 public:
@@ -169,7 +170,7 @@ private:
   AIDA::IPlotter* plotter;
 
 };
-
+#endif
 #endif
 
 

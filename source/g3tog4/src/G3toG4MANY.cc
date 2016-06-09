@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4MANY.cc,v 1.1 2001/11/08 16:08:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // By I. Hrivnacova, 22.10.01 
 

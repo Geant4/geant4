@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BosonConstructor.hh,v 1.3 2001/07/11 10:01:32 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BosonConstructor.hh,v 1.5 2005/09/30 22:59:05 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,14 +37,13 @@
 class G4BosonConstructor
 {
   //This class is a utility class for constructBoson 
-  //short lived particles
 
   public:
     G4BosonConstructor();
     ~G4BosonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 };
 
 #endif

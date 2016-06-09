@@ -22,7 +22,7 @@
 //
 //
 // $Id: RemSimPositronStandard.hh,v 1.3 2004/05/22 12:57:05 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 

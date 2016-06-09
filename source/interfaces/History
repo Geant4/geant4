@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2005/04/25 07:09:15 gcosmo Exp $
+$Id: History,v 1.78 2005/11/28 18:20:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 November 2005, Gabriele Cosmo (interface-V07-01-02)
+- G4UIXm.cc migrated to sstream
+
+21 November 2005, Hajime Yoshida (interface-V07-01-01)
+- G4UIGAG.cc and G4UIGainServer.cc migrated to sstream
+
+26 October 2005, Koichi Murakami (interfaces-V07-01-00)
+- G4UItcsh/G4UIterminal/G4VBasicShell: 
+  migration from strstream to sstream
 
 22 April 2005, Gabriele Cosmo (interfaces-V07-00-01)
 - G4UIGainServer: fixed conditional compilation for MacOS 10.4.

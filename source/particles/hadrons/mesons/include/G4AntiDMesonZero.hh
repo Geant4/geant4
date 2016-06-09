@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiDMesonZero.hh,v 1.8 2002/12/16 11:15:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AntiDMesonZero.hh,v 1.10 2005/01/14 03:49:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,49 +31,31 @@
 //
 //      Created,             Hisaya Kurashige, 15 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4AntiDMesonZero_h
 #define G4AntiDMesonZero_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         AntiDMesonZero                         ###
 // ######################################################################
 
-class G4AntiDMesonZero : public G4VMeson
+class G4AntiDMesonZero : public G4ParticleDefinition
 {
  private:
-   static G4AntiDMesonZero theAntiDMesonZero;
-
- private: // constructors are hide as private  
-   G4AntiDMesonZero(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4AntiDMesonZero* theInstance;
+   G4AntiDMesonZero(){}
+   ~G4AntiDMesonZero(){}
 
  public:
-   virtual ~G4AntiDMesonZero() {}
-
+   static G4AntiDMesonZero* Definition();
    static G4AntiDMesonZero* AntiDMesonZeroDefinition();
    static G4AntiDMesonZero* AntiDMesonZero();
-
 };
-
 
 #endif

@@ -27,8 +27,8 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.7 2004/05/27 12:31:31 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimEventAction.cc,v 1.8 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
@@ -39,8 +39,8 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include "Randomize.hh"
-#include "CLHEP/Random/RandEngine.h"
+//##include "Randomize.hh"
+//#include "CLHEP/Random/RandEngine.h"
 RemSimEventAction::RemSimEventAction():evtNo(-1)
 {}
  

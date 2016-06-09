@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.9 2003/06/16 17:00:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EMDataSet.cc,v 1.9.2.1 2005/11/30 16:35:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -35,7 +35,7 @@
 #include "G4EMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 // Constructor
 
@@ -143,12 +143,11 @@ void G4EMDataSet::LoadData(const G4String& fileName)
 {
   // Build the complete string identifying the file with the data set
   
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
   
   ost << fileName << z << ".dat";
   
-  G4String name(nameChar);
+  G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
   if (!path)

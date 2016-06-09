@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.18 2003/10/22 13:52:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParallelNavigator.cc,v 1.19 2005/11/09 14:47:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -33,7 +33,7 @@
 
 #include "G4ParallelNavigator.hh"
 
-#include <strstream>
+#include <sstream>
 #include "G4VParallelStepper.hh"
 
 
@@ -232,13 +232,12 @@ ComputeStepLengthShifted(const G4String &m,
 					 kInfinity, newSafety);
   }
   if (stepLength<=kCarTolerance) {
-    char st[200];
-    std::ostrstream os(st,200);
+    std::ostringstream os;
     os << "still got stepLength<=kCarTolerance: "
        << shift_pos
        << "\n"
        << '\0';
-    G4String m(st);
+    G4String m = os.str();
     Error(m, aPosition, aDirection);
   } 
   return stepLength;

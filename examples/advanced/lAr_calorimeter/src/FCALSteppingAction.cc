@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALSteppingAction.cc,v 1.5 2004/11/29 18:03:06 ribon Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: FCALSteppingAction.cc,v 1.6 2005/12/08 16:39:16 ribon Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -45,7 +45,7 @@
 #include "G4ThreeVector.hh"
 
 #include "G4ios.hh"
-#include "iostream.h"
+#include <iostream>
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -237,7 +237,8 @@ G4double FCALSteppingAction::GetEdepFCAL(G4String FCAL) {
   } else {
     if(strcmp(FCAL,"FCALHad") == 0) {
       return EdepFCALHad;}
-  };
+  }
+  return 0.0; 
 } 
 
 

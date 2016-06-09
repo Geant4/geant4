@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.24 2005/01/27 20:06:07 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSceneHandler.hh,v 1.25 2005/09/02 12:58:18 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  19th July 1996.
@@ -279,6 +279,8 @@ protected:
   G4VViewer*             fpViewer;         // Current viewer.
   G4Scene*               fpScene;          // Scene for this scene handler.
   G4bool                 fMarkForClearingTransientStore;
+  G4bool                 fSecondPassRequested;
+  G4bool                 fSecondPass;      // ...in process.
 
   //////////////////////////////////////////////////////////////
   // Workspace...

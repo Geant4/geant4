@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.8 2001/07/11 10:08:23 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.11 2005/11/26 00:47:54 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
   //     Process interface
   //--------------------------------------------------------------
 
-  void StartTracking();
+  void StartTracking(G4Track*);
   
   //---------------------------------------------------
   // GetPhysicalInteractionLength() and DoIt() methods:

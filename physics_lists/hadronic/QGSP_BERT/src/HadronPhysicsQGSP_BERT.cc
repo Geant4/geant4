@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSP_BERT.cc,v 1.2 2005/11/29 17:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsQGSP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 23.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #include "HadronPhysicsQGSP_BERT.hh"
 
 #include "globals.hh"
@@ -34,32 +48,60 @@
 
 HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
-{
-  theNeutrons.RegisterMe(&theQGSPNeutron);
-  theNeutrons.RegisterMe(&theLEPNeutron);
-  theNeutrons.RegisterMe(&theBertiniNeutron);
-  theLEPNeutron.SetMaxInelasticEnergy(25*GeV);
-  theLEPNeutron.SetMinInelasticEnergy(9.5*GeV);
-  theBertiniNeutron.SetMaxEnergy(9.9*GeV);
-  theBertiniNeutron.SetMinEnergy(0.0*GeV);
+{}
 
-  thePro.RegisterMe(&theQGSPPro);
-  thePro.RegisterMe(&theLEPPro);
-  thePro.RegisterMe(&theBertiniPro);
-  theLEPPro.SetMaxEnergy(25*GeV);
-  theLEPPro.SetMinEnergy(9.5*GeV);
-  theBertiniPro.SetMaxEnergy(9.9*GeV);
+void HadronPhysicsQGSP_BERT::CreateModels()
+{
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder);
+  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
+  theLEPNeutron->SetMinInelasticEnergy(9.5*GeV);
+  theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
+
+  theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
+  theBertiniNeutron->SetMinEnergy(0.0*GeV);
+  theBertiniNeutron->SetMaxEnergy(9.9*GeV);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder);
+  thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
+  theLEPPro->SetMinEnergy(9.5*GeV);
+  theLEPPro->SetMaxEnergy(25*GeV);
+
+  thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
+  theBertiniPro->SetMaxEnergy(9.9*GeV);
   
-  thePiK.RegisterMe(&theQGSPPiK);
-  thePiK.RegisterMe(&theLEPPiK);
-  thePiK.RegisterMe(&theBertiniPiK);
-  theLEPPiK.SetMaxEnergy(25*GeV);
-  theLEPPiK.SetMinPionEnergy(9.5*GeV);
-  theBertiniPiK.SetMaxEnergy(9.9*GeV);
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder);
+  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
+  theLEPPiK->SetMaxEnergy(25*GeV);
+  theLEPPiK->SetMinPionEnergy(9.5*GeV);
+
+  thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
+  theBertiniPiK->SetMaxEnergy(9.9*GeV);
+
   
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
+
 }
 
-HadronPhysicsQGSP_BERT::~HadronPhysicsQGSP_BERT() {}
+HadronPhysicsQGSP_BERT::~HadronPhysicsQGSP_BERT()
+{
+   delete theStoppingHadron;
+   delete theMiscLHEP;
+   delete theQGSPNeutron;
+   delete theLEPNeutron;
+   delete theBertiniNeutron;
+   delete theQGSPPro;
+   delete theLEPPro;
+   delete thePro;
+   delete theBertiniPro;
+   delete theQGSPPiK;
+   delete theLEPPiK;
+   delete theBertiniPiK;
+   delete thePiK;
+}
 
 void HadronPhysicsQGSP_BERT::ConstructParticle()
 {
@@ -76,11 +118,11 @@ void HadronPhysicsQGSP_BERT::ConstructParticle()
 #include "G4ProcessManager.hh"
 void HadronPhysicsQGSP_BERT::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePro.Build();
-  thePiK.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch

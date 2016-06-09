@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_BIC.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TQGSP_BIC_h
 #define TQGSP_BIC_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TQGSP_BIC: public T
 {
 public:
-  TQGSP_BIC();
+  TQGSP_BIC(G4int ver = 1);
   virtual ~TQGSP_BIC();
   
 public:

@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2004/09/22 20:00:06 johna Exp $
+$Id: History,v 1.18 2005/11/22 16:21:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+22nd November 2005  John Allison  (vistree-V07-01-01)
+- Refined guidance and printing.
+
+13th October 2005  John Allison  (vistree-V07-01-00)
+- Fixed bug in mass calculations.
+- Migrated to <sstream>.
 
 22nd September 2004  John Allison  (vistree-V06-02-01)
 - Fixed directory name (trailing /).

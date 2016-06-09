@@ -29,8 +29,8 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: PurgMagDetectorConstruction.cc,v 1.2 2004/06/18 09:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PurgMagDetectorConstruction.cc,v 1.3 2005/12/14 16:06:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagTabulatedField3D.hh"

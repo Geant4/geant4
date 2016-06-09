@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PiModel.hh,v 1.4 2002/01/09 17:24:18 ranjard Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05PiModel.hh,v 1.5 2005/11/16 07:39:03 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //----------------------------------------
@@ -39,7 +39,7 @@ public:
   //-------------------------
   // Constructor, destructor
   //-------------------------
-  ExN05PiModel (G4LogicalVolume *anEnvelope);
+  ExN05PiModel (G4Region *anEnvelope);
   ~ExN05PiModel ();
 
   //------------------------------

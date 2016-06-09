@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.18 2005/04/12 13:31:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MuBetheBlochModel.cc,v 1.20 2005/08/18 14:38:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -78,6 +78,9 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
   taulim(8.4146e-3),
   alphaprime(fine_structure_const/twopi)
 {
+  theElectron = G4Electron::Electron();
+  corr = G4LossTableManager::Instance()->EmCorrections();
+
   if(p) SetParticle(p);
 }
 
@@ -90,10 +93,12 @@ G4MuBetheBlochModel::~G4MuBetheBlochModel()
 
 void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  massSquare = mass*mass;
-  ratio = electron_mass_c2/mass;
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    massSquare = mass*mass;
+    ratio = electron_mass_c2/mass;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,16 +114,12 @@ G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
-
-  theElectron = G4Electron::Electron();
+  if(p) SetParticle(p);
 
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
-
-  corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -244,12 +245,12 @@ G4double G4MuBetheBlochModel::CrossSectionPerVolume(const G4Material* material,
 vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double minKinEnergy,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double maxKinEnergy = min(maxEnergy,tmax);
-  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
+  if(minKinEnergy >= maxKinEnergy) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;

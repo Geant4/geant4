@@ -22,7 +22,7 @@
 //
 //
 // $Id: g4mini.java,v 1.3 2001/07/11 10:09:09 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 import java.io.*;
 import java.net.*;

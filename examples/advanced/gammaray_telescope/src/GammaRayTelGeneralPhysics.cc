@@ -38,17 +38,11 @@ GammaRayTelGeneralPhysics::~GammaRayTelGeneralPhysics()
 {
 }
 
-#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
 
 void GammaRayTelGeneralPhysics::ConstructParticle()
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();  
+ 
 }
 
 void GammaRayTelGeneralPhysics::ConstructProcess()
@@ -58,7 +52,7 @@ void GammaRayTelGeneralPhysics::ConstructProcess()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess.IsApplicable(*particle)) { 
+    if (fDecayProcess.IsApplicable(*particle) && !particle->IsShortLived()) { 
       pmanager ->AddProcess(&fDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);

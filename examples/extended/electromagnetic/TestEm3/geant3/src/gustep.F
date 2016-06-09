@@ -34,21 +34,19 @@
 	if (histo(ih)) call hfill (ih,0.+layer,0.,destep/(aMeV*nevent)) 	
       ENDIF
 *
-* *** Energy flow
-      IF (NUMED.LE.NbAbsor) THEN
+* *** Energy flow : leaving an absorber ?
+      IF ((NUMED.LE.NbAbsor).and.(INWVOL.eq.2)) THEN
         Idnow = NbAbsor*(layer-1) + numed
         Eflow = gekin
         if (ipart.eq.2) Eflow = gekin + 2*emass
-*       entrance in an absorber	      
-        if (INWVOL.eq.1) THEN
-          if (Idnow.gt.Idold) Eforw(Idnow)   = Eforw(Idnow)   + Eflow
-          if (Idnow.lt.Idold) Eback(Idnow+1) = Eback(Idnow+1) + Eflow
-	  Idold = Idnow	  
+*		      
+        if (max(abs(vect(2)),abs(vect(3))).ge.(0.5*calorYZ)) then
+	  EleakLat(Idnow)   = EleakLat(Idnow)   + Eflow
+        elseif (vect(4).ge.0.) then
+	  EnerFlow(Idnow+1) = EnerFlow(Idnow+1) + Eflow
+        else
+	  EnerFlow(Idnow)   = EnerFlow(Idnow)   - Eflow	  
         endif
-*       last plane: forward leakage	
-	if ((INWVOL.eq.2).and.(Idnow.eq.NbAbsor*NbLayer)) THEN
-	  Eforw(Idnow+1) = Eforw(Idnow+1) + Eflow
-	endif
       ENDIF	     
 *
       END

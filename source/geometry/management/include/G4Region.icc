@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.10 2005/03/02 08:24:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Region.icc,v 1.11 2005/08/18 16:51:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4Region Inline Implementation file
@@ -224,3 +224,36 @@ G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
   if(c!=fMaterialCoupleMap.end()) couple = (*c).second;
   return couple;
 }
+
+// ********************************************************************
+// SetFastSimulationManager
+// ********************************************************************
+//
+inline
+void G4Region::SetFastSimulationManager(G4FastSimulationManager* fsm)
+{
+  fFastSimulationManager = fsm;
+}
+
+// ********************************************************************
+// GetFastSimulationManager
+// ********************************************************************
+//
+inline 
+G4FastSimulationManager* G4Region::GetFastSimulationManager() const
+{
+  return fFastSimulationManager;
+}
+
+// ********************************************************************
+// GetWorldPhysical
+// ********************************************************************
+//
+inline
+G4VPhysicalVolume* G4Region::GetWorldPhysical() const
+{
+  return fWorldPhys;
+}
+
+
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: g4rwPrimaryGeneratorAction.hh,v 1.1 2004/12/06 11:01:14 radoone Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------

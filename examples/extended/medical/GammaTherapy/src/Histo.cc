@@ -60,7 +60,8 @@ Histo* Histo::GetPointer()
 Histo::Histo()
 {
   verbose   = 1;
-  histName  = G4String("histo.hbook");
+  histName  = G4String("histo");
+  histType  = G4String("hbook");
   nHisto    = 10;
   nHisto1   = 10;
   maxEnergy = 50.0*MeV;
@@ -73,6 +74,7 @@ Histo::Histo()
   scoreZ    = 100.*mm;
 
 #ifdef G4ANALYSIS_USE
+  tree = 0;
   ntup = 0;
 #endif
 }
@@ -173,29 +175,30 @@ void Histo::EndOfHisto()
   G4cout<<G4endl;
 
 #ifdef G4ANALYSIS_USE
-  // normalise histograms
-  for(G4int i=0; i<nHisto1; i++) {
-    histo[i]->scale(x);
+  if(tree) {
+    // normalise histograms
+    for(G4int i=0; i<nHisto1; i++) {
+      histo[i]->scale(x);
+    }
+    G4double nr = histo[0]->binHeight(0);
+    if(nr > 0.0) nr = 1./nr;
+    histo[0]->scale(nr);
+
+    nr = (histo[1]->sumAllBinHeights())*stepR;
+    if(nr > 0.0) nr = 1./nr;
+    histo[1]->scale(nr);
+
+    histo[3]->scale(1000.0*cm3/(pi*absorberR*absorberR*stepZ));
+    histo[4]->scale(1000.0*cm3*volumeR[0]/stepZ);
+
+    // Write histogram file
+    if(0 < nHisto) {
+      tree->commit();
+      G4cout << "Histograms and Ntuples are saved" << G4endl;
+    }
+    tree->close();
+    G4cout << "Tree is closed" << G4endl;
   }
-  G4double nr = histo[0]->binHeight(0);
-  if(nr > 0.0) nr = 1./nr;
-  histo[0]->scale(nr);
-
-  nr = (histo[1]->sumAllBinHeights())*stepR;
-  if(nr > 0.0) nr = 1./nr;
-  histo[1]->scale(nr);
-
-  histo[3]->scale(1000.0*cm3/(pi*absorberR*absorberR*stepZ));
-  histo[4]->scale(1000.0*cm3*volumeR[0]/stepZ);
-
-  // Write histogram file
-  if(0 < nHisto) {
-    tree->commit();
-    G4cout << "Histograms and Ntuples are saved" << G4endl;
-  }
-  tree->close();
-  G4cout << "Tree is closed" << G4endl;
-
 #endif
 }
 
@@ -244,8 +247,23 @@ void Histo::bookHisto()
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(histName,"hbook",false,false);
-  G4cout << "Tree store : " << tree->storeName() << G4endl;
+  G4String tt = "hbook";
+  G4String nn = histName + ".hbook";
+  if(histType == "root") {
+    tt = "root";
+    nn = histName + ".root";
+  } else if(histType == "xml" || histType == "XML" || histType == "aida" || histType == "AIDA") {
+    tt = "xml";
+    nn = histName + ".aida";
+  }
+
+  tree = tf->create(nn,tt,false,true, "--noErrors uncompress");
+  if(tree) {
+    G4cout << "Tree store : " << tree->storeName() << G4endl;
+  } else {
+    G4cout << "Fail to open tree store " << nn << G4endl;
+    return;
+  }
 
   histo.resize(nHisto1);
 
@@ -318,7 +336,7 @@ void Histo::AddTargetPhoton(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_gam_tar++;
 #ifdef G4ANALYSIS_USE
-  histo[5]->fill(e,1.0);
+  if(tree) histo[5]->fill(e,1.0);
 #endif
 }
 
@@ -337,7 +355,7 @@ void Histo::AddTargetElectron(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_e_tar++;
 #ifdef G4ANALYSIS_USE
-  histo[8]->fill(e,1.0);
+  if(tree) histo[8]->fill(e,1.0);
 #endif
 }
 
@@ -348,7 +366,7 @@ void Histo::AddPhantomElectron(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_e_ph++;
 #ifdef G4ANALYSIS_USE
-  histo[7]->fill(e,1.0);
+  if(tree) histo[7]->fill(e,1.0);
 #endif
 }
 
@@ -430,8 +448,10 @@ void Histo::AddGamma(G4double e, G4double r)
   G4int bin1 = (G4int)(r/stepR);
   if(bin1 >= nBinsR) bin1 = nBinsR-1;
 #ifdef G4ANALYSIS_USE
-  histo[6]->fill(e,1.0);
-  histo[9]->fill(r,e*volumeR[bin1]);
+  if(tree) {
+    histo[6]->fill(e,1.0);
+    histo[9]->fill(r,e*volumeR[bin1]);
+  }
 #endif
 
 }
@@ -452,12 +472,14 @@ void Histo::AddStep(G4double edep, G4double r1, G4double z1, G4double r2, G4doub
   }
   if(nzbin == nScoreBin) {
 #ifdef G4ANALYSIS_USE
-    G4int bin  = (G4int)(r0/stepR);
-    if(bin >= nBinsR) bin = nBinsR-1;
-    double w    = edep*volumeR[bin];
-    histo[0]->fill(r0,w);
-    histo[1]->fill(r0,w);
-    histo[2]->fill(r0,w);
+    if(tree) {
+      G4int bin  = (G4int)(r0/stepR);
+      if(bin >= nBinsR) bin = nBinsR-1;
+      double w    = edep*volumeR[bin];
+      histo[0]->fill(r0,w);
+      histo[1]->fill(r0,w);
+      histo[2]->fill(r0,w);
+    }
 #endif
   }
   G4int bin1 = (G4int)(z1/stepZ);
@@ -466,11 +488,13 @@ void Histo::AddStep(G4double edep, G4double r1, G4double z1, G4double r2, G4doub
   if(bin2 >= nBinsZ) bin2 = nBinsZ-1;
   if(bin1 == bin2) {
 #ifdef G4ANALYSIS_USE
-    histo[3]->fill(z0,edep);
-    if(r1 < stepR) {
-      G4double w = edep;
-      if(r2 > stepR) w *= (stepR - r1)/(r2 - r1);
-      histo[4]->fill(z0,w);
+    if(tree) {
+      histo[3]->fill(z0,edep);
+      if(r1 < stepR) {
+        G4double w = edep;
+        if(r2 > stepR) w *= (stepR - r1)/(r2 - r1);
+        histo[4]->fill(z0,w);
+      }
     }
 #endif
   } else {
@@ -492,13 +516,15 @@ void Histo::AddStep(G4double edep, G4double r1, G4double z1, G4double r2, G4doub
     G4double rr2 = r1 + dr*(zz2-zz1)/dz;
     for(bin=bin1; bin<=bin2; bin++) {
 #ifdef G4ANALYSIS_USE
-      G4double de = edep*(zz2 - zz1)/dz;
-      G4double zf = (zz1+zz2)*0.5;
-      histo[3]->fill(zf,de);
-      if(rr1 < stepR) {
-        G4double w = de;
-        if(rr2 > stepR) w *= (stepR - rr1)/(rr2 - rr1);
-        histo[4]->fill(zf,w);
+      if(tree) {
+	G4double de = edep*(zz2 - zz1)/dz;
+	G4double zf = (zz1+zz2)*0.5;
+	histo[3]->fill(zf,de);
+	if(rr1 < stepR) {
+	  G4double w = de;
+	  if(rr2 > stepR) w *= (stepR - rr1)/(rr2 - rr1);
+	  histo[4]->fill(zf,w);
+	}
       }
 #endif
       zz1 = zz2;

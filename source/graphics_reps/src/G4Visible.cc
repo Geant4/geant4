@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.12 2005/05/26 10:34:55 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Visible.cc,v 1.13 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  30th October 1996
@@ -32,20 +32,21 @@
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
 
+G4Visible::G4Visible (): fpVisAttributes (0) {}
+
 G4Visible::~G4Visible () {}
 
-G4Visible& G4Visible::operator = (const G4Visible& right) {
-  if (&right == this) return *this;
-  fpVisAttributes = right.fpVisAttributes;
-  return *this;
-}
-
-G4bool G4Visible::operator == (const G4Visible& right) const{
-  return fpVisAttributes == right.fpVisAttributes;
-}
+G4Visible::G4Visible (const G4VisAttributes* pVA):
+  fpVisAttributes (pVA)
+{}
 
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   fpVisAttributes = new G4VisAttributes(VA);
+}
+
+G4bool G4Visible::operator != (const G4Visible& right) const {
+  // Simple test on non-equality of address...
+  return fpVisAttributes != right.fpVisAttributes;
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {

@@ -26,7 +26,7 @@
 //
 //
 // $Id: BrachyAnalysisManager.hh,v 1.9 2004/03/11 15:38:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //    **********************************
 //    *                                *

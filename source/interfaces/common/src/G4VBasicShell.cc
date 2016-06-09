@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.10 2003/06/16 16:56:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VBasicShell.cc,v 1.11 2005/10/26 06:20:08 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
-
-#include <vector>
 
 #include "G4VBasicShell.hh"
 #include "G4StateManager.hh"
@@ -33,7 +31,8 @@
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
 #include "G4UImanager.hh"
-#include <strstream>
+#include <vector>
+#include <sstream>
 
 G4VBasicShell::G4VBasicShell()
 :currentDirectory("/")
@@ -330,7 +329,7 @@ void G4VBasicShell::ApplyShellCommand (
     G4String ss = command(1,command.length()-1);
     G4int vl;
     const char* tt = ss;
-    std::istrstream is((char*)tt);
+    std::istringstream is(tt);
     is >> vl;
     G4int nh = UI->GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 

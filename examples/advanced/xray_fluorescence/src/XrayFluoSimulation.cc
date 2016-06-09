@@ -54,7 +54,10 @@
 #include "XrayFluoSteppingAction.hh"
 #include "XrayFluoSteppingVerbose.hh"
 #include "XrayFluoSimulation.hh"
+#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
+#endif
+using namespace CLHEP;
 
 XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
 
@@ -68,8 +71,8 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
-  HepRandom::setTheSeed(dir);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::HepRandom::setTheSeed(dir);
 
   //XrayFluo Verbose output class
   G4VSteppingVerbose::SetInstance(new XrayFluoSteppingVerbose);
@@ -135,7 +138,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv[1]);
+      session = new G4UIXm(argc,&argv[1]);
 #else           
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);
@@ -153,8 +156,10 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   visManager->Initialize();
 #endif
 
+#ifdef G4ANALYSIS_USE
   // set analysis to have the messenger running...
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+#endif
   XrayFluoEventAction* eventAction = 0;
   XrayFluoRunAction* runAction = new XrayFluoRunAction();
   XrayFluoSteppingAction* stepAction = new XrayFluoSteppingAction();
@@ -164,8 +169,10 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   if (geometryNumber == 1 || geometryNumber == 4) {
     if (geometryNumber == 4) {
+#ifdef G4ANALYSIS_USE
      analysis->PhaseSpaceOn();
      analysis->CreatePersistency();
+#endif
     }
     eventAction = new XrayFluoEventAction(testBeamDetector);
     runManager->SetUserAction(new XrayFluoPrimaryGeneratorAction(testBeamDetector));

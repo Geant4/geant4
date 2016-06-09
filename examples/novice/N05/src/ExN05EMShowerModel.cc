@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.10 2005/06/27 15:28:00 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05EMShowerModel.cc,v 1.13 2005/11/16 08:26:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"
 
-#include "RandomGamma.hh"
 #include "Randomize.hh"
 
 #include "G4Electron.hh"
@@ -36,9 +35,8 @@
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHandle.hh"
-//#include "G4TouchableHistory.hh"
 
-ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4LogicalVolume* envelope)
+ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
   fFakeStep          = new G4Step();
@@ -146,7 +144,7 @@ void ExN05EMShowerModel::Explode(const G4FastTrack& fastTrack)
     {
       // Longitudinal profile:
       // -- shoot z according to Gamma distribution:
-      bt = RandomGamma(a);
+      bt = CLHEP::RandGamma::shoot(a,1.0);
       t  = bt/b;
       z  = t*X0;
       

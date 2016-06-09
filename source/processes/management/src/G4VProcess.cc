@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.11 2004/11/10 08:48:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VProcess.cc,v 1.13 2005/11/21 21:59:19 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -90,7 +90,7 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
   }
 }
 
-void G4VProcess::StartTracking()
+void G4VProcess::StartTracking(G4Track*)
 {
   currentInteractionLength = -1.0;
   theNumberOfInteractionLengthLeft = -1.0;

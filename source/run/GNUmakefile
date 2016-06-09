@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2004/06/11 14:27:44 gcosmo Exp $
+# $Id: GNUmakefile,v 1.11 2005/10/17 21:26:45 tinslay Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -41,7 +41,8 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/event/include \
             -I$(G4BASE)/intercoms/include \
-	    -I$(G4BASE)/geometry/biasing/include 
+	    -I$(G4BASE)/geometry/biasing/include \
+            -I$(G4BASE)/graphics_reps/include 
 
 include $(G4INSTALL)/config/common.gmk
 

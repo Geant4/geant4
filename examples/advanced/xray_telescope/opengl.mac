@@ -77,17 +77,17 @@
 
 # Set General Particle Source options
 /gps/particle proton
-/gps/type Plane
-/gps/shape Annulus
-/gps/posrot1 0. 0. 1.
-/gps/posrot2 0. 1. 0.
-/gps/radius 35.5 cm
-/gps/radius0 30.5 cm
-/gps/centre 780.1 0. 0. cm
-/gps/angtype cos
-/gps/maxtheta 1. deg
-/gps/energytype Mono
-/gps/monoenergy 0.5 MeV
+/gps/pos/type Plane
+/gps/pos/shape Annulus
+/gps/pos/rot1 0. 0. 1.
+/gps/pos/rot2 0. 1. 0.
+/gps/pos/radius 35.5 cm
+/gps/pos/inner_radius 30.5 cm
+/gps/pos/centre 780.1 0. 0. cm
+/gps/ang/type cos
+/gps/ang/maxtheta 1. deg
+/gps/ene/type Mono
+/gps/ene/mono 0.5 MeV
 
 # Set number of particles and start
 /run/beamOn 30000

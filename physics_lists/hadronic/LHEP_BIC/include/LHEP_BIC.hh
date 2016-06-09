@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BIC.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysicsLHEP_BIC
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_BIC_h
 #define TLHEP_BIC_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TLHEP_BIC: public T
 {
 public:
-  TLHEP_BIC();
+  TLHEP_BIC(G4int ver = 1);
   virtual ~TLHEP_BIC();
   
 public:

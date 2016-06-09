@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.9 2004/08/30 15:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Em10PhysicsList.cc,v 1.14 2005/11/29 14:42:22 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4Timer.hh"
 
 #include "Em10PhysicsList.hh"
 #include "Em10DetectorConstruction.hh"
+// #include "ALICEDetectorConstruction.hh"
 #include "Em10PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -43,6 +44,14 @@
 #include <iomanip>
 
 #include "G4FastSimulationManagerProcess.hh"
+
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+
+
+#include "G4ProductionCuts.hh"
+
+
 
 
 /////////////////////////////////////////////////////////////
@@ -59,19 +68,56 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
      theeplusMultipleScattering(0),  theeplusIonisation(0),
      theeplusBremsstrahlung(0),
      theeplusAnnihilation(0),
-     theeminusStepCut(0),            theeplusStepCut(0)
+     theeminusStepCut(0),            theeplusStepCut(0),
+     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV),
+     fRadiatorCuts(0),fDetectorCuts(0)
 {
   pDet = p;
 
-  defaultCutValue = 1.000*mm ;
+  // world cuts
 
-  cutForGamma = defaultCutValue ;
-  cutForElectron = defaultCutValue ;
+  defaultCutValue = 1.000*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
+
+  // Region cuts
+
+  fGammaCut    = defaultCutValue;
+  fElectronCut = defaultCutValue;
+  fPositronCut = defaultCutValue;
 
   SetVerboseLevel(1);
   physicsListMessenger = new Em10PhysicsListMessenger(this);
 }
 
+/////////////////////////////////////////////////////////////
+//
+//
+/*
+Em10PhysicsList::Em10PhysicsList(ALICEDetectorConstruction* p)
+  :  G4VUserPhysicsList(),
+     MaxChargedStep(DBL_MAX),
+     thePhotoElectricEffect(0),      theComptonScattering(0),
+     theGammaConversion(0),
+     theeminusMultipleScattering(0), theeminusIonisation(0),
+     theeminusBremsstrahlung(0),
+     theeplusMultipleScattering(0),  theeplusIonisation(0),
+     theeplusBremsstrahlung(0),
+     theeplusAnnihilation(0),
+     theeminusStepCut(0),            theeplusStepCut(0),
+     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV)
+{
+  apDet = p;
+
+  defaultCutValue = 1.000*mm ;
+  cutForGamma     = defaultCutValue ;
+  cutForElectron  = defaultCutValue ;
+
+  SetVerboseLevel(1);
+  physicsListMessenger = new Em10PhysicsListMessenger(this);
+}
+*/
 /////////////////////////////////////////////////////////////////////////
 //
 //
@@ -151,7 +197,8 @@ void Em10PhysicsList::ConstructBarions()
 void Em10PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  // AddParameterisation();
+  
+// AddParameterisation();
 
   ConstructEM();
   ConstructGeneral();
@@ -162,14 +209,19 @@ void Em10PhysicsList::ConstructProcess()
 //
 
 #include "G4ComptonScattering.hh"
+#include "XTRComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "XTRPhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
+// #include "G4PAIwithPhotons.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -177,16 +229,113 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-#include "G4ForwardXrayTR.hh"
+// #include "G4ForwardXrayTR.hh"
 #include "G4RegularXTRadiator.hh"
+#include "G4TransparentRegXTRadiator.hh"
+#include "G4GammaXTRadiator.hh"
+#include "G4StrawTubeXTRadiator.hh"
+
+#include "G4XTRGammaRadModel.hh"
+#include "G4XTRRegularRadModel.hh"
+#include "G4XTRTransparentRegRadModel.hh"
 
 #include "Em10StepCut.hh"
-
-#include "G4PAIModel.hh"
 
 
 void Em10PhysicsList::ConstructEM()
 {
+  
+  // G4cout<<"fMinElectronEnergy = "<<fMinElectronEnergy/keV<<" keV"<<G4endl;
+  // G4cout<<"fMinGammaEnergy = "<<fMinGammaEnergy/keV<<" keV"<<G4endl;
+
+  const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
+  G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
+
+      
+  /*          
+        
+  G4GammaXTRadiator* processXTR =
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       1000.,
+				       100.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator");
+
+  
+  
+  G4XTRGammaRadModel* processXTR =
+                 new G4XTRGammaRadModel(pDet->GetLogicalRadiator(),
+				       1000.,
+				       100.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator");
+  
+
+  G4StrawTubeXTRadiator* processXTR = 
+                 new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+				0.53,	   // pDet->GetFoilThick(),
+				3.14159,	   // pDet->GetGasThick(),
+					 pDet->GetAbsorberMaterial(),
+                                         true,
+					 "strawXTRadiator");
+       
+  G4RegularXTRadiator* processXTR = 
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+  				    
+  
+    
+  G4TransparentRegXTRadiator* processXTR = 
+                 new G4TransparentRegXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+  
+       
+  
+  
+  G4XTRRegularRadModel* processXTR = 
+                 new G4XTRRegularRadModel(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+  */  
+  
+  G4XTRTransparentRegRadModel* processXTR = 
+                 new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator");
+       
+    
+  
+  
+   
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
@@ -199,12 +348,22 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();
-      theComptonScattering   = new G4ComptonScattering();
-      theGammaConversion     = new G4GammaConversion();
+      // thePhotoElectricEffect = new G4PhotoElectricEffect();
+      // theComptonScattering   = new G4ComptonScattering();
+      // pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+      // pmanager->AddDiscreteProcess(theComptonScattering);
 
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      XTRPhotoElectricEffect* xtrPhotoElectricEffect = new XTRPhotoElectricEffect();
+      //  xtrPhotoElectricEffect->SetMinElectronEnergy(fMinElectronEnergy);
+
+      XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
+      xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
+      xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
+
+      theGammaConversion                             = new G4GammaConversion();
+
+      pmanager->AddDiscreteProcess(xtrPhotoElectricEffect);
+      pmanager->AddDiscreteProcess(xtrComptonScattering);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
     }
@@ -213,32 +372,47 @@ void Em10PhysicsList::ConstructEM()
       // Construct processes for electron
 
       theeminusMultipleScattering = new G4MultipleScattering();
-      theeminusIonisation = new G4eIonisation();
       theeminusBremsstrahlung = new G4eBremsstrahlung();
 
-     // fPAIonisation = new G4PAIonisation("Xenon") ;
-     // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
-
       theeminusStepCut = new Em10StepCut();
+      
+      theeminusIonisation = new G4eIonisation();
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      theeminusIonisation->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
+      
+      pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
-
-      //G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
-      //eion->AddEmModel(0,pai,pai,gas);
-
+      /*
       pmanager->AddContinuousProcess(
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
-						    pDet->GetFoilMaterial(),
-						    pDet->GetGasMaterial(),
-						    pDet->GetFoilThick(),
-						    pDet->GetGasThick(),
-						    pDet->GetFoilNumber(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
+       
+      pmanager->AddContinuousProcess(
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       2.,
+				       10.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator"));
+       // ,-1,1,-1);
+       */
+      // pmanager->AddContinuousProcess(processXTR);
+   
+      // pmanager->AddContinuousProcess(strawXTRprocess);
+      // pmanager->AddProcess(new G4ForwardXrayTR("Air","Mylar","fXTR"),-1,-1,1);
 
-       //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
+      pmanager->AddDiscreteProcess(processXTR);
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -253,16 +427,17 @@ void Em10PhysicsList::ConstructEM()
       theeplusBremsstrahlung = new G4eBremsstrahlung();
       theeplusAnnihilation = new G4eplusAnnihilation();
 
-      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeplusStepCut = new Em10StepCut();
+
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      theeplusIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
       pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
 
-      // pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
 
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
       theeplusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -276,11 +451,37 @@ void Em10PhysicsList::ConstructEM()
       Em10StepCut* muonStepCut = new Em10StepCut();
 
       G4MuIonisation* themuIonisation = new G4MuIonisation() ;
+
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      themuIonisation->AddEmModel(0,pai,pai,gas);
+
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
-
+      /*
+      pmanager->AddContinuousProcess(
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator"));
+       // ,-1,1,-1);
+       
+      pmanager->AddContinuousProcess(
+                 new G4GammaXTRadiator(pDet->GetLogicalRadiator(),
+				       2.,
+				       10.,
+				       pDet->GetFoilMaterial(),
+				       pDet->GetGasMaterial(),
+				       pDet->GetFoilThick(),
+				       pDet->GetGasThick(),
+				       pDet->GetFoilNumber(),
+				       "GammaXTRadiator"));
+       // ,-1,1,-1);
+       */
       pmanager->AddProcess( muonStepCut,-1,-1,5);
       muonStepCut->SetMaxStep(MaxChargedStep) ;
 
@@ -296,14 +497,31 @@ void Em10PhysicsList::ConstructEM()
     {
       Em10StepCut* thehadronStepCut = new Em10StepCut();
 
-      G4hIonisation* thehIonisation = new G4hIonisation() ;
+      G4hIonisation* thehIonisation = new G4hIonisation();
       G4MultipleScattering* thehMultipleScattering =
                         new G4MultipleScattering() ;
 
 
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      thehIonisation->AddEmModel(0,pai,pai,gas);
+
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);
-
+      /*
+      pmanager->AddContinuousProcess(
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+					 pDet->GetFoilMaterial(),
+					 pDet->GetGasMaterial(),
+					 pDet->GetFoilThick(),
+					 pDet->GetGasThick(),
+					 pDet->GetFoilNumber(),
+					 "RegularXTRadiator"));
+       // ,-1,1,-1);
+       */
+      // pmanager->AddContinuousProcess(gammaXTRprocess);
+      //  pmanager->AddContinuousProcess(regXTRprocess);
+       // ,-1,1,-1);
+       
       pmanager->AddProcess( thehadronStepCut,-1,-1,3);
       thehadronStepCut->SetMaxStep(MaxChargedStep) ;
 
@@ -364,20 +582,32 @@ void Em10PhysicsList::AddParameterisation()
 
 void Em10PhysicsList::SetCuts()
 {
-  if (verboseLevel >0)
-  {
-    G4cout << "Em10PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
  
-  SetCutValue(cutForGamma,"gamma");
+  SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
+  SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
+  SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
 
-  SetCutValue(cutForElectron,"e-");
-  SetCutValue(cutForElectron,"e+");
+  if (verboseLevel > 0)
+  {
+    G4cout << "Em10PhysicsList::SetCuts:";
+    G4cout << "CutLength for e-, e+ and gamma is: " 
+           << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
+  
+  if( !fRadiatorCuts ) SetRadiatorCuts();
 
-  if (verboseLevel>1)     DumpCutValuesTable();
+  G4Region* region = (G4RegionStore::GetInstance())->GetRegion("XTRradiator");
+  region->SetProductionCuts(fRadiatorCuts);
+  G4cout << "Radiator cuts are set" << G4endl;
+
+if( !fDetectorCuts ) SetDetectorCuts();
+  region = (G4RegionStore::GetInstance())->GetRegion("XTRdEdxDetector");
+  region->SetProductionCuts(fDetectorCuts);
+  G4cout << "Detector cuts are set" << G4endl;
+
+  if (verboseLevel > 1)     DumpCutValuesTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -403,3 +633,33 @@ void Em10PhysicsList::SetMaxStep(G4double step)
   G4cout << G4endl;
 }
 
+/////////////////////////////////////////////////////
+
+void Em10PhysicsList::SetRadiatorCuts()
+{
+  if( !fRadiatorCuts ) fRadiatorCuts = new G4ProductionCuts();
+
+  fRadiatorCuts->SetProductionCut(fGammaCut, idxG4GammaCut);
+  fRadiatorCuts->SetProductionCut(fElectronCut, idxG4ElectronCut);
+  fRadiatorCuts->SetProductionCut(fPositronCut, idxG4PositronCut);
+
+  G4cout<<"Radiator gamma cut    = "<<fGammaCut/mm<<" mm"<<G4endl;
+  G4cout<<"Radiator electron cut = "<<fElectronCut/mm<<" mm"<<G4endl;
+  G4cout<<"Radiator positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
+}
+
+/////////////////////////////////////////////////////////////
+
+void Em10PhysicsList::SetDetectorCuts()
+{
+  if( !fDetectorCuts ) fDetectorCuts = new G4ProductionCuts();
+
+  fDetectorCuts->SetProductionCut(fGammaCut, idxG4GammaCut);
+  fDetectorCuts->SetProductionCut(fElectronCut, idxG4ElectronCut);
+  fDetectorCuts->SetProductionCut(fPositronCut, idxG4PositronCut);
+
+  G4cout<<"Detector gamma cut    = "<<fGammaCut/mm<<" mm"<<G4endl;
+  G4cout<<"Detector electron cut = "<<fElectronCut/mm<<" mm"<<G4endl;
+  G4cout<<"Detector positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
+
+}

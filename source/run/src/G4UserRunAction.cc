@@ -21,14 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.cc,v 1.6 2003/05/21 21:06:01 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UserRunAction.cc,v 1.7 2005/11/22 19:54:53 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4UserRunAction.hh"
+#include "G4ParticleTable.hh"
+#include "globals.hh"
+
 
 G4UserRunAction::G4UserRunAction()
-{;}
+{
+ if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ {
+   G4String msg;
+   msg =  " You are instantiating G4UserRunAction BEFORE your G4VUserPhysicsList is\n";
+   msg += "instantiated and assigned to G4RunManager.\n";
+   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+   msg += "set it to G4RunManager before instantiating other user action classes\n";
+   msg += "such as G4UserRunAction.";
+   G4Exception("G4UserRunAction::G4UserRunAction()",
+              "Run0002",FatalException,msg);
+ }
+}
 
 G4UserRunAction::~G4UserRunAction()
 {;}

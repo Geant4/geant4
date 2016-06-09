@@ -60,7 +60,8 @@ class G4ParticleChange;
  {
  public:
     
-    G4HadronicProcess( const G4String &processName = "Hadronic" );    
+    G4HadronicProcess( const G4String &processName = "Hadronic", 
+                       G4ProcessType   aType = fHadronic );    
     virtual ~G4HadronicProcess();
 
     void RegisterMe( G4HadronicInteraction *a );

@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2005/05/31 12:47:31 vnivanch Exp $
+$Id: History,v 1.20 2005/12/06 12:17:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,19 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31rd May 2005 V.Ivant  (testem8-V07-00-02)
+05-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+31-05-05 V.Ivant  (testem8-V07-00-02)
 - 70 -> st -> 52
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+03-05-2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
-23 April 04: V.Ivant (testem8-V07-00-01)
+23-04-04: V.Ivant (testem8-V07-00-01)
 - Remove IonC12 class to be compatible with new particle tags
 
-15 April 04: V.Ivant (testem8-V07-00-00)
+15-04-04: V.Ivant (testem8-V07-00-00)
 - Remove non-used headers
 
-02 Dec 04: V.Ivant (testem8-V06-02-01)
+02-12-04: V.Ivant (testem8-V06-02-01)
 - Migration to cmath
 
 27-05-04 V.Ivant (testem8-V06-01-00)

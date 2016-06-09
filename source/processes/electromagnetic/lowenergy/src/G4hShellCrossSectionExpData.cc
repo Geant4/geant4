@@ -29,12 +29,11 @@
 // 22 Apr 2004  First committed to cvs
 //
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExpData.cc,v 1.1 2004/04/27 09:45:49 saliceti Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4hShellCrossSectionExpData.cc,v 1.2 2005/12/06 10:19:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4hShellCrossSectionExpData.hh"
 #include <fstream>
-#include <strstream>
 
 G4hShellCrossSectionExpData::G4hShellCrossSectionExpData()
 {

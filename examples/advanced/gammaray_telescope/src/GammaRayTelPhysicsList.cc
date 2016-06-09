@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.5 2003/06/16 16:46:30 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: GammaRayTelPhysicsList.cc,v 1.6 2005/12/07 10:50:31 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -40,7 +40,7 @@
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
 #include <iomanip>   
-
+#include "GammaRayTelParticles.hh"
 #include "GammaRayTelGeneralPhysics.hh"
 #include "GammaRayTelEMPhysics.hh"
 #include "GammaRayTelMuonPhysics.hh"
@@ -52,6 +52,8 @@ GammaRayTelPhysicsList::GammaRayTelPhysicsList():  G4VModularPhysicsList()
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
+
+  RegisterPhysics( new GammaRayTelParticles("particles") );
 
   // General Physics
   RegisterPhysics( new GammaRayTelGeneralPhysics("general") );

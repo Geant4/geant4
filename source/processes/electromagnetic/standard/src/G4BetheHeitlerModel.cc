@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.3 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BetheHeitlerModel.cc,v 1.7 2005/12/05 16:44:43 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -36,6 +36,9 @@
 //
 // Modifications:
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
+// 16-11-05 replace shootBit() by G4UniformRand()  mma
+// 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
 //
 // Class Description:
 //
@@ -61,7 +64,7 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam),
     theCrossSectionTable(0),
-    nbins(100)
+    nbins(200)
 {
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
@@ -195,17 +198,18 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
 
   G4double epsil ;
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
+  if(epsil0 > 1.0) return 0;
 
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
 
-  if (GammaEnergy < Egsmall) { 
+  if (GammaEnergy < Egsmall) {
 
-    epsil = epsil0 + (0.5-epsil0)*G4UniformRand(); 
+    epsil = epsil0 + (0.5-epsil0)*G4UniformRand();
 
-  } else {  
+  } else {
     // now comes the case with GammaEnergy >= 2. MeV
-    // select randomly one element constituing the material  
+    // select randomly one element constituing the material
     const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
     // Extract Coulomb factor for this Element
@@ -222,7 +226,7 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
     G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
 
     //
-    // sample the energy rate of the created electron (or positron) 
+    // sample the energy rate of the created electron (or positron)
     //
     //G4double epsil, screenvar, greject ;
     G4double  screenvar, greject ;
@@ -253,7 +257,7 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   //
 
   G4double ElectTotEnergy, PositTotEnergy;
-  if (RandBit::shootBit()) {
+  if (G4UniformRand() > 0.5) {
 
     ElectTotEnergy = (1.-epsil)*GammaEnergy;
     PositTotEnergy = epsil*GammaEnergy;
@@ -314,6 +318,8 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
 
+  // kill incident photon
+  fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
  
   return fvect;

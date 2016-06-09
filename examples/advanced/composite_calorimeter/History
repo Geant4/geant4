@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.27 2005/05/03 10:05:48 allison Exp $
+$Id: History,v 1.29 2005/12/08 16:07:43 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,14 @@ $Id: History,v 1.27 2005/05/03 10:05:48 allison Exp $
                       Example History file
                       ---------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+08.12.2005 - A.Ribon (ccal-V07-01-01)
+- Migration to CLHEP namespace.
+
+13.12.04 - G.Cosmo (ccal-V07-01-00)
+- Migration to <sstream> from deprecated <strstream>.
+- Updated hadronic physics list (commented QGSP_Model by A.Ribon).
+
+03.05.2005 - J.Allison
 - Replaced vis manager with G4VisExecutive.
 
 13.12.04 - G.Cosmo (ccal-V06-02-02)

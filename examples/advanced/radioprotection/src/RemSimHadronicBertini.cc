@@ -26,8 +26,8 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBertini.cc,v 1.1 2004/11/23 14:37:47 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimHadronicBertini.cc,v 1.3 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
@@ -91,8 +91,7 @@ G4VPhysicsConstructor(name)
 
   QGSP_model = new G4TheoFSGenerator();
   theCascade = new G4GeneratorPrecompoundInterface();
-  theHandler = new G4ExcitationHandler();
-  thePreEquilib = new G4PreCompoundModel(theHandler);
+  thePreEquilib = new G4PreCompoundModel(&theHandler);
   theCascade -> SetDeExcitation(thePreEquilib);
   QGSP_model -> SetTransport(theCascade);
   theFragmentation = new G4QGSMFragmentation();

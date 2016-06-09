@@ -1,0 +1,23 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/parton_string directory
+        --------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+23 Nov 2005 Dennis Wright (hadr-prtn-V07-01-00)
+-----------------------------------------------
+
+- G. Folger fixed bug in hadronization/G4ExcitedStringDecay.cc
+   (tag had-hadronization-V07-01-00)
+
+- D. Wright created History file for parton_string directory

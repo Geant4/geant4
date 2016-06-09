@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.cc,v 1.12 2003/06/16 16:57:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4JPsi.cc,v 1.14 2005/01/14 03:49:16 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -30,61 +30,57 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
-// ------------------------------------------------------------
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------------
 
 #include "G4JPsi.hh"
-
-#include "G4DecayTable.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
-// ###                          JPsi                            ###
+// ###                                JPsi                            ###
 // ######################################################################
 
-G4JPsi::G4JPsi(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VMeson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4JPsi* G4JPsi::theInstance = 0;
+
+G4JPsi* G4JPsi::Definition()
 {
-  SetParticleSubType("J/psi");
-  // Anti-particle of J/Psi is J/Psi itself  
-  SetAntiPDGEncoding(encoding);
+  if (theInstance !=0) return theInstance;
+  const G4String name = "J/psi";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
 
-
+   anInstance = new G4ParticleDefinition(
+                 name,    3.09688*GeV,     0.087*MeV,          0.,
+                    2,              -1,            -1,
+                    0,               0,            -1,
+              "meson",               0,             0,         443,
+                false,          0.0*ns,          NULL,
+                false,         "J/psi",           443);
+  }
+  theInstance = reinterpret_cast<G4JPsi*>(anInstance);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4JPsi*  G4JPsi::JPsiDefinition()
+{
+  return Definition();
+}
 
-// In this version, charged pions are set to stable
-G4JPsi G4JPsi::theJPsi(
-	      "J/psi",     3.09688*GeV,     0.087*MeV,          0., 
-		    2,              -1,            -1,          
-		    0,               0,            -1,             
-	      "meson",               0,             0,         443,
-		false,          0.0*ns,          NULL
-);
+G4JPsi*  G4JPsi::JPsi()
+{
+  return Definition();
+}
 
-G4JPsi*  G4JPsi::JPsiDefinition(){return &theJPsi;}
-G4JPsi*  G4JPsi::JPsi(){return &theJPsi;}
 

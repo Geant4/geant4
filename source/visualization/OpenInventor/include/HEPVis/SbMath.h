@@ -22,7 +22,7 @@
 //
 //
 // $Id: SbMath.h,v 1.3 2004/12/07 23:40:59 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef HEPVis_SbMath_h
 #define HEPVis_SbMath_h

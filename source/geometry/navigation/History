@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004/12/02 09:36:23 gcosmo Exp $
+$Id: History,v 1.43 2005/11/24 17:48:17 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22nd, 2005 - J.Apostolakis (geomnav-V07-01-02)
+------------------------------
+- Revised Parameterised Navigation, to use new interface for 
+   ComputeMaterial -- it no longer needs 'Physical Touchable'.
+
+Sep 19th, 2005 - G.Cosmo  (geomnav-V07-01-01)
+------------------------
+- G4DrawVoxels: removed unnecessary 'panic' message in ComputeVoxelPolyhedra()
+  and some code cleanup.
+
+Jul 25th, 2005 - G.Cosmo  (geomnav-V07-01-00)
+------------------------
+- Some cleanup and cosmetic changes for Software Reference Manual.
+
+Jun 14th, 2005 - J.Apostolakis  (geomnav-V07-00-00)
+------------------------------
+- Added ability to use Nested Parameterisations to Parameterised Navigation
+  Coworks with tag "geomvol-V07-00-01".
 
 Dec 2nd, 2004 - G.Cosmo  (geomnav-V06-02-08)
 -----------------------

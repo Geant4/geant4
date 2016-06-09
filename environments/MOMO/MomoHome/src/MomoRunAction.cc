@@ -22,7 +22,7 @@
 //
 // Taken from
 // $Id: MomoRunAction.cc,v 1.1 2003/11/04 09:02:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 
 

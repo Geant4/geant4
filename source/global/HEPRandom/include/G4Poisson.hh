@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Poisson.hh,v 1.7 2004/11/12 17:38:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Poisson.hh,v 1.8 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@ inline G4long G4Poisson(G4double mean)
   G4double limit = 2e9;
 
   if(mean <= border) {
-    G4double position = RandFlat::shoot();
+    G4double position = CLHEP::RandFlat::shoot();
     G4double poissonValue = std::exp(-mean);
     G4double poissonSum = poissonValue;
 
@@ -63,8 +63,8 @@ inline G4long G4Poisson(G4double mean)
   } // the case of mean <= 16
 
   G4double value, t, y;
-  t = std::sqrt(-2*std::log(RandFlat::shoot()));
-  y = twopi*RandFlat::shoot();
+  t = std::sqrt(-2*std::log(CLHEP::RandFlat::shoot()));
+  y = twopi*CLHEP::RandFlat::shoot();
   t *= std::cos(y);
   value = mean + t*std::sqrt(mean) + 0.5;
   if(value <= 0) {return 0;}

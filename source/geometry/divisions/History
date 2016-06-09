@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005/06/06 09:53:24 gcosmo Exp $
+$Id: History,v 1.19 2005/11/16 19:25:54 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 16th, 2005     J.Apostolakis  (geomdiv-V07-01-02)
+- Adapted to revision of G4VPhysicalVolume that identifies some 
+  regular structures 
+   * added two RegularStructure methods for G4PVDivision (IsRS, GetRSId)
+
+November 9th, 2005      G.Cosmo  (geomdiv-V07-01-01)
+- Migration to <sstream> from deprecated <strstream> for the
+  unit test ExDivisions.
+
+November 2nd, 2005      G.Cosmo  (geomdiv-V07-01-00)
+- Protected case of generic construct for G4Polyhedra and G4Polycone
+  currently NOT supported for divisions.
+- Coworks with tag "geom-specific-V07-01-05".
 
 June 6th, 2005          G.Cosmo  (geomdiv-V07-00-00)
 - Fixed compilation problems on unit test.

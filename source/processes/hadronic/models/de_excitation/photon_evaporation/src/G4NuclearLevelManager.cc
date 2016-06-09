@@ -49,7 +49,7 @@
 #include "G4HadronicException.hh"
 #include <stdlib.h>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 #include <algorithm>
 #include "G4HadTmpUtil.hh"
 

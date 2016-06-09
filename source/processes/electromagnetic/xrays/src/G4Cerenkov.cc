@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.17 2004/12/10 18:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Cerenkov.cc,v 1.20 2005/08/17 17:30:39 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -33,11 +33,15 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2001-09-17, migration of Materials to pure STL (mma) 
+// Updated:     2005-08-17 by Peter Gumplinger
+//              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
+//              2005-07-28 by Peter Gumplinger
+//              > add G4ProcessType to constructor
+//              2001-09-17, migration of Materials to pure STL (mma) 
 //              2000-11-12 by Peter Gumplinger
 //              > add check on CerenkovAngleIntegrals->IsFilledVectorExist()
 //              in method GetAverageNumberOfPhotons 
-//              > and a test for MeanNumPhotons <= 0.0 in DoIt
+//              > and a test for MeanNumberOfPhotons <= 0.0 in DoIt
 //              2000-09-18 by Peter Gumplinger
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
@@ -73,8 +77,8 @@ using namespace std;
         // Constructors
         /////////////////
 
-G4Cerenkov::G4Cerenkov(const G4String& processName)
-           : G4VContinuousProcess(processName)
+G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
+           : G4VContinuousProcess(processName, type)
 {
 	fTrackSecondariesFirst = false;
 	fMaxPhotons = 0;
@@ -148,10 +152,10 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if (!Rindex) 
 	   return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
 
-	G4double MeanNumPhotons = 
+	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if (MeanNumPhotons <= 0.0) {
+        if (MeanNumberOfPhotons <= 0.0) {
 
                 // return unchanged particle and no secondaries
 
@@ -164,9 +168,9 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double step_length;
         step_length = aStep.GetStepLength();
 
-	MeanNumPhotons = MeanNumPhotons * step_length;
+	MeanNumberOfPhotons = MeanNumberOfPhotons * step_length;
 
-	G4int NumPhotons = (G4int) G4Poisson(MeanNumPhotons);
+	G4int NumPhotons = (G4int) G4Poisson(MeanNumberOfPhotons);
 
 	if (NumPhotons <= 0) {
 
@@ -438,12 +442,12 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
                 aMaterialPropertiesTable->GetProperty("RINDEX");
         if (!Rindex) return DBL_MAX;
 
-	G4double MeanNumPhotons = 
+	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if(MeanNumPhotons <= 0.0) return DBL_MAX;
+        if(MeanNumberOfPhotons <= 0.0) return DBL_MAX;
 
-	G4double StepLimit = fMaxPhotons / MeanNumPhotons;
+	G4double StepLimit = fMaxPhotons / MeanNumberOfPhotons;
 
 	return StepLimit;
 }

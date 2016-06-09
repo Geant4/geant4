@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN06PhysicsList.hh,v 1.6 2003/01/23 15:34:23 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

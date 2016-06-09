@@ -50,7 +50,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "fstream.h"
+#include <fstream>
 #include "G4ios.hh"
 
 
@@ -78,7 +78,7 @@ void FCALHadModule::InitializeGeometry() {
 
 #include "FCALHadModuleParameters.input"
 
-  ifstream File
+  std::ifstream File
    ("geom_data/FCal2Electrodes.dat");
    
    if(!File)  G4cerr << "Failed to open file FCal2Electrode data file" << G4endl;

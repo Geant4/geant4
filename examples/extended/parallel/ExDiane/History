@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.3 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.5 2005/12/06 14:53:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,13 +9,18 @@ $Id: History,v 1.3 2005/05/03 10:05:49 allison Exp $
                       Category History file
                       ---------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+06.12.2005 - Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+29.11.2005 - Susanna Guatelli (ExDiane-V07-01-00)
+- Updated documentation.
+
+03.05.2005 - John Allison (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
-2.12.2004 - Gabriele Cosmo (ExDiane-V06-02-00)
-            Implemented migration to <cmath>.
+02.12.2004 - Gabriele Cosmo (ExDiane-V06-02-00)
+- Implemented migration to <cmath>.
 
 25.5.2004 - Susanna Guatelli
-            Migration to AIDA 3.2.1 and PI 1.2.1
-            Cleaning of the code for public release
-           
+- Migration to AIDA 3.2.1 and PI 1.2.1
+- Cleaning of the code for public release.

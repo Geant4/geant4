@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2003/10/31 12:08:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsListMessenger.hh,v 1.3 2005/12/01 09:55:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -38,6 +38,7 @@
 class PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,6 +62,7 @@ private:
   G4UIcmdWithADoubleAndUnit* mCutCmd;
   G4UIcmdWithADoubleAndUnit* eCutCmd;
   G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithABool*          mscCmd;
     
 };
 

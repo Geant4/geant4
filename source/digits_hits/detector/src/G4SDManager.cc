@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.cc,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SDManager.cc,v 1.3 2005/09/22 22:21:36 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4SDManager.hh"
@@ -64,21 +64,34 @@ G4SDManager::~G4SDManager()
 
 void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
 {
-  G4String pathName = aSD->GetPathName();
   G4int numberOfCollections = aSD->GetNumberOfCollections();
+  G4String pathName = aSD->GetPathName();
   if( pathName(0) != '/' ) pathName.prepend("/");
   if( pathName(pathName.length()-1) != '/' ) pathName += "/";
   treeTop->AddNewDetector(aSD,pathName);
+  if(numberOfCollections<1) return;
   for(G4int i=0;i<numberOfCollections;i++)
   {
     G4String SDname = aSD->GetName();
     G4String DCname = aSD->GetCollectionName(i);
-    HCtable->Registor(SDname,DCname);
+    AddNewCollection(SDname,DCname);
   }
   if( verboseLevel > 0 )
   {
     G4cout << "New sensitive detector <" << aSD->GetName()
          << "> is registored at " << pathName << G4endl;
+  }
+}
+
+void G4SDManager::AddNewCollection(G4String SDname,G4String DCname)
+{
+  G4int i = HCtable->Registor(SDname,DCname);
+  if(verboseLevel>0)
+  {
+    if(i<0) G4cerr << "G4SDManager::AddNewCollection : the collection <"
+     << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
+    else G4cout << "G4SDManager::AddNewCollection : the collection <"
+     << SDname << "/" << DCname << "> is registered at " << i << G4endl;
   }
 }
 

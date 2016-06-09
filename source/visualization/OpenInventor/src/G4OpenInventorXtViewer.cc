@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.21 2004/11/26 08:38:51 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenInventorXtViewer.cc,v 1.23 2005/11/15 09:32:03 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -75,16 +75,20 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 
   G4String wName = fName;
 
-#define SIZE 400
+#define SIZE 600
   Widget parent = (Widget)fInteractorManager->GetParentInteractor ();
   if(!parent) {  
+    // Check if user has specified an X-Windows-type geometry string...
+    char s[32];
+    sprintf(s,"%dx%d",SIZE,SIZE);
+    G4String sgeometry = fVP.GetXGeometryString();
+    if(sgeometry.empty()) sgeometry = s;
+
     //Create a shell window :
     G4String shellName = wName;
     shellName += "_shell"; 
     Arg args[10];
-    char s[32];
-    sprintf(s,"%dx%d",SIZE,SIZE);
-    XtSetArg(args[0],XtNgeometry,XtNewString(s));
+    XtSetArg(args[0],XtNgeometry,XtNewString(sgeometry.c_str()));
     XtSetArg(args[1],XtNborderWidth,0);
     XtSetArg(args[2],XtNtitle,XtNewString(wName.c_str()));
     fShell = XtAppCreateShell(shellName.c_str(),"Inventor",
@@ -195,6 +199,16 @@ void G4OpenInventorXtViewer::FinishView () {
   fViewer->viewAll();
   fViewer->saveHomePosition();
 }
+
+void G4OpenInventorXtViewer::SetView () {
+  G4OpenInventorViewer::SetView ();
+  if(!fViewer) return;
+  // Background.
+  G4Colour b = fVP.GetBackgroundColour ();
+  fViewer->setBackgroundColor
+    (SbColor((float)b.GetRed(),(float)b.GetGreen(),(float)b.GetBlue()));
+}
+
 
 void G4OpenInventorXtViewer::ViewerRender () {
   if(!fViewer) return;

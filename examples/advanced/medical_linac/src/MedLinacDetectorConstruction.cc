@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.7 2005/06/02 13:57:07 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.9 2005/11/25 22:02:04 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -64,9 +64,6 @@
 #include "G4SubtractionSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Region.hh"
-#include "G4UserLimits.hh"
-
-
 
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -89,27 +86,41 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
     JawX1_phys(0), JawX2_phys(0),
     Phantom_phys(0)
 {
-  numberOfVoxelsAlongX=300;
-  numberOfVoxelsAlongY=300;
-  numberOfVoxelsAlongZ=300;
+  //G4double phantomDim_x = 15.*cm;
+  //G4double phantomDim_y = 15.*cm;
+  //G4double phantomDim_z = 15.*cm;
 
-  ComputeDimVoxel();
+   //PhantomDimensionX = PhantomDim_x;
+   //PhantomDimensionY = PhantomDim_y;
+   //PhantomDimensionZ = PhantomDim_z;
+
+  //numberOfVoxelsAlongX=150;
+  //numberOfVoxelsAlongY=150;
+  //numberOfVoxelsAlongZ=150;
+
+  numberOfVoxelsAlongX=0;
+  numberOfVoxelsAlongY=0;
+  numberOfVoxelsAlongZ=0;
+  maxStep = 0;
 
   sensitiveDetectorName = SDName;
 
  // default parameter values
 
-  fieldX1 = -10.*cm;
-  fieldX2 =  10.*cm;
-  fieldY1 = -10.*cm;
-  fieldY2 =  10.*cm;
+  fieldX1 = -2.5*cm;
+  fieldX2 =  2.5*cm;
+  fieldY1 = -2.5*cm;
+  fieldY2 =  2.5*cm;
 
 
   detectorMessenger = new MedLinacDetectorMessenger(this);
   pHead = new MedLinacHead();
   decorator = new MedLinacTargetAndFilterDecorator(pHead);
   decorator1 = new MedLinacMLCDecorator(pHead);
-}
+  ComputeDimVoxel();
+
+
+  }
 
 MedLinacDetectorConstruction* MedLinacDetectorConstruction::instance = 0;
 
@@ -125,11 +136,11 @@ MedLinacDetectorConstruction* MedLinacDetectorConstruction::GetInstance(G4String
 
 MedLinacDetectorConstruction::~MedLinacDetectorConstruction()
 {
-  delete detectorMessenger; 
+  delete detectorMessenger;
   delete pHead;
   delete decorator;
   delete decorator1;
-}
+  }
 
 G4VPhysicalVolume* MedLinacDetectorConstruction::Construct()
 {
@@ -178,10 +189,12 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
   G4Material* H2O = new G4Material(name="Water",density, ncomponents=2);
   H2O->AddElement(elH, natoms=2);
   H2O->AddElement(elO, natoms=1);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-  a = 207.19*g/mole;
-  density = 11.35*g/cm3;
-  G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
+  //density = 19.3*g/cm3;
+  density = 18.*g/cm3;
+  a = 183.85*g/mole;
+  G4Material* W = new G4Material(name="Tungsten"  , z=74., a, density);
 
   massOfMole = 1.008*g/mole;
   density = 1.e-25*g/cm3;
@@ -196,21 +209,21 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   //----1Y------------------------
 
-  G4double thetaY1 = std::atan(-fieldY1/(100.*cm));// in rad
-  G4double JawY1Pos_y = -((3.9*cm+28.*cm)*std::sin(thetaY1)+5.*cm*std::cos(thetaY1));
-  G4double JawY1Pos_z =115.*cm-((3.9*cm+28.*cm)*std::cos(thetaY1))+5.*cm*std::sin(thetaY1);
+  G4double thetaY1 = atan(-fieldY1/(100.*cm));// in rad
+  G4double JawY1Pos_y = -((3.9*cm+28.*cm)*sin(thetaY1)+5.*cm*cos(thetaY1));
+  G4double JawY1Pos_z =115.*cm-((3.9*cm+28.*cm)*cos(thetaY1))+5.*cm*sin(thetaY1);
   //----2Y-------------------------
-  G4double thetaY2 = std::atan(fieldY2/(100.*cm)); // in rad
-  G4double JawY2Pos_y = (3.9*cm+28.*cm)*std::sin(thetaY2)+5.*cm*std::cos(thetaY2);
-  G4double JawY2Pos_z = 115.*cm-(3.9*cm+28.*cm)*std::cos(thetaY2)+5.*cm*std::sin(thetaY2);
+  G4double thetaY2 = atan(fieldY2/(100.*cm)); // in rad
+  G4double JawY2Pos_y = (3.9*cm+28.*cm)*sin(thetaY2)+5.*cm*cos(thetaY2);
+  G4double JawY2Pos_z = 115.*cm-(3.9*cm+28.*cm)*cos(thetaY2)+5.*cm*sin(thetaY2);
   //----1X-------------------------
-  G4double thetaX1 = std::atan(-fieldX1/(100.*cm));
-  G4double JawX1Pos_x = -((36.7*cm+3.9*cm)*std::sin(thetaX1)+5.*cm*std::cos(thetaX1));
-  G4double JawX1Pos_z =115.*cm-(36.7*cm+3.9*cm)*std::cos(thetaX1)+5.*cm*std::sin(thetaX1);
+  G4double thetaX1 = atan(-fieldX1/(100.*cm));
+  G4double JawX1Pos_x = -((36.7*cm+3.9*cm)*sin(thetaX1)+5.*cm*cos(thetaX1));
+  G4double JawX1Pos_z =115.*cm-(36.7*cm+3.9*cm)*cos(thetaX1)+5.*cm*sin(thetaX1);
    //----2X-------------------------
-  G4double thetaX2 = std::atan(fieldX2/(100.*cm));
-  G4double JawX2Pos_x = (36.7*cm+3.9*cm)*std::sin(thetaX2)+5.*cm*std::cos(thetaX2);
-  G4double JawX2Pos_z = 115.*cm-(36.7*cm+3.9*cm)*std::cos(thetaX2)+5.*cm*std::sin(thetaX2);
+  G4double thetaX2 = atan(fieldX2/(100.*cm));
+  G4double JawX2Pos_x = (36.7*cm+3.9*cm)*sin(thetaX2)+5.*cm*cos(thetaX2);
+  G4double JawX2Pos_z = 115.*cm-(36.7*cm+3.9*cm)*cos(thetaX2)+5.*cm*sin(thetaX2);
   //---------rotation jaw1Y--------
 
   G4RotationMatrix* rotatejaw1Y=new G4RotationMatrix();
@@ -233,15 +246,16 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   //---------------colors----------
 
-   G4Colour  white   (1.0, 1.0, 1.0);
+  G4Colour  white   (1.0, 1.0, 1.0);
    G4Colour  magenta (1.0, 0.0, 1.0); 
    G4Colour  lblue   (0.20, .50, .85);
 
   //------------------------------------------------------ volumes
 
+  //------------------------------ experimental hall (world volume)
   //------------------------------ beam line along z axis-------SSD=100cm--------------  
 
-   //------------------------------ experimental hall (world volume)
+//------------------------------ experimental hall (world volume)
   G4double expHall_x = 3.0*m;
   G4double expHall_y = 3.0*m;
   G4double expHall_z = 3.0*m;
@@ -275,15 +289,17 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   G4double JawY1Dim_x = 10.0*cm;
   G4double JawY1Dim_y = 5.0*cm;
-  G4double JawY1Dim_z = 2.5*cm;
+  G4double JawY1Dim_z = 3.9*cm;
   G4Box* JawY1 = new G4Box("JawY1",JawY1Dim_x,
                                   JawY1Dim_y,JawY1Dim_z);
   JawY1_log = new G4LogicalVolume(JawY1,
-                                             Pb,"JawY1_log",0,0,0);
+                                             W,"JawY1_log",0,0,0);
 
 
 
   G4double JawY1Pos_x = 0.0*cm;
+  //G4double JawY1Pos_y = fieldY1;
+  //G4double JawY1Pos_z = 68.1*cm;
   JawY1_phys = new G4PVPlacement(rotatejaw1Y,
              G4ThreeVector(JawY1Pos_x,JawY1Pos_y,JawY1Pos_z),
              "JawY1",JawY1_log,experimentalHall_phys,false,0);
@@ -292,12 +308,14 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   G4double JawY2Dim_x = 10.0*cm;
   G4double JawY2Dim_y = 5.0*cm;
-  G4double JawY2Dim_z = 2.5*cm;
+  G4double JawY2Dim_z = 3.9*cm;
   G4Box* JawY2 = new G4Box("JawY2",JawY2Dim_x,
                                   JawY2Dim_y,JawY2Dim_z);
   JawY2_log = new G4LogicalVolume(JawY2,
-                                             Pb,"JawY1_log",0,0,0);
+                                             W,"JawY1_log",0,0,0);
   G4double JawY2Pos_x = 0.0*cm;
+  //G4double JawY2Pos_y = fieldY2;
+  //G4double JawY2Pos_z = 68.1*cm;
   JawY2_phys = new G4PVPlacement(rotatejaw2Y,
              G4ThreeVector(JawY2Pos_x,JawY2Pos_y,JawY2Pos_z),
              "JawY2",JawY2_log,experimentalHall_phys,false,0);
@@ -307,14 +325,17 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   G4double JawX1Dim_x = 5.0*cm;
   G4double JawX1Dim_y = 10.0*cm;
-  G4double JawX1Dim_z = 2.5*cm;
+  G4double JawX1Dim_z = 3.9*cm;
   G4Box* JawX1 = new G4Box("JawX1",JawX1Dim_x,
                                  JawX1Dim_y,JawX1Dim_z);
   JawX1_log = new G4LogicalVolume(JawX1,
-                                             Pb,"JawX1_log",0,0,0);
-  
-    G4double JawX1Pos_y = 0.0*cm;
-    JawX1_phys = new G4PVPlacement(rotatejaw1X,
+                                             W,"JawX1_log",0,0,0);
+  //G4cout <<"_________________DetectorConstruction fieldX1 "<< fieldX1/cm << G4endl;
+
+  //G4double JawX1Pos_x = fieldX1;
+  G4double JawX1Pos_y = 0.0*cm;
+  //G4double JawX1Pos_z = 54.2*cm;
+  JawX1_phys = new G4PVPlacement(rotatejaw1X,
              G4ThreeVector(JawX1Pos_x,JawX1Pos_y,JawX1Pos_z),
              "JawX1",JawX1_log,experimentalHall_phys,false,0);
 
@@ -322,20 +343,26 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
   G4double JawX2Dim_x = 5.0*cm;
   G4double JawX2Dim_y = 10.0*cm;
-  G4double JawX2Dim_z = 2.5*cm;
+  G4double JawX2Dim_z = 3.9*cm;
   G4Box* JawX2 = new G4Box("JawX2",JawX2Dim_x,
                                   JawX2Dim_y,JawX2Dim_z);
   JawX2_log = new G4LogicalVolume(JawX2,
-                                             Pb,"JawX1_log",0,0,0);
+                                             W,"JawX1_log",0,0,0);
+  //G4double JawX2Pos_x = fieldX2;
   G4double JawX2Pos_y = 0.0*cm;
+  //G4double JawX2Pos_z = 54.2*cm;
   JawX2_phys = new G4PVPlacement(rotatejaw2X,
              G4ThreeVector(JawX2Pos_x,JawX2Pos_y,JawX2Pos_z),
              "JawX2",JawX2_log,experimentalHall_phys,false,0);
 
   //----------------Phantom---------
-  phantomDim_x = 15.*cm;
-  phantomDim_y = 15.*cm;
-  phantomDim_z = 15.*cm;
+  //phantomDim_x = 15.*cm;
+  //phantomDim_y = 15.*cm;
+  //phantomDim_z = 15.*cm;
+  phantomDim_x = phantomDim;                                                                                                             
+  phantomDim_y = phantomDim;                                                                                                             
+  phantomDim_z = phantomDim; 
+
   G4Box* Phantom = new G4Box("Phantom",phantomDim_x,
                                   phantomDim_y,phantomDim_z);
   Phantom_log = new G4LogicalVolume(Phantom,
@@ -347,15 +374,19 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
              G4ThreeVector(PhantomPos_x,PhantomPos_y,PhantomPos_z),
              "Phantom_phys",Phantom_log,experimentalHall_phys,false,0);
 
+  numberOfVoxelsAlongX=numberOfVoxels;
+  numberOfVoxelsAlongY=numberOfVoxels;
+  numberOfVoxelsAlongZ=numberOfVoxels;
+
   PrintParameters();   
 
 //--------- Visualization attributes -------------------------------
 
 
  
-   G4VisAttributes* simpleH2OVisAtt= new G4VisAttributes(lblue);
-   simpleH2OVisAtt->SetVisibility(true);
-   simpleH2OVisAtt->SetForceSolid(true);
+  G4VisAttributes* simpleH2OVisAtt= new G4VisAttributes(lblue);
+  simpleH2OVisAtt->SetVisibility(true);
+  simpleH2OVisAtt->SetForceSolid(true);
    Phantom_log->SetVisAttributes(simpleH2OVisAtt);
 
    G4VisAttributes* simpleVacuumWVisAtt= new G4VisAttributes(white);
@@ -363,13 +394,13 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    simpleVacuumWVisAtt->SetForceWireframe(true);
    vacuumBlock_log->SetVisAttributes(simpleVacuumWVisAtt);
 
-   G4VisAttributes* simpleLeadSVisAtt= new G4VisAttributes(magenta);
-   simpleLeadSVisAtt->SetVisibility(true);
-   simpleLeadSVisAtt->SetForceSolid(true);
-   JawY1_log->SetVisAttributes(simpleLeadSVisAtt);
-   JawY2_log->SetVisAttributes(simpleLeadSVisAtt);
-   JawX1_log->SetVisAttributes(simpleLeadSVisAtt);
-   JawX2_log->SetVisAttributes(simpleLeadSVisAtt);
+   G4VisAttributes* simpleTungstenSVisAtt= new G4VisAttributes(magenta);
+   simpleTungstenSVisAtt->SetVisibility(true);
+   simpleTungstenSVisAtt->SetForceSolid(true);
+   JawY1_log->SetVisAttributes(simpleTungstenSVisAtt);
+   JawY2_log->SetVisAttributes(simpleTungstenSVisAtt);
+   JawX1_log->SetVisAttributes(simpleTungstenSVisAtt);
+   JawX2_log->SetVisAttributes(simpleTungstenSVisAtt);
 
  
    G4VisAttributes* simpleWorldVisAtt= new G4VisAttributes(white);
@@ -383,28 +414,41 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    //JawY2_log->SetVisAttributes(simpleWorldVisAtt);
    //JawX1_log->SetVisAttributes(simpleWorldVisAtt);
    //JawX2_log->SetVisAttributes(simpleWorldVisAtt);
-   vacuumBlock_log->SetVisAttributes(simpleWorldVisAtt);
+   //vacuumBlock_log->SetVisAttributes(simpleWorldVisAtt);
 
   //   Sets a max Step length in the detector
-
- G4UserLimits *l = new G4UserLimits();
- G4double maxStep= 0.1*mm; 
- l->SetMaxAllowedStep(maxStep);
- Phantom_log->SetUserLimits(l);
+   //G4double maxStep = 0.2*mm;
+   Phantom_log->SetUserLimits(new G4UserLimits(maxStep));
 
    ConstructVolume();
 
    ConstructSensitiveDetector();
+
+   //G4cout <<"????????????????????numberOfVoxels "<< numberOfVoxels <<G4endl ;
+   //G4cout <<"????????????????????numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
+   //G4cout <<"????????????????????numberOfVoxelsAlongY "<< numberOfVoxelsAlongY <<G4endl ;
+   //G4cout <<"????????????????????numberOfVoxelsAlongZ "<< numberOfVoxelsAlongZ <<G4endl ;
+
+
+   //G4cout <<"????????????????????maxStep "<< maxStep/mm << " mm " <<G4endl ;
+
+
+
+
    return experimentalHall_phys;
 }
 
 void MedLinacDetectorConstruction::PrintParameters()
-{
-  G4cout <<"jaws1 x position "<< fieldX1/cm << " cm "<<G4endl ;
-  G4cout <<"jaws2 x position "<< fieldX2/cm << " cm "<<G4endl ; 
-  G4cout <<"jaws1 y position "<< fieldY1/cm << " cm "<<G4endl ;
-  G4cout <<"jaws2 y position "<< fieldY2/cm << " cm "<<G4endl ; 
-    
+{ 
+  //G4cout <<"jaws1 x position "<< fieldX1/cm << " cm "<<G4endl ;
+  //G4cout <<"jaws2 x position "<< fieldX2/cm << " cm "<<G4endl ; 
+  //G4cout <<"jaws1 y position "<< fieldY1/cm << " cm "<<G4endl ;
+  //G4cout <<"jaws2 y position "<< fieldY2/cm << " cm "<<G4endl ; 
+  //G4cout <<"************************phantom dimension "<< phantomDim/cm << " cm "<<G4endl ;
+  // G4cout <<"************************numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
+  //G4cout <<"************************numberOfVoxelsAlongY "<< numberOfVoxelsAlongY <<G4endl ;
+  //G4cout <<"************************numberOfVoxelsAlongZ "<< numberOfVoxelsAlongZ <<G4endl ;
+  //G4cout <<"************************maxStep "<< maxStep/mm << " mm " <<G4endl;
 }
 
 
@@ -428,26 +472,47 @@ void MedLinacDetectorConstruction::SetJawY1Pos_y (G4double val)
 void MedLinacDetectorConstruction::SetJawY2Pos_y (G4double val)
 {
   fieldY2 = val;
+  //G4cout <<"==============================DetectorConstruction JawY2  "<< fieldY2/cm<<"cm"<<G4endl;
 }
 
+void MedLinacDetectorConstruction::SetPhantomDim (G4double val)
+{
+  phantomDim = val;
+  //G4cout <<"==============================phantomDim  "<< phantomDim/mm<<"mm"<<G4endl;
+}
 
+void MedLinacDetectorConstruction::SetNumberOfVoxels (G4int val)
+{
+  numberOfVoxels = val;
+  //G4cout <<"==============================numberOfVoxels  "<< numberOfVoxels<<G4endl;
+}
+
+void MedLinacDetectorConstruction::SetMaxStep (G4double val)
+{
+  maxStep = val;
+  //G4cout <<"==============================maxStep  "<< maxStep/mm<<"mm"<<G4endl;
+}
 void MedLinacDetectorConstruction::UpdateGeometry()
 { 
-  G4cout <<"UpdateGeometry "<< G4endl;
+  //G4cout <<"@@@@@@@@@@@@@@@@@@@@@UpdateGeometry "<< G4endl;
 
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructGeom());
 }
+
+
 
 void MedLinacDetectorConstruction::ConstructVolume()
 {
   pHead ->ConstructComponent(experimentalHall_phys,vacuumBlock_phys);
   decorator ->ConstructComponent( experimentalHall_phys,vacuumBlock_phys);
   decorator1 ->ConstructComponent( experimentalHall_phys,vacuumBlock_phys);
-}
+
+  }
 
 void  MedLinacDetectorConstruction::ConstructSensitiveDetector()
 // Sensitive Detector and ReadOut geometry definition
 { 
+
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
 
   if(!phantomSD)

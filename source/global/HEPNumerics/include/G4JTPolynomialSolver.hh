@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4JTPolynomialSolver.hh,v 1.5 2005/03/21 18:27:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Class description:
 //

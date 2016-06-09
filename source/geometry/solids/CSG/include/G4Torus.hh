@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.19 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Torus.hh,v 1.24 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -138,6 +138,8 @@ class G4Torus : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -151,25 +153,21 @@ class G4Torus : public G4CSGSolid
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
                           G4double pSPhi, G4double pDPhi);
  
-    G4int TorusRoots(      G4double Ri,
-                     const G4ThreeVector& p,
-                     const G4ThreeVector& v) const ;
+    G4Torus(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:
 
-    G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
-    G4int SolveCubic(G4double c[], G4double s[]  ) const ;
+    std::vector<G4double> TorusRootsJT(const G4ThreeVector& p,
+                                       const G4ThreeVector& v,
+                                             G4double r) const ;
 
-    G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
-    G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
-
-    G4int SolveQuadratic(G4double c[], G4double s[]  ) const ;
-
-    G4double SolveNumeric(const G4ThreeVector& p,
-                          const G4ThreeVector& v,
-                                G4bool IsDistanceToIn) const;
-
-    G4double SolveNumericJT(G4double c[]) const;
+    G4double SolveNumericJT(const G4ThreeVector& p,
+                            const G4ThreeVector& v,
+                                  G4double r,
+                                  G4bool IsDistanceToIn) const;
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform,
@@ -191,66 +189,7 @@ class G4Torus : public G4CSGSolid
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
-    inline G4double TorusEquation (G4double x, G4double y, G4double z,
-                                   G4double R0, G4double R1) const;
-    inline G4double TorusDerivativeX (G4double x, G4double y, G4double z,
-                                      G4double R0, G4double R1) const;
-    inline G4double TorusDerivativeY (G4double x, G4double y, G4double z,
-                                      G4double R0, G4double R1) const;
-    inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
-                                      G4double R0, G4double R1) const;
-    inline G4double TorusGradient(G4double dx, G4double dy, G4double dz,
-                                  G4double x, G4double y, G4double z,
-                                  G4double Rmax, G4double Rmin) const;
 
-    void BVMIntersection (G4double x, G4double y, G4double z,
-                          G4double dx, G4double dy, G4double dz,
-                          G4double Rmax, G4double Rmin,
-                          G4double *NewL, G4int *valid) const;
-  
-    void SortIntervals (G4double *SortL, G4double *NewL,
-                        G4int *valid, G4int *NbIntersection) const;
-  
-    G4double DistanceToTorus (G4double x, G4double y, G4double z,
-                              G4double dx, G4double dy, G4double dz,
-                              G4double R0,G4double R1) const;
-};
-
-
-class G4TorusEquation
-{
-  public:
-
-    G4TorusEquation();
-    G4TorusEquation(G4double Rmax, G4double Rmin);
-  
-    ~G4TorusEquation();
-
-    inline void setRadius (G4double Rmax, G4double Rmin);
-    inline void setPosition (G4double x,G4double y,G4double z);
-    inline void setPosition (const G4ThreeVector& p);
-    inline void setDirection (G4double dirx,G4double diry,G4double dirz);
-    inline void setDirection (const G4ThreeVector& v);
-
-  public:
-
-    inline G4double Function (G4double value);
-    inline G4double Derivative(G4double value);
-
-  private:
-
-    inline G4double TorusEquation    (G4double x, G4double y, G4double z);
-    inline G4double TorusDerivativeX (G4double x, G4double y, G4double z);
-    inline G4double TorusDerivativeY (G4double x, G4double y, G4double z);
-    inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z);
-
-  private:
-
-    G4double R0;
-    G4double R1;
-
-    G4double Px,Py,Pz;
-    G4double dx,dy,dz;  
 };
 
 #include "G4Torus.icc"

@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2003/10/22 13:52:26 gcosmo Exp $
+$Id: History,v 1.39 2005/11/09 14:47:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov, 9th 2005 G.Cosmo geombias-V07-01-00
+     - Implemented migration to <sstream> for affected classes:
+       G4ParallelNavigator and G4ImportanceAlgorithm.
 
 Oct, 22nd 2003 G.Cosmo geombias-V05-02-03
      - Migrated calls to G4Exception to new scheme.

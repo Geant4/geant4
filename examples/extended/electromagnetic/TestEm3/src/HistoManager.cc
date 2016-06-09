@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.10 2005/06/01 10:48:40 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: HistoManager.cc,v 1.11 2005/10/17 15:47:27 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,8 +167,8 @@ void HistoManager::SetHisto(G4int ih,
  // histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
  // ...etc...........  
  // 
- // histo 21 : forward  energy flow (MeV)
- // histo 22 : backward energy flow (MeV)  
+ // histo 21 : energy flow (MeV)
+ // histo 22 : lateral energy leak (MeV)  
   	 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
@@ -185,9 +185,9 @@ void HistoManager::SetHisto(G4int ih,
     title = "longit. profile of Edep (MeV/event) in absorber " 
            + id[ih-MaxAbsor];
   } else if (ih == 2*MaxAbsor+1) {
-    title = "Forward energy flow (MeV/event)";
+    title = "energy flow (MeV/event)";
   } else if (ih == 2*MaxAbsor+2) {
-    title = "Backward energy flow (MeV/event)";
+    title = "lateral energy leak (MeV/event)";
   } else return;
         
   exist[ih] = true;

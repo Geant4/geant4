@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------------
 
 #include "HadrontherapyPhantomSD.hh"
+#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyPhantomHit.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
@@ -78,6 +79,9 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
   G4int k  = ROhist -> GetReplicaNumber(0);
   G4int i  = ROhist -> GetReplicaNumber(2);
   G4int j  = ROhist -> GetReplicaNumber(1);
+ 
+  G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> 
+                           GetDefinition() -> GetParticleName();
 
   if(energyDeposit != 0)                       
     {  
@@ -86,7 +90,45 @@ G4bool HadrontherapyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* RO
       phantomHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
       HitsCollection -> insert(phantomHit);
     }
- 
+
+  // Energy deposit of secondary particles along X (integrated on Y and Z)
+#ifdef G4ANALYSIS_USE 	
+
+ HadrontherapyAnalysisManager* analysis = 
+			HadrontherapyAnalysisManager::getInstance();
+
+ if(energyDeposit != 0)                       
+    {  
+   
+ if(aStep -> GetTrack() -> GetTrackID()!= 1)
+   {
+     if (particleName == "proton")
+           analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
+  
+     if (particleName == "neutron")
+     analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
+
+     if (particleName == "alpha")
+       analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
+
+     if (particleName == "gamma")
+       analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
+       
+     if (particleName == "e-")
+       analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
+       
+     if (particleName == "triton")
+       analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
+  
+     if (particleName == "deuteron")
+       analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
+       
+    if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
+       analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
+   }
+    }
+#endif
+
   return true;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.12 2004/11/21 16:56:34 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIXm.cc,v 1.13 2005/11/28 18:20:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G.Barrand
 
@@ -31,7 +31,6 @@
 #ifdef G4UI_BUILD_XM_SESSION
 
 #include "G4Types.hh"
-#include <strstream>
 
 #include <string.h>
 

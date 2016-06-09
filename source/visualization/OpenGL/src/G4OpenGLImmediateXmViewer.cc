@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.11 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.13 2005/10/13 17:30:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -76,7 +76,6 @@ void G4OpenGLImmediateXmViewer::Initialise () {
 
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glShadeModel (GL_FLAT);
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //The following code was in the constructor and found not to work for
@@ -99,11 +98,11 @@ void G4OpenGLImmediateXmViewer::Initialise () {
 
 void G4OpenGLImmediateXmViewer::DrawView () {
 
-  if (white_background == true) {
-    glClearColor (1., 1., 1., 1.);
-  } else {
-    glClearColor (0., 0., 0., 1.);
-  }
+  glClearColor (background.GetRed(),
+		background.GetGreen(),
+		background.GetBlue(),
+		1.);
+
   glClearDepth (1.0);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();

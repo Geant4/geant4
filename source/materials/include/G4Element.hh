@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.18 2005/04/01 12:41:11 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Element.hh,v 1.20 2005/11/15 15:24:37 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 // class description
@@ -158,7 +158,7 @@ public:  // with description
   //return pointer to an element, given its name:
   //
   static
-  G4Element* GetElement(G4String name);
+  G4Element* GetElement(G4String name, G4bool warning=true);
   
   //count number of materials which use this element
   //
@@ -192,6 +192,11 @@ public:  // without description
 
   G4int operator==(const G4Element&) const;
   G4int operator!=(const G4Element&) const;
+
+  G4Element(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 private:
 

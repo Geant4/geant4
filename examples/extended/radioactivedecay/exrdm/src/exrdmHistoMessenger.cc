@@ -24,6 +24,8 @@
 
 #include "exrdmHistoMessenger.hh"
 
+#include <sstream>
+
 #include "exrdmHisto.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -46,7 +48,7 @@ exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
   fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
   fileCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  histoCmd = new G4UIcommand("/histo/setexrdmHisto",this);
+  histoCmd = new G4UIcommand("/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   histoCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
@@ -100,7 +102,7 @@ void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
      const char* t = newValues;
-     std::istrstream is((char*)t);
+     std::istringstream is(t);
      is >> ih >> nbBins >> vmin >> vmax >> unts;
      G4String unit = unts;
      G4double vUnit = 1. ;

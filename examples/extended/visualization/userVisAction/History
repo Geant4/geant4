@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2005/10/18 18:09:14 allison Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+        examples/extended/visualization/userVisAction History file
+        ----------------------------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+18th October 2005 (exam-ext-vis-V07-01-00)
+- Based on examples/novice/N02.
+- My beautiful logo vis action.

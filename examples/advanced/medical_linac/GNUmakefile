@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.1 2004/03/18 14:08:38 mpiergen Exp $
+# $Id: GNUmakefile,v 1.2 2005/07/03 23:27:36 mpiergen Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -15,7 +15,6 @@ endif
 
 .PHONY: all
 all: lib bin
-include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/binmake.gmk
 
 

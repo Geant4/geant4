@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.14 2004/12/02 14:01:36 pia Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VCrossSectionHandler.cc,v 1.14.2.1 2005/11/30 16:35:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -50,7 +50,7 @@
 #include <map>
 #include <vector>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 
 G4VCrossSectionHandler::G4VCrossSectionHandler()
@@ -160,12 +160,11 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char nameChar[100] = {""};
-      std::ostrstream ost(nameChar, 100, std::ios::out);
+      std::ostringstream ost;
       
       ost << fileName << Z << ".dat";
       
-      G4String name(nameChar);
+      G4String name(ost.str());
       
       char* path = getenv("G4LEDATA");
       if (!path)
@@ -233,12 +232,11 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char nameChar[100] = {""};
-      std::ostrstream ost(nameChar, 100, std::ios::out);
+      std::ostringstream ost;
 
       ost << fileName << Z << ".dat";
       
-      G4String name(nameChar);
+      G4String name(ost.str());
       
       char* path = getenv("G4LEDATA");
       if (!path)

@@ -41,7 +41,7 @@
 // 
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionDoubleExp.hh,v 1.2 2004/11/26 08:50:47 pia Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #ifndef G4HSHELLCROSSSECTIONDOUBLEEXP_HH
 #define G4HSHELLCROSSSECTIONDOUBLEEXP_HH 1

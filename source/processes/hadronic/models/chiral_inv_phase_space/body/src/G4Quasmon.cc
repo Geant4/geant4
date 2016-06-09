@@ -24,8 +24,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.83 2005/06/27 15:30:50 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Quasmon.cc,v 1.84 2005/12/14 13:57:13 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -392,16 +392,27 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 	     }
       else q4Mom.setE(p);
     }
-    G4double quasM= sqrt(qM2);                     // Current mass of Quasmon
-    G4double tmpEq=q4Mom.e();                      // Energy of Quasmon
-    G4double tmpPq=q4Mom.rho();                    // Momentum of Quasmon
+    G4double quasM= sqrt(qM2);              // Current mass of Quasmon
+    G4double tmpEq=q4Mom.e();               // Energy of Quasmon
+    G4double tmpPq=q4Mom.rho();             // Momentum of Quasmon
 	   if(tmpEq<tmpPq)
     {
-      G4cerr<<"*G4Q::HQ:Boost,4M="<<q4Mom<<",P="<<tmpPq<<">E="<<tmpEq<<",Q="<<valQ<<G4endl;
-      throw G4QException("G4Q::HQ:*TMP EXCEPTION - Tachionic boost");
-    }
-    G4double qurF=quasM/(tmpEq-tmpPq);       // Factor for k Lor.Trans. to LS
-    G4ThreeVector qltb = q4Mom.boostVector();// Boost vector for backward Lor.Trans. in LS
+      G4cerr<<"*Warning*G4Quasmon::HQ:Boost in vacuum ,4M="<<q4Mom<<",P="<<tmpPq<<">E="
+            <<tmpEq<<",Q="<<valQ<<G4endl;
+      if(fabs(tmpEq-tmpPq)<.01 && !valQ.GetCharge() && !valQ.GetBaryonNumber()
+                               && !valQ.GetStrangeness()) // Quantum numbers of a photon
+      {
+        q4Mom.setE(tmpPq);
+        G4QHadron* gamH = new G4QHadron(22,q4Mom);
+        FillHadronVector(gamH);             // Fill Moving Environment (delete equivalent)
+        KillQuasmon();                      // This Quasmon is done
+        qEnv=theEnvironment;                // Update QEnvironment
+        return theQHadrons;                 // The last decay of the quasmon... 
+      }
+      else throw G4QException("G4Q::HQ: EXCEPTION - Not Recoverable Tachionic boost");
+   }
+    G4double qurF=quasM/(tmpEq-tmpPq);       // Factor for k Lorentz Transformation to LS
+    G4ThreeVector qltb = q4Mom.boostVector();// Boost vector for backward Lor.Trans. to LS
     //////////G4double b2=qltb.mag2();                       // beta^2 of Quasmon
 #ifdef debug
 	   G4cout<<"G4Q::HQ: Quasm="<<q4Mom<<",qM="<<quasM<<",qQC="<<valQ<<G4endl;

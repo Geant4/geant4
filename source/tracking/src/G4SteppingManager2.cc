@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.23 2004/12/07 09:16:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SteppingManager2.cc,v 1.25 2005/09/21 09:49:15 tsasaki Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -167,7 +167,12 @@ void G4SteppingManager::GetProcessNumber()
               ->SetProcessDefinedStep(fCurrentProcess);
        }
      }
-     if (fCondition==ExclusivelyForced) return;  // Take note the 'return' at here !!!
+     if (fCondition==ExclusivelyForced) { 
+	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
+	     (*fSelectedPostStepDoItVector)[nrest] = InActivated; 
+	 } 
+	 return;  // Take note the 'return' at here !!! 
+     } 
    }
 
    if(fPostStepDoItProcTriggered<MAXofPostStepLoops)
@@ -402,7 +407,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      
      // Set the track status according to what the process defined
      // if kinetic energy >0, otherwise set  fStopButAlive
-     //     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
+     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
      
      // clear ParticleChange
      fParticleChange->Clear();

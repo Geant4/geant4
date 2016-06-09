@@ -42,8 +42,8 @@ class G4ProtonBuilder
     void RegisterMe(G4VProtonBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4HadronElasticProcess theProtonElasticProcess;
-    G4ProtonInelasticProcess  theProtonInelastic;
+    G4HadronElasticProcess  * theProtonElasticProcess;
+    G4ProtonInelasticProcess * theProtonInelastic;
     
     std::vector<G4VProtonBuilder *> theModelCollections;
 

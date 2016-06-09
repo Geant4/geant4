@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.10 2005/04/22 12:02:47 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLViewer.hh,v 1.11 2005/10/13 17:30:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -34,7 +34,6 @@
 #define G4OPENGLVIEWER_HH
 
 #include "G4VViewer.hh"
-#include "globals.hh"
 
 class G4OpenGLSceneHandler;
 
@@ -55,8 +54,8 @@ protected:
   void HLRThirdPass ();
   void InitializeGLView ();
   virtual void CreateFontLists () {}
-  G4bool white_background,  //the OpenGL clear colour
-    doublebuffer,           //are we using a double buffered visual?
+  G4Colour background;      //the OpenGL clear colour
+  G4bool doublebuffer,      //are we using a double buffered visual?
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?

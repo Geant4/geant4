@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_LEAD_HP.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_LEAD_HP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_LEAD_HP_h
 #define TLHEP_LEAD_HP_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TLHEP_LEAD_HP: public T
 {
 public:
-  TLHEP_LEAD_HP();
+  TLHEP_LEAD_HP(G4int ver = 1);
   virtual ~TLHEP_LEAD_HP();
   
 public:

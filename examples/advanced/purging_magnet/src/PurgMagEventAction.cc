@@ -29,8 +29,8 @@
 //    *                              *
 //    ********************************
 //
-// $Id: PurgMagEventAction.cc,v 1.2 2004/06/18 09:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PurgMagEventAction.cc,v 1.3 2005/12/07 14:35:12 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,12 +96,12 @@ void PurgMagEventAction::EndOfEventAction(const G4Event* evt)
       //save rndm status
       if (PurgMagRun->GetRndmFreq() == 2)
 	{
-	  HepRandom::saveEngineStatus("endOfEvent.rndm");   
+	  CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");   
 	  G4int evtNb = evt->GetEventID();
 	  if (evtNb%printModulo == 0)
 	    { 
 	      G4cout << "\n---> End of Event: " << evtNb << G4endl;
-	      HepRandom::showEngineStatus();
+	      CLHEP::HepRandom::showEngineStatus();
 	    }
 	}    
     }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.11 2005/06/04 13:38:34 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LCapture.cc,v 1.12 2005/11/17 23:10:26 dennis Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -66,9 +66,9 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
 
    const G4LorentzVector theMom = aTrack.Get4Momentum();
    G4double P = theMom.vect().mag()/GeV;
-   G4double Px = theMom.vect().x();
-   G4double Py = theMom.vect().y();
-   G4double Pz = theMom.vect().z();
+   G4double Px = theMom.vect().x()/GeV;
+   G4double Py = theMom.vect().y()/GeV;
+   G4double Pz = theMom.vect().z()/GeV;
    G4double E = theMom.e()/GeV;
    G4double E0 = aTrack.GetDefinition()->GetPDGMass()/GeV;
    G4double Q = aTrack.GetDefinition()->GetPDGCharge();
@@ -82,7 +82,9 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
       G4cout << "mass   " << E0 << " GeV" << G4endl;
       G4cout << "charge " << Q << G4endl;
    }
-// GHEISHA ADD operation to get total energy, mass, charge:
+
+   // GHEISHA ADD operation to get total energy, mass, charge:
+
    if (verboseLevel > 1) {
       G4cout << "G4LCapture:ApplyYourself: material:" << G4endl;
       G4cout << "A      " << N << G4endl;
@@ -105,10 +107,15 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
    Py = -Py;
    Pz = -Pz;
 
-// Make a gamma...
+   // Make a gamma...
 
-   G4double ran = G4RandGauss::shoot();
-   G4double p = 0.0065 + ran*0.0010;
+   G4double p;
+   if (Z == 1 && N == 1) { // special case for hydrogen
+     p = 0.0022;
+   } else {
+     G4double ran = G4RandGauss::shoot();
+     p = 0.0065 + ran*0.0010;
+   }
 
    G4double ran1 = G4UniformRand();
    G4double ran2 = G4UniformRand();
@@ -134,33 +141,34 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
                                   G4ThreeVector(px*GeV, py*GeV, pz*GeV));
    theParticleChange.AddSecondary(aGamma);
 
-// Make another gamma if there is sufficient energy left over...
+   // Make another gamma if there is sufficient energy left over...
 
    G4double xp = 0.008 - p;
-   if (xp <= 0.) return &theParticleChange;
+   if (xp > 0.) {
+     if (Z > 1 || N > 1) { 
+       ran1 = G4UniformRand();
+       ran2 = G4UniformRand();
+       cost = -1. + 2.*ran1;
+       sint = std::sqrt(std::abs(1. - cost*cost));
+       phi = ran2*twopi;
 
-   ran1 = G4UniformRand();
-   ran2 = G4UniformRand();
-   cost = -1. + 2.*ran1;
-   sint = std::sqrt(std::abs(1. - cost*cost));
-   phi = ran2*twopi;
+       px = xp*sint*std::sin(phi);
+       py = xp*sint*std::cos(phi);
+       pz = xp*cost;
+       e = xp;
+       e0 = 0.;
 
-   px = xp*sint*std::sin(phi);
-   py = xp*sint*std::cos(phi);
-   pz = xp*cost;
-   e = xp;
-   e0 = 0.;
+       a = px*Px + py*Py + pz*Pz;
+       a = (a/(E + E0) - e)/E0;
 
-   a = px*Px + py*Py + pz*Pz;
-   a = (a/(E + E0) - e)/E0;
+       px = px + a*Px;
+       py = py + a*Py;
+       pz = pz + a*Pz;
 
-   px = px + a*Px;
-   py = py + a*Py;
-   pz = pz + a*Pz;
-
-   aGamma = new G4DynamicParticle(G4Gamma::GammaDefinition(),
-                                  G4ThreeVector(px*GeV, py*GeV, pz*GeV));
-   theParticleChange.AddSecondary(aGamma);
-
+       aGamma = new G4DynamicParticle(G4Gamma::GammaDefinition(),
+                                      G4ThreeVector(px*GeV, py*GeV, pz*GeV));
+       theParticleChange.AddSecondary(aGamma);
+     }
+   }
    return &theParticleChange;
 }

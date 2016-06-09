@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.28 2004/12/02 09:31:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.33 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,11 +39,12 @@
 //
 // History
 // -------
-// Bugfix 266 by Radovan Chytracek:
-// The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
-// now. In this case the inner planes are not created. The fix goes even
-// further this means it consideres more than 2 z-planes and inner planes
-// are not created whenever two consecutive RMINs are = 0.0 .
+//
+// Bug-fix #266 by R.Chytracek:
+// - The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
+//   now. In this case the inner planes are not created. The fix goes even
+//   further this means it considers more than 2 z-planes and inner planes
+//   are not created whenever two consecutive RMINs are = 0.0 .
 // 
 // Corrections by S.Giani:
 // - Xaxis now corresponds to phi=0
@@ -61,7 +62,7 @@
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4FPlane.hh"
 
-#include <strstream>
+#include <sstream>
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                  G4double  start_angle,
@@ -155,7 +156,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     {
       // ERROR! Invalid sequence of z-values
       //
-      std::ostrstream msgstr;
+      std::ostringstream msgstr;
       msgstr << G4endl
              << "ERROR: unordered, non-increasing or non-decreasing sequence"
              << G4endl
@@ -163,8 +164,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
              << G4endl
              << "       Check z_values with indexes: "
              << idx << " " << (idx+1) << "." << G4endl << std::ends;
+      G4String message = msgstr.str();
       G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
-                   "InvalidSetup", FatalException, msgstr.str() );
+                   "InvalidSetup", FatalException, message );
     }
   }
 
@@ -214,7 +216,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         {
           // ERROR! The surface conflict!
           //
-          std::ostrstream msgstr;
+          std::ostringstream msgstr;
           msgstr << G4endl
                  << "ERROR: unordered sequence of z_values detected with"
                  << G4endl
@@ -398,13 +400,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         //
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] )
         {
-          std::strstream s;
+          std::stringstream s;
           s << G4endl  << "The values of RMIN[" << a << "] & RMAX[" << a+1
                        << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
                        << "generate an invalid configuration of solid: "
                        << name.c_str() << "!" << G4endl << std::ends;
+          G4String message = s.str();
           G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
-                       "InvalidSetup", FatalException, s.str() );
+                       "InvalidSetup", FatalException, message );
         }
 
         // We need to clasify all the cases in order to figure out
@@ -804,13 +807,18 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   Initialize(); 
 }
 
+G4BREPSolidPolyhedra::G4BREPSolidPolyhedra( __void__& a )
+  : G4BREPSolid(a)
+{
+}
+
 G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
 {
   if( constructorParams.num_z_planes > 0 )
   {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
   }  
 }
 
@@ -1171,19 +1179,17 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
     }
   }
 
+  G4double distance = 0.;
+
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   //
   if((ShortestDistance != kInfinity) && (parity&1))
   {
-    return std::sqrt(ShortestDistance);
+    distance = std::sqrt(ShortestDistance);
   }
-  else
-  {
-    // if no intersection is found, the point is outside
-    //
-    return 0; 
-  }
+
+  return distance;
 }
 
 G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const

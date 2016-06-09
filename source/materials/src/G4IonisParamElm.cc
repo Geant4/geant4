@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.11 2004/12/07 08:50:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonisParamElm.cc,v 1.13 2005/11/18 14:54:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -90,7 +90,7 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     fBlow =-3.229020*fClow/(fTau0*std::sqrt(Taum));
 
     // Shell correction factors
-    fShellCorrectionVector = new G4double[3];
+    fShellCorrectionVector = new G4double[3]; //[3]
     rate = 0.001*fMeanExcitationEnergy/eV;
     G4double rate2 = rate*rate;
     /*    
@@ -101,6 +101,16 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     fShellCorrectionVector[0] = ( 0.422377   + 3.858019*rate)*rate2 ;
     fShellCorrectionVector[1] = ( 0.0304043  - 0.1667989*rate)*rate2 ;
     fShellCorrectionVector[2] = (-0.00038106 + 0.00157955*rate)*rate2 ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4IonisParamElm::G4IonisParamElm(__void__&)
+  : fShellCorrectionVector(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

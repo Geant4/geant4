@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicShells.cc,v 1.5 2005/02/11 18:57:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

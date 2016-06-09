@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.8 2004/09/03 08:17:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RegionStore.cc,v 1.9 2005/08/18 16:51:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4RegionStore
 //
@@ -36,6 +36,7 @@
 #include "G4RegionStore.hh"
 #include "G4GeometryManager.hh"
 #include "G4VStoreNotifier.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include "G4ios.hh"
 
@@ -198,11 +199,11 @@ void G4RegionStore::ResetRegionModified()
 // Forces recomputation of material lists in all regions in the store.
 // ***************************************************************************
 //
-void G4RegionStore::UpdateMaterialList()
+void G4RegionStore::UpdateMaterialList(G4VPhysicalVolume* currentWorld)
 {
   for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
   {
-    (*i)->UpdateMaterialList();
+    if((*i)->GetWorldPhysical()==currentWorld) (*i)->UpdateMaterialList();
   }
 }
 
@@ -240,3 +241,30 @@ G4Region* G4RegionStore::FindOrCreateRegion(const G4String& name)
   }
   return target;
 }
+
+// **************************************************************************
+// Set a world physical volume pointer to a region that belongs to it.
+// Scan over all world volumes.
+// **************************************************************************
+//
+#include "G4VPhysicalVolume.hh"
+#include "G4PhysicalVolumeStore.hh"
+void G4RegionStore::SetWorldVolume()
+{
+  // Reset all pointers first
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  { (*i)->SetWorld(0); }
+
+  // Find world volumes
+  G4PhysicalVolumeStore* fPhysicalVolumeStore = G4PhysicalVolumeStore::GetInstance();
+  size_t nPhys = fPhysicalVolumeStore->size();
+  for(size_t iPhys=0;iPhys<nPhys;iPhys++)
+  {
+    G4VPhysicalVolume* fPhys = (*fPhysicalVolumeStore)[iPhys];
+    if(fPhys->GetMotherLogical()) continue; // not a world volume
+    // Now fPhys is a world volume, set it to regions that belong to it.
+    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    { (*i)->SetWorld(fPhys); }
+  }
+}
+

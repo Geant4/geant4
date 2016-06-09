@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.21 2004/02/17 11:17:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eIonisationParameters.cc,v 1.22 2005/11/30 16:34:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -52,7 +52,7 @@
 #include "G4Material.hh"
 #include "G4DataVector.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
@@ -186,10 +186,9 @@ void G4eIonisationParameters::LoadData()
   for (size_t i=0; i<nZ; i++) {
     
     G4int Z = (G4int)activeZ[i];
-    char nameChar[1000] = {""};
-    std::ostrstream ost(nameChar, 1000, std::ios::out);
+    std::ostringstream ost;
     ost << pathString << Z << ".dat";
-    G4String name(nameChar);
+    G4String name(ost.str());
 
     std::ifstream file(name);
     std::filebuf* lsdp = file.rdbuf();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4ChordFinderSaf.hh,v 1.2 2003/12/09 15:35:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4ChordFinderRad

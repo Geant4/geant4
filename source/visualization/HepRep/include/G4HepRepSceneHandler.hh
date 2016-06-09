@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepSceneHandler.hh,v 1.40 2005/06/02 23:40:49 duns Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 /**

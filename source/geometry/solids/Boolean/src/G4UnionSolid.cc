@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.29 2005/05/09 13:44:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UnionSolid.cc,v 1.30 2005/11/09 15:00:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -83,6 +83,15 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
 {
 } 
 
+//////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4UnionSolid::G4UnionSolid( __void__& a )
+  : G4BooleanSolid(a)
+{
+}
 
 ///////////////////////////////////////////////////////////
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacVGeometryComponent.cc,v 1.1 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacVGeometryComponent.cc,v 1.2 2005/07/03 23:27:37 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimShelterSPEDecorator.hh,v 1.3 2005/05/27 14:21:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimShelterSPEDecorator.hh,v 1.4 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

@@ -5,17 +5,19 @@
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
+/process/verbose 0
 #
 #### Add Hadronic Physics, muon physics and decay
 /physics/addPhysics hadronic-bertini
-#/physics/addPhysics hadronic-binary
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
+#/physics/addPhysics hadronic-binary
 ##############################
 #### Sets some default verbose
 /control/verbose 1
-/run/verbose 1
+/run/verbose 2
 /event/verbose 0
+/tracking/verbose 0
 /run/initialize
 ################
 ## Visualisation
@@ -30,17 +32,23 @@
 #/vis/viewer/zoom 2
 #/tracking/storeTrajectory 1
 ################
-# Generation of primary particles
-/gun/generator Basic
-/gun/particle proton
-/gun/energy 600. MeV
 # Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
-#/analysis/formatFile xml
+# Generation of primary particles
+/control/execute gcrZ=1gps.mac
 #/analysis/formatFile hbook
 # Number of events
-/run/beamOn 2
+#/tracking/verbose 1
+/run/beamOn 10
+
+
+
+
+
+
+
+
 
 
 

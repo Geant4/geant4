@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.6 2004/12/02 09:31:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IntersectingCone.cc,v 1.7 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -80,6 +80,16 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
     zLo = z[1]; zHi = z[0];
   }
 }
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4IntersectingCone::G4IntersectingCone( __void__& )
+{
+}
+
 
 //
 // Destructor

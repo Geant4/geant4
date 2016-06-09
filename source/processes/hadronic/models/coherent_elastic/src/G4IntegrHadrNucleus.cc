@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegrHadrNucleus.cc,v 1.12 2005/06/10 13:23:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IntegrHadrNucleus.cc,v 1.13 2005/11/23 10:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // IntegrHadrNucleus.cc
 
@@ -42,15 +42,11 @@
 
       G4int  Anucleus = (int) aNucleus->GetN();
 
- if(Anucleus<4)
-         {
-  G4Exception(" This nucleus is very light for this model !!!");
-         }
+  if(Anucleus==2 || Anucleus==3)
+      G4Exception(" This nucleus is very light for this model !!!");
 
-  if(Anucleus>208)
-         {
-  G4Exception(" This nucleus is very heavy for this model !!!");
-         }
+  if(Anucleus>238)
+      G4Exception(" This nucleus is very heavy for this model !!!");
 
           MbToB   = 2.568;
           Pi1     = 3.1416;
@@ -150,10 +146,10 @@
                                            G4Nucleus         * aNucleus)
 
          {       
-                HadrEnergy = aHadron->GetTotalEnergy()/1000;
-
-if(HadrEnergy < 1.4999)
-  G4Exception(" The hadron energy is very low for this model !!!");
+                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
+            G4double MassH  = aHadron->GetMass()/1000;
+  if(HadrEnergy-MassH < 1.0)
+     G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -167,9 +163,9 @@ if(HadrEnergy < 1.4999)
                                            G4Nucleus         * aNucleus)
         {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
-
-if(HadrEnergy < 1.4999)
-  G4Exception(" The hadron energy is very low for this model !!!");
+            G4double MassH  = aHadron->GetMass()/1000;
+  if(HadrEnergy-MassH < 1.0)
+     G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -183,9 +179,9 @@ if(HadrEnergy < 1.4999)
                                            G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
-
-if(HadrEnergy < 1.4999)
-  G4Exception(" The hadron energy is very low for this model !!!");
+            G4double MassH  = aHadron->GetMass()/1000;
+  if(HadrEnergy-MassH < 1.0)
+     G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -199,9 +195,9 @@ if(HadrEnergy < 1.4999)
                                            G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
-
-if(HadrEnergy < 1.4999)
-  G4Exception(" The hadron energy is very low for this model !!!");
+            G4double MassH  = aHadron->GetMass()/1000;
+  if(HadrEnergy-MassH < 1.0)
+     G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);
@@ -215,9 +211,9 @@ if(HadrEnergy < 1.4999)
                                            G4Nucleus         * aNucleus)
        {
                 HadrEnergy = aHadron->GetTotalEnergy()/1000;
-
-if(HadrEnergy < 1.4999)
-  G4Exception(" The hadron energy is very low for this model !!!");
+            G4double MassH  = aHadron->GetMass()/1000;
+  if(HadrEnergy-MassH < 1.0)
+     G4Exception(" The hadron energy is very low for this model !!!");
 
                 G4HadronValues::GetHadronValues(aHadron);
                 GetIntegralCrSec(aNucleus);

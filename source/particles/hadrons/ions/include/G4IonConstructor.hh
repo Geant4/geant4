@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonConstructor.hh,v 1.3 2001/07/11 10:01:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonConstructor.hh,v 1.4 2005/09/30 22:59:05 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,17 +37,16 @@
 class G4IonConstructor
 {
   //This class is a utility class for construction 
-  //short lived particles
 
   public:
     G4IonConstructor();
     ~G4IonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 
   protected:
-    void ConstructLightIons();
+    static void ConstructLightIons();
 };
 
 #endif

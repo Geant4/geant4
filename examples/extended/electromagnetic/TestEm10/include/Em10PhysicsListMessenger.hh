@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsListMessenger.hh,v 1.2 2001/07/11 09:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Em10PhysicsListMessenger.hh,v 1.4 2005/11/29 14:42:22 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -59,7 +59,16 @@ class Em10PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
- 
+    G4UIcmdWithADoubleAndUnit* eMinEnergyCmd;
+    G4UIcmdWithADoubleAndUnit* gMinEnergyCmd;
+
+    G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
+    G4UIcmdWithADoubleAndUnit* PositronCutCmd;
+    G4UIcmdWithADoubleAndUnit* GammaCutCmd;
+
+    G4UIcmdWithADoubleAndUnit* RadiatorCutCmd;
+    G4UIcmdWithADoubleAndUnit* DetectorCutCmd;
+
 };
 
 #endif

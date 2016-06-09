@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithAString.cc,v 1.4 2003/06/16 16:55:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIcmdWithAString.cc,v 1.5 2005/10/26 06:10:22 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
 #include "G4UIcmdWithAString.hh"
-#include <strstream>
 
 G4UIcmdWithAString::G4UIcmdWithAString
 (const char * theCommandPath,G4UImessenger * theMessenger)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.12 2002/12/16 11:15:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Neutron.hh,v 1.14 2005/01/14 03:49:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,70 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
-//----------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
+//  New implementation as a utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------
 
 #ifndef G4Neutron_h
 #define G4Neutron_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         NEUTRON                                ###
 // ######################################################################
 
-class G4Neutron : public G4VBaryon
+class G4Neutron : public G4ParticleDefinition
 {
  private:
-   static G4Neutron theNeutron;
-
- private:
-  G4Neutron(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4Neutron* theInstance;
+   G4Neutron(){}
+   ~G4Neutron(){}
 
  public:
-   virtual ~G4Neutron(){}
-
+   static G4Neutron* Definition();
    static G4Neutron* NeutronDefinition();
    static G4Neutron* Neutron();
-
- public:  //With Description
-   G4int    GetAtomicNumber() const;
-   G4int    GetAtomicMass() const;
-
-   G4double GetExcitationEnergy() const {return 0.;} 
-   void     SetExcitationEnergy(G4double ){}
-   // These two methods are dummy because all particles derived from 
-   // G4Neutron is "groud state" nuclei  
-
 };
-
-inline
- G4int G4Neutron::GetAtomicNumber() const 
-{
-  return 0; 
-}
-
-inline
- G4int G4Neutron::GetAtomicMass() const 
-{
-  return 1;
-}
 
 #endif

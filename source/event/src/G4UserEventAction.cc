@@ -21,16 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.cc,v 1.5 2003/05/21 20:52:54 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UserEventAction.cc,v 1.6 2005/11/22 21:06:29 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4ParticleTable.hh"
+#include "globals.hh"
+
 
 void G4UserEventAction::BeginOfEventAction(const G4Event*)
-{;}
+{
+  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ {
+   G4String msg;
+   msg =  " You are instantiating G4UserEventAction BEFORE your\n";
+   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+   msg += "set it to G4RunManager before instantiating other user action classes\n";
+   msg += "such as G4UserEventAction.";
+   G4Exception("G4UserEventAction::G4UserEventAction()",
+              "Event0001",FatalException,msg);
+ }
+}
+
 
 void G4UserEventAction::EndOfEventAction(const G4Event*)
 {;}

@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.1 2004/12/13 16:38:57 gcosmo Exp $
+# $Id: common.gmk,v 1.2 2005/12/07 09:57:46 gcosmo Exp $
 # --------------------------------------------------------------
 # Setup for hadronic physics-lists libraries
 # --------------------------------------------------------------
@@ -30,6 +30,13 @@ else
 endif
 
 LISTS_INCLUDE = $(G4LISTS_BASE)
+
+# Shared libraries for the physics lists are currently NOT supported
+# if granular libraries of Geant4 are installed and used.
+#
+ifdef G4LIB_USE_GRANULAR
+  G4LIB_NO_SHARED := 1
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 

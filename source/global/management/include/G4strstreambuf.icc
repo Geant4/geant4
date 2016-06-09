@@ -21,111 +21,125 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.icc,v 1.10 2005/03/15 19:11:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4strstreambuf.icc,v 1.12 2005/11/28 10:03:07 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+// ====================================================================
+//   G4strstreambuf.icc
 //
-// 
-// ---------------------------------------------------------------
-//
-// class G4strstreambuf
-// inline implementation
-// 
-// ---------------------------------------------------------------
+// ====================================================================
 
-inline
-G4strstreambuf::G4strstreambuf()
-  : destination(0), count(0)
+///////////////////////////////////////
+inline G4strstreambuf::G4strstreambuf()
+  : std::basic_streambuf<char>(),
+    count(0), destination(0)
+///////////////////////////////////////
 {
-  size = 4095;
-  buffer = new char[size+1];
+  size= 4095;
+  buffer= new char[size+1];
 }
 
-inline
-G4strstreambuf::~G4strstreambuf()
+
+////////////////////////////////////////
+inline G4strstreambuf::~G4strstreambuf()
+////////////////////////////////////////
 {
+  // flushing buffer...
+  // std::cout is used because destination object may not be alive.
+  if(count !=0) std::cout << buffer;
+
   delete [] buffer;
 }
 
-inline
-G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
-   : std_streambuf(), destination(right.destination),
-     buffer(right.buffer), count(right.count), size(right.size)
+
+//////////////////////////////////////////////////////////////////
+inline G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
+  : std::basic_streambuf<char>(), 
+    buffer(right.buffer), 
+    count(right.count), size(right.size),
+    destination(right.destination)
+//////////////////////////////////////////////////////////////////
 {
 }
 
-inline
-G4strstreambuf& G4strstreambuf::operator=(const G4strstreambuf& right)
-{
-  if (&right==this)  { return *this; }
 
-  destination = right.destination;
-  buffer = right.buffer;
-  count = right.count;
-  size = right.size;
+/////////////////////////////////////////////////////////////////////////////
+inline G4strstreambuf& G4strstreambuf::operator=(const G4strstreambuf& right)
+/////////////////////////////////////////////////////////////////////////////
+{
+  if(&right==this) return *this;
+  
+  destination= right.destination;
+  buffer= right.buffer;
+  count= right.count;
+  size= right.size;
 
   return *this;
 }
 
-inline
-void G4strstreambuf::SetDestination(G4coutDestination * value)
-{
-  destination = value;
-}
 
-inline
-G4int G4strstreambuf::overflow(G4int c)
+//////////////////////////////////////////////
+inline G4int G4strstreambuf::overflow(G4int c)
+//////////////////////////////////////////////
 {
-  G4int result = 0;
-  if(count>=size)  { result = sync(); }
-  buffer[count] = c;
+  G4int result= 0;
+  if(count>=size) result= sync();
+
+  buffer[count]= c;
   count++;
-  if(c=='\n')
-  {
-    result = sync();
 
-    // Fix to overcome a bug on GNU gcc-3.0.X compilers. The return value
-    // for cout, cerr overflow() function has to be c instead of 0 when
-    // buffer is flushed for carriage-return.
-    //
-    #if (__GNUC__==3) && (__GNUC_MINOR__==0)
-        if (this == & G4coutbuf || this == & G4cerrbuf)  result = c;
-    #endif
-  }
   return result;
 }
 
-inline
-G4int G4strstreambuf::sync()
+///////////////////////////////////
+inline G4int G4strstreambuf::sync()
+///////////////////////////////////
 {
   buffer[count] = '\0';
-  count = 0;
-  return ReceiveString ();
+  count= 0;
+  return ReceiveString();
 }
 
+
 #ifdef WIN32
-inline
-G4int G4strstreambuf::underflow()
+////////////////////////////////////////
+inline G4int G4strstreambuf::underflow()
+////////////////////////////////////////
 {
   return 0;
 }
 #endif
 
-inline
-G4int G4strstreambuf::ReceiveString ()
+
+///////////////////////////////////////////////////////////////////
+inline void G4strstreambuf::SetDestination(G4coutDestination* dest)
+///////////////////////////////////////////////////////////////////
+{
+  destination= dest;
+}
+
+
+/////////////////////////////////////////////
+inline G4int G4strstreambuf::ReceiveString ()
+/////////////////////////////////////////////
 {
   G4String stringToSend(buffer);
-  G4int result =0;
-  if(this == & G4coutbuf && destination != 0) {
-    result =  destination->ReceiveG4cout(stringToSend);
-  } else if(this == & G4cerrbuf && destination != 0) {
-    result =  destination->ReceiveG4cerr(stringToSend);
-  } else if(this == & G4coutbuf && destination == 0) {
+  G4int result= 0;
+
+  if(this == &G4coutbuf && destination != 0) {
+    result=  destination-> ReceiveG4cout(stringToSend);
+
+  } else if(this == &G4cerrbuf && destination != 0) {
+    result=  destination-> ReceiveG4cerr(stringToSend);
+
+  } else if(this == &G4coutbuf && destination == 0) {
     std::cout << stringToSend << std::flush;
-    result =0;
-  } else if(this == & G4cerrbuf && destination == 0) {
+    result= 0;
+
+  } else if(this == &G4cerrbuf && destination == 0) {
     std::cerr << stringToSend << std::flush;
-    result =0;
+    result= 0;
   }
+
   return result;
 }
 

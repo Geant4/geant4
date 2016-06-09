@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AttValue.hh,v 1.4 2005/03/22 16:51:34 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #ifndef G4ATTVALUE_HH
 #define G4ATTVALUE_HH

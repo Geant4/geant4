@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DalitzDecayChannel.cc,v 1.7 2004/12/10 18:02:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------

@@ -40,7 +40,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 G4AugerData::G4AugerData()
 {
@@ -232,15 +232,14 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
   
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
+  std::ostringstream ost;
   if(Z != 0){
     ost << "au-tr-pr-"<< Z << ".dat";
   }
   else{
     ost << "au-tr-pr-"<<".dat"; 
   }
-  G4String name(nameChar);
+  G4String name(ost.str());
   
   char* path = getenv("G4LEDATA");
   if (!path)
@@ -400,8 +399,8 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    }
 	    else {
 
-	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
-	      if((G4int)a != *vectorIndex){
+	      //	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
+	      if((G4int)a != initIds->back()){
 
 
 		if((initIds->size()) == 1) { 
@@ -409,9 +408,9 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		}  
 		else {
 
-		  initIds->push_back((G4int)a);
+
 		  G4int augerShellId = 0;
-		  augerShellId = *vectorIndex;
+		  augerShellId = initIds->back();
 		  
 		  (*newIdMap)[augerShellId] = *newIds;
 		  (*newEnergyMap)[augerShellId] = *transEnergies;
@@ -422,6 +421,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		  newIds = new std::vector<G4int>;
 		  transEnergies = new G4DataVector;
 		  transProbabilities = new G4DataVector;
+		  initIds->push_back((G4int)a);
 		}
 	      }
 	    }

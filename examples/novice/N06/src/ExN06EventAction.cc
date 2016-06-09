@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06EventAction.cc,v 1.1 2003/01/23 15:34:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN06EventAction.cc,v 1.2 2005/12/04 00:45:09 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,24 +53,10 @@ void ExN06EventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void ExN06EventAction::EndOfEventAction(const G4Event* evt)
+void ExN06EventAction::EndOfEventAction(const G4Event*)
 {
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-    
-  // extract the trajectories and draw them
-  //
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
-        }
-    }
+  // Trajectory drawing now done by vis mananger under vis comamnds.
+  // See vis.mac.
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

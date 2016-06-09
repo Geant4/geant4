@@ -24,8 +24,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QuasmonString.cc,v 1.3 2005/06/04 13:08:23 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4QuasmonString.cc,v 1.4 2005/11/30 16:31:03 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //      ---------------- G4QuasmonString ----------------
 //             by Mikhail Kossov, August 2000.
@@ -767,7 +767,7 @@ G4QHadronVector* G4QuasmonString::GetHadrons()
   return hadrons;
 } // End of GetHadrons
 
-// Randomize the momentum fraction for the CHIPS of nPart free partons [x*(1-x)^(n-2)]
+// Randomize the momentum fraction for the CHIPS of nPart free partons [x*(1-x)^(n-3)]
 G4double G4QuasmonString::RandomizeMomFractionFree(G4int nPart)
 {//              ==============================================
   // @@ TMP --- Begin ---

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.hh,v 1.10 2002/12/16 11:15:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Lambda.hh,v 1.12 2005/01/14 03:49:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,49 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 14 Feb 19
-// ---------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
+//  New implementation as a utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------
 
 #ifndef G4Lambda_h
 #define G4Lambda_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                          Lambda                                ###
 // ######################################################################
 
-class G4Lambda : public G4VBaryon
+class G4Lambda : public G4ParticleDefinition
 {
  private:
-   static G4Lambda theLambda;
-
- private:
-   G4Lambda(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4Lambda* theInstance;
+   G4Lambda(){}
+   ~G4Lambda(){}
 
  public:
-   virtual ~G4Lambda(){}
-
+   static G4Lambda* Definition();
    static G4Lambda* LambdaDefinition();
-
    static G4Lambda* Lambda();
-
 };
 
 #endif

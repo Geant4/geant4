@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.16 2003/06/16 16:55:51 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIGAG.cc,v 1.17 2005/11/21 13:43:08 hajime Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -32,7 +32,7 @@
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
-#include <strstream>
+#include <sstream>
 
 G4UIGAG::G4UIGAG()//: TVersion("T1.0a"), JVersion("J1.0a")
 {
@@ -254,7 +254,7 @@ G4String G4UIGAG::GetCommand()
       G4String ss = nC(1,nC.length()-1);
       G4int vl;
       const char* tt = ss;
-      std::istrstream is((char*)tt);
+      std::istringstream is((char*)tt);
       is >> vl;
       G4int nh = UI->GetNumberOfHistory();
       if(vl>=0 && vl<nh)

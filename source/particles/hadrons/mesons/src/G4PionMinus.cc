@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinus.cc,v 1.8 2003/06/16 16:57:47 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PionMinus.cc,v 1.10 2005/01/14 03:49:16 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,15 +31,11 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban, 26/6/96
-//  Add PionMinusDefinition(), H.Kurashige 4 July 1996
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4PionMinus.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -48,62 +44,56 @@
 // ###                         PIONMINUS                              ###
 // ######################################################################
 
-G4PionMinus::G4PionMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VMeson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4PionMinus* G4PionMinus::theInstance = 0;
+
+G4PionMinus* G4PionMinus::Definition()
 {
-  SetParticleSubType("pi");
-  SetPDGStable(false);
-  //create Decay Table 
-  G4DecayTable*   table = GetDecayTable();
-  if (table!=NULL) delete table;
-  table = new G4DecayTable();
+  if (theInstance !=0) return theInstance;
+  const G4String name = "pi-";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+
+   anInstance = new G4ParticleDefinition(
+                 name,    0.1395700*GeV, 2.5284e-14*MeV,    -1.*eplus,
+                    0,              -1,             0,
+                    2,              -2,            -1,
+              "meson",               0,             0,        -211,
+                false,       26.030*ns,          NULL,
+                false,       "pi");
+
+ //create Decay Table
+  G4DecayTable* table = new G4DecayTable();
 
   // create a decay channel
   // pi- -> mu- + anti_nu_mu
   G4VDecayChannel* mode = new G4PhaseSpaceDecayChannel("pi-",1.00,2,"mu-","anti_nu_mu");
   table->Insert(mode);
 
-  SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4PionMinus*>(anInstance);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-//
-G4PionMinus G4PionMinus::thePionMinus(
-	        "pi-",   0.1395700*GeV, 2.5284e-14*MeV,    -1.*eplus, 
-		    0,              -1,             0,          
-		    2,              -2,            -1,             
-	      "meson",               0,             0,        -211,
-		false,       26.030*ns,          NULL
-);
+G4PionMinus*  G4PionMinus::PionMinusDefinition()
+{
+  return Definition();
+}
 
-G4PionMinus* G4PionMinus::PionMinusDefinition(){return &thePionMinus;}
-
-G4PionMinus* G4PionMinus::PionMinus(){return &thePionMinus;}
-
-
-
-
-
-
-
+G4PionMinus*  G4PionMinus::PionMinus()
+{
+  return Definition();
+}
 

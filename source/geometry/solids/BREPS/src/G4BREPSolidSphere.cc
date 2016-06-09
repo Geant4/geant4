@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.9 2004/12/10 16:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidSphere.cc,v 1.10 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -56,6 +56,11 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
   
   active=1;
   Initialize();
+}
+
+G4BREPSolidSphere::G4BREPSolidSphere( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidSphere::~G4BREPSolidSphere()

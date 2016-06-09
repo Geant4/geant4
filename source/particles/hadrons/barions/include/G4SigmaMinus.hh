@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.hh,v 1.7 2001/10/16 08:15:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SigmaMinus.hh,v 1.9 2005/01/14 03:49:08 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,48 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 14 Feb 19
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4SigmaMinus_h
 #define G4SigmaMinus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                          SigmaMinus                            ###
 // ######################################################################
 
-class G4SigmaMinus : public G4VBaryon
+class G4SigmaMinus : public G4ParticleDefinition
 {
  private:
-   static G4SigmaMinus theSigmaMinus;
-
- private:
-   G4SigmaMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4SigmaMinus* theInstance;
+   G4SigmaMinus(){}
+   ~G4SigmaMinus(){}
 
  public:
-   virtual ~G4SigmaMinus(){}
- 
+   static G4SigmaMinus* Definition();
    static G4SigmaMinus* SigmaMinusDefinition();
    static G4SigmaMinus* SigmaMinus();
 };
-
 
 #endif

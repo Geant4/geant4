@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUserPrimaryParticleInformation.hh,v 1.1 2005/03/25 00:40:32 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------

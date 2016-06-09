@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2005/06/06 13:41:26 gcosmo Exp $
+$Id: History,v 1.134 2005/11/24 18:24:30 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,57 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 24th, 2005      J. Apostolakis - geomvol-V07-01-05
+- Revised implementation of G4VNestedParameterisation, taking out use
+   of G4PhysicalTouchable.
+- Added implementations of virtual methods to identify materials 
+   for nested parameterisations.
+- Removed G4PhysicalTouchable helper class.
+
+
+Nov 16th, 2005      J. Apostolakis - geomvol-V07-01-04
+- Corrections to tag below:
+   * fixing PVPlacement's 'IsRegularStructureMethod'
+   * adding missing RegularStructure methods for G4PhysicalTouchable
+
+Nov 11th, 2005      J. Apostolakis - geomvol-V07-01-03
+- Added methods to identify  Regular Structures in  Physical volume derived
+  classes (Replica, Parameterised Volume, but also Placement). 
+  New virtual methods implemented:
+    - IsRegularStructure()     from G4VPhysicalVolume, defined in Replica
+    - GetRegularStructureId()
+   * Note that Placement always return 'false' and 0 respectively.
+  New method defined (Replica), and implemented that can be redefined:
+    - SetRegularStructureId()  virtual 
+
+Nov 9th, 2005       G. Cosmo - geomvol-V07-01-02
+- Added fake default constructor for concrete types of volumes (placements,
+  parameterised and replica), for usage of direct object persistency.
+- Implemented migration to <sstream> for affected classes: G4AssemblyVolume.
+
+Oct 19th, 2005      G. Cosmo - geomvol-V07-01-01
+- Introduced first implementation for optional check of overlaps at
+  construction to G4PVPlacement and G4PVParameterised volumes. Default
+  resolution of 1000 points is defined for the check.
+  The check is disabled by default.
+- Introduced method CheckOverlaps(p) for placements and parameterised
+  volumes. The resolution for the check can be specified providing the
+  number of points wished to be generated.
+- Updated unit test for G4ReflectedSolid.
+
+Jul 25th, 2005      G. Cosmo - geomvol-V07-01-00
+- Cleanup and fixes in use of inline methods in G4VNestedParameterisation
+  and G4PhysicalTouchable.
+
+Jun 14th, 2005      J. Apostolakis - geomvol-V07-00-01
+- Added G4VNestedParameterisation with ability to use parent information
+  to compute/change material.
+- Added G4PhysicalTouchable class to enable this type of parameterisation.
+  This class is an implementation class only, and its name especially
+  and potentially other aspect is/are likely to be changed.   
+  ---> A revision of the interface of G4VPVParamerisation can provide this
+       capability in future, in a simpler way.
+  This tag coworks with "geomnav-V07-00-00". 
 
 Jun 6th, 2005       G. Cosmo - geomvol-V07-00-00
 - Moved constructors/destructors and operators for G4NavigationLevelRep

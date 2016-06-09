@@ -30,8 +30,8 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.8 2004/05/13 14:47:46 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: BrachyPhantomSD.cc,v 1.9 2005/11/22 12:47:35 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "BrachyPhantomSD.hh"
 #include "BrachyPhantomHit.hh"
@@ -50,16 +50,26 @@
 
 BrachyPhantomSD::BrachyPhantomSD(G4String name):G4VSensitiveDetector(name)
 {
- 
+ G4String HCname;
+ SensitiveDetectorName = name;
+ collectionName.insert(HCname="phantomCollection");
 }
 
 BrachyPhantomSD::~BrachyPhantomSD()
 {
+  
 }
 
-void BrachyPhantomSD::Initialize(G4HCofThisEvent*)
+void BrachyPhantomSD::Initialize(G4HCofThisEvent* HCE)
 {
- }
+  phantomCollection = new BrachyPhantomHitsCollection
+                          (SensitiveDetectorName,collectionName[0]); 
+  static G4int HCID = -1;
+  if(HCID<0)
+  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  HCE->AddHitsCollection( HCID, phantomCollection ); 
+ 
+}
 
 G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
@@ -75,12 +85,11 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
           
   if(energyDeposit != 0)                       
 	    { 
-            
-#ifdef G4ANALYSIS_USE	
+           
 	      // Read Voxel indexes: i is the x index, k is the z index
-	      G4int k = ROhist->GetReplicaNumber(1);
-	      G4int i = ROhist->GetReplicaNumber(2);
-	      G4int j = ROhist->GetReplicaNumber();
+	      G4int k = ROhist -> GetReplicaNumber(1);
+	      G4int i = ROhist -> GetReplicaNumber(2);
+	      G4int j = ROhist -> GetReplicaNumber();
   
 	      G4int numberOfVoxelZ = 300;
 	      G4double voxelWidthZ = 1. *mm;
@@ -88,6 +97,7 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	      G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
 	      G4double z = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
 
+#ifdef G4ANALYSIS_USE	
 	      BrachyAnalysisManager* analysis = 
 		BrachyAnalysisManager::getInstance();   
 	      analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
@@ -99,6 +109,12 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 		    analysis -> DoseDistribution(x,energyDeposit/MeV);
 		}
 #endif  
+	      
+  // Store the energy deposit and position in a Hit collection
+  BrachyPhantomHit* newHit = new BrachyPhantomHit();
+  newHit -> SetEdep(energyDeposit);
+  newHit -> SetPosition(x,y,z);
+  phantomCollection -> insert( newHit );
 	    }
   return true;
 }

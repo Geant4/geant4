@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.27 2005/02/15 19:35:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LossTableManager.hh,v 1.28 2005/10/27 14:04:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -241,7 +241,6 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
 
-  //G4VEnergyLossProcess*       eIonisation;
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
   G4EmCorrections*            emCorrections;

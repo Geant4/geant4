@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2005/06/01 12:57:25 maire Exp $
+$Id: History,v 1.27 2005/12/06 11:50:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+29-11-05 V.Ivant (testem6-V07-01-02)
+- Add GenericIon to the PhysicsList
+
+23-11-05 V.Ivant (testem6-V07-01-01)
+- extend test to mu+mu- and pi+pi- pair creation processes and G4hhIonisation
+  in order to test all processes of the subdirectory
+
+22-11-05 mma (testem6-V07-01-00)
+- update README for OpenScientist
+
 01-06-05 mma (testem6-V07-00-01)
 - RunAction : option "noErrors" for hbook files;
      

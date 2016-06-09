@@ -1,4 +1,4 @@
-$Id: History,v 1.201 2005/05/30 08:55:51 vnivanch Exp $
+$Id: History,v 1.219 2005/12/05 12:13:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,62 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 December 05: V.Ivant (emutils-V07-01-13)
+- G4EmProcessOptions - fix verbosity definition for energy loss processes
+
+29 November 05: V.Ivant (emutils-V07-01-12)
+- G4EmModelmanager - add protection for arithmetic operations with cut=DBL_MAX
+
+26 November 05: V.Ivant (emutils-V07-01-11)
+- G4EmCalculator - upgrade printout
+- G4EmCorrection - fix on calculation of effective charge and Mott correction
+                   for heavy ions 
+
+15 November 05: V.Ivant (emutils-V07-01-10)
+- G4EnergyLossMessenger: migration to <sstream>
+
+28 October 05: V.Ivant (emutils-V07-01-09)
+- Fix problem in G4EmCalculator in ComputeDEDX for ions
+- Provide subcutoff regime inside G4VEnergyLossProcess - do not
+  use G4VSubCutoffProcessor anymore  
+- update subcutoff set method inside G4EmProcessOptions 
+
+27 October 05: V.Ivant (emutils-V07-01-08)
+- add virtual method MscStepLimitation() to G4VMultipleScattering
+- add SetMscStepLimitation to G4EmProcessOptions
+
+25 October 05: V.Ivant (emutils-V07-01-07)
+- G4VEmModel.cc - default energy range from 0.1*keV to 100*TeV to
+  make easier initialisation of PAI models
+     
+17 October 05: L.Urban (emutils-V07-01-06) 
+- G4VEnergyLossProcess.cc: protection againg 0 mean loss removed,
+  effect cured in standard/G4UniversalFluctuation
+
+07 October 05: L.Urban (emutils-V07-01-05)
+- G4VMultipleScattering.hh: error in a protection in GetContinuousStepLimit 
+  corrected. Must cowork with emstand-V07-01-14
+     
+05 October 05: L.Urban (emutils-V07-01-04)
+- G4VEnergyLossProcess: added protection against mean_energy_loss = 0 
+
+04 September 05: V.Ivant (emutils-V07-01-03)
+- G4VEnergyLossProcess, G4VEmProcess: default lambdaFactor 0.8
+
+02 September 05: V.Ivant (emutils-V07-01-02)
+- This tag is 7.1 + bug fixes
+- G4VEnergyLossProcess: Integral=true; SetStepFunction(0.2, 1*mm)
+  fix a problem #780 connected with d-electron production tmax < cut
+- G4EmManager - fix a cut calculation for e+e- pair      
+
+12 August 05: mma (emutils-V07-01-01)
+- G4VEnergyLossProcess: Integral=false; SetStepFunction(0.2, 0.1*mm)
+
+25 July 05: V.Ivant (emutils-V07-01-00)
+- G4VEnergyLossProcess: add extra protection for non-integral mode
+- G4VEmModel, G4VEmFluctuationModel : move constructor anddestructor to the body
+- G4VEmProcess - use integral mode only for charged particles
 
 27 May 05: V.Ivant (utils-V07-00-13)
 - Fix problem observed for second run after adding/removal materials
@@ -49,7 +105,7 @@ committal in the CVS repository !
 
 13 April 05: V.Ivant (utils-V07-00-04)
 - Optimization of internal interfaces G4VEmModel, G4VEmFluctuationModel,
-  G4VEmProcess, G4VEmEnergyLossProcess
+  G4VEmProcess, G4VEnergyLossProcess
 - Fix range calculation for dedx=0 in G4LossTableBuilder
 - Add Mott correction to G4EmCorrection
 

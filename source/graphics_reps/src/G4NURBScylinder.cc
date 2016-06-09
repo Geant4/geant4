@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBScylinder.cc,v 1.6 2004/12/07 08:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBScylinder.cc,v 1.7 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -104,16 +104,6 @@ G4NURBScylinder::G4NURBScylinder(G4double R, G4double DZ)
   CP(mpCtrlPts[33] ,  R, 0,  DZ, 1 );
   CP(mpCtrlPts[34] ,  R, 0, -DZ, 1 );
   CP(mpCtrlPts[35] ,  0,  0, -DZ, 1 );
-}
-
-G4Visible & G4NURBScylinder::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBScylinder::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
 }
 
 const char* G4NURBScylinder::Whoami() const

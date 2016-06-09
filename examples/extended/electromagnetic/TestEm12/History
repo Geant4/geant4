@@ -1,0 +1,31 @@
+$Id: History,v 1.6 2005/12/06 11:34:42 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm12 History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+22-11-05 mma (testem12-V07-01-04)
+- update README for OpenScientist
+     
+14-11-05 Gabriele Cosmo (testem12-V07-01-03)
+- Migration to <sstream> for HistoMessenger.
+
+05-10-05 mma (testem12-V07-01-02)
+- create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
+     
+22-07-05 michel maire (testem12-V07-01-00)
+- created, from TestEm11

@@ -45,20 +45,18 @@
 /vis/scene/create
 /vis/open OGLIX
 /vis/viewer/flush
+
 /vis/viewer/set/viewpointThetaPhi 30 130 deg
-/vis/viewer/zoom 3
-/vis/viewer/pan -10  80 cm
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  40 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
 
 # SETTING FOR THE RANGE SHIFTER 
-/beamLine/RangeShifter/thickness 4 cm
-/beamLine/RangeShifter/RSMat Water
-
+/beamLine/RangeShifter/thickness 0.001 mm
+/beamLine/RangeShifter/RSMat Air
 #/tracking/verbose 1
 /vis/viewer/flush
-#/run/beamOn 1
-
-#/run/beamOn 5000
+/run/beamOn 10
 

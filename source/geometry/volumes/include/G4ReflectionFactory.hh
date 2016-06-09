@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReflectionFactory.hh,v 1.1 2004/05/13 14:50:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4ReflectionFactory

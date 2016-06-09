@@ -59,22 +59,17 @@ void HadrontherapyIonLowE::ConstructProcess()
       G4ProcessManager* manager = particle -> GetProcessManager();
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
-
-      // protons, ions, alpha, pions, kaons, generic ion.....
-      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+  
+    if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-") 
 	{
 	  if((!particle -> IsShortLived()) &&
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-	      G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-		 
-	      ionisation -> SetNuclearStoppingPowerModel("ICRU_R49") ; // ICRU49 models for nuclear SP
+	      // ICRU49 parameterisation is the default one
+              G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();		
 	      ionisation -> SetNuclearStoppingOn() ;
-		 
-	      // Switch off the Barkas and Bloch corrections
-	      ionisation -> SetBarkasOn();
-		 
+	  
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
 	      manager -> AddProcess(multipleScattering, -1,1,1);   
 	      manager -> AddProcess(ionisation, -1,2,2);

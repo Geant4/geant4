@@ -1,0 +1,108 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: QGSP_EMV.icc,v 1.1 2005/12/16 09:56:57 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   QGSP_EMV
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 23.11.2005 G.Folger: migration to non static particles 
+// 30.11.2005 G.Folger: Register EmStandard first,
+//                      Use EmStandard71 
+// 02.12.2005 V.Ivanchenko: rename components
+//
+//----------------------------------------------------------------------------
+//
+
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleWithCuts.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+#include "G4ios.hh"
+#include <iomanip>   
+
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonPhysics.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "HadronPhysicsQGSP_EMV.hh"
+
+template<class T> TQGSP_EMV<T>::TQGSP_EMV(G4int ver):  T()
+{
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_EMV 3.0"<<G4endl;
+  G4cout <<G4endl;
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(ver);
+
+  // EM Physics
+  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM msc 7.1",ver));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // General Physics - i.e. decay
+  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Physics
+  this->RegisterPhysics(  new HadronPhysicsQGSP_EMV("hadron"));
+
+  // Ion Physics
+  this->RegisterPhysics( new G4IonPhysics("ion"));
+
+}
+
+template<class T> TQGSP_EMV<T>::~TQGSP_EMV()
+{
+}
+
+template<class T> void TQGSP_EMV<T>::SetCuts()
+{
+  if (this->verboseLevel >1){
+    G4cout << "QGSP_EMV::SetCuts:";
+  }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+
+  this->SetCutsWithDefault();   
+  
+//  if (this->verboseLevel >0)
+//    G4VUserPhysicsList::DumpCutValuesTable();  
+  
+}
+
+
+
+// 2002 by J.P. Wellisch

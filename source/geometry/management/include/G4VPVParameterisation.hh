@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.6 2003/11/02 14:00:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VPVParameterisation.hh,v 1.11 2005/11/24 18:09:22 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4VPVParamterisation
 //
@@ -42,8 +42,10 @@
 #define G4VPVPARAMETERISATION_HH
 
 #include "G4Types.hh"
+#include "G4VVolumeMaterialScanner.hh"
 
 class G4VPhysicalVolume;
+class G4VTouchable; 
 class G4VSolid;
 class G4Material;
 
@@ -62,17 +64,26 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
+class G4VVolumeMaterialScanner; 
+
 class G4VPVParameterisation
 {
   public:
 
     virtual void ComputeTransformation(const G4int,
-                                       G4VPhysicalVolume *) const = 0;
+                                       G4VPhysicalVolume * ) const = 0;
 
     virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 				       
-    virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *);
-				       
+    virtual G4Material* ComputeMaterial(const G4int repNo, 
+                                        G4VPhysicalVolume *currentVol,
+                                        const G4VTouchable *parentTouch=0);
+       //  Refined method, enabling nested parameterisations
+
+    virtual G4bool IsNested() const;
+    virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
+       //   These enable material scan for nested parameterisations
+
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}

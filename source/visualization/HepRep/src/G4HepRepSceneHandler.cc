@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.90 2005/06/03 00:03:36 duns Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4HepRepSceneHandler.cc,v 1.94 2005/10/29 21:07:46 duns Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 /**
@@ -570,10 +570,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     outer->addAttValue("showParentAttributes",true);
     
     HepRepPoint* op1 = factory->createHepRepPoint(outer, vertex1.x(), vertex1.y(), vertex1.z());
-    op1->addAttValue("Radius",cons.GetOuterRadiusMinusZ());
+    op1->addAttValue("Radius",cons.GetOuterRadiusPlusZ());
     
     HepRepPoint* op2 = factory->createHepRepPoint(outer, vertex2.x(), vertex2.y(), vertex2.z());
-    op2->addAttValue("Radius",cons.GetOuterRadiusPlusZ());
+    op2->addAttValue("Radius",cons.GetOuterRadiusMinusZ());
 
     // Inner cylinder.
     HepRepInstance* inner = factory->createHepRepInstance(instance, type);
@@ -581,10 +581,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     inner->addAttValue("showParentAttributes",true);
     
     HepRepPoint* ip1 = factory->createHepRepPoint(inner, vertex1.x(), vertex1.y(), vertex1.z());
-    ip1->addAttValue("Radius",cons.GetInnerRadiusMinusZ());
+    ip1->addAttValue("Radius",cons.GetInnerRadiusPlusZ());
     
     HepRepPoint* ip2 = factory->createHepRepPoint(inner, vertex2.x(), vertex2.y(), vertex2.z());
-    ip2->addAttValue("Radius",cons.GetInnerRadiusPlusZ());
+    ip2->addAttValue("Radius",cons.GetInnerRadiusMinusZ());
 }
 
 
@@ -837,6 +837,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         } else {
             face = getGeometryInstance("*Face", fCurrentDepth+1);
             setAttribute(face, "PickParent", true);
+            setAttribute(face, "DrawAs", G4String("Polygon"));
         }
         
         setLine(face, polyhedron);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01FieldSetup.cc,v 1.6 2004/03/23 14:51:04 japost Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //   User Field setup class implementation.
 //

@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.34 2004/12/02 14:01:35 pia Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.35 2005/11/30 10:44:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -209,7 +209,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
-  if (RandBit::shootBit())
+  if (CLHEP::RandBit::shootBit())
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;

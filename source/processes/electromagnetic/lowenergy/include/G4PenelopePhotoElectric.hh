@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PenelopePhotoElectric.hh,v 1.3 2005/05/31 10:09:14 pandola Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: L.Pandola
 //

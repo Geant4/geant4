@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NistMessenger.cc,v 1.1 2005/02/22 10:11:09 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // File name:     G4NistMessenger

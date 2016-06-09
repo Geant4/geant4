@@ -36,19 +36,20 @@ G4LEPProtonBuilder::
 ~G4LEPProtonBuilder() {}
 
 void G4LEPProtonBuilder::
-Build(G4HadronElasticProcess & aP)
+Build(G4HadronElasticProcess * aP)
 {
   theElasticModel = new G4LElastic();
-  aP.RegisterMe(theElasticModel);
+  aP->RegisterMe(theElasticModel);
 }
 
 void G4LEPProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
+// G4cout << "adding inelastic Proton in LHEP" << G4endl;
   theLEProtonModel = new G4LEProtonInelastic();
   theLEProtonModel->SetMinEnergy(theMin);
   theLEProtonModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theLEProtonModel);
+  aP->RegisterMe(theLEProtonModel);
 }
 
 // 2002 by J.P. Wellisch

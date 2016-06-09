@@ -22,7 +22,7 @@
 //
 //
 // $Id: TRTMaterials.hh,v 1.3 2001/07/11 09:57:55 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

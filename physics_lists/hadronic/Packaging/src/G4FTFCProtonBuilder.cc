@@ -35,12 +35,12 @@ G4FTFCProtonBuilder()
 }
 
 void G4FTFCProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

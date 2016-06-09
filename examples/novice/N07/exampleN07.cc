@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.5 2005/05/03 10:21:16 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: exampleN07.cc,v 1.6 2005/11/22 22:20:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,8 +45,6 @@
 #include "ExN07PhysicsList.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
 #include "ExN07RunAction.hh"
-#include "ExN07EventAction.hh"
-#include "ExN07StackingAction.hh"
 
 int main(int argc,char** argv) {
 
@@ -56,6 +54,10 @@ int main(int argc,char** argv) {
  // set mandatory initialization classes
  runManager->SetUserInitialization(new ExN07DetectorConstruction);
  runManager->SetUserInitialization(new ExN07PhysicsList);
+    
+ // set user action classes
+ runManager->SetUserAction(new ExN07PrimaryGeneratorAction);
+ runManager->SetUserAction(new ExN07RunAction);
   
 #ifdef G4VIS_USE
  // visualization manager
@@ -63,15 +65,9 @@ int main(int argc,char** argv) {
  visManager->Initialize();
 #endif
     
- // set user action classes
- runManager->SetUserAction(new ExN07PrimaryGeneratorAction);
- runManager->SetUserAction(new ExN07RunAction);
- runManager->SetUserAction(new ExN07EventAction);
- runManager->SetUserAction(new ExN07StackingAction);
-  
  // Initialize G4 kernel
- // runManager->Initialize();
-    
+ runManager->Initialize();
+  
  // get the pointer to the User Interface manager 
  G4UImanager* UI = G4UImanager::GetUIpointer();  
 

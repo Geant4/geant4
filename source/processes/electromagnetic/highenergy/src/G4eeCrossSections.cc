@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.2 2004/12/01 18:13:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eeCrossSections.cc,v 1.5 2005/11/29 08:21:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -157,8 +157,11 @@ void G4eeCrossSections::Initialise()
   aomsigg = 0.;
   phomsigg = 0.;
 
-  G4double emin, emax;
   G4String w0, w1, w2;
+  ph3p = 0;
+
+  /*
+  G4double emin, emax;
   G4int nbins;
   const G4String fname = "wrhopi.wid"; 
   ifstream  fi(fname.c_str()); 
@@ -177,6 +180,7 @@ void G4eeCrossSections::Initialise()
     ph3p->PutValue(5*i + 4, s4);
   }
   fi.close();
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -230,8 +234,10 @@ G4double G4eeCrossSections::Width3p(G4double s, G4double mres,
 
 G4double G4eeCrossSections::PhaseSpace3p(G4double e) 
 {
-  G4bool b;
-  G4double x = ph3p->GetValue(e, b);
+  
+  //  G4bool b;
+  //  G4double x = ph3p->GetValue(e, b);
+  G4double x = 1.0; 
   G4double emev = e/MeV;
   G4double y = 414.12/emev;
   x *= pow(e/MsOm, 5.0) * pow(emev*0.1, 3.0)*(1.0 - y*y);

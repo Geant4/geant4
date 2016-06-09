@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RE01DetectorParameterDef.hh,v 1.1 2004/11/26 07:37:40 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
      G4double expHall_x;

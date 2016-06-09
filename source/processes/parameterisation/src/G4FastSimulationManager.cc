@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.8 2002/11/15 11:41:56 stesting Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastSimulationManager.cc,v 1.10 2005/11/26 00:35:02 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------
 //
@@ -50,9 +50,9 @@ G4FastSimulationManager(G4Envelope *anEnvelope,
   fFastTrack(anEnvelope,IsUnique),fTriggedFastSimulationModel(0),
   fLastCrossedParticle(0)
 {
-  // Communicates to the Logical Volume that it becomes a
+  // Communicates to the region that it becomes a
   // envelope and with this fast simulation manager.
-  anEnvelope->BecomeEnvelopeForFastSimulation(this);
+  anEnvelope->SetFastSimulationManager(this);
 
   // Add itself to the GlobalFastSimulationManager 
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
@@ -69,7 +69,7 @@ G4FastSimulationManager::~G4FastSimulationManager()
   // resets the Logical Volume IsEnvelope flag to avoid clash.
   //
   if(fFastTrack.GetEnvelope()->GetFastSimulationManager()==this)
-    fFastTrack.GetEnvelope()->ClearEnvelopeForFastSimulation();
+    fFastTrack.GetEnvelope()->ClearFastSimulationManager();
   // Remove itself from the GlobalFastSimulationManager 
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
     RemoveFastSimulationManager(this);
@@ -151,6 +151,7 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
   return model;
 }
 
+
 //----------------------------------------
 // Methods to add/remove GhostPlacements 
 //----------------------------------------
@@ -184,6 +185,44 @@ G4FastSimulationManager::RemoveGhostPlacement(const G4Transform3D *trans3d)
       FastSimulationNeedsToBeClosed();
   return found;
 }
+
+G4bool 
+G4FastSimulationManager::
+InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
+			   const G4ParticleDefinition& theParticle)
+{
+  G4PVPlacement *GhostPhysical;
+  // Not to do if there aren't glost placements
+  if(GhostPlacements.size()==0) return false;
+  
+  // If there are, verifies if at least one model is applicable
+  // for theParticle.
+  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
+    if(ModelList[iModel]->IsApplicable(theParticle)) {
+      // Ok, we find one. Place the ghost(s).
+      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
+	{
+	  std::vector<G4LogicalVolume*>::iterator ghostIter = fFastTrack.GetEnvelope()->GetRootLogicalVolumeIterator();
+	  G4LogicalVolume* rootGhostLV = (*ghostIter);
+	  GhostPhysical=new 
+	    G4PVPlacement(*(GhostPlacements[ighost]),
+			  rootGhostLV->GetName(),
+			  rootGhostLV,
+			  theClone,
+			  false,0);
+	  // -- I'd like to check if other root LV exist, since it can not be handled today,
+	  // -- but how stop the iterator loop ???
+	  //	  ghostIter++;
+	  //	  rootGhostLV = (*ghostIter);
+	  //	  if (rootGhostLV) G4Exception("G4FastSimulationManager does not know today how to handle ghost regions with several root logical volumes.");
+	}
+      //  And answer true
+      return true;
+    }
+  //otherwise answer false
+  return false;  
+}
+
 
 //
 //-------------------------------------
@@ -321,34 +360,6 @@ G4VParticleChange* G4FastSimulationManager::InvokeAtRestDoIt()
 {
   fTriggedFastSimulationModel->AtRestDoIt(fFastTrack,fFastStep);
   return &fFastStep;
-}
-
-G4bool 
-G4FastSimulationManager::
-InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
-			   const G4ParticleDefinition& theParticle)
-{
-  G4PVPlacement *GhostPhysical;
-  // Not to do if there aren't glost placements
-  if(GhostPlacements.size()==0) return false;
-
-  // If there are, verifies if at least one model is applicable
-  // for theParticle.
-  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
-    if(ModelList[iModel]->IsApplicable(theParticle)) {
-      // Ok, we find one. Place the ghost(s).
-      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
-	GhostPhysical=new 
-	  G4PVPlacement(*(GhostPlacements[ighost]),
-			fFastTrack.GetEnvelope()->GetName(),
-			fFastTrack.GetEnvelope(),
-			theClone,
-			false,0);
-      //  And answer true
-      return true;
-    }
-  //otherwise answer false
-  return false;  
 }
 
 void 

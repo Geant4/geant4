@@ -1,0 +1,48 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+           History file for Low Energy Parameterized Models
+           ------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+14 Dec 2005 - V.Ivanchenko (hadr-lep-V07-01-04)
+----------------------------------------------
+  G4LElastic.cc: restore version 1.19
+  G4LElasticB: alternative version with 4-momentum balance 
+
+03 Dec 2005 - V.Ivanchenko (hadr-lep-V07-01-03)
+----------------------------------------------
+  G4LElastic.cc: add protection in center of mass reference system (20 MeV/c), 
+  which was before in lab system. Below this momentum model is not valid
+
+29 Nov 2005 - G.Cosmo (hadr-lep-V07-01-02)
+------------------------------------------
+  Get rid of problematic printout in G4LElastic.cc causing porting
+  issues on VC++ compiler.
+
+28 Nov 2005 - V.Ivanchenko (hadr-lep-V07-01-01)
+----------------------------------------------
+  26 Nov 2005 - Fix of cosT calculation (internal unit for Q^2 is GeV) 
+
+24 Nov 2005 - D.Wright (hadr-lep-V07-01-00)
+-------------------------------------------
+  22 Nov 2005 - G.Cosmo
+    G4LElastic.cc: use std::numeric_limits instead of FLT_MAX for porting on
+    MSVC++8.0 compiler.
+
+  24 Nov 2005 - V. Ivanchenko
+    G4LElastic.cc: calculate cos(theta) in CM system (as it should be)
+
+  17 Nov 2005 - D.Wright
+    G4LCapture.cc: in method ApplyYourself, fixed unit bug in gamma momentum
+                 and added 2.2 MeV gamma for special case of n capture on H
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02CellScorerStore.cc,v 1.1 2002/11/08 14:52:17 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: B02CellScorerStore.cc,v 1.2 2005/12/07 18:07:31 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -44,13 +44,13 @@ G4CellScorer *B02CellScorerStore::
 AddG4CellScorer(const G4GeometryCell &g) {
   return fMapGeometryCellCellScorer[g] = 
     new G4CellScorer;
-};
+}
 
 void B02CellScorerStore::
 AddB02CellScorer(B02CellScorer *b02scorer,
 		 const G4GeometryCell &g) {
   fMapGeometryCellB02CellScorer[g] = b02scorer;
-};
+}
 
 
 const G4MapGeometryCellCellScorer &B02CellScorerStore::GetMapGeometryCellCellScorer()  {      

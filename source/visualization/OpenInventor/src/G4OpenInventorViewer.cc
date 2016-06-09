@@ -36,6 +36,7 @@
 #include "HEPVis/nodes/SoImageWriter.h"
 #include "HEPVis/actions/SoGL2PSAction.h"
 #include "HEPVis/actions/SoCounterAction.h"
+#include "HEPVis/actions/SoAlternateRepAction.h"
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -95,6 +96,12 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   camera->farDistance.setValue(100);
   camera->focalDistance.setValue(10);
   group->addChild(camera);
+
+ {SoInput soInput;
+   if(soInput.openFile("g4view.iv",TRUE)) {
+    SoSeparator* separator = SoDB::readAll(&soInput);
+    if(separator) fSoSelection->addChild(separator);
+  }}
 
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
@@ -242,8 +249,6 @@ void G4OpenInventorViewer::SetView () {
       //FIXME :   (2.*fVP.GetFieldHalfAngle());
     }
   }
-
-
 }
 
 //COIN_FUNCTION_EXTENSION
@@ -452,11 +457,29 @@ void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {
 
 void G4OpenInventorViewer::WriteInventor(const G4String& aFile) {
   G4cout << "Produce " << aFile << "..." << G4endl;
+
+  SbBool genAlternateRep = TRUE;
+  //SbBool binary = FALSE;
+  SbBool binary = TRUE;
+  SoAlternateRepAction alternateRepAction;
+  if(genAlternateRep==TRUE) {
+    alternateRepAction.setGenerate(TRUE); //Clear alternate reps.
+    alternateRepAction.apply(fSoSelection);
+  }
+
   SoWriteAction writeAction;
   writeAction.getOutput()->openFile(aFile.c_str());
-  writeAction.getOutput()->setBinary(FALSE);
+  writeAction.getOutput()->setBinary(binary);
   writeAction.apply(fSoSelection);
   writeAction.getOutput()->closeFile();
+
+  if(genAlternateRep==TRUE) {
+    alternateRepAction.setGenerate(FALSE); //Clear alternate reps.
+    alternateRepAction.apply(fSoSelection);
+  }
+
+
+
 }
 
 struct Counter {

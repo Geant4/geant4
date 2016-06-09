@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.26 2005/06/15 13:59:59 gunter Exp $
+# $Id: globlib.gmk,v 1.28 2005/12/07 09:53:46 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -20,11 +20,13 @@ makesub:
 
 g4libraries_to_build:=
 
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
   SHARED_LIB=$(G4LIBDIR)/lib$(name).$(SHEXT)
   g4libraries_to_build += $(SHARED_LIB)
 else
   SHARED_LIB=
+endif
 endif
 
 ifneq ($(G4LIB_BUILD_STATIC),)
@@ -68,14 +70,16 @@ $(G4LIBDIR)/lib$(name).a: \
 #
 #
 #
-	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
-	ranlib $(G4LIBDIR)/lib$(name).a ; fi
+	@if [ X$(G4SYSTEM) != XWIN32-VC ] ; then  \
+	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4LIBDIR)/lib$(name).a ; fi ; fi
 endif
 
 
 ##
 ## make shared libraries
 ##
+ifeq ($(G4LIB_NO_SHARED),)
 ifneq ($(G4LIB_BUILD_SHARED),)
 $(SHARED_LIB):	$(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
@@ -83,6 +87,7 @@ $(SHARED_LIB):	$(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@$(RM) $@
 #	use system specific commands to build the library
 	$(build-global-shared-lib)
+endif
 endif
 
 objs:

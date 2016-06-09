@@ -42,11 +42,8 @@
 #include "G4EventManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include <iostream.h>
 
-class HadrontherapyDetectorConstruction;
 class HadrontherapyRunAction;
-class HadrontherapyEventAction;
 class HadrontherapySteppingMessenger;
 
 
@@ -58,9 +55,12 @@ class HadrontherapySteppingMessenger;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-  HadrontherapySteppingAction( );
+  HadrontherapySteppingAction(HadrontherapyRunAction*);
   ~HadrontherapySteppingAction();
   
   void UserSteppingAction(const G4Step*);
+
+private:
+  HadrontherapyRunAction* runAction;
 };
 #endif

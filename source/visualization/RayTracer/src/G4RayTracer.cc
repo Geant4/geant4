@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.15 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RayTracer.cc,v 1.19 2005/12/05 03:51:22 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //
@@ -56,8 +56,11 @@
 
 G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
 			 G4VRTScanner* scanner)
-:G4VGraphicsSystem("RayTracer","RayTracer",RAYTRACER_FEATURES,
-                     G4VGraphicsSystem::threeD)
+:G4VGraphicsSystem
+(scanner ? scanner->GetGSName() : "RayTracer",
+ scanner ? scanner->GetGSNickname() : "RayTracer",
+ RAYTRACER_FEATURES,
+ G4VGraphicsSystem::threeD)
 {
   theFigMaker = figMaker;
   if(!theFigMaker) theFigMaker = new G4RTJpegMaker();
@@ -66,8 +69,8 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
   theRayShooter = new G4RayShooter();
   theRayTracerEventAction = 0;
   theRayTracerStackingAction = 0;
-  theRayTracerTrackingAction = new G4RTTrackingAction();
-  theRayTracerSteppingAction = new G4RTSteppingAction();
+  theRayTracerTrackingAction = 0;
+  theRayTracerSteppingAction = 0;
   theMessenger = new G4RTMessenger(this,theRayTracerSteppingAction);
   theEventManager = G4EventManager::GetEventManager();
 
@@ -89,8 +92,8 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker,
 G4RayTracer::~G4RayTracer()
 {
   delete theRayShooter;
-  delete theRayTracerTrackingAction;
-  delete theRayTracerSteppingAction;
+  if(theRayTracerTrackingAction) delete theRayTracerTrackingAction;
+  if(theRayTracerSteppingAction) delete theRayTracerSteppingAction;
   delete theMessenger;
   delete theScanner;
   delete theFigMaker;
@@ -157,6 +160,9 @@ void G4RayTracer::StoreUserActions()
   theUserTrackingAction = theEventManager->GetUserTrackingAction();
   theUserSteppingAction = theEventManager->GetUserSteppingAction();
 
+  if(!theRayTracerTrackingAction) theRayTracerTrackingAction = new G4RTTrackingAction();
+  if(!theRayTracerSteppingAction) theRayTracerSteppingAction = new G4RTSteppingAction();
+
   theEventManager->SetUserAction(theRayTracerEventAction);
   theEventManager->SetUserAction(theRayTracerStackingAction);
   theEventManager->SetUserAction(theRayTracerTrackingAction);
@@ -196,8 +202,11 @@ G4bool G4RayTracer::CreateBitMap()
   G4bool succeeded;
 
 // Confirm process(es) of Geantino is initialized
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4VPhysicalVolume* pWorld =
+	G4TransportationManager::GetTransportationManager()->
+	GetNavigatorForTracking()->GetWorldVolume();
+  G4RegionStore::GetInstance()->UpdateMaterialList(pWorld);
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(pWorld);
   G4ProcessVector* pVector
     = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
   for (G4int j=0; j < pVector->size(); ++j) {
@@ -223,26 +232,22 @@ G4bool G4RayTracer::CreateBitMap()
   while (theScanner->Coords(iRow,iColumn)) {
       G4int iCoord = iRow * nColumn + iColumn;
       G4Event* anEvent = new G4Event(iEvent++);
-      
       G4double angleX = -(viewSpanX/2. - iColumn*stepAngle);
       G4double angleY = viewSpanY/2. - iRow*stepAngle;
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
-        rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
+	rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
       }
       else
       {
-        rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
+	rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
       }
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
       G4ThreeVector rayPosition(eyePosition);
       G4bool interceptable = true;
       // Check if rayPosition is in the world.
-      G4VPhysicalVolume* pWorld =
-	G4TransportationManager::GetTransportationManager()->
-	GetNavigatorForTracking()->GetWorldVolume ();
       EInside whereisit =
 	pWorld->GetLogicalVolume()->GetSolid()->Inside(rayPosition);
       if (whereisit != kInside) {
@@ -251,7 +256,11 @@ G4bool G4RayTracer::CreateBitMap()
 	  pWorld->GetLogicalVolume()->GetSolid()->
 	  DistanceToIn(rayPosition,rayDirection);  
 	if (outsideDistance != kInfinity) {
-	  rayPosition = rayPosition+outsideDistance*rayDirection;
+	  // Borrowing form geometry, where 1e-8 < epsilon < 1e-3, in
+	  // absolute/internal length units, is used for ensuring good
+	  // nehaviour, choose to add 0.001 to ensure rayPosition is
+	  // definitely inside the world volume (JA 16/9/2005)...
+	  rayPosition = rayPosition+(outsideDistance+0.001)*rayDirection;
 	}
 	else {
 	  interceptable = false;
@@ -261,15 +270,16 @@ G4bool G4RayTracer::CreateBitMap()
 	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
 	theEventManager->ProcessOneEvent(anEvent);
 	succeeded = GenerateColour(anEvent,iCoord);
-  //G4cout << iColumn << " " << iRow << " " << anEvent->GetEventID() << G4endl;
       }
       else {  // Ray does not intercept world at all.
 	// Store background colour...
 	colorR[iCoord] = (unsigned char)(int(255*backgroundColour.GetRed()));
 	colorG[iCoord] = (unsigned char)(int(255*backgroundColour.GetGreen()));
 	colorB[iCoord] = (unsigned char)(int(255*backgroundColour.GetBlue()));
+	theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord],this);
 	succeeded = true;
       }
+
       delete anEvent;
       if(!succeeded) return false;
   }
@@ -311,6 +321,7 @@ G4bool G4RayTracer::GenerateColour(G4Event* anEvent, G4int iCoord)
   colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
   colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
   colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
+  theScanner->Draw(colorR[iCoord],colorG[iCoord],colorB[iCoord],this);
   return true;
 }
 

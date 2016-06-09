@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.9 2005/05/27 14:21:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimSensitiveDetector.cc,v 1.11 2005/11/23 09:22:11 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 #include "RemSimSensitiveDetector.hh"
-#include "RemSimHit.hh"
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -39,20 +38,13 @@
 RemSimSensitiveDetector::RemSimSensitiveDetector(G4String name)
   :G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
 }
 
 RemSimSensitiveDetector::~RemSimSensitiveDetector(){;}
 
-void RemSimSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
+void RemSimSensitiveDetector::Initialize(G4HCofThisEvent*)
 {
-  static G4int HCID = -1;
-  trackerCollection = new RemSimHitsCollection
-    (SensitiveDetectorName,collectionName[0]); 
-  if(HCID<0)
-    { HCID = GetCollectionID(0); }
-  HCE -> AddHitsCollection(HCID,trackerCollection);
+
 }
 
 G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep, 
@@ -61,24 +53,13 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   G4double edep = aStep -> GetTotalEnergyDeposit();
   if(edep==0.) return false;
 
-  G4int i = ROhist -> GetReplicaNumber();
-
-  RemSimHit* newHit = new RemSimHit();
-  newHit -> SetEdep(edep);
-  newHit -> SetIndexes(i);
-  newHit->SetPosition(aStep->GetPreStepPoint()->GetPosition());
-  trackerCollection -> insert( newHit );
-
-
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- 
+  G4int i = ROhist -> GetReplicaNumber();
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
-  //  G4cout << "energy deposit:"<< i <<","<< edep/MeV << G4endl;
   G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
   G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
-  //G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
 
   // Project the hits of primary and secondary particles
   // in the phantom in the plane x, y
@@ -92,7 +73,6 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   if(aStep -> GetTrack() -> GetTrackID()!= 1)
     analysis -> SecondaryEnergyDeposit(i,edep/MeV);
 #endif
-
   return true;
 }
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: RE01CalorimeterHit.cc,v 1.3 2005/06/07 10:53:17 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.hh,v 1.7 2003/06/16 16:55:35 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIparameter.hh,v 1.8 2005/10/26 06:09:15 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -31,9 +31,6 @@
 #define G4UIparameter_h 1
 
 #include "globals.hh"
-
-#include <strstream>
-
 #include "G4UItokenNum.hh"
 
 // class description:

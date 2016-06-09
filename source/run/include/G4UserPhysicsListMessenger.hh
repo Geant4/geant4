@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserPhysicsListMessenger.hh,v 1.15 2003/04/14 20:07:25 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //---------------------------------------------------------------

@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2005/06/17 21:07:13 asaim Exp $
+$Id: History,v 1.140 2005/11/28 10:57:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,51 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 28th, 2005, Makoto Asai (run-V07-01-08)
+- In G4RunManagerKernel.cc, changed inclusion of version.hh to G4Version.hh.
+  Coworks with tag "global-V07-01-05".
+
+November 22th, 2005, Makoto Asai (run-V07-01-07)
+- Put G4Exception to the constructors of G4VUserPrimaryGeneratorAction and
+  G4UserRunAction to protect against their instantiation before G4VUserPhysicsList
+  is instantiated and set to G4RunManager.
+- Remove redundant invokation of G4VUserPhysicsList::ConstructParticle() from
+  G4RunManagerKernel::InitializePhysics().
+
+November 10th, 2005, Makoto Asai (run-V07-01-06)
+- In G4RunManagerKernel.cc, invokation of G4ParticleTable::GetParticleTable()->SetReadiness();
+  has been moved from the constructor to SetPhysics() method.
+- This change enforces that all particles must be instantiated in ConstructParticle() method
+  in the physics list along with the introduction of non-static particle definition classes
+  in the tag particles-V07-01-02.
+
+November 9th, 2005, Gabriele Cosmo (run-V07-01-05)
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Added changes for support of CLHEP-2.0.X.
+
+November 7th, 2005, Gabriele Cosmo (run-V07-01-04)
+- Added graphics_reps to CPPFLAGS in GNUmakefile, following the changes
+  introduced in tag "run-V07-01-02" for migration of vis code.
+- Use version.hh for version and date in G4RunManagerKernel constructor.
+
+October 28th, 2005, Makoto Asai (run-V07-01-03)
+- Working tag for merging "envelope" to G4Region.
+- This tag does NOT contain run-V07-01-02 tag.
+
+October 20, 2005, Joseph Perl (run-V07-01-02)
+- Tag to co-work with vis-V07-01-05.
+
+October 17th, 2005 Jane Tinslay
+- Modify GNUmakefile to follow intercoms->graphics_reps migration for 
+  G4VGraphicsScene and G4VVisManager
+
+September 26th, 2005 G.Cosmo (run-V07-01-01)
+- Removed definition of G4Allocator<G4Run> after changes made in
+  previous tag (fixed compilation error for run-V07-01-00).
+
+September 19th, 2005 M.Asai (run-V07-01-00)
+- Cosmetic changes in G4Run.
 
 June 17th, 2005 M.Asai (run-V07-00-05)
 - Changed version string in G4RunManagerKernel not to have CVS version string.

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeometryCellStep.cc,v 1.1 2002/10/22 13:18:46 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

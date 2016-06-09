@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreTable.cc,v 1.3 2003/06/16 16:50:36 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ScoreTable.cc,v 1.5 2005/12/09 17:23:19 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4ScoreTable.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VIStore.hh"
@@ -86,12 +86,10 @@ void G4ScoreTable::PrintHeader(std::ostream *out)
 
 G4String G4ScoreTable::CreateName(const G4GeometryCell &gCell) {
   
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << gCell.GetPhysicalVolume().GetName()
-     << "_rep:" << gCell.GetReplicaNumber()
-     << '\0';
-  G4String name(st);
+     << "_rep:" << gCell.GetReplicaNumber();
+  G4String name = os.str();
 
   return name;
 }
@@ -125,7 +123,6 @@ void G4ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
     G4String name((*it).first);
     PrintLine(name, (*it).second.GetStandardCellScoreValues(), out); 
   }
-  *out << '\0';
   out->flush();
 }
 

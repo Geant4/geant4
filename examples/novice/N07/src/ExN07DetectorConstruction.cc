@@ -21,56 +21,85 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.4 2004/11/17 03:07:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN07DetectorConstruction.cc,v 1.5 2005/11/22 22:20:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
 #include "ExN07DetectorConstruction.hh"
+
 #include "G4RunManager.hh"
+
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
-#include "G4SDManager.hh"
+#include "G4PVReplica.hh"
+
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+
+#include "G4SDManager.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSEnergyDeposit.hh"
+#include "G4PSNofSecondary.hh"
+#include "G4PSTrackLength.hh"
+#include "G4PSNofStep.hh"
+#include "G4PSMinKinEAtGeneration.hh"
+#include "G4VSDFilter.hh"
+#include "G4SDParticleFilter.hh"
 #include "G4ios.hh"
+
 #include "ExN07DetectorMessenger.hh"
-#include "ExN07CalorimeterSD.hh"
-#include "ExN07GapParameterisation.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
 
 ExN07DetectorConstruction::ExN07DetectorConstruction()
-:numberOfLayers(40),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
- gapSolid(0),worldLogical(0),worldPhysical(0),serial(false)
+:constructed(false),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
+ layerSolid(0),gapSolid(0),worldLogical(0),worldPhysical(0),serial(false)
 {
+  numberOfLayers = 40;
+  totalThickness = 2.0*m;
+  layerThickness = totalThickness / numberOfLayers;
+
   for(size_t i=0;i<3;i++)
   {
     calorLogical[i] = 0;
     layerLogical[i] = 0;
+    gapLogical[i] = 0;
     calorPhysical[i] = 0;
     layerPhysical[i] = 0;
+    gapPhysical[i] = 0;
   }
 
-  gapParam = new ExN07GapParameterisation;
-  gapParam->SetNumberOfLayers(numberOfLayers);
-  ExN07CalorimeterSD::SetNumberOfLayers(numberOfLayers);
-  DefineMaterials();
+  calName[0] = "Calor-A";
+  calName[1] = "Calor-B";
+  calName[2] = "Calor-C";
+
   detectorMessenger = new ExN07DetectorMessenger(this);
 }
 
 ExN07DetectorConstruction::~ExN07DetectorConstruction()
 { delete detectorMessenger;}
 
+G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
+{
+  if(!constructed)
+  { 
+    constructed = true;
+    DefineMaterials();
+    SetupGeometry();
+    SetupDetectors();
+  }
+  return worldPhysical;
+}
 
 void ExN07DetectorConstruction::DefineMaterials()
 { 
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
-  G4int iz, n;                       //iz=number of protons  in an isotope; 
-                                     // n=number of nucleons in an isotope;
+  G4int iz;                          //iz=number of protons  in an isotope; 
+  G4int n;                           // n=number of nucleons in an isotope;
 
   G4int ncomponents, natoms;
   G4double abundance, fractionmass;
@@ -108,6 +137,10 @@ void ExN07DetectorConstruction::DefineMaterials()
   //
 
   new G4Material(name="Aluminium", z=13., a=26.98*g/mole, density=2.700*g/cm3);
+  new G4Material(name="Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3);
+  new G4Material(name="Iron", z=26., a=55.85*g/mole, density=7.87*g/cm3);
+  new G4Material(name="ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3);
+  new G4Material(name="He", z=2., a=4.0*g/mole, density=0.1786e-03*g/cm3);
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
@@ -156,16 +189,14 @@ void ExN07DetectorConstruction::DefineMaterials()
   worldMaterial    = Vacuum;
   absorberMaterial = Pb;
   gapMaterial      = lAr;
-  gapParam->SetAbsorberMaterial(absorberMaterial);
-  gapParam->SetGapMaterial(gapMaterial);
 }
 
-G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
+void ExN07DetectorConstruction::SetupGeometry()
 {
   //     
   // World
   //
-  G4VSolid* worldSolid = new G4Box("World",2.*m,2.*m,4.*m);
+  G4VSolid* worldSolid = new G4Box("World",2.*m,2.*m,totalThickness*2.);
   worldLogical = new G4LogicalVolume(worldSolid,worldMaterial,"World");
   worldPhysical = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"World",
                         0,false,0);
@@ -173,61 +204,57 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
   //                               
   // Calorimeter
   //  
-  G4VSolid* calorSolid = new G4Box("Calor",0.5*m,0.5*m,1.*m);
+  G4VSolid* calorSolid = new G4Box("Calor",0.5*m,0.5*m,totalThickness/2.);
   G4int i;
-  G4String calNam[3] = {"Cal-A","Cal-B","Cal-C"};
   for(i=0;i<3;i++)
   {
-    calorLogical[i] = new G4LogicalVolume(calorSolid,absorberMaterial,calNam[i]);
+    calorLogical[i] = new G4LogicalVolume(calorSolid,absorberMaterial,calName[i]);
     if(serial)
     {
       calorPhysical[i] = new G4PVPlacement(0,
-                 G4ThreeVector(0.,0.,G4double(i-1)*2.*m),
-                 calorLogical[i],calNam[i],worldLogical,false,i);
+                 G4ThreeVector(0.,0.,G4double(i-1)*totalThickness),
+                 calorLogical[i],calName[i],worldLogical,false,i);
     }
     else
     {
       calorPhysical[i] = new G4PVPlacement(0,
                  G4ThreeVector(0.,G4double(i-1)*m,0.),
-                 calorLogical[i],calNam[i],worldLogical,false,i);
+                 calorLogical[i],calName[i],worldLogical,false,i);
     }
   }
  
   //                                 
-  // Layers -- material is parameterised
+  // Layers --- as absorbers
   //
-  gapSolid = new G4Box("Gap",0.5*m,0.5*m,1.*m/G4double(2*numberOfLayers));
+  layerSolid = new G4Box("Layer",0.5*m,0.5*m,layerThickness/2.);
   for(i=0;i<3;i++)
   {
-    layerLogical[i] = new G4LogicalVolume(gapSolid,absorberMaterial,"Layer");
-    layerPhysical[i] = 
-       new G4PVParameterised("Layer",layerLogical[i],calorLogical[i],kZAxis,
-                          2*numberOfLayers,gapParam);
+    layerLogical[i] = new G4LogicalVolume(layerSolid,absorberMaterial,"Layer");
+    layerPhysical[i] = new G4PVReplica(calName[i]+"_Layer",layerLogical[i],calorLogical[i],kZAxis,
+                          numberOfLayers,layerThickness);
   }
    
   //
-  // Regions
+  // Gap
   //
-  G4String regName[] = {"Calor-A","Calor-B","Calor-C"};
+  gapSolid = new G4Box("Gap",0.5*m,0.5*m,layerThickness/4.);
   for(i=0;i<3;i++)
   {
-    G4Region* aRegion = new G4Region(regName[i]);
+    gapLogical[i] = new G4LogicalVolume(gapSolid,gapMaterial,"Gap");
+    gapPhysical[i] = new G4PVPlacement(0,G4ThreeVector(0.,0.,layerThickness/4.),
+                gapLogical[i],calName[i]+"_gap",layerLogical[i],false,0);
+  }
+
+  //
+  // Regions
+  //
+  for(i=0;i<3;i++)
+  {
+    G4Region* aRegion = new G4Region(calName[i]);
     calorLogical[i]->SetRegion(aRegion);
     aRegion->AddRootLogicalVolume(calorLogical[i]);
   }
 
-  //                               
-  // Sensitive Detectors: Absorber and Gap
-  //
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  G4String detName[] = {"CalorSD-A","CalorSD-B","CalorSD-C"};
-  for(i=0;i<3;i++)
-  {
-    G4VSensitiveDetector* calorSD = new ExN07CalorimeterSD(detName[i]);
-    SDman->AddNewDetector(calorSD);
-    layerLogical[i]->SetSensitiveDetector(calorSD);
-  }
-  
   //                                        
   // Visualization attributes
   //
@@ -238,10 +265,77 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
   { 
     calorLogical[i]->SetVisAttributes(simpleBoxVisAtt);
     layerLogical[i]->SetVisAttributes(simpleBoxVisAtt);
+    gapLogical[i]->SetVisAttributes(simpleBoxVisAtt);
   }
   
   PrintCalorParameters();
-  return worldPhysical;
+}
+
+void ExN07DetectorConstruction::SetupDetectors()
+{
+  G4String filterName, particleName;
+
+  G4SDParticleFilter* gammaFilter = new G4SDParticleFilter(filterName="gammaFilter",particleName="gamma");
+  G4SDParticleFilter* electronFilter = new G4SDParticleFilter(filterName="electronFilter",particleName="e-");
+  G4SDParticleFilter* positronFilter = new G4SDParticleFilter(filterName="positronFilter",particleName="e+");
+  G4SDParticleFilter* epFilter = new G4SDParticleFilter(filterName="epFilter");
+  epFilter->add(particleName="e-");
+  epFilter->add(particleName="e+");
+
+
+  for(G4int i=0;i<3;i++)
+  {
+   for(G4int j=0;j<2;j++)
+   {
+    // Loop counter j = 0 : absorber
+    //                = 1 : gap
+    G4String detName = calName[i];
+    if(j==0)
+    { detName += "_abs"; }
+    else
+    { detName += "_gap"; }
+    G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+
+    //  The second argument in each primitive means the "level" of geometrical hierarchy,
+    // the copy number of that level is used as the key of the G4THitsMap.
+    //  For absorber (j = 0), the copy number of its own physical volume is used.
+    //  For gap (j = 1), the copy number of its mother physical volume is used, since there
+    // is only one physical volume of gap is placed with respect to its mother.
+    G4VPrimitiveScorer* primitive;
+    primitive = new G4PSEnergyDeposit("eDep",j);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSNofSecondary("nGamma",j);
+    primitive->SetFilter(gammaFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSNofSecondary("nElectron",j);
+    primitive->SetFilter(electronFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSNofSecondary("nPositron",j);
+    primitive->SetFilter(positronFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSMinKinEAtGeneration("minEkinGamma",j);
+    primitive->SetFilter(gammaFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSMinKinEAtGeneration("minEkinElectron",j);
+    primitive->SetFilter(electronFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSMinKinEAtGeneration("minEkinPositron",j);
+    primitive->SetFilter(positronFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSTrackLength("trackLength",j);
+    primitive->SetFilter(epFilter);
+    det->RegisterPrimitive(primitive);
+    primitive = new G4PSNofStep("nStep",j);
+    primitive->SetFilter(epFilter);
+    det->RegisterPrimitive(primitive);
+
+    G4SDManager::GetSDMpointer()->AddNewDetector(det);
+    if(j==0)
+    { layerLogical[i]->SetSensitiveDetector(det); }
+    else
+    { gapLogical[i]->SetSensitiveDetector(det); }
+   }
+  }
 }
 
 void ExN07DetectorConstruction::PrintCalorParameters() const
@@ -263,8 +357,7 @@ void ExN07DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
   if(pttoMaterial)
   {
     absorberMaterial = pttoMaterial;
-    gapParam->SetAbsorberMaterial(pttoMaterial);
-    for(size_t i=0;i<3;i++)
+    if(constructed) for(size_t i=0;i<3;i++)
     {
       calorLogical[i]->SetMaterial(absorberMaterial);
       layerLogical[i]->SetMaterial(absorberMaterial);
@@ -284,7 +377,8 @@ void ExN07DetectorConstruction::SetGapMaterial(G4String materialChoice)
   if(pttoMaterial)
   {
     gapMaterial = pttoMaterial;
-    gapParam->SetGapMaterial(pttoMaterial);
+    if(constructed) for(size_t i=0;i<3;i++)
+    { gapLogical[i]->SetMaterial(absorberMaterial); }
   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
@@ -297,6 +391,10 @@ void ExN07DetectorConstruction::SetSerialGeometry(G4bool ser)
 {
   if(serial==ser) return;
   serial=ser;
+  ExN07PrimaryGeneratorAction* gen = (ExN07PrimaryGeneratorAction*)
+          (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+  if(gen) gen->SetSerial(serial);
+  if(!constructed) return;
   for(G4int i=0;i<3;i++)
   {
     if(serial)
@@ -304,49 +402,25 @@ void ExN07DetectorConstruction::SetSerialGeometry(G4bool ser)
     else
     { calorPhysical[i]->SetTranslation(G4ThreeVector(0.,G4double(i-1)*m,0.)); }
   }
-  ExN07PrimaryGeneratorAction* gen = (ExN07PrimaryGeneratorAction*)
-          G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
-  gen->SetSerial(serial);
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 void ExN07DetectorConstruction::SetNumberOfLayers(G4int nl)
 {
   numberOfLayers = nl;
-  gapSolid->SetZHalfLength(1.*m/G4double(2*numberOfLayers));
-  gapParam->SetNumberOfLayers(nl);
+  layerThickness = totalThickness/numberOfLayers;
+  if(!constructed) return;
+
+  layerSolid->SetZHalfLength(layerThickness/2.);
+  gapSolid->SetZHalfLength(layerThickness/4.);
   for(size_t i=0;i<3;i++)
   { 
-    if(layerPhysical[i])
-    {
-      calorLogical[i]->RemoveDaughter(layerPhysical[i]);
-      delete layerPhysical[i];
-    }
-    layerPhysical[i] = 
-       new G4PVParameterised("Layer",layerLogical[i],calorLogical[i],kZAxis,
-                          2*numberOfLayers,gapParam);
+    calorLogical[i]->RemoveDaughter(layerPhysical[i]);
+    delete layerPhysical[i];
+    layerPhysical[i] = new G4PVReplica(calName[i]+"_Layer",layerLogical[i],calorLogical[i],kZAxis,
+                          numberOfLayers,layerThickness);
+    gapPhysical[i]->SetTranslation(G4ThreeVector(0.,0.,layerThickness/4.));
   }
-  ExN07CalorimeterSD::SetNumberOfLayers(nl);
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
-
-void ExN07DetectorConstruction::CreateMaterial(G4String materialChoice)
-{
-  if ( G4Material::GetMaterial(materialChoice) != 0) return;
-   
-  G4double a,z,density;  
-  if (materialChoice == "Silicon"){
-      new G4Material("Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3);
-
-  } else if  (materialChoice =="Iron"){
-    new G4Material("Iron", z=26., a=55.85*g/mole, density=7.87*g/cm3);
-
-  } else if  (materialChoice =="ArgonGas"){
-    new G4Material("ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3);
-
-  } else if  (materialChoice =="He"){
-    new G4Material("He", z=2., a=4.0*g/mole, density=0.1786e-03*g/cm3);
-
-  }
-}

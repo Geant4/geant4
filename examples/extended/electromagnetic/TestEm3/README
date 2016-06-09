@@ -1,4 +1,4 @@
-$Id: README,v 1.24 2005/05/18 15:28:37 maire Exp $
+$Id: README,v 1.26 2005/11/22 15:29:06 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,10 +29,25 @@ $Id: README,v 1.24 2005/05/18 15:28:37 maire Exp $
   of the above parameters can be modified interactively via the commands 
   defined in the DetectorMessenger class.
   
-  NB. Numbering scheme (for histograms):
-  layer     : from 1 to NbOfLayers (inclued)
-  absorbers : from 1 to NbOfAbsor (inclued)
-  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (inclued)      
+
+	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+	|			|			|			|
+	==========================================================================
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||   abs 1	| abs 2	||   abs 1	| abs 2	||   abs 1	| abs 2	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+ beam	||		|	||		|	||		|	||
+======>	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||    cell 1	| cell 2||    cell 3	| cell 4||    cell 5	| cell 6||
+	==========================================================================
+	^		^	^		^	^		^	^
+	pln1		pln2	pln3		pln4	pln5		pln6	pln7
  	
   NB. The number of absorbers and the number of layers can be set to 1.
   In this case we have a unique homogeneous block of matter, which looks like 
@@ -62,6 +77,9 @@ $Id: README,v 1.24 2005/05/18 15:28:37 maire Exp $
   The corresponding interactive command is built in PrimaryGeneratorMessenger.
  	
   A RUN is a set of events.
+  
+  TestEm3 computes the energy deposited per absorber and the energy flow through
+  the calorimeter 
  				
  4- VISUALIZATION
  
@@ -126,11 +144,17 @@ $Id: README,v 1.24 2005/05/18 15:28:37 maire Exp $
   histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
   ...etc...........  
   
-  histo 21 :  forward energy flow (MeV/event)
-  histo 22 : backward energy flow (MeV/event)  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leak (MeV/event)  
 
  One can control the name of the histograms file with the command:
  /testem/histo/setFileName  name  (default testem3.hbook)
+ 
+  NB. Numbering scheme for histograms:
+  layer     : from 1 to NbOfLayers (inclued)
+  absorbers : from 1 to NbOfAbsor (inclued)
+  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (inclued)      
+ 	
  
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.
@@ -160,32 +184,28 @@ $Id: README,v 1.24 2005/05/18 15:28:37 maire Exp $
   eval `aida-config --runtime csh`
 
  8b -  OpenScientist
- 
-  OpenScientist is available at http://www.lal.in2p3.fr/OpenScientist
-  
-  In OpenScientist, the AIDA implementation is the Lab package. 
-  You have to "setup" this package before compiling (then with G4ANALYSIS_USE) 
-  and running your Geant4 application.
-   
-  On UNIX you setup, with a csh flavoured shell : 
-	csh> setenv CMTPATH <OpenScientist install path> 
-	csh> source <OpenScientist install path>/Lab/<version>/cmt/setup.csh 
-  On UNIX with a sh flavoured shell : 
-	sh> CMTPATH=<OpenScientist install path>;export CMTPATH 
-	sh> . <OpenScientist install path>/Lab/<version>/cmt/setup.sh 
-  On Windows : 
-	DOS> set CMTPATH=<OpenScientist install path> 
-	DOS> call <OpenScientist install path>/Lab/<version>/cmt/setup.bat 
 
-  You have to use the XML or root file formats ; producing hbook files is not 
-  supported by OpenScientist/Lab. But the three formats (hbook, AIDA-XML, root) 
-  are readable by the interactive applications ; the Lab onx interactive 
-  program or the OpenPAW program. 
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
 
-  With OpenPAW, someone can view the histograms with : 
+  You have to "setup" the OpenScientist AIDA implementation before compiling
+  (then with G4ANALYSIS_USE set) and running your Geant4 application.
+
+ On UNIX you setup, with a csh flavoured shell : 
+	csh> source <<OpenScientist install path>/aida-setup.csh 
+        or with a sh flavoured shell : 
+	sh> . <<OpenScientist install path>/aida-setup.sh
+ On Windows : 
+	DOS> call <<OpenScientist install path>/aida-setup.bat 
+
+  You can use various file formats for writing (AIDA-XML, hbook, root).
+  These formats are readable by the Lab onx interactive program
+  or the OpenPAW application. See the web pages.
+
+
+  With OpenPAW, on a run.hbook file, one can view the histograms
+  with something like :
 	OS> opaw 
-	opaw> h/file 1 run0.aida   (or opaw> h/file 1 run1.root) 
+        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
 	opaw> zone 2 2 
 	opaw> h/plot 1 
-	opaw> h/plot 2 
-	opaw> h/plot 3 
+	opaw> h/plot 2

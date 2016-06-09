@@ -48,20 +48,18 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4QGSPNeutronBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4HadronFissionProcess & aP);
-    virtual void Build(G4HadronCaptureProcess & aP);
-    virtual void Build(G4NeutronInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronFissionProcess * aP);
+    virtual void Build(G4HadronCaptureProcess * aP);
+    virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
-    G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > theStringModel;
-    G4QGSMFragmentation theFragmentation;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
 
     G4NeutronInelasticCrossSection theXSec;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Transportation.cc,v 1.52 2005/05/10 15:20:13 japost Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation

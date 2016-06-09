@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_BERT.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   QGSP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TQGSP_BERT_h
 #define TQGSP_BERT_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TQGSP_BERT: public T
 {
 public:
-  TQGSP_BERT();
+  TQGSP_BERT(G4int ver = 1);
   virtual ~TQGSP_BERT();
   
 public:
@@ -41,6 +54,7 @@ public:
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
+
 #include "QGSP_BERT.icc"
 typedef TQGSP_BERT<G4VModularPhysicsList> QGSP_BERT;
 

@@ -36,20 +36,20 @@
  ~G4LEADNeutronBuilder() {}
 
  void G4LEADNeutronBuilder::
- Build(G4NeutronInelasticProcess & aP)
+ Build(G4NeutronInelasticProcess * aP)
  {
-   aP.AddDataSet(&theXSec);  
+   aP->AddDataSet(&theXSec);  
    theModel->SetMinEnergy(theMin);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  void G4LEADNeutronBuilder::
- Build(G4HadronElasticProcess & ){}
+ Build(G4HadronElasticProcess * ){}
 
  void G4LEADNeutronBuilder::
- Build(G4HadronFissionProcess & ){}
+ Build(G4HadronFissionProcess * ){}
 
  void G4LEADNeutronBuilder::
- Build(G4HadronCaptureProcess & ){}
+ Build(G4HadronCaptureProcess * ){}
 
  // 2002 by J.P. Wellisch

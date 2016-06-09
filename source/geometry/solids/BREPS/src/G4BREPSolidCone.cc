@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.13 2004/12/02 09:31:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidCone.cc,v 1.14 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -111,6 +111,11 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   constructorParams.large_radius = large_radius;
   
   Initialize();
+}
+
+G4BREPSolidCone::G4BREPSolidCone( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidCone::~G4BREPSolidCone()

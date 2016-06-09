@@ -20,64 +20,87 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// G4HadronValues.cc
+// $Id: G4HadronValues.cc,v 1.14 2005/11/24 19:05:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+
+//
+//  G4HadronValues class
+//
+//
+//  Kinematic and dynamic values 
+//  N.  Starkov 2003.
+//
+//  Modifications:
+//  14.11.05 Use PDG code instead of static particle pointers (N.Starkov)
+//  23.11.05 cleanup (V.Ivanchenko)
+//
 
 #include "globals.hh"
 #include "G4HadronValues.hh"
 
+G4HadronValues::G4HadronValues()
+{}
 
- void 
- G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
+G4HadronValues::~G4HadronValues()
+{}
+
+void 
+G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
   {
+       G4int iHadron(-1), iHadrCode;
+       iHadrCode = aHadron->GetDefinition()->GetPDGEncoding();
 
-       G4ParticleDefinition * dHadron = aHadron->GetDefinition();
+//  G4cout<<" Code "<<iHadrCode<<G4endl;
 
-       G4int iHadron(-1);
+       if(  iHadrCode == 2212 ||
+            iHadrCode == 2112 ||
+            iHadrCode == 3122 ||
+            iHadrCode == 3222 ||
+            iHadrCode == 3112 ||
+            iHadrCode == 3212 ||
+            iHadrCode == 3312 ||
+            iHadrCode == 3322 ||
+            iHadrCode == 3334 )   iHadron = 0;
 
-         if(dHadron == G4Proton::Proton()        ||
-            dHadron == G4Neutron::Neutron()      ||
-            dHadron == G4Lambda::Lambda()        || 
-            dHadron == G4SigmaPlus::SigmaPlus()  ||
-            dHadron == G4SigmaMinus::SigmaMinus()|| 
-            dHadron == G4SigmaZero::SigmaZero()  ||
-            dHadron == G4XiMinus::XiMinus()      ||
-            dHadron == G4XiZero::XiZero()        || 
-            dHadron == G4OmegaMinus::OmegaMinus())         iHadron=0;
+       else if(
+            iHadrCode == -2212 ||
+            iHadrCode == -2112 ||
+            iHadrCode == -3122 ||
+            iHadrCode == -3222 ||
+            iHadrCode == -3112 ||
+            iHadrCode == -3212 ||
+            iHadrCode == -3312 ||
+            iHadrCode == -3322 ||
+            iHadrCode == -3334 )   iHadron = 1;
 
-   else  if(dHadron == G4AntiProton::AntiProton()        ||
-            dHadron == G4AntiNeutron::AntiNeutron()      ||
-            dHadron == G4AntiLambda::AntiLambda()        ||
-            dHadron == G4AntiSigmaPlus::AntiSigmaPlus()  ||
-            dHadron == G4AntiSigmaMinus::AntiSigmaMinus()||
-            dHadron == G4AntiSigmaZero::AntiSigmaZero()  ||
-            dHadron == G4AntiXiMinus::AntiXiMinus()      ||
-            dHadron == G4AntiXiZero::AntiXiZero()        || 
-            dHadron == G4AntiOmegaMinus::AntiOmegaMinus())  iHadron=1;
+       else if(  iHadrCode ==  211)     iHadron = 2;
+       else if(  iHadrCode == -211)     iHadron = 3;
+       else if(  iHadrCode ==  321)     iHadron = 4;
+       else if(  iHadrCode == -321)     iHadron = 5;
 
-   else  if(dHadron == G4PionPlus::PionPlus())              iHadron=2;
-
-   else  if(dHadron == G4PionMinus::PionMinus())            iHadron=3;
-
-   else  if(dHadron == G4KaonPlus::KaonPlus())              iHadron=4;
-
-   else  if(dHadron == G4KaonMinus::KaonMinus())            iHadron=5;
-
-   else {   
-  G4Exception(" There is not method for this hadron ");
-        }
+       else {   
+         G4cout << "G4HadronValues::GetHadronValues iHadrCode= " 
+		<< iHadrCode
+		<< "  " << aHadron->GetDefinition()->GetParticleName()
+		<< G4endl;
+         G4Exception(" There is not method for this hadron ");
+       }
 
        G4double mHadr      = aHadron->GetMass()/1000.;         // In GeV
        G4double HadrEnergy = aHadron->GetTotalEnergy()/1000.;  // In GeV
+       G4double HadrMoment = aHadron->GetTotalMomentum()/1000.;  // In GeV
        G4double sHadr      = 2*HadrEnergy*0.938+0.938*0.938+mHadr*mHadr;
        G4double sqrS       = std::sqrt(sHadr);
        G4double Ecm        = (sHadr-mHadr*mHadr+0.938*.938)/2/sqrS;
                 MomentumCM = std::sqrt(Ecm*Ecm-0.938*0.938);
 
-   if(HadrEnergy<1.0) 
+   if(HadrEnergy-mHadr<1.0) 
     {
      G4cout<<HadrEnergy<<G4endl;
      G4Exception(" The hadron Energy is very low for this method!");
     }
+
         switch (iHadron)
         {
 
@@ -98,23 +121,20 @@
 
 //    if(HadrEnergy>1000) HadrReIm=0.15; 
 
-        if( dHadron == G4Lambda::Lambda()        ||
-            dHadron == G4SigmaPlus::SigmaPlus()  ||
-            dHadron == G4SigmaMinus::SigmaMinus()||
-            dHadron == G4SigmaZero::SigmaZero())
+        if( iHadrCode == 3122 || iHadrCode == 3222 ||
+            iHadrCode == 3112 || iHadrCode == 3212 )
             {
               HadrTot   *=0.80;
               HadrSlope *=0.85;
             }
 
-        if( dHadron == G4XiMinus::XiMinus()      ||
-            dHadron == G4XiZero::XiZero())
+        if( iHadrCode == 3312 || iHadrCode == 3322 )
             {
               HadrTot   *=0.70;
               HadrSlope *=0.75;
             }           
 
-        if( dHadron == G4OmegaMinus::OmegaMinus())
+         if( iHadrCode == 3334)
             {
               HadrTot   *=0.60;
               HadrSlope *=0.65;
@@ -138,34 +158,33 @@
 
 //    if(HadrEnergy>1000) HadrReIm=0.15; 
 
-        if( dHadron == G4AntiLambda::AntiLambda()        ||
-            dHadron == G4AntiSigmaPlus::AntiSigmaPlus()  ||
-            dHadron == G4AntiSigmaMinus::AntiSigmaMinus()||
-            dHadron == G4AntiSigmaZero::AntiSigmaZero())
+        if( iHadrCode == -3122 || iHadrCode == -3222 ||
+            iHadrCode == -3112 || iHadrCode == -3212 )
             {
               HadrTot   *=0.75;
               HadrSlope *=0.85;
             }
-     
-        if( dHadron == G4AntiXiMinus::AntiXiMinus()      ||
-            dHadron == G4AntiXiZero::AntiXiZero())
+
+        if( iHadrCode == -3312 || iHadrCode == -3322 )
             {
               HadrTot   *=0.65;
               HadrSlope *=0.75;
             }
 
-        if( dHadron == G4AntiOmegaMinus::AntiOmegaMinus())
+         if( iHadrCode == -3334)
             {
               HadrTot   *=0.55;
               HadrSlope *=0.65;
             }
 
-            break;
+           break;
 
          case 2:             //   pi plus
 
-              HadrTot   = 10.6+2.*std::log(HadrEnergy)+
-                          25*std::pow(HadrEnergy,-0.43);               // mb 
+            if(HadrMoment>2.0)
+              HadrTot    = 10.6+2.*log(HadrEnergy)+
+                              25*std::pow(HadrEnergy,-0.43);           // mb
+            else HadrTot = 40-50*(HadrMoment-1.5)*(HadrMoment-1.7);
               HadrSlope = 7.28+0.245*std::log(sHadr);                  //GeV-2 
               HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);
               DDSect2   = 4.6;                                    //mb*GeV-2
@@ -176,6 +195,10 @@
 
               HadrTot   = 10.6+2*std::log(HadrEnergy)+
                           30*std::pow(HadrEnergy,-0.43);             // mb 
+
+            if(HadrMoment<1.399)
+              HadrTot = HadrTot+21.0/0.4*(1.4-HadrMoment);
+
               HadrSlope = 7.28+0.245*std::log(sHadr);               // GeV-2 
               HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);
               DDSect2   = 4.6;                                 //mb*GeV-2
@@ -188,7 +211,8 @@
                                9.0*std::pow(HadrEnergy,-0.55);     // mb 
          if(HadrEnergy>100) HadrSlope = 15.0;
          else
-              HadrSlope = 5.28+1.76*std::log(sHadr)-
+//              HadrSlope = 5.28+1.76*std::log(sHadr)-
+              HadrSlope = 1.0+1.76*std::log(sHadr)-
                               2.84*std::pow(sHadr,-0.5);           // GeV-2
               HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*std::pow(sHadr+50,-2.1);
               DDSect2   = 3.5;                                //mb*GeV-2

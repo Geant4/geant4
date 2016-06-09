@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.25 2005/02/15 04:38:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ProcessManager.cc,v 1.27 2005/11/21 03:47:32 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,9 +44,6 @@
 #include <iomanip>
 #include "G4ProcessTable.hh"
 #include "G4ios.hh"
-
-#include <strstream>
-
 
 
 // ---------------------------------
@@ -935,13 +932,13 @@ void G4ProcessManager::CreateGPILvectors()
 
 
 //////////////////////////////////////////
-void G4ProcessManager::StartTracking()
+void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
   for (G4int idx = 0; idx<theProcessList->entries(); idx++){
     if (GetAttribute(idx)->isActive)
-      ((*theProcessList)[idx])->StartTracking();
+      ((*theProcessList)[idx])->StartTracking(aTrack);
   }
-  duringTracking = true;
+  if(aTrack) duringTracking = true;
 }
 
 /////////////////////////////////////////////

@@ -1,11 +1,11 @@
-# $Id: ParGNUmakefile,v 1.4 2002/06/06 17:27:25 cooperma Exp $
+# $Id: ParGNUmakefile,v 1.6 2005/12/02 07:51:43 cooperma Exp $
 # --------------------------------------------------------------
 #This file should be included in GNUmakefile of local directory.
 
 #Usage:  make     [ to compile parallel version ]
 #        make run [ to compile and run it ]
 #        make run-debug [ to compile and run in gdb ]
-#        make parclean [ remove intermediate and executable files ] 
+#        make parclean [ remove intermediate and executable files ]
 # See `run' target for parameters by which executable is called.
 # This assumes Geant4 environment vars have been defined.
 # See ../info/NEW_APP_INSTALL (number 10) for an example of setting up
@@ -60,7 +60,7 @@ TOPC_OPTIONS = --TOPC-verbose
 EXTRALIBS=${TOPC_LIBS}
 CPPFLAGS=${TOPC_CFLAGS}
 
-TIMESTAMP=${G4BINDIR}/timestamp
+TIMESTAMP=${G4BINDIR}/ParN04.timestamp
 
 # Unfortunately, .../geant4.x.x/config/binmake.gmk has target:
 #    $(G4BINDIR)/$(G4TARGET)
@@ -72,11 +72,25 @@ compile:
 	@ if [ "$$G4SYSTEM" = "" ]; then \
 	  echo '***' Environment variable G4SYSTEM not defined; \
 	  echo '***' Make sure G4INSTALL and G4SYSTEM are set; \
+	  exit 1; \
 	fi
 	${MAKE} G4BINDIR=${G4BINDIR} ${TIMESTAMP}
+	@ if which topc-config > /dev/null; then :; \
+	else \
+	  echo '***' topc-config is not in your path; \
+	  exit 1; \
+	fi
+	@ echo ""
+	@ echo 'To run, now type "make run"'
+	@ echo 'To remove built files, type "make parclean"'
+
 ${TIMESTAMP}: *.cc *.icc src/*.cc include/*.hh ParGNUmakefile
-	# Test for presence of topc-config
-	topc-config ${MEM_MODEL} --libs > /dev/null
+	@ if which topc-config > /dev/null; then :; \
+	else \
+	  echo ''; \
+	  echo '***' topc-config is not in your path; \
+	  exit 1; \
+	fi
 	${MAKE} all
 	rm -f ${TIMESTAMP}
 	echo "" > ${TIMESTAMP}

@@ -1,4 +1,4 @@
-$Id: History,v 1.99 2005/06/30 06:48:07 gcosmo Exp $
+$Id: History,v 1.105 2005/12/15 19:07:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,53 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th December 2005  Gabriele Cosmo (examples-V08-00-00)
+- Updated reference outputs according to reference tag geant4-08-00-ref-00.
+- Includes tags: air_shower-V07-01-02, brachy-V07-01-00, ccal-V07-01-01,
+                 cosmicray_charging-V07-01-02, gammaraytel-V07-01-00,
+                 hadrontherapy-V07-01-06, lAr_calorimeter-V07-01-00,
+                 medical_linac-V07-01-05, purtag-V07-01-00, radmon-V07-01-14,
+                 radioprotection-V07-01-04, Rich-V07-01-00, Tiara-V07-01-05,
+                 DMX-V07-01-03, XrayFluo-V07-01-03, xraytel-V07-01-03,
+                 AnaEx01-V07-01-01, exampleB01-V07-01-02, exampleB02-V07-01-03,
+                 muonprocesses-V07-01-01, photonprocesses-V07-01-01,
+                 testem1-V07-01-02, testem2-V07-01-01, testem3-V07-01-04,
+                 testem4-V07-01-00, testem5-V07-01-03, testem6-V07-01-02,
+                 testem7-V07-01-02, testem9-V07-01-05, testem10-V07-01-01,
+                 testem11-V07-01-03, testem12-V07-01-04, exHepMC-V07-01-01,
+                 DICOM-V07-01-00, ExDiane-V07-01-00, extended_exampleRE-V07-01-00,
+                 exampleN03-V07-01-04, exampleN07-V07-01-00.
+
+18th November 2005  Gabriele Cosmo (examples-V07-01-05)
+- Updated reference outputs according to reference tag geant4-07-01-ref-05.
+- Includes tags: air_shower-V07-01-00, ccal-V07-01-00, Tiara-V07-01-00,
+                 cosmicray_charging-V07-01-00, XrayFluo-V07-01-00,
+                 DMX-V07-01-00, exbiasing-V07-01-00, testem1-V07-01-01,
+                 testem3-V07-01-03, testem5-V07-01-01, testem9-V07-01-03,
+                 testem11-V07-01-02, testem12-V07-01-03, exHepMC-V07-01-00,
+                 olapex-V07-01-00, ParN02-V07-01-00, ParN04-V07-01-00,
+                 exparam-V07-01-01, exrdm-V07-01-01, exampleN05-V07-01-01.
+
+31st October 2005  Gabriele Cosmo (examples-V07-01-04)
+- Updated reference outputs according to reference tag geant4-07-01-ref-04.
+- Includes tags: testem1-V07-01-00, testem2-V07-01-00, testem3-V07-01-01,
+                 testem5-V07-01-00, testem7-V07-01-00, testem9-V07-01-01,
+                 testem10-V07-01-00, testem11-V07-01-01, testem12-V07-01-02,
+                 fieldex02-V07-01-00, fieldex03-V07-01-00, gtherapy-V07-01-01,
+                 exam-ext-vix-V07-01-00, exampleN03-V07-01-01.
+
+30th September 2005  Gabriele Cosmo (examples-V07-01-03)
+- Updated reference outputs according to reference tag geant4-07-01-ref-03.
+- Includes tag testem9-V07-01-00.
+
+2nd September 2005  Gabriele Cosmo (examples-V07-01-02)
+- Updated reference outputs according to reference tag geant4-07-01-ref-02.
+- Includes tag gtherapy-V07-01-00.
+
+27th July 2005  Gabriele Cosmo (examples-V07-01-01)
+- Includes tags: testem11-V07-01-00, testem12-V07-01-01, exgps-V07-01-00,
+                 persistencyEx-V07-01-00, exrdm-V07-01-00, exampleN03-V07-01-00.
 
 30th June 2005  Gabriele Cosmo (examples-V07-01-00)
 - Updated reference outputs according to reference tag geant4-07-01-ref-00.

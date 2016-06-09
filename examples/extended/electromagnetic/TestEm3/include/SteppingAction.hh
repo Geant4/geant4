@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.6 2005/05/18 15:28:37 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: SteppingAction.hh,v 1.7 2005/10/17 15:47:27 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,8 +55,6 @@ class SteppingAction : public G4UserSteppingAction
     RunAction*            runAct;
     EventAction*          eventAct;
     HistoManager*         histoManager;
-    
-    G4int                 Idold;      
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

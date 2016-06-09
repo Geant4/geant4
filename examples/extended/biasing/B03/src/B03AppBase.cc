@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: B03AppBase.cc,v 1.1 2003/06/30 16:17:03 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: B03AppBase.cc,v 1.2 2005/12/06 11:18:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------------
 #include "B03AppBase.hh"
@@ -48,7 +48,7 @@ B03AppBase &B03AppBase::GetB03AppBase() {
 B03AppBase::B03AppBase(){
   G4long myseed = 345354;
 
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   frunMgr = new G4RunManager;
   

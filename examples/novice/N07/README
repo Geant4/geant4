@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
+$Id: README,v 1.3 2005/11/22 22:20:55 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,10 @@ $Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
      1. Utilizing a concrete run class derived from G4Run base class for
        accumulating physics quantities and hits as a run
      2. Changing calorimeter geometries without re-building a world volume
-     3. Changing materials used in parameterized volumes
-     4. Instantiating more than one sensitive detectors with different
-       module names from one concrete sensitive detector class
-     5. Defining geometrical regions ans setting production thresholds
+     3. Defining geometrical regions ans setting production thresholds
        for each region
+     4. Demonstrating the use of primitive scorer and filter classes without
+       implementing sensitive detector class
 
  1- Utilizing a concrete run class derived from G4Run base class for
     accumulating physics quantities and hits as a run
@@ -60,25 +59,7 @@ $Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
     ExN07DetectorConstruction::SetSerialGeometry(G4bool) for changing the
     position of placed volumes.
  
- 3- Changing materials used in parameterized volumes
-       	
-    Materials of absorber and sensitive gap in calorimeters are defined by
-    ExN07GapParameterisation::ComputeMaterial(const G4int,G4VPhysicalVolume*),
-    as well as positions of each layer to be defined by
-    ExN07GapParameterisation::ComputeTransformation(const G4int,
-    G4VPhysicalVolume*).
-
- 4- Instantiating more than one sensitive detectors with different
-    module names from one concrete sensitive detector class
-
-    ExN07CalorimeterSD is constructed three times with deferent module names
-    in ExN07DetectorConstruction::Construct(). In addition, each detector
-    create two hits collections of ExN07CalorHit. Thus, in total, six hits
-    collections of same type are created for each event. To access to each
-    of these collections in ExN07EventAction, both module name and collection
-    name are combinedly used.
-
- 5- Defining geometrical regions ans setting production thresholds
+ 3- Defining geometrical regions ans setting production thresholds
     for each region
 
     Setting production thresholds (so-called production cuts) to individual
@@ -110,7 +91,21 @@ $Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
     particular region. Please note that some EM processes still generate
     such secondary below threshold.
 
- 6- Macro files
+ 4- Demonstrating the use of primitive scorer and filter classes without
+    implementing sensitive detector class
+
+    In ExN07DetectorConstruction::SetupDetector() method, concrete classes
+    G4PSEnergyDeposit, G4PSNofSecondary, G4PSTrackLength, G4PSNofStep and
+    G4PSMinKinEAtGeneration, all of thich are derivalable of G4VPrimitiveScorer,
+    are used to define the sensitivity of the calorimeter. All of them are
+    registered to G4MultiFunctionalDetector and this detector object is set
+    to the logical volume. G4SDParticleFilter is used to define the particle
+    type(s) to be scored.
+
+    In ExN07Run::RecordEvent() method, the way of retreiving G4THitsMap
+    from each primitive scorer via G4HCofThisEvent is demonstrated.
+
+ 5- Macro files
 
   exampleN07.in
     To be used for batch mode. The reference output file is made by this
@@ -124,7 +119,7 @@ $Id: README,v 1.2 2003/04/09 23:20:58 asaim Exp $
     Setting visualization parameters. This macro file will be called 
     automatically when interactive execution starts.
 
- 7- UI commands defined in this example
+ 6- UI commands defined in this example
  
 Command /N07/setAbsMat
 Guidance :
@@ -166,17 +161,5 @@ Select calorimeters to be placed in serial or parallel.
 Parameter : serialize
  Parameter type  : b
  Omittable       : False
-
-
-
-Command /N07/verbose
-Guidance :
-Set verbosity of each event.
- Range of parameters : vl>=0 && vl<10
-
-Parameter : vl
- Parameter type  : i
- Omittable       : True
- Default value   : taken from the current value
 
      

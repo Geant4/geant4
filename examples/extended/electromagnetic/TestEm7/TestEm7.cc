@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm7.cc,v 1.4 2005/05/03 10:21:16 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: TestEm7.cc,v 1.5 2005/12/06 11:51:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -51,7 +51,7 @@
 int main(int argc,char** argv) {
  
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);

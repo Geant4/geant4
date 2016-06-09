@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepMCRootIO.cc,v 1.5 2005/04/22 16:26:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // File: G4HepMCRootIO.cc
 //

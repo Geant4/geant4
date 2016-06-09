@@ -1,0 +1,10 @@
+/control/verbose 2
+/vis/verbose p
+/vis/open OGLSXm
+/vis/scene/create
+#/vis/scene/add/userAction
+/vis/scene/add/userAction -10 10 -10 10 -10 10 m
+#/vis/scene/add/axes 0 0 0 10 m
+#/vis/scene/add/scale 10 m
+/vis/sceneHandler/attach
+/vis/viewer/flush

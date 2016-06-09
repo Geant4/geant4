@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SmartVoxelProxy.cc,v 1.2 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Class G4SmartVoxelProxy
 //

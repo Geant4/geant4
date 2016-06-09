@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.7 2005/05/03 17:48:51 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VTrajectory.cc,v 1.8 2005/11/15 03:52:26 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // ---------------------------------------------------------------
@@ -113,71 +113,9 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 
 void G4VTrajectory::DrawTrajectory(G4int i_mode) const
 {
-  // If i_mode>=0, draws a trajectory as a polyline (blue for
-  // positive, red for negative, green for neutral) and, if i_mode!=0,
-  // adds markers - yellow circles for step points and magenta squares
-  // for auxiliary points, if any - whose screen size in pixels is
-  // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
-  // visible markers.
-
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (!pVVisManager) return;
 
-  const G4double markerSize = std::abs(i_mode)/1000;
-  G4bool lineRequired (i_mode >= 0);
-  G4bool markersRequired (markerSize > 0.);
-
-  G4Polyline trajectoryLine;
-  G4Polymarker stepPoints;
-  G4Polymarker auxiliaryPoints;
-
-  for (G4int i = 0; i < GetPointEntries() ; i++) {
-    G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
-    const std::vector<G4ThreeVector>* auxiliaries
-      = aTrajectoryPoint->GetAuxiliaryPoints();
-    if (auxiliaries) {
-      for (size_t iAux = 0; iAux < auxiliaries->size(); ++iAux) {
-	const G4ThreeVector pos((*auxiliaries)[iAux]);
-	if (lineRequired) {
-	  trajectoryLine.push_back(pos);
-	}
-	if (markersRequired) {
-	  auxiliaryPoints.push_back(pos);
-	}
-      }
-    }
-    const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
-    if (lineRequired) {
-      trajectoryLine.push_back(pos);
-    }
-    if (markersRequired) {
-      stepPoints.push_back(pos);
-    }
-  }
-
-  if (lineRequired) {
-    G4Colour colour;
-    const G4double charge = GetCharge();
-    if(charge>0.)      colour = G4Colour(0.,0.,1.); // Blue = positive.
-    else if(charge<0.) colour = G4Colour(1.,0.,0.); // Red = negative.
-    else               colour = G4Colour(0.,1.,0.); // Green = neutral.
-    G4VisAttributes trajectoryLineAttribs(colour);
-    trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
-    pVVisManager->Draw(trajectoryLine);
-  }
-  if (markersRequired) {
-    auxiliaryPoints.SetMarkerType(G4Polymarker::squares);
-    auxiliaryPoints.SetScreenSize(markerSize);
-    auxiliaryPoints.SetFillStyle(G4VMarker::filled);
-    G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
-    auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
-    pVVisManager->Draw(auxiliaryPoints);
-
-    stepPoints.SetMarkerType(G4Polymarker::circles);
-    stepPoints.SetScreenSize(markerSize);
-    stepPoints.SetFillStyle(G4VMarker::filled);
-    G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow.
-    stepPoints.SetVisAttributes(&stepPointsAttribs);
-    pVVisManager->Draw(stepPoints);
+  if (0 != pVVisManager) {
+    pVVisManager->DispatchToModel(*this, i_mode);
   }
 }

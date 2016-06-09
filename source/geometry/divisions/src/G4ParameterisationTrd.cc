@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationTrd.cc,v 1.11 2004/12/02 09:31:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4ParameterisationTrd Implementation file
 //

@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005/02/17 11:49:25 gcosmo Exp $
+$Id: History,v 1.15 2005/12/16 09:59:31 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16.12.2005, G.Folger - hadr-lists-V07-01-08
+- Add QGSP_EMV, LHEP_EMV physics lists, both using multiple scattering 71.
+
+16.12.2005, G.Folger - hadr-lists-V07-01-07
+- Add QGSP_BERT_HP physics list, used for background radiation studies for LHCb 
+
+15.12.2005, G.Folger - hadr-lists-V07-01-06
+- Change version number for Packaging, FTFP, and QGSC.
+
+07.12.2005, G.Cosmo - hadr-lists-V07-01-05
+- Do not allow installation of shared libraries when Geant4 granular
+  libraries are installed and used. Coworks with tag "config-V07-01-06".
+
+06.12.2005, V.Ivanchenko - hadr-lists-V07-01-04
+- Defined hIoni and msc to the same list of hadrons as in version 7.1.
+- Fixed bug in EmPhysics71.
+
+05.12.2005, V.Ivanchenko - hadr-lists-V07-01-03
+- Add verbosity level as a parameter of Physics Lists
+- Update cout
+
+02.12.2005, G.Folger - hadr-lists-V07-01-02
+- Completed migration of physics lists to non static particles scheme.
+  Package 3.0.
+
+02.12.2005, V.Ivanchenko - hadr-lists-V07-01-01
+- Rename Builder -> Physics for all PhysicsConstructors.
+- Fixed compilation problems for non migrated lists.
+
+29.11.2005, G.Folger - hadr-lists-V07-01-00
+- (Partial) migration of physics lists to non static particles scheme.
+  A copy of the standard EM Builder is also used.
+
+Nov-2005, G.Folger - hadr-lists-V07-01-00
+- numerous changes to adopt lists to non static particle scheme.
+- use standard EM physics builder
 
 17.02.2005, G.Cosmo - ghad-lists-V07-00-01
 - Added missing fix in LBE physics-list for usage of 'this' pointer for

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QParticle.hh,v 1.23 2005/06/04 13:08:23 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.

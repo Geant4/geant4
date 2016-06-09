@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: MedLinacPhysicsList.hh,v 1.4 2004/06/18 09:17:39 gunter Exp $
+//// $Id: MedLinacPhysicsList.hh,v 1.6 2005/12/13 08:42:40 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -29,6 +29,7 @@
 
 #ifndef MedLinacPhysicsList_h
 #define MedLinacPhysicsList_h 1
+#include "MedLinacPhysicsListMessenger.hh"
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
@@ -50,8 +51,14 @@ class MedLinacPhysicsList: public G4VUserPhysicsList
     void ConstructProcess();
     void SetCuts();
 
-  //private:
-    
+public:
+  void SetCut (G4double);
+  G4double GetCut()  {return defaultCut;};
+  
+private:
+  G4double defaultCut;
+  MedLinacPhysicsListMessenger* physicsListMessenger;
+
   //G4double cutForGamma;
   //G4double cutForElectron;
   //G4double cutForPositron;

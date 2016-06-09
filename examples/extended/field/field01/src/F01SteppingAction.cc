@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01SteppingAction.cc,v 1.6 2003/06/16 16:48:58 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

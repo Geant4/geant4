@@ -31,7 +31,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4ExcitationHandler.hh"  
 #include "G4PreCompoundModel.hh"   
 #include "G4ProtonInelasticCrossSection.hh"
 
@@ -42,14 +41,13 @@ class G4PrecoProtonBuilder : public G4VProtonBuilder
     virtual ~G4PrecoProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4ProtonInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4ProtonInelasticCrossSection theXSec;
-    G4ExcitationHandler theHandler;
     G4PreCompoundModel * theModel;    
     G4double theMin;
     G4double theMax;

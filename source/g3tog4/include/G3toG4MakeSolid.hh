@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4MakeSolid.hh,v 1.6 2001/07/11 09:58:58 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------
 // Class Description:

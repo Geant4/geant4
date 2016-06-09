@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.10 2004/12/07 23:40:59 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  16th April 1997

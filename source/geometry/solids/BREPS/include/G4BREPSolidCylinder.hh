@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.8 2003/06/16 16:52:25 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidCylinder.hh,v 1.9 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidCylinder
@@ -65,6 +65,13 @@ class G4BREPSolidCylinder : public G4BREPSolid
 
   virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
+
+ public:  // without description
+
+  G4BREPSolidCylinder(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  private:
 

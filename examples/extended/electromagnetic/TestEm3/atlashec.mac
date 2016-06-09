@@ -1,4 +1,4 @@
-# $Id: atlashec.mac,v 1.2 2005/03/01 17:55:19 maire Exp $
+# $Id: atlashec.mac,v 1.5 2005/11/12 00:28:55 vnivanch Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -13,9 +13,9 @@
 /testem/det/setAbsor 2 Copper      2.5 cm
 /testem/det/setSizeYZ             17 cm
 #
-####/testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
-/testem/phys/setCuts 0.07 mm
+/testem/phys/setCuts 0.7 mm
 #
 /run/initialize
 #
@@ -25,9 +25,10 @@
 /testem/histo/setHisto 2 100   9.   10.  GeV
 #
 /gun/particle e-
-/gun/energy 10 GeV
+/gun/particle pi+
+/gun/energy 100 GeV
 /gun/position -40.635 0 0
 #
 /testem/event/printModulo 100
-/run/beamOn 1000
+/run/beamOn 100
 

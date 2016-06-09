@@ -35,6 +35,7 @@
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
 // 24/11/2004: migrated to cmath
+// 08/12/2005: removed compilation warnings
 //
 // ********************************************************************
 
@@ -111,7 +112,7 @@
   G4double RadPanel_bot  = LowerDeck_dia+12.*mm;
   G4double RadPanel_len  = 510.*mm;
   G4double RadPanel_thi  = 1.25*mm;
-  G4double RadPanel_zoff = 20*mm;
+  // G4double RadPanel_zoff = 20*mm;
   G4double RadPanelCutout_roff  = 0.5*(RadPanel_top+RadPanel_bot)/2.;
   G4double RadPanelCutout1_dia  = 466.*mm;
   G4double RadPanelCutout1_len  = 200.*mm;
@@ -291,7 +292,8 @@
     RadialPanelSkin_top, RadialPanelSkin_bot);
   G4LogicalVolume* RadialPanelCore_log = new G4LogicalVolume
     (RadialPanelCore_sol, AlHoneycomb, "RadialPanelCore_log");
-  G4VPhysicalVolume* RadialPanelCore_phys = new G4PVPlacement
+  G4VPhysicalVolume* RadialPanelCore_phys;
+  RadialPanelCore_phys = new G4PVPlacement
     (0, G4ThreeVector(0,0,0), "RadialPanelCore_phys", 
     RadialPanelCore_log, RadialPanelSkin_phys, false, 0);
   RadialPanelCore_log->SetVisAttributes(sol_white_vat);
@@ -307,7 +309,8 @@
     0.5*UpperDeckCore_thi + UpperDeckSkin_thi, 0., 360.*deg);
   G4LogicalVolume* UpperDeckSkin_log = new G4LogicalVolume
     (UpperDeckSkin_sol, CFRP, "UpperDeckSkin_log");
-  G4VPhysicalVolume* UpperDeckSkin_phys = new G4PVPlacement
+  G4VPhysicalVolume* UpperDeckSkin_phys;
+  UpperDeckSkin_phys = new G4PVPlacement
     (0, spacecraft_pos + G4ThreeVector(0,0,+0.5*StructTube_hei
     +0.5*UpperDeckCore_thi+UpperDeckSkin_thi+UpperDeck_zoff),
     "UpperDeckSkin_phys", UpperDeckSkin_log, wld_phys, false, 0);
@@ -318,7 +321,8 @@
     ("UpperDeckCore_sol",0.,.5*UpperDeck_dia,.5*UpperDeckCore_thi,0.,360.*deg);
   G4LogicalVolume* UpperDeckCore_log = new G4LogicalVolume
     (UpperDeckCore_sol, AlHoneycomb, "UpperDeckCore_log");
-  G4VPhysicalVolume* UpperDeckCore_phys = new G4PVPlacement(0,G4ThreeVector(),
+  G4VPhysicalVolume* UpperDeckCore_phys;
+  UpperDeckCore_phys = new G4PVPlacement(0,G4ThreeVector(),
     "UpperDeckCore_phys", UpperDeckCore_log, UpperDeckSkin_phys, false, 0);
   UpperDeckCore_log->SetVisAttributes(white_vat);
 
@@ -328,7 +332,8 @@
     0.5*LowerDeckCore_thi + LowerDeckSkin_thi, 0., 360.*deg);
   G4LogicalVolume* LowerDeckSkin_log = new G4LogicalVolume
     (LowerDeckSkin_sol, CFRP, "LowerDeckSkin_log");
-  G4VPhysicalVolume* LowerDeckSkin_phys = new G4PVPlacement
+  G4VPhysicalVolume* LowerDeckSkin_phys;
+  LowerDeckSkin_phys = new G4PVPlacement
     (0, spacecraft_pos + G4ThreeVector(0,0,-0.5*StructTube_hei
     -0.5*LowerDeckCore_thi-LowerDeckSkin_thi-LowerDeck_zoff),
     "LowerDeckSkin_phys", LowerDeckSkin_log, wld_phys, false, 0);
@@ -339,7 +344,8 @@
     ("LowerDeckCore_sol",0.,.5*LowerDeck_dia,.5*LowerDeckCore_thi,0.,360.*deg);
   G4LogicalVolume* LowerDeckCore_log = new G4LogicalVolume
     (LowerDeckCore_sol, AlHoneycomb, "LowerDeckCore_log");
-  G4VPhysicalVolume* LowerDeckCore_phys = new G4PVPlacement(0,G4ThreeVector(),
+  G4VPhysicalVolume* LowerDeckCore_phys;
+  LowerDeckCore_phys = new G4PVPlacement(0,G4ThreeVector(),
     "LowerDeckCore_phys", LowerDeckCore_log, LowerDeckSkin_phys, false, 0);
   LowerDeckCore_log->SetVisAttributes(sol_dgrey_vat);
 
@@ -348,7 +354,8 @@
     0., 0.5*MLIBlanket_dia, 0.5*MLIBlanket_thi, 0., 360.*deg);
   G4LogicalVolume* MLIBlanket_log = new G4LogicalVolume
     (MLIBlanket_sol, MLImat, "MLIBlanket_log");
-  G4VPhysicalVolume* MLIBlanket_phys = new G4PVPlacement
+  G4VPhysicalVolume* MLIBlanket_phys;
+  MLIBlanket_phys = new G4PVPlacement
     (0, spacecraft_pos + G4ThreeVector(0,0,-0.5*StructTube_hei
     -LowerDeckCore_thi-2*LowerDeckSkin_thi-LowerDeck_zoff-.5*MLIBlanket_thi),
     "MLIBlanket_phys", MLIBlanket_log, wld_phys, false, 0);
@@ -363,7 +370,8 @@
     0., 0.5*UpperDeck_dia, 0.5*ThermalShield_thi, 0., 360.*deg);
   G4LogicalVolume* ThermalShieldFacesheet_log = new G4LogicalVolume
     (ThermalShieldFacesheet_sol, CFRP, "ThermalShieldFacesheet_log");
-  G4VPhysicalVolume* ThermalShieldFacesheet_phys = new G4PVPlacement(0,
+  G4VPhysicalVolume* ThermalShieldFacesheet_phys;
+  ThermalShieldFacesheet_phys = new G4PVPlacement(0,
     spacecraft_pos + G4ThreeVector
     (0,0,+.5*StructTube_hei+UpperDeckCore_thi+2*UpperDeckSkin_thi+
     UpperDeck_zoff+0.5*ThermalShield_thi+ThermalShield_zoff), 
@@ -375,21 +383,23 @@
     0., 0.5*UpperDeck_dia, 0.5*ThermalShieldCore_thi, 0., 360.*deg);
   G4LogicalVolume* ThermalShieldCore_log = new G4LogicalVolume
     (ThermalShieldCore_sol, AlHoneycomb, "ThermalShieldCore_log");
-  G4VPhysicalVolume* ThermalShieldCore_phys = new G4PVPlacement(0,
+  G4VPhysicalVolume* ThermalShieldCore_phys;
+  ThermalShieldCore_phys = new G4PVPlacement(0,
     G4ThreeVector(0,0,.5*ThermalShieldFacesheet_thi+.5*ThermalShieldCore_thi),
     "ThermalShieldCore_phys", ThermalShieldCore_log, 
     ThermalShieldFacesheet_phys, false, 0);
   ThermalShieldCore_log->SetVisAttributes(red_vat);
-// Thermal Shield: foam
+  // Thermal Shield: foam
   G4Tubs* ThermalShieldFoam_sol = new G4Tubs("ThermalShieldFoam_sol",
     0., 0.5*UpperDeck_dia, 0.5*ThermalShieldFoam_thi, 0., 360.*deg);
   G4LogicalVolume* ThermalShieldFoam_log = new G4LogicalVolume
     (ThermalShieldFoam_sol, foam, "ThermalShieldFoam_log");
-  G4VPhysicalVolume* ThermalShieldFoam_phys = new G4PVPlacement(0,
+  G4VPhysicalVolume* ThermalShieldFoam_phys;
+  ThermalShieldFoam_phys = new G4PVPlacement(0,
     G4ThreeVector(0,0,-.5*ThermalShieldFacesheet_thi-.5*ThermalShieldFoam_thi),
     "ThermalShieldFoam_phys", ThermalShieldFoam_log, 
     ThermalShieldFacesheet_phys, false, 0);
- ThermalShieldFoam_log->SetVisAttributes(red_vat);
+  ThermalShieldFoam_log->SetVisAttributes(red_vat);
 
 
 
@@ -401,7 +411,8 @@
     SolarArray_i, SolarArray_o, 0.5*SolarArray_thi, 0., 360.*deg);
   G4LogicalVolume* SolarArray_log = new G4LogicalVolume
     (SolarArray_sol, Scell, "SolarArray_log");
-  G4VPhysicalVolume* SolarArray_phys = new G4PVPlacement(0, spacecraft_pos + 
+  G4VPhysicalVolume* SolarArray_phys;
+  SolarArray_phys = new G4PVPlacement(0, spacecraft_pos + 
     G4ThreeVector(0,0,+.5*StructTube_hei+UpperDeckCore_thi+2*UpperDeckSkin_thi+
     UpperDeck_zoff+ThermalShield_thi+ThermalShield_zoff+0.5*SolarArray_thi), 
     "SolarArray_phys",SolarArray_log, wld_phys, false, 0);
@@ -411,7 +422,8 @@
     0., OSRAssy_o, 0.5*OSRAssy_thi, 0., 360.*deg);
   G4LogicalVolume* OSRAssy_log = new G4LogicalVolume
     (OSRAssy_sol, vacuum, "OSRAssy_log");
-  G4VPhysicalVolume* OSRAssy_phys = new G4PVPlacement(0, spacecraft_pos + 
+  G4VPhysicalVolume* OSRAssy_phys;
+  OSRAssy_phys = new G4PVPlacement(0, spacecraft_pos + 
     G4ThreeVector(0,0,+.5*StructTube_hei+UpperDeckCore_thi+2*UpperDeckSkin_thi+
     UpperDeck_zoff+ThermalShield_thi+ThermalShield_zoff+0.5*OSRAssy_thi), 
     "OSRAssy_phys",OSRAssy_log, wld_phys, false, 0);
@@ -468,7 +480,8 @@
     RadPanelCutout_roff*std::sin(-120.*deg), RadPanelCutout2_zoff)));
   G4LogicalVolume* RadPanel_log = 
     new G4LogicalVolume(RadPanel6_sol, Al6061, "RadPanel_log");
-  G4VPhysicalVolume* RadPanel_phys = 
+  G4VPhysicalVolume* RadPanel_phys;
+  RadPanel_phys = 
     new G4PVPlacement(0, spacecraft_pos + G4ThreeVector(0,0,0),
     "RadPanel_phys", RadPanel_log, wld_phys, false, 0);
   RadPanel_log->SetVisAttributes(sol_white_vat);

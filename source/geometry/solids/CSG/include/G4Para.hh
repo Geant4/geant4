@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.13 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Para.hh,v 1.16 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // --------------------------------------------------------------------
@@ -141,6 +141,13 @@ class G4Para : public G4CSGSolid
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
 
+  public:  // without description
+
+    G4Para(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:  // without description
 
     G4ThreeVectorList*
@@ -151,6 +158,11 @@ class G4Para : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3, 
+                                  G4double& area) const;
+      // Returns a random point on the surface of one of the faces.
 
  private:
 

@@ -26,8 +26,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.16 2005/03/23 17:16:31 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VCSGfaceted.cc,v 1.17 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -64,6 +64,17 @@ G4VCSGfaceted::G4VCSGfaceted( G4String name )
 {
 }
 
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4VCSGfaceted::G4VCSGfaceted( __void__& a )
+  : G4VSolid(a),
+    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron(0),
+    fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
+{
+}
 
 //
 // Destructor

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.hh,v 1.10 2002/12/16 11:15:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AntiKaonZero.hh,v 1.12 2005/01/14 03:49:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,51 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
-
 
 #ifndef G4AntiKaonZero_h
 #define G4AntiKaonZero_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                       ANTI KAONZERO                            ###
 // ######################################################################
 
-class G4AntiKaonZero : public G4VMeson
+class G4AntiKaonZero : public G4ParticleDefinition
 {
  private:
-   static G4AntiKaonZero theAntiKaonZero;
-
- private: // constructors are hide as private  
- 
-   G4AntiKaonZero(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4AntiKaonZero* theInstance;
+   G4AntiKaonZero(){}
+   ~G4AntiKaonZero(){}
 
  public:
-   virtual ~G4AntiKaonZero() {}
-
+   static G4AntiKaonZero* Definition();
    static G4AntiKaonZero* AntiKaonZeroDefinition();
    static G4AntiKaonZero* AntiKaonZero();
-
 };
 
 #endif

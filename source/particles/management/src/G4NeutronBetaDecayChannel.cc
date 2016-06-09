@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronBetaDecayChannel.cc,v 1.6 2004/12/10 18:02:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------

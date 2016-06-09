@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: EmGammaNucleusBuilder.cc,v 1.5 2005/06/07 13:56:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "EmGammaNucleusBuilder.hh"
 #include "G4ParticleDefinition.hh"

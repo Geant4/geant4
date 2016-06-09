@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIdirectory.hh,v 1.4 2001/07/11 10:01:14 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 

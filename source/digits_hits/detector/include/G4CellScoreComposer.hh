@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CellScoreComposer.hh,v 1.1 2003/10/03 10:06:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4CellScoreComposer

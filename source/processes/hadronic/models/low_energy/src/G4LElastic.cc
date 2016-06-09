@@ -32,6 +32,7 @@
 // most of the code comes from the old Low-energy Elastic class
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
+// 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
 //
 
 #include "globals.hh"
@@ -148,7 +149,6 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double t1 = -std::log(ran)/bb;
    G4double t2 = -std::log(ran)/dd;
    if (verboseLevel > 1) {
-      G4cout << "log(FLT_MAX)=" << std::log(FLT_MAX) << G4endl;
       G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << 
               G4endl;
       G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << 

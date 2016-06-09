@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicZero.cc,v 1.14 2004/02/13 05:53:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AntiXicZero.cc,v 1.16 2005/01/14 03:49:11 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,15 +31,11 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added particle definitions, H.Kurashige, 14 June 1997
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
-//  Modified PDG encoding           H.Kurashige 24 Sep. 98
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4AntiXicZero.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -48,42 +44,47 @@
 // ###                           AntiXicZero                          ###
 // ######################################################################
 
-G4AntiXicZero::G4AntiXicZero(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VBaryon( aName,mass,width,charge,iSpin,iParity,
-              iConjugation,iIsospin,iIsospin3,gParity,pType,
-              lepton,baryon,encoding,stable,lifetime,decaytable )
+G4AntiXicZero* G4AntiXicZero::theInstance = 0;
+
+G4AntiXicZero* G4AntiXicZero::Definition()
 {
-   SetParticleSubType("xi_c");
+  if (theInstance !=0) return theInstance;
+  const G4String name = "anti_xi_c0";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0) 
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity   
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+  
+   anInstance = new G4ParticleDefinition(
+                 name,    2.4718*GeV,    6.7e-9*MeV,         0.0,
+                    1,              +1,             0,
+                    1,              +1,             0,
+             "baryon",               0,            -1,       -4132,
+                false,     0.098e-3*ns,          NULL,
+                false,       "xi_c");
+  }
+  theInstance = reinterpret_cast<G4AntiXicZero*>(anInstance);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4AntiXicZero*  G4AntiXicZero::AntiXicZeroDefinition()
+{ 
+  return Definition();
+}
 
-G4AntiXicZero G4AntiXicZero::theAntiXicZero(
-         "anti_xi_c0",      2.4718*GeV,    6.7e-9*MeV,         0.0, 
-		    1,              +1,             0,          
-		    1,              +1,             0,             
-	     "baryon",               0,            -1,       -4132,
-		false,     0.098e-3*ns,          NULL
-);
+G4AntiXicZero*  G4AntiXicZero::AntiXicZero()
+{ 
+  return Definition();
+}
 
-G4AntiXicZero* G4AntiXicZero::AntiXicZeroDefinition(){return &theAntiXicZero;}
-G4AntiXicZero* G4AntiXicZero::AntiXicZero(){return &theAntiXicZero;}
 

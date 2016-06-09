@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4InteractionCode.hh,v 1.2 2005/06/04 13:47:01 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4InteractionCode_h
 #define G4InteractionCode_h 1

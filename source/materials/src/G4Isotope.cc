@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.16 2005/04/01 12:41:11 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Isotope.cc,v 1.18 2005/11/15 15:24:37 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,6 +62,16 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
 
   theIsotopeTable.push_back(this);
   fIndexInTable = theIsotopeTable.size() - 1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4Isotope::G4Isotope(__void__&)
+  : fZ(0), fN(0), fA(0), fCountUse(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,7 +185,7 @@ size_t G4Isotope::GetNumberOfIsotopes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
+G4Isotope* G4Isotope::GetIsotope(G4String isotopeName, G4bool warning)
 {  
   // search the isotope by its name 
   for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
@@ -185,6 +195,11 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
    }
    
   // the isotope does not exist in the table
+  if (warning) {
+  G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
+         << isotopeName << " does not exist in the table. Return NULL pointer."
+	 << G4endl;
+  }     
   return 0;          
 }
 

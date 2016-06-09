@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.23 2005/03/23 17:16:31 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4DisplacedSolid.cc,v 1.26 2005/11/09 15:00:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -55,7 +55,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                           G4RotationMatrix* rotMatrix,
                                     const G4ThreeVector& transVector    )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fPtrTransform = new G4AffineTransform(rotMatrix,transVector) ;
@@ -70,7 +70,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
@@ -89,11 +89,22 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4AffineTransform directTransform )
-  : G4VSolid(pName), fpPolyhedron (0)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform( directTransform );
   fPtrTransform    = new G4AffineTransform( directTransform.Inverse() ) ; 
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4DisplacedSolid::G4DisplacedSolid( __void__& a )
+  : G4VSolid(a), fPtrSolid(0), fPtrTransform(0),
+    fDirectTransform(0), fpPolyhedron(0)
+{
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -331,6 +342,18 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Returns a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
+//
+
+G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
+{
+  G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
+  return fDirectTransform->TransformPoint(p);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Stream object contents to an output stream
 
 std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
@@ -355,7 +378,7 @@ std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
   return os;
 }
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //                    
 
@@ -365,7 +388,7 @@ G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
   scene.AddSolid (*this);
 }
 
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -378,7 +401,7 @@ G4DisplacedSolid::CreatePolyhedron () const
   return polyhedron;
 }
 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -390,7 +413,7 @@ G4DisplacedSolid::CreateNURBS () const
   return 0;
 }
 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 

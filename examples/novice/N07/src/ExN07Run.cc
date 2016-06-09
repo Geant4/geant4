@@ -21,32 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.cc,v 1.3 2003/04/09 23:20:59 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN07Run.cc,v 1.4 2005/11/22 22:20:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "ExN07Run.hh"
-#include "ExN07CalorHit.hh"
-#include "ExN07StackingAction.hh"
-
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
-
-G4Allocator<ExN07Run> anExN07RunAllocator;
+#include "G4SDManager.hh"
 
 ExN07Run::ExN07Run()
 {
+  G4String detName[6] = {"Calor-A_abs","Calor-A_gap","Calor-B_abs","Calor-B_gap","Calor-C_abs","Calor-C_gap"};
+  G4String primNameSum[6] = {"eDep","nGamma","nElectron","nPositron","trackLength","nStep"};
+  G4String primNameMin[3] = {"minEkinGamma","minEkinElectron","minEkinPositron"};
+
+  G4SDManager* SDMan = G4SDManager::GetSDMpointer();
+  G4String fullName;
   for(size_t i=0;i<6;i++)
   {
-    totE[i] = 0.;
-    totL[i] = 0.;
-    nStep[i] = 0;
-    nGamma[i] = 0;
-    nElectron[i] = 0; 
-    nPositron[i] = 0;
-    eMinGamma[i] = DBL_MAX;
-    eMinElectron[i] = DBL_MAX;
-    eMinPositron[i] = DBL_MAX;
+    for(size_t j=0;j<6;j++)
+    {
+      fullName = detName[i]+"/"+primNameSum[j];
+      colIDSum[i][j] = SDMan->GetCollectionID(fullName);
+    }
+    for(size_t k=0;k<3;k++)
+    {
+      fullName = detName[i]+"/"+primNameMin[k];
+      colIDMin[i][k] = SDMan->GetCollectionID(fullName);
+    }
   }
 }
 
@@ -58,33 +61,46 @@ void ExN07Run::RecordEvent(const G4Event* evt)
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
   numberOfEvent++;
-  for(int j=0;j<6;j++)
-  {
-    nGamma[j] += ExN07StackingAction::GetNGamma(j);
-    nElectron[j] += ExN07StackingAction::GetNElectron(j);
-    nPositron[j] += ExN07StackingAction::GetNPositron(j);
-    if(eMinGamma[j]>ExN07StackingAction::GetEMinGamma(j))
-    { eMinGamma[j] = ExN07StackingAction::GetEMinGamma(j); }
-    if(eMinElectron[j]>ExN07StackingAction::GetEMinElectron(j))
-    { eMinElectron[j] = ExN07StackingAction::GetEMinElectron(j); }
-    if(eMinPositron[j]>ExN07StackingAction::GetEMinPositron(j))
-    { eMinPositron[j] = ExN07StackingAction::GetEMinPositron(j); }
-  }
-  ExN07CalorHitsCollection* CHC = 0;
   for(size_t i=0;i<6;i++)
   {
-    if (HCE) CHC = (ExN07CalorHitsCollection*)(HCE->GetHC(i));
-    if (CHC)
+    for(size_t j=0;j<6;j++)
     {
-      G4int nHit = CHC->entries();
-      for (G4int ii=0;ii<nHit;ii++)
+      G4THitsMap<G4double>* evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(colIDSum[i][j]));
+      mapSum[i][j] += *evtMap;
+    }
+    for(size_t k=0;k<3;k++)
+    {
+      G4THitsMap<G4double>* evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(colIDMin[i][k]));
+      std::map<G4int,G4double*>::iterator itr = evtMap->GetMap()->begin();
+      for(; itr != evtMap->GetMap()->end(); itr++)
       {
-        totE[i] += (*CHC)[ii]->GetEdep();
-        totL[i] += (*CHC)[ii]->GetTrak();
-        nStep[i] += (*CHC)[ii]->GetNStep();
+        G4int key = (itr->first);
+        G4double val = *(itr->second);
+        G4double* mapP = mapMin[i][k][key];
+        if( mapP && (val>*mapP) ) continue;
+        mapMin[i][k].set(key,val);
       }
     }
   }
 }
+
+G4double ExN07Run::GetTotal(const G4THitsMap<G4double> &map) const
+{
+  G4double tot = 0.;
+  std::map<G4int,G4double*>::iterator itr = map.GetMap()->begin();
+  for(; itr != map.GetMap()->end(); itr++) 
+  { tot += *(itr->second); }
+  return tot;
+}
+
+G4double ExN07Run::FindMinimum(const G4THitsMap<G4double> &map) const
+{
+  G4double val = DBL_MAX;
+  std::map<G4int,G4double*>::iterator itr = map.GetMap()->begin();
+  for(; itr != map.GetMap()->end(); itr++) 
+  { if(val>*(itr->second)) val = *(itr->second); }
+  return val;
+}
+
 
   

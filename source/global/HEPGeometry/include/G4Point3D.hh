@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3D.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Point3D.hh,v 1.4 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4POINT3D_HH
 #define G4POINT3D_HH
@@ -30,6 +30,6 @@
 #include "globals.hh"
 #include <CLHEP/Geometry/Point3D.h>
 
-typedef HepPoint3D G4Point3D;
+typedef HepGeom::Point3D<G4double> G4Point3D;
 
 #endif /* G4POINT3D_HH */

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.72 2005/06/20 17:34:18 stesting Exp $
+# $Id: Configure,v 1.76 2005/12/13 10:02:37 stesting Exp $
 #
-# Generated on Mon Jun 20 19:30:06 CEST 2005 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 13 11:01:04 CET 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -201,6 +201,7 @@ g4vis_build_openglwin32_driver=''
 g4vis_build_openglx_driver=''
 g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
+g4vis_build_raytracerx_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
 g4vis_oglhome=''
@@ -213,6 +214,7 @@ g4vis_use_openglwin32=''
 g4vis_use_openglx=''
 g4vis_use_openglxm=''
 g4vis_use_raytracer=''
+g4vis_use_raytracerx=''
 g4vis_use_vrml=''
 g4vis_use_vrmlfile=''
 g4wanalysis_build=''
@@ -1898,25 +1900,66 @@ fi
 
 	fi #end of cxxflags
 
+
+
+	g4install_lib_AAA=`echo $g4install/lib|sed -e "s/\//AAA/g"`
+	g4final_install_lib_AAA=`echo $g4final_install/lib/geant4|sed -e "s/\//AAA/g"`
+	
+
+#############################################################################
 	if [ X$g4incflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_INSTALL_AAA=`grep 'G4INSTALL =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4INSTALL_AAA=`echo $G4INSTALL|sed -e "s/\//AAA/g"`
+###
+	INCFLAGS_AAA=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+
+#	echo INCFLAGS_AAA=$INCFLAGS_AAA
+#	echo G4INSTALL_AAA=$G4INSTALL_AAA
+#	echo G4FIRST_INSTALL_AAA=$G4FIRST_INSTALL_AAA
+
+	INCFLAGS_AAA_NEW=`echo $INCFLAGS_AAA| $sed -e "s/$G4FIRST_INSTALL_AAA/$G4INSTALL_AAA/g"`
+
+#	echo INCFLAGS_AAA_NEW=$INCFLAGS_AAA_NEW
+
+	INCFLAGS=`echo $INCFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo INCFLAGS=$INCFLAGS
+
+	if [ X$G4INCLUDE = X ] ; then
 	echo $INCFLAGS
+	else
+	echo -I$G4INCLUDE
+	fi
 	
 	$rm -rf .config/UU
 	exit 1
 
 	fi #end of incflags
+#############################################################################
 
+
+#############################################################################
 	if [ X$g4ldflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_LIB_AAA=`grep 'G4LIB =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4LIB_AAA=`echo $G4LIB|sed -e "s/\//AAA/g"`
+###
+#	G4FIRST_INSTALL_LIB_AAA=${G4FIRST_INSTALL_AAA}AAAlib
+#	G4INSTALL_LIB_AAA=${G4INSTALL_AAA}AAAlibAAAgeant4
+
+#	echo G4FIRST_INSTALL_LIB_AAA=$G4FIRST_INSTALL_LIB_AAA
+#	echo G4INSTALL_LIB_AAA=$G4INSTALL_LIB_AAA
+	
+	LDFLAGS_AAA=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+	LDFLAGS_AAA_NEW=`echo $LDFLAGS_AAA| $sed -e "s/$G4FIRST_LIB_AAA/$G4LIB_AAA/g"`
+	LDFLAGS=`echo $LDFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo LDFLAGS=$LDFLAGS
 	echo $LDFLAGS
@@ -1925,6 +1968,7 @@ fi
 	exit 1
 
 	fi #end of ldflags
+#############################################################################
 
 	if [ X$g4ldlibs = Xyes ] ; then
 
@@ -2656,13 +2700,13 @@ esac
 
 case "$g4levelgammadata" in
 '')
-	g4levelgammadata=$g4data/PhotonEvaporation
+	g4levelgammadata=$g4data/PhotonEvaporation2.0
 	;;
 esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiativeDecay
+	g4radioactivedata=$g4data/RadiativeDecay3.0
 	;;
 esac
 
@@ -3964,6 +4008,18 @@ case "$g4vis_use_oix" in
 	;;
 esac
 
+case "$g4vis_build_raytracerx_driver" in
+'')
+	g4vis_build_raytracerx_driver=n
+	;;
+esac
+
+case "$g4vis_use_raytracerx" in
+'')
+	g4vis_use_raytracerx=n
+	;;
+esac
+
 # Set by default!
 case "$g4vis_build_raytracer_driver" in
 '')
@@ -4172,6 +4228,8 @@ gans=$ans
 		;;
 	esac
 
+
+#######################################
 g4message=`cat << EOM
 
   G4VIS_BUILD_OIX_DRIVER
@@ -4199,7 +4257,36 @@ gans=$ans
 		g4vis_use_oix=y
 		;;
 	esac
+###############################################
 
+g4message=`cat << EOM
+
+  G4VIS_BUILD_RAYTRACERXX_DRIVER
+  G4VIS_USE_RAYTRACERX
+
+Allows for interactive ray-tracing graphics through X11.
+The X11 package is required.
+
+EOM`
+
+dflt=$g4vis_use_raytracerx
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_raytracerx_driver=n
+		g4vis_use_raytracerx=n
+		;;
+	y*|Y*) 
+		g4vis_build_raytracerx_driver=y
+		g4vis_use_raytracerx=y
+		;;
+	esac
+
+########################################################
 fi # if !WIN
 
 if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
@@ -4733,6 +4820,7 @@ g4vis_build_openglwin32_driver='$g4vis_build_openglwin32_driver'
 g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
 g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
+g4vis_build_raytracerx_driver='$g4vis_build_raytracerx_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
 g4vis_oglhome='$g4vis_oglhome'
@@ -4745,6 +4833,7 @@ g4vis_use_openglwin32='$g4vis_use_openglwin32'
 g4vis_use_openglx='$g4vis_use_openglx'
 g4vis_use_openglxm='$g4vis_use_openglxm'
 g4vis_use_raytracer='$g4vis_use_raytracer'
+g4vis_use_raytracerx='$g4vis_use_raytracerx'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'

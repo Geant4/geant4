@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SolidAnalyser.cc,v 1.4 2004/06/28 07:25:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: SolidAnalyser.cc,v 1.5 2005/11/15 14:15:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 #include "SolidAnalyser.hh"
 
-#include <strstream>
+#include <sstream>
 
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -145,7 +145,7 @@ G4int SolidAnalyser::GetParam(const G4Polycone * s,
    result.push_back(std::make_pair(temp, G4double(nr)));
    for (G4int i=0; i<nr; i++)
    {
-      std::ostrstream sstr_r, sstr_z;      
+      std::ostringstream sstr_r, sstr_z;      
       G4PolyconeSideRZ sideRz = s->GetCorner(i);
       sstr_z << "z_" << i << '\0';
       sstr_r << "r_" << i << '\0';
@@ -172,7 +172,7 @@ G4int SolidAnalyser::GetParam(const G4Polyhedra * s,
       
    for (G4int i=0; i<nr; i++)
    {
-      std::ostrstream sstr_r, sstr_z;      
+      std::ostringstream sstr_r, sstr_z;      
       G4PolyhedraSideRZ sideRz = s->GetCorner(i);
       sstr_z << "z_" << i << '\0';
       sstr_r << "r_" << i << '\0';

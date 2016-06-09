@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.15 2004/08/10 23:59:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EventManager.hh,v 1.16 2005/11/21 23:45:48 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
@@ -48,8 +48,7 @@ class G4SDManager;
 #include "globals.hh"
 class G4VUserEventInformation;
 
-#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
-                      // will support the HepMC module
+#ifdef CLHEP_HepMC   // Temporarly disabled
 #include "CLHEP/HepMC/GenEvent.h"
 #endif
 
@@ -80,7 +79,7 @@ class G4EventManager
       void ProcessOneEvent(G4Event* anEvent);
       //  This method is the main entry to this class for simulating an event.
 
-#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
+#ifdef CLHEP_HepMC         // Temporarly disabled on Windows, until CLHEP
                       // will support the HepMC module
       void ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent=0);
       //  This is an alternative entry for large HEP experiments which use

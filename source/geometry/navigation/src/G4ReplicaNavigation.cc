@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReplicaNavigation.cc,v 1.10 2004/12/10 16:20:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4ReplicaNavigation Implementation

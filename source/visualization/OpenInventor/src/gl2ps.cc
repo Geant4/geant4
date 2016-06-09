@@ -26,7 +26,7 @@
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.9 2005/06/02 16:51:56 allison Exp $
+ * $Id: gl2ps.cc,v 1.10 2005/08/01 16:15:49 gcosmo Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/
@@ -538,7 +538,7 @@ GLint gl2psFindRoot(GL2PSlist *primitives, GL2PSprimitive **root){
   }
 }
 
-void gl2psFreePrimitive(void *a, void *b){
+void gl2psFreePrimitive(void *a, void *){
   GL2PSprimitive *q;
   
   q = *(GL2PSprimitive**)a;
@@ -978,7 +978,7 @@ GLint gl2psAddInBspImageTree(GL2PSprimitive *prim, GL2PSbsptree2d **tree){
   return 0;
 }
 
-void gl2psAddInImageTree(void *a, void *b){
+void gl2psAddInImageTree(void *a, void *){
   GL2PSprimitive *prim = *(GL2PSprimitive **)a;
 
   if(!gl2psAddInBspImageTree(prim, &gl2ps->imagetree)){
@@ -1336,7 +1336,7 @@ int gl2psGetRGB(GLfloat *pixels, GLsizei width, GLsizei height, GLuint x, GLuint
 }
 
 void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GLsizei width, GLsizei height,
-				GLenum format, GLenum type, GLfloat *pixels,
+				GLenum, GLenum, GLfloat *pixels,
 				FILE *stream){
   typedef unsigned char Uchar;
   int status = 1, nbhex, nbyte;
@@ -1774,7 +1774,7 @@ void gl2psResetPostScriptColor(void){
   gl2ps->lastrgba[0] = gl2ps->lastrgba[1] = gl2ps->lastrgba[2] = -1.;
 }
 
-void gl2psPrintPostScriptPrimitive(void *a, void *b){
+void gl2psPrintPostScriptPrimitive(void *a, void *){
   GL2PSprimitive *prim;
 
   prim = *(GL2PSprimitive**)a;
@@ -1941,7 +1941,7 @@ void gl2psPrintTeXHeader(void){
 	  gl2ps->viewport[2], gl2ps->viewport[3]);
 }
 
-void gl2psPrintTeXPrimitive(void *a, void *b){
+void gl2psPrintTeXPrimitive(void *a, void *){
   GL2PSprimitive *prim;
 
   prim = *(GL2PSprimitive**)a;
@@ -1961,7 +1961,7 @@ void gl2psPrintTeXFooter(void){
 	  (gl2ps->options & GL2PS_LANDSCAPE) ? "}" : "");
 }
 
-void gl2psPrintTeXBeginViewport(GLint viewport[4]){
+void gl2psPrintTeXBeginViewport(GLint){
 }
 
 GLint gl2psPrintTeXEndViewport(void){

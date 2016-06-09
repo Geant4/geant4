@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBShexahedron.hh,v 1.7 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBShexahedron.hh,v 1.8 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hexa hedron builder prototype
 // OC 17 9 96
@@ -55,8 +55,6 @@ class  G4NURBShexahedron : public G4NURBS
 
   public:
     G4NURBShexahedron(const G4ThreeVector Corners [8]);
-    virtual G4Visible&  operator = (const G4Visible& right);
-    virtual G4VVisPrim& operator = (const G4VVisPrim& right);
     const char*  Whoami() const;
 };
 

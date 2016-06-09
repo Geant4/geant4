@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.8 2003/06/16 16:55:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBS.hh,v 1.9 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -38,7 +38,7 @@
 #define __C_G4NURBS__ 1
 
 #include "globals.hh"
-#include "G4VVisPrim.hh"
+#include "G4Visible.hh"
 
 // The internal floating point type is G4Float, defined line 162
 
@@ -46,7 +46,7 @@
 #include "G4Point3D.hh"
 #include "G4Vector3D.hh"
 
-class G4NURBS : public G4VVisPrim
+class G4NURBS : public G4Visible
 { 
  public:
   // NO public constructor. A G4NURBS must be builded with a child class.
@@ -61,9 +61,6 @@ class G4NURBS : public G4VVisPrim
 
   // destructor. 
   virtual ~G4NURBS();
-
-  virtual G4Visible&  operator = (const G4Visible& right);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
 
   // direction selector defined as a type because the user will use it
   // and we want the user to be well-manered.

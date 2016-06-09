@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.7 2005/05/08 16:12:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.cc,v 1.8 2005/10/03 01:59:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -29,7 +29,8 @@
 //
 // Author:      V.Ivanchenko 03.05.2004
 //
-// Modified:
+// Modified: 
+// 03-10-05 Add Builders 71 (V.Ivanchenko) 
 //
 //----------------------------------------------------------------------------
 //
@@ -44,6 +45,9 @@
 #include "G4EmQEDBuilder.hh"
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
+#include "G4EmQEDBuilder71.hh"
+#include "G4EmMuonBuilder71.hh"
+#include "G4EmHadronBuilder71.hh"
 #include "G4EmHighEnergyBuilder.hh"
 #include "G4EmQEDBuilder52.hh"
 #include "G4EmMuonBuilder52.hh"
@@ -91,6 +95,7 @@ void PhysicsList::ConstructParticle()
 {
   if(verbose > 0) 
     G4cout << "Construte Particles" << G4endl;
+
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -133,6 +138,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4EmQEDBuilder52());
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
+  } else if (name == "g4v71" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder71());
+    RegisterPhysics(new G4EmMuonBuilder71());
+    RegisterPhysics(new G4EmHadronBuilder71());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 

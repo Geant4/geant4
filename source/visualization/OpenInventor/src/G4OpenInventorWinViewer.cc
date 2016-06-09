@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.22 2004/11/25 14:45:06 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenInventorWinViewer.cc,v 1.24 2005/11/15 09:32:58 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation
@@ -61,7 +61,7 @@ public:
   }
 };
 
-#define SIZE 400
+#define SIZE 600
 // File : 
 #define ID_FILE_POSTSCRIPT 1
 #define ID_FILE_PIXMAP_POSTSCRIPT 2
@@ -211,6 +211,14 @@ void G4OpenInventorWinViewer::FinishView () {
   fViewer->saveHomePosition();
 }
 
+void G4OpenInventorWinViewer::SetView () {
+  G4OpenInventorViewer::SetView ();
+  if(!fViewer) return;
+  // Background.
+  G4Colour b = fVP.GetBackgroundColour ();
+  fViewer->setBackgroundColor
+    (SbColor((float)b.GetRed(),(float)b.GetGreen(),(float)b.GetBlue()));
+}
 void G4OpenInventorWinViewer::ViewerRender () {
   if(!fViewer) return;
   fViewer->render();

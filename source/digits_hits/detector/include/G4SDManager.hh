@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SDManager.hh,v 1.3 2005/09/22 22:21:35 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4SDManager_h
@@ -74,6 +74,8 @@ class G4SDManager
       G4VSensitiveDetector* FindSensitiveDetector(G4String dName, G4bool warning = true);
       G4HCofThisEvent* PrepareNewEvent();
       void TerminateCurrentEvent(G4HCofThisEvent* HCE);
+      void AddNewCollection(G4String SDname,G4String DCname);
+
 
   private: 
       static G4SDManager * fSDManager;

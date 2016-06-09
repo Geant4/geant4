@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2004/06/11 15:23:39 gcosmo Exp $
+$Id: History,v 1.39 2005/12/05 06:44:10 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,45 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th December 2005  Makoto Asai (raytracer-V07-01-08)
+- Correct initialization of G4RTTrackingAction and G4RTSteppingAction
+
+28th November 2005  Jane Tinslay (raytracer-V07-01-07)
+- Remove names of unused parameters to stop compiler warnings
+
+18th November 2005  John Allison  (raytracer-V07-01-06)
+- Merged in raytracer-V07-01-04 - see below.
+- Implemented window positioning.
+
+28th October 2005  Makoto Asai (raytracer-V07-01-05)
+- Working tag for merging "envelope" into G4Region.
+- This tag does not contain raytracer-V07-01-04 tag that might be
+  already done by J. Allison but does not yet appear on this file.
+
+13th October September 2005  John Allison (raytracer-V07-01-04)
+(On branch raytracer-V07-01-01-branch; changes *not* merged into head -
+need to cvs update -j raytracer-V07-01-02 -j raytracer-V07-01-01-branch.)
+- Migrated to <sstream>.
+- Default background black - can be changed by /vis/viewer/set/background.
+- GNUmakefile: Removed temporary CPPFLAGS += -DG4VIS_BUILD_RAYTRACERX_DRIVER.
+
+30th September 2005  Joseph Perl (raytracer-V07-01-03)
+New tag to include change Makoto made an hour after V07-01-02 was tagged.
+Change seems to just involve passing pWorld to material list where no argument was passed in previous version.
+
+16th September 2005  John Allison (raytracer-V07-01-02)
+(On branch raytracer-V07-01-01-branch; changes merged into head.)
+- Bug fix (black holes): Made small epsilon push into world to ensure inside.
+
+20th July 2005  John Allison (raytracer-V07-01-01)
+- Protected RayTracerX by G4VIS macro.
+
+17th July 2005  John Allison (raytracer-V07-01-00)
+- Introduced RayTracerX.  RayTracerX opens an X window and builds up
+  the picture, refining it gradually.  Already calculated pixels are
+  not recalculated, so it is as efficient as a top-to-bottom raster
+  scan.  It produces a jpeg file as well, just like RayTracer.
 
 11th June 2004  Gabriele Cosmo  (raytracer-V06-01-00)
 - Use global flag G4VIS_ALLOC_EXPORT to export extern symbols for DLLs.

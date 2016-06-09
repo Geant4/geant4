@@ -10,7 +10,7 @@
 #
 # create empty scene
 #
-#/vis/scene/create
+/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
@@ -22,7 +22,6 @@
 # draw scene
 #
 #
-
 /vis/viewer/flush
 
 

@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSC_LEAD.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  QGSC_LEAD
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TQGSC_LEAD_h
 #define TQGSC_LEAD_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TQGSC_LEAD: public T
 {
 public:
-  TQGSC_LEAD();
+  TQGSC_LEAD(G4int ver = 1);
   virtual ~TQGSC_LEAD();
   
 public:

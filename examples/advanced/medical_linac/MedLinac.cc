@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.5 2005/05/03 10:21:16 allison Exp $
+// $Id: MedLinac.cc,v 1.9 2005/12/07 14:27:39 guatelli Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -61,14 +61,15 @@ int main(int argc ,char ** argv)
 {
 
 //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   G4int seed = time(0);
-  HepRandom :: setTheSeed(seed);
+  CLHEP::HepRandom :: setTheSeed(seed);
 
  // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
   G4String sensitiveDetectorName = "Phantom";
-  MedLinacDetectorConstruction* pDetectorConstruction = MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
+  MedLinacDetectorConstruction* pDetectorConstruction = 
+MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
 
 
   // set mandatory initialization classes
@@ -107,25 +108,25 @@ int main(int argc ,char ** argv)
   // set mandatory user action class
   
   runManager->SetUserAction(new MedLinacPrimaryGeneratorAction);
-  //MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction(sensitiveDetectorName);
   MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction();
   runManager->SetUserAction(pMedLinacEventAction);
 
-  MedLinacRunAction *pRunAction = new MedLinacRunAction(sensitiveDetectorName);
+  MedLinacRunAction *pRunAction = new MedLinacRunAction();
 
   runManager->SetUserAction(pRunAction);  
   runManager->SetUserAction(new MedLinacTrackingAction);
 
 
   // Initialize  G4 kernel
-  runManager->Initialize();
+  //runManager->Initialize();
 
   // get the pointer to the UI manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
   
  if (session)   // Define UI session for interactive mode.
     { 
-      G4cout<<" UI session starts ..."<< G4endl;
+      G4cout<<" UI session starts ..."<< G4endl; 
+       UI -> ApplyCommand("/control/execute vis.mac");    
        session->SessionStart();
        delete session;
     }
@@ -136,9 +137,6 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
-  
-
-
 
 
   //job termination
@@ -151,5 +149,6 @@ int main(int argc ,char ** argv)
 
  return 0;
 }
+
 
 

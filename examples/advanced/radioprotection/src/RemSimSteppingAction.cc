@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.cc,v 1.6 2004/11/23 15:43:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimSteppingAction.cc,v 1.7 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)

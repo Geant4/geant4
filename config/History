@@ -1,4 +1,4 @@
-$Id: History,v 1.267 2005/06/17 06:59:37 gcosmo Exp $
+$Id: History,v 1.275 2005/12/12 09:15:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12th December 2005  Gabriele Cosmo (config-V07-01-07)
+- binmake.gmk: added workaround to allow for physics-lists to link
+  with DLLs on Windows.
+
+7th December 2005  Gabriele Cosmo (config-V07-01-06)
+- Added G4LIB_NO_SHARED protection for cases where installation of
+  shared libs are not allowed.
+
+2nd December 2005  Gabriele Cosmo (config-V07-01-05)
+- Replaced -GX with -EHsc compilation option in WIN32-VC setup for
+  porting on VC++8 compiler.
+
+29th November 2005  Gabriele Cosmo (config-V07-01-04)
+- Added -D_CRT_SECURE_NO_DEPRECATE to WIN32-VC setup to allow for
+  porting on VC++8 compiler.
+
+21st November 2005  Makoto Asai (config-V07-01-03)
+- binmake.gmk: added 'digits_hits/utils' module to INCFLAGS.
+
+5th October 2005 John Allison (config-V07-01-02)
+- G4VIS*.gmk: added G4VIS_BUILD_RAYTRACERX_DRIVER and G4VIS_USE_RAYTRACERX.
+
+29th July 2005 Mark Donszelmann (config-V07-01-01)
+- Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
+
+18th July 2005 Gabriele Cosmo (config-V07-01-00)
+- Excluded usage of unnecessary 'ranlib' at creation of the libraries for
+  WIN32-VC system. Fixes an observed problem of debug-symbols corruption.
 
 16th June 2005 Sergey Sadilov (config-V07-00-05)
 - Updated Configure script and support files:

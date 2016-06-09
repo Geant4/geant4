@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SphericalSurface.hh,v 1.9 2003/06/16 16:52:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4SphericalSurface

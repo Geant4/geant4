@@ -59,7 +59,7 @@ int main(int argc,char** argv) {
 
   G4long myseed = 345354;
 
-   HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   // Run manager
 

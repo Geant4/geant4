@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.13 2004/07/23 15:24:15 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisCommandsViewerSet.hh,v 1.15 2005/10/13 18:10:29 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -70,6 +70,7 @@ private:
   G4UIcommand*          fpCommandViewpointThetaPhi;
   G4UIcommand*          fpCommandViewpointVector;
   G4ThreeVector         fViewpointVector;
+  G4UIcommand*          fpCommandBackground;
 };
 
 #endif

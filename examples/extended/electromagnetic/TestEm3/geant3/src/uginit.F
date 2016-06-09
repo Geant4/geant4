@@ -14,7 +14,7 @@
 * *** Define the GEANT parameters
       CALL GINIT
 *
-* *** default values
+* *** default values for histo
       do ih = 1,MaxHist
         histo(ih) = .false.
       enddo	                                                       
@@ -48,10 +48,9 @@
         write (6,51) NbAbsor, MaxAbs
 	NbAbsor = MaxAbs
       endif
-      if (NbAbsor*NbLayer.ge.MaxPlanes) then
-        ntrunc = (MaxPlanes-1)/NbAbsor
-        write (6,52) NbLayer, ntrunc
-	NbLayer = ntrunc
+      if (NbLayer.gt.MaxLay) then
+        write (6,52) NbLayer, MaxLay
+	NbLayer = MaxLay
       endif      	
 51    FORMAT (/,5x,'warning (uginit): NbAbsor= ',I2,' truncated to ',I2)
 52    FORMAT (/,5x,'warning (uginit): NbLayer= ',I3,' truncated to ',I3)
@@ -88,8 +87,8 @@
       enddo                                                         
 *
       do k=1,MaxPlanes
-        Eforw(k) = 0.
-        Eback(k) = 0.
+        EnerFlow(k) = 0.
+        EleakLat(k) = 0.
       enddo                                                         
 *                                                                               
       END                                                                       

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4PreCompoundEmission.hh,v 1.2 2005/06/04 13:48:42 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 

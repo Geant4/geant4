@@ -1,0 +1,161 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// 05-11-21 NeutronHP or Low Energy Parameterization Models 
+//          Implemented by T. Koi (SLAC/SCCS)
+//          If NeutronHP data do not available for an element, then Low Energy 
+//          Parameterization models handle the interactions of the element.
+//
+
+//
+// Hadronic Process: High Precision low E neutron tracking
+// original by H.P. Wellisch, TRIUMF, 14-Feb-97
+// Builds and has the Cross-section data for one material.
+ 
+#ifndef G4NeutronHPorLEInelastic_h
+#define G4NeutronHPorLEInelastic_h 1
+
+// Class Description
+// Final state production model for a high precision (based on evaluated data
+// libraries) description of neutron elastic scattering below 20 MeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
+#include "G4NeutronHPorLEInelasticData.hh"
+
+#include "globals.hh"
+#include "G4NeutronHPChannel.hh"
+#include "G4NeutronHPChannelList.hh"
+#include "G4HadronicInteraction.hh"
+
+#include "G4NeutronHP2AInelasticFS.hh"
+#include "G4NeutronHP2N2AInelasticFS.hh"
+#include "G4NeutronHP2NAInelasticFS.hh"
+#include "G4NeutronHP2NDInelasticFS.hh"
+#include "G4NeutronHP2NInelasticFS.hh"
+#include "G4NeutronHP2NPInelasticFS.hh"
+#include "G4NeutronHP2PInelasticFS.hh"
+#include "G4NeutronHP3AInelasticFS.hh"
+#include "G4NeutronHP3NAInelasticFS.hh"
+#include "G4NeutronHP3NInelasticFS.hh"
+#include "G4NeutronHP3NPInelasticFS.hh"
+#include "G4NeutronHP4NInelasticFS.hh"
+#include "G4NeutronHPAInelasticFS.hh"
+#include "G4NeutronHPD2AInelasticFS.hh"
+#include "G4NeutronHPDAInelasticFS.hh"
+#include "G4NeutronHPDInelasticFS.hh"
+#include "G4NeutronHPHe3InelasticFS.hh"
+#include "G4NeutronHPN2AInelasticFS.hh"
+#include "G4NeutronHPN2PInelasticFS.hh"
+#include "G4NeutronHPN3AInelasticFS.hh"
+#include "G4NeutronHPNAInelasticFS.hh"
+#include "G4NeutronHPND2AInelasticFS.hh"
+#include "G4NeutronHPNDInelasticFS.hh"
+#include "G4NeutronHPNHe3InelasticFS.hh"
+#include "G4NeutronHPNInelasticFS.hh"
+#include "G4NeutronHPNPAInelasticFS.hh"
+#include "G4NeutronHPNPInelasticFS.hh"
+#include "G4NeutronHPNT2AInelasticFS.hh"
+#include "G4NeutronHPNTInelasticFS.hh"
+#include "G4NeutronHPNXInelasticFS.hh"
+#include "G4NeutronHPPAInelasticFS.hh"
+#include "G4NeutronHPPDInelasticFS.hh"
+#include "G4NeutronHPPInelasticFS.hh"
+#include "G4NeutronHPPTInelasticFS.hh"
+#include "G4NeutronHPT2AInelasticFS.hh"
+#include "G4NeutronHPTInelasticFS.hh"
+
+#include <set>
+
+class G4NeutronHPorLEInelastic : public G4HadronicInteraction
+{
+  public: 
+  
+  G4NeutronHPorLEInelastic();
+  
+  ~G4NeutronHPorLEInelastic();
+  
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+
+  
+
+  //G4int GetNiso() {return theInelastic[0].GetNiso();}
+
+   private:
+      G4NeutronHP2AInelasticFS the2AFS;
+      G4NeutronHP2N2AInelasticFS the2N2AFS;
+      G4NeutronHP2NAInelasticFS the2NAFS;
+      G4NeutronHP2NDInelasticFS the2NDFS;
+      G4NeutronHP2NInelasticFS the2NFS;
+      G4NeutronHP2NPInelasticFS the2NPFS;
+      G4NeutronHP2PInelasticFS the2PFS;
+      G4NeutronHP3AInelasticFS the3AFS;
+      G4NeutronHP3NAInelasticFS the3NAFS;
+      G4NeutronHP3NInelasticFS the3NFS;
+      G4NeutronHP3NPInelasticFS the3NPFS;
+      G4NeutronHP4NInelasticFS the4NFS;
+      G4NeutronHPAInelasticFS theAFS;
+      G4NeutronHPD2AInelasticFS theD2AFS;
+      G4NeutronHPDAInelasticFS theDAFS;
+      G4NeutronHPDInelasticFS theDFS;
+      G4NeutronHPHe3InelasticFS theHe3FS;
+      G4NeutronHPN2AInelasticFS theN2AFS;
+      G4NeutronHPN2PInelasticFS theN2PFS;
+      G4NeutronHPN3AInelasticFS theN3AFS;
+      G4NeutronHPNAInelasticFS theNAFS;
+      G4NeutronHPND2AInelasticFS theND2AFS;
+      G4NeutronHPNDInelasticFS theNDFS;
+      G4NeutronHPNHe3InelasticFS theNHe3FS;
+      G4NeutronHPNInelasticFS theNFS;
+      G4NeutronHPNPAInelasticFS theNPAFS;
+      G4NeutronHPNPInelasticFS theNPFS;
+      G4NeutronHPNT2AInelasticFS theNT2AFS;
+      G4NeutronHPNTInelasticFS theNTFS;
+      G4NeutronHPNXInelasticFS theNXFS;
+      G4NeutronHPPAInelasticFS thePAFS;
+      G4NeutronHPPDInelasticFS thePDFS;
+      G4NeutronHPPInelasticFS thePFS;
+      G4NeutronHPPTInelasticFS thePTFS;
+      G4NeutronHPT2AInelasticFS theT2AFS;
+      G4NeutronHPTInelasticFS theTFS;
+
+  G4double * xSec;
+  G4NeutronHPChannelList * theInelastic;
+  G4String dirName;
+  G4int numEle;
+
+   public: 
+      G4bool IsThisElementOK ( G4String );
+   private:
+     std::set< G4String > unavailable_elements;
+
+   public: 
+      G4VCrossSectionDataSet* GiveXSectionDataSet() { return theDataSet; }; 
+   private:
+      G4NeutronHPorLEInelasticData* theDataSet;
+      void createXSectionDataSet(); 
+};
+
+#endif

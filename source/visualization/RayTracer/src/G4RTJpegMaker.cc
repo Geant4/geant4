@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RTJpegMaker.cc,v 1.9 2003/06/18 08:23:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //

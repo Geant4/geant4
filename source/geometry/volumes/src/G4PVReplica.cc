@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.4 2003/11/17 11:29:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PVReplica.cc,v 1.6 2005/11/11 22:39:00 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4PVReplica Implementation
@@ -40,7 +40,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                           const G4double width,
                           const G4double offset )
   : G4VPhysicalVolume(0, G4ThreeVector(), pName, pLogical, pMother),
-    fcopyNo(-1)
+    fcopyNo(-1), fRegularVolsId(0)
 {
   if ((!pMother) || (!pMother->GetLogicalVolume()))
   {
@@ -76,7 +76,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                           const G4double width,
                           const G4double offset )
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
-    fcopyNo(-1)
+    fcopyNo(-1), fRegularVolsId(0)
 {
   if (!pMotherLogical)
   {
@@ -149,6 +149,11 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
   }
 }
 
+G4PVReplica::G4PVReplica( __void__& a )
+  : G4VPhysicalVolume(a), fRegularVolsId(0)
+{
+}
+
 G4PVReplica::~G4PVReplica()
 {
   if ( faxis==kPhi )
@@ -192,6 +197,8 @@ G4int G4PVReplica::GetMultiplicity() const
   return fnReplicas;
 }
 
+
+
 void G4PVReplica::GetReplicationData( EAxis& axis,
                                       G4int& nReplicas,
                                       G4double& width,
@@ -204,3 +211,18 @@ void G4PVReplica::GetReplicationData( EAxis& axis,
   offset = foffset;
   consuming = true;
 }
+
+G4bool G4PVReplica::IsRegularStructure() const
+{
+  return (fRegularVolsId!=0); 
+}
+
+G4int  G4PVReplica::GetRegularStructureId() const
+{
+  return fRegularVolsId; 
+}
+
+void   G4PVReplica::SetRegularStructureId( G4int Code )
+{
+  fRegularVolsId= Code; 
+} 

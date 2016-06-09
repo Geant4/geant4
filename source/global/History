@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2005/05/19 07:37:32 gcosmo Exp $
+$Id: History,v 1.153 2005/12/02 15:11:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2005  G.Cosmo (global-V07-01-06)
+- templates.hh: get rid of hard-coded numbers for DBL_MIN, FLT_MIN, DBL_DIG,
+  DBL_MAX, FLT_DIG, FLT_MAX/MAXFLOAT. Use numeric_limits from <limits> instead.
+  Fix necessary to allow for porting on VC++8 compiler.
+- Added unit test LimitsTest.cc.
+
+Nov 28, 2005  G.Cosmo (global-V07-01-05)
+- Changed header file from version.hh to G4Version.hh.
+  Coworks with tag "run-V07-01-08"
+- Fix in G4strstreambuf destructor to avoid double flushing of buffer.
+
+Nov 09, 2005  G.Cosmo (global-V07-01-04)
+- Removed '#undef __DEPRECATED' statement in G4Types.hh for strstream
+  deprecation by the gcc compiler.
+- Added forward declaration for __void__ type to be used for definition of
+  fake default constructors for usage of direct object persistency.
+
+Nov 04, 2005  G.Cosmo (global-V07-01-03)
+- Support for CLHEP-2.0.X series:
+  o Introduced explicit usage of 'CLHEP::' and 'HepGeom::' namespaces for
+    vector and geometry types.
+  o Added wrapper headers for units and constants to allow for usage in the
+    global namespace. Units and constants are NOT moved to the CLHEP namespace
+    in this version.
+  o Works with both 1.9.X and 2.0.X series of CLHEP.
+
+Oct 26, 2005  K.Murakami (global-V07-01-02)
+- version.hh: modified for the release 8.0
+- G4strstreambuf: revised for migration to sstream
+
+Oct 04, 2005  G.Cosmo (global-V07-01-01)
+- G4Allocator: initialise esplicitely data in copy-ctor.
+- G4AllocatorPool: added default dummy argument to ctor
+  to allow for default-ctor
+
+Sep 26, 2005  K.Murakami (global-V07-01-00)
+- Added version.hh header, including definitions for software versioning.
+
+Aug 12, 2005  M.Maire
+- G4UnitsTable.cc: added Surface/Mass unit (cm2/g).
 
 May 19, 2005  V.Grichine (global-V07-00-06)
 - Improved accuracy to G4AnalyticalPolSolver for quartic case.

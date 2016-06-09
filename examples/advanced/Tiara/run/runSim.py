@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# $Id: runSim.py,v 1.11 2005/03/17 19:48:27 daquinog Exp $
+# $Id: runSim.py,v 1.12 2005/12/15 16:23:11 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
 # importing python libraries
@@ -155,6 +155,9 @@ tApp.specifyPhysicsList(physList, particleCut)
 tApp.setScoreDetectorCreator(scoreDetectorCreator)
 tApp.buildGeometry()
 tiara_dir = os.environ["TIARA_BASE"]
+
+tApp.setPhysics()
+
 primGenBuilder = tiaraGenerators.\
                  TiaraDPSEnergyGenerator(tiaraSpecs,
                                          tiara_dir +

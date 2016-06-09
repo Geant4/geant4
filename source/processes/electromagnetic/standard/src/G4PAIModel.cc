@@ -574,6 +574,9 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
  
   G4double deltaTkin     = GetPostStepTransfer(scaledTkin);
+
+  // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV<<" keV "<<G4endl;
+
   if( deltaTkin <= 0. ) 
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
@@ -794,7 +797,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;
@@ -812,7 +815,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
         if(position >= (*(*fPAItransferTable)(iPlace))(iTransfer)) break ;
       }
       omega = GetEnergyTransfer(iPlace,position,iTransfer);
-      // G4cout<<omega/keV<<"\t";
+      // G4cout<<"G4PAIModel::SampleFluctuations, omega = "<<omega/keV<<" keV; "<<"\t";
       loss += omega;
       numOfCollisions-- ;
     }
@@ -826,13 +829,13 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     {
       meanNumber =((*(*fPAItransferTable)(iPlace+1))(0)-dNdxCut2)*step*charge2;
       if( meanNumber < 0. ) meanNumber = 0. ;
-      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
       //  numOfCollisions = G4Poisson(meanNumber) ;
     if( meanNumber > 0.) lambda = step/meanNumber;
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;
@@ -878,7 +881,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     else                 lambda = DBL_MAX;
     while(numb)
     {
-     stepDelta = RandExponential::shoot(lambda);
+     stepDelta = CLHEP::RandExponential::shoot(lambda);
      stepSum += stepDelta;
      if(stepSum >= step) break;
      numOfCollisions++;
@@ -912,7 +915,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       }
     }
   } 
-  //  G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV"<<G4endl ; 
+  // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "<<step/mm<<" mm"<<G4endl ; 
   if(loss > Tkin) loss=Tkin;
   return loss ;
 

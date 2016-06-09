@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.6 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MscModel.hh,v 1.7 2005/10/04 08:42:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -49,7 +49,9 @@
 // 17-08-04 name of data member facxsi changed to factail (L.Urban)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
-
+// 11-08-05 computation of lateral correlation added (L.Urban)
+// 02-10-05 nuclear size correction computation removed, the correction
+//          included in the (theoretical) tabulated values (L.Urban)
 //
 // Class Description:
 //
@@ -62,30 +64,42 @@
 #ifndef G4MscModel_h
 #define G4MscModel_h 1
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForMSC;
 class G4Navigator;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MscModel : public G4VEmModel
 {
 
 public:
 
-  G4MscModel(G4double&, G4double&, G4double&, G4double&, G4bool&,
-	     const G4String& nam = "MscUni");
+  G4MscModel(G4double dtrl,G4double factail, G4bool samplez, 
+	       const G4String& nam = "MscUni");
 
-  virtual ~G4MscModel();
+  ~G4MscModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  G4double ComputeCrossSectionPerAtom( 
+                             const G4ParticleDefinition* particle,
+                                   G4double KineticEnergy,
+                                   G4double AtomicNumber,
+                                   G4double AtomicWeight=0., 
+				   G4double cut =0.,
+				   G4double emax=0.);
+
+  G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy = 0.0,
 					 G4double maxEnergy = DBL_MAX);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double length,
@@ -105,19 +119,11 @@ public:
 
   G4double SampleDisplacement();
 
-  void SetLateralDisplasmentFlag(G4bool val);
+  G4double LatCorrelation();
+
+  void SetLateralDisplasmentFlag(G4bool val) { latDisplasment = val;};
 
 private:
-
-  G4double ComputeTransportCrossSection(
-                             const G4ParticleDefinition* particle,
-                                   G4double KineticEnergy,
-                                   G4double AtomicNumber,
-                                   G4double AtomicWeight);
-
-  // hide assignment operator
-  G4MscModel & operator=(const  G4MscModel &right);
-  G4MscModel(const  G4MscModel&);
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
@@ -132,16 +138,15 @@ private:
   G4double taulim;
   G4double currentTau;
   G4double dtrl;
-  G4double NuclCorrPar;
-  G4double FactPar;
   G4double factail ;
 
-  G4double sigmafactor;
   G4double b;
   G4double xsi;
 
   G4double lambda0;
+  G4double lambdaeff;
   G4double tPathLength;
+  G4double zPathLength;
   G4double par1,par2,par3 ;
 
   G4double stepmin ;
@@ -155,14 +160,7 @@ private:
   G4bool   isInitialized;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4MscModel::SetLateralDisplasmentFlag(G4bool val)
-{
-  latDisplasment = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

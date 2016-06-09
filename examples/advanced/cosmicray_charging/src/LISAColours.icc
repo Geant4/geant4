@@ -34,6 +34,7 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 08/12/2005: removed compilation warnings
 //
 // ********************************************************************
 
@@ -44,19 +45,32 @@
 
 
   // edge colour attributes
-  G4VisAttributes*   white_vat = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
-  G4VisAttributes*    grey_vat = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
-  G4VisAttributes*   black_vat = new G4VisAttributes(G4Colour(0.0, 0.0, 0.0));
-  G4VisAttributes*     red_vat = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
-  G4VisAttributes*  orange_vat = new G4VisAttributes(G4Colour(1.0, 0.5, 0.0));
-  G4VisAttributes*  yellow_vat = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
-  G4VisAttributes*    gold_vat = new G4VisAttributes(G4Colour(.75, .75, 0.0));
-  G4VisAttributes*   green_vat = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
-  G4VisAttributes*  lgreen_vat = new G4VisAttributes(G4Colour(0.0, .75, 0.0));
-  G4VisAttributes*    cyan_vat = new G4VisAttributes(G4Colour(0.0, 1.0, 1.0));
-  G4VisAttributes*   lblue_vat = new G4VisAttributes(G4Colour(0.0, 0.0, .75));
-  G4VisAttributes*    blue_vat = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
-  G4VisAttributes* magenta_vat = new G4VisAttributes(G4Colour(1.0, 0.0, 1.0));
+  G4VisAttributes* white_vat;
+  white_vat = new G4VisAttributes(  G4Colour(1.0, 1.0, 1.0));
+  G4VisAttributes* grey_vat;
+  grey_vat = new G4VisAttributes(   G4Colour(0.5, 0.5, 0.5));
+  G4VisAttributes* black_vat;
+  black_vat = new G4VisAttributes(  G4Colour(0.0, 0.0, 0.0));
+  G4VisAttributes* red_vat;
+  red_vat = new G4VisAttributes(    G4Colour(1.0, 0.0, 0.0));
+  G4VisAttributes* orange_vat;
+  orange_vat = new G4VisAttributes( G4Colour(1.0, 0.5, 0.0));
+  G4VisAttributes* yellow_vat;
+  yellow_vat = new G4VisAttributes( G4Colour(1.0, 1.0, 0.0));
+  G4VisAttributes* gold_vat;
+  gold_vat = new G4VisAttributes(   G4Colour(.75, .75, 0.0));
+  G4VisAttributes* green_vat;
+  green_vat = new G4VisAttributes(  G4Colour(0.0, 1.0, 0.0));
+  G4VisAttributes* lgreen_vat;
+  lgreen_vat = new G4VisAttributes( G4Colour(0.0, .75, 0.0));
+  G4VisAttributes* cyan_vat;
+  cyan_vat = new G4VisAttributes(   G4Colour(0.0, 1.0, 1.0));
+  G4VisAttributes* lblue_vat;
+  lblue_vat = new G4VisAttributes(  G4Colour(0.0, 0.0, .75));
+  G4VisAttributes* blue_vat;
+  blue_vat = new G4VisAttributes(   G4Colour(0.0, 0.0, 1.0));
+  G4VisAttributes* magenta_vat;
+  magenta_vat = new G4VisAttributes(G4Colour(1.0, 0.0, 1.0));
 
   // solid colour attributes
   G4VisAttributes* sol_white_vat  = new G4VisAttributes(G4Colour(1.0,1.0,1.0));

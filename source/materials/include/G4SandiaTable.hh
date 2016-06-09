@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.12 2004/12/07 08:50:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SandiaTable.hh,v 1.13 2005/11/09 15:38:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // class description
 //
@@ -79,6 +79,12 @@ public:  // with description
            G4double  GetSandiaCofForMaterial(G4int,G4int);
            G4double* GetSandiaCofForMaterial(G4double energy);
 	   
+public:  // without description
+
+    G4SandiaTable(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
 private:
        

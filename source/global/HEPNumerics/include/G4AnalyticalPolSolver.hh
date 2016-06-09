@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AnalyticalPolSolver.hh,v 1.4 2005/05/19 07:37:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Class description:
 //

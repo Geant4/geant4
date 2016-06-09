@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.7 2004/05/16 20:42:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.8 2005/10/26 06:10:22 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
+#include <sstream>
 
 G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -57,7 +57,7 @@ G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(const char* param
   G4double vy;
   G4double vz;
   char unts[30];
-  std::istrstream is((char*)paramString);
+  std::istringstream is(paramString);
   is >> vx >> vy >> vz >> unts;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -68,7 +68,7 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
   G4double vy;
   G4double vz;
   char unts[30];
-  std::istrstream is((char*)paramString);
+  std::istringstream is(paramString);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
@@ -80,11 +80,11 @@ G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(G4ThreeVector ve
   G4String canList = unitParam->GetParameterCandidates();
   G4Tokenizer candidateTokenizer(canList);
   G4String aToken = candidateTokenizer();
-  char strg[120];
-  std::ostrstream os(strg,120);
-  os << G4BestUnit(vec,CategoryOf(aToken)) << '\0';
 
-  G4String st = strg;
+  std::ostringstream os;
+  os << G4BestUnit(vec,CategoryOf(aToken));
+  G4String st = os.str();
+
   return st;
 }
 

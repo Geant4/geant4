@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.20 2005/05/31 16:54:01 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ViewParameters.cc,v 1.23 2005/11/13 15:26:18 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -54,6 +54,7 @@ G4ViewParameters::G4ViewParameters ():
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.
   fZoomFactor (1.),
+  fScaleFactor (G4Vector3D (1., 1., 1.)),
   fCurrentTargetPoint (),
   fDolly (0.),
   fLightsMoveWithCamera (false),
@@ -69,14 +70,20 @@ G4ViewParameters::G4ViewParameters ():
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
-  fAutoRefresh (false)
+  fAutoRefresh (false),
+  fBackgroundColour (G4Colour(0.,0.,0.))          // Black
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
 }
 
-G4ViewParameters::~G4ViewParameters () {
-// Clear cutaway planes?  Rogue Wave probably destroys OK.
+G4ViewParameters::~G4ViewParameters () {}
+
+void G4ViewParameters::MultiplyScaleFactor
+(const G4Vector3D& scaleFactorMultiplier) {
+  fScaleFactor.setX(fScaleFactor.x() * scaleFactorMultiplier.x());
+  fScaleFactor.setY(fScaleFactor.y() * scaleFactorMultiplier.y());
+  fScaleFactor.setZ(fScaleFactor.z() * scaleFactorMultiplier.z());
 }
 
 G4Vector3D& G4ViewParameters::GetActualLightpointDirection () {
@@ -247,6 +254,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
       (fZoomFactor           != v.fZoomFactor)           ||
+      (fScaleFactor          != v.fScaleFactor)          ||
       (fCurrentTargetPoint   != v.fCurrentTargetPoint)   ||
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
@@ -259,8 +267,11 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
+      (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
-      (fAutoRefresh          != v.fAutoRefresh))
+      (fXGeometryString      != v.fXGeometryString)      ||
+      (fAutoRefresh          != v.fAutoRefresh)          ||
+      (fBackgroundColour     != v.fBackgroundColour))
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -369,6 +380,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
 
   os << "\n  Zoom factor:          " << v.fZoomFactor;
 
+  os << "\n  Scale factor:         " << v.fScaleFactor;
+
   os << "\n  Current target point: " << v.fCurrentTargetPoint;
 
   os << "\n  Dolly distance:       " << v.fDolly;
@@ -427,9 +440,13 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Window size hint: "
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
+  os << "\n  X geometry string: " << v.fXGeometryString;
+
   os << "\n  Auto refresh: ";
   if (v.fAutoRefresh) os << "true";
   else os << "false";
+
+  os << "\n  Background colour: " << v.fBackgroundColour;
 
   return os;
 }
@@ -456,6 +473,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
       (fZoomFactor           != v.fZoomFactor)           ||
+      (fScaleFactor          != v.fScaleFactor)          ||
       (fCurrentTargetPoint   != v.fCurrentTargetPoint)   ||
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
@@ -470,7 +488,9 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
-      (fAutoRefresh          != v.fAutoRefresh))
+      (fXGeometryString      != v.fXGeometryString)      ||
+      (fAutoRefresh          != v.fAutoRefresh)          ||
+      (fBackgroundColour     != v.fBackgroundColour))
     return true;
 
   if (fDensityCulling &&

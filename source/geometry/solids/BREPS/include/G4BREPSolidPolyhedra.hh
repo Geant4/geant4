@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.12 2003/06/16 16:52:28 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.13 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra
@@ -122,6 +122,13 @@ public:
 
   void Reset() const;
     // Resets all distance attributes.
+
+public:  // without description
+
+  G4BREPSolidPolyhedra(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 private:
 

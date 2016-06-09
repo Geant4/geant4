@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingManager.cc,v 1.33 2004/08/12 00:50:11 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------

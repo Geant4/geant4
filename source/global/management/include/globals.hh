@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.25 2004/11/12 16:25:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: globals.hh,v 1.26 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // Global Constants and typedefs
@@ -38,7 +38,7 @@
 // 26.08.98 J.Allison,E.Tcherniaev - Introduced min/max/sqr/abs functions
 // 22.09.98 G.Cosmo - Removed min/max/sqr/abs functions and replaced with
 //                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
-// 15.12.99 G.Gracia - Included min, max definitions for NT with ISO standard
+// 15.12.99 G.Garcia - Included min, max definitions for NT with ISO standard
 // 15.06.01 G.Cosmo - Removed cbrt() definition
 
 #ifndef GLOBALS_HH
@@ -64,8 +64,9 @@
 // Includes some additional definitions: sqr, G4SwapPtr, G4SwapObj.
 #include "templates.hh"
 
-// System of Units and Physical Constants
-#include <CLHEP/Units/PhysicalConstants.h>
+// Includes Physical Constants and System of Units
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Global error function
 #include "G4ExceptionSeverity.hh"

@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005/06/22 14:08:29 gcosmo Exp $
+$Id: History,v 1.8 2005/11/30 19:17:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 28th, 2005 J.Weng (gflash-V07-01-02)
+---------------------
+- Design iteration. Added concrete sampling shower parameterisation
+  and tuning classes.
+
+Nov 28th, 2005 G.Cosmo (gflash-V07-01-01)
+----------------------
+- Migration to <sstream> for GFlashShowerModelMessenger.
+
+Oct 4th, 2005 G.Cosmo (gflash-V07-01-00) 
+---------------------
+- Corrected typo to name GFlashHomoShowerParamterisation, to become
+  GFlashHomoShowerParameterisation. Replaced affected files.
+- Code cleanup for Software Reference Manual.
+- Fixed usage of random numbers in GFlashHomoShowerParameterisation
+  to allow for event reproducibility.
+
+Jul 15th, 2005 J.Weng 
+---------------------
+- Added overflow protection in method GenerateRadius() for
+  GFlashHomoShowerParamterisation.
 
 Jun 22nd, 2005 G.Cosmo (gflash-V07-00-04) 
 ----------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction.cc,v 1.2 2004/10/19 00:59:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SamplingPostStepAction.cc,v 1.3 2005/11/21 21:41:29 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,7 +37,7 @@
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
 #include "G4VTrackTerminator.hh"
-#include <strstream>
+#include <sstream>
 
 G4SamplingPostStepAction::
 G4SamplingPostStepAction(const G4VTrackTerminator &TrackTerminator)
@@ -72,13 +72,11 @@ void G4SamplingPostStepAction::DoIt(const G4Track& aTrack,
   else
   {
     // wrong answer
-    char st[200];
-    std::ostrstream os(st,200);
+    std::ostringstream os;
     os << "Sampler returned nw = "
        << nw
-       << "\n"
-       << '\0';
-    G4String m(st);
+       << "\n";
+    G4String m = os.str();
     
     G4Exception("G4SamplingPostStepAction::DoIt()",
                 "InvalidCondition", FatalException, m);

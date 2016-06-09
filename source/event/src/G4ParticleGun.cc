@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.9 2005/04/27 01:32:46 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParticleGun.cc,v 1.10 2005/11/22 21:06:29 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 // G4ParticleGun
@@ -73,6 +73,11 @@ G4ParticleGun::~G4ParticleGun()
 void G4ParticleGun::SetParticleDefinition
                  (G4ParticleDefinition * aParticleDefinition)
 { 
+  if(!aParticleDefinition)
+  {
+    G4Exception("G4ParticleGun::SetParticleDefinition()","Event00003",FatalException,
+     "Null pointer is given.");
+  }
   if(aParticleDefinition->IsShortLived())
   {
     if(!(aParticleDefinition->GetDecayTable()))

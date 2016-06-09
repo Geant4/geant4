@@ -1,4 +1,4 @@
-$Id: History,v 1.296 2005/06/07 17:10:55 allison Exp $
+$Id: History,v 1.319 2005/12/05 06:43:50 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,172 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+4th December 2005  Joseph Perl (vis-V07-01-10)
+- Global tag for Geant4 release 8.0
+- Corresponds to the following subdirectory tags:
+- externals: geant4-07-01-ref-05
+- FukuiRenderer: geant4-07-01-ref-05
+- HepRep: geant4-07-01-ref-05
+- management: visman-V07-01-10
+- modeling: modeling-V07-01-07
+- OpenGL: opengl-V07-01-09
+- OpenInventor: openinventor-V07-01-04
+- RayTracer: raytracer-V07-01-08
+- test: vistest-V07-01-04
+- Tree: vistree-V07-01-01
+- VRML: geant4-07-01-ref-05
+- XXX: visXXX-V07-01-02
+
+29th November 2005  Jane Tinslay (vis-V07-01-09)
+- Make G4VisManager::RegisterModelFactories() non-pure for 
+  backwards compatibility.
+- Add information message to G4VisManager::DispatchToModel
+  when default trajectory model is used.
+- Removed names of unused paramaters to stop compiler warnings:
+  G4VModelCommand.hh, G4ModelCommandsDrawByCharge.cc,
+  G4ModelCommandsDrawByParticleID.cc, G4VRTScanner.hh
+
+25th November 2005  Joseph Perl (vis-V07-01-08)
+- Global tag for Geant4 release 8.0
+- Corresponds to the following subdirectory tags:
+- externals: geant4-07-01-ref-05
+- FukuiRenderer: geant4-07-01-ref-05
+- HepRep: geant4-07-01-ref-05
+- management: visman-V07-01-09
+- modeling: modeling-V07-01-05
+- OpenGL: opengl-V07-01-09
+- OpenInventor: openinventor-V07-01-03
+- RayTracer: raytracer-V07-01-06
+- test: vistest-V07-01-04
+- Tree: vistree-V07-01-01
+- VRML: geant4-07-01-ref-05
+- XXX: visXXX-V07-01-02
+
+22nd November 2005  John Allison
+- vistest-V07-01-04: Added G4Tet and PerspectiveVisAction. Refined G4Polyhedra.
+- opengl-V07-01-08: Added G4OpenGLXmViewerMessenger. Corrected text position.
+- vistree-V07-01-01: Refined guidance and printing.
+- visXXX-V07-01-02: Simplified guidance.
+- modeling-V07-01-03: Implemented radial replicas for G4Tubs.
+
+18th November 2005  John Allison
+- raytracer-V07-01-06: merged developments to the head, including RayTracerX.
+
+18th November 2005  Joseph Perl  (vis-V07-01-07)
+- Minor modification of geant4-07-01-ref-05 to facilitate acceptance
+  of greps-V07-01-09 and tracking tracking-V07-01-02.  As with
+  vis-V07-01-06, it should subsequently simply be ignored.
+
+15th November 2005  Guy Barrand
+- openinventor-V07-01-03: Background, scaling and window positioning.  Also
+  reading and wroting of .iv files.
+
+14th November 2005  John Allison (vis-V07-01-06)
+- Minor modification of vis-V07-01-03 + vis-HepRep-V07-01-04 (to avoid
+  warnings on Sun), i.e., it excludes all development since then. This
+  tag is purely to facilitate acceptance of greps-V07-01-09.  To
+  achieve this, the modification was made on a branch -
+  vis-V07-01-03-branch - of just one file, namely G4VisManager.hh.
+  This should subsequently simply be ignored.
+
+13th November 2005  John Allison
+- visman-V07-01-08: Added XGeometryString and background opacity parameter.
+- opengl-V07-01-07: Implemented window placing (XGeometryString) in OGL*X.
+
+24th October 2005  John Allison
+- modeling-V07-01-02: Added trajectory models.
+- visman-V07-01-07: Added methods for managing trajectory models.
+
+20th October 2005  Joseph Perl (vis-V07-01-05)
+- New Global Vis Tag.
+- Includes head of everything except RayTracer and OpenInventor.
+- Requires geant4-07-01-ref-03 plus the following:
+- graphics_reps: greps-V07-01-06
+- intercoms: intercoms-V07-01-01
+- event: event-V07-01-0
+- run: run-V07-01-02
+
+13th October 2005  John Allison (vis-V07-01-04)
+- Implemented non-uniform scaling in management and OpenGL.
+- Implemented arbitrary background in management, OpenGL and RayTracer.
+- Migrated to <sstream>.
+- The above consists of:
+  o vistest-V07-01-03: Migrated to <sstream> plus minor changes.
+  o DAWN-V07-01-00: Migrated to <sstream>.
+  o vis-HepRep-V07-01-03: Migrated to <sstream>.
+  o opengl-V07-01-06: Migrated to <sstream>, non-uniform scaling, any
+    background.
+  o vistree-V07-01-00: Migrated to <sstream>, fixed bug in mass calculations.
+  o visXXX-V07-01-01: Migrated to <sstream>.
+  o modeling-V07-01-01: Migrated to <sstream>.
+  o visman-V07-01-05: Migrated to <sstream>, non-uniform scaling, any
+    background.
+
+12th October 2005  John Allison (vis-V07-01-03)
+- G4VisCommandsViewer.cc: Trapped zero viewer pointer in /vis/viewer/update
+  (bug found by system test of vis-V07-01-02).
+
+2nd Oct 2005  Joseph Perl (vis-V07-01-02)
+  Same as vis-V07-01-01 but with earlier raytracer tag:
+  raytracer-V07-01-02
+
+30th Sep 2005  Joseph Perl (vis-V07-01-01)
+  New global tag for Vis.  Corresponds to vis-V07-01-00 plus:
+  vistest-V07-01-02
+  visman-V07-01-04
+  raytracer-V07-01-03
+  modeling-V07-01-00
+  opengl-V07-01-05
+  openinventor-V07-01-02
+  visXXX-V07-01-00
+  vis-HepRep-V07-01-01
+
+30th September 2005  Joseph Perl (raytracer-V07-01-03)
+New tag to include change Makoto made an hour after V07-01-02 was tagged.
+Change seems to just involve passing pWorld to material list where no argument was passed in previous version.
+
+29th September 2005  John Allison  (opengl-V07-01-05)
+- Added G4OpenGLViewerDataStore to facilitate access of viewer data by
+  scene handler.
+- Re-implemented transparency button in OpenGLXm.
+
+New tags to be included 16th Sep 2005 (JA):
+  o visman-V07-01-03:
+    + Issue "/tracking/storeTrajectory 1" on /vis/scene/add/trajectories.
+    + Warning: Attempt to add volume to a scene already containing the world.
+    + Error: Logical volume model must be only volume model in scene.
+  o visman-V07-01-04: Simplified use of ConcreteInstance..
+  o raytracer-V07-01-02: Bug fix (black holes).
+  o vistest-V07-01-02: Added a G4AttValue with time.
+
+To be included:
+  o visman-V07-01-01: Introduced (optional) second pass over scene.
+  o visman-V07-01-02: Added /vis/viewer/set/whiteBackground.
+                      Added RayTracerX to G4VisExecutive.
+  o modeling-V07-01-00: Fixed (non-)culling of transparent volumes.
+  o opengl-V07-01-01: Half-way implementation of transparency.
+  o opengl-V07-01-02: "Better algorithm" for transparency.
+  o opengl-V07-01-03: Bug fix.
+  o opengl-V07-01-04: Fixed hidden line removal.
+  o vis-HepRep-V07-01-00 (4 August 2005 Mark Donszelmann)
+  o openinventor-V07-01-01 (1st August 2005  Gabriele Cosmo)
+  o openinventor-V07-01-02: Corrected treatment of edgeflags.
+  o raytracer-V07-01-01: Protected RayTracerX by G4VIS macro.
+  o visXXX-V07-01-00: Improved guidance for rendering polyhedron objects.
+  o vistest-V07-01-01: RayTracerX instantiation removed - now in
+                       G4VisExecutive.
+
+20th July 2005  John Allison (vis-V07-01-00)
+- opengl-V07-01-00: Introduced smooth shading.  Also window size hints for Xm.
+- openinventor-V07-01-00: Changed Geant4_SoPolyhedron to construct
+    from G4Polyhedron.  Functionality unchanged.
+- visman-V07-01-00: Protected new viewer pointer.
+- vistest-V07-01-00
+- Removed top level README files.  (All wisdom now transferred
+    properly to User Guides.)
+
+17th July 2005  John Allison
+- raytracer-V07-01-00: Introduced RayTracerX.
 
 7th June 2005  John Allison (vis-V07-00-19)
 - visXXX-V07-00-00: Fixed compiler warnings.

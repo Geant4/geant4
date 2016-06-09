@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_BIC_HP.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_BIC_HP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_BIC_HP_h
 #define TLHEP_BIC_HP_h 1
 
@@ -31,7 +45,7 @@ template<class T>
 class TLHEP_BIC_HP: public T
 {
 public:
-  TLHEP_BIC_HP();
+  TLHEP_BIC_HP(G4int ver = 1);
   virtual ~TLHEP_BIC_HP();
   
 public:

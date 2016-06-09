@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorWin.cc,v 1.4 2004/04/08 10:49:57 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // OpenInventor graphics system factory.
 

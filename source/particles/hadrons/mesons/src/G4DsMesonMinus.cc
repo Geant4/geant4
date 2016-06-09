@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonMinus.cc,v 1.8 2004/02/13 05:53:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4DsMesonMinus.cc,v 1.10 2005/01/14 03:49:15 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,61 +31,56 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4DsMesonMinus.hh"
-
-#include "G4DecayTable.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                        DsMesonMinus                            ###
 // ######################################################################
 
-G4DsMesonMinus::G4DsMesonMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VMeson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4DsMesonMinus* G4DsMesonMinus::theInstance = 0;
+
+G4DsMesonMinus* G4DsMesonMinus::Definition()
 {
-   SetParticleSubType("Ds");
+  if (theInstance !=0) return theInstance;
+  const G4String name = "Ds-";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+                 name,   1.9685*GeV,  1.342e-9*MeV,    -1.*eplus,
+                    0,              -1,             0,
+                    0,               0,             0,
+              "meson",               0,             0,         -431,
+                false,     0.467e-3*ns,          NULL,
+             false,           "Ds"
+              );
+  }
+  theInstance = reinterpret_cast<G4DsMesonMinus*>(anInstance);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinusDefinition()
+{
+  return Definition();
+}
 
-// In this version, charged pions are set to stable
-G4DsMesonMinus G4DsMesonMinus::theDsMesonMinus(
-	        "Ds-",      1.9685*GeV,  1.342e-9*MeV,    -1.*eplus, 
-		    0,              -1,             0,          
-		    0,               0,             0,             
-	      "meson",               0,             0,         -431,
-		false,     0.467e-3*ns,          NULL
-);
-
-G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinusDefinition(){return &theDsMesonMinus;}
-G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinus(){return &theDsMesonMinus;}
-
-
-
-
+G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinus()
+{
+  return Definition();
+}
 

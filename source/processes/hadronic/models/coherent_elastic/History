@@ -1,0 +1,48 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+           History file for Low Energy Parameterized Models
+           ------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+28 Nov 2005 - G. Cosmo (hadr-cohe-V07-01-05)
+---------------------------------------------
+  Migrated to <sstream> from G4ElasticHadrNucleusHE.
+
+25 Nov 2005 - D. Wright (hadr-cohe-V07-01-04)
+---------------------------------------------
+  From Solaris testing:  line 83 of G4DiffElasticHadrScattering.hh:
+     multiple declaration of variable c1.   Fixed.
+
+25 Nov 2005 - D. Wright (hadr-cohe-V07-01-03)
+---------------------------------------------
+  Add detailed comments of N. Starkov from previous tags to History 
+  file:
+    G4DiffElasticHadrNucleus.hh, .cc :  
+        add high energy elastic scattering on protons
+        add new method HadronProtonDiffCrSec
+
+    G4ElasticHadrNucleusHE.hh, .cc :
+        add high energy elastic scattering on protons
+
+    G4HadronValues.hh, .cc :
+        use PDG value instead of static particle pointers
+
+  From V. Ivantchenko: fixed memory leaks
+                       4-momentum balance fixed, tested OK
+                       fixed compiler warnings
+         
+25 Nov 2005 - V.Ivanchenko (ghad-cohe-V07-01-03)
+------------------------------------------------
+  Integration of recent development of the subpackage
+  Remove of the G4Rutherford for the time being
+

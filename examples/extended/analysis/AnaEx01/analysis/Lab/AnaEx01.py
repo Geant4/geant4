@@ -24,17 +24,27 @@
 #/////////////////////////////////////////////////////////////////////////////
 #/////////////////////////////////////////////////////////////////////////////
 #
-# Example of a Python script using the AnaEx01.root file.
+# Example of a Python script using the AnaEx01.aida file.
 #
 #/////////////////////////////////////////////////////////////////////////////
 
-from Lab import *
+#
+#  To be executed from the Python shell :
+#   OS> <setup Lab>
+#   OS> python
+#  (>>> import AIDA)
+#   >>> import AnaEx01
+#
+
+from AIDA import AIDA_createAnalysisFactory
+
+aida = AIDA_createAnalysisFactory()
 
 # Get some AIDA factories :
 plotterFactory = aida.createPlotterFactory()
 treeFactory = aida.createTreeFactory()
+memoryTree = treeFactory.createDefault()
 histogramFactory = aida.createHistogramFactory(memoryTree)
-functionFactory = aida.createFunctionFactory(memoryTree)
 
 # Attach the current plotter :
 plotter = plotterFactory.create('')
@@ -42,50 +52,50 @@ plotter = plotterFactory.create('')
 plotter.createRegions(1,2,0)
 plotter.setParameter('title','AnaEx01 analysis')
 
-# If already loaded close (not delete) the file :
-fileName='AnaEx01.root'
-session.destroyManager(fileName)
-
-rioTree = treeFactory.create(fileName,'ROOT',1,0)
-rioTree.ls()
+tree = treeFactory.create('AnaEx01.aida','xml',1,0)
+tree.ls()
 
 #/////////////////////////////////////////////////////////////////////////////
 # In first region, get and plot the EAbs histo :
 #/////////////////////////////////////////////////////////////////////////////
 
-rioTree.cd('histograms')
-rioTree.ls()
+tree.cd('histograms')
+tree.ls()
 
-#  Get some histograms with the H1Get 
-# builtin Python procedure (defined in Lab/scripts/Python/Lab_init.py).
-
-EAbs = IManagedObject_to_IHistogram1D(rioTree.find('EAbs'))
+# From an AIDA tree we retreive IManagedObjects, we have to cast.
+#FIXME : IManagedObject_to_IHistogram1D is not AIDA, it is OSC specific.
+from AIDA import IManagedObject_to_IHistogram1D
+EAbs = IManagedObject_to_IHistogram1D(tree.find('EAbs'))
 if EAbs == None:
- print 'EAbs not found or is not an AIDA::IHistogram1D.'
+  print 'EAbs not found or is not an AIDA::IHistogram1D.'
 else :
- # Plot the histo :
- region = plotter.currentRegion()
- region.plot(EAbs)
+  # Plot the histo :
+  region = plotter.currentRegion()
+  region.plot(EAbs)
 
 #/////////////////////////////////////////////////////////////////////////////
 # In second region plot the EAbs histo built from the tuple :
 #/////////////////////////////////////////////////////////////////////////////
 
-rioTree.cd('..')
-rioTree.cd('tuples')
-rioTree.ls()
+tree.cd('..')
+tree.cd('tuples')
+tree.ls()
 
-rioTupleFactory = aida.createTupleFactory(rioTree)
-# Get a tuple from the rioTree :
-tuple = rioTupleFactory.create('AnaEx01','AnaEx01','')
+tupleFactory = aida.createTupleFactory(tree)
+# Get a tuple from the tree :
+#tuple = tupleFactory.create('AnaEx01','AnaEx01','')
+from AIDA import IManagedObject_to_ITuple
+tuple = IManagedObject_to_ITuple(tree.find('AnaEx01'))
+if tuple == None:
+  print 'Tuple AnaEx01 not found or is not an AIDA::ITuple.'
 
 # Create an histo in the default memory tree :
 tuple_EAbs = histogramFactory.createHistogram1D('tuple_EAbs','AnaEx01/EAbs',100,0,100)
 
 # Create an Evaluator and a Filter object :
-evaluator = rioTupleFactory.createEvaluator('EAbs')
+evaluator = tupleFactory.createEvaluator('EAbs')
 evaluator.initialize(tuple)
-filter = rioTupleFactory.createFilter('')
+filter = tupleFactory.createFilter('')
 filter.initialize(tuple)
 
 # Project tuple AnaEx01/EAbs column on the tuple_EAbs histo :
@@ -94,19 +104,20 @@ tuple.project(tuple_EAbs,evaluator,filter)
 plotter.next()
 region = plotter.currentRegion()
 region.plot(tuple_EAbs)
-region.setParameter('histogramContext','color red modeling solid')
+
+plotter.show()
+plotter.interact()
 
 del evaluator
 del filter
 
 print 'The two histos must give the same information !'
 
-del rioTupleFactory
+del tupleFactory
 
-del rioTree
+del tree
 del plotter
 del region
 del plotterFactory
 del treeFactory
 del histogramFactory
-del functionFactory

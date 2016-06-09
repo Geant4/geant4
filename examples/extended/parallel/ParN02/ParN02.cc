@@ -22,7 +22,7 @@
 //
 //
 // $Id: ParN02.cc,v 1.3 2005/05/03 10:21:16 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.25 2005/04/22 12:02:47 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLXViewer.cc,v 1.28 2005/11/22 16:10:12 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -223,34 +223,57 @@ void G4OpenGLXViewer::CreateMainWindow () {
   swa.event_mask = ExposureMask | ButtonPressMask | StructureNotifyMask;
   swa.backing_store = WhenMapped;
 
+  // Window size and position...
+  unsigned int width, height;
+  x_origin = 0;
+  y_origin = 0;
+  size_hints = XAllocSizeHints();
+  const G4String& XGeometryString = fVP.GetXGeometryString();
+  int screen_num = DefaultScreen(dpy);
+  if (!XGeometryString.empty()) {
+    G4int geometryResultMask = XParseGeometry
+      ((char*)XGeometryString.c_str(),
+       &x_origin, &y_origin, &width, &height);
+    if (geometryResultMask & (WidthValue | HeightValue)) {
+      if (geometryResultMask & XValue) {
+	if (geometryResultMask & XNegative) {
+	  x_origin = DisplayWidth(dpy, screen_num) + x_origin - width;
+	}
+	size_hints->flags |= PPosition;
+	size_hints->x = x_origin;
+      }
+      if (geometryResultMask & YValue) {
+	if (geometryResultMask & YNegative) {
+	  y_origin = DisplayHeight(dpy, screen_num) + y_origin - height;
+	}
+	size_hints->flags |= PPosition;
+	size_hints->y = y_origin;
+      }
+    } else {
+      G4cout << "ERROR: Geometry string \""
+	     << XGeometryString
+	     << "\" invalid.  Using \"600x600\"."
+	     << G4endl;
+      width = 600;
+      height = 600;
+    }
+  }
+  size_hints->width = width;
+  size_hints->height = height;
+  size_hints->flags |= PSize;
+
   //  G4int                             WinSize_x;
   //  G4int                             WinSize_y;
-  if (xwa.width > xwa.height) {
-    WinSize_x = (xwa.height)/2;
-    WinSize_y = (xwa.height)/2;
-  }
-  else {
-    WinSize_x = (xwa.width)/2;
-    WinSize_y = (xwa.width)/2;
-  }
-  if (WinSize_x < fVP.GetWindowSizeHintX ())
-    WinSize_x = fVP.GetWindowSizeHintX ();
-  if (WinSize_y < fVP.GetWindowSizeHintY ())
-    WinSize_y = fVP.GetWindowSizeHintY ();
-  x_origin = xwa.x;
-  y_origin = xwa.y;
+  WinSize_x = width;
+  WinSize_y = height;
+
   G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
   char *icon_name = charViewName;
   //char tmpatom[] = "XA_WM_NORMAL_HINTS"; 
-  size_hints = XAllocSizeHints();
   wm_hints = XAllocWMHints();
   class_hints = XAllocClassHint();
-
-  size_hints -> flags = PPosition | PSize | PMinSize;
-  size_hints -> min_width = 300;
-  size_hints -> min_height = 200;
 
   XStringListToTextProperty (&window_name, 1, &windowName);
   XStringListToTextProperty (&icon_name, 1, &iconName);

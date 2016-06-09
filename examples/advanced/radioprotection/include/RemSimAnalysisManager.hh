@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.7 2004/11/23 11:43:21 guatelli Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.8 2005/09/08 06:56:18 guatelli Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -39,7 +39,7 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 # include <AIDA/AIDA.h>
-#include "RemSimAnalysisMessenger.hh"
+//#include "RemSimAnalysisMessenger.hh"
 
 namespace AIDA 
 {
@@ -52,7 +52,7 @@ namespace AIDA
   class ITreeFactory;
 };
 
-class RemSimAnalysisMessenger;
+//class RemSimAnalysisMessenger;
 class RemSimAnalysisManager { 
 
 public:
@@ -113,7 +113,7 @@ private:
   AIDA::IHistogram2D* shape;
   AIDA::IHistogram2D* energyShape;
   
-  RemSimAnalysisMessenger* messenger;
+  //  RemSimAnalysisMessenger* messenger;
   G4String fileFormat; 
 };
 #endif

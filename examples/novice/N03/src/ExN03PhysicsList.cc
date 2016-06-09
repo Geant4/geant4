@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.18 2004/03/19 14:58:21 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN03PhysicsList.cc,v 1.19 2005/10/15 14:58:34 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -159,105 +159,40 @@ void ExN03PhysicsList::ConstructEM()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
+    
     if (particleName == "gamma") {
-    // gamma
-      pmanager->AddDiscreteProcess(new G4GammaConversion());
-      pmanager->AddDiscreteProcess(new G4ComptonScattering());      
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
-
+      // gamma         
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      
     } else if (particleName == "e-") {
-    //electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
-      G4VProcess* theeminusIonisation         = new G4eIonisation();
-      G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
-      //
-      // add processes
-      pmanager->AddProcess(theeminusMultipleScattering);
-      pmanager->AddProcess(theeminusIonisation);
-      pmanager->AddProcess(theeminusBremsstrahlung);
-      //      
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,1);
-      pmanager->SetProcessOrdering(theeminusIonisation,         idxAlongStep,2);
-      pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxAlongStep,3);      
-      //
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
-      pmanager->SetProcessOrdering(theeminusIonisation,         idxPostStep,2);
-      pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxPostStep,3);
+      //electron
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
 
     } else if (particleName == "e+") {
-    //positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
-      G4VProcess* theeplusIonisation         = new G4eIonisation();
-      G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
-      G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
-      //
-      // add processes
-      pmanager->AddProcess(theeplusMultipleScattering);
-      pmanager->AddProcess(theeplusIonisation);
-      pmanager->AddProcess(theeplusBremsstrahlung);
-      pmanager->AddProcess(theeplusAnnihilation);
-      //
-      // set ordering for AtRestDoIt
-      pmanager->SetProcessOrderingToFirst(theeplusAnnihilation, idxAtRest);
-      //
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
-      pmanager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
-      pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxAlongStep,3);      
-      //
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);
-      pmanager->SetProcessOrdering(theeplusIonisation,         idxPostStep,2);
-      pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxPostStep,3);
-      pmanager->SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
+      //positron
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
 
-    } else if( particleName == "mu+" ||
+    } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-    //muon
-      G4VProcess* aMultipleScattering = new G4MultipleScattering();
-      G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
-      G4VProcess* aPairProduction     = new G4MuPairProduction();
-      G4VProcess* anIonisation        = new G4MuIonisation();
-      //
-      // add processes
-      pmanager->AddProcess(anIonisation);
-      pmanager->AddProcess(aMultipleScattering);
-      pmanager->AddProcess(aBremsstrahlung);
-      pmanager->AddProcess(aPairProduction);
-      //
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
-      pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
-      pmanager->SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
-      pmanager->SetProcessOrdering(aPairProduction,     idxAlongStep,4);      
-      //
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
-      pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
-      pmanager->SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
-      pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
-
+      //muon  
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
+     
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) &&
+	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
-     G4VProcess* anIonisation        = new G4hIonisation();
-     //
-     // add processes
-     pmanager->AddProcess(anIonisation);
-     pmanager->AddProcess(aMultipleScattering);
-     //
-     // set ordering for AlongStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
-     pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
-     //
-     // set ordering for PostStepDoIt
-     pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
-     pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
+      //all others charged particles except geantino
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hIonisation,       -1, 2,2); 
     }
   }
 }

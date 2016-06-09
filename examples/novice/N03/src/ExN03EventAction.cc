@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.24 2005/05/30 14:24:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN03EventAction.cc,v 1.26 2005/12/06 10:48:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -30,6 +30,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03EventAction.hh"
+
+#include "ExN03RunAction.hh"
 #include "ExN03EventActionMessenger.hh"
 
 #include "G4Event.hh"
@@ -43,8 +45,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventAction::ExN03EventAction()
-:drawFlag("all"),printModulo(1),eventMessenger(0)
+ExN03EventAction::ExN03EventAction(ExN03RunAction* run)
+:runAct(run),drawFlag("all"),printModulo(1),eventMessenger(0)
 {
   eventMessenger = new ExN03EventActionMessenger(this);
 }
@@ -63,7 +65,7 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) { 
    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-   HepRandom::showEngineStatus();
+   CLHEP::HepRandom::showEngineStatus();
  }
  
  // initialisation per event
@@ -75,8 +77,13 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 
 void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
+  //accumulates statistic
+  //
+  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+  
+  //print per event (modulo n)
+  //
   G4int evtNb = evt->GetEventID();
-
   if (evtNb%printModulo == 0) {
     G4cout << "---> End of event: " << evtNb << G4endl;	
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.hh,v 1.7 2003/06/03 08:11:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TransitionRadiation.hh,v 1.8 2005/07/28 23:56:30 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -43,6 +43,7 @@
 // 02.02.00, V.Grichine, new data fEnergy and fVarAngle for double
 //                       numerical integration in inherited classes
 // 03.06.03, V.Ivanchenko fix compilation warnings
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 
 #ifndef G4TransitionRadiation_h
 #define G4TransitionRadiation_h
@@ -59,7 +60,8 @@ public:
 // Constructors
 
 
-  G4TransitionRadiation( const G4String& processName = "TR") ;
+  G4TransitionRadiation( const G4String& processName = "TR",
+                                  G4ProcessType type = fElectromagnetic) ;
 
 
 //  G4TransitionRadiation(const G4TransitionRadiation& right) ;

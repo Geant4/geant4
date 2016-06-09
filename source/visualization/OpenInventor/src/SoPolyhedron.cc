@@ -37,18 +37,21 @@
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/elements/SoTextureCoordinateElement.h>
+#include <Inventor/nodes/SoSeparator.h>
 
 //#include <HEPVis/SbMath.h>
 #define SbMinimum(a,b) ((a)<(b)?a:b)
 #define SbMaximum(a,b) ((a)>(b)?a:b)
 
-#include "HepPolyhedron.h"
+#include <HEPVis/actions/SoAlternateRepAction.h>
+
+#include "G4Polyhedron.hh"
 
 //typedef SbVec3f HVPoint3D;
 //typedef SbVec3f HVNormal3D;
 
-typedef HepPoint3D HVPoint3D;
-typedef HepNormal3D HVNormal3D;
+typedef HepGeom::Point3D<double> HVPoint3D;
+typedef HepGeom::Normal3D<double> HVNormal3D;
 
 SO_NODE_SOURCE(Geant4_SoPolyhedron) 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,10 +72,11 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
   SO_NODE_CONSTRUCTOR(Geant4_SoPolyhedron);
   SO_NODE_ADD_FIELD(solid,(TRUE));
   SO_NODE_ADD_FIELD(reducedWireFrame,(TRUE));
+  SO_NODE_ADD_FIELD(alternateRep,(NULL));
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(
- const HepPolyhedron& aPolyhedron
+ const G4Polyhedron& aPolyhedron
 )
 :fPolyhedron(0)
 //////////////////////////////////////////////////////////////////////////////
@@ -80,11 +84,14 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
 {
   SO_NODE_CONSTRUCTOR(Geant4_SoPolyhedron);
   SO_NODE_ADD_FIELD(solid,(TRUE));
-  fPolyhedron = new HepPolyhedron(aPolyhedron);
+  SO_NODE_ADD_FIELD(reducedWireFrame,(TRUE));
+  SO_NODE_ADD_FIELD(alternateRep,(NULL));
+
+  fPolyhedron = new G4Polyhedron(aPolyhedron);
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(
- HepPolyhedron* aPolyhedron
+ G4Polyhedron* aPolyhedron
 )
 :fPolyhedron(aPolyhedron)
 //////////////////////////////////////////////////////////////////////////////
@@ -92,6 +99,8 @@ Geant4_SoPolyhedron::Geant4_SoPolyhedron(
 {
   SO_NODE_CONSTRUCTOR(Geant4_SoPolyhedron);
   SO_NODE_ADD_FIELD(solid,(TRUE));
+  SO_NODE_ADD_FIELD(reducedWireFrame,(TRUE));
+  SO_NODE_ADD_FIELD(alternateRep,(NULL));
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::~Geant4_SoPolyhedron(
@@ -197,7 +206,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
         notLastEdge = fPolyhedron->GetNextVertex(vertex,edgeFlag);
         if(reducedWireFrame.getValue()==FALSE) edgeFlag = 1;        
         if(firstEdge) {
-          if(edgeFlag) {
+          if(edgeFlag > 0) {
             pvb.setNormal(normal);
             point.setValue(vertex[0],vertex[1],vertex[2]);
             pvb.setPoint(point);
@@ -207,7 +216,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
           prevEdgeFlag = edgeFlag;
         } else {
           if(edgeFlag!=prevEdgeFlag) { 
-            if(edgeFlag) { // Pass to a visible edge :
+            if(edgeFlag > 0) { // Pass to a visible edge :
               pvb.setNormal(normal);
               point.setValue(vertex[0],vertex[1],vertex[2]);
               pvb.setPoint(point);
@@ -219,7 +228,7 @@ void Geant4_SoPolyhedron::generatePrimitives(
             }
             prevEdgeFlag = edgeFlag;
           } else {
-            if(edgeFlag) {
+            if(edgeFlag > 0) {
               pve.setNormal(normal);
               point.setValue(vertex[0],vertex[1],vertex[2]);
               pve.setPoint(point);
@@ -300,5 +309,252 @@ void Geant4_SoPolyhedron::computeBBox(
   }
 }
 
+#include <Inventor/nodes/SoNormalBinding.h>
+#include <Inventor/nodes/SoNormal.h>
+#include <Inventor/nodes/SoCoordinate3.h>
+#include <Inventor/nodes/SoIndexedFaceSet.h>
+#include <Inventor/nodes/SoIndexedLineSet.h>
+//////////////////////////////////////////////////////////////////////////////
+void Geant4_SoPolyhedron::generateAlternateRep(
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(!fPolyhedron) return;
+  if(fPolyhedron->GetNoFacets()<=0) return; // Abnormal polyhedron.
+  if(fPolyhedron->GetNoVertices()<=0) return; // Abnormal polyhedron.
+
+  if(solid.getValue()==TRUE) {
+
+    SoSeparator* separator = new SoSeparator;
+
+    SoNormalBinding* normalBinding = new SoNormalBinding;
+    normalBinding->value = SoNormalBinding::PER_FACE;
+    separator->addChild(normalBinding);
+
+    SoCoordinate3* coordinate3 = new SoCoordinate3;
+    separator->addChild(coordinate3);
+    SoNormal* normal = new SoNormal;
+    separator->addChild(normal);
+    SoIndexedFaceSet* indexedFaceSet = new SoIndexedFaceSet;
+    separator->addChild(indexedFaceSet);
+
+    SbBool empty = TRUE;
+
+    int nvert = fPolyhedron->GetNoVertices();
+    int nface = fPolyhedron->GetNoFacets();
+
+    SbVec3f* normals = new SbVec3f[nface];
+    //FIXME : have the exact booking.
+    SbVec3f* points = new SbVec3f[nvert];
+    int32_t* coords = new int32_t[nvert+1];
+
+    int inormal = 0;
+    int icoord = 0;
+    int iindex = 0;
+
+    // Assume all facets are convex quadrilaterals :
+    bool notLastFace;
+    do {
+      HVNormal3D unitNormal;
+      notLastFace = fPolyhedron->GetNextUnitNormal(unitNormal);
+
+      // begin face POLYGON
+      int ipoint = 0;
+
+      bool notLastEdge;
+      int edgeFlag = 1;
+      do {
+        HVPoint3D vertex;
+        notLastEdge = fPolyhedron->GetNextVertex(vertex,edgeFlag);
+        points[ipoint].setValue(vertex[0],vertex[1],vertex[2]);
+        coords[ipoint] = icoord + ipoint;
+        ipoint++;
+        empty = FALSE;
+
+      } while (notLastEdge);
+
+      // end face.
+      coords[ipoint] = SO_END_FACE_INDEX;
+      coordinate3->point.setValues(icoord,ipoint,points);
+      icoord += ipoint;
+
+      normals[inormal].setValue(unitNormal[0],unitNormal[1],unitNormal[2]);
+      inormal++;  
+
+      indexedFaceSet->coordIndex.setValues(iindex,(ipoint+1),coords);
+      iindex += ipoint+1;
+
+    } while (notLastFace);
+
+    normal->vector.setValues(0,inormal,normals);
+
+    delete [] normals;
+    delete [] coords;
+    delete [] points;
+
+    if(empty==TRUE) {
+      separator->unref();
+    } else {
+      alternateRep.setValue(separator);
+    }
+
+  } else {
+
+    SoSeparator* separator = new SoSeparator;
+
+    int nvert = fPolyhedron->GetNoVertices();
+
+    //FIXME : have the exact booking.
+    int nedge = nvert * 3;
+    int npoint = nedge*2;
+    SbVec3f* points = new SbVec3f[npoint];
+    int ncoord = nedge*3;
+    int32_t* coords = new int32_t[ncoord];
+
+    SbVec3f pvb,pve;
+
+    SbBool empty = TRUE;
+    int ipoint = 0;
+    int icoord = 0;
+
+    bool notLastFace;
+    do {
+      HVNormal3D unitNormal;
+      notLastFace = fPolyhedron->GetNextUnitNormal(unitNormal);
+
+      //SbVec3f normal;
+      //if( (fProjection==SbProjectionRZ) || (fProjection==SbProjectionZR) ) {
+        //normal.setValue(0,0,1);
+      //} else {
+        //normal.setValue(unitNormal[0],unitNormal[1],unitNormal[2]);
+      //}
+
+      // Treat edges :
+      int edgeFlag = 1;
+      int prevEdgeFlag = edgeFlag;
+      bool notLastEdge;
+      SbBool firstEdge = TRUE;
+      do {
+        HVPoint3D vertex;
+        notLastEdge = fPolyhedron->GetNextVertex(vertex,edgeFlag);
+        if(reducedWireFrame.getValue()==FALSE) edgeFlag = 1;        
+        if(firstEdge) {
+          if(edgeFlag > 0) {
+            pvb.setValue(vertex[0],vertex[1],vertex[2]);
+          } else {
+          }
+          firstEdge = FALSE;
+          prevEdgeFlag = edgeFlag;
+        } else {
+          if(edgeFlag!=prevEdgeFlag) { 
+            if(edgeFlag > 0) { // Pass to a visible edge :
+              pvb.setValue(vertex[0],vertex[1],vertex[2]);
+            } else { // Pass to an invisible edge :
+              pve.setValue(vertex[0],vertex[1],vertex[2]);
+
+              if((ipoint+1)>=npoint) {
+                int new_npoint = 2 * npoint;
+                SbVec3f* new_points = new SbVec3f[new_npoint];
+                for(int i=0;i<npoint;i++) new_points[i] = points[i];
+                delete [] points;
+                npoint = new_npoint;
+                points = new_points;
+              }
+
+              if((icoord+2)>=ncoord) {
+                int new_ncoord = 2 * ncoord;
+                int32_t* new_coords = new int32_t[new_ncoord];
+                for(int i=0;i<ncoord;i++) new_coords[i] = coords[i];
+                delete [] coords;
+                ncoord = new_ncoord;
+                coords = new_coords;
+              }
+
+              points[ipoint+0] = pvb;
+              points[ipoint+1] = pve;
+              coords[icoord+0] = ipoint + 0;
+              coords[icoord+1] = ipoint + 1;
+              coords[icoord+2] = SO_END_LINE_INDEX;
+              ipoint += 2;
+              icoord += 3;
+              empty = FALSE;
+            }
+            prevEdgeFlag = edgeFlag;
+          } else {
+            if(edgeFlag > 0) {
+              pve.setValue(vertex[0],vertex[1],vertex[2]);
+
+              if((ipoint+1)>=npoint) {
+                int new_npoint = 2 * npoint;
+                SbVec3f* new_points = new SbVec3f[new_npoint];
+                for(int i=0;i<npoint;i++) new_points[i] = points[i];
+                delete [] points;
+                npoint = new_npoint;
+                points = new_points;
+              }
+
+              if((icoord+2)>=ncoord) {
+                int new_ncoord = 2 * ncoord;
+                int32_t* new_coords = new int32_t[new_ncoord];
+                for(int i=0;i<ncoord;i++) new_coords[i] = coords[i];
+                delete [] coords;
+                ncoord = new_ncoord;
+                coords = new_coords;
+              }
+
+              points[ipoint+0] = pvb;
+              points[ipoint+1] = pve;
+              coords[icoord+0] = ipoint + 0;
+              coords[icoord+1] = ipoint + 1;
+              coords[icoord+2] = SO_END_LINE_INDEX;
+              ipoint += 2;
+              icoord += 3;
+              empty = FALSE;
+
+              pvb = pve;
+            } else {
+            }
+          }
+        }
+      } while (notLastEdge);
+    } while (notLastFace);
+
+    SoCoordinate3* coordinate3 = new SoCoordinate3;
+    coordinate3->point.setValues(0,ipoint,points);
+    separator->addChild(coordinate3);
+
+    SoIndexedLineSet* indexedLineSet = new SoIndexedLineSet;
+    indexedLineSet->coordIndex.setValues(0,icoord,coords);
+    separator->addChild(indexedLineSet);
+
+    delete [] coords;
+    delete [] points;
+
+    if(empty==TRUE) {
+      separator->unref();
+    } else {
+      alternateRep.setValue(separator);
+    }
+  }
+}
+//////////////////////////////////////////////////////////////////////////////
+void Geant4_SoPolyhedron::clearAlternateRep(
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  alternateRep.setValue(NULL);
+}
+//////////////////////////////////////////////////////////////////////////////
+void Geant4_SoPolyhedron::doAction(
+ SoAction* aAction
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  SO_ALTERNATEREP_DO_ACTION(aAction)
+  SoShape::doAction(aAction);
+}
 
 #endif

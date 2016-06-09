@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsFTFC.cc,v 1.2 2005/11/29 16:59:40 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 28.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #include "HadronPhysicsFTFC.hh"
 
 #include "globals.hh"
@@ -34,21 +48,46 @@
 
 HadronPhysicsFTFC::HadronPhysicsFTFC(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
-{
-  theNeutrons.RegisterMe(&theFTFCNeutron);
-  theNeutrons.RegisterMe(&theLEPNeutron);
-  theLEPNeutron.SetMaxInelasticEnergy(25*GeV);
+{}
 
-  thePro.RegisterMe(&theFTFCPro);
-  thePro.RegisterMe(&theLEPPro);
-  theLEPPro.SetMaxEnergy(25*GeV);
+void HadronPhysicsFTFC::CreateModels()
+{
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(theFTFCNeutron=new G4FTFCNeutronBuilder);
+  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
+  theLEPNeutron->SetMaxInelasticEnergy(25*GeV);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(theFTFCPro=new G4FTFCProtonBuilder);
+  thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
+  theLEPPro->SetMaxEnergy(25*GeV);
   
-  thePiK.RegisterMe(&theFTFCPiK);
-  thePiK.RegisterMe(&theLEPPiK);
-  theLEPPiK.SetMaxEnergy(25*GeV);
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theFTFCPiK=new G4FTFCPiKBuilder);
+  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
+  theLEPPiK->SetMaxEnergy(25*GeV);
+  
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
-HadronPhysicsFTFC::~HadronPhysicsFTFC() {}
+HadronPhysicsFTFC::~HadronPhysicsFTFC() 
+{
+  delete theNeutrons;
+  delete theLEPNeutron;
+  delete theFTFCNeutron;
+    
+  delete thePiK;
+  delete theLEPPiK;
+  delete theFTFCPiK;
+    
+  delete thePro;
+  delete theLEPPro;
+  delete theFTFCPro;    
+    
+  delete theMiscLHEP;
+  delete theStoppingHadron;
+}
 
 void HadronPhysicsFTFC::ConstructParticle()
 {
@@ -65,11 +104,11 @@ void HadronPhysicsFTFC::ConstructParticle()
 #include "G4ProcessManager.hh"
 void HadronPhysicsFTFC::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePro.Build();
-  thePiK.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch

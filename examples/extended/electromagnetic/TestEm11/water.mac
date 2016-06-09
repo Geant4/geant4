@@ -1,0 +1,32 @@
+# $Id: water.mac,v 1.2 2005/10/05 11:57:57 maire Exp $
+#
+# no constraint on tracking step
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setSizeX  3 cm
+/testem/det/setSizeYZ 3 cm
+#
+/testem/phys/addPhysics  standard	# em physics
+###/testem/phys/addPhysics  g4v52  	# em physics 
+#
+/run/initialize
+#
+/testem/phys/setCuts 10 mum
+#
+/gun/particle e-
+/gun/energy 4 MeV
+#
+/testem/histo/setFileType hbook
+/testem/histo/setFileName water.1mum
+/testem/histo/setHisto 1 120 0.  24. mm		#edep profile
+/testem/histo/setHisto 3 100 0.  24. mm		#track length primary
+/testem/histo/setHisto 4 100 0.  2.  mm		#step length primary
+/testem/histo/setHisto 5 100 0.  20. mm		#proj range
+/testem/histo/setHisto 6 100 0.  24. mm		#track length secondaries
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UnknownDecay.hh,v 1.2 2004/12/02 07:06:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // ------------------------------------------------------------

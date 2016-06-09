@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisAttributes.hh,v 1.14 2005/03/22 16:48:18 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  23rd October 1996

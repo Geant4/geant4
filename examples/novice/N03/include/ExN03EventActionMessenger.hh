@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN03EventActionMessenger.hh,v 1.7 2002/12/16 16:37:26 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.37 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Trap.cc,v 1.40 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4Trap
 //
@@ -53,10 +53,14 @@
 
 #include "G4VPVParameterisation.hh"
 
+#include "Randomize.hh"
+
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -69,14 +73,6 @@ const G4double kCoplanar_Tolerance = 1E-4 ;
 // Private enum: Not for external use 
     
 enum Eside {kUndef,ks0,ks1,ks2,ks3,kPZ,kMZ};
-
-////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Trap::~G4Trap()
-{
-}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -523,6 +519,24 @@ G4Trap::G4Trap( const G4String& pName )
     fTalpha2    (0.)
 {
  MakePlanes();
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Trap::G4Trap( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Destructor
+
+G4Trap::~G4Trap()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1759,7 +1773,107 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnPlane
+//
+// Auxiliary method for Get Point on Surface
+
+G4ThreeVector G4Trap::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                      G4ThreeVector p2, G4ThreeVector p3,
+                                      G4double& area) const
+{
+  G4double lambda1, lambda2, chose, aOne, aTwo;
+  G4ThreeVector t, u, v, w, Area, normal;
+  
+  t = p1 - p0;
+  u = p2 - p1;
+  v = p3 - p2;
+  w = p0 - p3;
+
+  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
+                       w.z()*v.x() - w.x()*v.z(),
+                       w.x()*v.y() - w.y()*v.x());
+  
+  aOne = 0.5*Area.mag();
+  
+  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
+                       t.z()*u.x() - t.x()*u.z(),
+                       t.x()*u.y() - t.y()*u.x());
+  
+  aTwo = 0.5*Area.mag();
+  
+  area = aOne + aTwo;
+  
+  chose = RandFlat::shoot(0.,aOne+aTwo);
+
+  if( (chose>=0.) && (chose < aOne) )
+  {
+    lambda1 = RandFlat::shoot(0.,1.);
+    lambda2 = RandFlat::shoot(0.,lambda1);
+    return (p2+lambda1*v+lambda2*w);    
+  }
+  
+  // else
+
+  lambda1 = RandFlat::shoot(0.,1.);
+  lambda2 = RandFlat::shoot(0.,lambda1);
+
+  return (p0+lambda1*t+lambda2*u);    
+}
+
+///////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Trap::GetPointOnSurface() const
+{
+  G4double aOne, aTwo, aThree, aFour, aFive, aSix, chose;
+  G4ThreeVector One, Two, Three, Four, Five, Six, test;
+  G4ThreeVector pt[8];
+     
+  pt[0] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                        -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1] = G4ThreeVector(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                        -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3] = G4ThreeVector(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                        +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5] = G4ThreeVector(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                        +fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                        +fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7] = G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                        +fDz*fTthetaSphi+fDy2,+fDz);
+  
+  // make sure we provide the points in a clockwise fashion
+
+  One   = GetPointOnPlane(pt[0],pt[1],pt[3],pt[2], aOne);
+  Two   = GetPointOnPlane(pt[4],pt[5],pt[7],pt[6], aTwo);
+  Three = GetPointOnPlane(pt[6],pt[7],pt[3],pt[2], aThree);
+  Four  = GetPointOnPlane(pt[4],pt[5],pt[1],pt[0], aFour); 
+  Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
+  Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
+ 
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  if( (chose>=0.) && (chose<aOne) )                    
+    { return One; }
+  else if( (chose>=aOne) && (chose<aOne+aTwo) )  
+    { return Two; }
+  else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) )
+    { return Three; }
+  else if( (chose>=aOne+aTwo+aThree) && (chose<aOne+aTwo+aThree+aFour) )
+    { return Four; }
+  else if( (chose>=aOne+aTwo+aThree+aFour)
+        && (chose<aOne+aTwo+aThree+aFour+aFive) )
+    { return Five; }
+  return Six;
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 

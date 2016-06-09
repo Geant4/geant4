@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.27 2005/04/15 14:41:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VMultipleScattering.hh,v 1.29 2005/10/27 11:33:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,9 +48,11 @@
 // 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 15-04-05 remove boundary flag (V.Ivanchenko)
+// 07-10-05 error in a protection in GetContinuousStepLimit corrected (L.Urban)
+// 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -113,6 +115,9 @@ public:
   // Build physics table during initialisation
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
+  // set boolean flag steppingAlgorithm
+  // ( true/false : standard or 7.1 style process)
+  virtual void MscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -303,7 +308,10 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
   currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
-  if(currentRange < currentMinimalStep) currentRange = currentMinimalStep;
+  // the next line was in error 
+  // if(currentRange < currentMinimalStep) currentRange = currentMinimalStep;
+  //  the condition/protection correctly should be
+  if(currentRange < currentMinimalStep) currentMinimalStep = currentRange;
   truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
   //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
   //       << lambda0 << " range= " << currentRange

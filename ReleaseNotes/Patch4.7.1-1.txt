@@ -1,0 +1,164 @@
+
+                 Geant4 7.1 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           25 October 2005
+
+List of fixes included in this public patch since the public release 7.1:
+
+  o Configuration:
+    -------------
+    + Excluded usage of unnecessary 'ranlib' at creation of the libraries
+      for WIN32-VC system. Fixes an observed problem of debug-symbols
+      corruption.
+    + Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
+    + Fixed Configure script for --incflags and --ldflags options.
+
+  o Event:
+    -----
+    + Corrected typo in printout in G4GeneralParticleMessenger.
+      Addresses problem report #786.
+
+  o Geometry:
+    --------
+    + navigation
+      o G4DrawVoxels: removed unnecessary 'panic' message in
+        ComputeVoxelPolyhedra() and some code cleanup.
+    + solids/BREPS
+      o Fixed problem of double-deletion in G4BREPSolidPolyhedra and
+        G4BREPSolidPCone destructors.
+    + solids/CSG
+      o Fixed bug in G4Sphere::DistanceToOut(p,v): added check for
+        intersection with double cone.
+      o Fixed bug in G4Para::DistanceToOut(p,v) for the case v.x()<0.
+        Following problem report from user posted on Hypernews (#452).
+      o Improved implementation for DistanceToIn/Out() in G4Torus to make use
+        of G4JTPolynomialSolver for precise calculation of the intersections.
+    + solids/specific:
+      o Fixed compilation warning on WIN32-VC for G4VSurface.cc.
+
+  o Global:
+    ------
+    + G4Allocator: initialise esplicitely data in copy-ctor.
+    + G4AllocatorPool: added default dummy argument to ctor to allow for
+      default-ctor
+
+  o Parameterisations:
+    -----------------
+    + Added overflow protection in method GenerateRadius() for
+      GFlashHomoShowerParamterisation in the 'gflash' module.
+
+  o Particles:
+    ---------
+    + Fix to prohibit creation of ions in 'PreInit' state to make sure
+      that proper processes will be attached to the ions.
+
+  o Electromagnetic processes:
+    -------------------------
+    + high-energy:
+      o Fix a misprint in G4BetheBlochNoDeltaModel and minor cleanup.
+    + muons:
+      o In all energy loss models return protection against the case
+        tmin>tmax (fixes bug report).
+      o Fix angular distributions of secondaries and 4-momentum balance
+        in G4MuBremsstrahlungModel and G4MuPairProductionModel.
+      o Added protection in G4MuPairProductionModel needed for sampling
+        of pair energy in the case of low cuts.
+    + standard:
+      o In all energy loss models return protection against the case
+        tmin>tmax (fixes bug report).
+      o Fix for initialisation of G4eBremsstrahlungModel.
+      o Fix a bug in calculation of chemical correction in G4BraggIonModel
+        and fix in G4BraggModel for problem observed when increasing
+        precision using standard model and chemical effect.
+    + utils:
+      o G4VEnergyLossProcess: return number protections against numerical
+        imprecision, which were used in version 7.0 and removed in 7.1
+        (fixes bug report)
+      o Set default lambdaFactor to 0.8 for integral mode (improvement in
+        CPU performance for low cuts).
+      o G4VEmProcess: use integral mode only for charged particles.
+      o G4EmModelManager: fix a cut calculation for the e+e- pair
+        production physics process.
+      o G4VMultipleScattering: fixed error in a protection in
+        GetContinuousStepLimit().
+    + xrays:
+      o Changed variable name 'MeanNumPhotons' to 'MeanNumberOfPhotons' in
+        G4Scintillation and G4Cerenkov to conform with the documentation in
+        the Application Developers Guide.
+      o Added G4ProcessType identifier to all processes constructors.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o Correctly set the type of a hadronic process.
+        Fixes problem report #744.
+    + models/chiral_inv_phase_space/body:
+      o Memory leak fix for nuclear mass management in G4QPDGCode to use
+        G4 masses of nuclear fragments.
+    + models/low_energy:
+      o Fix in elastic scattering for the case of target hydrogen: use
+        relativistic kinematic for the generation of the final state.
+        Fix tested in HARP.
+    + stopping:
+      o Fixed bug in time of e- produced in bound decay of mu-.
+
+  o Management of processes:
+    -----------------------
+    + Added forward declaration of G4UImessenger in G4ProcessTable header.
+      Fixes problem report #768.
+
+  o Optical Processes:
+    -----------------
+    + Added G4ProcessType identifier to all processes constructors.
+
+  o Run:
+    ---
+    + Removed unnecessary usage of G4Allocator for allocation of a run.
+
+  o Tracking:
+    --------
+    + Fix in G4SteppingManager::InvokeAlongStepDoItProcs() for problem
+      report #761.
+    + Fix in G4SteppingManager::DefinePhysicalStepLength() for the order
+      of execution of 'ExclusivelyForced' processes like Fast-Simulation.
+      Problem reported and fixed in CMS and ATLAS.
+
+  o Physics lists:
+    -------------
+    + hadronic: corrected text for the installation in README.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/electromagnetic/TestEm9
+      o Fixed problem for changing cuts between runs.
+    + extendedeventgenerator/exgps
+      o Fixed GNUMakefile for linking with AIDA on WIN32-VC.
+        Fixes problem report #767.
+    + extended/medical/GammaTherapy
+      o Added vis.mac and histogram type (aida, root, hbook).
+      o Use standard angular distribution for low-energy PhotoElectric.
+    + extended/persistency
+      o Added missing EXTRALIBS to link list for specialised setup.
+    + extended/radioactivedecay/exrdm
+      o Fixed GNUMakefile for linking with AIDA on WIN32-VC.
+        Fixes problem report #767.
+    + novice/N03
+      o RunAction: compute and print statistic at the end of the run.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 7.1.
+  o  Technical notes distributed for release 7.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 7.1 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03EventAction.cc,v 1.4 2001/11/07 16:36:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: F03EventAction.cc,v 1.5 2005/12/06 14:01:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -109,12 +109,12 @@ void F03EventAction::EndOfEventAction(const G4Event* evt)
   //save rndm status
   if (runaction->GetRndmFreq() == 2)
     { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
+     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");   
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
+        CLHEP::HepRandom::showEngineStatus();
        }
     }     
 }

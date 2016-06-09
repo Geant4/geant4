@@ -116,10 +116,11 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
 }
 
 
-Hep3Vector CCalMagneticField::MagneticField(const Hep3Vector point) const {
+CLHEP::Hep3Vector CCalMagneticField::
+MagneticField(const CLHEP::Hep3Vector point) const {
 
   G4double x[3],B[3];
-  Hep3Vector v;
+  CLHEP::Hep3Vector v;
   
   x[0] = point.x();
   x[1] = point.y();

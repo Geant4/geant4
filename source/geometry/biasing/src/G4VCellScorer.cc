@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VCellScorer.cc,v 1.5 2002/12/13 11:54:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

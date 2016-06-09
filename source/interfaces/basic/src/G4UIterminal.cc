@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.19 2003/06/16 16:56:03 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIterminal.cc,v 1.20 2005/10/26 06:19:35 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4Types.hh"
-#include <strstream>
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
 #include "G4UIterminal.hh"
 #include "G4UIcsh.hh"
+#include <sstream>
+
 
 //////////////////////////////////////////////
 G4UIterminal::G4UIterminal(G4VUIshell* aShell)
@@ -205,7 +206,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
     G4String ss= nC(1, nC.length()-1);
     G4int vl;
     const char* tt= ss;
-    std::istrstream is((char*)tt);
+    std::istringstream is(tt);
     is >> vl;
     G4int nh= UI-> GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 

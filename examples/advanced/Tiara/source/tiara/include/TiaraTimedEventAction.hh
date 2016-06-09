@@ -22,7 +22,7 @@
 //
 //
 // $Id: TiaraTimedEventAction.hh,v 1.1.1.1 2003/06/12 13:08:24 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class TiaraTimedEventAction

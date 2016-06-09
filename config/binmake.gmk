@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.107 2005/06/15 13:59:59 gunter Exp $
+# $Id: binmake.gmk,v 1.109 2005/12/12 09:08:21 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -133,6 +133,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/digits_hits/detector/include \
               -I$(G4BASE)/digits_hits/hits/include \
               -I$(G4BASE)/digits_hits/digits/include \
+              -I$(G4BASE)/digits_hits/utils/include \
               -I$(G4BASE)/persistency/include \
               -I$(G4BASE)/readout/include \
               -I$(G4BASE)/event/include \
@@ -258,18 +259,28 @@ LDLIBS4 += $(LOADLIBS)
 #
 ifdef USER_DEFINED_LDLIBS
   LDLIBS_PREFINAL := $(LDLIBS)
+  LDLIBS_KERNEL   := $(LDLIBS)
 else
 # Again, do not use := or +=.  See note on LDLIBS2 above.
   LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
+# Version leaving out EXTRALIBS 
+  LDLIBS_KERNEL   = $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
+LDLIBS_KERNEL   += $(LDLIBS4)
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
+  WIN32TMP3 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS1))
+  WIN32TMP4 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_KERNEL))
   ifdef SHAREDLIBS
+    ifdef G4LIB_USE_DLL
+        LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP3)) $(patsubst -l%,lib%.lib,$(WIN32TMP4))
+    else
 	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.lib,$(WIN32TMP2))
+    endif
   else
   	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif

@@ -11,6 +11,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+19/07/2005 F.Lei (exgps-V07-01-00)
+-  Changing in GNUmakefile 
+   LOADLIBS += `aida-config --lib`
+    by
+   LDLIBS += `aida-config --lib`
+  Fixing link with AIDA on WIN32-VC (bug#767)
 
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.

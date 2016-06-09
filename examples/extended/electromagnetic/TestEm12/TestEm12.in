@@ -1,0 +1,35 @@
+# $Id: TestEm12.in,v 1.2 2005/07/22 11:48:23 maire Exp $
+#
+# no constraint on tracking step
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setRadius  3 cm
+/testem/det/setNbOfLayers 1
+#
+/testem/phys/addPhysics  standard	# em physics
+###/testem/phys/addPhysics  g4v52  	# em physics 
+#
+/run/initialize
+#
+/process/eLoss/integral 0
+/testem/phys/setCuts 1 mum
+#
+/gun/particle e-
+/gun/energy 4 MeV
+#
+/testem/histo/setFileType hbook
+/testem/histo/setFileName noint.v71
+/testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
+/testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
+/testem/histo/setHisto 3 100  0.    3. cm	#true track length
+/testem/histo/setHisto 4 100  0.  500. mum	#true step length
+/testem/histo/setHisto 5 200 -3.    3. cm	#proj range
+/testem/histo/setcsdaRange       2.037 cm
+/testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000

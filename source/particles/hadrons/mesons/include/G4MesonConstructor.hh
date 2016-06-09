@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MesonConstructor.hh,v 1.3 2001/07/11 10:01:47 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MesonConstructor.hh,v 1.4 2005/09/30 22:59:05 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,19 +37,18 @@
 class G4MesonConstructor
 {
   //This class is a utility class for construction 
-  //short lived particles
 
   public:
     G4MesonConstructor();
     ~G4MesonConstructor();
   
   public:
-    void ConstructParticle();
+    static void ConstructParticle();
 
   protected:
-    void ConstructLightMesons();
-    void ConstructCharmMesons();
-    void ConstructBottomMesons();
+    static void ConstructLightMesons();
+    static void ConstructCharmMesons();
+    static void ConstructBottomMesons();
 };
 
 #endif

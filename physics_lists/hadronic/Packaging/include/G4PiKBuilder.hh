@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4PiKBuilder.hh,v 1.2 2005/11/25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4PiKBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4PiKBuilder_h
 #define G4PiKBuilder_h 1
 
@@ -42,19 +56,19 @@ class G4PiKBuilder
     void RegisterMe(G4VPiKBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4HadronElasticProcess thePionPlusElasticProcess;
-    G4HadronElasticProcess thePionMinusElasticProcess;
-    G4HadronElasticProcess theKaonPlusElasticProcess;
-    G4HadronElasticProcess theKaonMinusElasticProcess;
-    G4HadronElasticProcess theKaonZeroLElasticProcess;
-    G4HadronElasticProcess theKaonZeroSElasticProcess;
+    G4HadronElasticProcess* thePionPlusElasticProcess;
+    G4HadronElasticProcess* thePionMinusElasticProcess;
+    G4HadronElasticProcess* theKaonPlusElasticProcess;
+    G4HadronElasticProcess* theKaonMinusElasticProcess;
+    G4HadronElasticProcess* theKaonZeroLElasticProcess;
+    G4HadronElasticProcess* theKaonZeroSElasticProcess;
 
-    G4PionPlusInelasticProcess  thePionPlusInelastic;
-    G4PionMinusInelasticProcess thePionMinusInelastic;
-    G4KaonPlusInelasticProcess  theKaonPlusInelastic;
-    G4KaonMinusInelasticProcess theKaonMinusInelastic;
-    G4KaonZeroLInelasticProcess theKaonZeroLInelastic;
-    G4KaonZeroSInelasticProcess theKaonZeroSInelastic;
+    G4PionPlusInelasticProcess*  thePionPlusInelastic;
+    G4PionMinusInelasticProcess* thePionMinusInelastic;
+    G4KaonPlusInelasticProcess*  theKaonPlusInelastic;
+    G4KaonMinusInelasticProcess* theKaonMinusInelastic;
+    G4KaonZeroLInelasticProcess* theKaonZeroLInelastic;
+    G4KaonZeroSInelasticProcess* theKaonZeroSInelastic;
      
     std::vector<G4VPiKBuilder *> theModelCollections;
 

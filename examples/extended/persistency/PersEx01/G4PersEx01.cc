@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersEx01.cc,v 1.2 2005/05/03 10:21:16 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PersEx01.cc,v 1.3 2005/12/06 15:40:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN03 
-//
-// --------------------------------------------------------------
-// Comments
+//      GEANT4 object persistency example
 //
 // --------------------------------------------------------------
 
@@ -59,7 +56,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new Pers01SteppingVerbose);

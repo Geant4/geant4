@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2005/05/09 16:10:42 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: DetectorConstruction.cc,v 1.4 2005/11/22 16:40:07 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,7 +135,6 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
 
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

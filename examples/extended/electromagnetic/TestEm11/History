@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005/06/03 15:18:43 maire Exp $
+$Id: History,v 1.6 2005/12/06 11:32:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,5 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+22-11-05 mma (testem11-V07-01-03)
+- update README for OpenScientist 
+    
+14-11-05 Gabriele Cosmo (testem11-V07-01-02)
+- Migration to <sstream> for HistoMessenger.
+
+05-10-05 mma (testem11-V07-01-00)
+- create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
+    
 03-06-05 michel maire (testem11-V07-00-00)
 - created, from TestEm1

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.20 2004/12/07 08:50:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4SandiaTable.cc,v 1.21 2005/11/09 15:38:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -71,7 +71,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4SandiaTable::G4SandiaTable(G4Material* material)
-:fMaterial(material)
+  : fMaterial(material)
 {
   fPhotoAbsorptionCof = 0 ;
   //build the CumulInterval array
@@ -86,6 +86,16 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
   fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;   
 }
 							
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4SandiaTable::G4SandiaTable(__void__&)
+  : fMaterial(0), fMatSandiaMatrix(0), fPhotoAbsorptionCof(0)
+{
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4SandiaTable::~G4SandiaTable()

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.4 2005/05/18 10:12:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eeToHadrons.cc,v 1.6 2005/11/29 08:15:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 23-11-05 Istert AddEmModel which was lost (V.Ivantchenko)
 //
 
 //
@@ -55,15 +56,17 @@ using namespace std;
 
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
   : G4VEmProcess(name),
+    multimodel(0),
+    csFactor(1.0), 
     isInitialised(false)
-{}
+{
+    SetVerboseLevel(1);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eeToHadrons::~G4eeToHadrons()
-{
-  delete multimodel;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,11 +77,14 @@ void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 
     SetBuildTableFlag(false);
     SetIntegral(true);
+    SetMaxKinEnergy(10.0*TeV);
 
     SetSecondaryParticle(G4Gamma::Gamma());
     SetParticle(G4Positron::Positron());
 
     multimodel = new G4eeToHadronsMultiModel(verboseLevel);
+    if(csFactor > 1.0) multimodel->SetCrossSecFactor(csFactor);
+    AddEmModel(1, multimodel);
   }
 }
 
@@ -93,7 +99,8 @@ void G4eeToHadrons::PrintInfo()
 
 void G4eeToHadrons::SetCrossSecFactor(G4double fac)
 {
-  multimodel->SetCrossSecFactor(fac);
+  if(multimodel) multimodel->SetCrossSecFactor(fac);
+  csFactor = fac;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

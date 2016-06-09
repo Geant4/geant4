@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2004/05/28 15:56:58 guatelli Exp $
+$Id: README,v 1.13 2005/11/30 19:58:30 santin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -55,7 +55,7 @@ setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
 setenv G4VIS_USE_VRML               1
 setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"  # example at CERN
 
-#set up OpenGL or Mesa 
+#set up OpenGL
 setenv G4VIS_BUILD_OPENGLX_DRIVER   1
 setenv G4VIS_USE_OPENGLX            1
 
@@ -69,34 +69,12 @@ NOTE: The geometry is refreshed on the viewer at the beginning of each run,
 
 
 
-Analysis
---------
-Set up for the AIDA 3.2.1, PI 1.2.1 interface:
-In case the variable G4ANALYSIS_USE is set:
-setenv G4ANALYSIS_USE               1
-relevant information from the simulation is processed in the XrayTelAnalysis
-class and saved, through the AIDA interface, to Histograms and Tuples.
-Compilation and link flags to hook any AIDA compliant system 
-are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
-that should come with any AIDA compliant system.
-Specifically in the GNUmakefile you find the 2 lines:
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-
-For more information about AIDA and PI please look at:
-> http://aida.freehep.org/
-> http://www.cern.ch/PI                                                            
 Sources
 -------
 
 GAG can be found in:
 
 geant4/environments/MOMO
-
-OpenGL Mesa needs to be installed prior to building Geant4 and can be
-downloaded from:
-
-http://www.mesa3d.org
 
 DAWN can be obtained from:
 
@@ -106,7 +84,9 @@ VRMLview for Linux can be obtained from:
 
 http://www.sim.no
 
+
 2. Run
+
 To execute a sample simulation with visualisation of proton tracks
 reaching the detector run:
 
@@ -128,10 +108,12 @@ automatically open and the corresponding files will be created.
 A 1D histogram will display the energy distribution of the protons
 that reach the detector at the end of the run.
 
+
 3. Detector description
 
 The telescope and detector geometry is defined in 
 XrayTelDetectorConstruction.cc
+
 
 4. Physics processes
 
@@ -139,18 +121,38 @@ The physics processes are in XrayTelPhysicsList.cc
 The main process in this example is MultipleScattering of the protons
 on the mirror surfaces.
 
+
 5. Event generation
 
 This is done using the new General Particle Source. Documentation for 
-this can be found in
+this can be found in:
 
-http://www.space.qinetiq.com/geant4/gspm.html
+http://reat.space.qinetiq.com/gps/
+
 
 6. Analysis
 
-Presently, the Anaphe tool (http://cern.ch/anaphe) 
-(version 5) provides an implementation of AIDA 3, 
-other packages as JAS will follow soon.  
+In case the variable G4ANALYSIS_USE is set:
+setenv G4ANALYSIS_USE               1
+relevant information from the simulation is processed in the XrayTelAnalysis
+class and saved, through the AIDA interface, to Histograms and Tuples.
+
+Compilation and link flags to hook any AIDA compliant system are passed 
+to the Geant4 GNUmakefile system by using the "aida-config" tool
+that should come with any AIDA compliant system.
+Specifically in the GNUmakefile you find the 2 lines:
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS += `aida-config --lib`
+
+For more information about AIDA and PI please look at:
+http://aida.freehep.org/
+http://www.cern.ch/PI
+
+Presently, the tools
+- PI (http://cern.ch/pi)
+- OpenScientist (http://openscientist.lal.in2p3.fr/)
+- JAS (http://jas.freehep.org/jas3/)
+provide an implementation of AIDA 3.2.1
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 

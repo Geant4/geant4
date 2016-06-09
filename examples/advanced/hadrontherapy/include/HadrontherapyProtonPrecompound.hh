@@ -38,9 +38,7 @@
 #define HadrontherapyProtonPrecompound_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
 #include "G4ExcitationHandler.hh"  
-
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
@@ -48,12 +46,8 @@
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4ProtonInelasticProcess.hh"
-
 #include "G4ProcessManager.hh"
-
-#include "G4ExcitationHandler.hh"  
 #include "G4PreCompoundModel.hh"   
-
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
@@ -86,7 +80,6 @@
 #include "G4LETritonInelastic.hh"
 #include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
-
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4PiNuclearCrossSection.hh"
@@ -106,53 +99,39 @@ protected:
 
 private:
 
-  // Proton inelastic proces
-  G4ProtonInelasticProcess       protonInelasticScattering;
-
-  // Cross Section for proton inelastic process
-  G4ProtonInelasticCrossSection  protonInelasticCrossSection;
-  
-  // Neutron inelastic process 
-  G4NeutronInelasticProcess neutronInelasticScattering;
-  
-  // Cross Section for neutron inelastic process
-  G4NeutronInelasticCrossSection neutronInelasticCrossSection;
-
-  // Pion plus inelastic process
-  G4PionPlusInelasticProcess pionPlusInelasticScattering;
-
-  // Cross sections for Pion plus inelastic process
-  G4PiNuclearCrossSection pionPlusInelasticCrossSection;
-
-  // Pion minus inelastic process
-  G4PionMinusInelasticProcess pionMinusInelasticScattering;
-
-  // Cross section for Pion minus inelastic process
-  G4PiNuclearCrossSection pionMinusInelasticCrossSection;
-  
-  // Deuteron inelastic process
-  G4DeuteronInelasticProcess deuteronInelasticScattering;
-
-  // Tritium inelastic process
-  G4TritonInelasticProcess tritonInelasticScattering; 
-
-  // Alpha inelastic process
-  G4AlphaInelasticProcess alphaInelasticScattering;
-
-  // He3 inelastic process
-  G4HadronInelasticProcess* He3InelasticProcess;
-  G4TripathiCrossSection* TripathiCrossSection;
-  G4IonsShenCrossSection* ShenCrossSection;
-
   G4double binaryLightIonLowLimit;
   G4double binaryLightIonHighLimit;
   G4double LEPHighLimit;
   G4double precompoundLowLimit;
   G4double precompoundHighLimit;
   G4double neutronLowLimit;
-  G4double neutronHighLimit;
+  G4double neutronHighLimit; 
+ 
 
-  G4ExcitationHandler theHandler;    
+  G4ExcitationHandler theHandler; 
+
+
+  // Proton inelastic proces
+  G4ProtonInelasticProcess       theIPProton;
+  // Cross Section for proton inelastic process
+  G4ProtonInelasticCrossSection  thePXSec;
+
+  // Neutron inelastic process
+  G4NeutronInelasticProcess	 theIPNeutron;
+  // Cross Section for neutron inelastic process
+  G4NeutronInelasticCrossSection   theNXSec;
+
+  // Deuteron inelastic process
+  G4DeuteronInelasticProcess      theIPdeuteron;
+     
+  // Tritium inelastic process
+  G4TritonInelasticProcess        theIPtriton;
+
+  // Alpha inelastic process
+  G4AlphaInelasticProcess         theIPalpha;
+ 
+  // He3 inelastic process
+  G4HadronInelasticProcess*       theIPHe3; 
 };
 #endif
 

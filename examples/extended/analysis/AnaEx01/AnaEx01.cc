@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01.cc,v 1.9 2003/12/03 10:33:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: AnaEx01.cc,v 1.13 2005/12/06 11:07:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,14 +37,19 @@
 //   See the README file within the same directory to have more infos.
 // --------------------------------------------------------------
 
+// Geant4 :
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 
 #include "Randomize.hh"
 
-#include "AnaEx01AnalysisManager.hh"
+// AIDA :
+#ifdef G4ANALYSIS_USE
+#include <AIDA/IAnalysisFactory.h>
+#endif
 
+// AnaEx01 :
+#include "AnaEx01AnalysisManager.hh"
 #include "AnaEx01DetectorConstruction.hh"
 #include "AnaEx01PhysicsList.hh"
 #include "AnaEx01PrimaryGeneratorAction.hh"
@@ -56,7 +61,7 @@
 int main(int,char**) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new AnaEx01SteppingVerbose);
@@ -71,16 +76,14 @@ int main(int,char**) {
 
   runManager->SetUserAction(new AnaEx01PrimaryGeneratorAction(detector));
 
+  AnaEx01AnalysisManager* analysisManager = 0;
 #ifdef G4ANALYSIS_USE
-  AnaEx01AnalysisManager* analysisManager = new AnaEx01AnalysisManager();
+  AIDA::IAnalysisFactory* aida = AIDA_createAnalysisFactory();
+  analysisManager = new AnaEx01AnalysisManager(aida);
+#endif
   runManager->SetUserAction(new AnaEx01RunAction(analysisManager));
   runManager->SetUserAction(new AnaEx01EventAction(analysisManager));
   runManager->SetUserAction(new AnaEx01SteppingAction(analysisManager));
-#else
-  runManager->SetUserAction(new AnaEx01RunAction());
-  runManager->SetUserAction(new AnaEx01EventAction());
-  runManager->SetUserAction(new AnaEx01SteppingAction());
-#endif
 
   //Initialize G4 kernel
   runManager->Initialize();
@@ -96,6 +99,10 @@ int main(int,char**) {
   delete analysisManager;
 #endif
   delete runManager;
+
+#ifdef G4ANALYSIS_USE
+  delete aida;
+#endif
 
   return 0;
 }

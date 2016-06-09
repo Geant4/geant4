@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBSbox.cc,v 1.5 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBSbox.cc,v 1.6 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -66,16 +66,6 @@ G4NURBSbox::G4NURBSbox(G4double DX, G4double DY, G4double DZ)
   CP(mpCtrlPts[i++], DX, DY, DZ, 1 ); 
   CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
   CP(mpCtrlPts[i++], DX, DY,-DZ, 1 ); 
-}
-
-G4Visible & G4NURBSbox::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBSbox::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
 }
 
 const char*  G4NURBSbox::Whoami() const

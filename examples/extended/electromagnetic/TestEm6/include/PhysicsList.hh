@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.4 2004/09/27 09:35:33 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.hh,v 1.5 2005/11/23 19:23:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
-class G4AnnihiToMuPair; 
+class G4AnnihiToMuPair;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,19 +48,20 @@ class PhysicsList: public G4VUserPhysicsList
     void ConstructParticle();
     void ConstructBosons();
     void ConstructLeptons();
-     
+    void ConstructHadrons();
+
     void SetCuts();
-        
+
     // Construct processes and register them
-    void ConstructProcess();  
+    void ConstructProcess();
     void ConstructGeneral();
     void ConstructEM();
-    
+
     void SetGammaToMuPairFac(G4double);
     void SetAnnihiToMuPairFac(G4double);
-        
+
   private:
-     PhysicsListMessenger*  pMes;    
+     PhysicsListMessenger*  pMes;
      G4GammaConversionToMuons* theGammaToMuPairProcess;
      G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
 };

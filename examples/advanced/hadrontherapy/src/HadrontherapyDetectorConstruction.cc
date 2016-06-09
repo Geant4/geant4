@@ -72,9 +72,9 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   phantomSizeZ = 20.*mm;
 
   // Number of the phantom voxels  
-  numberOfVoxelsAlongX = 80;
-  numberOfVoxelsAlongY = 80;
-  numberOfVoxelsAlongZ = 80;
+  numberOfVoxelsAlongX = 200;
+  numberOfVoxelsAlongY = 200;
+  numberOfVoxelsAlongZ = 200;
 }
 
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationTrd.hh,v 1.6 2004/05/13 14:57:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // classes G4ParameterisationTrdX
 //         G4ParameterisationTrdY

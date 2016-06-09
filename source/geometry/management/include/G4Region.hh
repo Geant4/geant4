@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.11 2005/03/02 08:24:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Region.hh,v 1.14 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4Region
 //
@@ -31,9 +31,6 @@
 // Defines a region or a group of regions in the detector geometry
 // setup, sharing properties associated to materials or production
 // cuts which may affect or bias specific physics processes. 
-//
-// Member data:
-//
 
 // History:
 // 18.09.02 G.Cosmo Initial version
@@ -47,6 +44,8 @@ class G4Material;
 class G4VUserRegionInformation;
 class G4MaterialCutsCouple;
 class G4UserLimits;
+class G4FastSimulationManager;
+class G4VPhysicalVolume;
 
 #include <vector>
 #include <map>
@@ -115,7 +114,7 @@ class G4Region
 
     inline void SetUserLimits(G4UserLimits* ul);
     inline G4UserLimits* GetUserLimits() const;
-      // Set and Get methodf for userL-limits associated to a region.
+      // Set and Get methods for userL-limits associated to a region.
       // Once user-limits are set, it will propagate to daughter volumes.
 
     inline void ClearMap();
@@ -128,6 +127,42 @@ class G4Region
     inline G4MaterialCutsCouple* FindCouple(G4Material* mat);
       // Find a G4MaterialCutsCouple which corresponds to the material
       // in this region.
+
+    inline void SetFastSimulationManager(G4FastSimulationManager* fsm);
+    inline G4FastSimulationManager* GetFastSimulationManager() const;
+      // Set and Get methods for G4FastSimulationManager.
+      // The root logical volume that has the region with G4FastSimulationManager
+      // becomes an envelope of fast simulation.
+    
+    void ClearFastSimulationManager();
+      // Set G4FastSimulationManager pointer to the one for the parent region
+      // if it exists. Otherwise set to null.
+
+    inline G4VPhysicalVolume* GetWorldPhysical() const;
+      // Get method for the world physical volume which this region
+      // belongs to. A valid pointer will be assigned by G4RunManagerKernel
+      // through G4RegionStore when the geometry is to be closed. Thus, this
+      // pointer may be incorrect at PreInit and Idle state. If the pointer
+      // is null at the proper state, this particular region does not belong
+      // to any world (maybe not assigned to any volume, etc.).
+
+    void SetWorld(G4VPhysicalVolume* wp);
+      // Set the world physical volume if this region belongs to this world.
+      // If wp is null, reset the pointer.
+
+    G4bool BelongsTo(G4VPhysicalVolume* thePhys) const;
+      // Returns whether this region belongs to the given physical volume
+      // (recursively scanned to the bottom of the hierarchy)
+
+    G4Region* GetParentRegion() const;
+      // Returns a region that contains this region. Otherwise null returned.
+
+  public:  // without description
+
+    G4Region(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 
@@ -148,6 +183,10 @@ class G4Region
 
     G4VUserRegionInformation* fUserInfo;
     G4UserLimits* fUserLimits;
+
+    G4FastSimulationManager* fFastSimulationManager;
+
+    G4VPhysicalVolume* fWorldPhys;
 };
 
 #include "G4Region.icc"

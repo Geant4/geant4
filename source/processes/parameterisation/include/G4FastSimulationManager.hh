@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.8 2002/11/02 00:10:34 mverderi Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastSimulationManager.hh,v 1.10 2005/11/26 00:35:02 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "globals.hh"
 
 #include "G4LogicalVolume.hh"
+#include "G4Region.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -61,7 +62,7 @@
 //---------------------------
 // For possible future needs:
 //---------------------------
-typedef G4LogicalVolume G4Envelope;
+typedef G4Region G4Envelope;
 
 //-------------------------------------------
 //
@@ -70,8 +71,10 @@ typedef G4LogicalVolume G4Envelope;
 //-------------------------------------------
 
 // Class Description:
-//  The G4VFastSimulationModel objects are attached to the envelope through a G4FastSimulationManager.
-//   This object will manage the list of models and will message them at tracking time.
+//  The G4VFastSimulationModel objects are attached to the envelope
+// through a G4FastSimulationManager.
+//   This object will manage the list of models and will message them
+// at tracking time.
 //
 
 
@@ -90,14 +93,17 @@ public:  // with description
 
   G4FastSimulationManager(G4Envelope *anEnvelope,
 			  G4bool IsUnique=FALSE);
-  // This is the only constructor. In this constructor you specify the envelope by giving the 
-  // G4LogicalVolume pointer. The G4FastSimulationManager object will bind itself to this envelope 
-  // and will notify this G4LogicalVolume to become an envelope. If you know that this volume is
-  // placed only once, you can turn the IsUnique boolean to "true" to allow some optimization. 
+  // This is the only constructor. In this constructor you specify 
+  // the envelope by giving the G4Region (typedef-ed as G4Envelope)
+  // pointer. The G4FastSimulationManager object will bind itself to
+  // this envelope and will notify this G4Region to become an envelope.
+  // If you know that this region is used for only one logical volume,
+  // you can turn the IsUnique boolean to "true" to allow some optimization. 
   //
-  // Note that if you choose to use the G4VFastSimulationModel(const G4String&, G4LogicalVolume*, 
-  // G4bool) constructor for you model, the G4FastSimulationManager will be constructed using the 
-  // given G4LogicalVolume* and G4bool values of the model constructor.
+  // Note that if you choose to use the G4VFastSimulationModel(const G4String&,
+  // G4Region*, G4bool) constructor for you model, the G4FastSimulationManager
+  // will be constructed using the given G4Region* and G4bool values of the
+  // model constructor.
   //
 
 public:  // without description
@@ -123,21 +129,6 @@ public:  // with description
   G4bool InActivateFastSimulationModel(const G4String&);
   // Inactivate a model in the Model List.
 
-  // Methods to add/remove GhostPlacements to/from the 
-  // GhostPlacements List.
-  //
-  G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
-				   const G4ThreeVector&);
-  // Flag that the envelope is a ghost volume giving its global placement, where the rotation matrix
-  // and the translatation vector of 3D transformation describe the placement relative to the world 
-  // coordinates. 
-
-  G4Transform3D* AddGhostPlacement(G4Transform3D*);
-  // The same but using a G4Transform3D.
-  
-  G4bool RemoveGhostPlacement(const G4Transform3D*);
-  // Removes a Ghost placement.
-
 public:  // without description  
   // Methods for print/control commands
   void ListTitle() const;
@@ -153,6 +144,23 @@ public:  // without description
 
 
 
+  // -------------------------------------------------  
+  // Methods to add/remove GhostPlacements to/from the 
+  // GhostPlacements List.
+  // -------------------------------------------------
+  //
+  G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
+				   const G4ThreeVector&);
+  // Flag that the envelope is a ghost volume giving its global 
+  // placement, where the rotation matrix and the translatation 
+  // vector of 3D transformation describe the placement relative 
+  // to the world coordinates. 
+  
+  G4Transform3D* AddGhostPlacement(G4Transform3D*);
+  // The same but using a G4Transform3D.
+  
+  G4bool RemoveGhostPlacement(const G4Transform3D*);
+  // Removes a Ghost placement.
   //
   //----------------------------------------------
   // Interface methods for the G4GlobalFastSimulationManager

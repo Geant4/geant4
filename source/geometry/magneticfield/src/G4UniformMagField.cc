@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UniformMagField.cc,v 1.10 2004/12/02 09:55:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // Class for creation of uniform Magnetic Field

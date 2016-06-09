@@ -22,7 +22,7 @@
 //
 //
 // $Id: OlapManagerMessenger.cc,v 1.2 2002/12/05 01:07:00 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------

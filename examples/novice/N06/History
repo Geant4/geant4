@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2005/05/17 00:21:46 gum Exp $
+$Id: History,v 1.30 2005/12/06 10:56:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,13 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th December 2005 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+4th December 2005 John Allison (exampleN06-V07-01-00)
+- Replaced vis code in EndOfEventAction by suitable vis commands in vis.mac.
+
 16 May 2005 Peter Gumplinger (exampleN06-V07-00-01)
 - use SetProcessOrdering for theDecayProces
      
 11 May 2005 Michel Maire (exampleN06-V07-00-00)
 - UI command cerenkovMaxPhotons available in Idle state only 
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+3rd May 2005 John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
 June 1, 2004 Peter Gunplinger (exampleN06-V06-01-01)

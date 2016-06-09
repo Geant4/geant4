@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.6 2005/05/30 08:46:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BraggIonModel.cc,v 1.10 2005/11/29 07:58:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 29-11-05 Do not use G4Alpha class (V.Ivantchenko)
 //
 
 // Class Description:
@@ -53,7 +54,6 @@
 #include "G4BraggIonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
-#include "G4Alpha.hh"
 #include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,7 +70,7 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& 
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
   lowestKinEnergy  = 1.0*keV;
-  HeMass           = G4Alpha::Alpha()->GetPDGMass();
+  HeMass           = 3.72742*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
@@ -97,7 +97,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p != particle) SetParticle(p);
   G4String pname = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" && 
+  if(particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
   if(pParticleChange)
@@ -176,12 +176,12 @@ G4double G4BraggIonModel::CrossSectionPerVolume(const G4Material* material,
 std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double xmin,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  G4double xmin = min(xmax, minEnergy);
+  if(xmin >= xmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -242,28 +242,20 @@ std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
 
 G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
 {
+  const size_t numberOfMolecula = 11 ;
+  SetMoleculaNumber(numberOfMolecula) ;
   G4String chFormula = material->GetChemicalFormula() ;
 
-   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 30 ;
-  SetMoleculaNumber(numberOfMolecula) ;
-  static G4String nameMol[numberOfMolecula] = {
-    "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
-    "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
-    "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
-    "CO_2", "Cellulose-Nitrat", "C_2H_4", "LiF",
-    "CH_4", "Nylon", "Polycarbonate", "(CH_2)_N-Polyetilene", "PMMA",
-    "(C_8H_8)_N", "SiO_2", "CsI", "H_2O", "H_2O-Gas"} ;
-
-  // Special treatment for water in gas state
-
-  const G4State theState = material->GetState() ;
-  if( theState == kStateGas && "H_2O" == chFormula)
-    chFormula = G4String("H_2O-Gas");
+  // ICRU Report N49, 1993. Ziegler model for He.
+  static G4String molName[numberOfMolecula] = {
+    "CaF_2",  "Cellulose_Nitrate",  "LiF", "Policarbonate",  
+    "(C_2H_4)_N-Polyethylene",  "(C_2H_4)_N-Polymethly_Methacralate",
+    "Polysterene", "SiO_2", "NaI", "H_2O",
+    "Graphite" } ;
 
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; i++) {
-      if (chFormula == nameMol[i]) {
+      if (chFormula == molName[i]) {
         SetMoleculaNumber(i) ;
 	return true ;
       }
@@ -274,79 +266,70 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BraggIonModel::StoppingPower(const G4Material* material,
-                                              G4double kineticEnergy)
+					G4double kineticEnergy) 
 {
   G4double ionloss = 0.0 ;
 
-  if (iMolecula < 30) {
-
-    // The data and the fit from:
-    // ICRU Report N49, 1993. Ziegler's model for protons.
-    // Proton kinetic energy for parametrisation (keV/amu)
+  if (iMolecula < 11) {
+  
+    // The data and the fit from: 
+    // ICRU Report N49, 1993. Ziegler's model for alpha
+    // He energy in internal units of parametrisation formula (MeV)
 
     G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
-    static G4double c[30][7] = {
-      {8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
-   },{ 13.3100,  3.7432,  39.4130,  12.1990,  1.0950, 0.38, 1.4
-   },{ 22.7240,  3.6040,  47.1810,  17.5490,  0.9040, 0.40, 1.4
-   },{ 24.4040,  2.4032,  48.9440,  27.9730,  1.2933, 0.40, 1.6
-   },{ 58.4719,  1.5115,  77.6421,  102.490,  1.5811, 0.50, 2.0
-   },{ 60.5408,  1.6297,  91.7601,  94.1260,  1.3662, 0.50, 2.0
-   },{ 48.4480,  6.4323,  59.2890,  18.3810,  0.4937, 0.48, 1.6
-   },{ 59.0346,  5.1305,  47.0866,  30.0857,  0.3500, 0.60, 2.0
-   },{ 71.8691,  2.8250,  51.1658,  57.1235,  0.4477, 0.60, 2.0
-   },{ 78.3520,  4.0961,  136.731,  28.4470,  1.0621, 0.52, 1.2
-   },{ 120.553,  1.5374,  49.8740,  82.2980,  0.8733, 0.45, 1.6
-   },{ 249.896,  0.6996,  -37.274,  248.592,  1.1052, 0.50, 1.5
-   },{ 246.698,  0.6219,  -58.391,  292.921,  0.8186, 0.56, 1.8
-   },{ 248.563,  0.6235,  -36.8968, 306.960,  1.3214, 0.50, 2.0
-   },{ 25.5860,  1.7125,  154.723,  118.620,  2.2580, 0.50, 2.0
-   },{ 138.294,  25.6413, 231.873,  17.3780,  0.3218, 0.58, 1.3
-   },{ 83.2091,  1.1294,  135.7457, 190.865,  2.3461, 0.50, 2.0
-   },{ 263.542,  1.4754,  1541.446, 781.898,  1.9209, 0.40, 2.0
-   },{ 59.5545,  1.5354,  132.1523, 153.3537, 2.0262, 0.50, 2.0
-   },{ 31.7380,  19.820,  125.2100, 6.8910,   0.7242, 0.50, 1.1
-   },{ 31.7549,  1.5682,  97.4777,  106.0774, 2.3204, 0.50, 2.0
-   },{ 230.465,  4.8967,  1845.320, 358.641,  1.0774, 0.46, 1.2
-   },{ 423.444,  5.3761,  1189.114, 319.030,  0.7652, 0.48, 1.5
-   },{ 86.3410,  3.3322,  91.0433,  73.1091,  0.4650, 0.50, 2.0
-   },{ 146.105,  9.4344,  515.1500, 82.8860,  0.6239, 0.55, 1.5
-   },{ 238.050,  5.6901,  372.3575, 146.1835, 0.3992, 0.50, 2.0
-   },{ 124.2338, 2.6730,  133.8175, 99.4109,  0.7776, 0.50, 2.0
-   },{ 221.723,  1.5415,  87.7315,  192.5266, 1.0742, 0.50, 2.0
-   },{ 26.7537,  1.3717,  90.8007,  77.1587,  2.3264, 0.50, 2.0
-   },{ 37.6121,  1.8052,  73.0250,  66.2070,  1.4038, 0.50, 2.0} };
+    static G4double a[11][5] = {
+       {9.43672, 0.54398, 84.341, 1.3705, 57.422},
+       {67.1503, 0.41409, 404.512, 148.97, 20.99},
+       {5.11203, 0.453,  36.718,  50.6,  28.058}, 
+       {61.793, 0.48445, 361.537, 57.889, 50.674},
+       {7.83464, 0.49804, 160.452, 3.192, 0.71922},
+       {19.729, 0.52153, 162.341, 58.35, 25.668}, 
+       {26.4648, 0.50112, 188.913, 30.079, 16.509},
+       {7.8655, 0.5205, 63.96, 51.32, 67.775},
+       {8.8965, 0.5148, 339.36, 1.7205, 0.70423},
+       {2.959, 0.53255, 34.247, 60.655, 15.153}, 
+       {3.80133, 0.41590, 12.9966, 117.83, 242.28} };   
 
-    G4double a1,a2 ;
-  // Free electron gas model
+    static G4double atomicWeight[11] = {
+       101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
+       104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
+
+    G4int i = iMolecula;
+
+    // Free electron gas model
     if ( T < 0.001 ) {
-      G4double T0 = 0.001 ;
-      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T0,-2.0+c[iMolecula][5])) ;
-      a2 = (c[iMolecula][0]*log(T0)/T0 + c[iMolecula][2]/T0) *
-            exp(-c[iMolecula][4]*pow(T0,-c[iMolecula][6])) +
-            c[iMolecula][3]/(T0*T0) ;
+      G4double slow  = a[i][0] ;
+      G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
+	 * a[i][2]*1000.0 ;
+      ionloss  = slow*shigh / (slow + shigh) ;
+      ionloss *= sqrt(T*1000.0) ;
 
-      ionloss *= sqrt(T/T0) ;
-
-  // Main parametrisation
+      // Main parametrisation
     } else {
-      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T,-2.0+c[iMolecula][5])) ;
-      a2 = (c[iMolecula][0]*log(T)/T + c[iMolecula][2]/T) *
-            exp(-c[iMolecula][4]*pow(T,-c[iMolecula][6])) +
-            c[iMolecula][3]/(T*T) ;
+      G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
+      G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+      ionloss = slow*shigh / (slow + shigh) ;
+       /*
+	 G4cout << "## " << i << ". T= " << T << " slow= " << slow
+	 << " a0= " << a[i][0] << " a1= " << a[i][1] 
+	 << " shigh= " << shigh 
+	 << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV) << G4endl;
+       */
     }
-
-  // He effective charge
-    G4double z = (material->GetTotNbOfElectPerVolume()) /
-                 (material->GetTotNbOfAtomsPerVolume()) ;
-
-    ionloss     = a1*a2 / HeEffChargeSquare(z, T) ;
-
     if ( ionloss < 0.0) ionloss = 0.0 ;
-  }
 
-  return ionloss ;
+    // He effective charge
+    G4double aa = atomicWeight[iMolecula];
+    ionloss /= (HeEffChargeSquare(0.5*aa, T)*aa);
+
+  // pure material (normally not the case for this function)
+  } else if(1 == (material->GetNumberOfElements())) {
+    G4double z = material->GetZ() ;
+    ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
+  }
+  
+  return ionloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -513,17 +496,9 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
   // compaund material with parametrisation
   if( HasMaterial(material) ) {
 
-    eloss = StoppingPower(material, kineticEnergy)
-                               * (material->GetTotNbOfAtomsPerVolume());
-    if(1 < numberOfElements) {
-      G4int nAtoms = 0;
+    eloss = StoppingPower(material, kineticEnergy)*
+      material->GetDensity()/amu;
 
-      const G4int* theAtomsVector = material->GetAtomsVector();
-      for (G4int iel=0; iel<numberOfElements; iel++) {
-        nAtoms += theAtomsVector[iel];
-      }
-      eloss /= nAtoms;
-    }
   // pure material
   } else if(1 == numberOfElements) {
 

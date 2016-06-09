@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.hh,v 1.9 2004/11/11 16:41:14 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Polymarker.hh,v 1.10 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  November 1996
@@ -46,10 +46,6 @@ public: // With description
   enum MarkerType {dots, circles, squares};
   G4Polymarker ();
   virtual ~G4Polymarker ();
-  virtual G4Visible&    operator = (const G4Visible& right);
-  virtual G4VVisPrim&   operator = (const G4VVisPrim& right);
-  virtual G4VMarker&    operator = (const G4VMarker& right);
-  virtual G4Polymarker& operator = (const G4Polymarker& right);
   MarkerType GetMarkerType () const;
   void SetMarkerType (MarkerType type);
 private:

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.10 2003/11/25 14:51:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: F02DetectorConstruction.cc,v 1.11 2005/10/13 15:00:13 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -32,8 +32,6 @@
 #include "F02CalorimeterSD.hh"
 #include "F02ElectricFieldSetup.hh"
 
-#include "G4VClusterModel.hh"
-#include "G4PAIclusterModel.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"

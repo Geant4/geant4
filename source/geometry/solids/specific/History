@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2005/05/09 14:15:37 gcosmo Exp $
+$Id: History,v 1.78 2005/12/08 15:02:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,89 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-Dec-2005, O.Link (geom-specific-V07-01-14)
+- Fixed bug in G4VTwistSurface::ComputeLocalPoint(p) for point coordinate
+  transformation. The bug affected only G4TwistTrapFlatSide.
+
+06-Dec-2005, G.Cosmo (geom-specific-V07-01-13)
+- Fixed compilation errors on WIN32-VC for last tag changes.
+
+05-Dec-2005, O.Link (geom-specific-V07-01-12)
+- Added polyhedron definition for twisted solids (G4TwistedTrap,
+  G4TwistedTrd, G4TwistedBox, G4TwistedTubs) for visualization.
+
+30-Nov-2005, G.Cosmo (geom-specific-V07-01-11)
+- Trivial fixes for porting on CLHEP-2.0.X series.
+
+18-Nov-2005, O.Link (geom-specific-V07-01-10)
+- Renamed classes for twisted solids set, to identify them in the
+  twisted framework.
+
+17-Nov-2005, O.Link
+- G4VTwistedFacted:
+  o corrected bug in DistanceToSurface() implementation
+  o added GetPointOnSurface() method
+- G4TwistedTubs:
+  o added GetPointOnSurface() method
+- G4Hype:
+  o corrected surface area calculation used in GetPointOnSurface()
+  
+17-Nov-2005, G.Cosmo (geom-specific-V07-01-09)
+- More fixes required for direct object persistency to G4Polycone,
+  G4polyhedra and related utility classes.
+
+10-Nov-2005, J.Allison (geom-specific-V07-01-08)
+- G4Tet:
+  o Added implementation for GetPolyhedron() and GetCubicVolume().
+  o Corrected order of specifying vertices in CreatePolyhedron().
+
+09-Nov-2005, G.Cosmo (geom-specific-V07-01-07)
+- Added fake default constructor for all concrete solids and relevant
+  utility classes, for usage of direct object persistency.
+- Implemented changes to support CLHEP-2.0.X for explicit usage of the
+  CLHEP/HepGeom namespaces for CLHEP types.
+
+07-Nov-2005, G.Cosmo (geom-specific-V07-01-06)
+- G4Ellipsoid: replaced call to hypot(x,y) with std::sqrt(x*x+y*y)
+  for porting to ISO standard.
+
+02-Nov-2005, G.Cosmo (geom-specific-V07-01-05)
+- G4Polyhedra, G4Polycone:
+  o Protected case of generic construct for visualization.
+  o Introduced explicit flag and method IsGeneric() to identify the kind
+    of constructor used.
+
+29-Sep-2005, G.Cosmo (geom-specific-V07-01-04)
+- Fix in G4EllipticalCone methods DistanceToIn() and DistanceToOut().
+  Added unit test for it (by D.Anninos).
+- Coworks with tag "greps-V07-01-02".
+
+10-Aug-2005, G.Cosmo (geom-specific-V07-01-03)
+- Introduced new solid G4EllipticalCone, a full cone with elliptical base
+  that can be cut in Z (by D.Anninos).
+  Coworks with tag "greps-V07-01-02".
+
+08-Aug-2005, D.Anninos (geom-specific-V07-01-02)
+- Added GetPointOnSurface() for all solids except twisted ones.
+  The method returns a random point according to a quasi-uniform
+  distribution along the surface.
+
+18-Jul-2005, G.Cosmo (geom-specific-V07-01-01)
+- Fixed compilation warning on WIN32-VC for G4VSurface.cc.
+- Not including G4Tet.
+
+06-Jul-2005, G.Cosmo (geom-specific-V07-01-00)
+- Added new shape G4Ellipsoid. Coworks with tag "greps-V07-01-00".
+  Contribution of G.Horton-Smith and G.Guerrieri.
+  Code cleanup, and added default arguments for cuts, added first
+  implementation of unit test.
+- Corrected unit tests for twisted-box/trap.
+- Not including G4Tet.
+
+15-Jun-2005, J.Apostolakis
+- Introduced new solid G4Tet, contribution of M.H.Mendenhall
+  and R.A.Weller, Vanderbilt University, USA.
 
 29-Apr-2005, O.Link (geom-specific-V07-00-04)
 - G4TwistedSurface: fixed bug in GetAreaCode() affecting G4TwistedTubs.

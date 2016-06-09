@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_HP.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TQGSP_HP_h
 #define TQGSP_HP_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TQGSP_HP: public T
 {
 public:
-  TQGSP_HP();
+  TQGSP_HP(G4int ver = 1);
   virtual ~TQGSP_HP();
   
 public:

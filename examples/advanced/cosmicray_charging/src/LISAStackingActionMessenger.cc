@@ -40,6 +40,8 @@
 
 #include "LISAStackingActionMessenger.hh"
 
+#include <sstream>
+
 #include "LISAStackingAction.hh"
 
 
@@ -88,7 +90,7 @@ void LISAStackingActionMessenger::SetNewValue
   if(command == SetPriSurvey) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     stackingAction->SetPrimarySurvey(vl!=0);
   }
@@ -96,7 +98,7 @@ void LISAStackingActionMessenger::SetNewValue
   else if(command == SetPartSurvey) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     stackingAction->SetParticleSurvey(vl!=0);
   }

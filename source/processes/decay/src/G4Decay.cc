@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.20 2005/04/29 05:09:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Decay.cc,v 1.21 2005/11/21 18:06:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -309,7 +309,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 } 
 
 
-void G4Decay::StartTracking()
+void G4Decay::StartTracking(G4Track*)
 {
   currentInteractionLength = -1.0;
   ResetNumberOfInteractionLengthLeft();

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2005/06/03 15:20:32 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RunAction.cc,v 1.3 2005/12/06 11:32:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
   
   //initialize total energy deposit
   //
@@ -151,8 +151,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (particle->GetPDGCharge() != 0.)
     csdaRange = emCalculator.GetRange(energy,particle,material);
   G4cout 
-    << "\n csda Range from EmCalculator  = " << G4BestUnit(csdaRange,"Length")
-    << G4endl;
+    << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
+    << " (from restricted dE/dx)" << G4endl;
    	 	 
   //compute projected range of primary track
   //
@@ -211,7 +211,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->save();
  
   // show Rndm status
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

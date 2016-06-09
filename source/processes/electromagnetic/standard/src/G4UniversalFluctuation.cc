@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.4 2005/05/03 13:37:43 urban Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UniversalFluctuation.cc,v 1.7 2005/10/17 13:01:05 urban Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +46,9 @@
 // 07-02-05 define problim = 5.e-3 (mma)
 // 03-05-05 conditions of Gaussian fluctuation changed (bugfix)
 //          + smearing for very small loss (L.Urban)
+// 03-10-05 energy dependent rate -> cut dependence of the
+//          distribution is much weaker (L.Urban)
+// 17-10-05 correction for very small loss (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,7 +163,6 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     e2Fluct      = material->GetIonisation()->GetEnergy2fluct();
     e1LogFluct   = material->GetIonisation()->GetLogEnergy1fluct();
     e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
-    rateFluct    = material->GetIonisation()->GetRateionexcfluct();
     ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     lastMaterial = material;
@@ -168,14 +170,17 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
   G4double p1,p2,p3;
-  G4double rate = rateFluct ;
+  // cut and material dependent rate --------------------------------
+  G4double rate = 0.173+0.027*log(tmax/ipotFluct) ;
+  if(rate < 0.) rate = 0. ;
+  if(rate > 1.) rate = 1. ;
 
   G4double w1 = tmax/ipotFluct;
   G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
   if(w2 > ipotLogFluct)
   {
-    G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct);
+    G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
     a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
     a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
     if(a2 < 0.)
@@ -190,7 +195,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     rate = 1. ;
   }
 
-  a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  if(tmax > ipotFluct) 
+    a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
 
   G4double suma = a1+a2+a3;
   
@@ -269,7 +275,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
-  a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+  if(tmax <= e0) return meanLoss;
+  else a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+
   if (a3 > alim)
   {
     siga=sqrt(a3);

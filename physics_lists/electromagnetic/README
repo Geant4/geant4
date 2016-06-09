@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
+$Id: README,v 1.2 2005/12/02 18:48:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,8 @@ $Id: README,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
      The following modules can be activated:
 
      1. "standard"    - (alternative) standard EM physics (current version)
-     2. "standard70"  - (alternative) standard EM physics (development version)
+     2. "standard71"  - (alternative) standard EM physics with multiple 
+                        scattering process version from G4 7.1p01
      3. "g4v52"       - (alternative) standard EM physics (version G4 5.2p02)
      4. "high_energy" - add high energy processes
      5. "step_limit"  - add step limit for charged particles
@@ -45,4 +46,5 @@ $Id: README,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
 
      The direct test of this PhysicsList is performed in the example
      examples/extended/electromagnetic/TestEm2, TestEm9
+     example/extended/medical/GammaTherapy
 

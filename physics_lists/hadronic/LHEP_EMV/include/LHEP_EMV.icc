@@ -1,0 +1,107 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: LHEP_EMV.icc,v 1.1 2005/12/16 09:57:06 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: LHEP_EMV
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 16.12.2005 G.Folger: create from LHEP_GN
+//
+//----------------------------------------------------------------------------
+//
+
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleWithCuts.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+#include "G4ios.hh"
+#include <iomanip>   
+
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonPhysics.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "HadronPhysicsLHEP_EMV.hh"
+
+template<class T> TLHEP_EMV<T>::TLHEP_EMV(G4int ver):  T()
+{
+  // default cut value  (1.0mm) 
+  // defaultCutValue = 1.0*mm;
+  G4DataQuestionaire it(photon);
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_EMV 3.0"<<G4endl;
+  G4cout <<G4endl;
+  this->defaultCutValue = 0.7*mm;  
+  this->SetVerboseLevel(ver);
+
+  // EM Physics - without multiple scattering limiting the step
+  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM msc 7.1",ver));
+
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // Decays
+  this->RegisterPhysics( new G4DecayPhysics("general",ver) );
+
+   // Hadron Physics
+  this->RegisterPhysics(  new HadronPhysicsLHEP_EMV("hadron"));
+
+  // Ion Physics
+  this->RegisterPhysics( new G4IonPhysics("ion"));
+}
+
+template<class T> TLHEP_EMV<T>::~TLHEP_EMV()
+{
+}
+
+template<class T> void TLHEP_EMV<T>::SetCuts()
+{
+  if (this->verboseLevel >1){
+    G4cout << "LHEP_EMV::SetCuts:";
+  }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+
+  this->SetCutsWithDefault();   
+ 
+  if (this->verboseLevel >0)
+    G4VUserPhysicsList::DumpCutValuesTable();  
+ 
+  
+}
+
+
+
+// 2002 by J.P. Wellisch

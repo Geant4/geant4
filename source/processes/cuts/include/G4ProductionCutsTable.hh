@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.5 2004/12/02 06:53:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ProductionCutsTable.hh,v 1.6 2005/08/18 16:52:52 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -51,6 +51,7 @@
 class G4RegionStore;
 class G4VRangeToEnergyConverter;
 class G4LogicalVolume;
+class G4VPhysicalVolume;
 class G4ProductionCuts;
 
 #include "globals.hh"
@@ -78,7 +79,7 @@ class G4ProductionCutsTable
     virtual ~G4ProductionCutsTable();
 
   public: // with description
-    void UpdateCoupleTable();
+    void UpdateCoupleTable(G4VPhysicalVolume* currentWorld);
     // This method triggers an update of the table of G4ProductionCuts objects.
 
     void SetEnergyRange(G4double lowedge, G4double highedge);

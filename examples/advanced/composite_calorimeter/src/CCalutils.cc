@@ -27,29 +27,22 @@
 #include "CCalutils.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
+
+#include <sstream>
 
 
 G4String operator+(const G4String& str, const int i) {
-  int l = str.length() + 15; //How long can an integer be?
-  char *cname = new char[l];
-  cname[0]='\0';
-  std::ostrstream os(cname, l);
+  std::ostringstream os;
   os << str << i <<'\0';
-  G4String back(cname);  
-  delete[] cname;
+  G4String back = os.str();  
   return back;
 }
 
 
 G4String operator+(const G4String& str, const double i) {
-  int l = str.length() + 15; //How long can an double be?
-  char *cname = new char[l];
-  cname[0]='\0';
-  std::ostrstream os(cname, l);
+  std::ostringstream os;
   os << str << i <<'\0';
-  G4String back(cname);  
-  delete[] cname;
+  G4String back = os.str();  
   return back;
 }
 

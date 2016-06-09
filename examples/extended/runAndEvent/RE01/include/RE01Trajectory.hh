@@ -22,7 +22,7 @@
 //
 //
 // $Id: RE01Trajectory.hh,v 1.2 2005/06/01 18:27:29 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef RE01Trajectory_h

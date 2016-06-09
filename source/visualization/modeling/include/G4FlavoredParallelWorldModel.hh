@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlavoredParallelWorldModel.hh,v 1.6 2001/07/11 10:09:20 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FlavoredParallelWorldModel.hh,v 1.7 2005/11/22 16:29:40 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
 //
@@ -46,7 +46,7 @@ public: // With description
   G4FlavoredParallelWorldModel
   (G4VFlavoredParallelWorld* FPW,
    G4int soughtDepth = G4PhysicalVolumeModel::UNLIMITED,
-   const G4Transform3D& modelTransformation = G4Transform3D::Identity,
+   const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* mp = 0);
 
   ~G4FlavoredParallelWorldModel ();

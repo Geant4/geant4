@@ -55,7 +55,7 @@ private:
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;
   G4bool ionIsRegistered;
-  G4bool protonPrecompoundIsRegistered;
+  G4bool protonHadronicIsRegistered;
   G4bool chargedParticleIsRegistered;
   G4bool muonIsRegistered;
   G4bool decayIsRegistered;

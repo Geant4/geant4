@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.7 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.8 2005/09/05 11:02:38 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -54,6 +54,7 @@ public:
   void ClearTransientStore ();
 
 private:
+  void RequestPrimitives (const G4VSolid& solid);
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };
 

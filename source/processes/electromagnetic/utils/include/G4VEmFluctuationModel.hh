@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.hh,v 1.8 2005/04/12 11:21:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEmFluctuationModel.hh,v 1.9 2005/07/25 18:13:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 25-07-05 Move constructor and destructor to the body (V.Ivanchenko)
 //
 //
 // Class Description: 
@@ -107,14 +108,6 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-inline G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
-  : name(nam) 
-{}
-
-inline G4VEmFluctuationModel::~G4VEmFluctuationModel() 
-{}
 
 inline void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
 {}

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.10 2004/12/02 09:31:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParameterisationPolycone.cc,v 1.11 2005/11/02 16:06:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4ParameterisationPolycone Implementation file
 //
@@ -47,6 +47,12 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Polycone* msol = (G4Polycone*)(msolid);
+  if (msol->IsGeneric())
+  {
+    G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
+                "NotSupported", FatalException,
+                "Sorry, generic construct for G4Polycone NOT supported.");
+  }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid  

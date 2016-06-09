@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.23 2004/05/16 18:42:30 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIcommand.cc,v 1.24 2005/10/26 06:10:22 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -34,6 +34,7 @@
 #include "G4UnitsTable.hh"
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
+#include <sstream>
 
 G4UIcommand::G4UIcommand()
 :messenger(0),token(IDENTIFIER),paramERR(0)
@@ -351,19 +352,17 @@ G4String G4UIcommand::ConvertToString(G4bool boolVal)
 
 G4String G4UIcommand::ConvertToString(G4int intValue)
 {
-  char st[20];
-  std::ostrstream os(st,20);
-  os << intValue << '\0';
-  G4String vl = st;
+  std::ostringstream os;
+  os << intValue;
+  G4String vl = os.str();
   return vl;
 }
 
 G4String G4UIcommand::ConvertToString(G4double doubleValue)
 {
-  char st[40];
-  std::ostrstream os(st,40);
-  os << doubleValue << '\0';
-  G4String vl = st;
+  std::ostringstream os;
+  os << doubleValue;
+  G4String vl = os.str();
   return vl;
 }
 
@@ -372,19 +371,17 @@ G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
   G4String unt = unitName;
   G4double uv = ValueOf(unitName);
 
-  char st[60];
-  std::ostrstream os(st,60);
-  os << doubleValue/uv << " " << unitName << '\0';
-  G4String vl = st;
+  std::ostringstream os;
+  os << doubleValue/uv << " " << unitName;
+  G4String vl = os.str();
   return vl;
 }
 
 G4String G4UIcommand::ConvertToString(G4ThreeVector vec)
 {
-  char st[100];
-  std::ostrstream os(st,100);
-  os << vec.x() << " " << vec.y() << " " << vec.z() << '\0';
-  G4String vl = st;
+  std::ostringstream os;
+  os << vec.x() << " " << vec.y() << " " << vec.z();
+  G4String vl = os.str();
   return vl;
 }
 
@@ -393,11 +390,10 @@ G4String G4UIcommand::ConvertToString(G4ThreeVector vec,const char* unitName)
   G4String unt = unitName;
   G4double uv = ValueOf(unitName);
 
-  char st[120];
-  std::ostrstream os(st,120);
+  std::ostringstream os;
   os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
-     << " " << unitName << '\0';
-  G4String vl = st;
+     << " " << unitName;
+  G4String vl = os.str();
   return vl;
 }
 
@@ -414,7 +410,7 @@ G4bool G4UIcommand::ConvertToBool(const char* st)
 G4int G4UIcommand::ConvertToInt(const char* st)
 {
   G4int vl;
-  std::istrstream is((char*)st);
+  std::istringstream is(st);
   is >> vl;
   return vl;
 }
@@ -422,7 +418,7 @@ G4int G4UIcommand::ConvertToInt(const char* st)
 G4double G4UIcommand::ConvertToDouble(const char* st)
 {
   G4double vl;
-  std::istrstream is((char*)st);
+  std::istringstream is(st);
   is >> vl;
   return vl;
 }
@@ -432,7 +428,7 @@ G4double G4UIcommand::ConvertToDimensionedDouble(const char* st)
   G4double vl;
   char unts[30];
 
-  std::istrstream is((char*)st);
+  std::istringstream is(st);
   is >> vl >> unts;
   G4String unt = unts;
 
@@ -444,7 +440,7 @@ G4ThreeVector G4UIcommand::ConvertTo3Vector(const char* st)
   G4double vx;
   G4double vy;
   G4double vz;
-  std::istrstream is((char*)st);
+  std::istringstream is(st);
   is >> vx >> vy >> vz;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -455,7 +451,7 @@ G4ThreeVector G4UIcommand::ConvertToDimensioned3Vector(const char* st)
   G4double vy;
   G4double vz;
   char unts[30];
-  std::istrstream is((char*)st);
+  std::istringstream is(st);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   G4double uv = ValueOf(unt);
@@ -467,7 +463,6 @@ G4ThreeVector G4UIcommand::ConvertToDimensioned3Vector(const char* st)
 
 
 #include <ctype.h>          // isalpha(), toupper()
-#include <strstream>
 
 //#include "checkNewValue_debug.icc"
 //#define DEBUG 1
@@ -489,7 +484,7 @@ TypeCheck(const char * t)
 {
     G4String aNewValue;
     char type;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     for (unsigned i=0; i< parameter.size(); i++) {
         is >> aNewValue;
         type = toupper(parameter[i]->GetParameterType());
@@ -623,7 +618,7 @@ RangeCheck(const char* t) {
     yystype result;
     char type;
     bp = 0;                 // reset buffer pointer for G4UIpGetc()
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     for (unsigned i=0; i< parameter.size(); i++) {
         type= toupper(parameter[i]->GetParameterType());
         switch ( type ) {
@@ -1050,7 +1045,7 @@ Yylex()         // reads input and returns token number, KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
          const char* t = buf;
-	 std::istrstream is((char*)t);
+	 std::istringstream is(t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;

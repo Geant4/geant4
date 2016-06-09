@@ -114,66 +114,12 @@ The user can choose the Bertini cascade approach or the
  binary cascade approach for the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
-
-The user can select different set-ups to generate primary particles:
-
-- "Basic": monochromatic particle beam (default configuration)
-
-- "Interplanetary": particle beam with energy derived from a given 
-  energy spectrum. 
-
-- "Moon": particles generated with energy derived from a given 
-  energy spectrum; The primary vertex is generated on a given hemisphere.
-
-The default configuration is Basic.
-
-The energy spectrum is written is ASCII file:
-first column: energy in MeV
-second column: flux
-The final two rows must look as follows:
--1 -1
--2 -2
-
-The flux is used as probability of generating a particle with a particular 
-energy. The sum of the fluxes is normalised to 1 in the RunAction. 
-
-Examples of ASCII files --
-
-- Galactic Cosmic Rays fluxes (envelope of CREME96 1977 and CREME86 1975 solar
-minimum spectra):
-
-p: gcrZ=1.txt
-alpha: gcrZ=2.txt
-carbon ion: gcrZ=6.txt
-oxygen ion: gcrZ=8.txt
-silicon ion: gcrZ=14.txt
-iron ion: gcrZ=26.txt
-
-- Solar Particle Events (envelope of CREME96 October 1989 and 
-August 1972 spectra)
-
-p: speZ=1.txt
-alpha: speZ=2.txt
-
-3.1 UI
-
-The user can select interactively the configuration with the following
-UI commands:
-/gun/generator Basic
-/gun/generator Interplanetary
-/gun/generator Moon
-
-After that the user can define primary particles with the following command:
-/gun/particle proton
-/gun/particle alpha
-/gun/particle IonC12
-/gun/particle IonO16
-/gun/particle IonSi28
-/gun/particle IonFe52
-
-In the Basic configuration, the user can change interactively the 
-energy of primary particles:
-example: /gun/energy 1. MeV
+Primary particles are generated through the General Particle Source.
+Galactic Cosmic Protons (CREME 96) are generated from a point set in 
+the position (0., 0., -25. m), with a direction (0., 0., 1.) by default.
+The energy spectrum of the primary particles follows the 
+differential energy distribution described in gcrZ=1gps.mac.
+The user can change these parameters interactively.
 
 4. STEPPING
 
@@ -263,6 +209,6 @@ Author : Susanna Guatelli
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 
-last modified: Susanna Guatelli 27/5/2005
+last modified: Susanna Guatelli 2/12/2005
 
 

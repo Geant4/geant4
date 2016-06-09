@@ -21,31 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.hh,v 1.3 2003/12/03 14:15:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// --------------------------------------------------------------
+//   GEANT 4 - Underground Dark Matter Detector Advanced Example
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//      For information related to this code contact: Alex Howard
+//      e-mail: a.s.howard@ic.ac.uk
+// --------------------------------------------------------------
+// Comments
+//
+//
+// TrackerHit header
+// --------------------------------------------------------------
 
 #ifndef ExN02TrackerHit_h
 #define ExN02TrackerHit_h 1
+
+
+//MSH_include_begin
+#include "MarshaledG4String.h"
+//MSH_include_end
 
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN02TrackerHit : public G4VHit
+//MSH_BEGIN
+class ExN02TrackerHit : public G4VHit 
 {
   public:
 
       ExN02TrackerHit();
      ~ExN02TrackerHit();
+
       ExN02TrackerHit(const ExN02TrackerHit&);
       const ExN02TrackerHit& operator=(const ExN02TrackerHit&);
-      G4int operator==(const ExN02TrackerHit&) const;
+      int operator==(const ExN02TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);
@@ -53,48 +65,61 @@ class ExN02TrackerHit : public G4VHit
       void Draw();
       void Print();
 
-  public:
-  
-      void SetTrackID  (G4int track)      { trackID = track; };
-      void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
-      void SetEdep     (G4double de)      { edep = de; };
-      void SetPos      (G4ThreeVector xyz){ pos = xyz; };
-      
-      G4int GetTrackID()    { return trackID; };
-      G4int GetChamberNb()  { return chamberNb; };
-      G4double GetEdep()    { return edep; };      
-      G4ThreeVector GetPos(){ return pos; };
-      
+
   private:
-  
-      G4int         trackID;
-      G4int         chamberNb;
-      G4double      edep;
-      G4ThreeVector pos;
+  G4ThreeVector pos; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetPos(); }]
+  [elementSet: { $THIS->SetPos($ELEMENT); }] */
+
+  G4double edep; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetEdep(); }]
+  [elementSet: { $THIS->SetEdep($ELEMENT); }] */
+
+  G4int         trackID; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetTrackID(); }]
+  [elementSet: { $THIS->SetTrackID($ELEMENT); }] */
+
+  G4int         chamberNb; /*MSH: primitive
+  [elementGet: { $ELEMENT = $THIS->GetChamberNb(); }]
+  [elementSet: { $THIS->SetChamberNb($ELEMENT); }] */
+
+
+  public:
+     
+  inline void SetTrackID  (G4int track)       {trackID = track; };
+  inline void SetChamberNb(G4int chamb)       {chamberNb = chamb; };  
+  inline void SetEdep(G4double de)            {edep=de;};
+  inline void SetPos(G4ThreeVector xyz)       {pos=xyz;};
+
+  inline G4int GetTrackID()                   const {return trackID; };
+  inline G4int GetChamberNb()                 const {return chamberNb; };
+  inline G4double GetEdep()                   const {return edep;};
+  inline G4ThreeVector GetPos()               const {return pos;};
+
 };
+//MSH_END
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+// vector collection of one type of hits
 typedef G4THitsCollection<ExN02TrackerHit> ExN02TrackerHitsCollection;
+
 
 extern G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void* ExN02TrackerHit::operator new(size_t)
-{
-  void *aHit;
-  aHit = (void *) ExN02TrackerHitAllocator.MallocSingle();
+inline void* ExN02TrackerHit::operator new(size_t) {
+  void* aHit;
+  aHit = (void*) ExN02TrackerHitAllocator.MallocSingle();
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void ExN02TrackerHit::operator delete(void *aHit)
-{
+inline void ExN02TrackerHit::operator delete(void* aHit) {
   ExN02TrackerHitAllocator.FreeSingle((ExN02TrackerHit*) aHit);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+
+
+
+

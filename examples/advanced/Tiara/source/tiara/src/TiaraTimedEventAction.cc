@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraTimedEventAction.cc,v 1.2 2003/06/13 16:05:33 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: TiaraTimedEventAction.cc,v 1.3 2005/12/15 14:24:33 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -93,7 +93,7 @@ void TiaraTimedEventAction::EndOfEventAction(const G4Event* )
     fTimeFromPreviousRuns+=fCurrentRunTime;
     fCurrentRunTime = 0;
     if (fFilename!="none") {
-      HepRandom::saveEngineStatus(fFilename);
+      CLHEP::HepRandom::saveEngineStatus(fFilename);
     }
   }  
 

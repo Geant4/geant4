@@ -21,18 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.10 2003/06/16 16:56:02 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UItcsh.cc,v 1.11 2005/10/26 06:19:35 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef WIN32
 
-#include <ctype.h>
 #include "G4Types.hh"
-#include <strstream>
 #include "G4StateManager.hh"
 #include "G4UIcommandStatus.hh"
 #include "G4UItcsh.hh"
+#include <ctype.h>
+#include <sstream>
 
 // ASCII character code
 static const char AsciiCtrA = '\001';
@@ -107,10 +107,9 @@ void G4UItcsh::MakePrompt(const char* msg)
         break;
       case 'h':  // history#
 	{
-	char st[20];
-	std::ostrstream os(st,20);
-        os << currentHistoryNo << '\0';
-	promptString.append(st);
+	std::ostringstream os;
+        os << currentHistoryNo;
+	promptString.append(os.str());
 	i++;
 	}
         break;

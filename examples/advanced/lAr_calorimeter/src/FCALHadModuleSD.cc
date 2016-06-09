@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALHadModuleSD.cc,v 1.7 2004/11/29 18:03:06 ribon Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: FCALHadModuleSD.cc,v 1.8 2005/12/08 16:39:16 ribon Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -43,8 +43,8 @@
 #include "G4SDManager.hh"
 
 #include "G4ios.hh"
-#include "iostream.h"
-#include "fstream.h"
+#include <iostream>
+#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALHadModuleSD::FCALHadModuleSD(G4String name) : G4VSensitiveDetector(name)
@@ -108,7 +108,7 @@ void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
       EvisTileP[NF2Tile] = EvisF2Tile[i];
     };};
 
-  G4cout << "Number of F2 tiles with Positive energy : " << NF2Tile <<  endl;
+  G4cout << "Number of F2 tiles with Positive energy : " << NF2Tile <<  G4endl;
 
   // Write data in File
   //-------------------
@@ -121,7 +121,7 @@ void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
     iostemp = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
-  ofstream HadDatafile(FileName, iostemp);
+  std::ofstream HadDatafile(FileName, iostemp);
   // EmDatafile.precision(5);
 
   HadDatafile << NF2Tile << std::endl;

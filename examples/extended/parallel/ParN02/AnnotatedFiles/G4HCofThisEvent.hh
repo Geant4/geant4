@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh,v 1.1 2004/11/22 17:39:47 cooperma Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4HCofThisEvent.hh,v 1.2 2005/11/26 09:47:01 cooperma Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -31,7 +31,7 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VHitsCollection.hh"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -68,7 +68,7 @@ class G4HCofThisEvent
       void AddHitsCollection(G4int HCID,G4VHitsCollection * aHC);
 
   private:
-      G4std::vector<G4VHitsCollection*> * HC; /*MSH: ptr_as_array
+      std::vector<G4VHitsCollection*> * HC; /*MSH: ptr_as_array
   [elementType: G4VHitsCollection*]
   [elementCount: { $ELE_COUNT = $THIS->GetNumberOfCollections(); }]
   [elementGet: { $ELEMENT = $THIS->GetHC($ELE_INDEX); }]
@@ -101,7 +101,11 @@ class G4HCofThisEvent
 };
 //MSH_END
 
-extern G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#if defined G4DIGI_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#endif
 
 inline void* G4HCofThisEvent::operator new(size_t)
 {

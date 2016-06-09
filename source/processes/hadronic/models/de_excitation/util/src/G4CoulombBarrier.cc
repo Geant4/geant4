@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.4 2005/06/04 13:29:20 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4CoulombBarrier.cc,v 1.5 2005/11/23 17:14:51 miheikki Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -30,7 +30,7 @@
 
 #include "G4CoulombBarrier.hh"
 #include "G4HadronicException.hh"
-#include <strstream>
+#include <sstream>
 
 G4CoulombBarrier::G4CoulombBarrier(const G4CoulombBarrier & ) : G4VCoulombBarrier()
 {
@@ -61,13 +61,13 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
 {
   G4double Barrier = 0.0;
   if (ZRes > ARes || ARes < 1) {
-    char errMessage[1024];
-    std::ostrstream errOs(errMessage,1024);
+    std::ostringstream errOs;
     errOs << "G4CoulombBarrier::GetCoulombBarrier: ";
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
     errOs << "and residual nucleus Z = " << ZRes << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errMessage);
+
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
   if (GetA() == 1 && GetZ() == 0) {
     Barrier = 0.0;   // Neutron Coulomb Barrier is 0

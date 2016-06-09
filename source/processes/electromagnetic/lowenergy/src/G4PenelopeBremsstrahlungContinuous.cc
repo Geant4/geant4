@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.7 2004/12/02 14:01:35 pia Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.8 2005/11/30 16:34:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -45,7 +45,7 @@
 #include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-#include <strstream>
+#include <sstream>
 
 G4PenelopeBremsstrahlungContinuous::G4PenelopeBremsstrahlungContinuous (G4int Zed,G4double taglio,G4double e1,
 									G4double e2,
@@ -83,10 +83,9 @@ void G4PenelopeBremsstrahlungContinuous::LoadFromFile()
    }
  G4String pathString(path);
  G4String filename = "br-pen-cont-";
- char nameChar[100] = {""};
- std::ostrstream ost(nameChar, 100, std::ios::out); 
+ std::ostringstream ost; 
  ost << filename << Zmat << ".dat";
- G4String name(nameChar);
+ G4String name(ost.str());
  G4String dirFile = pathString + "/penelope/" + name;
  std::ifstream file(dirFile);
  std::filebuf* lsdp = file.rdbuf();

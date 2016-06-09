@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChangeForLoss.hh,v 1.15 2005/04/15 06:44:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // ------------------------------------------------------------

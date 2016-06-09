@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DCtable.hh,v 1.8 2004/03/15 19:18:53 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4DCtable_H

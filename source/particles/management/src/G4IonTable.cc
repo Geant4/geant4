@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.36 2004/12/02 07:46:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonTable.cc,v 1.39 2005/11/18 21:07:35 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,6 +44,7 @@
 
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
+#include "G4StateManager.hh"
 #include "G4Ions.hh"
 #include "G4UImanager.hh"
 #include "G4NucleiProperties.hh"
@@ -55,7 +56,7 @@
 #include <iostream>               
 #include <iomanip>               
 
-#include <strstream>
+#include <sstream>
 
 
 ////////////////////
@@ -108,13 +109,29 @@ G4IonTable::~G4IonTable()
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int J)
 {
   G4ParticleDefinition* ion=0;
+
+  // check whether the cuurent state is not "PreInit" 
+  //  to make sure that GenericIon has processes
+  G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
+  if (currentState == G4State_PreInit){
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1) {
+      G4cout << "G4IonTable::CreateIon() : can not create ion of  "; 
+      G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
+      G4cout << " because the current state is PreInit !!" <<   G4endl;
+    }
+#endif
+    G4Exception( "G4IonTable::CreateIon()","Illegal operation",
+		 JustWarning, "Can not create ions in PreInit state");
+    return 0;
+  }
   
   // get ion name
   G4String name = GetIonName(Z, A, E);
   if ( name(0) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : can not create ions " << G4endl;
+      G4cout << "G4IonTable::CreateIon() : can not create ions " << G4endl;
       G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
     }
 #endif
@@ -150,7 +167,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "G4IonTable::GetIon() : create ion of " << name << G4endl;
+    G4cout << "G4IonTable::CreateIon() : create ion of " << name << G4endl;
   } 
 #endif
   
@@ -189,7 +206,9 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
     }
 #endif
     G4cerr << "G4IonTable::GetIon called with Z="<<Z<<", A="<<A<<G4endl;
-    G4Exception("G4IonTable::GetIon : illegal atomic number/mass ");
+    G4Exception( "G4IonTable::GetIon()","Illegal operation",
+		 JustWarning, "illegal atomic number/mass");
+    return 0;
   }
 
   // Search ions with A, Z 
@@ -269,11 +288,10 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   } else {
     return "?";
   }
-  char val[50];
-  std::ostrstream os(val,50);
+  std::ostringstream os;
   os.setf(std::ios::fixed);
-  os << A << '[' << std::setprecision(1) << E/keV << ']' << '\0';
-  name += val;
+  os << A << '[' << std::setprecision(1) << E/keV << ']';
+  name += os.str();
   return name;
 }
 
@@ -347,7 +365,9 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
       G4cout << " Z =" << Z << "  A = " << A  << G4endl;
     }
 #endif
-    G4Exception("G4IonTable::GetNucleusMass() : illegal atomic number/mass ");
+    G4Exception( "G4IonTable::GetNucleusMass()","Illegal operation",
+		 EventMustBeAborted, "illegal atomic number/mass");
+    return -1.0;
   }
 
   // calculate nucleus mass
@@ -458,9 +478,9 @@ G4int G4IonTable::GetVerboseLevel() const
 void  G4IonTable::AddProcessManager(const G4String& name)
 {
   // create command string for addProcManager
-  char cmdAdd[60];
-  std::ostrstream osAdd(cmdAdd,60);
-  osAdd << "/run/particle/addProcManager "<< name << '\0';
+  std::ostringstream osAdd;
+  osAdd << "/run/particle/addProcManager "<< name;
+  G4String cmdAdd = osAdd.str();
 
   // set /control/verbose 0
   G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();

@@ -1,4 +1,3 @@
- 
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -53,7 +52,6 @@
 #include "G4Transform3D.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
 #include "G4RunManager.hh"
 
 HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),

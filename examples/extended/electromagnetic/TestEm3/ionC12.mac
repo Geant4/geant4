@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.8 2004/10/20 14:32:28 maire Exp $
+# $Id: ionC12.mac,v 1.9 2005/11/12 00:28:55 vnivanch Exp $
 #
 # Macro file for "TestEm3.cc"
 # (can be run in batch, without graphic)
@@ -7,6 +7,7 @@
 #
 /control/verbose 2
 /run/verbose 2
+/tracking/verbose 1
 #
 #  select EM PhysicsList
 #
@@ -20,11 +21,13 @@
 /testem/det/setAbsor 1 CsI 1.99 cm
 /testem/det/setSizeYZ 3 cm
 #
+/gun/particle ion
+/gun/ion 6 12
 /run/initialize
 #
 /testem/gun/setDefault
-/gun/particle ion
-/gun/ion 6 12
+#/gun/particle ion
+#/gun/ion 6 12
 /gun/energy 108 GeV
 #
 /testem/histo/setHisto 1 200 350. 550. MeV

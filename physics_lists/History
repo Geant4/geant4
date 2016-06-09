@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
+$Id: History,v 1.3 2005/12/03 14:35:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.12.2005, G.Folger & V.Ivantchenko - phys-lists-V07-01-01
+- Includes tags: emphys-V07-01-01 and hadr-lists-V07-01-02.
+- Implemented migration of physics lists to non static particles scheme.
+
+02.08.2005, G.Cosmo - phys-lists-V07-01-00
+- Corrected README of hadronic lists for build instructions.
 
 13.12.2004, G.Cosmo - phys-lists-V06-02-00
 - Imported hadronic lists and electromagnetic lists from top-level.

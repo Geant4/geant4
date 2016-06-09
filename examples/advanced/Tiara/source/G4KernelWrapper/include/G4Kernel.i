@@ -1,6 +1,6 @@
-# $Id: G4Kernel.i,v 1.5 2003/06/20 12:41:06 dressel Exp $
+# $Id: G4Kernel.i,v 1.7 2005/12/15 14:24:56 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
 %module G4Kernel
@@ -41,7 +41,7 @@
 #include "G4VIStore.hh"
 #include "G4IStore.hh"
 #include "G4UserSteppingAction.hh"
-#include <strstream>
+#include <sstream>
 #include "G4VisManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 %}
@@ -89,7 +89,7 @@
 %include G4ScoreTable.hh
 %extend G4ScoreTable {
   const char *Write(const G4MapGeometryCellCellScorer &cs){
-    std::ostrstream tmpout;
+    std::ostringstream tmpout;
     self->Print(cs, &tmpout);
     std::string *value = new std::string(tmpout.str());
     return value->c_str();
@@ -202,7 +202,7 @@ class G4PVPlacement : public G4VPhysicalVolume
 {
 public:  
   G4PVPlacement(G4RotationMatrix *pRot,
-		const Hep3Vector &tlate,
+		const CLHEP::Hep3Vector &tlate,
 		G4LogicalVolume *pCurrentLogical,
 		const G4String &pName,
 		G4LogicalVolume *pMotherLogical = 0,

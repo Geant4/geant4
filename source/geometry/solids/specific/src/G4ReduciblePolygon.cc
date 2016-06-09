@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.9 2004/12/02 09:31:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ReduciblePolygon.cc,v 1.10 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -128,6 +128,16 @@ void G4ReduciblePolygon::Create( const G4double a[],
   numVertices = n;
   
   CalculateMaxMin();
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4ReduciblePolygon::G4ReduciblePolygon( __void__& )
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.), vertexHead(0)
+{
 }
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.12 2004/08/26 07:58:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PVDivision.cc,v 1.13 2005/11/16 19:27:06 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4PVDivision Implementation file
 //
@@ -458,3 +458,22 @@ void G4PVDivision::ErrorInAxis( EAxis axis, G4VSolid* solid )
   G4Exception("G4PVDivision::ErrorInAxis()", "IllegalConstruct",
               FatalException, error);
 }
+// The next methods are for specialised repeated volumes 
+//     (replicas, parameterised vol.) which are completely regular.
+// Currently this is not applicable to divisions  ( J.A. Nov 2005 )
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4bool G4PVDivision::IsRegularStructure() const
+{
+  return false;
+}           
+
+// ----------------------------------------------------------------------
+// IsRegularRepeatedStructure()
+//
+G4int G4PVDivision::GetRegularStructureId() const
+{
+  return 0;  
+}           
+// This is for specialised repeated volumes (replicas, parameterised vol.)

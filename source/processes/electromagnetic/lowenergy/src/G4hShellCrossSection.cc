@@ -60,57 +60,56 @@ std::vector<G4double> G4hShellCrossSection::GetCrossSection(G4int Z,
 						G4double deltaEnergy,
 						G4bool) const 
 {
-  return Probabilities(Z,incidentEnergy,mass,deltaEnergy);
+  return CalculateCrossSections(Z,incidentEnergy,mass,deltaEnergy,false);
 }  
 
 
-//std::vector<G4double> G4hShellCrossSection::Probabilities(
-//                                              G4int Z, 
-//		                      G4double incidentEnergy, 
-//				      G4double hMass, 
-//				      G4double deltaEnergy,
-//				      G4bool testFlag) const
-//{
-//  // Cross-sections for proton ionization calculated as in
-//  // "M. Gryzinski, Two-Particle Collisions. I. General Relations for 
-//  // Collisions in the Laboratory system, Phys.Rev. 138 A305"
-//  // Other reference papers are Gryzinski's "Paper I" and "Paper II"
-//  // V.Ivanchenko add only implementation of the formula (53) 
-//  // last factor neglected because it is 1 with a good accuracy
-//
-//  const G4AtomicTransitionManager*  transitionManager = 
-//                              G4AtomicTransitionManager::Instance();
-//
-//  size_t nShells = transitionManager->NumberOfShells(Z);
-//
-//  // Vector that stores the calculated cross-sections for each shell:
-//  std::vector<G4double> crossSections;
-//
-//  // In this loop we calculate cross-section for every shell in the atom
-//  for (size_t k=0;  k<nShells;  k++)
-//    {
-//      G4double bindingEnergy = transitionManager->Shell(Z,k)->BindingEnergy();
-//      G4double xEnergy = 0.5*bindingEnergy;
-//    G4double y = incidentEnergy*electron_mass_c2/(xEnergy*hMass);
-//      G4double dele = deltaEnergy + xEnergy;
-//      G4double x = electron_mass_c2/dele;
-//
-//      G4double aCrossSection = (dele/(xEnergy*(1. + 1./y)) 
-//                             + 4.*std::log(2.7 + std::sqrt(y))/3.) * x*x*x;    
-//
-//       // Fill the vector of cross sections with the value just calculated
-//      crossSections.push_back(aCrossSection);
-//
-//       if (testFlag) 
-//  	{
-//	  G4cout <<"Element: " <<Z<<" Shell: "<<k<<" Particle Energy(MeV): "<<incidentEnergy/MeV<<G4endl;
-//          G4cout <<"Delta Ray Energy(MeV): "<< deltaEnergy/MeV<<" Binding Energy(MeV): "<<bindingEnergy/MeV<<G4endl;
-//	  G4cout <<"Cross Section: "<<aCrossSection/barn<<" barns"<< G4endl;
-// 	}
-//     }
-//
-//  return crossSections;
-//}
+std::vector<G4double> G4hShellCrossSection::CalculateCrossSections(G4int Z, 
+								   G4double incidentEnergy, 
+								   G4double hMass, 
+								   G4double deltaEnergy,
+								   G4bool testFlag) const
+{
+ // Cross-sections for proton ionization calculated as in
+ // "M. Gryzinski, Two-Particle Collisions. I. General Relations for 
+ // Collisions in the Laboratory system, Phys.Rev. 138 A305"
+ // Other reference papers are Gryzinski's "Paper I" and "Paper II"
+ // V.Ivanchenko add only implementation of the formula (53) 
+ // last factor neglected because it is 1 with a good accuracy
+
+ const G4AtomicTransitionManager*  transitionManager = 
+                             G4AtomicTransitionManager::Instance();
+
+ size_t nShells = transitionManager->NumberOfShells(Z);
+
+ // Vector that stores the calculated cross-sections for each shell:
+ std::vector<G4double> crossSections;
+
+ // In this loop we calculate cross-section for every shell in the atom
+ for (size_t k=0;  k<nShells;  k++)
+   {
+     G4double bindingEnergy = transitionManager->Shell(Z,k)->BindingEnergy();
+     G4double xEnergy = 0.5*bindingEnergy;
+   G4double y = incidentEnergy*electron_mass_c2/(xEnergy*hMass);
+     G4double dele = deltaEnergy + xEnergy;
+     G4double x = electron_mass_c2/dele;
+
+     G4double aCrossSection = (dele/(xEnergy*(1. + 1./y)) 
+                            + 4.*std::log(2.7 + std::sqrt(y))/3.) * x*x*x;    
+
+      // Fill the vector of cross sections with the value just calculated
+     crossSections.push_back(aCrossSection);
+
+      if (testFlag) 
+ 	{
+	  G4cout <<"Element: " <<Z<<" Shell: "<<k<<" Particle Energy(MeV): "<<incidentEnergy/MeV<<G4endl;
+         G4cout <<"Delta Ray Energy(MeV): "<< deltaEnergy/MeV<<" Binding Energy(MeV): "<<bindingEnergy/MeV<<G4endl;
+	  G4cout <<"Cross Section: "<<aCrossSection/barn<<" barns"<< G4endl;
+	}
+    }
+
+ return crossSections;
+}
 
 
 
@@ -123,7 +122,7 @@ std::vector<G4double> G4hShellCrossSection::Probabilities(
 					      G4double deltaEnergy
 					      ) const
 {  
-  std::vector<G4double> crossSection = GetCrossSection(Z, incidentEnergy, hMass, deltaEnergy,true);
+  std::vector<G4double> crossSection = CalculateCrossSections(Z, incidentEnergy, hMass, deltaEnergy,true);
   G4double nShells = crossSection.size();
 
   // Partial and total cross-section used for normalization of crossSections:

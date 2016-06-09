@@ -34,29 +34,29 @@
  }
 
  void G4BinaryNeutronBuilder::
- Build(G4NeutronInelasticProcess & aP)
+ Build(G4NeutronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
-   aP.RegisterMe(theModel);
-   aP.AddDataSet(&theXSec);  
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(&theXSec);  
  }
 
  G4BinaryNeutronBuilder::
  ~G4BinaryNeutronBuilder() {}
 
  void G4BinaryNeutronBuilder::
- Build(G4HadronElasticProcess & )
+ Build(G4HadronElasticProcess * )
  {
  }
 
  void G4BinaryNeutronBuilder::
- Build(G4HadronFissionProcess & )
+ Build(G4HadronFissionProcess * )
  {
  }
 
  void G4BinaryNeutronBuilder::
- Build(G4HadronCaptureProcess & )
+ Build(G4HadronCaptureProcess * )
  {
  }
 

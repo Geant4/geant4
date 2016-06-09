@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.7 2005/05/03 10:21:17 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: TiaraSim.cc,v 1.8 2005/12/15 16:24:36 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "TiaraSim.hh"
@@ -84,6 +84,7 @@ void TiaraSim::AddTiaraEventAction(G4UserEventAction *eventAction) {
 void TiaraSim::
 SetPhysicsList(G4VUserPhysicsList *physicsList) {
   fPhysics = physicsList;
+  frunMgr->SetUserInitialization(fPhysics);
 }
 
 void TiaraSim::
@@ -124,13 +125,8 @@ void TiaraSim::initialize(){
     G4cout << "TiaraSim::initialize: no primary generator set" << G4endl;
     ready = false;
   } 
-  if (!fPhysics) {
-    G4cout << "TiaraSim::initialize: no physics list set" << G4endl;
-    ready = false;
-  }
   if (ready) {
     frunMgr->SetUserInitialization(fGeometry);
-    frunMgr->SetUserInitialization(fPhysics);
     frunMgr->SetUserAction(fPrimary);
     if (fUserEventAction) {
       frunMgr->SetUserAction(fUserEventAction);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSteppingAction.cc,v 1.6 2001/07/11 10:08:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UserSteppingAction.cc,v 1.7 2005/11/22 21:04:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // ---------------------------------------------------------------
@@ -41,6 +41,31 @@
 // ---------------------------------------------------------------
 
 #include "G4UserSteppingAction.hh"
+#include "G4ParticleTable.hh"
+#include "globals.hh"
+
+/////////////////////////////////////////////////////////
+G4UserSteppingAction::G4UserSteppingAction()
+/////////////////////////////////////////////////////////
+{
+ if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ {
+   G4String msg;
+   msg =  " You are instantiating G4UserSteppingAction BEFORE your\n";
+   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+   msg += "set it to G4RunManager before instantiating other user action classes\n";
+   msg += "such as G4UserSteppingAction.";
+   G4Exception("G4UserSteppingAction::G4UserSteppingAction()",
+              "Tracking0002",FatalException,msg);
+ }
+}
+
+/////////////////////////////////////////////////////////
+G4UserSteppingAction::~G4UserSteppingAction()
+/////////////////////////////////////////////////////////
+{;}
 
 /////////////////////////////////////////////////////////
 void G4UserSteppingAction::

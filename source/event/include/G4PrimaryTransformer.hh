@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryTransformer.hh,v 1.10 2005/04/27 01:32:46 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4PromaryTransformer_h 

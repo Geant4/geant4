@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.8 2003/06/16 16:52:44 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidBox.cc,v 1.9 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -96,6 +96,11 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   
   Initialize();
   
+}
+
+G4BREPSolidBox::G4BREPSolidBox( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidBox::~G4BREPSolidBox()

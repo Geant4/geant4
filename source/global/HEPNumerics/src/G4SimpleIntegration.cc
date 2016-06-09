@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SimpleIntegration.cc,v 1.6 2005/03/15 19:11:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation file for simple integration methods
 //

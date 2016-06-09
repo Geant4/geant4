@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VShortLivedParticle.hh,v 1.6 2003/03/10 08:43:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VShortLivedParticle.hh,v 1.7 2004/09/02 01:52:42 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -68,7 +68,7 @@ class G4VShortLivedParticle : public G4ParticleDefinition
                G4double         lifetime,
                G4DecayTable     *decaytable);
 
-   virtual ~G4VShortLivedParticle() {};
+   virtual ~G4VShortLivedParticle();
 
    G4int operator==(const G4VShortLivedParticle &right) const;
    G4int operator!=(const G4VShortLivedParticle &right) const;

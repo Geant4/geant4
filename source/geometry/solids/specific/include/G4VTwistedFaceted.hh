@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.3 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VTwistedFaceted.hh,v 1.8 2005/12/06 09:22:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -35,7 +35,9 @@
 //  G4VTwistedFaceted is an abstract base class for twisted boxoids:
 //  G4TwistedTrd, G4TwistedTrap and G4TwistedBox
 
-// Author:  O.Link (Oliver.Link@cern.ch)
+// Author:
+//
+//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -43,10 +45,10 @@
 #define __G4VTWISTEDFACETED__
 
 #include "G4VSolid.hh"
-#include "G4TwistedTrapAlphaSide.hh"
-#include "G4TwistedTrapParallelSide.hh"
-#include "G4TwistedTrapBoxSide.hh"
-#include "G4FlatTrapSide.hh" 
+#include "G4TwistTrapAlphaSide.hh"
+#include "G4TwistTrapParallelSide.hh"
+#include "G4TwistBoxSide.hh"
+#include "G4TwistTrapFlatSide.hh" 
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
@@ -98,10 +100,13 @@ class G4VTwistedFaceted: public G4VSolid
 
   virtual G4ThreeVector SurfaceNormal(const G4ThreeVector &p) const;
 
+  G4ThreeVector GetPointOnSurface() const;
+  G4ThreeVector GetPointInSolid(G4double z) const;
+  
   virtual inline G4double GetCubicVolume() ;
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
-  virtual G4Polyhedron   *CreatePolyhedron   () const = 0 ;
+  virtual G4Polyhedron   *CreatePolyhedron   () const ;
   virtual G4NURBS        *CreateNURBS        () const;
   virtual G4Polyhedron   *GetPolyhedron      () const;
 
@@ -131,6 +136,13 @@ class G4VTwistedFaceted: public G4VSolid
 
   virtual G4VisExtent     GetExtent    () const;
   virtual G4GeometryType  GetEntityType() const;
+
+ public:  // without description
+
+  G4VTwistedFaceted(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
  protected:  // with description
 
@@ -171,13 +183,13 @@ class G4VTwistedFaceted: public G4VSolid
 
   G4double fAngleSide;
      
-  G4VSurface *fLowerEndcap ;  // surface of -ve z
-  G4VSurface *fUpperEndcap ;  // surface of +ve z
+  G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
+  G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
   
-  G4VSurface *fSide0 ;         // Twisted Side at phi = 0 deg
-  G4VSurface *fSide90 ;        // Twisted Side at phi = 90 deg
-  G4VSurface *fSide180 ;       // Twisted Side at phi = 180 deg
-  G4VSurface *fSide270 ;       // Twisted Side at phi = 270 deg
+  G4VTwistSurface *fSide0 ;         // Twisted Side at phi = 0 deg
+  G4VTwistSurface *fSide90 ;        // Twisted Side at phi = 90 deg
+  G4VTwistSurface *fSide180 ;       // Twisted Side at phi = 180 deg
+  G4VTwistSurface *fSide270 ;       // Twisted Side at phi = 270 deg
 
   G4double fCubicVolume ;      // volume of the twisted trapezoid
 
@@ -204,7 +216,7 @@ class G4VTwistedFaceted: public G4VSolid
       {
         p.set(kInfinity,kInfinity,kInfinity);
         vec.set(kInfinity,kInfinity,kInfinity);
-        surface = new G4VSurface*[1];
+        surface = new G4VTwistSurface*[1];
       }
       ~LastVector()
       {
@@ -213,7 +225,7 @@ class G4VTwistedFaceted: public G4VSolid
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VSurface    **surface;
+      G4VTwistSurface    **surface;
   };
 
   class LastValue              // last G4double value
@@ -290,7 +302,7 @@ inline
 G4double G4VTwistedFaceted::Xcoef(G4double u, G4double phi, G4double ftg) const 
 {
   return GetValueA(phi)/2. + (GetValueD(phi)-GetValueA(phi))/4. 
-    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) + ftg );
+    - u*( ( GetValueD(phi)-GetValueA(phi) ) / ( 2 * GetValueB(phi) ) - ftg );
 }
 
 #endif

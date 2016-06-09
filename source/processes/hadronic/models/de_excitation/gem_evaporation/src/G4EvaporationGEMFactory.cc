@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EvaporationGEMFactory.cc,v 1.6 2005/06/28 12:10:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

@@ -21,16 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStackingAction.cc,v 1.5 2003/05/21 20:52:54 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UserStackingAction.cc,v 1.6 2005/11/22 21:06:29 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4UserStackingAction.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
+#include "G4ParticleTable.hh"
+#include "globals.hh"
+
 
 G4UserStackingAction::G4UserStackingAction()
-{;}
+{
+ if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ {
+   G4String msg;
+   msg =  " You are instantiating G4UserStackingAction BEFORE your\n";
+   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+   msg += "set it to G4RunManager before instantiating other user action classes\n";
+   msg += "such as G4UserStackingAction.";
+   G4Exception("G4UserStackingAction::G4UserStackingAction()",
+              "Event0002",FatalException,msg);
+ }
+}
+
 
 G4UserStackingAction::~G4UserStackingAction()
 {;}

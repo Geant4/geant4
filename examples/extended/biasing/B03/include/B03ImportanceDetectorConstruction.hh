@@ -22,7 +22,7 @@
 //
 //
 // $Id: B03ImportanceDetectorConstruction.hh,v 1.2 2003/06/16 16:47:22 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef B03ImportanceDetectorConstruction_hh 

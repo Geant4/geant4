@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunAction.hh,v 1.7 2003/05/22 17:20:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: BrachyRunAction.hh,v 1.9 2005/11/22 11:00:47 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //
@@ -41,7 +41,6 @@
 
 class G4Run;
 class BrachyAnalysisManager;
-class BrachyDetectorConstruction;
 class BrachyRunMessenger;
 class BrachyFactory;
 class BrachyFactoryIr;
@@ -50,7 +49,7 @@ class BrachyFactoryI;
 class BrachyRunAction : public G4UserRunAction
 {
 public:
-  BrachyRunAction(G4String& );
+  BrachyRunAction();
   ~BrachyRunAction();
 
 public:
@@ -59,9 +58,6 @@ public:
   void SelectEnergy(G4int); 
 
 private:
- 
-  G4String sensitiveDetectorName;
-  BrachyDetectorConstruction* detector;
   BrachyRunMessenger* runMessenger;
   BrachyFactory *factory; 
   G4int sourceChoice; //select primary particle 

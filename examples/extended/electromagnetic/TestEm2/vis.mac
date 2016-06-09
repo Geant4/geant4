@@ -22,6 +22,7 @@
 # Draw scene
 #
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/set/style surface
 /vis/viewer/zoom 1.1
 /vis/viewer/flush
 #

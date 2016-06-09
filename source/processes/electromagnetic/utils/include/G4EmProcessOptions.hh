@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.3 2005/03/28 23:08:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmProcessOptions.hh,v 1.4 2005/10/27 14:04:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,7 @@ public:
 
   void SetLossFluctuations(G4bool val);
 
-  void SetSubCutoff(G4bool val);
+  void SetSubCutoff(G4bool val, const G4Region* r=0);
 
   void SetIntegral(G4bool val);
 
@@ -98,6 +98,8 @@ public:
   void SetLambdaFactor(G4double val);
 
   void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
+
+  void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
 private:
 

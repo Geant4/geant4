@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.25 2004/10/10 10:15:27 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSolid.cc,v 1.27 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4VSolid
 //
@@ -57,6 +57,21 @@
 G4VSolid::G4VSolid(const G4String& name)
   : fshapeName(name)
 {
+    // Register to store
+    //
+    G4SolidStore::GetInstance()->Register(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4VSolid::G4VSolid( __void__& )
+  : fshapeName("")
+{
+    // Register to store
+    //
     G4SolidStore::GetInstance()->Register(this);
 }
 
@@ -91,6 +106,20 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
            << "        Method not overloaded by derived class !" << G4endl;
     G4Exception("G4VSolid::ComputeDimensions()", "NotApplicable",
                 FatalException, "Illegal call to case class.");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Throw exception (warning) for solids not implementing the method
+
+G4ThreeVector G4VSolid::GetPointOnSurface() const
+{
+    G4cerr << "WARNING - G4VSolid::GetPointOnSurface()" << G4endl
+           << "          Not implemented for solid: "
+	   << this->GetEntityType() << " !" << G4endl;
+    G4Exception("G4VSolid::GetPointOnSurface()", "NotImplemented",
+        JustWarning, "Not implemented for this solid ! Returning origin.");
+    return G4ThreeVector(0,0,0);
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.15 2005/03/09 23:48:15 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VVisCommand.cc,v 1.17 2005/11/22 17:12:43 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -32,7 +32,7 @@
 #include "G4UIcommand.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
+#include <sstream>
 
 G4VVisCommand::~G4VVisCommand () {}
 
@@ -43,11 +43,9 @@ G4String G4VVisCommand::ConvertToString
 {
   G4double uv = G4UIcommand::ValueOf(unitName);
   
-  char st[50];
-  std::ostrstream os(st,50);
-  os << x/uv << " " << y/uv << " " << unitName << std::ends;
-  G4String vl = st;
-  return vl;
+  std::ostringstream oss;
+  oss << x/uv << " " << y/uv << " " << unitName;
+  return oss.str();
 }
 
 void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
@@ -57,7 +55,7 @@ void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
   G4double x, y;
   char unts[30];
   
-  std::istrstream is(paramString);
+  std::istringstream is(paramString);
   is >> x >> y >> unts;
   G4String unt = unts;
 
@@ -72,7 +70,7 @@ void G4VVisCommand::UpdateVisManagerScene
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
 
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
@@ -94,11 +92,12 @@ void G4VVisCommand::UpdateVisManagerScene
 
   fpVisManager -> SetCurrentScene (pScene);
 
-  // Scene has changed.  Trigger a rebuild of graphical database...
+  // Scene has changed.  Refresh viewers of all sceneHandlers using
+  // this scene...
   G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
   if (sceneHandler && sceneHandler -> GetScene ()) {
-    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+    if (pViewer) {
       G4UImanager::GetUIpointer () ->
 	ApplyCommand ("/vis/scene/notifyHandlers");
     }

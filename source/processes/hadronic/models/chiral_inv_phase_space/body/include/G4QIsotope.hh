@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.hh,v 1.3 2005/03/24 16:06:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4QIsotope.hh,v 1.4 2005/11/30 16:31:03 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //      ---------------- G4QIsotope header ----------------
@@ -84,6 +84,10 @@ public:
   // The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
   // ======================================================================================
   G4int GetLastIndex(G4int Z); // Returns the last defined index (if only natural: =0)
+
+  // Indices can have differen numbers (not 1,2,3,...) & in different sequences (9,3,7,...)
+  // ======================================================================================
+  G4bool IsDefined(G4int Z, G4int Ind); // Returns true if defined, false, if not defined
 
   // A#ofNeutrons in Element with Z & UseDefIndex. Universal for Nat(index=0) & UserDefElem
   // ======================================================================================

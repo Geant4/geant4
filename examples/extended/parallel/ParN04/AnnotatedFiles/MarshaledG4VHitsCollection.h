@@ -233,24 +233,24 @@ void marshal3() {
     {
 	if(0){}
 	else if((param->GetName() == "calCollection") ){
-		G4THitsCollection<ExN04CalorimeterHit> *aObj949 = (G4THitsCollection<ExN04CalorimeterHit>*)param;
-		MarshaledG4THitsCollection<ExN04CalorimeterHit> marChild(aObj949);
+		G4THitsCollection<ExN04CalorimeterHit> *aObj621 = (G4THitsCollection<ExN04CalorimeterHit>*)param;
+		MarshaledG4THitsCollection<ExN04CalorimeterHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy(msh_cursor,marChild.getBuffer(), marChild.getBufferSize());
 		msh_currentSize = marChild.getBufferSize();
 		msh_typechoice = 0;
 	}
 	else if( (param->GetName() == "muonCollection") ){
-		G4THitsCollection<ExN04MuonHit> *aObj949 = (G4THitsCollection<ExN04MuonHit>*)param;
-		MarshaledG4THitsCollection<ExN04MuonHit> marChild(aObj949);
+		G4THitsCollection<ExN04MuonHit> *aObj621 = (G4THitsCollection<ExN04MuonHit>*)param;
+		MarshaledG4THitsCollection<ExN04MuonHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy(msh_cursor,marChild.getBuffer(), marChild.getBufferSize());
 		msh_currentSize = marChild.getBufferSize();
 		msh_typechoice = 1;
 	}
 	else if( true ){
-		G4THitsCollection<ExN04TrackerHit> *aObj949 = (G4THitsCollection<ExN04TrackerHit>*)param;
-		MarshaledG4THitsCollection<ExN04TrackerHit> marChild(aObj949);
+		G4THitsCollection<ExN04TrackerHit> *aObj621 = (G4THitsCollection<ExN04TrackerHit>*)param;
+		MarshaledG4THitsCollection<ExN04TrackerHit> marChild(aObj621);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy(msh_cursor,marChild.getBuffer(), marChild.getBufferSize());
 		msh_currentSize = marChild.getBufferSize();

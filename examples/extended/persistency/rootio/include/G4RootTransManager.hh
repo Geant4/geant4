@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4RootTransManager.hh,v 1.4 2005/04/22 16:57:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // File: G4RootTransManager.hh
 //

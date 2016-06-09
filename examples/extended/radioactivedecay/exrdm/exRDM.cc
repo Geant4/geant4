@@ -48,7 +48,7 @@
 int main(int argc,char** argv)
 {
   // random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;

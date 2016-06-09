@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: DetectorMessenger.cc,v 1.3 2004/09/24 09:58:07 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -19,15 +19,23 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: RemsimParticles.hh; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Remsim example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-// $Id: RemSimParticles.hh,v 1.4 2004/05/22 12:57:04 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
-//
-// Author:Susanna Guatelli, guatelli@ge.infn.it 
-//
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 
-#ifndef REMSIMPARTICLES_HH
-#define REMSIMPARTICLES_HH 1
+#ifndef HADRONTHERAPYPARTICLES_HH
+#define HADRONTHERAPYPARTICLES_HH 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"

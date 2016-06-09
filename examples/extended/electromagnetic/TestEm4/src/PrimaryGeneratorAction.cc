@@ -22,7 +22,7 @@
 //
 //
 // $Id: PrimaryGeneratorAction.cc,v 1.2 2004/12/02 16:16:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraDimensions.cc,v 1.3 2003/06/25 09:12:59 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "TiaraDimensions.hh"

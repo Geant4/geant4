@@ -1,0 +1,82 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4EllipticalCone.icc,v 1.3 2005/08/16 13:27:33 danninos Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4EllipticalCone.icc
+//
+// Implementation of inline methods of G4EllipticalCone
+// --------------------------------------------------------------------
+// Author: Dionysios Anninos
+// --------------------------------------------------------------------
+
+G4double G4EllipticalCone::GetSemiAxisMax () const
+{
+  return ySemiAxis > xSemiAxis ? ySemiAxis : xSemiAxis;
+}
+
+G4double G4EllipticalCone::GetZTopCut() const
+{
+  return zTopCut;
+}
+
+void G4EllipticalCone::SetSemiAxis (G4double newxSemiAxis,
+                                    G4double newySemiAxis,
+                                    G4double newzMax)
+{
+  xSemiAxis = newxSemiAxis; 
+  ySemiAxis = newySemiAxis; 
+  zheight   = newzMax;
+  semiAxisMax = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
+  if (zTopCut > +zheight) { zTopCut = +zheight; }
+}
+
+void G4EllipticalCone::SetZCut (G4double newzTopCut)
+{
+  zTopCut = newzTopCut;
+  if (zTopCut > +zheight) { zTopCut = +zheight; }
+}
+
+inline
+G4double G4EllipticalCone::GetCubicVolume()
+{
+  if(fCubicVolume != 0 ) {;}
+  else
+  {
+    if (zTopCut > +zheight )
+    {
+      fCubicVolume = (8./3.)*pi*xSemiAxis*ySemiAxis*zheight*zheight*zheight;
+    }
+    else 
+    {   
+      fCubicVolume = pi*xSemiAxis*ySemiAxis*
+                    (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut);
+    }
+  }
+  return fCubicVolume;
+}

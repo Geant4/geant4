@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.4 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NistMaterialBuilder.cc,v 1.7 2005/10/31 11:35:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
+// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -105,15 +106,15 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
   if(!mat) mat = BuildMaterial(name, isotopes);
 
   if (mat) {
-    if( verbose > 1) {
+    if( verbose > 1) 
       G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial material "
              << name << " is available"
 	     << G4endl;
-    }
   } else {
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
-           << " material <" << name
-           << "> is not found out" << G4endl;
+    if( verbose > 0) 
+      G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
+	     << " material <" << name
+	     << "> is not found out" << G4endl;
   }
 
   return mat;
@@ -125,7 +126,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
                                                  G4bool isotopes)
 
 {
-  if (verbose > 0) G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
+  if (verbose > 1) G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
                           << G4endl;
 
   G4Material* mat = 0;
@@ -134,9 +135,9 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
   for (G4int i=0; i<nMaterials; i++) {
     if (name == names[i]) {
       G4int nc = components[i];
-      mat = new G4Material(names[i],densities[i],nc,states[i]);
+      mat = new G4Material(names[i],densities[i],nc,states[i],temperatures[i], presures[i]);
 
-      if (verbose>0) G4cout << "New material nComponents= " << nc << G4endl;
+      if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
       if (nc > 0) {
 	G4int idx = indexes[i];
 	for (G4int j=0; j<nc; j++) {
@@ -321,6 +322,8 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   states.push_back(state);
   components.push_back(ncomp);
   indexes.push_back(nComponents);
+  temperatures.push_back(STP_Temperature);
+  presures.push_back(STP_Pressure);
 
   if (ncomp == 1) {
     elements.push_back(Z);
@@ -333,13 +336,70 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 
   nMaterials++;
 
-  if(verbose > 0) {
+  if(verbose > 1) {
     G4cout << "New material " << nameMat << " is prepeared; "
            << " nMaterials= " << nMaterials
            << " nComponents= " << nComponents
            << " nCurrent= " << nCurrent
            << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
+                                               const G4String& ch)
+{
+  if (nCurrent != 0) {
+    G4cout
+    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: previous mixture "
+    << nMaterials << " " << names[nMaterials] << " is not yet complete!"
+    << G4endl;
+  }
+
+  if(nameMat == names[nMaterials-1]) {
+    chFormulas[nMaterials-1] = ch;
+    return;
+  } else {
+    for(G4int i=0; i<nMaterials; i++) {
+      if(nameMat == names[i]) {
+        chFormulas[i] = ch;
+	return;
+      }
+    }
+  }
+  G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: there is no "
+    << nameMat << " in the list of materials; ch=" << ch
+    << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double p)
+{
+  if (nCurrent != 0) {
+    G4cout
+    << "WARNING: G4NistMaterialBuilder::AddGas problem: previous mixture "
+    << nMaterials << " " << names[nMaterials] << " is not yet complete!"
+    << G4endl;
+  }
+
+  if(nameMat == names[nMaterials-1]) {
+    temperatures[nMaterials-1] = t;
+    presures[nMaterials-1] = p;
+    return;
+  } else {
+    for(G4int i=0; i<nMaterials; i++) {
+      if(nameMat == names[i]) {
+        temperatures[i] = t;
+        presures[i] = p;
+	return;
+      }
+    }
+  }
+  G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
+    << nameMat << " in the list of materials;"
+    << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -394,7 +454,7 @@ void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
 void G4NistMaterialBuilder::Initialise()
 {
   if (verbose > 0)
-    G4cout << "G4NistMaterialBuilder::Initialise()" << G4endl;
+    G4cout << "### G4NistMaterialBuilder::Initialise()" << G4endl;
 
   if (!matManager) {
     G4cout << "G4NistMaterialBuilder::Initialise(): Warning : "
@@ -573,6 +633,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_ALUMINUM_OXIDE", 3.97, 0, 145.2, 2);
   AddElementByWeightFraction( 8, 0.470749);
   AddElementByWeightFraction(13, 0.529251);
+  AddChemicalFormula("G4_ALUMINUM_OXIDE","Al_2O_3");
 
   AddMaterial("G4_AMBER", 1.1, 0, 63.2, 3);
   AddElementByWeightFraction( 1, 0.10593 );
@@ -738,6 +799,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_CARBON_DIOXIDE", 0.00184212, 0, 85., 2, kStateGas);
   AddElementByWeightFraction( 6, 0.272916);
   AddElementByWeightFraction( 8, 0.727084);
+  AddChemicalFormula("G4_CARBON_DIOXIDE","CO_2");
 
   AddMaterial("G4_CARBON_TETRACHLORIDE", 1.594, 0, 166.3, 2);
   AddElementByWeightFraction( 6, 0.078083);
@@ -1219,6 +1281,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_POLYETHYLENE", 0.94, 0, 57.4, 2);
   AddElementByWeightFraction( 1, 0.143711);
   AddElementByWeightFraction( 6, 0.856289);
+  AddChemicalFormula("G4_POLYETHYLENE","(C_2H_4)_N-Polyethylene");
 
   AddMaterial("G4_MYLAR", 1.4, 0, 78.7, 3);
   AddElementByWeightFraction( 1, 0.041959);
@@ -1238,6 +1301,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_POLYPROPYLENE", 0.9, 0, 56.5, 2);
   AddElementByWeightFraction( 1, 0.143711);
   AddElementByWeightFraction( 6, 0.856289);
+  AddChemicalFormula("G4_POLYPROPYLENE","(C_2H_4)_N-Polypropylene");
 
   AddMaterial("G4_POLYSTYRENE", 1.06, 0, 68.7, 2);
   AddElementByWeightFraction( 1, 0.077418);
@@ -1330,6 +1394,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_SILICON_DIOXIDE", 2.32, 0, 139.2, 2);
   AddElementByWeightFraction( 8, 0.532565);
   AddElementByWeightFraction(14, 0.467435);
+  AddChemicalFormula("G4_SILICON_DIOXIDE","SiO_2");
 
   AddMaterial("G4_SILVER_BROMIDE", 6.473, 0, 486.6, 2);
   AddElementByWeightFraction(35, 0.425537);
@@ -1502,13 +1567,15 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
 
-  AddMaterial("G4_WATER", 1,0, 75., 2);
+  AddMaterial("G4_WATER", 1.0,0, 75., 2);
   AddElementByWeightFraction( 1, 0.111894);
   AddElementByWeightFraction( 8, 0.888106);
+  AddChemicalFormula("G4_WATER","H_2O");
 
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
   AddElementByWeightFraction( 1, 0.111894);
   AddElementByWeightFraction( 8, 0.888106);
+  AddChemicalFormula("G4_WATER_VAPOR","H_2O-Gas");
 
   AddMaterial("G4_XYLENE", 0.87, 0, 61.8, 2);
   AddElementByWeightFraction( 1, 0.094935);
@@ -1516,6 +1583,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
 
   AddMaterial("G4_GRAPHITE", 1.7, 0, 78., 1);
   nNIST = nMaterials;
+  AddChemicalFormula("G4_GRAPHITE","Graphite");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1534,6 +1602,7 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 
   G4double density = universe_mean_density*cm3/g;
   AddMaterial("G4_Galactic", density, 1, 21.8, 1, kStateGas);
+  AddGas("G4_Galactic",2.73*kelvin, 3.e-18*pascal);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

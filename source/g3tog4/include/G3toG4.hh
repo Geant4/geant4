@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4.hh,v 1.8 2004/03/26 14:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 

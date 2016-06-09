@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.icc,v 1.4 2004/12/02 09:31:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Trap.icc,v 1.6 2005/08/04 10:57:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -103,16 +103,19 @@ TrapSidePlane G4Trap::GetSidePlane( G4int n ) const
   return fPlanes[n] ;
 }
 
-
-///////////////////////////////////////////////////
-//
-// Return the volume as a bit modified Trd
+inline
+G4double G4Trap::GetFaceArea(const G4ThreeVector& p0, const G4ThreeVector& p1,
+                             const G4ThreeVector& p2, const G4ThreeVector& p3)
+{
+   G4double area = 0.5*((p1-p0).cross(p2-p1).mag()+(p3-p2).cross(p0-p3).mag());
+   return area;
+}
 
 inline
 G4double G4Trap::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-  else   fCubicVolume = fDz*( (fDx1+fDx2+fDx3+fDx4)*(fDy1+fDy2)
-                            + (fDx4+fDx3-fDx2-fDx1)*(fDy2-fDy1)/3 ); 
+  if(fCubicVolume != 0.) {;}
+  else  { fCubicVolume = fDz*( (fDx1+fDx2+fDx3+fDx4)*(fDy1+fDy2)
+                             + (fDx4+fDx3-fDx2-fDx1)*(fDy2-fDy1)/3 ); }
   return fCubicVolume;
 }

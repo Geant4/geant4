@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.hh,v 1.8 2002/12/16 11:15:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Electron.hh,v 1.11 2005/01/30 22:58:04 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,51 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Added SetCuts implementation for Electron, L.Urban, 30 May 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VLepton
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4Electron_h
 #define G4Electron_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VLepton.hh"
-class G4Positron;
+#include "G4ParticleDefinition.hh"
+
 // ######################################################################
 // ###                         ELECTRON                               ###
 // ######################################################################
 
-class G4Electron : public G4VLepton
+class G4Electron : public G4ParticleDefinition
 {
- friend class G4Positron;
  private:
-   static G4Electron theElectron;
-
- private: //hide constructor as private
-   G4Electron(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4Electron* theInstance;
+   G4Electron(){}
+   ~G4Electron(){}
 
  public:
-   virtual ~G4Electron(){}
-
+   static G4Electron* Definition();
    static G4Electron* ElectronDefinition();
    static G4Electron* Electron();
-
 };
 
 #endif

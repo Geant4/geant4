@@ -21,66 +21,59 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.12 2004/06/09 07:30:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4strstreambuf.hh,v 1.14 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+// ====================================================================
 //
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
+//   G4strstreambuf
 //
-// G4strstrambuf.hh
-//
-// ---------------------------------------------------------------
-#ifndef G4STRSTREAM_HH
-#define G4STRSTREAM_HH
+// ====================================================================
+#ifndef G4_STR_STREAM_BUF_HH
+#define G4_STR_STREAM_BUF_HH
 
-#include "G4Types.hh"
-#include <strstream>
-#include "globals.hh"     
+#include "globals.hh"
 #include "G4coutDestination.hh"
+#include <streambuf>
 
 class G4strstreambuf;
 
 #if defined G4IOS_EXPORT
-  extern G4DLLEXPORT G4strstreambuf G4coutbuf;
-  extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
+extern G4DLLEXPORT G4strstreambuf G4coutbuf;
+extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
 #else
-  extern G4DLLIMPORT G4strstreambuf G4coutbuf;
-  extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+extern G4DLLIMPORT G4strstreambuf G4coutbuf;
+extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
 #endif
 
-class G4strstreambuf : public std::streambuf
+class G4strstreambuf : public std::basic_streambuf<char>
 {
-
-  typedef std::streambuf std_streambuf;
-
   public:
 
     G4strstreambuf();
     ~G4strstreambuf();
+    
+    virtual G4int overflow(G4int c=EOF);
+    virtual G4int sync();
 
-    inline void SetDestination(G4coutDestination * value);
-
-    inline G4int overflow(G4int c=EOF);
-    inline G4int sync();
 #ifdef WIN32
-    inline G4int underflow();
+    virtual G4int underflow();
 #endif
 
-    inline G4int ReceiveString ();
-
+    void SetDestination(G4coutDestination* dest);
+    G4int ReceiveString ();
+  
   private:
 
+    char* buffer;
+    G4int count, size;
+    G4coutDestination* destination;
+
+    // hidden...
     G4strstreambuf(const G4strstreambuf&);
     G4strstreambuf& operator=(const G4strstreambuf&);
-
-  private:
-
-    G4coutDestination * destination;
-    char* buffer;
-    G4int count,size;
 };
 
 #include "G4strstreambuf.icc"
 
 #endif
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.38 2005/03/09 23:48:15 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisManager.hh,v 1.45 2005/11/29 22:23:01 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -38,7 +38,7 @@
 // class from G4VisManager, implement the pure virtual function
 // RegisterGraphicsSystems, and instantiate an object of the derived
 // class - for an example see
-// visualization/include/MyVisManager.hh/cc.
+// visualization/include/G4VisExecutive.hh/icc.
 //
 // The recommended way for users to obtain a pointer to the vis
 // manager is with G4VVisManager::GetConcreteInstance (), being always
@@ -50,15 +50,16 @@
 // pure virtual function RegisterGraphicsSystems called from
 // Initialise ().  You can also use the public function
 // RegisterGraphicsSystem (new MyGraphicsSystem) if you have your own
-// graphics system.
+// graphics system. A graphics system is, in effect, a factory for
+// scene handlers and viewers.
 //
-// The VisManager creates graphics systems, scenes, scene handlers and
-// viewers and manages them.  You can have any number.  It has the
-// concept of a "current viewer", and the "current scene handler", the
-// "current scene" and the "current graphics system" which go with it.
-// You can select the current viewer.  Most of the the operations of
-// the VisManager take place with the current viewer, in particular,
-// the Draw operations.
+// The VisManager creates and manages graphics systems, scenes, scene
+// handlers, viewers and some models and model makers.  You can have
+// any number.  It has the concept of a "current viewer", and the
+// "current scene handler", the "current scene" and the "current
+// graphics system" which go with it.  You can select the current
+// viewer.  Most of the the operations of the VisManager take place
+// with the current viewer, in particular, the Draw operations.
 //
 // Each scene comprises drawable objects such as detector components
 // and hits when appropriate.  A scene handler translates a scene into
@@ -80,12 +81,13 @@
 
 #include "globals.hh"
 #include "G4GraphicsSystemList.hh"
+#include "G4ModelingParameters.hh"
+#include "G4NullModel.hh"
 #include "G4SceneHandlerList.hh"
 #include "G4SceneList.hh"
-#include "G4Transform3D.hh"
-#include "G4NullModel.hh"
 #include "G4TrajectoriesModel.hh"
-#include "G4ModelingParameters.hh"
+#include "G4Transform3D.hh"
+#include "G4UImessenger.hh"
 
 #include <iostream>
 #include <vector>
@@ -94,7 +96,16 @@ class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
 class G4VisStateDependent;
+class G4VTrajectoryModel;
 class G4VUserVisAction;
+template <typename T> class G4VisListManager;
+template <typename T> class G4VModelFactory;
+
+namespace {
+  // Typedef's for trajectory drawing
+  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajectoryModelFactory;
+  typedef G4VisListManager<G4VTrajectoryModel> G4TrajectoryModelManager;
+}
 
 class G4VisManager: public G4VVisManager {
 
@@ -162,7 +173,23 @@ public: // With description
 
   void Initialise ();
   void Initialize ();  // Alias Initialise ().
-  G4bool RegisterGraphicsSystem (G4VGraphicsSystem* pSystem);
+
+  G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
+  // Register an individual graphics system.  Normally this is done in
+  // a sub-class implementation of the protected virtual function,
+  // RegisterGraphicsSystems.  See, e.g., G4VisExecutive.icc.
+
+  void RegisterModelFactory(G4TrajectoryModelFactory* factory);
+  // Register trajectory model factory. Assumes ownership of factory.
+
+  void RegisterModel(G4VTrajectoryModel* model);
+  // Register trajectory model. Assumes ownership of model.
+
+  void SelectTrajectoryModel(const G4String& model);
+  // Set default trajectory model. Useful for use in compiled code
+
+  void RegisterMessenger(G4UImessenger* messenger);
+  // Register messenger. Assumes ownership of messenger.
 
   /////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -170,28 +197,28 @@ public: // With description
   // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -209,19 +236,22 @@ public: // With description
   // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
 
   void GeometryHasChanged ();
   // Used by run manager to notify change.
+
+  void DispatchToModel(const G4VTrajectory&, G4int i_mode);
+  // Draw the trajectory.
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -269,6 +299,14 @@ public: // With description
   Verbosity                    GetVerbosity                () const;
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
+  const G4String&              GetXGeometryString          () const;
+  // GetXGeometryString is intended to be parsed by XParseGeometry.
+  // It contains the size information, as in GetWindowSizeHint, but
+  // may also contain the window position, e.g., "600x600-0+200.  The
+  // viewer should use this in preference to GetWindowSizeHint, since
+  // it contains more information.  (The size information in
+  // GetXGeometryString and GetWindowSizeHint is guaranteed to be
+  // identical.)
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -283,6 +321,7 @@ public: // With description
   void              SetVerboseLevel             (const G4String&);
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
+  void              SetXGeometryString          (const G4String&);
 
 
   /////////////////////////////////////////////////////////////////////
@@ -312,6 +351,12 @@ public: // With description
 protected:
 
   virtual void RegisterGraphicsSystems () = 0;
+  // The sub-class must implement and make successive calls to
+  // RegisterGraphicsSystem.
+
+  virtual void RegisterModelFactories();
+  // Sub-class must register desired models
+
   void RegisterMessengers              ();   // Command messengers.
   void PrintAvailableGraphicsSystems   () const;
   void PrintInvalidPointers            () const;
@@ -343,11 +388,19 @@ protected:
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
-  G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer construction.
+  G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
+  G4String fXGeometryString;                // ...construction.
   G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
 
+private:
+
+  // Trajectory model related data members
+  G4String fTrajectoryPlacement; // Placement for trajectory model commands
+  G4TrajectoryModelManager* fpTrajectoryModelMgr; // Trajectory model manager
+  std::vector<G4TrajectoryModelFactory*> fTrajectoryModelFactoryList; // Trajectory model factories
+  
 };
 
 #include "G4VisManager.icc"

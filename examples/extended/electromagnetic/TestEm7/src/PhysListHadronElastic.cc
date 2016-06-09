@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListHadronElastic.cc,v 1.2 2004/09/27 14:42:27 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysListHadronElastic.cc,v 1.3 2005/12/02 16:54:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,9 +57,11 @@ void PhysListHadronElastic::ConstructProcess()
     G4ProcessManager* pManager = particle->GetProcessManager();
     if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)) { 
       pManager->AddDiscreteProcess(&theElasticProcess);
+      /*
       G4cout << "### Elastic model are registered for " 
              << particle->GetParticleName()
              << G4endl;
+      */
     }
   }
 

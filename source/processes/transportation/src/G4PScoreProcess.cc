@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PScoreProcess.cc,v 1.9 2004/10/19 00:59:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.16 2003/06/16 17:00:06 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4CrossSectionHandler.cc,v 1.17 2005/11/30 16:34:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -46,8 +46,6 @@
 #include "Randomize.hh"
 #include <map>
 #include <vector>
-#include <fstream>
-#include <strstream>
 
 #include "G4LogLogInterpolation.hh"
 

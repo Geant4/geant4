@@ -27,7 +27,7 @@
 // and all its terms.
 //
 // $Id: G4VParticlePropertyReporter.hh,v 1.1 2003/09/21 19:38:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ---------------------------------------------------------------

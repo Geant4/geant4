@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RE01DetectorConstruction.cc,v 1.2 2004/11/26 17:20:27 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 

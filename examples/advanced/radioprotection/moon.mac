@@ -32,10 +32,7 @@
 /configuration/choose moon
 /configuration/AddRoof On
 /roof/thickness 2. m
-/gun/generator Interplanetary
-/gun/data gcrZ=26.txt
-#/tracking/verbose 1
-/gun/particle IonFe52
+/control/execute gcrZ=1gps.mac
 /run/beamOn 10
 
 

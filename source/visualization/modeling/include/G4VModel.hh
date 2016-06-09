@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.16 2005/03/03 16:39:15 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VModel.hh,v 1.17 2005/11/22 16:29:40 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -55,7 +55,7 @@ public: // With description
   friend std::ostream& operator << (std::ostream& os, const G4VModel&);
 
   G4VModel
-  (const G4Transform3D& modelTransformation = G4Transform3D::Identity,
+  (const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0);
    
   virtual ~G4VModel ();

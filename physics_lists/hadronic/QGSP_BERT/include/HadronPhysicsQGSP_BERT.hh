@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSP_BERT.hh,v 1.2 2005/11/29 17:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsQGSP_BERT
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 23.11.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef HadronPhysicsQGSP_BERT_h
 #define HadronPhysicsQGSP_BERT_h 1
 
@@ -27,7 +41,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronQEDBuilder.hh"
 #include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
@@ -56,24 +69,24 @@ class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
-    G4NeutronBuilder theNeutrons;
-    G4LEPNeutronBuilder theLEPNeutron;
-    G4QGSPNeutronBuilder theQGSPNeutron;
-    G4BertiniNeutronBuilder theBertiniNeutron;
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LEPNeutronBuilder * theLEPNeutron;
+    G4QGSPNeutronBuilder * theQGSPNeutron;
+    G4BertiniNeutronBuilder * theBertiniNeutron;
     
-    G4PiKBuilder thePiK;
-    G4LEPPiKBuilder theLEPPiK;
-    G4QGSPPiKBuilder theQGSPPiK;
-    G4BertiniPiKBuilder theBertiniPiK;
+    G4PiKBuilder * thePiK;
+    G4LEPPiKBuilder * theLEPPiK;
+    G4QGSPPiKBuilder * theQGSPPiK;
+    G4BertiniPiKBuilder * theBertiniPiK;
     
-    G4ProtonBuilder thePro;
-    G4LEPProtonBuilder theLEPPro;
-    G4QGSPProtonBuilder theQGSPPro; 
-    G4BertiniProtonBuilder theBertiniPro;
+    G4ProtonBuilder * thePro;
+    G4LEPProtonBuilder * theLEPPro;
+    G4QGSPProtonBuilder * theQGSPPro; 
+    G4BertiniProtonBuilder * theBertiniPro;
     
-    G4MiscLHEPBuilder theMiscLHEP;
-    G4StoppingHadronBuilder theStoppingHadron;
-    G4HadronQEDBuilder theHadronQED;
+    G4MiscLHEPBuilder * theMiscLHEP;
+    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.17 2004/12/02 09:31:23 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.18 2005/11/24 17:31:03 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -182,6 +182,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
             case kParameterised:
               G4VSolid *pSolid;
               G4VPVParameterisation *pParam;
+	      G4TouchableHistory parentTouchable( fHistory );
               pParam = fBlockedPhysicalVolume->GetParameterisation();
               pSolid = pParam->ComputeSolid(fBlockedReplicaNo,
                                             fBlockedPhysicalVolume);
@@ -198,8 +199,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               G4LogicalVolume *pLogical;
               pLogical = fBlockedPhysicalVolume->GetLogicalVolume();
               pLogical->SetSolid( pSolid );
-              pLogical->UpdateMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
-                                                      fBlockedPhysicalVolume));
+              pLogical->UpdateMaterial(pParam->ComputeMaterial( 
+						      fBlockedReplicaNo,
+                                                      fBlockedPhysicalVolume, 
+						      &parentTouchable));
               break;
           }
           fEntering = false;
@@ -987,11 +990,15 @@ void G4Navigator::SetupHierarchy()
         pSolid->ComputeDimensions(pParam, replicaNo, current);
         pParam->ComputeTransformation(replicaNo, current);
 
+	G4TouchableHistory touchable( fHistory );
+	touchable.MoveUpHistory();  // move up to the parent level
+      
         // Set up the correct solid and material in Logical Volume
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
-        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current));
+        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current, 
+							  &touchable) );
         break;
     }
     mother = current;

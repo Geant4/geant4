@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysicsList.hh,v 1.1 2004/12/13 16:38:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Modified:
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.24 2005/06/27 15:32:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Track.cc,v 1.26 2005/11/24 16:54:53 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -167,10 +167,14 @@ G4double G4Track::GetVelocity() const
     // special case for photons
     if ( (fOpticalPhoton !=0)  &&
 	 (fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
-                                                                                
-       G4Material*
+
+       G4Material* mat=0; 
+       if ( this->GetStep() ){
+	  mat= this->GetMaterial();         //   Fix for repeated volumes
+       }else{
           mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
-                                                                                
+       }
+
        if(mat->GetMaterialPropertiesTable() != 0){
          // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
          // values stored in GROUPVEL material properties vector

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.19 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Orb.cc,v 1.22 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4Orb
 //
@@ -43,12 +43,16 @@
 
 #include "G4VPVParameterisation.hh"
 
+#include "Randomize.hh"
+
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 // Private enum: Not for external use - used by distanceToOut
 
@@ -82,6 +86,16 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Orb::G4Orb( __void__& a )
+  : G4CSGSolid(a)
+{
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // Destructor
@@ -89,7 +103,6 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 G4Orb::~G4Orb()
 {
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -542,7 +555,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
 /////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance (<=actual) to closest surface of shape from inside
+// Calculate distance (<=actual) to closest surface of shape from inside
 
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 {
@@ -595,7 +608,27 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Orb::GetPointOnSurface() const
+{
+  //  generate a random number from zero to 2pi...
+  //
+  G4double phi      = RandFlat::shoot(0.,2.*pi);
+  G4double cosphi   = std::cos(phi);
+  G4double sinphi   = std::sin(phi);
+  
+  G4double theta    = RandFlat::shoot(0.,pi);
+  G4double costheta = std::cos(theta);
+  G4double sintheta = std::sqrt(1.-sqr(costheta));
+  
+  return G4ThreeVector (fRmax*sintheta*cosphi,
+                        fRmax*sintheta*sinphi, fRmax*costheta); 
+}
+
+////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 
@@ -613,7 +646,3 @@ G4NURBS* G4Orb::CreateNURBS () const
 {
   return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }
-
-// End of G4Orb.cc 
-//
-/////////////////////////////////////////////////////////////////////

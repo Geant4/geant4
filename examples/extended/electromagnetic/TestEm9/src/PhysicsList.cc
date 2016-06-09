@@ -50,6 +50,8 @@
 #include "G4LossTableManager.hh"
 #include "StepMax.hh"
 
+#include "G4EmProcessOptions.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
@@ -64,6 +66,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   muonDetectorCuts   = 0;
 
   stepMaxProcess  = 0;
+
+  mscStepLimit = true;
 
   pMessenger = new PhysicsListMessenger(this);
   stepMaxProcess = new StepMax();
@@ -113,6 +117,10 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
+  if(!mscStepLimit) {
+    G4EmProcessOptions opt;
+    opt.SetMscStepLimitation(false);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,10 +188,11 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-  G4cout << "world cuts are set" << G4endl;
+  SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
+  SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
+  SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
+  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
+	 << " mm    cutE= " << cutForElectron/mm << " mm " << G4endl;
 
   if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
@@ -203,6 +212,7 @@ void PhysicsList::SetCuts()
 void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -210,6 +220,7 @@ void PhysicsList::SetCutForGamma(G4double cut)
 void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,6 +228,7 @@ void PhysicsList::SetCutForElectron(G4double cut)
 void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,3 +255,11 @@ void PhysicsList::SetMuonCut(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetMscStepLimit(G4bool val)
+{
+  mscStepLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

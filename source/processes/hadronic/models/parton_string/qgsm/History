@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2005/11/30 11:39:45 gcosmo Exp $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+      History file for hadronic/models/parton_string/qgsm directory
+      -------------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+30 Nov 2005 Gabriele Cosmo (hadr-qgsm-V07-01-00)
+-----------------------------------------------
+- Trivial fix in G4QGSParticipants and for support of CLHEP-2.0.X series.
+- Created History file.

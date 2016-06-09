@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.12 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Trap.hh,v 1.15 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,7 @@
 //              at -/+pDz
 //      pPhi    Azimuthal angle of the line joing the centre of the face at
 //              -pDz to the centre of the face at +pDz
-//      pDy1     Half-length along y of the face at -pDz
+//      pDy1    Half-length along y of the face at -pDz
 //      pDx1    Half-length along x of the side at y=-pDy1 of the face at -pDz
 //      pDx2    Half-length along x of the side at y=+pDy1 of the face at -pDz
 //      pAlp1   Angle with respect to the y axis from the centre of the side
@@ -62,8 +62,9 @@
 //   Member Data:
 //
 //      fDz     Half-length along the z axis
-//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)  These combinations are suitable for
-//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)  creation of the trapezoid corners
+//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)
+//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)
+//      These combinations are suitable for creation of the trapezoid corners
 //
 //      fDy1    Half-length along y of the face at -fDz
 //      fDx1    Half-length along x of the side at y=-fDy1 of the face at -fDz
@@ -162,14 +163,13 @@ class G4Trap : public G4CSGSolid
     inline G4double GetXHalfLength3() const;
     inline G4double GetXHalfLength4() const;
     inline G4double GetTanAlpha2()    const;
-    inline TrapSidePlane GetSidePlane( G4int n ) const;
-    inline G4ThreeVector GetSymAxis() const;
-    inline G4double GetCubicVolume();
-
-
       //
       // Returns coordinates of unit vector along straight
       // line joining centers of -/+fDz planes   
+
+    inline TrapSidePlane GetSidePlane( G4int n ) const;
+    inline G4ThreeVector GetSymAxis() const;
+    inline G4double GetCubicVolume();
 
   // Modifiers
 
@@ -212,6 +212,8 @@ class G4Trap : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const;
+
     std::ostream& StreamInfo( std::ostream& os ) const;
 
   // Visualisation functions
@@ -219,6 +221,13 @@ class G4Trap : public G4CSGSolid
     void          DescribeYourselfTo ( G4VGraphicsScene& scene  ) const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
+
+  public:  // without description
+
+    G4Trap(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:  // with description
 
@@ -240,6 +249,20 @@ class G4Trap : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+    inline G4double GetFaceArea(const G4ThreeVector& p1,
+                                const G4ThreeVector& p2, 
+                                const G4ThreeVector& p3,
+                                const G4ThreeVector& p4);
+      //
+      // Provided four corners of plane in clockwise fashion,
+      // it returns the area of finite face
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3, 
+                                  G4double& area) const;
+      //
+      // Returns a random point on the surface of one of the faces
 
   private:
 

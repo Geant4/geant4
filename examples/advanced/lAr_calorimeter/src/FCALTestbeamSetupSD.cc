@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.9 2004/11/29 18:03:07 ribon Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: FCALTestbeamSetupSD.cc,v 1.10 2005/12/08 16:39:16 ribon Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -42,8 +42,8 @@
 #include "G4SDManager.hh"
 
 #include "G4ios.hh"
-#include "iostream.h"
-#include "fstream.h"
+#include <iostream>
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -152,7 +152,7 @@ void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent*)
     iostemp = std::ios::out|std::ios::app;   
   };
   
-  ofstream BeamDatafile(FileName, iostemp);
+  std::ofstream BeamDatafile(FileName, iostemp);
   // BeamDatafile.precision(5);
 
   BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << std::endl;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.17 2003/06/16 17:00:04 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BremsstrahlungParameters.cc,v 1.18 2005/11/30 16:34:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -45,7 +45,6 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4Material.hh"
 #include <fstream>
-#include <strstream>
 
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(const G4String& name,

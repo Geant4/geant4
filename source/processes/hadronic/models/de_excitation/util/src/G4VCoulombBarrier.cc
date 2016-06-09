@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.cc,v 1.3 2005/06/04 13:29:20 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VCoulombBarrier.cc,v 1.4 2005/11/23 17:19:15 miheikki Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -30,7 +30,7 @@
 
 #include "G4VCoulombBarrier.hh"
 #include "G4HadronicException.hh"
-#include <strstream>
+#include <sstream>
 
 G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 {
@@ -38,13 +38,12 @@ G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 	theA = anA;
 	theZ = aZ;
     } else {
-	char errMessage[1024];
-	std::ostrstream errOs(errMessage,1024);
+        std::ostringstream errOs;
 	errOs << "G4VCoulombBarrier::G4VCoulombBarrier: ";
 	errOs << "Wrong values for ";
 	errOs << "A = " << anA << " ";
 	errOs << "and Z = " << aZ << G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, errMessage);
+	throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     }
 }
 

@@ -29,8 +29,8 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.cc,v 1.2 2004/06/18 09:18:00 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PurgMagRunAction.cc,v 1.3 2005/12/07 14:35:12 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "PurgMagRunAction.hh"
@@ -81,8 +81,8 @@ PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
   
   // save Rndm status
   if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
+    { CLHEP::HepRandom::showEngineStatus();
+      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
     }
        
  
@@ -117,8 +117,8 @@ void PurgMagRunAction::EndOfRunAction(const G4Run* aRun)
        
   // save Rndm status
   if (saveRndm == 1)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
+    { CLHEP::HepRandom::showEngineStatus();
+      CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
     }                         
 }
 

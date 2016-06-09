@@ -22,7 +22,7 @@
 //
 //
 // $Id: Brachy.cc
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -115,29 +115,30 @@ int main(int argc ,char ** argv)
     }
 
   BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager->SetUserAction(pEventAction );
+  pRunManager -> SetUserAction(pEventAction );
 
-  BrachyRunAction *pRunAction = new BrachyRunAction(sensitiveDetectorName);
-  pRunManager->SetUserAction(pRunAction);
+  BrachyRunAction *pRunAction = new BrachyRunAction();
+  pRunManager -> SetUserAction(pRunAction);
 
   //Initialize G4 kernel
-  pRunManager->Initialize();
+  pRunManager -> Initialize();
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
   if (session)   // Define UI session for interactive mode.
     { 
-      G4cout<<" UI session starts ..."<< G4endl;
-      UI->ApplyCommand("/control/execute VisualisationMacro.mac");    
-      session->SessionStart();
+      G4cout << " UI session starts ..." << G4endl;
+      UI -> ApplyCommand("/control/execute VisualisationMacro.mac");    
+      session -> SessionStart();
       delete session;
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UI -> ApplyCommand(command+fileName);
     }  
+
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
   analysis -> finish();

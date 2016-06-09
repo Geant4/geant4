@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.9 2003/06/16 16:57:53 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Electron.cc,v 1.11 2005/01/14 03:49:17 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,66 +31,56 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Added SetCuts implementation, L.Urban, 30 May 1996
-//  Revised, G.Cosmo, 6 June 1996
-//  Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban, 26/6/96
-//  Add ElectronDefinition() H.Kurashige 4 July 1996
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-    
 #include "G4Electron.hh"
+#include "G4ParticleTable.hh"
+
 // ######################################################################
 // ###                         ELECTRON                               ###
 // ######################################################################
+G4Electron* G4Electron::theInstance = 0;
 
-G4Electron::G4Electron(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VLepton( aName,mass,width,charge,iSpin,iParity,
-	      iConjugation,iIsospin,iIsospin3,gParity,pType,
-              lepton,baryon,encoding,stable,lifetime,decaytable )
+G4Electron* G4Electron::Definition()
 {
-  SetParticleSubType("e");
-}
-
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-
-G4Electron G4Electron::theElectron(
-		 "e-",  0.51099906*MeV,       0.0*MeV,    -1.*eplus, 
+  if (theInstance !=0) return theInstance;
+  const G4String name = "e-";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+                 name,  0.51099906*MeV,       0.0*MeV,    -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          11,
-		 true,            -1.0,          NULL
-);
-
-G4Electron* G4Electron::ElectronDefinition(){return &theElectron;}
-
-G4Electron* G4Electron::Electron()
-{  
-  return &theElectron; 
+		 true,            -1.0,          NULL,
+             false,           "e"
+              );
+  }
+  theInstance = reinterpret_cast<G4Electron*>(anInstance);
+  return theInstance;
 }
- 
 
+G4Electron*  G4Electron::ElectronDefinition()
+{
+  return Definition();
+}
 
-
+G4Electron*  G4Electron::Electron()
+{
+  return Definition();
+}
 
 

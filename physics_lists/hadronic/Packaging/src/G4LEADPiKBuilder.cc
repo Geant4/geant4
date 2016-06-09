@@ -36,49 +36,49 @@ G4LEADPiKBuilder::
 ~G4LEADPiKBuilder() {}
 
 void G4LEADPiKBuilder::
-Build(G4HadronElasticProcess & ) {}
+Build(G4HadronElasticProcess * ) {}
 
 void G4LEADPiKBuilder::
-Build(G4PionPlusInelasticProcess & aP)
+Build(G4PionPlusInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&thePiData);
   theModel->SetMinEnergy(theMin);
 }
 
 void G4LEADPiKBuilder::
-Build(G4PionMinusInelasticProcess & aP)
+Build(G4PionMinusInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&thePiData);
   theModel->SetMinEnergy(theMin);
 }
 
 void G4LEADPiKBuilder::
-Build(G4KaonPlusInelasticProcess & aP)
+Build(G4KaonPlusInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
+  aP->RegisterMe(theModel);
   theModel->SetMinEnergy(theMin);
 }
 
 void G4LEADPiKBuilder::
-Build(G4KaonMinusInelasticProcess & aP)
+Build(G4KaonMinusInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
+  aP->RegisterMe(theModel);
   theModel->SetMinEnergy(theMin);
 }
 
 void G4LEADPiKBuilder::
-Build(G4KaonZeroLInelasticProcess & aP)
+Build(G4KaonZeroLInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
+  aP->RegisterMe(theModel);
   theModel->SetMinEnergy(theMin);
 }
 
 void G4LEADPiKBuilder::
-Build(G4KaonZeroSInelasticProcess & aP)
+Build(G4KaonZeroSInelasticProcess * aP)
 {
-  aP.RegisterMe(theModel);
+  aP->RegisterMe(theModel);
   theModel->SetMinEnergy(theMin);
 }
 

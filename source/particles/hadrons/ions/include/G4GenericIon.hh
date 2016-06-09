@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.hh,v 1.7 2001/10/16 08:16:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4GenericIon.hh,v 1.9 2005/01/14 03:49:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,44 +31,37 @@
 //      History: first implementation, based on object model of
 //      4-th Dec 1998, H.Kurashige
 // ****************************************************************
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ****************************************************************
 // This class is used only by G4IonTable and not for tracking
 // G4IonTable creates various ions other than alpha,deuteron,triton,
 // and He3. Processes for these ions will be same as ones for 
 // this "GenericIon". So, user should register processes for ions
 // to this class in his/her UserPhysicsList
+// ----------------------------------------------------------------------
 
 #ifndef G4GenericIon_h
 #define G4GenericIon_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VIon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                          GenericIon                            ###
 // ######################################################################
 
-class G4GenericIon : public G4VIon
+class G4GenericIon : public G4ParticleDefinition
 {
  private:
-   static G4GenericIon theGenericIon;
+   static G4GenericIon* theInstance;
+   G4GenericIon(){}
+   ~G4GenericIon(){}
 
  public:
-   G4GenericIon(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
-   virtual ~G4GenericIon();
-
-   static G4GenericIon*    GenericIonDefinition();
-   static G4GenericIon*    GenericIon();
+   static G4GenericIon* Definition();
+   static G4GenericIon* GenericIonDefinition();
+   static G4GenericIon* GenericIon();
 };
 
 #endif

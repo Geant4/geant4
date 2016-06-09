@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.16 2004/11/29 17:53:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Allocator.hh,v 1.17 2005/10/04 13:01:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -88,7 +88,7 @@ class G4Allocator
     typedef const Type& const_reference;
 
     template <class U> G4Allocator(const G4Allocator<U>& right) throw()
-         { *this = right; }
+      : mem(right.mem) {}
       // Copy constructor
 
     pointer address(reference r) const { return &r; }

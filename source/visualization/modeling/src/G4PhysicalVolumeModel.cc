@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.32 2005/06/07 16:54:33 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.36 2005/11/24 11:15:21 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -44,7 +44,7 @@
 #include "G4VVisManager.hh"
 #include "G4Polyhedron.hh"
 
-#include <strstream>
+#include <sstream>
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
@@ -68,10 +68,9 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fppCurrentLV    (0),
   fppCurrentMaterial (0)
 {
-  const int len = 8; char a [len];
-  std::ostrstream o (a, len); o.seekp (std::ios::beg);
-  o << fpTopPV -> GetCopyNo () << std::ends;
-  fGlobalTag = fpTopPV -> GetName () + "." + a;
+  std::ostringstream o;
+  o << fpTopPV -> GetCopyNo ();
+  fGlobalTag = fpTopPV -> GetName () + "." + o.str();
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
   CalculateExtent ();
@@ -158,11 +157,10 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {
-  const int len = 8; char a [len];
-  std::ostrstream o (a, len); o.seekp (std::ios::beg);
   if (fpCurrentPV) {
-    o << fpCurrentPV -> GetCopyNo () << std::ends;
-    return fpCurrentPV -> GetName () + "." + a;
+    std::ostringstream o;
+    o << fpCurrentPV -> GetCopyNo ();
+    return fpCurrentPV -> GetName () + "." + o.str();
   }
   else {
     return "WARNING: NO CURRENT VOLUME - global tag is " + fGlobalTag;
@@ -252,8 +250,16 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       //   They have phi of offset+n*width to offset+(n+1)*width where
       //   n=0..nReplicas-1
       // 
+      pSol = pLV -> GetSolid ();
+      pMaterial = pLV -> GetMaterial ();
       G4ThreeVector originalTranslation = pVPV -> GetTranslation ();
       G4RotationMatrix* pOriginalRotation = pVPV -> GetRotation ();
+      G4double originalRMin = 0., originalRMax = 0.;
+      if (axis == kRho && pSol->GetEntityType() == "G4Tubs") {
+	originalRMin = ((G4Tubs*)pSol)->GetInnerRadius();
+	originalRMax = ((G4Tubs*)pSol)->GetOuterRadius();
+      }
+      G4bool visualisable = true;
       for (int n = 0; n < nReplicas; n++) {
 	G4ThreeVector translation;  // Null.
 	G4RotationMatrix rotation;  // Null - life long enough for visualizing.
@@ -270,11 +276,20 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	  translation = G4ThreeVector (0,0,-width*(nReplicas-1)*0.5+n*width);
 	  break;
 	case kRho:
-	  G4cout <<
-	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
-	    "\n  built-in replicated volumes replicated in radius are not yet"
-	    "\n  properly visualizable."
-	       << G4endl;
+	  if (pSol->GetEntityType() == "G4Tubs") {
+	    ((G4Tubs*)pSol)->SetInnerRadius(width*n+offset);
+	    ((G4Tubs*)pSol)->SetOuterRadius(width*(n+1)+offset);
+	  } else {
+	    G4cout <<
+	      "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
+	      "\n  built-in replicated volumes replicated in radius for "
+		   << pSol->GetEntityType() <<
+	      "-type\n  solids (your solid \""
+		   << pSol->GetName() <<
+	      "\") are not visualisable."
+		   << G4endl;
+	    visualisable = false;
+	  }
 	  break;
 	case kPhi:
 	  rotation.rotateZ (-(offset+(n+0.5)*width));
@@ -286,14 +301,18 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
 	pVPV -> SetCopyNo (n);
-	pSol = pLV -> GetSolid ();
-	pMaterial = pLV -> GetMaterial ();
-	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
+	if (visualisable) {
+	  DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
+	}
       }
       // Restore originals...
       pVPV -> SetTranslation (originalTranslation);
       pVPV -> SetRotation    (pOriginalRotation);
+      if (axis == kRho && pSol->GetEntityType() == "G4Tubs") {
+	((G4Tubs*)pSol)->SetInnerRadius(originalRMin);
+	((G4Tubs*)pSol)->SetOuterRadius(originalRMax);
+      }
     }
   }
 
@@ -485,8 +504,9 @@ G4bool G4PhysicalVolumeModel::IsDaughterCulled
 	&&
 	// Cull only if mother is visible...
 	(pVisAttribs ? pVisAttribs -> IsVisible () : true)
-	// &&
-	// true // ...and opaque (transparency parameter not yet implemented).
+	&&
+	// ...and opaque...
+	(pVisAttribs ? (pVisAttribs -> GetColour ().GetAlpha() >= 1.) : true)
 	)
        )
       ;

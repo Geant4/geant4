@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrackStack.cc,v 1.5 2002/12/03 17:04:22 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4TrackStack.hh"

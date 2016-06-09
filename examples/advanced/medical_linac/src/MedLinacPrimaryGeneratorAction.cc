@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.4 2004/11/24 13:49:42 mpiergen Exp $
+// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.6 2005/12/07 14:18:41 guatelli Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -47,7 +47,8 @@ MedLinacPrimaryGeneratorAction::MedLinacPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-  //create a messenger for this class
+
+//create a messenger for this class
   gunMessenger = new MedLinacPrimaryGeneratorMessenger(this);
 
   // default particle kinematic
@@ -57,8 +58,14 @@ MedLinacPrimaryGeneratorAction::MedLinacPrimaryGeneratorAction()
 
   particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
   particleGun->SetParticleEnergy(pEnergy);
+
+  //**********************************************************************
+  //**********************************************************************
   particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 123.0*cm));
-  
+  //particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 160.09855*cm));
+  //**********************************************************************
+  //**********************************************************************
+
 }
 
 MedLinacPrimaryGeneratorAction::~MedLinacPrimaryGeneratorAction()
@@ -71,29 +78,36 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double energy;
 
-#ifdef G4ANALYSIS_USE
-  MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
-#endif
+  //#ifdef G4ANALYSIS_USE
+  //MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
+  //#endif
  
-   G4double cosTheta = RandGauss::shoot(-1.,0.00003);
-   G4double phi = twopi * G4UniformRand();
+  //BeamLine
+   //G4ThreeVector v(0.0,0.0,-1.0);
+  //particleGun->SetParticleMomentumDirection(v);
 
-   G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
-   G4double ux = sinTheta*std::cos(phi);
-   G4double uy = sinTheta*std::sin(phi);
-   G4double uz = cosTheta;
+
+ //uniform distribution in solid angle (-1<cosTheta<-0.9999; 0<phi<2pi)
+  //
+
+  //G4double cosTheta = -0.0001*G4UniformRand()-0.9999;
+  G4double cosTheta = CLHEP::RandGauss::shoot(-1.,0.00003);
+  G4double phi = twopi * G4UniformRand();
+
+    G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
+    G4double ux = sinTheta*cos(phi);
+    G4double uy = sinTheta*sin(phi);
+    G4double uz = cosTheta;
 
    particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
 
   energy=pEnergy;
-  energy = RandGauss::shoot(pEnergy,sigma);
+  energy = CLHEP::RandGauss::shoot(pEnergy,sigma);
   particleGun->SetParticleEnergy(energy);
 
+  //G4cout <<"the energy of the primaries is  "  << energy <<" "<<"MeV"<< G4endl;
+  //G4cout <<"the sigma of the energy is  "  << sigma <<" "<<"MeV"<< G4endl;
   
- //1D Histogram of primary particle energy ...
-#ifdef G4ANALYSIS_USE
-  analysis->PrimaryParticleEnergySpectrum(energy);
-#endif   
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

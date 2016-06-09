@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.4 2005/06/04 13:47:45 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.5 2005/11/30 11:33:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc
@@ -164,7 +164,7 @@
     {
       G4double totalCrossSection = 0.0;
       G4bool interpolated = false;
-      G4double fRndm = RandFlat::shoot();
+      G4double fRndm = G4UniformRand();
       G4double Hmax 
         = theCoefficientVector->GetValue(kineticEnergy, isOutRange);
       for (G4int i=1; i<=34; i++)
@@ -187,7 +187,7 @@
 
         if(interpolated) {
           // calculate energy, momentum and angle of outgoing muon
-          RandFlat::shootArray(3, rndm);
+          CLHEP::RandFlat::shootArray(3, rndm);
           G4double theta = std::acos(tetal[icos-1]) 
                           + rndm[0]*(std::acos(tetal[icos])-std::acos(tetal[icos-1]));
           cosTheta = std::cos(theta);
@@ -227,7 +227,7 @@
     // virtual photon is exchanged with a pion of same Q2
     // select pi+/pi- randomly and generate pion track
     G4ParticleDefinition* pdPion;
-    if(RandBit::shootBit())
+    if(CLHEP::RandBit::shootBit())
       pdPion = G4PionMinus::PionMinusDefinition();
     else
       pdPion = G4PionPlus::PionPlusDefinition();

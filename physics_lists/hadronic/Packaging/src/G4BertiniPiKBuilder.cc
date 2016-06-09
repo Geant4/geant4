@@ -39,42 +39,42 @@
  ~G4BertiniPiKBuilder() {}
 
  void G4BertiniPiKBuilder::
- Build(G4PionPlusInelasticProcess & aP)
+ Build(G4PionPlusInelasticProcess * aP)
  {
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
 
  void G4BertiniPiKBuilder::
- Build(G4PionMinusInelasticProcess & aP)
+ Build(G4PionMinusInelasticProcess * aP)
  {
-   aP.RegisterMe(theModel);
-   aP.AddDataSet(&thePiData);
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(&thePiData);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
 
  void G4BertiniPiKBuilder::
- Build(G4HadronElasticProcess & ) {}
+ Build(G4HadronElasticProcess * ) {}
 
  void G4BertiniPiKBuilder::
- Build(G4KaonPlusInelasticProcess & )
+ Build(G4KaonPlusInelasticProcess * )
  {
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonMinusInelasticProcess & )
+ Build(G4KaonMinusInelasticProcess * )
  {
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonZeroLInelasticProcess & )
+ Build(G4KaonZeroLInelasticProcess * )
  {
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonZeroSInelasticProcess & )
+ Build(G4KaonZeroSInelasticProcess * )
  {
  }
 

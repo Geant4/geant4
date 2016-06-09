@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.11 2004/11/18 15:19:40 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.13 2005/10/13 17:30:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -78,7 +78,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
                                  fVP.GetCutawayPlanes ().size ()) ||
       // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
     return true;
   }

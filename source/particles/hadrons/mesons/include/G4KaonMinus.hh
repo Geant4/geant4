@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.hh,v 1.7 2001/10/16 08:16:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4KaonMinus.hh,v 1.9 2005/01/14 03:49:14 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,46 +31,29 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VMeson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4KaonMinus_h
 #define G4KaonMinus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VMeson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                        KAONMINUS                               ###
 // ######################################################################
 
-class G4KaonMinus : public G4VMeson
+class G4KaonMinus : public G4ParticleDefinition
 {
  private:
-   static G4KaonMinus theKaonMinus;
-
- private: // constructors are hide as private  
-   G4KaonMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4KaonMinus* theInstance;
+   G4KaonMinus(){}
+   ~G4KaonMinus(){}
 
  public:
-   virtual ~G4KaonMinus(){}
-
+   static G4KaonMinus* Definition();
    static G4KaonMinus* KaonMinusDefinition();
    static G4KaonMinus* KaonMinus();
 };

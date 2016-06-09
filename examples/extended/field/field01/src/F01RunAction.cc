@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01RunAction.cc,v 1.8 2003/06/25 17:40:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: F01RunAction.cc,v 1.9 2005/12/06 13:58:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -62,8 +62,8 @@ void F01RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   if (saveRndm > 0)
   { 
-      HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
+      CLHEP::HepRandom::showEngineStatus();
+      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
   }  
   G4UImanager* UI = G4UImanager::GetUIpointer();
    
@@ -85,8 +85,8 @@ void F01RunAction::EndOfRunAction(const G4Run*)
 
   if (saveRndm == 1)
   { 
-    HepRandom::showEngineStatus();
-    HepRandom::saveEngineStatus("endOfRun.rndm");
+    CLHEP::HepRandom::showEngineStatus();
+    CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }     
 }
 

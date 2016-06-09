@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2005/06/13 14:05:05 gcosmo Exp $
+$Id: History,v 1.97 2005/11/30 15:23:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 30, 2005, G.Cosmo (event-V07-01-05)
+- Trivial fixes to G4SPSAngDistribution and G4SPSPosDistribution for
+  support of CLHEP-2.0.X series.
+
+November 22, 2005, M.Asai (event-V07-01-04)
+- Put G4Exception to the constructors of G4UserEventAction and
+  G4UserStackingAction to protect against their instantiation before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+- Put protection against null pointer to
+  G4ParticleGun::SetParticleDefinition().
+
+November 21, 2005, M.Asai (event-V07-01-03)
+- Fix a bug in the previous tag.
+
+November 18, 2005, M.Asai (event-V07-01-02)
+- Migration to sstream.
+- Move G4HepMC classes to examples/extended/eventgenerator/HepMC.
+
+October 20, 2005, Joseph Perl (event-V07-01-01)
+- Tag to co-work with vis-V07-01-05.
+
+Oct 17, 2005 Jane Tinslay
+- Modify GNUmakefile to follow intercoms->graphics_reps migration for 
+  G4VGraphicsScene and G4VVisManager
+
+Sep 05, 2005, F.Lei (event-V07-01-00)
+- Corrected typo in printout in G4GeneralParticleMessenger.cc (bug #786)
 
 Jun 13, 2005, G.Cosmo (event-V07-00-05)
 - Corrected typo in printout in G4GeneralParticleMessenger.cc.

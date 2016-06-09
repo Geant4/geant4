@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.10 2005/03/16 12:08:22 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.cc,v 1.12 2005/12/02 17:23:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "PhysListEmG4v71.hh"
 #include "PhysListEmPenelope.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
@@ -88,31 +89,10 @@ PhysicsList::~PhysicsList()
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
 
-// Mesons
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
-#include "G4Eta.hh"
-#include "G4EtaPrime.hh"
-
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonZeroShort.hh"
-
-// Baryons
-#include "G4Proton.hh"
-#include "G4AntiProton.hh"
-#include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
-
-// Nuclei
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4Alpha.hh"
-#include "G4GenericIon.hh"
+// Hadrons
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -140,29 +120,16 @@ void PhysicsList::ConstructParticle()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
 // mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
 
 // barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
 
 // ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -253,6 +220,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
     
+  } else if (name == "g4v71") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmG4v71(name);
+        
   } else if (name == "penelope") {
 
     emName = name;

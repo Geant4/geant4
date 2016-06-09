@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListBinaryCascade.hh,v 1.2 2004/04/29 13:55:09 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor

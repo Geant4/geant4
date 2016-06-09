@@ -4,14 +4,16 @@
 #
 # create empty scene
 #
-/vis/scene/create Space
-/vis/scene/notifyHandlers Space flush
+#/vis/scene/create Space
+#/vis/scene/notifyHandlers Space flush
+/vis/scene/create 
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
+/vis/open OGLIX
 #/vis/open RayTracer
-/vis/open OGLSX
+#/vis/open OGLSX
 #/vis/open DAWNFILE
 #/vis/open HepRepFile
 #/vis/open VRML2FILE

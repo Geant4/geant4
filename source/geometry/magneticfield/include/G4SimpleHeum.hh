@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SimpleHeum.hh,v 1.7 2003/11/05 16:30:55 japost Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4SimpleHeum

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.cc,v 1.2 2003/06/16 16:46:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: GammaRayTelMuonPhysics.cc,v 1.3 2005/12/07 10:50:31 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -42,31 +42,8 @@ GammaRayTelMuonPhysics::~GammaRayTelMuonPhysics()
 {
 }
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4TauMinus.hh"
-#include "G4TauPlus.hh"
-#include "G4NeutrinoTau.hh"
-#include "G4AntiNeutrinoTau.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
 void GammaRayTelMuonPhysics::ConstructParticle()
 {
-  // Mu
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-
-  // Tau
-  G4TauMinus::TauMinusDefinition();
-  G4TauPlus::TauPlusDefinition();
-  G4NeutrinoTau::NeutrinoTauDefinition();
-  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();
 
 }
 

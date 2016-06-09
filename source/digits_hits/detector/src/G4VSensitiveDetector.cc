@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc,v 1.1 2003/10/03 10:12:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSensitiveDetector.cc,v 1.2 2005/09/22 22:21:36 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
 
 G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
-:verboseLevel(0),active(true),ROgeometry(0)
+:verboseLevel(0),active(true),ROgeometry(0),filter(0)
 {
   size_t sLast = name.last('/');
   if(sLast==std::string::npos)
@@ -56,6 +56,7 @@ G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector &right)
   verboseLevel = right.verboseLevel;
   active = right.active;
   ROgeometry = right.ROgeometry;
+  filter = right.filter;
 }
 
 G4VSensitiveDetector::~G4VSensitiveDetector()
@@ -70,6 +71,7 @@ const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveD
   verboseLevel = right.verboseLevel;
   active = right.active;
   ROgeometry = right.ROgeometry;
+  filter = right.filter;
   return *this;
 }
 

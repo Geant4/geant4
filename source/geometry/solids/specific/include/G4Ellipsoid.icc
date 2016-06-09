@@ -1,0 +1,91 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4Ellipsoid.icc,v 1.3 2005/07/04 13:32:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Ellipsoid.icc
+//
+// Implementation of inline methods of G4Ellipsoid
+// --------------------------------------------------------------------
+
+G4double G4Ellipsoid::GetSemiAxisMax (G4int i) const
+{
+  return (i==0) ? xSemiAxis
+       : (i==1) ? ySemiAxis
+       : zSemiAxis;
+}
+
+G4double G4Ellipsoid::GetZBottomCut() const
+{
+  return zBottomCut;
+}
+
+G4double G4Ellipsoid::GetZTopCut() const
+{
+  return zTopCut;
+}
+
+void G4Ellipsoid::SetSemiAxis (G4double newxSemiAxis,
+                               G4double newySemiAxis,
+                               G4double newzSemiAxis)
+{
+  xSemiAxis= newxSemiAxis; ySemiAxis= newySemiAxis; zSemiAxis= newzSemiAxis;
+  semiAxisMax = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
+  if (zSemiAxis > semiAxisMax) { semiAxisMax= zSemiAxis; } 
+  if (zBottomCut < -zSemiAxis) { zBottomCut = -zSemiAxis; }
+  if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
+}
+
+void G4Ellipsoid::SetZCuts (G4double newzBottomCut, G4double newzTopCut)
+{
+  zBottomCut = newzBottomCut;
+  zTopCut = newzTopCut;
+  if (zBottomCut < -zSemiAxis) { zBottomCut = -zSemiAxis; }
+  if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
+}
+
+inline
+G4double G4Ellipsoid::GetCubicVolume()
+{
+  if(fCubicVolume != 0 ) {;}
+  else
+  {
+    if ((zTopCut > +zSemiAxis && zBottomCut < -zSemiAxis)
+     || (zTopCut == 0 && zBottomCut == 0) )
+    {
+      fCubicVolume = (4./3.)*pi*xSemiAxis*ySemiAxis*zSemiAxis;
+    }
+    else 
+    {   
+      fCubicVolume = pi*xSemiAxis*ySemiAxis
+                   * ((zTopCut-std::pow(zTopCut,3.)/(3.*sqr(zSemiAxis)))
+                   - (zBottomCut-std::pow(zBottomCut,3.)/(3.*sqr(zSemiAxis))));
+    }
+  }
+  return fCubicVolume;
+}

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.10 2005/03/15 17:57:54 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.cc,v 1.11 2005/10/07 16:26:07 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "PhysListEmG4v71.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -215,6 +216,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+
+  } else if (name == "g4v71") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmG4v71(name);
 
   } else {
 

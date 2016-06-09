@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.2 2003/11/02 16:06:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PVParameterised.hh,v 1.5 2005/11/11 22:39:00 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4PVParameterised
@@ -51,11 +51,13 @@ class G4PVParameterised : public G4PVReplica
                             G4LogicalVolume* pMotherLogical,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam);
+                            G4VPVParameterisation *pParam,
+                            G4bool pSurfChk=false);
       // Replicate the volume nReplicas Times using the paramaterisation pParam,
       // within the mother volume pMotherLogical.
       // The positioning of the replicas is dominant along the specified axis.
-
+      // pSurfChk if true activates check for overlaps with existing volumes.
+ 
   public:  // without description
 
     G4PVParameterised(const G4String& pName,
@@ -63,9 +65,15 @@ class G4PVParameterised : public G4PVReplica
                             G4VPhysicalVolume* pMother,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam);
+                            G4VPVParameterisation *pParam,
+                            G4bool pSurfChk=false);
       // Almost exactly similar to first constructor, changing only mother 
       // pointer's type to PhysicalVolume.
+
+    G4PVParameterised(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   public:  // with description
 
@@ -84,6 +92,14 @@ class G4PVParameterised : public G4PVReplica
                             G4double& offset,
                             G4bool& consuming) const;
       // Fills arguments with the attributes from the base replica.
+    virtual void SetRegularStructureId( G4int Code ); 
+      // Method sets code and can prepare for special type of regular volumes.
+
+    G4bool CheckOverlaps(G4int res=1000);
+      // Verifies if each instance of the parameterised volume is overlapping
+      // with other instances or with the mother volume. Provides default
+      // resolution for the number of points to be generated and verified.
+      // Returns true if an overlap occurs.
 
   private:
 

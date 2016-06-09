@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDecorator.cc,v 1.1 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacDecorator.cc,v 1.2 2005/07/03 23:27:37 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -38,8 +38,12 @@ MedLinacDecorator::~MedLinacDecorator()
 {;}
 
 void MedLinacDecorator::ConstructComponent(G4VPhysicalVolume*,G4VPhysicalVolume*)
-{;}
+{
+  //  component -> ConstructComponent(motherVolume) ; 
+ }
 
 void MedLinacDecorator::DestroyComponent()
-{;}
+{
+  //component -> DestroyComponent();
+}
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPrimaryGeneratorAction.cc,v 1.3 2003/12/09 08:48:05 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: TiaraPrimaryGeneratorAction.cc,v 1.4 2005/12/15 14:25:33 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "globals.hh"
@@ -48,7 +48,6 @@ TiaraPrimaryGeneratorAction(const TiaraVSourceEnergyGenerator& eG,
   particleGun(new G4ParticleGun(1)),
   fTally(tally)
 {
-  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   particleGun->
     SetParticlePosition(G4ThreeVector(0.0, 0.0, 
 				      tiaraDimensions.targetPosZ));
@@ -83,6 +82,7 @@ operator=(const TiaraPrimaryGeneratorAction &rhs)
 
 void TiaraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   particleGun->SetParticleMomentumDirection(fDirectionGenerator->
 					    GetDirection());  
 

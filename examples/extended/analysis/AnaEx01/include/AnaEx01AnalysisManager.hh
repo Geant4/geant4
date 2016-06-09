@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.6 2003/06/20 14:55:44 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: AnaEx01AnalysisManager.hh,v 1.8 2005/10/25 13:46:11 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -44,7 +44,7 @@ namespace AIDA {
 
 class AnaEx01AnalysisManager {
 public:
-  AnaEx01AnalysisManager();
+  AnaEx01AnalysisManager(AIDA::IAnalysisFactory*);
   virtual ~AnaEx01AnalysisManager();
 public:
   virtual void BeginOfRun(const G4Run*); 
@@ -54,7 +54,7 @@ public:
   virtual void Step(const G4Step*);
 private:
   int fCalorimeterCollID;                
-  AIDA::IAnalysisFactory* fAnalysisFactory;
+  AIDA::IAnalysisFactory* fAIDA;
   AIDA::ITree* fTree;
   AIDA::IHistogram1D* fEAbs;
   AIDA::IHistogram1D* fLAbs;
@@ -62,6 +62,10 @@ private:
   AIDA::IHistogram1D* fLGap;
   AIDA::ITuple* fTuple;
 };
+
+#else
+
+class AnaEx01AnalysisManager;
 
 #endif
 

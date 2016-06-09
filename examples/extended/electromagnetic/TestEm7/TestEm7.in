@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.10 2005/05/13 10:54:53 maire Exp $
+# $Id: TestEm7.in,v 1.11 2005/10/06 14:13:51 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/phys/addPhysics  standard	# em physics     
+/testem/phys/addPhysics  standard	# em physics  
 ###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize

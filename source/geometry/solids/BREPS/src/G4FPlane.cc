@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FPlane.cc,v 1.15 2004/12/02 09:31:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

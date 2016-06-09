@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh,v 1.5 2001/07/11 10:00:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Randomize.hh,v 1.6 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef randomize_h
 #define randomize_h 1
@@ -38,7 +38,7 @@
 #include <CLHEP/Random/RandLandau.h>
 #include <CLHEP/Random/RandBit.h>
 
-#define G4RandGauss RandGaussQ
-#define G4UniformRand() HepRandom::getTheEngine()->flat()
+#define G4RandGauss CLHEP::RandGaussQ
+#define G4UniformRand() CLHEP::HepRandom::getTheEngine()->flat()
 
 #endif // randomize_h 

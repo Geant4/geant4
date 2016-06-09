@@ -62,6 +62,13 @@ public:
 						G4double deltaEnergy,
 						G4bool testFlag = false) const;
 
+std::vector<G4double> CalculateCrossSections(G4int Z, 
+					     G4double incidentEnergy, 
+					     G4double hMass, 
+					     G4double deltaEnergy,
+					     G4bool testFlag) const;
+  
+  
 protected:
 
   virtual std::vector<G4double> Probabilities(G4int Z,

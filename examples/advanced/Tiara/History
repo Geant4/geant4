@@ -1,6 +1,6 @@
-# $Id: History,v 1.27 2005/05/03 10:05:48 allison Exp $
+# $Id: History,v 1.29 2005/12/16 08:30:21 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -19,14 +19,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+December 15th, 2005 A.Howard
+- Migration to CLHEP namespace - requires cloning of class in python
+- Migrated to non-static particles
+
+November 15th, 2005 G.Cosmo - Tiara-V07-01-00
+- Migration to <sstream> from deprecated <strstream>.
+
+May 3rd, 2005 J.Allison
 - Replaced vis manager with G4VisExecutive.
 
 March 17th, 2005 G.Daquino - Tiara-V07-00-00
-- migration of Tiara (working with PI) from rh73 to slc3
+- Migration of Tiara (working with PI) from rh73 to slc3
 
 Dec 14th, 2004 G.Daquino - Tiara-V06-02-02
-- update of GNUmakefiles to the new phys_lists structure
+- Update of GNUmakefiles to the new phys_lists structure
 
 Dec 13th, 2004 G.Cosmo - Tiara-V06-02-01
 - Use new phys-lists structure.

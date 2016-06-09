@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacRunAction.hh,v 1.2 2004/04/02 17:48:41 mpiergen Exp $
+// $Id: MedLinacRunAction.hh,v 1.3 2005/11/25 22:02:04 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -41,16 +41,12 @@ class MedLinacDetectorConstruction;
 class MedLinacRunAction : public G4UserRunAction
 {
   public:
-  MedLinacRunAction(G4String);
+  MedLinacRunAction();
    ~MedLinacRunAction();
 
   public:
     void BeginOfRunAction(const G4Run* aRun);
     void EndOfRunAction(const G4Run* aRun);
-private:
- 
-  G4String sensitiveDetectorName;
-  MedLinacDetectorConstruction* detector;
 
 };
 

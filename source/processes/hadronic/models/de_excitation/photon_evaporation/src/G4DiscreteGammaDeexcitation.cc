@@ -54,7 +54,7 @@
 
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 
 G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation(): 

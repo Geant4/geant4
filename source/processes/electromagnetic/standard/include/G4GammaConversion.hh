@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaConversion.hh,v 1.17 2005/05/12 11:06:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //------------------ G4GammaConversion physics process------------------------

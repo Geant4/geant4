@@ -21,14 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayShooter.cc,v 1.3 2004/12/07 23:41:00 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RayShooter.cc,v 1.4 2005/12/05 04:13:50 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4RayShooter.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
-#include "G4Geantino.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "globals.hh"
+
 
 G4RayShooter::G4RayShooter()
 {
@@ -37,7 +40,7 @@ G4RayShooter::G4RayShooter()
 
 void G4RayShooter::SetInitialValues()
 {
-  particle_definition = G4Geantino::GeantinoDefinition();
+  particle_definition = 0;
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 1.0*GeV;
@@ -52,6 +55,20 @@ G4RayShooter::~G4RayShooter()
 
 void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc)
 {
+  if(!particle_definition)
+  {
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4String particleName;
+    particle_definition = particleTable->FindParticle(particleName="geantino");
+    if(!particle_definition)
+    {
+      G4String msg;
+      msg =  " G4RayTracer uses geantino to trace the ray, but your physics list does not\n";
+      msg += "define G4Geantino. Please add G4Geantino in your physics list.";
+      G4Exception("G4RayShooter::Shoot","RayTracer001",FatalException,msg);
+    }
+  }
+
   // create a new vertex
   G4PrimaryVertex* vertex = new G4PrimaryVertex(vtx,particle_time);
 

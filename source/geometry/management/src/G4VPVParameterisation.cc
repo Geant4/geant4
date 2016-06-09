@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc,v 1.4 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VPVParameterisation.cc,v 1.6 2005/11/24 18:15:42 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.
@@ -31,6 +31,7 @@
 #include "G4VPVParameterisation.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VVolumeMaterialScanner.hh"
 
 G4VSolid*
 G4VPVParameterisation::ComputeSolid(const G4int,
@@ -41,7 +42,21 @@ G4VPVParameterisation::ComputeSolid(const G4int,
        
 G4Material*
 G4VPVParameterisation::ComputeMaterial(const G4int,
-                                       G4VPhysicalVolume *pPhysicalVol) 
+                                       G4VPhysicalVolume *pPhysicalVol,
+				       const G4VTouchable *) 
 {
   return pPhysicalVol->GetLogicalVolume()->GetMaterial();
 }
+
+
+G4bool G4VPVParameterisation::IsNested() const
+{
+  return false;
+}
+
+G4VVolumeMaterialScanner* 
+G4VPVParameterisation::GetMaterialScanner()
+{
+  return 0;
+}
+//   These enable material scan for nested parameterisations

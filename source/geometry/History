@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2004/12/10 16:24:41 gcosmo Exp $
+$Id: History,v 1.36 2005/11/09 15:12:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 09, 2005   Gabriele Cosmo               geometry-V07-01-00
+-----------------------------
+- Includes tags: geomsolids-V07-01-00, geomvol-V07-01-02, geombias-V07-01-00,
+                 geomdiv-V07-01-01, field-V07-01-00, geommng-V07-01-03.
+- Implemented changes for support of CLHEP-2.0.X.
+- Added fake default constructor for all concrete volumes, solids, base
+  classes and relevant utility classes for handling of direct object
+  persistency.
+- Implemented migration to <sstream> from deprecated <strstream>.
 
 Dec 10, 2004   Gabriele Cosmo               geometry-V06-02-02
 -----------------------------

@@ -45,7 +45,7 @@
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 
-DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, 
+DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels, 
 							   G4double maxDensity, 
 							   G4double minDensity ,
 							   G4Material* lunginhale,
@@ -218,8 +218,11 @@ void DicomPatientParameterisation::ComputeDimensions(G4Box& voxels, const G4int,
     voxels.SetZHalfLength((sliceThickness / 2.0) * mm);
 }
 
-G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4VPhysicalVolume* physVol) {
-
+G4Material*
+DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,
+                                              G4VPhysicalVolume* physVol,
+                                              const G4VTouchable*)
+{
     if( density[copyNo] >= 0.207 && density[copyNo] <= 0.227 ) {
 	physVol->SetName("PhysicalLungINhale");
 	physVol->GetLogicalVolume()->SetVisAttributes( attributeLungINhale );

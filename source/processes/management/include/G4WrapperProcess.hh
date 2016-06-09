@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.3 2004/11/07 01:41:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4WrapperProcess.hh,v 1.4 2005/11/21 18:07:56 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -153,7 +153,7 @@ class G4WrapperProcess  :public G4VProcess
       // File name should be defined by each process 
       // and the file should be placed under the directory specifed by the argument. 
   ////////////////////////////
-      virtual void StartTracking();
+      virtual void StartTracking(G4Track*);
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
  

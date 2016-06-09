@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListHadronElastic.hh,v 1.3 2004/06/21 10:57:11 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor

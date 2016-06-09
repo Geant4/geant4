@@ -82,6 +82,7 @@ public: // Without description
     G4UIcmdWithADoubleAndUnit* YMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
     G4UIcmdWithAString*        HistoCmd;
+    G4UIcmdWithAString*        HistoTCmd;
     G4UIcmdWithABool*          ntupCmd;
     G4UIcmdWithAnInteger*      NumOfEvt;
     G4UIcmdWithAnInteger*      verbCmd;

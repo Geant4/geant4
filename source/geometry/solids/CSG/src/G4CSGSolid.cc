@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.10 2005/03/23 17:16:31 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4CSGSolid.cc,v 1.11 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------------
 
@@ -30,11 +30,23 @@
 
 #include "G4Polyhedron.hh"
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Constructor
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
   G4VSolid(name), fCubicVolume(0.), fpPolyhedron(0)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4CSGSolid::G4CSGSolid( __void__& a )
+  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
 {
 }
 

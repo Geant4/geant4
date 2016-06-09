@@ -35,8 +35,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.14 2004/11/24 09:53:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: BrachyRunAction.cc,v 1.16 2005/11/22 11:00:47 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "BrachyRunAction.hh"
@@ -50,7 +50,6 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include "BrachyDetectorConstruction.hh"
 #include "BrachyRunMessenger.hh"
 #include "G4SDManager.hh"
 #include "G4Timer.hh"
@@ -58,17 +57,16 @@
 #include "BrachyFactoryI.hh"
 #include "BrachyFactory.hh"
 #include "BrachyRunAction.hh"
-BrachyRunAction::BrachyRunAction(G4String &SDNAME)
+
+BrachyRunAction::BrachyRunAction()
+
 {
-  sensitiveDetectorName = SDNAME;
-  detector = new BrachyDetectorConstruction(sensitiveDetectorName);
   runMessenger = new BrachyRunMessenger(this);
 }
 
 BrachyRunAction::~BrachyRunAction()
 { 
   delete runMessenger;
-  delete detector; 
 }
 void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
@@ -84,6 +82,7 @@ void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
  else { G4cout << "The results of Run:"<< runNb << " are summed to the" << 
         " results of the previous Run in brachytherapy.hbk" << G4endl;} 
 #endif  
+
   G4RunManager* runManager = G4RunManager::GetRunManager();
 
   if(runManager)

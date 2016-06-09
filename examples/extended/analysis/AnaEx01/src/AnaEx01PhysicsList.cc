@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01PhysicsList.cc,v 1.4 2003/06/20 14:55:45 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

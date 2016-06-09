@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IonConstructor.cc,v 1.3 2001/07/11 10:01:44 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------

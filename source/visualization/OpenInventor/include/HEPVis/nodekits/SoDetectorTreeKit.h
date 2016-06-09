@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.h,v 1.3 2004/11/22 22:57:01 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: SoDetectorTreeKit.h,v 1.4 2005/10/17 07:21:44 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
-/*-----------------------------Hepvis----------------------------------------*/
+/*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */
 /* Node:             SoDetectorTreeKit                                       */
 /* Description:      Easy way of browsing through a tree of detectors        */
@@ -34,11 +34,10 @@
 #ifndef HEPVis_SoDetectorTreeKit_h
 #define HEPVis_SoDetectorTreeKit_h
 
+// Inheritance :
 #include <Inventor/nodekits/SoBaseKit.h>
-#include <Inventor/nodes/SoEventCallback.h>
 
-class SoSFNode;
-class SoHandleEventAction;
+class SoEventCallback;
 class SoSeparator;
 
 #define SoDetectorTreeKit Geant4_SoDetectorTreeKit
@@ -49,7 +48,9 @@ class SoDetectorTreeKit:public SoBaseKit {
   // The following is required:
   SO_KIT_HEADER(SoDetectorTreeKit);
   ////////////////////////////////////////////
-  SoSFNode alternateRep;
+public:
+  SoSFNode alternateRep; //public in order to query if alternateRep done.
+private:
   ////////////////////////////////////////////
   SO_KIT_CATALOG_ENTRY_HEADER(callbackList);
   SO_KIT_CATALOG_ENTRY_HEADER(topSeparator);
@@ -80,7 +81,7 @@ public:
   // Return the preview state
   virtual SbBool getPreview() const;
 
-  // The SoSwitch::whichChild = SO_SWITCH_ALL
+  // Set SoSwitch::whichChild = SO_SWITCH_ALL
   void setPreviewAndFull();
 
   // Return the preview Separator
@@ -104,6 +105,7 @@ protected:
   // Destructor.
   virtual ~SoDetectorTreeKit();
 
+  virtual void doAction(SoAction*);
 private: 
 
   // This is needed as well

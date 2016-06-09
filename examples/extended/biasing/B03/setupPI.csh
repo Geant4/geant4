@@ -1,6 +1,6 @@
 # #Id: setupPI.csh,v 1.6 2004/06/19 17:22:46 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
 # before sourcing this script make sure you have set the

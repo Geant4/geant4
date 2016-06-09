@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Vector3D.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Vector3D.hh,v 1.4 2005/11/04 08:18:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4VECTOR3D_HH
 #define G4VECTOR3D_HH
@@ -30,6 +30,6 @@
 #include "globals.hh"
 #include <CLHEP/Geometry/Vector3D.h>
 
-typedef HepVector3D G4Vector3D;
+typedef HepGeom::Vector3D<G4double> G4Vector3D;
 
 #endif /* G4VECTOR3D_HH */

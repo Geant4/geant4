@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10SteppingVerbose.hh,v 1.2 2001/07/11 09:57:21 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //  
 //---------------------------------------------------------------

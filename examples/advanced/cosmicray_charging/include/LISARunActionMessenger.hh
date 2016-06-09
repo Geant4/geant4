@@ -36,7 +36,6 @@
 #include "G4UImessenger.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithABool.hh"
-#include <strstream>
 #include "globals.hh"
 
 class LISARunAction;

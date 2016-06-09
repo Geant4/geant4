@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder.cc,v 1.1 2004/12/13 16:38:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmHadronBuilder.cc,v 1.2 2005/12/06 15:26:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -90,9 +90,24 @@ void G4EmHadronBuilder::ConstructProcess()
         pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
         pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
 
-      } else if ((!particle->IsShortLived()) &&
-	         (particle->GetPDGCharge() != 0.0) &&
-	         (particle->GetParticleName() != "chargedgeantino")) {
+    } else if (particleName == "anti_omega-" ||
+               particleName == "anti_proton" ||
+               particleName == "anti_sigma+" ||
+               particleName == "anti_sigma-" ||
+               particleName == "anti_xi-" ||
+               particleName == "deuteron" ||
+               particleName == "kaon+" ||
+               particleName == "kaon-" ||
+               particleName == "omega-" ||
+               particleName == "pi+" ||
+               particleName == "pi-" ||
+               particleName == "proton" ||
+               particleName == "sigma+" ||
+               particleName == "sigma-" ||
+               particleName == "tau+" ||
+               particleName == "tau-" ||
+               particleName == "triton" ||
+               particleName == "xi-" ) {
 
         pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
         pmanager->AddProcess(new G4hIonisation,       -1,2,2);

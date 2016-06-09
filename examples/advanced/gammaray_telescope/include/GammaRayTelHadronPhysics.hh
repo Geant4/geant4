@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GammaRayTelHadronPhysics.hh,v 1.2 2003/06/16 16:46:21 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: GammaRayTelHadronPhysics.hh,v 1.3 2005/12/07 10:50:31 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -152,6 +152,7 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
+
 class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
 {
   public: 
@@ -161,17 +162,17 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
   public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    void ConstructParticle(){};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+  void ConstructProcess();
 
   protected:
    // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
-   G4LElastic*            theElasticModel;
+    G4HadronElasticProcess theElasticProcess;
+    G4LElastic*            theElasticModel;
   
    // Pi + 
    G4PionPlusInelasticProcess thePionPlusInelastic;
@@ -192,11 +193,11 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
 
    // pi+ and pi-
    
-    G4TheoFSGenerator theTheoModel;
+    G4TheoFSGenerator* theModel;
     G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
-    G4GeneratorPrecompoundInterface theCascade;
-    G4QGSModel< G4QGSParticipants > theStringModel;
+    G4GeneratorPrecompoundInterface* theCascade;
+    G4QGSModel<G4QGSParticipants>* theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
 
@@ -334,9 +335,7 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4LEAntiOmegaMinusInelastic*  theLEAntiOmegaMinusModel;
    G4HEAntiOmegaMinusInelastic*  theHEAntiOmegaMinusModel;
    G4MultipleScattering theAntiOmegaMinusMult;
-   G4hIonisation theAntiOmegaMinusIonisation;
-
-   
+   G4hIonisation theAntiOmegaMinusIonisation;   
 };
 
 

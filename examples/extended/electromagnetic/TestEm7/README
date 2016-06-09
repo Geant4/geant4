@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2005/03/02 12:30:36 maire Exp $
+$Id: README,v 1.12 2005/11/22 16:56:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -152,32 +152,28 @@ $Id: README,v 1.11 2005/03/02 12:30:36 maire Exp $
   eval `aida-config --runtime csh`
 
  8b -  OpenScientist
- 
-  OpenScientist is available at http://www.lal.in2p3.fr/OpenScientist
-  
-  In OpenScientist, the AIDA implementation is the Lab package. 
-  You have to "setup" this package before compiling (then with G4ANALYSIS_USE) 
-  and running your Geant4 application.
-   
-  On UNIX you setup, with a csh flavoured shell : 
-	csh> setenv CMTPATH <OpenScientist install path> 
-	csh> source <OpenScientist install path>/Lab/<version>/cmt/setup.csh 
-  On UNIX with a sh flavoured shell : 
-	sh> CMTPATH=<OpenScientist install path>;export CMTPATH 
-	sh> . <OpenScientist install path>/Lab/<version>/cmt/setup.sh 
-  On Windows : 
-	DOS> set CMTPATH=<OpenScientist install path> 
-	DOS> call <OpenScientist install path>/Lab/<version>/cmt/setup.bat 
 
-  You have to use the XML or root file formats ; producing hbook files is not 
-  supported by OpenScientist/Lab. But the three formats (hbook, AIDA-XML, root) 
-  are readable by the interactive applications ; the Lab onx interactive 
-  program or the OpenPAW program. 
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
 
-  With OpenPAW, someone can view the histograms with : 
+  You have to "setup" the OpenScientist AIDA implementation before compiling
+  (then with G4ANALYSIS_USE set) and running your Geant4 application.
+
+ On UNIX you setup, with a csh flavoured shell : 
+	csh> source <<OpenScientist install path>/aida-setup.csh 
+        or with a sh flavoured shell : 
+	sh> . <<OpenScientist install path>/aida-setup.sh
+ On Windows : 
+	DOS> call <<OpenScientist install path>/aida-setup.bat 
+
+  You can use various file formats for writing (AIDA-XML, hbook, root).
+  These formats are readable by the Lab onx interactive program
+  or the OpenPAW application. See the web pages.
+
+
+  With OpenPAW, on a run.hbook file, one can view the histograms
+  with something like :
 	OS> opaw 
-	opaw> h/file 1 run0.aida   (or opaw> h/file 1 run1.root) 
+        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
 	opaw> zone 2 2 
 	opaw> h/plot 1 
-	opaw> h/plot 2 
-	opaw> h/plot 3 
+	opaw> h/plot 2

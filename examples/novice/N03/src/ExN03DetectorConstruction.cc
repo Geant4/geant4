@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.21 2004/11/14 10:12:08 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN03DetectorConstruction.cc,v 1.22 2005/11/14 16:17:20 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -196,7 +196,7 @@ steam->AddMaterial(H2O, fractionmass=1.);
 
 G4Material* Vacuum =
 new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
-                           kStateGas, 3.e-18*pascal, 2.73*kelvin);
+                           kStateGas, 2.73*kelvin, 3.e-18*pascal);
 
 G4Material* beam = 
 new G4Material("Beam", density= 1.e-5*g/cm3, ncomponents=1,

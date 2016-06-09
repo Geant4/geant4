@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.17 2005/03/09 23:48:15 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisCommandsViewer.hh,v 1.19 2005/11/22 17:00:15 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -37,6 +37,7 @@ class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3Vector;
 
 class G4VVisCommandViewer: public G4VVisCommand {
 public:
@@ -129,6 +130,18 @@ private:
   G4double fPanToRight, fPanToUp;
 };
 
+class G4VisCommandViewerReset: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerReset ();
+  virtual ~G4VisCommandViewerReset ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
+  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandViewerRefresh: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerRefresh ();
@@ -141,16 +154,31 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerReset: public G4VVisCommandViewer {
+class G4VisCommandViewerRebuild: public G4VVisCommandViewer {
 public:
-  G4VisCommandViewerReset ();
-  virtual ~G4VisCommandViewerReset ();
+  G4VisCommandViewerRebuild ();
+  virtual ~G4VisCommandViewerRebuild ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
-  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4VisCommandViewerRebuild (const G4VisCommandViewerRebuild&);
+  G4VisCommandViewerRebuild& operator = (const G4VisCommandViewerRebuild&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerScale: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerScale ();
+  virtual ~G4VisCommandViewerScale ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerScale (const G4VisCommandViewerScale&);
+  G4VisCommandViewerScale& operator = (const G4VisCommandViewerScale&);
+  G4UIcmdWith3Vector* fpCommandScale;
+  G4UIcmdWith3Vector* fpCommandScaleTo;
+  G4Vector3D fScaleMultiplier;
+  G4Vector3D fScaleTo;
 };
 
 class G4VisCommandViewerSelect: public G4VVisCommandViewer {

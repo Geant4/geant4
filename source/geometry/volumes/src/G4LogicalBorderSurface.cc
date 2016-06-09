@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalBorderSurface.cc,v 1.13 2004/05/19 08:14:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.hh,v 1.2 2004/11/17 03:07:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN07DetectorConstruction.hh,v 1.3 2005/11/22 22:20:55 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -34,10 +34,9 @@
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class G4PVParameterised;
+class G4PVReplica;
 class G4Material;
 class G4Box;
-class ExN07GapParameterisation;
 class ExN07DetectorMessenger;
 
 class ExN07DetectorConstruction : public G4VUserDetectorConstruction
@@ -50,8 +49,6 @@ class ExN07DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
      
   public:
-    void CreateMaterial(G4String materialChoice);
-    void UpdateGeometry();
     void PrintCalorParameters() const;
     void SetAbsorberMaterial(G4String materialChoice);     
     G4String GetAbsorberMaterial() const;
@@ -66,27 +63,37 @@ class ExN07DetectorConstruction : public G4VUserDetectorConstruction
      
   private:
     void DefineMaterials();
+    void SetupGeometry();
+    void SetupDetectors();
 
   private:
     G4int              numberOfLayers;
+    G4double           totalThickness; // total thinkness of one calorimeter
+    G4double           layerThickness; // = totalThickness / numberOfLayers
+
+    G4bool             constructed;
+    
+    G4String           calName[3];
 
     G4Material*        worldMaterial;
     G4Material*        absorberMaterial;
     G4Material*        gapMaterial;
 
+    G4Box*             layerSolid;
     G4Box*             gapSolid;
 
     G4LogicalVolume*   worldLogical;
     G4LogicalVolume*   calorLogical[3];
     G4LogicalVolume*   layerLogical[3];
+    G4LogicalVolume*   gapLogical[3];
 
     G4VPhysicalVolume* worldPhysical;
     G4VPhysicalVolume* calorPhysical[3];
-    G4PVParameterised* layerPhysical[3];
+    G4PVReplica*       layerPhysical[3];
+    G4VPhysicalVolume* gapPhysical[3];
 
     G4bool             serial;
 
-    ExN07GapParameterisation* gapParam;
     ExN07DetectorMessenger* detectorMessenger; 
       
 };

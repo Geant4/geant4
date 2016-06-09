@@ -30,22 +30,16 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomHit.cc,v 1.5 2003/05/27 08:37:55 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: BrachyPhantomHit.cc,v 1.6 2005/11/22 12:47:35 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "BrachyPhantomHit.hh"
 #include "G4ios.hh"
-#include "G4VVisManager.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4LogicalVolume.hh"
 
 G4Allocator<BrachyPhantomHit> BrachyPhantomHitAllocator;
 
-BrachyPhantomHit::BrachyPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int YID,G4int ZID)
-  :logicalVolume(logVol),xHitPosition(XID),zHitPosition(ZID),yHitPosition(YID)
+BrachyPhantomHit::BrachyPhantomHit()
 {
- energyDeposit = 0;
 }
 
 BrachyPhantomHit::~BrachyPhantomHit()
@@ -59,9 +53,6 @@ BrachyPhantomHit::BrachyPhantomHit(const BrachyPhantomHit &right)
  zHitPosition = right.zHitPosition;
  yHitPosition = right.yHitPosition;
  energyDeposit = right.energyDeposit;
- hitPosition = right.hitPosition;
- rotation = right.rotation;
- logicalVolume = right.logicalVolume;
 }
 
 const BrachyPhantomHit& BrachyPhantomHit::operator=(const BrachyPhantomHit &right)
@@ -70,9 +61,6 @@ const BrachyPhantomHit& BrachyPhantomHit::operator=(const BrachyPhantomHit &righ
  zHitPosition = right.zHitPosition;
  yHitPosition = right.yHitPosition;
  energyDeposit = right.energyDeposit;
- hitPosition = right.hitPosition;
- rotation = right.rotation;
- logicalVolume = right.logicalVolume;
  return *this;
 }
 

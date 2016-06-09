@@ -20,6 +20,22 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: QGSP_HP.icc,v 1.7 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 23.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 02.12.2005 V.Ivanchenko: rename components
+//
+//----------------------------------------------------------------------------
+//
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -34,38 +50,38 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "GeneralPhysics.hh"
-#include "EM_GNPhysics.hh"
-#include "MuonPhysics.hh"
-#include "IonPhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonPhysics.hh"
+
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_HP.hh"
 
-template<class T> TQGSP_HP<T>::TQGSP_HP():  T()
+template<class T> TQGSP_HP<T>::TQGSP_HP(G4int ver):  T()
 {
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "You are using the simulation engine: QGSP_HP 2.3"<<G4endl;
-  G4cout <<G4endl<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_HP 3.0"<<G4endl;
+  G4cout <<G4endl;
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   this->defaultCutValue = 0.7*mm;  
-  this->SetVerboseLevel(1);
-
-  // General Physics
-  this->RegisterPhysics( new GeneralPhysics("general") );
+  this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new EM_GNPhysics("standard EM plus electro nuclear"));
+  this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
 
-  // Muon Physics
-  this->RegisterPhysics(  new MuonPhysics("muon"));
+  // Synchroton Radiation & GN Physics
+  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+
+  // Decays
+  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSP_HP("hadron"));
 
   // Ion Physics
-  this->RegisterPhysics( new IonPhysics("ion"));
-
+  this->RegisterPhysics( new G4IonPhysics("ion"));
 
 }
 
@@ -83,7 +99,8 @@ template<class T> void TQGSP_HP<T>::SetCuts()
 
   this->SetCutsWithDefault();   
   
-  G4VUserPhysicsList::DumpCutValuesTable();  
+//  if (this->verboseLevel >0)
+//    G4VUserPhysicsList::DumpCutValuesTable();  
   
 }
 // 2002 by J.P. Wellisch

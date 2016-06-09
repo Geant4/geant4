@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.19 2005/04/04 11:56:59 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.23 2005/11/17 16:59:35 link Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -32,20 +32,12 @@
 //
 // G4Hype.cc
 //
-// This class implements in G4 the volume equivalent to the HYPE volume
-// in Geant 3.21, i.e. a tube with hyperbolic profile.
-// For further informations, please read G4Hype.history and G4Hype.doc,
-// and the G4Hype.hh header.
-//
 // --------------------------------------------------------------------
 //
 // Authors: 
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
-//
-// History: 
-//      Updated Feb 2000 D.C. Williams
 //
 // --------------------------------------------------------------------
 
@@ -60,6 +52,10 @@
 
 #include "meshdefs.hh"
 
+#include <cmath>
+
+#include "Randomize.hh"
+
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
@@ -67,6 +63,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+using namespace CLHEP;
 
 // Constructor - check parameters, and fills protected data members
 G4Hype::G4Hype(const G4String& pName,
@@ -132,6 +130,16 @@ G4Hype::G4Hype(const G4String& pName,
     
   SetInnerStereo( newInnerStereo );
   SetOuterStereo( newOuterStereo );
+}
+
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Hype::G4Hype( __void__& a  )
+  : G4VSolid(a), fCubicVolume(0.), fpPolyhedron(0)
+{
 }
 
 
@@ -1090,7 +1098,6 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
 }
 
 
-
 //
 // Calculate distance (<=actual) to closest surface of shape from inside
 //
@@ -1118,66 +1125,6 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
   
   return sBest < 0.5*kCarTolerance ? 0 : sBest;
 }
-
-
-//
-// GetEntityType
-//
-G4GeometryType G4Hype::GetEntityType() const
-{
-  return G4String("G4Hype");
-}
-
-
-//
-// Stream object contents to an output stream
-//
-std::ostream& G4Hype::StreamInfo(std::ostream& os) const
-{
-  os << "-----------------------------------------------------------\n"
-     << "    *** Dump for solid - " << GetName() << " ***\n"
-     << "    ===================================================\n"
-     << " Solid type: G4Hype\n"
-     << " Parameters: \n"
-     << "    half length Z: " << halfLenZ/mm << " mm \n"
-     << "    inner radius : " << innerRadius/mm << " mm \n"
-     << "    outer radius : " << outerRadius/mm << " mm \n"
-     << "    inner stereo angle : " << innerStereo/degree << " degrees \n"
-     << "    outer stereo angle : " << outerStereo/degree << " degrees \n"
-     << "-----------------------------------------------------------\n";
-
-  return os;
-}
-
-
-void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
-{
-  scene.AddSolid (*this);
-}
-
-G4VisExtent G4Hype::GetExtent() const 
-{
-  // Define the sides of the box into which the G4Tubs instance would fit.
-  //
-  return G4VisExtent( -endOuterRadius, endOuterRadius, 
-                      -endOuterRadius, endOuterRadius, 
-                      -halfLenZ, halfLenZ );
-}
-
-G4Polyhedron* G4Hype::CreatePolyhedron () const 
-{
-  // Tube for now!!!
-  //
-  return new G4PolyhedronTube (endInnerRadius, endOuterRadius, halfLenZ);
-}
-
-G4NURBS* G4Hype::CreateNURBS () const 
-{
-  // Tube for now!!!
-  //
-  return new G4NURBStube(endInnerRadius, endOuterRadius, halfLenZ);
-}
-
 
 
 //
@@ -1364,6 +1311,16 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
   return std::fabs((pr-rh)*dr)/len;
 }
 
+
+//
+// GetEntityType
+//
+G4GeometryType G4Hype::GetEntityType() const
+{
+  return G4String("G4Hype");
+}
+
+
 //
 // GetCubicVolume
 //
@@ -1374,6 +1331,168 @@ G4double G4Hype::GetCubicVolume()
   return fCubicVolume;
 }
 
+
+//
+// Stream object contents to an output stream
+//
+std::ostream& G4Hype::StreamInfo(std::ostream& os) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: G4Hype\n"
+     << " Parameters: \n"
+     << "    half length Z: " << halfLenZ/mm << " mm \n"
+     << "    inner radius : " << innerRadius/mm << " mm \n"
+     << "    outer radius : " << outerRadius/mm << " mm \n"
+     << "    inner stereo angle : " << innerStereo/degree << " degrees \n"
+     << "    outer stereo angle : " << outerStereo/degree << " degrees \n"
+     << "-----------------------------------------------------------\n";
+
+  return os;
+}
+
+
+
+//
+// GetPointOnSurface
+//
+G4ThreeVector G4Hype::GetPointOnSurface() const
+{
+  G4double xRand, yRand, zRand, r2 , aOne, aTwo, aThree, chose, sinhu;
+  G4double phi, cosphi, sinphi, rBar2Out, rBar2In, alpha, t, rOut, rIn2, rOut2;
+
+  // we use the formula of the area of a surface of revolution to compute 
+  // the areas, using the equation of the hyperbola:
+  // x^2 + y^2 = (z*tanphi)^2 + r^2
+
+  rBar2Out = outerRadius2;
+  alpha = 2.*pi*rBar2Out*std::cos(outerStereo)/tanOuterStereo;
+  t     = halfLenZ*tanOuterStereo/(outerRadius*std::cos(outerStereo));
+  t     = std::log(t+std::sqrt(sqr(t)+1));
+  aOne  = std::fabs(2.*alpha*(std::sinh(2.*t)/4.+t/2.));
+
+
+  rBar2In = innerRadius2;
+  alpha = 2.*pi*rBar2In*std::cos(innerStereo)/tanInnerStereo;
+  t     = halfLenZ*tanInnerStereo/(innerRadius*std::cos(innerStereo));
+  t     = std::log(t+std::sqrt(sqr(t)+1));
+  aTwo  = std::fabs(2.*alpha*(std::sinh(2.*t)/4.+t/2.));
+
+  aThree = pi*((outerRadius2+sqr(halfLenZ*tanOuterStereo)
+              -(innerRadius2+sqr(halfLenZ*tanInnerStereo))));
+  
+  if(outerStereo == 0.) {aOne = std::fabs(2.*pi*outerRadius*2.*halfLenZ);}
+  if(innerStereo == 0.) {aTwo = std::fabs(2.*pi*innerRadius*2.*halfLenZ);}
+  
+  phi = RandFlat::shoot(0.,2.*pi);
+  cosphi = std::cos(phi);
+  sinphi = std::sin(phi);
+  sinhu = RandFlat::shoot(-1.*halfLenZ*tanOuterStereo/outerRadius,
+                          halfLenZ*tanOuterStereo/outerRadius);
+
+  chose = RandFlat::shoot(0.,aOne+aTwo+2.*aThree);
+  if(chose>=0. && chose < aOne)
+  {
+    if(outerStereo != 0.)
+    {
+      zRand = outerRadius*sinhu/tanOuterStereo;
+      xRand = std::sqrt(sqr(sinhu)+1)*outerRadius*cosphi;
+      yRand = std::sqrt(sqr(sinhu)+1)*outerRadius*sinphi;
+      return G4ThreeVector (xRand, yRand, zRand);
+    }
+    else
+    {
+      return G4ThreeVector(outerRadius*cosphi,outerRadius*sinphi,
+                           RandFlat::shoot(-halfLenZ,halfLenZ));
+    }
+  }
+  else if(chose>=aOne && chose<aOne+aTwo)
+  {
+    if(innerStereo != 0.)
+    {
+      sinhu = RandFlat::shoot(-1.*halfLenZ*tanInnerStereo/innerRadius,
+                              halfLenZ*tanInnerStereo/innerRadius);
+      zRand = innerRadius*sinhu/tanInnerStereo;
+      xRand = std::sqrt(sqr(sinhu)+1)*innerRadius*cosphi;
+      yRand = std::sqrt(sqr(sinhu)+1)*innerRadius*sinphi;
+      return G4ThreeVector (xRand, yRand, zRand);
+    }
+    else 
+    {
+      return G4ThreeVector(innerRadius*cosphi,innerRadius*sinphi,
+                           RandFlat::shoot(-1.*halfLenZ,halfLenZ));
+    }
+  }
+  else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
+  {
+    rIn2  = innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ;
+    rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
+    rOut  = std::sqrt(rOut2) ;
+ 
+    do {
+      xRand = RandFlat::shoot(-rOut,rOut) ;
+      yRand = RandFlat::shoot(-rOut,rOut) ;
+      r2 = xRand*xRand + yRand*yRand ;
+    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+
+    zRand = halfLenZ;
+    return G4ThreeVector (xRand, yRand, zRand);
+  }
+  else
+  {
+    rIn2  = innerRadius2+tanInnerStereo2*halfLenZ*halfLenZ;
+    rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
+    rOut  = std::sqrt(rOut2) ;
+ 
+    do {
+      xRand = RandFlat::shoot(-rOut,rOut) ;
+      yRand = RandFlat::shoot(-rOut,rOut) ;
+      r2 = xRand*xRand + yRand*yRand ;
+    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+
+    zRand = -1.*halfLenZ;
+    return G4ThreeVector (xRand, yRand, zRand);
+  }
+}
+
+
+//
+// DescribeYourselfTo
+//
+void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+{
+  scene.AddSolid (*this);
+}
+
+
+//
+// GetExtent
+//
+G4VisExtent G4Hype::GetExtent() const 
+{
+  // Define the sides of the box into which the G4Tubs instance would fit.
+  //
+  return G4VisExtent( -endOuterRadius, endOuterRadius, 
+                      -endOuterRadius, endOuterRadius, 
+                      -halfLenZ, halfLenZ );
+}
+
+
+//
+// CreatePolyhedron
+//
+G4Polyhedron* G4Hype::CreatePolyhedron() const 
+{
+  // Tube for now!!!
+  //
+  return new G4PolyhedronTube (endInnerRadius, endOuterRadius, halfLenZ);
+}
+
+
+//
+// GetPolyhedron
+//
 G4Polyhedron* G4Hype::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
@@ -1384,4 +1503,24 @@ G4Polyhedron* G4Hype::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+
+//
+// CreateNURBS
+//
+G4NURBS* G4Hype::CreateNURBS() const 
+{
+  // Tube for now!!!
+  //
+  return new G4NURBStube(endInnerRadius, endOuterRadius, halfLenZ);
+}
+
+
+//
+//  asinh
+//
+G4double G4Hype::asinh(G4double arg)
+{
+  return std::log(arg+std::sqrt(sqr(arg)+1));
 }

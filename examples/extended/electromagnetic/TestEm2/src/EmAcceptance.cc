@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: EmAcceptance.cc,v 1.4 2004/12/02 14:57:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

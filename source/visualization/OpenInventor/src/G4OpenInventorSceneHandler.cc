@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.38 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.39 2005/11/15 08:39:03 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -51,9 +51,9 @@
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoNurbsSurface.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoResetTransform.h>
 #include <Inventor/nodes/SoMatrixTransform.h>
-#include <Inventor/nodes/SoTransform.h>
 
 #define USE_SOPOLYHEDRON
 
@@ -210,11 +210,11 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   
   const G4VMarker& marker = polymarker;
   G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
+  const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
   //const G4Vector3D& viewpointDirection =
-  //  fpViewer -> GetViewParameters().GetViewpointDirection();
+  //  fpViewer->GetViewParameters().GetViewpointDirection();
   //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  G4double scale = fpViewer->GetViewParameters().GetGlobalMarkerScale();
   G4double size = scale *
     userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
   G4double screenSize = 0;  // Calculate marker in screen size...
@@ -357,11 +357,11 @@ void G4OpenInventorSceneHandler::AddCircleSquare
   // A few useful quantities...
   G4Point3D centre = marker.GetPosition();
   G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
+  const G4VMarker& def = fpViewer->GetViewParameters().GetDefaultMarker();
   //const G4Vector3D& viewpointDirection =
-  //  fpViewer -> GetViewParameters().GetViewpointDirection();
+  //  fpViewer->GetViewParameters().GetViewpointDirection();
   //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  G4double scale = fpViewer->GetViewParameters().GetGlobalMarkerScale();
   G4double size = scale *
     userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
   G4double screenSize = 0;  // Calculate marker in screen size...
@@ -432,56 +432,6 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 
   delete [] points;
 }
-
-/* Old method
-//
-// Method for handling G4Square objects - defaults to wireframe
-//
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
-  //
-  // Color
-  //
-  const G4Colour& c = GetColour (square);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
-
-  // A few useful quantities...
-  const G4VMarker& marker = square;
-  G4Point3D centre = marker.GetPosition();
-  G4bool userSpecified = (marker.GetWorldSize() || marker.GetScreenSize());
-  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
-  //const G4Vector3D& viewpointDirection =
-  //  fpViewer -> GetViewParameters().GetViewpointDirection();
-  //const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  G4double size = scale *
-    userSpecified ? marker.GetWorldSize() : def.GetWorldSize();
-  G4double screenSize = 0, worldSize = 0;  // Calculate marker in world size...
-  if (size) {  // Size specified in world coordinates.
-    worldSize = size;
-  } else { // Size specified in screen coordinates (pixels).
-    screenSize = scale *
-      userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
-    worldSize = 1. * cm;  // Needs to be more sophisticated!!
-  }
-
-  SoTranslation *sTrans = new SoTranslation;
-  sTrans->translation.setValue((float)centre.x(),
-                               (float)centre.y(),
-                               (float)centre.z());
-  fCurrentSeparator->addChild(sTrans);
-  
-  SoCube *g4Square = new SoCube();
-  g4Square->width =  (float)worldize;
-  g4Square->height = (float)worldSize;
-  g4Square->depth =  (float)worldSize;
-  fCurrentSeparator->addChild(g4Square);
-}
-*/
 
 //
 // Method for handling G4Polyhedron objects for drawing solids.
@@ -603,6 +553,13 @@ void G4OpenInventorSceneHandler::BeginPrimitives
     SoMatrixTransform* matrixTransform = new SoMatrixTransform;
     G4OpenInventorTransform3D oiTran(objectTransformation);
     SbMatrix* sbMatrix = oiTran.GetSbMatrix();
+
+    const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
+    SbMatrix sbScale;
+    sbScale.setScale
+      (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
+    sbMatrix->multRight(sbScale);
+
     matrixTransform->matrix.setValue(*sbMatrix);
     delete sbMatrix;
     fCurrentSeparator->addChild(matrixTransform);
@@ -630,15 +587,6 @@ void G4OpenInventorSceneHandler::ClearTransientStore () {
 
   fTransientRoot->removeAllChildren();
 }
-
-/*
-void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-    // Stop-gap solution for display List re-use.
-    // A proper implementation would use geometry hierarchy.
-    //
-    G4VSceneHandler::RequestPrimitives (solid);
-}
-*/
 
 void G4OpenInventorSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
@@ -677,8 +625,8 @@ void G4OpenInventorSceneHandler::PreAddSolid
   // First find the color attributes.
   //
   const G4VisAttributes* pVisAttribs =
-    fpViewer -> GetApplicableVisAttributes (&visAttribs);
-  const G4Colour& g4Col =  pVisAttribs -> GetColour ();
+    fpViewer->GetApplicableVisAttributes (&visAttribs);
+  const G4Colour& g4Col =  pVisAttribs->GetColour ();
   const double red = g4Col.GetRed ();
   const double green = g4Col.GetGreen ();
   const double blue = g4Col.GetBlue ();
@@ -757,18 +705,6 @@ void G4OpenInventorSceneHandler::PreAddSolid
       } else {
         //printf("debug : PreAddSolid : mother not found in map !!!\n");
         fDetectorRoot->addChild(detectorTreeKit);
-	/*
-	do {
-	  SoSeparator* dummySeparator   =  
-	    (SoSeparator*) g4DetectorTreeKit->getPart("dummySeparator",TRUE);
-	  dummySeparator->renderCaching = SoSeparator::OFF; //????
-	  dummySeparator->addChild(transform);
-	  fSeparatorMap[MotherVolume] = dummySeparator;
-	  MotherVolume = MotherVolume->GetPhysicalVolume()->GetMotherLogical();
-	} while
-	  (MotherVolume &&
-	   fSeparatorMap.find(MotherVolume) == fSeparatorMap.end());
-	*/
       }
     } else {
       //printf("debug : PreAddSolid : has no mother\n");
@@ -785,20 +721,10 @@ void G4OpenInventorSceneHandler::PreAddSolid
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
         fCurrentSeparator = fSeparatorMap[MotherVolume];
       } else {
-/*
-        G4cerr << "G4OpenInventorSceneHandler::PreAddSolid() : WARNING :"
-               << " volume " << fpCurrentPV->GetName()
-               << " has invisible mother (" << MotherVolume->GetName() << ")." 
-               << G4endl;
-        G4cerr << " Its scene graph will be put under the viewer"
-               << " detector root scene graph."
-               << G4endl;
-*/
         fCurrentSeparator = fDetectorRoot;
       }
     } else {
       fCurrentSeparator = fDetectorRoot;
-      /* Fix here as above!!! */
     }
 
     SoMaterial* material = 
@@ -820,61 +746,18 @@ void G4OpenInventorSceneHandler::PreAddSolid
   SoMatrixTransform* matrixTransform = new SoMatrixTransform;
   G4OpenInventorTransform3D oiTran(objectTransformation);
   SbMatrix* sbMatrix = oiTran.GetSbMatrix();
+
+  const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
+  SbMatrix sbScale;
+  sbScale.setScale
+    (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
+  sbMatrix->multRight(sbScale);
+
   matrixTransform->matrix.setValue(*sbMatrix);
   delete sbMatrix;
   fCurrentSeparator->addChild(matrixTransform);
 }
 
-
-/*
-G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark ) 
-{
-        //----- return value ( marker radius in 3d units) 
-        G4double size       = 1.0 ; // initialization
-
-        //----- parameters to calculate 3d size from 2d size
-        const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
-        double zoom_factor  = fpViewer->GetViewParameters().GetZoomFactor() ;
-        if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
-        double extent_radius_3d = GetScene()->GetExtent().GetExtentRadius() ;
-        if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
-
-        //----- get marker radius in 3D units
-        size = mark.GetWorldSize();
-        if        ( size  ) {
-
-                // get mark radius in 3D units
-                size = 0.5 * mark.GetWorldSize()  ; 
-
-        } else if ( (size = mark.GetScreenSize()) ) {
-
-                // local
-                double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
-
-                // get mark radius in 3D units
-                size \
-                 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
-                size *= zoom_factor ;
-
-        } else {
-                // local
-                double mark_radius_2d \
-                 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
-
-                // get mark radius in 3D units
-                size \
-                 = extent_radius_3d * ( mark_radius_2d / HALF_SCREEN_SIZE_2D );
-                size *= zoom_factor ;
-        }
-
-                //----- global rescaling
-        size *= fpViewer->GetViewParameters().GetGlobalMarkerScale(); 
-
-                //----- return size
-        return size ;
-
-} // G4OpenInventorSceneHandler::GetMarkerSize ()
-*/
 
 //void G4OpenInventorSceneHandler::AddSolid(const G4VTrajectory& traj) {
 //  G4VSceneHandler::AddSolid(traj);  // For now.

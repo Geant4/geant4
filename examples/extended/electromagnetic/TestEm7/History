@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2005/06/01 13:12:13 maire Exp $
+$Id: History,v 1.33 2005/12/06 11:51:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+02-12-05: V.Ivant (testem7-V07-01-02)
+- Fix crash connected with non-static hadrons
+
+22-11-05 mma (testem7-V07-01-01)
+- update README for OpenScientist
+          
+06-10-05 mma (testem7-V07-01-00)
+- create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
+     
 01-06-05 mma (testem7-V07-00-03)
 - RunAction : option "--noErrors" for hbook
      

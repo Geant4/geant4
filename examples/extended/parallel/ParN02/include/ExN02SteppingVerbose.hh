@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02SteppingVerbose.hh,v 1.1 2002/03/05 15:21:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP.cc,v 1.2 2005/11/29 17:01:20 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsLHEP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
+//
 #include "HadronPhysicsLHEP.hh"
 
 #include "globals.hh"
@@ -34,13 +48,29 @@
 
 HadronPhysicsLHEP::HadronPhysicsLHEP(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
+{}
+
+void HadronPhysicsLHEP::CreateModels()
 {
-  theNeutrons.RegisterMe(&theLHEPNeutron);
-  thePro.RegisterMe(&theLHEPPro);
-  thePiK.RegisterMe(&theLHEPPiK);
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(theLHEPNeutron=new G4LHEPNeutronBuilder);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(theLHEPPro=new G4LHEPProtonBuilder);
+
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
 }
 
-HadronPhysicsLHEP::~HadronPhysicsLHEP() {}
+HadronPhysicsLHEP::~HadronPhysicsLHEP()
+{
+   delete theLHEPNeutron;
+   delete theNeutrons;
+   delete theLHEPPro;
+   delete thePro;
+   delete theLHEPPiK;
+   delete thePiK;
+}
 
 void HadronPhysicsLHEP::ConstructParticle()
 {
@@ -52,16 +82,19 @@ void HadronPhysicsLHEP::ConstructParticle()
 
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
+  
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 #include "G4ProcessManager.hh"
 void HadronPhysicsLHEP::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePro.Build();
-  thePiK.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch

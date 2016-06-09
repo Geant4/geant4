@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.cc,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4DrawVoxels.cc,v 1.3 2005/09/19 10:35:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4DrawVoxels
@@ -75,6 +75,7 @@ void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,
   fVoxelsVisAttributes[1]=VA_voxelY;
   fVoxelsVisAttributes[2]=VA_voxelZ;
 }
+
 void G4DrawVoxels::SetBoundingBoxVisAttributes(G4VisAttributes& VA_boundingbox)
 {
   fBoundingBoxVisAttributes=VA_boundingbox;
@@ -90,12 +91,6 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 {
   // Let's draw the selected voxelisation now !
  
-#ifdef G4DrawVoxelsDebug
-  G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : "
-         << "a query for drawing voxelisation";
-  G4cout << "Logical Volume:" << lv->GetName() << G4endl;
-#endif
-
    G4VSolid* solid=lv->GetSolid();
   
    G4double dx=kInfinity,dy=kInfinity,dz=kInfinity;
@@ -103,12 +98,6 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    
    if (lv->GetNoDaughters()<=0)
    {
-     #ifdef G4DrawVoxelsDebug
-        G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : "
-               << "a query for drawing voxelisation" << G4endl;
-        G4cout << "of a logical volume that has no (or <=0) daughter "
-               << "has been detected !!! ****" << G4endl;
-     #endif
      return;
    }
    
@@ -123,7 +112,8 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    dy=ymax-ymin;
    dz=zmax-zmin;
 
-   //Preparing the colored bounding polyhedronBox for the pVolume
+   // Preparing the colored bounding polyhedronBox for the pVolume
+   //
    G4PolyhedronBox bounding_polyhedronBox(dx*0.5,dy*0.5,dz*0.5);
    bounding_polyhedronBox.SetVisAttributes(&fBoundingBoxVisAttributes);
    G4ThreeVector t_centerofBoundingBox((xmin+xmax)*0.5,
@@ -163,11 +153,6 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
        voxelsVisAttributes=&fVoxelsVisAttributes[2];
        break;
      default:
-       /************************/
-       G4cout << "PANIC: in Draw_Voxels:DrawVoxels(...) header is decayed."
-              << G4endl;
-       G4cout << "header->GetAxis returns an invalid axis." << G4endl; 
-       /************************/
        break;
    };
      
@@ -179,19 +164,8 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    G4double beginning=header->GetMinExtent(),
             step=(header->GetMaxExtent()-beginning)/no_slices;
 
-   #ifdef G4DrawVoxelsDebug
-      G4cout << "Axis of the voxelisation:" << header->GetAxis();
-      G4cout << "No slices of the voxelisation:" << header->GetNoSlices();
-      G4cout << "step:" << step << G4endl;
-   #endif
-
    while (slice_no<no_slices)
-   {
-     #ifdef G4DrawVoxelsDebug
-        G4cout << "slice_no:" << slice_no;
-        G4cout << "header/node:" << slice->IsHeader() << G4endl;
-     #endif
-    
+   {    
      if (slice->IsHeader())
      {
        G4VoxelLimits newlimit(limit);
@@ -208,9 +182,9 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
      slice_no=(slice->IsHeader()
                ? slice->GetHeader()->GetMaxEquivalentSliceNo()+1
                : slice->GetNode()->GetMaxEquivalentSliceNo()+1);
-     if (slice_no<no_slices) slice=header->GetSlice(slice_no);
+     if (slice_no<no_slices) { slice=header->GetSlice(slice_no); }
    }
-} //end of ComputeVoxelPolyhedra...
+}
 
 // ########################################################################
 
@@ -225,17 +199,11 @@ G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv) const
 
 void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
 {   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
-  if (lv->GetNoDaughters()<=0)
-  {
-    #ifdef G4DrawVoxelsDebug
-       G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : "
-              << "a query for drawing voxelisation" << G4endl;
-       G4cout << "of a logical volume that has no (or <=0) daughter "
-              << "has been detected !!! ****" << G4endl;
-    #endif
-    return;
+   if (lv->GetNoDaughters()<=0)
+   {
+     return;
    }
 
    // Computing the transformation according to the world volume 
@@ -253,13 +221,22 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
    G4PlacedPolyhedronList* pplist=CreatePlacedPolyhedra(lv);
    if(pVVisManager)
    {
-     //Drawing the bounding and voxel polyhedra for the pVolume
+     // Drawing the bounding and voxel polyhedra for the pVolume
+     //
      for (size_t i=0;i<pplist->size();i++)
+     {
        pVVisManager->Draw((*pplist)[i].GetPolyhedron(),
                           (*pplist)[i].GetTransform()*transf3D);
+     }
    }
    else
-     G4cout << "@@@@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume*)"
-            << " pVVisManager is null! @@@@" << G4endl; 
+   {
+     G4cerr << "ERROR - G4DrawVoxels::DrawVoxels()" << G4endl
+            << "        Pointer to visualization manager is null!"
+            << G4endl; 
+     G4Exception("G4DrawVoxels::DrawVoxels()",
+                 "NotApplicable", JustWarning,
+                 "Pointer to visualization manager is null!");
+   }
    delete pplist;
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2005/06/01 17:15:35 allison Exp $
+$Id: History,v 1.16 2005/11/22 21:41:55 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22, 2005,  M.Asai (digits_hits-V07-01-04)
+- G4SDParticleFilter: Protection against null pointer.
+
+Nov 18, 2005,  M.Asai (digits_hits-V07-01-03)
+- Introducing G4THitsMap template class.
+- Introducing concrete primitive scorer and filter classes.
+
+Nov 16, 2005,  M.Asai (digits_hits-V07-01-02)
+- Adding a new sub-directory "utils" where new concrete primitive scorers and
+  concrete filters are stored.
+
+Sept 27, 2005,  M.Asai (digits_hits-V07-01-01)
+- Updating new classes.
+
+Sept 22, 2005,  M.Asai (digits_hits-V07-01-00)
+- Introducing G4MultiFunctionalDetector, G4VPrimitiveSensitivity and G4VSDFilter
+  classes.
 
 June 1, 2005,  J.Allison (digits_hits-V07-00-00)
 - G4VHit: Fixed interface to CreateAttValues (removed const). Improved

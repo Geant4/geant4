@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.12 2002/12/04 21:29:50 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.15 2005/11/26 00:35:02 mverderi Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -103,7 +103,7 @@ RemoveFastSimulationManager(G4FastSimulationManager* fsmanager)
 void G4GlobalFastSimulationManager::CloseFastSimulation()
 {
   if(fClosed) return;
-
+  
   G4ParticleTable* theParticleTable;
   
   // Reset the NeededFlavoredWorlds List
@@ -113,26 +113,29 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   theParticleTable=G4ParticleTable::GetParticleTable();
   
   // Creates the first world volume clone.
-  G4VPhysicalVolume* aClone=GiveMeAWorldVolumeClone();
+  G4VPhysicalVolume* aClone = GiveMeAWorldVolumeClone();
   
-  G4cout << "Closing FastSimulation\n";
-  for (G4int iParticle=0; iParticle<theParticleTable->entries(); iParticle++) {
+  G4cout << "Closing Fast-Simulation ..." << G4endl;
+  
+  for (G4int iParticle=0;
+       iParticle<theParticleTable->entries(); iParticle++) {
     G4bool Needed = false;
     for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
       Needed = Needed || ManagedManagers[ifsm]->
-	InsertGhostHereIfNecessary(aClone,
-				   *(theParticleTable->
-				     GetParticle(iParticle)));
+        InsertGhostHereIfNecessary(aClone,
+                                   *(theParticleTable->
+                                     GetParticle(iParticle)));
     // if some FSM inserted a ghost, keep this clone.
-    if(Needed) {
-      NeededFlavoredWorlds.push_back(new 
-				  G4FlavoredParallelWorld(theParticleTable->
-					  GetParticle(iParticle),
-							  aClone));
-      // and prepare a new one.
-      aClone=GiveMeAWorldVolumeClone();
-    }
+    if(Needed)
+      {
+	G4Region* aWorldGhostRegion = new G4Region("Ghost world region for " + theParticleTable->GetParticle(iParticle)->GetParticleName());
+	aWorldGhostRegion->AddRootLogicalVolume(aClone->GetLogicalVolume());
+	NeededFlavoredWorlds.push_back(new G4FlavoredParallelWorld(theParticleTable->GetParticle(iParticle), aClone));
+	// and prepare a new one.
+	aClone=GiveMeAWorldVolumeClone();
+      }
   }
+  
   fClosed=true;
 }
 
@@ -147,11 +150,13 @@ GetFlavoredWorldForThis(G4ParticleDefinition* particle)
 }
 
 void 
-G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName)
+G4GlobalFastSimulationManager::
+ActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-    result = result || ManagedManagers[ifsm]->ActivateFastSimulationModel(aName);
+    result = result || ManagedManagers[ifsm]->
+                       ActivateFastSimulationModel(aName);
   if(result) 
     G4cout << "Model " << aName << " activated.";
   else
@@ -160,11 +165,13 @@ G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName
 }
 
 void 
-G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aName)
+G4GlobalFastSimulationManager::
+InActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-    result = result || ManagedManagers[ifsm]->InActivateFastSimulationModel(aName);
+    result = result || ManagedManagers[ifsm]->
+                       InActivateFastSimulationModel(aName);
   if(result) 
     G4cout << "Model " << aName << " inactivated.";
   else
@@ -174,7 +181,7 @@ G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aNa
 
 void 
 G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
-					     listType theType)
+                                             listType theType)
 {
   if(theType == ISAPPLICABLE) {
     for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
@@ -186,11 +193,11 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
     G4int titled = 0;
     for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++) {
       if(theType == NAMES_ONLY) {
-	if(!(titled++))
-	  G4cout << "Current Envelopes for Fast Simulation:\n";
-	G4cout << "   "; 
-	ManagedManagers[ifsm]->ListTitle();
-	G4cout << G4endl;
+        if(!(titled++))
+          G4cout << "Current Envelopes for Fast Simulation:\n";
+        G4cout << "   "; 
+        ManagedManagers[ifsm]->ListTitle();
+        G4cout << G4endl;
       }
       else ManagedManagers[ifsm]->ListModels();
     }
@@ -198,9 +205,9 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
   else {
     for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
       if(aName == ManagedManagers[ifsm]->
-	 GetEnvelope()->GetName()){
-	ManagedManagers[ifsm]->ListModels();
-	break;
+         GetEnvelope()->GetName()){
+        ManagedManagers[ifsm]->ListModels();
+        break;
       }
   }
 }
@@ -230,14 +237,14 @@ G4GlobalFastSimulationManager::GiveMeAWorldVolumeClone()
   
   G4LogicalVolume *parallelWorldLog = 
     new G4LogicalVolume(parallelWorldSolid,
-			parallelWorldMaterial,
-			"ParallelWorldLogical",
-			0, 0, 0);
+                        parallelWorldMaterial,
+                        "ParallelWorldLogical",
+                        0, 0, 0);
   
   theParallelWorldPhysical= new G4PVPlacement(0,G4ThreeVector(),
-					      "ParallelWorldPhysical",
-					      parallelWorldLog,
-					      0,false,0);
+                                              "ParallelWorldPhysical",
+                                              parallelWorldLog,
+                                              0,false,0);
   
   return theParallelWorldPhysical;
 }
@@ -247,22 +254,35 @@ G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
 { 
   G4StateManager * stateManager = G4StateManager::GetStateManager();
   if((stateManager->GetPreviousState()==G4State_Idle) &&
-     (requestedState==G4State_GeomClosed) &&
-     (!fClosed))
-    G4Exception("G4GlobalFastSimulationManager fatal error : \n1) you are using ghost volumes;\n2) In this case the G4GlobalFastSimulationManager MUST be closed BEFORE\n  closing the geometry;\n3) To do this put in your code the call \n  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->\n    CloseFastSimulation();\n  just before closing the geometry.");
+     (requestedState==G4State_GeomClosed) && (!fClosed) )
+  {
+    G4cerr
+      << "ERROR - G4GlobalFastSimulationManager::Notify()" << G4endl
+      << "        1) you are using ghost volumes;" << G4endl
+      << "        2) In this case the G4GlobalFastSimulationManager" << G4endl
+      << "           MUST be closed BEFORE closing the geometry;" << G4endl
+      << "        3) To do this put in your code the call to" << G4endl
+      << "           GetGlobalFastSimulationManager()->CloseFastSimulation();"
+      << G4endl
+      << "           just before closing the geometry." << G4endl;
+    G4Exception("G4GlobalFastSimulationManager::Notify()", "InvalidState",
+                FatalException, "Fast simulation must be closed.");
+  }
   return true;
 }
 
 G4VFastSimulationModel* 
-G4GlobalFastSimulationManager::GetFastSimulationModel(const G4String& modelName,
-						      const G4VFastSimulationModel* previousFound) const
+G4GlobalFastSimulationManager::
+GetFastSimulationModel(const G4String& modelName,
+                       const G4VFastSimulationModel* previousFound) const
 {
   G4VFastSimulationModel* model = 0;
   // -- flag used to navigate accross the various managers;
   bool foundPrevious(false);
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
     {
-      model = ManagedManagers[ifsm]->GetFastSimulationModel(modelName, previousFound, foundPrevious);
+      model = ManagedManagers[ifsm]->
+              GetFastSimulationModel(modelName, previousFound, foundPrevious);
       if (model) break;
     }
   return model;

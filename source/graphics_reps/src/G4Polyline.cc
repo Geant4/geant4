@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.cc,v 1.8 2003/06/16 16:55:23 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Polyline.cc,v 1.9 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  July 1995
@@ -31,25 +31,7 @@
 
 G4Polyline::G4Polyline () {}
 
-G4Polyline::G4Polyline (const G4VVisPrim& prim):
-  G4VVisPrim (prim)
-{}
-
 G4Polyline::~G4Polyline () {}
-
-G4Visible & G4Polyline::operator = (const G4Visible &right) {
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4Polyline::operator = (const G4VVisPrim &right) {
-  return G4VVisPrim::operator = (right);
-}
-
-G4Polyline & G4Polyline::operator = (const G4Polyline &right) {
-  if (&right == this) return *this;
-  G4VVisPrim::operator = (right);
-  return *this;
-}
 
 G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
   for (iterator i = begin(); i != end(); ++i) i->transform(transformation);
@@ -58,7 +40,7 @@ G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
 
 std::ostream& operator << (std::ostream& os, const G4Polyline& line) {
   os << "G4Polyline: ";
-  os << '\n' << (G4VVisPrim) line;
+  os << '\n' << (G4Visible) line;
   os << '\n' << (G4Point3DList) line;
   return os;
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4BuildTree.cc,v 1.19 2005/05/26 14:18:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // modified by I. Hrivnacova, 2.8.99 
 

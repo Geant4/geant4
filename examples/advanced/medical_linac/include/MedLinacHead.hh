@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacHead.hh,v 1.1 2004/05/14 18:25:39 mpiergen Exp $
+// $Id: MedLinacHead.hh,v 1.2 2005/07/03 23:27:37 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -73,9 +73,8 @@ public:
   G4Region* aUpperCollRegion;
 
 
-  G4VisAttributes* simpleLeadWVisAtt;
-  G4VisAttributes* simpleLeadSVisAtt;
-  G4VisAttributes* simpleAlVisAtt;
+  G4VisAttributes* simpleTungstenWVisAtt;
+  G4VisAttributes* simpleTungstenSVisAtt;
   G4VisAttributes* simpleCopperSVisAtt;
   G4VisAttributes* simpleMylarVisAtt;
   G4VisAttributes* simpleKaptonVisAtt;

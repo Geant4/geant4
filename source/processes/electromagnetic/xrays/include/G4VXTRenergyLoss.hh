@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.8 2005/04/05 08:27:21 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VXTRenergyLoss.hh,v 1.12 2005/10/07 16:19:14 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -32,12 +32,14 @@
 // method
 // 
 // History:
-// 15.01.02 V. Grichine first version 
+// 06.10.05 V. Grichine first step to discrete process
+// 15.01.02 V. Grichine first version
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 //
 
 
-#ifndef G4VXTRenergyLoss_h
-#define G4VXTRenergyLoss_h 1
+#ifndef G4XTRenergyLoss_h
+#define G4XTRenergyLoss_h 1
 
 
 #include <complex>
@@ -54,27 +56,34 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4VContinuousProcess.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4Integrator.hh"
+#include "G4ParticleChange.hh"
 
 
-class G4VXTRenergyLoss : public G4VContinuousProcess
+
+class G4VParticleChange;
+
+
+class G4XTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
 public:
 
-  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+  G4XTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                     G4double,G4double,G4int,
-                     const G4String & processName = "XTRenergyLoss");
-   virtual  ~G4VXTRenergyLoss ();
+                    const G4String & processName = "XTRenergyLoss",
+                    G4ProcessType type = fElectromagnetic);
+   virtual  ~G4XTRenergyLoss ();
 
-  // Pure virtuals must be implemented in inherited particular TR radiators
+  // These virtual has to be implemented in inherited particular TR radiators
  
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
-                                                     G4double varAngle ) = 0  ;
+                                                     G4double varAngle );
 
 
   G4bool IsApplicable(const G4ParticleDefinition&);
@@ -87,6 +96,13 @@ public:
 
   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
 				   const G4Step&  aStep);
+
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+				   const G4Step&  aStep);
+
+  G4double GetMeanFreePath(const G4Track& aTrack,
+                           G4double previousStepSize,
+                           G4ForceCondition* condition);
  
   void BuildTable() ;
   void BuildEnergyTable() ;
@@ -168,25 +184,28 @@ protected:
   static G4PhysicsLogVector* fProtonEnergyVector ;
 
 
-  static G4double fTheMinEnergyTR ;            //  static min TR energy
-  static G4double fTheMaxEnergyTR ;            //  static max TR energy
-         G4double fMinEnergyTR ;               //  min TR energy in material
-         G4double fMaxEnergyTR ;               //  max TR energy in material
-  static G4double fTheMaxAngle ;               //  max theta of TR quanta
-  static G4double fTheMinAngle ;               //  max theta of TR quanta
-         G4double fMaxThetaTR ;                //  max theta of TR quanta
-  static G4int    fBinTR ;                     //  number of bins in TR vectors
+  static G4double fTheMinEnergyTR;            //  static min TR energy
+  static G4double fTheMaxEnergyTR;            //  static max TR energy
+         G4double fMinEnergyTR;               //  min TR energy in material
+         G4double fMaxEnergyTR;               //  max TR energy in material
+  static G4double fTheMaxAngle;               //  max theta of TR quanta
+  static G4double fTheMinAngle;               //  max theta of TR quanta
+         G4double fMaxThetaTR;                //  max theta of TR quanta
+  static G4int    fBinTR;                     //  number of bins in TR vectors
 
-  static G4double fMinProtonTkin ;             // min Tkin of proton in tables
-  static G4double fMaxProtonTkin ;             // max Tkin of proton in tables
-  static G4int    fTotBin        ;             // number of bins in log scale
-         G4double fGamma         ;             // current Lorentz factor
-         G4double fEnergy ;                    // energy and
-         G4double fVarAngle ;                  // angle squared
+  static G4double fMinProtonTkin;             // min Tkin of proton in tables
+  static G4double fMaxProtonTkin;             // max Tkin of proton in tables
+  static G4int    fTotBin;                    // number of bins in log scale
+         G4double fGamma;                     // current Lorentz factor
+         G4double fEnergy;                    // energy and
+         G4double fVarAngle;                  // angle squared
+  G4double fLambda;
 
   static G4double fPlasmaCof ;               // physical consts for plasma energy
-  static G4double fCofTR ;
+  static G4double fCofTR ;  
 
+
+  G4bool fExitFlux;
   G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
 
   G4int fMatIndex1, fMatIndex2 ;
@@ -201,6 +220,10 @@ protected:
   G4int      fGasIntervalNumber ;
   G4double   fGasThick ;     
   G4double fAlphaPlate, fAlphaGas ;
+
+  G4ParticleChange fParticleChange;
 };
+
+typedef G4XTRenergyLoss G4VXTRenergyLoss;
 
 #endif

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EventGenerator.cc,v 1.3 2005/06/04 13:47:01 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4EventGenerator
 #include "G4EventGenerator.hh"

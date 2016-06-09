@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.11 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Tubs.hh,v 1.14 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -126,6 +126,8 @@ class G4Tubs : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4ThreeVector GetPointOnSurface() const;
+
     std::ostream& StreamInfo( std::ostream& os ) const;
 
     // Visualisation functions
@@ -135,6 +137,11 @@ class G4Tubs : public G4CSGSolid
     G4NURBS*            CreateNURBS        () const;
 
   public:  // without description
+
+    G4Tubs(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
     //  Older names for access functions
 

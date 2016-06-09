@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.28 2005/05/12 11:06:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEmProcess.hh,v 1.29 2005/10/25 11:38:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -333,7 +333,9 @@ inline G4double G4VEmProcess::RecalculateLambda(G4double e, const G4MaterialCuts
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
   G4VEmModel* currentModel = SelectModel(e);
-  return currentModel->CrossSectionPerVolume(currentMaterial,particle,e);
+  G4double x = 0.0;
+  if(currentModel) x = currentModel->CrossSectionPerVolume(currentMaterial,particle,e);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

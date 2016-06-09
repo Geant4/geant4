@@ -22,7 +22,7 @@
 //
 //
 // $Id: RE01DecayPhysics.hh,v 1.1 2004/11/26 07:37:39 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 

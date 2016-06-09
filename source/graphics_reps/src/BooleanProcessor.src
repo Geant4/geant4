@@ -10,8 +10,10 @@
 
 #include <CLHEP/Geometry/Plane3D.h>
 
+using namespace HepGeom;
+
 #define INITIAL_SIZE 200
-#define CRAZY_POINT  HepPoint3D(-10.e+6, -10.e+6, -10.e+6)
+#define CRAZY_POINT  Point3D<double>(-10.e+6, -10.e+6, -10.e+6)
 #define GRANULARITY  10.e+5;
 
 #define SWAP(A,B) w = A; A = B; B = w
@@ -69,11 +71,11 @@ class vector {
 // ---------------------------------------------------- Extended node ---
 class ExtNode {
  public:
-  HepPoint3D v;
+  Point3D<double> v;
   int        s;
 
  public: 
-  ExtNode(HepPoint3D vertex=HepPoint3D(), int status=0)
+  ExtNode(Point3D<double> vertex=Point3D<double>(), int status=0)
     : v(vertex), s(status) {}
   ~ExtNode() {}
 
@@ -125,7 +127,7 @@ class ExtEdge {
 class ExtFace {
  public:
   int        iedges[4];        // indices of original edges
-  HepPlane3D plane;            // face plane
+  Plane3D<double> plane;            // face plane
   double     rmin[3], rmax[3]; // bounding box
   int        iold;             // head of the list of the original edges
   int        inew;             // head of the list of the new edges
@@ -250,7 +252,7 @@ class BooleanProcessor {
   void   initiateLists();
   void   assemblePolyhedra();
   void   findABC(double x1, double y1, double x2, double y2,
-		 double &a, double &b, double &c) const;
+                 double &a, double &b, double &c) const;
   int    checkDirection(double *x, double *y) const;
   int    checkIntersection(int ix, int iy, int i1, int i2) const;
   void   mergeContours(int ix, int iy, int kext, int kint);
@@ -265,8 +267,8 @@ class BooleanProcessor {
   ~BooleanProcessor() {}
 
   HepPolyhedron execute(int op,
-			const HepPolyhedron &a,
-			const HepPolyhedron &b);
+                        const HepPolyhedron &a,
+                        const HepPolyhedron &b);
 
   void draw();
   void draw_edge(int, int);
@@ -309,7 +311,7 @@ inline void ExtFace::invert()
   }
   if (inew > 0) inew = iEprev;
 
-  plane = HepPlane3D(-plane.a(), -plane.b(), -plane.c(), -plane.d());
+  plane = Plane3D<double>(-plane.a(), -plane.b(), -plane.c(), -plane.d());
 }
 
 void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
@@ -333,7 +335,7 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
   //    nodes.push_back(ExtNode(p.GetVertex(i)));
   //  }
 
-  HepPoint3D ppp;	
+  Point3D<double> ppp;        
   for (i=1; i <= p.GetNoVertices(); i++) {  
     ppp = p.GetVertex(i);
     ppp.setX(ppp.x()+dx);
@@ -364,7 +366,7 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
     for (i=0; i<nnode; i++) {
       faces.back().iedges[i] = edges.size();
       edges.push_back(ExtEdge(iNodes[i], iNodes[i+1],
-			      iface+dface, iFaces[i], iVis[i]));
+                              iface+dface, iFaces[i], iVis[i]));
       edges.back().inext     = edges.size();
     }
     edges.back().inext = 0;
@@ -377,22 +379,22 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
     }
     for (i=1; i<nnode; i++) {
       for (k=0; k<3; k++) {
-	if (faces.back().rmin[k] > nodes[iNodes[i]].v[k])
-	    faces.back().rmin[k] = nodes[iNodes[i]].v[k];
-	if (faces.back().rmax[k] < nodes[iNodes[i]].v[k])
-	    faces.back().rmax[k] = nodes[iNodes[i]].v[k];
+        if (faces.back().rmin[k] > nodes[iNodes[i]].v[k])
+            faces.back().rmin[k] = nodes[iNodes[i]].v[k];
+        if (faces.back().rmax[k] < nodes[iNodes[i]].v[k])
+            faces.back().rmax[k] = nodes[iNodes[i]].v[k];
       }
     }
 
     //   S E T   F A C E   P L A N E
 
-    HepNormal3D n = (nodes[iNodes[2]].v-nodes[iNodes[0]].v).cross
+    Normal3D<double> n = (nodes[iNodes[2]].v-nodes[iNodes[0]].v).cross
                     (nodes[iNodes[3]].v-nodes[iNodes[1]].v);
-    HepPoint3D  p(0,0,0);
+    Point3D<double>  p(0,0,0);
     
     for (i=0; i<nnode; i++) { p += nodes[iNodes[i]].v; }
     p *= (1./nnode);
-    faces.back().plane = HepPlane3D(n.unit(), p);
+    faces.back().plane = Plane3D<double>(n.unit(), p);
 
     //   S E T   R E F E R E N C E   T O   T H E   N E X T   F A C E
 
@@ -473,14 +475,14 @@ void BooleanProcessor::selectOutsideFaces(int & ifaces, int & iout)
  ***********************************************************************/
 {
   int i, outflag, iface = ifaces, *prev;
-  HepPoint3D mmbox[8] = { HepPoint3D(rmin[0],rmin[1],rmin[2]),
-			  HepPoint3D(rmax[0],rmin[1],rmin[2]),
-			  HepPoint3D(rmin[0],rmax[1],rmin[2]),
-			  HepPoint3D(rmax[0],rmax[1],rmin[2]),
-			  HepPoint3D(rmin[0],rmin[1],rmax[2]),
-			  HepPoint3D(rmax[0],rmin[1],rmax[2]),
-			  HepPoint3D(rmin[0],rmax[1],rmax[2]),
-			  HepPoint3D(rmax[0],rmax[1],rmax[2]) };
+  Point3D<double> mmbox[8] = { Point3D<double>(rmin[0],rmin[1],rmin[2]),
+                               Point3D<double>(rmax[0],rmin[1],rmin[2]),
+                               Point3D<double>(rmin[0],rmax[1],rmin[2]),
+                               Point3D<double>(rmax[0],rmax[1],rmin[2]),
+                               Point3D<double>(rmin[0],rmin[1],rmax[2]),
+                               Point3D<double>(rmax[0],rmin[1],rmax[2]),
+                               Point3D<double>(rmin[0],rmax[1],rmax[2]),
+                               Point3D<double>(rmax[0],rmax[1],rmax[2]) };
   prev = &ifaces;
   while (iface > 0) {
 
@@ -498,9 +500,9 @@ void BooleanProcessor::selectOutsideFaces(int & ifaces, int & iout)
       int npos = 0, nneg = 0;
       double d;
       for (i=0; i<8; i++) {
-	d = faces[iface].plane.distance(mmbox[i]);
-	if (d > +del) npos++;
-	if (d < -del) nneg++;
+        d = faces[iface].plane.distance(mmbox[i]);
+        if (d > +del) npos++;
+        if (d < -del) nneg++;
       }
       if (npos == 8 || nneg == 8) outflag = 1;
     }
@@ -529,7 +531,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
  ***********************************************************************/
 {
   int        iface = edge.iface1;
-  HepPlane3D plane = faces[edge.iface2].plane;
+  Plane3D<double> plane = faces[edge.iface2].plane;
   int        i, nnode, npos = 0, nneg = 0, nzer = 0;
   double     dd[5];
 
@@ -594,22 +596,22 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
     for (i=0; i<2; i++) {
       iedge = faces[iface].iedges[ii[i]];
       while (iedge > 0) {
-	i1 = edges[iedge].i1;
-	i2 = edges[iedge].i2;
-	d1 = plane.distance(nodes[i1].v);
-	d2 = plane.distance(nodes[i2].v);
-	if (d1 > del) {
-	  if (d2 < -del) { ii[i] = nodes.size(); break; } // +-
-	}else if (d1 < -del) {
-	  if (d2 >  del) { ii[i] = nodes.size(); break; } // -+
-	}else{ 
-	  ii[i] = i1; break;                              // 0+ or 0-
-	}
-	iedge = edges[iedge].inext;
+        i1 = edges[iedge].i1;
+        i2 = edges[iedge].i2;
+        d1 = plane.distance(nodes[i1].v);
+        d2 = plane.distance(nodes[i2].v);
+        if (d1 > del) {
+          if (d2 < -del) { ii[i] = nodes.size(); break; } // +-
+        }else if (d1 < -del) {
+          if (d2 >  del) { ii[i] = nodes.size(); break; } // -+
+        }else{ 
+          ii[i] = i1; break;                              // 0+ or 0-
+        }
+        iedge = edges[iedge].inext;
       }
       if (ii[i] == nodes.size()) {
-	dd = d2-d1; d1 = d1/dd; d2 = d2/dd;
-	nodes.push_back(ExtNode(d2*nodes[i1].v-d1*nodes[i2].v, iedge));
+        dd = d2-d1; d1 = d1/dd; d2 = d2/dd;
+        nodes.push_back(ExtNode(d2*nodes[i1].v-d1*nodes[i2].v, iedge));
       }  
     }
     edge.inext = 0;
@@ -729,7 +731,7 @@ void BooleanProcessor::divideEdge(int & i1, int & i2)
     ie2 = faces[edges[ie1].iface2].iedges[0];
     while (ie2 > 0) {
       if (edges[ie2].i1 == edges[ie1].i2 &&
-	  edges[ie2].i2 == edges[ie1].i1) break;
+          edges[ie2].i2 == edges[ie1].i1) break;
       ie2 = edges[ie2].inext;
     }
 
@@ -942,30 +944,30 @@ void BooleanProcessor::assembleFace(int what, int iface)
     for (;;) {
       i = &faces[iface].inew;
       while(*i > 0) {
-	if (edges[*i].i1 == edges[icur].i2) break;
-	i = &edges[*i].inext;
+        if (edges[*i].i1 == edges[icur].i2) break;
+        i = &edges[*i].inext;
       }
       if (*i == 0) {
-	i = &faces[iface].iold;
-	while(*i > 0) {
-	  if (edges[*i].i1 == edges[icur].i2) ioldflag = 1;
-	  if (edges[*i].i1 == edges[icur].i2) break;
-	  i = &edges[*i].inext;
-	}
+        i = &faces[iface].iold;
+        while(*i > 0) {
+          if (edges[*i].i1 == edges[icur].i2) ioldflag = 1;
+          if (edges[*i].i1 == edges[icur].i2) break;
+          i = &edges[*i].inext;
+        }
       }
       if (*i > 0) {
-	icur = *i;
-	*i = edges[icur].inext;
-	INSERT_EDGE_TO_THE_LIST(icur);
-	if (edges[icur].i2 == ifirst) { break; } else { continue; }
+        icur = *i;
+        *i = edges[icur].inext;
+        INSERT_EDGE_TO_THE_LIST(icur);
+        if (edges[icur].i2 == ifirst) { break; } else { continue; }
       }else{
-	processor_error = 1;
-	std::cerr
-	  << "BooleanProcessor::assembleFace(" << iface << ") : "
-	  << "could not find next edge of the contour"
-	  << std::endl;
-	faces[iface].inew = DEFECTIVE_FACE;
-	return;
+        processor_error = 1;
+        std::cerr
+          << "BooleanProcessor::assembleFace(" << iface << ") : "
+          << "could not find next edge of the contour"
+          << std::endl;
+        faces[iface].inew = DEFECTIVE_FACE;
+        return;
       }
     }
   }
@@ -977,18 +979,18 @@ void BooleanProcessor::assembleFace(int what, int iface)
   if (what == 0 && ioldflag == 0 && iedge > 0) {
     for (;;) {
       if (edges[iedge].inext > 0) {
-	if (edges[iedge].i2 == edges[edges[iedge].inext].i1) {
-	  iedge = edges[iedge].inext;
-	}else{
-	  break;
-	}
+        if (edges[iedge].i2 == edges[edges[iedge].inext].i1) {
+          iedge = edges[iedge].inext;
+        }else{
+          break;
+        }
       }else{
-	if (edges[iedge].i2 == edges[faces[iface].iold].i1) {
-	  edges[iedge].inext = ihead;   // set new face
-	  return;
-	}else{
-	  break;
-	}
+        if (edges[iedge].i2 == edges[faces[iface].iold].i1) {
+          edges[iedge].inext = ihead;   // set new face
+          return;
+        }else{
+          break;
+        }
       }
     }
   }
@@ -1022,7 +1024,7 @@ void BooleanProcessor::assembleNewFaces(int what, int ihead)
       checkDoubleEdges(iface);
       assembleFace(what, iface);
       faces[iface].inew =
-	(faces[iface].iold == 0) ? UNSUITABLE_FACE : NEW_FACE;
+        (faces[iface].iold == 0) ? UNSUITABLE_FACE : NEW_FACE;
     }
     iface = faces[iface].inext;
   }
@@ -1153,9 +1155,9 @@ void BooleanProcessor::assemblePolyhedra()
     while(iedge > 0) {
       iface = edges[iedge].iface2;
       if (faces[iface].inew == UNKNOWN_FACE) {
-	unknown_faces.remove(iface);
-	suitable_faces.push_back(iface);
-	faces[iface].inew = ORIGINAL_FACE;
+        unknown_faces.remove(iface);
+        suitable_faces.push_back(iface);
+        faces[iface].inew = ORIGINAL_FACE;
       }
       iedge = edges[iedge].inext;
     }
@@ -1174,9 +1176,9 @@ void BooleanProcessor::assemblePolyhedra()
     while(iedge > 0) {
       iface = edges[iedge].iface2;
       if (faces[iface].inew == UNKNOWN_FACE) {
-	unknown_faces.remove(iface);
-	unsuitable_faces.push_back(iface);
-	faces[iface].inew = UNSUITABLE_FACE;
+        unknown_faces.remove(iface);
+        unsuitable_faces.push_back(iface);
+        faces[iface].inew = UNSUITABLE_FACE;
       }
       iedge = edges[iedge].inext;
     }
@@ -1187,7 +1189,7 @@ void BooleanProcessor::assemblePolyhedra()
 
 inline void
 BooleanProcessor::findABC(double x1, double y1, double x2, double y2,
-			  double &a, double &b, double &c) const
+                          double &a, double &b, double &c) const
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::findABC                   Date:    07.03.00 *
@@ -1358,34 +1360,34 @@ void BooleanProcessor::mergeContours(int ix, int iy, int kext, int kint)
       k[4] = edges[i1int].i2;
       k[5] = edges[i2int].i2; 
       for (i=3; i<6; i++) {
-	x[i] = nodes[k[i]].v[ix];
-	y[i] = nodes[k[i]].v[iy];
+        x[i] = nodes[k[i]].v[ix];
+        y[i] = nodes[k[i]].v[iy];
       }
 
       //   T E S T   L I N E   K1 - K4
       //   I F   O K   T H E N   M E R G E   C O N T O U R S
 
       if (checkDirection(x, y) == 0) {
-	if (checkIntersection(ix, iy, k[1], k[4]) == 0) {
-	  i = i1int;
-	  for(;;) {
-	    if (edges[i].inext == 0) {
-	      edges[i].inext = internal_contours[kint];
-	      internal_contours[kint] = 0;
-	      break;
-	    }else{
-	      i = edges[i].inext;
-	    }
-	  }
-	  i = edges[i1int].iface1;
-	  edges.push_back(ExtEdge(k[1], k[4], i, -(edges.size()+1), -1));
-	  edges.back().inext = i2int;
-	  edges.push_back(ExtEdge(k[4], k[1], i, -(edges.size()-1), -1));
-	  edges.back().inext = edges[i1ext].inext;
-	  edges[i1ext].inext = edges.size()-2;
-	  edges[i1int].inext = edges.size()-1;
-	  return;
-	}
+        if (checkIntersection(ix, iy, k[1], k[4]) == 0) {
+          i = i1int;
+          for(;;) {
+            if (edges[i].inext == 0) {
+              edges[i].inext = internal_contours[kint];
+              internal_contours[kint] = 0;
+              break;
+            }else{
+              i = edges[i].inext;
+            }
+          }
+          i = edges[i1int].iface1;
+          edges.push_back(ExtEdge(k[1], k[4], i, -(edges.size()+1), -1));
+          edges.back().inext = i2int;
+          edges.push_back(ExtEdge(k[4], k[1], i, -(edges.size()-1), -1));
+          edges.back().inext = edges[i1ext].inext;
+          edges[i1ext].inext = edges.size()-2;
+          edges[i1int].inext = edges.size()-1;
+          return;
+        }
       }
       i1int = edges[i1int].inext;
     }
@@ -1482,25 +1484,25 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     if (istart == 0) {
       istart = iedge1;
       if (nnode <= 3) {
-	iedge3 = edges[iedge2].inext;
-	edges[iedge1].iface1 = faces.size();
-	edges[iedge2].iface1 = faces.size();
-	edges[iedge3].iface1 = faces.size();
-	edges[iedge3].inext = 0;
-	faces.push_back(ExtFace());
-	faces.back().iold = iedge1;
-	faces.back().inew = ORIGINAL_FACE;
+        iedge3 = edges[iedge2].inext;
+        edges[iedge1].iface1 = faces.size();
+        edges[iedge2].iface1 = faces.size();
+        edges[iedge3].iface1 = faces.size();
+        edges[iedge3].inext = 0;
+        faces.push_back(ExtFace());
+        faces.back().iold = iedge1;
+        faces.back().inew = ORIGINAL_FACE;
 
   //if (draw_flag) draw_contour(4, 2, iedge1);
 
-	break;
+        break;
       }
     }else if (istart == iedge1) {
       processor_error = 1;
       std::cerr
-	<< "BooleanProcessor::triangulateContour : "
-	<< "could not generate a triangle (infinite loop)"
-	<< std::endl;
+        << "BooleanProcessor::triangulateContour : "
+        << "could not generate a triangle (infinite loop)"
+        << std::endl;
       break;
     }
 
@@ -1579,7 +1581,7 @@ void BooleanProcessor::triangulateFace(int iface)
   //   F I N D   M A X   C O M P O N E N T   O F   T H E   N O R M A L
   //   S E T  IX, IY, IZ
 
-  HepNormal3D normal = faces[iface].plane.normal();
+  Normal3D<double> normal = faces[iface].plane.normal();
   int ix, iy, iz = 0;
   if (std::abs(normal[1]) > std::abs(normal[iz])) iz = 1;
   if (std::abs(normal[2]) > std::abs(normal[iz])) iz = 2;
@@ -1601,34 +1603,34 @@ void BooleanProcessor::triangulateFace(int iface)
     z      = 0.0;
     for(;;) {
       if (iedge > 0) { 
-	i1 = edges[iedge].i1;
-	i2 = edges[iedge].i2;
-	z += nodes[i1].v[ix]*nodes[i2].v[iy]-nodes[i2].v[ix]*nodes[i1].v[iy];
-	if (ifirst != i2) {
-	  iedge = edges[iedge].inext;
-	  continue;
-	}else{
-	  if (z > del*del) {
-	    external_contours.push_back(icontour);
-	  }else if (z < -del*del) {
-	    internal_contours.push_back(icontour);
-	  }else{  
-	    processor_error = 1;
-	    std::cerr
-	      << "BooleanProcessor::triangulateFace : too small contour"
-	      << std::endl;
-	  }
-	  icontour = edges[iedge].inext;
-	  edges[iedge].inext = 0;
-	  break;
-	}
+        i1 = edges[iedge].i1;
+        i2 = edges[iedge].i2;
+        z += nodes[i1].v[ix]*nodes[i2].v[iy]-nodes[i2].v[ix]*nodes[i1].v[iy];
+        if (ifirst != i2) {
+          iedge = edges[iedge].inext;
+          continue;
+        }else{
+          if (z > del*del) {
+            external_contours.push_back(icontour);
+          }else if (z < -del*del) {
+            internal_contours.push_back(icontour);
+          }else{  
+            processor_error = 1;
+            std::cerr
+              << "BooleanProcessor::triangulateFace : too small contour"
+              << std::endl;
+          }
+          icontour = edges[iedge].inext;
+          edges[iedge].inext = 0;
+          break;
+        }
       }else{
-	processor_error = 1;
-	std::cerr
-	  << "BooleanProcessor::triangulateFace : broken contour"
-	  << std::endl;
-	icontour = 0;
-	break;
+        processor_error = 1;
+        std::cerr
+          << "BooleanProcessor::triangulateFace : broken contour"
+          << std::endl;
+        icontour = 0;
+        break;
       }
     }
   }
@@ -1644,9 +1646,9 @@ void BooleanProcessor::triangulateFace(int iface)
     if (kext == external_contours.size()) {
       processor_error = 1;
       std::cerr
-	<< "BooleanProcessor::triangulateFace : "
-	<< "could not merge internal contour " << kint 
-	<< std::endl;
+        << "BooleanProcessor::triangulateFace : "
+        << "could not merge internal contour " << kint 
+        << std::endl;
     }      
   }
 
@@ -1664,16 +1666,16 @@ void BooleanProcessor::triangulateFace(int iface)
     iedge = faces[ifa].iold;
     while (iedge > 0) {
       if (edges[iedge].iface1 != ifa) {
-	processor_error = 1;
-	std::cerr
-	  << "BooleanProcessor::triangulateFace : wrong reference to itself, "
-	  << "iface=" << ifa << ", iface1=" << edges[iedge].iface1
-	  << std::endl;
+        processor_error = 1;
+        std::cerr
+          << "BooleanProcessor::triangulateFace : wrong reference to itself, "
+          << "iface=" << ifa << ", iface1=" << edges[iedge].iface1
+          << std::endl;
       }else if (edges[iedge].iface2 > 0) {
-	modifyReference(edges[iedge].iface2,
-			edges[iedge].i1, edges[iedge].i2, ifa);
+        modifyReference(edges[iedge].iface2,
+                        edges[iedge].i1, edges[iedge].i2, ifa);
       }else if (edges[iedge].iface2 < 0) {
-	edges[iedge].iface2 = edges[-edges[iedge].iface2].iface1;
+        edges[iedge].iface2 = edges[-edges[iedge].iface2].iface1;
       }
       iedge = edges[iedge].inext;
     }
@@ -1701,8 +1703,8 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
       faces[i].inew = ++nface;
       iedge = faces[i].iold;
       while (iedge > 0) {
-	nodes[edges[iedge].i1].s = 1;
-	iedge = edges[iedge].inext;
+        nodes[edges[iedge].i1].s = 1;
+        iedge = edges[iedge].inext;
       }
     }else{
       faces[i].inew = 0;
@@ -1734,10 +1736,10 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     iedge = faces[i].iold;
     while (iedge > 0) {
       if (k > 3) {
-	std::cerr
-	  << "BooleanProcessor::createPolyhedron : too many edges"
-	  << std::endl;
-	break;
+        std::cerr
+          << "BooleanProcessor::createPolyhedron : too many edges"
+          << std::endl;
+        break;
       }
       v[k]  = nodes[edges[iedge].i1].s;
       if (edges[iedge].ivis < 0) v[k] = -v[k];
@@ -1747,9 +1749,9 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     }
     if (k < 3) {
       std::cerr
-	<< "BooleanProcessor::createPolyhedron : "
-	<< "face has only " << k << " edges"
-	<< std::endl;
+        << "BooleanProcessor::createPolyhedron : "
+        << "face has only " << k << " edges"
+        << std::endl;
     }
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]);
@@ -1758,8 +1760,8 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
 }
 
 HepPolyhedron BooleanProcessor::execute(int op,
-					const HepPolyhedron & a,
-					const HepPolyhedron & b)
+                                        const HepPolyhedron & a,
+                                        const HepPolyhedron & b)
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::execute                   Date:    10.12.99 *
@@ -1779,7 +1781,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
     {  17,  31, -23},
     {  31, -23,  17},
     { -31,  23, -17}
-  }; 	  
+  };           
 
   //   I N I T I A T E   P R O C E S S O R
 
@@ -1806,13 +1808,13 @@ HepPolyhedron BooleanProcessor::execute(int op,
       return b;
     case OP_INTERSECTION:
       std::cerr 
-	<< "BooleanProcessor: intersection with empty polyhedron"
-	<< std::endl;
+        << "BooleanProcessor: intersection with empty polyhedron"
+        << std::endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
       std::cerr
-	<< "BooleanProcessor: subtraction from empty polyhedron"
-	<< std::endl;
+        << "BooleanProcessor: subtraction from empty polyhedron"
+        << std::endl;
       return HepPolyhedron();
     }
   }
@@ -1822,8 +1824,8 @@ HepPolyhedron BooleanProcessor::execute(int op,
       return a;
     case OP_INTERSECTION:
       std::cerr
-	<< "BooleanProcessor: intersection with empty polyhedron"
-	<< std::endl;
+        << "BooleanProcessor: intersection with empty polyhedron"
+        << std::endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
       return a;
@@ -1835,7 +1837,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
   del = findMinMax();
 
   //   W O R K A R O U N D   T O   A V O I D   I E   A N D   E E
-  	
+          
   double ddxx = del*shift[ishift][0];
   double ddyy = del*shift[ishift][1];
   double ddzz = del*shift[ishift][2];
@@ -1883,8 +1885,8 @@ return a;
     while (ifa1 > 0) {
       ifa2 = ifaces2;
       while (ifa2 > 0) {
-	testFaceVsFace(ifa1, ifa2);
-	ifa2 = faces[ifa2].inext;
+        testFaceVsFace(ifa1, ifa2);
+        ifa2 = faces[ifa2].inext;
       }
       ifa1 = faces[ifa1].inext;
     }
@@ -1906,8 +1908,8 @@ return a;
     if (unknown_faces.front() != 0) {
       processor_error = 1;
       std::cerr
-	<< "BooleanProcessor::execute : unknown faces !!!"
-	<< std::endl;
+        << "BooleanProcessor::execute : unknown faces !!!"
+        << std::endl;
     }
     break;
   }
@@ -1971,25 +1973,25 @@ return a;
 
       while (iedge > 0) {
 
-	cout << "  iegde = " << iedge
-	     << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
-	     << " iface1,iface2 = "
-	     << edges[iedge].iface1 << "," << edges[iedge].iface2
-	     << endl;
+        cout << "  iegde = " << iedge
+             << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
+             << " iface1,iface2 = "
+             << edges[iedge].iface1 << "," << edges[iedge].iface2
+             << endl;
 
-	i1 = edges[iedge].i1;
-	p1[0] = nodes[i1].v.x();
-	p1[1] = nodes[i1].v.y();
-	p1[2] = nodes[i1].v.z();
-	IHWTON(p1,p1);
-	i2 = edges[iedge].i2;
-	p2[0] = nodes[i2].v.x();
-	p2[1] = nodes[i2].v.y();
-	p2[2] = nodes[i2].v.z();
-	IHWTON(p2,p2);
+        i1 = edges[iedge].i1;
+        p1[0] = nodes[i1].v.x();
+        p1[1] = nodes[i1].v.y();
+        p1[2] = nodes[i1].v.z();
+        IHWTON(p1,p1);
+        i2 = edges[iedge].i2;
+        p2[0] = nodes[i2].v.x();
+        p2[1] = nodes[i2].v.y();
+        p2[2] = nodes[i2].v.z();
+        IHWTON(p2,p2);
 //        icol =  (edges[iedge].ivis > 0) ? 1 : 2;
-	IHZLIN(icol,p1[0],p1[1],p1[2], p2[0],p2[1],p2[2]);
-	iedge = edges[iedge].inext;
+        IHZLIN(icol,p1[0],p1[1],p1[2], p2[0],p2[1],p2[2]);
+        iedge = edges[iedge].inext;
       }
       
       cout << "--- inew" << endl;
@@ -1999,25 +2001,25 @@ return a;
 
       while (iedge > 0) {
 
-	cout << "  iegde = " << iedge
-	     << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
-	     << " iface1,iface2 = "
-	     << edges[iedge].iface1 << "," << edges[iedge].iface2
-	     << endl;
+        cout << "  iegde = " << iedge
+             << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
+             << " iface1,iface2 = "
+             << edges[iedge].iface1 << "," << edges[iedge].iface2
+             << endl;
 
-	i1 = edges[iedge].i1;
-	p1[0] = nodes[i1].v.x();
-	p1[1] = nodes[i1].v.y();
-	p1[2] = nodes[i1].v.z();
-	IHWTON(p1,p1);
-	i2 = edges[iedge].i2;
-	p2[0] = nodes[i2].v.x();
-	p2[1] = nodes[i2].v.y();
-	p2[2] = nodes[i2].v.z();
-	IHWTON(p2,p2);
+        i1 = edges[iedge].i1;
+        p1[0] = nodes[i1].v.x();
+        p1[1] = nodes[i1].v.y();
+        p1[2] = nodes[i1].v.z();
+        IHWTON(p1,p1);
+        i2 = edges[iedge].i2;
+        p2[0] = nodes[i2].v.x();
+        p2[1] = nodes[i2].v.y();
+        p2[2] = nodes[i2].v.z();
+        IHWTON(p2,p2);
 //        icol =  (edges[iedge].ivis > 0) ? 1 : 2;
-	IHZLIN(icol,p1[0],p1[1],p1[2], p2[0],p2[1],p2[2]);
-	iedge = edges[iedge].inext;
+        IHZLIN(icol,p1[0],p1[1],p1[2], p2[0],p2[1],p2[2]);
+        iedge = edges[iedge].inext;
       }
       iface = faces[iface].inext;
 
@@ -2026,8 +2028,6 @@ return a;
       cin >> II;
       ixclrwi();
       IHZCLE(0);
-
-
     }
   }
 }

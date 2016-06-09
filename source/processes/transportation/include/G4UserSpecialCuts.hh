@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4UserSpecialCuts.hh,v 1.9 2005/03/07 16:21:41 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class description
 //

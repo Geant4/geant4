@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.8 2004/11/12 17:38:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: templates.hh,v 1.9 2005/12/02 13:42:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // -*- C++ -*-
@@ -48,6 +48,8 @@
 #ifndef templates_h
 #define templates_h 1
 
+#include <limits>
+
 //
 // If HIGH_PRECISION is defined to TRUE (ie. != 0) then the type "Float"
 // is typedefed to "double". If it is FALSE (ie. 0) it is typedefed
@@ -67,39 +69,39 @@ typedef float Float;
 // and temporarly defined for portability on HP-UX.
 
 #ifndef DBL_MIN   /* Min decimal value of a double */
-#define DBL_MIN   2.2250738585072014e-308
+#define DBL_MIN   std::numeric_limits<double>::min()  // 2.2250738585072014e-308
 #endif
 
 #ifndef DBL_DIG   /* Digits of precision of a double */
-#define DBL_DIG   15
+#define DBL_DIG   std::numeric_limits<double>::digits10   // 15
 #endif
 
 #ifndef DBL_MAX   /* Max decimal value of a double */
-#define DBL_MAX   1.7976931348623157e+308
+#define DBL_MAX   std::numeric_limits<double>::max()  // 1.7976931348623157e+308
 #endif
 
 #ifndef DBL_EPSILON
-#define DBL_EPSILON   2.2204460492503131e-16
-#endif
+#define DBL_EPSILON std::numeric_limits<double>::epsilon()
+#endif                                                // 2.2204460492503131e-16
 
 #ifndef FLT_MIN   /* Min decimal value of a float */
-#define FLT_MIN   1.17549435e-38F
+#define FLT_MIN   std::numeric_limits<float>::min()   // 1.17549435e-38F
 #endif
 
 #ifndef FLT_DIG   /* Digits of precision of a float */
-#define FLT_DIG   6
+#define FLT_DIG   std::numeric_limits<float>::digits10     // 6
 #endif
 
 #ifndef FLT_MAX   /* Max decimal value of a float */
-#define FLT_MAX   3.40282347e+38F
+#define FLT_MAX   std::numeric_limits<float>::max()   // 3.40282347e+38F
 #endif
 
 #ifndef FLT_EPSILON
-#define FLT_EPSILON   1.192092896e-07F
-#endif
+#define FLT_EPSILON std::numeric_limits<float>::epsilon()
+#endif                                                // 1.192092896e-07F
 
 #ifndef MAXFLOAT   /* Max decimal value of a float */
-#define MAXFLOAT   3.40282347e+38F
+#define MAXFLOAT  std::numeric_limits<float>::max()   // 3.40282347e+38F
 #endif
 
 //---------------------------------

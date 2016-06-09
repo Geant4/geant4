@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10RunMessenger.cc,v 1.3 2002/12/05 00:24:24 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: Em10RunMessenger.cc,v 1.4 2005/12/06 11:31:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -380,8 +380,8 @@ void Em10RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 		 
   if (command == RndmReadCmd)
     { G4cout << "\n---> rndm status restored from file: " << newValues << G4endl;
-      HepRandom::restoreEngineStatus(newValues);
-      HepRandom::showEngineStatus();
+      CLHEP::HepRandom::restoreEngineStatus(newValues);
+      CLHEP::HepRandom::showEngineStatus();
     }   
 }
 

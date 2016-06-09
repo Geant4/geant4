@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.58 2005/05/27 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LossTableManager.cc,v 1.61 2005/10/27 15:05:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -179,7 +179,7 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   tables_are_built.push_back(false);
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
-  if(subCutoffFlag)        p->SetSubCutoff(true);
+  if(subCutoffFlag)        p->ActivateSubCutoff(true);
   if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
@@ -488,11 +488,11 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {
-    G4PhysicsTable* lambdaTable = loss_list[j]->BuildLambdaTable();
-    loss_list[j]->SetLambdaTable(lambdaTable);
-    if (0 < loss_list[j]->NumberOfSubCutoffRegions()) {
-      lambdaTable = loss_list[j]->BuildLambdaSubTable();
-      loss_list[j]->SetSubLambdaTable(lambdaTable);
+    G4VEnergyLossProcess* p = loss_list[j];
+    p->SetLambdaTable(p->BuildLambdaTable());
+    if (0 < p->NumberOfSubCutoffRegions()) {
+      p->SetSubLambdaTable(p->BuildLambdaSubTable());
+      if( p != em) em->AddCollaborativeProcess(p);
     }
   }
   if (1 < verbose) {
@@ -520,7 +520,7 @@ void G4LossTableManager::SetSubCutoff(G4bool val)
 {
   subCutoffFlag = val;
   for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetSubCutoff(val);
+    if(loss_vector[i]) loss_vector[i]->ActivateSubCutoff(val);
   }
 }
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsdetu.cc,v 1.5 2003/04/03 11:30:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G3toG4.hh"
 

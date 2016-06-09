@@ -19,42 +19,30 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: HadrontherapyParticles.cc; May 2005
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
-// $Id: RemSimParticles.cc,v 1.4 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
-//
-// Author:Susanna Guatelli, guatelli@ge.infn.it 
-//
-
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
 #include "RemSimParticles.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Proton.hh"
-#include "G4Alpha.hh"
-#include "G4IonO16.hh"
-#include "G4IonC12.hh"
-#include "G4IonSi28.hh"
-#include "G4IonFe52.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4BosonConstructor.hh"
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4TauMinus.hh"
-#include "G4TauPlus.hh"
-#include "G4NeutrinoTau.hh"
-#include "G4AntiNeutrinoTau.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
+
 RemSimParticles::RemSimParticles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
@@ -64,47 +52,26 @@ RemSimParticles::~RemSimParticles()
 
 void RemSimParticles::ConstructParticle()
 {
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4Proton :: ProtonDefinition();
-  G4Alpha :: AlphaDefinition();
-  G4IonO16::IonO16Definition();  
-  G4IonC12::IonC12Definition();
-  G4IonSi28::IonSi28Definition();
-  G4IonFe52::IonFe52Definition();
-
-// Mu
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-
-// Tau
-  G4TauMinus::TauMinusDefinition();
-  G4TauPlus::TauPlusDefinition();
-  G4NeutrinoTau::NeutrinoTauDefinition();
-  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition(); 
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4LeptonConstructor lepton;
+  lepton.ConstructParticle();
  
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition(); 
+  G4BosonConstructor boson;
+  boson.ConstructParticle();
 
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
- 
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
+  G4MesonConstructor meson;
+  meson.ConstructParticle();
 
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
 
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle(); 
+  G4ShortLivedConstructor shortLived;
+  shortLived.ConstructParticle();
+  // ******//
+  //  ions //
+  // ******//
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
 }

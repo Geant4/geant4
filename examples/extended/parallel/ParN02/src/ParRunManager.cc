@@ -24,8 +24,6 @@
 
 #include "G4Timer.hh"
 
-
-
 #include "G4RunManager.hh"
 
 #include "Randomize.hh"
@@ -53,7 +51,10 @@
 #include "MarshaledG4HCofThisEvent.h"
 
 #include "G4ios.hh"
-#include <strstream>
+
+#include <sstream> // Geant4 8.x and beyond
+
+using namespace CLHEP;
 
 /*
  * The TopC call backs are implemented by using the 5 static data members to store
@@ -80,6 +81,7 @@ TOPC_ACTION ParRunManager::MyCheckEventResult( void * input_buf, void *buf ) {
 
 static void trace_event_input( void *input ) { 
   //G4cout << "Event " << *(G4int *)input << G4endl; 
+  input = NULL; // Stop C++ from complaining about unused parameter
 }
 
 /*
@@ -98,17 +100,19 @@ void ParRunManager::DoEventLoop( G4int n_event, const char* macroFile, G4int n_s
   return;
 #endif
 
-  if ( verboseLevel > 0 ) { timer->Start(); }
- 
+  if(verboseLevel>0)
+  { timer->Start(); }
 
   G4String msg;
-  if ( macroFile != 0 ) { 
-    if ( n_select < 0 ) n_select = n_event;
+  if(macroFile!=0)
+  {
+    if(n_select<0) n_select = n_event;
     msg = "/control/execute ";
     msg += macroFile;
-  } else { 
-    n_select = -1; 
   }
+  else
+  { n_select = -1; }
+
 
   // BeginOfEventAction() and EndOfEventAction() would normally be
   // called inside G4EventManager::ProcessOneEvent() in ParRunManager::DoEvent
@@ -176,8 +180,8 @@ TOPC_BUF ParRunManager::DoEvent( void *input_buf )
   // removed for Geant4.6
   //  stateManager->SetNewState(G4State_EventProc);
 
-  currentEvent = GenerateEvent( i_event );
-  eventManager->ProcessOneEvent( currentEvent );
+  currentEvent = GenerateEvent(i_event);
+  eventManager->ProcessOneEvent(currentEvent);
 
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
 
@@ -199,7 +203,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
 
   // removed for Geant4.6
   //stateManager->SetNewState(G4State_EventProc);
-  // Geant4.6 requires the state to be G4State_GeomClosed
+  // Geant4 6.0 requires the state to be G4State_GeomClosed
   // before calling EventManager::ProcessOneEvent(..)
 
   if ( !userPrimaryGeneratorAction )
@@ -235,11 +239,12 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   if ( origUserEventAction )
     origUserEventAction->EndOfEventAction( currentEvent );
 
-  AnalyzeEvent( currentEvent );
+  AnalyzeEvent(currentEvent);
 
-  if ( i_event < n_select ) G4UImanager::GetUIpointer()->ApplyCommand( msg );
+  if (i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
+  // Geant4 6.0 requires the state to be G4State_GeomClosed
   stateManager->SetNewState( G4State_GeomClosed );
-  StackPreviousEvent( currentEvent );
+  StackPreviousEvent(currentEvent);
   currentEvent = 0;
   return NO_ACTION;
 }

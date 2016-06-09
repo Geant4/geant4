@@ -34,20 +34,27 @@
 
 void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 {
-   char the[100] = {""};
-   std::ostrstream ost(the, 100, std::ios::out);
+  //   char the[100] = {""};
+  //   std::ostrstream ost(the, 100, std::ios::out);
+  //   ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
+  //   G4String * aName = new G4String(the);
+  //   std::ifstream from(*aName, std::ios::in);
+
+   std::ostringstream ost;
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
-   G4String * aName = new G4String(the);
-   std::ifstream from(*aName, std::ios::in);
+   G4String aName = ost.str();
+   std::ifstream from(aName, std::ios::in);
+
    if(!from) return; // no data found for this isotope
-   std::ifstream theGammaData(*aName, std::ios::in);
+   //   std::ifstream theGammaData(*aName, std::ios::in);
+   std::ifstream theGammaData(aName, std::ios::in);
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
        G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
        G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
    theGammas.Init(theGammaData);
-   delete aName;
+   //   delete aName;
 }
 
 void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirName, G4String & bit)

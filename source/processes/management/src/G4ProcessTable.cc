@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProcessTable.cc,v 1.11 2004/06/12 13:07:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------

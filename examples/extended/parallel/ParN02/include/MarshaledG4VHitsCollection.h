@@ -222,8 +222,8 @@ void marshal3() {
 
     //Now just copy "get" functions here
     {
-		G4THitsCollection<ExN02TrackerHit> *aObj100 = (G4THitsCollection<ExN02TrackerHit>*)param;
-		MarshaledG4THitsCollection<ExN02TrackerHit> marChild(aObj100);
+		G4THitsCollection<ExN02TrackerHit> *aObj293 = (G4THitsCollection<ExN02TrackerHit>*)param;
+		MarshaledG4THitsCollection<ExN02TrackerHit> marChild(aObj293);
 		EXTEND_BUFFER(marChild.getBufferSize());
 		memcpy(msh_cursor,marChild.getBuffer(), marChild.getBufferSize());
 		msh_currentSize = marChild.getBufferSize();

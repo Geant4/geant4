@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.2 2003/11/02 16:06:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PVReplica.hh,v 1.4 2005/11/11 22:39:00 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4PVReplica
@@ -94,6 +94,11 @@ class G4PVReplica : public G4VPhysicalVolume
                 const G4double width,
                 const G4double offset=0);
 
+    G4PVReplica(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   public:  // with description
 
     virtual ~G4PVReplica();
@@ -112,6 +117,16 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const;
 
+    // Methods for specialised geometries
+    G4bool  IsRegularStructure()   const; 
+    G4int  GetRegularStructureId() const;
+      // return values
+    virtual void SetRegularStructureId( G4int Code ); 
+      // This method must set a unique code for each type
+      //  of regular structure.
+      //  - It must be called only during detector construction.
+      //  - It can also be used to prepare a/any corresponding 
+      //    special navigation 'conditions'.
  private:
 
     void CheckAndSetParameters(
@@ -123,6 +138,9 @@ class G4PVReplica : public G4VPhysicalVolume
     G4PVReplica(const G4PVReplica&);
     const G4PVReplica& operator=(const G4PVReplica&);
 
+ private:
+    G4int fRegularStructureCode; 
+
  protected:
 
     EAxis faxis;
@@ -130,6 +148,10 @@ class G4PVReplica : public G4VPhysicalVolume
     G4double fwidth,foffset;
     
     G4int    fcopyNo;
-};
+
+  private:
+    G4int fRegularVolsId; 
+
+ };
 
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.7 2002/10/29 16:17:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonisParamMat.hh,v 1.8 2005/11/09 15:38:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 // class description
@@ -91,6 +91,11 @@ public:  // without description
     const G4IonisParamMat& operator=(const G4IonisParamMat&);          
     G4int operator==(const G4IonisParamMat&) const;
     G4int operator!=(const G4IonisParamMat&) const;
+
+    G4IonisParamMat(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
 private:
     

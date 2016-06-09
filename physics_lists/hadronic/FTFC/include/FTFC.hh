@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: FTFC.hh,v 1.3 2005/12/05 12:55:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 05.12.2005 V.Ivanchenko add controlled verbosity
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TTFTFC_h
 #define TTFTFC_h 1
 
@@ -31,7 +45,7 @@ template<class T>
 class TFTFC: public T
 {
 public:
-  TFTFC();
+  TFTFC(G4int ver = 1);
   virtual ~TFTFC();
   
 public:

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.11 2003/10/13 10:49:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EnergyLossMessenger.cc,v 1.12 2005/11/11 23:28:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
@@ -41,7 +41,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-#include <strstream>
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -172,11 +172,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == StepFuncCmd)
    {
      G4double v1,v2;
-     char unts[30];
-     const char* t = newValue;
-     std::istrstream is((char*)t);
-     is >> v1 >> v2 >> unts;
-     G4String unt = unts;
+     G4String unt;
+     std::istringstream is(newValue);
+     is >> v1 >> v2 >> unt;
      v2 *= G4UIcommand::ValueOf(unt);
      G4VEnergyLoss::SetStepFunction(v1,v2);
      lossTables->SetStepLimits(v1,v2);

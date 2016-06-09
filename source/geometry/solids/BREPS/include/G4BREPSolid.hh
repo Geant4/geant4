@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.14 2004/10/10 10:56:31 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolid.hh,v 1.15 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid
@@ -161,6 +161,13 @@ public:
 
   virtual void Reset() const;
     // Resets all distance attributes.
+
+public:  // without description
+
+  G4BREPSolid(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
 protected:
  

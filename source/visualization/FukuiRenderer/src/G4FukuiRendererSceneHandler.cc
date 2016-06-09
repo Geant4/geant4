@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.11 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.12 2005/10/13 17:19:55 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996
@@ -40,7 +40,6 @@
 
      //----- header files
 #include <fstream>
-//#include <strstream.h>
 #include <string.h>
 #include "globals.hh"
 #include "G4FRConst.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.hh,v 1.4 2001/07/11 10:09:02 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RayTracerViewer.hh,v 1.5 2005/07/17 13:59:24 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // John Allison  17th March 2000
 
@@ -38,7 +38,7 @@ public:
   void SetView();
   void ClearView();
   void DrawView();
-private:
+protected:
   G4int fFileCount;
 };
 

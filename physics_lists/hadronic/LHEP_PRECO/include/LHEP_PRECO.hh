@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: LHEP_PRECO.hh,v 1.3 2005/12/05 18:25:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_PRECO
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 #ifndef TLHEP_PRECO_h
 #define TLHEP_PRECO_h 1
 
@@ -31,7 +44,7 @@ template<class T>
 class TLHEP_PRECO: public T
 {
 public:
-  TLHEP_PRECO();
+  TLHEP_PRECO(G4int ver = 1);
   virtual ~TLHEP_PRECO();
   
 public:

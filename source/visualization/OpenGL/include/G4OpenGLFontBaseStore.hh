@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4OpenGLFontBaseStore.hh,v 1.2 2005/05/27 10:56:06 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // J.Allison  Apr 2005.
 

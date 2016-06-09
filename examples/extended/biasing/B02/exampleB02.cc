@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.17 2004/12/08 19:18:45 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: exampleB02.cc,v 1.19 2005/12/09 16:38:18 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -93,7 +93,7 @@ int main(int , char **)
 
   G4long myseed = 345354;
 
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   G4RunManager *runManager = new G4RunManager;
   
@@ -163,11 +163,11 @@ int main(int , char **)
 
   G4CellStoreScorer scorer(b02store); 
 
-  G4ParallelGeometrySampler mgs(pdet->GetWorldVolume(),
+  G4ParallelGeometrySampler pgs(pdet->GetWorldVolume(),
 				"neutron");
-  mgs.PrepareScoring(&scorer);
-  mgs.PrepareImportanceSampling(&aIstore, 0);
-  mgs.Configure();
+  pgs.PrepareScoring(&scorer);
+  pgs.PrepareImportanceSampling(&aIstore, 0);
+  pgs.Configure();
 
   runManager->BeamOn(numberOfEvent);
 
@@ -183,6 +183,9 @@ int main(int , char **)
   delete tf;
   delete tree;
 
+  pgs.ClearSampling();
+
+  delete runManager;
  
   return 0;
 }

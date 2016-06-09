@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.56 2005/04/08 12:39:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4hIonisation.cc,v 1.61 2005/10/02 16:38:11 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -31,7 +31,7 @@
 // File name:     G4hIonisation
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1997
 //
 // Modifications:
@@ -69,6 +69,7 @@
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 24-03-05 Optimize internal interfaces (V.Ivantchenko)
+// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 //
 // -------------------------------------------------------------------
 //
@@ -140,7 +141,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
-  SetStepLimits(0.2, 1.0*mm);
+  SetStepLimits(0.2, 1*mm);
+  SetIntegral(true);
 
   isInitialised = true;
 }

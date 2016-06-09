@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.9 2003/11/02 14:01:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VPhysicalVolume.cc,v 1.10 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -44,6 +44,17 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
   : frot(pRot), ftrans(tlate), flogical(pLogical),
     fname(pName), flmother(0)
 {
+  G4PhysicalVolumeStore::Register(this);
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
+  : frot(0), flogical(0), fname(""), flmother(0)
+{
+  // Register to store
+  //
   G4PhysicalVolumeStore::Register(this);
 }
 

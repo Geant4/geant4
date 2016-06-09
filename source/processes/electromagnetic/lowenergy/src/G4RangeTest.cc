@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RangeTest.cc,v 1.7 2003/06/16 17:00:24 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

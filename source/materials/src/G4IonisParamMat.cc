@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.15 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonisParamMat.cc,v 1.17 2005/11/18 14:54:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -44,11 +44,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::G4IonisParamMat(G4Material* material)
-:fMaterial(material)
+  : fMaterial(material)
 {
   ComputeMeanParameters();
   ComputeDensityEffect();
   ComputeFluctModel();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency
+
+G4IonisParamMat::G4IonisParamMat(__void__&)
+  : fMaterial(0), fShellCorrectionVector(0)
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -74,7 +84,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
   fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
 
-  fShellCorrectionVector = new G4double[3];
+  fShellCorrectionVector = new G4double[3]; //[3]
 
   for (G4int j=0; j<=2; j++)
   {

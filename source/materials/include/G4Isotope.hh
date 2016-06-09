@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.16 2005/04/01 12:41:11 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Isotope.hh,v 1.18 2005/11/15 15:24:37 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,6 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// 15.11.05: GetIsotope(isotopeName, G4bool warning=false)
 // 31.03.05: A becomes optional. Taken from Nist data base by default (mma)  
 // 26.02.02: fIndexInTable renewed 
 // 14.09.01: fCountUse: nb of elements which use this isotope 
@@ -86,7 +87,7 @@ class G4Isotope
     void  decreaseCountUse()  {fCountUse--;};
     
     static  
-    G4Isotope* GetIsotope(G4String name);
+    G4Isotope* GetIsotope(G4String name, G4bool warning=false);
     
     static const
     G4IsotopeTable* GetIsotopeTable();
@@ -109,7 +110,12 @@ class G4Isotope
  
     G4int operator==(const G4Isotope&) const;
     G4int operator!=(const G4Isotope&) const;
-    
+
+    G4Isotope(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+   
  private:
      
     G4Isotope(G4Isotope&);

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.103 2005/05/17 08:08:13 gcosmo Exp $
+# $Id: architecture.gmk,v 1.104 2005/12/07 09:41:54 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -72,7 +72,9 @@ G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
 # Backwards compatibility
 #
 ifneq ($(G4MAKESHLIB),)
-  G4LIB_BUILD_SHARED = 1
+  ifeq ($(G4LIB_NO_SHARED),)
+    G4LIB_BUILD_SHARED = 1
+  endif
 endif
 
 # Defaults for library BUILD. No default for USE, ie. take what is found.

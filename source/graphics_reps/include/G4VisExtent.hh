@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisExtent.hh,v 1.9 2005/02/19 22:00:11 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // A.Walkden 28/11/95

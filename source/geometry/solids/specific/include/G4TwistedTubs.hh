@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.8 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTubs.hh,v 1.11 2005/11/18 16:48:01 link Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -53,9 +53,9 @@
 #define __G4TWISTEDTUBS__
 
 #include "G4VSolid.hh"
-#include "G4FlatSurface.hh"
-#include "G4TwistedSurface.hh"
-#include "G4HyperbolicSurface.hh"
+#include "G4TwistTubsFlatSide.hh"
+#include "G4TwistTubsSide.hh"
+#include "G4TwistTubsHypeSide.hh"
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
@@ -168,10 +168,17 @@ class G4TwistedTubs : public G4VSolid
     // Returns an estimation of the geometrical cubic volume of the
     // solid. Caches the computed value once computed the first time.
 
+  G4ThreeVector GetPointOnSurface() const ;
+
  public:  // without description
 
+  G4TwistedTubs(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
+
 #ifdef G4SPECSDEBUG
-  G4VSurface * GetOuterHype() const { return fOuterHype; }
+  G4VTwistSurface * GetOuterHype() const { return fOuterHype; }
 #endif
   
  private:
@@ -213,12 +220,12 @@ class G4TwistedTubs : public G4VSolid
   G4double fTanOuterStereo2;   // fInnerRadius * fInnerRadius
   G4double fEndZ2[2];          // fEndZ * fEndZ
   
-  G4VSurface *fLowerEndcap;    // Surface of -ve z
-  G4VSurface *fUpperEndcap;    // Surface of +ve z
-  G4VSurface *fLatterTwisted;  // Surface of -ve phi
-  G4VSurface *fFormerTwisted;  // Surface of +ve phi
-  G4VSurface *fInnerHype;      // Surface of -ve r
-  G4VSurface *fOuterHype;      // Surface of +ve r
+  G4VTwistSurface *fLowerEndcap;    // Surface of -ve z
+  G4VTwistSurface *fUpperEndcap;    // Surface of +ve z
+  G4VTwistSurface *fLatterTwisted;  // Surface of -ve phi
+  G4VTwistSurface *fFormerTwisted;  // Surface of +ve phi
+  G4VTwistSurface *fInnerHype;      // Surface of -ve r
+  G4VTwistSurface *fOuterHype;      // Surface of +ve r
 
   G4double fCubicVolume;       // Cached value for cubic volume
 
@@ -245,7 +252,7 @@ class G4TwistedTubs : public G4VSolid
       {
         p.set(kInfinity,kInfinity,kInfinity);
         vec.set(kInfinity,kInfinity,kInfinity);
-        surface = new G4VSurface*[1];
+        surface = new G4VTwistSurface*[1];
       }
       ~LastVector()
       {
@@ -254,7 +261,7 @@ class G4TwistedTubs : public G4VSolid
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VSurface    **surface;
+      G4VTwistSurface    **surface;
   };
 
   class LastValue              // last G4double value

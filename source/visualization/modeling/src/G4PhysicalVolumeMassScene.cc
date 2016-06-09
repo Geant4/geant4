@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicalVolumeMassScene.cc,v 1.4 2005/01/26 16:48:56 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  10th August 1998.

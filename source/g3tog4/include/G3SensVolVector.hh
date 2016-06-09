@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3SensVolVector.hh,v 1.6 2003/06/16 16:50:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // vector of logical volumes that were defined with
 // tracking medium with ISVOL=1

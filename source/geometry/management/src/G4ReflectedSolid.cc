@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.5 2005/03/23 17:16:31 allison Exp $
+// $Id: G4ReflectedSolid.cc,v 1.7 2005/09/21 10:24:35 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -448,7 +448,7 @@ G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p,
   G4ThreeVector solNorm ; 
 
   G4Point3D newPoint     = (*fDirectTransform3D)*G4Point3D(p) ;
-  G4Point3D newDirection = (*fDirectTransform3D)*G4Point3D(v) ;
+  G4Point3D newDirection = (*fDirectTransform3D)*G4Point3D(v);
   newDirection.unit() ;
 
   G4double dist =
@@ -458,9 +458,9 @@ G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p,
               calcNorm, validNorm, &solNorm) ;
   if(calcNorm)
   { 
-    G4Point3D newN = (*fDirectTransform3D)*G4Point3D(solNorm) ;
+    G4Point3D newN = (*fDirectTransform3D)*G4Point3D(solNorm);
     newN.unit() ;
-    *n = G4ThreeVector(newN.x(),newN.y(),newN.z()) ;
+    *n = G4ThreeVector(newN.x(),newN.y(),newN.z());
   }
   return dist ;  
 }
@@ -472,9 +472,9 @@ G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4Point3D newPoint = (*fDirectTransform3D)*G4Point3D(p) ;
+  G4Point3D newPoint = (*fDirectTransform3D)*G4Point3D(p);
   return fPtrSolid->DistanceToOut(
-                    G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z())) ;   
+                    G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z()));   
 }
 
 //////////////////////////////////////////////////////////////
@@ -490,6 +490,19 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
   G4Exception("G4BooleanSolid::ComputeDimensions()",
                "NotApplicable", FatalException,
                "Method not applicable in this context!");
+}
+
+//////////////////////////////////////////////////////////////
+//
+// Return a point (G4ThreeVector) randomly and uniformly selected
+// on the solid surface
+
+G4ThreeVector G4ReflectedSolid::GetPointOnSurface() const
+{
+  G4ThreeVector p    =  fPtrSolid->GetPointOnSurface();
+  G4Point3D newPoint = (*fDirectTransform3D)*G4Point3D(p);
+
+  return G4ThreeVector(newPoint.x(),newPoint.y(),newPoint.z());
 }
 
 //////////////////////////////////////////////////////////////////////////

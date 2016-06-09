@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.cc,v 1.11 2004/11/29 18:03:07 ribon Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: FCALTBEventAction.cc,v 1.12 2005/12/08 16:39:16 ribon Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -55,8 +55,8 @@
 #include "FCALAnalysisManager.hh"
 
 #include "G4ios.hh"
-#include "iostream.h"
-#include "fstream.h"
+#include <fstream>
+#include <iostream>
 
 #ifdef G4ANALYSIS_USE
   #include <AIDA/AIDA.h>
@@ -120,7 +120,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   } else {
     iostemp1 = std::ios::out|std::ios::app; // std::ios::app;  
   };
-  ofstream OutTracks(FileName1, iostemp1);
+  std::ofstream OutTracks(FileName1, iostemp1);
 
   OutTracks << NTracksOutOfWorld << G4endl;
 
@@ -154,7 +154,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
     iostemp2 = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
-  ofstream SecndTracks(FileName2, iostemp2);
+  std::ofstream SecndTracks(FileName2, iostemp2);
   
   SecndTracks << NSecondaries << std::endl;
 
@@ -183,7 +183,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
     iostemp3 = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
-  ofstream EdepFCAL(FileName3, iostemp3);
+  std::ofstream EdepFCAL(FileName3, iostemp3);
   
   G4double EmEdep  = StepAction->GetEdepFCAL("FCALEm");
   G4double HadEdep = StepAction->GetEdepFCAL("FCALHad");

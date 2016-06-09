@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.7 2002/10/16 10:44:14 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from

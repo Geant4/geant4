@@ -20,37 +20,27 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// G4HadronValues.hh
+// $Id: G4HadronValues.hh,v 1.9 2005/11/23 11:24:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+
+//
+//  G4HadronValues header file
+//
+//
+//  Kinematic and dynamic values 
+//  N.  Starkov 2003.
+//
+//  Modifications:
+//  14.11.05 Use PDG code instead of static particle pointers (N.Starkov)
+//  23.11.05 cleanup (V.Ivanchenko)
+//
 
 #ifndef  G4HadronValues_h
 #define  G4HadronValues_h 1
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Neutron.hh"
-#include "G4Proton.hh"
-#include "G4Lambda.hh"
-#include "G4SigmaPlus.hh"
-#include "G4SigmaMinus.hh"
-#include "G4SigmaZero.hh"
-#include "G4XiMinus.hh"
-#include "G4XiZero.hh"
-#include "G4OmegaMinus.hh"
-
-#include "G4AntiNeutron.hh"
-#include "G4AntiProton.hh"
-#include "G4AntiLambda.hh"
-#include "G4AntiSigmaPlus.hh"
-#include "G4AntiSigmaMinus.hh"
-#include "G4AntiSigmaZero.hh"
-#include "G4AntiXiMinus.hh"
-#include "G4AntiXiZero.hh"
-#include "G4AntiOmegaMinus.hh"
-
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
 
 #define MyPi      3.141593
 #define MbToGeV2  2.568
@@ -58,20 +48,18 @@
 #define MbToFm2   25.68
 
 class G4HadronValues 
- {
-   public:
+{
+public:
       
-       G4HadronValues() {;}
-      ~G4HadronValues() {;}
+  G4HadronValues();
+  ~G4HadronValues(); 
 
-//   protected:  
+  void GetHadronValues(const G4DynamicParticle * aHadron);
+  
+  G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3,
+            MomentumCM;
 
-       void GetHadronValues(const G4DynamicParticle * aHadron);
-
-       G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3,
-                 MomentumCM;
-
-  };
+};
 
 #endif
 

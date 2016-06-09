@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.cc,v 1.6 2005/04/12 09:10:55 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RegularXTRadiator.cc,v 1.7 2005/08/06 13:59:35 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include <complex>
@@ -78,6 +78,7 @@ G4RegularXTRadiator::GetStackFactor( G4double energy,
                                          G4double gamma, G4double varAngle )
 {
 
+  // some gamma (10000/1000) like algorithm
 
   G4double result, Za, Zb, Ma, Mb;
   
@@ -94,7 +95,7 @@ G4RegularXTRadiator::GetStackFactor( G4double energy,
   G4complex Ha = pow(Ca,-fAlphaPlate);  
   G4complex Hb = pow(Cb,-fAlphaGas);
   G4complex H  = Ha*Hb;
-
+  
   G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
                  * G4double(fPlateNumber);
 
@@ -102,14 +103,16 @@ G4RegularXTRadiator::GetStackFactor( G4double energy,
                  * (1.0 - pow(H,fPlateNumber));
 
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
-
+  
   result       = 2.0*real(R);
   
   return      result;
+  
+  /*
+   // numerically stable but slow algorithm
 
-
-  /* // numerically unstable algorithm
-  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D;  
+  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb;   // , D; 
+ 
   aZa = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle);
   bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle);
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
@@ -122,6 +125,7 @@ G4RegularXTRadiator::GetStackFactor( G4double energy,
   G4complex Hb( exp(-0.5*bMb)*cos(bZb),
                -exp(-0.5*bMb)*sin(bZb)    );
   G4complex H  = Ha*Hb;
+  
   G4complex Hs = conj(H);
   D            = 1.0 /( (1 - sqrt(Q))*(1 - sqrt(Q)) + 
                   4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) );
@@ -130,6 +134,17 @@ G4RegularXTRadiator::GetStackFactor( G4double energy,
   G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs)
                  * (1.0 - pow(H,fPlateNumber)) * D*D;
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+  
+
+  G4complex S(0.,0.), c(1.,0.);
+  G4int k;
+  for(k = 1; k < fPlateNumber; k++)
+  {
+    c *= H;
+    S += ( G4double(fPlateNumber) - G4double(k) )*c; 
+  }
+  G4complex R  = (2.- Ha - 1./Ha)*S + (1. - Ha)*G4double(fPlateNumber);
+            R *= OneInterfaceXTRdEdx(energy,gamma,varAngle);
   result       = 2.0*real(R); 
   return      result;
   */

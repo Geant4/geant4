@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.hh,v 1.1 2004/03/01 11:49:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VTransitionRadiation.hh,v 1.2 2005/07/28 23:56:07 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // G4VTransitionRadiation  -- header file
 //
@@ -30,6 +30,7 @@
 //
 // History:
 // 29.02.04, V.Ivanchenko created
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 
 #ifndef G4VTransitionRadiation_h
 #define G4VTransitionRadiation_h
@@ -51,7 +52,8 @@ class G4VTransitionRadiation : public   G4VDiscreteProcess
 public:
 
 // Constructors
-  G4VTransitionRadiation( const G4String& processName = "TR");
+  G4VTransitionRadiation( const G4String& processName = "TR",
+                                G4ProcessType type = fElectromagnetic);
 
 
 // Destructor

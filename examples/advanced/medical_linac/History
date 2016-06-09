@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/06/02 13:57:07 mpiergen Exp $
+$Id: History,v 1.17 2005/12/08 13:34:51 mpiergen Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+08.12.2005   Michela Piergentili , tag medical_linac-V07-01-05
+	     updated macro for visualization
+ 
+07.12.2005   Susanna Guatelli, tag medical_linac-V07-01-04
+             The example compiles with CLHEP 2.0.2.2
+
+25.11.2005   Michela Piergentili , tag medical_linac-V07-01-03
+	     update README file, added new methods to messengers
+	     for the selection of the detector features
+
+25.11.2005   Michela Piergentili , tag medical_linac-V07-01-02
+	     code maitenance
+
+24.11.2005   Michela Piergentili , tag medical_linac-V07-01-01
+             code maitenance
+
+24.11.2005   Michela Piergentili , tag medical_linac-V07-01-00
+             code maitenance
+
+13.07.2005   Michela Piergentili, tag medical_linac-V07-00-06
+             macro added
+
+04.07.2005   Michela Piergentili, tag medical_linac-V07-00-05
+             code with DIANE, added histograms
+
+04.07.2005   Michela Piergentili, tag medical_linac-V07-00-04
+             code with DIANE
+
 02.06.2005   Michela Piergentili, tag medical_linac-V07-00-03
 	     code maintenance
 

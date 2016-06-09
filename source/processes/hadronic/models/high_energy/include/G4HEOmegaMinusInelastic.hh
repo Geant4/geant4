@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEOmegaMinusInelastic.hh,v 1.12 2005/06/04 13:32:52 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // G4 Gheisha High Energy model class -- header file

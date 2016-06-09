@@ -22,7 +22,7 @@
 //
 //
 // $Id: Pers01PrimaryGeneratorMessenger.cc,v 1.2 2002/12/06 16:59:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

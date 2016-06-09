@@ -31,7 +31,7 @@ template<class T>
 class TQGSC: public T
 {
 public:
-  TQGSC();
+  TQGSC(G4int ver = 1);
   virtual ~TQGSC();
   
 public:

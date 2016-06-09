@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.11 2003/11/05 17:41:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Polyhedra.hh,v 1.15 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,7 +85,7 @@ class G4PolyhedraHistorical
 
 class G4Polyhedra : public G4VCSGfaceted
 {
-  public:  // with description
+ public:  // with description
 
   G4Polyhedra( const G4String& name, 
                      G4double phiStart,    // initial phi starting angle
@@ -122,6 +122,8 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4GeometryType  GetEntityType() const;
 
+  G4ThreeVector GetPointOnSurface() const;
+
   std::ostream& StreamInfo( std::ostream& os ) const;
 
   G4Polyhedron* CreatePolyhedron() const;
@@ -135,29 +137,25 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4double GetStartPhi() const;
   inline G4double GetEndPhi()   const;
   inline G4bool IsOpen()        const;
+  inline G4bool IsGeneric()     const;
   inline G4int GetNumRZCorner() const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
   inline G4PolyhedraHistorical* GetOriginalParameters() const;
   inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
 
-  protected:  // without description
+ public:  // without description
 
-  // Here are our parameters
+  G4Polyhedra(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
-  G4int   numSide;      // Number of sides
-  G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
-  G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
-  G4bool   phiIsOpen;   // true if there is a phi segment
-  G4int   numCorner;    // number RZ points
-  G4PolyhedraSideRZ *corners;  // our corners
-  G4PolyhedraHistorical  *original_parameters;  // original input parameters
-
-  // Our quick test
-
-  G4EnclosingCylinder *enclosingCylinder;
+ protected:  // without description
 
   // Generic initializer, call by all constructors
 
+  inline void SetOriginalParameters();
+  
   void Create( G4double phiStart,           // initial phi starting angle
                G4double phiTotal,           // total phi angle
                G4int    numSide,            // number sides
@@ -165,6 +163,28 @@ class G4Polyhedra : public G4VCSGfaceted
 
   void CopyStuff( const G4Polyhedra &source );
   void DeleteStuff();
+
+  // Methods for generation of random points on surface
+
+  G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
+                                G4ThreeVector p2, G4ThreeVector p3) const;
+  G4ThreeVector GetPointOnTriangle(G4ThreeVector p0, G4ThreeVector p1,
+                                   G4ThreeVector p2) const;
+  G4ThreeVector GetPointOnSurfaceCorners() const;
+
+ protected:  // without description
+
+  G4int   numSide;      // Number of sides
+  G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
+  G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
+  G4bool   phiIsOpen;   // true if there is a phi segment
+  G4bool   genericPgon; // true if created through the 2nd generic constructor
+  G4int   numCorner;    // number RZ points
+  G4PolyhedraSideRZ *corners;  // our corners
+  G4PolyhedraHistorical  *original_parameters;  // original input parameters
+
+  G4EnclosingCylinder *enclosingCylinder;
+
 };
 
 #include "G4Polyhedra.icc"

@@ -32,11 +32,12 @@
   vietha 2003.05.08
 */
 
-#ifndef G4String_h
-#define G4String_h
+#ifndef __G4String
+#define __G4String
 
 //MSH_BEGIN
-class G4String{
+class G4String : public std::string
+{
     int dummy; /*MSH: manual
     { memcpy($$, param->c_str(), param->size());
     *($$+param->size()) = '\0'; 

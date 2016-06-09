@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QNucleus.cc,v 1.53 2005/05/23 09:39:33 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.

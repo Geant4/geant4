@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ListOfCollisions.hh,v 1.1.4.1 2004/03/24 13:18:28 hpw Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // $Id: G4ListOfCollisions.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

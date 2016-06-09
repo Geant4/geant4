@@ -30,33 +30,41 @@
  {
    theMin = 12*GeV;
    theModel = new G4TheoFSGenerator;
+
+   theStringModel = new G4QGSModel< G4QGSParticipants >;
+   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+   theStringModel->SetFragmentationModel(theStringDecay);
+
    theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(&theHandler);
+   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
    theCascade->SetDeExcitation(thePreEquilib);  
+
    theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(&theStringModel);
-   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-   theStringModel.SetFragmentationModel(theStringDecay);
+   theModel->SetHighEnergyGenerator(theStringModel);
  }
 
  void G4QGSPProtonBuilder::
- Build(G4ProtonInelasticProcess & aP)
+ Build(G4ProtonInelasticProcess * aP)
  {
-   aP.AddDataSet(&theXSec);  
+// G4cout << "adding inelastic Proton in QGSP" << G4endl;
+   aP->AddDataSet(&theXSec);  
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
-   aP.RegisterMe(theModel);
+   aP->RegisterMe(theModel);
  }
 
  void G4QGSPProtonBuilder::
- Build(G4HadronElasticProcess & )
+ Build(G4HadronElasticProcess * )
  {
  }
 
  G4QGSPProtonBuilder::
  ~G4QGSPProtonBuilder() 
  {
+   delete thePreEquilib;
+   delete theCascade;
    delete theStringDecay;
+   delete theStringModel;
  }
 
  // 2002 by J.P. Wellisch

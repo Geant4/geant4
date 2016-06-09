@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPhantomHit.cc,v 1.3 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacPhantomHit.cc,v 1.4 2005/07/03 23:27:37 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -40,7 +40,9 @@ MedLinacPhantomHit::MedLinacPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int Y
 {
  energyDeposit = 0;
 
- }
+ //G4cout << "Hit generated1" << G4endl;
+
+}
 
 MedLinacPhantomHit::~MedLinacPhantomHit()
 {
@@ -53,11 +55,14 @@ MedLinacPhantomHit::MedLinacPhantomHit(const MedLinacPhantomHit &right)
  zHitPosition = right.zHitPosition;
  yHitPosition = right.yHitPosition;
  energyDeposit = right.energyDeposit;
+ //G4cout << "=====energyDeposit in ImrtPhantomHit1 e'" << energyDeposit << G4endl;
  hitPosition = right.hitPosition;
  rotation = right.rotation;
  logicalVolume = right.logicalVolume;
 
- }
+ //G4cout << "Hit generated2" << G4endl;
+
+}
 
 const MedLinacPhantomHit& MedLinacPhantomHit::operator=(const MedLinacPhantomHit &right)
 {
@@ -68,7 +73,8 @@ const MedLinacPhantomHit& MedLinacPhantomHit::operator=(const MedLinacPhantomHit
  hitPosition = right.hitPosition;
  rotation = right.rotation;
  logicalVolume = right.logicalVolume;
-  return *this;
+ //G4cout << " EnergyDep in PhantomHit2 e' "<<" " << energyDeposit  <<G4endl; 
+ return *this;
 }
 
 int MedLinacPhantomHit::operator==(const MedLinacPhantomHit &right) const

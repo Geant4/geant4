@@ -20,13 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.7 2004/11/23 14:05:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: DetectorMessenger.cc,v 1.10 2005/11/17 08:16:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
+
+#include <sstream>
 
 #include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
@@ -57,7 +59,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   NbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
-  NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
+  NbLayersCmd->SetRange("NbLayers>0");
   NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   NbAbsorCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfAbsor",this);
@@ -138,11 +140,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == AbsorCmd)
    {
      G4int num; G4double tick;
-     char mat[30],unts[30];
-     const char* t = newValue;
-     std::istrstream is((char*)t);
-     is >> num >> mat >> tick >> unts;
-     G4String material=mat, unt=unts;
+     G4String unt, mat;
+     std::istringstream is(newValue);
+     is >> num >> mat >> tick >> unt;
+     G4String material=mat;
      tick *= G4UIcommand::ValueOf(unt);
      Detector->SetAbsorMaterial (num,material);
      Detector->SetAbsorThickness(num,tick);

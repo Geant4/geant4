@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.cc,v 1.3 2003/06/16 16:49:26 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: OlapEventAction.cc,v 1.4 2005/11/15 14:15:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 #include "globals.hh"
 #include <vector>
-#include <strstream>
+#include <sstream>
 
 #include "G4VVisManager.hh"
 #include "G4Trajectory.hh"
@@ -272,7 +272,7 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
      oi->probNot = true; // probably not an overlap, just numerics ....
      dontDelete = true;
           
-     std::ostrstream os;
+     std::ostringstream os;
      os << "A,B diff. steps AB:" << ABSteps.size()
                       << " BA:"  << BASteps.size() << '\0';
 

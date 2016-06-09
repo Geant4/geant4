@@ -1,10 +1,18 @@
-
-/control/verbose 2
+/PhysicsList/cut 0.2 mm
+/control/verbose 1
 /control/saveHistory
 /run/verbose 2
 
+
 /run/initialize
 /tracking/storeTrajectory 1
+
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 150
+/Phantom/maxStep 0.2 mm
+
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 150
 
 #    Multi Leaf
 
@@ -177,7 +185,7 @@
 /Jaws/X1/DistanceFromAxis -4.2 cm
 /Jaws/X2/DistanceFromAxis 5.2 cm
 /Jaws/Y1/DistanceFromAxis -6.6 cm
-/Jaws/Y2/DistanceFromAxis 6.8. cm
+/Jaws/Y2/DistanceFromAxis 6.8 cm
 /Jaws/update
 
 /energy 6.0 MeV

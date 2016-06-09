@@ -22,7 +22,7 @@
 //
 //
 // $Id: g4rwPrimaryGeneratorAction.cc,v 1.3 2004/12/07 09:45:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "g4rwPrimaryGeneratorAction.hh"

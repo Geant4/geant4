@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2005/03/03 16:30:50 allison Exp $
+# $Id: GNUmakefile,v 1.12 2005/10/14 08:21:49 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 

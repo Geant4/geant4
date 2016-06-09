@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_PRECO.cc,v 1.3 2005/12/02 17:30:34 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  HadronPhysicsLHEP_PRECO
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//  1.12.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #include "HadronPhysicsLHEP_PRECO.hh"
 
 #include "globals.hh"
@@ -34,19 +48,43 @@
 
 HadronPhysicsLHEP_PRECO::HadronPhysicsLHEP_PRECO(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
-{
-  theNeutrons.RegisterMe(&thePrecoNeutron);
-  theNeutrons.RegisterMe(&theLHEPNeutron);
-  theLHEPNeutron.SetMinInelasticEnergy(0.15*GeV);
+{}
 
-  thePro.RegisterMe(&thePrecoPro);
-  thePro.RegisterMe(&theLHEPPro);
-  theLHEPPro.SetMinEnergy(0.15*GeV);
+void HadronPhysicsLHEP_PRECO::CreateModels()
+{
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(thePrecoNeutron=new G4PrecoNeutronBuilder);
+  theNeutrons->RegisterMe(theLHEPNeutron=new G4LHEPNeutronBuilder);
+  theLHEPNeutron->SetMinInelasticEnergy(0.15*GeV);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(thePrecoPro=new G4PrecoProtonBuilder);
+  thePro->RegisterMe(theLHEPPro=new G4LHEPProtonBuilder);
+  theLHEPPro->SetMinEnergy(0.15*GeV);
   
-  thePiK.RegisterMe(&theLHEPPiK);
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
+
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
-HadronPhysicsLHEP_PRECO::~HadronPhysicsLHEP_PRECO() {}
+HadronPhysicsLHEP_PRECO::~HadronPhysicsLHEP_PRECO()
+{
+  delete theNeutrons;
+  delete theLHEPNeutron;
+  delete thePrecoNeutron;
+  
+  delete thePiK;
+  delete theLHEPPiK;
+  
+  delete thePro;
+  delete theLHEPPro;
+  delete thePrecoPro;    
+  
+  delete theMiscLHEP;
+  delete theStoppingHadron;
+}
 
 void HadronPhysicsLHEP_PRECO::ConstructParticle()
 {
@@ -63,11 +101,11 @@ void HadronPhysicsLHEP_PRECO::ConstructParticle()
 #include "G4ProcessManager.hh"
 void HadronPhysicsLHEP_PRECO::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePro.Build();
-  thePiK.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch

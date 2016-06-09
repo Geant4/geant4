@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05CalorimeterHit.cc,v 1.5 2003/05/28 11:20:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "ExN05CalorimeterHit.hh"

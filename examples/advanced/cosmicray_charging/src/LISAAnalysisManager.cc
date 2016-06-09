@@ -41,7 +41,6 @@
 #ifdef G4ANALYSIS_USE
 
 #include "LISAAnalysisManager.hh"
-#include <strstream>
 #include "globals.hh"
 
 LISAAnalysisManager* LISAAnalysisManager::instance = 0;

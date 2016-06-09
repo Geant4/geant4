@@ -69,7 +69,7 @@ class G4BetaPlusDecayChannel : public G4NuclearDecayChannel
                             G4double theDaughterExcitation=0.0,
                             G4double theFFN=0.0,
 			    G4bool   theBetaSimple = false,
-			    RandGeneral* theRandEnergy = NULL) :
+			    CLHEP::RandGeneral* theRandEnergy = 0) :
       G4NuclearDecayChannel (BetaPlus, 
 			     Verbose, 
 			     theParentNucleus, 

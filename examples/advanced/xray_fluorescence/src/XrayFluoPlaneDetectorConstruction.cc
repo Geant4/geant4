@@ -48,7 +48,7 @@
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
-#include "XrayFluoMaterials.hh"
+#include "XrayFluoNistMaterials.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,7 +69,7 @@ XrayFluoPlaneDetectorConstruction::XrayFluoPlaneDetectorConstruction()
     defaultMaterial(0),HPGeSD(0)
   
 { 
-  materials = XrayFluoMaterials::GetInstance();
+  materials = XrayFluoNistMaterials::GetInstance();
 
   DefineDefaultMaterials();
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: EmAcceptance.cc,v 1.3 2004/12/02 19:06:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 

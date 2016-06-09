@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GRSSolidHandle.hh,v 1.5 2003/11/02 16:06:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 // Class G4GRSSolidHandle
 //

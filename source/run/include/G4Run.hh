@@ -21,15 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.10 2004/06/11 14:27:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Run.hh,v 1.11 2005/09/19 16:53:53 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef G4Run_h
 #define G4Run_h 1
 
 #include "globals.hh"
-#include "G4Allocator.hh"
 
 class G4Event;
 class G4HCtable;
@@ -47,8 +46,6 @@ class G4Run
   public:
     G4Run();
     virtual ~G4Run();
-    inline void *operator new(size_t);
-    inline void operator delete(void* aRun);
 
   protected:
     G4int runID;
@@ -58,10 +55,10 @@ class G4Run
     G4DCtable* DCtable;
 
   public: // with description
-    virtual void RecordEvent(const G4Event*) 
-    { numberOfEvent++; }
+    virtual void RecordEvent(const G4Event*);
     //  Method to be overwritten by the user for recording events in this run.
     //  In such a case, it is the user's responsibility to increment numberOfEvent.
+    //  Also, user's run class object must be instantiated in user's runAction.
 
   public: // with description
     inline G4int GetRunID() const
@@ -90,23 +87,6 @@ class G4Run
     { DCtable = DCtbl; }
 };
 
-#if defined G4RUN_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4Run> aRunAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4Run> aRunAllocator;
-#endif
-
-inline void* G4Run::operator new(size_t)
-{
-  void* aRun;
-  aRun = (void*)aRunAllocator.MallocSingle();
-  return aRun;
-}
-
-inline void G4Run::operator delete(void* aRun)
-{
-  aRunAllocator.FreeSingle((G4Run*)aRun);
-}
 
 #endif
 

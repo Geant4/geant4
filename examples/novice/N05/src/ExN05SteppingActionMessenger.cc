@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SteppingActionMessenger.cc,v 1.5 2003/06/16 16:50:04 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05SteppingActionMessenger.cc,v 1.6 2005/11/16 08:33:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "ExN05SteppingActionMessenger.hh"
-#include "ExN05SteppingAction.hh"
 
-#include "globals.hh"
+#include <sstream>
+
+#include "ExN05SteppingAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 
@@ -50,7 +51,7 @@ void ExN05SteppingActionMessenger::SetNewValue(G4UIcommand* command, G4String ne
   {
     G4int vl;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     SteppingAction->SetDrawFlag(vl!=0);
   }

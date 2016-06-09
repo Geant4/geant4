@@ -50,19 +50,17 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     virtual ~G4QGSPProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4ProtonInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4ProtonInelasticCrossSection theXSec;
     G4TheoFSGenerator * theModel;
-    G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > theStringModel;
-    G4QGSMFragmentation theFragmentation;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4double theMin;
 

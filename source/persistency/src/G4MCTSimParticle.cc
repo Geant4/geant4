@@ -25,7 +25,7 @@
 // ====================================================================
 
 #include "globals.hh"
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 #include "G4ios.hh"
 #include "G4MCTSimParticle.hh"
@@ -50,7 +50,7 @@ G4MCTSimParticle::G4MCTSimParticle()
 /////////////////////////////////////////////////////////////
 G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
-			       const HepLorentzVector& p)
+			       const G4LorentzVector& p)
   : parentParticle(0), 
     name(aname), pdgID(apcode), 
     trackID(atid), parentTrackID(ptid),
@@ -63,7 +63,7 @@ G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode,
 /////////////////////////////////////////////////////////////
 G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
-			       const HepLorentzVector& p,
+			       const G4LorentzVector& p,
 			       const G4MCTSimVertex* v )
   : parentParticle(0), 
     name(aname), pdgID(apcode), 
@@ -133,12 +133,11 @@ void G4MCTSimParticle::SetStoreFlagToParentTree(G4bool q)
 void G4MCTSimParticle::PrintSingle(std::ostream& ostr) const
 //////////////////////////////////////////////////////////
 {
-  char stp[20];
-  std::ostrstream os(stp,20);
+  std::ostringstream os;
   char cqp=' ';
   if(storeFlag) cqp='+';
   os << cqp << trackID << '\0';
-  std::string stid(stp);
+  std::string stid(os.str());
   ostr << std::setw(6) << stid;
   //ostr << std::setw(4) << trackID;
 
@@ -159,12 +158,11 @@ void G4MCTSimParticle::PrintSingle(std::ostream& ostr) const
   if(vertex) {
     ostr << " %" << vertex-> GetCreatorProcessName() << G4endl;
 
-    char stv[20];
-    std::ostrstream osv(stv,20);
+    std::ostringstream osv;
     char cqv=' ';
     if(vertex->GetStoreFlag()) cqv='+';
     osv << cqv << vertex-> GetID() << '\0';
-    std::string svid(stv);
+    std::string svid(osv.str());
     ostr << "       " << std::setw(6) << svid;
     //ostr << "      " << std::setw(4) << vertex-> GetID();
     ostr.unsetf(std::ios::fixed);

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2005/05/18 11:02:10 vnivanch Exp $
+$Id: History,v 1.12 2005/11/29 08:18:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 05: V.Ivant (emhighenergy-V07-01-04)
+- Fix initialisation problems in G4hhIonisation and G4eeToHadrons and related classes
+
+23 November 05: V.Ivant (emhighenergy-V07-01-03)
+- G4eeToHadrons - fix verbosity, restore missing line
+- G4eeToHadronsModel - change verbosity level
+
+30 October 05: V.Ivant (emhighenergy-V07-01-02)
+- Remove magnetic change from G4BraggNoDeltaModel and G4BetheBlochNoDeltaModel
+- add G4hhIonisation - ionisation for heavy exotic particles
+
+05 August 05: V.Ivant (emhighenergy-V07-01-01)
+- Remove inline constructors and destructors
+
+30 June 05: V.Ivant (emhighenergy-V07-01-00)
+- Fix a misprint in G4BetheBlochNoDeltaModel
 
 18 May 05: V.Ivant (highenergy-V07-00-01)
 - Use optimised interfaces from utils - reorganise ee->hadrons models

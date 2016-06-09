@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.14 2005/04/04 09:28:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Region.cc,v 1.17 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4Region Implementation
@@ -42,7 +42,8 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
+    fFastSimulationManager(0), fWorldPhys(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -57,6 +58,20 @@ G4Region::G4Region(const G4String& pName)
   {
     rStore->Register(this);
   }
+}
+
+// ********************************************************************
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+// ********************************************************************
+//
+G4Region::G4Region( __void__& )
+  : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
+    fFastSimulationManager(0), fWorldPhys(0)
+{
+  // Register to store
+  //
+  G4RegionStore::GetInstance()->Register(this);
 }
 
 // *******************************************************************
@@ -256,3 +271,97 @@ void G4Region::UpdateMaterialList()
     ScanVolumeTree(*pLV, true);
   }
 }
+
+// *******************************************************************
+// SetWorld:
+//  - Set the world physical volume if this region belongs to this
+//    world. If the given pointer is null, reset the pointer.
+// *******************************************************************
+//
+void G4Region::SetWorld(G4VPhysicalVolume* wp)
+{
+  if(!wp)
+  { fWorldPhys = 0; }
+  else
+  { if(BelongsTo(wp)) fWorldPhys = wp; }
+
+  return;
+}
+
+// *******************************************************************
+// BelongsTo:
+//  - Returns whether this region belongs to the given physical volume
+//    (recursively scanned to the bottom of the hierarchy)
+// *******************************************************************
+// 
+G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
+{
+  if(thePhys->GetLogicalVolume()->GetRegion()==this) return true;
+
+  {
+    G4int nDaughters = thePhys->GetLogicalVolume()->GetNoDaughters();
+    while((nDaughters--)>0)
+    {
+      G4VPhysicalVolume* aPhys = thePhys->GetLogicalVolume()->GetDaughter(nDaughters);
+      if(aPhys->GetLogicalVolume()->GetRegion()==this) return true;
+      if(BelongsTo(aPhys)) return true;
+    }
+  }
+  return false;
+}
+
+// *******************************************************************
+// ClearFastSimulationManager:
+//  - Set G4FastSimulationManager pointer to the one for the parent region
+//    if it exists. Otherwise set to null.
+// *******************************************************************
+//
+void G4Region::ClearFastSimulationManager()
+{
+  G4Region* parent = GetParentRegion();
+  if(parent)
+  { fFastSimulationManager = parent->GetFastSimulationManager(); }
+  else
+  { fFastSimulationManager = 0; }
+}
+
+// *******************************************************************
+// GetParentRegion:
+//  - Returns a region that contains this region. Otherwise null
+//    returned.
+// *******************************************************************
+#include "G4LogicalVolumeStore.hh"
+// 
+G4Region* G4Region::GetParentRegion() const
+{
+  G4Region* parent = 0;
+  G4LogicalVolumeStore* lvStore = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolumeStore::iterator lvItr;
+  for(lvItr=lvStore->begin();lvItr!=lvStore->end();lvItr++)
+  {
+    G4int nD = (*lvItr)->GetNoDaughters();
+    for(G4int iD=0;iD<nD;iD++)
+    {
+      if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
+      { 
+        G4Region* aR = (*lvItr)->GetRegion();
+        if(parent)
+        {
+          if(parent!=aR)
+          {
+            G4cerr << "Region <" << fName << "> belongs to more than one parent regions" << G4endl;
+            G4cerr << " --- Regions found that directly contains this region are : "
+                   << parent->GetName() << ", " << aR->GetName() << G4endl;
+            G4Exception("G4Region::GetParentRegion","MoreThanOneParent",FatalException,
+                        "A region must not belong to more than one direct parent region.");
+          }
+        }
+        else
+        { parent = aR; }
+      }
+    }
+  }
+  return parent;
+}
+
+

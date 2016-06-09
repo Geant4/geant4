@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.10 2004/02/13 05:53:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4KaonMinus.cc,v 1.12 2005/01/14 03:49:16 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,38 +32,51 @@
 //      4th April 1996, G.Cosmo
 //                              H.Kurashige   7 Jul 96
 // **********************************************************************
-
-#include <fstream>
-#include <iomanip>
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------------
 
 #include "G4KaonMinus.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4KL3DecayChannel.hh"
 #include "G4DecayTable.hh"
+
 // ######################################################################
 // ###                         KAONMINUS                              ###
 // ######################################################################
 
-G4KaonMinus::G4KaonMinus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VMeson( aName,mass,width,charge,iSpin,iParity,
-             iConjugation,iIsospin,iIsospin3,gParity,pType,
-             lepton,baryon,encoding,stable,lifetime,decaytable )
+G4KaonMinus* G4KaonMinus::theInstance = 0;
+
+G4KaonMinus* G4KaonMinus::Definition()
 {
-  SetParticleSubType("kaon");
-  //create Decay Table 
-  G4DecayTable*   table = GetDecayTable();
-  if (table!=NULL) delete table;
-  table = new G4DecayTable();
+  if (theInstance !=0) return theInstance;
+  const G4String name = "kaon-";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+
+   anInstance = new G4ParticleDefinition(
+                 name,    0.493677*GeV,   5.315e-14*MeV,    -1.*eplus,
+                    0,              -1,             0,
+                    1,              -1,             0,
+              "meson",               0,             0,        -321,
+                false,       12.371*ns,          NULL,
+                false,       "kaon");
+
+ //create Decay Table
+  G4DecayTable* table = new G4DecayTable();
 
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
@@ -75,39 +88,27 @@ G4KaonMinus::G4KaonMinus(
   mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.056,3,"pi-","pi+","pi-");
   // kaon- -> pi- + pi0 + pi0
   mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.017,3,"pi-","pi0","pi0");
-  // kaon- -> pi0 + e- + anti_nu_e (Ke3) 
+  // kaon- -> pi0 + e- + anti_nu_e (Ke3)
   mode[4] = new G4KL3DecayChannel("kaon-",0.048,"pi0","e-","anti_nu_e");
-  // kaon- -> pi0 + mu- + anti_nu_mu (Kmu3) 
+  // kaon- -> pi0 + mu- + anti_nu_mu (Kmu3)
   mode[5] = new G4KL3DecayChannel("kaon-",0.032,"pi0","mu-","anti_nu_mu");
 
-
-  for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);  
+  for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;
 
-  SetDecayTable(table);
+   anInstance->SetDecayTable(table);
+  }
+  theInstance = reinterpret_cast<G4KaonMinus*>(anInstance);
+  return theInstance;
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
-//
-G4KaonMinus G4KaonMinus::theKaonMinus(
-	      "kaon-",    0.493677*GeV,   5.315e-14*MeV,    -1.*eplus, 
-		    0,              -1,             0,          
-		    1,              -1,             0,             
-	      "meson",               0,             0,        -321,
-		false,       12.371*ns,          NULL
-);
+G4KaonMinus*  G4KaonMinus::KaonMinusDefinition()
+{
+  return Definition();
+}
 
-G4KaonMinus* G4KaonMinus::KaonMinusDefinition(){return &theKaonMinus;}
-G4KaonMinus* G4KaonMinus::KaonMinus(){return &theKaonMinus;}
-
-
+G4KaonMinus*  G4KaonMinus::KaonMinus()
+{
+  return Definition();
+}
 

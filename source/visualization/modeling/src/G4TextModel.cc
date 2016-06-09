@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TextModel.cc,v 1.6 2005/06/07 16:53:40 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  3rd April 2001

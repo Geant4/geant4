@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.74 2005/06/20 10:16:54 gcosmo Exp $
+# $Id: GNUmakefile,v 1.75 2005/12/07 13:28:42 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -31,13 +31,13 @@ unique := $(shell echo $$$$)
 
 .PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
 
-all: kernel
+all: banner kernel
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	@$(MAKE) libmap
 
-glob global: kernel_global
+glob global: banner kernel_global
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
@@ -48,10 +48,6 @@ kernel_global:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
 
 kernel:
-	@echo "*************************************************************"
-	@echo " Installation Geant4 version $$Name: geant4-07-01 $ "
-	@echo "                            Copyright : Geant4 Collaboration "
-	@echo "*************************************************************"
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
@@ -94,7 +90,7 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
-dll: win32def
+dll: banner win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Verifying existence of global libraries for DLLs ..."
 	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1
@@ -130,6 +126,12 @@ includes:
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 endif
+
+banner:
+	@echo "*************************************************************"
+	@echo " Installation Geant4 version $$Name: geant4-08-00 $ "
+	@echo "                            Copyright : Geant4 Collaboration "
+	@echo "*************************************************************"
 
 clean_libs::
 	@echo Removing all libraries ...

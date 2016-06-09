@@ -20,11 +20,25 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Created by Joanna Weng 9.11.2004 
+//
+// $Id: GFlashHitMaker.hh,v 1.4 2005/10/04 09:08:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  GFlashHitMaker
+//
+//  Class description:
+//
+//  Singleton for GFlash parameterisation hit creation.
 
+//
+// Author: Joanna Weng - 9.11.04
+//---------------------------------------------------------------
 #ifndef GFlashHitMaker_h
 #define GFlashHitMaker_h 1
-// has singleton semantics
 
 #include "G4TouchableHandle.hh"
 #include "G4Navigator.hh"
@@ -35,28 +49,26 @@
 
 class GFlashHitMaker 
 {
-	public:
-	GFlashHitMaker();
-	~GFlashHitMaker();
-	
-	void make(GFlashEnergySpot * aSpot, const G4FastTrack * aT );
-	
-	private:  
-	G4TouchableHandle fTouchableHandle;
-	G4Navigator *fpNavigator;
-	G4bool fNaviSetup;
-	
-	private:
-	GFlashHitMaker(const GFlashHitMaker & )
-	{
-		G4Exception("GFlashHitMaker copy constructor not publicly available");
-	}
-	GFlashHitMaker & operator = (const GFlashHitMaker & )
-	{
-		G4Exception("GFlashHitMaker asignment operator not publicly available");
-		return *this;
-	}
-	
+  public:
+
+    GFlashHitMaker();
+    ~GFlashHitMaker();
+  
+    void make(GFlashEnergySpot * aSpot, const G4FastTrack * aT );
+  
+  private:  
+
+    G4TouchableHandle fTouchableHandle;
+    G4Navigator *fpNavigator;
+    G4bool fNaviSetup;
+  
+  private:
+
+    GFlashHitMaker(const GFlashHitMaker & ) {}
+    GFlashHitMaker & operator = (const GFlashHitMaker & )
+    {
+      return *this;
+    }
 };
 #endif
 

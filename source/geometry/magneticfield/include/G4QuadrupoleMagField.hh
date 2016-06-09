@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QuadrupoleMagField.hh,v 1.3 2003/10/31 14:35:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4QuadrupoleMagField

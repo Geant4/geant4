@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.7 2005/06/07 13:55:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.cc,v 1.8 2005/10/03 02:22:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -30,6 +30,7 @@
 // Author:      V.Ivanchenko 03.05.2004
 //
 // Modified:
+// 03-10-05 Add g4v71 (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -44,11 +45,14 @@
 #include "G4EmQEDBuilder.hh"
 #include "G4EmMuonBuilder.hh"
 #include "G4EmHadronBuilder.hh"
-#include "G4EmQEDBuilder52.hh"
 #include "G4LowEnergyQEDBuilder.hh"
 #include "G4PenelopeQEDBuilder.hh"
+#include "G4EmQEDBuilder52.hh"
 #include "G4EmMuonBuilder52.hh"
 #include "G4EmHadronBuilder52.hh"
+#include "G4EmQEDBuilder71.hh"
+#include "G4EmMuonBuilder71.hh"
+#include "G4EmHadronBuilder71.hh"
 #include "G4StepLimiterBuilder.hh"
 #include "DecaysBuilder.hh"
 #include "EmHadronElasticBuilder.hh"
@@ -59,6 +63,10 @@
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -145,6 +153,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
+  } else if (name == "g4v71" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder71());
+    RegisterPhysics(steplimiter);
+    RegisterPhysics(new G4EmMuonBuilder71());
+    RegisterPhysics(new G4EmHadronBuilder71());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
   } else if (name == "lowenergy" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4LowEnergyQEDBuilder());
     RegisterPhysics(steplimiter);
@@ -211,11 +227,10 @@ void PhysicsList::SetVerbose(G4int val)
   verbose = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -223,6 +238,7 @@ void PhysicsList::SetCutForGamma(G4double cut)
 void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -230,6 +246,7 @@ void PhysicsList::SetCutForElectron(G4double cut)
 void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

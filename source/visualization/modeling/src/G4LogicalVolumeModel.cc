@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalVolumeModel.cc,v 1.11 2005/02/15 14:51:33 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  26th July 1999.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.12 2003/06/20 14:55:45 gbarrand Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: AnaEx01AnalysisManager.cc,v 1.15 2005/10/25 18:19:56 gbarrand Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.
@@ -46,9 +46,9 @@
 #include "AnaEx01CalorHit.hh"
 #include "AnaEx01AnalysisManager.hh"
 
-AnaEx01AnalysisManager::AnaEx01AnalysisManager()
+AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
 :fCalorimeterCollID(-1)
-,fAnalysisFactory(0)
+,fAIDA(aAIDA)
 ,fTree(0)
 ,fEAbs(0)
 ,fLAbs(0)
@@ -56,41 +56,35 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
 ,fLGap(0)
 ,fTuple(0)
 {
-  fAnalysisFactory = AIDA_createAnalysisFactory();
-
   // Could fail if no AIDA implementation found :
-  if(!fAnalysisFactory) {
+  if(!fAIDA) {
     G4cout << "AIDA analysis factory not found." << G4endl;
     return;
   }
 
-  AIDA::ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
-  if(!treeFactory) {
-    delete fAnalysisFactory;
-    fAnalysisFactory = 0;
-    return;
-  }
+  AIDA::ITreeFactory* treeFactory = fAIDA->createTreeFactory();
+  if(!treeFactory) return;
 
-  // Create a "tree" to handle histograms.
-  // This tree is associated to a writable ROOT "store".
-  fTree = treeFactory->create("AnaEx01.root","ROOT",0,1);
+  // Create a tree-like container to handle histograms.
+  // This tree is associated to a AnaEx01.aida file.  
+  //std::string opts = "compress=yes";
+  std::string opts = "compress=no";
+  fTree = treeFactory->create("AnaEx01.aida","xml",false,true,opts);
+  //std::string opts = "export=root";
+  //fTree = treeFactory->create("AnaEx01.root","ROOT",false,true,opts);
 
   // Factories are not "managed" by an AIDA analysis system.
   // They must be deleted by the AIDA user code.
   delete treeFactory; 
 
-  if(!fTree) {
-    delete fAnalysisFactory;
-    fAnalysisFactory = 0;
-    return;
-  }
+  if(!fTree) return;
 
   fTree->mkdir("histograms");
   fTree->cd("histograms");
       
   // Create an histo factory that will create histo in the tree :
   AIDA::IHistogramFactory* histoFactory = 
-    fAnalysisFactory->createHistogramFactory(*fTree);
+    fAIDA->createHistogramFactory(*fTree);
   if(histoFactory) {
     fEAbs = histoFactory->createHistogram1D("EAbs",100,0,100);
     fLAbs = histoFactory->createHistogram1D("LAbs",100,0,100);
@@ -104,19 +98,18 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
   fTree->cd("tuples");
     
   // Get a tuple factory :
-  AIDA::ITupleFactory* tupleFactory = 
-    fAnalysisFactory->createTupleFactory(*fTree);
+  AIDA::ITupleFactory* tupleFactory = fAIDA->createTupleFactory(*fTree);
   if(tupleFactory) {
     
     // Create a tuple :
-    fTuple = tupleFactory->create("AnaEx01","AnaEx01","EAbs LAbs EGap LGap");
+    fTuple = tupleFactory->create("AnaEx01","AnaEx01",
+      "double EAbs,double LAbs,double EGap,double LGap");
     
     delete tupleFactory;
   }
 
 }
 AnaEx01AnalysisManager::~AnaEx01AnalysisManager() {
-  delete fAnalysisFactory;
 }
 
 void AnaEx01AnalysisManager::BeginOfRun(const G4Run* aRun){

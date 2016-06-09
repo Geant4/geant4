@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2003/06/20 14:55:44 gbarrand Exp $
+$Id: README,v 1.14 2005/10/25 13:45:42 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -37,6 +37,66 @@ $Id: README,v 1.12 2003/06/20 14:55:44 gbarrand Exp $
   For info, the CPP macros G4ANALYSIS_*_AIDA_* are used in the 
  config/analysis.gmk file of the Geant4 GNUmakefile system.
 
+ Working with the OpenScientist/Lab package :
+ ------------------------------------------
+  To reconstruct this example by using the OpenScientist/Lab 
+ package (assuming that OpenScientist is installed ! ) you have
+ first to "setup" the environment of the Lab package and Geant4.
+ The Lab package (and all OpenScientist packages) being handled 
+ by the CMT tools, you may have to setup the environment
+ variable "CMTSITE" to execute site specific things in the chain
+ of setup files of the OpenScientist packages. Then for example at CERN :
+   csh> setenv CMTSITE CERN
+  (DOS> set CMTSITE=CERN_WIN32   (for Windows))
+ When done then do :
+   csh> source <some directory>/Lab/<version>/cmt/setup.csh
+   csh> source <your Geant4 setup script>.csh
+   csh> setenv G4ANALYSIS_USE 1
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
+   csh> gmake
+
+ To run :
+   csh> cd analyis/Lab
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
+
+  It must produce an AnaEx01.aida file that contains some histograms 
+ and a tuple.
+
+  To plot some histograms, spawn the Lab interactive tool with :
+   csh> onx
+  (DOS> onx     (for Windows))
+ click in 'File/Open AIDA file...' to map a file chooser, 
+ then choose AnaEx01.aida. The file name should appear in the left
+ tree widget beside the plotting area. Use the tree widget to browse
+ the file. You can visualize histos by selecting them with the mouse.
+
+  If the OpenScientist/OnX and Lab Python drivers had been
+ reconstructed at installation of OpenScientist, then 
+ you can also work with the OpenScientist/Lab/AIDA Python API. 
+ You can execute AnaEx01.py by doing :
+    OS> python AnaEx01.py
+ or : 
+    OS> python
+   (>>> import AIDA)
+    >>> import AnaEx01
+  The AnaEx01 file contains a Python script that
+ does some analysis over the AnaEx01.aida file by using the AIDA interfaces.
+ This script gets an histo (EAbs) and  plots it in a first drawing region.
+ Then it gets the 'AnaEx01' tuple, books and fills another histo
+ from the tuple colum 'EAbs' and plots it a secon drawing region.
+
+  If exporting a AnaEx01.root file (see src/AnaEx01AnalysisManager.cc),
+ the AnaEx01.C file could also be used, within the ROOT tool. 
+ To see a projection of the first column of the tuple contained
+ in the AnaEx01.root file. For example :
+     csh> root
+     root[0] .X AnaEx01.C
+
+  The OpenScientist URL is : http://OpenScientist.lal.in2p3.fr.
+ OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
+
  Working with the Falsetto package :
  ---------------------------------
   Falsetto is a little package containing a dummy 
@@ -62,55 +122,4 @@ $Id: README,v 1.12 2003/06/20 14:55:44 gbarrand Exp $
 
  The Falsetto URL is : http://www.lal.in2p3.fr/SI/Falsetto
  Falsetto is installed at CERN under /afs/cern.ch/sw/contrib.
-
- Working with the OpenScientist/Lab package :
- ------------------------------------------
-  To reconstruct this example by using the OpenScientist/Lab 
- package (assuming that OpenScientist is installed ! ) you have
- first to "setup" the environment of the Lab package and Geant4.
- The Lab package (and all OpenScientist packages) being handled 
- by the CMT tools, you may have to setup the environment
- variable "CMTSITE" to execute site specific things in the chain
- of setup files of the OpenScientist packages. Then for example at CERN :
-   csh> setenv CMTSITE CERN
-  (DOS> set CMTSITE=CERN_WIN32   (for Windows))
- When done then do :
-   csh> source <some directory>/Lab/<version>/cmt/setup.csh
-   csh> source <your Geant4 setup script>.csh
-   csh> setenv G4ANALYSIS_USE 1
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-   csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-   csh> gmake
-
- To run :
-   csh> cd analyis/Lab
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
-
-  It must produce an AnaEx01.root file that contains
- some HCL histograms and a Lab tuple (stored as a ROOT/TTree). 
-
-  To plot some histograms, spawn the Lab interactive tool with :
-   csh> onx
-  (DOS> onx     (for Windows))
- click in 'File/File/import' to map a file chooser, choose AnaEx01.py
- to execute the AnaEx01.py. You can also execute this script by issuing an :
-       import AnaEx01
- in the command prompt.
-  This file contains a Python script that
- do some analysis over the AnaEx01.root file by using the AIDA interfaces.
- This script gets an histo (EAbs) and  plots it in a first drawing region.
- Then it gets the 'AnaEx01' tuple, books and fills another histo
- from the tuple colum 'EAbs' and plots it a secon drawing region.
-
-  The AnaEx01.C file could also be used, within the ROOT tool, 
- to see a projection of the first column of the tuple contained
- in the AnaEx01.root file. For example :
-     csh> root
-     root[0] .X AnaEx01.C
- Note that the HCL 'EAbs' histogram could not be seen with ROOT.
-
-  The OpenScientist URL is : http://www.lal.in2p3.fr/OpenScientist
- OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
-
 

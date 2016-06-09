@@ -22,7 +22,7 @@
 //
 //
 // $Id: Pers01SteppingAction.hh,v 1.1 2002/12/04 02:44:25 morita Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

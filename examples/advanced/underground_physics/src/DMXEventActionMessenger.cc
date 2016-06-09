@@ -38,6 +38,8 @@
 
 #include "DMXEventActionMessenger.hh"
 
+#include <sstream>
+
 #include "DMXEventAction.hh"
 
 #include "G4UIdirectory.hh"
@@ -126,7 +128,7 @@ void DMXEventActionMessenger::SetNewValue
   if(command == DrawHitsCmd) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     eventAction->SetDrawHitsFlag(vl!=0);
   }
@@ -134,7 +136,7 @@ void DMXEventActionMessenger::SetNewValue
   if(command == SavePmtCmd) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     eventAction->SetSavePmtFlag(vl!=0);
   }
@@ -142,7 +144,7 @@ void DMXEventActionMessenger::SetNewValue
   if(command == SaveHitsCmd) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     eventAction->SetSaveHitsFlag(vl!=0);
   }

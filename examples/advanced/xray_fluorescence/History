@@ -1,6 +1,6 @@
-# $Id: History,v 1.5 2005/05/03 10:05:48 allison Exp $
+# $Id: History,v 1.6 2005/11/15 15:57:47 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+15-11-2004 Gabriele Cosmo: XrayFluo-V07-01-00
+- Migration to <sstream> from deprecated <strstream>.
+
+3-5-2005  John Allison
 - Replaced vis manager with G4VisExecutive.
 
 10-12-2004 Alfonso Mantero: XrayFluo-V06-02-01

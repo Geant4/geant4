@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: MedLinacPhantomSD.hh,v 1.4 2004/06/18 09:17:38 gunter Exp $
+//// $Id: MedLinacPhantomSD.hh,v 1.6 2005/12/13 08:42:38 gunter Exp $
 //
 //
+
 // Code developed by: M. Piergentili
 //
 #ifndef MedLinacPhantomSD_h
@@ -30,6 +31,7 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "MedLinacPhantomHit.hh"
+class MedLinacPhantomMessenger;
 
 class G4Step;
 class G4HCofThisEvent;
@@ -41,6 +43,10 @@ public:
   MedLinacPhantomSD(G4String name);
   ~MedLinacPhantomSD();
 
+
+  void SetPhantomDimension (G4double);
+  void SetNumberOfPhantomVoxels (G4int);
+
   void Initialize(G4HCofThisEvent*);
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
   void EndOfEvent(G4HCofThisEvent*HCE);
@@ -48,6 +54,14 @@ public:
   void DrawAll();
   void PrintAll();
 
+public:
+  G4double GetPhantomDimension()  {return phantomDimension;};
+  G4int GetNumberOfPhantomVoxels()  {return numberOfPhantomVoxels;};
+
+  private:
+    G4double phantomDimension;
+  G4int numberOfPhantomVoxels;
+  MedLinacPhantomMessenger* phantomMessenger;
 };
 #endif
 

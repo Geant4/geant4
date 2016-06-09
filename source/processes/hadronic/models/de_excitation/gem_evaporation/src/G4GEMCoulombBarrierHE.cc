@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.4 2005/06/04 13:25:25 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4GEMCoulombBarrierHE.cc,v 1.5 2005/11/23 16:40:09 miheikki Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -30,7 +30,7 @@
 
 #include "G4GEMCoulombBarrierHE.hh"
 #include "G4HadronicException.hh"
-#include <strstream>
+#include <sstream>
 
 G4GEMCoulombBarrierHE::G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & ) : G4VCoulombBarrier()
 {
@@ -61,13 +61,12 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
 {
   G4double Barrier = 0.0;
   if (ZRes > ARes || ARes < 1) {
-    char errMessage[1024];
-    std::ostrstream errOs(errMessage,1024);
+    std::ostringstream errOs;
     errOs << "G4GEMCoulombBarrierHE::GetCoulombBarrier: ";
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
     errOs << "and residual nucleus Z = " << ZRes << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errMessage);
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
   if (GetZ() == 0) {
     Barrier = 0.0;   // If there is no charge there is neither barrier

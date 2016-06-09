@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: EventActionMessenger.cc,v 1.1 2004/08/03 16:56:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

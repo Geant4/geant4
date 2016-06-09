@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.5 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NistElementBuilder.hh,v 1.6 2005/10/31 11:35:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -34,6 +34,8 @@
 //              Nist data base
 //
 // Author:      V.Ivanchenko 21-11-2004
+//
+// Modifications:
 //
 //----------------------------------------------------------------------------
 //
@@ -59,17 +61,17 @@ class G4NistElementBuilder
 public:
   G4NistElementBuilder(G4int vb);
  ~G4NistElementBuilder();
- 
+
   G4int    GetZ           (const G4String& symb);
   G4double GetA           (G4int Z);
   G4double GetIsotopeMass (G4int Z, G4int N);
-  
+
   G4int    GetMaxNumElements() {return maxNumElements-1;};
-    
+
   void SetVerbose   (G4int vb) {verbose = vb;};
   void PrintElement (G4int Z);
-    
-  // Find or build a G4Element by atomic number  
+
+  // Find or build a G4Element by atomic number
   G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
   // Find  or build a G4Element by symbol

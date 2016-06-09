@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.7 2004/05/16 20:42:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.8 2005/10/26 06:10:22 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
-#include <strstream>
+#include <sstream>
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -52,7 +52,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString
   G4double vl;
   char unts[30];
   
-  std::istrstream is((char*)paramString);
+  std::istringstream is(paramString);
   is >> vl >> unts;
   
   return vl;
@@ -63,7 +63,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
   G4double vl;
   char unts[30];
   
-  std::istrstream is((char*)paramString);
+  std::istringstream is(paramString);
   is >> vl >> unts;
   G4String unt = unts;
   
@@ -76,11 +76,10 @@ G4String G4UIcmdWithADoubleAndUnit::ConvertToStringWithBestUnit(G4double val)
   G4String canList = unitParam->GetParameterCandidates();
   G4Tokenizer candidateTokenizer(canList);
   G4String aToken = candidateTokenizer();
-  char strg[60];
-  std::ostrstream os(strg,60);
-  os << G4BestUnit(val,CategoryOf(aToken)) << '\0';
+  std::ostringstream os;
+  os << G4BestUnit(val,CategoryOf(aToken));
 
-  G4String st = strg;
+  G4String st = os.str();
   return st;
 }
 

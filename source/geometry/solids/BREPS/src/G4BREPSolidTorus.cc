@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.cc,v 1.7 2003/06/16 16:52:51 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidTorus.cc,v 1.8 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -56,6 +56,11 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
   
   active = 1;
   Initialize();
+}
+
+G4BREPSolidTorus::G4BREPSolidTorus( __void__& a )
+  : G4BREPSolid(a)
+{
 }
 
 G4BREPSolidTorus::~G4BREPSolidTorus()

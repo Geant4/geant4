@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.22 2004/12/08 00:07:24 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParticleTable.cc,v 1.24 2005/11/15 23:18:40 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4ParticleTable
 //
@@ -56,7 +56,7 @@
 
 ////////////////////
 G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" "),
-readyToUse(true)
+readyToUse(false)
 {
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
@@ -106,7 +106,9 @@ G4ParticleTable::~G4ParticleTable()
 ////////////////////
 G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
 {
-  G4Exception("you call copy constructor of G4ParticleTable");    
+  G4Exception("G4ParticleTable::G4ParticleTable()",
+	      "illegal constructor call", JustWarning,
+	      "you call copy constructor of G4ParticleTable");    
   fDictionary = new G4PTblDictionary(*(right.fDictionary));
   fIterator   = new G4PTblDicIterator(*fDictionary);
 }
@@ -392,13 +394,13 @@ void G4ParticleTable::CheckReadiness()
    G4String msg;
    msg = " Access to G4ParticleTable for finding a particle or equivalent\n";
    msg += "operation occurs before G4VUserPhysicsList is instantiated and\n";
-   msg += "assigned to G4RunManager. Such an access will be prohibited by\n";
-   msg += "Geant4 version 7.0. To fix this problem, please make sure that\n";
-   msg += "the main() instantiates G4VUserPhysicsList and set it to\n";
+   msg += "assigned to G4RunManager. Such an access is prohibited by\n";
+   msg += "Geant4 version 8.0. To fix this problem, please make sure that\n";
+   msg += "your main() instantiates G4VUserPhysicsList and set it to\n";
    msg += "G4RunManager before instantiating other user classes such as\n";
    msg += "G4VUserPrimaryParticleGeneratorAction.";
    G4Exception("G4ParticleTable::CheckReadiness()",
-              "PartMan0000",JustWarning,msg);
+              "PartMan0000",FatalException,msg);
   }
 }
 

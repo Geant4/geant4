@@ -205,7 +205,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
     for ( G4int isec = 0; isec < nEmSecondaries; isec++ ) {
       G4ParticleDefinition* pd = Cascade[isec].GetParticleDef();
       G4double localtime = globalTime;
-      if(isec > nCascade) localtime += tDelay;
+      if(isec >= nCascade) localtime += tDelay;
       if(pd) {
         G4DynamicParticle* aNewParticle = new G4DynamicParticle;
         aNewParticle->SetDefinition( pd );

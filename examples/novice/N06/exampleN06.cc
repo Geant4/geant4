@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.8 2005/05/03 10:21:16 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: exampleN06.cc,v 1.11 2005/12/06 10:56:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,8 @@
 #include "ExN06StackingAction.hh"
 #include "ExN06SteppingVerbose.hh"
 
+#include "Randomize.hh"
+
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
@@ -73,7 +75,7 @@ int main(int argc,char** argv) {
 
   // Seed the random number generator manually
   G4long myseed = 345354;
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExN06SteppingVerbose);

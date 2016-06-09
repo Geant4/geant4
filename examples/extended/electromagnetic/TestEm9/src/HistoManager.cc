@@ -170,6 +170,8 @@ void HistoManager::EndOfRun()
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
 
+  G4double f = 100.*std::sqrt(beamEnergy/GeV);
+
   G4cout                         << "Number of events             " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of e-         " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma      " << xg << G4endl;
@@ -177,7 +179,10 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   for(j=0; j<3; j++) {
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << edep[j]
-           << " +- " << erms[j]*std::sqrt(x) << G4endl;
+           << " +- " << erms[j]*std::sqrt(x);
+    if(edep[j] > 0.0)
+      G4cout << "  res=  " << f*erms[j]/edep[j] << " %";
+    G4cout << G4endl;
   }
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;

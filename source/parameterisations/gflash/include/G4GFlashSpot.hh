@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4GFlashSpot.hh,v 1.3 2005/10/04 09:08:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  G4GFlashSpot
+//
+//  Class description:
+//
+//  Definition of energy spot for GFlash parameterisation.
+
+//---------------------------------------------------------------
 #ifndef G4GFlashSpot_h
 #define G4GFlashSpot_h
 
@@ -30,25 +45,28 @@
 
 class G4GFlashSpot
 {
-	public:
-	G4GFlashSpot(const GFlashEnergySpot * aSpot, const G4FastTrack * aTrack, G4TouchableHandle aH)
-	: theSpot(aSpot), theTrack(aTrack), theHandle(aH) {}
-	
-	~G4GFlashSpot() {}
-	
-	const GFlashEnergySpot * GetEnergySpot() const {return theSpot;}
-	
-	const G4FastTrack * GetOriginatorTrack() const {return theTrack;}
-	
-	G4TouchableHandle GetTouchableHandle() const {return theHandle;}
-	
-	G4ThreeVector GetPosition() const {return GetOriginatorTrack()->GetPrimaryTrack()->GetPosition();}
-		
-	private:
-	
-	const GFlashEnergySpot * theSpot;
-	const G4FastTrack * theTrack;
-	G4TouchableHandle theHandle;
+  public:
+
+    G4GFlashSpot(const GFlashEnergySpot * aSpot,
+                 const G4FastTrack * aTrack, G4TouchableHandle aH)
+      : theSpot(aSpot), theTrack(aTrack), theHandle(aH) {}
+  
+    ~G4GFlashSpot() {}
+  
+    const GFlashEnergySpot * GetEnergySpot() const {return theSpot;}
+  
+    const G4FastTrack * GetOriginatorTrack() const {return theTrack;}
+  
+    G4TouchableHandle GetTouchableHandle() const {return theHandle;}
+  
+    G4ThreeVector GetPosition() const
+     {return GetOriginatorTrack()->GetPrimaryTrack()->GetPosition();}
+    
+  private:
+  
+    const GFlashEnergySpot * theSpot;
+    const G4FastTrack * theTrack;
+    G4TouchableHandle theHandle;
 };
 
 #endif

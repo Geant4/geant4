@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegacZero.hh,v 1.9 2002/12/16 11:15:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AntiOmegacZero.hh,v 1.11 2005/01/14 03:49:07 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,50 +31,31 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 14 Feb 19
-//  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VBaryon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4AntiOmegacZero_h
 #define G4AntiOmegacZero_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBaryon.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
-// ###                          AntiOmegacZero                            ###
+// ###                      AntiOmegacZero                            ###
 // ######################################################################
 
-class G4AntiOmegacZero : public G4VBaryon
+class G4AntiOmegacZero : public G4ParticleDefinition
 {
  private:
-   static G4AntiOmegacZero theAntiOmegacZero;
-
- private:
-   G4AntiOmegacZero(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4AntiOmegacZero* theInstance;
+   G4AntiOmegacZero(){}
+   ~G4AntiOmegacZero(){}
 
  public:
-   virtual ~G4AntiOmegacZero(){}
-
+   static G4AntiOmegacZero* Definition();
    static G4AntiOmegacZero* AntiOmegacZeroDefinition();
    static G4AntiOmegacZero* AntiOmegacZero();
-
 };
-
 
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.16 2005/04/22 12:02:47 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLXmViewer.cc,v 1.21 2005/11/22 16:03:23 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -34,8 +34,7 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-
-#include "G4ios.hh"
+#include "G4OpenGLXmViewerMessenger.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -47,6 +46,8 @@
 
 #include "G4Xt.hh"
 #include <X11/Shell.h>
+
+#include <sstream>
 
 void G4OpenGLXmViewer::ShowView () {
 
@@ -68,26 +69,33 @@ void G4OpenGLXmViewer::GetXmConnection () {
   }
 
   // Better to put this in an X11 resource file !!!
-  interactorManager->PutStringInResourceDatabase ((char*)"\
-*glxarea*width: 500\n\
-*glxarea*height: 500\n\
-*frame*x: 10\n\
-*frame*y: 10\n\
-*frame*topOffset: 10\n\
-*frame*bottomOffset: 10\n\
-*frame*rightOffset: 10\n\
-*frame*leftOffset: 10\n\
-*frame*shadowType: SHADOW_IN\n\
-*frame*useColorObj: False\n\
-*frame*primaryColorSetId: 3\n\
-*frame*secondaryColorSetId: 3\n\
-*menubar*useColorObj: False\n\
-*menubar*primaryColorSetId: 3\n\
-*menubar*secondaryColorSetId: 3\n\
-*toplevel*useColorObj: False\n\
-*toplevel*primaryColorSetId: 3\n\
-*toplevel*secondaryColorSetId: 3\n\
-");
+  std::ostringstream oss;
+  oss <<
+    "*glxarea*width: " << fVP.GetWindowSizeHintX() << "\n"
+    "*glxarea*height: " << fVP.GetWindowSizeHintY() << "\n"
+    /*
+    // Tried this as a replacement for the above two lines, but
+    // sub-windows (rotation, etc.) came same size!!
+    "*geometry: " << fVP.GetXGeometryString() << "\n"
+    */
+    "*frame*x: 10\n"
+    "*frame*y: 10\n"
+    "*frame*topOffset: 10\n"
+    "*frame*bottomOffset: 10\n"
+    "*frame*rightOffset: 10\n"
+    "*frame*leftOffset: 10\n"
+    "*frame*shadowType: SHADOW_IN\n"
+    "*frame*useColorObj: False\n"
+    "*frame*primaryColorSetId: 3\n"
+    "*frame*secondaryColorSetId: 3\n"
+    "*menubar*useColorObj: False\n"
+    "*menubar*primaryColorSetId: 3\n"
+    "*menubar*secondaryColorSetId: 3\n"
+    "*toplevel*useColorObj: False\n"
+    "*toplevel*primaryColorSetId: 3\n"
+    "*toplevel*secondaryColorSetId: 3\n";
+  interactorManager->PutStringInResourceDatabase ((char*)oss.str().c_str());
+
   //  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)G4OpenGLXmViewerSecondaryLoopPostAction);
   
   shell = XtAppCreateShell ((String)fName.data(),(String)fName.data(),topLevelShellWidgetClass,XtDisplay(toplevel),NULL,0); 
@@ -311,18 +319,18 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
-  if (white_background == true) {
+  if (background.GetRed() == 1. &&
+      background.GetGreen() == 1. &&
+      background.GetBlue() == 1.) {
     special_widget = XtNameToWidget(background_color_pullright, "button_0");
     if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
-  } else if (white_background == false) {
+  } else {
     special_widget = XtNameToWidget(background_color_pullright, "button_1");
     if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
-  } else {
-    G4Exception("white_background in G4OpenGLXmViewer is neither true nor false!!");
   }
 
   XmStringFree (white_str);
@@ -609,16 +617,19 @@ rot_sens (4.),
 wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
 frameNo (0),
-fprotation_top (NULL),
-fprotation_slider (NULL),
-fppanning_top (NULL),
-fppanning_slider (NULL),
-fpzoom_slider (NULL),
-fpdolly_slider (NULL),
-fpsetting_top (NULL),
-fpmiscellany_top (NULL),
-fpprint_top (NULL)
+fprotation_top (0),
+fprotation_slider (0),
+fppanning_top (0),
+fppanning_slider (0),
+fpzoom_slider (0),
+fpdolly_slider (0),
+fpsetting_top (0),
+fpmiscellany_top (0),
+fpprint_top (0),
+fpMessenger (0)
 {
+
+  fpMessenger = new G4OpenGLXmViewerMessenger(this, fShortName);
 
   WinSize_x = 100;
   WinSize_y = 100;
@@ -652,6 +663,8 @@ G4OpenGLXmViewer::~G4OpenGLXmViewer ()
     delete fpmiscellany_top;
   }
 ******************************/
+
+  delete fpMessenger;
 }
 
 #endif

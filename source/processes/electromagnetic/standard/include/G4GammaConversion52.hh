@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaConversion52.hh,v 1.1 2005/05/04 16:16:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //------------------ G4GammaConversion52 physics process -------------------------
 //                   by Michel Maire, 24 May 1996

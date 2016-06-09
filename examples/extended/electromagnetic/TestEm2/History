@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2005/06/08 14:26:10 maire Exp $
+$Id: History,v 1.59 2005/12/06 11:37:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+22-11-05 mma (testem2-V07-01-01)
+- update README for OpenScientist
+     
+08 May 05: V.Ivant (testem2-V07-01-00)
+- Used updated PhysicsList with g4v71
+- Add protection for the case, when histogram tree is not created
+
+07-07-05 mma
+- vis.mac : /vis/viewer/set/style surface
      
 08-06-05 mma (testem2-V07-00-02)
 - RunAction : histo : option --noErrors for hbook files

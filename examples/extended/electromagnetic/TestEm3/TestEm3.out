@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,9 +20,11 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 2
 #
-#### /testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v71
 /testem/phys/addPhysics  standard
 #
 /run/initialize
@@ -46,7 +48,6 @@ userDetector->Construct() start.
 -------------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -64,10 +65,10 @@ PhysicsList::SetCuts:CutLength : 1 mm
 ----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1;  52 bins from 0 none to 52 none
 /testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
 ----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 21 102  0.   102. none	#energy flow of primary
-----> SetHisto 21: Forward energy flow (MeV/event);  102 bins from 0 none to 102 none
-/testem/histo/setHisto 22 102  0.   102. none	#energy flow of secondaries
-----> SetHisto 22: Backward energy flow (MeV/event);  102 bins from 0 none to 102 none
+/testem/histo/setHisto 21 102  0.   102. none	#energy flow
+----> SetHisto 21: energy flow (MeV/event);  102 bins from 0 none to 102 none
+/testem/histo/setHisto 22 102  0.   102. none	#lateral energy leakage
+----> SetHisto 22: lateral energy leak (MeV/event);  102 bins from 0 none to 102 none
 #
 /testem/event/printModulo 50
 #
@@ -87,13 +88,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.2
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -105,7 +106,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -119,7 +120,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -139,7 +140,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -177,9 +178,9 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-Region DefaultRegionForTheWorld
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Lead liquidArgon 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -212,19 +213,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k Layer
        0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.01    Layer
+       8.30          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -239,28 +240,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=108.61s Real=116.66s Sys=6.64s
+  User=211.69s Real=250.27s Sys=37.62s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead:  806.1 MeV +- 16.85 MeV      2.09 +- 0.209 %      55.8 cm  +- 1.31 cm 
-liquidArgon: 183.68 MeV +- 15.11 MeV     8.225 +- 0.8225 %        91 cm  +- 7.82 cm 
+      Lead: 783.12 MeV +- 14.93 MeV     1.906 +- 0.1906 %      53.9 cm  +- 1.18 cm 
+liquidArgon: 206.22 MeV +- 14.83 MeV      7.19 +- 0.719 %      1.02 m   +- 7.58 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
-  material	 Total Edep	 Forward Edep	 Backward Edep 
+  material 	 Total Edep 
  
-      Lead:	 811.1 MeV	 801.1 MeV	 9.995 MeV
-liquidArgon:	 186.2 MeV	 196.2 MeV	 -9.995 MeV
+      Lead:	 783.128 MeV
+liquidArgon:	 206.221 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1565724203, 225741664
+ Current couple of seeds = 1763111852, 1437958173
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

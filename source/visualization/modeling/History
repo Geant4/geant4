@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2005/06/07 16:56:40 allison Exp $
+$Id: History,v 1.46 2005/12/05 00:16:34 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,40 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+2nd December 2005  Joseph Perl (modeling-V07-01-07)
+- Change "G4String inline" to "inline G4String" to correct compiler
+  warning in G4VTrajectoryModel.hh.
+
+30th November 2005  Gabriele Cosmo (modeling-V07-01-06)
+- Trivial fix to G4VModel for support of CLHEP-2.0.X series.
+
+28th November 2005  Jane Tinslay
+- Remove names of unused parameters to stop compiler warnings
+
+24th November 2005  John Allison (modeling-V07-01-05)
+- Set initial values for originalRMin, originalRMax to satisfy compiler
+
+23rd November 2005  Joseph Perl  (modeling-V07-01-04)
+- Tagged in preparation for Geant4 8.0
+
+23rd November 2005 Jane Tinslay
+- Enhanced trajectory implementation
+
+22nd November 2005  John Allison (modeling-V07-01-03)
+- Implemented radial replicas for G4Tubs.
+- Changed G4Transform3D::Identity to G4Transform3D().
+
+24th October 2005  John Allison (modeling-V07-01-02)
+- Added: G4VTrajectoryModel, G4VTrajectoryModelMaker, G4TrajectoryModelMaker
+  and G4TrajectoryTestModel.
+- G4VModel: cosmetic changes.
+
+13th October 2005  John Allison (modeling-V07-01-01)
+- Migrated to <sstream>.
+
+13th September 2005  John Allison (modeling-V07-01-00)
+- Fixed (non-)culling of transparent volumes.
 
 7th June 2005  John Allison (modeling-V07-00-02)
 - G4PhysicalVolumeModel: fixed case of off-origin volume.

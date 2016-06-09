@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.20 2005/05/18 15:28:37 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: SteppingAction.cc,v 1.22 2005/11/22 15:29:06 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,27 +54,24 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  //initialize Energy flow
-  if (aStep->GetTrack()->GetCurrentStepNumber() == 1) Idold = 0;
-      
+  //track informations
+  const G4StepPoint* prePoint = aStep->GetPreStepPoint();   
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4Track*     track    = aStep->GetTrack();
+  const G4ParticleDefinition* particle = track->GetDefinition(); 
+    
   //if World, return
   //
-  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
   G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
-  if (mat == detector->GetWorldMaterial()) return;
+  if (mat == detector->GetWorldMaterial()) return; 
  
   //here we are in an absorber. Locate it
   //
   G4int absorNum  = volume->GetCopyNo();
   G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
-  
-  //track informations 
-  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4Track*     track    = aStep->GetTrack();
-  const G4ParticleDefinition* particle = track->GetDefinition(); 
-     
+       
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -92,25 +89,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //
   // unique identificator of layer+absorber
   G4int Idnow = (detector->GetNbOfAbsor())*layerNum + absorNum;
-  if (track->GetCurrentStepNumber() == 1) Idold = Idnow;     // track begins
+  G4int plane;
   //
-  //first step in the absorber ?
-  G4int plane=0;
-  if (prePoint->GetStepStatus() == fGeomBoundary) {
-    G4double Eflow = prePoint->GetKineticEnergy();
-    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;  
-    if      (Idnow > Idold) runAct->sumForwEflow(plane=Idnow,   Eflow);
-    else if (Idnow < Idold) runAct->sumBackEflow(plane=Idnow+1, Eflow);
-    Idold = Idnow;
-  }   
-  
-  //last plane : forward leakage
-  G4int Idlast = (detector->GetNbOfAbsor())*(detector->GetNbOfLayers()); 
-  if ((Idnow == Idlast) && (endPoint->GetStepStatus() == fGeomBoundary)) {
+  //leaving the absorber ?
+  if (endPoint->GetStepStatus() == fGeomBoundary) {
+    G4ThreeVector position  = endPoint->GetPosition();
+    G4ThreeVector direction = endPoint->GetMomentumDirection();
+    G4double sizeYZ = 0.5*detector->GetCalorSizeYZ();       
     G4double Eflow = endPoint->GetKineticEnergy();
-    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;  
-    runAct->sumForwEflow(plane=Idlast+1, Eflow);
-  }
+    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
+    if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ)) 
+                                  runAct->sumLateralEleak(Idnow, Eflow);
+    else if (direction.x() >= 0.) runAct->sumEnergyFlow(plane=Idnow+1, Eflow);
+    else                          runAct->sumEnergyFlow(plane=Idnow,  -Eflow);    
+  }   
 
 ////  example of Birk attenuation
 ////  G4double destep   = aStep->GetTotalEnergyDeposit();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.8 2003/06/16 16:57:22 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Deuteron.cc,v 1.10 2005/01/14 03:49:13 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -31,59 +31,60 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added by J.L.Chuma, TRIUMF, 27 June 1996
-//  Added G4Deuteron::DeuteronDefinition() by H.Kurashige, 27 June 1996
-//  Fixed parameters H. Kurashige, 25 Apr 1998
+//  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4Deuteron.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                           DEUTERON                             ###
 // ######################################################################
 
-G4Deuteron::G4Deuteron(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VIon( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable )
+G4Deuteron* G4Deuteron::theInstance = 0;
+
+G4Deuteron* G4Deuteron::Definition()
 {
-  SetParticleSubType("static");
+  if (theInstance !=0) return theInstance;
+  const G4String name = "deuteron";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance ==0)
+  {
+  // create particle
+  //
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+   anInstance = new G4ParticleDefinition(
+                 name,   1.875613*GeV,       0.0*MeV,  +1.0*eplus,
+                    2,              +1,             0,
+                    0,               0,             0,
+            "nucleus",               0,            +2,           0,
+                 true,            -1.0,          NULL,
+             false,           "static"
+              );
+
+   anInstance->SetAtomicNumber(1);
+   anInstance->SetAtomicMass(2);
+  }
+  theInstance = reinterpret_cast<G4Deuteron*>(anInstance);
+  return theInstance;
 }
 
-G4Deuteron::~G4Deuteron()
+G4Deuteron*  G4Deuteron::DeuteronDefinition()
 {
+  return Definition();
 }
 
-// ......................................................................
-// ...                 static member definitions                      ...
-// ......................................................................
-//     
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table 
+G4Deuteron*  G4Deuteron::Deuteron()
+{
+  return Definition();
+}
 
-G4Deuteron G4Deuteron::theDeuteron(
-           "deuteron",    1.875613*GeV,       0.0*MeV,  +1.0*eplus, 
-		    2,              +1,             0,          
-		    0,               0,             0,             
-	    "nucleus",               0,            +2,           0,
-		 true,            -1.0,          NULL
-);
 
-G4Deuteron* G4Deuteron::DeuteronDefinition(){return &theDeuteron;}
-G4Deuteron* G4Deuteron::Deuteron(){return &theDeuteron;}

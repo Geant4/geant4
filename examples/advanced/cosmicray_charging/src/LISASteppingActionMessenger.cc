@@ -39,6 +39,8 @@
 
 #include "LISASteppingActionMessenger.hh"
 
+#include <sstream>
+
 #include "LISASteppingAction.hh"
 
 
@@ -78,7 +80,7 @@ void LISASteppingActionMessenger::SetNewValue
   if(command == SetFlagSpectrum) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     steppingAction->SetFlagSpectrum(vl!=0);
   }

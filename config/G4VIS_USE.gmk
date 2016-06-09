@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.20 2003/11/13 09:54:41 gcosmo Exp $
+# $Id: G4VIS_USE.gmk,v 1.22 2005/10/05 17:35:40 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -88,6 +88,13 @@ ifdef G4VIS_USE_OI
   VISLIBS += -lG4OpenInventor
   INC_IV    = 1
   LOAD_IV   = 1
+endif
+
+ifdef G4VIS_USE_RAYTRACERX
+  CPPFLAGS += -DG4VIS_USE_RAYTRACERX
+  # CPPFLAGS += -I... and VISLIBS += set above.
+  INC_X11 = 1
+  LOAD_X11  = 1
 endif
 
 ifdef G4VIS_USE_VRML

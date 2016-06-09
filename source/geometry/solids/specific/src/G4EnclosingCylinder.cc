@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.7 2004/12/10 16:22:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EnclosingCylinder.cc,v 1.8 2005/11/09 15:04:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -80,6 +80,14 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
   radius += 10*kCarTolerance;
   zLo    -= 10*kCarTolerance;
   zHi    += 10*kCarTolerance;
+}
+
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4EnclosingCylinder::G4EnclosingCylinder( __void__& )
+{
 }
 
 //

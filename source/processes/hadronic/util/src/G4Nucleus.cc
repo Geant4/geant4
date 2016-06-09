@@ -325,15 +325,19 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     // chv: .. we assume zero temperature!
     
     // momentum is equally distributed in each phasespace volume dpx, dpy, dpz.
-    G4double ranflat1=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
-    G4double ranflat2=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
-    G4double ranflat3=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+    G4double ranflat1=
+      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+    G4double ranflat2=
+      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+    G4double ranflat3=
+      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
     G4double ranmax = (ranflat1>ranflat2? ranflat1: ranflat2);
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
     // - random decay angle
     G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
-    G4double phi  =RandFlat::shoot((G4double)0.,(G4double)2*pi);  // isotropic decay angle phi
+    G4double phi  =CLHEP::RandFlat::shoot((G4double)0.,(G4double)2*pi);
+                                        // isotropic decay angle phi
     
     // - setup ThreeVector
     G4double pz=std::cos(theta)*ranmax;

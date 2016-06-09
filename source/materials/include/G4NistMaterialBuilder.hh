@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.3 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NistMaterialBuilder.hh,v 1.4 2005/10/31 11:35:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -35,6 +35,7 @@
 // Author:      V.Ivanchenko 21-11-2004
 //
 // Modifications:
+// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
 //
 //
 //----------------------------------------------------------------------------
@@ -100,6 +101,10 @@ private:
                          G4double pot=0.0, G4int ncomp=1,
                          G4State=kStateSolid);
 
+  void AddChemicalFormula(const G4String& nameMat, const G4String& ch);
+  void AddGas(const G4String& nameMat, G4double t=STP_Temperature,
+              G4double p=STP_Pressure);
+
   void AddElementByWeightFraction(G4int Z, G4double);
   void AddElementByAtomCount     (G4int Z, G4int);
 
@@ -108,10 +113,10 @@ private:
 
   // build a G4Material from dataBase
   G4Material* BuildMaterial(const G4String& name, G4bool isotopes);
-  
+
   void DumpElm(G4int);
   void DumpMix(G4int);
-  
+
 private:
 
   G4NistManager*         matManager;
@@ -134,6 +139,9 @@ private:
   std::vector<G4int>     components;
   std::vector<G4int>     indexes;
   std::vector<G4int>     elements;
+
+  std::vector<G4double>  temperatures;
+  std::vector<G4double>  presures;
 
   G4bool                 first;
 

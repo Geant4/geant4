@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.hh,v 1.1 2003/09/18 11:14:02 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RTSimpleScanner.hh,v 1.2 2005/07/17 13:59:24 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
@@ -45,6 +45,14 @@ public: // with description
   // Compiler defaults for destructor, copy constructor and
   // assignmemt.
 
+  virtual const G4String& GetGSName() const;
+  // Get name that acts as graphics system name.
+
+  virtual const G4String& GetGSNickname() const;
+  // Get name that acts as graphics system nickname.  It is this that
+  // the user specifies on the /vis/open and /vis/sceneHandler/create
+  // commands.
+
   virtual void Initialize(G4int nRow, G4int nColumn);
   // Intialises scanner for window with nRow rows and nColumn columns.
 
@@ -54,6 +62,7 @@ public: // with description
   // last valid coordinate.
 
 protected:
+  G4String theGSName, theGSNickname;
   G4int theNRow, theNColumn, theIRow, theIColumn;
 };
 

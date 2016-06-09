@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.12 2005/04/27 01:32:46 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParticleGunMessenger.cc,v 1.13 2005/11/18 21:46:24 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4ParticleGunMessenger.hh"
@@ -40,9 +40,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"
-
-#include <iomanip>               
-#include <strstream>
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   :fParticleGun(fPtclGun),fShootIon(false)

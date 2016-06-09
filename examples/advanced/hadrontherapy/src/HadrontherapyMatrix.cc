@@ -37,13 +37,14 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "globals.hh"
+#include <fstream>
 
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
   // Number of the voxels of the phantom
-  numberVoxelX = 80;
-  numberVoxelY = 80;
-  numberVoxelZ = 80; 
+  numberVoxelX = 200;
+  numberVoxelY = 200;
+  numberVoxelZ = 200; 
  
   // Create the matrix
   matrix = new G4double[numberVoxelX*numberVoxelY*numberVoxelZ];
@@ -86,33 +87,32 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   G4int k;
   G4int j;
   G4int i;
-
+  
   if (matrix)
     {  
-      for(G4int l = 0; l < numberVoxelZ; l++) 
-	{
-	  k = l;
-                        
-	  for(G4int m = 0; m < numberVoxelY; m++) 
-	    { 
-	      j = m * numberVoxelZ + k; 
-                         
-	      for(G4int n = 0; n <  numberVoxelX; n++)
-		{
-		  i =  n* numberVoxelZ * numberVoxelY + j;
-		  if(matrix[i] != 0)
-		    {			     
-#ifdef G4ANALYSIS_USE 	
-		      HadrontherapyAnalysisManager* analysis = 
-			HadrontherapyAnalysisManager::getInstance();
-		      analysis -> FillEnergyDeposit(n, m, k, matrix[i]);
-		      analysis -> BraggPeak(n, matrix[i]);
-#endif
-		    }
-		}       
+	for(G4int l = 0; l < numberVoxelZ; l++) 
+	  {
+	    k = l;
 	    
-	    }
-      
-	}
+	    for(G4int m = 0; m < numberVoxelY; m++) 
+	      { 
+		j = m * numberVoxelZ + k; 
+		
+		for(G4int n = 0; n <  numberVoxelX; n++)
+		  {
+		    i =  n* numberVoxelZ * numberVoxelY + j;
+		    if(matrix[i] != 0)
+		      {	
+					
+#ifdef G4ANALYSIS_USE 	
+			HadrontherapyAnalysisManager* analysis = 
+			  HadrontherapyAnalysisManager::getInstance();
+			analysis -> FillEnergyDeposit(n, m, k, matrix[i]);
+			analysis -> BraggPeak(n, matrix[i]);
+#endif
+		      }
+		  }       
+	      }
+	  }
     }
 }

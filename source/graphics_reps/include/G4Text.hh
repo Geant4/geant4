@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.hh,v 1.7 2001/07/11 10:01:03 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Text.hh,v 1.8 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  17/11/96.
@@ -76,12 +76,7 @@ public: // With description
   G4Text (const G4String& text);
   G4Text (const G4String& text, const G4Point3D& pos);
   G4Text (const G4VMarker& marker);
-  virtual ~G4Text ();
-
-  virtual G4Visible&  operator = (const G4Visible& from);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& from);
-  virtual G4VMarker&  operator = (const G4VMarker& from);
-  virtual G4Text&     operator = (const G4Text& from);
+  ~G4Text ();
 
   G4String GetText   () const;
   Layout   GetLayout () const;

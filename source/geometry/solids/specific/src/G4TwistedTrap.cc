@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.9 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTrap.cc,v 1.13 2005/12/06 09:22:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -33,11 +33,7 @@
 //
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
-//
-// History:
-//
-//   10/11/2004 - Created.
+//   10/11/2004 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -71,6 +67,14 @@ G4TwistedTrap(const G4String &pName,      // Name of instance
               )
   : G4VTwistedFaceted( pName, pPhiTwist, pDz, pTheta,
                        pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4, pAlph )
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedTrap::G4TwistedTrap( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 
@@ -108,17 +112,6 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedTrap::CreatePolyhedron () const 
-{
-  // Returns simple trap for now!!
-  //
-  return new G4PolyhedronTrap(GetDz(), GetTheta(), GetPhi(),
-                              GetDy1(), GetDx1(), GetDx2(), GetAlpha(),
-                              GetDy2(), GetDx3(), GetDx4(), GetAlpha());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

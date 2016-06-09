@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimIonICRU.cc,v 1.6 2005/05/19 13:46:29 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimIonICRU.cc,v 1.9 2005/12/06 07:47:35 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 
@@ -51,20 +51,30 @@ void RemSimIonICRU::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
 
-      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+      if (particleName  == "proton" || particleName == "GenericIon"
+          || particleName == "alpha" )
+	{
+	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+	  G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+	  manager -> AddProcess(multipleScattering, -1,1,1);   
+	  manager -> AddProcess(ionisation, -1,2,2);
+	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	}
+      else{     
+	if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
             particleName != "e-" && particleName != "mu-") 
-	    {
-             if((!particle -> IsShortLived()) &&
-		 (particle -> GetParticleName() != "chargedgeantino"))
-	       {
-		 G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-		 manager -> AddProcess(multipleScattering, -1,1,1);   
-		 manager -> AddProcess(ionisation, -1,2,2);
-                 manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
-	       }
-	    }
-    }
+	  {
+	    if((!particle -> IsShortLived()) &&
+	       (particle -> GetParticleName() != "chargedgeantino"))
+	      {
+		G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+		G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+		manager -> AddProcess(multipleScattering, -1,1,1);   
+		manager -> AddProcess(ionisation, -1,2,2);
+		manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	      }
+	  }
+      }}
 }
 
    

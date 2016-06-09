@@ -1,0 +1,23 @@
+$Id: History,v 1.2 2005/11/30 11:40:58 gcosmo Exp $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+            History file for hadronic/models/util directory
+            -----------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+30 Nov 2005 Gabriele Cosmo (hadr-munuclear-V07-01-00)
+----------------------------------------------------
+- Trivial fix in G4MuonNucleusInteractionModel and
+  G4ParametrizedHadronicVertex for support of CLHEP-2.0.X series.
+  NOTE: use of RandBit() can lead to event irreproducibility !
+- Created History file.

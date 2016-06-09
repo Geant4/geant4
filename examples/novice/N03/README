@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2003/12/02 14:22:31 maire Exp $
+$Id: README,v 1.16 2005/11/22 16:11:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,7 +29,25 @@ $Id: README,v 1.15 2003/12/02 14:22:31 maire Exp $
  	The default geometry is constructed in DetectorConstruction class,
  	but all of the above parameters can be modified interactively via
  	the commands defined in the DetectorMessenger class.
- 	
+
+
+	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+	|			|			|			|
+	==========================================================================
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+ beam	||		|	||		|	||		|	||
+======>	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+	||    		| 	||    		| 	||    		| 	||
+	==========================================================================
+	
  	NB. The thickness of the absorber or of the gap can be set to zero
  	    (but not together), and the number of layers to 1. In this case we
  	    have a unique homogeneous block of matter, which looks like

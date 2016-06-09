@@ -139,7 +139,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
                        G4double theBR,
                        G4double theFFN,
 		       G4bool betaS, 
-		       RandGeneral* randBeta,
+		       CLHEP::RandGeneral* randBeta,
                        G4double theQtransition,
                        G4int A,
                        G4int Z,
@@ -271,8 +271,8 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   // Load-up the details of the parent and daughter particles if they have not
   // been defined properly.
   //
-  if (parent == NULL) FillParent();
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();
+  if (daughters == 0) FillDaughters();
   //
   //
   // We want to ensure that the difference between the total
@@ -296,7 +296,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   //
   // Define a product vector.
   //
-  G4DecayProducts *products = NULL;
+  G4DecayProducts *products = 0;
   //
   //
   // Depending upon the number of daughters, select the appropriate decay
@@ -325,7 +325,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       G4cerr <<"Number of daughters in decay = " <<numberOfDaughters <<G4endl;
       G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,  "G4NuclearDecayChannel::DecayIt");
     }
-  if ((products == NULL) && (GetVerboseLevel()>0)) {
+  if ((products == 0) && (GetVerboseLevel()>0)) {
     G4cerr << "G4NuclearDecayChannel::DecayIt ";
     G4cerr << *parent_name << " can not decay " << G4endl;
     DumpInfo();

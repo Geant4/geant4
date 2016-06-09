@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.27 2005/03/10 19:33:03 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.29 2005/11/22 17:23:52 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -35,7 +35,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 ////////////// /vis/sceneHandler/attach ///////////////////////////////////////
 
@@ -86,8 +86,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4SceneList& sceneList =
-    fpVisManager -> SetSceneList ();
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
 
   if (sceneList.empty ()) {
     if (verbosity >= G4VisManager::errors) {
@@ -105,12 +104,22 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   if (iScene < nScenes) {
     G4Scene* pScene = sceneList [iScene];
     pSceneHandler -> SetScene (pScene);
-    UpdateVisManagerScene(sceneName);
+    // Make sure scene is current...
+    fpVisManager -> SetCurrentScene (pScene);
+    // Refresh viewer, if any (only if auto-refresh)...
+    G4VViewer* pViewer = pSceneHandler -> GetCurrentViewer();
+    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+      pViewer -> SetView ();
+      pViewer -> ClearView ();
+      pViewer -> DrawView ();
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Scene \"" << sceneName
 	     << "\" attached to scene handler \""
-	     << pSceneHandler -> GetName ()
-	     << "." << G4endl;
+	     << pSceneHandler -> GetName () <<
+	".\n  (You may have to refresh with \"/vis/viewer/flush\" if view"
+	" is not \"auto-refresh\".)"
+	     << G4endl;
     }
   }
   else {
@@ -164,10 +173,9 @@ G4VisCommandSceneHandlerCreate::~G4VisCommandSceneHandlerCreate () {
 }
 
 G4String G4VisCommandSceneHandlerCreate::NextName () {
-  char nextName [20];
-  std::ostrstream ost (nextName, 20);
-  ost << "scene-handler-" << fId << std::ends;
-  return nextName;
+  std::ostringstream oss;
+  oss << "scene-handler-" << fId;
+  return oss.str();
 }
 
 G4String G4VisCommandSceneHandlerCreate::GetCurrentValue(G4UIcommand*) {
@@ -198,7 +206,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String graphicsSystem, newName;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
@@ -263,8 +271,19 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
 
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
-  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName)
+  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+	" Curious name mismatch."
+	"\n Current name \""
+	     << fpVisManager -> GetCurrentSceneHandler () -> GetName ()
+	     << "\" is not the new name \""
+	     << newName
+	     << "\".\n  Please report to vis coordinator."
+	     << G4endl;
+    }
     return;
+  }
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
@@ -303,7 +322,7 @@ G4String G4VisCommandSceneHandlerList::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
 						G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is (newValue);
+  std::istringstream is (newValue);
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);

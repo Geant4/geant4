@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_BIC.hh,v 1.3 2005/12/02 16:13:42 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysicsLHEP_BIC
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//  1.12.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef HadronPhysicsLHEP_BIC_h
 #define HadronPhysicsLHEP_BIC_h 1
 
@@ -27,7 +41,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronQEDBuilder.hh"
 #include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
@@ -53,20 +66,20 @@ class HadronPhysicsLHEP_BIC : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
-    G4NeutronBuilder theNeutrons;
-    G4LHEPNeutronBuilder theLHEPNeutron;
-    G4BinaryNeutronBuilder theBinaryNeutron;
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LHEPNeutronBuilder * theLHEPNeutron;
+    G4BinaryNeutronBuilder * theBinaryNeutron;
     
-    G4PiKBuilder thePiK;
-    G4LHEPPiKBuilder theLHEPPiK;
+    G4PiKBuilder * thePiK;
+    G4LHEPPiKBuilder * theLHEPPiK;
     
-    G4ProtonBuilder thePro;
-    G4LHEPProtonBuilder theLHEPPro;
-    G4BinaryProtonBuilder theBinaryPro;
+    G4ProtonBuilder * thePro;
+    G4LHEPProtonBuilder * theLHEPPro;
+    G4BinaryProtonBuilder * theBinaryPro;
     
-    G4MiscLHEPBuilder theMiscLHEP;
-    G4StoppingHadronBuilder theStoppingHadron;
-    G4HadronQEDBuilder theHadronQED;
+    G4MiscLHEPBuilder * theMiscLHEP;
+    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

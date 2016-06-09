@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CylindricalSurface.cc,v 1.7 2004/12/10 16:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

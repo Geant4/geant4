@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.35 2004/12/02 09:31:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidPCone.cc,v 1.37 2005/11/09 15:01:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,7 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4BREPSolidPCone.hh"
 #include "G4FCylindricalSurface.hh"
@@ -171,15 +171,15 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         //
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] )
         {
-          char msgbuf[512];
-          std::ostrstream os(msgbuf,512);
+          std::ostringstream os;
           os << "The values of RMIN[" << a
              << "] & RMAX[" << a+1 << "] or RMAX[" << a
              << "] & RMIN[" << a+1 << "] "
              << "generate an invalid configuration for solid: "
              << name.c_str() << "!" << G4endl;
+          G4String message = os.str();
           G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                      "InvalidSetup", FatalException, msgbuf );
+                      "InvalidSetup", FatalException, message );
         }
         
         ESurfaceSense UpSurfSense, LowSurfSense;
@@ -555,13 +555,18 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   Initialize();
 }
 
+G4BREPSolidPCone::G4BREPSolidPCone( __void__& a )
+  : G4BREPSolid(a)
+{
+}
+
 G4BREPSolidPCone::~G4BREPSolidPCone()
 {
   if( constructorParams.num_z_planes > 0 )
   {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
   }
 }
 

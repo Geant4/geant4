@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysicsListMessenger.cc,v 1.2 2004/10/20 14:32:36 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRTScanner.hh,v 1.1 2003/09/18 11:14:03 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VRTScanner.hh,v 1.3 2005/11/28 20:07:44 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
@@ -36,9 +36,19 @@
 
 #include "globals.hh"
 
+class G4RayTracer;
+
 class G4VRTScanner {
 
 public: // with description
+
+  virtual const G4String& GetGSName() const = 0;
+  // Get name that acts as graphics system name.
+
+  virtual const G4String& GetGSNickname() const = 0;
+  // Get name that acts as graphics system nickname.  It is this that
+  // the user specifies on the /vis/open and /vis/sceneHandler/create
+  // commands.
 
   virtual void Initialize(G4int nRow, G4int nColumn) = 0;
   // Intialises scanner for window with nRow rows and nColumn columns.
@@ -47,6 +57,11 @@ public: // with description
   // Supplies coordinate (iRow,iColumn) and returns false when the
   // sequence has finished, i.e., on the call *after* suplying the
   // last valid coordinate.
+
+  virtual void Draw
+  (unsigned char, unsigned char, unsigned char,
+   G4RayTracer*) {}
+  // Draw coloured square at current position.
 
 };
 

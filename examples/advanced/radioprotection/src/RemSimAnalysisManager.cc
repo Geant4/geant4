@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.8 2005/05/27 14:21:42 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.9 2005/09/08 06:56:18 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include "RemSimAnalysisManager.hh"
-#include "RemSimAnalysisMessenger.hh"
+//#include "RemSimAnalysisMessenger.hh"
 #include "G4ios.hh"
 #include <AIDA/AIDA.h>
 #include "G4RunManager.hh"
@@ -51,13 +51,13 @@ RemSimAnalysisManager::RemSimAnalysisManager()
 { 
   
   aFact = AIDA_createAnalysisFactory();
-  messenger = new  RemSimAnalysisMessenger(this); 
+  // messenger = new  RemSimAnalysisMessenger(this); 
   fileFormat = "hbook";
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
 { 
-  delete messenger;
+  //delete messenger;
 
   delete energyShape;
   energyShape = 0;

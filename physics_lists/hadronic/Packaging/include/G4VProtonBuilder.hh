@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4VProtonBuilder.hh,v 1.2 2005/11/25 15:38:50 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4VProtonBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4VProtonBuilder_h
 #define G4VProtonBuilder_h
 
@@ -31,8 +45,8 @@ class G4VProtonBuilder
   public:
     G4VProtonBuilder() {}
     virtual ~G4VProtonBuilder() {}
-    virtual void Build(G4HadronElasticProcess & aP) = 0;
-    virtual void Build(G4ProtonInelasticProcess & aP) = 0;
+    virtual void Build(G4HadronElasticProcess * aP) = 0;
+    virtual void Build(G4ProtonInelasticProcess * aP) = 0;
 };
 // 2002 by J.P. Wellisch
 

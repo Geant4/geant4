@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AnalyticalPolSolver.cc,v 1.5 2005/05/19 07:40:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include  "globals.hh"

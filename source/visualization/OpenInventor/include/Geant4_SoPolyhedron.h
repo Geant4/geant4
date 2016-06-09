@@ -27,20 +27,25 @@
 #include <Inventor/nodes/SoShape.h>
 
 #include <Inventor/fields/SoSFBool.h>
+#include <Inventor/fields/SoSFNode.h>
 
-class HepPolyhedron;
+class G4Polyhedron;
 
 /**
- *  Geant4_SoPolyhedron is an Inventor encapsulation of the HepPolyedron
- * class written by E.Chernyaev. In particular Geant4_SoPolyhedron permits
+ *  SoPolyhedron is an Inventor encapsulation of the G4Polyedron
+ * class written by E.Chernyaev. In particular SoPolyhedron permits
  * to represent boolean operations over solids.
- *  The solids are modeled with HepPolyedron objects. The HepPolyhedron
- * permits to produce a new HepPolyhedron according to the boolean 
- * operation done on them. The resulting HepPolyhedron  is then given
- * to an Geant4_SoPolyhedron for rendering.
+ *  To avoid clashes with other libraries (Geant4) where the G4Polyhedron
+ * classes may be found, the G4Polyhedron (through usage of CPP macros)
+ * had been renamed G4Polyhedron in the HEPVis lib.
+ *  The solids are modeled with G4Polyedron objects. The G4Polyhedron
+ * permits to produce a new G4Polyhedron according to the boolean 
+ * operation done on them. The resulting G4Polyhedron  is then given
+ * to an SoPolyhedron for rendering.
  *  Note that a boolean operation could be rendered in wire frame
  * by drawing the contour of the resulting solid (not by drawing
  * the wire frame of a triangulation).
+ *  See the applications/Polyhedron example.
  */
 
 class Geant4_SoPolyhedron : public SoShape {
@@ -48,19 +53,23 @@ class Geant4_SoPolyhedron : public SoShape {
 public:
   SoSFBool solid;
   SoSFBool reducedWireFrame;
+  SoSFNode alternateRep;
 public:
   Geant4_SoPolyhedron();
-  Geant4_SoPolyhedron(const HepPolyhedron&);
-  Geant4_SoPolyhedron(HepPolyhedron*);
+  Geant4_SoPolyhedron(const G4Polyhedron&);
+  Geant4_SoPolyhedron(G4Polyhedron*);
+  virtual void generateAlternateRep();
+  virtual void clearAlternateRep();
 public:
   static void initClass();
 protected:
   virtual void computeBBox(SoAction*,SbBox3f&,SbVec3f&);
   virtual void generatePrimitives(SoAction*);
+  virtual void doAction(SoAction*);
 protected:
   virtual ~Geant4_SoPolyhedron();
 private: 
-  HepPolyhedron* fPolyhedron;
+  G4Polyhedron* fPolyhedron;
 };
 
 #endif

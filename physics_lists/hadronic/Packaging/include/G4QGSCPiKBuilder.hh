@@ -47,13 +47,13 @@ class G4QGSCPiKBuilder : public G4VPiKBuilder
     virtual ~G4QGSCPiKBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess & aP);
-    virtual void Build(G4PionPlusInelasticProcess & aP);
-    virtual void Build(G4PionMinusInelasticProcess & aP);
-    virtual void Build(G4KaonPlusInelasticProcess & aP);
-    virtual void Build(G4KaonMinusInelasticProcess & aP);
-    virtual void Build(G4KaonZeroLInelasticProcess & aP);
-    virtual void Build(G4KaonZeroSInelasticProcess & aP);
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4PionPlusInelasticProcess * aP);
+    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
@@ -62,7 +62,7 @@ class G4QGSCPiKBuilder : public G4VPiKBuilder
     
     G4TheoFSGenerator * theModel;
     G4StringChipsParticleLevelInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > theStringModel;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
     G4double theMin;

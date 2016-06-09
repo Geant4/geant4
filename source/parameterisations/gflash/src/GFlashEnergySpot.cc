@@ -20,23 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Created by Joanna Weng, 9.11.04
+// $Id: GFlashEnergySpot.cc,v 1.4 2005/10/04 09:08:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+// ------------------------------------------------------------
+// GEANT 4 class implementation
+//
+//      ---------------- GFlashEnergySpot ----------------
+//
+// Author: Joanna Weng - 9.11.2004
+// ------------------------------------------------------------
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
 #include "G4VVisManager.hh"
 #include "G4Step.hh"
-//GFlash
 #include "GFlashEnergySpot.hh"
 
 GFlashEnergySpot::GFlashEnergySpot() {}
 
 GFlashEnergySpot::GFlashEnergySpot(const G4ThreeVector& point, G4double E)
 {
-	Point = point;
-	Energy = E;
-	// initialize shower start @@@@@
+  Point = point;
+  Energy = E;
+  // initialize shower start @@@@@
 }
 
 GFlashEnergySpot::~GFlashEnergySpot() {}

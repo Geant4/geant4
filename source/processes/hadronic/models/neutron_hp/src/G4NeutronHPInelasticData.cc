@@ -106,7 +106,8 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4int size = G4int(std::max(10., aT/60*kelvin));
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
   G4double neutronVMag = neutronVelocity.mag();
-  while(counter == 0 || std::abs(buffer-result/counter) > 0.01*buffer)
+
+  while(counter == 0 || std::abs(buffer-result/std::max(1,counter)) > 0.01*buffer)
   {
     if(counter) buffer = result/counter;
     while (counter<size)

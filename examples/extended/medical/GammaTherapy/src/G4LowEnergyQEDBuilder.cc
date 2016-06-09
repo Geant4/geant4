@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyQEDBuilder.cc,v 1.1 2004/12/02 10:34:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4LowEnergyQEDBuilder.cc,v 1.2 2005/08/23 17:31:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -88,7 +88,10 @@ void G4LowEnergyQEDBuilder::ConstructProcess()
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddDiscreteProcess( new G4LowEnergyPhotoElectric() );
+  G4LowEnergyPhotoElectric* pe = new G4LowEnergyPhotoElectric();
+  pe->SetAngularGenerator("standard");
+
+  pmanager->AddDiscreteProcess( pe );
   pmanager->AddDiscreteProcess( new G4LowEnergyCompton() );
   pmanager->AddDiscreteProcess( new G4LowEnergyGammaConversion() );
   pmanager->AddDiscreteProcess( new G4LowEnergyRayleigh() );

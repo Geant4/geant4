@@ -21,14 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryGeneratorAction.cc,v 1.3 2001/07/11 10:08:34 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VUserPrimaryGeneratorAction.cc,v 1.4 2005/11/22 19:54:53 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleTable.hh"
+#include "globals.hh"
 
 G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
-{;}
+{
+ if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+ {
+   G4String msg;
+   msg =  " You are instantiating G4VUserPrimaryGeneratorAction BEFORE your\n";
+   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
+   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+   msg += "set it to G4RunManager before instantiating other user action classes\n";
+   msg += "such as G4VUserPrimaryParticleGeneratorAction.";
+   G4Exception("G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()",
+              "Run0001",FatalException,msg);
+ }
+}
 
 G4VUserPrimaryGeneratorAction::~G4VUserPrimaryGeneratorAction()
 {;}

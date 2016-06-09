@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.15 2003/11/18 18:39:39 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TrackingManager.cc,v 1.16 2005/11/21 23:37:19 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -106,7 +106,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   fpTrack->SetStep(fpSteppingManager->GetStep());
 
   // Inform beginning of tracking to physics processes 
-  fpTrack->GetDefinition()->GetProcessManager()->StartTracking();
+  fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
 
   // Track the particle Step-by-Step while it is alive
   G4StepStatus stepStatus;

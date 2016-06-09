@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.14 2004/12/08 17:39:07 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: B01DetectorConstruction.cc,v 1.16 2005/12/06 16:35:59 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 #include <set>
 #include "globals.hh"
 
@@ -327,15 +327,13 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
 
 G4String B01DetectorConstruction::GetCellName(G4int i)
 {
-  char st[200];
-  std::ostrstream os(st,200);
+  std::ostringstream os;
   os << "cell_";
   if (i<10)
   {
     os << "0";
   }
-  os << i 
-     << '\0';
-  G4String name(st);
+  os << i ;
+  G4String name = os.str();
   return name;
 }

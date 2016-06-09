@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2005/06/02 12:22:11 mpiergen Exp $
+$Id: README,v 1.6 2005/11/27 13:13:59 mpiergen Exp $
 -------------------------------------------------------------------
 
 
@@ -104,7 +104,23 @@ or without visualization:
   3) $G4WORDIR/bin/Linux-g++/MedLinac
 
 -->possible different configurations for interactive mode:  
+
+The user can select the cut of the physics processes:
+/PhysicsList/cut 0.2 mm
+
+The user can select the dimension of the water phantom and the dimension of the phantom's voxels in the detector 
+construction:
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 150/Phantom/maxStep 0.2 mm
+
+and in the definition of the sensitive detector:
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 150
             
+The user can select the max step defined in the detector construction:
+/Phantom/maxStep 0.2 mm
+
+
 The user can select the position of the secondary collimators (the jaws)
 to obtain the desired field at isocenter:
 idle>/Jaws/X1/DistanceFromAxis -20. cm
@@ -192,6 +208,6 @@ The default cut in range value is 0.1 mm, a bigger cut is associated to the firs
 
 for comments, advices, doubts and questions: Michela.Piergentili@ge.infn.it
 
-last modified: Michela Piergentili 24/11/2004
+last modified: Michela Piergentili 24/11/2005
 
 

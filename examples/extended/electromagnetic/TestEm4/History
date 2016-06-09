@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2005/06/01 11:11:26 maire Exp $
+$Id: History,v 1.39 2005/12/06 11:44:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+22-11-05 mma (testem4-V07-01-00)
+- update README for OpenScientist
      
 01-06-05 mma (testem4-V07-00-01)
 - RunAction : option "--noErrors" for hbook;

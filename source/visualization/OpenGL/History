@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2005/05/29 23:18:56 allison Exp $
+$Id: History,v 1.59 2005/11/24 10:24:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,95 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+24th November 2005  John Allison  (opengl-V07-01-09)
+- Protected G4OpenGLXmViewerMessenger with #ifdef G4VIS_BUILD_OPENGLXM_DRIVER.
+
+22nd November 2005  John Allison  (opengl-V07-01-08)
+- Added G4OpenGLXmViewerMessenger.
+- Corrected text position.
+- Made depth test for polyhedron GL_LEQUAL (slightly dominant).
+
+17th November 2005  Gabriele Cosmo
+- Fixed settings of background style for WIN32 viewers.
+
+13th November 2005  John Allison  (opengl-V07-01-07)
+- Implemented X-Window-style geometry hints in G4OpenGLXViewer.
+
+13th October 2005  John Allison  (opengl-V07-01-06)
+- Allowed any colour background.
+- Implemented non-uniform scaling.
+- Migration to <sstream>.
+
+29th September 2005  John Allison  (opengl-V07-01-05)
+- Added G4OpenGLViewerDataStore to facilitate access of viewer data by
+  scene handler.
+- Re-implemented transparency button in OpenGLXm.
+
+13th September 2005  John Allison  (opengl-V07-01-04 - needs visman-V07-01-02)
+- Implemented white background for all OGL viewers.
+- G4OpenGLSceneHandler.cc:
+  o Fixed hidden line removal (bug introduced in opengl-V07-01-02).
+  o Fixed treatment of triangular polygons for drawing of auxiliary/soft lines.
+  o Corrected GetTextColour(text).
+  o Corrected GetColour(polyhedron).
+
+5th September 2005  John Allison  (opengl-V07-01-03)
+- Bug fix: stored transparent objects were being lost.
+
+2nd September 2005  John Allison  (opengl-V07-01-02 - needs visman-V07-01-01)
+- Bug fix: edgeflags problem introduced with smooth shading in
+  opengl-V07-01-00.
+- Implementation of a "better algorithm" for the rendering of
+  transparent polyhedron objects.  It renders all opaque objects
+  first, then renders the transparent objects with the depth buffer in
+  read-only mode (see OpenGL Programming Guide).  It uses the new
+  facility in G4VSceneHandler::ProcessScene for an optional second pass
+  of the run-duration models in the scene.  Note this algorithm is
+  still only an approximation.  It will still give the wrong blended
+  colour if two transparent objects are rendered front first.  For
+  nested transparent objects, this is unfortunate, because
+  G4PhysicalVolumeModel traverses Geant4's mother-daughter hierarchy
+  in such a way that mothers come first.  Also, there is no guaranteed
+  relationship between the order of rendering and the depth of two
+  transparent objects if they are at the same level or in different
+  branches of the hierarchy.  Still, the only error will be an
+  incorrect colour - the objects will still give the appearance of
+  transparency, so it's a pretty good algorithm.  (An even better
+  algorithm would be to attempt to render the facets in depth order,
+  deepest first.  But how do you calculate the depth - centre of area,
+  deepest corner?  One can still imagine pathalogical cases that would
+  sometimes give the wrong colour.  Also, for stored mode, the order
+  is fixed in a display list so when the user rotates the view, one
+  would lose the depth ordering.  I think we have to accept that
+  blending in OpenGL is only ever an approximation.  For accurate
+  blending, use RayTracer.)
+
+28th August 2005  John Allison  (opengl-V07-01-01)
+- Half-way implementation of rendering of transparent polyhedron
+  objects.  In this implementation, no account is taken of the order
+  of rendering.  Transparent objects are rendered with depth testing
+  off so that objects behind can still be seen.  But this means that
+  opaque objects in front do not obscure them - and they jolly well
+  should!  A better algorithm is to render all opaque objects first,
+  then render the transparent objects with the depth buffer in
+  read-only mode (see OpenGL Programming Guide).  This is going to
+  take a little more thought - see opengl-V07-01-02.
+
+20th July 2005  John Allison  (opengl-V07-01-00)
+- Introduced smooth shading, taking advantage of hitherto un-noticed
+  feature of HepPolyhedron::GetNextFacet that calculates the normals
+  at each vertex so that curved surfaces are rendered more
+  realistically (Gouraud shading).
+- G4OpenGLImmediateSceneHandler.cc: Removed unnecessary #include's.
+- G4OpenGLXmViewer.cc: Fixed to use window size hints.  This changes
+  the default window size.  It used to be 400x400, hardcoded in
+  G4OpenGLXmViewer.cc, but now it picks up the
+  G4ViewParameters::GetWindowSizeHintX/Y, which defaults to 600x600.
+  The user may change it on the command line, e.g:
+    /vis/open OGLSXm 500
+  or
+    /vis/viewer/create ! ! 500
 
 30th May 2005  John Allison  (opengl-V07-00-03)
 - Fixed compilation problem in OpenGL on SUN.  (Replaced multimap by

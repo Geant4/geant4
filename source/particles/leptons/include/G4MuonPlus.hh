@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.hh,v 1.7 2001/10/16 08:16:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MuonPlus.hh,v 1.9 2005/01/14 03:49:17 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,51 +31,32 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Added SetCuts, L.Urban, 12 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VLepton
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4MuonPlus_h
 #define G4MuonPlus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VLepton.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         MUONPLUS                               ###
 // ######################################################################
 
-class G4MuonPlus : public G4VLepton
+class G4MuonPlus : public G4ParticleDefinition
 {
  private:
-   static G4MuonPlus   theMuonPlus;
-
- private: // constructors are hide as private  
-   G4MuonPlus(
-        const G4String&     aName,        G4double            mass,
-        G4double            width,        G4double            charge,    
-        G4int               iSpin,        G4int               iParity,     
-         G4int              iConjugation, G4int               iIsospin,   
-        G4int               iIsospin3,    G4int               gParity,
-        const G4String&     pType,        G4int               lepton,      
-        G4int               baryon,       G4int               encoding,
-        G4bool              stable,       G4double            lifetime,
-        G4DecayTable        *decaytable
-    );
+   static G4MuonPlus* theInstance;
+   G4MuonPlus(){}
+   ~G4MuonPlus(){}
 
  public:
-   virtual ~G4MuonPlus(){}
-
+   static G4MuonPlus* Definition();
    static G4MuonPlus* MuonPlusDefinition();
    static G4MuonPlus* MuonPlus();
 };
-
 
 #endif
 

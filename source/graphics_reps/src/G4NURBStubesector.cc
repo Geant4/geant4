@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.9 2004/12/10 17:48:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBStubesector.cc,v 1.11 2005/10/03 12:30:13 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -31,7 +31,7 @@
 // OC 290896
 
 #include "G4NURBStubesector.hh"
-#include <strstream>
+#include <sstream>
 
 G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
                                      G4double DZ, G4double PHI1, G4double PHI2)
@@ -179,21 +179,10 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   // to a line instead of a point
 
   // creating the nurbs identity
-  mpwhoami = new char [200];
-  std::ostrstream  tmpstr(mpwhoami, 200);
-  tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2 << '\0';
-  // could be more sophisticated, reallocating
-  // mpwhoami to the exact length
-}
-
-G4Visible & G4NURBStubesector::operator = (const G4Visible &right)
-{
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4NURBStubesector::operator = (const G4VVisPrim &right)
-{
-  return G4VVisPrim::operator = (right);
+  std::ostringstream  tmpstr;
+  tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2;
+  mpwhoami = new char [tmpstr.str().length() + 1];
+  mpwhoami = std::strcpy(mpwhoami, tmpstr.str().c_str());
 }
 
 const char* G4NURBStubesector::Whoami() const

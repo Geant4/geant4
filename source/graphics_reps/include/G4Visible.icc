@@ -21,21 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.icc,v 1.5 2005/03/09 16:37:25 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Visible.icc,v 1.6 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  30th October 1996
-
-inline G4Visible::G4Visible (): fpVisAttributes (0) {}
-
-inline G4Visible::G4Visible (const G4Visible& visible):
-  fpVisAttributes (visible.fpVisAttributes)
-{}
-
-inline G4Visible::G4Visible (const G4VisAttributes* pVA):
-  fpVisAttributes (pVA)
-{}
 
 inline const G4VisAttributes* G4Visible::GetVisAttributes () const {
   return fpVisAttributes;

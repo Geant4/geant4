@@ -24,7 +24,8 @@
 //
 #include "G4RadioactiveDecaymessenger.hh"
 
-#include <iostream>
+#include <sstream>
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger 
@@ -179,13 +180,13 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
   else if  (command==analoguemcCmd) {
     G4int vl;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     theRadioactiveDecayContainer->SetAnalogueMonteCarlo(vl!=0);}
   else if  (command==fbetaCmd) {
     G4int vl;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     theRadioactiveDecayContainer->SetFBeta(vl!=0);}
   else if  (command==avolumeCmd) {theRadioactiveDecayContainer->
@@ -199,7 +200,7 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
   else if  (command==brbiasCmd) {
     G4int vl;
     const char* t = newValues;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     theRadioactiveDecayContainer->SetBRBias(vl!=0);}
   else if (command==sourcetimeprofileCmd) {theRadioactiveDecayContainer->

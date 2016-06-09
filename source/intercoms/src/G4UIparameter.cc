@@ -21,16 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.12 2003/06/16 16:55:47 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UIparameter.cc,v 1.13 2005/10/26 06:10:22 kmura Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4UIparameter.hh"
 #include "G4UIcommandStatus.hh"
-
 #include "G4Tokenizer.hh"
-
 #include "G4ios.hh"
+#include <sstream>
+
+
 G4UIparameter::G4UIparameter():paramERR(0)
 {
   G4String nullString;
@@ -108,18 +109,16 @@ void G4UIparameter::List()
 
 void G4UIparameter::SetDefaultValue(G4int theDefaultValue)
 {
-  char defVal[20];
-  std::ostrstream os(defVal,20);
-  os << theDefaultValue << '\0';
-  defaultValue = defVal;
+  std::ostringstream os;
+  os << theDefaultValue;
+  defaultValue = os.str();
 }
 
 void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 {
-  char defVal[20];
-  std::ostrstream os(defVal,20);
-  os << theDefaultValue << '\0';
-  defaultValue = defVal;
+  std::ostringstream os;
+  os << theDefaultValue;
+  defaultValue = os.str();
 }
 
 
@@ -158,7 +157,7 @@ G4int G4UIparameter::
 RangeCheck(const char* newValue) {
     yystype result;
     bp = 0;                   // reset buffer pointer for G4UIpGetc()
-    std::istrstream is((char*)newValue); 
+    std::istringstream is(newValue); 
     char type = toupper( parameterType );
     switch (type) {
         case 'D': { is >> newVal.D; } break;
@@ -674,7 +673,7 @@ Yylex()         // reads input and returns token number KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
 	 const char* t = buf;
-	 std::istrstream is((char*)t);
+	 std::istringstream is(t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;

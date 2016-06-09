@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.5 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NistElementBuilder.cc,v 1.7 2005/09/06 08:28:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -114,11 +114,12 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 {
   G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];
-  if (verbose > 0) {
+  if (verbose > 1) {
     G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
            << ">  Z= " << Zeff
-	   << "  A= " << Aeff
-           << G4endl;
+	   << "  A= " << Aeff;
+    if(buildIsotopes) G4cout << "  with natural isotope composition" << G4endl; 
+    else              G4cout << "  isotopes are not built" << G4endl;
   }
   G4Element* theElement = 0;
   

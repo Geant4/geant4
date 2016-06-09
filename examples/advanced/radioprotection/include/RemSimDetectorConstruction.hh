@@ -26,8 +26,8 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.11 2005/05/19 14:28:09 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimDetectorConstruction.hh,v 1.12 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

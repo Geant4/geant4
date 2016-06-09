@@ -22,7 +22,7 @@
 //
 //
 // $Id: B01DetectorConstruction.hh,v 1.6 2003/08/25 12:32:29 dressel Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #ifndef B01DetectorConstruction_hh

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListIonBinaryCascade.hh,v 1.3 2005/03/16 13:17:27 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 18.11.03   created by V.Ivanchenko
 //

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# $Id: runSimNoAnalysis.py,v 1.6 2005/03/17 19:48:27 daquinog Exp $
+# $Id: runSimNoAnalysis.py,v 1.7 2005/12/15 16:23:06 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-07-01 $
+# GEANT4 tag $Name: geant4-08-00 $
 # -------------------------------------------------------------------
 
 
@@ -124,11 +124,14 @@ tApp.buildGeometry()
 
 tiara_dir = os.environ["TIARA_BASE"]
 
+tApp.setPhysics()
+
 #primGenBuilder = tiaraGenerators.\
 #                 TiaraDPSEnergyGenerator(tiaraSpecs,
 #                                         tiara_dir +
 #                                         "/data/expDataConverted/dpsSource.xml")
 #primGenBuilder = tiaraGenerators.TiaraPrimaryGenerator(tiaraSpecs)
+
 primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
 
 tApp.setPrimaryGenerator(primGenBuilder.primGen)

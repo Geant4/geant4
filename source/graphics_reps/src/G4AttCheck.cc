@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.6 2005/05/03 17:43:01 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4AttCheck.cc,v 1.7 2005/09/16 01:04:43 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4AttCheck.hh"
 
@@ -45,11 +45,13 @@ G4AttCheck::G4AttCheck
     // Legal Unit Category Types...
     fUnitCategories.insert("Length");
     fUnitCategories.insert("Energy");
+    fUnitCategories.insert("Time");
     fUnitCategories.insert("Electric charge");
 
     // Corresponding Standard Units...
     fStandardUnits["Length"] = "m";
     fStandardUnits["Energy"] = "MeV";
+    fStandardUnits["Time"] = "ns";
     fStandardUnits["Electric charge"] = "e+";
 
     // Legal Categories...

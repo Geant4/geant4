@@ -30,7 +30,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "CLHEP/Vector/ThreeVector.h"
+#include "G4ThreeVector.hh"
 #include "G4MCTSimParticle.hh"
 
 // ====================================================================
@@ -45,7 +45,7 @@ private:
   std::vector<int> outParticleTrackIDList;
 
   int id; // assigned independently from G4
-  Hep3Vector position;
+  G4ThreeVector position;
   double time;
   std::string volumeName;
   int volumeNumber;
@@ -54,8 +54,8 @@ private:
   
 public:
   G4MCTSimVertex();
-  G4MCTSimVertex(const Hep3Vector& x, double t);
-  G4MCTSimVertex(const Hep3Vector& x, double t, 
+  G4MCTSimVertex(const G4ThreeVector& x, double t);
+  G4MCTSimVertex(const G4ThreeVector& x, double t, 
 	       std::string vname, int ncopy, std::string pname);
   ~G4MCTSimVertex();
  
@@ -67,8 +67,8 @@ public:
   void SetID(int i);
   int GetID() const;
 
-  void SetPosition(const Hep3Vector& x);
-  const Hep3Vector& GetPosition() const;
+  void SetPosition(const G4ThreeVector& x);
+  const G4ThreeVector& GetPosition() const;
 
   void SetTime(double t);
   double GetTime() const;
@@ -125,10 +125,10 @@ inline const G4MCTSimVertex&
 inline void G4MCTSimVertex::SetID(int i) { id= i; }
 inline int  G4MCTSimVertex::GetID() const { return id; }
 
-inline  void G4MCTSimVertex::SetPosition(const Hep3Vector& x)
+inline  void G4MCTSimVertex::SetPosition(const G4ThreeVector& x)
 { position= x; }
 
-inline  const Hep3Vector& G4MCTSimVertex::GetPosition() const
+inline  const G4ThreeVector& G4MCTSimVertex::GetPosition() const
 { return position; }
 
 inline  void G4MCTSimVertex::SetTime(double t)

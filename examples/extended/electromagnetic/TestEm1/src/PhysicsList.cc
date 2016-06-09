@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.4 2005/03/15 17:45:04 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsList.cc,v 1.5 2005/10/04 16:16:15 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
  
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "PhysListEmG4v71.hh"
 #include "DetectorConstruction.hh"
 
 #include "G4LossTableManager.hh"
@@ -220,7 +221,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+    
+  } else if (name == "g4v71") {
 
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmG4v71(name);
+    
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

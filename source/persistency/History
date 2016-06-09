@@ -15,6 +15,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 June, 05  G.Cosmo (persistency-V07-01-01)
+- Trivial fixes to G4MCTSimParticle and G4MCTSimVertex to support for
+  CLHEP-2.0.X series.
+
+28 June, 05  G.Cosmo (persistency-V07-01-00)
+- Migration to <sstream> for G4MCTSimParticle and G4MCTSimVertex.
+
 07 June, 04  G.Cosmo (persistency-V06-01-00)
 - GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
 

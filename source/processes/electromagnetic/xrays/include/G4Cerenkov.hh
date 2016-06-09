@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.5 2001/07/11 10:03:41 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Cerenkov.hh,v 1.7 2005/07/28 23:57:07 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,8 @@
 // Version:     2.0
 // Created:     1996-02-21
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2005-07-28 add G4ProcessType to constructor
+//              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
 // mail:        gum@triumf.ca
@@ -88,7 +89,8 @@ public: // Without description
 	// Constructors and Destructor
 	////////////////////////////////
 
-	G4Cerenkov(const G4String& processName = "Cerenkov");
+	G4Cerenkov(const G4String& processName = "Cerenkov", 
+                            G4ProcessType type = fElectromagnetic);
 
 	// G4Cerenkov(const G4Cerenkov &right);
 
@@ -169,7 +171,11 @@ private:
 inline 
 G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return (aParticleType.GetPDGCharge() != 0);
+   if (aParticleType.GetParticleName() != "chargedgeantino" ) {
+      return (aParticleType.GetPDGCharge() != 0);
+   } else {
+      return false;
+   }
 }
 
 inline 

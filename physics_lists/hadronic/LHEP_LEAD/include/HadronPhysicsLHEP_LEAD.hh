@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_LEAD.hh,v 1.3 2005/12/02 18:24:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  HadronPhysicsLHEP_LEAD
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//  1.12.2005 G.Folger: migration to non static particles
+//
+//----------------------------------------------------------------------------
+//
 #ifndef HadronPhysicsLHEP_LEAD_h
 #define HadronPhysicsLHEP_LEAD_h 1
 
@@ -27,7 +41,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronQEDBuilder.hh"
 #include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
@@ -54,21 +67,21 @@ class HadronPhysicsLHEP_LEAD : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   private:
-    G4NeutronBuilder theNeutrons;
-    G4LHEPNeutronBuilder theLHEPNeutron;
-    G4LEADNeutronBuilder theLEADNeutron;
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LHEPNeutronBuilder * theLHEPNeutron;
+    G4LEADNeutronBuilder * theLEADNeutron;
     
-    G4PiKBuilder thePiK;
-    G4LHEPPiKBuilder theLHEPPiK;
-    G4LEADPiKBuilder theLEADPiK;
+    G4PiKBuilder * thePiK;
+    G4LHEPPiKBuilder * theLHEPPiK;
+    G4LEADPiKBuilder * theLEADPiK;
     
-    G4ProtonBuilder thePro;
-    G4LHEPProtonBuilder theLHEPPro;
-    G4LEADProtonBuilder theLEADPro;    
+    G4ProtonBuilder * thePro;
+    G4LHEPProtonBuilder * theLHEPPro;
+    G4LEADProtonBuilder * theLEADPro;    
     
-    G4MiscLHEPBuilder theMiscLHEP;
-    G4StoppingHadronBuilder theStoppingHadron;
-    G4HadronQEDBuilder theHadronQED;
+    G4MiscLHEPBuilder * theMiscLHEP;
+    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

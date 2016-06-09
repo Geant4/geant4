@@ -24,7 +24,7 @@
 // A scene handler to dump geometry hierarchy to GAG.
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4GAGTreeSceneHandler.hh"
 
@@ -159,9 +159,7 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
   // Add the extension ".details.index" to the current PV node
 
     // Step 1: Initialize the extension
-  const int CHAR_LENGTH = 1024;
-  char pv_ext [CHAR_LENGTH];  pv_ext[0] = '\0';
-  std::ostrstream ost (pv_ext, CHAR_LENGTH);
+  std::ostringstream ost;
 
     // Step 2: Generate the extension
       // copy number 
@@ -176,10 +174,10 @@ void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&)
     ost	<< "." << fpCurrentLV->GetSolid()->GetEntityType() ;
   }
       // Tree index (0 for the world) 
-  ost << "." << fPVCounter << '\0' ; 
+  ost << "." << fPVCounter; 
 
     // Step 3: Add the extention to the current PV name
-  cur_pv_name += pv_ext ;            
+  cur_pv_name += ost.str() ;            
 
   // End of adding extension
 

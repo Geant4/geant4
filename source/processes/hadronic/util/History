@@ -1,0 +1,25 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+           History file for hadronic/util directory
+           ----------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+30 Nov 2005 Gabriele Cosmo (hadr-util-V07-01-01)
+-----------------------------------------------
+- Trivial fix in G4ReactionKinematics and G4Nucleus for support of
+  CLHEP-2.0.X series.
+
+25 Nov 2005 Dennis Wright (hadr-util-V07-01-00)
+----------------------------------------------
+- G4HadTmpUtil.cc : <sstream> migration
+ 

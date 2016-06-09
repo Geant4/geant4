@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.2 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTrd.cc,v 1.6 2005/12/06 09:22:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -33,11 +33,7 @@
 //
 // Author:
 //
-//   Oliver Link (Oliver.Link@cern.ch)
-//
-// History:
-//
-//   18/03/2005 - Created.
+//   18/03/2005 - O.Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
@@ -53,6 +49,14 @@ G4TwistedTrd::G4TwistedTrd( const G4String& pName,
                                   G4double  pPhiTwist )
   : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
                        pDy1, pDx1, pDx1, pDy2, pDx2, pDx2,0.)
+{
+}
+
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4TwistedTrd::G4TwistedTrd( __void__& a )
+  : G4VTwistedFaceted(a)
 {
 }
 
@@ -81,15 +85,6 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
   return os;
 }
 
-//=====================================================================
-//* CreatePolyhedron --------------------------------------------------
-
-G4Polyhedron* G4TwistedTrd::CreatePolyhedron () const 
-{
-  // Returns simple Trd for now !!
-  //
-  return new G4PolyhedronTrd2 (GetDx1(),GetDx3(),GetDy1(),GetDy2(),GetDz());
-}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

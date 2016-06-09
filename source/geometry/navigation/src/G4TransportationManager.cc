@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TransportationManager.cc,v 1.4 2003/12/05 17:08:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // G4TransportationManager 

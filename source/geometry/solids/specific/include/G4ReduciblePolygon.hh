@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.hh,v 1.6 2003/11/03 18:39:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ReduciblePolygon.hh,v 1.8 2005/11/17 14:08:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -61,87 +61,95 @@ class G4ReduciblePolygon
   friend class G4ReduciblePolygonIterator;
 
   public:
-  //
-  // Creator: via simple a/b arrays
-  //
-  G4ReduciblePolygon( const G4double a[], const G4double b[], G4int n );
+    //
+    // Creator: via simple a/b arrays
+    //
+    G4ReduciblePolygon( const G4double a[], const G4double b[], G4int n );
   
-  //
-  // Creator: a special version for G4Polygon and G4Polycone
-  // that takes two a points at planes of b
-  // (where a==r and b==z for the GEANT3 classic PCON and PGON)
-  //
-  G4ReduciblePolygon( const G4double rmin[], const G4double rmax[],
-                      const G4double z[], G4int n );
+    //
+    // Creator: a special version for G4Polygon and G4Polycone
+    // that takes two a points at planes of b
+    // (where a==r and b==z for the GEANT3 classic PCON and PGON)
+    //
+    G4ReduciblePolygon( const G4double rmin[], const G4double rmax[],
+                        const G4double z[], G4int n );
   
-  virtual ~G4ReduciblePolygon();
+    virtual ~G4ReduciblePolygon();
   
-  //
-  // Queries
-  //
-  inline G4int NumVertices() const { return numVertices; }
+    //
+    // Queries
+    //
+    inline G4int NumVertices() const { return numVertices; }
   
-  inline G4double Amin() const { return aMin; }
-  inline G4double Amax() const { return aMax; }
-  inline G4double Bmin() const { return bMin; }
-  inline G4double Bmax() const { return bMax; }
+    inline G4double Amin() const { return aMin; }
+    inline G4double Amax() const { return aMax; }
+    inline G4double Bmin() const { return bMin; }
+    inline G4double Bmax() const { return bMax; }
   
-  void CopyVertices( G4double a[], G4double b[] ) const;
+    void CopyVertices( G4double a[], G4double b[] ) const;
 
-  //
-  // Manipulations
-  //
-  void ScaleA( G4double scale );
-  void ScaleB( G4double scale );
+    //
+    // Manipulations
+    //
+    void ScaleA( G4double scale );
+    void ScaleB( G4double scale );
   
-  G4bool RemoveDuplicateVertices( G4double tolerance );
-  G4bool RemoveRedundantVertices( G4double tolerance );
+    G4bool RemoveDuplicateVertices( G4double tolerance );
+    G4bool RemoveRedundantVertices( G4double tolerance );
   
-  void ReverseOrder();
+    void ReverseOrder();
 
-  //
-  // Tests
-  //
-  G4double Area();
-  G4bool CrossesItself( G4double tolerance );
-  G4bool BisectedBy( G4double a1, G4double b1,
-         G4double a2, G4double b2, G4double tolerance );
+    //
+    // Tests
+    //
+    G4double Area();
+    G4bool CrossesItself( G4double tolerance );
+    G4bool BisectedBy( G4double a1, G4double b1,
+           G4double a2, G4double b2, G4double tolerance );
   
-  void Print();  // Debugging only
+    void Print();  // Debugging only
   
+  public:  // without description
+
+    G4ReduciblePolygon(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
   protected:
   
-  void Create( const G4double a[], const G4double b[], G4int n );
+    void Create( const G4double a[], const G4double b[], G4int n );
   
-  void CalculateMaxMin();
+    void CalculateMaxMin();
   
-  //
-  // Below are member values that are *always* kept up to date (please!)
-  //
-  G4double aMin, aMax, bMin, bMax;
-  G4int   numVertices;
+    //
+    // Below are member values that are *always* kept up to date (please!)
+    //
+    G4double aMin, aMax, bMin, bMax;
+    G4int   numVertices;
   
-  //
-  // A subclass which holds the vertices in a single-linked list
-  //
-  // Yeah, call me an old-fashioned c hacker, but I cannot make
-  // myself use the rogue tools for this trivial list.
-  //
-  struct ABVertex;
-  friend struct ABVertex;
-  struct ABVertex
-  {
-    G4double a, b;
-    ABVertex *next;
-  };
+    //
+    // A subclass which holds the vertices in a single-linked list
+    //
+    // Yeah, call me an old-fashioned c hacker, but I cannot make
+    // myself use the rogue tools for this trivial list.
+    //
+    struct ABVertex;              // Secret recipe for allowing
+    friend struct ABVertex;       // protected nested structures
+    struct ABVertex
+    {
+      ABVertex() { next = 0; }
+      G4double a, b;
+      ABVertex *next;
+    };
   
-  ABVertex *vertexHead;
+    ABVertex *vertexHead;
 
-  private:
+    private:
 
-    G4ReduciblePolygon(const G4ReduciblePolygon&);
-    G4ReduciblePolygon& operator=(const G4ReduciblePolygon&);
-    // Private copy constructor and assignment operator.
+      G4ReduciblePolygon(const G4ReduciblePolygon&);
+      G4ReduciblePolygon& operator=(const G4ReduciblePolygon&);
+      // Private copy constructor and assignment operator.
 };
 
 
@@ -153,21 +161,21 @@ class G4ReduciblePolygonIterator
 {
   public:
 
-  G4ReduciblePolygonIterator( const G4ReduciblePolygon *theSubject )
-   { subject = theSubject; current=0; }
+    G4ReduciblePolygonIterator( const G4ReduciblePolygon *theSubject )
+     { subject = theSubject; current=0; }
   
-  void  Begin() { current = subject->vertexHead; }  
-  G4bool  Next()  { if (current) current=current->next; return Valid(); }
+    void  Begin() { current = subject->vertexHead; }  
+    G4bool  Next()  { if (current) current=current->next; return Valid(); }
   
-  G4bool  Valid() const { return current!=0; }  
+    G4bool  Valid() const { return current!=0; }  
   
-  G4double GetA() const { return current->a; }
-  G4double GetB() const { return current->b; }
+    G4double GetA() const { return current->a; }
+    G4double GetB() const { return current->b; }
   
   protected:
 
-  const G4ReduciblePolygon  *subject;      // Who are we iterating over
-  G4ReduciblePolygon::ABVertex  *current;  // Current vertex
+    const G4ReduciblePolygon  *subject;      // Who are we iterating over
+    G4ReduciblePolygon::ABVertex  *current;  // Current vertex
 };
 
 #endif

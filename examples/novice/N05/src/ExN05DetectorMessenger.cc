@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorMessenger.cc,v 1.6 2003/06/16 16:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: ExN05DetectorMessenger.cc,v 1.7 2005/11/16 08:33:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -34,7 +34,7 @@
 #include "globals.hh"
 #include <iomanip>                
 
-#include <strstream>
+#include <sstream>
 
 ExN05DetectorMessenger::ExN05DetectorMessenger(ExN05DetectorConstruction * myDet) : myDetector(myDet)
 { 
@@ -103,8 +103,7 @@ void ExN05DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValue
 G4String ExN05DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
-  char line[255];
-  std::ostrstream os(line,255);
+  std::ostringstream os;
   
   if( command == SwitchCmd ) { 
     if ( myDetector->IsUseUserLimits() )returnValue = "on";
@@ -112,15 +111,15 @@ G4String ExN05DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 
   } else if( command == TmaxCmd ) {
     os <<  myDetector->GetMaxTimeInCrystal()/ns << " ns" << '\0';
-    returnValue = G4String(line);
+    returnValue = os.str();
 
   } else if( command == EminCmd ) {
     os <<  myDetector->GetMinEkineInCrystal()/MeV << " MeV" << '\0';
-    returnValue = G4String(line);
+    returnValue = os.str();
 
   } else if( command == RminCmd ) {
     os <<  myDetector->GetMinRangeInCrystal()/mm << " mm" << '\0';
-    returnValue = G4String(line);
+    returnValue = os.str();
   }
   return returnValue;
 }

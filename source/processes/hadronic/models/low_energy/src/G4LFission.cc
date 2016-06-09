@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LFission.cc,v 1.12 2005/06/04 13:38:34 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // G4 Model: Low Energy Fission

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALPrimaryGeneratorAction.cc,v 1.6 2004/11/29 18:03:06 ribon Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: FCALPrimaryGeneratorAction.cc,v 1.7 2005/12/08 16:39:16 ribon Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -37,8 +37,8 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
-#include "fstream.h"
-#include "stdlib.h"
+#include <fstream>
+#include <cstdlib>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
@@ -67,7 +67,7 @@ FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
   // Read Kinematics from file
   G4int InEvent = 0;
   G4String file_name = "data-tracks/tracks-80GeV.dat";
-  ifstream Traks_file(file_name);
+  std::ifstream Traks_file(file_name);
   if(!Traks_file) G4cerr << "WARNING:  Failed to open file " << file_name << G4endl;
   Traks_file.seekg(0);
   

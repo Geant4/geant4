@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.7 2004/06/11 14:27:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Run.cc,v 1.9 2005/09/26 08:34:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4Run.hh"
-
-G4Allocator<G4Run> aRunAllocator;
 
 G4Run::G4Run()
 :runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
@@ -35,4 +33,7 @@ G4Run::G4Run()
 
 G4Run::~G4Run()
 {;}
+
+void G4Run::RecordEvent(const G4Event*)
+{ numberOfEvent++; }
 

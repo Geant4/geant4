@@ -1,0 +1,25 @@
+$Id: History,v 1.2 2005/11/19 00:59:10 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 18, 2007  M.Asai (detutils-V07-01-01)
+- Introducing concrete primitive scorer and filter classes.
+
+November 16, 2007  M.Asai (detutils-V07-01-00)
+- Created.
+

@@ -20,7 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Created by Joanna Weng, 9.11.04
+//
+// $Id: GFlashShowerModelMessenger.hh,v 1.3 2005/10/04 09:08:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  GFlashShowerModelMessenger
+//
+//  Class description:
+//
+//  Messenger for the GFlash parameterisation shower model control.
+
+//
+// Author: Joanna Weng - 9.11.04
+//---------------------------------------------------------------
 
 #ifndef GFlashShowerModelMessenger_h
 #define GFlashShowerModelMessenger_h 1
@@ -37,37 +53,25 @@ class G4UIcmdWithADouble;
 
 class GFlashShowerModelMessenger: public G4UImessenger
 {
-	public:
-	GFlashShowerModelMessenger(GFlashShowerModel * myModel);
-	~GFlashShowerModelMessenger();
-	
-	void SetNewValue(G4UIcommand * command,G4String newValues);
-	G4String GetCurrentValue(G4UIcommand * command);
-	
-	private:
-	GFlashShowerModel* myModel;
-	G4UIdirectory* 	myParaDir;
-	G4UIcmdWithAString*	SwitchCmd;
-	G4UIcmdWithAnInteger*	FlagCmd;
-	G4UIcmdWithAnInteger*	ContCmd; // Containment Check
-	G4UIcmdWithADouble* 	StepInX0Cmd;		
- 	
-	G4UIcmdWithADoubleAndUnit* 	EmaxCmd;
-	G4UIcmdWithADoubleAndUnit* 	EminCmd;
-	G4UIcmdWithADoubleAndUnit* 	EkillCmd;
+  public:
+
+    GFlashShowerModelMessenger(GFlashShowerModel * myModel);
+    ~GFlashShowerModelMessenger();
+  
+    void SetNewValue(G4UIcommand * command,G4String newValues);
+    G4String GetCurrentValue(G4UIcommand * command);
+  
+  private:
+
+    GFlashShowerModel* myModel;
+    G4UIdirectory*   myParaDir;
+    G4UIcmdWithAString*  SwitchCmd;
+    G4UIcmdWithAnInteger*  FlagCmd;
+    G4UIcmdWithAnInteger*  ContCmd; // Containment Check
+    G4UIcmdWithADouble*   StepInX0Cmd;
+    G4UIcmdWithADoubleAndUnit*   EmaxCmd;
+    G4UIcmdWithADoubleAndUnit*   EminCmd;
+    G4UIcmdWithADoubleAndUnit*   EkillCmd;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

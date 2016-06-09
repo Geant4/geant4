@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.11 2005/11/28 11:30:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+Nov 28th, 2005  G.Cooperman - ParN02-V07-01-01
+---------------------------
+- Updated in sync with the last kernel code.
+
+Nov 15th, 2005  G.Cosmo - ParN02-V07-01-00
+-----------------------
+- Migration to <sstream> from deprecated <strstream>.
+
+May 3rd, 2005  J.Allison
+------------------------
 - Replaced vis manager with G4VisExecutive.
 
 Nov 22nd, 2004  G.Cooperman - ParN02-V07-00-00

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimSensitiveDetector.hh,v 1.2 2004/05/22 12:57:05 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimSensitiveDetector.hh,v 1.3 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -29,7 +29,7 @@
 #define RemSimSensitiveDetector_h 1
 
 #include "G4VSensitiveDetector.hh"
-#include "RemSimHit.hh"
+
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
@@ -46,7 +46,7 @@ class RemSimSensitiveDetector : public G4VSensitiveDetector
       void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      RemSimHitsCollection *trackerCollection;
+
 };
 #endif
 

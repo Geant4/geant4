@@ -28,9 +28,8 @@
 //    *******************************
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
-//
-// $Id: RemSimRunAction.cc,v 1.11 2005/05/19 13:30:59 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimRunAction.cc,v 1.13 2005/11/23 08:49:10 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "RemSimRunAction.hh"
@@ -43,8 +42,6 @@
 #include "G4RunManager.hh"
 #include "G4ios.hh"
 #include "RemSimRunAction.hh"
-#include <fstream>
-#include <strstream>
 
 RemSimRunAction::RemSimRunAction()
 {

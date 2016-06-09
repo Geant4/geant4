@@ -31,7 +31,7 @@ template<class T>
 class TLHEP_BERT_HP: public T
 {
 public:
-  TLHEP_BERT_HP();
+  TLHEP_BERT_HP(G4int ver = 1);
   virtual ~TLHEP_BERT_HP();
   
 public:

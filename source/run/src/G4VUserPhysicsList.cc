@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUserPhysicsList.cc,v 1.52 2005/05/09 10:02:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------

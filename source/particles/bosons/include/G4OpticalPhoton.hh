@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.hh,v 1.8 2002/12/16 11:15:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpticalPhoton.hh,v 1.11 2005/01/30 22:57:53 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,49 +31,35 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
+//  New impelemenataion as an utility class  H.Kurashige, 14 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VBoson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4OpticalPhoton_h
 #define G4OpticalPhoton_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBoson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         OPTICAL PHOTON                         ###
 // ######################################################################
 
-class G4OpticalPhoton: public G4VBoson
+class G4OpticalPhoton : public G4ParticleDefinition
 {
  private:
-   static G4OpticalPhoton theOpticalPhoton;
+   static G4OpticalPhoton* theInstance;
 
  private:
-   G4OpticalPhoton (
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,
-       G4int               iSpin,        G4int               iParity,
-       G4int               iConjugation, G4int               iIsospin,
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+  G4OpticalPhoton () {}
 
  public:
-   virtual  ~G4OpticalPhoton (){}
+   ~G4OpticalPhoton (){}
 
+   static G4OpticalPhoton* Definition();
    static G4OpticalPhoton* OpticalPhotonDefinition();
    static G4OpticalPhoton* OpticalPhoton();
+
 };
 
 #endif

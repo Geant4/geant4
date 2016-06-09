@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.9 2003/09/18 11:03:11 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Colour.hh,v 1.11 2005/11/10 20:34:45 tinslay Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison 20th October 1996
@@ -58,6 +58,8 @@
 //      G4Colour  magenta (1.0, 0.0, 1.0) ;  // magenta 
 //      G4Colour  yellow  (1.0, 1.0, 0.0) ;  // yellow
 // 
+// For convenience, static data members are also defined for the above colours. 
+//
 // After instantiation of a G4Colour object, you can access to its components 
 // with the following access functions: 
 // 
@@ -73,6 +75,9 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include <iostream>
+#include <map>
+
+using std::map;
 
 class G4Colour {
   friend std::ostream& operator << (std::ostream& os, const G4Colour& c);
@@ -91,8 +96,46 @@ public: // With description
   G4double GetGreen () const;
   G4double GetBlue  () const;
   G4double GetAlpha () const;  // alpha = opacity = 1. - transparency.
+
+  static const G4Colour& White();
+  static const G4Colour& Gray();
+  static const G4Colour& Grey();
+  static const G4Colour& Black();
+  static const G4Colour& Red();
+  static const G4Colour& Green();
+  static const G4Colour& Blue(); 
+  static const G4Colour& Cyan();
+  static const G4Colour& Magenta();
+  static const G4Colour& Yellow();
+
+  static void AddToMap(const G4String& key, const G4Colour& colour);
+  // Add user defined colour to colour map with given key. Standard
+  // colours are added to map by default.
+
+  static bool GetColour(const G4String& key, G4Colour& result);
+  // Get colour for given key. Returns false if key doesn't exist 
+  // in colour map, leaving result unchanged. Colour map
+  // is not sensitive to key case.
+  
 private:
   G4double red, green, blue, alpha;
+
+  static const G4Colour fWhite;
+  static const G4Colour fGray; 
+  static const G4Colour fGrey; 
+  static const G4Colour fBlack;
+  static const G4Colour fRed;  
+  static const G4Colour fGreen;
+  static const G4Colour fBlue; 
+  static const G4Colour fCyan; 
+  static const G4Colour fMagenta;
+  static const G4Colour fYellow; 
+  
+  static map<G4String, G4Colour> fColourMap;
+  static bool fInitColourMap;
+
+  static void InitialiseColourMap();
+    
 };
 
 inline G4double G4Colour::GetRed   () const {return red;}

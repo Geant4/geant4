@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BlinePrimaryGeneratorAction.cc,v 1.2 2004/12/03 16:07:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // --------------------------------------------------------------------

@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2005/05/25 14:58:11 gcosmo Exp $
+$Id: History,v 1.95 2005/11/24 18:16:54 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19, 2005  J. Apostolakis          geommng-V07-01-05
+- Revised G4VPVParameterisation
+   Changed signature of ComputeMaterial, adding parent touchable pointer
+   -> this refinement enables easy use of nested parameterisations
+   Additional methods allow nested parameterisation to be identified
+     G4bool IsNested() const;
+   and to provide their material via new interface class
+     G4VVolumeMaterialScanner* GetMaterialScanner(); 
+   [ As a result is that G4PhysicalTouchable in volumes is not needed 
+     in the implementation (and is supressed.)
+
+November 11, 2005  J. Apostolakis          geommng-V07-01-04
+- Added methods to identify  Regular Structures in  Physical volume 
+  New pure virtual methods:
+    - IsRegularStructure()     ,  returns boolean 
+    - GetRegularStructureId()  ,  returns code for structure type
+
+November 9, 2005  G.Cosmo                  geommng-V07-01-03
+- Added fake default constructor for base types of volumes, solids and
+  regions, for usage of direct object persistency.
+- Migrated unit test TestAssemblyVolume to <sstring> from
+  deprecated <strstream>.
+
+October 28, 2005  M.Asai                   geommng-V07-01-02
+- Merged concept of "envelope" to G4Region for fast-parameterisation.
+
+September 15, 2005  V.Grichine             geommng-V07-01-01
+- Added concrete implementation for GetPointOnSurface() to G4ReflectedSolid.
+
+August 10, 2005  G.Cosmo                   geommng-V07-01-00
+- Added virtual method GetPointOnSurface() to G4VSolid to be implemented in
+  the concrete solids classed for returning a random-point uniformely
+  distributed on the surface.
 
 May 25, 2005  G.Cosmo                      geommng-V07-00-04
 - Fixed problem with previous tag, where version of G4LogicalVolume.cc was

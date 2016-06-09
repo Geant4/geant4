@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03PrimaryGeneratorAction.cc,v 1.5 2004/12/03 16:07:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

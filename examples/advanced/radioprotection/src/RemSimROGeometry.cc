@@ -30,7 +30,7 @@
 //    ************************************
 //
 // $Id: RemSimROGeometry.cc,v 1.5 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #include "RemSimROGeometry.hh"
 #include "RemSimDummySD.hh"

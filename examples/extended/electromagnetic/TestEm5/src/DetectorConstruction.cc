@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.7 2005/03/16 12:08:22 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: DetectorConstruction.cc,v 1.9 2005/11/22 17:01:56 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,6 +150,12 @@ G4Material* Air = new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
 
+G4Material* Air20 = 
+new G4Material("Air20", density= 1.205*mg/cm3, ncomponents=2,
+                        kStateGas, 293.*kelvin, 1.*atmosphere);
+Air20->AddElement(N, fractionmass=0.7);
+Air20->AddElement(O, fractionmass=0.3);
+
 //Graphite
 //
 G4Material* Graphite = 
@@ -175,10 +181,12 @@ Havar->AddElement(W , fractionmass=0.0631);
 //
 // examples of gas
 //
-
+new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
+                           kStateGas, 273.15*kelvin, 1*atmosphere);
+			   
 new G4Material("XenonGas", z=54, a=131.29*g/mole, density= 5.458*mg/cm3,
-                           kStateGas,293.15*kelvin, 1*atmosphere);
-
+                           kStateGas, 293.15*kelvin, 1*atmosphere);
+			   
 G4Material* CO2 =
 new G4Material("CarbonicGas", density= 1.977*mg/cm3, ncomponents=2);
 CO2->AddElement(C, natoms=1);

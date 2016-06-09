@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.15 2005/05/18 15:28:37 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RunAction.hh,v 1.16 2005/10/17 15:47:27 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,8 +59,10 @@ class RunAction : public G4UserRunAction
 
     void fillPerEvent(G4int,G4double,G4double);
     
-    void sumForwEflow(G4int plane, G4double Eflow) {forwEflow[plane] += Eflow;};
-    void sumBackEflow(G4int plane, G4double Eflow) {backEflow[plane] += Eflow;};
+    void sumEnergyFlow(G4int plane, G4double Eflow)
+                                                 {EnergyFlow[plane]  += Eflow;};
+    void sumLateralEleak(G4int cell, G4double Eflow)
+                                                 {lateralEleak[cell] += Eflow;};
     
     void PrintDedxTables();
     
@@ -80,8 +82,8 @@ class RunAction : public G4UserRunAction
     G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
     G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
     
-    std::vector<G4double> forwEflow;
-    std::vector<G4double> backEflow;
+    std::vector<G4double> EnergyFlow;
+    std::vector<G4double> lateralEleak;
     
     G4double edeptrue [MaxAbsor];
     G4double rmstrue  [MaxAbsor];

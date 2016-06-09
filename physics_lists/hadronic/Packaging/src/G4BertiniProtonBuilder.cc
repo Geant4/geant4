@@ -37,17 +37,17 @@ G4BertiniProtonBuilder::
 ~G4BertiniProtonBuilder() {}
 
 void G4BertiniProtonBuilder::
-Build(G4HadronElasticProcess & )
+Build(G4HadronElasticProcess * )
 {
 }
 
 void G4BertiniProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
+Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

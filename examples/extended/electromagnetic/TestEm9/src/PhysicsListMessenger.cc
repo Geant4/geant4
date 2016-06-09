@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2003/07/14 17:10:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: PhysicsListMessenger.cc,v 1.2 2005/12/01 09:55:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -34,6 +34,7 @@
 #include "PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,6 +87,11 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
   pListCmd->AvailableForStates(G4State_PreInit);
+
+  mscCmd = new G4UIcmdWithABool("/testem/phys/mscStepLimit",this);
+  mscCmd->SetGuidance("Activate Multiple Scattering step limit");
+  mscCmd->SetParameterName("PList",false);
+  mscCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,6 +105,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete pListCmd;
   delete eCutCmd;
   delete mCutCmd;
+  delete mscCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,6 +138,9 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
+
+  if( command == mscCmd )
+   { pPhysicsList->SetMscStepLimit(mscCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

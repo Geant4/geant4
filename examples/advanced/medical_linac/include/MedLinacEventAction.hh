@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacEventAction.hh,v 1.3 2004/05/14 18:25:39 mpiergen Exp $
+// $Id: MedLinacEventAction.hh,v 1.4 2005/07/03 23:27:36 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili

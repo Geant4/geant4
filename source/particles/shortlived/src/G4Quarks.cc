@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quarks.cc,v 1.5 2003/06/16 16:58:49 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Quarks.cc,v 1.6 2004/09/02 01:52:42 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -57,3 +57,6 @@ G4Quarks::G4Quarks(
 {
    SetParticleSubType("quark");
 }
+
+G4Quarks::~G4Quarks() {}
+

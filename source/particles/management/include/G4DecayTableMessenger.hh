@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DecayTableMessenger.hh,v 1.7 2003/05/19 17:10:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------

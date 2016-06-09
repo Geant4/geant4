@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.21 2004/08/10 23:59:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EventManager.cc,v 1.22 2005/11/21 23:45:48 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //
@@ -324,8 +324,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   DoProcessing(anEvent);
 }
 
-#ifndef WIN32         // Temporarly disabled on Windows, until CLHEP
-                      // will support the HepMC module
+#ifdef CLHEP_HepMC         // Temporarly disabled
 #include "G4HepMCInterface.hh"
 void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
 {

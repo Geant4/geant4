@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.13 2004/11/23 14:05:30 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: DetectorConstruction.cc,v 1.14 2005/10/07 16:26:07 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,8 +224,8 @@ void DetectorConstruction::DefineMaterials()
   CO2->AddElement(O, natoms=2);
 
   G4Material* steam = 
-  new G4Material("WaterSteam", density= 0.3*mg/cm3, ncomponents=1,
-                  kStateGas, temperature= 500.*kelvin, pressure= 2.*atmosphere);
+  new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1,
+                  kStateGas, temperature= 273*kelvin, pressure= 1*atmosphere);
   steam->AddMaterial(H2O, fractionmass=1.);
 
   //

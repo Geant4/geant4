@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.12 2004/12/07 23:41:01 perl Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RayTracerViewer.cc,v 1.14 2005/11/18 23:07:04 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4RayTracerViewer.hh"
 
 #include "G4ios.hh"
-#include <strstream>
+#include <sstream>
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
@@ -37,7 +37,13 @@
 G4RayTracerViewer::G4RayTracerViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
-  fFileCount(0) {}
+  fFileCount(0)
+{
+  G4RayTracer* theTracer = 
+    (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
+}
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
 
@@ -69,6 +75,7 @@ void G4RayTracerViewer::SetView() {
   const G4Vector3D
     actualLightpointDirection(-fVP.GetActualLightpointDirection());
   theTracer->SetLightDirection(actualLightpointDirection);
+  theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
 }
 
 
@@ -93,9 +100,7 @@ void G4RayTracerViewer::DrawView() {
   }
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
-  char fileName [100];
-  std::ostrstream ost(fileName, 100);
-  ost << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg"
-      << std::ends;
-  theTracer->Trace(fileName);
+  std::ostringstream filename;
+  filename << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg";
+  theTracer->Trace(filename.str());
 }

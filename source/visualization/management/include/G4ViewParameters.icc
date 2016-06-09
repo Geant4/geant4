@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.7 2005/05/31 16:54:01 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ViewParameters.icc,v 1.10 2005/11/13 15:26:18 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // John Allison  20th October 1996
@@ -105,6 +105,10 @@ inline G4double G4ViewParameters::GetZoomFactor () const {
   return fZoomFactor;
 }
 
+inline const G4Vector3D& G4ViewParameters::GetScaleFactor () const {
+  return fScaleFactor;
+}
+
 inline const G4Point3D& G4ViewParameters::GetCurrentTargetPoint () const {
   return fCurrentTargetPoint;
 }
@@ -163,8 +167,16 @@ inline G4int G4ViewParameters::GetWindowSizeHintY () const {
   return fWindowSizeHintY;
 }
 
+inline const G4String& G4ViewParameters::GetXGeometryString () const {
+  return fXGeometryString;
+}
+
 inline G4bool G4ViewParameters::IsAutoRefresh () const {
   return fAutoRefresh;
+}
+
+inline const G4Colour& G4ViewParameters::GetBackgroundColour () const {
+  return fBackgroundColour;
 }
 
 inline void
@@ -235,6 +247,10 @@ inline void G4ViewParameters::SetZoomFactor (G4double zoomFactor) {
 inline void
 G4ViewParameters::MultiplyZoomFactor (G4double zoomFactorMultiplier) {
   fZoomFactor *= zoomFactorMultiplier;
+}
+
+inline void G4ViewParameters::SetScaleFactor (const G4Vector3D& scaleFactor) {
+  fScaleFactor = scaleFactor;
 }
 
 inline void
@@ -311,6 +327,14 @@ inline void G4ViewParameters::SetWindowSizeHint (G4int xHint, G4int yHint) {
   fWindowSizeHintY = yHint;
 }
 
+inline void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
+  fXGeometryString = geomString;
+}
+
 inline void G4ViewParameters::SetAutoRefresh (G4bool state) {
   fAutoRefresh = state;
+}
+
+inline void G4ViewParameters::SetBackgroundColour (const G4Colour& colour) {
+  fBackgroundColour = colour;
 }

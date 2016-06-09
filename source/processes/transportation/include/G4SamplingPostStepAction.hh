@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SamplingPostStepAction.hh,v 1.1 2003/11/26 14:51:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4SamplingPostStepAction

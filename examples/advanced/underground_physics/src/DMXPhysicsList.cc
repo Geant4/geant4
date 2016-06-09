@@ -39,6 +39,10 @@
 //
 // 14-02-03 Fix bugs in msc and hIon instanciation + cut per region
 //
+// 05-02-05 AH - changes to G4Decay - added is not short lived protection
+//          and redefined particles to allow non-static creation
+//          i.e. changed construction to G4MesonConstructor, G4BaryonConstructor
+//
 // --------------------------------------------------------------
 
 #include "DMXPhysicsList.hh"
@@ -90,9 +94,7 @@ void DMXPhysicsList::ConstructParticle()
 
   ConstructMyBosons();
   ConstructMyLeptons();
-  ConstructMyMesons();
-  ConstructMyBaryons();
-  ConstructMyIons();
+  ConstructMyHadrons();
   ConstructMyShortLiveds();
 
 }
@@ -130,45 +132,27 @@ void DMXPhysicsList::ConstructMyLeptons()
 }
 
 
-// construct Mesons://///////////////////////////////////////////////////
-void DMXPhysicsList::ConstructMyMesons()
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+
+// construct Hadrons://///////////////////////////////////////////////////
+void DMXPhysicsList::ConstructMyHadrons()
 {
  //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
+
+ //  baryons
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
+
+ //  ions
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
+
 }
 
-
-// construct Baryons://///////////////////////////////////////////////////
-void DMXPhysicsList::ConstructMyBaryons()
-{
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-}
-
-
-// construct Ions://///////////////////////////////////////////////////
-void DMXPhysicsList::ConstructMyIons()
-{
-//  Ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
-}
 
 // construct Shortliveds://///////////////////////////////////////////////////
 void DMXPhysicsList::ConstructMyShortLiveds()
@@ -254,6 +238,9 @@ void DMXPhysicsList::AddTransportation() {
 
 //OTHERS:
 //#include "G4hIonisation.hh" // standard hadron ionisation
+
+//em process options to allow msc step-limitation to be switched off
+#include "G4EmProcessOptions.hh"
 
 void DMXPhysicsList::ConstructEM() {
 
@@ -367,6 +354,11 @@ void DMXPhysicsList::ConstructEM() {
       }
     
   }
+
+  // turn off msc step-limitation - especially as electron cut 1nm
+  G4EmProcessOptions opt;
+  opt.SetMscStepLimitation(false);
+
 }
 
 
@@ -749,7 +741,7 @@ void DMXPhysicsList::ConstructGeneral() {
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       
-      if (theDecayProcess->IsApplicable(*particle)) 
+      if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
 	  pmanager ->AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt

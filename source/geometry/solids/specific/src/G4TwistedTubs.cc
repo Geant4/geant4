@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.12 2005/04/04 11:56:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TwistedTubs.cc,v 1.17 2005/12/05 17:03:47 link Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
 //
 //
-// G4TwistedSurface.cc
+// G4TwistTubsSide.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -55,6 +55,8 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+
+#include "Randomize.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -170,6 +172,16 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    fDPhi = totphi / nseg;
    SetFields(twistedangle, innerrad, outerrad, negativeEndz, positiveEndz);
    CreateSurfaces();
+}
+
+//=====================================================================
+//* Fake default constructor ------------------------------------------
+
+G4TwistedTubs::G4TwistedTubs( __void__& a )
+  : G4VSolid(a), fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
+    fFormerTwisted(0), fInnerHype(0), fOuterHype(0), fCubicVolume(0.),
+    fpPolyhedron(0)
+{
 }
 
 //=====================================================================
@@ -457,8 +469,8 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
    }
    
    
-   EInside  outerhypearea = ((G4HyperbolicSurface *)fOuterHype)->Inside(p);
-   G4double innerhyperho  = ((G4HyperbolicSurface *)fInnerHype)->GetRhoAtPZ(p);
+   EInside  outerhypearea = ((G4TwistTubsHypeSide *)fOuterHype)->Inside(p);
+   G4double innerhyperho  = ((G4TwistTubsHypeSide *)fInnerHype)->GetRhoAtPZ(p);
    G4double distanceToOut = p.getRho() - innerhyperho; // +ve: inside
 
    if (outerhypearea == kOutside || distanceToOut < -halftol) {
@@ -502,12 +514,12 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    }    
    G4ThreeVector *tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
    G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VSurface    **tmpsurface = const_cast<G4VSurface**>(fLastNormal.surface);
+   G4VTwistSurface    **tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double      distance = kInfinity;
 
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
    surfaces[2] = fInnerHype;
@@ -591,7 +603,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4double      distance = kInfinity;   
 
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLowerEndcap;
    surfaces[1] = fUpperEndcap;
    surfaces[2] = fLatterTwisted;
@@ -664,7 +676,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
          G4double      distance = kInfinity;   
 
          // find intersections and choose nearest one.
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
          surfaces[0] = fLowerEndcap;
          surfaces[1] = fUpperEndcap;
          surfaces[2] = fLatterTwisted;
@@ -744,7 +756,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
       // particle is just on a boundary.
       // if the particle is exiting from the volume, return 0.
       G4ThreeVector normal = SurfaceNormal(p);
-      G4VSurface *blockedsurface = fLastNormal.surface[0];
+      G4VTwistSurface *blockedsurface = fLastNormal.surface[0];
       if (normal*v > 0) {
 
             if (calcNorm) {
@@ -762,7 +774,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    G4double      distance = kInfinity;
        
    // find intersections and choose nearest one.
-   G4VSurface *surfaces[6];
+   G4VTwistSurface *surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
    surfaces[2] = fInnerHype;
@@ -841,7 +853,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          G4double      distance = kInfinity;
    
          // find intersections and choose nearest one.
-         G4VSurface *surfaces[6];
+         G4VTwistSurface *surfaces[6];
          surfaces[0] = fLatterTwisted;
          surfaces[1] = fFormerTwisted;
          surfaces[2] = fInnerHype;
@@ -932,10 +944,36 @@ G4VisExtent G4TwistedTubs::GetExtent() const
 
 G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const 
 {
+
+  const G4int m = 8  ;  // number of meshes
+  const G4int n = 20  ;
+
+  const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
+  const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
+
+  G4Polyhedron *ph=new G4Polyhedron;
+  G4double xyz[nnodes ][3];         // number of nodes 
+  G4int  faces[nfaces][4] ; // number of faces
+
+  fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
+  fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
+  fInnerHype->GetFacets(m,n,xyz,faces,2) ;
+  fFormerTwisted->GetFacets(m,n,xyz,faces,3) ;
+  fOuterHype->GetFacets(m,n,xyz,faces,4) ;
+  fLatterTwisted->GetFacets(m,n,xyz,faces,5) ;
+
+  ph->createPolyhedron(nnodes,nfaces,xyz,faces);
+
+  return ph;
+
+#if 0
   // Tube for now!!!
   //
   return new G4PolyhedronTubs (fInnerRadius, fOuterRadius, fZHalfLength,
                                fEndPhi[0], fDPhi);
+#endif
+
+
 }
 
 //=====================================================================
@@ -974,34 +1012,34 @@ void G4TwistedTubs::CreateSurfaces()
    G4ThreeVector x0(0, 0, fEndZ[0]);
    G4ThreeVector n (0, 0, -1);
 
-   fLowerEndcap = new G4FlatSurface("LowerEndcap",
+   fLowerEndcap = new G4TwistTubsFlatSide("LowerEndcap",
                                     fEndInnerRadius, fEndOuterRadius,
                                     fDPhi, fEndPhi, fEndZ, -1) ;
 
-   fUpperEndcap = new G4FlatSurface("UpperEndcap",  
+   fUpperEndcap = new G4TwistTubsFlatSide("UpperEndcap",  
                                     fEndInnerRadius, fEndOuterRadius,
                                     fDPhi, fEndPhi, fEndZ, 1) ;
 
    G4RotationMatrix    rotHalfDPhi;
    rotHalfDPhi.rotateZ(0.5*fDPhi);
 
-   fLatterTwisted = new G4TwistedSurface("LatterTwisted",
+   fLatterTwisted = new G4TwistTubsSide("LatterTwisted",
                                          fEndInnerRadius, fEndOuterRadius,
                                          fDPhi, fEndPhi, fEndZ, 
                                          fInnerRadius, fOuterRadius, fKappa,
                                          1 ) ; 
-   fFormerTwisted = new G4TwistedSurface("FormerTwisted", 
+   fFormerTwisted = new G4TwistTubsSide("FormerTwisted", 
                                          fEndInnerRadius, fEndOuterRadius,
                                          fDPhi, fEndPhi, fEndZ, 
                                          fInnerRadius, fOuterRadius, fKappa,
                                          -1 ) ; 
 
-   fInnerHype = new G4HyperbolicSurface("InnerHype",
+   fInnerHype = new G4TwistTubsHypeSide("InnerHype",
                                         fEndInnerRadius, fEndOuterRadius,
                                         fDPhi, fEndPhi, fEndZ, 
                                         fInnerRadius, fOuterRadius,fKappa,
                                         fTanInnerStereo, fTanOuterStereo, -1) ;
-   fOuterHype = new G4HyperbolicSurface("OuterHype", 
+   fOuterHype = new G4TwistTubsHypeSide("OuterHype", 
                                         fEndInnerRadius, fEndOuterRadius,
                                         fDPhi, fEndPhi, fEndZ, 
                                         fInnerRadius, fOuterRadius,fKappa,
@@ -1040,4 +1078,108 @@ G4double G4TwistedTubs::GetCubicVolume()
   if(fCubicVolume != 0.) ;
     else fCubicVolume = G4VSolid::GetCubicVolume(); 
   return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
+{
+
+  G4double  z = CLHEP::RandFlat::shoot(fEndZ[0],fEndZ[1]);
+  G4double phi , phimin, phimax ;
+  G4double x   , xmin,   xmax ;
+  G4double r   , rmin,   rmax ;
+
+  G4double a1 = fOuterHype->GetSurfaceArea() ;
+  G4double a2 = fInnerHype->GetSurfaceArea() ;
+  G4double a3 = fLatterTwisted->GetSurfaceArea() ;
+  G4double a4 = fFormerTwisted->GetSurfaceArea() ;
+  G4double a5 = fLowerEndcap->GetSurfaceArea()  ;
+  G4double a6 = fUpperEndcap->GetSurfaceArea() ;
+
+  //  G4cout << "a1 .. a6 = " << a1 << ", " << a2 << ", " << a3 << ", " << a4 << ", " << a5 << ", " << a6 << G4endl ;
+  G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+
+  if(chose < a1)
+  {
+
+    phimin = fOuterHype->GetBoundaryMin(z) ;
+    phimax = fOuterHype->GetBoundaryMax(z) ;
+    phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
+
+    //    G4cout << "Outer: phi, z = " << phi << ", " << z << G4endl ;
+
+    return fOuterHype->SurfacePoint(phi,z,true) ;
+
+  }
+  else if ( (chose >= a1) && (chose < a1 + a2 ) )
+  {
+
+    phimin = fInnerHype->GetBoundaryMin(z) ;
+    phimax = fInnerHype->GetBoundaryMax(z) ;
+    phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
+
+    // G4cout << "Inner: phi, z = " << phi << ", " << z << G4endl ;
+
+    return fInnerHype->SurfacePoint(phi,z,true) ;
+
+  }
+  else if ( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) ) 
+  {
+
+    xmin = fLatterTwisted->GetBoundaryMin(z) ; 
+    xmax = fLatterTwisted->GetBoundaryMax(z) ;
+    x = CLHEP::RandFlat::shoot(xmin,xmax) ;
+    
+    // G4cout << "latter twisted : " << xmin << " , " << xmax << G4endl ;
+
+    return fLatterTwisted->SurfacePoint(x,z,true) ;
+
+  }
+  else if ( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
+  {
+
+    xmin = fFormerTwisted->GetBoundaryMin(z) ; 
+    xmax = fFormerTwisted->GetBoundaryMax(z) ;
+    x = CLHEP::RandFlat::shoot(xmin,xmax) ;
+
+    // G4cout << "former twisted : " << xmin << " , " << xmax << G4endl ;
+    
+    return fFormerTwisted->SurfacePoint(x,z,true) ;
+  
+  }
+  else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
+  {
+
+    rmin = GetEndInnerRadius(0) ;
+    rmax = GetEndOuterRadius(0) ;
+    r = CLHEP::RandFlat::shoot(rmin,rmax) ;
+
+    phimin = fLowerEndcap->GetBoundaryMin(r) ; 
+    phimax = fLowerEndcap->GetBoundaryMax(r) ;
+    phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
+
+    // G4cout << "lower endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
+    return fLowerEndcap->SurfacePoint(phi,r,true) ;
+
+  }
+  else {
+
+    rmin = GetEndInnerRadius(1) ;
+    rmax = GetEndOuterRadius(1) ;
+    r = CLHEP::RandFlat::shoot(rmin,rmax) ;
+
+    phimin = fUpperEndcap->GetBoundaryMin(r) ; 
+    phimax = fUpperEndcap->GetBoundaryMax(r) ;
+    phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
+
+    // G4cout << "upper endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
+
+    return fUpperEndcap->SurfacePoint(phi,r,true) ;
+
+  }
+    
+
 }

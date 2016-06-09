@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDecorator.hh,v 1.1 2004/05/14 18:25:39 mpiergen Exp $
+// $Id: MedLinacDecorator.hh,v 1.2 2005/07/03 23:27:36 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -38,10 +38,10 @@ class MedLinacDecorator: public MedLinacVGeometryComponent
 {
 public:
   MedLinacDecorator(MedLinacVGeometryComponent*);
-  virtual  ~MedLinacDecorator();
+    ~MedLinacDecorator();
 
-  virtual void ConstructComponent(G4VPhysicalVolume*, G4VPhysicalVolume*)=0;
-  virtual void DestroyComponent()=0; 
+  virtual void ConstructComponent(G4VPhysicalVolume*, G4VPhysicalVolume*);
+  virtual void DestroyComponent(); 
 
 private:
    MedLinacVGeometryComponent* component;

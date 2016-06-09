@@ -21,17 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.4 2004/09/10 15:38:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ParameterisedNavigation.cc,v 1.9 2005/11/24 17:49:37 japost Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 // class G4ParameterisedNavigation Implementation
 //
-// Author: P.Kent, 1996
-//
+// Initial Author: P.Kent, 1996
+// Revisions:
+//  J. Apostolakis 24 Nov 2005, Revised/fixed treatment of nested params
+//  J. Apostolakis  4 Feb 2005, Reintroducting multi-level parameterisation
+//                                for materials only - see note 1 below
+//  G. Cosmo       11 Mar 2004, Added Check mode 
+//  G. Cosmo       15 May 2002, Extended to 3-d voxelisation, made subclass
+//  J. Apostolakis  5 Mar 1998, Enabled parameterisation of material & solid type
 // --------------------------------------------------------------------
 
+// Note 1: Design/implementation note for extensions
+//         J. Apostolakis, March 1st, 2005
+// We cannot make the solid, dimensions and transformation dependant on parent
+//   because the voxelisation will not have access to this. 
+// So the following can NOT be done:
+//     sampleSolid = curParam->ComputeSolid(num, curPhysical, pParentTouch);
+//     sampleSolid->ComputeDimensions(curParam, num, curPhysical, pParentTouch);
+//     curParam->ComputeTransformation(num, curPhysical, pParentTouch);
+
 #include "G4ParameterisedNavigation.hh"
+#include "G4TouchableHistory.hh"
+#include "G4VNestedParameterisation.hh"
 
 // ********************************************************************
 // Constructor
@@ -52,6 +69,24 @@ G4ParameterisedNavigation::~G4ParameterisedNavigation()
   G4cout << "G4ParameterisedNavigation::~G4ParameterisedNavigation() called."
    << G4endl;
 #endif
+}
+
+// ***************************************************************************
+// IdentifyAndPlaceSolid
+// ***************************************************************************
+//
+G4VSolid* G4ParameterisedNavigation::
+IdentifyAndPlaceSolid( G4int num,
+                       G4VPhysicalVolume *apparentPhys, // PhysV or PhysT
+                       G4VPVParameterisation *curParam  )
+{
+  G4VSolid *sampleSolid; 
+
+  sampleSolid = curParam->ComputeSolid(num, apparentPhys);
+  sampleSolid->ComputeDimensions(curParam, num, apparentPhys);
+  curParam->ComputeTransformation(num, apparentPhys);
+
+  return sampleSolid; 
 }
 
 // ***************************************************************************
@@ -101,6 +136,9 @@ G4double G4ParameterisedNavigation::
 
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety;              // Working isotropic safety
+
+  // G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeStep()" << G4endl
+  //    << "            Current solid " << motherSolid->GetName() << G4endl; 
 
 #ifdef G4VERBOSE
   if ( fCheck )
@@ -175,6 +213,8 @@ G4double G4ParameterisedNavigation::
 
   sampleParam = samplePhysical->GetParameterisation();
 
+  // G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
+
   do
   {
     curVoxelNode = fVoxelNode;
@@ -186,9 +226,13 @@ G4double G4ParameterisedNavigation::
       if ( !fBList.IsBlocked(sampleNo) )
       {
         fBList.BlockVolume(sampleNo);
-        sampleSolid = sampleParam->ComputeSolid(sampleNo, samplePhysical);
-        sampleSolid->ComputeDimensions(sampleParam, sampleNo, samplePhysical);
-        sampleParam->ComputeTransformation(sampleNo, samplePhysical);
+        // sampleSolid = sampleParam->ComputeSolid(sampleNo, samplePhysical);
+        // sampleSolid->ComputeDimensions(sampleParam, sampleNo, samplePhysical);
+        // sampleParam->ComputeTransformation(sampleNo, samplePhysical);
+
+        // Call virtual methods, and copy information if needed
+        sampleSolid= IdentifyAndPlaceSolid( sampleNo, samplePhysical, sampleParam ); 
+
         G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                    samplePhysical->GetTranslation());
         sampleTf.Invert();
@@ -376,7 +420,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety;                     // Working isotropic safety
-  
+
   //
   // Compute daughter safeties
   //
@@ -387,6 +431,10 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   samplePhysical = motherLogical->GetDaughter(0);
   samplePhysical->GetReplicationData(axis, nReplicas, width, offset, consuming);
   sampleParam = samplePhysical->GetParameterisation();
+
+  // Check development  
+  // G4cerr << "DebugLOG - G4ParameterisedNavigation::ComputeSafety()" << G4endl
+  //       << "            Current solid " << motherSolid->GetName() << G4endl; 
 
   // Look inside the current Voxel only at the current point
   //
@@ -407,9 +455,13 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
   {
     sampleNo = curVoxelNode->GetVolume(contentNo);
-    sampleSolid = sampleParam->ComputeSolid(sampleNo, samplePhysical);
-    sampleSolid->ComputeDimensions(sampleParam, sampleNo, samplePhysical);
-    sampleParam->ComputeTransformation(sampleNo, samplePhysical);
+    
+    // Call virtual methods, and copy information if needed
+    sampleSolid= IdentifyAndPlaceSolid( sampleNo, samplePhysical, sampleParam ); 
+    // sampleSolid = sampleParam->ComputeSolid(sampleNo, samplePhysical);
+    // sampleSolid->ComputeDimensions(sampleParam, sampleNo, samplePhysical);
+    // sampleParam->ComputeTransformation(sampleNo, samplePhysical);
+
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                samplePhysical->GetTranslation());
     sampleTf.Invert();
@@ -426,6 +478,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   {
     ourSafety=voxelSafety;
   }
+
   return ourSafety;
 }
 
@@ -440,6 +493,9 @@ G4double G4ParameterisedNavigation::
 ComputeVoxelSafety(const G4ThreeVector& localPoint,
                    const EAxis pAxis) const
 {
+  // Check development  
+  // G4cout << "DebugLOG - G4ParameterisedNavigation::ComputeVoxelSafety()" << G4endl; 
+
   // If no best axis is specified, adopt default
   // strategy as for placements
   //  
@@ -534,4 +590,104 @@ LocateNextVoxel( const G4ThreeVector& localPoint,
     }
   }
   return isNewVoxel;
+}
+
+// ********************************************************************
+// LevelLocate
+// ********************************************************************
+//
+G4bool
+G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
+                                  const G4VPhysicalVolume* blockedVol,
+                                  const G4int blockedNum,
+                                  const G4ThreeVector& globalPoint,
+                                  const G4ThreeVector* globalDirection,
+                                  const G4bool pLocatedOnEdge, 
+                                        G4ThreeVector& localPoint )
+{
+  G4SmartVoxelHeader *motherVoxelHeader;
+  G4SmartVoxelNode *motherVoxelNode;
+  G4VPhysicalVolume *motherPhysical, *pPhysical;
+  G4VPVParameterisation *pParam;
+  G4LogicalVolume *motherLogical;
+  G4VSolid *pSolid;
+  G4ThreeVector samplePoint;
+  G4int voxelNoDaughters, replicaNo;
+  
+  motherPhysical = history.GetTopVolume();
+  motherLogical = motherPhysical->GetLogicalVolume();
+  motherVoxelHeader = motherLogical->GetVoxelHeader();
+
+  // Find the voxel containing the point
+  //
+  motherVoxelNode = ParamVoxelLocate(motherVoxelHeader,localPoint);
+  
+  voxelNoDaughters = motherVoxelNode->GetNoContained();
+  if ( voxelNoDaughters==0 )  return false;
+  
+  pPhysical = motherLogical->GetDaughter(0);
+  pParam = pPhysical->GetParameterisation();
+
+  // Check development  
+  // G4cerr << "DebugLOG - G4ParameterisedNavigation::LevelLocate() " 
+  //        << "            Current solid "
+  //        << motherLogical->GetSolid()->GetName() << G4endl; 
+  // G4cerr << " Attaching parent touchable information to Phys Volume "
+  //        << G4endl; 
+
+  // Save parent history in touchable history
+  //   ... for use as parent t-h in ComputeMaterial method of param
+  G4TouchableHistory parentTouchable( history ); 
+
+  // Search replicated daughter volume
+  //
+  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  {
+    replicaNo = motherVoxelNode->GetVolume(sampleNo);
+    if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
+    {
+      // Obtain solid (as it can vary) and obtain its parameters
+      //
+
+      // pSolid = pParam->ComputeSolid(replicaNo, pPhysical); 
+      // pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
+      // pParam->ComputeTransformation(replicaNo, pPhysical);
+
+      // Call virtual methods, and copy information if needed
+      pSolid= IdentifyAndPlaceSolid( replicaNo, pPhysical, pParam ); 
+
+      // Setup history
+      //
+      history.NewLevel(pPhysical, kParameterised, replicaNo);
+      samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
+      if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid,
+                                  samplePoint, globalDirection, 
+                                  history.GetTopTransform(), pLocatedOnEdge) )
+      {
+        history.BackLevel();
+      }
+      else
+      { 
+        // Enter this daughter
+        //
+        localPoint = samplePoint;
+        
+        // Set the correct copy number in physical
+        //
+        pPhysical->SetCopyNo(replicaNo);
+        
+        // Set the correct solid and material in Logical Volume
+        //
+        G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
+        pLogical->SetSolid(pSolid);
+
+        pLogical->UpdateMaterial(
+				 pParam->ComputeMaterial(replicaNo, pPhysical, &parentTouchable)  );
+	
+        return true;
+      }
+    }
+  }
+
+  return false;
 }

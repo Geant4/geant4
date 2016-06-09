@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CurvePoint.hh,v 1.5 2001/07/11 09:59:33 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4CurvePoint

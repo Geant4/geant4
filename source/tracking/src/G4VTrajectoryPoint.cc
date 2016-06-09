@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTrajectoryPoint.cc,v 1.1 2004/07/05 17:08:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------

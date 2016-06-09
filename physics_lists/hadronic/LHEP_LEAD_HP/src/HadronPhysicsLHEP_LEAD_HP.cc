@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsLHEP_LEAD_HP.cc,v 1.3 2005/12/02 18:29:46 gunter Exp $
+// GEANT4 tag $Name: geant4-08-00 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:  LHEP_LEAD_HP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.11.2005 G.Folger: migration to non static particles
+// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+//
+//----------------------------------------------------------------------------
+//
 #include "HadronPhysicsLHEP_LEAD_HP.hh"
 
 #include "globals.hh"
@@ -34,24 +49,50 @@
 
 HadronPhysicsLHEP_LEAD_HP::HadronPhysicsLHEP_LEAD_HP(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
-{
-  theNeutrons.RegisterMe(&theLHEPNeutron);
-  theLHEPNeutron.SetMinEnergy(19.9*MeV);
-  theLHEPNeutron.SetMinInelasticEnergy(4.99*GeV);
-  theNeutrons.RegisterMe(&theLEADNeutron);
-  theLEADNeutron.SetMinEnergy(19.9*MeV);
-  theNeutrons.RegisterMe(&theHPNeutron);
+{}
 
-  thePro.RegisterMe(&theLHEPPro);
-  theLHEPPro.SetMinEnergy(4.99*GeV);
-  thePro.RegisterMe(&theLEADPro);
+void HadronPhysicsLHEP_LEAD_HP::CreateModels()
+{
+  theNeutrons=new G4NeutronBuilder;
+  theNeutrons->RegisterMe(theLHEPNeutron=new G4LHEPNeutronBuilder);
+  theLHEPNeutron->SetMinEnergy(19.9*MeV);
+  theLHEPNeutron->SetMinInelasticEnergy(4.99*GeV);
+  theNeutrons->RegisterMe(theLEADNeutron=new G4LEADNeutronBuilder);
+  theLEADNeutron->SetMinEnergy(19.9*MeV);
+  theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
+
+  thePro=new G4ProtonBuilder;
+  thePro->RegisterMe(theLHEPPro=new G4LHEPProtonBuilder);
+  theLHEPPro->SetMinEnergy(4.99*GeV);
+  thePro->RegisterMe(theLEADPro=new G4LEADProtonBuilder);
   
-  thePiK.RegisterMe(&theLHEPPiK);
-  theLHEPPiK.SetMinEnergy(4.99*GeV);
-  thePiK.RegisterMe(&theLEADPiK);
+  thePiK=new G4PiKBuilder;
+  thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
+  theLHEPPiK->SetMinEnergy(4.99*GeV);
+  thePiK->RegisterMe(theLEADPiK=new G4LEADPiKBuilder);
+
+  theMiscLHEP=new G4MiscLHEPBuilder;
+  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
-HadronPhysicsLHEP_LEAD_HP::~HadronPhysicsLHEP_LEAD_HP() {}
+HadronPhysicsLHEP_LEAD_HP::~HadronPhysicsLHEP_LEAD_HP()
+{
+  delete theNeutrons;
+  delete theLHEPNeutron;
+  delete theLEADNeutron;
+  delete theHPNeutron;
+
+  delete thePiK;
+  delete theLHEPPiK;
+  delete theLEADPiK;
+
+  delete thePro;
+  delete theLHEPPro;
+  delete theLEADPro;    
+
+  delete theMiscLHEP;
+  delete theStoppingHadron;
+}
 
 void HadronPhysicsLHEP_LEAD_HP::ConstructParticle()
 {
@@ -68,11 +109,11 @@ void HadronPhysicsLHEP_LEAD_HP::ConstructParticle()
 #include "G4ProcessManager.hh"
 void HadronPhysicsLHEP_LEAD_HP::ConstructProcess()
 {
-  theNeutrons.Build();
-  thePro.Build();
-  thePiK.Build();
-  theMiscLHEP.Build();
-  theStoppingHadron.Build();
-  theHadronQED.Build();
+  CreateModels();
+  theNeutrons->Build();
+  thePro->Build();
+  thePiK->Build();
+  theMiscLHEP->Build();
+  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch

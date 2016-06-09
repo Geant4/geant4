@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.8 2003/06/16 16:55:25 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VMarker.cc,v 1.9 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -38,15 +38,6 @@ G4VMarker::G4VMarker ():
   fInfo       (G4String())
 {}
 
-G4VMarker::G4VMarker (const G4VMarker& marker):
-  G4VVisPrim  (marker),
-  fPosition   (marker.fPosition),
-  fWorldSize  (marker.fWorldSize),
-  fScreenSize (marker.fScreenSize),
-  fFillStyle  (marker.fFillStyle),
-  fInfo       (marker.fInfo)
-{}  
-
 G4VMarker::G4VMarker (const G4Point3D& pos):
   fPosition   (pos),
   fWorldSize  (0.),
@@ -57,23 +48,16 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
 
 G4VMarker::~G4VMarker () {}
 
-G4Visible & G4VMarker::operator = (const G4Visible &right) {
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4VMarker::operator = (const G4VVisPrim &right) {
-  return G4VVisPrim::operator = (right);
-}
-
-G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
-  if (&right == this) return *this;
-  G4VVisPrim::operator = (right);
-  fPosition   = right.fPosition;
-  fWorldSize  = right.fWorldSize;  
-  fScreenSize = right.fScreenSize;
-  fFillStyle  = right.fFillStyle;
-  fInfo       = right.fInfo;
-  return *this;
+G4bool G4VMarker::operator != (const G4VMarker& m) const {
+  if (
+      (G4Visible::operator != (m))   ||
+      (fWorldSize  != m.fWorldSize)   ||
+      (fScreenSize != m.fScreenSize)  ||
+      (fFillStyle  != m.fFillStyle)   ||
+      !(fPosition  == m.fPosition)
+      )
+    return true;
+  return false;
 }
 
 std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
@@ -94,20 +78,8 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   default:
     os << "unrecognised"; break;
   }
-  os << "\n           " << (G4VVisPrim) marker;
+  os << "\n           " << (G4Visible) marker;
   return os;
-}
-
-G4bool G4VMarker::operator != (const G4VMarker& m) const {
-  if (
-      !(G4VVisPrim::operator == (m))  ||
-      (fWorldSize  != m.fWorldSize)   ||
-      (fScreenSize != m.fScreenSize)  ||
-      (fFillStyle  != m.fFillStyle)   ||
-      !(fPosition  == m.fPosition)
-      )
-    return true;
-  return false;
 }
 
 const G4String& G4VMarker::GetInfo() const { return fInfo ;}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraDPSSampledEnergy.cc,v 1.8 2004/06/09 15:04:37 daquinog Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "TiaraDPSSampledEnergy.hh"

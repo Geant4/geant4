@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.13 2005/06/04 13:44:43 jwellisc Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NeutronHPIsoData.hh,v 1.14 2005/11/19 00:12:10 dennis Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1
@@ -34,7 +34,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <strstream>
+// #include <strstream>
 #include <stdlib.h>
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPNames.hh"

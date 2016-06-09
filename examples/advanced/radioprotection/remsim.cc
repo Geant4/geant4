@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.10 2005/05/27 14:21:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: remsim.cc,v 1.12 2005/12/07 14:41:36 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -71,14 +71,14 @@ int main(int argc,char** argv)
   runManager -> SetUserAction(new RemSimSteppingAction(primary));
 
 #ifdef G4VIS_USE
-  // Visualisation
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager -> Initialize();
+   // Visualisation
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager -> Initialize();
 #endif
 
 #ifdef G4ANALYSIS_USE
-  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  analysis -> SetFormat("hbook");
+ RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+ analysis -> SetFormat("hbook");
 #endif
  
   // get the pointer to the UI manager and set verbosities
@@ -108,16 +108,16 @@ int main(int argc,char** argv)
     }
 
 #ifdef G4ANALYSIS_USE
-  analysis -> finish();
-#endif  
- 
+ analysis -> finish();
+#endif
+
 #ifdef G4VIS_USE
-  delete visManager;
+ delete visManager;
 #endif
 
   // job termination
   delete runManager;
+ 
   return 0;
 }
-
 

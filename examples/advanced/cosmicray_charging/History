@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08.12.2005 - Henrique Araujo, tag cosmicray_charging-V07-01-02
+             Removed all compilation warnings
+
+07.12.2005 - S. Guatelli tag cosmicray_charging-V07-01-01
+             G4Exception fixed (hadronic physics updated) 
+             The example compiles withn CLHEP 2.0.2.2 
+
+15.11.2005 - Gabriele Cosmo, tag cosmicray_charging-V07-01-00
+             Migration to <sstream> from deprecated <strstream>.
+
 06.06.2005 - Gabriele Cosmo, tag cosmicray_charging-V07-00-00
              Fixed trivial compilation error on gcc-3.4.X (double semicolon).
 

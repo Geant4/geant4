@@ -30,34 +30,34 @@ G4PrecoNeutronBuilder()
 {
   theMin = 0;
   theMax = 170.*MeV;
-  theModel = new G4PreCompoundModel(&theHandler);
+  theModel = new G4PreCompoundModel(new G4ExcitationHandler);
 }
 
 G4PrecoNeutronBuilder::
 ~G4PrecoNeutronBuilder() {}
 
 void G4PrecoNeutronBuilder::
-Build(G4HadronElasticProcess & )
+Build(G4HadronElasticProcess * )
 {
 }
 
 void G4PrecoNeutronBuilder::
-Build(G4HadronFissionProcess & )
+Build(G4HadronFissionProcess * )
 {
 }
 
 void G4PrecoNeutronBuilder::
-Build(G4HadronCaptureProcess & )
+Build(G4HadronCaptureProcess * )
 {
 }
 
 void G4PrecoNeutronBuilder::
-Build(G4NeutronInelasticProcess & aP)
+Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

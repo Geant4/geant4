@@ -23,14 +23,14 @@
 // ====================================================================
 //
 //   H02PythiaInterface.cc
-//   $Id: H02PythiaInterface.cc,v 1.3 2003/12/09 15:31:57 gunter Exp $
+//   $Id: H02PythiaInterface.cc,v 1.4 2005/12/06 13:50:16 gcosmo Exp $
 //
 // ====================================================================
 #include "H02PythiaInterface.hh"
 #include "H02PythiaMessenger.hh"
 
-#include "CLHEP/HepMC/CBhepevt.h"
-#include "CLHEP/HepMC/include/PythiaWrapper6_2.h"
+#include <CLHEP/HepMC/CBhepevt.h>
+#include <CLHEP/HepMC/include/PythiaWrapper6_2.h>
 
 // additional pythia calls
 #define pygive pygive_

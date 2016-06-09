@@ -1,4 +1,4 @@
-$Id: History,v 1.227 2005/05/31 13:10:47 pia Exp $
+$Id: History,v 1.244 2005/11/30 16:34:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,170 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.11.2005   G.Cosmo, tag emlowen-V07-01-14
+             * Fixes for migration to <sstream> from obsolete <strstream>.
+             * Trivial fix to G4LowEnergyGammaConversion for support of
+               CLHEP-2.0.X series.
+               NOTE: usage of RandBit can lead to event irreproducibility !
+
+04.11.2005   MGP, tag emlowen-V07-01-13
+             Fix in G4hLowEnergyIonistation (see note on 08.09.2005)
+             On top of emlowen-V07-01-12
+
+04.11.2005   MGP, tag emlowen-V07-01-12
+             Fixes in atomic relaxation by A. Mantero
+             On top of geant4-07-01-ref-04
+
+21.09.2005   Ziad FRANCIS, tag emlowen-V07-01-11
+             * Small corrections in G4DNAProtonBornExcitationProcess
+             * ProtonBornExcitationCrossSection data file created
+             * ProtonBornExcitation is tested an seems working fine.
+
+21.09.2005   Ziad FRANCIS, tag emlowen-V07-01-10
+             * G4DNARuddIonizationFinalStatesPolicy modifications so it
+               becomes a common policy for HydrogenRuddIonization and
+               ProtonRuddIonization. 
+               So, G4DNAHydrogenRuddIonizationFinalStatesPolicy.hh .icc
+               where deleted (useless).
+             * G4DNAElectronBornExcitation Process implemented with data
+               file "ElectronBornExcitationCrossSection" and tested by
+               modified G4DNATest.cc
+             * G4DNAProtonBornExcitation Process was implemented.
+               ! It was NOT tested
+               ! Data file "ProtonBornExcitation" is NOT ready yet
+
+16.09.2005   Ziad FRANCIS, tag emlowen-V07-01-09
+             * Implementation of Hydrogen Ionization Process in liquid water 
+               according to the model of Eugene Rudd. Files created :
+                    - G4DNAHydrogenRuddIonization.hh & .cc
+                    - G4DNAHydrogenRuddIonizationFinalStatesPolicy.hh & .icc
+                    - "RuddHydrogenIonizationCrossSection.dat" located in
+                       ...lowenergy/test/ contains the total integrated
+                       cross section.
+             * G4DNATest was modified in order to take into account
+               G4DNAHydrogenRuddIonization process.
+             * Duplicated functions in G4DNARuddIonizationFinalStatesPolicy
+               .hh & . icc  were removed and fixed.
+             * G4DNARuddTotalCrossSectionPolicy.hh was removed (not needed).
+             * G4DNAHydrogenRuddIonization Process was tested and seems
+               working fine.      
+                                                                 
+15.09.2005   Ziad FRANCIS, tag emlowen-V07-01-08
+             * Implementation of Proton Charge Increase process according to
+               the model proposed by Dingfelder(2000). Files created :
+                      - G4DNAChargeIncreaseInWater.hh .icc
+                      - G4DNAProtonChargeIncrease.hh .cc
+                      - G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh
+                                                                        .icc
+                      - G4DNAProtonChargeIncreaseFinalStatesPolicy.hh .icc
+             * G4DNATest was modified in order to take into account this
+               proton charge increase process in liquid water.
+             * G4DNAProtonChargeIncrease was tested and seems to be OK!
+ 
+15.09.2005   Ziad FRANCIS, tag emlowen-V07-01-07
+             * Implementation of slow protons Charge Transfer process
+               according to the model used by M.Dingfelder(2000). Files
+               created :
+                      - G4DNAChargeDecreaseInWater.hh .icc
+                      - G4DNAProtonChargeDecrease.hh .cc
+                      - G4DNAProtonChargeDecreaseTotalCrossSectionPolicy.hh
+                                                                        .icc
+                      - G4DNAProtonChargeDecreaseFinalStatesPolicy.hh .icc
+             * G4DNATest was modified in order to take into account
+               ProtonChargeDecrease process testing.
+             * G4DNAProtonChargeDecrease was Tested and seems working fine !
+
+13.09.2005   Ziad FRANCIS, tag emlowen-V07-01-06
+             * Implementation of slow protons (<500keV) ionization process according
+               to the Rudd semi empirical model, files created :
+                          - G4DNAIonizationInWater.hh .icc
+                          - G4DNAProtonRuddIonizationFinalStatesPolicy.hh .icc
+                          - G4DNAProtonRuddIonization.hh .cc
+             * Total integrated cross sections are in a data file
+               "RuddProtonIonizationCrossSection.dat"
+             * G4DNATest was modified in order to take into account this
+               ProtonRuddIonization process which was tested in a first
+               approach.
+             
+12.09.2005   R.Capra, tag emlowen-V07-01-05
+             * Minor changes to G4DNATest in order to corectly support 
+               secondaries. 
+             * Minor changes to G4VDNAProcessInWater in order to corectly
+               kill particles with secondaries
+
+10.09.2005   R.Capra, tag emlowen-V07-01-04
+             * Minor fixes to G4DNATotalCrossSectionFromFilePolicy. It had
+               compilation errors.
+
+08.09.2005   R.Capra, tag emlowen-V07-01-03
+             * There is a serius bug in G4hLowEnergyLoss. There are
+               a lot of static data members. Moreover there are static
+               vectors with fixed dimensions.
+               The vector dimension has been resized from 10 to 100 in order
+               to avoid memory corruption errors caused by code in 
+               src/G4hLowEnergyIonisation.cc.
+               The bug cannot be considered properly fixed. It is still
+               pending
+             * test/G4DNATest.cc has been upgraded in order to manage
+               processes with more than one secondary particle
+
+26.07.2005   Ziad FRANCIS, tag emlowen-V07-01-02
+             * G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy.hh and 
+               G4DNAEmfietzoglouExcitationTotalCrossSectionPolicy.icc were
+               tested using G4DNATest
+             * G4DNATest upgrade in order to manage G4DNAElectronExcitation
+               testing
+             * Implementation of Electron Excitation process
+               (G4DNAElectronExcitation)
+
+20.07.2005   Riccardo Capra, tag emlowen-V07-01-01
+             * Small corrections in G4DNATotalCrossSectionFromFilePolicy
+             * Implementation of DNA excitation processes for protons and
+               alphas.
+               - Processes tested (preliminary test). Protons seems fine
+                 while alpha particle total cross section differs from
+                 plots in the reference documents
+             * G4DNATest upgrade in order to manage the new implemented
+               processes and in order to select the particle type from
+               command line
+
+07.07.2005   Riccardo Capra, tag emlowen-V07-01-00
+             * G4DNAElectronElasticBrenner and G4DNAElectronElasticEmfietzoglou
+               were tested with G4DNATest
+               - Some minor correction to the related classes
+             * Implementation of the total cross-section policy that allows
+               reading file tables (tested)
+             * Correction in the Save method of the G4(*)EMDataSet classes
+               - The previous tag has a problem with units
+
+24.06.2005   Riccardo Capra, tag emlowen-V07-00-13
+             * Changes to G4(*)EMDataSet classes according to the design
+               iteration:
+              - LoadData is now a public virtual method
+              - SaveData is a new method that allows data saving in the same
+                format of LoadData.
+              - Constructors with the filename cannot be used anymore. They
+                are substituted with constructors that generates an empty
+                data set
+              - Energies and Data can be set after de construction with
+                the new SetEnergiesData
+
+             * Changes to G4VLowEnergyDiscretePhotonProcess in order to
+               inherit from G4VLowEnergyTestableDiscreteProcess.
+               - GetMeanFreePath and PostStepDoIt methods of all discrete
+                 processes made inherit from G4VLowEnergyTestableDiscreteProcess 
+                 could be (partially) tested with a unique testing code now.
+             
+             * DNA code changed according to the design iteration tha now
+               uses templated classes
+               
+             * Code builds and links the test codes unde Linux.
+               - G4(*)EMDataSet and DNA classes test are still in progress
+               - Some minor changes could be done to the structures used to
+                 configure the policy-based processes
+
+??.??.????   ?, tag emlowen-V07-00-12
 
 31.05.2005   MGP, tag emlowen-V07-00-11
              Fix to Penelope ionisation (for atomic deexcitation?)

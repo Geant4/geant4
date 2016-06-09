@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Circle.cc,v 1.4 2001/07/11 10:01:07 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Circle.cc,v 1.5 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 
@@ -32,28 +32,8 @@
 
 G4Circle::G4Circle () {}
 
-G4Circle::G4Circle (const G4Point3D& pos):
-G4VMarker (pos) {}
+G4Circle::G4Circle (const G4VMarker& marker): G4VMarker (marker) {}
 
-G4Circle::G4Circle (const G4VMarker& marker):
-G4VMarker (marker) {}
+G4Circle::G4Circle (const G4Point3D& pos): G4VMarker (pos) {}
 
 G4Circle::~G4Circle () {}
-
-G4Visible & G4Circle::operator = (const G4Visible &right) {
-  return G4Visible::operator = (right);
-}
-
-G4VVisPrim & G4Circle::operator = (const G4VVisPrim &right) {
-  return G4VVisPrim::operator = (right);
-}
-
-G4VMarker & G4Circle::operator = (const G4VMarker &right) {
-  return G4VMarker::operator = (right);
-}
-
-G4Circle& G4Circle::operator = (const G4Circle& right) {
-  if (&right == this) return *this;
-  G4VMarker::operator = (right);
-  return *this;
-}

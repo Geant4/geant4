@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2005/06/28 14:47:09 gcosmo Exp $
+$Id: History,v 1.32 2005/12/06 10:54:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+4th December 2005  John Allison (exampleN05-V07-01-03)
+- Quietened vis manager in batch mode.
+
+25th November 2005  Marc Verderi  (exampleN05-V07-01-02)
+- Ghost functionnality made available back
+- requires param-V07-01-03
+
+16th November 2005  Marc Verderi  (exampleN05-V07-01-01)
+- Migration to G4Region.
+- NOTE: *** ghost functionnality is not available for now ***.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+4th November 2005  Marc Verderi  (exampleN05-V07-01-00)
+- Use RandGamma from CLHEP end removed custom RandomGamma function.
 
 28th June 2005  Gabriele Cosmo  (exampleN05-V07-00-00)
 - Added inclusion of <cmath> to RandomGamma.cc.

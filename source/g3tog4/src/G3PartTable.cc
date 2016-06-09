@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.cc,v 1.12 2003/06/16 16:50:51 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G3PartTable.cc,v 1.13 2005/11/14 18:21:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include "G4Types.hh"
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 #include "G3PartTable.hh"
 
@@ -63,10 +63,9 @@ G3PartTable::Put(G4int partid, G4ParticleDefinition *partpt){
 
 void
 G3PartTable::HashID(G4int partid, G4String& theHashID){
-  char s[20];
-  std::ostrstream ostr(s, sizeof s);
+  std::ostringstream ostr;
   ostr << "Part" << partid << std::ends;
-  theHashID = s;
+  theHashID = ostr.str();
 }
 
 void 

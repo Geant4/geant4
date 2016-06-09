@@ -39,7 +39,7 @@ public:
       
   // Access functions
   void MagneticField(const double Point[3], double Bfield[3]) const;
-  Hep3Vector MagneticField(const Hep3Vector Point) const;
+  CLHEP::Hep3Vector MagneticField(const CLHEP::Hep3Vector Point) const;
   virtual void GetFieldValue(const double Point[3], double* Bfield) const;
   G4double GetConstantFieldvalue() const {return fval;}
 

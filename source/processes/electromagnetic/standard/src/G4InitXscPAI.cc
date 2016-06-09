@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4InitXscPAI.cc,v 1.8 2005/05/03 08:07:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // G4InitXscPAI.cc -- class implementation file

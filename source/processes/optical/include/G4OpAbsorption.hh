@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.hh,v 1.7 2001/08/31 16:43:32 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpAbsorption.hh,v 1.8 2005/07/28 22:27:31 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Definition
@@ -33,7 +33,8 @@
 // Version:     1.0
 // Created:     1996-05-21
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2005-07-28 add G4ProcessType to constructor
+//              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 //              1998-08-25 by Stefano Magni
@@ -85,7 +86,8 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpAbsorption(const G4String& processName = "OpAbsorption");
+        G4OpAbsorption(const G4String& processName = "OpAbsorption",
+                                G4ProcessType type = fOptical);
 
         // G4OpAbsorption(const G4OpAbsorption &right);
 

@@ -40,6 +40,8 @@
 
 #include "LISARunActionMessenger.hh"
 
+#include <sstream>
+
 #include "LISARunAction.hh"
 
 
@@ -69,7 +71,7 @@ void LISARunActionMessenger::SetNewValue
   if(command == SetAutoSeedCmd) {
     G4int vl;
     const char* t = newValue;
-    std::istrstream is((char*)t);
+    std::istringstream is(t);
     is >> vl;
     runAction->SetAutoSeed(vl!=0);
   }

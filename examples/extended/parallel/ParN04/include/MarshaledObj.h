@@ -1,13 +1,26 @@
  /**********************************************************************
-  *                Parallel Library for Geant4                         *
+  *                Include file with Base Class of Marshalgen          *
   * Copyright (c) 2001 Gene Cooperman <gene@ccs.neu.edu>               *
   *                                                                    *
-  * This library is free software distributed under the GNU            *
-  * Lesser General Public License.  See the file COPYING for details.  *
+  * This library is free software; you can redistribute it and/or      *
+  * modify it under the terms of the GNU Lesser General Public         *
+  * License as published by the Free Software Foundation; either       *
+  * version 2.1 of the License, or (at your option) any later version. *
+  *                                                                    *
+  * This library is distributed in the hope that it will be useful,    *
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of     *
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU   *
+  * Lesser General Public License for more details.                    *
+  *                                                                    *
+  * You should have received a copy of the GNU Lesser General Public   *
+  * License along with this library (see file COPYING); if not, write  *
+  * to the Free Software Foundation, Inc., 59 Temple Place, Suite      *
+  * 330, Boston, MA 02111-1307 USA, or contact Gene Cooperman          *
+  * <gene@ccs.neu.edu>.                                                *
   **********************************************************************/
 
-#ifndef PARMARSHALEDOBJ_H
-#define PARMARSHALEDOBJ_H
+#ifndef MARSHALEDOBJ_H
+#define MARSHALEDOBJ_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,14 +124,14 @@ class MarshaledObj {
     char* msh_field_begin;
 
     // msh_size contains the total size of msh_buffer. i.e.,
-    int msh_size;
+    size_t msh_size;
 
     // msh_cursor points to the next field to be marshaled.
     char *msh_cursor;
 
     // msh_extent is the total allocated space for msh_buffer.
     // msh_extent is always >= msh_size
-    int msh_extent;
+    size_t msh_extent;
 
     bool msh_isUnmarshalDone; //Is unmarshaling done yet?
 
@@ -130,7 +143,7 @@ class MarshaledObj {
 		}
     }
 
-	void resizeBuffer(int new_size ) {
+	void resizeBuffer(size_t new_size ) {
 		int msh_displacement = msh_cursor - msh_buffer;
 		int field_displacement = msh_field_begin - msh_buffer;
 

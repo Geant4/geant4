@@ -182,11 +182,11 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   }
 				    
   //xprime axis coordinates
-  Hep3Vector xprime(sinth1*cosph1,sinth1*sinph1,costh1);
+  CLHEP::Hep3Vector xprime(sinth1*cosph1,sinth1*sinph1,costh1);
   //yprime axis coordinates
-  Hep3Vector yprime(sinth2*cosph2,sinth2*sinph2,costh2);
+  CLHEP::Hep3Vector yprime(sinth2*cosph2,sinth2*sinph2,costh2);
   //zprime axis coordinates
-  Hep3Vector zprime(sinth3*cosph3,sinth3*sinph3,costh3);
+  CLHEP::Hep3Vector zprime(sinth3*cosph3,sinth3*sinph3,costh3);
 
 #ifdef ddebug
   G4cout << xprime << '\t';    G4cout << yprime << '\t';    G4cout << zprime << G4endl;

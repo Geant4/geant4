@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.33 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Para.cc,v 1.37 2005/11/09 15:03:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4Para
 //
@@ -30,10 +30,10 @@
 //
 // History:
 //
+// 23.10.05 V.Grichine: bug fixed in DistanceToOut(p,v,...) for the v.x()<0 case 
 // 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
-// 26.04.05 V.Grichine: new SurfaceNormal is default
-// 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and in
-//                      constructor with vertices
+// 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and
+//                      in constructor with vertices
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
 // 18.11.99 V.Grichine: kUndef was added to ESide
 // 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
@@ -53,6 +53,8 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
+
+using namespace CLHEP;
 
 // Private enum: Not for external use 
     
@@ -153,6 +155,16 @@ G4Para::G4Para( const G4String& pName,
     G4Exception("G4Para::G4Para()", "InvalidSetup",
                 FatalException, "Invalid vertice coordinates.");
   }    
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+G4Para::G4Para( __void__& a )
+  : G4CSGSolid(a)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -444,7 +456,7 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   G4int noSurfaces = 0; 
   G4double distx,disty,distz;
   G4double newpx,newpy,xshift;
-  G4double calpha,salpha;      // Sin/Cos(alpha) - needed to recalc G4Parameter 
+  G4double calpha,salpha;      // Sin/Cos(alpha) - needed to recalc G4Parameter
   G4double tntheta,cosntheta;  // tan and cos of normal's theta component
   G4double ycomp;
   G4double delta = 0.5*kCarTolerance;
@@ -453,8 +465,8 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   newpy  = p.y()-fTthetaSphi*p.z();
 
   calpha = 1/std::sqrt(1+fTalpha*fTalpha);
-  if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-  else          salpha = 0.;
+  if (fTalpha) {salpha = -calpha/fTalpha;} // NOTE: using MINUS std::sin(alpha)
+  else         {salpha = 0.;}
   
   //  xshift = newpx*calpha+newpy*salpha;
   xshift = newpx - newpy*fTalpha;
@@ -468,27 +480,29 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   cosntheta = 1/std::sqrt(1+tntheta*tntheta);
   ycomp     = 1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
 
-  G4ThreeVector nX  = G4ThreeVector( calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
+  G4ThreeVector nX  = G4ThreeVector( calpha*cosntheta,
+                                     salpha*cosntheta,
+                                    -tntheta*cosntheta);
   G4ThreeVector nY  = G4ThreeVector( 0, ycomp,-fTthetaSphi*ycomp);
   G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
 
   if (distx <= delta)      
   {
     noSurfaces ++;
-    if ( xshift >= 0.) sumnorm += nX;
-    else               sumnorm -= nX;   
+    if ( xshift >= 0.) {sumnorm += nX;}
+    else               {sumnorm -= nX;}
   }
   if (disty <= delta)
   {
     noSurfaces ++;
-    if ( newpy >= 0.)  sumnorm += nY;
-    else               sumnorm -= nY;   
+    if ( newpy >= 0.)  {sumnorm += nY;}
+    else               {sumnorm -= nY;}
   }
   if (distz <= delta)  
   {
     noSurfaces ++;
-    if ( p.z() >= 0.)  sumnorm += nZ;
-    else               sumnorm -= nZ; 
+    if ( p.z() >= 0.)  {sumnorm += nZ;}
+    else               {sumnorm -= nZ;}
   }
   if ( noSurfaces == 0 )
   {
@@ -498,8 +512,8 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
-  else if ( noSurfaces == 1 ) norm = sumnorm;
-  else                        norm = sumnorm.unit();
+  else if ( noSurfaces == 1 ) {norm = sumnorm;}
+  else                        {norm = sumnorm.unit();}
 
   return norm;
 }
@@ -541,13 +555,13 @@ G4ThreeVector G4Para::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     
   if (distx<disty)
   {
-    if (distx<distz) side=kNX;
-    else side=kNZ;
+    if (distx<distz) {side=kNX;}
+    else {side=kNZ;}
   }
   else
   {
-    if (disty<distz) side=kNY;
-    else side=kNZ;
+    if (disty<distz) {side=kNY;}
+    else {side=kNZ;}
   }
 
   switch (side)
@@ -1005,9 +1019,9 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         }
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=-1/std::sqrt(1+tntheta*tntheta);
-        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);           
-        return snxt=0;
+        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
       }
+      return snxt=0;
     }
   }
 
@@ -1207,11 +1221,115 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
      << "    half length Y: " << fDy/mm << " mm \n"
      << "    half length Z: " << fDz/mm << " mm \n"
      << "    std::tan(alpha)         : " << fTalpha/degree << " degrees \n"
-     << "    std::tan(theta)*std::cos(phi): " << fTthetaCphi/degree << " degrees \n"
-     << "    std::tan(theta)*std::sin(phi): " << fTthetaSphi/degree << " degrees \n"
+     << "    std::tan(theta)*std::cos(phi): " << fTthetaCphi/degree
+     << " degrees \n"
+     << "    std::tan(theta)*std::sin(phi): " << fTthetaSphi/degree
+     << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnPlane
+// Auxiliary method for Get Point on Surface
+//
+
+G4ThreeVector G4Para::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                      G4ThreeVector p2, G4ThreeVector p3, 
+                                      G4double& area) const
+{
+  G4double lambda1, lambda2, chose, aOne, aTwo;
+  G4ThreeVector t, u, v, w, Area, normal;
+  
+  t = p1 - p0;
+  u = p2 - p1;
+  v = p3 - p2;
+  w = p0 - p3;
+
+  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
+                       w.z()*v.x() - w.x()*v.z(),
+                       w.x()*v.y() - w.y()*v.x());
+  
+  aOne = 0.5*Area.mag();
+  
+  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
+                       t.z()*u.x() - t.x()*u.z(),
+                       t.x()*u.y() - t.y()*u.x());
+  
+  aTwo = 0.5*Area.mag();
+  
+  area = aOne + aTwo;
+  
+  chose = RandFlat::shoot(0.,aOne+aTwo);
+
+  if( (chose>=0.) && (chose < aOne) )
+  {
+    lambda1 = RandFlat::shoot(0.,1.);
+    lambda2 = RandFlat::shoot(0.,lambda1);
+    return (p2+lambda1*v+lambda2*w);    
+  }
+
+  // else
+
+  lambda1 = RandFlat::shoot(0.,1.);
+  lambda2 = RandFlat::shoot(0.,lambda1);
+  return (p0+lambda1*t+lambda2*u);    
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+//
+// Return a point (G4ThreeVector) randomly and uniformly
+// selected on the solid surface
+
+G4ThreeVector G4Para::GetPointOnSurface() const
+{
+  G4ThreeVector One, Two, Three, Four, Five, Six;
+  G4ThreeVector pt[8] ;
+  G4double chose, aOne, aTwo, aThree, aFour, aFive, aSix;
+
+  pt[0] = G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                        -fDz*fTthetaSphi-fDy, -fDz);
+  pt[1] = G4ThreeVector(-fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                        -fDz*fTthetaSphi-fDy, -fDz);
+  pt[2] = G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                        -fDz*fTthetaSphi+fDy, -fDz);
+  pt[3] = G4ThreeVector(-fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                        -fDz*fTthetaSphi+fDy, -fDz);
+  pt[4] = G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                        +fDz*fTthetaSphi-fDy, +fDz);
+  pt[5] = G4ThreeVector(+fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                        +fDz*fTthetaSphi-fDy, +fDz);
+  pt[6] = G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                        +fDz*fTthetaSphi+fDy, +fDz);
+  pt[7] = G4ThreeVector(+fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                        +fDz*fTthetaSphi+fDy, +fDz);
+
+  // make sure we provide the points in a clockwise fashion
+
+  One   = GetPointOnPlane(pt[0],pt[1],pt[3],pt[2], aOne);
+  Two   = GetPointOnPlane(pt[4],pt[5],pt[7],pt[6], aTwo);
+  Three = GetPointOnPlane(pt[6],pt[7],pt[3],pt[2], aThree);
+  Four  = GetPointOnPlane(pt[4],pt[5],pt[1],pt[0], aFour); 
+  Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
+  Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
+
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  
+  if( (chose>=0.) && (chose<aOne) )                    
+    { return One; }
+  else if(chose>=aOne && chose<aOne+aTwo)  
+    { return Two; }
+  else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
+    { return Three; }
+  else if(chose>=aOne+aTwo+aThree && chose<aOne+aTwo+aThree+aFour)
+    { return Four; }
+  else if(chose>=aOne+aTwo+aThree+aFour && chose<aOne+aTwo+aThree+aFour+aFive)
+    { return Five; }
+  return Six;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1237,47 +1355,4 @@ G4NURBS* G4Para::CreateNURBS () const
 {
   // return new G4NURBSbox (fDx, fDy, fDz);
   return 0 ;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Return a point (G4ThreeVector) randomly and uniformly selected on the solid surface
-
-G4ThreeVector G4Para::GetPointOnSurface() const
-{
-  G4double px, py, pz, select, sumS;
-  G4double Sxy, Sxz, Syz;
-
-  Sxy = fDx*fDy; 
-  Sxz = fDx*fDz; 
-  Syz = fDy*fDz;
-
-  sumS   = Sxy + Sxz + Syz;
-  select = sumS*G4UniformRand();
- 
-  if( select < Sxy )
-  {
-    px = -fDx +2*fDx*G4UniformRand();
-    py = -fDy +2*fDy*G4UniformRand();
-
-    if(G4UniformRand() > 0.5) pz =  fDz;
-    else                      pz = -fDz;
-  }
-  else if ( ( select - Sxy ) < Sxz ) 
-  {
-    px = -fDx +2*fDx*G4UniformRand();
-    pz = -fDz +2*fDz*G4UniformRand();
-
-    if(G4UniformRand() > 0.5) py =  fDy;
-    else                      py = -fDy;
-  }
-  else  
-  {
-    py = -fDy +2*fDy*G4UniformRand();
-    pz = -fDz +2*fDz*G4UniformRand();
-
-    if(G4UniformRand() > 0.5) px =  fDx;
-    else                      px = -fDx;
-  } 
-  return G4ThreeVector(px,py,pz);
 }

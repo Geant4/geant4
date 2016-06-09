@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2005/05/03 10:05:48 allison Exp $
+$Id: History,v 1.22 2005/12/07 14:58:09 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07.12.2005 - S. Guatelli, tag xraytel-V07-01-03
+             warninw deleted; it concerned stream.
+
+30.11.2005 - G.Santin, tag xraytel-V07-01-02
+             general update of macros and documentation
+             ASCII output enabled also without AIDA
+
+27.09.2005 - G.Santin, tag xraytel-V07-01-01
+             compilation protection for non AIDA users,
+             obsolete GPS commands updated
 
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.

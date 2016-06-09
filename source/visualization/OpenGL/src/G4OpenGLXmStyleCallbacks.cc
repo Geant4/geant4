@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.8 2005/02/23 11:24:52 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.12 2005/10/13 17:30:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -34,6 +34,8 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+
+#include "G4OpenGLViewerDataStore.hh"
 
 void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 
@@ -120,27 +122,21 @@ void G4OpenGLXmViewer::background_color_callback (Widget w,
 		 NULL);
 
 
-  //I need to revisit the kernel if the background colour changes and hidden
-  //line removal is enabled, because hlr drawing utilises the background
-  //colour in its drawing...
+  //I need to revisit the kernel if the background colour changes and
+  //hidden line removal is enabled, because hlr drawing utilises the
+  //background colour in its drawing...
+  // (Note added by JA 13/9/2005) Background now handled in view
+  // parameters.  A kernel visit is triggered on change of background.
   switch (choice) {
     
   case 0:
-    if (!pView->white_background) {
-      pView->white_background = true;
-      if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit (true);
-      }
-    }
+    ((G4ViewParameters&)pView->GetViewParameters()).
+      SetBackgroundColour(G4Colour(1.,1.,1.));  // White
     break;
 
   case 1:
-    if (pView->white_background) {
-      pView->white_background = false;
-      if (pView->GetViewParameters().GetDrawingStyle() == G4ViewParameters::hlr) {
-	pView->SetNeedKernelVisit (true);
-      }
-    }
+    ((G4ViewParameters&)pView->GetViewParameters()).
+      SetBackgroundColour(G4Colour(0.,0.,0.));  // Black
     break;
 
   default:
@@ -166,20 +162,19 @@ void G4OpenGLXmViewer::transparency_callback (Widget w,
     
   case 0:
     pView->transparency_enabled = false;
-    glDisable (GL_BLEND);
+    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, false);
     break;
 
   case 1:
     pView->transparency_enabled = true;
-    glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glShadeModel (GL_FLAT);
+    G4OpenGLViewerDataStore::SetTransparencyEnabled(pView, true);
     break;
 
   default:
     G4Exception("Unrecognised case in transparency_callback.");
   }
 
+  pView->SetNeedKernelVisit (true);
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();

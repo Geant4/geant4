@@ -26,8 +26,8 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBertini.hh,v 1.1 2004/11/23 14:37:47 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RemSimHadronicBertini.hh,v 1.3 2005/09/08 06:56:18 guatelli Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
@@ -37,7 +37,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-
+#include "G4ExcitationHandler.hh"
 #include "G4QGSParticipants.hh"
 #include "G4QGSModel.hh"
 
@@ -99,7 +99,7 @@ class RemSimHadronicBertini: public G4VPhysicsConstructor
 
     G4TheoFSGenerator* QGSP_model;
     G4GeneratorPrecompoundInterface* theCascade;
-    G4ExcitationHandler* theHandler;
+    G4ExcitationHandler theHandler;
     G4PreCompoundModel* thePreEquilib;
     G4QGSMFragmentation* theFragmentation;
     G4ExcitedStringDecay* theStringDecay;

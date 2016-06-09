@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.14 2003/11/03 03:27:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ProcessTableMessenger.cc,v 1.15 2005/11/21 03:47:32 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 //---------------------------------------------------------------
@@ -56,7 +56,7 @@
 #include "G4ios.hh"                 
 #include "G4Tokenizer.hh"
 #include <iomanip>               
-#include <strstream>
+#include <sstream>
 
 /////////////////////////////////////////
 G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
@@ -216,7 +216,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4String tmpS = G4String(next());
     //  inputstream for newValues
     const char* temp = (const char*)(tmpS);
-    std::istrstream is((char*)temp);
+    std::istringstream is((char*)temp);
     G4int level;
     is  >>level;
 
@@ -356,16 +356,15 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
   G4String candidates;
   G4String returnValue('\0');
 
-  char line[255];
-  std::ostrstream os(line,255);
+  std::ostringstream os;
   G4UIparameter * param; 
 
   G4int idx; 
 
   if( command==verboseCmd ){
     //Commnad   /process/verbose
-    os << theProcessTable->GetVerboseLevel() << '\0';
-    returnValue = G4String(line);
+    os << theProcessTable->GetVerboseLevel();
+    returnValue = os.str();
 
   } else if ( command==listCmd ){
     //Commnad   /process/list

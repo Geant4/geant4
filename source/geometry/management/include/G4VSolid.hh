@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.19 2005/05/23 07:52:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSolid.hh,v 1.21 2005/11/09 14:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // class G4VSolid
@@ -176,6 +176,9 @@ class G4VSolid
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
 
+    virtual G4ThreeVector GetPointOnSurface() const;
+      // Returns a random point located on the surface of the solid.
+
     virtual std::ostream& StreamInfo(std::ostream& os) const = 0;
       // Dumps contents of the solid to a stream.
     inline void DumpInfo() const;
@@ -206,8 +209,12 @@ class G4VSolid
       // If the solid is a "G4DisplacedSolid", return a self pointer
       // else return 0.
 
-  //  virtual G4ThreeVectorList* 
-  //  CreateRotatedVertices(const G4AffineTransform& pTransform) const = 0 ;
+  public:  // without description
+
+    G4VSolid(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   protected:  // with description
 

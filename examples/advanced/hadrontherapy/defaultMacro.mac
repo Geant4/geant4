@@ -35,8 +35,8 @@
 /physics/addPhysics ion-LowE
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
-/physics/addPhysics proton-precompound
-
+#/physics/addPhysics proton-precompound
+/physics/addPhysics proton-precompoundGEM
 /run/initialize
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
@@ -44,7 +44,18 @@
 # SETTING FOR THE RANGE SHIFTER
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
-#/vis/viewer/flush
-/beam/energy/meanEnergy 63.5
-/run/beamOn 300
+
+
+# SET OF THE VISUALISATION CHARACTERISTICS
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+
+/vis/viewer/flush
+/beam/energy/meanEnergy 63.5 MeV
+#/run/beamOn 2000
+
+
+
+
 

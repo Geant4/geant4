@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.20 2005/05/18 15:28:37 maire Exp $
+# $Id: TestEm3.in,v 1.22 2005/10/17 15:47:27 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-#### /testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v71
 /testem/phys/addPhysics  standard
 #
 /run/initialize
@@ -22,8 +22,8 @@
 /testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
 /testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
 /testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
-/testem/histo/setHisto 21 102  0.   102. none	#energy flow of primary
-/testem/histo/setHisto 22 102  0.   102. none	#energy flow of secondaries
+/testem/histo/setHisto 21 102  0.   102. none	#energy flow
+/testem/histo/setHisto 22 102  0.   102. none	#lateral energy leakage
 #
 /testem/event/printModulo 50
 #

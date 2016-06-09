@@ -22,7 +22,7 @@
 //
 //
 // $Id: clGeometry.cc,v 1.6 2005/06/27 15:27:39 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

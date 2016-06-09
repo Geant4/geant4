@@ -1,21 +1,36 @@
-Installation instructions:
-
- - Download the tar files of the physics simulation engine you want to use.
- - 'tar -xvf', whereever you want into the directory 'hadronic'.
- - set the environment:
+Installation instructions
+-------------------------
+ + set the environment:
    - G4INSTALL as usual to point to your geant4 installation.
-   - G4LISTS_BASE to point to the directory that contains the 'hadronic'
-     directory for your specific installation of the hadronic physics-lists.
-   - If you wish to work against the 'central' physics-lists installation,
-     do NOT set G4LISTS_BASE, and use G4WORKDIR as usual.
-   - type 'gmake' for each physics list, and the packaging library.
-   - copy the example GNUmakefile (GNUmakefile.user.code.example), that comes
-     with the package, to our application area and uncomment the physics lists
-     you wish to use.
-   - To clean the installation of the physics-lists, you can type
-     "gmake clean_lists" from $G4INSTALL/source in your Geant4 installation.
- 
-Setting default cut values:
+     * [optional] set G4LISTS_BASE, if you have your own physics lists area
+       installation point different from the default one. G4LISTS_BASE must
+       point to the 'physics_lists' directory that contains the subdirectory
+       'hadronic'.
+ + type 'make' from physics_lists/hadronic directory
+ + to build your own application/example: copy the provided
+   GNUmakefile.user.code.example file to your application area and
+   uncomment the physics lists you decide to employ.
+
+ NOTE for Linux/Unix users:
+   - Shared libraries of the physics-lists are NOT allowed if granular
+     kernel libraries of Geant4 are installed and used. In this specific
+     case, physics-lists must be built only with -static- libraries,
+     (i.e. - must have the variable G4LIB_BUILD_SHARED -unset-) !
+
+ NOTE for Windows users:
+   - If DLL libraries of the kernel libraries of Geant4 are installed,
+     the physics-lists must be installed using the variable G4LIB_USE_DLL
+     -set- (i.e. - use 'make G4LIB_USE_DLL=1' to build the physics-lists).
+     Similar for building any Geant4 example or application.
+
+Setting default cut values
+--------------------------
  - The default is: defaultCutValue = 0.7*mm;  
  - To override this value, please call the 
-   "void SetDefaultCutValue(G4double newCutValue)" method.
+  "void SetDefaultCutValue(G4double newCutValue)" method of the Physics List.
+
+Verbosity Level
+---------------
+ - verbosity level of any Physics List can be established via its
+   constructor, e.g. "new QGSP(0)" means 0 verbosity level for
+   the Physics List. The default level is 1.

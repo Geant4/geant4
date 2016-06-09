@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.24 2005/03/03 16:04:14 allison Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IntersectionSolid.cc,v 1.25 2005/11/09 15:00:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -60,7 +60,6 @@ G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
 {
 } 
 
-
 ///////////////////////////////////////////////////////////////////
 //
 
@@ -84,6 +83,20 @@ G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
   : G4BooleanSolid(pName,pSolidA,pSolidB,transform)
 {
 } 
+
+//////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+
+G4IntersectionSolid::G4IntersectionSolid( __void__& a )
+  : G4BooleanSolid(a)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+//
 
 G4IntersectionSolid::~G4IntersectionSolid()
 {

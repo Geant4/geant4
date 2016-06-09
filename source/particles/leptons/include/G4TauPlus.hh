@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.hh,v 1.7 2001/10/16 08:16:16 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TauPlus.hh,v 1.9 2005/01/14 03:49:17 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,53 +31,32 @@
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
+//  New implementation as a utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------
-
-// Each class inheriting from G4VLepton
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
-
 
 #ifndef G4TauPlus_h
 #define G4TauPlus_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VLepton.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                           TAUPLUS                              ###
 // ######################################################################
 
-class G4TauPlus : public G4VLepton
+class G4TauPlus : public G4ParticleDefinition
 {
  private:
-   static G4TauPlus theTauPlus;
-
- private: // constructors are hide as private  
-   G4TauPlus(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+   static G4TauPlus* theInstance;
+   G4TauPlus(){}
+   ~G4TauPlus(){}
 
  public:
-   virtual ~G4TauPlus(){}
-
-   static G4TauPlus*  TauPlusDefinition();
-   static G4TauPlus*  TauPlus();
-
+   static G4TauPlus* Definition();
+   static G4TauPlus* TauPlusDefinition();
+   static G4TauPlus* TauPlus();
 };
-
 
 #endif
 

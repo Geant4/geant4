@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh,v 1.7 2004/12/07 08:50:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4IonisParamElm.hh,v 1.8 2005/11/09 15:38:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 // class description
@@ -55,25 +55,25 @@ public:  // with description
 
     // retrieval methods
     
-    G4double  GetZ()        const {return fZ;};       // atomic number Z
-    G4double  GetZ3()       const {return fZ3;};      // std::pow (Z,1/3)
-    G4double  GetZZ3()      const {return fZZ3;};     // std::pow (Z(Z+1),1/3)
-    G4double  GetlogZ3()    const {return flogZ3;};   // std::log(Z)/3
+    G4double  GetZ()        const {return fZ;}       // atomic number Z
+    G4double  GetZ3()       const {return fZ3;}      // std::pow (Z,1/3)
+    G4double  GetZZ3()      const {return fZZ3;}     // std::pow (Z(Z+1),1/3)
+    G4double  GetlogZ3()    const {return flogZ3;}   // std::log(Z)/3
 
     G4double  GetTau0() const {return fTau0;};
                        // 0.1*std::pow(Z,1/3)*MeV/proton_mass_c2
     
-    G4double  GetTaul() const {return fTaul;};        // 2*MeV/proton mass
+    G4double  GetTaul() const {return fTaul;}        // 2*MeV/proton mass
     
-    G4double  GetAlow() const {return fAlow;};
-    G4double  GetBlow() const {return fBlow;};
-    G4double  GetClow() const {return fClow;};
+    G4double  GetAlow() const {return fAlow;}
+    G4double  GetBlow() const {return fBlow;}
+    G4double  GetClow() const {return fClow;}
                        // parameters for the low energy ion.loss
     
-    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};
+    G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;}
                                         // 16*std::pow(Z,0.9)*eV 
       
-    G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;};
+    G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;}
                                        // shell correction coefficients
    
 public:  // without description
@@ -83,6 +83,10 @@ public:  // without description
     G4int operator==(const G4IonisParamElm&) const;
     G4int operator!=(const G4IonisParamElm&) const;
      
+    G4IonisParamElm(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
 private:
 

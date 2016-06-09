@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacTargetAndFilterDecorator.hh,v 1.1 2004/05/14 18:25:39 mpiergen Exp $
+// $Id: MedLinacTargetAndFilterDecorator.hh,v 1.2 2005/07/03 23:27:37 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -102,8 +102,8 @@ private:
   G4VPhysicalVolume* layer21_phys;
 
 
-  G4VisAttributes* simpleLeadSVisAtt;
-  G4VisAttributes* simpleAlSVisAtt;
+  G4VisAttributes* simpleTungstenSVisAtt;
+  G4VisAttributes* simpleCopperSVisAtt;
   G4VisAttributes* simpleWorldVisAtt;
   //MedLinacVGeometryComponent* component;
 };

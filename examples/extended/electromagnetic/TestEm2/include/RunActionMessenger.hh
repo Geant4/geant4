@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: RunActionMessenger.hh,v 1.2 2004/09/17 10:51:38 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

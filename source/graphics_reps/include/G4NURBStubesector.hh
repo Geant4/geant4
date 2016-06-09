@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.hh,v 1.6 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4NURBStubesector.hh,v 1.7 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -53,8 +53,6 @@ class  G4NURBStubesector : public G4NURBS
     G4NURBStubesector(G4double RMIN, G4double RMAX,
                       G4double DZ, G4double PHI1, G4double PHI2);
     virtual ~G4NURBStubesector();
-    virtual G4Visible&  operator = (const G4Visible& right);
-    virtual G4VVisPrim& operator = (const G4VVisPrim& right);
     virtual const char* Whoami() const;
 
   protected:

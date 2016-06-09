@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.20 2004/03/24 10:11:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: exampleB01.cc,v 1.22 2005/12/09 16:28:37 ahoward Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;
   G4long myseed = 345354;
-  HepRandom::setTheSeed(myseed);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   G4RunManager *runManager = new G4RunManager;
   
@@ -150,6 +150,10 @@ int main(int argc, char **argv)
   if (wwAlg) {
     delete wwAlg;
   }
+
+  mgs.ClearSampling();
+
+  delete runManager;
 
   return 0;
 }

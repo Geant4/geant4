@@ -1,0 +1,54 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for High Precision Neutron model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+22 Nov 2005 Dennis Wright (hadr-hpn-V07-01-03)
+----------------------------------------------
+- fix division NAN compiler warning in outer while loop for
+    G4NeutronHPorLEInelasticData.cc, G4NeutronHPorLElasticData.cc,
+    G4NeutronHPorLEFissionData.cc, G4NeutronHPorLFissionData.cc
+
+22 Nov 2005 Dennis Wright for Tatsumi Koi (hadr-hpn-V07-01-02)
+--------------------------------------------------------------
+- T. Koi implemented new process which switches from HP neutron model 
+  to Low Energy Parameterized model when HP neutron data are absent.
+
+  New files:
+    G4NeutronHPorLCapture.hh, .cc
+    G4NeutronHPorLCaptureData.hh, .cc
+    G4NeutronHPorLCaptureModel.hh, .cc
+    G4NeutronHPorLEInelastic.hh, .cc
+    G4NeutronHPorLEInelasticData.hh, .cc
+    G4NeutronHPorLEInelasticModel.hh, .cc
+    G4NeutronHPorLElastic.hh, .cc
+    G4NeutronHPorLElasticData.hh, .cc
+    G4NeutronHPorLElasticModel.hh, .cc
+    G4NeutronHPorLFission.hh, .cc
+    G4NeutronHPorLFissionData.hh, .cc
+    G4NeutronHPorLFissionModel.hh, .cc
+
+
+18 Nov 2005 Dennis Wright (hadr-hpn-V07-01-00)
+----------------------------------------------
+
+- <sstream> migration for
+         G4NeutronHPInelasticBaseFS.cc, G4NeutronHPInelasticCompFS.cc, 
+         G4NeutronHPNInelasticFS.cc, G4NeutronHPIsoData.hh, 
+         G4NeutronHPNames.hh 
+
+- fix division NAN compiler warning in outer while loop for
+         G4NeutronHPCaptureData.cc, G4NeutronHPElasticData.cc, 
+         G4NeutronHPInelasticData.cc, G4NeutronHPFissionData.cc
+

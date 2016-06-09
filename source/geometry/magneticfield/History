@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2004/12/02 09:56:48 gcosmo Exp $
+$Id: History,v 1.99 2005/11/09 14:51:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 9th, 2005  G.Cosmo - field-V07-01-00
+----------------------
+- Archived source code of field01 unit test, now moved to examples/extended.
+- Migrated unit test NTST to use <sstream> and std:: namespace. Up-to-date
+  with G4VParticleChange new interface.
 
 Dec 2nd, 2004  G.Cosmo - field-V06-02-02
 ----------------------

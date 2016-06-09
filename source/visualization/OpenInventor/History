@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2005/06/02 16:51:56 allison Exp $
+$Id: History,v 1.73 2005/11/30 16:16:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,45 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+30th November 2005  Gabriele Cosmo (openinventor-V07-01-04)
+- Trivial fix to SoPolyhedron for support of CLHEP-2.0.X series.
+
+15th November 2005  Guy Barrand (openinventor-V07-01-03)
+- G4OpenInventorXtViewer : handle fVP.GetXGeometryString().
+- G4OpenInventorSceneHandler : handle global scale view parameter.
+  Done in BeginPrimitives and PreAddSolid by doing a 
+  SbMatrix::multRight(sbScale) to the incoming global G4Transform3D matrix.
+- G4OpenInventor[Xt,Win]Viewer : handle set background. Done
+  in the overloaded SetView method.
+
+17th October 2005  Guy Barrand
+- G4OpenInventorViewer::G4OpenInventorViewer : read a g4view.iv
+  file at creating of a view. If found, the scene graph in g4view.iv
+  if added at head of the overall scene graph. This permits easy
+  out of band customization of the scene without having to touch
+  the code.
+- Modification in order to save geometry in an Inventor file.
+  Addition of an "alternateRep" for the SoPolyhedron (see Inventor doc).
+  Addition of an "alternateRep" for the SoDetectorTreeKit.
+  Addition of the SoAlternaterRepAction to traverse a scene graph
+  and construct / delete the alternate reps.
+  Modification of G4OpenInventorViewer::WriteInventor to write the
+  alternateRep of the SoPolyhedron and then save geometry in a 
+  .iv file by using Inventor standard lib. In particular the produced
+  .iv files are readable by the ivview standard tool.
+
+2nd September 2005  John Allison (openinventor-V07-01-02)
+- Corrected treatment of edgeflags.
+
+1st August 2005  Gabriele Cosmo  (openinventor-V07-01-01)
+- Fixed compilation errors and warnings on gcc-4.0.0. Modified files:
+  SoDetectorTreeKit.cc, gl2ps[.h.cc].
+
+20th July 2005  John Allison  (openinventor-V07-01-00)
+- Changed Geant4_SoPolyhedron to construct from G4Polyhedron rather
+  than its base class, HepPolyhedron, for possible future
+  developments.  Functionality unchanged.
 
 2nd June 2005  John Allison  (openinventor-V07-00-02)
 - Changed char* to const char* in gl2psMsg.

@@ -1,35 +1,16 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 ### NIST DataBase for Materials is used
-G4NistMaterialBuilder: BuildMaterial G4_AIR
-New material nComponents= 4
-G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107
-G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068
-G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994
-G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477
 G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Al
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815
 G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Si
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Si>  Z= 14  A= 28.0854
 G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
-G4NistMaterialBuilder: BuildMaterial G4_Fe
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Fe>  Z= 26  A= 55.8451
 G4Material: Mean excitation energy is changed for G4_Fe Iold= 286eV; Inew= 286 eV;
-G4NistMaterialBuilder: BuildMaterial G4_CESIUM_IODIDE
-New material nComponents= 2
-G4NistElementBuilder: Build Element <I>  Z= 53  A= 126.904
-G4NistElementBuilder: Build Element <Cs>  Z= 55  A= 132.905
 G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166eV; Inew= 553.1 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -45,6 +26,8 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+Registering model factories...
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -111,7 +94,8 @@ PhysicsList::AddPhysicsList: <standard>
 Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
 Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
-world cuts are set
+### New geometry is constructed
+PhysicsList: world cuts are set cutG= 0.3 mm    cutE= 0.3 mm 
 Vertex cuts are set
 Muon cuts are set
 #
@@ -135,13 +119,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -153,7 +137,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -167,7 +151,7 @@ annihil:       Heilter model of formula of annihilation into 2 photons
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -187,7 +171,7 @@ ionIoni:   tables are built for  GenericIon
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -225,7 +209,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
 
@@ -289,34 +273,39 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start
 HistoManager: Histograms are booked and run has been started
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=83.39s Real=87.81s Sys=3.77s
+  User=113.19s Real=122.87s Sys=9.65s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1322
-Average number of gamma      698.5
-Average number of e+         47.86
-Average number of steps      3884
-Edep 1x1 =                   0.8258 +- 0.003048
-Edep 3x3 =                   0.9543 +- 0.001289
-Edep 5x5 =                   0.9794 +- 0.0009566
+Average number of e-         1325
+Average number of gamma      701.4
+Average number of e+         48.36
+Average number of steps      5267
+Edep 1x1 =                   0.8256 +- 0.003038  res=  3.679 %
+Edep 3x3 =                   0.9565 +- 0.001559  res=  1.63 %
+Edep 5x5 =                   0.9782 +- 0.001325  res=  1.354 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8258  delEdep1x1= -0.0001842 nrms= -0.05248
-Erms1x1: 0.03048  delErms1x1= -0.00462 nrms= -1.316
-Edep3x3: 0.9543  delEdep3x3= -0.00212 nrms= -1.325
-Erms3x3: 0.01289  delErms3x3= -0.003107 nrms= -1.942
-Edep5x5: 0.9794  delEdep5x5= 0.000367 nrms= 0.3084
-Erms5x5: 0.009566  delErms5x5= -0.002334 nrms= -1.962
+Edep1x1: 0.8256  delEdep1x1= -0.0004101 nrms= -0.1168
+Erms1x1: 0.03038  delErms1x1= -0.004723 nrms= -1.346
+Edep3x3: 0.9565  delEdep3x3= 8.504e-05 nrms= 0.05315
+Erms3x3: 0.01559  delErms3x3= -0.0004063 nrms= -0.2539
+Edep5x5: 0.9782  delEdep5x5= -0.0008222 nrms= -0.6909
+Erms5x5: 0.01325  delErms5x5= 0.001349 nrms= 1.134
 <<<<<END>>>>>   IS ACCEPTED
 
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 Graphics systems deleted.
 Visualization Manager deleting...

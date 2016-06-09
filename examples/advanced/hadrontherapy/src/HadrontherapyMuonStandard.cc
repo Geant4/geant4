@@ -65,7 +65,8 @@ void HadrontherapyMuonStandard::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
      
       if(( particleName == "mu+")|| (particleName == "mu-" ))
-	{//muon
+	{
+           //muon
 	  G4VProcess* aMultipleScattering = new G4MultipleScattering();
 	  G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
 	  G4VProcess* aPairProduction     = new G4MuPairProduction();
@@ -94,4 +95,5 @@ void HadrontherapyMuonStandard::ConstructProcess()
 	    pmanager -> AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
 	}
     }
+  G4cout << "muon processed loaded"<<G4endl;
 }

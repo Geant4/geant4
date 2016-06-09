@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.1 2005/04/22 09:44:18 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.2 2005/08/06 13:59:35 grichine Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 
 #include <complex>
@@ -49,17 +49,17 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume *anEnvelope,
 
   if( unishut )
   {
-    fAlphaPlate = 25;
-    fAlphaGas   = 25;
-    G4cout<<"straw uniform shuting: "<<"fAlphaPlate = "
+    fAlphaPlate = 1./3.;
+    fAlphaGas   = 12.4;
+    G4cout<<"straw uniform shooting: "<<"fAlphaPlate = "
           <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
   }
   else
   {
-    fAlphaPlate = 9;
-    fAlphaGas   = 9;
-    G4cout<<"straw isotropical shuting: "<<"fAlphaPlate = "
+    fAlphaPlate = 0.5;
+    fAlphaGas   = 5.;
+    G4cout<<"straw isotropical shooting: "<<"fAlphaPlate = "
           <<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl;
 
 

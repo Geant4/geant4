@@ -34,9 +34,6 @@
 #include <vector>
 #include <cmath>
 
-
-#define G4RandGamma  RandGamma
-
 class G4FermiPhaseSpaceDecay
 {
 public:

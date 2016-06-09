@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.27 2005/06/17 21:07:13 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RunManagerKernel.cc,v 1.33 2005/11/28 10:57:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //
 
@@ -46,6 +46,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Version.hh"
 #include "G4ios.hh"
 #include <vector>
 
@@ -75,16 +76,17 @@ G4RunManagerKernel::G4RunManagerKernel()
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
   // Following line is tentatively moved from SetPhysics method
-  G4ParticleTable::GetParticleTable()->SetReadiness();
+  // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
   // version banner
-  G4String vs = "$Name: geant4-07-01 $";
+  G4String vs = G4Version;
   vs = vs.substr(1,vs.size()-2);
   versionString = " Geant4 version ";
   versionString += vs;
-  versionString += "   (30-June-2005)";
+  versionString += "   ";
+  versionString += G4Date;
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
@@ -202,7 +204,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  // G4ParticleTable::GetParticleTable()->SetReadiness();
+  G4ParticleTable::GetParticleTable()->SetReadiness();
   physicsList->ConstructParticle();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
@@ -240,8 +242,8 @@ void G4RunManagerKernel::InitializePhysics()
                 "G4VUserPhysicsList is not defined");
   }
 
-  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
-  physicsList->ConstructParticle();
+  //if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   physicsList->Construct();
@@ -325,8 +327,8 @@ void G4RunManagerKernel::ResetNavigator()
 
 void G4RunManagerKernel::UpdateRegion()
 {
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+  G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
 
 void G4RunManagerKernel::BuildPhysicsTables()
@@ -346,14 +348,18 @@ void G4RunManagerKernel::BuildPhysicsTables()
 
 void G4RunManagerKernel::CheckRegions()
 {
+  G4RegionStore::GetInstance()->SetWorldVolume();
+
   for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
   { 
     G4Region* region = (*(G4RegionStore::GetInstance()))[i];
+    if(region->GetWorldPhysical()!=currentWorld) continue;
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(!cuts)
     {
       G4cerr << "Warning : Region <" << region->GetName()
-             << "> does not have specific production cuts." << G4endl;
+             << "> does not have specific production cuts," << G4endl
+             << "even though it appears in the current tracking world." << G4endl;
       G4cerr << "Default cuts are used for this region." << G4endl;
       region->SetProductionCuts(
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
@@ -377,7 +383,13 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   else
   {
     G4cout << G4endl;
-    G4cout << "Region " << region->GetName() << G4endl;
+    G4cout << "Region <" << region->GetName() << "> -- appears in <" 
+           << region->GetWorldPhysical()->GetName() << "> world volume" << G4endl;
+    if(region->GetWorldPhysical()!=currentWorld)
+    {
+      G4cout << G4endl;
+      return;
+    }
     G4cout << " Materials : ";
     std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();

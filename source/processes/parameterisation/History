@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2004/12/07 08:22:11 gcosmo Exp $
+$Id: History,v 1.28 2005/11/26 00:47:54 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 25, 2005, M. Verderi param-V07-01-04
+- put back Makoto's change: StartTracking(G4Track*)
+
+November 25, 2005, M. Verderi param-V07-01-03
+- Make ghost functionnality available with G4Region
+- ** Note ** Change back StartTracking(G4Track*) -> StartTracking() in G4FSMP
+             StartTracking(G4Track*) was introduced in  param-V07-01-02
+	     because (I guess) of procman-V07-01-01
+  This is to make param-V07-01-03 compatible with geant4-07-01-ref-05
+
+November 21, 2005 M.Asai - param-V07-01-02
+- Fix warning message.
+
+November 02, 2005 G.Cosmo - param-V07-01-01
+- Corrected setting of envelope volumes and solid in G4FastTrack.
+- Migrated old scheme for G4Exception and some cosmetics...
+
+October 28, 2005 M.Asai - param-V07-01-00
+- Working tag for merging "envelope" to G4Region.
 
 December 07, 2004 G. Cosmo - param-V06-02-01
 - Implemented migration to <cmath>.

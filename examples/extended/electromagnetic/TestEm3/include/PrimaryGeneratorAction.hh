@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PrimaryGeneratorAction.hh,v 1.3 2004/10/25 12:50:58 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

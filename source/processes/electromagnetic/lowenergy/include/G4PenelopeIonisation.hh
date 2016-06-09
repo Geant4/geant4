@@ -22,7 +22,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4PenelopeIonisation.hh,v 1.4 2003/07/09 12:36:46 pandola Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // Author: L. Pandola
 //

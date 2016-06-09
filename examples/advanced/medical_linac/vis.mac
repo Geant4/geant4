@@ -1,12 +1,12 @@
-
+/PhysicsList/cut 0.2 mm
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
-
+/run/initialize
 
 /vis/scene/create
 /vis/open OGLIX
-/vis/drawVolume
+#/vis/drawVolume
 /vis/viewer/update
 /vis/viewer/set/viewpointThetaPhi 70 20 deg
 /vis/viewer/zoom 1
@@ -17,9 +17,18 @@
 #
 #
 # for drawing the tracks
+
 /run/initialize
+
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+
+/Phantom/dimension 15. cm
+/Phantom/Nvoxels 150
+/Phantom/maxStep 0.2 mm
+
+/PhantomSD/dimension 15. cm
+/PhantomSD/Nvoxels 150
 
 #    Multi Leaf
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.15 2005/06/08 14:26:10 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: RunAction.cc,v 1.17 2005/12/06 11:37:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,12 +178,14 @@ void RunAction::bookHisto()
 void RunAction::cleanHisto()
 {
 #ifdef G4ANALYSIS_USE
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  G4cout << "\n----> Histogram Tree is saved in " << histoName[1] << G4endl; 
+  if(tree) {
+    tree->commit();       // Writing the histograms to the file
+    tree->close();        // and closing the tree (and the file)
+    G4cout << "\n----> Histogram Tree is saved in " << histoName[1] << G4endl; 
    
-  delete tree;
-  tree = 0;
+    delete tree;
+    tree = 0;
+  }
 #endif
 }
 
@@ -195,7 +197,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
   //reshape arrays if needed
   //
@@ -276,13 +278,15 @@ void RunAction::fillPerEvent()
 #ifdef G4ANALYSIS_USE
   //fill histograms
   //
-  G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
-  G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
-  G4double radl=Det->GetMaterial()->GetRadlen();
+  if(tree) {
+    G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
+    G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+    G4double radl=Det->GetMaterial()->GetRadlen();
 
-  histo[0]->fill(100.*dLCumul/(Ekin+mass));
-  histo[1]->fill(ChargTrLength/radl);
-  histo[2]->fill(NeutrTrLength/radl);
+    histo[0]->fill(100.*dLCumul/(Ekin+mass));
+    histo[1]->fill(ChargTrLength/radl);
+    histo[2]->fill(NeutrTrLength/radl);
+  }
 #endif
 }
 
@@ -322,15 +326,17 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     positronFlux[i] /= NbOfEvents;
 
 #ifdef G4ANALYSIS_USE
-    G4double bin = i*dLradl;
-    histo[3]->fill(bin,MeanELongit[i]/dLradl);
-    bin = (i+1)*dLradl;
-    histo[4]->fill(bin,MeanELongitCumul[i]);
-    histo[5]->fill(bin, rmsELongitCumul[i]);
+    if(tree) {
+      G4double bin = i*dLradl;
+      histo[3]->fill(bin,MeanELongit[i]/dLradl);
+      bin = (i+1)*dLradl;
+      histo[4]->fill(bin,MeanELongitCumul[i]);
+      histo[5]->fill(bin, rmsELongitCumul[i]);
 
-    histo[6]->fill(bin, gammaFlux[i]);
-    histo[7]->fill(bin, positronFlux[i]);
-    histo[8]->fill(bin, electronFlux[i]);
+      histo[6]->fill(bin, gammaFlux[i]);
+      histo[7]->fill(bin, positronFlux[i]);
+      histo[8]->fill(bin, electronFlux[i]);
+    }
 #endif
    }
 
@@ -352,11 +358,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
 #ifdef G4ANALYSIS_USE
-    G4double bin = i*dRradl;
-    histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
-    bin = (i+1)*dRradl;
-    histo[10]->fill(bin,MeanERadialCumul[i]);
-    histo[11]->fill(bin, rmsERadialCumul[i]);
+    if(tree) {
+      G4double bin = i*dRradl;
+      histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
+      bin = (i+1)*dRradl;
+      histo[10]->fill(bin,MeanERadialCumul[i]);
+      histo[11]->fill(bin, rmsERadialCumul[i]);
+    }
 #endif
    }
 
@@ -440,7 +448,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   cleanHisto();
   
   // show Rndm status
-  HepRandom::showEngineStatus();
+  CLHEP::HepRandom::showEngineStatus();
 
   // Acceptance
   if(limittrue < DBL_MAX) {

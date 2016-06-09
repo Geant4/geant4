@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.26 2005/03/21 18:34:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UnitsTable.cc,v 1.28 2005/08/12 13:36:47 maire Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -32,6 +32,7 @@
 // 01-03-01: parsec, M.Maire
 // 06-03-01: migration to STL vectors, G.Cosmo
 // 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
+// 12-08-05: cm2/g ("Surface/Mass")  (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -184,7 +185,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
- // new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
+ //new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
  new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
@@ -248,6 +249,9 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("mg/cm3","mg/cm3","Volumic Mass",mg/cm3);
  new G4UnitDefinition("kg/m3", "kg/m3", "Volumic Mass",kg/m3);
  
+ //Surface/Mass
+ new G4UnitDefinition( "cm2/g", "cm2/g","Surface/Mass", cm2/g);
+  
  //Power
  new G4UnitDefinition("watt","W","Power",watt);
  

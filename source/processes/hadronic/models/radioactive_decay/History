@@ -13,16 +13,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 November 2005 Dennis Wright (radioactive_decay-V07-01-02)
+- more <sstream> migration: replace istrstream with istringstream in
+   G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc
+
+24 November 2005 Dennis Wright (radioactive_decay-V07-01-01)
+- migrated two remaining files to <sstream>:
+   G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc
+
+09 November 2005 Gabriele Cosmo (radioactive_decay-V07-01-00)
+- Implemented migration to <sstream> from deprecated <strstream>.
+- Added changes for support of CLHEP-2.0.X.
+- Replaced usage of NULL with 0.
+
 02 June 2005 Fan Lei (radioactive_decay-V07-00-01)
-- added lines 667-669 to G4NuclearDeceyChannel.cc, to avoid rounding erros
+- Added lines 667-669 to G4NuclearDeceyChannel.cc, to avoid rounding erros
   in cos calculations. A bug reported by Ben Morgan
-- removed the test subdirectory
+- Removed the test subdirectory
 
 07 Mar 2005 Fan Lei (radioactive_decay-V07-00-00)
-- added line 457, G4NuclearDeceyChannel.cc to fix bug #711
+- Added line 457, G4NuclearDeceyChannel.cc to fix bug #711
 
 10 Nov 2004 Fan Lei (radioactive_decay-V06-02-01)
-- added G4MshellECDecayChannel.hh and changed G4RadioactiveDecay.cc accordingly.
+- Added G4MshellECDecayChannel.hh and changed G4RadioactiveDecay.cc accordingly.
 
 09 Nov 2004 Fan Lei
 - Changes to G4RaioactiveDecay.cc (radioactive_decay-V06-02-00) 
@@ -44,7 +58,7 @@ track of all tags.
   G4ITDecayChannel to use G4Ions instead of G4ParticleDefinition.
 
 03 Jan 2003 Fan Lei
-- bug (test18) fix in G4NuclearDecayChannel.cc
+- Bug (test18) fix in G4NuclearDecayChannel.cc
 
 15 Nov 2002 Fan Lei ((radiative_decay-V04-01-01)
 - Added linked to atomic relaxation model after EC and
@@ -64,19 +78,19 @@ track of all tags.
   for the geometry domain (tag "geometry-V03-01-00").
 
 01 Nov 2000 Fan Lei (radiative_decay-V02-00-02)
-- added the missing line " ee = e0+1.; " to line 763 in 
+- Added the missing line " ee = e0+1.; " to line 763 in 
   G4RadioactiveDecay.cc
  
 27th Oct 200   fan Lei  (radiative_decay-V02-00-01)
-- add a fast simulation mode for beta decays
+- Add a fast simulation mode for beta decays
 
 25th Oct 2000  fan lei  (radiative_decay-V02-00-00)
-- added 'const' to line 1185 of G4RadioactiveDecay.cc to cowork with 
+- Added 'const' to line 1185 of G4RadioactiveDecay.cc to cowork with 
   tag Track-V02-00-00
 
 27th June 2000  Fan Lei  (radiative_decay-V01-01-04)
-- fix for DEC-cxx debug non-ISO.
-- update test log files.
+- Fix for DEC-cxx debug non-ISO.
+- Update test log files.
 
 15th June 2000  Fan Lei (radiative_decay_V01-01-03)
 - Minor fix on Linux
@@ -84,6 +98,4 @@ track of all tags.
 15th June 2000  Fan Lei (radiative_decay_V01-01-02)
 - ISO compliance.
 
-initial tag by Hans_Pete (radiative_decay_V01-01-00)
-
-
+* Initial tag by Hans-Peter Wellisch (radiative_decay_V01-01-00)

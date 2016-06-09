@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.7 2003/11/10 08:57:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4FastTrack.cc,v 1.9 2005/11/02 09:21:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 //---------------------------------------------------------------
 //
@@ -47,9 +47,10 @@
 // -----------
 //
 G4FastTrack::G4FastTrack(G4Envelope *anEnvelope,
-			 G4bool IsUnique) :
+                         G4bool IsUnique) :
   fAffineTransformationDefined(false),   fEnvelope(anEnvelope),
-  fIsUnique(IsUnique),   fEnvelopeSolid(fEnvelope->GetSolid())
+  fIsUnique(IsUnique), fEnvelopeLogicalVolume(0), fEnvelopePhysicalVolume(0),
+  fEnvelopeSolid(0)
 {}
 
 // -----------
@@ -63,7 +64,7 @@ G4FastTrack::~G4FastTrack()
 // method to setup the current G4FastTrack object 
 //------------------------------------------------------------
 void G4FastTrack::SetCurrentTrack(const G4Track& track,
-				  const G4Navigator* theNavigator) 
+                                  const G4Navigator* theNavigator) 
 {
 
   // -- Register track pointer (used everywhere):
@@ -130,12 +131,17 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // Run accross the hierarchy to find the physical volume
   // associated with the envelope
   //-----------------------------------------------------
-  int depth = history->GetHistory()->GetDepth();
-  int idepth, Done = 0;
-  for (idepth = 0; idepth <= depth; idepth++) {
-    if (history->GetHistory()->GetVolume(idepth)->GetLogicalVolume() == 
-	fEnvelope) {
-      fEnvelopePhysicalVolume=history->GetHistory()->GetVolume(idepth);
+  G4int depth = history->GetHistory()->GetDepth();
+  G4int idepth, Done = 0;
+  for (idepth = 0; idepth <= depth; idepth++)
+  {
+    G4VPhysicalVolume* currPV = history->GetHistory()->GetVolume(idepth);
+    G4LogicalVolume* currLV   = currPV->GetLogicalVolume();
+    if ( (currLV->GetRegion() == fEnvelope) && (currLV->IsRootRegion()) )
+    {
+      fEnvelopePhysicalVolume = currPV;
+      fEnvelopeLogicalVolume  = currLV;
+      fEnvelopeSolid          = currLV->GetSolid();
       Done = 1;
       break;
     }
@@ -145,8 +151,13 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   //---------------------------------------------
   if ( !Done )
     {
-      G4cout << "\n\nERROR !!! can't find Transform for " <<
-	fEnvelopePhysicalVolume->GetName() << "\n\n" << G4endl;
+      G4cout << "WARNING - G4FastTrack::FRecordsAffineTransformation()"
+             << G4endl
+             << "          Can't find transformation for "
+             << fEnvelopePhysicalVolume->GetName() << G4endl;
+      G4Exception("G4FastTrack::FRecordsAffineTransformation()",
+                  "InvalidSetup", JustWarning,
+                  "Transformation for envelope volume not found!");
     }
   else
     {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.9 2003/06/16 16:55:12 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VMarker.hh,v 1.10 2005/07/05 14:04:02 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.
@@ -81,12 +81,12 @@
 #define G4VMARKER_HH
 
 #include "globals.hh"
-#include "G4VVisPrim.hh"
+#include "G4Visible.hh"
 #include "G4Point3D.hh"
 #include "G4Colour.hh"
 #include "G4Color.hh"
 
-class G4VMarker: public G4VVisPrim {
+class G4VMarker: public G4Visible {
 
   friend std::ostream& operator << (std::ostream& os, const G4VMarker& marker);
 
@@ -97,18 +97,11 @@ public: // With description
   //////////////////////////////////////////////////////
   // Constructors...
   G4VMarker ();
-  G4VMarker (const G4VMarker& marker);
   G4VMarker (const G4Point3D& pos);
 
   //////////////////////////////////////////////////////
   // Destructor...
   virtual ~G4VMarker ();
-
-  //////////////////////////////////////////////////////
-  // Assignment...
-  virtual G4Visible&  operator = (const G4Visible& right);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
-  virtual G4VMarker&  operator = (const G4VMarker& right);
 
   //////////////////////////////////////////////////////
   // Logical...

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.11 2004/07/01 15:29:15 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.12 2005/10/13 17:33:24 allison Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -52,7 +52,7 @@
 #include "G4OpenGLXmTopLevelShell.hh"
 #include "G4OpenGLXmSeparator.hh"
 
-#include <strstream>
+#include <sstream>
 
 void G4OpenGLXmViewer::actions_callback (Widget w, 
 				       XtPointer clientData,
@@ -74,14 +74,11 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
     {
       
       if (!pView->fprotation_top) {
-	const int rot_len = 50;
-	char* frot_Name = new char [rot_len];
-	std::ostrstream rot_ost (frot_Name, rot_len);
-	rot_ost.seekp (std::ios::beg);
-	rot_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << std::ends;
+	std::ostringstream rot_Name;
+	rot_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
 	
-	pView->fprotation_top = new G4OpenGLXmTopLevelShell (pView, 
-							     frot_Name);
+	pView->fprotation_top = new G4OpenGLXmTopLevelShell (pView,
+							     (char*)rot_Name.str().c_str());
 	pView->fprotation_button_box = new G4OpenGLXmBox ("Rotation button box", True);
 	
 	pView->fprotation_top->AddChild (pView->fprotation_button_box);
@@ -161,14 +158,11 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
     {
 
       if (!pView->fppanning_top) {
-	const int pan_len = 50;
-	char* fpan_Name = new char [pan_len];
-	std::ostrstream pan_ost (fpan_Name, pan_len);
-	pan_ost.seekp (std::ios::beg);
-	pan_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << std::ends;
+	std::ostringstream pan_Name;
+	pan_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
 	
 	pView->fppanning_top = new G4OpenGLXmTopLevelShell (pView, 
-							    fpan_Name);
+							    (char*)pan_Name.str().c_str());
 	
 	pView->fppanning_box = new G4OpenGLXmFramedBox ("Pan up-down-left-right", 
 							False);
@@ -261,14 +255,11 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
     {
       
       if (!pView->fpsetting_top) {
-	const int set_len = 50;
-	char* fset_Name = new char [set_len];
-	std::ostrstream set_ost (fset_Name, set_len);
-	set_ost.seekp (std::ios::beg);
-	set_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << std::ends;
+	std::ostringstream set_Name;
+	set_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
 	
 	pView->fpsetting_top = new G4OpenGLXmTopLevelShell(pView,
-							   fset_Name);
+							   (char*)set_Name.str().c_str());
 	
 	pView->fpsetting_box = new G4OpenGLXmFramedBox ("Set values for control panels",
 							False);
@@ -342,14 +333,11 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 
       if (!pView->fpmiscellany_top) {
 	
-	const int misc_len = 50;
-	char* fmisc_Name = new char [misc_len];
-	std::ostrstream misc_ost (fmisc_Name, misc_len);
-	misc_ost.seekp (std::ios::beg);
-	misc_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << std::ends;
+	std::ostringstream misc_Name;
+	misc_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
 	
 	pView->fpmiscellany_top = new G4OpenGLXmTopLevelShell (pView, 
-							       fmisc_Name);
+							       (char*)misc_Name.str().c_str());
 	pView->fpwobble_box = new G4OpenGLXmFramedBox ("Wobble view",
 						       True);
 	pView->fpmiscellany_top->AddChild (pView->fpwobble_box);
@@ -437,14 +425,11 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
     {
       if (!pView->fpprint_top) {
 	
-	const int print_len = 50;
-	char* fprint_Name = new char [print_len];
-	std::ostrstream print_ost (fprint_Name, print_len);
-	print_ost.seekp (std::ios::beg);
-	print_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << std::ends;
+	std::ostringstream print_Name;
+	print_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
 	
 	pView->fpprint_top = new G4OpenGLXmTopLevelShell (pView, 
-							  fprint_Name);
+							  (char*)print_Name.str().c_str());
 
 	pView->fpprint_box = new G4OpenGLXmFramedBox ("Create EPS file of current view",
 						       False);

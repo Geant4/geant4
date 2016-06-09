@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AttDef.hh,v 1.4 2004/11/11 16:39:53 johna Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.5 2004/12/10 18:53:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpWLS.cc,v 1.6 2005/07/28 22:28:20 gum Exp $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -34,7 +34,7 @@
 // Created:     2003-05-13
 // Author:      John Paul Archambault
 //              (Adaptation of G4Scintillation and G4OpAbsorption)
-// Updated:     
+// Updated:     2005-07-28 - add G4ProcessType to constructor
 // mail:        gum@triumf.ca
 //              jparcham@phys.ualberta.ca
 //
@@ -51,8 +51,8 @@
 // Constructors
 /////////////////
 
-G4OpWLS::G4OpWLS(const G4String& processName)
-  : G4VDiscreteProcess(processName)
+G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
+  : G4VDiscreteProcess(processName, type)
 {
   theIntegralTable = 0;
  

@@ -32,7 +32,7 @@
 //
 //
 // $Id: BrachyDetectorMessenger.cc,v 1.9 2004/11/24 09:53:05 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

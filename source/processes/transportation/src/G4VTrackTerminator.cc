@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTrackTerminator.cc,v 1.3 2003/11/26 14:51:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

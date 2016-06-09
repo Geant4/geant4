@@ -23,7 +23,7 @@
 #ifdef G4ANALYSIS_USE
 //
 // $Id: GammaRayTelAnalysis.hh,v 1.17 2004/06/01 06:59:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

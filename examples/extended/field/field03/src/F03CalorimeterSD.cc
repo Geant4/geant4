@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03CalorimeterSD.cc,v 1.5 2003/06/25 17:19:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationTubs.cc,v 1.7 2004/05/17 07:20:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// GEANT4 tag $Name: geant4-08-00 $
 //
 // class G4ParameterisationTubs Implementation file
 //
