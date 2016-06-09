@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.11 2005/11/02 16:06:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.12 2006/01/10 13:01:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
@@ -48,8 +48,11 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
-  if (msol->IsGeneric())
+  if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
+    G4cerr << G4endl
+           << "ERROR - Generic construct for G4Polyhedra NOT supported ("
+           << msol->GetName() << ")." << G4endl;
     G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
                 "NotSupported", FatalException,
                 "Sorry, generic construct for G4Polyhedra NOT supported.");

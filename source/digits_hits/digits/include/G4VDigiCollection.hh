@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigiCollection.hh,v 1.1 2003/10/03 10:14:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VDigiCollection.hh,v 1.2 2006/01/02 19:41:51 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 
 #ifndef G4VDigiCollection_h
 #define G4VDigiCollection_h 1
 
+class G4VDigi;
 #include "globals.hh"
 
 // class description:
@@ -61,6 +62,14 @@ class G4VDigiCollection
       { return collectionName; };
       inline G4String GetDMname()
       { return DMname; };
+
+  public:
+      // GetDigi and GetSize are given a default implementation here so
+      // that the template G4TDigiCollection can be used, but they
+      // are re-implemented in G4TDigiCollection.
+      virtual G4VDigi* GetDigi(size_t) const { return 0; }
+      virtual size_t GetSize() const { return 0; }
+
 };
 
 #endif

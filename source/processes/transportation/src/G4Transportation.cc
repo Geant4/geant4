@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.52 2005/05/10 15:20:13 japost Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Transportation.cc,v 1.55 2006/02/06 16:14:17 japost Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -37,6 +37,7 @@
 //
 // =======================================================================
 // Modified:   
+//            19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
 //            11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
 //            21 June 2003, J.Apostolakis: Calling field manager with 
 //                            track, to enable it to configure its accuracy
@@ -73,7 +74,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-  
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
@@ -126,29 +126,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4double geometryStepLength, newSafety ; 
   fParticleIsLooping = false ;
 
-  if( track.GetCurrentStepNumber()==1 )
-  {
-     // reset safety value
-     //
-     fPreviousSafety    = 0.0 ; 
-     fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
- 
-     // reset counter for looping particles in field
-     fNoLooperTrials= 0; 
-
-     // ChordFinder reset internal state
-     //
-     if ( DoesGlobalFieldExist() )
-     {
-        G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
-        if( chordF ) chordF->ResetStepEstimate();
-     }
-
-     // We need to update the current transportation's touchable handle
-     // to the track's one
-     //
-     fCurrentTouchableHandle = track.GetTouchableHandle();
-  }
+  // Initial actions moved to  StartTrack()   
+  // --------------------------------------
+  // Note: in case another process changes touchable handle
+  //    it will be necessary to add here (for all steps)   
+  // fCurrentTouchableHandle = aTrack->GetTouchableHandle();
 
   // GPILSelection is set to defaule value of CandidateForSelection
   // It is a return value
@@ -157,7 +139,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Get initial Energy/Momentum of the track
   //
-  const G4DynamicParticle*  pParticle  = track.GetDynamicParticle() ;
+  const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
+  const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
   G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
   G4ThreeVector startPosition          = track.GetPosition() ;
 
@@ -180,8 +163,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Is the particle charged ?
   //
-  G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
-  G4double              particleCharge = pParticleDef->GetPDGCharge() ; 
+  G4double              particleCharge = pParticle->GetCharge() ; 
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
@@ -755,3 +737,37 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   return &fParticleChange ;
 }
+
+// New method takes over the responsibility to reset the state of G4Transportation
+//   object at the start of a new track or the resumption of a suspended track. 
+
+void 
+G4Transportation::StartTracking(G4Track* aTrack)
+{
+  G4VProcess::StartTracking(aTrack);
+
+// The actions here are those that were taken in AlongStepGPIL
+//   when track.GetCurrentStepNumber()==1
+
+  // reset safety value and center
+  //
+  fPreviousSafety    = 0.0 ; 
+  fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
+  
+  // reset looping counter -- for motion in field
+  if( aTrack->GetCurrentStepNumber()==1 ) {
+     fNoLooperTrials= 0; 
+  }
+
+  // ChordFinder reset internal state
+  //
+  if( DoesGlobalFieldExist() ) {
+     G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
+     if( chordF ) chordF->ResetStepEstimate();
+  }
+  
+  // Update the current touchable handle  (from the track's)
+  //
+  fCurrentTouchableHandle = aTrack->GetTouchableHandle();
+}
+

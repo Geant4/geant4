@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 December 2005 Dennis Wright (radioactive_decay-V08-00-01)
+- G4NuclearDecayChannel::BetaDecayIt() : check for negative sqrt argument in
+  daughtermomentum[1]. Response to Bug report #822.
+
 24 November 2005 Dennis Wright (radioactive_decay-V07-01-02)
 - more <sstream> migration: replace istrstream with istringstream in
    G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc

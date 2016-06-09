@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.8 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RayTracerSceneHandler.hh,v 1.9 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 
 // John Allison  17th March 2000
 
@@ -64,6 +64,7 @@ public:
 
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
+  static G4Scene  fDummyRayTracerScene;
 };
 
 #endif

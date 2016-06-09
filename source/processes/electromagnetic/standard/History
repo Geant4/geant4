@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2005/12/11 12:21:11 vnivanch Exp $
+$Id: History,v 1.204 2006/01/30 17:23:18 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- 12 December 05: L.Urban (emstand-V07-01-30)
+30 January 06 : mma (emstand_p01-V08-00-00)
+- build on top of geant4-08-00-ref-00
+- G4PolarizedComptonScattering : return G4ComptonScattering52::PostStepDoIt()
+ 
+26 January 05: V.Ivant (emstand-V08-00-04)
+26 January 06: V. Grichine 
+- fix nan value for delta direction for the case of zero cut 
+     
+25 January 05: mma (emstand-V08-00-03)
+- G4eplusAnnihilation::AtRestDoIt() : remove cut dependance 
+
+24 January 05: V.Ivant (emstand-V08-00-02)
+24 January 06: V. Grichine 
+- fVerbose for G4PAIModel providing hiding of some technical messages
+
+20 January 05: V.Ivant (emstand-V08-00-01)
+19 January 06: L.Urban
+- G4MultipleScattering: value of facgeom changed (4 -> 3.5)
+                        tlimitmin = facrange*50*micrometer
+  G4MscModel: tail of angular distribution changed
+
+10 January 05: V.Ivant (emstand-V08-00-00)
+- substitute the method SetStepLimits by SetStepFunction
+- move initialisation of default values to the constructor 
+
+12 December 05: L.Urban (emstand-V07-01-30)
+
 - G4MultipleScattering: data member rangecut removed, step limit
                         does not depend on cut any more
      

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.4 2005/11/18 21:20:13 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.5 2006/01/18 05:44:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 // --------------------------------------------------------------
@@ -101,12 +101,11 @@ G4int G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &rig
 G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut, 
 					    const G4Material* material) 
 {
-  //???????????? G4double Charge = theParticle->GetPDGCharge();
   G4double Mass   = theParticle->GetPDGMass();
   G4double theKineticEnergyCuts = 0.;
  
   // Build the energy loss table
-  if (theLossTable ==0) BuildLossTable();
+  BuildLossTable();
   
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector

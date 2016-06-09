@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.cc,v 1.3 2005/11/18 23:07:04 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RayTracerX.cc,v 1.4 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 //
@@ -30,13 +30,18 @@
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 
 #include "G4RayTracerX.hh"
-
+#include "G4RayTracerFeatures.hh"
 #include "G4RayTracerSceneHandler.hh"
 #include "G4RayTracerXViewer.hh"
-#include "G4RTXScanner.hh"
 
 G4RayTracerX::G4RayTracerX():
-  G4RayTracer(0, new G4RTXScanner)
+  G4VGraphicsSystem("RayTracerX",
+		    "RayTracerX",
+		    RAYTRACER_FEATURES,
+		    G4VGraphicsSystem::threeD)
+{}
+
+G4RayTracerX::~G4RayTracerX()
 {}
 
 G4VSceneHandler* G4RayTracerX::CreateSceneHandler (const G4String& name) {
@@ -49,13 +54,19 @@ G4VViewer* G4RayTracerX::CreateViewer (G4VSceneHandler& sceneHandler,
   G4VViewer* pViewer = new G4RayTracerXViewer (sceneHandler, name);
   if (pViewer) {
     if (pViewer->GetViewId() < 0) {
-      G4cerr << "G4RayTracerX::CreateViewer: error flagged by negative"
-        "\n  view id in G4RayTracerXViewer creation."
+      G4cout <<
+        "G4RayTracerX::CreateViewer: ERROR flagged by negative"
+        " view id in G4RayTracerXViewer creation."
         "\n Destroying view and returning null pointer."
-           << G4endl;
+             << G4endl;
       delete pViewer;
       pViewer = 0;
     }
+  }
+  else {
+    G4cout <<
+      "G4RayTracerX::CreateViewer: ERROR: null pointer on new G4RayTracerXViewer."
+           << G4endl;
   }
   return pViewer;
 }

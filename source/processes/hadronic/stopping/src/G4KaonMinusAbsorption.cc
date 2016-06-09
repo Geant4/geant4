@@ -46,8 +46,9 @@
 
 // constructor
  
-G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName)
-  : G4VRestProcess (processName),       // initialization
+G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType),       // initialization
   massKaonMinus(G4KaonMinus::KaonMinus()->GetPDGMass()/GeV),
   massGamma(G4Gamma::Gamma()->GetPDGMass()/GeV),
   massPionZero(G4PionZero::PionZero()->GetPDGMass()/GeV),

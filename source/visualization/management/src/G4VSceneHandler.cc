@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.45 2005/11/22 17:09:12 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VSceneHandler.cc,v 1.48 2006/01/09 17:40:08 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -75,7 +75,10 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fViewCount             (0),
   fpViewer               (0),
   fpScene                (0),
-  fMarkForClearingTransientStore (false),
+  fMarkForClearingTransientStore (true),  // Ready for first
+					  // ClearTransientStoreIfMarked(),
+					  // e.g., at end of run (see
+					  // G4VisManager.cc).
   fSecondPassRequested   (false),
   fSecondPass            (false),
   fReadyForTransients    (true),  // Only false while processing scene.

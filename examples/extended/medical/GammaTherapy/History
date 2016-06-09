@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2005/12/06 14:32:29 gcosmo Exp $
+$Id: History,v 1.20 2006/01/17 10:05:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 Deember 05: G.Cosmo
+17 January 06: V.Ivant (gtherapy-V08-00-00)
+- PreciseRange -> CSDARange
+
+06 December 05: G.Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
 02 December 05: V.Ivant (gtherapy-V07-01-02)

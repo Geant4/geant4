@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -280,7 +280,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=113.19s Real=122.87s Sys=9.65s
+  User=114.01s Real=123.61s Sys=9.56s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

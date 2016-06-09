@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.15 2005/12/06 11:51:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: RunAction.cc,v 1.16 2006/01/25 16:03:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 
 RunAction::~RunAction()
 {
-  delete tallyEdep;
+  delete [] tallyEdep;
   
 #ifdef G4ANALYSIS_USE
   delete af;  

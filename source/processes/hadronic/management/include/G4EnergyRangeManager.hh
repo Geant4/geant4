@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh,v 1.7 2005/06/04 12:51:43 jwellisc Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EnergyRangeManager.hh,v 1.8 2005/12/16 14:24:11 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -64,7 +64,7 @@
      const G4Material *aMaterial,
      const G4Element *anElement ) const;
     
- private:
+	//private:
     
     inline G4int GetHadronicInteractionCounter() const
     { return theHadronicInteractionCounter; }

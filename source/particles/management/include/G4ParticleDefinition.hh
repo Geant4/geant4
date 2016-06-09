@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.27 2005/01/14 03:00:38 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ParticleDefinition.hh,v 1.28 2006/01/02 20:32:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -177,9 +177,9 @@ class G4ParticleDefinition
 
   public:
     void SetAtomicNumber(G4int);
-    G4int GetAtomicNumber() const;
+    virtual G4int GetAtomicNumber() const;
     void SetAtomicMass(G4int);
-    G4int GetAtomicMass() const;
+    virtual G4int GetAtomicMass() const;
 
  public:
       void  SetVerboseLevel(G4int value);

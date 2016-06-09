@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.hh,v 1.5 2005/07/17 13:59:24 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RayTracerViewer.hh,v 1.6 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 
 // John Allison  17th March 2000
 
@@ -31,15 +31,21 @@
 
 #include "G4VViewer.hh"
 
+class G4TheRayTracer;
+
 class G4RayTracerViewer: public G4VViewer {
 public:
-  G4RayTracerViewer(G4VSceneHandler&,const G4String& name);
+  G4RayTracerViewer(G4VSceneHandler&,
+		    const G4String& name,
+		    G4TheRayTracer* = 0);
   virtual ~G4RayTracerViewer();
   void SetView();
   void ClearView();
   void DrawView();
+  G4TheRayTracer* GetTracer() {return theTracer;}
 protected:
   G4int fFileCount;
+  G4TheRayTracer* theTracer;
 };
 
 #endif

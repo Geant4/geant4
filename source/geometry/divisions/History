@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2005/11/16 19:25:54 japost Exp $
+$Id: History,v 1.22 2006/02/03 14:36:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 3rd, 2006      G.Cosmo  (geomdiv-V08-00-01)
+- Cache information about axis of division and provided accessor method
+  GetDivisionAxis() in G4PVDivision.
+
+January 10th, 2006      G.Cosmo  (geomdiv-V08-00-00)
+- Added missing setting of mother-logical pointer in constructors of
+  G4PVDivision. Fixes problem report #829.
+- Added checks for illegal constructs of G4PVDivision (NULL pointer to
+  mother logical and self-placement).
+- Fixed check for generic construct in G4ParameterisationPolycone and
+  G4ParameterisationPolyhedra: allow it for the automatic replicated instance.
+
 November 16th, 2005     J.Apostolakis  (geomdiv-V07-01-02)
 - Adapted to revision of G4VPhysicalVolume that identifies some 
-  regular structures 
-   * added two RegularStructure methods for G4PVDivision (IsRS, GetRSId)
+  regular structures: added two methods for G4PVDivision (IsRegularStructure()
+  and GetRegularStructureId()).
 
 November 9th, 2005      G.Cosmo  (geomdiv-V07-01-01)
 - Migration to <sstream> from deprecated <strstream> for the

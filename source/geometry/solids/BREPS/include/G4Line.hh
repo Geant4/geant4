@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Line.hh,v 1.7 2001/07/11 09:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Line.hh,v 1.8 2005/12/21 17:37:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Line
@@ -52,7 +52,8 @@ public:  // with description
   G4Line& operator=(const G4Line& right);
     // Copy constructor and assignment operator.
 
-  G4Curve* Project(const G4Transform3D& tr=G4Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr =
+                   HepGeom::Transform3D::Identity);
     // Transforms and projects the line.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& vec);

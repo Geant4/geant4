@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.45 2005/11/29 22:23:01 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisManager.hh,v 1.45.2.1 2006/01/25 17:15:38 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 
@@ -119,6 +119,8 @@ class G4VisManager: public G4VVisManager {
   // Odd friends that need access to various methods of the G4VisManager...
   friend class G4RTSteppingAction;
   friend class G4RayTrajectory;
+  friend class G4RTMessenger;
+  friend class G4RayTracerSceneHandler;
 
   // Management friends...
   friend class G4VSceneHandler;

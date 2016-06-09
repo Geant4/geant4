@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.hh,v 1.5 2003/09/18 11:13:24 johna Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RTMessenger.hh,v 1.6 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 
@@ -44,20 +44,25 @@ class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
-class G4RayTracer;
+class G4TheRayTracer;
 class G4RTSteppingAction;
 
 class G4RTMessenger : public G4UImessenger
 {
   public:
-    G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2);
+    static G4RTMessenger* GetInstance
+    (G4TheRayTracer* p1,G4RTSteppingAction* p2);  // Singleton constructor.
     virtual ~G4RTMessenger();
     
     virtual G4String GetCurrentValue(G4UIcommand * command);
     virtual void SetNewValue(G4UIcommand * command,G4String newValue);
 
   private:
-    G4RayTracer* theTracer;
+    G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2);
+    static G4RTMessenger* fpInstance;
+    G4TheRayTracer* theDefaultTracer;  // The first tracer to
+				       // instantiate this messenger.
+    G4TheRayTracer* theTracer;         // The current tracer.
     G4RTSteppingAction* theSteppingAction;
 
     G4UIdirectory* rayDirectory;

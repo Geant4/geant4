@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.7 2005/11/09 15:04:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EllipticalCone.cc,v 1.9 2005/12/20 12:59:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -53,6 +53,8 @@
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
+
+//#define G4SPECSDEBUG 1    
 
 using namespace CLHEP;
 
@@ -248,6 +250,7 @@ EInside G4EllipticalCone::Inside(const G4ThreeVector& p) const
 
   // check this side of z cut first, because that's fast
   //
+
   if ( (p.z() < -zTopCut - 0.5*kCarTolerance)
     || (p.z() > zTopCut + 0.5*kCarTolerance ) )
   {
@@ -262,8 +265,10 @@ EInside G4EllipticalCone::Inside(const G4ThreeVector& p) const
     return in = kOutside; 
   }
 
-  rad2oi= sqr( p.x()*(1.0 + 0.5*kRadTolerance/(xSemiAxis*xSemiAxis)) )
-        + sqr( p.y()*(1.0 + 0.5*kRadTolerance/(ySemiAxis*ySemiAxis)) );
+  //  rad2oi= sqr( p.x()*(1.0 + 0.5*kRadTolerance/(xSemiAxis*xSemiAxis)) )
+  //      + sqr( p.y()*(1.0 + 0.5*kRadTolerance/(ySemiAxis*ySemiAxis)) );
+  rad2oi = sqr(p.x()/( xSemiAxis - 0.5*kRadTolerance ))
+        + sqr(p.y()/( ySemiAxis - 0.5*kRadTolerance ));
      
   if (rad2oi < sqr( zheight-p.z() ) )
   {
@@ -385,8 +390,124 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
                                          const G4ThreeVector& v  ) const
 {
+
+  static const G4double halfTol = 0.5*kCarTolerance;
+
   G4double distMin = kInfinity;
+
+  // code from EllipticalTube
+
+  G4double sigz = p.z()+zTopCut;
+
+  //
+  // Check z = -dz planer surface
+  //
+
+#ifdef G4SPECSDEBUG    
+  G4cout << "DToIn: check -dz planar surface" << G4endl ;
+#endif
+
+  if (sigz < halfTol)
+  {
+    //
+    // We are "behind" the shape in z, and so can
+    // potentially hit the rear face. Correct direction?
+    //
+    if (v.z() <= 0)
+    {
+      //
+      // As long as we are far enough away, we know we
+      // can't intersect
+      //
+      if (sigz < 0) return kInfinity;
+      
+      //
+      // Otherwise, we don't intersect unless we are
+      // on the surface of the ellipse
+      //
+
+      if ( sqr(p.x()/( xSemiAxis - halfTol ))
+         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight+zTopCut ) )
+        return kInfinity;
+
+    }
+    else
+    {
+      //
+      // How far?
+      //
+      G4double s = -sigz/v.z();
+      
+      //
+      // Where does that place us?
+      //
+      G4double xi = p.x() + s*v.x(),
+               yi = p.y() + s*v.y();
+      
+      //
+      // Is this on the surface (within ellipse)?
+      //
+      if ( sqr(xi/xSemiAxis) + sqr(yi/ySemiAxis) <= sqr( zheight + zTopCut ) )
+      {
+        //
+        // Yup. Return s, unless we are on the surface
+        //
+        return (sigz < -halfTol) ? s : 0;
+      }
+      else if (xi/(xSemiAxis*xSemiAxis)*v.x() + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
+      {
+
+        //
+        // Else, if we are traveling outwards, we know
+        // we must miss
+        //
+        //        return kInfinity;
+      }
+    }
+  }
+
+  //
+  // Check z = +dz planer surface
+  //
+
+#ifdef G4SPECSDEBUG    
+  G4cout << "DToIn: check +dz planar surface" << G4endl ;
+#endif
+
+  sigz = p.z() - zTopCut;
   
+  if (sigz > -halfTol)
+  {
+    if (v.z() >= 0)
+    {
+
+      if (sigz > 0) return kInfinity;
+
+      if ( sqr(p.x()/( xSemiAxis - halfTol ))
+         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight-zTopCut ) )
+        return kInfinity;
+
+    }
+    else {
+      G4double s = -sigz/v.z();
+
+      G4double xi = p.x() + s*v.x(),
+               yi = p.y() + s*v.y();
+
+      if ( sqr(xi/xSemiAxis) + sqr(yi/ySemiAxis) <= sqr( zheight - zTopCut ) )
+      {
+        return (sigz > -halfTol) ? s : 0;
+      }
+      else if (xi/(xSemiAxis*xSemiAxis)*v.x() + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
+      {
+        //        return kInfinity;
+      }
+    }
+  }
+
+
+#if 0
+
   // check to see if Z plane is relevant
   //
   if (p.z() < -zTopCut - 0.5*kCarTolerance)
@@ -419,7 +540,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
   }
   
-  if (p.z() > zTopCut - 0.5*kCarTolerance)
+  if (p.z() > zTopCut - 0.5*kCarTolerance && p.z() < zTopCut + 0.5*kCarTolerance )
   {
     if (v.z() > 0.) 
       return kInfinity;
@@ -427,7 +548,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     return distMin = 0.;
   }
   
-  if (p.z() < -zTopCut + 0.5*kCarTolerance)
+  if (p.z() < -zTopCut + 0.5*kCarTolerance && p.z() > -zTopCut - 0.5*kCarTolerance)
   {
     if (v.z() < 0.)
       return distMin = kInfinity;
@@ -435,9 +556,15 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     return distMin = 0.;
   }
   
+#endif
+
   // if we are here then it either intersects or grazes the curved surface 
   // or it does not intersect at all
   //
+#ifdef G4SPECSDEBUG    
+  G4cout << "DToIn: if we are here then it either intersects or grazes the curved surface" << G4endl ;
+#endif
+
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2*(v.x()*p.x()/sqr(xSemiAxis) + 
                   v.y()*p.y()/sqr(ySemiAxis) + v.z()*(zheight-p.z()));
@@ -460,9 +587,48 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   
   G4double plus  = (-B+std::sqrt(discr))/(2.*A);
   G4double minus = (-B-std::sqrt(discr))/(2.*A);
-  G4double lambda   = std::fabs(plus) < std::fabs(minus) ? plus : minus;
- 
-  return std::fabs(lambda);
+  //  G4double lambda   = std::fabs(plus) < std::fabs(minus) ? plus : minus;
+
+  G4double lambda = 0;
+
+  if ( minus > halfTol && minus < distMin ) 
+  {
+    lambda = minus ;
+    // check normal vector   n * v < 0
+    G4ThreeVector pin = p + lambda*v;
+
+    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                           pin.y()/(ySemiAxis*ySemiAxis),
+                           - ( pin.z() - zheight ));
+    if ( truenorm*v < 0)
+    {   // yes, going inside the solid
+      distMin = lambda;
+    }
+  }
+    
+  if ( plus > halfTol  && plus < distMin )
+  {
+    lambda = plus ;
+    // check normal vector   n * v < 0
+    G4ThreeVector pin = p + lambda*v;
+
+    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                           pin.y()/(ySemiAxis*ySemiAxis),
+                           - ( pin.z() - zheight ) );
+    if ( truenorm*v < 0)
+    {   // yes, going inside the solid
+      distMin = lambda;
+    }
+  }
+
+#ifdef G4SPECSDEBUG    
+    G4cout << "DToIn: plus,minus, lambda = " << plus
+           << ", " << minus << ", " << lambda << G4endl ;
+    G4cout << "DToIn: distMin = " << distMin << G4endl ;
+#endif
+
+    
+  return distMin ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -539,23 +705,34 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   distMin = kInfinity;
   surface = kNoSurf;
 
+#ifdef G4SPECSDEBUG    
+  G4cout << "DToOut: vz < 0" << G4endl ;
+#endif
+
   if (v.z() < 0.0)
   {
     lambda = (-p.z() - zTopCut)/v.z();
+
     if ( (sqr((p.x() + lambda*v.x())/xSemiAxis) + 
           sqr((p.y() + lambda*v.y())/ySemiAxis)) < 
           sqr(zheight + zTopCut + 0.5*kCarTolerance) )
     {
       distMin = std::fabs(lambda);
+
       if (!calcNorm) { return distMin; }
     } 
     distMin = std::fabs(lambda);
     surface = kPlaneSurf;
   }
 
+#ifdef G4SPECSDEBUG    
+  G4cout << "DToOut: vz > 0" << G4endl ;
+#endif
+
   if (v.z() > 0.0)
   {
     lambda = (zTopCut - p.z()) / v.z();
+
     if ( (sqr((p.x() + lambda*v.x())/xSemiAxis)
         + sqr((p.y() + lambda*v.y())/ySemiAxis) )
        < (sqr(zheight - zTopCut + 0.5*kCarTolerance)) )
@@ -570,6 +747,12 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   // if we are here then it either intersects or grazes the 
   // curved surface...
   //
+
+#ifdef G4SPECSDEBUG    
+  G4cout << " distMin = " << distMin << G4endl ;
+  G4cout << " if we are here then it either intersects or grazes the curved surface..." << G4endl ;
+#endif
+
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2.*(v.x()*p.x()/sqr(xSemiAxis) +  
                    v.y()*p.y()/sqr(ySemiAxis) + v.z()*(zheight-p.z()));
@@ -588,9 +771,21 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
     G4double plus  = (-B+std::sqrt(discr))/(2.*A);
     G4double minus = (-B-std::sqrt(discr))/(2.*A);
 
-    lambda   = std::fabs(plus) < std::fabs(minus) ? plus:minus;
-    distMin  = std::fabs(lambda);
-    surface  = kCurvedSurf;
+    if ( plus > 0.5*kCarTolerance && minus > 0.5*kCarTolerance ) { // take the shorter distance
+      lambda   = std::fabs(plus) < std::fabs(minus) ? plus:minus;
+    }
+    else {         // at least one solution is close to zero or negaive -> take the longer distance
+      lambda   = std::fabs(plus) > std::fabs(minus) ? plus:minus;
+    }
+
+#ifdef G4SPECSDEBUG    
+    G4cout << "plus,minus, lambda = " << plus << ", " << minus << ", " << lambda << G4endl ;
+#endif
+
+    if ( std::fabs(lambda) < distMin ) {
+      distMin  = std::fabs(lambda);
+      surface  = kCurvedSurf;
+    }
   }
 
   // set normal if requested
@@ -617,7 +812,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
           G4ThreeVector pexit = p + distMin*v;
           G4ThreeVector truenorm(pexit.x()/(xSemiAxis*xSemiAxis),
                                  pexit.y()/(ySemiAxis*ySemiAxis),
-                                 pexit.z() - zheight);
+                                 pexit.z() - zheight );
           truenorm /= truenorm.mag();
           *n= truenorm;
         } 
@@ -644,6 +839,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
       }
     }
   }
+
   return distMin;
 }
 
@@ -756,17 +952,28 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   }
   else if((chose>=aOne) && (chose<aOne+aTwo))
   {
-    rRand1 = RandFlat::shoot(0.,1.);
-    rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
-    return G4ThreeVector(rRand1*xSemiAxis*(zheight+zTopCut),
-                         rRand2*ySemiAxis*(zheight+zTopCut), -zTopCut);
+    do
+    {
+      rRand1 = RandFlat::shoot(0.,1.) ;
+      rRand2 = RandFlat::shoot(0.,1.) ;
+    } while ( rRand2 >= rRand1  ) ;
+
+    //    rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
+    return G4ThreeVector(rRand1*xSemiAxis*(zheight+zTopCut)*cosphi,
+                         rRand1*ySemiAxis*(zheight+zTopCut)*sinphi, -zTopCut);
+
   }
   // else
   //
-  rRand1 = RandFlat::shoot(0.,1.);
-  rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
-  return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut),
-                       rRand2*ySemiAxis*(zheight-zTopCut), zTopCut);
+
+  do
+  {
+    rRand1 = RandFlat::shoot(0.,1.) ;
+    rRand2 = RandFlat::shoot(0.,1.) ;
+  } while ( rRand2 >= rRand1  ) ;
+
+  return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut)*cosphi,
+                       rRand1*ySemiAxis*(zheight-zTopCut)*sinphi, zTopCut);
 }
 
 //

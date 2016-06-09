@@ -46,8 +46,9 @@
 
 // constructor
  
-G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& processName)
-  : G4VRestProcess (processName),       // initialization
+G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType),       // initialization
   massPionMinus(G4PionMinus::PionMinus()->GetPDGMass()/GeV),
   pdefGamma(G4Gamma::Gamma()),
   pdefPionZero(G4PionZero::PionZero()),

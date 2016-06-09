@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.cc,v 1.3 2005/12/06 09:22:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TwistTrapFlatSide.cc,v 1.4 2005/12/09 13:38:10 link Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -513,21 +513,22 @@ void G4TwistTrapFlatSide::GetFacets( G4int m, G4int n, G4double xyz[][3],
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
-      if ( i<n-1 && j<m-1 ) {   // conterclock wise filling
+      if ( i<n-1 && j<m-1 ) {   
 
         nface = GetFace(i,j,m,n,iside) ;
 
-        if (fHandedness < 0) {  // lower side
-          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-          faces[nface][1] = GetNode(i+1,j  ,m,n,iside)+1 ;
-          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-          faces[nface][3] = GetNode(i  ,j+1,m,n,iside)+1 ;
+        if (fHandedness < 0) {  // lower side 
+          faces[nface][0] = GetEdgeVisibility(i,j,m,n,0,1) * ( GetNode(i  ,j  ,m,n,iside)+1) ;  
+          faces[nface][1] = GetEdgeVisibility(i,j,m,n,1,1) * ( GetNode(i+1,j  ,m,n,iside)+1) ;
+          faces[nface][2] = GetEdgeVisibility(i,j,m,n,2,1) * ( GetNode(i+1,j+1,m,n,iside)+1) ;
+          faces[nface][3] = GetEdgeVisibility(i,j,m,n,3,1) * ( GetNode(i  ,j+1,m,n,iside)+1) ;
         } else {                // upper side
-          faces[nface][0] = GetNode(i  ,j  ,m,n,iside)+1 ;  
-          faces[nface][1] = GetNode(i  ,j+1,m,n,iside)+1 ;
-          faces[nface][2] = GetNode(i+1,j+1,m,n,iside)+1 ;
-          faces[nface][3] = GetNode(i+1,j  ,m,n,iside)+1 ;
+          faces[nface][0] = GetEdgeVisibility(i,j,m,n,0,-1) * ( GetNode(i  ,j  ,m,n,iside)+1) ;  
+          faces[nface][1] = GetEdgeVisibility(i,j,m,n,1,-1) * ( GetNode(i  ,j+1,m,n,iside)+1) ;
+          faces[nface][2] = GetEdgeVisibility(i,j,m,n,2,-1) * ( GetNode(i+1,j+1,m,n,iside)+1) ;
+          faces[nface][3] = GetEdgeVisibility(i,j,m,n,3,-1) * ( GetNode(i+1,j  ,m,n,iside)+1) ;
         }
+
       }
     }
   }

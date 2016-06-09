@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh,v 1.10 2003/03/11 05:49:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Ions.hh,v 1.11 2006/01/02 20:32:37 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -73,8 +73,8 @@ class G4Ions : public G4ParticleDefinition
    G4Ions*    			Ions();
 
  public:  //With Description
-   G4int    GetAtomicNumber() const;
-   G4int    GetAtomicMass() const;
+   virtual G4int    GetAtomicNumber() const;
+   virtual G4int    GetAtomicMass() const;
 
    G4double GetExcitationEnergy() const ; 
    void     SetExcitationEnergy(G4double value);

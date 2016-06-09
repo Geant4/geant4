@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRTScanner.hh,v 1.3 2005/11/28 20:07:44 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VRTScanner.hh,v 1.4 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 
@@ -35,8 +35,6 @@
 // Interface class for provider of a sequence of window coordinates.
 
 #include "globals.hh"
-
-class G4RayTracer;
 
 class G4VRTScanner {
 
@@ -59,10 +57,13 @@ public: // with description
   // last valid coordinate.
 
   virtual void Draw
-  (unsigned char, unsigned char, unsigned char,
-   G4RayTracer*) {}
+  (unsigned char red, unsigned char green, unsigned char blue);
   // Draw coloured square at current position.
 
 };
+
+inline void G4VRTScanner::Draw
+(unsigned char, unsigned char, unsigned char)
+{}
 
 #endif

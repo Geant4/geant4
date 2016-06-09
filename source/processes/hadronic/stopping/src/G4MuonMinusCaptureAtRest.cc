@@ -38,8 +38,9 @@
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
 
-G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
-  : G4VRestProcess (processName), nCascade(0), targetCharge(0),
+G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+    G4VRestProcess (processName, aType), nCascade(0), targetCharge(0),
     targetAtomicMass(0)
 {
   Cascade     = new G4GHEKinematicsVector [17];

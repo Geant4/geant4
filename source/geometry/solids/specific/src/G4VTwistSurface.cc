@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.3 2005/12/06 09:22:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VTwistSurface.cc,v 1.4 2005/12/09 13:38:15 link Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -959,6 +959,115 @@ G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m,
   } 
   return -1 ;  // wrong node 
 } 
+
+//=====================================================================
+//* GetEdgeVisiblility ------------------------------------------------
+
+G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4int number, G4int orientation) 
+{
+
+  // clockwise filling         -> positive orientation
+  // counter clockwise filling -> negative orientation 
+
+  //
+  //   d    C    c
+  //     +------+ 
+  //     |      |
+  //     |      |
+  //     |      |
+  //   D |      |B
+  //     |      |
+  //     |      |
+  //     |      |
+  //     +------+
+  //    a   A    b
+  //    
+  //  a = +--+    A = ---+
+  //  b = --++    B = --+-
+  //  c = -++-    C = -+--
+  //  d = ++--    D = +---
+
+
+  // check first invisible faces
+
+  if ( ( i>0 && i<n-2 ) && ( j>0 && j<m-2 ) ) {
+    return -1 ;   // always invisible, signs:   ----
+  }
+  
+  // change first the vertex number (depends on the orientation)
+  // 0,1,2,3  -> 3,2,1,0
+  if ( orientation < 0 ) { number = ( 3 - number ) ;  }
+  
+  // check true edges
+  if ( ( j>=1 && j<=m-3 ) ) {
+
+    if ( i == 0 )  {        // signs (A):  ---+  
+      return ( number == 3 ) ? 1 : -1 ;
+    }
+    
+    else if ( i == n-2 ) {  // signs (C):  -+--
+      return  ( number == 1 ) ? 1 : -1 ; 
+    }
+    
+    else {
+      G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
+	     << GetName() << G4endl
+	     << "        Not correct face number! - " << G4endl ;
+	G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
+		    FatalException, "Not correct face number.");
+    }
+  }
+  
+  if ( ( i>=1 && i<=n-3 ) ) {
+
+    if ( j == 0 )  {        // signs (D):  +---
+      return ( number == 0 ) ? 1 : -1 ;
+    }
+
+    else if ( j == m-2 ) {  // signs (B):  --+-
+      return  ( number == 2 ) ? 1 : -1 ; 
+    }
+
+    else {
+      G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
+	     << GetName() << G4endl
+	     << "        Not correct face number! - " << G4endl ;
+	G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
+		    FatalException, "Not correct face number.");
+    }
+  }
+  
+  // now the corners
+  if ( i == 0 && j == 0 ) {          // signs (a) : +--+
+    return ( number == 0 || number == 3 ) ? 1 : -1 ;
+  }
+  else if ( i == 0 && j == m-2 ) {   // signs (b) : --++
+    return ( number == 2 || number == 3 ) ? 1 : -1 ;
+  }
+  else if ( i == n-2 && j == m-2 ) { // signs (c) : -++-
+    return ( number == 1 || number == 2 ) ? 1 : -1 ;
+  }
+  else if ( i == n-2 && j == j ) {   // signs (d) : ++--
+    return ( number == 0 || number == 1 ) ? 1 : -1 ;
+  }
+  else {
+    G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
+           << GetName() << G4endl
+           << "        Not correct face number! - " << G4endl ;
+      G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
+		  FatalException, "Not correct face number.");
+  }
+
+  G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
+	 << GetName() << G4endl
+	 << "        Not correct face number! - " << G4endl ;
+    G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
+		FatalException, "Not correct face number.");
+  
+  return 0 ;
+
+}
+
 
 //=====================================================================
 //* DebugPrint --------------------------------------------------------

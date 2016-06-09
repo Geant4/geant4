@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.14 2005/05/04 16:16:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.15 2006/01/30 17:10:50 maire Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -36,6 +36,7 @@
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 04-05-05, Inheritance from ComptonScattering52 (V.Ivanchenko)
+// 30-01-06, DoIt : return G4ComptonScattering52::PostStepDoIt(aTrack,aStep) mma
 //
 // -----------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();
 
    if (std::abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
-      G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
+      return G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
    G4double E0_m = GammaEnergy0 / electron_mass_c2;

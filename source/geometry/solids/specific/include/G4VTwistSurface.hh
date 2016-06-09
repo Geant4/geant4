@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh,v 1.3 2005/12/06 09:22:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VTwistSurface.hh,v 1.4 2005/12/09 13:38:07 link Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -174,6 +174,7 @@ class G4VTwistSurface
                           G4int faces[][4], G4int iside) = 0 ;
    G4int GetNode( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
    G4int GetFace( G4int i, G4int j, G4int m, G4int n, G4int iside )  ;
+   G4int GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4int number, G4int orientation) ;
 
 
  public:  // without description

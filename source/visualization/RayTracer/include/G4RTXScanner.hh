@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.hh,v 1.2 2005/07/20 20:39:02 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RTXScanner.hh,v 1.3 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //
 
@@ -39,7 +39,10 @@
 
 #include "G4VRTScanner.hh"
 
-class G4RayTracer;
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+class G4ViewParameters;
 
 class G4RTXScanner: public G4VRTScanner {
 
@@ -67,13 +70,19 @@ public: // with description
   // last valid coordinate.
 
   virtual void Draw
-  (unsigned char red, unsigned char green, unsigned char blue,
-   G4RayTracer*);
+  (unsigned char red, unsigned char green, unsigned char blue);
   // Draw coloured square at current position.
+
+  G4bool GetXWindow(const G4String& name, G4ViewParameters&);
 
 protected:
   G4String theGSName, theGSNickname;
   G4int theNRow, theNColumn, theStep, theIRow, theIColumn;
+  // X Window variables...
+  Display* display;
+  Window win;
+  GC gc;
+  XStandardColormap *scmap;
 };
 
 #endif

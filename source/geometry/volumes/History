@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2005/11/24 18:24:30 japost Exp $
+$Id: History,v 1.135 2005/12/20 13:35:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,28 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov 24th, 2005      J. Apostolakis - geomvol-V07-01-05
-- Revised implementation of G4VNestedParameterisation, taking out use
-   of G4PhysicalTouchable.
-- Added implementations of virtual methods to identify materials 
-   for nested parameterisations.
-- Removed G4PhysicalTouchable helper class.
 
+Dec 20th, 2005      G.Cosmo - geomvol-V08-00-00
+- G4AssemblyVolume: fixed initialisation of names for placed volumes
+  which was corrupted after migration to <sstream> as side effect.
+
+Nov 24th, 2005      J. Apostolakis - geomvol-V07-01-05
+- Revised implementation of G4VNestedParameterisation,
+  taking out use of G4PhysicalTouchable.
+- Added implementations of virtual methods to identify materials 
+  for nested parameterisations.
+- Removed G4PhysicalTouchable helper class.
 
 Nov 16th, 2005      J. Apostolakis - geomvol-V07-01-04
 - Corrections to tag below:
-   * fixing PVPlacement's 'IsRegularStructureMethod'
-   * adding missing RegularStructure methods for G4PhysicalTouchable
+  o Fixed G4PVPlacement's IsRegularStructure() method.
+  o Added missing methods for regular-structures to G4PhysicalTouchable.
 
 Nov 11th, 2005      J. Apostolakis - geomvol-V07-01-03
-- Added methods to identify  Regular Structures in  Physical volume derived
-  classes (Replica, Parameterised Volume, but also Placement). 
+- Added methods to identify regular structures in physical-volume derived
+  classes (replicas, parameterised volumes, placements). 
   New virtual methods implemented:
-    - IsRegularStructure()     from G4VPhysicalVolume, defined in Replica
-    - GetRegularStructureId()
-   * Note that Placement always return 'false' and 0 respectively.
-  New method defined (Replica), and implemented that can be redefined:
-    - SetRegularStructureId()  virtual 
+   - IsRegularStructure()     [from G4VPhysicalVolume, defined in Replica]
+   - GetRegularStructureId()
+  Note that G4PVPlacement always return 'false' and 0 respectively.
+  New method defined for Replicas:
+   - SetRegularStructureId()  virtual 
 
 Nov 9th, 2005       G. Cosmo - geomvol-V07-01-02
 - Added fake default constructor for concrete types of volumes (placements,

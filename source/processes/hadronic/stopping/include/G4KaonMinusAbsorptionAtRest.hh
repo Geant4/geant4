@@ -63,7 +63,8 @@ private:
       G4KaonMinusAbsorptionAtRest& operator=(const G4KaonMinusAbsorptionAtRest &right);
       G4KaonMinusAbsorptionAtRest(const G4KaonMinusAbsorptionAtRest& );
 public:
-      G4KaonMinusAbsorptionAtRest(const G4String& processName ="KaonMinusAbsorptionAtRest");
+      G4KaonMinusAbsorptionAtRest(const G4String& processName ="KaonMinusAbsorptionAtRest", 
+                       G4ProcessType   aType = fHadronic );
      ~G4KaonMinusAbsorptionAtRest();
 
   //override methods...

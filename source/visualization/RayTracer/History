@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2005/12/05 06:44:10 perl Exp $
+$Id: History,v 1.41 2006/01/11 18:03:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,17 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11th January 2006  John Allison  (raytracer-V08-00-00)
+- Reorganisation (needs visman-V08-00-02):
+  o Allowed multiple ray tracers.
+  o Separated out the original ray tracer into G4TheRayTracer, to be
+    used by viewers.
+  o Made G4RTMessenger a smart singleton that queries the vis manager
+    for tracers.
+  o Caused G4RayTracer to instantiate a default ray tracer if the user
+    wants to use /vis/rayTracer commands without the benefit of the
+    vis system (scene handlers and viewers).
 
 4th December 2005  Makoto Asai (raytracer-V07-01-08)
 - Correct initialization of G4RTTrackingAction and G4RTSteppingAction

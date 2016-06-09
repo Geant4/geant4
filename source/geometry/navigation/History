@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2005/11/24 17:48:17 japost Exp $
+$Id: History,v 1.45 2006/02/08 18:27:56 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,22 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb  8th, 2006 - J.Apostolakis (geomnav-V08-00-00)
+------------------------------
+- Addressing problem with convergence in LocateIntersectionPoint 
+    of G4PropagatorInField
+    ( identified by Atlas,  observed when requesting high precision
+         ie small values of eps_min/max, delta_one_step, 
+            due eg to need for small delta_intersection )
+   * first solution by increasing maximum iterations (from 100 to 10,000)
+   * until correct information can be return an Exception is thrown
+      in case of too many iterations
+   * warn in case over 1000 iterations --> to let user see difficulty
 
-Nov 22nd, 2005 - J.Apostolakis (geomnav-V07-01-02)
+  This fix is an interim solution, in lieu of improving the algorithm 
+   for location  (or returning correct incomplete progress).
+
+Nov 24th, 2005 - J.Apostolakis (geomnav-V07-01-02)
 ------------------------------
 - Revised Parameterised Navigation, to use new interface for 
    ComputeMaterial -- it no longer needs 'Physical Touchable'.

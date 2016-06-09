@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 Jan 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-01)
+--------------------------------------------------------------
+- fixed problem seen in NeutronHP models: core dump when neutron energy
+    gets close to 20 MeV in some materials.  In 
+    G4NeutronHPPartial::Sample(G4double)  change look-up index from 
+    nData-1 to nData.
+
 22 Nov 2005 Dennis Wright (hadr-hpn-V07-01-03)
 ----------------------------------------------
 - fix division NAN compiler warning in outer while loop for

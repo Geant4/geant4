@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.14 2005/11/18 23:07:04 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RayTracerViewer.cc,v 1.15 2006/01/11 18:01:33 allison Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 
 #include "G4RayTracerViewer.hh"
 
@@ -31,26 +31,26 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
-#include "G4RayTracer.hh"
+#include "G4TheRayTracer.hh"
 #include "G4UImanager.hh"
 
 G4RayTracerViewer::G4RayTracerViewer
-(G4VSceneHandler& sceneHandler, const G4String& name):
+(G4VSceneHandler& sceneHandler,
+ const G4String& name,
+ G4TheRayTracer* aTracer):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
   fFileCount(0)
 {
-  G4RayTracer* theTracer = 
-    (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
+  theTracer = aTracer;
+  if (!aTracer) theTracer = new G4TheRayTracer;
   theTracer->SetNColumn(fVP.GetWindowSizeHintX());
   theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
 
-void G4RayTracerViewer::SetView() {
-  G4RayTracer* theTracer = 
-    (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
-
+void G4RayTracerViewer::SetView()
+{
   // Get radius of scene, etc.  (See G4OpenGLViewer::SetView().)
   // Note that this procedure properly takes into account zoom, dolly and pan.
   const G4Point3D& targetPoint
@@ -81,7 +81,8 @@ void G4RayTracerViewer::SetView() {
 
 void G4RayTracerViewer::ClearView() {}
 
-void G4RayTracerViewer::DrawView() {
+void G4RayTracerViewer::DrawView()
+{
   if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
     G4double fieldHalfAngle = perMillion;
     fVP.SetFieldHalfAngle(fieldHalfAngle);
@@ -98,8 +99,6 @@ void G4RayTracerViewer::DrawView() {
   else {
     SetView();  // Special graphics system - bypass ProcessView().
   }
-  G4RayTracer* theTracer = 
-    (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
   std::ostringstream filename;
   filename << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg";
   theTracer->Trace(filename.str());

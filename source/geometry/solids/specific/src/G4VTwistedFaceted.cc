@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.10 2005/12/06 09:22:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VTwistedFaceted.cc,v 1.12 2006/01/16 12:55:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -1261,16 +1261,19 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
 G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const 
 {
-
-  const G4int m = 8  ;  // number of meshes
-  const G4int n = 20  ;
+  // number of meshes
+  const G4int m =
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
+  const G4int n = m;
 
   const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
   const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
 
   G4Polyhedron *ph=new G4Polyhedron;
-  G4double xyz[nnodes ][3];         // number of nodes 
-  G4int  faces[nfaces][4] ; // number of faces
+  typedef G4double G4double3[3];
+  typedef G4int G4int4[4];
+  G4double3* xyz = new G4double3[nnodes];  // number of nodes 
+  G4int4*  faces = new G4int4[nfaces] ;    // number of faces
 
   fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
   fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
@@ -1282,6 +1285,4 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 
   return ph;
-
 }
-

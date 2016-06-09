@@ -1712,9 +1712,11 @@
     const G4double cpar[] = { 0.6, 0.6, 0.35, 0.15, 0.10 };
     const G4double gpar[] = { 2.6, 2.6, 1.8, 1.30, 1.20 };
     
-    if( forwardCount == 1 )rmc = forwardMass;
-    else
-    {
+    if (forwardCount <= 0) {
+      return false;     //      array bounds protection
+    } else if (forwardCount == 1) {
+      rmc = forwardMass;
+    } else {
 //      G4int ntc = std::min(5,forwardCount); // check if offset by 1 @@
       G4int ntc = std::max(1, std::min(5,forwardCount))-1; // check if offset by 1 @@
       rmc = forwardMass + std::pow(-std::log(1.0-G4UniformRand()),cpar[ntc-1])/gpar[ntc-1];

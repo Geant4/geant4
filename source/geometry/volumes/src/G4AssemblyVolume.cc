@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.4 2005/11/09 15:08:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4AssemblyVolume.cc,v 1.5 2005/12/20 13:35:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -225,7 +225,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                  pFinalRotation
                                 ,finalTranslation
                                 ,fTriplets[i].GetVolume()
-                                ,pvName.str()
+                                ,pvName.str().c_str()
                                 ,pMotherLV
                                 ,false
                                 ,numberOfDaughters + i
@@ -293,7 +293,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // Generate a new physical volume instance inside a mother
     G4VPhysicalVolume* pPlaced = new G4PVPlacement( Tfinal,
                                                     fTriplets[i].GetVolume(),
-                                                    pvName.str(),
+                                                    pvName.str().c_str(),
                                                     pMotherLV,
                                                     false,
                                                     numberOfDaughters + i );

@@ -46,8 +46,9 @@
 
 // constructor
  
-G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName)
-  : G4VRestProcess (processName),       // initialization
+G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType),       // initialization
   massProton(G4Proton::Proton()->GetPDGMass()/GeV),
   massNeutron(G4Neutron::Neutron()->GetPDGMass()/GeV),
   massElectron(G4Electron::Electron()->GetPDGMass()/GeV),

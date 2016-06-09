@@ -49,8 +49,9 @@
 #include "G4StopDeexcitationAlgorithm.hh"
 #include "G4ReactionKinematics.hh"
 
-G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& processName)
-  : G4VRestProcess (processName)
+G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType)
 {
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;

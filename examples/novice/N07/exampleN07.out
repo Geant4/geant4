@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -243,7 +243,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=28.83s Real=31.51s Sys=2.63s
+  User=28.31s Real=30.98s Sys=2.66s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -535,7 +535,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=59.14s Real=63.89s Sys=4.75s
+  User=57.73s Real=63.07s Sys=5.34s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -835,7 +835,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=19.12s Real=20.57s Sys=1.45s
+  User=18.91s Real=20.26s Sys=1.35s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1145,7 +1145,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=35.13s Real=39.07s Sys=3.94s
+  User=34.52s Real=38.53s Sys=4.01s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

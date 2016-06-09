@@ -24,6 +24,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 13-Jan-06 fix in Sample by T. Koi
+//
 #include "G4NeutronHPPartial.hh"  
 #include "G4NeutronHPInterpolator.hh"
 #include "Randomize.hh"
@@ -112,7 +114,8 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
         theBuff.SetY(ii, GetY(0,ii));
       }
     }
-    else if(i==nData-1)
+    //else if(i==nData-1) this line will be delete 
+    else if ( i == nData )  
     {
       for(i=0;i<GetNEntries(nData-1);i++) 
       {

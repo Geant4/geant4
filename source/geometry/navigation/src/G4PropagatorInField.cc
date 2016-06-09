@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.20 2004/12/02 09:31:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PropagatorInField.cc,v 1.22 2006/02/08 18:21:02 japost Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -464,7 +464,13 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4bool restoredFullEndpoint= false;
 
   G4int       substep_no = 0;
-  const G4int max_substeps= 100;
+
+  // Limits for substep number
+  const G4int max_substeps=   10000;  // Test 120  (old value 100 )
+  const G4int warn_substeps=   1000;  //      100  
+  // Statistics for substeps 
+  static G4int max_no_seen= -1; 
+  static G4int trigger_substepno_print= warn_substeps - 20 ;  
 
   do{                // REPEAT
 
@@ -653,22 +659,106 @@ G4PropagatorInField::LocateIntersectionPoint(
      } // EndIf ( E is close enough to the curve, ie point F. )
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
+#ifdef G4DEBUG_LOCATE_INTERSECTION  
+// #ifdef G4VERBOSE
+    if( substep_no >= trigger_substepno_print ) {
+       G4cout << "Difficulty in converging in G4PropagatorInField::LocateIntersectionPoint:"
+	      << " Substep no = " << substep_no << G4endl;
+       if( substep_no == trigger_substepno_print ){
+	 printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
+		    -1.0, NewSafety,  0,          0);
+       }
+       G4cout << " State of point A: "; 
+       printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
+		    -1.0, NewSafety,  substep_no-1, 0);
+       G4cout << " State of point B: "; 
+       printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
+		    -1.0, NewSafety,  substep_no, 0);
+    }
+#endif
+
+    substep_no++; 
+
   } while (  ( ! found_approximate_intersection )
 	     && ( ! there_is_no_intersection )     
-	     && ( substep_no++ < max_substeps) ); // UNTIL found or failed
+	     && ( substep_no <= max_substeps) ); // UNTIL found or failed
 
-#ifdef G4VERBOSE
-  if( substep_no >= max_substeps ) {
+  if( substep_no > max_no_seen ) {
+    max_no_seen = substep_no; 
+    if( max_no_seen > warn_substeps ) {
+      trigger_substepno_print= max_no_seen - 20;   // Want to see that last 20 steps 
+    } 
+  }
+
+  if(  ( substep_no >= max_substeps) && !there_is_no_intersection && !found_approximate_intersection ) {
+
     G4cerr << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
 	   << " Convergence is requiring too many substeps: " << substep_no;
-    G4cerr << " Will abandon effort to intersect. " << G4endl;
+    G4cerr << " Abandoning effort to intersect. " << G4endl;
     G4cerr << " Information on start & current step follows in cout: " << G4endl;
-    printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
+    G4cout << "Problem in G4PropagatorInField::LocateIntersectionPoint:"
+	   << " Convergence is requiring too many substeps: " << substep_no << G4endl;
+    G4cout << "   found intersection= " << found_approximate_intersection
+	   << "   intersection exists = " <<  ! there_is_no_intersection << G4endl;
+
+    G4cout << G4endl;
+    G4cout << " Start and Endpoint of Requested Step " << G4endl;
+    printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
 		 -1.0, NewSafety,  0,          0);
+
+    G4cout << G4endl;
+    G4cout << " 'Bracketing' starting and endpoint of current Sub-Step " << G4endl;
+    printStatus( CurrentA_PointVelocity,  CurrentA_PointVelocity,
+		 -1.0, NewSafety,  substep_no-1, 0);
     printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
 		 -1.0, NewSafety,  substep_no, 0);
-  }
+
+    G4cout << G4endl;
+ 
+// #ifdef G4DEBUG_LOCATE_INTERSECTION  
+// #ifdef G4VERBOSE
+// #endif
+
+    // G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
+    //   	FatalException, "Too many substeps while trying to locate intersection.");
+
+#ifdef FUTURE_CORRECTION
+    // Attempt to correct the results of the method // FIX - TODO
+    if ( ! found_approximate_intersection ){ 
+      recalculatedEndPoint= true;
+      // Return the further valid intersection point -- potentially A ??  JA/19 Jan 2006
+      IntersectedOrRecalculatedFT = CurrentA_PointVelocity;
+
+      G4cout << "G4PropagatorInField::LocateIntersectionPoint:"
+	     << " did not convergence after " << substep_no << " substeps." << G4endl;
+      G4cout << " The endpoint was adjused to pointA resulting from the last substep: " 
+	     << CurrentA_PointVelocity
+	     << G4endl;
+    }
 #endif
+
+    G4cout.precision( 10 ); 
+    G4double done_len=     CurrentA_PointVelocity.GetCurveLength(); 
+    G4double full_len= CurveEndPointVelocity.GetCurveLength();
+    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): " << G4endl
+	   << " Undertaken only length " << done_len
+	   << "  out of " << full_len << " required." << G4endl;
+    G4cout << "  Remaining length = " << full_len - done_len << " " << G4endl; 
+
+    G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "UnableToLocateIntersection",
+		FatalException, "Too many substeps while trying to locate intersection.");
+
+  }
+  else if( substep_no >= warn_substeps ) {  
+    int oldprc= G4cout.precision( 10 ); 
+    G4cout << " G4PropagatorInField::LocateIntersectionPoint(): Undertaken length "  
+	   << CurrentB_PointVelocity.GetCurveLength(); 
+    G4cout << "  Needed "  << substep_no << " substeps.  Warning level= " << warn_substeps
+	   << " and maximum substeps= " << max_substeps << G4endl;
+    G4Exception("G4PropagatorInField::LocateIntersectionPoint()", "DifficultyToLocateIntersection",
+		JustWarning, "Many substeps while trying to locate intersection.");
+    G4cout.precision( oldprc ); 
+  }
 
   return  !there_is_no_intersection; //  Success or failure
 }
@@ -694,7 +784,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
       
   if( ((stepNo == 0) && (verboseLevel <3))
-      || (verboseLevel == 3) )
+      || (verboseLevel >= 3) )
   {
     static G4int noPrecision= 4;
     G4cout.precision(noPrecision);
@@ -702,20 +792,25 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
     G4cout << std::setw( 6)  << " " 
            << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
-    G4cout << std::setw( 5) << "Step#" << " "
+    G4cout << std::setw( 5) << "Step#" 
+	   << std::setw(10) << "  s  " << " "
            << std::setw(10) << "X(mm)" << " "
            << std::setw(10) << "Y(mm)" << " "  
            << std::setw(10) << "Z(mm)" << " "
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
-           << std::setw( 7) << " N_z " << " "
+           << std::setw( 7) << " N_z " << " " ;
+    // 	   << G4endl; 
+    G4cout     // << " >>> "
 	   << std::setw( 7) << " Delta|N|" << " "
       //   << std::setw( 7) << " Delta(N_z) " << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
-           << std::setw( 9) << "PhsStep" << " "  
-           << std::setw(18) << "NextVolume" << " "
-           << G4endl;
+           << std::setw( 9) << "PhsStep" << " ";  
+    if( startVolume ) {
+      G4cout << std::setw(18) << "NextVolume" << " "; 
+    }
+    G4cout << G4endl;
   }
   if((stepNo == 0) && (verboseLevel <=3)){
      // Recurse to print the start values
@@ -724,18 +819,23 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
    }
    if( verboseLevel <= 3 )
    {
-     G4cout.precision(8);
      if( stepNo >= 0)
-       G4cout << std::setw( 5) << stepNo << " ";
+       G4cout << std::setw( 4) << stepNo << " ";
      else
-       G4cout << std::setw( 5) << "Start" << " ";
+       G4cout << std::setw( 5) << "Start" ;
+     G4cout.precision(8);
+     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
+     G4cout.precision(8);
      G4cout << std::setw(10) << CurrentPosition.x() << " "
             << std::setw(10) << CurrentPosition.y() << " "
-            << std::setw(10) << CurrentPosition.z() << " "
-            << std::setw( 7) << CurrentUnitVelocity.x() << " "
+            << std::setw(10) << CurrentPosition.z() << " ";
+     G4cout.precision(4);
+     G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
             << std::setw( 7) << CurrentUnitVelocity.y() << " "
             << std::setw( 7) << CurrentUnitVelocity.z() << " ";
-      G4cout.precision(2); 
+     //  G4cout << G4endl; 
+     //     G4cout << " >>> " ; 
+     G4cout.precision(3); 
      G4cout << std::setw( 7) << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag() << " "; 
      //   << std::setw( 7) << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
      G4cout << std::setw( 9) << step_len << " "; 
@@ -749,6 +849,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
      {
        G4cout << std::setw(12) << startVolume->GetName() << " ";
      }
+#if 0
      else
      {
        if( step_len != -1 )
@@ -756,6 +857,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
        else
          G4cout << std::setw(12) << "NotGiven" << " ";
      }
+#endif
 
      G4cout << G4endl;
    }

@@ -1,0 +1,152 @@
+
+                 Geant4 8.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           10 February 2006
+
+List of fixes included in this public patch since the public release 8.0:
+
+  o Digits & Hits:
+    -------------
+    + Added missing methods in G4VDigiCollection and G4TDigiCollection.
+      Addresses problem report #786.
+
+  o Geometry:
+    --------
+    + divisions
+      o Added missing setting of mother-logical pointer in constructors of
+        G4PVDivision. Fixes problem report #829.
+      o Added missing checks for illegal constructs of G4PVDivision (NULL
+        pointer to mother logical and self-placement).
+      o Fixed check for generic construct in G4ParameterisationPolycone and
+        G4ParameterisationPolyhedra: allow it for the automatic replicated
+        instance.
+      o Cache information about axis of division and provided accessor method
+        GetDivisionAxis() in G4PVDivision.
+    + navigation
+      o Addressing problem with convergence in LocateIntersectionPoint()
+        of G4PropagatorInField. The problem, identified by Atlas, was
+        observed when requesting high precision, i.e. small values of
+        eps_min/max, delta_one_step, due to need for small delta_intersection.
+        Increased maximum iterations (from 100 to 10000) until correct
+        information can be return an Exception is thrown in case of too many
+        iterations; a warning is thrown in case over 1000 iterations.
+    + solids/BREPS
+      o Use explicit 'HepGeom' namespace for 'Identity', to allow for
+        porting on Windows/VC++ when using CLHEP-2.0.X.
+    + solids/CSG
+      o G4Sphere: fixed bug in DistanceToOut() for theta intersections.
+        Fixes problem report #830.
+    + solids/specific
+      o Fixed visibility of soft edges for visualization of twisted solids.
+      o G4TwistedTubs and G4VTwistedFaceted::CreatePolyhedron(): changed
+        parameterised polyhedron mesh approximation in terms of
+        G4Polyhedron::GetNumberOfRotationSteps().
+      o Fixes in G4EllipticalCone:
+        - Changed GetPointOnSurface(), which was not uniform in endcaps.
+        - Bug fix in Inside(), which was not correct for the elliptic mantel.
+          Made test similar as in G4EllipticTube.
+        - Several fixes in DistanceToIn/Out() resolving problems of looping
+          events.
+    + volumes
+      o G4AssemblyVolume: fixed initialisation of names for placed volumes
+        which was corrupted after migration to <sstream> as side effect.
+
+  o Particles:
+    ---------
+    + Bug fix for G4ParticleDefinition, was causing improper behavior of
+      GetAtomicNumber() method for ions. Fixes problem report #827.
+
+  o Electromagnetic processes:
+    -------------------------
+    + standard:
+      o Fix in G4PolarizedComptonScattering, returning PostStepDoIt()
+        for G4ComptonScattering52. Fixes problem report #478.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o G4HadronicProcess: fixed problem report #611. Problems caused when
+        hadronic interactions reset stopButAlive particle to Alive.
+      o Added diagnostics when hadronic exceptions occur in G4HadronicProcess
+        and G4EnergyRangeManager.
+    + models/binary_cascade:
+      o Fixed problem report #794. Projectile nucleus needs to be centered.
+    + models/chiral_inv_phase_space/body:
+      o Fixed trivial compilation warning.
+    + models/de_excitation:
+      o G4NuclearLevelManager: print a warning if no data file is present.
+        Addressed problem report #814.
+      o G4ParaFissionModel: fix for compilation error, following problem
+        report #817.
+    + models/neutron_hp:
+      o Fixes core dump observed when neutron energy is close to 20 MeV.
+    + models/radioactive_decay
+      o G4NuclearDecayChannel::BetaDecayIt(): check for negative sqrt()
+        argument in 'daughtermomentum[1]'. Fixes problem report #822.
+    + stopping:
+      o Set process type to be 'fHadronic'. Was not set previously.
+    + util:
+      o G4ReactionDynamics: added array bounds protection in TwoCluster().
+
+  o Processes cuts:
+    --------------
+    + Fix in G4VRangeToEnergyConverter::Convert() to recalculate the energy
+      loss table if new elements are added. Fixes problem report #831.
+
+  o Track:
+    -----
+    + G4ParticleChangeForRadDecay is now derived from G4ParticleChangeForDecay.
+
+  o Transportation:
+    --------------
+    + G4Transportation: the particle's charge is now taken from the dynamic
+      particle, so that it can take into account changes from the interaction
+      of an ion with matter (eg stripping e-).
+    + Corrected problem with suspended tracks, addressing problem report #802.
+      Added StartTracking() method which takes over responsibility to clear
+      the state for a new track, and to message other relevant component to
+      clear their state.
+
+  o Visualization:
+    -------------
+    + management:
+      o Fixed bug that omits geometry volumes from file-based visualization
+        drivers for first /run/beamOn.
+      o Added friend status for ray-tracer.
+    + RayTracer:
+      o Fix behavior of messengers when RayTracerX is used.
+      o Allow for multiple ray tracers.
+      o Separated out the original ray tracer to be used by viewers.
+
+  o Data:
+    ----
+    + New data set for high-precision neutron processes G4NDL-3.8
+      o Added Gadorinium data (source ENDF/B-VI).
+      o Replaced: Inelastic/CrossSection/17_nat_Chlorine and
+        Inelastic/F10/28_62_Nickel (source ENDF/B-VI).
+      o Removed: Inelastic/CrossSection/32_70|72|73|74|76_Germanium
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/electromagnetic/TestEm7
+      o Trivial fix of memory leak.
+    + extended/medical/GammaTherapy
+      o Substituted PreciseRange with CSDARange.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.0.
+  o  Technical notes distributed for release 8.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.0 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

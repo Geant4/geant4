@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeCurve.hh,v 1.6 2001/07/11 09:59:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4CompositeCurve.hh,v 1.7 2005/12/21 17:37:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4CompositeCurve
@@ -60,7 +60,8 @@ public:  // with description
   virtual G4String GetEntityType() const;
     // Returns entity type identifier.
 
-  virtual G4Curve* Project(const G4Transform3D& tr = G4Transform3D::Identity);
+  virtual G4Curve* Project(const G4Transform3D& tr =
+                           HepGeom::Transform3D::Identity);
     // Project along trasformation tr.
 	
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

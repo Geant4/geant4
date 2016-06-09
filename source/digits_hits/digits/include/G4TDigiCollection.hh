@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.4 2004/06/11 14:10:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TDigiCollection.hh,v 1.5 2006/01/02 19:41:51 asaim Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 
 #ifndef G4TDigiCollection_h
@@ -103,6 +103,13 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
         return theDigiCollection->size();
       }
       //  Returns the number of digi objcets stored in this collection.
+
+  public:
+      virtual G4VDigi* GetDigi(size_t i) const
+      { return (*((std::vector<T*>*)theCollection))[i]; }
+      virtual size_t GetSize() const
+      { return ((std::vector<T*>*)theCollection)->size(); }
+
 };
 
 template <class T> inline void* G4TDigiCollection<T>::operator new(size_t)

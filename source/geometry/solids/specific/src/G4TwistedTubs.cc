@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.17 2005/12/05 17:03:47 link Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TwistedTubs.cc,v 1.20 2006/01/16 12:57:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -72,7 +72,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
      fCubicVolume(0.), fpPolyhedron(0)
 {
-   if (endinnerrad < DBL_MIN) {
+   if (endinnerrad < DBL_MIN)
+   {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
                   FatalException, "Invalid end-inner-radius!");
    }
@@ -105,9 +106,13 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
      fCubicVolume(0.), fpPolyhedron(0)
 {
 
-   if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
-                     << "        Invalid nseg. nseg = " << nseg << G4endl;
-   if (totphi == DBL_MIN || endinnerrad < DBL_MIN) {
+   if (!nseg)
+   {
+     G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
+            << "        Invalid nseg. nseg = " << nseg << G4endl;
+   }
+   if (totphi == DBL_MIN || endinnerrad < DBL_MIN)
+   {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
                   FatalException, "Invalid total-phi or end-inner-radius!");
    }    
@@ -140,7 +145,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
      fCubicVolume(0.), fpPolyhedron(0)
 {
-   if (innerrad < DBL_MIN) {
+   if (innerrad < DBL_MIN)
+   {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
                   FatalException, "Invalid end-inner-radius!");
    }
@@ -162,9 +168,13 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
      fCubicVolume(0.), fpPolyhedron(0)
 {
-   if (!nseg) G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
-                     << "        Invalid nseg. nseg = " << nseg << G4endl;
-   if (totphi == DBL_MIN || innerrad < DBL_MIN) {
+   if (!nseg)
+   {
+     G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
+            << "        Invalid nseg. nseg = " << nseg << G4endl;
+   }
+   if (totphi == DBL_MIN || innerrad < DBL_MIN)
+   {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
                   FatalException, "Invalid total-phi or end-inner-radius!");
    }
@@ -189,13 +199,13 @@ G4TwistedTubs::G4TwistedTubs( __void__& a )
 
 G4TwistedTubs::~G4TwistedTubs()
 {
-   if (fLowerEndcap)   delete fLowerEndcap;
-   if (fUpperEndcap)   delete fUpperEndcap;
-   if (fLatterTwisted) delete fLatterTwisted;
-   if (fFormerTwisted) delete fFormerTwisted;
-   if (fInnerHype)     delete fInnerHype;
-   if (fOuterHype)     delete fOuterHype;
-   if (fpPolyhedron)   delete fpPolyhedron;
+   if (fLowerEndcap)   { delete fLowerEndcap;   }
+   if (fUpperEndcap)   { delete fUpperEndcap;   }
+   if (fLatterTwisted) { delete fLatterTwisted; }
+   if (fFormerTwisted) { delete fFormerTwisted; }
+   if (fInnerHype)     { delete fInnerHype;     }
+   if (fOuterHype)     { delete fOuterHype;     }
+   if (fpPolyhedron)   { delete fpPolyhedron;   }
 }
 
 //=====================================================================
@@ -299,26 +309,27 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   // Outer hyperbolic surface  
 
   v0 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 
+       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 
                      + fZHalfLength));
   v1 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 
+       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 
                      - fZHalfLength));
-  if (splitOuter) {
+  if (splitOuter)
+  {
      v4 = transform.TransformPoint(
-          G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi, 0));
+          G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 0));
   }
   
   // Inner hyperbolic surface  
 
   G4double zInnerSplit = 0.;
-  if (splitInner) {
-  
+  if (splitInner)
+  {
      v2 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
+          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
                         + fZHalfLength));
      v3 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
+          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
                         - fZHalfLength));
       
      // Find intersection of tangential line of inner
@@ -329,18 +340,19 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
 
      // Build associated vertices
      v5 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
                         + zInnerSplit));
      v6 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
                         - zInnerSplit));
-  } else {
-  
+  }
+  else
+  {
      v2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
                         + fZHalfLength));
      v3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi, 
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
                         - fZHalfLength));
   }
 
@@ -354,50 +366,55 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   // Outer hyperbolic surface  
   
   w0 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi,
+       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi,
                      + fZHalfLength));
   w1 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad * cosPhi, fudgeEndOuterRad * sinPhi,
+       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi,
                      - fZHalfLength));
-  if (splitOuter) {
+  if (splitOuter)
+  {
      G4double r = rFudge*fOuterRadius;
      
      w4 = transform.TransformPoint(G4ThreeVector( r*cosPhi, r*sinPhi, 0 ));
       
      AddPolyToExtent( v0, v4, w4, w0, voxelLimit, axis, extentList );
      AddPolyToExtent( v4, v1, w1, w4, voxelLimit, axis, extentList );
-  } else {
+  }
+  else
+  {
      AddPolyToExtent( v0, v1, w1, w0, voxelLimit, axis, extentList );
   }
   
   // Inner hyperbolic surface
   
-  if (splitInner) {
-  
+  if (splitInner)
+  {
      w2 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
+          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
                         + fZHalfLength));
      w3 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad * cosPhi, maxEndInnerRad * sinPhi, 
+          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
                         - fZHalfLength));
           
      w5 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
                         + zInnerSplit));
      w6 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
                         - zInnerSplit));
                                    
      AddPolyToExtent( v3, v6, w6, w3, voxelLimit, axis, extentList );
      AddPolyToExtent( v6, v5, w5, w6, voxelLimit, axis, extentList );
      AddPolyToExtent( v5, v2, w2, w5, voxelLimit, axis, extentList );
      
-  } else {
+  }
+  else
+  {
      w2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
                         + fZHalfLength));
      w3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius * cosPhi, fInnerRadius * sinPhi,
+          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
                         - fZHalfLength));
 
      AddPolyToExtent( v3, v2, w2, w3, voxelLimit, axis, extentList );
@@ -436,7 +453,8 @@ void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
     phiPoly.AddVertexInOrder( w1 );
     phiPoly.AddVertexInOrder( w0 );
 
-    if (phiPoly.PartialClip( voxelLimit, axis )) {
+    if (phiPoly.PartialClip( voxelLimit, axis ))
+    {
         phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
         extentList.AddSurface( phiPoly );
     }
@@ -458,35 +476,42 @@ EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
 
    G4ThreeVector *tmpp;
    EInside       *tmpinside;
-   if (fLastInside.p == p) {
-
+   if (fLastInside.p == p)
+   {
      return fLastInside.inside;
-
-   } else {
+   }
+   else
+   {
       tmpp      = const_cast<G4ThreeVector*>(&(fLastInside.p));
       tmpinside = const_cast<EInside*>(&(fLastInside.inside));
       tmpp->set(p.x(), p.y(), p.z());
    }
    
-   
    EInside  outerhypearea = ((G4TwistTubsHypeSide *)fOuterHype)->Inside(p);
    G4double innerhyperho  = ((G4TwistTubsHypeSide *)fInnerHype)->GetRhoAtPZ(p);
    G4double distanceToOut = p.getRho() - innerhyperho; // +ve: inside
 
-   if (outerhypearea == kOutside || distanceToOut < -halftol) {
+   if ((outerhypearea == kOutside) || (distanceToOut < -halftol))
+   {
       *tmpinside = kOutside;
-   } else if (outerhypearea == kSurface) {
+   }
+   else if (outerhypearea == kSurface)
+   {
       *tmpinside = kSurface;
-   } else {
-      if (distanceToOut <= halftol) {
+   }
+   else
+   {
+      if (distanceToOut <= halftol)
+      {
          *tmpinside = kSurface;
-      } else {
+      }
+      else
+      {
          *tmpinside = kInside;
       }
    }
-   
-   return fLastInside.inside;
 
+   return fLastInside.inside;
 }
 
 //=====================================================================
@@ -501,20 +526,16 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    // Which of the three or four surfaces are we closest to?
    //
 
-  // static G4int timerid = -1;
-  // G4Timer timer(timerid, "G4TwistedTubs", "SurfaceNormal");
-  // timer.Start();
-   
-
-
-
-   if (fLastNormal.p == p) {
-
+   if (fLastNormal.p == p)
+   {
       return fLastNormal.vec;
    }    
-   G4ThreeVector *tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
-   G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VTwistSurface    **tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
+   G4ThreeVector *tmpp          =
+     const_cast<G4ThreeVector*>(&(fLastNormal.p));
+   G4ThreeVector *tmpnormal     =
+     const_cast<G4ThreeVector*>(&(fLastNormal.vec));
+   G4VTwistSurface **tmpsurface =
+     const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double      distance = kInfinity;
@@ -531,9 +552,11 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i< 6; i++) {
+   for (i=0; i< 6; i++)
+   {
       G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx;
          besti = i; 
@@ -566,11 +589,12 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector *tmpp;
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
-   if (fLastDistanceToInWithV.p == p && fLastDistanceToInWithV.vec == v) {
-
+   if ((fLastDistanceToInWithV.p == p) && (fLastDistanceToInWithV.vec == v))
+   {
      return fLastDistanceToIn.value;
-
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToInWithV.p));
       tmpv    = const_cast<G4ThreeVector*>(&(fLastDistanceToInWithV.vec));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToInWithV.value));
@@ -584,25 +608,33 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == kInside) {
-
-   } else if (currentside == kSurface) {
-      // particle is just on a boundary.
-      // if the particle is entering to the volume, return 0.
-      G4ThreeVector normal = SurfaceNormal(p);
-      if (normal*v < 0) {
-
-        *tmpdist = 0;
-        return fLastDistanceToInWithV.value;
-      } 
+   if (currentside == kInside)
+   {
+   }
+   else
+   {
+     if (currentside == kSurface)
+     {
+       // particle is just on a boundary.
+       // If the particle is entering to the volume, return 0.
+       //
+       G4ThreeVector normal = SurfaceNormal(p);
+       if (normal*v < 0)
+       {
+         *tmpdist = 0;
+         return fLastDistanceToInWithV.value;
+       } 
+     }
    }
       
    // now, we can take smallest positive distance.
    
    // Initialize
+   //
    G4double      distance = kInfinity;   
 
    // find intersections and choose nearest one.
+   //
    G4VTwistSurface *surfaces[6];
    surfaces[0] = fLowerEndcap;
    surfaces[1] = fUpperEndcap;
@@ -615,17 +647,18 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i< 6; i++) {
+   for (i=0; i< 6; i++)
+   {
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx;
          besti = i;
       }
    }
-
    *tmpdist = distance;
-   // timer.Stop();
+
    return fLastDistanceToInWithV.value;
 }
  
@@ -637,7 +670,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    // DistanceToIn(p):
    // Calculate distance to surface of shape from `outside',
    // allowing for tolerance
-   //
    
    //
    // checking last value
@@ -645,10 +677,12 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
-   if (fLastDistanceToIn.p == p) {
-
+   if (fLastDistanceToIn.p == p)
+   {
      return fLastDistanceToIn.value;
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToIn.p));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToIn.value));
       tmpp->set(p.x(), p.y(), p.z());
@@ -660,18 +694,17 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    
    EInside currentside = Inside(p);
 
-   switch (currentside) {
-
-      case (kInside) : {
-
-      }
-
-      case (kSurface) : {
+   switch (currentside)
+   {
+      case (kInside) :
+      {}
+      case (kSurface) :
+      {
          *tmpdist = 0.;
          return fLastDistanceToIn.value;
       }
-
-      case (kOutside) : {
+      case (kOutside) :
+      {
          // Initialize
          G4double      distance = kInfinity;   
 
@@ -688,25 +721,26 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++) {
+         for (i=0; i< 6; i++)
+         {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance)  {
+            if (tmpdistance < distance)
+            {
                distance = tmpdistance;
                bestxx = xx;
                besti = i;
             }
          }
-      
-
          *tmpdist = distance;
          return fLastDistanceToIn.value;
       }
-
-      default : {
+      default :
+      {
          G4Exception("G4TwistedTubs::DistanceToIn(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
+
    return kInfinity;
 }
 
@@ -716,15 +750,14 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
 G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
                                        const G4ThreeVector& v,
                                        const G4bool calcNorm,
-                                       G4bool *validNorm, G4ThreeVector *norm ) const
+                                       G4bool *validNorm,
+                                       G4ThreeVector *norm ) const
 {
    // DistanceToOut (p, v):
    // Calculate distance to surface of shape from `inside'
    // along with the v, allowing for tolerance.
    // The function returns kInfinity if no intersection or
    // just grazing within tolerance.
-   //
-   
 
    //
    // checking last value
@@ -733,10 +766,12 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    G4ThreeVector *tmpp;
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
-   if (fLastDistanceToOutWithV.p == p && fLastDistanceToOutWithV.vec == v  ) {
-
+   if ((fLastDistanceToOutWithV.p == p) && (fLastDistanceToOutWithV.vec == v) )
+   {
      return fLastDistanceToOutWithV.value;
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToOutWithV.p));
       tmpv    = const_cast<G4ThreeVector*>(&(fLastDistanceToOutWithV.vec));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToOutWithV.value));
@@ -750,30 +785,39 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == kOutside) {
-
-   } else if (currentside == kSurface) {
-      // particle is just on a boundary.
-      // if the particle is exiting from the volume, return 0.
-      G4ThreeVector normal = SurfaceNormal(p);
-      G4VTwistSurface *blockedsurface = fLastNormal.surface[0];
-      if (normal*v > 0) {
-
-            if (calcNorm) {
-               *norm = (blockedsurface->GetNormal(p, true));
-               *validNorm = blockedsurface->IsValidNorm();
-            }
-            *tmpdist = 0.;
-            return fLastDistanceToOutWithV.value;
-      }
+   if (currentside == kOutside)
+   {
+   }
+   else
+   {
+     if (currentside == kSurface)
+     {
+       // particle is just on a boundary.
+       // If the particle is exiting from the volume, return 0.
+       //
+       G4ThreeVector normal = SurfaceNormal(p);
+       G4VTwistSurface *blockedsurface = fLastNormal.surface[0];
+       if (normal*v > 0)
+       {
+         if (calcNorm)
+         {
+           *norm = (blockedsurface->GetNormal(p, true));
+           *validNorm = blockedsurface->IsValidNorm();
+         }
+         *tmpdist = 0.;
+         return fLastDistanceToOutWithV.value;
+       }
+     }
    }
       
    // now, we can take smallest positive distance.
    
    // Initialize
+   //
    G4double      distance = kInfinity;
        
    // find intersections and choose nearest one.
+   //
    G4VTwistSurface *surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
@@ -786,24 +830,28 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    G4int besti = -1;
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (i=0; i< 6; i++) {
+   for (i=0; i< 6; i++)
+   {
       G4double tmpdistance = surfaces[i]->DistanceToOut(p, v, xx);
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx; 
          besti = i;
       }
    }
 
-   if (calcNorm) {
-      if (besti != -1) {
+   if (calcNorm)
+   {
+      if (besti != -1)
+      {
          *norm = (surfaces[besti]->GetNormal(p, true));
          *validNorm = surfaces[besti]->IsValidNorm();
       }
    }
 
    *tmpdist = distance;
-   // timer.Stop();
+
    return fLastDistanceToOutWithV.value;
 }
 
@@ -816,8 +864,6 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    // DistanceToOut(p):
    // Calculate distance to surface of shape from `inside', 
    // allowing for tolerance
-   //
-
 
    //
    // checking last value
@@ -825,9 +871,12 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
-   if (fLastDistanceToOut.p == p) {
+   if (fLastDistanceToOut.p == p)
+   {
       return fLastDistanceToOut.value;
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToOut.p));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToOut.value));
       tmpp->set(p.x(), p.y(), p.z());
@@ -839,16 +888,18 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    
    EInside currentside = Inside(p);
 
-   switch (currentside) {
-      case (kOutside) : {
-
+   switch (currentside)
+   {
+      case (kOutside) :
+      {
       }
-      case (kSurface) : {
+      case (kSurface) :
+      {
         *tmpdist = 0.;
          return fLastDistanceToOut.value;
       }
-      
-      case (kInside) : {
+      case (kInside) :
+      {
          // Initialize
          G4double      distance = kInfinity;
    
@@ -865,26 +916,27 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++) {
+         for (i=0; i< 6; i++)
+         {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance) {
+            if (tmpdistance < distance)
+            {
                distance = tmpdistance;
                bestxx = xx;
                besti = i;
             }
          }
-
-
          *tmpdist = distance;
    
          return fLastDistanceToOut.value;
       }
-      
-      default : {
+      default :
+      {
          G4Exception("G4TwistedTubs::DistanceToOut(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
+
    return 0;
 }
 
@@ -933,6 +985,7 @@ void G4TwistedTubs::DescribeYourselfTo (G4VGraphicsScene& scene) const
 G4VisExtent G4TwistedTubs::GetExtent() const 
 {
   // Define the sides of the box into which the G4Tubs instance would fit.
+
   G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
   return G4VisExtent( -maxEndOuterRad, maxEndOuterRad, 
                       -maxEndOuterRad, maxEndOuterRad, 
@@ -944,17 +997,22 @@ G4VisExtent G4TwistedTubs::GetExtent() const
 
 G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const 
 {
-
-  const G4int m = 8  ;  // number of meshes
-  const G4int n = 20  ;
+  // number of meshes
+  //
+  G4double dA = std::max(fDPhi,fPhiTwist);
+  const G4int m =
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * dA / twopi) + 2;
+  const G4int n =
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
 
   const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
   const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
 
   G4Polyhedron *ph=new G4Polyhedron;
-  G4double xyz[nnodes ][3];         // number of nodes 
-  G4int  faces[nfaces][4] ; // number of faces
-
+  typedef G4double G4double3[3];
+  typedef G4int G4int4[4];
+  G4double3* xyz = new G4double3[nnodes];  // number of nodes 
+  G4int4*  faces = new G4int4[nfaces] ;    // number of faces
   fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
   fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
   fInnerHype->GetFacets(m,n,xyz,faces,2) ;
@@ -964,16 +1022,10 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 
+  delete[] xyz;
+  delete[] faces;
+
   return ph;
-
-#if 0
-  // Tube for now!!!
-  //
-  return new G4PolyhedronTubs (fInnerRadius, fOuterRadius, fZHalfLength,
-                               fEndPhi[0], fDPhi);
-#endif
-
-
 }
 
 //=====================================================================
@@ -992,13 +1044,13 @@ G4NURBS* G4TwistedTubs::CreateNURBS () const
 
 G4Polyhedron* G4TwistedTubs::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
-      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-      fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-    }
+  if ((!fpPolyhedron) ||
+      (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+       fpPolyhedron->GetNumberOfRotationSteps()))
+  {
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }
 
@@ -1007,8 +1059,8 @@ G4Polyhedron* G4TwistedTubs::GetPolyhedron () const
 
 void G4TwistedTubs::CreateSurfaces() 
 {
-   
-   // create 6 surfaces of TwistedTub.
+   // create 6 surfaces of TwistedTub
+
    G4ThreeVector x0(0, 0, fEndZ[0]);
    G4ThreeVector n (0, 0, -1);
 
@@ -1046,7 +1098,8 @@ void G4TwistedTubs::CreateSurfaces()
                                         fTanInnerStereo, fTanOuterStereo, 1) ;
 
 
-   // set neighbour surfaces.
+   // set neighbour surfaces
+   //
    fLowerEndcap->SetNeighbours(fInnerHype, fLatterTwisted,
                                fOuterHype, fFormerTwisted);
    fUpperEndcap->SetNeighbours(fInnerHype, fLatterTwisted,
@@ -1080,9 +1133,8 @@ G4double G4TwistedTubs::GetCubicVolume()
   return fCubicVolume;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// GetPointOnSurface
+//=====================================================================
+//* GetPointOnSurface -------------------------------------------------
 
 G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 {
@@ -1099,7 +1151,6 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   G4double a5 = fLowerEndcap->GetSurfaceArea()  ;
   G4double a6 = fUpperEndcap->GetSurfaceArea() ;
 
-  //  G4cout << "a1 .. a6 = " << a1 << ", " << a2 << ", " << a3 << ", " << a4 << ", " << a5 << ", " << a6 << G4endl ;
   G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
 
   if(chose < a1)
@@ -1108,8 +1159,6 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     phimin = fOuterHype->GetBoundaryMin(z) ;
     phimax = fOuterHype->GetBoundaryMax(z) ;
     phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
-
-    //    G4cout << "Outer: phi, z = " << phi << ", " << z << G4endl ;
 
     return fOuterHype->SurfacePoint(phi,z,true) ;
 
@@ -1121,8 +1170,6 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     phimax = fInnerHype->GetBoundaryMax(z) ;
     phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
 
-    // G4cout << "Inner: phi, z = " << phi << ", " << z << G4endl ;
-
     return fInnerHype->SurfacePoint(phi,z,true) ;
 
   }
@@ -1133,8 +1180,6 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     xmax = fLatterTwisted->GetBoundaryMax(z) ;
     x = CLHEP::RandFlat::shoot(xmin,xmax) ;
     
-    // G4cout << "latter twisted : " << xmin << " , " << xmax << G4endl ;
-
     return fLatterTwisted->SurfacePoint(x,z,true) ;
 
   }
@@ -1145,12 +1190,10 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     xmax = fFormerTwisted->GetBoundaryMax(z) ;
     x = CLHEP::RandFlat::shoot(xmin,xmax) ;
 
-    // G4cout << "former twisted : " << xmin << " , " << xmax << G4endl ;
-    
     return fFormerTwisted->SurfacePoint(x,z,true) ;
   
   }
-  else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
+  else if( (chose >= a1 + a2 + a3 + a4  )&&(chose < a1 + a2 + a3 + a4 + a5 ) )
   {
 
     rmin = GetEndInnerRadius(0) ;
@@ -1161,12 +1204,11 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     phimax = fLowerEndcap->GetBoundaryMax(r) ;
     phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
 
-    // G4cout << "lower endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
     return fLowerEndcap->SurfacePoint(phi,r,true) ;
 
   }
-  else {
-
+  else
+  {
     rmin = GetEndInnerRadius(1) ;
     rmax = GetEndOuterRadius(1) ;
     r = CLHEP::RandFlat::shoot(rmin,rmax) ;
@@ -1175,11 +1217,6 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     phimax = fUpperEndcap->GetBoundaryMax(r) ;
     phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
 
-    // G4cout << "upper endcap : " << rmin << " , " << rmax << " , " << phimin << " , " << phimax << G4endl ;
-
     return fUpperEndcap->SurfacePoint(phi,r,true) ;
-
   }
-    
-
 }

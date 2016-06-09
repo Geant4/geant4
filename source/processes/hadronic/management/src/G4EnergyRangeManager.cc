@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.12 2005/06/04 12:51:43 jwellisc Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EnergyRangeManager.cc,v 1.14 2006/01/12 16:23:52 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -85,7 +85,8 @@
 
     G4int cou = 0, memory = 0, memor2 = 0;
     G4double emi1 = 0.0, ema1 = 0.0, emi2 = 0.0, ema2 = 0.0;
-    for( G4int i=0; i<counter; i++ ) {
+    for( G4int i=0; i<counter; i++ )
+    {
       G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
       // Work-around for particles with 0 kinetic energy, which still
       // require a model to return a ParticleChange
@@ -107,6 +108,15 @@
     switch ( cou )
     {
      case 0:
+       G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="<<counter<<", Ek="
+             <<kineticEnergy<<", Material = "<<aMaterial->GetName()<<", Element = "
+             <<anElement->GetName()<<G4endl;
+       for( G4int j=0; j<counter; j++ )
+       {
+         G4HadronicInteraction* HInt=theHadronicInteraction[j];
+         G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
+               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
+       }
        throw G4HadronicException(__FILE__, __LINE__,
           "GetHadronicInteraction: No Model found");
        return 0;
@@ -115,8 +125,19 @@
        break;
      case 2:
        if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
-      throw G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: Energy ranges of two models fully overlapping");
+       {
+         G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="<<counter<<", Ek="
+               <<kineticEnergy<<", Material = "<<aMaterial->GetName()<<", Element = "
+               <<anElement->GetName()<<G4endl;
+         if(counter) for( G4int j=0; j<counter; j++ )
+         {
+           G4HadronicInteraction* HInt=theHadronicInteraction[j];
+           G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
+               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
+         }
+         throw G4HadronicException(__FILE__, __LINE__,
+               "GetHadronicInteraction: Energy ranges of two models fully overlapping");
+       }
        rand = G4UniformRand();
        if( emi1 < emi2 )
        {

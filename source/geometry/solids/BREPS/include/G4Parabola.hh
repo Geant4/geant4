@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.hh,v 1.8 2001/07/11 09:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Parabola.hh,v 1.9 2005/12/21 17:37:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Parabola
@@ -52,8 +52,8 @@ public:  // with description
   G4Parabola& operator=(const G4Parabola& right);
     // Copy constructor and assignment operator.
 
-  G4Curve* Project(const G4Transform3D& tr=
-                   G4Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr =
+                   HepGeom::Transform3D::Identity);
     // Transforms and projects the curve.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

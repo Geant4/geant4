@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 Jan 2006 Dennis Wright (hadr-V08-00-01)
+-----------------------------------------
+
+- photon_evaporation
+   G4NuclearLevelManager.cc : in method MakeLevels(), re-enable the 
+       warning that no gamma levels file exists. This is in response 
+       to bug report 814. 
+
+- fission
+   G4ParaFissionModel.hh : fix compilation errors which do not show up
+       because there is no .cc file.  This is in response to bug report 
+       817.  Note: splitting this class into header and implementation 
+       files will have to wait for a directory re-organization because 
+       as it stands now, there are circular dependencies between the 
+       fission and evaporation directories.
+
 24 Nov 2005 Dennis Wright (hadr-deex-V07-01-00)
 ----------------------------------------------
 

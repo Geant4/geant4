@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -240,7 +240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=211.69s Real=250.27s Sys=37.62s
+  User=208.9s Real=250.14s Sys=38.2s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 

@@ -46,8 +46,9 @@
 
 // constructor
  
-G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& processName)
-  : G4VRestProcess (processName),       // initialization
+G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& processName,
+                                      G4ProcessType   aType ) :
+  G4VRestProcess (processName, aType),       // initialization
   massPionMinus(G4PionMinus::PionMinus()->GetPDGMass()/GeV),
   massProton(G4Proton::Proton()->GetPDGMass()/GeV),
   massPionZero(G4PionZero::PionZero()->GetPDGMass()/GeV),

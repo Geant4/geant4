@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V07-01-05    (16-December-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -244,7 +244,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.384
 9.283e+04	3.384
 
-total time for build X-ray TR energy loss tables = 0.86 s
+total time for build X-ray TR energy loss tables = 0.85 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength for e-, e+ and gamma is: 1 mm 
@@ -422,7 +422,7 @@ Set G4PAIModel::SampleSecondary::deltaTkin = 1e-05
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=188.81s Real=238.02s Sys=49.17s
+  User=188.68s Real=240.28s Sys=51.55s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=40.6977 +- 0.0916085  mm  

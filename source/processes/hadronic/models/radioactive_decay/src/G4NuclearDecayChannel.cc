@@ -516,9 +516,11 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
 			       2.0*daughterenergy[0] * daughtermass[0]);
     // the recoil neuleus is asummed to have a maximum energy of Q/daughterA/1000.
-    daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);    
-    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
-			       2.0*daughterenergy[1] * daughtermass[1]);
+    daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);
+    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
+                               2.0*daughterenergy[1] * daughtermass[1];
+    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
+    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
     //
     //create daughter G4DynamicParticle
     G4double costheta, sintheta, phi, sinphi, cosphi;

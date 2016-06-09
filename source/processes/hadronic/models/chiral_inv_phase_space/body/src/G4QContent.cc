@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.39 2005/06/04 13:08:23 jwellisc Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QContent.cc,v 1.41 2006/01/26 16:38:35 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-00-patch-01 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -501,23 +501,21 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   G4QContent r=Pi;     // Pion prototype of returned value
   if((tot!=4||q!=2) && (tot!=5||(q!=1&&aq!=1)) && (tot!=6||abs(b)!=2))
   {
-	//#ifdef erdebug
+	   //#ifdef erdebug
     G4cerr<<"***G4QCont::SplitChipo: QC="<<GetThis()<<G4endl;
-	//#endif
-    return Pi;
+	   //#endif
   }
   else if(tot==4)      // Mesonic (eight possibilities)
   {
     r=GetThis();
-    if     (r.SubtractPi0())  return r;
-    else if(r.SubtractPion()) return r;
-    else if(r.SubtractKaon(mQ)) return r;
+    if     (r.SubtractPi0())    ; // Try any trivial algorithm of splitting
+    else if(r.SubtractPion())   ;
+    else if(r.SubtractKaon(mQ)) ;
     else
     {
-	  //#ifdef debug
+	     //#ifdef debug
       G4cerr<<"***G4QCont::SplitChipo:MesTot="<<tot<<",b="<<b<<",q="<<q<<",a="<<aq<<G4endl;
-	  //#endif
-      return Pi;
+	     //#endif
     }
   }
   else if(b==1&&tot==5)      // Baryonic (four possibilities)
@@ -590,13 +588,10 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     }
     else
     {
-	  //#ifdef erdebug
+	     //#ifdef erdebug
       G4cerr<<"***G4QCont::SplitChipo: Baryonic tot=5,b=1,qCont="<<GetThis()<<G4endl;
       //#endif
-      return Pi;
-
     }
-    return r;
   }
   else if(tot==b*3)          // MultyBaryon cace
   {
@@ -613,47 +608,44 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
       G4QContent om(0,0,3,0,0,0);
       if     (nU>=nD&&nU>=nS)
       {
-        if     (r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(dp)) return r-dp;
-        else if(r.SubtractHadron(nt)) return r-nt;
-        else if(r.SubtractHadron(la)) return r-la;
-        else if(r.SubtractHadron(dm)) return r-dm;
+        if     (r.SubtractHadron(pr)) r-=pr; // These functions only check
+        else if(r.SubtractHadron(dp)) r-=dp;
+        else if(r.SubtractHadron(nt)) r-=nt;
+        else if(r.SubtractHadron(la)) r-=la;
+        else if(r.SubtractHadron(dm)) r-=dm;
         else
         {
-     	  //#ifdef erdebug
+       	  //#ifdef erdebug
           G4cerr<<"***G4QCont::SplitChipo:Dibar (1) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
       else if(nD>=nU&&nD>=nS)
       {
-        if     (r.SubtractHadron(nt)) return r-nt;
-        else if(r.SubtractHadron(dm)) return r-dm;
-        else if(r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(dp)) return r-dp;
-        else if(r.SubtractHadron(la)) return r-la;
+        if     (r.SubtractHadron(nt)) r-=nt; // These functions only check
+        else if(r.SubtractHadron(dm)) r-=dm;
+        else if(r.SubtractHadron(pr)) r-=pr;
+        else if(r.SubtractHadron(dp)) r-=dp;
+        else if(r.SubtractHadron(la)) r-=la;
         else
         {
-     	  //#ifdef erdebug
+     	    //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo:Dib(2) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
       else
       {
-        if     (r.SubtractHadron(la)) return r-la;
-        else if(r.SubtractHadron(ks)) return r-ks;
-        else if(r.SubtractHadron(om)) return r-om;
-        else if(r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(nt)) return r-nt;
+        if     (r.SubtractHadron(la)) r-=la; // These functions only check
+        else if(r.SubtractHadron(ks)) r-=ks;
+        else if(r.SubtractHadron(om)) r-=om;
+        else if(r.SubtractHadron(pr)) r-=pr;
+        else if(r.SubtractHadron(nt)) r-=nt;
         else
         {
-     	  //#ifdef erdebug
+     	    //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo:Dib(3) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
 	   }
@@ -669,47 +661,44 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
       G4QContent om(0,0,0,0,0,3);
       if     (nAU>=nAD&&nAU>=nAS)
       {
-        if     (r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(dp)) return r-dp;
-        else if(r.SubtractHadron(nt)) return r-nt;
-        else if(r.SubtractHadron(la)) return r-la;
-        else if(r.SubtractHadron(dm)) return r-dm;
+        if     (r.SubtractHadron(pr)) r-=pr; // These functions only check
+        else if(r.SubtractHadron(dp)) r-=dp;
+        else if(r.SubtractHadron(nt)) r-=nt;
+        else if(r.SubtractHadron(la)) r-=la;
+        else if(r.SubtractHadron(dm)) r-=dm;
         else
         {
-     	  //#ifdef erdebug
+     	    //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo:ADib(1) tot=6,b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
       else if(nAD>=nAU&&nAD>=nAS)
       {
-        if     (r.SubtractHadron(nt)) return r-nt;
-        else if(r.SubtractHadron(dm)) return r-dm;
-        else if(r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(dp)) return r-dp;
-        else if(r.SubtractHadron(la)) return r-la;
+        if     (r.SubtractHadron(nt)) r-=nt; // These functions only check
+        else if(r.SubtractHadron(dm)) r-=dm;
+        else if(r.SubtractHadron(pr)) r-=pr;
+        else if(r.SubtractHadron(dp)) r-=dp;
+        else if(r.SubtractHadron(la)) r-=la;
         else
         {
-     	  //#ifdef erdebug
+     	    //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo:ADib(2) tot=6,b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
       else
       {
-        if     (r.SubtractHadron(la)) return r-la;
-        else if(r.SubtractHadron(ks)) return r-ks;
-        else if(r.SubtractHadron(om)) return r-om;
-        else if(r.SubtractHadron(pr)) return r-pr;
-        else if(r.SubtractHadron(nt)) return r-nt;
+        if     (r.SubtractHadron(la)) r-=la; // These functions only check
+        else if(r.SubtractHadron(ks)) r-=ks;
+        else if(r.SubtractHadron(om)) r-=om;
+        else if(r.SubtractHadron(pr)) r-=pr;
+        else if(r.SubtractHadron(nt)) r-=nt;
         else
         {
-     	  //#ifdef erdebug
+     	    //#ifdef erdebug
           G4cerr<<"***G4QContent::SplitChipo:ADib(3) tot=6,b=2, qCont="<<GetThis()<<G4endl;
           //#endif
-          return Pi;
         }
       }
 	   }
@@ -719,8 +708,8 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     //#ifdef erdebug
     G4cerr<<"*G4QContent::SplitChipolino:UnknownHadron with QuarkCont="<<GetThis()<<G4endl;
     //#endif
-    return r;
   }
+  return r;
 }// End of G4QContent::SplitChipolino
 
 // Return one-quark QC using index (a kind of iterator)

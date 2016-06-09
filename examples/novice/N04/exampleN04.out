@@ -7,7 +7,7 @@
 *************************************************************
 
 
-<<< Geant4 Physics List engine packaging library: PACK 3.0
+<<< Geant4 Physics List engine packaging library: PACK 5.0
 <<< Geant4 Physics List simulation engine: QGSP 3.0
 
 Visualization Manager instantiating...
@@ -181,9 +181,9 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     253 hits are stored in ExN04TrackerHitsCollection.
+     213 hits are stored in ExN04TrackerHitsCollection.
      9 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.21372898 (GeV)
+     Total energy deposition in calorimeter : 0.21707545 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -196,14 +196,14 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     141 hits are stored in ExN04TrackerHitsCollection.
+     129 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.33186402 (GeV)
+     Total energy deposition in calorimeter : 0.32850593 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.38s Real=2.59s Sys=0.04s
+  User=2.2s Real=2.41s Sys=0.04s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...
