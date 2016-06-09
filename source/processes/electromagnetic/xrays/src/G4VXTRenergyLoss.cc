@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.34 2006/06/29 19:56:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VXTRenergyLoss.cc,v 1.42 2007/07/02 11:25:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -47,6 +47,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4AffineTransform.hh"
+#include "G4SandiaTable.hh"
 
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -160,10 +161,10 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
 
 G4XTRenergyLoss::~G4XTRenergyLoss()
 {
-   G4int i ;
+  //   G4int i ;
 
    if(fEnvelope) delete fEnvelope;
-
+   /*
    for(i=0;i<fGasIntervalNumber;i++)
    {
      delete[] fGasPhotoAbsCof[i] ;
@@ -175,6 +176,7 @@ G4XTRenergyLoss::~G4XTRenergyLoss()
      delete[] fPlatePhotoAbsCof[i] ;
    }
    delete[] fPlatePhotoAbsCof ;
+   */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1252,9 +1254,12 @@ G4complex G4XTRenergyLoss::GetPlateComplexFZ( G4double omega ,
 
 void G4XTRenergyLoss::ComputePlatePhotoAbsCof() 
 {
-   G4int i, j, numberOfElements ;
-   static const G4MaterialTable* 
-   theMaterialTable = G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* mat = (*theMaterialTable)[fMatIndex1];
+  fPlatePhotoAbsCof = mat->GetSandiaTable();
+
+    /*
+  G4int i, j, numberOfElements ;
 
    G4SandiaTable thisMaterialSandiaTable(fMatIndex1) ;
    numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements() ;
@@ -1292,8 +1297,11 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
       }
    }
    delete[] thisMaterialZ ;
-   return ;
+    */
+   return;
 }
+
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -1302,12 +1310,18 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
 
 G4double G4XTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega) 
 {
-  G4int i ;
+  //  G4int i ;
   G4double omega2, omega3, omega4 ; 
 
   omega2 = omega*omega ;
   omega3 = omega2*omega ;
   omega4 = omega2*omega2 ;
+
+  G4double* SandiaCof = fPlatePhotoAbsCof->GetSandiaCofForMaterial(omega);
+  G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
+                   SandiaCof[2]/omega3 + SandiaCof[3]/omega4;
+  return cross;
+  /*
 
   for(i=0;i<fPlateIntervalNumber;i++)
   {
@@ -1321,7 +1335,9 @@ G4double G4XTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
   
   return fPlatePhotoAbsCof[i][1]/omega  + fPlatePhotoAbsCof[i][2]/omega2 + 
          fPlatePhotoAbsCof[i][3]/omega3 + fPlatePhotoAbsCof[i][4]/omega4  ;
+  */
 }
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -1369,6 +1385,10 @@ G4complex G4XTRenergyLoss::GetGasComplexFZ( G4double omega ,
 
 void G4XTRenergyLoss::ComputeGasPhotoAbsCof() 
 {
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* mat = (*theMaterialTable)[fMatIndex2];
+  fGasPhotoAbsCof = mat->GetSandiaTable();
+  /*
    G4int i, j, numberOfElements ;
    static const G4MaterialTable* 
    theMaterialTable = G4Material::GetMaterialTable();
@@ -1409,8 +1429,12 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
       }
    }
    delete[] thisMaterialZ ;
-   return ;
+  */
+  return;
 }
+
+
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -1419,13 +1443,19 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
 
 G4double G4XTRenergyLoss::GetGasLinearPhotoAbs(G4double omega) 
 {
-  G4int i ;
+  //  G4int i ;
   G4double omega2, omega3, omega4 ; 
 
   omega2 = omega*omega ;
   omega3 = omega2*omega ;
   omega4 = omega2*omega2 ;
 
+  G4double* SandiaCof = fGasPhotoAbsCof->GetSandiaCofForMaterial(omega);
+  G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
+                   SandiaCof[2]/omega3 + SandiaCof[3]/omega4;
+  return cross;
+
+  /*
   for(i=0;i<fGasIntervalNumber;i++)
   {
     if( omega < fGasPhotoAbsCof[i][0] ) break ;
@@ -1438,7 +1468,7 @@ G4double G4XTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
   
   return fGasPhotoAbsCof[i][1]/omega  + fGasPhotoAbsCof[i][2]/omega2 + 
          fGasPhotoAbsCof[i][3]/omega3 + fGasPhotoAbsCof[i][4]/omega4  ;
-
+  */
 }
 
 //////////////////////////////////////////////////////////////////////

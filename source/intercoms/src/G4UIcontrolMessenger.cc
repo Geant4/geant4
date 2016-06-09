@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.10 2006/06/29 19:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UIcontrolMessenger.cc,v 1.11 2007/06/06 15:14:51 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 
 #include <stdlib.h>
@@ -126,6 +126,12 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   listAliasCommand = new G4UIcmdWithoutParameter("/control/listAlias",this);
   listAliasCommand->SetGuidance("List aliases.");
 
+  getEnvCmd = new G4UIcmdWithAString("/control/getEnv",this);
+  getEnvCmd->SetGuidance("Get a shell environment variable and define it as an alias.");
+
+  echoCmd = new G4UIcmdWithAString("/control/echo",this);
+  echoCmd->SetGuidance("Display the aliased value.");
+
   shellCommand = new G4UIcmdWithAString("/control/shell",this);
   shellCommand->SetGuidance("Execute a (Unix) SHELL command.");
 
@@ -158,6 +164,8 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete aliasCommand;
   delete unaliasCommand;
   delete listAliasCommand;
+  delete getEnvCmd;
+  delete echoCmd;
   delete shellCommand;
   delete loopCommand;
   delete foreachCommand; 
@@ -206,6 +214,21 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   {
     UI->ListAlias();
   }
+  if(command==getEnvCmd)
+  {
+    if(getenv(newValue))
+    { 
+      G4String st = "/control/alias ";
+      st += newValue;
+      st += " ";
+      st += getenv(newValue);
+      UI->ApplyCommand(st);
+    }
+    else
+    { G4cerr << "<" << newValue << "> is not defined as a shell variable. Command ignored." << G4endl; }
+  }
+  if(command==echoCmd)
+  { G4cout << UI->SolveAlias(newValue) << G4endl; }
   if(command==shellCommand)
   {
     system(newValue);

@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIterminal.cc,v 1.6 2007/05/28 03:11:20 kmura Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4UIterminal.cc,v 1.7 2007/06/29 02:22:20 kmura Exp $
+// $Name: geant4-09-00-patch-01 $
 // ====================================================================
 //   pyG4UIterminal.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
@@ -51,7 +52,11 @@ void StartUISession()
     G4UItcsh* tcsh= new 
       G4UItcsh("[40;01;33mg4py[40;31m(%s)[40;36m[%/][00;30m:");
 
+#if G4VERSION_NUMBER >= 900
     session= new G4UIterminal(tcsh, false);
+#else
+    session= new G4UIterminal(tcsh);
+#endif
     tcsh-> SetLsColor(BLUE,RED);
   }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.16 2007/05/31 13:52:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4PolyconeSide.cc,v 1.17 2007/08/13 10:33:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4double theDeltaPhi, 
                                       G4bool thePhiIsOpen, 
                                       G4bool isAllBehind )
-  : corners(0)
+  : ncorners(0), corners(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
@@ -85,7 +85,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
     //
     // Calculate corner coordinates
     //
-    corners = new G4ThreeVector[4];
+    ncorners = 4;
+    corners = new G4ThreeVector[ncorners];
     
     corners[0] = G4ThreeVector( tail->r*std::cos(startPhi),
                                 tail->r*std::sin(startPhi), tail->z );
@@ -152,7 +153,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 //                            for usage restricted to object persistency.
 //
 G4PolyconeSide::G4PolyconeSide( __void__& )
-  : cone(0), corners(0)
+  : phiIsOpen(false), cone(0), ncorners(0), corners(0)
 {
 }
 
@@ -229,7 +230,8 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   
   if (phiIsOpen)
   {
-    corners = new G4ThreeVector[4];
+    ncorners = 4;
+    corners = new G4ThreeVector[ncorners];
     
     corners[0] = source.corners[0];
     corners[1] = source.corners[1];

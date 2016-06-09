@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveRayIntersection.cc,v 1.7 2007/05/11 13:49:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4CurveRayIntersection.cc,v 1.8 2007/07/16 08:06:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -48,6 +48,7 @@ G4CurveRayIntersection::G4CurveRayIntersection()
 G4CurveRayIntersection::G4CurveRayIntersection(G4Curve& c0, const G4Ray& r0)
 {
   Init(c0, r0);
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4CurveRayIntersection::~G4CurveRayIntersection()
@@ -61,6 +62,7 @@ G4CurveRayIntersection::G4CurveRayIntersection(const G4CurveRayIntersection& cr)
   p = cr.p;
   u = cr.u;
   notComputed = cr.notComputed;
+  kCarTolerance = cr.kCarTolerance;
 }
 
 G4CurveRayIntersection&
@@ -73,6 +75,7 @@ G4CurveRayIntersection::operator=(const G4CurveRayIntersection& cr)
   r = cr.r;
   d = cr.d;
   notComputed = cr.notComputed;
+  kCarTolerance = cr.kCarTolerance;
 
   return *this;
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.14 2007/04/03 11:08:36 urban Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4UniversalFluctuation.cc,v 1.15 2007/07/13 11:01:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 // 20-03-07 'GLANDZ' part rewritten completely, no 'very small loss'
 //          regime any more (L.Urban)
 // 03-04-07 correction to get better width of eloss distr.(L.Urban)
+// 13-07-07 add protection for very small step or low-density material (VI)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,6 +179,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     e0 = material->GetIonisation()->GetEnergy0fluct();
     lastMaterial = material;
   }
+
+  // very small step or low-density material
+  if(tmax <= e0) return meanLoss;
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
 

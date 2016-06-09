@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070618 fix memory leaking by T. Koi
+
 #include "G4NeutronHPFissionData.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -48,7 +50,13 @@ G4NeutronHPFissionData::G4NeutronHPFissionData()
    
 G4NeutronHPFissionData::~G4NeutronHPFissionData()
 {
-  delete theCrossSections;
+
+// TKDB
+   if ( theCrossSections != NULL )
+   {
+      theCrossSections->clearAndDestroy();
+      delete theCrossSections;
+   }
 }
    
 void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
@@ -56,7 +64,9 @@ void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
-  theCrossSections = new G4PhysicsTable( numberOfElements );
+  //theCrossSections = new G4PhysicsTable( numberOfElements );
+   // TKDB
+   if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
 

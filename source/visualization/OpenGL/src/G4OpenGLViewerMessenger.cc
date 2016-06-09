@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.8 2007/05/16 15:59:58 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.9 2007/06/15 09:52:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -217,6 +217,8 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpDirectorySet;
   delete fpCommandPrintEPS;
   delete fpDirectory;
+
+  delete fpInstance;
 }
 
 void G4OpenGLViewerMessenger::SetNewValue

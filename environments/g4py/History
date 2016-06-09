@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007/06/07 09:07:37 kmura Exp $
+$Id: History,v 1.28 2007/07/11 05:32:42 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,15 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 July 2007 K.Murakami (1.4.0)
+ - add version contorol in pyG4UIterminal.cc
+ - bug fix in pyG4VUserDetectorConstruction
+    - Construct() method should return PV
+ - update G4VSolid
+ - add specific CSG solid classes
+ - add gtest05 as an example constructing CSG solid geometry in Python
+ - a new example of TestEm0 is contributed by Jean
 
 07 June 2007 K.Murakami
  - modified for 9.0

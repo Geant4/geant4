@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm8.cc,v 1.7 2006/06/29 16:58:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: TestEm8.cc,v 1.8 2007/07/27 15:29:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -77,12 +77,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new PhysicsList);
   
 #ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
+  G4VisManager* visManager = 0;
 #endif 
  
   // set user action classes
@@ -102,30 +97,28 @@ int main(int argc,char** argv)
                                                             runAction);
   runManager->SetUserAction(steppingAction);
   
-  //Initialize G4 kernel, physics tables may be here ???...
-
-  //  runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-
   G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc==1)   // Define UI terminal for interactive mode  
-  { 
-     G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");    
-     session->SessionStart();
-     delete session;
-  }
+    { 
+#ifdef G4VIS_USE
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif 
+      G4UIsession * session = new G4UIterminal;
+      UI->ApplyCommand("/control/execute init.mac");    
+      session->SessionStart();
+      delete session;
+    }
   else           // Batch mode
-  { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-  }
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }
     
   // job termination
-
+  
 #ifdef G4VIS_USE
   delete visManager;
 #endif  

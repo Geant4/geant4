@@ -25,8 +25,8 @@
 //
 //
 
-// $Id: PhysicsList.cc,v 1.9 2006/12/13 15:42:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.10 2007/07/27 15:29:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,12 @@
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+
+#include "StepMax.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,6 +93,7 @@ PhysicsList::~PhysicsList()
   delete generalPhysicsList;
   delete emPhysicsList;
   for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
+  delete stepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,14 +153,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

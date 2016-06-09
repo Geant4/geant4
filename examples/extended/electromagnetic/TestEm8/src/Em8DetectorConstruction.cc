@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.19 2006/11/15 19:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: Em8DetectorConstruction.cc,v 1.20 2007/07/27 15:29:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 
@@ -58,12 +58,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-
-
 const G4double Em8DetectorConstruction::fDelta = 0.0001*mm;
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -77,14 +72,6 @@ fAbsorberMaterial(NULL),fSolidAbsorber(NULL),fLogicAbsorber(NULL),
 fPhysicsAbsorber(NULL),fDetectorMessenger(NULL),
 fCalorimeterSD(NULL),fRegGasDet(NULL)
 {
-  // default parameter values of the calorimeter
-
-  //  G4double inch = 2.54*cm ;
-  // G4double  mil = inch/1000.0 ;
-
-  // G4double delta = 0.0001*mm;
-
-  // fAbsorberThickness = 85.*mm;
   fAbsorberThickness = 23.0*mm;
 
   fAbsorberRadius    = 10.*cm;
@@ -126,21 +113,18 @@ void Em8DetectorConstruction::DefineMaterials()
 { 
  //This function illustrates the possible ways to define materials
  
-G4String name, symbol ;             //a=mass of a mole;
-G4double a, z, density ;            //z=mean number of protons;  
-// G4int iz, n; 
-G4int nel ;                       //iz=number of protons  in an isotope; 
+  G4String name, symbol ;             //a=mass of a mole;
+  G4double a, z, density ;            //z=mean number of protons;  
+
+  G4int nel ;                       //iz=number of protons  in an isotope; 
                                    // n=number of nucleons in an isotope;
 
- G4int ncomponents; 
-  // G4int natoms;
-// G4double abundance; 
-G4double fractionmass;
-//G4double temperature, pressure;
+  G4int ncomponents; 
+  G4double fractionmass;
 
-//
-// define Elements
-//
+  //
+  // define Elements
+  //
 
   a = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
@@ -157,138 +141,17 @@ G4double fractionmass;
   a = 39.948*g/mole;
   G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
 
-  //  a = 131.29*g/mole;
-  //  G4Element* elXe = new G4Element(name="Xenon", symbol="Xe", z=54., a);
-  
-  //  a = 19.00*g/mole;
-  //  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
+  //
+  // define simple materials
+  //
 
-
-//
-// define simple materials
-//
-
-     /* ******************************************************************
-
-
-
-density = 1.390*g/cm3;
-a = 39.95*g/mole;
-G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
-
-density = 7.870*g/cm3;
-a = 55.85*g/mole;
-G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
-
-density = 8.960*g/cm3;
-a = 63.55*g/mole;
-G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-
-density = 19.32*g/cm3;
-a =196.97*g/mole;
-G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
-
-density = 11.35*g/cm3;
-a = 207.19*g/mole;
-G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
-
-//
-// define a material from elements.   case 1: chemical molecule
-//
-
-density = 1.000*g/cm3;
-G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
-H2O->AddElement(elH, natoms=2);
-H2O->AddElement(elO, natoms=1);
-
-  // Kapton (polyimide) ??? since = Mylar C5H4O2
-
-  density = 1.39*g/cm3;
-  G4Material* Kapton = new G4Material(name="Kapton", density, nel=3);
-  Kapton->AddElement(elO,2);
-  Kapton->AddElement(elC,5);
-  Kapton->AddElement(elH,4);
-
-
-  // Carbon dioxide
-
-  density = 1.977*mg/cm3;
-  G4Material* CO2 = new G4Material(name="CO2", density, nel=2,
-				       kStateGas,273.15*kelvin,1.*atmosphere);
-  CO2->AddElement(elC,1);
-  CO2->AddElement(elO,2);
-
-
-  // TRT_CH2
-      
-  density = 0.935*g/cm3;
-  G4Material* TRT_CH2 = new G4Material(name="TRT_CH2",density, nel=2);
-  TRT_CH2->AddElement(elC,1);
-  TRT_CH2->AddElement(elH,2);
-
-  // Radiator
-
-  density = 0.059*g/cm3;
-  G4Material* Radiator = new G4Material(name="Radiator",density, nel=2);
-  Radiator->AddElement(elC,1);
-  Radiator->AddElement(elH,2);
-
-  // Carbon Fiber
-
-  density = 0.145*g/cm3;
-  G4Material* CarbonFiber = new G4Material(name="CarbonFiber",density, nel=1);
-  CarbonFiber->AddElement(elC,1);
-
-  density = 1.290*mg/cm3;  // old air from elements
-  G4Material* air = new G4Material(name="air"  , density, ncomponents=2);
-  Air->AddElement(elN, fractionmass=0.7);
-  Air->AddElement(elO, fractionmass=0.3);
-
-
-  density = 1.25053*mg/cm3 ;       // STP
-  a = 14.01*g/mole ;       // get atomic weight !!!
-  //  a = 28.016*g/mole;
-  G4Material* N2  = new G4Material(name="Nitrogen", z= 7.,a,density) ;
-
-  density = 1.25053*mg/cm3 ;       // STP
-  G4Material* anotherN2 = new G4Material(name="anotherN2", density,ncomponents=2);
-  anotherN2->AddElement(elN, 1);
-  anotherN2->AddElement(elN, 1);
-
-
-  // liquid hydrogen for muon cooling target
-
-  density = 0.071*g/cm3;
-  a = 1.01*g/mole;
-  G4Material* lH2 = new G4Material(name="liquidHydrigen", z=1., a, density);
-
-  // Beryllium
-
-  density = 1.848*g/cm3;
-  a = 9.01*g/mole;
-  G4Material* Be = new G4Material(name="Beryllium", z=4., a, density);
-  // Al for electrodes
-
-  density = 2.700*g/cm3;
-  a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-
-
-  // Polypropelene
-
-  G4Material* CH2 = new G4Material ("Polypropelene" , 0.91*g/cm3, 2);
-  CH2->AddElement(elH,2);
-  CH2->AddElement(elC,1);
-
-************************ */
   // Aluminium
-
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
   if(Al);
-  // Mylar
 
+  // Mylar
   density = 1.39*g/cm3;
   G4Material* Mylar = new G4Material(name="Mylar", density, nel=3);
   Mylar->AddElement(elO,2);
@@ -296,27 +159,18 @@ H2O->AddElement(elO, natoms=1);
   Mylar->AddElement(elH,4);
 
   // Silicon as detector material
-
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
   G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
   if(Si);
-  // Krypton as detector gas, STP
 
+  // Krypton as detector gas, STP
   density = 3.700*mg/cm3 ;
   a = 83.80*g/mole ;
   G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
 
-  // Metane, STP
-
-  //  density = 0.7174*mg/cm3 ;
-  //  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
-  //  metane->AddElement(elC,1) ;
-  //  metane->AddElement(elH,4) ;
-
 
   // Dry air (average composition)
-
   density = 1.7836*mg/cm3 ;       // STP
   G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
   Argon->AddElement(elAr, 1);
@@ -329,23 +183,20 @@ H2O->AddElement(elO, natoms=1);
   G4Material* Oxygen = new G4Material(name="O2"  , density, ncomponents=1);
   Oxygen->AddElement(elO, 2);
 
-
   density = 1.2928*mg/cm3 ;       // STP
   G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
   Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
 
+  /* **************
 
   // 93% Kr + 7% CH4, STP
-
-  //  density = 3.491*mg/cm3 ;      
-  //  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
-  //                                                   ncomponents=2);
-  //  Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
-  //  Kr7CH4->AddMaterial( metane,   fractionmass = 0.014 ) ;
-
-  /* **************
+  density = 3.491*mg/cm3 ;      
+  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
+				      ncomponents=2);
+  Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
+  Kr7CH4->AddMaterial( metane,   fractionmass = 0.014 ) ;
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
   G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
@@ -377,36 +228,30 @@ H2O->AddElement(elO, natoms=1);
   *********** */
 
   // Xenon as detector gas, STP
-
   density = 5.858*mg/cm3 ;
   a = 131.29*g/mole ;
   G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
 
   // Metane, STP
-
   density = 0.7174*mg/cm3 ;
   G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
   metane->AddElement(elC,1) ;
   metane->AddElement(elH,4) ;
 
   // C3H8,20 C, 2 atm
-
   density = 3.758*mg/cm3 ;
   G4Material* C3H8 = new G4Material(name="C3H8",density,nel=2) ;
   C3H8->AddElement(elC,3) ;
   C3H8->AddElement(elH,8) ;
 
   // Propane, STP
-
   density = 2.005*mg/cm3 ;
   G4Material* propane = new G4Material(name="propane",density,nel=2) ;
   propane->AddElement(elC,3) ;
   propane->AddElement(elH,8) ;
 
   // 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1 atm 
-
   density = 4.9196*mg/cm3 ;
-
   G4Material* XeCH4C3H8 = new G4Material(name="XeCH4C3H8"  , 
                                   density,  ncomponents=3);
   XeCH4C3H8->AddMaterial( Xe,       fractionmass = 0.971 ) ;
@@ -414,37 +259,32 @@ H2O->AddElement(elO, natoms=1);
   XeCH4C3H8->AddMaterial( propane,  fractionmass = 0.019 ) ;
 
   // 93% Ar + 7% CH4, STP
-
   density = 1.709*mg/cm3 ;      
   G4Material* Ar7CH4 = new G4Material(name="Ar7CH4", density, ncomponents=2);
   Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
   Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
 
   // Carbon dioxide, STP
-
   density = 1.977*mg/cm3;
   G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2);
   CarbonDioxide->AddElement(elC,1);
   CarbonDioxide->AddElement(elO,2);
 
   // 80% Ar + 20% CO2, STP
-
-//  density = 1.8223*mg/cm3 ;      
-//  G4Material* Ar_80CO2_20 = new G4Material(name="ArCO2"  , density, 
-//                                    ncomponents=2);
-//  Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
-//  Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
+  density = 1.8223*mg/cm3 ;      
+  G4Material* Ar_80CO2_20 = new G4Material(name="ArCO2"  , density, 
+					   ncomponents=2);
+  Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
+  Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
 
   // 80% Xe + 20% CO2, STP
-
-  //  density = 5.0818*mg/cm3 ;      
-  //  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , 
-  // density, ncomponents=2);
-  //  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
-  //  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+  density = 5.0818*mg/cm3 ;      
+  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2", density, 
+				       ncomponents=2);
+  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
+  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
 
   // 80% Kr + 20% CO2, STP
-
   density = 3.601*mg/cm3 ;      
   G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density, 
                                         ncomponents=2);
@@ -482,11 +322,6 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
   PrintCalorParameters();
       
   // World
-  
-  // if(fSolidWorld)   delete fSolidWorld ;
-  // if(fLogicWorld)   delete fLogicWorld ;
-  // if(fPhysicsWorld) delete fPhysicsWorld ;
-
   fSolidWorld = new G4Tubs("World",				//its name
                    0.,fWorldSizeR,fWorldSizeZ/2.,0.,twopi)       ;//its size
                          
@@ -506,18 +341,15 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   if (fAbsorberThickness > 0.) 
   { 
-    // if(fSolidAbsorber)   delete fSolidAbsorber ;
-    // if(fLogicAbsorber)   delete fLogicAbsorber ;
-    // if(fPhysicsAbsorber) delete fPhysicsAbsorber ;
 
-      fSolidAbsorber = new G4Tubs("Absorber",		
+    fSolidAbsorber = new G4Tubs("Absorber",		
                           0.,fAbsorberRadius,fAbsorberThickness/2.,0.,twopi); 
                           
-      fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    
+    fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    
       			                  fAbsorberMaterial, 
       			                  "Absorber");     
       			                  
-      fPhysicsAbsorber = new G4PVPlacement(0,		   
+    fPhysicsAbsorber = new G4PVPlacement(0,		   
       		    G4ThreeVector(0.,0.,fAbsorberZ),        
                                         "Absorber",        
                                         fLogicAbsorber,     
@@ -597,12 +429,14 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 void Em8DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n The  WORLD   is made of " 
-       << fWorldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
-  G4cout << ", the transverse size (R) of the world is " << fWorldSizeR/mm << " mm. " << G4endl;
+	 << fWorldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
+  G4cout << ", the transverse size (R) of the world is " << fWorldSizeR/mm 
+	 << " mm. " << G4endl;
   G4cout << " The ABSORBER is made of " 
-       << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName() ;
+	 << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName() ;
   G4cout << ", the transverse size (R) is " << fAbsorberRadius/mm << " mm. " << G4endl;
-  G4cout << " Z position of the (middle of the) absorber " << fAbsorberZ/mm << "  mm." << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " 
+	 << fAbsorberZ/mm << "  mm." << G4endl;
   G4cout << G4endl;
 }
 
@@ -724,20 +558,4 @@ void Em8DetectorConstruction::UpdateGeometry()
 //
 //
 ////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

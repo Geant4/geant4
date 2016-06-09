@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2007/06/19 11:28:38 gcosmo Exp $
+$Id: History,v 1.120 2007/07/16 08:41:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 16, 2007  G.Cosmo                     geommng-V09-00-00
+- Added dummy constructor and destructor to G4VPVParameterisation.
 
 June 19, 2007  G.Cosmo                     geommng-V08-03-03
 - Apply migration to <cmath> and std:: for G4ErrorCylSurfaceTarget and

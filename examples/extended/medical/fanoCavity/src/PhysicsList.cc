@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.5 2007/06/12 12:04:15 maire Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: PhysicsList.cc,v 1.6 2007/06/27 13:47:25 maire Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,9 +98,11 @@ void PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
+#include "G4EmProcessOptions.hh"
+#include "G4MscStepLimitType.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructEM()
 {
@@ -154,9 +156,19 @@ void PhysicsList::ConstructEM()
   // Em options
   //
   G4EmProcessOptions emOptions;
+  
+  //multiple scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+  emOptions.SetSkin(2.);
+  
+  //energy loss
+  //
+  emOptions.SetLinearLossLimit(1.e-6);  
   emOptions.SetStepFunction(0.2, 10*um);
-  emOptions.SetLinearLossLimit(1.e-6);
-  emOptions.SetSkin(2.);		//single scattering at boundaries
+  
+  //build CSDA range
+  //
   emOptions.SetBuildCSDARange(true);  
 }
 

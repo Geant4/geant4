@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.121 2007/06/08 14:24:29 gcosmo Exp $
+cvs log $Id: History,v 1.122.2.1 2007/08/21 14:04:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
- 
+
+21st August 2007   Gabriele Cosmo  (greps-V09-00-00a)
+- Corrected graphical description for G4EllipticalCone in HepPolyhedron
+  and G4Polyhedron.
+
+17th July 2007  John Allison  (greps-V09-00-00)
+- G4VGraphicsScene: Added constructor and virtual destructor.
+
 8th June 2007  Gabriele Cosmo  (greps-V08-03-00)
 - G4AttHolder: replaced forward declarations in header with explicit inclusions
   to allow for porting on Intel-icc compiler.

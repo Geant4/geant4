@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.cc,v 1.6 2006/06/29 18:24:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4HelixExplicitEuler.cc,v 1.7 2007/08/21 09:43:50 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 //
 //  Helix Explicit Euler: x_1 = x_0 + helix(h)
@@ -39,13 +39,73 @@
 #include "G4HelixExplicitEuler.hh"
 #include "G4ThreeVector.hh"
 
+
+void G4HelixExplicitEuler::Stepper(  const G4double  yInput[7],
+                               const G4double*,
+                                     G4double Step,
+                                     G4double yOut[7],
+                                     G4double yErr[])
+
+{
+
+ //Estimation of the Stepping Angle
+
+  G4ThreeVector Bfld;
+  MagFieldEvaluate(yInput, Bfld); 
+  
+  const G4int nvar = 6 ;
+  G4int i;
+  G4double      yTemp[7], yIn[7] ;
+  G4ThreeVector  Bfld_midpoint;
+  //  Saving yInput because yInput and yOut can be aliases for same array
+        for(i=0;i<nvar;i++) yIn[i]=yInput[i];
+     
+        G4double h = Step * 0.5;
+ 
+     // Do full step and two half steps
+        G4double yTemp2[7];
+        AdvanceHelix(yIn,   Bfld,  h, yTemp2,yTemp);
+        MagFieldEvaluate(yTemp2, Bfld_midpoint) ;     
+        AdvanceHelix(yTemp2, Bfld_midpoint, h, yOut);
+    
+     // Error estimation
+        for(i=0;i<nvar;i++) {
+         yErr[i] = yOut[i] - yTemp[i] ;
+       }
+    
+}
+
+G4double G4HelixExplicitEuler::DistChord()   const 
+{
+  // Implementation : must check whether h/R > 2 pi  !!
+  //   If( h/R <  pi) use G4LineSection::DistLine
+  //   Else           DistChord=R_helix
+  //
+  G4double distChord;
+  G4double Ang_curve=GetAngCurve();
+
+      
+	 if(Ang_curve<=pi){
+	   distChord=GetRadHelix()*(1-cos(0.5*Ang_curve));
+	 }
+         else 
+         if(Ang_curve<twopi){
+           distChord=GetRadHelix()*(1+std::cos(0.5*(twopi-Ang_curve)));
+         }
+         else{
+          distChord=2.*GetRadHelix();  
+         }
+
+  return distChord;
+  
+}
 void
 G4HelixExplicitEuler::DumbStepper( const G4double  yIn[],
 				   G4ThreeVector   Bfld,
-				   G4double  h,
-				   G4double  yOut[])
+				   G4double        h,
+				   G4double        yOut[])
 {
-  AdvanceHelix(yIn, Bfld, h, yOut);
-
-  // NormaliseTangentVector( yOut );  // this could harm more than it helps 
+    
+       AdvanceHelix(yIn, Bfld, h, yOut);
+               
 }  

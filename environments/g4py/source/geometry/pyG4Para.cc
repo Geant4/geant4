@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Para.cc,v 1.4 2006/06/29 15:32:21 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Para.cc,v 1.5 2007/07/12 10:01:53 kmura Exp $
+// $Name: geant4-09-00-patch-01 $
 // ====================================================================
 //   pyG4Para.cc
 //
@@ -34,6 +34,22 @@
 #include "G4Para.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Para {
+
+G4Para* CreatePara(const G4String& name, 
+                   G4double pDx, G4double pDy, G4double pDz,
+                   G4double pAlpha, G4double pTheta, G4double pPhi)
+{
+  return new G4Para(name, pDx, pDy, pDz, pAlpha, pTheta, pPhi);
+}
+
+}
+
+using namespace pyG4Para;
 
 // ====================================================================
 // module definition
@@ -58,9 +74,11 @@ void export_G4Para()
     .def("SetTanAlpha",       &G4Para::SetTanAlpha)
     .def("SetThetaAndPhi",    &G4Para::SetThetaAndPhi)
     .def("SetAllParameters",  &G4Para::SetAllParameters)
-    .def("GetCubicVolume",    &G4Para::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreatePara", CreatePara, return_value_policy<manage_new_object>());
 }
 

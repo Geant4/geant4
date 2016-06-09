@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.66 2007/01/11 16:40:05 allison Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VisManager.hh,v 1.67 2007/07/10 17:49:27 allison Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 
@@ -343,9 +343,6 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  const G4String&              GetBeginOfLastRunRandomStatus   () const;
-  const G4String&              GetBeginOfLastEventRandomStatus () const;
-  G4int                        GetLastRunID                    () const;
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
   const G4Event*               GetRequestedEvent               () const;

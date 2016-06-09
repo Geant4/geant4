@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.123 2007/06/28 14:16:55 gcosmo Exp $
+# $Id: binmake.gmk,v 1.129.2.1 2007/08/20 09:41:21 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -282,6 +282,7 @@ LDLIBS_PREFINAL += $(LDLIBS4)
 LDLIBS_KERNEL   += $(LDLIBS4)
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Windows
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
@@ -296,8 +297,11 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   else
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
+  OUT   := /Fe
 else
+  # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
+  OUT   := -o 
 endif
 
 ifdef transform-RPath
@@ -339,12 +343,12 @@ endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 else
 	@echo Linking $(G4TARGET) ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 	@if [ \( -f $(G4BINDIR)/$(G4TARGET) \) ]; then \
 	  echo "... Done!"; fi

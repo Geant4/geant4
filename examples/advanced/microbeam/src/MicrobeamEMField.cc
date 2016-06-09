@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.5 2006/06/29 16:05:27 gunter Exp $
+// $Id: MicrobeamEMField.cc,v 1.6 2007/07/06 06:52:54 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
@@ -253,6 +253,8 @@ if (z>=-1400*mm & z <-200*mm)
   G2=0;
   G3=0;
   cte=0;
+
+  G4bool largeScattering=false;
   
   for (G4int i=0;i<4; i++) 
   {
@@ -264,6 +266,8 @@ if (z>=-1400*mm & z <-200*mm)
 			x_local = (x - xoprime) * std::cos (lineAngle) - (z - zoprime) * std::sin (lineAngle); 
 			y_local = y; 
 			z_local = (z - zoprime) * std::cos (lineAngle) + (x - xoprime) * std::sin (lineAngle); 
+			if (std::sqrt(x_local*x_local+y_local*y_local)>a0[i]) largeScattering=true;
+
 		}
 		 
 	 if (i==1) 
@@ -273,6 +277,7 @@ if (z>=-1400*mm & z <-200*mm)
 			x_local = (x - xoprime) * std::cos (lineAngle) - (z - zoprime) * std::sin (lineAngle); 
 			y_local = y; 
 			z_local = (z - zoprime) * std::cos (lineAngle) + (x - xoprime) * std::sin (lineAngle); 
+			if (std::sqrt(x_local*x_local+y_local*y_local)>a0[i]) largeScattering=true;
 		}
 
 	 if (i==2) 
@@ -282,6 +287,7 @@ if (z>=-1400*mm & z <-200*mm)
 			x_local = (x - xoprime) * std::cos (lineAngle) - (z - zoprime) * std::sin (lineAngle); 
 			y_local = y; 
 			z_local = (z - zoprime) * std::cos (lineAngle) + (x - xoprime) * std::sin (lineAngle); 
+			if (std::sqrt(x_local*x_local+y_local*y_local)>a0[i]) largeScattering=true;
 		}
 	 
 	 if (i==3) 
@@ -291,6 +297,7 @@ if (z>=-1400*mm & z <-200*mm)
 			x_local = (x - xoprime) * std::cos (lineAngle) - (z - zoprime) * std::sin (lineAngle); 
 			y_local = y; 
 			z_local = (z - zoprime) * std::cos (lineAngle) + (x - xoprime) * std::sin (lineAngle); 
+			if (std::sqrt(x_local*x_local+y_local*y_local)>a0[i]) largeScattering=true;
 		}
 
 	 
@@ -357,6 +364,16 @@ if (z>=-1400*mm & z <-200*mm)
 
 	 }
 	  
+	 // PROTECTION AGAINST LARGE SCATTERING
+
+	 if ( largeScattering ) 
+	 {
+	  G0=0;
+	  G1=0;
+	  G2=0;
+	  G3=0;
+	 }
+
 	 // MAGNETIC FIELD COMPUTATION FOR EACH QUADRUPOLE
 	 
 	 Bx_local = y_local*(G0-(1./12)*(3*x_local*x_local+y_local*y_local)*G2);
@@ -501,6 +518,27 @@ if (z>=-1400*mm & z <-200*mm)
       Bfield[4] = electricFieldPlate2;
       Bfield[5] = 0;
   }
+
+// ZERO FIELD REGIONS
+
+if (
+(Bfield[0]==0. &
+Bfield[1]==0. &
+Bfield[2]==0. &
+Bfield[4]==0. &
+Bfield[5]==0. &
+Bfield[6]==0. )
+)
+{
+
+G4FieldManager *pFieldMgr;
+pFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+pFieldMgr = NULL;
+
+}
+
+//
+
 
 }
 

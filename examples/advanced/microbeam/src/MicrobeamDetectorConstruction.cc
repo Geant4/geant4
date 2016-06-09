@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.cc,v 1.5 2006/06/29 16:05:25 gunter Exp $
+// $Id: MicrobeamDetectorConstruction.cc,v 1.7 2007/08/27 15:51:54 gcosmo Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamDetectorConstruction.hh"
@@ -396,7 +396,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
   solid1Gap = new G4Cons("_CollObj_gap1_", 0.*micrometer, 6*micrometer,
 			 0.*micrometer,2.5*micrometer,
 			 3.5*micrometer, 
-			 0, ((360*M_PI)/180));
+			 0, ((360*CLHEP::pi)/180));
   
   logic1Gap = new G4LogicalVolume(solid1Gap, defaultMaterial, "_CollObj_gap1_");
   
@@ -408,7 +408,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
   solid2Gap = new G4Cons("_CollObj_gap2_", 0.*micrometer, 15*micrometer,
 			 0.*micrometer,6*micrometer,
 			 6.5*micrometer, 
-			 0, ((360*M_PI)/180));
+			 0, ((360*CLHEP::pi)/180));
   
   logic2Gap = new G4LogicalVolume(solid2Gap, defaultMaterial, "_CollObj_gap2_");
   
@@ -420,7 +420,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
   solid3Gap = new G4Cons("_CollObj_gap3_", 0.*micrometer, 105*micrometer, 
 			 0.*micrometer,15*micrometer,
 			 25*micrometer, 
-			 0, ((360*M_PI)/180));
+			 0, ((360*CLHEP::pi)/180));
   
   logic3Gap = new G4LogicalVolume(solid3Gap, defaultMaterial, "_CollObj_gap3_");
   
@@ -443,7 +443,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
   solid4Gap = new G4Cons("_CollDet_gap4_", 0.*micrometer, 8*micrometer,
 			 0.*micrometer,5*micrometer,
 			 7.5*micrometer, 
-			 0, ((360*M_PI)/180));
+			 0, ((360*CLHEP::pi)/180));
 
   logic4Gap = new G4LogicalVolume(solid4Gap, defaultMaterial, "_CollDet_gap4_");
   
@@ -454,7 +454,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
   solid5Gap = new G4Cons("_CollDet_gap5_", 0.*micrometer, 105*micrometer,
 			 0.*micrometer,8*micrometer,
 			 27.5*micrometer, 
-			 0, ((360*M_PI)/180));
+			 0, ((360*CLHEP::pi)/180));
 
   logic5Gap = new G4LogicalVolume(solid5Gap, defaultMaterial, "_CollDet_gap5_");
   
@@ -633,7 +633,7 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
                             logicPhantom,    // their logical volumr
 //                            logicCyto,       // Mother logical volume
                             logicKgm,       // Mother logical volume
-			    kZAxis,          // Are placed along this axis 
+			    kUndefined,          // Are placed along this axis 
                             phantomParam->GetNoBoxes(),    // Number of boxes
                             phantomParam,false);   // The parametrisation
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.8 2006/06/29 16:04:57 gunter Exp $
+// $Id: Microbeam.cc,v 1.9 2007/08/28 09:48:40 gcosmo Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -103,9 +103,13 @@ int main(int argc,char** argv) {
        
   if (argc==1)   // define UI session for interactive mode.
     {
-      // G4UIterminal is a dumb or a TCSH terminal.
-      // G4UIsession * session = new G4UIterminal(); // dumb terminal (for Windows)
-      G4UIsession * session = new G4UIterminal(new G4UItcsh); // TCSH terminal
+      // G4UIterminal is a (dumb) terminal.
+      G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);
+#else
+      session = new G4UIterminal();
+#endif
       UI->ApplyCommand("/control/execute microbeam.mac");    
       session->SessionStart();
       delete session;

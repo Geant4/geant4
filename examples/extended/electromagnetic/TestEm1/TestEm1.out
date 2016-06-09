@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,7 +52,7 @@
 
 /run/verbose 2
 #
-/testem/det/setMat Aluminium 
+/testem/det/setMat Aluminium
 /testem/det/setSize 10 m
 #
 /run/initialize
@@ -65,23 +65,23 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
-/testem/gun/setDefault 
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
+/testem/histo/setHisto 1 100 0 50 cm 
 ----> SetHisto 1: total track length of primary particle (cm);  100 bins from 0 cm to 50 cm
-/testem/histo/setHisto 2 100 0  300 none	#nb steps of primary
+/testem/histo/setHisto 2 100 0 300 none 
 ----> SetHisto 2: nb steps of primary particle;  100 bins from 0 none to 300 none
-/testem/histo/setHisto 3 200 0   20 mm		#step size of primary
+/testem/histo/setHisto 3 200 0 20 mm 
 ----> SetHisto 3: step size of primary particle (mm);  200 bins from 0 mm to 20 mm
 #
-/testem/histo/setFileType hbook	
+/testem/histo/setFileType hbook
 ###/testem/histo/setFileType root
 ###/testem/histo/setFileType XML
 #
 /testem/phys/setCuts 1 mm
-/testem/histo/setFileName run0 
+/testem/histo/setFileName run0
 /run/beamOn 2000
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -291,7 +291,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=216.91s Real=248.87s Sys=1.16s
+  User=215.64s Real=270.81s Sys=1.58s
 
  ======================== run summary ======================
 
@@ -359,7 +359,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=390.49s Real=418.67s Sys=1.24s
+  User=390.44s Real=487.76s Sys=1.58s
 
  ======================== run summary ======================
 

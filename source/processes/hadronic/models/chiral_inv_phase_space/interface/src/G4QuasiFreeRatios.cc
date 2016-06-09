@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.14 2007/06/15 17:06:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4QuasiFreeRatios.cc,v 1.14.2.1 2007/08/21 12:29:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 //
 // G4 Physics class: G4QuasiFreeRatios for N+A elastic cross sections
@@ -625,6 +625,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   if(!nDB || !found)                            // Create new line in the AMDB
 	 {
     lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
+    lastI = ind;                                // Remember the initialized inex    
     lastK = static_cast<int>((lp-lpi)/dl)+1;    // MaxBin to be initialized in LogTaB
     if(lastK>nlp)
     {
@@ -830,7 +831,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QFR::Scat: -t="<<mint<<G4endl;
 #endif
-  G4double cost=1.-mint/CSmanager->GetHMaxT(); // cos(theta) in CMS
+  G4double cost=1.-(mint+mint)/CSmanager->GetHMaxT(); // cos(theta) in CMS
 #ifdef ppdebug
   G4cout<<"G4QFR::Scat:-t="<<mint<<",dpc2="<<CSmanager->GetHMaxT()<<",cost="<<cost<<G4endl;
 #endif

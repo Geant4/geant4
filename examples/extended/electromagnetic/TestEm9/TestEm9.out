@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,22 +15,22 @@ G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166
 /run/verbose 1
 #/tracking/verbose 1
 #
-#  select EM PhysicsList
+# select EM PhysicsList
 #
-/testem/phys/addPhysics  emstandard_opt1
+/testem/phys/addPhysics emstandard_opt1
 PhysicsList::Set emstandard_opt1 EM physics
 #
-/testem/phys/setCuts    0.3 mm
+/testem/phys/setCuts 0.3 mm
 /testem/phys/VertexCuts 0.01 mm
-/testem/phys/MuonCuts  10.0 mm
-/testem/stepMax         100 mm
+/testem/phys/MuonCuts 10.0 mm
+/testem/stepMax 100 mm
 #
-/testem/det/acceptance1  0.8271 0.02974 2.5
-/testem/det/acceptance9  0.9570 0.01286 2.5
+/testem/det/acceptance1 0.8271 0.02974 2.5
+/testem/det/acceptance9 0.9570 0.01286 2.5
 /testem/det/acceptance25 0.9793 0.00884 2.5
 #
-#/process/eLoss/preciseRange  true
-#/process/eLoss/integral      true
+#/process/eLoss/preciseRange true
+#/process/eLoss/integral true
 /run/initialize
 
 ***** Table : Nb of materials = 5 *****
@@ -83,8 +83,8 @@ PhysicsList: world cuts are set cutG= 0.3 mm    cutE= 0.3 mm
 Vertex cuts are set
 Muon cuts are set
 #
-#/testem/histo/fileName  e_pr.root
-#/testem/histo/fileType  root
+#/testem/histo/fileName e_pr.root
+#/testem/histo/fileType root
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
@@ -298,33 +298,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=81.22s Real=81.31s Sys=0s
+  User=81.36s Real=81.45s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1318
-Average number of gamma      699.4
-Average number of e+         48.33
-Average number of steps      3975
-Edep 1x1 =                   0.8349 +- 0.003051  res=  3.655 %
-Edep 3x3 =                   0.9574 +- 0.001213  res=  1.267 %
-Edep 5x5 =                   0.9795 +- 0.0007431  res=  0.7587 %
+Average number of e-         1315
+Average number of gamma      696.9
+Average number of e+         47.49
+Average number of steps      3970
+Edep 1x1 =                   0.8286 +- 0.002879  res=  3.475 %
+Edep 3x3 =                   0.9576 +- 0.001195  res=  1.248 %
+Edep 5x5 =                   0.9795 +- 0.0008153  res=  0.8324 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8309 +- 0.003579  res=  4.307 %
-Edep 3x3 =                   0.9559 +- 0.001677  res=  1.754 %
-Edep 5x5 =                   0.978 +- 0.001364  res=  1.395 %
+Edep 1x1 =                   0.8277 +- 0.002993  res=  3.616 %
+Edep 3x3 =                   0.9567 +- 0.001341  res=  1.402 %
+Edep 5x5 =                   0.9787 +- 0.001003  res=  1.025 %
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8349  delEdep1x1= 0.007834 nrms= 2.634
-Erms1x1: 0.03051  delErms1x1= 0.0007728 nrms= 0.2599
-Edep3x3: 0.9574  delEdep3x3= 0.0004009 nrms= 0.3117
-Erms3x3: 0.01213  delErms3x3= -0.000728 nrms= -0.5661
-Edep5x5: 0.9795  delEdep5x5= 0.0001678 nrms= 0.1898
-Erms5x5: 0.007431  delErms5x5= -0.001409 nrms= -1.594
-<<<<<END>>>>>   IS NOT ACCEPTED
+Edep1x1: 0.8286  delEdep1x1= 0.001452 nrms= 0.4883
+Erms1x1: 0.02879  delErms1x1= -0.0009471 nrms= -0.3185
+Edep3x3: 0.9576  delEdep3x3= 0.0005923 nrms= 0.4606
+Erms3x3: 0.01195  delErms3x3= -0.0009121 nrms= -0.7093
+Edep5x5: 0.9795  delEdep5x5= 0.0001642 nrms= 0.1858
+Erms5x5: 0.008153  delErms5x5= -0.0006874 nrms= -0.7776
+<<<<<END>>>>>   IS ACCEPTED
 
 #
 G4 kernel has come to Quit state.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -342,7 +342,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.03s Real=0.22s Sys=0.01s
+  User=0.04s Real=0.28s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1230,7 +1230,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.4s Real=0.54s Sys=0.09s
+  User=0.42s Real=0.54s Sys=0.09s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1396,7 +1396,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.06s Real=0.1s Sys=0.02s
+  User=0.07s Real=0.1s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

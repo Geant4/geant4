@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2007/06/13 15:00:48 ahoward Exp $
+$Id: History,v 1.14 2007/07/10 09:54:30 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.12 2007/06/13 15:00:48 ahoward Exp $
 
                       Category History file
                       ---------------------
+02.07.2007 - A. Howard (DMX-V09-00-01)
+	     Added G4StepLimiter to physics list (correction of migration to
+             Geant4 7.0)
+
+02.07.2007 - A. Howard (DMX-V09-00-00)
+	     Added missing header file G4hIonisation.hh to DMXPhysicsLists.cc
+
 06.06.2007 - A. Howard (DMX-V08-03-01)
 	     Changed fG4v71 to preferable fMinimal for msc step limitation
 	     Converted to hIonisation from hLowEnergyIonisation until

@@ -29,7 +29,8 @@
 //
 // G4HelixMixedStepper split the Method used for Integration in two:
 //
-// If Stepping Angle ( h / R_curve) < pi/3  use Classical RK4Stepper
+// If Stepping Angle ( h / R_curve) < pi/3  
+//        use Stepper for small step(ClassicalRK4 by default)
 // Else use  HelixExplicitEuler Stepper
 //
 // History: 
@@ -39,17 +40,33 @@
 
 #include "G4HelixMixedStepper.hh"
 #include "G4ClassicalRK4.hh"
+#include "G4CashKarpRKF45.hh"
+#include "G4SimpleRunge.hh"
+#include "G4HelixImplicitEuler.hh"
+#include "G4HelixExplicitEuler.hh"
+#include "G4HelixSimpleRunge.hh"
+#include "G4ExactHelixStepper.hh"
+#include "G4ExplicitEuler.hh"
+#include "G4ImplicitEuler.hh"
+#include "G4SimpleHeum.hh"
+#include "G4RKG3_Stepper.hh"
+
 #include "G4ThreeVector.hh"
-G4HelixMixedStepper::G4HelixMixedStepper(G4Mag_EqRhs *EqRhs)
+#include "G4LineSection.hh"
+G4HelixMixedStepper::G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int fStepperNumber)
   : G4MagHelicalStepper(EqRhs)
     
 {
-  
-  fRK4Stepper= new G4ClassicalRK4(EqRhs);
+   SetVerbose(1); fNumCallsRK4=0; fNumCallsHelix=0;
+   if(!fStepperNumber) fStepperNumber=4;
+   fRK4Stepper =  SetupStepper(EqRhs, fStepperNumber);
 }
 
+
 G4HelixMixedStepper::~G4HelixMixedStepper() {
+     
      delete(fRK4Stepper);
+     if (fVerbose>0){ PrintCalls();};
 } 
 void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
                                const G4double dydx[7],
@@ -74,33 +91,34 @@ void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
    R_1=std::abs(GetInverseCurve(velocityVal,Bmag));
    Ang_curve=R_1*Step;
    SetAngCurve(Ang_curve);
-   fLastStepSize=Step;
+   SetCurve(std::abs(1/R_1));
+   
 
    if(Ang_curve<0.33*pi){
+     fNumCallsRK4++;   
+     fRK4Stepper->Stepper(yInput,dydx,Step,yOut,yErr);
     
-    fRK4Stepper->Stepper(yInput,dydx,Step,yOut,yErr);
 
    }
     else{
+      fNumCallsHelix++;
       const G4int nvar = 6 ;
       G4int i;
       G4double      yTemp[7], yIn[7] ;
+      G4double yTemp2[7];
       G4ThreeVector  Bfld_midpoint;
     //  Saving yInput because yInput and yOut can be aliases for same array
         for(i=0;i<nvar;i++) yIn[i]=yInput[i];
 
       G4double h = Step * 0.5;
- 
-     // Do two half steps
-          AdvanceHelix(yIn,   Bfld,  h, yTemp);
+     // Do two half steps and full step
+          AdvanceHelix(yIn,   Bfld,  h, yTemp,yTemp2);
           MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
           AdvanceHelix(yTemp, Bfld_midpoint, h, yOut);
-     // Do a full step    
-          h = Step ;
-          AdvanceHelix(yIn, Bfld, h, yTemp); 
      // Error estimation
           for(i=0;i<nvar;i++) {
-          yErr[i] = yOut[i] - yTemp[i] ;
+          yErr[i] = yOut[i] - yTemp2[i] ;
+          
           }
     }
 
@@ -122,7 +140,6 @@ G4HelixMixedStepper::DumbStepper( const G4double  yIn[],
     
                
 }  
-// ---------------------------------------------------------------------------
 
 G4double G4HelixMixedStepper::DistChord()   const 
 {
@@ -131,19 +148,54 @@ G4double G4HelixMixedStepper::DistChord()   const
   //   Else           DistChord=R_helix
   //
   G4double distChord;
-  G4double H_helix;
-  H_helix=fLastStepSize; 
   G4double Ang_curve=GetAngCurve();
-  
-  if(Ang_curve<pi){
-    
-    distChord=0.5*H_helix*std::tan(0.25*Ang_curve);  
 
-  }
-  else{
-    distChord=GetRadHelix();
-  }
- 
+      
+	 if(Ang_curve<=pi){
+	   distChord=GetRadHelix()*(1-cos(0.5*Ang_curve));
+	 }
+         else 
+         if(Ang_curve<twopi){
+           distChord=GetRadHelix()*(1+std::cos(0.5*(twopi-Ang_curve)));
+         }
+         else{
+          distChord=2.*GetRadHelix();  
+         }
+
+   
+
   return distChord;
   
+}
+// ---------------------------------------------------------------------------
+void G4HelixMixedStepper::PrintCalls()
+{
+  G4cout<<"In HelixMixedStepper::Number of calls to smallStepStepper = "<<fNumCallsRK4
+        <<"  and Number of calls to Helix = "<<fNumCallsHelix<<G4endl;
+}
+
+
+
+G4MagIntegratorStepper* G4HelixMixedStepper:: SetupStepper(G4Mag_EqRhs* pE, G4int StepperNumber)
+{
+  G4MagIntegratorStepper* pStepper;
+  if (fVerbose>0)G4cout<<"In G4HelixMixedStepper Stepper for small steps is "; 
+  switch ( StepperNumber )
+    {
+     case 0: pStepper = new G4ExplicitEuler( pE ); if (fVerbose>0)G4cout<<"G4ExplicitEuler"<<G4endl; break;
+     case 1: pStepper = new G4ImplicitEuler( pE ); if (fVerbose>0)G4cout<<"G4ImplicitEuler"<<G4endl; break;
+     case 2: pStepper = new G4SimpleRunge( pE ); if (fVerbose>0)G4cout<<"G4SimpleRunge"<<G4endl; break;
+     case 3: pStepper = new G4SimpleHeum( pE );  if (fVerbose>0)G4cout<<"G4SimpleHeum"<<G4endl;break;
+     case 4: pStepper = new G4ClassicalRK4( pE ); if (fVerbose>0)G4cout<<"G4ClassicalRK4"<<G4endl; break;
+     case 5: pStepper = new G4HelixExplicitEuler( pE ); if (fVerbose>0)G4cout<<"G4HelixExplicitEuler"<<G4endl; break;
+     case 6: pStepper = new G4HelixImplicitEuler( pE ); if (fVerbose>0)G4cout<<"G4HelixImplicitEuler"<<G4endl; break;
+     case 7: pStepper = new G4HelixSimpleRunge( pE ); if (fVerbose>0)G4cout<<"G4HelixSimpleRunge"<<G4endl; break;
+     case 8: pStepper = new G4CashKarpRKF45( pE );    if (fVerbose>0)G4cout<<"G4CashKarpRKF45"<<G4endl; break;
+     case 9: pStepper = new G4ExactHelixStepper( pE );  if (fVerbose>0)G4cout<<"G4ExactHelixStepper"<<G4endl;   break;
+     case 10: pStepper = new G4RKG3_Stepper( pE );  if (fVerbose>0)G4cout<<"G4RKG3_Stepper"<<G4endl;   break;
+      
+      default: pStepper = new G4ClassicalRK4( pE );G4cout<<"Default G4ClassicalRK4"<<G4endl; break;
+      
+    }
+  return pStepper;
 }

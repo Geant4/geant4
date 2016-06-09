@@ -16,9 +16,7 @@ c= test12.AClass()
 c.ival=30
 
 v= test12.AVector()
-v.push_back(a)
-v.push_back(b)
-v.push_back(c)
+v[:]= [a, b, c]
 
 print "*** size of vector= ", len(v)
 x=v[0]

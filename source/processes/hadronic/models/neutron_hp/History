@@ -14,7 +14,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 Jul 2007 Dennis Wright (hadr-hpn-V09-00-00)
+---------------------------------------------
+- G4NeutronHPThermalScattering.cc : remove duplicate declaration of dirName
+  (already a class member).
+
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-07)
+--------------------------------------------
+- Changed logic of data selection when G4NEUTRONHP_SKIP_MISSING_ISOTOPES turn on
+  natural abandance data are allowed. 
+	G4NeutronHPDataUsed.hh
+	G4NeutronHPNames.cc
+
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-06)
+--------------------------------------------
+- fixes for memory leaking 
+	G4NeutronHPFissionData.cc
+	G4NeutronHPThermalScattering.cc
+	G4NeutronHPThermalScatteringData.hh
+	G4NeutronHPThermalScatteringData.cc
+
 22 Jun 2007 Gabriele Cosmo (hadr-hpn-V08-03-05)
+-----------------------------------------------
 - Replaced following environment variables:
   o NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS
     with: G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION
@@ -28,12 +49,14 @@ code and to keep track of all tags.
   pointer when performing deletion.
 
 18 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-04)
+--------------------------------------------
 - fixes for memory leaking 
 	G4NeutronHPPartial.hh
 	G4NeutronHPPhotonDist.hh
 	G4NeutronHPPhotonDist.cc
 
 08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-03)
+--------------------------------------------
 - fixes for memory leaking 
 	G4NeutronHPAngular.hh G4NeutronHPChannel.hh G4NeutronHPPhotonDist.hh
         G4NeutronHPCaptureData.cc G4NeutronHPElasticData.cc G4NeutronHPInelasticData.cc 
@@ -41,6 +64,7 @@ code and to keep track of all tags.
 	
 
 08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-02)
+--------------------------------------------
 - Bug fixes for valgrind & delete Unnecessary comment out from
 	G4NeutronHPFissionERelease.hh
 

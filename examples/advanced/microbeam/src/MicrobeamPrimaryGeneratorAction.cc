@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPrimaryGeneratorAction.cc,v 1.6 2006/06/29 16:05:35 gunter Exp $
+// $Id: MicrobeamPrimaryGeneratorAction.cc,v 1.7 2007/08/27 15:51:54 gcosmo Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,7 +83,7 @@ void MicrobeamPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      } 
   while(theta>1.1e-6*rad);
 
-  phi=2*M_PI*G4UniformRand()*rad;
+  phi=CLHEP::twopi*G4UniformRand()*rad;
 
   xMom0=std::sin(theta)*std::cos(phi);
   yMom0=std::sin(theta)*std::sin(phi);
@@ -100,7 +100,7 @@ void MicrobeamPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4cout 
   << "-> Event # " << numEvent 
   << " : THETA from Z axis (mrad) = " << theta*1000 
-  << " -- PHI (deg) = " << phi*180/M_PI 
+  << " -- PHI (deg) = " << phi*180/CLHEP::pi 
   << " -- x0 (um) = " << x0/micrometer 
   << " -- y0 (um) = " << y0/micrometer 
   << " -- z0 (m) = " << z0/m 

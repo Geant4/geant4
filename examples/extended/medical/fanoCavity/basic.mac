@@ -1,4 +1,4 @@
-# $Id: basic.mac,v 1.7 2007/03/19 13:08:41 maire Exp $
+# $Id: basic.mac,v 1.8 2007/06/27 13:47:25 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
@@ -13,4 +13,4 @@
 #
 /testem/event/printModulo 20000
 #
-###/run/beamOn 200000
+/run/beamOn 200000

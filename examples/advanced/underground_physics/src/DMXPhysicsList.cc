@@ -187,6 +187,7 @@ void DMXPhysicsList::ConstructProcess()
 // Transportation ///////////////////////////////////////////////////////////
 #include "DMXMaxTimeCuts.hh"
 #include "DMXMinEkineCuts.hh"
+#include "G4StepLimiter.hh"
 
 void DMXPhysicsList::AddTransportation() {
   
@@ -199,9 +200,13 @@ void DMXPhysicsList::AddTransportation() {
     G4String particleName = particle->GetParticleName();
     // time cuts for ONLY neutrons:
     if(particleName == "neutron") 
-    pmanager->AddDiscreteProcess(new DMXMaxTimeCuts());
+      pmanager->AddDiscreteProcess(new DMXMaxTimeCuts());
     // Energy cuts to kill charged (embedded in method) particles:
     pmanager->AddDiscreteProcess(new DMXMinEkineCuts());
+
+    // Step limit applied to all particles:
+    pmanager->AddProcess(new G4StepLimiter,       -1,-1,1);
+
   }		      
 }
 
@@ -240,7 +245,7 @@ void DMXPhysicsList::AddTransportation() {
 #include "G4MuonMinusCaptureAtRest.hh"
 
 //OTHERS:
-//#include "G4hIonisation.hh" // standard hadron ionisation
+#include "G4hIonisation.hh" // standard hadron ionisation
 
 //em process options to allow msc step-limitation to be switched off
 #include "G4EmProcessOptions.hh"

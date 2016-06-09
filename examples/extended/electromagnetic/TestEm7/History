@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2007/06/22 12:44:42 maire Exp $
+$Id: History,v 1.51 2007/07/26 14:13:48 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-07-07 mma (testem7-V09-00-00)
+- update README for physicsList names
      
 22-06-07 mma (testem7-V08-03-02)
 - cosmetic in TestEm7.cc

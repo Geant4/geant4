@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.hh,v 1.2 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VPolarizedCrossSection.hh,v 1.3 2007/07/10 09:36:39 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // File name:     G4VPolarizedCrossSection
 //
@@ -67,13 +67,13 @@ public:
   virtual G4StokesVector GetPol3();
 
   // return appropriate distribute polarisation states;
-  void DicePolarization();
-  G4StokesVector DicedPol2();
-  G4StokesVector DicedPol3();
+//  void DicePolarization();
+//   G4StokesVector DicedPol2();
+//   G4StokesVector DicedPol3();
 protected:
-//   G4double costheta;
-  G4StokesVector pol0, pol1;
-  G4StokesVector pol2, pol3;
+//   G4double costheta; 
+//  G4StokesVector pol0, pol1;
+//   G4StokesVector pol2, pol3;
 };
 
 

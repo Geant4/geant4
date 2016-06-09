@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2007/06/12 12:04:15 maire Exp $
+$Id: History,v 1.12 2007/07/05 10:45:47 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05-07-07 mma (fano-V09-00-01)
+- fano-00 retaged in fano-01
+     
+27-06-07 mma (fano-V09-00-00)
+- emOptions : fUseDistanceToBoundary
+- cosmetic in fanoCavity.cc
      
 12-06-07 mma (fano-V08-03-01)
 - emOptions : SetLinearLossLimit(1.e-6); SetSkin(2.);

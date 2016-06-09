@@ -1,4 +1,4 @@
-$Id: History,v 1.290 2007/06/20 12:43:54 vnivanch Exp $
+$Id: History,v 1.291 2007/07/11 17:55:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 July 07: V.Ivant (emutils-V09-00-00)
+- G4VEmModel - fixed SelectRandomAtom method (last element of compound
+  was never selected - instead first was taken)
 
 20 June 07: V.Ivant (emutils-V08-03-06)
 - G4VEnergyLossProcess add initialisation of preStepKinEnergy before 

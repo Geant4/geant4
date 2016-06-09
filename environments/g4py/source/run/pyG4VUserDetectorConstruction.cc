@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VUserDetectorConstruction.cc,v 1.5 2006/06/29 15:35:27 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4VUserDetectorConstruction.cc,v 1.6 2007/07/10 07:09:51 kmura Exp $
+// $Name: geant4-09-00-patch-01 $
 // ====================================================================
 //   pyG4VUserDetectorConstruction.cc
 //
@@ -45,7 +45,7 @@ struct CB_G4VUserDetectorConstruction :
   G4VUserDetectorConstruction, wrapper<G4VUserDetectorConstruction> {
 
   G4VPhysicalVolume* Construct() {
-    get_override("Construct")();
+    return get_override("Construct")();
   }
 };
 

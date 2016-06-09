@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2007/05/18 07:33:48 gcosmo Exp $
+$Id: History,v 1.67 2007/07/16 08:07:29 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16/07/2007 : G. Cosmo          breps-V09-00-00
+- Added missing initialisations of kCarTolerance in alternative constructors
+  for G4BoundingBox3D, G4Curve, G4CurveRayIntersection, G4KnotVector.
+  Addressing problem report #959.
 
 18/05/2007 : G. Cosmo          breps-V08-03-01
 - Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.

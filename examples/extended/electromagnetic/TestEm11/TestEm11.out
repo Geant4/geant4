@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -74,12 +74,12 @@ Registered filter factories:
 /run/verbose 2
 #
 /testem/det/setMat G4_Si
-/testem/det/setSizeX  1 mm
+/testem/det/setSizeX 1 mm
 /testem/det/setSizeYZ 1 mm
 #
-/testem/phys/addPhysics  standard	# em physics
+/testem/phys/addPhysics standard 
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  penelope  	# em physics 
+###/testem/phys/addPhysics penelope # em physics
 #
 /run/initialize
 userDetector->Construct() start.
@@ -99,16 +99,16 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileType hbook
 /testem/histo/setFileName testem11
-/testem/histo/setHisto 1 100 0.    1. mm	#edep profile
+/testem/histo/setHisto 1 100 0. 1. mm 
 ----> SetHisto 1: Edep (MeV/mm) along absorber (mm);  100 bins from 0 mm to 1 mm
       stepMax = 10 um 
-/testem/histo/setHisto 2 102 0.  510. keV	#total Edep
+/testem/histo/setHisto 2 102 0. 510. keV 
 ----> SetHisto 2: total Energy deposited in absorber (keV);  102 bins from 0 keV to 510 keV
-/testem/histo/setHisto 3 100 0.    2. mm	#track length
+/testem/histo/setHisto 3 100 0. 2. mm 
 ----> SetHisto 3: true track length of the primary particle (mm);  100 bins from 0 mm to 2 mm
-/testem/histo/setHisto 4 100 0.  200. um	#step length
+/testem/histo/setHisto 4 100 0. 200. um 
 ----> SetHisto 4: true step size of the primary particle (um);  100 bins from 0 um to 200 um
-/testem/histo/setHisto 5 100 0.    1. mm	#proj range
+/testem/histo/setHisto 5 100 0. 1. mm 
 ----> SetHisto 5: projected range of the primary particle (mm);  100 bins from 0 mm to 1 mm
 #
 /testem/event/printModulo 10000
@@ -303,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=310.07s Real=547.62s Sys=15.53s
+  User=313.21s Real=588.9s Sys=16.44s
 
  ======================== run summary ======================
 

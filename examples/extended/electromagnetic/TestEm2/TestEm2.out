@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+ Geant4 version Name: geant4-09-00-patch-01-ref    (28-August-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -50,8 +50,8 @@
 /testem/det/setMat PbWO4
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
-/testem/run/acceptance  0.949 0.0082 3.0
-/testem/phys/addPhysics  standard
+/testem/run/acceptance 0.949 0.0082 3.0
+/testem/phys/addPhysics standard
 PhysicsList::AddPhysicsList: <standard>
 /testem/phys/setCuts 1.0 mm
 /run/initialize
@@ -240,24 +240,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=230.57s Real=232.74s Sys=0.1s
+  User=240.57s Real=254.49s Sys=0.07s
 
  SUMMARY 
 
- energy deposit :   94.09 % E0 +-    3.39 % E0
- charged traklen:  480.77 radl +-   17.09 radl
- neutral traklen: 4415.63 radl +-  238.27 radl
+ energy deposit :   94.66 % E0 +-    1.16 % E0
+ charged traklen:  478.38 radl +-    5.95 radl
+ neutral traklen: 4443.67 radl +-  122.78 radl
 
- 90.00 % confinement: radius = 3.23 radl  (2.88 cm )
+ 90.00 % confinement: radius = 3.10 radl  (2.77 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 945930242, 400601456
+ Current couple of seeds = 1583448758, 1480928536
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94094309  delEdep= -0.0080569076 nrms= -9.8254971
-Erms: 0.033906596  delErms= 0.025706596 nrms= 31.349508
-<<<<END>>>>   IS NOT ACCEPTED
+Edep: 0.94655506  delEdep= -0.002444939 nrms= -2.9816329
+Erms: 0.011557799  delErms= 0.0033577985 nrms= 4.0948763
+<<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

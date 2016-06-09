@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Tubs.cc,v 1.4 2006/06/29 15:32:45 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Tubs.cc,v 1.5 2007/07/12 10:01:53 kmura Exp $
+// $Name: geant4-09-00-patch-01 $
 // ====================================================================
 //   pyG4Tubs.cc
 //
@@ -34,6 +34,21 @@
 #include "G4Tubs.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Tubs {
+
+G4Tubs* CreateTubs(const G4String& name, G4double pRMin, G4double pRMax,
+                   G4double pDz, G4double pSPhi, G4double pDPhi )
+{
+  return new G4Tubs(name, pRMin, pRMax, pDz, pSPhi, pDPhi);
+}
+
+}
+
+using namespace pyG4Tubs;
 
 // ====================================================================
 // module definition
@@ -61,9 +76,12 @@ void export_G4Tubs()
     .def("GetDz",            &G4Tubs::GetDz)
     .def("GetSPhi",          &G4Tubs::GetSPhi)
     .def("GetDPhi",          &G4Tubs::GetDPhi)
-    .def("GetCubicVolume",   &G4Tubs::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateTubs", CreateTubs, return_value_policy<manage_new_object>());
+
 }
 

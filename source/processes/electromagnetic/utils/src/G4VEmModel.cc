@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.6 2006/06/29 19:55:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VEmModel.cc,v 1.7 2007/07/11 17:55:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //

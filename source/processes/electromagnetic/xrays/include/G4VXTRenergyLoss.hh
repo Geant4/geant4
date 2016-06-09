@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.18 2006/06/29 19:55:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VXTRenergyLoss.hh,v 1.22 2007/07/02 10:04:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@
 #include "G4ParticleChange.hh"
 
 
-
+class G4SandiaTable;
 class G4VParticleChange;
 class G4PhysicsFreeVector;
 
@@ -81,7 +81,7 @@ public:
                     G4double,G4double,G4int,
                     const G4String & processName = "XTRenergyLoss",
                     G4ProcessType type = fElectromagnetic);
-   virtual  ~G4XTRenergyLoss ();
+  virtual  ~G4XTRenergyLoss ();
 
   // These virtual has to be implemented in inherited particular TR radiators
  
@@ -230,12 +230,14 @@ protected:
 
   G4int fPlateNumber ;
   G4double fTotalDist ;
-  G4double** fPlatePhotoAbsCof ;
-  G4int      fPlateIntervalNumber ;
+  //  G4double** fPlatePhotoAbsCof ;
+  G4SandiaTable* fPlatePhotoAbsCof ;
+  //  G4int      fPlateIntervalNumber ;
   G4double   fPlateThick ;
  
-  G4double** fGasPhotoAbsCof ;
-  G4int      fGasIntervalNumber ;
+  // G4double** fGasPhotoAbsCof ;
+  G4SandiaTable* fGasPhotoAbsCof ;
+  // G4int      fGasIntervalNumber ;
   G4double   fGasThick ;     
   G4double fAlphaPlate, fAlphaGas ;
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2007/06/07 09:12:11 kmura Exp $
+$Id: History,v 1.30 2007/07/13 05:13:22 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-00-00  14 July Koichi Murakami
+ [g4py]
+  - bug fix
+  - update/add geometry staffs
+  - new example of TestEm0
 
 envs-V08-03-01  7 June Koichi Murakami
  [g4py]

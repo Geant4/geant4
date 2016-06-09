@@ -1,4 +1,4 @@
-$Id: 00README,v 1.6 2006/08/10 08:48:26 kmura Exp $
+$Id: 00README,v 1.7 2007/07/13 05:02:31 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -154,12 +154,12 @@ Notes:
 All users' libraries should be build in shared libaries.
 
 2) Development Environment:
-OS:             SuSE Linux 10.1 (x86-64)
-g++ :           4.1.0
-Python:         2.4.2
-CLHEP:          1.9.2.2 / 2.0.2.2
-BOOST-Python:   1.33.1
-ROOT:           5.10/00
+OS:             SuSE Linux 10.2 (x86-64)
+g++ :           4.1.2
+Python:         2.5
+CLHEP:          1.9.3.1 / 2.0.3.1
+BOOST-Python:   1.33.3
+ROOT:           5.16/00
 
 Have A Fun!!
 

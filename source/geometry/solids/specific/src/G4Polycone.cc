@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.37 2007/04/26 13:34:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4Polycone.cc,v 1.38 2007/07/19 08:18:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -313,7 +313,7 @@ void G4Polycone::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polycone::G4Polycone( __void__& a )
-  : G4VCSGfaceted(a), genericPcon(false),
+  : G4VCSGfaceted(a), genericPcon(false), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }

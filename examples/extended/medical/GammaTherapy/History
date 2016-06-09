@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2007/05/25 09:59:14 vnivanch Exp $
+$Id: History,v 1.25 2007/07/04 11:14:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-07-07  V.Ivant (gtherapy-V09-00-00)
+- Provide a possibility to change cuts between runs
 
 25-05-07  V.Ivant (gtherapy-V08-03-02)
 - Fixed singleton GetPointer method 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.46 2007/05/22 17:31:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-00 $
+// $Id: G4VEmModel.hh,v 1.47 2007/07/11 17:55:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -335,9 +335,9 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
 				               G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  currentElement = (*theElementVector)[0];
-  G4int nelm = material->GetNumberOfElements() - 1;
-  if (nelm > 0) {
+  G4int nelm = material->GetNumberOfElements();
+  currentElement = (*theElementVector)[nelm-1];
+  if (nelm > 1) {
     G4double x = G4UniformRand()*
                  CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<nelm; i++) {

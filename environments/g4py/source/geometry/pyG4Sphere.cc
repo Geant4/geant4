@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Sphere.cc,v 1.4 2006/06/29 15:32:27 gunter Exp $
-// $Name: geant4-09-00 $
+// $Id: pyG4Sphere.cc,v 1.5 2007/07/13 04:57:50 kmura Exp $
+// $Name: geant4-09-00-patch-01 $
 // ====================================================================
 //   pyG4Sphere.cc
 //
@@ -34,6 +34,23 @@
 #include "G4Sphere.hh"
 
 using namespace boost::python;
+
+// ====================================================================
+// wrappers
+// ====================================================================
+namespace pyG4Sphere {
+
+G4Sphere* CreateSphere(const G4String& name, 
+                       G4double pRmin, G4double pRmax,
+                       G4double pSPhi, G4double pDPhi,
+                       G4double pSTheta, G4double pDTheta)
+{
+  return new G4Sphere(name, pRmin, pRmax, pSPhi, pDPhi, pSTheta, pDTheta);
+}
+
+}
+
+using namespace pyG4Sphere;
 
 // ====================================================================
 // module definition
@@ -58,8 +75,11 @@ void export_G4Sphere()
     .def("SetDeltaPhiAngle",    &G4Sphere::SetDeltaPhiAngle)
     .def("SetStartThetaAngle",  &G4Sphere::SetStartThetaAngle)
     .def("SetDeltaThetaAngle",  &G4Sphere::SetDeltaThetaAngle)
-    .def("GetCubicVolume",      &G4Sphere::GetCubicVolume)
     // operators
     .def(self_ns::str(self))
     ;
+
+    // Create solid
+    def("CreateSphere", CreateSphere, return_value_policy<manage_new_object>());
+
 }

@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.18 2006/10/05 14:22:06 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.19 2007/07/18 14:21:15 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -303,7 +303,6 @@ int main (int argc, char** argv) {
 
 #if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
       ptr=strchr(ntg4tmp1,':');
-      if ( ptr ) *(ptr+1)='\0';
 
       while ( ptr=strchr(buffer,'\\') ) *ptr='/';
  
