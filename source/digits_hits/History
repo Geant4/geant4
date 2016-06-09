@@ -1,4 +1,4 @@
-$Id: History,v 1.36.2.2 2009/08/11 13:47:53 gcosmo Exp $
+$Id: History,v 1.36.2.4 2010/01/26 08:26:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2009, M.Asai (digits_hits-V09-01-05)
+- Added missing virtual keyword for qualification of CheckROVolume() and
+  FindROTouchable() methods in G4VReadOutGeometry.
+
+Nov 13, 2009, M.Asai
+- Fixes for the way of counting the flux and current passing through
+  a curved surface (cylinder and sphere surfaces).
 
 May 06, 2009, M.Asai (digits_hits-V09-01-04)
 - Replaced usage of non-Standard calls to 'sprintf' with ostringstream,

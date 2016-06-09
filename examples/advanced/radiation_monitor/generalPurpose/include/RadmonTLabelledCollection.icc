@@ -29,9 +29,9 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonTLabelledCollection.icc,v 1.6.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-02 $
+// Tag:           $Name: geant4-09-02-patch-03 $
 // Id:            $Id: RadmonTLabelledCollection.icc,v 1.6.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-02 $
+// Tag:           $Name: geant4-09-02-patch-03 $
 //
 
 #ifndef   RADMONTLABELLEDCOLLECTION_HH

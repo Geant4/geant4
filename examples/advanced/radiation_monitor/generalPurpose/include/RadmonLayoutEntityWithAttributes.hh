@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.3.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
-// Tag:           $Name: geant4-09-02-patch-02 $
+// Tag:           $Name: geant4-09-02-patch-03 $
 //
 // Description:   Provides attributes to other detector classes
 //

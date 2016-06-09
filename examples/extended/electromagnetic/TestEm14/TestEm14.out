@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -251,7 +251,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Energy thresholds :  gamma 2.94056 keV    e- 351.877 keV    e+ 342.545 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -292,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.96s Real=0.97s Sys=0.01s
+  User=1.1s Real=1.1s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -363,23 +363,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.1s Real=1s Sys=0s
+  User=1.1s Real=1.1s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 60245	eIoni = 39755
+ Process calls frequency --->	eBrem = 60579	eIoni = 39421
 
- MeanFreePath:	1.6208 cm  +- 1.6143 cm 	massic: 1.6208 g/cm2 
- CrossSection:	0.617 cm^-1 			massic: 0.617 cm2/g
+ MeanFreePath:	1.6318 cm  +- 1.6268 cm 	massic: 1.6318 g/cm2 
+ CrossSection:	0.61283 cm^-1 			massic: 0.61283 cm2/g
 
- mean energy of charged secondaries: 737.62 keV	mass_energy_transfer coef: 0.0045511 cm2/g
+ mean energy of charged secondaries: 738.41 keV	mass_energy_transfer coef: 0.0045252 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	eBrem= 0.37235 cm2/g	eIoni= 0.24497 cm2/g	total= 0.61732 cm2/g
+	eBrem= 0.3722 cm2/g	eIoni= 0.24166 cm2/g	total= 0.61386 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 217534387, 1863082931
+ Current couple of seeds = 1924985081, 747323284
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

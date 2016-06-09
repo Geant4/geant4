@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VisManager.cc,v 1.115.2.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.

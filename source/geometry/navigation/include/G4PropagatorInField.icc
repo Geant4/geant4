@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.13.2.1 2009/08/11 13:31:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4PropagatorInField.icc,v 1.13.2.2 2010/01/26 09:10:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -109,6 +109,7 @@ void     G4PropagatorInField::SetMaxLoopCount( G4int new_max )
   fMax_loop_count = new_max;
 }
 
+// #if 0
 inline
 G4double G4PropagatorInField::GetDeltaIntersection() const
 {
@@ -124,14 +125,14 @@ G4double G4PropagatorInField::GetDeltaOneStep() const
 inline
 void
 G4PropagatorInField::SetAccuraciesWithDeltaOneStep( G4double valDeltaOneStep )
-{ 
+{
   fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
 }
 
 inline
 void G4PropagatorInField::SetDeltaOneStep( G4double valDeltaOneStep )
-{ 
-  fDetectorFieldMgr->SetDeltaOneStep(valDeltaOneStep); 
+{
+  fDetectorFieldMgr->SetDeltaOneStep(valDeltaOneStep);
 }
 
 inline
@@ -139,6 +140,7 @@ void G4PropagatorInField::SetDeltaIntersection( G4double valDeltaIntersection )
 {
   fDetectorFieldMgr->SetDeltaIntersection(valDeltaIntersection);
 }
+// #endif 
 
 inline
 G4int G4PropagatorInField::GetVerboseLevel() const
@@ -235,6 +237,12 @@ G4int G4PropagatorInField::GetThresholdNoZeroSteps( G4int i )
    return t;
 }
 
+inline G4double  G4PropagatorInField::GetZeroStepThreshold(){ return fZeroStepThreshold; }
+inline void      G4PropagatorInField::SetZeroStepThreshold( G4double newLength )
+{ 
+  fZeroStepThreshold= newLength;
+}
+
 inline
 void G4PropagatorInField::SetDetectorFieldManager(G4FieldManager* newDetectorFieldManager)
 {
@@ -299,3 +307,4 @@ G4bool G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
                           fPreviousSafety,fPreviousSftOrigin,
                           LinearStepLength,IntersectionPoint);
 }
+

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXViewer.cc,v 1.42.6.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // Andrew Walkden  7th February 1997

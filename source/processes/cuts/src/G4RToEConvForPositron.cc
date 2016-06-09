@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForPositron.cc,v 1.5.4.1 2009/08/11 12:45:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4RToEConvForPositron.cc,v 1.5.4.2 2010/01/26 13:56:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // --------------------------------------------------------------
@@ -121,53 +121,3 @@ G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
 }
 
 
-
-void G4RToEConvForPositron::BuildRangeVector(const G4Material* aMaterial,
-					     G4double       maxEnergy,
-					     G4double       aMass,
-					     G4PhysicsLogVector* rangeVector)
-{
-  //  create range vector for a material
-  const G4double tlim = 10.*keV;
-  const G4int maxnbint = 100;
-
-  const G4ElementVector* elementVector = aMaterial->GetElementVector();
-  const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  G4int NumEl = aMaterial->GetNumberOfElements();
-
-  // calculate parameters of the low energy part first
-  size_t i;
-  G4double loss=0.;
-  for (i=0; i<size_t(NumEl); i++) {
-    G4bool isOut;
-    G4int IndEl = (*elementVector)[i]->GetIndex();
-    loss += atomicNumDensityVector[i]*
-           (*theLossTable)[IndEl]->GetValue(tlim,isOut);
-  }
-  G4double taulim = tlim/aMass;
-  G4double clim = std::sqrt(taulim)*loss;
-  G4double taumax = maxEnergy/aMass;
-
-  // now the range vector can be filled
-  for ( i=0; i<size_t(TotBin); i++) {
-    G4double LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-    G4double tau = LowEdgeEnergy/aMass;
-
-    if ( tau <= taulim ) {
-      G4double Value = 2.*aMass*tau*std::sqrt(tau)/(3.*clim);
-      rangeVector->PutValue(i,Value);
-    } else {
-      G4double rangelim = 2.*aMass*taulim*std::sqrt(taulim)/(3.*clim);
-      G4double ltaulow = std::log(taulim);
-      G4double ltauhigh = std::log(tau);
-      G4double ltaumax = std::log(taumax);
-      G4int    nbin = G4int(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
-      if( nbin < 1 ) nbin = 1;
-      G4double Value = RangeLogSimpson( NumEl, elementVector,
-					atomicNumDensityVector, aMass,
-					ltaulow,       ltauhigh, nbin) 
-	             + rangelim;
-      rangeVector->PutValue(i,Value);
-    }
-  }
-} 

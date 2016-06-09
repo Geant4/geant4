@@ -14,8 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 December 2009 Vladimir Ivanchenko (hadr-man-V09-01-12)
+--------------------------------------------------------
+- G4HadronicProcessStore - new protection to the Clean method
+
 25 February 2009 Vladimir Ivanchenko (hadr-man-V09-01-11)
-------------------------------------
+---------------------------------------------------------
 - G4HadronicProcessStore - added protection to the Clean method 
 
 14 February 2009 Vladimir Ivanchenko

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.4 2008/11/14 18:26:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIntersectionLocator.hh,v 1.4.2.1 2010/01/26 09:10:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // Class G4VIntersectionLocator 
@@ -94,25 +94,36 @@ class G4VIntersectionLocator
        // Intersect the chord from StartPointA to EndPointB and return
        // whether an intersection occurred. NOTE: changes the Safety!
 
+     inline void    SetEpsilonStepFor( G4double EpsilonStep );
+     inline void    SetDeltaIntersectionFor( G4double deltaIntersection );
+     inline void    SetNavigatorFor( G4Navigator *fNavigator );
+     inline void    SetChordFinderFor(G4ChordFinder *fCFinder );
+       // These parameters must be set at each step, in case they were changed
+
+       // Note: This simple approach ensures that all scenarios are considered. 
+       //   [ Future refinement may identify which are invariant during a 
+       //      track, run or event ]
+
+    inline void     SetVerboseFor(G4int fVerbose);
+    inline G4int    GetVerboseFor();
+       // Controling verbosity enables checking of the locating of intersections
+
   public:  // without description
+    // Additional inline Set/Get methods for parameters, dependent objects
 
-    // inline Set/Get methods used for IntersctionLocator
+    inline G4double       GetDeltaIntersectionFor();
+    inline G4double       GetEpsilonStepFor();
+    inline G4Navigator*   GetNavigatorFor();
+    inline G4ChordFinder* GetChordFinderFor();
 
-    inline G4double  GetDeltaIntersectionFor();
-    inline G4double  GetEpsilonStepFor();
-    inline G4Navigator*  GetNavigatorFor();
-    inline G4ChordFinder*  GetChordFinderFor();
-    inline G4int  GetVerboseFor();
+    inline void   SetSafetyParametersFor(G4bool UseSafety );
 
-    inline void SetEpsilonStepFor( G4double EpsilonStep );
-    inline void SetDeltaIntersectionFor( G4double deltaIntersection );
-    inline void SetNavigatorFor( G4Navigator *fNavigator );
-    inline void SetChordFinderFor(G4ChordFinder *fCFinder );
-    inline void SetSafetyParametersFor(G4bool UseSafety );
-    inline void SetVerboseFor(G4int fVerbose);
-
-    inline void AddAdjustementOfFoundIntersection(G4bool UseCorrection);
+    inline void   AddAdjustementOfFoundIntersection(G4bool UseCorrection);
     inline G4bool GetAdjustementOfFoundIntersection();
+      // Methods to be made Obsolete - replaced by methods below
+    inline void   AdjustIntersections(G4bool UseCorrection); 
+    inline G4bool AreIntersectionsAdjusted(){ return fUseNormalCorrection; }  
+      // Change adjustment flag  ( New Interface ) 
 
   protected:  // with description
 
@@ -143,17 +154,19 @@ class G4VIntersectionLocator
   
   protected:
 
-    G4double kCarTolerance;
-    G4int    fVerboseLevel;
-      // For verbose purposes
-    G4bool   fUseNormalCorrection;
+    G4double kCarTolerance;         // Constant
 
+    G4int    fVerboseLevel;          // For debugging
+    G4bool   fUseNormalCorrection;   // Configuration parameter
+
+    G4Navigator   *fiNavigator;
+      // Parameters set by G4PropagatorInField  ( when ? ) 
+
+    G4ChordFinder *fiChordFinder;
     G4double       fiEpsilonStep;
     G4double       fiDeltaIntersection;
-    G4Navigator   *fiNavigator;
-    G4ChordFinder *fiChordFinder;
     G4bool         fiUseSafety;
-      // For passing the parameters from G4PropagatorInField
+      // Parameters set at each physical step by calling method - G4PropagatorInField
 
     G4Navigator *fHelpingNavigator;
       // Helper for location

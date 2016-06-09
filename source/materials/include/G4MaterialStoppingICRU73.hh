@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MaterialStoppingICRU73.hh,v 1.3.2.1 2009/03/03 13:30:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 
 #ifndef G4MaterialStoppingICRU73_h
 #define G4MaterialStoppingICRU73_h 1

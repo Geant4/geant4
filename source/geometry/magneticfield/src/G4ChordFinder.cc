@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ChordFinder.cc,v 1.51.2.1 2009/08/11 13:44:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 

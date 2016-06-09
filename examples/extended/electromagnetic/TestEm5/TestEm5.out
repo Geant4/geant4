@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -301,7 +301,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 2.13 mm     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 9.93829 keV    e- 20.7856 keV    e+ 20.268 keV
+ Energy thresholds :  gamma 9.92375 keV    e- 21.4886 keV    e+ 20.8954 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -342,30 +342,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.28s Real=6.52s Sys=2.24s
+  User=4.22s Real=6.46s Sys=2.23s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.274 keV +- 16.76 eV 
+ Total energy deposit in absorber per event = 6.287 keV +- 16.85 eV 
 
- -----> Mean dE/dx = 3.137 MeV/cm	(1.346 MeV*cm2/g)
+ -----> Mean dE/dx = 3.144 MeV/cm	(1.349 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 2.936 MeV/cm	(1.26 MeV*cm2/g)
+   restricted dEdx = 2.942 MeV/cm	(1.263 MeV*cm2/g)
    full dEdx       = 4.705 MeV/cm	(2.019 MeV*cm2/g)
 
- Leakage :  primary = 5 GeV +- 656.5 eV    secondaries = 2.584 keV +- 655.9 eV 
+ Leakage :  primary = 5 GeV +- 236.7 eV    secondaries = 1.866 keV +- 235 eV 
  Energy balance :  edep + eleak = 5 GeV
 
- Total track length (charged) in absorber per event = 20.26 um  +- 7.844 nm 
- Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
+ Total track length (charged) in absorber per event = 20.25 um  +- 7.685 nm 
+ Total track length (neutral) in absorber per event = 7.993e+04 fm  +- 7.993e+04 fm 
 
- Number of steps (charged) in absorber per event = 1.174 +- 8.857e-06
- Number of steps (neutral) in absorber per event = 0 +- 0
+ Number of steps (charged) in absorber per event = 1.172 +- 8.767e-06
+ Number of steps (neutral) in absorber per event = 1e-05 +- 8.767e-06
 
- Number of secondaries per event : Gammas = 0;   electrons = 0.0173;   positrons = 0
+ Number of secondaries per event : Gammas = 1e-05;   electrons = 0.01663;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -374,13 +374,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02405 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02407 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.873 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.925 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1842548953, 1977856001
+ Current couple of seeds = 295720797, 646065333
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

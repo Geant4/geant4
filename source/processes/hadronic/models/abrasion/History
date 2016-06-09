@@ -1,0 +1,18 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/abrasion directory
+        --------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+09-Dec-2009, Pete Truscott,                 (had-abrasion-V09-01-00)
+- abrasion problems with sqrt(-ve) should be fixed and the code is
+  more robust to potential while-loop problems.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.20.2.1 2009/08/11 08:27:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4GDMLReadDefine.cc,v 1.20.2.2 2010/01/26 13:39:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -373,6 +373,7 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
    }
 
    quantityMap[name] = value*unit;
+   eval.DefineConstant(name,value*unit);
 }
 
 void

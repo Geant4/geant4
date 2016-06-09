@@ -1,4 +1,4 @@
-$Id: History,v 1.155.2.1 2009/08/11 09:24:31 gcosmo Exp $
+$Id: History,v 1.155.2.2 2010/01/26 13:26:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 6th, 2009       G.Cosmo - geomvol-V09-01-05
+- Moved inline constructors to source for G4TouchableHistory, to avoid problems
+  of memory alignment in allocation.
+
+Nov 3rd, 2009       G.Cosmo
+- Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
+  Should reduce the number of direct calls to malloc and memory fragmentation.
+  Measured an average improvement of 3-5% in CPU speed, and same memory
+  footprint.
+
+Sep 22nd, 2009      G.Cosmo
+- Added missing implementation for composing G4AssemblyVolume constructor.
+
+Sep 21st, 2009      G.Cosmo
+- Fix in G4PVParameterised::CheckOverlaps() to not modify daughter volume
+  transformation matrix for application to points in the daughter's frame.
+  Adopt Inverse() instead of Invert() in call to G4AffineTransform.
+  Addresses problem report #1078.
 
 Aug 3rd, 2009       G.Cosmo - geomvol-V09-01-04
 - Get rid of unnecessary call to Reset() in G4NavigationHistory destructor.

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LogicalSurface.hh,v 1.10.6.1 2009/08/11 13:36:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface

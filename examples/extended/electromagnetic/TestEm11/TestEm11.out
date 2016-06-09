@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -376,7 +376,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 540.718 keV    e+ 521.113 keV
+ Energy thresholds :  gamma 6.95018 keV    e- 548.291 keV    e+ 526.624 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -403,7 +403,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=12.64s Real=13.06s Sys=0.43s
+  User=12.39s Real=12.85s Sys=0.46s
 
  ======================== run summary ======================
 
@@ -411,20 +411,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 444.607 keV +- 108.535 keV
+ Total Energy deposited        = 444.458 keV +- 109.035 keV
 
- Track length of primary track = 868.715 um  +- 194.872 um 
+ Track length of primary track = 868.313 um  +- 196.904 um 
  Range from EmCalculator       = 938.446 um  (from full dE/dx)
 
- Projected range               = 311.192 um  +- 203.930 um 
+ Projected range               = 311.924 um  +- 203.294 um 
 
- Nb of steps of primary track  = 87.39 +- 19.47	 Step size= 9.932 um  +- 91.138 nm 
+ Nb of steps of primary track  = 87.35 +- 19.68	 Step size= 9.932 um  +- 84.350 nm 
 
- absorbed = 76.92 %   transmit = 4.97 %   reflected = 18.11 %
+ absorbed = 77.11 %   transmit = 5.10 %   reflected = 17.79 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515728334, 203590976
+ Current couple of seeds = 2053840150, 1880285425
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

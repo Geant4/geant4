@@ -1,4 +1,4 @@
-$Id: History,v 1.22.2.2 2009/08/11 12:46:07 gcosmo Exp $
+$Id: History,v 1.22.2.3 2010/01/26 13:56:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep. 14th, 2009  -  H.Kurashige (procuts-V09-01-03) 
+- Added G4ProductionCutTable::ResetConverters()
+   to clear loss tables and range vectors
+
+Sep. 12th, 2009  -  H.Kurashige
+- Modify G4VRangeToEnergyConverter::ConvertCutToKineticEnergy
+   to improve performance
+
+Sep. 11th, 2009  -  H.Kurashige
+- Modify BuildRangeVector where integration is perfomed in this method
+  (i.e. not using RangeXXSimpson methods)
+- G4VRangeToEnergyConverter::BuildRangeVector is for e+/e- 
+- G4VRangeToEnergyConverter::TotBin is changed to constant
+  (i.e. same for all converters)
+- Remove RToEConverter for neutron, anti-protprtton, and anti-neutron
+
+Sep. 10th, 2009  -  H.Kurashige
+- Add G4VRangeToEnergyConverter::MaxEnergyCut
+   ( 10 GeV is set in default)
+- Add G4VRangeToEnergyConverter::fRangeVectorStore 
+   to ensure that RangeVector is created only one for each material
+- Set G4VRangeToEnergyConverter::TotBin to 100
+   ( 200 for previous versions) 
 
 July 29, 2009  -  H.Kurashige (procuts-V09-01-02) 
 - Added missing implementation of G4VRangeToEnergyConverter::GetParticleType().

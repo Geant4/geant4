@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.27.2.1 2009/03/03 11:21:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4Navigator.hh,v 1.27.2.2 2010/01/26 09:10:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // class G4Navigator
@@ -236,10 +236,11 @@ class G4Navigator
   inline G4bool ExitedMotherVolume() const;
     // Verify if the step has exited the mother volume.
 
-  inline void  CheckMode(G4bool mode);
+  inline void   CheckMode(G4bool mode);
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
+  inline G4bool IsCheckModeActive() { return fCheck; } 
 
   void PrintState() const;
     // Print the internal state of the Navigator (for debugging).

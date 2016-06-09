@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -345,7 +345,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Energy thresholds :  gamma 6.90363 keV    e- 598.345 keV    e+ 570.85 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -368,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.77s Real=7.81s Sys=0.05s
+  User=7.6s Real=7.65s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -376,29 +376,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.809 MeV
+ total energy deposit: 99.811 MeV
 
- nb tracks/event   neutral:     27.812   charged:     149.78
- nb  steps/event   neutral:     140.97   charged:     479.86
+ nb tracks/event   neutral:     27.598   charged:     149.39
+ nb  steps/event   neutral:     140.54   charged:     478.86
 
  nb of process calls per event: 
             msc       eBrem       eIoni        phot       compt        conv     annihilTransportation
-         150.38      25.189      302.85      25.422      113.15       1.428      1.4285      0.9695
+         149.94      25.043      302.46      25.214      112.94      1.4095      1.4095       0.983
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.166 cm    rms = 3.8689 cm 
- proj Range = 9.6994 cm    rms = 3.5848 cm 
- proj/true  = 0.86868
- transverse dispersion at end = 1.6748 cm 
-      mass true Range from simulation = 30.147 g/cm2 
+ true Range = 11.055 cm    rms = 3.8762 cm 
+ proj Range = 9.5867 cm    rms = 3.5781 cm 
+ proj/true  = 0.86717
+ transverse dispersion at end = 1.6588 cm 
+      mass true Range from simulation = 29.849 g/cm2 
        from PhysicsTable (csda range) = 31.825 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 396477430, 588271649
+ Current couple of seeds = 1613224983, 2145392365
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -418,7 +418,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 990 eV     e- 33.887552 keV    e+ 33.472938 keV
+ Energy thresholds :  gamma 990 eV     e- 34.172517 keV    e+ 33.943645 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -428,7 +428,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 396477430, 588271649
+ Current couple of seeds = 1613224983, 2145392365
 ----------------------------------------
 Start Run processing.
 
@@ -436,7 +436,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=14.34s Real=14.4s Sys=0.07s
+  User=14.01s Real=14.04s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -444,29 +444,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.823 MeV
+ total energy deposit: 99.776 MeV
 
- nb tracks/event   neutral:     34.919   charged:      296.8
- nb  steps/event   neutral:     144.78   charged:      913.9
+ nb tracks/event   neutral:     34.968   charged:     296.26
+ nb  steps/event   neutral:     146.01   charged:     912.18
 
  nb of process calls per event: 
-          eIoni       eBrem         msc       compt        phot        conv     annihilTransportation
-         587.48      33.136      291.89      109.86      32.597       1.381       1.381      0.9545
+          eIoni       eBrem         msc       comptTransportation        conv     annihil        phot
+         586.34      33.069      291.35      111.05      0.9805       1.401       1.401      32.605
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.19 cm    rms = 3.759 cm 
- proj Range = 9.6992 cm    rms = 3.5171 cm 
- proj/true  = 0.8668
- transverse dispersion at end = 1.703 cm 
-      mass true Range from simulation = 30.212 g/cm2 
+ true Range = 11.175 cm    rms = 3.8565 cm 
+ proj Range = 9.7059 cm    rms = 3.5607 cm 
+ proj/true  = 0.86853
+ transverse dispersion at end = 1.741 cm 
+      mass true Range from simulation = 30.173 g/cm2 
        from PhysicsTable (csda range) = 31.825 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1906073740, 289456673
+ Current couple of seeds = 453034775, 328919682
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

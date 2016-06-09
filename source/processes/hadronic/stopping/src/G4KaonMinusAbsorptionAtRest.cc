@@ -189,7 +189,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   
   for ( i = 0; i<nAbsorptionProducts; i++)
     {
-      pProducts = pProducts + (*absorptionProducts)[i]->GetMomentum();
+      pProducts += (*absorptionProducts)[i]->GetMomentum();
       productEnergy += (*absorptionProducts)[i]->GetKineticEnergy();
     }
 
@@ -199,8 +199,6 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   G4double bDiff = G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(A),static_cast<G4int>(Z)) - 
     G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(newA), static_cast<G4int>(newZ));
 
-  G4double pNucleus = pProducts.mag();
-  
   G4StopDeexcitationAlgorithm* nucleusAlgorithm = new G4StopTheoDeexcitation();
   G4StopDeexcitation stopDeexcitation(nucleusAlgorithm);
 
@@ -213,7 +211,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
       G4cout << " -- KaonAtRest -- excitation = " 
 	     << energyDeposit 
 	     << ", pNucleus = "
-	     << pNucleus 
+	     << pProducts
 	     << ", A: "
 	     << A 
 	     << ", "
@@ -232,7 +230,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   }
   delete nucleus;    
 
-  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pProducts);
   
   unsigned int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->size();

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLWin32Viewer.cc,v 1.17.6.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific

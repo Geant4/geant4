@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.31.2.1 2009/08/11 13:36:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4SmartVoxelHeader.cc,v 1.31.2.2 2010/01/26 08:19:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -1037,6 +1037,9 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   //
   for (nNode=0; nNode<noNodes; nNode++)
   {
+    // Get rid of possible excess capacity in the internal node vector
+    //
+    ((*nodeList)[nNode])->Shrink();
     G4SmartVoxelProxy* pProxyNode = new G4SmartVoxelProxy((*nodeList)[nNode]);
     if (!pProxyNode)
     {

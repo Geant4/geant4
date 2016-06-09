@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.18.2.1 2009/08/11 12:45:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4ProductionCutsTable.cc,v 1.18.2.2 2010/01/26 13:56:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // --------------------------------------------------------------
@@ -49,6 +49,7 @@
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+#include "G4Timer.hh"
 
 #include "G4ios.hh"
 #include <iomanip>                
@@ -216,6 +217,10 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 
   // Update RangeEnergy cuts tables
   size_t idx = 0;
+  G4Timer timer;
+  if (verboseLevel>2) {
+    timer.Start();
+  }
   for(CoupleTableIterator cItr=coupleTable.begin();
       cItr!=coupleTable.end();cItr++){
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
@@ -234,6 +239,13 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
     }
     idx++;  
   }
+  if (verboseLevel>2) {
+    timer.Stop();
+    std::cout << "G4ProductionCutsTable::UpdateCoupleTable "
+              << "  elapsed time for calculation of  energy cuts " << G4endl;
+    std::cout << timer <<G4endl;
+  }
+
 
   // resize Range/Energy cuts double vectors if new couple is made
   if(newCoupleAppears){
@@ -289,7 +301,12 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
    
 }
 
-
+void G4ProductionCutsTable::ResetConverters()
+{
+  for(size_t i=0;i< NumberOfG4CutIndex;i++){
+    if (converters[i]!=0) converters[i]->Reset();
+  }
+}
 
 void G4ProductionCutsTable::SetEnergyRange(G4double lowedge, G4double highedge)
 {

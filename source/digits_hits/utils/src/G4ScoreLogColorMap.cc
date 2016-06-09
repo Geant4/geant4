@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoreLogColorMap.cc,v 1.2.2.1 2009/08/11 13:47:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 
 #include "G4ScoreLogColorMap.hh"

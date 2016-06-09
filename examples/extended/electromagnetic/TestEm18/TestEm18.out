@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -248,7 +248,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+ Energy thresholds :  gamma 2.94056 keV    e- 351.877 keV    e+ 342.545 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -289,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.7s Real=1.7s Sys=0s
+  User=1.91s Real=1.92s Sys=0s
 
  ======================== run summary ======================
 
@@ -297,19 +297,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5874  stepSize= 6.3025 mm 
+ trackLength= 1.0004 cm 	 nb of steps= 1.5843  stepSize= 6.3148 mm 
 
- d-rays  : eLoss/primary= 249 keV	  nb of d-rays= 0.23725  <Tkin>= 1.0495 MeV  Tmin= 347.14 keV  Tmax= 4.9425 MeV
+ d-rays  : eLoss/primary= 246.4 keV	  nb of d-rays= 0.23458  <Tkin>= 1.0504 MeV  Tmin= 351.89 keV  Tmax= 4.9512 MeV
 
- brems   : eLoss/primary= 170.94 keV	  nb of gammas= 0.30516  <Tkin>= 560.18 keV  Tmin= 2.9024 keV  Tmax= 9.7582 MeV
+ brems   : eLoss/primary= 173.4 keV	  nb of gammas= 0.30715  <Tkin>= 564.53 keV  Tmin= 2.9411 keV  Tmax= 9.7584 MeV
 
- deposit : eLoss/primary= 1.7342 MeV	 <dEcut > table= 1.735 MeV   ---> simul/reference= 0.99955
+ deposit : eLoss/primary= 1.7353 MeV	 <dEcut > table= 1.7361 MeV   ---> simul/reference= 0.99956
 
- total   : eLoss/primary= 2.1542 MeV	 <dEfull> table= 2.1645 MeV   ---> simul/reference= 0.99524
+ total   : eLoss/primary= 2.1551 MeV	 <dEfull> table= 2.1644 MeV   ---> simul/reference= 0.99571
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 324312302, 435775564
+ Current couple of seeds = 811425121, 1477752701
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

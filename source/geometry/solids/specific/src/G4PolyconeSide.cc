@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.19.2.1 2009/08/11 09:20:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4PolyconeSide.cc,v 1.19.2.2 2010/01/26 11:33:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -461,8 +461,7 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
 {
   if (p == G4ThreeVector(0.,0.,0.))  { return p; }
 
-  G4ThreeVector dFrom;
-  G4double dOut2;
+  G4double dFrom, dOut2;
   
   dFrom = DistanceAway( p, false, dOut2 );
   

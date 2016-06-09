@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.2.2.1 2009/03/03 14:03:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.2.2.2 2010/01/25 10:14:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // // G4PSCylinderSurfaceFlux
 #include "G4PSCylinderSurfaceFlux.hh"
@@ -143,8 +143,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
     if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
+    //   <kCarTolerance ){
+    G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_In;
     }
   }
@@ -155,8 +160,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
     if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())) 
+    // <kCarTolerance ){
+    G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_Out;
     }
   }

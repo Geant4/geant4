@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4RPGPionInelastic.cc,v 1.1.2.1 2009/08/11 12:57:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
  
 #include "G4RPGPionInelastic.hh"

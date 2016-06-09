@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -295,7 +295,7 @@ hPairProd:   for  pi-    SubType= 4
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : PbWO4
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 84.7768 keV    e- 1.13176 MeV    e+ 1.06419 MeV
+ Energy thresholds :  gamma 89.3347 keV    e- 1.12535 MeV    e+ 1.05931 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -321,24 +321,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.08s Real=7.09s Sys=0s
+  User=6.94s Real=6.94s Sys=0s
 
  SUMMARY 
 
- energy deposit :   94.65 % E0 +-    1.11 % E0
- charged traklen:  479.04 radl +-    5.67 radl
- neutral traklen: 4445.64 radl +-  131.94 radl
+ energy deposit :   94.63 % E0 +-    1.10 % E0
+ charged traklen:  479.12 radl +-    5.52 radl
+ neutral traklen: 4457.58 radl +-  126.67 radl
 
- 90.00 % confinement: radius = 3.08 radl  (2.75 cm )
+ 90.00 % confinement: radius = 3.09 radl  (2.76 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 868685207, 1645334416
+ Current couple of seeds = 1193887036, 832761039
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94651796  delEdep= -0.0024820373 nrms= -3.0268747
-Erms: 0.011130863  delErms= 0.0029308628 nrms= 3.5742229
+Edep: 0.94633496  delEdep= -0.0026650351 nrms= -3.2500428
+Erms: 0.010985051  delErms= 0.0027850512 nrms= 3.3964039
 <<<<END>>>>   IS NOT ACCEPTED
 
 G4 kernel has come to Quit state.

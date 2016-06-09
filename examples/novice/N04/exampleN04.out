@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -320,21 +320,21 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
- Energy thresholds :  gamma 5.84521 keV    e- 422.711 keV    e+ 407.385 keV
+ Energy thresholds :  gamma 5.87535 keV    e- 424.726 keV    e+ 410.692 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Scintillator
  Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
- Energy thresholds :  gamma 2.08499 keV    e- 281.588 keV    e+ 274.74 keV
+ Energy thresholds :  gamma 2.09434 keV    e- 281.891 keV    e+ 276.265 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
- Energy thresholds :  gamma 94.7155 keV    e- 1.00067 MeV    e+ 940.93 keV
+ Energy thresholds :  gamma 94.5861 keV    e- 1.00386 MeV    e+ 951.321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -345,9 +345,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     93 hits are stored in ExN04TrackerHitsCollection.
-     29 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.50748244 (GeV)
+     89 hits are stored in ExN04TrackerHitsCollection.
+     35 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.82291732971492 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -359,13 +359,13 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     48 hits are stored in ExN04TrackerHitsCollection.
-     29 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.69012254356973 (GeV)
+     36 hits are stored in ExN04TrackerHitsCollection.
+     33 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.70653281756119 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.46s Real=1.47s Sys=0s
+  User=2.57s Real=2.59s Sys=0s
 G4 kernel has come to Quit state.
 

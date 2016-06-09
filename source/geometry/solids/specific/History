@@ -1,4 +1,4 @@
-$Id: History,v 1.150.2.3 2009/08/11 09:20:32 gcosmo Exp $
+$Id: History,v 1.150.2.4 2010/01/26 11:33:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-Nov-2009  G.Cosmo (geom-specific-V09-01-22)
+- Avoid fake (and redundant) assignment of value to 3-vector in
+  G4PolyconeSide and G4TwistTubsSide.
+
+24-Sep-2009  T.Nikitina
+- G4Ellipsoid: refined fix in DistanceToIn(p,v) for points located on the
+  curved surface, and correct treatment of geometrical tolerance.
+
+09-Sep-2009  G.Cosmo
+- G4Ellipsoid: fixed usage of half-tolerances (radial and Cartesian) in
+  DistanceToIn(p,v), based on incorrect assumptions introduced in tag
+  "geom-specific-V09-02-04", responsible for zero steps on configurations
+  with cut in Z. Addresses problem report #1076.
 
 04-Aug-2009  T.Nikitina (geom-specific-V09-01-21)
 - G4Ellipsoid:

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4InelasticInteraction.cc,v 1.11.2.1 2009/03/03 11:26:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // Hadronic Process: Inelastic Interaction 
 // original by H.P. Wellisch

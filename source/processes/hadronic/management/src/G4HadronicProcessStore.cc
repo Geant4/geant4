@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.7.2.1 2009/03/03 11:45:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4HadronicProcessStore.cc,v 1.7.2.2 2010/01/26 14:55:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -91,8 +91,9 @@ void G4HadronicProcessStore::Clean()
       if( process[i] ) {
         //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " << i << G4endl;
 	//G4cout <<  process[i]->GetProcessName() << G4endl;
-	delete process[i];
+	G4HadronicProcess* p = process[i]; 
 	process[i] = 0;
+	delete p;
       }
     }
   }
@@ -102,8 +103,9 @@ void G4HadronicProcessStore::Clean()
         //G4cout << "G4HadronicProcessStore::Clean() delete extra "  
 	//       << i << G4endl;
 	//G4cout << extraProcess[i]->GetProcessName() << G4endl;
-	delete extraProcess[i];
+	G4VProcess* p = extraProcess[i]; 
         extraProcess[i] = 0;
+	delete p;
       }
     }
   }
@@ -361,7 +363,7 @@ void G4HadronicProcessStore::Register(G4HadronicProcess* proc)
 { 
   if(0 < n_proc) {
     for(G4int i=0; i<n_proc; i++) {
-      if(process[i] == proc) return;
+      if(process[i] == proc) { return; }
     }
   }
   //G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc

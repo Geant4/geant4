@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.12 2006/06/29 18:58:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TouchableHistory.cc,v 1.12.4.1 2010/01/26 13:26:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // class G4TouchableHistory Implementation
@@ -33,6 +33,25 @@
 // ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
+
+G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+
+G4TouchableHistory::G4TouchableHistory()
+  : frot(G4RotationMatrix()),
+    ftlate(G4ThreeVector(0.,0.,0.)),
+    fhistory()
+{
+   G4VPhysicalVolume* pPhysVol=0;
+   fhistory.SetFirstEntry(pPhysVol);
+}
+
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
+  : fhistory(history)
+{
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
+}
 
 G4TouchableHistory::~G4TouchableHistory()
 {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2.4.1 2009/03/03 14:03:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2.4.2 2010/01/25 10:14:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
@@ -120,9 +120,12 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     G4double localR2 = localpos1.x()*localpos1.x()
                       +localpos1.y()*localpos1.y()
                       +localpos1.z()*localpos1.z();
-    G4double InsideRadius2 = 
-      sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    //G4double InsideRadius2 = 
+    //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
+    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_In;
     }
   }
@@ -135,9 +138,12 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     G4double localR2 = localpos2.x()*localpos2.x()
                       +localpos2.y()*localpos2.y()
                       +localpos2.z()*localpos2.z();
-    G4double InsideRadius2 = 
-      sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    //G4double InsideRadius2 = 
+    //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
+    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_Out;
     }
   }

@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 October 2009 - V.Ivanchenko (hadr-cohe-V09-01-09)
+----------------------------------------------------
+  G4HadronElastic - use static pointer to G4VQCrossSection
+                    in order to gurantee unique version
+                    of CHIPS cross section class;
+                    removed printout in destructor
+
 27 November 2008 - V.Ivanchenko (hadr-cohe-V09-01-08)
 ----------------------------------------------------
   G4ChargeExchangeProcess - added high and low energy protections into 

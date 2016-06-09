@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -436,8 +436,8 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.65323799848557
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.013283146545291
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.658058822155
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.01056189276278
 
 -> Event # 8 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !

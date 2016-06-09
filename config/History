@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.344.2.3 2009/08/11 09:07:32 gcosmo Exp $
+$Id: History,v 1.344.2.6 2010/01/26 08:24:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th January 2010 Gabriele Cosmo (config-V09-01-20)
+- binmake.gmk: removed extra space characters in definition of TARGOBJEXT,
+  fixing issue with target for main() not being rebuilt according to
+  dependencies change. Addressing problem report #1098.
+
+8th September 2009  Gabriele Cosmo
+- Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to
+  setup for Qt4 configuration.
+
+17th August 2009  Gabriele Cosmo
+- Added G4OPTDEBUG option for hybrid optimized-debug build also to
+  Darwin-g++ and WIN32-g++ configurations.
 
 3rd August 2009 Gabriele Cosmo (config-V09-01-19)
 - Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more

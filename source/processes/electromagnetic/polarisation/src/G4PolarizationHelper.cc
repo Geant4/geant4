@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.4 2007/11/01 17:30:25 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizationHelper.cc,v 1.4.4.2 2010/01/26 16:36:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // GEANT4 Class file
 //

@@ -1,0 +1,188 @@
+
+                 Geant4 9.2 - patch-03 Release Notes
+                 -----------------------------------
+
+                                                            29 January 2010
+
+List of fixes included in this public patch since the public release 9.2.p02:
+
+  o Configuration:
+    -------------
+    + binmake.gmk: removed extra space characters in definition of TARGOBJEXT,
+      fixing issue with target for main() not being rebuilt according to
+      dependencies change. Addressing problem report #1098.
+    + Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to
+      setup for Qt4 configuration.
+    + Added G4OPTDEBUG option for hybrid optimized-debug build also to
+      Darwin-g++ and WIN32-g++ configurations.
+
+  o Digits_Hits:
+    -----------
+    + Corrected counting of flux and current passing through curved surfaces
+      (affecting cylinder and sphere surface scorers).
+    + Added missing virtual keyword for qualification of CheckROVolume()
+      and FindROTouchable() methods in G4VReadOutGeometry.
+
+  o Error_propagation:
+    -----------------
+    + Corrected usage of G4ThreeVector constructor in class
+      G4ErrorMagFieldLimitProces.
+
+  o Event:
+    -----
+    + Minor changes to G4GeneralParticleSourceMessenger to now use full range
+      of predefined units for length, energy and angle.
+    + Fixed gcc-4.4.0 compilation warning message for non-initialised variable
+      in G4SPSEneDistribution.
+
+  o Geometry:
+    --------
+    + magnetic_field:
+      o Bug fix in G4EqEMFieldWithSpin, following report on Hypernews EM-field
+        forum #161. Courtesy of Hiromi Iinuma (KEK).
+    + management:
+      o Fixed implementation of G4LogicalVolume::TotalVolumeEntities() to
+        become invariant to call sequence.
+      o Clear possible excess capacity in node vectors in G4SmartVoxelHeader
+        BuildNodes() method. May reduce excess memory allocated in optimisation
+        in large detector setups, with slight time increase in initialisation
+        for geometry voxelisation.
+      o G4VTouchable: moved inline vitual methods, constructor and destructor
+        to source, to avoid problem of memory alignment in allocation of
+        derived objects.
+    + navigation:
+      o Refinements in G4PropagatorInField:
+        + Improved handling of repeated small steps at boundaries which are
+          due to geometry imprecision, navigation optimisation, or the details
+          of the algorithm used for tracking in field.
+          Added new member 'fZeroStepThreshold', to enable tuning of this
+          existing threshold for identifying tiny or zero steps.
+          A new value for this threshold 'fZeroStepThreshold' is a large
+          multiple (10^4) of 'kCarTolerance'. Addresses a problem of tracks
+          stuck at boundaries of volumes reported by ATLAS.
+          The condition for identifying a tiny step is changed in order to
+          avoid misidentifying small proposed physical steps as problem tiny
+          steps.
+        + Changed parameters which determine the size of the next trial step.
+          This is used only when trying to recover from consecutive tiny/zero
+          steps. The default decrease factor is now 0.25 (from 0.1); when the
+          step size is comparable to the value of 'fZeroStepThreshold' a
+          different decrease factor is used. The value given to the decrease
+          factor was changed to 0.35 (from 0.25).
+        + Added new method RefreshIntersectionLocator() to update the state
+          of helper class.
+        + Improved printing of diagnostics.
+      o G4VIntersectionLocator: fixed problem in ReEstimateEndPoint() for very
+        small steps. Corrected constructor to ensure that it initialises all
+        data members. Labelled methods in header to make noticable those that
+        must change attributes at every step.
+    + solids/CSG:
+      o G4Cons: fix to DistanceToIn(p,v), added a check on the direction in
+        case of point on surface. Fixes a problem of stuck tracks observed in
+        CMS, due to wrong reply from the solid for points on the inner radius
+        surface base with direction along the imaginary extension of the cone.
+      o G4Torus: fix in SolveNumericJT() in order to take in account the
+        difference in the value of theta for different intervals, [0:pi] or
+        [-pi:0], and for SPhi in [0:twopi] or [-twopi:0]. Addresses problem
+        report #1086.
+      o G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.
+    + solids/specific:
+      o G4Ellipsoid: refined fix in DistanceToIn(p,v) for points located on the
+        curved surface, and correct treatment of geometrical tolerance.
+        Addresses problem report #1076.
+      o Avoid redundant assignment of value to 3-vector in G4PolyconeSide and
+        in G4TwistTubsSide.
+    + volumes:
+      o Fix in G4PVParameterised::CheckOverlaps() to not modify daughter volume
+        transformation matrix for application to points in the daughter's frame.
+        Adopt Inverse() instead of Invert()  in call to G4AffineTransform.
+        Addresses problem report #1078.
+      o Added missing implementation for composing G4AssemblyVolume constructor.
+      o Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
+        Should reduce the number of direct calls to malloc and memory
+        fragmentation. Measured an average improvement of ~5% in CPU speed
+        with same memory footprint. Moved inline constructors to source to
+        avoid problems of memory alignment in allocation.
+
+  o Global:
+    ------
+    + Changed date for patch-03 to release 9.2.
+
+  o Standard Electromagnetic Processes:
+    ----------------------------------
+    + Utils:
+      o G4ionEffectiveCharge: added protection to minimal kinetic energy.
+      o G4EmCorrections: fixed computation of correction to ion stopping powers.
+      o G4VEnergyLossProcess, G4VEmProcess: added protection against negative
+        cross section; fixed problem in retrieving physics tables from file.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4CrossSectionDataSetRegistry: more accurate deletion of cross-sections.
+      o G4TripathiLightCrossSection: re-enabled low energy check code.
+    + management:
+      o G4HadronicProcessStore: added protection to Clean() method.
+    + models/abrasion:
+      o Fixed problems of negative sqrt() and made code more robust to
+        potential loop problems.
+    + models/CHIPS:
+      o Fix in G4QElasticCrossSection for memory corruption caused by wrong
+        setting of limit for the tabular initialization in method GetPTables().
+        Courtesy of Z.Marshall (ATLAS).
+    + models/coherent_elastic:
+      o G4HadronElastic: use static pointer to G4VQCrossSection in order to
+        guarantee unique version of CHIPS cross-section class. Removed printout
+        in destructor.
+    + models/management:
+      o G4HadronicInteractionRegistry: more accurate deletion of models.
+    + stopping:
+      o G4PiMinusAbsorptionAtRest and G4KaonMinusAbsorptionAtRest: fixed
+        usage of 3vector constructor.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o G4VRangeToEnergyConverter: modified implementation of method
+        ConvertCutToKineticEnergy() to improve performance.
+        Measured a factor 2 to 3 improvement in initialisation speed when
+        building physics tables.
+        Modified BuildRangeVector() where integration is perfomed in this
+        method; extended for e+/e-. Changed 'TotBin' to be constant (i.e. same
+        for all converters) and set to 100 (200 for previous versions).
+        Added 'MaxEnergyCut' (10 GeV set in default). Added 'fRangeVectorStore'
+        to ensure that range-vector is created only once for each material.
+        Do not apply converter for neutron, anti-proton, and anti-neutron.
+      o A new method ResetConverters() has been added to G4ProductionCutTable.
+        This method allows to reduce the memory footprint by clearing temporary
+        loss tables and range vectors used at initialization, if invoked when
+        starting the first run of a session.
+
+  o Persistency:
+    -----------
+    + gdml:
+      o Corrected handling of 'quantity' tag; added missing caching of
+        evaluation.
+
+  o Examples:
+    --------
+    + extended/radioactivedecay/exrdm:
+      o Fixed trivial compilation warning when compiled without G4ANALYSIS_USE.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This is a cumulative patch and can be applied on top of release 9.2,
+     9.2.p01 or 9.2.p02.
+  o  Technical notes distributed for release 9.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.2 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -124,7 +124,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Energy thresholds :  gamma 6.90363 keV    e- 598.345 keV    e+ 570.85 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -145,33 +145,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.25s Real=0.25s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         50.61   RMS(MeV) 31.51
-Average number of steps              219.6
-Average number of gamma              1.34
-Average number of e-                 4.05
-Average number of e+                 0.05
-Average number of neutrons           0.4
-Average number of protons            0.46
+Average energy deposit (MeV)         68.8   RMS(MeV) 63.77
+Average number of steps              237.9
+Average number of gamma              2.02
+Average number of e-                 3.94
+Average number of e+                 0.02
+Average number of neutrons           1.68
+Average number of protons            1.39
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.11
-Average number of pi0                0.07
+Average number of pi+ & pi-          0.31
+Average number of pi0                0.14
 Average number of kaons              0
-Average number of muons              0
-Average number of deuterons+tritons  0.06
-Average number of He3+alpha          0.07
-Average number of ions               0.29
-Average number of forward neutrons   0.05
-Average number of reflected neutrons 0.02
-Average number of leaked neutrons    0.33
-Average number of proton leak        0.23
-Average number of pion leak          0.09
+Average number of muons              0.01
+Average number of deuterons+tritons  0.11
+Average number of He3+alpha          0.08
+Average number of ions               0.57
+Average number of forward neutrons   0.22
+Average number of reflected neutrons 0.03
+Average number of leaked neutrons    1.3
+Average number of proton leak        0.61
+Average number of pion leak          0.24
 ========================================================
 
 #

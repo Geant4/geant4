@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.14.8.1 2009/08/11 09:20:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4Ellipsoid.cc,v 1.14.8.2 2010/01/26 11:33:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // class G4Ellipsoid
 //
@@ -472,12 +472,12 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     if (v.z() <= 0.0) { return distMin; }
     G4double distZ = (zBottomCut - p.z()) / v.z();
 
-    if ( (distZ >- halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
+    if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
+      if ( std::abs(distZ) < halfRadTolerance ) { distZ=0.; }
       return distMin= distZ;
     }
-
   }
   if (p.z() >= zTopCut-halfCarTolerance)
   {
@@ -486,6 +486,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
+      if ( std::abs(distZ) < halfRadTolerance ) { distZ=0.; }
       return distMin= distZ;
     }
   }
@@ -505,25 +506,38 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   {    
     G4double distR= (-B - std::sqrt(C)) / (2.0*A);
     G4double intZ = p.z()+distR*v.z();
-    if ( (distR >- halfRadTolerance)
+    if ( (distR > halfRadTolerance)
       && (intZ >= zBottomCut-halfRadTolerance)
       && (intZ <= zTopCut+halfRadTolerance) )
     { 
       distMin = distR;
     }
+    else if( (distR >- halfRadTolerance)
+	    && (intZ >= zBottomCut-halfRadTolerance)
+	    && (intZ <= zTopCut+halfRadTolerance) )
+    {
+      // p is on the curved surface, DistanceToIn returns 0 or kInfinity:
+      // DistanceToIn returns 0, if second root is positive (means going inside)
+      // If second root is negative, DistanceToIn returns kInfinity (outside)
+      //
+      distR = (-B + std::sqrt(C) ) / (2.0*A);
+      if(distR>0.) { distMin=0.; }
+    }
     else
     {
       distR= (-B + std::sqrt(C)) / (2.0*A);
       intZ = p.z()+distR*v.z();
-      if ( (distR >- halfRadTolerance)
+      if ( (distR > halfRadTolerance)
         && (intZ >= zBottomCut-halfRadTolerance)
         && (intZ <= zTopCut+halfRadTolerance) )
       {
-        if (p.dot(v)<0.) { distMin = distR; }
+        G4ThreeVector norm=SurfaceNormal(p);
+        if (norm.dot(v)<0.) { distMin = distR; }
       }
     }
-    if ( distMin>dRmax ) // Avoid rounding errors due to precision issues on
-    {                    // 64 bits systems. Split long distances and recompute
+    if ( (distMin!=kInfinity) && (distMin>dRmax) ) 
+    {                    // Avoid rounding errors due to precision issues on
+                         // 64 bits systems. Split long distances and recompute
       G4double fTerm = distMin-std::fmod(distMin,dRmax);
       distMin = fTerm + DistanceToIn(p+fTerm*v,v);
     }

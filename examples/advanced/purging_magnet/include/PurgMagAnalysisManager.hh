@@ -33,7 +33,7 @@
 //    ************************************
 //
 // $Id: PurgMagAnalysisManager.hh,v 1.3.4.1 2009/08/11 14:22:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 
 #ifdef G4ANALYSIS_USE

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.24.4.1 2009/08/18 15:46:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4Orb.cc,v 1.24.4.3 2010/01/26 16:20:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // class G4Orb
 //
@@ -297,18 +297,20 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
   rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
 
+  G4double rad = std::sqrt(rad2);
+
   // G4double rad = std::sqrt(rad2);
   // Check radial surface
   // sets `in'
   
   tolRMax = fRmax - fRmaxTolerance*0.5 ;
     
-  if ( rad2 <= tolRMax*tolRMax )  in = kInside ;
+  if ( rad <= tolRMax )  { in = kInside ; }
   else
   {
     tolRMax = fRmax + fRmaxTolerance*0.5 ;       
-    if ( rad2 <= tolRMax*tolRMax ) in = kSurface ;
-    else                           in = kOutside ;
+    if ( rad <= tolRMax )  { in = kSurface ; }
+    else                   { in = kOutside ; }
   }
   return in;
 }
@@ -385,7 +387,9 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
-  c = rad2 - fRmax*fRmax ;
+
+  G4double rad = std::sqrt(rad2);
+  c = (rad - fRmax)*(rad + fRmax);
 
   if ( c > fRmaxTolerance*fRmax )
   {
@@ -397,8 +401,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     if ( d2 >= 0 )
     {
       s = -pDotV3d - std::sqrt(d2) ;
-
-      if (s >= 0 )
+      if ( s >= 0 )
       {
         if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
         {              // 64 bits systems. Split long distances and recompute
@@ -418,15 +421,22 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     if ( c > -fRmaxTolerance*fRmax )  // on surface  
     {
       d2 = pDotV3d*pDotV3d - c ;             
-      //  if ( pDotV3d >= 0 ) return snxt = kInfinity;
-      if ( d2 < fRmaxTolerance*fRmax || pDotV3d >= 0 ) return snxt = kInfinity;
-      else                return snxt = 0.;
+      if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+      {
+        return snxt = kInfinity;
+      }
+      else
+      {
+        return snxt = 0.;
+      }
     }
+#ifdef G4CSGDEBUG
     else // inside ???
     {
       G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
                   JustWarning, "Point p is inside !?");
     }
+#endif
   }
   return snxt;
 }
@@ -439,9 +449,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe=0.0, rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
-                 safe = rad - fRmax;
-  if( safe < 0 ) safe = 0. ;
+  G4double safe = 0.0,
+           rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  safe = rad - fRmax;
+  if( safe < 0 ) { safe = 0.; }
   return safe;
 }
 
@@ -483,12 +494,13 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
   
   const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
+  G4double rad = std::sqrt(rad2);
 
-  if( rad2 <= Rmax_plus*Rmax_plus )
+  if ( rad <= Rmax_plus )
   {
-    c = rad2-fRmax*fRmax ;
+    c = (rad - fRmax)*(rad + fRmax);
 
-    if ( c < fRmaxTolerance*fRmax) 
+    if ( c < fRmaxTolerance*fRmax ) 
     {
       // Within tolerant Outer radius 
       // 

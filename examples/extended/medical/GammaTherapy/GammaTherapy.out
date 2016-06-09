@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -137,7 +137,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Be
  Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.02934 keV    e- 107.795 keV    e+ 106.476 keV
+ Energy thresholds :  gamma 1.05172 keV    e- 109.289 keV    e+ 107.83 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -151,21 +151,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : G4_W
  Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 36.0479 keV    e- 351.438 keV    e+ 334.551 keV
+ Energy thresholds :  gamma 36.0599 keV    e- 351.877 keV    e+ 337.972 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : G4_MYLAR
  Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.19365 keV    e- 98.2879 keV    e+ 96.4896 keV
+ Energy thresholds :  gamma 1.21113 keV    e- 99.4755 keV    e+ 98.1475 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.09571 keV    e- 84.2696 keV    e+ 83.2385 keV
+ Energy thresholds :  gamma 1.10981 keV    e- 84.6589 keV    e+ 83.5287 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -181,22 +181,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.37s Real=8.36s Sys=0s
+  User=8.03s Real=8.03s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.08
-Average number of gamma                      21.04
-Average number of e+                         0.7823
+Average number of e-                         12
+Average number of gamma                      20.96
+Average number of e+                         0.7912
 Average number of neutrons                   0
-Average number of steps in absorber          31.85
-Average number of e- steps in target         18.65
-Average number of g  produced in the target  20.25
-Average number of e- produced in the target  7.163
-Average number of g produced in the phantom  0.5069
-Average number of e- produced in the phantom 2.777
-Total gamma fluence in front of phantom      8.651 MeV 
+Average number of steps in absorber          31.16
+Average number of e- steps in target         18.56
+Average number of g  produced in the target  20.16
+Average number of e- produced in the target  7.147
+Average number of g produced in the phantom  0.5111
+Average number of e- produced in the phantom 2.756
+Total gamma fluence in front of phantom      8.64 MeV 
 ========================================================
 
 

@@ -26,7 +26,7 @@
 //
 //
 // $Id: G4PhotoNuclearProcess.cc,v 1.2.4.1 2009/08/11 14:36:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 
 #include "G4PhotoNuclearProcess.hh"

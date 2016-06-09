@@ -25,7 +25,7 @@
 //
 //
 // $Id: AnaEx01AnalysisManager.cc,v 1.16.4.1 2009/08/11 09:50:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.

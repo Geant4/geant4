@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4Paraboloid.cc,v 1.8.2.1 2009/03/03 11:00:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // class G4Paraboloid
 //

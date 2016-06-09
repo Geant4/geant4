@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.hh,v 1.2.4.1 2009/03/03 11:26:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// $Id: G4HadronicInteractionRegistry.hh,v 1.2.4.2 2010/01/26 15:37:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 
@@ -64,7 +64,6 @@ private:
 
   static G4HadronicInteractionRegistry* theInstance;
   
-  G4int nModels;
   std::vector <G4HadronicInteraction *> allModels;
 
 };

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.60 2008/10/17 14:46:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEmProcess.cc,v 1.60.2.1 2010/01/26 14:33:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -447,6 +447,7 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
     cross = 
       model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy);
   }
+  if(cross < 0.0) { cross = 0.0; }
 
   return cross;
 }

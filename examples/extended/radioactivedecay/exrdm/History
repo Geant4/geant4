@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2008/12/05 09:57:30 flei Exp $
+$Id: History,v 1.26.2.1 2010/01/26 15:54:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/09/2009 G.Folger (exrdm-V09-01-05)
+- removed trivial compilation warning when compiled without
+  G4ANALYSIS_USE in exrdmHisto.
+
 05/12/2008 F.Lei (exrdm-V09-01-04)
 - exrdmAnalysisManager.cc, exrdmSteppingAction.cc
    - better G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT logic 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.36 2008/03/21 21:42:44 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QElasticCrossSection.cc,v 1.36.2.1 2010/01/26 15:26:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //
 // G4 Physics class: G4QElasticCrossSection for N+A elastic cross sections
@@ -789,7 +789,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
       if(ini<nPoints)
       {
         G4int fin = static_cast<int>((LP-lPMin)/dlnP)+1; // final bin of initialization
-        if(fin>nPoints) fin=nLast;                // Limit of the tabular initialization
+        if(fin>=nPoints) fin=nLast;               // Limit of the tabular initialization
         if(fin>=ini)
         {
           G4double lp=0.;

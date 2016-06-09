@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -272,14 +272,14 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_CESIUM_IODIDE
  Range cuts        :  gamma 300 um     e- 300 um     e+ 300 um 
- Energy thresholds :  gamma 18.1187 keV    e- 288.607 keV    e+ 278.143 keV
+ Energy thresholds :  gamma 18.2919 keV    e- 291.524 keV    e+ 281.891 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
  Range cuts        :  gamma 300 um     e- 300 um     e+ 300 um 
- Energy thresholds :  gamma 3.89739 keV    e- 258.339 keV    e+ 252.056 keV
+ Energy thresholds :  gamma 3.92577 keV    e- 258.31 keV    e+ 253.154 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -293,28 +293,28 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 990 eV     e- 33.8876 keV    e+ 33.4729 keV
+ Energy thresholds :  gamma 990 eV     e- 34.1725 keV    e+ 33.9436 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 990 eV     e- 31.4747 keV    e+ 31.0896 keV
+ Energy thresholds :  gamma 990 eV     e- 31.9516 keV    e+ 31.7376 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 6     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Fe
  Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy thresholds :  gamma 60.4019 keV    e- 12.9518 MeV    e+ 12.0297 MeV
+ Energy thresholds :  gamma 60.499 keV    e- 13.0779 MeV    e+ 12.2279 MeV
  Region(s) which use this couple : 
     MuonDetector
 
 Index : 7     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
  Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy thresholds :  gamma 20.4949 keV    e- 4.54874 MeV    e+ 4.2772 MeV
+ Energy thresholds :  gamma 20.3682 keV    e- 4.52289 MeV    e+ 4.28616 MeV
  Region(s) which use this couple : 
     MuonDetector
 
@@ -326,37 +326,37 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.3s Real=2.3s Sys=0s
+  User=2.23s Real=2.23s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1315
-Average number of gamma      696.9
-Average number of e+         49.36
-Average number of steps      3968
-Edep 1x1 =                   0.8282 +- 0.002935  res=  3.544 %
-Edep 3x3 =                   0.9576 +- 0.001273  res=  1.296 %
-Edep 5x5 =                   0.9797 +- 0.0008735  res=  0.8691 %
+Average number of e-         1317
+Average number of gamma      695.8
+Average number of e+         48.13
+Average number of steps      3971
+Edep 1x1 =                   0.8294 +- 0.00261  res=  3.131 %
+Edep 3x3 =                   0.9568 +- 0.001158  res=  1.192 %
+Edep 5x5 =                   0.9803 +- 0.0006846  res=  0.677 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8282 +- 0.002935  res=  3.544 %
-Edep 3x3 =                   0.9552 +- 0.001641  res=  1.718 %
-Edep 5x5 =                   0.9776 +- 0.00136  res=  1.392 %
+Edep 1x1 =                   0.8282 +- 0.002853  res=  3.445 %
+Edep 3x3 =                   0.9548 +- 0.001573  res=  1.647 %
+Edep 5x5 =                   0.9779 +- 0.001249  res=  1.277 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.867 +- 0.002573
-  E1/E25 =                   0.8472 +- 0.002799
-  E9/E25 =                   0.9772 +- 0.0009419
+  E1/E9  =                   0.8673 +- 0.002639
+  E1/E25 =                   0.8469 +- 0.002858
+  E9/E25 =                   0.9764 +- 0.0009825
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8282  delEdep1x1= 0.001103 nrms= 0.371
-Erms1x1: 0.02935  delErms1x1= -0.0003898 nrms= -0.1311
-Edep3x3: 0.9576  delEdep3x3= 0.0006072 nrms= 0.4722
-Erms3x3: 0.01241  delErms3x3= -0.0004519 nrms= -0.3514
-Edep5x5: 0.9797  delEdep5x5= 0.000378 nrms= 0.4276
-Erms5x5: 0.008514  delErms5x5= -0.0003259 nrms= -0.3686
+Edep1x1: 0.8294  delEdep1x1= 0.002285 nrms= 0.7684
+Erms1x1: 0.02597  delErms1x1= -0.003771 nrms= -1.268
+Edep3x3: 0.9568  delEdep3x3= -0.0002397 nrms= -0.1864
+Erms3x3: 0.01141  delErms3x3= -0.001454 nrms= -1.13
+Edep5x5: 0.9803  delEdep5x5= 0.001023 nrms= 1.158
+Erms5x5: 0.006637  delErms5x5= -0.002203 nrms= -2.492
 <<<<<END>>>>>   IS ACCEPTED
 
 #

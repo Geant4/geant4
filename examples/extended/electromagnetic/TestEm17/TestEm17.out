@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -212,7 +212,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Energy thresholds :  gamma 20.6438 keV    e- 1.29592 MeV    e+ 1.21169 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -253,18 +253,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.3s Real=4.52s Sys=0.21s
+  User=4.25s Real=4.49s Sys=0.24s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 468853	muPairProd : 63156	muBrems : 675
+ Number of process calls --->	muIoni : 462870	muPairProd : 63659	muBrems : 670
 
- Simulation: total CrossSection = 0.53268 /cm	 MeanFreePath = 1.8773 cm 	 massicCrossSection = 0.067685 cm2/g
+ Simulation: total CrossSection = 0.5272 /cm	 MeanFreePath = 1.8968 cm 	 massicCrossSection = 0.066988 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1001958740, 1620882094
+ Current couple of seeds = 1816099210, 1953523403
 ----------------------------------------
 #
 /gun/particle pi+
@@ -281,7 +281,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.832343 keV    e- 1.280018 MeV    e+ 1.2185143 MeV
+ Energy thresholds :  gamma 20.643844 keV    e- 1.295918 MeV    e+ 1.2116932 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -291,7 +291,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1001958740, 1620882094
+ Current couple of seeds = 1816099210, 1953523403
 ----------------------------------------
 Start Run processing.
 
@@ -317,17 +317,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.14s Real=4.38s Sys=0.24s
+  User=4.02s Real=4.25s Sys=0.23s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 439081	hPairProd : 59651	hBrems : 350
+ Number of process calls --->	hPairProd : 58776	hIoni : 433494	hBrems : 349
 
- Simulation: total CrossSection = 0.49908 /cm	 MeanFreePath = 2.0037 cm 	 massicCrossSection = 0.063416 cm2/g
+ Simulation: total CrossSection = 0.49262 /cm	 MeanFreePath = 2.03 cm 	 massicCrossSection = 0.062595 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1819680615, 1945765586
+ Current couple of seeds = 984121171, 2066617935
 ----------------------------------------
 #
 /gun/particle proton
@@ -344,7 +344,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.832343 keV    e- 1.280018 MeV    e+ 1.2185143 MeV
+ Energy thresholds :  gamma 20.643844 keV    e- 1.295918 MeV    e+ 1.2116932 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -354,7 +354,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1819680615, 1945765586
+ Current couple of seeds = 984121171, 2066617935
 ----------------------------------------
 Start Run processing.
 
@@ -380,17 +380,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.78s Real=4.01s Sys=0.24s
+  User=3.63s Real=3.85s Sys=0.22s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 439254	hPairProd : 34118	hBrems : 8
+ Number of process calls --->	hIoni : 434423	hPairProd : 33860	hBrems : 7
 
- Simulation: total CrossSection = 0.47338 /cm	 MeanFreePath = 2.1125 cm 	 massicCrossSection = 0.06015 cm2/g
+ Simulation: total CrossSection = 0.46829 /cm	 MeanFreePath = 2.1354 cm 	 massicCrossSection = 0.059503 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1573720723, 844772267
+ Current couple of seeds = 1046054350, 1785581391
 ----------------------------------------
 #
 Graphics systems deleted.

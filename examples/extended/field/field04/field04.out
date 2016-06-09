@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -276,7 +276,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
  Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 3.07332 keV    e- 990 eV     e+ 990 eV 
+ Energy thresholds :  gamma 3.12389 keV    e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -290,14 +290,14 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_W
  Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.31122 MeV    e+ 2.14666 MeV
+ Energy thresholds :  gamma 10 GeV    e- 2.30976 MeV    e+ 2.13081 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Pb
  Range cuts        :  gamma 1 m      e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.37814 MeV    e+ 1.28002 MeV
+ Energy thresholds :  gamma 10 GeV    e- 1.36749 MeV    e+ 1.27862 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -121,14 +121,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Energy thresholds :  gamma 10 GeV    e- 10 GeV    e+ 10 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water_vapor
  Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 18.4792 GeV    e+ 17.5913 GeV
+ Energy thresholds :  gamma 10 GeV    e- 10 GeV    e+ 10 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -155,7 +155,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=30.28s Real=30.27s Sys=0s
+  User=29.05s Real=29.05s Sys=0s
 
  ======================== run summary ======================
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.143 2008/10/17 14:46:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEnergyLossProcess.cc,v 1.143.2.1 2010/01/26 14:33:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -1410,6 +1410,7 @@ G4double G4VEnergyLossProcess::CrossSectionPerVolume(
 					  particle, kineticEnergy,
 					  (*theCuts)[currentMaterialIndex]);
   }
+  if(cross < 0.0) { cross = 0.0; }
 
   return cross;
 }
@@ -1557,6 +1558,10 @@ G4bool G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
 					   G4bool mandatory)
 {
   G4bool res = true;
+  if(!aTable) { 
+    if(mandatory) {res = false;} 
+    return res;
+  }
   G4String filename = GetPhysicsTableFileName(part,directory,tname,ascii);
   G4bool yes = aTable->ExistPhysicsTable(filename);
   if(yes) {

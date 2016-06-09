@@ -154,8 +154,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double newZ = Z - stopAbsorption.NProtons();
   G4double newN = A - Z - stopAbsorption.NNeutrons();
   G4double newA = newZ + newN;
-  G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
-  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,stopAbsorption.RecoilMomentum());
 
   unsigned int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     

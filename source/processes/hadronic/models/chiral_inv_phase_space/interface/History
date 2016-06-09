@@ -12,6 +12,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+06-Oct-2009 G.Cosmo (hadr-chips-inter-V09-01-11)
+------------------------------------------------
+- Fix in G4QElasticCrossSection for memory corruption caused by wrong setting
+  of limit for the tabular initialization in method GetPTables(). Courtesy
+  of Z.Marchall (ATLAS).
+
 06-Feb-2009 V.Ivanchenko (hadr-chips-inter-V09-01-10)
 ------------------------------------------------------
 - added deregistration in destructor of G4QCaptureAtRest

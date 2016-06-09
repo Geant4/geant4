@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -311,14 +311,14 @@ Region <VertexDetector> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Mylar
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+ Energy thresholds :  gamma 3.00044 keV    e- 419.056 keV    e+ 405.209 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : XeCH4C3H8
  Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 3.83995 keV    e- 63.4899 keV    e+ 61.9458 keV
+ Energy thresholds :  gamma 3.84742 keV    e- 63.8405 keV    e+ 62.5663 keV
  Region(s) which use this couple : 
     VertexDetector
 
@@ -359,54 +359,54 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.1s Real=0.1s Sys=0s
+  User=0.09s Real=0.1s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.9403 +- 0.310636  mm  
+    mean charged track length   in absorber=23.7016 +- 0.252731  mm  
 
-            mean energy deposit in absorber=0.0166436 +- 0.000450602  MeV 
+            mean energy deposit in absorber=0.0163122 +- 0.000438361  MeV 
 
- mean number of steps in absorber (charged) =0.144 +- 0.0486751      
+ mean number of steps in absorber (charged) =0.107 +- 0.0367906      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.019 +- 0.00431729
+   mean number of charged secondaries = 0.017 +- 0.00408791
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.019  and e+s =0
+   mean number of e-s =0.017  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=17
+#entries=1000    #underflows=0    #overflows=14
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           4       0.004
-    2         6         120        0.12
-    3         9         273       0.273
-    4        12         242       0.242
-    5        15         131       0.131
-    6        18          64       0.064
-    7        21          39       0.039
-    8        24          30        0.03
-    9        27          21       0.021
-   10        30          20        0.02
-   11        33           9       0.009
-   12        36          10        0.01
+    1         3           3       0.003
+    2         6         125       0.125
+    3         9         275       0.275
+    4        12         223       0.223
+    5        15         150        0.15
+    6        18          65       0.065
+    7        21          41       0.041
+    8        24          31       0.031
+    9        27          20        0.02
+   10        30          22       0.022
+   11        33           7       0.007
+   12        36           6       0.006
    13        39           5       0.005
-   14        42           2       0.002
-   15        45           4       0.004
-   16        48           3       0.003
+   14        42           1       0.001
+   15        45           2       0.002
+   16        48           6       0.006
    17        51           1       0.001
-   18        54           2       0.002
-   19        57           3       0.003
+   18        54           1       0.001
+   19        57           2       0.002
 
- Emp =           0.009   width=          0.003  MeV 
+ Emp =           0.009   width=          0.006  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 204394921, 561701738
+ Current couple of seeds = 1051352904, 1439402606
 ----------------------------------------
 #
 UserDetectorConstruction deleted.

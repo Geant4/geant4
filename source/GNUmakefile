@@ -149,7 +149,7 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-02-patch-02 $ "
+	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-02-patch-03 $ "
 	@$(ECHO) " Copyright (C) 1994-2009 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 

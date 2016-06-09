@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: DicomNestedPhantomParameterisation.cc,v 1.4.2.1 2009/03/03 13:43:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // --------------------------------------------------------------------
 #include "DicomNestedPhantomParameterisation.hh"

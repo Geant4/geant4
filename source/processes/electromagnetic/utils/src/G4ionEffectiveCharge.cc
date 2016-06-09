@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.24 2008/12/18 13:01:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ionEffectiveCharge.cc,v 1.24.2.1 2010/01/26 14:33:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -104,10 +104,13 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
+
+  //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " << material->GetName() << G4endl;
+
   if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 || !material) return charge;
 
   G4double z    = material->GetIonisation()->GetZeffective();
-  //  reducedEnergy = std::max(reducedEnergy,energyLowLimit);
+  reducedEnergy = std::max(reducedEnergy,energyLowLimit);
 
   // Helium ion case
   if( Zi < 2.5 ) {

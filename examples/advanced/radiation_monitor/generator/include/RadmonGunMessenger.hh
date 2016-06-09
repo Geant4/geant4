@@ -28,7 +28,7 @@
 //    ************************************************
 //
 // $Id: RadmonGunMessenger.hh,v 1.2.2.2 2009/08/11 14:20:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 //
 //Code developed by:  S.Guatelli, guatelli@ge.infn.it
 //

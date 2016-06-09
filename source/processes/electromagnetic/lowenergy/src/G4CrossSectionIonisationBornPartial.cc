@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4CrossSectionIonisationBornPartial.cc,v 1.4.2.1 2009/03/05 08:50:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-02 $
+// GEANT4 tag $Name: geant4-09-02-patch-03 $
 
 #include "G4CrossSectionIonisationBornPartial.hh"
 

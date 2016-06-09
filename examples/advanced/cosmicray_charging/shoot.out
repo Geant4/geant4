@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
+ Geant4 version Name: geant4-09-02-patch-03-ref    (29-January-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -419,70 +419,70 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Al6061
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 9.61286 keV    e- 1.02044 MeV    e+ 981.911 keV
+ Energy thresholds :  gamma 9.58744 keV    e- 1.02075 MeV    e+ 977.042 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : AlHoneycomb
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 1.47519 keV    e- 73.0604 keV    e+ 71.6677 keV
+ Energy thresholds :  gamma 1.47112 keV    e- 72.824 keV    e+ 72.2948 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : CFRP
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 3.81634 keV    e- 764.561 keV    e+ 735.691 keV
+ Energy thresholds :  gamma 3.85267 keV    e- 762.461 keV    e+ 729.814 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : MLImat
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 3.95385 keV    e- 694.417 keV    e+ 668.195 keV
+ Energy thresholds :  gamma 3.96672 keV    e- 693.489 keV    e+ 668.655 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : foam
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 250 eV     e- 85.2216 keV    e+ 84.4054 keV
+ Energy thresholds :  gamma 250 eV     e- 86.1247 keV    e+ 84.2607 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes     recalculation needed : No 
  Material : Scell
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 17.0843 keV    e- 2.72314 MeV    e+ 2.57036 MeV
+ Energy thresholds :  gamma 17.1832 keV    e- 2.71248 MeV    e+ 2.55874 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 7     used in the geometry : Yes     recalculation needed : No 
  Material : TiAlloy
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 18.105 keV    e- 1.44292 MeV    e+ 1.36196 MeV
+ Energy thresholds :  gamma 18.2157 keV    e- 1.44864 MeV    e+ 1.36653 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes     recalculation needed : No 
  Material : ULEglass
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 7.83917 keV    e- 909.156 keV    e+ 874.826 keV
+ Energy thresholds :  gamma 7.87371 keV    e- 908.318 keV    e+ 869.427 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 9     used in the geometry : Yes     recalculation needed : No 
  Material : SiC
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 9.50746 keV    e- 1.20181 MeV    e+ 1.14535 MeV
+ Energy thresholds :  gamma 9.58744 keV    e- 1.19841 MeV    e+ 1.14709 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 10     used in the geometry : Yes     recalculation needed : No 
  Material : molybdenum
  Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 64.242 keV    e- 2.83 MeV    e+ 2.62031 MeV
+ Energy thresholds :  gamma 64.3319 keV    e- 2.79278 MeV    e+ 2.59634 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -530,7 +530,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
