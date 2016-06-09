@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.13 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VSolid.hh,v 1.18 2004/10/13 13:06:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // class G4VSolid
@@ -164,7 +164,14 @@ class G4VSolid
                                    const G4VPhysicalVolume* pRep);
       // Throw exception if ComputeDimensions called frrom an illegal
       // derived class.
-                                   
+
+    virtual G4double GetCubicVolume();
+      // Returns an estimation of the solid volume in internal units.
+      // This method may be overloaded by derived classes to compute the
+      // exact geometrical quantity for solids where this is possible,
+      // or anyway to cache the computed value.
+      // Note: the computed value is NOT cached.
+
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
@@ -185,6 +192,9 @@ class G4VSolid
     virtual G4NURBS*      CreateNURBS      () const;
       // Create a G4Polyhedron/G4NURBS/...  (It is the caller's responsibility
       // to delete it).  A null pointer means "not created".
+    virtual G4Polyhedron* GetPolyhedron () const;
+      // Smart access function - creates on request and stores for future
+      // access.  A null pointer means "not available".
 
     virtual const G4VSolid* GetConstituentSolid(G4int no) const;
     virtual       G4VSolid* GetConstituentSolid(G4int no);
@@ -251,6 +261,12 @@ class G4VSolid
       // the polygon is described by the vertices at (0),(1),...,(n),(0) in
       // pPolygon. 
       // If the polygon is completely clipped away, the polygon is cleared.
+
+
+    G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
+      // Calculate cubic volume based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
 
 private:
 

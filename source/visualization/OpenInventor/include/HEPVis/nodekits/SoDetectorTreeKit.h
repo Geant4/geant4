@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.h,v 1.2 2004/06/14 09:27:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SoDetectorTreeKit.h,v 1.3 2004/11/22 22:57:01 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 /*-----------------------------Hepvis----------------------------------------*/
 /*                                                                           */
@@ -79,6 +79,9 @@ public:
 
   // Return the preview state
   virtual SbBool getPreview() const;
+
+  // The SoSwitch::whichChild = SO_SWITCH_ALL
+  void setPreviewAndFull();
 
   // Return the preview Separator
   virtual SoSeparator *getPreviewSeparator() const;

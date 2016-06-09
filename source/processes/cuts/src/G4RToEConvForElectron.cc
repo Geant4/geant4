@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.2 2003/11/08 06:10:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RToEConvForElectron.cc,v 1.3 2004/12/02 06:53:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // --------------------------------------------------------------
@@ -72,11 +72,11 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
  
   G4double Mass = theParticle->GetPDGMass();       
   //  calculate dE/dx for electrons
-  if( abs(AtomicNumber-Z)>0.1 ) {
+  if( std::abs(AtomicNumber-Z)>0.1 ) {
     Z = AtomicNumber;
     taul = Tlow/Mass;
-    ionpot = 1.6e-5*MeV*exp(0.9*log(Z))/Mass;
-    ionpotlog = log(ionpot);
+    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;
+    ionpotlog = std::log(ionpot);
   } 
 
 
@@ -88,26 +88,26 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
     G4double t2 = taul+2.;
     G4double tsq = taul*taul;
     G4double beta2 = taul*t2/(t1*t1);
-    G4double f = 1.-beta2+log(tsq/2.)
-                  +(0.5+0.25*tsq+(1.+2.*taul)*log(0.5))/(t1*t1);
-    dEdx = (log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
+    G4double f = 1.-beta2+std::log(tsq/2.)
+                  +(0.5+0.25*tsq+(1.+2.*taul)*std::log(0.5))/(t1*t1);
+    dEdx = (std::log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
     dEdx = twopi_mc2_rcl2*Z*dEdx;
-    G4double clow = dEdx*sqrt(taul);
-    dEdx = clow/sqrt(KineticEnergy/Mass);
+    G4double clow = dEdx*std::sqrt(taul);
+    dEdx = clow/std::sqrt(KineticEnergy/Mass);
 
   } else {
     G4double t1 = tau+1.;
     G4double t2 = tau+2.;
     G4double tsq = tau*tau;
     G4double beta2 = tau*t2/(t1*t1);
-    G4double f = 1.-beta2+log(tsq/2.)
-                   +(0.5+0.25*tsq+(1.+2.*tau)*log(0.5))/(t1*t1);
-    dEdx = (log(2.*tau+4.)-2.*ionpotlog+f)/beta2;
+    G4double f = 1.-beta2+std::log(tsq/2.)
+                   +(0.5+0.25*tsq+(1.+2.*tau)*std::log(0.5))/(t1*t1);
+    dEdx = (std::log(2.*tau+4.)-2.*ionpotlog+f)/beta2;
     dEdx = twopi_mc2_rcl2*Z*dEdx;
 
     // loss from bremsstrahlung follows
     G4double cbrem = (cbr1+cbr2*Z)
-                       *(cbr3+cbr4*log(KineticEnergy/Thigh));
+                       *(cbr3+cbr4*std::log(KineticEnergy/Thigh));
     cbrem = Z*(Z+1.)*cbrem*tau/beta2;
 
     cbrem *= bremfactor ;
@@ -142,7 +142,7 @@ void G4RToEConvForElectron::BuildRangeVector(const G4Material* aMaterial,
            (*theLossTable)[IndEl]->GetValue(tlim,isOut);
   }
   G4double taulim = tlim/aMass;
-  G4double clim = sqrt(taulim)*loss;
+  G4double clim = std::sqrt(taulim)*loss;
   G4double taumax = maxEnergy/aMass;
 
   // now the range vector can be filled
@@ -151,13 +151,13 @@ void G4RToEConvForElectron::BuildRangeVector(const G4Material* aMaterial,
     G4double tau = LowEdgeEnergy/aMass;
 
     if ( tau <= taulim ) {
-      G4double Value = 2.*aMass*tau*sqrt(tau)/(3.*clim);
+      G4double Value = 2.*aMass*tau*std::sqrt(tau)/(3.*clim);
       rangeVector->PutValue(i,Value);
     } else {
-      G4double rangelim = 2.*aMass*taulim*sqrt(taulim)/(3.*clim);
-      G4double ltaulow = log(taulim);
-      G4double ltauhigh = log(tau);
-      G4double ltaumax = log(taumax);
+      G4double rangelim = 2.*aMass*taulim*std::sqrt(taulim)/(3.*clim);
+      G4double ltaulow = std::log(taulim);
+      G4double ltauhigh = std::log(tau);
+      G4double ltaumax = std::log(taumax);
       G4int    nbin = G4int(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
       if( nbin < 1 ) nbin = 1;
       G4double Value = RangeLogSimpson( NumEl, elementVector,

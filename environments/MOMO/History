@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004/01/05 07:41:56 yhajime Exp $
+$Id: History,v 1.6 2004/11/26 04:53:21 hajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2004 November 26 Hajime Yoshida
+ - replaced MOMO.jar with minor changes
+ - added some example files and README
+
+2004 November 25 hajime Yoshida
+ - replaced MOMO.jar, a new one integratig GAG and Gain.
+ - removed GAG.jar and gain.jar
+ - updated docs
+ - deleted old files
 
 2004 January 05 Hajime Yoshida
  - replaced MOMO.jar with the debugged one

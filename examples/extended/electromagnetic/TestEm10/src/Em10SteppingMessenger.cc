@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10SteppingMessenger.cc,v 1.2 2001/07/11 09:57:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10SteppingMessenger.cc,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -52,7 +52,7 @@ Em10SteppingMessenger::~Em10SteppingMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em10SteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void Em10SteppingMessenger::SetNewValue(G4UIcommand*,G4String)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

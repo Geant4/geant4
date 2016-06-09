@@ -31,7 +31,7 @@
 //    **********************************
 //
 // $Id: BrachyPhysicsList.cc,v 1.10 2004/01/08 17:25:13 silvarod Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #include "BrachyPhysicsList.hh"
 

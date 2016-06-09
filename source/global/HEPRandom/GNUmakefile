@@ -1,7 +1,7 @@
-# $Id: GNUmakefile,v 1.2 2004/06/11 14:18:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004/10/29 08:40:23 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global HEPRandom.  Gunter Folger 12-Dec-2000.
-#  note: this needed only to created "installed" include files.
+# This is needed only for generating "installed" include files.
 # --------------------------------------------------------------
 
 ifndef G4INSTALL
@@ -11,5 +11,6 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -DG4IOS_EXPORT
+CPPFLAGS += -I$(G4BASE)/global/HepGeometry/include
 
 include $(G4INSTALL)/config/common.gmk

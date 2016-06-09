@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2004/06/21 09:28:04 gcosmo Exp $
+$Id: History,v 1.29 2004/12/08 19:18:45 daquinog Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 8th, 2004  G. Daquino - exbiasing-V06-02-00
+- B01, B02 and B03 migrated to <cmath>.
 
 Jun 21st, 2004  G. Daquino - exbiasing-V06-01-00
 - Ported B02 and B03 to AIDA 3.2.1 and PI 1.2.1.

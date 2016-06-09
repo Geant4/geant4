@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.1 2004/04/08 09:41:11 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorXtViewer.cc,v 1.21 2004/11/26 08:38:51 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -30,7 +30,12 @@
  *	Mods for SoXtHepViewer
  * gb : on Win32 use an SoXtExaminerViewer.
  * gb 05 April 2004 : revisit to separate Windows things.
+ * gb 09 November 2004 : restore the escape button.
+ * gb 09 November 2004 : have a menu bar in the viewer shell.
+ * gb 09 November 2004 : have gl2ps file production.
+ * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
+
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
 // this :
@@ -40,111 +45,33 @@
 
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+
 #include <X11/StringDefs.h>
+#include <X11/Shell.h>
+
+#include <Xm/Xm.h>
+#include <Xm/PushB.h>
+#include <Xm/Form.h>
+#include <Xm/CascadeB.h>
+#include <Xm/RowColumn.h>
+#include <Xm/Text.h>
+
+#include "HEPVis/actions/SoGL2PSAction.h"
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 
-//
-// Global variables 
-//
-
-//static void SecondaryLoopPostAction ();
-
-void G4OpenInventorXtViewer::FinishView () {
-  if(!fViewer) return;
-  fViewer->viewAll();
-  fViewer->saveHomePosition();
-}
-
-//static void SecondaryLoopPostAction ()
-//{
-//  Display *display = fViewer->getDisplay();
-//  XSync(display, False);
-//  if(interactorManager -> GetExitSecondaryLoopCode ()==OIV_EXIT_CODE) {
-//    if (fShell!=0) XtRealizeWidget(fShell);
-//  }
-//}
-
-void G4OpenInventorXtViewer::KernelVisitDecision () {
-  
-  // If there's a significant difference with the last view parameters
-  // of either the scene handler or this viewer, trigger a rebuild.
-
-  if (
-      //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
-      // We need a test for empty scene graph, such as
-      // staticRoot.size() or something??????????  See temporary fix
-      // in contructor.  (John Allison Aug 2001)
-      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
-      CompareForKernelVisit(fLastVP)) {
-    NeedKernelVisit ();
-  }      
-  fLastVP = fVP;
-  fG4OpenInventorSceneHandler.fLastVP = fVP;
-}
- 
-G4bool G4OpenInventorXtViewer::CompareForKernelVisit
-(G4ViewParameters&) {
-
-  if (
-      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
-      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (fLastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
-      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
-      ) {
-      return true;;
-  }
-  if (fLastVP.IsDensityCulling () &&
-      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    return true;
-
-  if (fLastVP.IsExplode () &&
-      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    return true;
-      
-  return false;
-}
-
-G4OpenInventorXtViewer::G4OpenInventorXtViewer
-(G4OpenInventorSceneHandler& sceneHandler,
- const G4String& name)
-:G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
-,fG4OpenInventorSceneHandler(sceneHandler)
+G4OpenInventorXtViewer::G4OpenInventorXtViewer(
+ G4OpenInventorSceneHandler& sceneHandler
+,const G4String& name)
+:G4OpenInventorViewer (sceneHandler, name)
 ,fShell(0)
 ,fViewer(0)
-,fSelection(0)
-,fInteractorManager(0)
+,fHelpForm(0)
+,fHelpText(0)
 {
-  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
-
-  fInteractorManager = 
-    ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
-    GetInteractorManager();
-  //Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
-
-  //fInteractorManager->
-  //AddSecondaryLoopPostAction((G4SecondaryLoopAction)SecondaryLoopPostAction);
-
   G4cout << "Window name: " << fName << G4endl;
-  // 
-  // Selection
-  //
-  fSelection = new SoSelection;
-  fSelection->policy = SoSelection::SINGLE;
-  fSelection->ref();
-  fSelection->addChild(fG4OpenInventorSceneHandler.root);
 
   G4String wName = fName;
 
@@ -154,7 +81,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
     //Create a shell window :
     G4String shellName = wName;
     shellName += "_shell"; 
-    Arg args[3];
+    Arg args[10];
     char s[32];
     sprintf(s,"%dx%d",SIZE,SIZE);
     XtSetArg(args[0],XtNgeometry,XtNewString(s));
@@ -164,18 +91,83 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
 	  		       topLevelShellWidgetClass,
 			       SoXt::getDisplay(),
 			       args,3); 
-    parent = fShell;
+
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
+    Widget form = XmCreateForm (fShell,(char*)"form",args,4);
+    XtManageChild (form);
+
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    Widget menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
+    XtManageChild(menuBar);
+
+   {Widget menu = AddMenu(menuBar,"File","File");
+    AddButton(menu,"PS (gl2ps)",PostScriptCbk);
+    AddButton(menu,"PS (pixmap)",PixmapPostScriptCbk);
+    AddButton(menu,"IV",WriteInventorCbk);
+    AddButton(menu,"Escape",EscapeCbk);}
+
+   {Widget menu = AddMenu(menuBar,"Etc","Etc");
+    AddButton(menu,"Erase detector",EraseDetectorCbk);
+    AddButton(menu,"Erase event",EraseEventCbk);
+    AddButton(menu,"Set solid",SetSolidCbk);
+/*    AddButton(menu,"Set (G4) wire frame",SetWireFrameCbk);*/
+    AddButton(menu,"Set (G4) reduced wire frame",SetReducedWireFrameCbk);
+    AddButton(menu,"Set (G4) full wire frame",SetFullWireFrameCbk);
+    AddButton(menu,"Visible mothers + invisible daughters",SetPreviewCbk);
+    AddButton(menu,"Visible mothers + visible daughters",SetPreviewAndFullCbk);
+    AddButton(menu,"Update scene",UpdateSceneCbk);
+    AddButton(menu,"Scene graph stats",SceneGraphStatisticsCbk);
+   }
+
+   {Widget menu = AddMenu(menuBar,"Help","Help");
+    AddButton(menu,"Controls",HelpCbk);}
+
+    fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
+    
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_WIDGET);
+    XtSetArg(args[1],XmNtopWidget       ,menuBar);
+    XtSetArg(args[2],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[4],XmNbottomAttachment,XmATTACH_FORM);
+    XtSetValues(fViewer->getWidget(),args,5);
+
+    fHelpForm = XmCreateFormDialog(fShell,(char*)"help",NULL,0);
+    XtSetArg(args[0],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNbottomAttachment,XmATTACH_FORM);
+    Widget cancel = XmCreatePushButton(fHelpForm,(char*)"helpCancel",args,3);
+    XtAddCallback(cancel,XmNactivateCallback,HelpCancelCbk,(XtPointer)this);
+    XtManageChild(cancel);
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
+    XtSetArg(args[4],XmNbottomWidget    ,cancel);
+    fHelpText = XmCreateScrolledText(fHelpForm,(char*)"helpText",args,5);
+    XtManageChild(fHelpText);
+
     fInteractorManager->AddShell(fShell);
+
   } else {
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
+    fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
   }
-  //
-  // Create and Customize the Viewer
-  //
-  fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
+
   fViewer->setSize(SbVec2s(SIZE,SIZE));
-  fViewer->setSceneGraph(fSelection);
+
+  // Have a GL2PS render action :
+  const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
+  fGL2PSAction = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(fGL2PSAction);
+
+  // Else :
+  fViewer->setSceneGraph(fSoSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();
   fViewer->setTitle(fName);
@@ -189,26 +181,164 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
 
 G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {
   if(fShell) fInteractorManager->RemoveShell(fShell);
-  if(fViewer) delete fViewer;
+  if(fViewer) {
+    fViewer->setSceneGraph(0);
+    //FIXME : SGI : the below "delete" block things.
+    //FIXME : CoinXt : the below "delete" crashe in ~SoXtRenderArea.
+    //FIXME : delete fViewer;
+  }
   if(fShell) XtDestroyWidget(fShell);
-  if(fSelection) fSelection->unref();
 }
 
-void G4OpenInventorXtViewer::ClearView () {
+void G4OpenInventorXtViewer::FinishView () {
+  if(!fViewer) return;
+  fViewer->viewAll();
+  fViewer->saveHomePosition();
 }
 
-void G4OpenInventorXtViewer::SetView () {
+void G4OpenInventorXtViewer::ViewerRender () {
+  if(!fViewer) return;
+  fViewer->render();
 }
 
-void G4OpenInventorXtViewer::DrawView () {
-  G4cout << "debug Iv::DrawViewer " <<G4endl;
-  KernelVisitDecision();
-  ProcessView();
-  FinishView();
+SoCamera* G4OpenInventorXtViewer::GetCamera () {
+  if(!fViewer) return 0;
+  return fViewer->getCamera();
 }
 
-void G4OpenInventorXtViewer::ShowView () {
-  fInteractorManager -> SecondaryLoop ();
+Widget G4OpenInventorXtViewer::AddMenu(
+ Widget aMenuBar
+,const G4String& aName
+,const G4String& aLabel
+)
+{
+  // Pulldown menu :
+  Widget menu = XmCreatePulldownMenu(aMenuBar,(char*)aName.c_str(),NULL,0);
+  // Cascade button :
+  Arg args[2];
+  XmString cps = 
+    XmStringLtoRCreate((char*)aLabel.c_str(),XmSTRING_DEFAULT_CHARSET);
+  XtSetArg (args[0],XmNlabelString,cps);
+  XtSetArg (args[1],XmNsubMenuId,menu);
+  Widget widget = XmCreateCascadeButton(aMenuBar,(char*)aName.c_str(),args,2);
+  XmStringFree (cps);
+  XtManageChild(widget);
+  return menu;
 }
+void G4OpenInventorXtViewer::AddButton (
+ Widget aMenu
+,const G4String& aLabel
+,XtCallbackProc aCallback
+)
+{
+  Widget widget = XmCreatePushButton(aMenu,(char*)aLabel.c_str(),NULL,0);
+  XtManageChild(widget);
+  XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
+}
+
+void G4OpenInventorXtViewer::HelpCancelCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  XtUnmanageChild(This->fHelpForm);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+void G4OpenInventorXtViewer::EscapeCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->Escape();
+}
+
+void G4OpenInventorXtViewer::PostScriptCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WritePostScript();
+}
+
+void G4OpenInventorXtViewer::PixmapPostScriptCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WritePixmapPostScript();
+}
+
+void G4OpenInventorXtViewer::SceneGraphStatisticsCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SceneGraphStatistics();
+}
+
+void G4OpenInventorXtViewer::WriteInventorCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->WriteInventor();
+}
+
+void G4OpenInventorXtViewer::EraseDetectorCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->EraseDetector();
+}
+
+void G4OpenInventorXtViewer::EraseEventCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->EraseEvent();
+}
+
+void G4OpenInventorXtViewer::SetSolidCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetSolid();
+}
+
+void G4OpenInventorXtViewer::SetWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetWireFrame();
+}
+
+void G4OpenInventorXtViewer::SetReducedWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetReducedWireFrame(true);
+}
+
+void G4OpenInventorXtViewer::SetFullWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetReducedWireFrame(false);
+}
+
+void G4OpenInventorXtViewer::UpdateSceneCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->UpdateScene();
+}
+
+void G4OpenInventorXtViewer::SetPreviewCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetPreview();
+}
+
+void G4OpenInventorXtViewer::SetPreviewAndFullCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetPreviewAndFull();
+}
+
+void G4OpenInventorXtViewer::HelpCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  XtManageChild(This->fHelpForm);
+  XmTextSetString(This->fHelpText,(char*)This->Help().c_str());
+}
+
 
 #endif
+
+

@@ -388,7 +388,7 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
 	   << G4endl;
 #endif
 
-    G4int absnelem = abs(nElem);
+    G4int absnelem = std::abs(nElem);
 
     G4String* mats    = new G4String[absnelem];
     G4double* weights = new G4double[absnelem];
@@ -398,7 +398,7 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
       readName(is, name);
       is >> prop >> jump;
       mats[i]=name;
-      weights[i]=abs(prop);
+      weights[i]=std::abs(prop);
     } //for...
     MatDescription md;
     if (nElem>0 && prop<0)

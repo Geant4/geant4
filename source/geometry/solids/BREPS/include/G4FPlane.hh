@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FPlane.hh,v 1.12 2002/01/28 16:38:40 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4FPlane

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2004/05/13 14:47:46 guatelli Exp $
+$Id: History,v 1.10 2004/12/03 11:25:33 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.8 2004/05/13 14:47:46 guatelli Exp $
 
                       Category History file
                       ---------------------
+3.12.2004 -  Susanna Guatelli
+             Simulation seed changed
+
+24.11.2004 - Susanna Guatelli
+             Analysis management improved. 
 
 13.5.2004 - Susanna Guatelli
             Migration to AIDA 3.2.1 and PI 1.2.1

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.6 2004/05/28 16:52:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VSurface.cc,v 1.10 2004/12/08 10:20:40 link Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -40,15 +40,16 @@
 // --------------------------------------------------------------------
 
 #include "G4VSurface.hh"
+#include <iomanip>
 
 const G4int  G4VSurface::sOutside        = 0x00000000;
 const G4int  G4VSurface::sInside         = 0x10000000;
 const G4int  G4VSurface::sBoundary       = 0x20000000;
 const G4int  G4VSurface::sCorner         = 0x40000000;
-const G4int  G4VSurface::sCMin1Min       = 0x40000101; 
-const G4int  G4VSurface::sCMax1Min       = 0x40000201;
-const G4int  G4VSurface::sCMax1Max       = 0x40000202; 
-const G4int  G4VSurface::sCMin1Max       = 0x40000102; 
+const G4int  G4VSurface::sC0Min1Min      = 0x40000101; 
+const G4int  G4VSurface::sC0Max1Min      = 0x40000201;
+const G4int  G4VSurface::sC0Max1Max      = 0x40000202; 
+const G4int  G4VSurface::sC0Min1Max      = 0x40000102; 
 const G4int  G4VSurface::sAxisMin        = 0x00000101; 
 const G4int  G4VSurface::sAxisMax        = 0x00000202; 
 const G4int  G4VSurface::sAxisX          = 0x00000404;
@@ -273,10 +274,10 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
    
-   G4ThreeVector gxx[2];
-   G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {sOutside, sOutside};
-   G4bool        isvalid[2]     = {false, false};
+   G4ThreeVector gxx[4];
+   G4double      distance[4]    = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int         areacode[4]    = {sOutside, sOutside, sOutside, sOutside};
+   G4bool        isvalid[4]     = {false, false, false, false};
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;  
    G4ThreeVector bestgxx(kInfinity, kInfinity, kInfinity);
@@ -336,10 +337,10 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
          for (G4int j=0; j< nneighbours; j++) {
             // if on corner, nneighbours = 2.
             // if on boundary, nneighbours = 1.
-            G4ThreeVector tmpgxx[2];
-            G4double      tmpdist[2]     = {kInfinity, kInfinity};
-            G4int         tmpareacode[2] = {sOutside, sOutside};
-            G4bool        tmpisvalid[2]  = {false, false};
+            G4ThreeVector tmpgxx[4];
+            G4double      tmpdist[4]     = {kInfinity, kInfinity, kInfinity, kInfinity};
+            G4int         tmpareacode[4] = {sOutside, sOutside, sOutside, sOutside};
+            G4bool        tmpisvalid[4]  = {false, false, false, false };
                   
             G4int tmpnxx = neighbours[j]->DistanceToSurface(
                                           gp, gv, tmpgxx, tmpdist,
@@ -382,7 +383,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                   // tmpxx[k] is same boundary (or corner) of xx.
                  
                   neighbournormal = neighbours[j]->GetNormal(tmpgxx[k], true);
-                  if (neighbournormal * gv < 0) isaccepted[1] = true;
+                  if (neighbournormal * gv < 0) isaccepted[j] = true;
                }
             } 
 
@@ -426,6 +427,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
       G4cout << "      bestdist : " << bestdistance << G4endl;
       G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } 
+
 #endif
 
    return bestdistance;
@@ -446,10 +448,10 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
 
-   G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {sOutside, sOutside};
-   G4bool        isvalid [2]    = {false, false};
-   G4ThreeVector gxx[2];
+   G4double      distance[4]    = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int         areacode[4]    = {sOutside, sOutside, sOutside, sOutside};
+   G4bool        isvalid [4]    = {false, false, false, false};
+   G4ThreeVector gxx[4];
    G4int         nxx;
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;
@@ -511,9 +513,9 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
    G4cout << "      gp   : " << gp << G4endl;
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
-   G4double distance[2] = {kInfinity, kInfinity};
-   G4int    areacode[2] = {sOutside, sOutside};
-   G4ThreeVector gxx[2];
+   G4double distance[4] = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int    areacode[4] = {sOutside, sOutside, sOutside, sOutside};
+   G4ThreeVector gxx[4];
    G4int nxx;
 
    nxx = DistanceToSurface(gp, gxx, distance, areacode);
@@ -677,13 +679,13 @@ void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
                  FatalException, "Area code must represents corner.");
    }
 
-   if ((areacode & sCMin1Min) == sCMin1Min) {
+   if ((areacode & sC0Min1Min) == sC0Min1Min) {
       fCorners[0].set(x, y, z);
-   } else if ((areacode & sCMax1Min) == sCMax1Min) {
+   } else if ((areacode & sC0Max1Min) == sC0Max1Min) {
       fCorners[1].set(x, y, z);
-   } else if ((areacode & sCMax1Max) == sCMax1Max) {
+   } else if ((areacode & sC0Max1Max) == sC0Max1Max) {
       fCorners[2].set(x, y, z);
-   } else if ((areacode & sCMin1Max) == sCMin1Max) {
+   } else if ((areacode & sC0Min1Max) == sC0Min1Max) {
       fCorners[3].set(x, y, z);
    }
 }
@@ -736,16 +738,16 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & sCorner) {
-      if (areacode & sCMin1Max) {
+      if (areacode & sC0Min1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sCMax1Min) {
+      } else if (areacode & sC0Max1Min) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sCMax1Max) {
+      } else if (areacode & sC0Max1Max) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMax[1];
-      } else if (areacode & sCMin1Max) {
+      } else if (areacode & sC0Min1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMax[1];
       }
@@ -810,10 +812,10 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
 
 void G4VSurface::DebugPrint() const
 {
-   G4ThreeVector A = fRot * GetCorner(sCMin1Min) + fTrans;
-   G4ThreeVector B = fRot * GetCorner(sCMax1Min) + fTrans;
-   G4ThreeVector C = fRot * GetCorner(sCMax1Max) + fTrans;
-   G4ThreeVector D = fRot * GetCorner(sCMin1Max) + fTrans;
+   G4ThreeVector A = fRot * GetCorner(sC0Min1Min) + fTrans;
+   G4ThreeVector B = fRot * GetCorner(sC0Max1Min) + fTrans;
+   G4ThreeVector C = fRot * GetCorner(sC0Max1Max) + fTrans;
+   G4ThreeVector D = fRot * GetCorner(sC0Min1Max) + fTrans;
   
    G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
           << G4endl;
@@ -826,10 +828,10 @@ void G4VSurface::DebugPrint() const
           << ", " << fAxisMax[0] << ")" << G4endl;
    G4cout << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 
           << ", " << fAxisMax[1] << ")" << G4endl;
-   G4cout << "/* Cornar point sCMin1Min = " << A << G4endl;
-   G4cout << "/* Cornar point sCMax1Min = " << B << G4endl;
-   G4cout << "/* Cornar point sCMax1Max = " << C << G4endl;
-   G4cout << "/* Cornar point sCMin1Max = " << D << G4endl;
+   G4cout << "/* Cornar point sC0Min1Min = " << A << G4endl;
+   G4cout << "/* Cornar point sC0Max1Min = " << B << G4endl;
+   G4cout << "/* Cornar point sC0Max1Max = " << C << G4endl;
+   G4cout << "/* Cornar point sC0Min1Max = " << D << G4endl;
    G4cout << "/*---------------------------------------------------------"
           << G4endl;
 }
@@ -843,7 +845,7 @@ void G4VSurface::DebugPrint() const
 
 G4VSurface::CurrentStatus::CurrentStatus() 
 {
-  for (size_t i=0; i<2; i++)
+  for (size_t i=0; i<4; i++)
   {
     fDistance[i] = kInfinity;
     fAreacode[i] = sOutside;
@@ -919,13 +921,13 @@ G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
      if (!v || (v && *v == fLastv)) return;
   }         
   G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
-  for (size_t i=0; i<2; i++)
+  for (size_t i=0; i<4; i++)
   {
     fDistance[i] = kInfinity;
     fAreacode[i] = sOutside;
     fIsValid[i]  = false;
-    fXX[i] = xx[i];
-  }
+    fXX[i] = xx;   // bug in old code ( was fXX[i] =  xx[i]  )
+    }
   fNXX   = 0;
   fLastp.set(kInfinity, kInfinity, kInfinity);
   fLastv.set(kInfinity, kInfinity, kInfinity);

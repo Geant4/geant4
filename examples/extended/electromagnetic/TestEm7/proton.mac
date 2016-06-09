@@ -1,0 +1,29 @@
+# $Id: proton.mac,v 1.2 2004/08/13 10:07:57 maire Exp $
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSizeX  30 cm
+/testem/det/setSizeYZ 30 cm
+#
+/testem/phys/addPhysics  standard		#em physics
+#
+####/testem/phys/addPhysics  binary 		#hadronic physics
+####/testem/phys/addPhysics  binary_ion		#hadronic physics
+####/testem/phys/addPhysics  elastic		#hadronic physics
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 200 MeV
+#
+/testem/stepMax 0.5 mm
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
+#

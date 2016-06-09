@@ -22,7 +22,7 @@
 //
 //
 // $Id: DetectorConstruction.hh,v 1.3 2004/05/27 13:43:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 /////////////////////////////////////////////////////////////////////////

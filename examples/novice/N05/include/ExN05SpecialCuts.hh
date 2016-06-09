@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05SpecialCuts.hh,v 1.7 2003/08/27 16:15:42 vnivanch Exp $
-// GEANT4 tag $Name: exampleN05-V05-02-00 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------

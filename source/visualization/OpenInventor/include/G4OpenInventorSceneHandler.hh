@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.16 2004/04/08 09:39:38 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.23 2004/11/24 14:59:38 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -34,18 +34,19 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include <map>
-
+// Inheritance :
 #include "G4VSceneHandler.hh"
+
+#include <map>
 
 class G4OpenInventor;
 class SoSeparator;
+class Geant4_SoStyleCache;
 
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
 
-friend class G4OpenInventorXtViewer;
-friend class G4OpenInventorWinViewer;
+friend class G4OpenInventorViewer;
 
 public:
 
@@ -68,22 +69,6 @@ public:
   //
   // Primitives for use of HEPVis
   //
-  void AddThis (const G4Box  & Box);
-  void AddThis (const G4Tubs & Tubs);
-  void AddThis (const G4Cons & Cons);
-  void AddThis (const G4Trd  & Trd);
-  void AddThis (const G4Trap & Trap);
-
-  // Base class callbacks defined in G4OpenInventorSceneHandler.icc
-  void AddThis (const G4Sphere&);
-  void AddThis (const G4Para&);
-  void AddThis (const G4Torus&);
-  void AddThis (const G4Polycone&);
-  void AddThis (const G4Polyhedra&);
-  void AddThis (const G4VSolid&);
-  void AddThis (const G4VTrajectory&);
-  void AddThis (const G4VHit&);
-
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void EndModeling ();
@@ -95,25 +80,25 @@ private:
   void 		ClearStore ();
   void 		ClearTransientStore ();
   void 		RequestPrimitives (const G4VSolid& solid);
-  static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
-  static 	G4int    fSceneCount;     // No. of extanct scene handlers.
   G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
-  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
-         // namely the ones which go with the graphical database
-         // (display lists).  A view may interrogate this to decide if
-         // it needs to visit the kernel, i.e., to remake the
-         // graphical database.
-
+private:
+  static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
+  static G4int fSceneCount;
+private:
   //
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   //
   std::map <const G4LogicalVolume*, SoSeparator*,
-    std::less <const G4LogicalVolume*> > SeparatorMap;
-  SoSeparator *root;
-  SoSeparator *staticRoot;
-  SoSeparator *transientRoot;
-  SoSeparator *currentSeparator;
+    std::less <const G4LogicalVolume*> > fSeparatorMap;
+  SoSeparator* fRoot;
+  SoSeparator* fDetectorRoot;
+  SoSeparator* fTransientRoot;
+  SoSeparator* fCurrentSeparator;
+  G4bool fModelingSolid;
+  G4bool fReducedWireFrame;
+  Geant4_SoStyleCache* fStyleCache;
+  bool fPreviewAndFull;
 };
 
 #include "G4OpenInventorSceneHandler.icc"

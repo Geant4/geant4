@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.8 2004/06/21 10:57:15 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: TrackingAction.cc,v 1.9 2004/12/02 16:19:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,9 +98,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   G4ThreeVector direction = aTrack->GetMomentumDirection();
   if (histoManager->HistoExist(id)) {
-    G4double theta  = acos(direction.x());
+    G4double theta  = std::acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
-    G4double weight = 1./(twopi*sin(theta)*dteta);
+    G4double weight = 1./(twopi*std::sin(theta)*dteta);
     G4double unit   = histoManager->GetHistoUnit(id);
     histoManager->FillHisto(id,theta,weight*unit*unit);
   }
@@ -113,11 +113,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && neutral) id = 16;
 
   if(id>0) {
-    G4double tet = atan(direction.y()/abs(direction.x()));
+    G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
     histoManager->FillHisto(id,tet);
     if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
 
-    tet = atan(direction.z()/abs(direction.x()));
+    tet = std::atan(direction.z()/std::fabs(direction.x()));
     histoManager->FillHisto(id,tet);
     if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
   }

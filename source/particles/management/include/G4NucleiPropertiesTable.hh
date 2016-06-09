@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.11 2003/12/12 06:48:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NucleiPropertiesTable.hh,v 1.12 2004/12/02 08:08:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -46,6 +46,7 @@
 // Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 // -------------------------------------------------------------------
 #include "globals.hh"
+#include <cmath>
 
 
 #ifndef G4NucleiPropertiesTable_h

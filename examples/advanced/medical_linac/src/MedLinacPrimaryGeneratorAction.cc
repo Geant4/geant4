@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.3 2004/05/14 18:25:40 mpiergen Exp $
+// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.4 2004/11/24 13:49:42 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -78,9 +78,9 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    G4double cosTheta = RandGauss::shoot(-1.,0.00003);
    G4double phi = twopi * G4UniformRand();
 
-   G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
-   G4double ux = sinTheta*cos(phi);
-   G4double uy = sinTheta*sin(phi);
+   G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
+   G4double ux = sinTheta*std::cos(phi);
+   G4double uy = sinTheta*std::sin(phi);
    G4double uz = cosTheta;
 
    particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.19 2003/11/22 10:11:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Polycone.cc,v 1.20 2004/12/10 16:22:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // --------------------------------------------------------------------
@@ -190,11 +190,11 @@ void G4Polycone::Create( G4double phiStart,
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
   //
-  if (phiTotal <= 0 || phiTotal > 2.0*M_PI-1E-10)
+  if (phiTotal <= 0 || phiTotal > twopi-1E-10)
   {
     phiIsOpen = false;
     startPhi = 0;
-    endPhi = 2*M_PI;
+    endPhi = twopi;
   }
   else
   {
@@ -204,10 +204,10 @@ void G4Polycone::Create( G4double phiStart,
     // Convert phi into our convention
     //
     startPhi = phiStart;
-    while( startPhi < 0 ) startPhi += 2*M_PI;
+    while( startPhi < 0 ) startPhi += twopi;
     
     endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi ) endPhi += 2*M_PI;
+    while( endPhi < startPhi ) endPhi += twopi;
   }
   
   //

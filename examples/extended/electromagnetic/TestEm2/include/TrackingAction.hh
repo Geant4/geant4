@@ -20,11 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: TrackingAction.hh,v 1.3 2004/09/17 10:51:38 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: TrackingAction.hh,v 1.2 2004/05/24 07:03:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -37,19 +37,15 @@ class RunAction;
 
 class TrackingAction : public G4UserTrackingAction {
 
-public:
-  TrackingAction(RunAction*);
+ public:
+   TrackingAction(RunAction*);
   ~TrackingAction() {};
 
-  void PostUserTrackingAction(const G4Track*);
+   void PostUserTrackingAction(const G4Track*);
 
-private:
-
-  // hide assignment operator
-  TrackingAction & operator=(const TrackingAction &right);
-  TrackingAction(const TrackingAction&);
-
-  RunAction* Run;
+ private:
+   RunAction* Run;
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

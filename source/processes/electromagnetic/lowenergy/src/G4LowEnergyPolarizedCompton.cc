@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.17 2003/11/18 16:39:21 pia Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.19 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -185,9 +185,9 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   if(gammaEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(gammaEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(gammaEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -204,7 +204,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   G4double epsilon0 = 1./(1. + 2*E0_m);
   G4double epsilon0Sq = epsilon0*epsilon0;
-  G4double alpha1   = - log(epsilon0);
+  G4double alpha1   = - std::log(epsilon0);
   G4double alpha2 = 0.5*(1.- epsilon0Sq);
 
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;
@@ -214,13 +214,13 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
       {
-	epsilon   = exp(-alpha1*G4UniformRand());  
+	epsilon   = std::exp(-alpha1*G4UniformRand());  
 	epsilonSq = epsilon*epsilon; 
       }
     else 
       {
 	epsilonSq = epsilon0Sq + (1.- epsilon0Sq)*G4UniformRand();
-	epsilon   = sqrt(epsilonSq);
+	epsilon   = std::sqrt(epsilonSq);
       }
 
     onecost = (1.- epsilon)/(epsilon*E0_m);
@@ -249,7 +249,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       }
     // End protection
 
-    G4double x =  sqrt(onecost/2.) / (wlGamma/cm);;
+    G4double x =  std::sqrt(onecost/2.) / (wlGamma/cm);;
     G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
     greject = (1. - epsilon*sinThetaSqr/(1.+ epsilonSq))*scatteringFunction;
 
@@ -293,7 +293,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   // End protection      
   
   
-  G4double sinTheta = sqrt (sinThetaSqr);
+  G4double sinTheta = std::sqrt (sinThetaSqr);
   
   // Protection
   if (sinTheta > 1.)
@@ -319,8 +319,8 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   // End protection
   
       
-  G4double dirx = sinTheta*cos(phi);
-  G4double diry = sinTheta*sin(phi);
+  G4double dirx = sinTheta*std::cos(phi);
+  G4double diry = sinTheta*std::sin(phi);
   G4double dirz = cosTheta ;
   
   //
@@ -347,14 +347,14 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   if (gammaEnergy1 > 0.)
     {
-      aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
-      aParticleChange.SetMomentumChange( gammaDirection1 );
-      aParticleChange.SetPolarizationChange( gammaPolarization1 );
+      aParticleChange.ProposeEnergy( gammaEnergy1 ) ;
+      aParticleChange.ProposeMomentumDirection( gammaDirection1 );
+      aParticleChange.ProposePolarization( gammaPolarization1 );
     }
   else
     {
-      aParticleChange.SetEnergyChange(0.) ;
-      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.) ;
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
     }
 
   //
@@ -369,18 +369,18 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   if (rangeTest->Escape(G4Electron::Electron(),couple,ElecKineEnergy,safety))
     {
-      G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
+      G4double ElecMomentum = std::sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
       G4ThreeVector ElecDirection((gammaEnergy0 * gammaDirection0 -
 				   gammaEnergy1 * gammaDirection1) * (1./ElecMomentum));
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);
-      aParticleChange.SetLocalEnergyDeposit(0.); 
+      aParticleChange.ProposeLocalEnergyDeposit(0.); 
     }
   else
     {
       aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.SetLocalEnergyDeposit(ElecKineEnergy);
+      aParticleChange.ProposeLocalEnergyDeposit(ElecKineEnergy);
     }
   
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
@@ -407,7 +407,7 @@ G4double G4LowEnergyPolarizedCompton::SetPhi(G4double energyRate,
       a = 2*sinSqrTh;
       b = energyRate + 1/energyRate;
       
-      phiProbability = 1 - (a/b)*(cos(phi)*cos(phi));
+      phiProbability = 1 - (a/b)*(std::cos(phi)*std::cos(phi));
 
       
  
@@ -445,9 +445,9 @@ G4ThreeVector G4LowEnergyPolarizedCompton::GetRandomPolarization(G4ThreeVector& 
   
   G4ThreeVector c;
   
-  c.setX(cos(angle)*(a0.x())+sin(angle)*b0.x());
-  c.setY(cos(angle)*(a0.y())+sin(angle)*b0.y());
-  c.setZ(cos(angle)*(a0.z())+sin(angle)*b0.z());
+  c.setX(std::cos(angle)*(a0.x())+std::sin(angle)*b0.x());
+  c.setY(std::cos(angle)*(a0.y())+std::sin(angle)*b0.y());
+  c.setZ(std::cos(angle)*(a0.z())+std::sin(angle)*b0.z());
   
   G4ThreeVector c0 = c.unit();
 
@@ -481,13 +481,13 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
 {
   G4double rand1;
   G4double rand2;
-  G4double cosPhi = cos(phi);
-  G4double sinPhi = sin(phi);
-  G4double sinTheta = sqrt(sinSqrTh);
+  G4double cosPhi = std::cos(phi);
+  G4double sinPhi = std::sin(phi);
+  G4double sinTheta = std::sqrt(sinSqrTh);
   G4double cosSqrPhi = cosPhi*cosPhi;
   //  G4double cossqrth = 1.-sinSqrTh;
   //  G4double sinsqrphi = sinPhi*sinPhi;
-  G4double normalisation = sqrt(1. - cosSqrPhi*sinSqrTh);
+  G4double normalisation = std::sqrt(1. - cosSqrPhi*sinSqrTh);
   
 
   // Determination of Theta 
@@ -505,13 +505,13 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
       theta = twopi*rand1;
       a = 4*normalisation*normalisation;
       b = (epsilon + 1/epsilon) - 2;
-      thetaProbability = (b + a*cos(theta)*cos(theta))/(a+b);
-      cosTheta = cos(theta);
+      thetaProbability = (b + a*std::cos(theta)*std::cos(theta))/(a+b);
+      cosTheta = std::cos(theta);
     }
   while ( rand2 > thetaProbability );
   
   G4double cosBeta = cosTheta;
-  G4double sinBeta = sqrt(1-cosBeta*cosBeta);
+  G4double sinBeta = std::sqrt(1-cosBeta*cosBeta);
   
   G4ThreeVector gammaPolarization1;
 

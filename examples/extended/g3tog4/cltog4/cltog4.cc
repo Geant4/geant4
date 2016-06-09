@@ -22,7 +22,7 @@
 //
 //
 // $Id: cltog4.cc,v 1.4 2003/07/04 15:45:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 #include "G4ios.hh"

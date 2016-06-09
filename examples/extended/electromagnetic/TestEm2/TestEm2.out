@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,10 +82,11 @@ Current available graphics systems are:
 /testem/det/setRbin 6 0.111
 #
 # Acceptance printout is activated
-/testem/run/acceptance  0.9425 0.0355 3.0
+/testem/run/acceptance  0.9412 0.0491 3.0
 #
 /testem/phys/addPhysics  standard
-### /testem/phys/addPhysics  g4v52
+PhysicsList::AddPhysicsList <standard>
+#### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
 #
@@ -96,6 +97,7 @@ Absorber is 3.60564 m   of Water
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
 phot:  Total cross sections from Sandia parametrisation. 
+/testem/phys/verbose  -1
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -103,6 +105,7 @@ phot:  Total cross sections from Sandia parametrisation.
 /testem/event/printModulo 20
 #
 /run/beamOn 100
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -112,80 +115,9 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
-
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
-
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
-
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
-
-MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-
-MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Parametrised model 
-
-MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Parametrised model 
-### All dEdx and Range tables are built #####
-
-MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
-      Lambda tables from threshold to 100 GeV in 90 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -218,20 +150,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.88s Real=24s Sys=0.79s
+  User=18.23s Real=22.85s Sys=0.7s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   15.55%       7.53%             0-> 1.11 radl:   15.55%     7.53% 
-    1.11-> 2.22 radl:   25.78%       9.77%             0-> 2.22 radl:   41.33%    14.34% 
-    2.22-> 3.33 radl:   21.23%      10.43%             0-> 3.33 radl:   62.56%    16.48% 
-    3.33-> 4.44 radl:   12.63%       7.44%             0-> 4.44 radl:   75.19%    15.24% 
-    4.44-> 5.55 radl:    8.22%       6.41%             0-> 5.55 radl:   83.41%    13.04% 
-    5.55-> 6.66 radl:    5.04%       6.12%             0-> 6.66 radl:   88.45%     9.13% 
-    6.66-> 7.77 radl:    3.32%       5.60%             0-> 7.77 radl:   91.77%     6.79% 
-    7.77-> 8.88 radl:    1.40%       3.09%             0-> 8.88 radl:   93.17%     6.15% 
-    8.88-> 9.99 radl:    0.46%       1.16%             0-> 9.99 radl:   93.63%     6.04% 
+    0.00-> 1.11 radl:   14.32%       5.75%             0-> 1.11 radl:   14.32%     5.75% 
+    1.11-> 2.22 radl:   24.89%      10.85%             0-> 2.22 radl:   39.21%    13.56% 
+    2.22-> 3.33 radl:   20.73%       8.66%             0-> 3.33 radl:   59.94%    16.26% 
+    3.33-> 4.44 radl:   13.35%       7.29%             0-> 4.44 radl:   73.29%    15.17% 
+    4.44-> 5.55 radl:    8.70%       6.24%             0-> 5.55 radl:   81.99%    13.44% 
+    5.55-> 6.66 radl:    5.63%       5.68%             0-> 6.66 radl:   87.62%    10.40% 
+    6.66-> 7.77 radl:    3.47%       4.91%             0-> 7.77 radl:   91.09%     7.02% 
+    7.77-> 8.88 radl:    1.51%       2.78%             0-> 8.88 radl:   92.60%     5.23% 
+    8.88-> 9.99 radl:    1.06%       2.54%             0-> 9.99 radl:   93.66%     3.83% 
 
 
 
@@ -239,28 +171,29 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   62.83%      11.49%             0-> 0.11 radl:   62.83%    11.49% 
-    0.11-> 0.22 radl:   16.02%       6.14%             0-> 0.22 radl:   78.85%    10.87% 
-    0.22-> 0.33 radl:    7.39%       4.51%             0-> 0.33 radl:   86.24%     9.57% 
-    0.33-> 0.44 radl:    3.43%       2.71%             0-> 0.44 radl:   89.67%     8.31% 
-    0.44-> 0.56 radl:    2.34%       2.36%             0-> 0.56 radl:   92.02%     7.01% 
-    0.56-> 0.67 radl:    1.62%       1.82%             0-> 0.67 radl:   93.63%     6.04% 
+    0.00-> 0.11 radl:   61.90%      12.34%             0-> 0.11 radl:   61.90%    12.34% 
+    0.11-> 0.22 radl:   17.49%       7.14%             0-> 0.22 radl:   79.39%     9.57% 
+    0.22-> 0.33 radl:    7.30%       5.73%             0-> 0.33 radl:   86.70%     6.30% 
+    0.33-> 0.44 radl:    3.72%       3.45%             0-> 0.44 radl:   90.41%     4.43% 
+    0.44-> 0.56 radl:    1.95%       1.82%             0-> 0.56 radl:   92.37%     4.12% 
+    0.56-> 0.67 radl:    1.29%       1.16%             0-> 0.67 radl:   93.66%     3.83% 
 
                               SUMMARY
-                         energy deposit :   93.63 % E0 +-    6.04 % E0
-                         charged traklen:   13.64 radl +-    0.87 radl
-                         neutral traklen:  194.75 radl +-   23.22 radl
+                         energy deposit :   93.66 % E0 +-    3.83 % E0
+                         charged traklen:   13.60 radl +-    0.56 radl
+                         neutral traklen:  196.41 radl +-   18.59 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1295517251, 1185660715
+ Current couple of seeds = 746053755, 1768068041
 ----------------------------------------
 
-<<<<<ACCEPTANCE>>>>> 100 events for Total Energy in Absorber
-Edep: 0.93630358  delEdep= -0.0061964186 nrms= -1.74547
-Erms: 0.06041669  delErms= 0.02491669 nrms= 7.0187859
-<<<<<END>>>>>   IS NOT ACCEPTED
+<<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
+Edep: 0.93657535  delEdep= -0.00462465 nrms= -0.94188392
+Erms: 0.038327017  delErms= -0.010772983 nrms= -2.1940903
+<<<<END>>>>   IS ACCEPTED
 
+#
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

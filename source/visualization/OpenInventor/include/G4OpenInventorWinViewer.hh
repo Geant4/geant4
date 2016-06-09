@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.2 2004/04/08 10:49:10 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorWinViewer.hh,v 1.7 2004/11/25 13:39:54 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -33,35 +33,28 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include "G4VViewer.hh"
+// Inheritance :
+#include "G4OpenInventorViewer.hh"
 
 #include <windows.h>
 
-class SoWinExaminerViewer;
-class SoSelection;
-class G4OpenInventorSceneHandler;
-class G4VInteractorManager;
+class Geant4_SoWinExaminerViewer;
 
-class G4OpenInventorWinViewer: public G4VViewer {
-
+class G4OpenInventorWinViewer: public G4OpenInventorViewer {
+public: //G4VViewer
+  virtual void FinishView();
+protected:
+  virtual void ViewerRender();
+  virtual SoCamera* GetCamera();
 public:
   G4OpenInventorWinViewer(G4OpenInventorSceneHandler& scene,
 		       const G4String& name = "");
   virtual ~G4OpenInventorWinViewer();
-  void DrawView();
-  void ShowView();
 private:
-  void ClearView();
-  void FinishView();
-  void SetView();
-  void KernelVisitDecision();
-  G4bool CompareForKernelVisit(G4ViewParameters&);
-  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
-  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
+  static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
+private:
   HWND fShell;
-  SoWinExaminerViewer* fViewer;
-  SoSelection* fSelection;
-  G4VInteractorManager* fInteractorManager;
+  Geant4_SoWinExaminerViewer* fViewer;
 };
 
 #endif

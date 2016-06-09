@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.6 2004/06/07 08:46:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4TwistedSurface.cc,v 1.9 2004/12/02 09:31:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -171,7 +171,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    //    y(rho(z=0), z) = rho(z=0)*K*z
    //    z(rho(z=0), z) = z
    //    with
-   //       K = tan(fPhiTwist/2)/fZHalfLen
+   //       K = std::tan(fPhiTwist/2)/fZHalfLen
    //
    // Equation of a line:
    //
@@ -230,9 +230,9 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    // p is origin or
    //
 
-   G4double absvz = fabs(v.z());
+   G4double absvz = std::fabs(v.z());
 
-   if ((absvz < DBL_MIN) && (fabs(p.x() * v.y() - p.y() * v.x()) < DBL_MIN)) {
+   if ((absvz < DBL_MIN) && (std::fabs(p.x() * v.y() - p.y() * v.x()) < DBL_MIN)) {
       // no intersection
 
       isvalid[0] = false;
@@ -251,8 +251,8 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4double c = fKappa * p.x() * p.z() - p.y();
    G4double D = b * b - 4 * a * c;             // discriminant
 
-   if (fabs(a) < DBL_MIN) {
-      if (fabs(b) > DBL_MIN) { 
+   if (std::fabs(a) < DBL_MIN) {
+      if (std::fabs(b) > DBL_MIN) { 
 
          // single solution
 
@@ -306,7 +306,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 
       // double solutions
 
-      D = sqrt(D);
+      D = std::sqrt(D);
       G4double      factor = 0.5/a;
       G4double      tmpdist[2] = {kInfinity, kInfinity};
       G4ThreeVector tmpxx[2];
@@ -320,7 +320,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
          // protection against round off error  
          //G4double protection = 1.0e-6;
          G4double protection = 0;
-         if ( b * D < 0 && fabs(bminusD / D) < protection ) {
+         if ( b * D < 0 && std::fabs(bminusD / D) < protection ) {
             G4double acovbb = (a*c)/(b*b);
             tmpdist[i] = - c/b * ( 1 - acovbb * (1 + 2*acovbb));
          } else { 
@@ -389,7 +389,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       for (G4int k=0; k<2; k++) {
          if (!isvalid[k]) continue;
 
-         G4ThreeVector xxonsurface(xx[k].x(), fKappa * fabs(xx[k].x())
+         G4ThreeVector xxonsurface(xx[k].x(), fKappa * std::fabs(xx[k].x())
                                               * xx[k].z() , xx[k].z());
          G4double      deltaY  =  (xx[k] - xxonsurface).mag();
 
@@ -414,7 +414,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
                  break;
                }
                xxonsurface.set(xx[k].x(),
-                               fKappa * fabs(xx[k].x()) * xx[k].z(),
+                               fKappa * std::fabs(xx[k].x()) * xx[k].z(),
                                xx[k].z());
             }
             if (l == maxcount) {
@@ -570,7 +570,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 
    // In order to set correct diagonal, swap A and D, C and B if needed.  
    G4ThreeVector pt(p.x(), p.y(), 0.);
-   G4double      rc = fabs(p.x());
+   G4double      rc = std::fabs(p.x());
    G4ThreeVector surfacevector(rc, rc * fKappa * p.z(), 0.); 
    G4int         pside = AmIOnLeftSide(pt, surfacevector); 
    G4double      test  = (A.z() - C.z()) * parity * pside;  
@@ -630,8 +630,8 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
 
    // if calculated distance = 0, return  
 
-   if (fabs(distToACB) <= halftol || fabs(distToCAD) <= halftol) {
-      xx = (fabs(distToACB) < fabs(distToCAD) ? xxacb : xxcad); 
+   if (std::fabs(distToACB) <= halftol || std::fabs(distToCAD) <= halftol) {
+      xx = (std::fabs(distToACB) < std::fabs(distToCAD) ? xxacb : xxcad); 
       areacode[0] = sInside;
       gxx[0] = ComputeGlobalPoint(xx);
       distance[0] = 0;
@@ -710,11 +710,11 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
    }
 
    // if p is on surface, return 0.
-   if (fabs(distToanm) <= halftol) {
+   if (std::fabs(distToanm) <= halftol) {
       xx = xxanm;
       n  = nanm * parity;
       return 0;
-   } else if (fabs(distTocmn) <= halftol) {
+   } else if (std::fabs(distTocmn) <= halftol) {
       xx = xxcmn;
       n  = ncmn * parity;
       return 0;
@@ -856,28 +856,28 @@ void G4TwistedSurface::SetCorners(
       G4double x, y, z;
       
       // corner of Axis0min and Axis1min
-      x = endInnerRad[zmin]*cos(endPhi[zmin]);
-      y = endInnerRad[zmin]*sin(endPhi[zmin]);
+      x = endInnerRad[zmin]*std::cos(endPhi[zmin]);
+      y = endInnerRad[zmin]*std::sin(endPhi[zmin]);
       z = endZ[zmin];
-      SetCorner(sCMin1Min, x, y, z);
+      SetCorner(sC0Min1Min, x, y, z);
       
       // corner of Axis0max and Axis1min
-      x = endOuterRad[zmin]*cos(endPhi[zmin]);
-      y = endOuterRad[zmin]*sin(endPhi[zmin]);
+      x = endOuterRad[zmin]*std::cos(endPhi[zmin]);
+      y = endOuterRad[zmin]*std::sin(endPhi[zmin]);
       z = endZ[zmin];
-      SetCorner(sCMax1Min, x, y, z);
+      SetCorner(sC0Max1Min, x, y, z);
       
       // corner of Axis0max and Axis1max
-      x = endOuterRad[zmax]*cos(endPhi[zmax]);
-      y = endOuterRad[zmax]*sin(endPhi[zmax]);
+      x = endOuterRad[zmax]*std::cos(endPhi[zmax]);
+      y = endOuterRad[zmax]*std::sin(endPhi[zmax]);
       z = endZ[zmax];
-      SetCorner(sCMax1Max, x, y, z);
+      SetCorner(sC0Max1Max, x, y, z);
       
       // corner of Axis0min and Axis1max
-      x = endInnerRad[zmax]*cos(endPhi[zmax]);
-      y = endInnerRad[zmax]*sin(endPhi[zmax]);
+      x = endInnerRad[zmax]*std::cos(endPhi[zmax]);
+      y = endInnerRad[zmax]*std::sin(endPhi[zmax]);
       z = endZ[zmax];
-      SetCorner(sCMin1Max, x, y, z);
+      SetCorner(sC0Min1Max, x, y, z);
 
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -914,28 +914,28 @@ void G4TwistedSurface::SetBoundaries()
    if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
       
       // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisX | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisZ) ;
+                  GetCorner(sC0Min1Min), sAxisZ) ;
       
       // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisX | sAxisMax), direction, 
-                  GetCorner(sCMax1Min), sAxisZ);
+                  GetCorner(sC0Max1Min), sAxisZ);
                   
       // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisX);
+                  GetCorner(sC0Min1Min), sAxisX);
                   
       // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-                  GetCorner(sCMin1Max), sAxisX);
+                  GetCorner(sC0Min1Max), sAxisX);
                   
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl

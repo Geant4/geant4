@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PlaceOfAction.hh,v 1.3 2003/11/26 14:51:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PlaceOfAction

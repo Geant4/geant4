@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004/06/07 08:46:53 gcosmo Exp $
+$Id: History,v 1.51 2004/12/08 12:30:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-Dec-2004, O.Link (geom-specific-V06-02-07)
+- Extensions to twisted box/trap shapes to consider all 4 solutions
+  for determining correct intersections.
+
+29-Nov-2004, O.Link (geom-specific-V06-02-06)
+- G4TwistedTrapSide, G4TwistedBoxSide: improved (analytical) version
+  of GetPhiUAtX() method.
+
+24-Nov-2004, O.Link (geom-specific-V06-02-05)
+- Fixed bug in description of twisted trapezoid side.
+
+12-Nov-2004, O.Link (geom-specific-V06-02-04)
+- Added G4TwistedBox  - a twisted box with twist angle alpha,
+                        length a/2,b/2,L/2.
+- Added G4TwistedTrap - a twisted trapezoid (still in debug state)
+- Changed in G4VSurface.icc: 
+    - GetNeighbours(): corrected axiscode (was returning the wrong neighbours)
+    - SetNeighbours(): fixed problem #685 (index out of range)
+- Added tests for G4TwistedBox and G4TwistedTrap in specific/test.
+- Added G4TwistedBox and G4TwistedTrap in system testing, test10.
+
+22-Oct-2004, D.C.Williams (geom-specific-V06-02-03)
+- Fix in G4PolyconeSide::Inside for points at radius = 0 for phi slides
+  solids with an inner radius. Addresses problem report #598.
+
+10-Oct-2004, J.Allison (geom-specific-V06-02-02)
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
+
+22-Sep-2004, G.Cosmo (geom-specific-V06-02-01)
+- Added implementation of GetCubicVolume() with cashing mechanism for
+  solids: G4EllipticalTube, G4Hype, G4Polyhedra, G4Polycone, G4TwistedTubs.
+
+01-Sep-2004, D.C.Williams (geom-specific-V06-02-00)
+- G4VCSGfaceted: fix for rare anomalous situation in which
+  DistanceToOut(p,v,..) will report kInfinity, make an additional check
+  for the point p on the surface, in which case will report zero.
+  Addresses problem observed in G4Polyhedra and reported in #650.
 
 07-Jun-2004, G.Cosmo (geom-specific-V06-01-04)
 - Fixed compilation problem in G4TwistedSurface.cc on WIN32-VC.

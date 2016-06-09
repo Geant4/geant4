@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004/06/11 14:17:14 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004/11/12 09:05:05 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for geometry/management library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -16,9 +16,8 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include 
-
-#            -I$(G4BASE)/geometry/volumes/include
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/materials/include
 
 ifdef G4GEOMETRY_VOXELDEBUG
   CPPFLAGS += -DG4GEOMETRY_VOXELDEBUG

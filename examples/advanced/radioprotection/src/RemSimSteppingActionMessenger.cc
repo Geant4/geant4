@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-//$Id: RemSimSteppingActionMessenger.cc,v 1.2 2004/05/22 12:57:07 guatelli Exp $// GEANT4 tag $Name: geant4-06-02 $
+//$Id: RemSimSteppingActionMessenger.cc,v 1.3 2004/11/23 15:43:41 guatelli Exp $// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -53,6 +53,10 @@ RemSimSteppingActionMessenger::~RemSimSteppingActionMessenger()
 
 void RemSimSteppingActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
- if(command == hadronicCmd) steppingAction -> SetHadronicAnalysis(newValue);
+ if(command == hadronicCmd) 
+ {
+   steppingAction -> SetHadronicAnalysis(newValue);
+   G4cout<< " The stepping verbose is switched on" << G4endl; 
+ }
 }
 

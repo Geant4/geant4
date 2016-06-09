@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MuCrossSections.hh,v 1.1 2004/06/14 10:09:22 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: MuCrossSections.hh,v 1.2 2004/08/27 11:06:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,8 +43,8 @@ class MuCrossSections
    ~MuCrossSections();
 
   public:
-    G4double CR_Macroscopic (G4String, G4Material*, G4double, G4double);   
-    G4double CR_PerAtom     (G4String, G4Element* , G4double, G4double);
+    G4double CR_Macroscopic (const G4String&, G4Material*, G4double, G4double);   
+    G4double CR_PerAtom     (const G4String&, G4Element* , G4double, G4double);
                        
   private:
     G4double CRB_Mephi (G4double, G4double, G4double, G4double);

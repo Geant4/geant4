@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4strstreambuf.hh,v 1.12 2004/06/09 07:30:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ---------------------------------------------------------------

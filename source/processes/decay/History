@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2004/05/08 15:30:19 kurasige Exp $
+$Id: History,v 1.21 2004/12/10 18:23:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Dec. 10, 04 G.Cosmo (decay-V06-02-05)
+- replaced M_PI with CLHEP's pi.
+
+- Dec. 2, 04 H.Kurashige (decay-V06-02-04)
+- migration to cmath
+
+- Oct 19, 04 H.Kurashige (decay-V06-02-03)
+- Modify G4UnknownDecay for migration of ParticleChange
+
+- Sep 17, 04 P. Gumplinger (decay-V06-02-02)
+- Add G4DecayWithSpin class and allow for dependency to
+  /geometry/navigation in GNUmakefile
+- Fixed the problem of determination of particle's decay time
+  for the case the particle stops due to energy loss.  
+
+- Aug. 10, 04 H.Kurashige(decay-V06-02-01)
+- Add G4Decay::GetRemainderLifeTime method
+
+- Jul. 07, 04 M.Asai (decay-V06-02-00)
+- Introducing G4UnknownDecay
+
 -  May. 08, 04 H.Kurashige(decay-V06-01-00)
 -   Change method name for ParticleChange
 

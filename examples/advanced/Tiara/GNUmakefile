@@ -1,11 +1,11 @@
-#  $Id: GNUmakefile,v 1.6 2004/06/09 15:04:34 daquinog Exp $
+#  $Id: GNUmakefile,v 1.7 2004/12/08 15:37:13 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # --------------------------------------------------------------
 
 
 
-TIARA_SRC_DIRS =  tiaraPhysicsPackaging tiaraPhysicsLists tiara 
+TIARA_SRC_DIRS = tiara
 TIARA_SRC_SWIG_DIRS = CLHEPWrapper G4KernelWrapper TiaraWrapper
 
 include $(G4INSTALL)/config/architecture.gmk

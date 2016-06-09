@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2004/07/23 15:39:34 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2003/10/06 10:02:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,9 +30,9 @@
 #define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class G4ParticleGun;
 class G4Event;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
@@ -52,11 +49,13 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetDefaultKinematic(G4int);
     void SetRndmBeam(G4double val)  {rndmBeam = val;}   
     void GeneratePrimaries(G4Event*);
+    
+    G4ParticleGun* GetParticleGun() {return particleGun;}
 
   private:
-    G4ParticleGun*                particleGun;
+    G4ParticleGun*             particleGun;
     DetectorConstruction*      Detector;
-    G4double                      rndmBeam;       
+    G4double                   rndmBeam;       
     PrimaryGeneratorMessenger* gunMessenger;     
 };
 

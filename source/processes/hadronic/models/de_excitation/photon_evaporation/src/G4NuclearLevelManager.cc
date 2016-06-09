@@ -126,7 +126,7 @@ NearestLevel(const G4double energy, const G4double eDiffMax) const
 	for (i=0; i<_levels->size(); i++)
 	{
 	    G4double e = _levels->operator[](i)->Energy();
-	    G4double eDiff = abs(e - energy);
+	    G4double eDiff = std::abs(e - energy);
 	    if (eDiff < diff && eDiff <= eDiffMax)
 	    { 
 		diff = eDiff; 

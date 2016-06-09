@@ -64,7 +64,7 @@ public:
 
   G4PAIModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
 
-  ~G4PAIModel();
+  virtual ~G4PAIModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -157,20 +157,26 @@ private:
 
 
   // vectors
-  G4PhysicsTable*                    fPAItransferBank;
+
+  G4PhysicsTable*                    fPAItransferTable;
   std::vector<G4PhysicsTable*>       fPAIxscBank;
+
   G4PhysicsTable*                    fPAIdEdxTable;
   std::vector<G4PhysicsTable*>       fPAIdEdxBank;
+
   std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>       fPAIRegionVector;
+
   size_t                             fMatIndex ;  
   G4double**                         fSandiaPhotoAbsCof ;
   G4int                              fSandiaIntervalNumber ;
 
   G4PhysicsLogVector*              fdEdxVector ;
   std::vector<G4PhysicsLogVector*> fdEdxTable ;
+
   G4PhysicsLogVector*              fLambdaVector ;
   std::vector<G4PhysicsLogVector*> fLambdaTable ;
+
   G4PhysicsLogVector*              fdNdxCutVector ;
   std::vector<G4PhysicsLogVector*> fdNdxCutTable ;
 

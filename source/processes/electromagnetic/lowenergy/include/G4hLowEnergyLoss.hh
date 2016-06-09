@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.15 2003/04/18 17:50:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4hLowEnergyLoss.hh,v 1.16 2004/12/02 14:01:12 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -235,9 +235,9 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4int TotBin; // number of bins in table,
                          // calculated in BuildPhysicsTable
 
-    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
+    static G4double RTable,LOGRTable; // LOGRTable=std::log(HighestKineticEnergy
                                       //          /LowestKineticEnergy)/TotBin
-                                      //   RTable = exp(LOGRTable)
+                                      //   RTable = std::exp(LOGRTable)
   private:
 
     static G4PhysicsTable* theDEDXTable;

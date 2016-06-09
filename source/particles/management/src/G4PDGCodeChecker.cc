@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.6 2003/06/16 16:58:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PDGCodeChecker.cc,v 1.7 2004/12/07 09:05:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -100,49 +100,49 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   }
  
  //exceptions
-  if (abs(tempPDGcode)%10000 == 3122) { 
+  if (std::abs(tempPDGcode)%10000 == 3122) { 
     // Lambda
     quark2=2;  quark3 = 1; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 3124) { 
+  } else if (std::abs(tempPDGcode)%10000 == 3124) { 
     // Lambda*
     quark2=2;  quark3 = 1; spin = 3;
-  } else if (abs(tempPDGcode)%10000 == 3126) { 
+  } else if (std::abs(tempPDGcode)%10000 == 3126) { 
     // Lambda*
     quark2=2;  quark3 = 1; spin = 5;
-  } else if (abs(tempPDGcode)%10000 == 3128) { 
+  } else if (std::abs(tempPDGcode)%10000 == 3128) { 
     // Lambda*
     quark2=2;  quark3 = 1; spin = 7;
-  } else if (abs(tempPDGcode)%10000 == 4122) { 
+  } else if (std::abs(tempPDGcode)%10000 == 4122) { 
     // Lambda_c
     quark2=2;  quark3 = 1; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 4132) { 
+  } else if (std::abs(tempPDGcode)%10000 == 4132) { 
     // Xi_c0
     quark2=3;  quark3 = 1; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 4232) { 
+  } else if (std::abs(tempPDGcode)%10000 == 4232) { 
     // Xi_c+
     quark2=3;  quark3 = 2; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 2122) { 
+  } else if (std::abs(tempPDGcode)%10000 == 2122) { 
     // Delta+ (spin 1/2) 
     quark2=2;  quark3 = 1; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 1212) { 
+  } else if (std::abs(tempPDGcode)%10000 == 1212) { 
     // Delta0 (spin 1/2) 
     quark1=2;  quark2 = 1; spin = 1;
-  } else if (abs(tempPDGcode)%10000 == 2126) { 
+  } else if (std::abs(tempPDGcode)%10000 == 2126) { 
     // Delta+ (spin 5/2) 
     quark2=2;  quark3 = 1; spin = 5;
-  } else if (abs(tempPDGcode)%10000 == 1216) { 
+  } else if (std::abs(tempPDGcode)%10000 == 1216) { 
     // Delta0 (spin 5/2) 
     quark1=2;  quark2 = 1; spin = 5;
-  } else if (abs(tempPDGcode)%10000 == 2128) { 
+  } else if (std::abs(tempPDGcode)%10000 == 2128) { 
     // Delta+ (spin 7/2) 
     quark2=2;  quark3 = 1; spin = 7;
-  } else if (abs(tempPDGcode)%10000 == 1218) { 
+  } else if (std::abs(tempPDGcode)%10000 == 1218) { 
     // Delta0 (spin 7/2) 
     quark1=2;  quark2 = 1; spin = 7;
-  } else if (abs(tempPDGcode)%10000 == 2124) { 
+  } else if (std::abs(tempPDGcode)%10000 == 2124) { 
     // N*+ (spin 3/2) 
     quark2=2;  quark3 = 1; spin = 3;
-  } else if (abs(tempPDGcode)%10000 == 1214) { 
+  } else if (std::abs(tempPDGcode)%10000 == 1214) { 
     // N*0 (spin 3/2) 
     quark1=2;  quark2 = 1; spin = 3;
   } 
@@ -290,7 +290,7 @@ G4int G4PDGCodeChecker::CheckForDiQuarks()
 /////////////
 G4int G4PDGCodeChecker::CheckForQuarks()
 {
-  if ( abs(quark1)>NumberOfQuarkFlavor ) {
+  if ( std::abs(quark1)>NumberOfQuarkFlavor ) {
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
       G4cout << " ??? unknown quark ";
@@ -302,7 +302,7 @@ G4int G4PDGCodeChecker::CheckForQuarks()
 
   } 
 
-  quark1 = abs(code);
+  quark1 = std::abs(code);
 
   // Fill Quark Contents
   if (code>0){
@@ -325,7 +325,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
     totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
   }
 
-  if (abs(totalCharge-thePDGCharge)>0.1*eplus) { 
+  if (std::abs(totalCharge-thePDGCharge)>0.1*eplus) { 
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
       G4cout << " illegal electric charge " << thePDGCharge/eplus;
@@ -340,7 +340,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
 /////////////
 void G4PDGCodeChecker::GetDigits(G4int PDGcode)
 {
-  G4int temp = abs(PDGcode);
+  G4int temp = std::abs(PDGcode);
   
   higherSpin = temp/10000000;
   temp -= G4int(higherSpin*10000000);

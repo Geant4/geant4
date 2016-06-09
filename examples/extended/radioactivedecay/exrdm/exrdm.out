@@ -1,0 +1,205 @@
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (27-July-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+----> The target has been changed to 3 cm of Lead
+
+phot:  Total cross sections from Sandia parametrisation. 
+Thank you for using G4BinaryCascade. 
+/fred/geant4/g4/data/G4NDL
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 396.844 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Histo books 7 histograms 
+Loaded linked in JVM.
+Looking for already loaded JVMs...
+None found.
+Using CLASSPATH.
+classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.2/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.2/lib/optimizers.jar:/fred/flei/JAIDA-3.2.2/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.2/lib/jel.jar:/fred/flei/JAIDA-3.2.2/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.2/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.2/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.2/lib/bcel.jar:/fred/flei/JAIDA-3.2.2/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.2/lib/aida.jar:
+Starting JVM...JVM Created.
+Tree store  : exrdm-proton.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Closing the tree...
+Histograms and Ntuples are saved
+### Histo books 7 histograms 
+Loaded linked in JVM.
+Looking for already loaded JVMs...
+Number of jvm's returned: 1Using already loaded JVM.
+Tree store  : exrdm-f24.aida
+Creating Ntuple: Emitted Particles
+Creating Ntuple: RadioIsotopes
+Creating Ntuple: Energy Depositions
+Closing the tree...
+Histograms and Ntuples are saved
+Graphics systems deleted.
+Visualization Manager deleting...

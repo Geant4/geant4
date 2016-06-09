@@ -1,6 +1,6 @@
-# $Id: TestEm2.in,v 1.14 2004/06/18 15:43:35 maire Exp $
+# $Id: TestEm2.in,v 1.17 2004/11/29 14:49:26 vnivanch Exp $
 #
-# Macro file for "TestEm2.cc" 
+# Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
 #
 # H2O L = 9.97 radl  R = 0.665 radl; electron 1 GeV
@@ -16,14 +16,15 @@
 /testem/det/setRbin 6 0.111
 #
 # Acceptance printout is activated
-/testem/run/acceptance  0.9425 0.0355 3.0
+/testem/run/acceptance  0.9412 0.0491 3.0
 #
 /testem/phys/addPhysics  standard
-### /testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
 #
 /run/initialize
+/testem/phys/verbose  -1
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -31,5 +32,5 @@
 /testem/event/printModulo 20
 #
 /run/beamOn 100
-
+#
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.3 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4GeomTestVolume.cc,v 1.4 2004/12/02 09:31:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -252,7 +252,7 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
   //
   G4double xMax = std::max(extent.GetXmax(),-extent.GetXmin());
   G4double yMax = std::max(extent.GetYmax(),-extent.GetYmin());
-  G4double rhoMax = sqrt(xMax*xMax + yMax*yMax);
+  G4double rhoMax = std::sqrt(xMax*xMax + yMax*yMax);
   
   G4double zMax = extent.GetZmax();
   G4double zMin = extent.GetZmin();
@@ -269,8 +269,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
   if ((iPhi&1) == 0) iPhi++;  // Also use odd number phi slices
   do
   {
-    G4double cosPhi = cos(phi);
-    G4double sinPhi = sin(phi);
+    G4double cosPhi = std::cos(phi);
+    G4double sinPhi = std::sin(phi);
     
     //
     // Loop over rho

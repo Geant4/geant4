@@ -72,8 +72,8 @@ private:
   G4int theA;
   G4int theZ;
   
-  // Vc(A, Z) = 1.44 * Z /(r0*(1 + pow(A, 1/3))) 
-  //          = colomb * Z / (1 + pow(A, 1/3))
+  // Vc(A, Z) = 1.44 * Z /(r0*(1 + std::pow(A, 1/3))) 
+  //          = colomb * Z / (1 + std::pow(A, 1/3))
   static const G4double coulomb;       // coulomb barier constant
   static const G4double a_kaon;        // kaon's potential constant
   static const G4double a_pion;        // pion's potential constant

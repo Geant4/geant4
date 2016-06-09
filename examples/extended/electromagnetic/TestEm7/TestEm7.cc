@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TestEm7.cc,v 1.1 2003/04/22 16:25:03 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: TestEm7.cc,v 1.3 2004/09/27 14:42:22 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -36,11 +35,12 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
  #include "VisManager.hh"
@@ -78,6 +78,7 @@ int main(int argc,char** argv) {
   
   runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
   runManager->SetUserAction(new EventAction);
+  runManager->SetUserAction(new TrackingAction(run));  
   runManager->SetUserAction(new SteppingAction(det,run));
 
   //get the pointer to the User Interface manager 

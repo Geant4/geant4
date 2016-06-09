@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.9 2004/02/19 20:41:34 gum Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4OpBoundaryProcess.hh,v 1.12 2004/12/02 23:10:36 gum Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -307,10 +307,11 @@ G4ThreeVector G4OpBoundaryProcess::
 
   G4ThreeVector vec2 = vec1.cross(normal);
 
-  G4double cost = 2.*G4UniformRand() - 1.0;
-  G4double sint = sqrt(1.0 - cost * cost);
+  G4double phi = twopi*G4UniformRand();
+  G4double cosphi = std::cos(phi);
+  G4double sinphi = std::sin(phi);
 
-  return cost * vec1 + sint * vec2;
+  return cosphi * vec1 + sinphi * vec2;
 }
 
 inline
@@ -368,17 +369,17 @@ void G4OpBoundaryProcess::DoAbsorption()
 		
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
-                 aParticleChange.SetLocalEnergyDeposit(thePhotonMomentum);
+                 aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
               }
               else {
-                 aParticleChange.SetLocalEnergyDeposit(0.0);
+                 aParticleChange.ProposeLocalEnergyDeposit(0.0);
               }
 
               NewMomentum = OldMomentum;
               NewPolarization = OldPolarization;
 
-//              aParticleChange.SetEnergyChange(0.0);
-              aParticleChange.SetStatusChange(fStopAndKill);
+//              aParticleChange.ProposeEnergy(0.0);
+              aParticleChange.ProposeTrackStatus(fStopAndKill);
 }
 
 inline

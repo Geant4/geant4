@@ -84,7 +84,7 @@ public:
 protected:
   void RequestPrimitives(const G4VSolid&);
   // Overrides G4VScenehandler::RequestPrimitives and implements dump
-  // of leaves of the geometry heirachy.
+  // of the geometry hierarchy.
   std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> > fLVSet;
   typedef
   std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> >::iterator

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation52.cc,v 1.1 2003/08/08 11:30:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eIonisation52.cc,v 1.4 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //--------------- G4eIonisation52 physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997
@@ -45,6 +45,7 @@
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
 // 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +62,8 @@ G4double G4eIonisation52::UpperBoundLambda = 100.*TeV;
 G4int    G4eIonisation52::NbinLambda = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4eIonisation52::G4eIonisation52(const G4String& processName)
    : G4VeEnergyLoss(processName),
@@ -284,7 +287,7 @@ G4double G4eIonisation52::ComputeRestrictedMeandEdx (
  if (&aParticleType==G4Electron::Electron())
    {
      Tmax = KineticEnergy/2.;
-     d = std::min(DeltaThreshold, Tmax)/particleMass;
+     d = min(DeltaThreshold, Tmax)/particleMass;
      dEdx = log(2.*(tau+2.)/Eexcm2)-1.-beta2
             + log((tau-d)*d)+tau/(tau-d)
             + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -293,7 +296,7 @@ G4double G4eIonisation52::ComputeRestrictedMeandEdx (
  else        //positron
    {
      Tmax = KineticEnergy;  
-     d = std::min(DeltaThreshold, Tmax)/particleMass;
+     d = min(DeltaThreshold, Tmax)/particleMass;
      G4double d2=d*d/2., d3=d*d*d/3., d4=d*d*d*d/4.;
      G4double y=1./(1.+gamma);
      dEdx = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -491,118 +494,22 @@ G4VParticleChange* G4eIonisation52::PostStepDoIt( const G4Track& trackData,
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
 
-      aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
+      aParticleChange.ProposeMomentumDirection(finalPx, finalPy, finalPz);
     }
   else
     {
       Edep = finalKineticEnergy;
       finalKineticEnergy = 0.;
-      if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-      else             aParticleChange.SetStatusChange(fStopButAlive);
+      if (Charge < 0.) aParticleChange.ProposeTrackStatus(fStopAndKill);
+      else             aParticleChange.ProposeTrackStatus(fStopButAlive);
     }
 
-  aParticleChange.SetEnergyChange(finalKineticEnergy);
+  aParticleChange.ProposeEnergy(finalKineticEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(theDeltaRay);
-  aParticleChange.SetLocalEnergyDeposit(Edep);
+  aParticleChange.ProposeLocalEnergyDeposit(Edep);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4eIonisation52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory,
-				              G4bool          ascii)
-{
-  G4String filename;
-
-  // store stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4eIonisation52::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory,
-				                 G4bool          ascii)
-{
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-  // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss();
-  HighestKineticEnergy = GetUpperBoundEloss();
-  TotBin               = GetNbinEloss();
-
-  G4String filename;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
-
-  // retreive stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  theLossTable = new G4PhysicsTable(numOfCouples);
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  if (particle==G4Electron::Electron())
-    {
-     RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable;
-     CounterOfElectronProcess++;
-    }
-  else
-    {
-     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
-     CounterOfPositronProcess++;
-    }
-
-  BuildDEDXTable(*particle);
-  if (particle==G4Electron::Electron()) PrintInfoDefinition();
-
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -612,7 +519,7 @@ void G4eIonisation52::PrintInfoDefinition()
   G4String comments = "delta cross sections from Moller+Bhabha. "
             "Good description from 1 KeV to 100 GeV.\n"
             "        delta ray energy sampled from  differential Xsection.";
-                     
+
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from "
 	 << G4BestUnit(LowerBoundLambda,"Energy")

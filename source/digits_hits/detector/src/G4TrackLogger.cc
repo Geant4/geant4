@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackLogger.cc,v 1.1 2003/10/03 10:12:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4TrackLogger.cc,v 1.2 2004/07/01 09:19:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -45,7 +45,7 @@ void G4TrackLogger::SetEventID(G4int id){
     fTrackIDsSet.clear();
     fPreviousEventID =id;
   }
-};
+}
 
 G4bool G4TrackLogger::FirstEnterance(G4int trid){
   G4bool first = true;
@@ -62,5 +62,4 @@ G4bool G4TrackLogger::FirstEnterance(G4int trid){
     
   }
   return first;
-};
-
+}

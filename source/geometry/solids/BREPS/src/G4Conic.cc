@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Conic.cc,v 1.7 2003/03/28 13:11:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -143,7 +143,7 @@
     SetDefinition( aParticleDefinition );
     SetKineticEnergy( aKineticEnergy );
     if( pp > DBL_MIN )
-      SetMomentum( aMomentum * (sqrt(aKineticEnergy*aKineticEnergy +
+      SetMomentum( aMomentum * (std::sqrt(aKineticEnergy*aKineticEnergy +
                                     2*aKineticEnergy*GetMass())/pp) );
   }
 
@@ -204,10 +204,10 @@
     G4double x = p1x+a*p2x;
     G4double y = p1y+a*p2y;
     G4double z = p1z+a*p2z;
-    G4double p = sqrt(x*x+y*y+z*z);
+    G4double p = std::sqrt(x*x+y*y+z*z);
     SetMass( p1.mass );
-    SetTotalEnergy( sqrt( (p1.mass+p)*(p1.mass+p) - 2.*p1.mass*p ) );
-    //SetTotalEnergy( sqrt( p1.mass*p1.mass + x*x + y*y + z*z ) );
+    SetTotalEnergy( std::sqrt( (p1.mass+p)*(p1.mass+p) - 2.*p1.mass*p ) );
+    //SetTotalEnergy( std::sqrt( p1.mass*p1.mass + x*x + y*y + z*z ) );
     SetMomentum( x, y, z );
   }
  
@@ -218,13 +218,13 @@
     G4ThreeVector pM = p.momentum;
     G4double tx = tM.x(); G4double ty = tM.y(); G4double tz = tM.z();
     G4double px = pM.x(); G4double py = pM.y(); G4double pz = pM.z();
-    G4double a = sqrt( ( px*px + py*py + pz*pz ) * ( tx*tx + ty*ty + tz*tz ) );
+    G4double a = std::sqrt( ( px*px + py*py + pz*pz ) * ( tx*tx + ty*ty + tz*tz ) );
     if( a == 0.0 ) {
       return 0.0;
     } else {
       a = ( tx*px + ty*py + tz*pz ) / a;
-      if( fabs(a) > 1.0 ) { a<0.0 ? a=-1.0 : a=1.0; }
-      return acos( a );
+      if( std::fabs(a) > 1.0 ) { a<0.0 ? a=-1.0 : a=1.0; }
+      return std::acos( a );
     }
   }
  
@@ -237,9 +237,9 @@
     G4double z = p1.momentum.z() + p2.momentum.z();
     G4double newMass = totEnergy*totEnergy - ( x*x + y*y + z*z );
     if( newMass < 0.0 )
-      newMass = -1. * sqrt( -newMass );
+      newMass = -1. * std::sqrt( -newMass );
     else
-      newMass = sqrt( newMass );
+      newMass = std::sqrt( newMass );
     G4ReactionProduct result;
     result.SetMass( newMass );
     result.SetMomentum( x, y, z );
@@ -259,9 +259,9 @@
     G4double z = p1.momentum.z() - p2.momentum.z();
     G4double newMass = totEnergy*totEnergy - ( x*x + y*y + z*z );
     if( newMass < 0.0 )
-      newMass = -1. * sqrt( -newMass );
+      newMass = -1. * std::sqrt( -newMass );
     else
-      newMass = sqrt( newMass );
+      newMass = std::sqrt( newMass );
     G4ReactionProduct result;
     result.SetMass( newMass );
     result.SetMomentum( x, y, z );

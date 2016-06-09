@@ -37,8 +37,8 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExp.cc,v 1.2 2004/06/07 07:42:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4hShellCrossSectionExp.cc,v 1.4 2004/12/02 14:01:37 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 
 #include "globals.hh"
 #include <vector>
@@ -98,15 +98,15 @@ G4double G4hShellCrossSectionExp::GetCrossSectionExp(G4int Z,
 
   if(Z<26 && Z>=6 && Z!=17)
     {
-      crossSectionsInBarn = a*(pow(b,(1./incidentEnergyInMeV)))*(pow(incidentEnergyInMeV,c));
+      crossSectionsInBarn = a*(std::pow(b,(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,c));
     }          
   else if(Z<66 && Z>=26 || Z==17)
     {
-      crossSectionsInBarn = exp(a+(b/incidentEnergyInMeV)+(c*log(incidentEnergyInMeV)));
+      crossSectionsInBarn = std::exp(a+(b/incidentEnergyInMeV)+(c*std::log(incidentEnergyInMeV)));
     }
   else if(Z<=92 && Z>=66)
     {	 
-      crossSectionsInBarn = (pow(incidentEnergyInMeV,a))*exp(b-(c*incidentEnergyInMeV));  
+      crossSectionsInBarn = (std::pow(incidentEnergyInMeV,a))*std::exp(b-(c*incidentEnergyInMeV));  
     }
   else
     {
@@ -136,7 +136,8 @@ void G4hShellCrossSectionExp::SetTotalCS(G4double value)
   
   std::vector<G4double> kProbability;
   kProbability.push_back(GetCrossSectionExp(Z,incidentEnergy)/atomTotalCrossSection);
-  kProbability.push_back(1 - kProbability[1]);
+  // ---- MGP ---- Next line corrected to kProbability[0] instead of [1], which is not initialized!
+  kProbability.push_back(1 - kProbability[0]);
 
   return kProbability;
 }

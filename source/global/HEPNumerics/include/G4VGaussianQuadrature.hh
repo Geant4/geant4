@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.hh,v 1.4 2001/07/11 10:00:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VGaussianQuadrature.hh,v 1.5 2004/11/12 17:38:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Class description:
 //
@@ -44,7 +44,7 @@
 //
 // ----------------------------------------------------------------------
 //
-// Auxiliary function which returns the value of log(gamma-function(x))
+// Auxiliary function which returns the value of std::log(gamma-function(x))
 //
 // G4double 
 // GammaLogarithm(G4double xx)

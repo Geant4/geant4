@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2004/05/25 08:36:17 guatelli Exp $
+$Id: History,v 1.2 2004/12/02 17:37:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.1 2004/05/25 08:36:17 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+2.12.2004 - Gabriele Cosmo (ExDiane-V06-02-00)
+            Implemented migration to <cmath>.
 
 25.5.2004 - Susanna Guatelli
             Migration to AIDA 3.2.1 and PI 1.2.1

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.8 2003/07/21 12:52:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlungModel.hh,v 1.11 2004/12/01 19:37:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ public:
 
   G4eBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "StanBrem");
 
-  ~G4eBremsstrahlungModel();
+  virtual ~G4eBremsstrahlungModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -142,6 +142,7 @@ private:
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition* theGamma;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double minThreshold;
@@ -164,7 +165,7 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
 
@@ -182,7 +183,7 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
 

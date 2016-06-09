@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EmHadronBuilder52.cc,v 1.1 2004/05/04 08:33:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //---------------------------------------------------------------------------
 //

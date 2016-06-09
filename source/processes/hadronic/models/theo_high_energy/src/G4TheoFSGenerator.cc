@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TheoFSGenerator.cc,v 1.3 2003/11/03 17:55:38 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"

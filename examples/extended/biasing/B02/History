@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/06/18 16:05:17 daquinog Exp $
+$Id: History,v 1.2 2004/06/20 17:29:30 daquinog Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,3 +23,4 @@ Jun 18th, 2004  G.Daquino - B02-V06-01-00
   HBOOk file produced at the end of the example still needs other packages to 
   be displayed. However, future PI releases could contain python modules with
   this property.
+  README file has been updated accordingly.

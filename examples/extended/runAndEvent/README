@@ -1,0 +1,18 @@
+
+        Geant4 extended examples - run and event
+        ----------------------------------------
+
+ Examples in this directory demonstrate the use of some features in
+Run and Event categories. Since these categories are on the top of
+hierarchy of Geant4 structure to control the full functionarities of
+Geant4, some examples contain features in other categories such as
+Tracking, Track, Particles, Detector responces, and even some cases
+Geometry and Processes.
+
+RE01
+----
+
+ This example demonstrates how to connect the information between
+primary particles and hits. It also utilize some user-information 
+classes.
+

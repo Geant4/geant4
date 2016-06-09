@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.8 2004/06/21 10:57:14 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysicsList.cc,v 1.9 2004/09/20 08:21:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -200,7 +200,7 @@ void PhysicsList::AddDecay()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)) { 
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
 
       pmanager ->AddProcess(fDecayProcess);
 
@@ -228,7 +228,7 @@ void PhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
+      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
 	  pmanager ->AddDiscreteProcess(stepMaxProcess);
         }

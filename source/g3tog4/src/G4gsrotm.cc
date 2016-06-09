@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsrotm.cc,v 1.10 2004/05/03 07:49:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4gsrotm.cc,v 1.11 2004/12/07 08:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
@@ -63,18 +63,18 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     
         // Construct unit vectors 
     
-    G4ThreeVector x(sin(th1r)*cos(phi1r), sin(th1r)*sin(phi1r), cos(th1r));
-    G4ThreeVector y(sin(th2r)*cos(phi2r), sin(th2r)*sin(phi2r), cos(th2r));
-    G4ThreeVector z(sin(th3r)*cos(phi3r), sin(th3r)*sin(phi3r), cos(th3r));
+    G4ThreeVector x(std::sin(th1r)*std::cos(phi1r), std::sin(th1r)*std::sin(phi1r), std::cos(th1r));
+    G4ThreeVector y(std::sin(th2r)*std::cos(phi2r), std::sin(th2r)*std::sin(phi2r), std::cos(th2r));
+    G4ThreeVector z(std::sin(th3r)*std::cos(phi3r), std::sin(th3r)*std::sin(phi3r), std::cos(th3r));
 
         // check for orthonormality and left-handedness
 
     G4double check = (x.cross(y))*z;
     G4double tol = 1.0e-3;
         
-    if (1-abs(check)>tol) {
+    if (1-std::abs(check)>tol) {
         G4cerr << "Coordinate axes forming rotation matrix "
-               << irot << " are not orthonormal.(" << 1-abs(check) << ")" 
+               << irot << " are not orthonormal.(" << 1-std::abs(check) << ")" 
          << G4endl;
         G4cerr << " theta1=" << theta1;
         G4cerr << " phi1=" << phi1;

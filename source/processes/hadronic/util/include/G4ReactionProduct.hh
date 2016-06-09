@@ -51,7 +51,7 @@
        G4ReactionProduct result;
        result.SetMomentum(aDouble*p2.GetMomentum());
        result.SetMass(p2.GetMass());
-       result.SetTotalEnergy(sqrt(result.GetMass()*result.GetMass()+
+       result.SetTotalEnergy(std::sqrt(result.GetMass()*result.GetMass()+
                                   result.GetMomentum()*result.GetMomentum()));
        return result;
      }
@@ -97,7 +97,7 @@
     { return momentum; }
     
     inline G4double GetTotalMomentum() const
-    { return sqrt(abs(kineticEnergy*(totalEnergy+mass))); }
+    { return std::sqrt(std::abs(kineticEnergy*(totalEnergy+mass))); }
     
     inline G4double GetTotalEnergy() const
     { return totalEnergy; }

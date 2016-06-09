@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.5 2004/05/09 16:58:01 lara Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4PreCompoundTransitions.cc,v 1.6 2004/12/07 13:50:43 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 
@@ -87,7 +87,7 @@ CalculateProbability(const G4Fragment & aFragment)
   else RelativeVelocitySqr = 2.0*RelativeEnergy/neutron_mass_c2;
 
   // <V_{rel}>
-  G4double RelativeVelocity = sqrt(RelativeVelocitySqr);
+  G4double RelativeVelocity = std::sqrt(RelativeVelocitySqr);
 
   // Proton-Proton Cross Section
   G4double ppXSection = (10.63/RelativeVelocitySqr - 29.92/RelativeVelocity + 42.9)*millibarn;
@@ -111,15 +111,15 @@ CalculateProbability(const G4Fragment & aFragment)
 
   // This factor is introduced to take into account the Pauli principle
   G4double PauliFactor = 1.0 - (7.0/5.0)*FermiRelRatio;
-  if (FermiRelRatio > 0.5) PauliFactor += (2.0/5.0)*FermiRelRatio*pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
+  if (FermiRelRatio > 0.5) PauliFactor += (2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
 
   // Interaction volume 
-  G4double Vint = (4.0/3.0)*pi*pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
+  G4double Vint = (4.0/3.0)*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
 
   // Transition probability for \Delta n = +2
-  //  TransitionProb1 = 0.00332*AveragedXSection*PauliFactor*sqrt(RelativeEnergy)/
-  //    pow(1.2 + 1.0/(4.7*RelativeVelocity), 3.0);
-  TransitionProb1 = AveragedXSection*PauliFactor*sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
+  //  TransitionProb1 = 0.00332*AveragedXSection*PauliFactor*std::sqrt(RelativeEnergy)/
+  //    std::pow(1.2 + 1.0/(4.7*RelativeVelocity), 3.0);
+  TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
   if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
 
   // g = (6.0/pi2)*aA; 
@@ -136,7 +136,7 @@ CalculateProbability(const G4Fragment & aFragment)
   // F(p+1,h+1)
   G4double Fph1 = Fph + N/2.0;
   // (n+1)/n ((g*E - F(p,h))/(g*E - F(p+1,h+1)))^(n+1)
-  G4double ProbFactor = pow((GE-Fph)/(GE-Fph1),N+1.0);
+  G4double ProbFactor = std::pow((GE-Fph)/(GE-Fph1),N+1.0);
 
 
   if (NeverGoBack)

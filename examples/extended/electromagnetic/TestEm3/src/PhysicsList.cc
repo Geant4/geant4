@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.5 2004/04/28 17:40:48 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysicsList.cc,v 1.8 2004/11/23 14:05:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,8 +108,6 @@ PhysicsList::~PhysicsList()
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
 
-#include "IonC12.hh"
-
 void PhysicsList::ConstructParticle()
 {
 // pseudo-particles
@@ -159,7 +156,6 @@ void PhysicsList::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,6 +190,10 @@ void PhysicsList::ConstructProcess()
   // electromagnetic Physics List
   //
   emPhysicsList->ConstructProcess();
+  
+  // stepLimitation (as a full process)
+  //
+  AddStepMax();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -223,6 +223,27 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "StepMax.hh"
+
+void PhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  stepMaxProcess = new StepMax();
+
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+
+      if (stepMaxProcess->IsApplicable(*particle))
+        {
+	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+        }
   }
 }
 

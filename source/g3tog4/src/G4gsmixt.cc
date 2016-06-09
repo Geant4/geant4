@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.10 2003/06/16 16:50:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4gsmixt.cc,v 1.11 2004/12/07 08:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -49,10 +49,10 @@ void PG4gsmixt(G4String tokens[])
     //G4double dens = Rpar[0]*g/cm3;
     G4double dens = Rpar[0];
     G4double *a = Rpar + 1;
-    G4double *z = Rpar + 1+abs(nlmat);
-    G4double *wmat = Rpar + 1 + 2*abs(nlmat);
+    G4double *z = Rpar + 1+std::abs(nlmat);
+    G4double *wmat = Rpar + 1 + 2*std::abs(nlmat);
 
-    for (int i=0; i<abs(nlmat); i++){
+    for (int i=0; i<std::abs(nlmat); i++){
       //Rpar[i]=Rpar[i]*g/mole;
       Rpar[i]=Rpar[i];
     };
@@ -79,14 +79,14 @@ void G4gsmixt(G4int imate, G4String name, G4double* a, G4double* z,
     // in case of proportions given in atom counts (nlmat<0),
     // the wmat[i] are converted to weight fractions
     G4double aMol = 0.;
-    for (i=0; i<abs(nlmat); i++) { 
+    for (i=0; i<std::abs(nlmat); i++) { 
       // total molecular weight 
       aMol += wmat[i]*a[i]; 
     }  
     if (aMol == 0.)
       G4Exception("\nG4mixt: Total molecular weight in " +
         name + " = 0.");       
-    for (i=0; i<abs(nlmat); i++) {
+    for (i=0; i<std::abs(nlmat); i++) {
       // weight fractions
       wmat[i] = wmat[i]*a[i]/aMol;
     }
@@ -96,8 +96,8 @@ void G4gsmixt(G4int imate, G4String name, G4double* a, G4double* z,
   // (elements)
 
   G4Material* material 
-    = new G4Material(name, dens*g/cm3, abs(nlmat));
-  for (i=0; i<abs(nlmat); i++) {
+    = new G4Material(name, dens*g/cm3, std::abs(nlmat));
+  for (i=0; i<std::abs(nlmat); i++) {
     // add units
     // G4Element* element = G4Element(z[i], a[i]*g/mole, name);
     G4Element* element = G3Ele.GetEle(z[i]);
@@ -111,7 +111,7 @@ void G4gsmixt(G4int imate, G4String name, G4double* a, G4double* z,
 /*
 void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
               G4double dens, G4int nlmat, G4double wmat[]){
-  G4int nmate = abs(nlmat);
+  G4int nmate = std::abs(nlmat);
   G4String sname = name.strip(G4String::both);
   G4double theDensity = dens*g/cm3;
 
@@ -121,7 +121,7 @@ void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
     G4Element* theElement = G3Ele.GetEle(z[i]);
     if (nlmat>0) {
       G4double fractionmass = wmat[i];
-      ok = ok && abs(fractionmass)<=1.;
+      ok = ok && std::abs(fractionmass)<=1.;
       theMixture->AddElement(theElement, fractionmass);
     } else if (nlmat<0) {
       G4int natoms = wmat[i];

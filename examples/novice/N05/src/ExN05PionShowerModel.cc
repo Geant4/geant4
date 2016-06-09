@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.10 2003/11/10 14:41:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: ExN05PionShowerModel.cc,v 1.11 2004/11/25 23:35:16 mverderi Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -86,8 +86,8 @@ void ExN05PionShowerModel::DoIt(const G4FastTrack& fastTrack,
 
   // Kill the parawmeterised particle:
   fastStep.KillPrimaryTrack();
-  fastStep.SetPrimaryTrackPathLength(0.0);
-  fastStep.SetTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
+  fastStep.ProposePrimaryTrackPathLength(0.0);
+  fastStep.ProposeTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
 
   // split into "energy spots" energy according to the shower shape:
   Explode(fastTrack);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.cc,v 1.1 2003/10/03 10:10:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4CellScoreComposer.cc,v 1.2 2004/07/01 09:19:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -95,7 +95,7 @@ GetStandardCellScoreValues() const {
 
 void G4CellScoreComposer::SetImportnace(G4double importance){
   fSCScoreValues.fImportance = importance;
-};
+}
 
 std::ostream& operator<<(std::ostream &out, 
                            const G4CellScoreComposer &ps) {

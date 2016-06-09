@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.10 2002/05/30 02:13:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NucleiProperties.cc,v 1.11 2004/12/02 08:08:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,10 +61,10 @@ G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
   G4int Zpairing = G4int(Z)%2;
   G4double binding =
       - 15.67*A                           // nuclear volume
-      + 17.23*pow(A,2./3.)                // surface energy
+      + 17.23*std::pow(A,2./3.)                // surface energy
       + 93.15*((A/2.-Z)*(A/2.-Z))/A       // asymmetry
-      + 0.6984523*Z*Z*pow(A,-1./3.);      // coulomb
-  if( Npairing == Zpairing ) binding += (Npairing+Zpairing-1) * 12.0 / sqrt(A);  // pairing
+      + 0.6984523*Z*Z*std::pow(A,-1./3.);      // coulomb
+  if( Npairing == Zpairing ) binding += (Npairing+Zpairing-1) * 12.0 / std::sqrt(A);  // pairing
 
   return -binding*MeV;
 }
@@ -96,7 +96,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 		if (nucleus!=0) {
 			return nucleus->GetPDGMass();
   		}else {
-			return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*pow(Z,2.39);
+			return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);
 		}
 	}
 }
@@ -109,12 +109,12 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 // 	const G4double phi = 44.2355*MeV;
 // 	const G4double gamma = 25.8357*MeV;
 //   
-// 	const G4double A13 = pow(G4double(A),1.0/3.0);
+// 	const G4double A13 = std::pow(G4double(A),1.0/3.0);
 // 	const G4double A23 = A13*A13;
 // 	const G4double A43 = A23*A23;
-// 	const G4double Z43 = pow(G4double(Z),4.0/3.0);
+// 	const G4double Z43 = std::pow(G4double(Z),4.0/3.0);
 // 	G4double D = (G4double(A) - 2.0*G4double(Z))/G4double(A);
-// 	D *= D; // D = pow((A-2Z)/A,2)
+// 	D *= D; // D = std::pow((A-2Z)/A,2)
 //   
 //   
 // 	// Surface term
@@ -232,7 +232,7 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
     G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
 	   << " and Z = " << Z << G4endl;	return 0.0;
 
-  } else if (abs(A - G4int(A)) > 1.e-10) {
+  } else if (std::abs(A - G4int(A)) > 1.e-10) {
     return AtomicMass(A,Z);
 
   } else {

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Win32.cc,v 1.8 2004/04/08 15:35:05 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G.Barrand
 

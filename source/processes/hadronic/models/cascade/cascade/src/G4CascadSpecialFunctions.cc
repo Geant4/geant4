@@ -107,7 +107,7 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
   G4double csec = 0.0;
   
   if (e < 0.3) {
-    csec = 0.1106 / sqrt(e) - 0.8 + 0.08 / ((e - 0.123) * (e - 0.123) + 0.0056);
+    csec = 0.1106 / std::sqrt(e) - 0.8 + 0.08 / ((e - 0.123) * (e - 0.123) + 0.0056);
 
   } else if (e < 1.0) {
     csec = 3.6735 * (1.0 - e) * (1.0 - e);     

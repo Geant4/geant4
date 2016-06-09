@@ -30,7 +30,7 @@
 //    *******************************
 //
 // $Id: PurgMagVisManager.cc,v 1.2 2004/06/18 09:18:05 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifdef G4VIS_USE

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmate.cc,v 1.9 2003/04/03 11:30:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4gsmate.cc,v 1.10 2004/12/07 08:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -76,8 +76,8 @@ G4Element* CreateElement(G4double zeff, G4double aeff, G4String matName)
   for (G4int i=0; i<table->entries(); i++) {
      G4Element* entry = (*table)[i];
      if (elSymbol == entry->GetSymbol()) index++; 
-     if ( abs(zeff - entry->GetZ()) < tolerance &&
-         (abs(aeff - entry->GetA())/(g/mole)) < tolerance ){
+     if ( std::abs(zeff - entry->GetZ()) < tolerance &&
+         (std::abs(aeff - entry->GetA())/(g/mole)) < tolerance ){
        return entry;
      }
   }  

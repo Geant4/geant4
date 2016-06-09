@@ -51,12 +51,12 @@ G4CascadeInterface::G4CascadeInterface()
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
   }
-};
+}
    
 G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* , 
 						       G4V3DNucleus* ) {
   return NULL;
-};
+}
 
 // #define debug_G4CascadeInterface
 
@@ -110,7 +110,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   momentumBullet[0] =0.;
   momentumBullet[1] =0;
   momentumBullet[2] =0;
-  momentumBullet[3] =sqrt(px*px+py*py+pz*pz);
+  momentumBullet[3] =std::sqrt(px*px+py*py+pz*pz);
 
   G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
@@ -136,9 +136,9 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     target->setEnergy();
 
     std::vector<G4double>  bmom = bullet->getMomentum();
-    eInit = sqrt(bmom[0] * bmom[0]);
+    eInit = std::sqrt(bmom[0] * bmom[0]);
     std::vector<G4double> tmom = target->getMomentum();
-    eInit += sqrt(tmom[0] * tmom[0]);
+    eInit += std::sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
 
@@ -199,9 +199,9 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 	sumBaryon += 1;
 
 	std::vector<G4double> bmom = bullet->getMomentum();
-	eInit = sqrt(bmom[0] * bmom[0]);
+	eInit = std::sqrt(bmom[0] * bmom[0]);
 	std::vector<G4double> tmom = targetH->getMomentum();
-	eInit += sqrt(tmom[0] * tmom[0]);
+	eInit += std::sqrt(tmom[0] * tmom[0]);
 
 	if (verboseLevel > 2) {
 	  G4cout << "Target:  " << G4endl;
@@ -242,7 +242,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
       std::vector<G4double> mom = ipart->getMomentum();
-      eTot   += sqrt(mom[0] * mom[0]);
+      eTot   += std::sqrt(mom[0] * mom[0]);
 
       G4double ekin = ipart->getKineticEnergy() * GeV;
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
@@ -331,7 +331,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
 	std::vector<G4double> mom = ifrag->getMomentum();
-        eTot   += sqrt(mom[0] * mom[0]);
+        eTot   += std::sqrt(mom[0] * mom[0]);
 
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	aMom = aMom.unit();
@@ -388,8 +388,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
   if(target != NULL) delete target;
   if(targetH != NULL) delete targetH;
-  if(cascadeParticle != NULL) delete cascadeParticle;
-  if(aFragment != NULL) delete aFragment;
+ // if(cascadeParticle != NULL) delete cascadeParticle;
+ // if(aFragment != NULL) delete aFragment;
 
   return &theResult;
 }

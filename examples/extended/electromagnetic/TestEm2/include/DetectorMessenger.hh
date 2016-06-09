@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.4 2004/06/18 15:43:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
+// $Id: DetectorMessenger.hh,v 1.5 2004/09/17 10:51:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +53,7 @@ private:
   DetectorConstruction* Detector;
 
   G4UIdirectory*             testemDir;
+  G4UIdirectory*             detDir;  
   G4UIcmdWithAString*        MaterCmd;
   G4UIcmdWith3Vector*        LBinCmd;
   G4UIcmdWith3Vector*        RBinCmd;

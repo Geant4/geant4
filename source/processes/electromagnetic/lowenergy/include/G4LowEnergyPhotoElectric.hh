@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.25 2002/06/01 03:14:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.26 2004/05/12 09:20:03 silvarod Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -33,6 +33,7 @@
 // 12 Aug  2001   MGP        Major revision according to a design iteration
 // 16 Sept 2001   E. Guardincerri Added fluorescence generation
 // 31 May  2002   V.Ivanchenko Add cut on Auger electrons
+// 10 May  2004   P. Rodrigues Changes to accommodate new angular generators
 //
 // -------------------------------------------------------------------
 
@@ -56,6 +57,7 @@ class G4VParticleChange;
 class G4VEMDataSet;
 class G4VCrossSectionHandler;
 class G4VRangeTest;
+class G4VPhotoElectricAngularDistribution;
 
 class G4LowEnergyPhotoElectric : public G4VDiscreteProcess {
   
@@ -76,6 +78,11 @@ public:
   void SetCutForLowEnSecElectrons(G4double);
 
   void ActivateAuger(G4bool);
+
+  void SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution);
+
+  void SetAngularGenerator(const G4String& name);
+
 
   // For testing purpose only
   G4double DumpMeanFreePath(const G4Track& aTrack, 
@@ -112,6 +119,9 @@ private:
   G4double cutForLowEnergySecondaryElectrons;
 
   G4AtomicDeexcitation deexcitationManager;
+
+  G4VPhotoElectricAngularDistribution* ElectronAngularGenerator;
+  G4String generatorName;
 };
 
 #endif

@@ -20,11 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.cc,v 1.6 2004/01/30 00:56:55 tkoi Exp $
+// $Id: A01PhysicsList.cc,v 1.7 2004/11/23 04:02:03 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi
-
+// 22-Nov-04 Comment out QGSP_BERT and QGSP_BIC
+//           Output Notificaiton message             
+//           All Particles are created in GeneralPhysics 
 
 #include "A01PhysicsList.hh"
 
@@ -47,30 +49,44 @@
 #include "A01HadronPhysics.hh"
 #include "A01IonPhysics.hh"
 
-#include "HadronPhysicsQGSP_BERT.hh"
-#include "HadronPhysicsQGSP_BIC.hh"
+//#include "HadronPhysicsQGSP_BERT.hh"
+//#include "HadronPhysicsQGSP_BIC.hh"
 
 A01PhysicsList::A01PhysicsList():  G4VModularPhysicsList()
 {
+
+  G4cout << "You are using the A01PhysicsList" << G4endl;
+  G4cout << "Full set of particles (barions bosons and mesons) will be created and" << G4endl;
+  G4cout << "Standard EM Physics and Low & High Energy parameterized models will be applied." << G4endl;
+  G4cout << "A01PhysicsList is optimized for robustness" << G4endl;
+  G4cout << "and not for any particular usage." << G4endl;
+  G4cout << "For the hadronic physics, educated guesses of physics list are prepared for various use cases." << G4endl;
+  G4cout << "When you will start REAL calculations for your own interest," << G4endl;
+  G4cout << "please consider the usage of hadronic_lists instead of A01PhysicsLists." << G4endl;
+  G4cout << "More information can also be found from the Geant4 HyperNews." << G4endl;
+  G4cout << "http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index" << G4endl;
+  G4cout << "" << G4endl;
+
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
 
-  // General Physics
+  // General Physics ( Create ALL Particle and apply Decay )
   RegisterPhysics( new A01GeneralPhysics("general") );
 
-  // EM Physics
+  // EM Physics ( Apply related Processes to gamma and e-/+)
   RegisterPhysics( new A01EMPhysics("standard EM"));
 
-  // Muon Physics
+  // Muon Physics ( Apply related processes to mu and tau
   RegisterPhysics(  new A01MuonPhysics("muon"));
 
-   // Hadron Physics
-  //RegisterPhysics(  new A01HadronPhysics("hadron"));
-  RegisterPhysics(  new HadronPhysicsQGSP_BERT("hadron"));
+   // Hadron Physics ( Apply related processes to hadrons )
+  RegisterPhysics(  new A01HadronPhysics("hadron"));
+// We do not use hadronic lists since v7.
+  //RegisterPhysics(  new HadronPhysicsQGSP_BERT("hadron"));
   //RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron"));
 
-  // Ion Physics
+  // Ion Physics ( Apply related processes to ions )
   RegisterPhysics( new A01IonPhysics("ion"));
 
 }

@@ -140,11 +140,11 @@ At the moment the plotting is not available using a python script, but
 it is planned in future releases. A histogram is created and later displayed
 using standard analysis packages.
 
+To clean all the added files, just type gmake clean_all.
+
 Files in B03;
 B03Application.py: Is a example class utilizing importance sampling
    and scoring using python.
 B03RunApplication.py: Is a python script running the example. 
    It may be executed from the shell or in a python session.
 B03App.py: Is created by swig using swig.
-TracksEntering.hbook: 
-   It is the histogram file created by running B03RunApplication.py

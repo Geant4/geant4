@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.14 2003/02/12 08:52:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Cerenkov.cc,v 1.17 2004/12/10 18:49:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -54,6 +54,8 @@
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Cerenkov.hh"
+
+using namespace std;
 
 /////////////////////////
 // Class Implementation  
@@ -181,7 +183,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
-                   aParticleChange.SetStatusChange(fSuspend);
+                   aParticleChange.ProposeTrackStatus(fSuspend);
         }
 	
 	////////////////////////////////////////////////////////////////
@@ -224,7 +226,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		rand = G4UniformRand();
 
-		G4double phi = 2*M_PI*rand;
+		G4double phi = twopi*rand;
 		G4double sinPhi = sin(phi);
 		G4double cosPhi = cos(phi);
 

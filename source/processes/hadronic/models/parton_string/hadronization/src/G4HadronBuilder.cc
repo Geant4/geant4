@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HadronBuilder.cc,v 1.3 2004/12/07 13:50:13 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -98,7 +98,7 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
    
    G4double charge =  black->GetPDGCharge() 
                     + white->GetPDGCharge();	 
-   if (abs(charge) > 2 || abs(3.*charge - 3*G4int(charge)) > perCent )
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge)) > perCent )
    	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
 	    G4cerr << "    Invalid total charge found for on input: " 
@@ -112,22 +112,22 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	
 	G4int id1= black->GetPDGEncoding();
 	G4int id2= white->GetPDGEncoding();
-//	G4int ifl1= std::max(abs(id1), abs(id2));
-	if ( abs(id1) < abs(id2) )
+//	G4int ifl1= std::max(std::abs(id1), std::abs(id2));
+	if ( std::abs(id1) < std::abs(id2) )
 	   {
 	   G4int xchg = id1; 
 	   id1 = id2;  
 	   id2 = xchg;
 	   }
 	
-	if (abs(id1) > 3 ) 
+	if (std::abs(id1) > 3 ) 
 	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Meson : Illegal Quark content as input");
 	
         G4int PDGEncoding=0;
 
 	if (id1 + id2 == 0) {     
 	   G4double rmix = G4UniformRand();
-	   G4int    imix = 2*abs(id1) - 1;
+	   G4int    imix = 2*std::abs(id1) - 1;
 	   if(theSpin == SpinZero) {
 	      PDGEncoding = 110*(1 + (G4int)(rmix + scalarMesonMixings[imix - 1])
         	                   + (G4int)(rmix + scalarMesonMixings[imix])
@@ -138,8 +138,8 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 				) +  theSpin;
 	   }
 	} else {
-	   PDGEncoding = 100 * abs(id1) + 10 * abs(id2) +  theSpin;  
-	   G4bool IsUp = (abs(id1)&1) == 0;	// quark 1 up type quark (u or c)
+	   PDGEncoding = 100 * std::abs(id1) + 10 * std::abs(id2) +  theSpin;  
+	   G4bool IsUp = (std::abs(id1)&1) == 0;	// quark 1 up type quark (u or c)
 	   G4bool IsAnti = id1 < 0; 		// quark 1 is antiquark?
 	   if( (IsUp && IsAnti ) || (!IsUp && !IsAnti ) ) 
 	      PDGEncoding = - PDGEncoding;
@@ -177,7 +177,7 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 //  Verify Input Charge
    G4double charge =  black->GetPDGCharge() 
                     + white->GetPDGCharge();	 
-   if (abs(charge) > 2 || abs(3.*charge - 3*G4int(charge)) > perCent )
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge)) > perCent )
    	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
 	    G4cerr << "    Invalid total charge found for on input: " 
@@ -190,19 +190,19 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 #endif	
 	G4int id1= black->GetPDGEncoding();
 	G4int id2= white->GetPDGEncoding();
-	if ( abs(id1) < abs(id2) )
+	if ( std::abs(id1) < std::abs(id2) )
 	   {
 	   G4int xchg = id1; 
 	   id1 = id2;  
 	   id2 = xchg;
 	   }
 
-	if (abs(id1) < 1000 || abs(id2) > 3 ) 
+	if (std::abs(id1) < 1000 || std::abs(id2) > 3 ) 
 	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Barion: Illegal quark content as input");   
 
-	G4int ifl1= abs(id1)/1000;
-	G4int ifl2 = (abs(id1) - ifl1 * 1000)/100;
-	G4int diquarkSpin = abs(id1)%10; 
+	G4int ifl1= std::abs(id1)/1000;
+	G4int ifl2 = (std::abs(id1) - ifl1 * 1000)/100;
+	G4int diquarkSpin = std::abs(id1)%10; 
 	G4int ifl3 = id2;
 	if (id1 < 0)
 	   {
@@ -210,9 +210,9 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	   ifl2 = - ifl2;
 	   }
 	//... Construct barion, distinguish Lambda and Sigma barions.
-	G4int kfla = abs(ifl1);
-	G4int kflb = abs(ifl2);
-	G4int kflc = abs(ifl3);
+	G4int kfla = std::abs(ifl1);
+	G4int kflb = std::abs(ifl2);
+	G4int kflc = std::abs(ifl3);
 
 	G4int kfld = std::max(kfla,kflb);
 	      kfld = std::max(kfld,kflc);

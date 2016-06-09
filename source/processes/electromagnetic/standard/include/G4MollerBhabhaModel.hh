@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.7 2003/07/21 12:52:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MollerBhabhaModel.hh,v 1.8 2004/10/25 13:20:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ public:
 
   G4MollerBhabhaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MollerBhabha");
 
-  ~G4MollerBhabhaModel();
+  virtual ~G4MollerBhabhaModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.14 2004/04/05 16:21:23 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.15 2004/09/16 13:55:50 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,7 +138,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
-                                 0);              // no field specific to volume
+                                 0);              // copy number
 				 
   //------------------------------ 
   // Target
@@ -154,7 +154,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				  "Target",        // its name
 				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
-				  0);              // no particular field 
+				  0);              // copy number 
 
   G4cout << "Target is " << fTargetLength/cm << " cm of " 
          << TargetMater->GetName() << G4endl;
@@ -173,7 +173,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				  "Tracker",       // its name
 				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
-				  0);              // no particular field 
+				  0);              // copy number 
 
   //------------------------------ 
   // Tracker segments

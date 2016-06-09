@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.14 2003/11/19 19:38:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MollerBhabhaModel.cc,v 1.15 2004/12/01 19:37:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,8 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
@@ -152,7 +154,7 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
-  G4double d = std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
+  G4double d = min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
   G4double dedx;
 
   // electron
@@ -214,7 +216,7 @@ G4double G4MollerBhabhaModel::CrossSection(const G4MaterialCutsCouple* couple,
 
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  tmax = std::min(maxEnergy, tmax);
+  tmax = min(maxEnergy, tmax);
 
   if(cutEnergy < tmax) {
 
@@ -263,7 +265,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(dp));
+  G4double tmax = min(maxEnergy, MaxSecondaryEnergy(dp));
   if(tmin > tmax) tmin = tmax;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -364,13 +366,13 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

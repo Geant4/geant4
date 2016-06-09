@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPersistencyManager.cc,v 1.4 2001/07/13 15:57:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "G4VPersistencyManager.hh"

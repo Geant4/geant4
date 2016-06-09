@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung52.cc,v 1.1 2003/08/08 11:28:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MuBremsstrahlung52.cc,v 1.4 2004/12/02 08:20:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //--------------- G4MuBremsstrahlung52 physics process ---------------------------
@@ -41,6 +41,7 @@
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove interface of Store/Retrieve tables (V.Ivantchenko)
 //------------------------------------------------------------------------------
 
 #include "G4MuBremsstrahlung52.hh"
@@ -67,7 +68,7 @@ G4int	 G4MuBremsstrahlung52::NbinLambda = 150;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// constructor
+using namespace std;
 
 G4MuBremsstrahlung52::G4MuBremsstrahlung52(const G4String& processName)
   : G4VMuEnergyLoss(processName),
@@ -589,7 +590,7 @@ G4VParticleChange* G4MuBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
   NBINminus1 = NBIN-1 ;
   for (G4int iz=0; iz<nzdat; iz++)
   {
-    del = abs(lnZ-log(zdat[iz])) ;
+    del = fabs(lnZ-log(zdat[iz])) ;
     if(del<delmin)
     {
        delmin=del ;
@@ -600,7 +601,7 @@ G4VParticleChange* G4MuBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
   delmin = 1.e10 ;
   for (G4int it=0; it<ntdat; it++)
   {
-    del = abs(log(KineticEnergy)-log(tdat[it])) ;
+    del = fabs(log(KineticEnergy)-log(tdat[it])) ;
     if(del<delmin)
     {
       delmin=del;
@@ -658,15 +659,15 @@ G4VParticleChange* G4MuBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
   G4double NewKinEnergy = KineticEnergy - GammaEnergy;
   if (NewKinEnergy > 0.)
   {
-    aParticleChange.SetMomentumChange(ParticleDirection);
-    aParticleChange.SetEnergyChange(NewKinEnergy);
-    aParticleChange.SetLocalEnergyDeposit (0.);
+    aParticleChange.ProposeMomentumDirection(ParticleDirection);
+    aParticleChange.ProposeEnergy(NewKinEnergy);
+    aParticleChange.ProposeLocalEnergyDeposit (0.);
   }
   else
   {
-    aParticleChange.SetEnergyChange(0.);
-    aParticleChange.SetLocalEnergyDeposit (0.);
-    aParticleChange.SetStatusChange(fStopButAlive);
+    aParticleChange.ProposeEnergy(0.);
+    aParticleChange.ProposeLocalEnergyDeposit (0.);
+    aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -690,124 +691,6 @@ const G4Element* G4MuBremsstrahlung52::SelectRandomAtom(
   G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
        << " has no elements, NULL pointer returned." << G4endl;
   return NULL;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4MuBremsstrahlung52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory,
-				              G4bool          ascii)
-{
-  G4String filename;
-
-  // store stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // store PartialSumSigma table (G4OrderedTable)
-  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
-  if ( !PartialSumSigma.Store(filename, ascii) ){
-    G4cout << " FAIL PartialSumSigma.store in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4MuBremsstrahlung52::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory,
-				                 G4bool          ascii)
-{
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-  // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss();
-  HighestKineticEnergy = GetUpperBoundEloss();
-  TotBin               = GetNbinEloss();
-
-  G4String filename;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
-  PartialSumSigma.clearAndDestroy();
-  PartialSumSigma.reserve(numOfCouples);
-
-  // retreive stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  theLossTable = new G4PhysicsTable(numOfCouples);
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retrieve PartialSumSigma table (G4OrderedTable)
-  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
-  if ( !PartialSumSigma.Retrieve(filename, ascii) ){
-    G4cout << " FAIL PartialSumSigma.retrieve in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  if (particle->GetPDGCharge() < 0.)
-    {
-      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
-      CounterOfmuminusProcess++;
-    }
-  else
-    {
-      RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable;
-      CounterOfmuplusProcess++;
-    }
-
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
-  MakeSamplingTables(particle);
-
-  G4VMuEnergyLoss::BuildDEDXTable(*particle);
-  if(particle==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
-
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

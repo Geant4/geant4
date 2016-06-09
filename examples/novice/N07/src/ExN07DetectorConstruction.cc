@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.3 2003/04/08 15:47:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ExN07DetectorConstruction.cc,v 1.4 2004/11/17 03:07:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -330,3 +330,23 @@ void ExN07DetectorConstruction::SetNumberOfLayers(G4int nl)
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
+
+void ExN07DetectorConstruction::CreateMaterial(G4String materialChoice)
+{
+  if ( G4Material::GetMaterial(materialChoice) != 0) return;
+   
+  G4double a,z,density;  
+  if (materialChoice == "Silicon"){
+      new G4Material("Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3);
+
+  } else if  (materialChoice =="Iron"){
+    new G4Material("Iron", z=26., a=55.85*g/mole, density=7.87*g/cm3);
+
+  } else if  (materialChoice =="ArgonGas"){
+    new G4Material("ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3);
+
+  } else if  (materialChoice =="He"){
+    new G4Material("He", z=2., a=4.0*g/mole, density=0.1786e-03*g/cm3);
+
+  }
+}

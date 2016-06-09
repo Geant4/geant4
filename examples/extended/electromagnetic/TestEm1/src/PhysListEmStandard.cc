@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.6 2004/04/13 15:07:00 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysListEmStandard.cc,v 1.7 2004/12/07 13:03:40 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -83,14 +83,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       ///pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*MeV),-1,3,3);
+      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*GeV),-1,3,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       ///pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*MeV),-1,3,3);
+      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*GeV),-1,3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 

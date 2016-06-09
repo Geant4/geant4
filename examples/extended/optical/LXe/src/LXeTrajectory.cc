@@ -73,13 +73,13 @@ void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
   // If i_mode>=0, draws a trajectory as a polyline and, if i_mode!=0,
   // adds markers - yellow circles for step points and magenta squares
   // for auxiliary points, if any - whose screen size in pixels is
-  // given by abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
+  // given by std::abs(i_mode)/1000.  E.g: i_mode = 5000 gives easily
   // visible markers.
   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
  
-  const G4double markerSize = abs(i_mode)/1000;
+  const G4double markerSize = std::abs(i_mode)/1000;
   G4bool lineRequired (i_mode >= 0);
   G4bool markersRequired (markerSize > 0.);
   

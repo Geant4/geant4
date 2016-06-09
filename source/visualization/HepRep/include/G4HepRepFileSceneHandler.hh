@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.14 2003/11/13 01:11:41 perl Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.15 2004/11/11 16:01:39 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -79,9 +79,6 @@ public:
   //                 const G4VisAttributes&);
   // void PostAddThis();
 
-  // Allows G4PhysicalVolumeModel to provide extra information...
-  void EstablishSpecials(G4PhysicalVolumeModel&);
-
   ////////////////////////////////////////////////////////////////
   // Required implementation of pure virtual functions...
 
@@ -127,9 +124,6 @@ public:
 protected:
   static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
   static G4int         fSceneCount;    // No. of extanct scene handlers.
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
   G4HepRepFileXMLWriter *hepRepXMLWriter;

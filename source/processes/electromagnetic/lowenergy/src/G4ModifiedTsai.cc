@@ -77,7 +77,7 @@ G4double G4ModifiedTsai::PolarAngle(const G4double initial_energy,
   G4double u, theta = 0;
 
   do{
-  u = - log(G4UniformRand()*G4UniformRand());
+  u = - std::log(G4UniformRand()*G4UniformRand());
 
   if (9./(9.+d) > G4UniformRand()) u /= a1;
   else                             u /= a2;

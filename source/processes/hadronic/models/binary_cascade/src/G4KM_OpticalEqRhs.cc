@@ -68,8 +68,8 @@ void G4KM_OpticalEqRhs::SetFactor(G4double mass, G4double opticalParameter)
 void G4KM_OpticalEqRhs::EvaluateRhsGivenB(const G4double y[], const G4double *,
 					  G4double dydx[]) const
 {
-  G4double yMod = sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);
-  G4double e = sqrt(theMass*theMass+y[3]*y[3]+y[4]*y[4]+y[5]*y[5]);
+  G4double yMod = std::sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);
+  G4double e = std::sqrt(theMass*theMass+y[3]*y[3]+y[4]*y[4]+y[5]*y[5]);
   dydx[0] = c_light*y[3]/e;   //
   dydx[1] = c_light*y[4]/e;   //  dq/dt=dH/dp = c*p/e
   dydx[2] = c_light*y[5]/e;   // 

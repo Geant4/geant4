@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.cc,v 1.1 2003/08/26 18:54:50 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VPreCompoundIon.cc,v 1.2 2004/12/07 13:50:44 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 
@@ -65,13 +65,13 @@ ProbabilityDistributionFunction(const G4double eKin,
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
   //    theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
-  G4double pA = (3.0/4.0) * sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
-      GetAlpha()*(eKin+GetBeta())/(r0*pow(GetRestA(),1.0/3.0)) *
+  G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
+      GetAlpha()*(eKin+GetBeta())/(r0*std::pow(GetRestA(),1.0/3.0)) *
       CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P);
 
-  G4double pB = pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
+  G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
 
-  G4double pC = pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
+  G4double pC = std::pow((gj*Ej)/(g0*E0),GetA()-1.0)*(gj/g0)/E0;
 
   G4double Probability = pA * pB * pC;
 

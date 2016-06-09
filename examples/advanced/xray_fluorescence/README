@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2004/05/29 10:02:08 mantero Exp $
+$Id: README,v 1.12 2004/12/08 10:47:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -55,42 +55,46 @@ generation and analysis schemes available in Geant4:
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
 
-
 #set up VRMLview
 setenv G4VRMLFILE_MAX_FILE_NUM     100
 setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
+
+Then define the in PATH the path where the 'vrmlview' binary application
+is installed.
 
 #set up OpenGL or Mesa 
 setenv G4VIS_BUILD_OPENGLX_DRIVER   1
 setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
 #set up DAWN
 setenv G4VIS_BUILD_DAWN_DRIVER      1
 setenv G4VIS_USE_DAWN               1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
+
+Then define the in PATH the path where the 'dawn' binary application
+is installed.
 
 # flag that we want to use analysis:
-setenv G4ANALYSIS_USE               1
+setenv G4ANALYSIS_USE 1
 
-#select AIDA implementation: PI 1.2.1  (for cern AFS)
+#select AIDA implementation: for instance, PI (http://cern.ch/pi)
 
-setenv G4ANALYSIS_BUILD  1
-setenv PI_VERSION 1_2_1
+Define in PATH/LD_LIBRARY_PATH the paths where the your analysis tool
+and libs are installed.
+e.g., for PI-1.2.1:
 
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/PI/Linux-g++/bin"
+setenv PATH ${PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/PI_1_2_1/rh73_gcc32/bin
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/PI_1_2_1/rh73_gcc32/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:[your-PI-installation-path]/PI/1.2.1/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib
 
 eval `aida-config -r csh`
 
-
 #path to the lowEnergy data base
 
-setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW2.3
+setenv G4LEDATA [your-data-path]:/G4EMLOW2.3
 
 #path to Xray_Fluorescence data files, if not set, PWD is assumed:
 
-setenv XRAYDATA /afs/cern.ch/user/u/username
+setenv XRAYDATA $G4INSTALL/examples/advanced/xray_fluorescence
 
 1. Run
 To execute a sample simulation with visualisation of tracks
@@ -134,9 +138,9 @@ XrayFluoParticleGeneratorAction.cc
 6. Analysis
 
 At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
-In the example the Anaphe toolkit is used.
+In the example the PI toolkit is used.
 
-AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
+AIDA / PI configuration for compilation and link are in GNUmakefile, once 
 is set the environmente as above:
 
 ifdef G4ANALYSIS_USE
@@ -148,17 +152,16 @@ To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
 
-It is possible to visualize the outpu of the simulation. In order to do this 
+It is possible to visualize the output of the simulation. In order to do this 
 is necessary to uncomment all lines in XrayFluoAnalysisManager.cc / .hh regarding plotting; 
 and the same must be done for plotting refernces in XrayFluoRunManager.cc and XrayFluoEventAction.cc.
-And link against other AIDA compliant analysis sistems, such as Anaphe or JAS.
+And link against other AIDA compliant analysis sistems, such as PI or JAS.
  
 Finally, by setting visPlotter variable in XrayFluoAnalysisManager to true, 
 it is possible to display the simulated output of the detector while 
 simulation is in progress. Graph window is updated every 100000 events. 
 
-The example provides also a simple Python file used to display
-histograms with Lizard 3.0.0.x (from Anaphe)
+The example provides also a simple Python file used to display histograms.
 
 Various commads, with help,  are available for Geant4 UI. 
 /analysis/outputFile and /analysis/fileType respectively for 

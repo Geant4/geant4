@@ -70,39 +70,39 @@ public:
 
   //  virtual void ComputeDimensions (G4Box & voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
 
-  virtual void ComputeDimensions (G4Box&, 
+  virtual void ComputeDimension (G4Box&, 
 				  const G4int, 
 				  const G4VPhysicalVolume* ) const;
 
-   virtual void ComputeDimensions(G4Tubs &,
+   virtual void ComputeDimension(G4Tubs &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Trd &,
+    virtual void ComputeDimension(G4Trd &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimensions(G4Trap &,
+    virtual void ComputeDimension(G4Trap &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 	
-    virtual void ComputeDimensions(G4Cons &,
+    virtual void ComputeDimension(G4Cons &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Sphere &,
+    virtual void ComputeDimension(G4Sphere &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Torus &,
+    virtual void ComputeDimension(G4Torus &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Para &,
+    virtual void ComputeDimension(G4Para &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    virtual void ComputeDimensions(G4Hype &,
+    virtual void ComputeDimension(G4Hype &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.5 2003/11/07 12:39:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TiaraSim.cc,v 1.6 2004/12/08 15:37:15 daquinog Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include "TiaraSim.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.hh,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VTouchable.hh,v 1.8 2004/11/19 07:30:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // class G4VTouchable
@@ -57,8 +57,8 @@
 //
 //   3) GetVolume gives the physical volume.
 //
-//   4) GetReplicaNumber gives the replica number of the physical volume, 
-//      if it is replicated.
+//   4) GetReplicaNumber or GetCopyNumber gives the copy number of the
+//      physical volume, either if it is replicated or not.
 //
 // Touchables that store volume hierarchy (history) have the whole stack of
 // parent volumes available. Thus it is possible to add a little more state
@@ -71,9 +71,9 @@
 //
 //   5) GetHistoryDepth gives the depth of the history tree.
 //
-//   6) GetReplicaNumber, GetVolume, GetTranslation and GetRotation each
-//      can be called with a depth argument.  They return the value of the 
-//      respective level of the touchable.
+//   6) GetReplicaNumber/GetCopyNumber, GetVolume, GetTranslation and
+//      GetRotation each can be called with a depth argument.
+//      They return the value of the respective level of the touchable.
 // 
 //   7) MoveUpHistory(num) moves the current pointer inside the touchable
 //      to point "num" levels up the history tree. Thus, eg, calling 
@@ -119,12 +119,13 @@ class G4VTouchable
     // Accessors for physical volumes and solid.
 
   virtual G4int GetReplicaNumber(G4int depth=0) const;
+  inline  G4int GetCopyNumber(G4int depth=0) const;
   virtual G4int GetHistoryDepth() const;
   virtual G4int MoveUpHistory(G4int num_levels=1);
     // Methods for touchables with history.
 
   virtual void  UpdateYourself(G4VPhysicalVolume* pPhysVol,
-			       const G4NavigationHistory* history=NULL); 
+			       const G4NavigationHistory* history=0); 
     // Update method.
 
  public:  // without description

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.10 2003/11/04 12:17:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PhysicsTable.cc,v 1.12 2004/10/29 11:38:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@ G4PhysicsTable::G4PhysicsTable(size_t capacity)
   : G4PhysCollection()
 {
   reserve(capacity);
+  vecFlag.reserve(capacity);
 }
 
 G4PhysicsTable::G4PhysicsTable(const G4PhysicsTable& right)
@@ -60,9 +61,11 @@ G4PhysicsTable& G4PhysicsTable::operator=(const G4PhysicsTable& right)
   if (this != &right)
   {
     G4PhysCollection::const_iterator itr;
-    for (itr=right.begin(); itr!=right.end(); ++itr)
-    {
+    size_t idx = 0;
+    for (itr=right.begin(); itr!=right.end(); ++itr ) {
       G4PhysCollection::push_back(*itr);
+      vecFlag.push_back(right.GetFlag(idx));
+      idx +=1;
     }
   }
   return *this;
@@ -70,9 +73,16 @@ G4PhysicsTable& G4PhysicsTable::operator=(const G4PhysicsTable& right)
 
 G4PhysicsTable::~G4PhysicsTable()
 {
-  clear();
+  G4PhysCollection::clear();
+  vecFlag.clear();
 }
  
+void   G4PhysicsTable::resize(size_t size, G4PhysicsVector* vec)
+{
+  G4PhysCollection::resize(size, vec);
+  vecFlag.resize(size, true);
+}
+
 
 G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
 					 G4bool          ascii)
@@ -88,7 +98,7 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
   // check if the file has been opened successfully 
   if (!fOut) {
 #ifdef G4VERBOSE  
-    G4cerr << "G4PhysicsTable::::StorePhysicsTable  ";
+    G4cerr << "G4PhysicsTable::StorePhysicsTable  ";
     G4cerr << " Can not open file " << fileName << G4endl;
 #endif
     fOut.close();
@@ -165,6 +175,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     fIn >> tableSize;
   }
   reserve(tableSize); 
+  vecFlag.clear();
 
   // Physics Vector
   for (size_t idx=0; idx<tableSize; ++idx) {
@@ -196,7 +207,9 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     }
 
     // add a PhysicsVector to this PhysicsTable
-    push_back(pVec);
+    G4PhysCollection::push_back(pVec);
+    vecFlag.push_back(true);
+    
   } 
   fIn.close();
   return true;
@@ -210,12 +223,28 @@ std::ostream& operator<<(std::ostream& out,
   size_t i=0;
   for (itr=right.begin(); itr!=right.end(); ++itr) {
     out << std::setw(8) << i << "-th Vector   ";
-    out << ": Type    " << G4int((*itr)->GetType()) << G4endl;
+    out << ": Type    " << G4int((*itr)->GetType()) ;
+    out << ": Flag    ";
+    if (right.GetFlag(i)) {
+      out << " T";
+    } else {
+      out << " F";
+    } 
+    out << G4endl;
     out << *(*itr);
     i +=1;
   }
   out << G4endl;
   return out; 
+}
+
+void G4PhysicsTable::ResetFlagArray()
+{
+  size_t tableSize = G4PhysCollection::size(); 
+  vecFlag.clear();
+  for (size_t idx=0; idx<tableSize; idx++){
+    vecFlag.push_back(true);
+  }
 }
 
 #include "G4PhysicsVectorType.hh"
@@ -262,3 +291,9 @@ G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
   return pVector;
 }
  
+
+
+
+
+
+

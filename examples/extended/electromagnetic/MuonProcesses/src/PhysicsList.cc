@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2004/06/14 10:09:26 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysicsList.cc,v 1.2 2004/08/17 18:07:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "MuNuclearBuilder.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -51,6 +52,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   // EM physics
   emName = G4String("standard");
   emPhysicsList = new PhysListEmStandard(emName);
+
+  muNuclPhysicsList = 0;
   
   // instanciate EnergyLossTable
   G4LossTableManager::Instance();
@@ -166,6 +169,7 @@ void PhysicsList::ConstructProcess()
   // electromagnetic Physics List
   //
   emPhysicsList->ConstructProcess();
+  if(muNuclPhysicsList) muNuclPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,6 +193,9 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+
+  } else if (name == "muNucl") {
+    muNuclPhysicsList = new MuNuclearBuilder(name);
 
   } else {
 

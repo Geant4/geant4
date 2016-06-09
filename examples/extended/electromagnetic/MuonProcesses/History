@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2004/06/16 10:46:47 maire Exp $
+$Id: History,v 1.11 2004/12/06 12:02:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-16.06.04 V. Ivantchenko (muonprocesses-V06-01-01)
+05.12.04 mma (muonprocesses-V06-02-09)
+- namespace std in MuCrossSections
+
+02.12.04 V.Ivant (muonprocesses-V06-02-08)
+- Migration to cmath
+
+25.11.04 S. Sadilov (muonprocesses-V06-02-07)
+- Cast to doubles to resolve compilation problems on MS Windows.
+     
+03-11-04 mma (muonprocesses-V06-02-06)
+- do not delete Analysisfactory (for Jaida)
+
+27.10.04 S. Sadilov (muonprocesses-V06-02-04, muonprocesses-V06-02-05)
+- Cast to doubles to resolve compilation problems in gcc-3.2.
+
+07.09.04 V. Ivanchenko (muonprocesses-V06-02-03)
+- fix for histograms for muons-V06-02-01 tag 
+
+27.06.04 V. Ivanchenko (muonprocesses-V06-02-02)
+- update for muons-V06-02-01 tag 
+
+17.06.04 V. Ivanchenko (muonprocesses-V06-02-01)
+- introduce MuNuclearBuilder and corresponding macro
+
+30.06.04 mma (muonprocesses-V06-02-00)
+- histo management like in testem5-V06-01-04
+     
+16.06.04 V. Ivanchenko (muonprocesses-V06-01-01)
 - std::max in MuCrossSections
               
 14.06.04 Michel Maire (muonprocesses-V06-01-00)

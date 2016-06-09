@@ -8,7 +8,14 @@ $Id:
 
                       Category History file
                       ---------------------
-28.05.2003 - S. Guatelli (DMX-V06-01-00)
+
+07.12.2004 - S. Guatelli (DMX-V06-02-02)
+            G4VParticleChange migrated
+
+29.11.2004 - S. Guatelli (DMX-V06-02-00)
+             Migrated to <cmath>
+
+28.05.2004 - S. Guatelli (DMX-V06-01-00)
              Migrated to AIDA 3.2.1 and PI 1.2.1
 
 02.12.2003 - G.Cosmo (DMX-V05-02-01)

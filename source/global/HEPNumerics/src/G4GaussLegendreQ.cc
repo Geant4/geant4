@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLegendreQ.cc,v 1.3 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4GaussLegendreQ.cc,v 1.4 2004/11/12 17:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G4GaussLegendreQ.hh"
 
@@ -62,7 +62,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
       do
       {               // loop of Newton's method               
 	 temp1 = 1.0 ;
@@ -77,7 +77,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
 	 newton1 = newton ;
 	 newton  = newton1 - temp1/temp ;       // Newton's method
       }
-      while(fabs(newton - newton1) > tolerance) ;
+      while(std::fabs(newton - newton1) > tolerance) ;
 	 
       fAbscissa[fNumber-i] =  newton ;
       fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;

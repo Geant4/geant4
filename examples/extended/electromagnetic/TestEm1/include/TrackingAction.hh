@@ -20,33 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TrackingAction.hh,v 1.2 2003/10/20 10:43:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
+// $Id: TrackingAction.hh,v 1.3 2004/07/23 15:39:34 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
 
 #include "G4UserTrackingAction.hh"
 
+class PrimaryGeneratorAction;
 class RunAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(RunAction*);
+    TrackingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
    ~TrackingAction() {};
    
-    void PreUserTrackingAction(const G4Track*);
+    void  PreUserTrackingAction(const G4Track*);
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    RunAction* runAction;  
+    PrimaryGeneratorAction* primary;
+    RunAction*              runAction;
+    HistoManager*           histoManager;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

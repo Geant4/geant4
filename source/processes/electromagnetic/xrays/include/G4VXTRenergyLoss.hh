@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.5 2003/06/16 17:02:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VXTRenergyLoss.hh,v 1.6 2004/08/11 14:41:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ public:
 
 protected:
 
-  G4Gamma* fPtrGamma ;  // pointer to TR photon
+  G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
 
   G4double* fGammaCutInKineticEnergy ; // TR photon cut in energy array
   G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.

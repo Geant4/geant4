@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.11 2003/06/16 17:02:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ForwardXrayTR.hh,v 1.13 2004/08/11 14:41:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4ForwardXrayTR -- header file
 //
@@ -62,6 +62,7 @@
 #include "G4TransitionRadiation.hh"
 #include "G4PhysicsTable.hh"
 #include "G4Gamma.hh"
+#include "G4PhysicsLogVector.hh"
 
 class G4ForwardXrayTR : public G4TransitionRadiation
 {
@@ -156,7 +157,7 @@ protected :  // for access from X-ray TR fast simulation models
 
   // private :  ///////////////  Data members   ///////////////////////////
 
-G4Gamma* fPtrGamma ;  // pointer to TR photon
+G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
 
 const std::vector<G4double>* fGammaCutInKineticEnergy ;
                                      // TR photon cut in energy array

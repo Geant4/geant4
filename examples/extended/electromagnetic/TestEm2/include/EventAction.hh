@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EventAction.hh,v 1.2 2004/09/17 10:51:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: EventAction.hh,v 1.1 2003/10/08 17:28:36 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,8 +55,8 @@ class EventAction : public G4UserEventAction
   private:
   
     RunAction*             Run;
-    G4String                  drawFlag;
-    G4int                     printModulo;          
+    G4String               drawFlag;
+    G4int                  printModulo;          
     EventActionMessenger*  eventMessenger;
 };
 

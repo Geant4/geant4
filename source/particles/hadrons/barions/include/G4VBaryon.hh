@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBaryon.hh,v 1.4 2003/03/11 05:49:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VBaryon.hh,v 1.5 2004/07/26 08:21:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -41,9 +41,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4Material.hh"
 
-#include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
 
 class G4VBaryon : public G4ParticleDefinition

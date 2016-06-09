@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CompositeCurve.cc,v 1.12 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

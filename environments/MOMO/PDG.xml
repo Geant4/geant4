@@ -69,8 +69,8 @@
          <D type="denstiy" value="1.205" unit="mg/cm3"/>
          <T type="temperature" value="293.15" unit="kelvin"/>
          <P type="pascal" value="1.0" unit="atmosphere"/>
-         <franction n="0.7" ref="N"/>
-         <franction n="0.3" ref="O"/>
+         <composite n="1" ref="N"/>
+         <composite n="0" ref="O"/>
      </material>
      <material name="H2O">
          <D type="denstiy" value="1.0" unit="g/cm3"/>
@@ -97,12 +97,12 @@
          <D type="denstiy" value="2.5" unit="g/cm3"/>
          <T type="temperature" value="273.15" unit="kelvin"/>
          <P type="pascal" value="1.0" unit="atmosphere"/>
-         <franction n="0.52" ref="O"/>
-         <franction n="0.0" ref="Na"/>
-         <franction n="0.04" ref="Al"/>
-         <franction n="0.325" ref="Si"/>
-         <franction n="0.06" ref="Ca"/>
-         <franction n="0.02" ref="Fe"/>
+         <composite n="1" ref="O"/>
+         <composite n="0" ref="Na"/>
+         <composite n="0" ref="Al"/>
+         <composite n="0" ref="Si"/>
+         <composite n="0" ref="Ca"/>
+         <composite n="0" ref="Fe"/>
      </material>
      <material name="FusedQuarz">
          <D type="denstiy" value="2.2" unit="g/cm3"/>
@@ -110,14 +110,6 @@
          <P type="pascal" value="1.0" unit="atmosphere"/>
          <composite n="2" ref="O"/>
          <composite n="1" ref="Si"/>
-     </material>
-     <material name="DimethylEther">
-         <D type="denstiy" value="" unit="mg/cm3"/>
-         <T type="temperature" value="273.15" unit="kelvin"/>
-         <P type="pascal" value="1.0" unit="atmosphere"/>
-         <composite n="6" ref="H"/>
-         <composite n="2" ref="C"/>
-         <composite n="1" ref="O"/>
      </material>
      <material name="Methane">
          <D type="denstiy" value="0.4224" unit="mg/cm3"/>
@@ -280,14 +272,6 @@
          <P type="pascal" value="1.0" unit="atmosphere"/>
          <composite n="1" ref="Na"/>
          <composite n="1" ref="I"/>
-     </material>
-     <material name="">
-         <D type="denstiy" value="" unit="g/cm3"/>
-         <T type="temperature" value="273.15" unit="kelvin"/>
-         <P type="pascal" value="1.0" unit="atmosphere"/>
-         <composite n="0" ref="H"/>
-         <composite n="0" ref="O"/>
-         <composite n="0" ref="Si"/>
      </material>
 
      <!--Materials from Scratch-->

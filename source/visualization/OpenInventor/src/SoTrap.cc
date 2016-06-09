@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrap.cc,v 1.2 2004/06/14 09:27:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
 //
-/*-----------------------------Hepvis----------------------------------------*/
+// $Id: SoTrap.cc,v 1.7 2004/12/16 12:33:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+/*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */
 /* Node:             SoTrap                                                  */
 /* Description:      Represents the G4Trap Geant Geometry entity             */
@@ -32,8 +33,14 @@
 /*                                                                           */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
+// this :
+#include "HEPVis/nodes/SoTrap.h"
+
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoAction.h>
@@ -48,7 +55,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoTrap.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoTrap)
@@ -249,8 +255,8 @@ void SoTrap::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center ){
   if (pDy2.getValue() > pDy) pDy = pDy2.getValue(); 
   float TthetaCphi = FTAN(pTheta.getValue())*FCOS(pPhi.getValue());
   float TthetaSphi = FTAN(pTheta.getValue())*FSIN(pPhi.getValue());
-  float Xalp = FFABS(tan(pAlp1.getValue())*pDy1.getValue());
-  float Xalp2 = FFABS(tan(pAlp2.getValue())*pDy2.getValue());
+  float Xalp = FFABS(std::tan(pAlp1.getValue())*pDy1.getValue());
+  float Xalp2 = FFABS(std::tan(pAlp2.getValue())*pDy2.getValue());
   if (Xalp< Xalp2) Xalp=Xalp2;
   pDx += FFABS(TthetaCphi*pDz.getValue());
   pDx += Xalp;
@@ -401,3 +407,4 @@ void SoTrap::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

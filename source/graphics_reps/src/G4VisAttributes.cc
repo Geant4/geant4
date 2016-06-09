@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.9 2003/06/16 16:55:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisAttributes.cc,v 1.10 2004/07/28 15:44:32 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -30,36 +30,39 @@
 #include "G4VisAttributes.hh"
 
 G4VisAttributes::G4VisAttributes ():
-fVisible            (true),
-fDaughtersInvisible (false),
-fColour             (G4Colour ()),
-fLineStyle          (unbroken),
-fLineWidth          (1.),
-fForceDrawingStyle  (false),
-fAttValues          (0),
-fAttDefs            (0)
+fVisible             (true),
+fDaughtersInvisible  (false),
+fColour              (G4Colour ()),
+fLineStyle           (unbroken),
+fLineWidth           (1.),
+fForceDrawingStyle   (false),
+fForceAuxEdgeVisible (false),
+fAttValues           (0),
+fAttDefs             (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility):
-fVisible            (visibility),
-fDaughtersInvisible (false),
-fColour             (G4Colour ()),
-fLineStyle          (unbroken),
-fLineWidth          (1.),
-fForceDrawingStyle  (false),
-fAttValues          (0),
-fAttDefs            (0)
+fVisible             (visibility),
+fDaughtersInvisible  (false),
+fColour              (G4Colour ()),
+fLineStyle           (unbroken),
+fLineWidth           (1.),
+fForceDrawingStyle   (false),
+fForceAuxEdgeVisible (false),
+fAttValues           (0),
+fAttDefs             (0)
 {}
 
 G4VisAttributes::G4VisAttributes (const G4Colour& colour):
-fVisible            (true),
-fDaughtersInvisible (false),
-fColour             (colour),
-fLineStyle          (unbroken),
-fLineWidth          (1.),
-fForceDrawingStyle  (false),
-fAttValues          (0),
-fAttDefs            (0)
+fVisible             (true),
+fDaughtersInvisible  (false),
+fColour              (colour),
+fLineStyle           (unbroken),
+fLineWidth           (1.),
+fForceDrawingStyle   (false),
+fForceAuxEdgeVisible (false),
+fAttValues           (0),
+fAttDefs             (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
@@ -112,6 +115,11 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
     else {
       os << "unforced";
     }
+    os << "\n  auxiliary edge visibility";
+    if (!a.fForceAuxEdgeVisible) {
+      os << " not";
+    }
+    os << " forced";
     os << "\n  vector<G4AttValue> pointer is ";
     if (a.fAttValues) {
       os << "non-";
@@ -136,6 +144,7 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fLineStyle          != a.fLineStyle)          ||
       (fLineWidth          != a.fLineWidth)          ||
       (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
+      (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)||
       (fAttValues          != a.fAttValues)          ||
       (fAttDefs            != a.fAttDefs)
       )

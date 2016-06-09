@@ -34,9 +34,9 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 24/11/2004: migrated to cmath
 //
 // ********************************************************************
-
 
 
 #include "LISADetectorConstruction.hh"

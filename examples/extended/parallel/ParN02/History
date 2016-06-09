@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2004/06/21 09:46:23 gcosmo Exp $
+$Id: History,v 1.7 2004/11/26 16:49:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22nd, 2004  G.Cooperman and V.H.Nguyen - ParN02-V06-02-00
+------------------------------------------
+- New version of marshaling/unmarshaling code, generated from
+  annotations using Marshalgen.
 
 June 20th, 2004  G.Cooperman
 ----------------------------

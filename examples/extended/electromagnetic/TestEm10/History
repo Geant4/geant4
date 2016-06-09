@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003/11/25 18:47:28 vnivanch Exp $
+$Id: History,v 1.13 2004/12/03 09:34:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 04: V.Ivant (testem10-V06-02-01)
+- Migration to cmath
+- Remove compilation warnings and hbook histograms
+
+30-08-04 V.Ivant (testem10-V06-02-00)
+- Remove obsolete processes from PhysicsList
 
 25-11-03 V.Ivant (testem10-V05-02-01)
 

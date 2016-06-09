@@ -20,6 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RemSimIonICRU.cc,v 1.5 2004/11/23 14:37:47 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
+//
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+
 #include "RemSimIonICRU.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
@@ -45,28 +50,19 @@ void RemSimIonICRU::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
 
-      if (particleName == "proton" || particleName == "alpha"
-          || particleName == "GenericIon")
-	    {
-             G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-	     G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-             manager -> AddProcess(multipleScattering, -1,1,1);   
-	     manager -> AddProcess(ionisation, -1,2,2);
-	    }
-      else if (charge != 0.0)
-	{
-	  if (particleName != "e+" && particleName != "e-"  && 
-		   (particleName != "mu+") && (particleName != "mu-")) 
+      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+            particleName != "e-" && particleName != "mu-") 
 	    {
              if((!particle -> IsShortLived()) &&
 		 (particle -> GetParticleName() != "chargedgeantino"))
-	       { 
-	      G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-              manager -> AddProcess(multipleScattering, -1,1,1);  
-	      manager -> AddProcess(ionisation, -1,2,2);
+	       {
+		 G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+		 G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+		 manager -> AddProcess(multipleScattering, -1,1,1);   
+		 manager -> AddProcess(ionisation, -1,2,2);
 	       }
 	    }
-	}
     }
 }
+
+   

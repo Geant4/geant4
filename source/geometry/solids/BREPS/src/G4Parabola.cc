@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.cc,v 1.6 2003/03/28 13:12:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Parabola.cc,v 1.7 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -77,7 +77,7 @@ G4Curve* G4Parabola::Project(const G4Transform3D& tr)
 {
   G4double axisZ= (tr*position.GetPZ()).unit().z();
 
-  if (abs(axisZ)<kAngTolerance) 
+  if (std::abs(axisZ)<kAngTolerance) 
     return 0;
   
   
@@ -93,7 +93,7 @@ G4Curve* G4Parabola::Project(const G4Transform3D& tr)
                                     focalDist*(u*u*xPrime+2*u*yPrime) );
   newLocation.setZ(0);
   G4Vector3D newRefDirection= xPrime;
-  G4double newFocalDist= (focalDist*((2*u+1)*xPrime+2*yPrime)).mag()/sqrt(5.);
+  G4double newFocalDist= (focalDist*((2*u+1)*xPrime+2*yPrime)).mag()/std::sqrt(5.);
 			  
   // create the new parabola
   G4Axis2Placement3D newPosition;
@@ -125,7 +125,7 @@ void G4Parabola::InitBounded()
   {
     G4double x_i= position.GetPX()(i);
     
-    if (abs(x_i) <= kAngTolerance) 
+    if (std::abs(x_i) <= kAngTolerance) 
     {
       G4double u= - position.GetPY()(i) / x_i;
       if (IsPOn(u)) 

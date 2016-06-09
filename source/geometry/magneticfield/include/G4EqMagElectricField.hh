@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EqMagElectricField.hh,v 1.8 2003/11/05 12:46:39 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // class G4EqMagElectricField

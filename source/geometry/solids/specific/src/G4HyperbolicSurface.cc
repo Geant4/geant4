@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.5 2004/05/28 13:13:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4HyperbolicSurface.cc,v 1.7 2004/12/02 09:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -242,7 +242,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    //     p       - (in) Point on trajectory
    //     v       - (in) Vector along trajectory
    //     r2      - (in) Square of radius at z = 0
-   //     tan2phi - (in) tan(stereo)**2
+   //     tan2phi - (in) std::tan(stereo)**2
    //     s       - (out) Up to two points of intersection, where the
    //                     intersection point is p + s*v, and if there are
    //                     two intersections, s[0] < s[1]. May be negative.
@@ -310,15 +310,15 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       //        where 
       //        beta = vrho / vz
       // Solution (z value of intersection point):
-      //    xxz = +- sqrt (fR02 / (beta^2 - fTan2Stereo))
+      //    xxz = +- std::sqrt (fR02 / (beta^2 - fTan2Stereo))
       //
 
       G4double vz    = v.z();
-      G4double absvz = abs(vz);
+      G4double absvz = std::abs(vz);
       G4double vrho  = v.getRho();       
       G4double vslope = vrho/vz;
       G4double vslope2 = vslope * vslope;
-      if (vrho == 0 || (vrho/absvz) <= (absvz*fabs(fTanStereo)/absvz)) {
+      if (vrho == 0 || (vrho/absvz) <= (absvz*std::fabs(fTanStereo)/absvz)) {
          // vz/vrho is bigger than slope of asymptonic line
          distance[0] = kInfinity;
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
@@ -327,8 +327,8 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       }
        
       if (vz) { 
-         G4double xxz  = sqrt(fR02 / (vslope2 - fTan2Stereo)) 
-                        * (vz / fabs(vz)) ;
+         G4double xxz  = std::sqrt(fR02 / (vslope2 - fTan2Stereo)) 
+                        * (vz / std::fabs(vz)) ;
          G4double t = xxz / vz;
          xx[0].set(t*v.x(), t*v.y(), xxz);
       } else {
@@ -367,8 +367,8 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4double c = p.x()*p.x() + p.y()*p.y() - fR02 - p.z()*p.z()*fTan2Stereo;
    G4double D = b*b - 4*a*c;          //discriminant 
    
-   if (fabs(a) < DBL_MIN) {
-      if (fabs(b) > DBL_MIN) {           // single solution
+   if (std::fabs(a) < DBL_MIN) {
+      if (std::fabs(b) > DBL_MIN) {           // single solution
 
          distance[0] = -c/b;
          xx[0] = p + distance[0]*v;
@@ -406,7 +406,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       
    } else if (D > DBL_MIN) {         // double solutions
       
-      D = sqrt(D);
+      D = std::sqrt(D);
       G4double      factor = 0.5/a;
       G4double      tmpdist[2] = {kInfinity, kInfinity};
       G4ThreeVector tmpxx[2] ;
@@ -551,8 +551,8 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
    //
        
    G4double prho       = p.getRho();
-   G4double pz         = fabs(p.z());           // use symmetry
-   G4double r1         = sqrt(fR02 + pz * pz * fTan2Stereo);
+   G4double pz         = std::fabs(p.z());           // use symmetry
+   G4double r1         = std::sqrt(fR02 + pz * pz * fTan2Stereo);
    
    G4ThreeVector pabsz(p.x(), p.y(), pz);
     
@@ -564,7 +564,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       
       // Second point xx2
       G4double z2 = (prho * fTanStereo + pz) / (1 + fTan2Stereo);
-      G4double r2 = sqrt(fR02 + z2 * z2 * fTan2Stereo);
+      G4double r2 = std::sqrt(fR02 + z2 * z2 * fTan2Stereo);
       t = r2 / prho;
       G4ThreeVector xx2(t * pabsz.x(), t * pabsz.y() , z2);
             
@@ -822,28 +822,28 @@ void G4HyperbolicSurface::SetCorners(
       G4double x, y, z;
       
       // corner of Axis0min and Axis1min
-      x = endRad[zmin]*cos(endPhi[zmin] - halfdphi);
-      y = endRad[zmin]*sin(endPhi[zmin] - halfdphi);
+      x = endRad[zmin]*std::cos(endPhi[zmin] - halfdphi);
+      y = endRad[zmin]*std::sin(endPhi[zmin] - halfdphi);
       z = endZ[zmin];
-      SetCorner(sCMin1Min, x, y, z);
+      SetCorner(sC0Min1Min, x, y, z);
       
       // corner of Axis0max and Axis1min
-      x = endRad[zmin]*cos(endPhi[zmin] + halfdphi);
-      y = endRad[zmin]*sin(endPhi[zmin] + halfdphi);
+      x = endRad[zmin]*std::cos(endPhi[zmin] + halfdphi);
+      y = endRad[zmin]*std::sin(endPhi[zmin] + halfdphi);
       z = endZ[zmin];
-      SetCorner(sCMax1Min, x, y, z);
+      SetCorner(sC0Max1Min, x, y, z);
       
       // corner of Axis0max and Axis1max
-      x = endRad[zmax]*cos(endPhi[zmax] + halfdphi);
-      y = endRad[zmax]*sin(endPhi[zmax] + halfdphi);
+      x = endRad[zmax]*std::cos(endPhi[zmax] + halfdphi);
+      y = endRad[zmax]*std::sin(endPhi[zmax] + halfdphi);
       z = endZ[zmax];
-      SetCorner(sCMax1Max, x, y, z);
+      SetCorner(sC0Max1Max, x, y, z);
       
       // corner of Axis0min and Axis1max
-      x = endRad[zmax]*cos(endPhi[zmax] - halfdphi);
-      y = endRad[zmax]*sin(endPhi[zmax] - halfdphi);
+      x = endRad[zmax]*std::cos(endPhi[zmax] - halfdphi);
+      y = endRad[zmax]*std::sin(endPhi[zmax] - halfdphi);
       z = endZ[zmax];
-      SetCorner(sCMin1Max, x, y, z);
+      SetCorner(sC0Min1Max, x, y, z);
 
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -879,28 +879,28 @@ void G4HyperbolicSurface::SetBoundaries()
 
       G4ThreeVector direction;
       // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMin), direction, 
-                   GetCorner(sCMin1Min), sAxisZ);
+                   GetCorner(sC0Min1Min), sAxisZ);
 
       // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMax), direction, 
-                  GetCorner(sCMax1Min), sAxisZ);
+                  GetCorner(sC0Max1Min), sAxisZ);
 
       // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-                   GetCorner(sCMin1Min), sAxisPhi);
+                   GetCorner(sC0Min1Min), sAxisPhi);
 
       // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-                  GetCorner(sCMin1Max), sAxisPhi);
+                  GetCorner(sC0Min1Max), sAxisPhi);
    } else {
       G4cerr << "ERROR - G4HyperbolicSurface::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl

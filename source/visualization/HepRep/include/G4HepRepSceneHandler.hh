@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.32 2004/05/27 05:55:20 duns Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4HepRepSceneHandler.hh,v 1.33 2004/11/11 16:01:51 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 /**
@@ -72,8 +72,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         void PreAddThis (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddThis ();
-
-        void EstablishSpecials(G4PhysicalVolumeModel&);
 
         void AddPrimitive (const G4Polyline&);
         void AddPrimitive (const G4Text&);
@@ -170,10 +168,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4String extension;
         G4bool writeMultipleFiles;
 
-        G4int currentDepth;
-        G4VPhysicalVolume* currentPV;
-        G4LogicalVolume* currentLV;
-        
         // DO NOT USE member vars directly, use get methods.
         HEPREP::HepRep*                         _heprep;
         HEPREP::HepRep*                         _heprepGeometry;

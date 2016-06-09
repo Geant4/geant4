@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.18 2003/06/16 17:02:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Scintillation.cc,v 1.22 2004/12/10 18:49:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2002-11-21 by Peter Gumplinger
+// Updated:     2004-08-05 by Peter Gumplinger
+//              > changed StronglyForced back to Forced in GetMeanLifeTime
+//              2002-11-21 by Peter Gumplinger
 //              > change to use G4Poisson for small MeanNumPhotons
 //              2002-11-07 by Peter Gumplinger
 //              > now allow for fast and slow scintillation component
@@ -55,6 +57,8 @@
 
 #include "G4ios.hh"
 #include "G4Scintillation.hh"
+
+using namespace std;
 
 /////////////////////////
 // Class Implementation  
@@ -198,7 +202,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
-	  	   aParticleChange.SetStatusChange(fSuspend);
+	  	   aParticleChange.ProposeTrackStatus(fSuspend);
         }
 	
 	////////////////////////////////////////////////////////////////
@@ -234,10 +238,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( ExcitationRatio == 1.0 ) {
-                    Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
+                    Num = G4int (min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = G4int (std::min(ExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (min(ExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -277,7 +281,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 G4double cost = 1. - 2.*G4UniformRand();
                 G4double sint = sqrt((1.-cost)*(1.+cost));
 
-		G4double phi = 2*M_PI*G4UniformRand();
+		G4double phi = twopi*G4UniformRand();
 		G4double sinp = sin(phi);
 		G4double cosp = cos(phi);
 
@@ -299,7 +303,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 G4ThreeVector perp = photonMomentum.cross(photonPolarization);
 
-		phi = 2*M_PI*G4UniformRand();
+		phi = twopi*G4UniformRand();
 		sinp = sin(phi);
 		cosp = cos(phi);
 
@@ -550,7 +554,7 @@ G4double G4Scintillation::GetMeanFreePath(const G4Track&,
 G4double G4Scintillation::GetMeanLifeTime(const G4Track&,
                                           G4ForceCondition* condition)
 {
-        *condition = StronglyForced;
+        *condition = Forced;
 
         return DBL_MAX;
 

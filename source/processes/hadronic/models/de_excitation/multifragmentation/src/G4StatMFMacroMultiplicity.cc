@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.3 2004/12/07 13:47:46 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -59,7 +59,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     // For that is necesary to calculate mean multiplicities
 {
     G4double CP = ((3./5.)*elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0-1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0));
+	(1.0-1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0));
 
     // starting value for chemical potential \mu
     // it is the derivative of F(T,V)-\nu*Z w.r.t. Af in Af=5
@@ -69,15 +69,15 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
 	_MeanTemperature*_MeanTemperature/ILD5 -
 	_ChemPotentialNu*ZA5 + 
 	G4StatMFParameters::GetGamma0()*(1.0-2.0*ZA5)*(1.0-2.0*ZA5) +
-	(2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/pow(5.,1./3.) +
-	(5.0/3.0)*CP*ZA5*ZA5*pow(5.,2./3.) -
+	(2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/std::pow(5.,1./3.) +
+	(5.0/3.0)*CP*ZA5*ZA5*std::pow(5.,2./3.) -
 	1.5*_MeanTemperature/5.0;
 		
 
 
     G4double ChemPa = _ChemPotentialMu;
     if (ChemPa/_MeanTemperature > 10.0) ChemPa = 10.0*_MeanTemperature;
-    G4double ChemPb = ChemPa - 0.5*abs(ChemPa);
+    G4double ChemPb = ChemPa - 0.5*std::abs(ChemPa);
     
     
     G4double fChemPa = this->operator()(ChemPa); 
@@ -87,7 +87,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     G4int iterations = 0;
     while (fChemPa*fChemPb > 0.0 && iterations < 10) 
     {
-	if (abs(fChemPa) <= abs(fChemPb)) 
+	if (std::abs(fChemPa) <= std::abs(fChemPb)) 
 	{
 	    ChemPa += 0.6*(ChemPa-ChemPb);
 	    fChemPa = this->operator()(ChemPa);

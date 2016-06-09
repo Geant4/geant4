@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.26 2004/01/26 09:03:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Box.cc,v 1.28.2.1 2004/12/02 09:30:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 //
@@ -100,6 +100,8 @@ void G4Box::SetXHalfLength(G4double dx)
     G4Exception("G4Box::SetXHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
@@ -114,6 +116,8 @@ void G4Box::SetYHalfLength(G4double dy)
     G4Exception("G4Box::SetYHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
@@ -128,6 +132,8 @@ void G4Box::SetZHalfLength(G4double dz)
     G4Exception("G4Box::SetZHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 } 
     
 
@@ -334,23 +340,23 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 {
   EInside in = kOutside ;
 
-  if ( fabs(p.x()) <= fDx - kCarTolerance*0.5 )
+  if ( std::fabs(p.x()) <= fDx - kCarTolerance*0.5 )
   {
-    if (fabs(p.y()) <= fDy - kCarTolerance*0.5 )
+    if (std::fabs(p.y()) <= fDy - kCarTolerance*0.5 )
     {
-      if      (fabs(p.z()) <= fDz - kCarTolerance*0.5 ) in = kInside ;
-      else if (fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+      if      (std::fabs(p.z()) <= fDz - kCarTolerance*0.5 ) in = kInside ;
+      else if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
     }
-    else if (fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    else if (std::fabs(p.y()) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
+      if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5 ) in = kSurface ;
     }
   }
-  else if (fabs(p.x()) <= fDx + kCarTolerance*0.5 )
+  else if (std::fabs(p.x()) <= fDx + kCarTolerance*0.5 )
   {
-    if (fabs(p.y()) <= fDy + kCarTolerance*0.5 )
+    if (std::fabs(p.y()) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(p.z()) <= fDz + kCarTolerance*0.5) in = kSurface ;
+      if (std::fabs(p.z()) <= fDz + kCarTolerance*0.5) in = kSurface ;
     }
   }
   return in ;
@@ -369,9 +375,9 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 
   // Calculate distances as if in 1st octant
 
-  distx = fabs(fabs(p.x()) - fDx) ;
-  disty = fabs(fabs(p.y()) - fDy) ;
-  distz = fabs(fabs(p.z()) - fDz) ;
+  distx = std::fabs(std::fabs(p.x()) - fDx) ;
+  disty = std::fabs(std::fabs(p.y()) - fDy) ;
+  distz = std::fabs(std::fabs(p.z()) - fDz) ;
 
   if ( distx <= disty )
   {
@@ -431,9 +437,9 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
   G4double stmp ;
   G4double sOut=kInfinity, sOuty=kInfinity, sOutz=kInfinity ;
 
-  safx = fabs(p.x()) - fDx ;     // minimum distance to x surface of shape
-  safy = fabs(p.y()) - fDy ;
-  safz = fabs(p.z()) - fDz ;
+  safx = std::fabs(p.x()) - fDx ;     // minimum distance to x surface of shape
+  safy = std::fabs(p.y()) - fDy ;
+  safz = std::fabs(p.z()) - fDz ;
 
   // Will we intersect?
   // If safx/y/z is >-tol/2 the point is outside/on the box's x/y/z extent.
@@ -452,12 +458,12 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
 
   if ( v.x())
   {
-    stmp = 1.0/fabs(v.x()) ;
+    stmp = 1.0/std::fabs(v.x()) ;
 
     if (safx >= 0.0)
     {
       smin = safx*stmp ;
-      smax = (fDx+fabs(p.x()))*stmp ;
+      smax = (fDx+std::fabs(p.x()))*stmp ;
     }
     else
     {
@@ -470,12 +476,12 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
 
   if ( v.y()) 
   {
-    stmp = 1.0/fabs(v.y()) ;
+    stmp = 1.0/std::fabs(v.y()) ;
 
     if (safy >= 0.0)
     {
       sminy = safy*stmp ;
-      smaxy = (fDy+fabs(p.y()))*stmp ;
+      smaxy = (fDy+std::fabs(p.y()))*stmp ;
 
       if (sminy > smin) smin=sminy ;
       if (smaxy < smax) smax=smaxy ;
@@ -497,12 +503,12 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
 
   if ( v.z() )
   {
-    stmp = 1.0/fabs(v.z()) ;
+    stmp = 1.0/std::fabs(v.z()) ;
 
     if ( safz >= 0.0)
     {
       sminz = safz*stmp ;
-      smaxz = (fDz+fabs(p.z()))*stmp ;
+      smaxz = (fDz+std::fabs(p.z()))*stmp ;
 
       if (sminz > smin) smin = sminz ;
       if (smaxz < smax) smax = smaxz ;
@@ -540,9 +546,9 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 {
   G4double safex, safey, safez, safe = 0.0 ;
 
-  safex = fabs(p.x()) - fDx ;
-  safey = fabs(p.y()) - fDy ;
-  safez = fabs(p.z()) - fDz ;
+  safex = std::fabs(p.x()) - fDx ;
+  safey = std::fabs(p.y()) - fDy ;
+  safez = std::fabs(p.z()) - fDz ;
 
   if (safex > safe) safe = safex ;
   if (safey > safe) safe = safey ;

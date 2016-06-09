@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UnionSolid.cc,v 1.25 2004/02/27 08:38:09 grichine Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

@@ -12,7 +12,7 @@ G4HepRepSceneHandler.cc
 G4HepRepMessenger.cc
 G4HepRepViewer.cc
 
-and the zlib sources
+and the zlib and zipios sources
 
 the other sources are copies from the FreeHEP library
 (java.freehep.org) and are maintained there.

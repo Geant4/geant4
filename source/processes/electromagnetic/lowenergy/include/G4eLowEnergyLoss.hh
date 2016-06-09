@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.12 2003/06/16 16:59:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4eLowEnergyLoss.hh,v 1.13 2004/12/02 14:01:12 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 
@@ -219,9 +219,9 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
                                           // calculated in BuildPhysicTable
     static G4double LowerBoundEloss;
     static G4double UpperBoundEloss;
-    static G4double RTable,LOGRTable;    // LOGRTable=log(UpperBoundEloss-
+    static G4double RTable,LOGRTable;    // LOGRTable=std::log(UpperBoundEloss-
                                          // LowerBoundEloss)/NbinEloss
-                                         // RTable = exp(LOGRTable)
+                                         // RTable = std::exp(LOGRTable)
 
     //for interpolation within the tables
     static G4PhysicsTable* theeRangeCoeffATable;

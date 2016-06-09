@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.hh,v 1.10 2004/05/08 15:28:11 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParticleChange.hh,v 1.11 2004/10/19 00:51:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -200,36 +200,6 @@ class G4ParticleChange: public G4VParticleChange
     //  Add a secondary particle to theListOfSecondaries.
     //  position and are same as thePositionChange  
     // ----------------------------------------------------
-
-  public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4ParticleChange   
-    const G4ThreeVector* GetMomentumDirectionChange() const;
-    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
-    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
-    const G4ThreeVector* GetMomentum() const;
-    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
-    void SetMomentumChange(const G4ThreeVector& Pfinal);
-    const G4ThreeVector* GetMomentumChange() const;
-    const G4ThreeVector* GetPolarizationChange() const;
-    void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
-    void SetPolarizationChange(const G4ThreeVector& finalPoralization);
-    G4double GetEnergyChange() const;
-    void SetEnergyChange(G4double theEnergyChange);
-    G4double GetProperTimeChange() const;
-    void SetProperTimeChange(G4double t);
-    const G4ThreeVector* GetPositionChange() const;
-    void SetPositionChange(G4double x, G4double y, G4double z);
-    void SetPositionChange(const G4ThreeVector& finalPosition);
-    G4double GetTimeChange() const;
-    void SetTimeChange(G4double t);
-    G4double GetMassChange() const;
-    void SetMassChange(G4double mass);
-    G4double GetChargeChange() const;
-    void SetChargeChange(G4double mass);
-    G4double GetWeightChange() const;
-    void SetWeightChange(G4double w);
 
   public:
     virtual void DumpInfo() const;

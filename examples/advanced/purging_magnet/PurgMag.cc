@@ -30,7 +30,7 @@
 //    *********************
 //
 // $Id: PurgMag.cc,v 1.2 2004/06/18 09:17:42 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Comments: Main program for the Purgin Magnet example. 
 //

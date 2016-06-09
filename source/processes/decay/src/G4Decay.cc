@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.18 2004/05/08 15:30:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4Decay.cc,v 1.19 2004/08/13 08:17:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -87,14 +87,14 @@ G4bool G4Decay::IsApplicable(const G4ParticleDefinition& aParticleType)
    }
 }
 
-G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
+G4double G4Decay::GetMeanLifeTime(const G4Track& aTrack  ,
                                   G4ForceCondition*)
 {
-   // get particle type 
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-
    // returns the mean free path in GEANT4 internal units
    G4double meanlife;
+
+   // get particle 
+   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
    G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
@@ -102,9 +102,6 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
    if (aParticleDef->GetPDGStable()) {
      meanlife = DBL_MAX;
     
-   } else if (aLife < 0.0) {
-     meanlife = DBL_MAX;
-      
    } else {
      meanlife = aLife;
    }
@@ -122,28 +119,23 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 {
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-
-   // returns the mean free path in GEANT4 internal units
-   G4double pathlength;
    G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
-   G4double aCtau = c_light * aParticleDef->GetPDGLifeTime();
    G4double aMass = aParticle->GetMass();
+   G4double aLife = aParticleDef->GetPDGLifeTime();
+
+
+    // returns the mean free path in GEANT4 internal units
+   G4double pathlength;
+   G4double aCtau = c_light * aLife;
 
    // check if the particle is stable?
    if (aParticleDef->GetPDGStable()) {
      pathlength = DBL_MAX;
 
-   } else if (aCtau < 0.0) {
-     pathlength =  DBL_MAX;
-      
    //check if the particle has very short life time ?
    } else if (aCtau < DBL_MIN) { 
      pathlength =  DBL_MIN;
  
-   //check if zero mass
-   } else if (aMass <  DBL_MIN)  {
-     pathlength =  DBL_MAX;
-
    } else {
     //calculate the mean free path 
     // by using normalized kinetic energy (= Ekin/mass)
@@ -310,14 +302,98 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
   fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
   fParticleChangeForDecay.ProposeGlobalTime( finalGlobalTime );
-  // reset NumberOfInteractionLengthLeft
+  // Clear NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
 
   return &fParticleChangeForDecay ;
 } 
 
 
+void G4Decay::StartTracking()
+{
+  currentInteractionLength = -1.0;
+  ResetNumberOfInteractionLengthLeft();
+ 
+  fRemainderLifeTime = -1.0;
+}
+
+void G4Decay::EndTracking()
+{
+  // Clear NumberOfInteractionLengthLeft
+  ClearNumberOfInteractionLengthLeft();
+
+  currentInteractionLength = -1.0;
+}
 
 
+G4double G4Decay::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{
+ 
+   // condition is set to "Not Forced"
+  *condition = NotForced;
 
+   // pre-assigned Decay time
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+  G4double aLife = track.GetDynamicParticle()->GetDefinition()->GetPDGLifeTime();
 
+  if (pTime < 0.) {
+    // normal case 
+    if ( previousStepSize > 0.0){
+      // subtract NumberOfInteractionLengthLeft 
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft<0.){
+	theNumberOfInteractionLengthLeft=perMillion;
+      }
+      fRemainderLifeTime = theNumberOfInteractionLengthLeft*aLife;
+    }
+    // get mean free path
+    currentInteractionLength = GetMeanFreePath(track, previousStepSize, condition);
+    
+#ifdef G4VERBOSE
+    if ((currentInteractionLength <=0.0) || (verboseLevel>2)){
+      G4cout << "G4Decay::PostStepGetPhysicalInteractionLength " << G4endl;
+      track.GetDynamicParticle()->DumpInfo();
+      G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<G4endl;
+    }
+#endif
+
+    G4double value;
+    if (currentInteractionLength <DBL_MAX) {
+      value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+    } else {
+      value = DBL_MAX;
+    }
+
+    return value;
+
+  } else {
+    //pre-assigned Decay time case
+    // reminder proper time
+    fRemainderLifeTime = pTime - track.GetProperTime();
+    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  
+    // use pre-assigned Decay time to determine PIL
+    return (fRemainderLifeTime/aLife)*GetMeanFreePath(track, previousStepSize, condition);
+  }
+}
+
+G4double G4Decay::AtRestGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4ForceCondition* condition
+                            )
+{
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+  if (pTime >= 0.) {
+    fRemainderLifeTime = pTime - track.GetProperTime();
+    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  } else {
+    fRemainderLifeTime = 
+      theNumberOfInteractionLengthLeft * GetMeanLifeTime(track, condition);
+  }
+  return fRemainderLifeTime;
+}

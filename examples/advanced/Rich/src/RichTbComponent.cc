@@ -112,9 +112,9 @@ RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial,
 
   }
   //Mirror
-  G4double MirrThetaSize=2.0*asin(MirrorHorizontalChord/(MirrorRInner*2.0));
+  G4double MirrThetaSize=2.0*std::asin(MirrorHorizontalChord/(MirrorRInner*2.0));
   G4double MirrThetaStart=halfpi*rad-MirrThetaSize/2.0;
-  G4double MirrPhiSize=2.0*asin(MirrorVerticalChord/(MirrorRInner*2.0));
+  G4double MirrPhiSize=2.0*std::asin(MirrorVerticalChord/(MirrorRInner*2.0));
   G4double MirrPhiStart=-MirrPhiSize/2.0;
 
   G4Sphere* MirrorSphe= new G4Sphere("MirrorSphe",MirrorRInner,
@@ -151,10 +151,10 @@ RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial,
   G4double  MirrorPosX,  MirrorPosY,  MirrorPosZ;
 
   if( MirrorTotRotX !=0.0 ||  MirrorTotRotY != 0.0 ) {
-     MirrorPosX =-VesselPosX-MirrorRInner*sin(MirrorTotRotY);
-     MirrorPosY =-VesselPosY+MirrorRInner*sin(MirrorTotRotX);
+     MirrorPosX =-VesselPosX-MirrorRInner*std::sin(MirrorTotRotY);
+     MirrorPosY =-VesselPosY+MirrorRInner*std::sin(MirrorTotRotX);
      MirrorPosZ =MirrorShiftFromEnd-VesselHalfZ
-      -MirrorRInner*(cos(MirrorTotRotY)+cos(MirrorTotRotX)-1.0);
+      -MirrorRInner*(std::cos(MirrorTotRotY)+std::cos(MirrorTotRotX)-1.0);
   }else {
     MirrorPosX =-VesselPosX;
     MirrorPosY =-VesselPosY;

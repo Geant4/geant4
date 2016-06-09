@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2004/06/23 11:29:50 maire Exp $
+$Id: README,v 1.10 2004/09/27 14:42:22 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -84,7 +84,7 @@ $Id: README,v 1.7 2004/06/23 11:29:50 maire Exp $
  	% gmake
  		
      - execute Test  in 'batch' mode from macro files
- 	% TestEm7    run01.mac
+ 	% TestEm7    proton.mac
  		
      - execute Test  in 'interactive mode' with visualization
  	% TestEm7 
@@ -110,7 +110,7 @@ $Id: README,v 1.7 2004/06/23 11:29:50 maire Exp $
      
      The bin size is egal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
-     The total energy deposited is plotted in MeV/mm.  
+     The total energy deposited is plotted in MeV/mm per incident particle.  
 
      Note that, by default, histograms are disabled. To activate them, uncomment
      G4ANALYSIS_USE in GNUmakefile.
@@ -119,10 +119,7 @@ $Id: README,v 1.7 2004/06/23 11:29:50 maire Exp $
   
      The energy deposited in the test-volumes (tallies) defined in
      DetectorConstruction are printed at EndOfRun, both in MeV and gray.
-     
-     Notice that the doses are not re initialized between runs, i.e. they are
-     cumulative over the runs. (idem for the histogram of the Bragg peak.)   
-
+ 
 
  8- Using histograms
  ------------------- 
@@ -155,9 +152,5 @@ Before running the example the command should be issued:
 
 eval `aida-config --runtime csh`
 
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testem/histo/setFileType type
-
-The following types are available: hbook, root, xml.
+It is possible to choose the format of the histogram file (hbook, root, XML):
+comment/uncomment 1 line in  RunAction::bookHisto().

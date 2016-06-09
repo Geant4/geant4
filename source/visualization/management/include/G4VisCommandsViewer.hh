@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.15 2001/11/06 12:55:28 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisCommandsViewer.hh,v 1.16 2004/07/14 15:38:49 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -101,20 +101,6 @@ private:
   G4VisCommandViewerFlush (const G4VisCommandViewerFlush&);
   G4VisCommandViewerFlush& operator = (const G4VisCommandViewerFlush&);
   G4UIcmdWithAString* fpCommand;
-};
-
-class G4VisCommandViewerLights: public G4VVisCommandViewer {
-public:
-  G4VisCommandViewerLights ();
-  virtual ~G4VisCommandViewerLights ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandViewerLights (const G4VisCommandViewerLights&);
-  G4VisCommandViewerLights& operator = (const G4VisCommandViewerLights&);
-  G4UIcommand* fpCommandLightsThetaPhi;
-  G4UIcommand* fpCommandLightsVector;
-  G4ThreeVector fLightsVector;
 };
 
 class G4VisCommandViewerList: public G4VVisCommandViewer {
@@ -202,21 +188,6 @@ private:
   G4VisCommandViewerUpdate (const G4VisCommandViewerUpdate&);
   G4VisCommandViewerUpdate& operator = (const G4VisCommandViewerUpdate&);
   G4UIcmdWithAString* fpCommand;
-  G4UIcmdWithAString* fpCommand1;
-};
-
-class G4VisCommandViewerViewpoint: public G4VVisCommandViewer {
-public:
-  G4VisCommandViewerViewpoint ();
-  virtual ~G4VisCommandViewerViewpoint ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandViewerViewpoint (const G4VisCommandViewerViewpoint&);
-  G4VisCommandViewerViewpoint& operator = (const G4VisCommandViewerViewpoint&);
-  G4UIcommand* fpCommandViewpointThetaPhi;
-  G4UIcommand* fpCommandViewpointVector;
-  G4ThreeVector fViewpointVector;
 };
 
 class G4VisCommandViewerZoom: public G4VVisCommandViewer {

@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.cc,v 1.5 2004/04/28 16:58:49 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysListEmStandard.cc,v 1.6 2004/10/20 14:32:36 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

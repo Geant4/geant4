@@ -49,14 +49,14 @@ G4Parton::G4Parton(G4int PDGcode)
 	//                  in (-1,-2,-3)=(Rbar,Gbar,Bbar) for anti-quarks:
   //
 	if (theDefinition->GetParticleType() == "quarks") {
-		theColour = ((G4int)(3.*G4UniformRand())+1)*(abs(PDGencoding)/PDGencoding) ;
+		theColour = ((G4int)(3.*G4UniformRand())+1)*(std::abs(PDGencoding)/PDGencoding) ;
 	}
 	//
 	// colour by random in (-1,-2,-3)=(Rbar,Gbar,Bbar)=(GB,RB,RG) for di-quarks and
 	//                  in (1,2,3)=(R,G,B)=(GB,RB,RG) for anti-di-quarks:
   //
 	else if (theDefinition->GetParticleType() == "diquarks") {
-		theColour = -((G4int)(3.*G4UniformRand())+1)*(abs(PDGencoding)/PDGencoding);
+		theColour = -((G4int)(3.*G4UniformRand())+1)*(std::abs(PDGencoding)/PDGencoding);
 	}
 	//
 	// colour by random in (-11,-12,...,-33)=(RRbar,RGbar,RBbar,...,BBbar) for gluons:

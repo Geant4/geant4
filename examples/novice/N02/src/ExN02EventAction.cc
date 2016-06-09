@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02EventAction.cc,v 1.9 2004/03/08 15:14:49 maire Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: ExN02EventAction.cc,v 1.10 2004/09/08 16:30:10 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,6 @@
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,17 +69,6 @@ void ExN02EventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "    " << n_trajectories 
 	   << " trajectories stored in this event." << G4endl;
   }
-    
-  // extract the trajectories and draw them
-  //
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(1000);
-        }
-    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

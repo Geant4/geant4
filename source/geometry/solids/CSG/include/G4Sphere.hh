@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.10 2004/01/26 09:03:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Sphere.hh,v 1.12 2004/12/10 16:22:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 // --------------------------------------------------------------------
@@ -37,10 +37,10 @@
 //
 //   The phi and theta segments are described by a starting angle,
 //   and the +ve delta angle for the shape.
-//   If the delta angle is >=2*M_PI, or >=M_PI the shape is treated as
+//   If the delta angle is >=2*pi, or >=pi the shape is treated as
 //   continuous in phi or theta respectively.
 //
-//   Theta must lie between 0-PI (incl).
+//   Theta must lie between 0-pi (incl).
 //
 //   Member Data:
 //
@@ -90,6 +90,7 @@ class G4Sphere : public G4CSGSolid
     inline G4double GetDeltaPhiAngle  () const;
     inline G4double GetStartThetaAngle() const;
     inline G4double GetDeltaThetaAngle() const;
+    inline G4double GetCubicVolume();
 
     // Modifiers
 

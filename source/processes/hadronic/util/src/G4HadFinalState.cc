@@ -46,7 +46,7 @@
    void G4HadFinalState::SetMomentumChange(G4double x, G4double y, G4double z) 
    {
      theDirection = G4ThreeVector(x,y,z);
-     if(fabs(theDirection.mag()-1)>0.001) 
+     if(std::fabs(theDirection.mag()-1)>0.001) 
      {
        G4cout <<"We have negative theDirection.mag() = "<<theDirection.mag()<<G4endl;
        throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative direction.mag().");

@@ -21,17 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.2 2004/06/14 09:27:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
 //
-/*-----------------------------Hepvis----------------------------------------*/
+// $Id: SoDetectorTreeKit.cc,v 1.9 2004/12/16 12:33:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+/*-----------------------------HEPVis----------------------------------------*/
 /*                                                                           */
 /* Node:             SoDetectorTreeKit                                       */
 /* Description:      Represents a single sided silicon strip detector        */
 /* Author:           Joe Boudreau Nov 11 1996                                */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-#include <math.h>
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
+// this :
+
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
+
+#include <cmath>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
 #include <Inventor/SoPickedPoint.h>
@@ -48,8 +56,6 @@
 #include <Inventor/nodes/SoUnits.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTexture2Transform.h>
-
-#include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 // This statement is required
 SO_KIT_SOURCE(SoDetectorTreeKit) 
@@ -113,16 +119,16 @@ void SoDetectorTreeKit::expand(void *userData, SoEventCallback *eventCB){
   if (!event->wasCtrlDown()) return;
   if (event->wasShiftDown()) return;
 
-  // Which Strip Detector is this being called for?
-  SoDetectorTreeKit *This = (SoDetectorTreeKit *) userData;
+  // Which Detector is this being called for?
+  SoDetectorTreeKit* This = (SoDetectorTreeKit *) userData;
 
-  // Find out whether that's the one that has been picked.  This is the lowest detector
-  // tree kit in the hierarchy.
+  // Find out whether that's the one that has been picked.  
+  // "This' is the lowest detector tree kit in the hierarchy.
   SoHandleEventAction *handleEventAction = eventCB->getAction();
   const SoPickedPoint *pickedPoint = handleEventAction->getPickedPoint();
   if (!pickedPoint) return;
 
-  SoFullPath          *path        = (SoFullPath *) pickedPoint->getPath();
+  SoFullPath* path = (SoFullPath*)pickedPoint->getPath();
   SoNode *ancestorNode=NULL;
   for (int i=0;i<path->getLength();i++) {
     ancestorNode  = path->getNodeFromTail(i);
@@ -146,17 +152,17 @@ void SoDetectorTreeKit::contract(void *userData, SoEventCallback *eventCB){
   if (event->wasCtrlDown()) return;
   if (!event->wasShiftDown()) return;
 
-  // Which Strip Detector is this being called for?
-  SoDetectorTreeKit *This = (SoDetectorTreeKit *) userData;
+  // Which Detector is this being called for?
+  SoDetectorTreeKit* This = (SoDetectorTreeKit *) userData;
 
   // Find out whether that's the one that has been picked
   SoHandleEventAction *handleEventAction = eventCB->getAction();
   const SoPickedPoint *pickedPoint = handleEventAction->getPickedPoint();
   if (!pickedPoint) return;
  
-  // Find out whether that's the one that has been picked.  This is the lowest detector
-  // tree kit in the hierarchy.
-  SoFullPath          *path        = (SoFullPath *) pickedPoint->getPath();
+  // Find out whether that's the one that has been picked.  
+  // "This" is the lowest detector tree kit in the hierarchy.
+  SoFullPath* path = (SoFullPath*)pickedPoint->getPath();
   SoNode *ancestorNode=NULL;
   SbBool firstTreeFound=FALSE;
   for (int i=0;i<path->getLength();i++) {
@@ -193,6 +199,11 @@ SbBool SoDetectorTreeKit::getPreview() const {
 }
 
 
+void SoDetectorTreeKit::setPreviewAndFull() {
+  SoSwitch *theChildList = (SoSwitch *) childList.getValue();
+  theChildList->whichChild.setValue(SO_SWITCH_ALL);
+}
+
 SoSeparator *SoDetectorTreeKit::getPreviewSeparator() const {
   return (SoSeparator *) previewSeparator.getValue();
 }
@@ -212,3 +223,5 @@ void SoDetectorTreeKit::generateAlternateRep() {
 void SoDetectorTreeKit::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
+
+#endif

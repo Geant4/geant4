@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.25 2004/01/22 17:50:38 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Material.cc,v 1.26 2004/12/07 08:50:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -243,7 +243,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
      // check sum of weights -- OK?
      G4double wtSum(0.0);
      for (size_t i=0;i<fNumberOfElements;i++) {wtSum += fMassFractionVector[i];}
-     if (abs(1.-wtSum) > perThousand) {
+     if (std::abs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
                  "the Delta is > 0.001"
                  "(the weights are NOT renormalized; the results may be wrong)" 
@@ -305,7 +305,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
      G4double wtSum(0.0);
      for (size_t i=0;i<fNumberOfElements;i++)
       { wtSum +=  fMassFractionVector[i]; }
-     if (abs(1.-wtSum) > perThousand) {
+     if (std::abs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! - Fractional masses do not sum to 1 : "
                  "the Delta is > 0.001"
                  "(the weights are NOT renormalized; the results may be wrong)" 
@@ -369,7 +369,7 @@ void G4Material::ComputeNuclearInterLength()
   G4double NILinv = 0.0;
   for (size_t i=0;i<fNumberOfElements;i++) {
      NILinv +=
-     VecNbOfAtomsPerVolume[i]*pow(((*theElementVector)[i]->GetN()),0.6666667); 
+     VecNbOfAtomsPerVolume[i]*std::pow(((*theElementVector)[i]->GetN()),0.6666667); 
    }
   NILinv *= amu/lambda0; 
   fNuclInterLen = (NILinv <= 0.0 ? DBL_MAX : 1./NILinv);

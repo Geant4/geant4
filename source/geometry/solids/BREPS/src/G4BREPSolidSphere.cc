@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.7 2003/06/16 16:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4BREPSolidSphere.cc,v 1.9 2004/12/10 16:22:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,9 +43,9 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
 {
   SurfaceVec    = new G4Surface*[1];
   G4double ph1  = 0;
-  G4double ph2  = 2*M_PI;
+  G4double ph2  = 2*pi;
   G4double th1  = 0;
-  G4double th2  = M_PI;
+  G4double th2  = pi;
   SurfaceVec[0] = new G4SphericalSurface(origin, xhat, zhat, radius, ph1, ph2, th1, th2);
   nb_of_surfaces = 1;
   
@@ -81,7 +81,7 @@ G4ThreeVector G4BREPSolidSphere::SurfaceNormal(const G4ThreeVector& Pt) const
 
 G4double G4BREPSolidSphere::DistanceToIn(const G4ThreeVector& Pt) const
 {
-  return  fabs(SurfaceVec[0]->HowNear(Pt));
+  return  std::fabs(SurfaceVec[0]->HowNear(Pt));
 }
 
 
@@ -97,7 +97,7 @@ G4double G4BREPSolidSphere::DistanceToIn(register const G4ThreeVector& Pt,
   if(Result>0)
   {
     ShortestDistance = SurfaceVec[0]->GetDistance();
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   return kInfinity; 
 }
@@ -124,7 +124,7 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
     }
 
     ShortestDistance = SurfaceVec[0]->GetDistance();
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   return kInfinity; 
 }
@@ -132,7 +132,7 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolidSphere::DistanceToOut(const G4ThreeVector& Pt) const
 {
-  return  fabs(SurfaceVec[0]->HowNear(Pt));
+  return  std::fabs(SurfaceVec[0]->HowNear(Pt));
 }
 
 // Streams solid contents to output stream.

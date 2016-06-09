@@ -32,31 +32,31 @@
     G4double EF;
     
     EF = theAvarageKineticPerNucleonForLightFragments/eV;
-    G4double lightU1 = sqrt(energy)-sqrt(EF);
+    G4double lightU1 = std::sqrt(energy)-std::sqrt(EF);
     lightU1 *= lightU1/tm;
-    G4double lightU2 = sqrt(energy)+sqrt(EF);
+    G4double lightU2 = std::sqrt(energy)+std::sqrt(EF);
     lightU2 *= lightU2/tm;
     G4double lightTerm=0;
     if(theAvarageKineticPerNucleonForLightFragments>1*eV)
     {
-      lightTerm  = pow(lightU2, 1.5)*E1(lightU2);
-      lightTerm -= pow(lightU1, 1.5)*E1(lightU1);
+      lightTerm  = std::pow(lightU2, 1.5)*E1(lightU2);
+      lightTerm -= std::pow(lightU1, 1.5)*E1(lightU1);
       lightTerm += Gamma15(lightU2)-Gamma15(lightU1);
-      lightTerm /= 3.*sqrt(tm*EF);
+      lightTerm /= 3.*std::sqrt(tm*EF);
     }
     
     EF = theAvarageKineticPerNucleonForHeavyFragments/eV;
-    G4double heavyU1 = sqrt(energy)-sqrt(EF);
+    G4double heavyU1 = std::sqrt(energy)-std::sqrt(EF);
     heavyU1 *= heavyU1/tm;
-    G4double heavyU2 = sqrt(energy)+sqrt(EF);
+    G4double heavyU2 = std::sqrt(energy)+std::sqrt(EF);
     heavyU2 *= heavyU2/tm;
     G4double heavyTerm=0	;
     if(theAvarageKineticPerNucleonForHeavyFragments> 1*eV)
     {
-      heavyTerm  = pow(heavyU2, 1.5)*E1(heavyU2);
-      heavyTerm -= pow(heavyU1, 1.5)*E1(heavyU1);
+      heavyTerm  = std::pow(heavyU2, 1.5)*E1(heavyU2);
+      heavyTerm -= std::pow(heavyU1, 1.5)*E1(heavyU1);
       heavyTerm += Gamma15(heavyU2)-Gamma15(heavyU1);
-      heavyTerm /= 3.*sqrt(tm*EF);
+      heavyTerm /= 3.*std::sqrt(tm*EF);
     }
     
     result = 0.5*(lightTerm+heavyTerm);
@@ -79,18 +79,18 @@
       if(newValue < random) 
       {
         buff = current;
-	current+=abs(current-last)/2.;
+	current+=std::abs(current-last)/2.;
 	last = buff;
         if(current>190*MeV) throw G4HadronicException(__FILE__, __LINE__, "Madland-Nix Spectrum has not converged in sampling");
       }
       else
       {
         buff = current;
-        current-=abs(current-last)/2.;
+        current-=std::abs(current-last)/2.;
 	last = buff;
       }
     }
-    while (abs(oldValue-newValue)>precision*newValue);
+    while (std::abs(oldValue-newValue)>precision*newValue);
     return current;
   }
 
@@ -99,11 +99,11 @@
   {
     if(aMean<1*eV) return 0;
     G4double b = anEnergy/eV;
-    G4double sb = sqrt(b);
+    G4double sb = std::sqrt(b);
     G4double EF = aMean/eV;
     
-    G4double alpha = sqrt(tm); 
-    G4double beta = sqrt(EF);
+    G4double alpha = std::sqrt(tm); 
+    G4double beta = std::sqrt(EF);
     G4double A = EF/tm;
     G4double B =  (sb+beta)*(sb+beta)/tm;
     G4double Ap = A;
@@ -116,52 +116,52 @@
     {
       result =
       (
-        (0.4*alpha2*pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
-        (0.4*alpha2*pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
+        (0.4*alpha2*std::pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
+        (0.4*alpha2*std::pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
       )
        -
       (
-        (0.4*alpha2*pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
-        (0.4*alpha2*pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
+        (0.4*alpha2*std::pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
+        (0.4*alpha2*std::pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
       )
       +
       (
-        (alpha2*B-2*alphabeta*sqrt(B))*Gamma15(B)  - 
-        (alpha2*A-2*alphabeta*sqrt(A))*Gamma15(A) 
+        (alpha2*B-2*alphabeta*std::sqrt(B))*Gamma15(B)  - 
+        (alpha2*A-2*alphabeta*std::sqrt(A))*Gamma15(A) 
       )
       -
       (
-        (alpha2*Bp-2*alphabeta*sqrt(Bp))*Gamma15(Bp) -
-        (alpha2*Ap-2*alphabeta*sqrt(Ap))*Gamma15(Ap)
+        (alpha2*Bp-2*alphabeta*std::sqrt(Bp))*Gamma15(Bp) -
+        (alpha2*Ap-2*alphabeta*std::sqrt(Ap))*Gamma15(Ap)
       )
       - 0.6*alpha2*(Gamma25(B) - Gamma25(A) - Gamma25(Bp) + Gamma25(Ap))
-      - 1.5*alphabeta*(exp(-B)*(1+B) - exp(-A)*(1+A) + exp(-Bp)*(1+Bp) + exp(-Ap)*(1+Ap)) ;
+      - 1.5*alphabeta*(std::exp(-B)*(1+B) - std::exp(-A)*(1+A) + std::exp(-Bp)*(1+Bp) + std::exp(-Ap)*(1+Ap)) ;
     }
     else
     {
       result =
       (
-        (0.4*alpha2*pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
-        (0.4*alpha2*pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
+        (0.4*alpha2*std::pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
+        (0.4*alpha2*std::pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
       );
        result -=
       (
-        (0.4*alpha2*pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
-        (0.4*alpha2*pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
+        (0.4*alpha2*std::pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
+        (0.4*alpha2*std::pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
       );
       result +=
       (
-        (alpha2*B-2*alphabeta*sqrt(B))*Gamma15(B)  - 
-        (alpha2*A-2*alphabeta*sqrt(A))*Gamma15(A) 
+        (alpha2*B-2*alphabeta*std::sqrt(B))*Gamma15(B)  - 
+        (alpha2*A-2*alphabeta*std::sqrt(A))*Gamma15(A) 
       );
       result -=
       (
-        (alpha2*Bp+2*alphabeta*sqrt(Bp))*Gamma15(Bp) -
-        (alpha2*Ap+2*alphabeta*sqrt(Ap))*Gamma15(Ap)
+        (alpha2*Bp+2*alphabeta*std::sqrt(Bp))*Gamma15(Bp) -
+        (alpha2*Ap+2*alphabeta*std::sqrt(Ap))*Gamma15(Ap)
       );
       result -= 0.6*alpha2*(Gamma25(B) - Gamma25(A) - Gamma25(Bp) + Gamma25(Ap));
-      result -= 1.5*alphabeta*(exp(-B)*(1+B) - exp(-A)*(1+A) + exp(-Bp)*(1+Bp) + exp(-Ap)*(1+Ap) - 2.) ;
+      result -= 1.5*alphabeta*(std::exp(-B)*(1+B) - std::exp(-A)*(1+A) + std::exp(-Bp)*(1+Bp) + std::exp(-Ap)*(1+Ap) - 2.) ;
     }
-    result = result / (3.*sqrt(tm*EF));
+    result = result / (3.*std::sqrt(tm*EF));
     return result;
   }

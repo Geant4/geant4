@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2003/10/28 13:42:28 gcosmo Exp $
+$Id: History,v 1.56 2004/10/10 10:56:26 johna Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10/10/2004 : J.Allison         breps-V06-02-02
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
+
+22/09/2004 : V. Grichine       breps-V06-02-01
+- G4BREPSolid[.hh.icc.cc]: added specific implementation for GetCubicVolume()
+  to cache the computed value.
+
+02/07/2004 : G. Cosmo          breps-V06-02-00
+- G4BREPSolidPolyhedra.cc, G4BREPSolidPCone.cc:
+  o Use squared-half-tolerance for handling with surface distances instead
+    of 0.5*kCarTolerance, in Inside(p), SurfaceNormal(p), DistanceToIn(p,v),
+    DistanceToOut(p,v,...).
+  o Implemented SurfaceNormal(p) to follow specifications for G4VSolid,
+    i.e. return the normal to the closest surface if the point is not on
+    boundary.
+  o Some code cleanup ...
+- G4BREPSolid.cc:
+  o Use squared-half-tolerance for handling with surface distances instead
+    of 0.5*kCarTolerance, in Inside(p), SurfaceNormal(p), DistanceToIn(p,v),
+    DistanceToOut(p,v,...), Intersert(r), FinalEvaluation(r,i).
+  o Some code cleanup ...
 
 28/10/2003 : G. Cosmo          breps-V05-02-01
 - Migrated to use new G4Exception scheme.

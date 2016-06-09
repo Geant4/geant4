@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.45 2003/11/13 19:46:56 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ChordFinder.cc,v 1.46 2004/12/02 09:55:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -350,11 +350,11 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 
 #if 1 
   // const G4double  threshold = 1.21, multiplier = 0.9;
-  //  0.9 < 1 / sqrt(1.21)
+  //  0.9 < 1 / std::sqrt(1.21)
 
   if (dChordStep > 0.0)
   {
-    stepEstimate_Unconstrained = stepTrialOld*sqrt( fDeltaChord / dChordStep );
+    stepEstimate_Unconstrained = stepTrialOld*std::sqrt( fDeltaChord / dChordStep );
     // stepTrial =  0.98 * stepEstimate_Unconstrained;
     stepTrial =  fFractionNextEstimate * stepEstimate_Unconstrained;
   }
@@ -529,7 +529,7 @@ G4ChordFinder::TestChordPrint( G4int    noTrials,
      G4int oldprec= G4cout.precision(5);
      G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
             << " this_step= "       << std::setw(10) << lastStepTrial;
-     if( fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
+     if( std::fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
              G4cout.precision(8);
      }else{  G4cout.precision(6); }
      G4cout << " dChordStep=  "     << std::setw(12) << dChordStep;

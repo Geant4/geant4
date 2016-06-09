@@ -21,20 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.cc,v 1.5 2004/04/08 09:41:11 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorTransform3D.cc,v 1.6 2004/11/22 14:20:19 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // jck 17 Dec 1996
 // G4OpenInventorTransform3D provides OpenGL style transformation matrix
 // from G4Transform3D.
+// gb 22 Nov 2004 : use SbMatrix instead of SoSFMatrix.
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
 #include "G4OpenInventorTransform3D.hh"
 
-#include <Inventor/fields/SoSFMatrix.h>
+#include <Inventor/SbLinear.h>
 
 G4OpenInventorTransform3D::G4OpenInventorTransform3D (const G4Transform3D &t) 
 : G4Transform3D (t) {
@@ -56,12 +57,11 @@ G4OpenInventorTransform3D::G4OpenInventorTransform3D (const G4Transform3D &t)
   m[15] = 1;
 }
 
-SoSFMatrix* G4OpenInventorTransform3D::GetOIMatrix () const {
-  SoSFMatrix *tm = new SoSFMatrix;
-  tm->setValue(m[0],m[1],m[2],m[3],
-               m[4],m[5],m[6],m[7],
-               m[8],m[9],m[10],m[11],
-               m[12],m[13],m[14],m[15]);
+SbMatrix* G4OpenInventorTransform3D::GetSbMatrix () const {
+  SbMatrix* tm = new SbMatrix(m[0],m[1],m[2],m[3],
+                              m[4],m[5],m[6],m[7],
+                              m[8],m[9],m[10],m[11],
+                              m[12],m[13],m[14],m[15]);
   return tm;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHighEnergyBuilder.cc,v 1.1 2004/05/04 08:33:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4EmHighEnergyBuilder.cc,v 1.2 2004/11/24 13:18:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,6 +44,7 @@
 
 #include "G4AnnihiToMuPair.hh"
 #include "G4GammaConversionToMuons.hh"
+#include "G4eeToHadrons.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -86,7 +87,16 @@ void G4EmHighEnergyBuilder::ConstructProcess()
   // Add standard EM Processes for e+
   particle = G4Positron::Positron();
   pmanager = particle->GetProcessManager();
-  pmanager->AddDiscreteProcess( new G4AnnihiToMuPair() );
+  G4AnnihiToMuPair* eplusmumu = new G4AnnihiToMuPair();
+  pmanager->AddDiscreteProcess( eplusmumu );
+
+  G4eeToHadrons* eplushadr = new G4eeToHadrons();
+  pmanager->AddDiscreteProcess( eplushadr );
+  
+  // Built-in biasing factor for cross secsions
+  eplusmumu->SetCrossSecFactor(1.0);
+  eplushadr->SetCrossSecFactor(1.0);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

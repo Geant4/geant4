@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.3 2003/11/04 11:29:52 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFChannel.cc,v 1.4 2004/12/07 13:47:40 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -189,7 +189,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
     // Fragments positions are sampled inside prolongated ellipsoid.
 {
     const G4double R0 = G4StatMFParameters::Getr0();
-    const G4double Rsys = 2.0*R0*pow(anA,1./3.);
+    const G4double Rsys = 2.0*R0*std::pow(anA,1./3.);
 
     G4bool TooMuchIterations;
     do 
@@ -197,8 +197,8 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 	TooMuchIterations = false;
 	
 	// Sample the position of the first fragment
-	G4double R = (Rsys - R0*pow(_theFragments[0]->GetA(),1./3.))*
-	  pow(G4UniformRand(),1./3.);
+	G4double R = (Rsys - R0*std::pow(_theFragments[0]->GetA(),1./3.))*
+	  std::pow(G4UniformRand(),1./3.);
 	_theFragments[0]->SetPosition(IsotropicVector(R));
 	
 	
@@ -210,7 +210,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 	    G4int counter = 0;
 	    do 
 	      {
-		R = (Rsys - R0*pow((*i)->GetA(),1./3.))*pow(G4UniformRand(),1./3.);
+		R = (Rsys - R0*std::pow((*i)->GetA(),1./3.))*std::pow(G4UniformRand(),1./3.);
 		(*i)->SetPosition(IsotropicVector(R));
 		
 		// Check that there are not overlapping fragments
@@ -218,8 +218,8 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 		for (j = _theFragments.begin(); j != i; ++j) 
 		  {
 		    G4ThreeVector FragToFragVector = (*i)->GetPosition() - (*j)->GetPosition();
-		    G4double Rmin = R0*(pow((*i)->GetA(),1./3.) +
-					pow((*j)->GetA(),1./3));
+		    G4double Rmin = R0*(std::pow((*i)->GetA(),1./3.) +
+					std::pow((*j)->GetA(),1./3));
 		    if (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) break;
 		  }
 		counter++;
@@ -253,7 +253,7 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
     else if (NF == 1) 
       {
 	// We have only one fragment to deal with
-	p = IsotropicVector(sqrt(2.0*_theFragments[idx]->GetNuclearMass()*KinE));
+	p = IsotropicVector(std::sqrt(2.0*_theFragments[idx]->GetNuclearMass()*KinE));
 	_theFragments[idx]->SetMomentum(p);
       } 
     else if (NF == 2) 
@@ -261,7 +261,7 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	// We have only two fragment to deal with
 	G4double M1 = _theFragments[idx]->GetNuclearMass();
 	G4double M2 = _theFragments[idx+1]->GetNuclearMass();
-	p = IsotropicVector(sqrt(2.0*KinE*(M1*M2)/(M1+M2)));		
+	p = IsotropicVector(std::sqrt(2.0*KinE*(M1*M2)/(M1+M2)));		
 	_theFragments[idx]->SetMomentum(p);
 	_theFragments[idx+1]->SetMomentum(-p);
       } 
@@ -287,11 +287,11 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 		do 
 		  {
 		    E = 9.0*T*G4UniformRand();
-		    Boltzmann = sqrt(E)*exp(-E/T);
-		    RandE = sqrt(T/2.)*exp(-0.5)*G4UniformRand();
+		    Boltzmann = std::sqrt(E)*std::exp(-E/T);
+		    RandE = std::sqrt(T/2.)*std::exp(-0.5)*G4UniformRand();
 		  } 
 		while (RandE > Boltzmann);
-		p = IsotropicVector(sqrt(2.0*E*_theFragments[i]->GetNuclearMass()));
+		p = IsotropicVector(std::sqrt(2.0*E*_theFragments[i]->GetNuclearMass()));
 		_theFragments[i]->SetMomentum(p);
 		SummedE += E;
 		SummedP += p;
@@ -326,17 +326,17 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	else Sign = 1.0;
 		
 		
-	G4double P1 = (p.mag()*CosTheta1+Sign*sqrt(p.mag2()*(CosTheta1*CosTheta1-CTM12)))/H;
-	G4double P2 = sqrt(P1*P1+p.mag2() - 2.0*P1*p.mag()*CosTheta1);
+	G4double P1 = (p.mag()*CosTheta1+Sign*std::sqrt(p.mag2()*(CosTheta1*CosTheta1-CTM12)))/H;
+	G4double P2 = std::sqrt(P1*P1+p.mag2() - 2.0*P1*p.mag()*CosTheta1);
 	G4double Phi = twopi*G4UniformRand();
-	G4double SinTheta1 = sqrt(1.0 - CosTheta1*CosTheta1);
-	G4double CosPhi1 = cos(Phi);
-	G4double SinPhi1 = sin(Phi);
+	G4double SinTheta1 = std::sqrt(1.0 - CosTheta1*CosTheta1);
+	G4double CosPhi1 = std::cos(Phi);
+	G4double SinPhi1 = std::sin(Phi);
 	G4double CosPhi2 = -CosPhi1;
 	G4double SinPhi2 = -SinPhi1;
 	G4double CosTheta2 = (p.mag2() + P2*P2 - P1*P1)/(2.0*p.mag()*P2);
 	G4double SinTheta2 = 0.0;
-	if (CosTheta2 > -1.0 && CosTheta2 < 1.0) SinTheta2 = sqrt(1.0 - CosTheta2*CosTheta2);
+	if (CosTheta2 > -1.0 && CosTheta2 < 1.0) SinTheta2 = std::sqrt(1.0 - CosTheta2*CosTheta2);
 	
 	G4ThreeVector p1(P1*SinTheta1*CosPhi1,P1*SinTheta1*SinPhi1,P1*CosTheta1);
 	G4ThreeVector p2(P2*SinTheta2*CosPhi2,P2*SinTheta2*SinPhi2,P2*CosTheta2);
@@ -363,8 +363,8 @@ void G4StatMFChannel::SolveEqOfMotion(const G4double anA, const G4double anZ, co
     // for fragments in the self-consistent time-dependent Coulomb field
 {
   G4double CoulombEnergy = (3./5.)*(elm_coupling*anZ*anZ)*
-    pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-    (G4StatMFParameters::Getr0()*pow(anA,1./3.))
+    std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
+    (G4StatMFParameters::Getr0()*std::pow(anA,1./3.))
     - GetFragmentsCoulombEnergy();
   if (CoulombEnergy <= 0.0) return;
   
@@ -463,7 +463,7 @@ G4ThreeVector G4StatMFChannel::RotateMomentum(G4ThreeVector Pa,
   
   G4double Alpha1 = U * V;
   
-  G4double Alpha2 = sqrt(V.mag2() - Alpha1*Alpha1);
+  G4double Alpha2 = std::sqrt(V.mag2() - Alpha1*Alpha1);
 
   G4ThreeVector N = (1./Alpha2)*U.cross(V);
   
@@ -484,10 +484,10 @@ G4ThreeVector G4StatMFChannel::IsotropicVector(const G4double Magnitude)
     // By default Magnitude = 1
 {
     G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
     G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-			 Magnitude*cos(Phi)*CosTheta,
-			 Magnitude*sin(Phi));
+    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+			 Magnitude*std::cos(Phi)*CosTheta,
+			 Magnitude*std::sin(Phi));
     return Vector;
 }

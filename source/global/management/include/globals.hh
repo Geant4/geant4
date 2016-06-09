@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.23 2003/06/06 16:17:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: globals.hh,v 1.25 2004/11/12 16:25:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // Global Constants and typedefs
@@ -46,33 +46,6 @@
 
 #include "G4ios.hh"
 
-// Undefine possible existing min/max/sqr/abs macros first
-// (temporary solution)
-#ifdef min
-  #undef min
-#endif
-#ifdef max
-  #undef max
-#endif
-#ifdef sqr
-  #undef sqr
-#endif
-#ifdef abs
-  #undef abs
-#endif
-
-#include <algorithm>
-#ifndef CLHEP_MAX_MIN_DEFINED
-  #define CLHEP_MAX_MIN_DEFINED
-#endif
-
-#if defined(WIN32) && !defined(XPNET)
-// For NT with Native STL (used in ISO standard mode)
-// templated functions min and max should be _MIN _MAX
-  #define min _MIN
-  #define max _MAX
-#endif
-
 #ifndef FALSE
   #define FALSE 0
 #endif
@@ -80,10 +53,7 @@
   #define TRUE 1
 #endif
 
-// min, max, abs and sqr are in TemplateFunctions.h.
-// Includes also CLHEP.h with typedef for numeric types and
-// implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
-#include <CLHEP/config/TemplateFunctions.h>
+#include <algorithm>  // Retrieve definitions of min/max
 
 // Include base types
 #include "G4Types.hh"
@@ -91,7 +61,7 @@
 // Get definition of G4String
 #include "G4String.hh"
 
-// Includes some additional definitions
+// Includes some additional definitions: sqr, G4SwapPtr, G4SwapObj.
 #include "templates.hh"
 
 // System of Units and Physical Constants
@@ -99,7 +69,10 @@
 
 // Global error function
 #include "G4ExceptionSeverity.hh"
-void G4Exception(const char* issure,const char* errorCode,G4ExceptionSeverity severity,const char* comments);
+void G4Exception(const char* issure,
+                 const char* errorCode,
+                             G4ExceptionSeverity severity,
+                 const char* comments);
 void G4Exception(const char* s=0);
 void G4Exception(std::string s);
 void G4Exception(G4String s);

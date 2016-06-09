@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.6 2004/03/10 10:48:11 maire Exp $
+# $Id: ionC12.mac,v 1.12 2004/08/13 10:07:57 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -19,7 +19,6 @@
 /testem/det/tallyPosition  5.  0. 0. cm
 #
 /testem/phys/addPhysics  standard		#em physics
-####/testem/phys/addPhysics  g4v52		#em physics
 #
 ####/testem/phys/addPhysics  binary 		#hadronic physics
 ####/testem/phys/addPhysics  binary_ion		#hadronic physics
@@ -27,13 +26,12 @@
 #
 /run/initialize
 #
-####/gun/particle ion
-####/gun/ion 6 12
-/gun/particle ionC12
+/gun/particle ion
+/gun/ion 6 12 6
 /gun/energy 3.5 GeV
+/testem/gun/rndm 2 mm
 #
-/testem/event/printModulo 1000
 /testem/stepMax 1 mm
+/testem/event/printModulo 1000
 #
 /run/beamOn 10000
-

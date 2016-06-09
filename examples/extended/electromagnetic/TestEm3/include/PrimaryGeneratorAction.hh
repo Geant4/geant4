@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.hh,v 1.3 2004/10/25 12:50:58 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2003/09/22 14:06:43 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,13 +36,14 @@
 class G4Event;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
+    PrimaryGeneratorAction(DetectorConstruction*, HistoManager*);    
    ~PrimaryGeneratorAction();
 
   public:
@@ -55,9 +53,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* GetParticleGun() {return particleGun;};
     
   private:
-    G4ParticleGun*              particleGun;
-    DetectorConstruction*    Detector;
-    
+    G4ParticleGun*         particleGun;
+    DetectorConstruction*  Detector;
+    HistoManager*          histoManager;        
     G4double rndmBeam;   //lateral random beam extension in fraction sizeYZ/2   
     
     PrimaryGeneratorMessenger* gunMessenger; 

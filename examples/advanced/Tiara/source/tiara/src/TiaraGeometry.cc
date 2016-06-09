@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraGeometry.cc,v 1.3 2003/06/25 09:13:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: TiaraGeometry.cc,v 1.4 2004/12/08 17:25:34 daquinog Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include "TiaraGeometry.hh"
@@ -247,14 +247,14 @@ G4LogicalVolume *TiaraGeometry::BuildShield(G4double width,
 
   G4LogicalVolume *logVol = 0;
   if (! (width > 0)) {
-    G4cout << "TiaraGeometry::BuildShiel witdth must be > 0"
+    G4cout << "TiaraGeometry::BuildShield width must be > 0"
 	   << G4endl;
   }
   else {
     G4Material *mat = 0;
     mat = fMaterials.GetMaterial(matName);
     if (!mat) {
-      G4cout << "TiaraGeometry::BuildShiel no valid material"
+      G4cout << "TiaraGeometry::BuildShield no valid material"
 	     << G4endl;
     }
     else {

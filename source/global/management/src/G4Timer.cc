@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.11 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Timer.cc,v 1.13 2004/11/22 08:14:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ----------------------------------------------------------------------
 // class G4Timer
 //
 // Implementation
-// 29.04.97 G.Cosmo Added timings for Windows/NT
+// 29.04.97 G.Cosmo Added timings for Windows systems
 
 #include "G4Timer.hh"
 #include "G4ios.hh"

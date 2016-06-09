@@ -32,7 +32,7 @@
 //
 //
 // $Id: RemSimDetectorMessenger.cc,v 1.9 2004/05/22 12:57:06 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

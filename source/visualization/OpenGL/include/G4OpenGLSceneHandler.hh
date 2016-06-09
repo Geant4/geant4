@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.15 2004/04/07 15:17:12 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.17 2004/07/09 15:44:20 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -80,7 +80,6 @@ protected:
 			G4int id,
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
-  G4bool initialize_hlr;
 
 private:
   void AddCircleSquare (const G4VMarker&, G4int nSides);
@@ -98,7 +97,6 @@ private:
   // Draws in world coordinates a polygon in the screen plane knowing
   // viewpoint direction and up vector.
 
-  GLdouble clear_colour[4];
   static const GLubyte fStippleMaskHashed [128];
 };
 

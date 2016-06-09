@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.4 2003/11/14 16:54:18 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FissionProbability.cc,v 1.5 2004/12/07 13:46:48 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -73,7 +73,7 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
     G4double Ufission = U - G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(static_cast<G4int>(A),
 											    static_cast<G4int>(Z));
   
-    G4double SystemEntropy = 2.0*sqrt(theEvapLDP.LevelDensityParameter(static_cast<G4int>(A),
+    G4double SystemEntropy = 2.0*std::sqrt(theEvapLDP.LevelDensityParameter(static_cast<G4int>(A),
 								       static_cast<G4int>(Z),
 								       Ucompound)*Ucompound);
 	
@@ -81,18 +81,18 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
 							 static_cast<G4int>(Z),
 							 Ufission);
 
-    G4double Cf = 2.0*sqrt(afission*MaximalKineticEnergy);
+    G4double Cf = 2.0*std::sqrt(afission*MaximalKineticEnergy);
 
-    //    G4double Q1 = 1.0 + (Cf - 1.0)*exp(Cf);
-    //    G4double Q2 = 4.0*pi*afission*exp(SystemEntropy);
+    //    G4double Q1 = 1.0 + (Cf - 1.0)*std::exp(Cf);
+    //    G4double Q2 = 4.0*pi*afission*std::exp(SystemEntropy);
 	
     //    G4double probability = Q1/Q2;
  
     
     G4double Exp1 = 0.0;
-    if (SystemEntropy <= 160.0) Exp1 = exp(-SystemEntropy);
+    if (SystemEntropy <= 160.0) Exp1 = std::exp(-SystemEntropy);
     // @@@@@@@@@@@@@@@@@ hpw changed max to min - cannot notify vicente now since cern mail gave up on me...
-    G4double Exp2 = exp( std::min(700.0,Cf-SystemEntropy) ); 
+    G4double Exp2 = std::exp( std::min(700.0,Cf-SystemEntropy) ); 
 
     G4double probability = (Exp1 + (1.0-Cf)*Exp2) / 4.0*pi*afission;
     

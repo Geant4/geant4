@@ -21,18 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: SoCons.cc,v 1.2 2004/06/14 09:27:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
 //
-/*-----------------------------Hepvis---------------------------------------*/
+// $Id: SoCons.cc,v 1.7 2004/12/16 12:33:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+/*-----------------------------HEPVis---------------------------------------*/
 /*                                                                          */
 /* Node:             SoCons                                                 */
 /* Description:      Represents the G4Cons Geant Geometry entity            */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
+// this :
+#include "HEPVis/nodes/SoCons.h"
+
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -46,7 +53,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoCons.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoCons)
@@ -128,7 +134,7 @@ void SoCons::generatePrimitives(SoAction *action) {
   ///////////////////////////////////////////////////////
 
 
-  int NPHI = (int)(2+22*fabs(fDPhi.getValue()/(2.0*M_PI)));
+  int NPHI = (int)(2+22*std::fabs(fDPhi.getValue()/(2.0*M_PI)));
   double deltaPhi = fDPhi.getValue()/NPHI;
   double phi0     = fSPhi.getValue();
   double phi1     = phi0 + fDPhi.getValue();
@@ -138,12 +144,12 @@ void SoCons::generatePrimitives(SoAction *action) {
   double rMin2    = fRmin2.getValue();
   double zMax     = fDz.getValue();
   double zMin     = -zMax;
-  double cosPhi0  = cos(phi0);
-  double sinPhi0  = sin(phi0);
-  double cosPhi1  = cos(phi1);
-  double sinPhi1  = sin(phi1);
-  double cosDeltaPhi = cos(deltaPhi);
-  double sinDeltaPhi = sin(deltaPhi);
+  double cosPhi0  = std::cos(phi0);
+  double sinPhi0  = std::sin(phi0);
+  double cosPhi1  = std::cos(phi1);
+  double sinPhi1  = std::sin(phi1);
+  double cosDeltaPhi = std::cos(deltaPhi);
+  double sinDeltaPhi = std::sin(deltaPhi);
   //
   // The outer surface!
   //
@@ -169,7 +175,7 @@ void SoCons::generatePrimitives(SoAction *action) {
     inc(sinPhi, cosPhi, sinDeltaPhi, cosDeltaPhi);    
   } 
   endShape();
-  if (fabs(deltaPhi)<2.0*M_PI) { 
+  if (std::fabs(deltaPhi)<2.0*M_PI) { 
     //
     // The end 
     //
@@ -434,3 +440,4 @@ void SoCons::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

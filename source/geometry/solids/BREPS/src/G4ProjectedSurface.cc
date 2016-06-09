@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.9 2003/03/28 13:12:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ProjectedSurface.cc,v 1.10 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -282,7 +282,7 @@ void G4ProjectedSurface::SplitNURBSurface()
     value = u_knots->GetKnot((u_knots->GetSize()-1)/2);
     
     for( i = 0; i < u_knots->GetSize(); i++)
-      if( (abs(value - u_knots->GetKnot(i))) < kCarTolerance )
+      if( (std::abs(value - u_knots->GetKnot(i))) < kCarTolerance )
       {
 	k_index = i;
 	break;
@@ -340,7 +340,7 @@ void G4ProjectedSurface::SplitNURBSurface()
     value = v_knots->GetKnot((v_knots->GetSize() -1)/2);
     
     for( i = 0; i < v_knots->GetSize(); i++)
-      if( (abs(value - v_knots->GetKnot(i))) < kCarTolerance )
+      if( (std::abs(value - v_knots->GetKnot(i))) < kCarTolerance )
       {
 	k_index = i;
 	break;
@@ -522,7 +522,7 @@ void G4ProjectedSurface::CalcOsloMatrix()
     i = j + 1;
     muprim = mu;
     
-    while ( ((abs(new_knots->GetKnot(i) - old_knots->GetKnot(muprim))) < 
+    while ( ((std::abs(new_knots->GetKnot(i) - old_knots->GetKnot(muprim))) < 
 	     kCarTolerance) && i < (j + ord)                             ) 
     {
       i++;
@@ -534,7 +534,7 @@ void G4ProjectedSurface::CalcOsloMatrix()
     for (v = 0, p = 1; p < ord; p++) 
     {
       // if (new_knots->GetKnot(j + p) == old_knots->GetKnot(ih))
-      if ( (abs((new_knots->GetKnot(j + p)) - (old_knots->GetKnot(ih)))) < 
+      if ( (std::abs((new_knots->GetKnot(j + p)) - (old_knots->GetKnot(ih)))) < 
 	   kCarTolerance                                                    )
 	ih++;
       else

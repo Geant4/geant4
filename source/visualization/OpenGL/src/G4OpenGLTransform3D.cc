@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.cc,v 1.6 2003/06/10 17:41:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLTransform3D.cc,v 1.7 2004/09/13 12:12:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  24th October 1996
@@ -38,23 +38,16 @@ G4OpenGLTransform3D::G4OpenGLTransform3D (const G4Transform3D &t):
 
 const GLdouble* G4OpenGLTransform3D::GetGLMatrix () 
 {
-  m[0]  = (GLdouble)xx;
-  m[1]  = (GLdouble)yx;
-  m[2]  = (GLdouble)zx;
-  m[3]  = (GLdouble)0;
-  m[4]  = (GLdouble)xy;
-  m[5]  = (GLdouble)yy;
-  m[6]  = (GLdouble)zy;
-  m[7]  = (GLdouble)0;
-  m[8]  = (GLdouble)xz;
-  m[9]  = (GLdouble)yz;
-  m[10] = (GLdouble)zz;
-  m[11] = (GLdouble)0;
-  m[12] = (GLdouble)dx;
-  m[13] = (GLdouble)dy;
-  m[14] = (GLdouble)dz;
-  m[15] = (GLdouble)1;
-
+  GLdouble *p = m;
+  for (size_t i=0; i<4; i++)
+  { 
+    for (size_t k=0; k<3; k++)
+    {
+      *p++ = operator()(k,i);
+    }
+    *p++ = 0.; 
+  } 
+  m[15] = 1.; 
   return m;
 }
 

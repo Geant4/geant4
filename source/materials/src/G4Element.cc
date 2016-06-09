@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.17 2003/06/18 08:12:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Element.cc,v 1.18 2004/12/07 08:50:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -239,12 +239,12 @@ void G4Element::ComputeLradTsaiFactor()
   const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
   const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
   
-  const G4double logZ3 = log(fZeff)/3.;
+  const G4double logZ3 = std::log(fZeff)/3.;
 
   G4double Lrad, Lprad;
   G4int iz = (int)(fZeff+0.5) - 1 ;
   if (iz <= 3) { Lrad = Lrad_light[iz] ;  Lprad = Lprad_light[iz] ; }
-     else { Lrad = log(184.15) - logZ3 ; Lprad = log(1194.) - 2*logZ3 ; }
+     else { Lrad = std::log(184.15) - logZ3 ; Lprad = std::log(1194.) - 2*logZ3 ; }
 
   fRadTsai = 4*alpha_rcl2*fZeff*(fZeff*(Lrad-fCoulomb) + Lprad); 
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.6 2001/07/11 10:08:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmViewer.hh,v 1.7 2004/07/23 15:23:50 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -95,6 +95,7 @@ protected:
                                     transparency_pullright, 
                                     antialias_pullright, 
                                     haloing_pullright, 
+                                    aux_edge_pullright, 
                                     frame, 
                                     glxarea;
   
@@ -121,6 +122,7 @@ protected:
 				    anti_str,
 				    trans_str,
 				    halo_str,
+				    aux_edge_str,
 				    bgnd_str,
 				    off_str,
 				    on_str;
@@ -357,6 +359,10 @@ public:
 				  XtPointer callData); 
 
   static void haloing_callback (Widget w, 
+				XtPointer clientData, 
+				XtPointer callData); 
+
+  static void aux_edge_callback (Widget w, 
 				XtPointer clientData, 
 				XtPointer callData); 
 

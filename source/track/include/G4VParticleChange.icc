@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.11 2004/05/08 15:28:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VParticleChange.icc,v 1.12 2004/10/19 00:51:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
+//   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------
 // Virtual methods for updating G4Step 
 //
@@ -303,43 +304,5 @@ inline
  G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
 {
   return fSetParentWeightByProcess;
-}
-
-// Following methods will be removed in release 7.0
-inline 
- void G4VParticleChange::SetStatusChange(G4TrackStatus aStatus)
-{
-  ProposeTrackStatus(aStatus);
-}
-
-inline 
- G4TrackStatus G4VParticleChange::GetStatusChange() const
-{
-  return GetTrackStatus();
-}
-
-inline
-void G4VParticleChange::SetSteppingControl(G4SteppingControl StepControlFlag)
-{
-  ProposeSteppingControl(StepControlFlag);
-}
-
-inline 
- void G4VParticleChange::SetLocalEnergyDeposit(G4double anEnergyPart)
-{
-  ProposeLocalEnergyDeposit(anEnergyPart);
-}
-
-
-inline 
- void G4VParticleChange::SetTrueStepLength(G4double aLength)
-{
-  ProposeTrueStepLength(aLength);
-}
-
-inline
- void     G4VParticleChange::SetParentWeight(G4double w)
-{
-  ProposeParentWeight(w);
 }
 

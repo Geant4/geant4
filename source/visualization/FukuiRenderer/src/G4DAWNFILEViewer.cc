@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.14 2003/06/16 17:13:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4DAWNFILEViewer.cc,v 1.16 2004/12/10 18:16:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
@@ -235,14 +235,14 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
-	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
+	const    G4double        MAX_HALF_ANGLE     = 0.499 * pi ;
 
 		//----- CALC camera distance
 		//..... Note: Camera cannot enter inside object
 	G4double  camera_distance ;
 	G4double  radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 
-	G4double half_view_angle  = fabs ( fVP.GetFieldHalfAngle () ) ;
+	G4double half_view_angle  = std::fabs ( fVP.GetFieldHalfAngle () ) ;
 	if( half_view_angle > MAX_HALF_ANGLE ) { 
 	  half_view_angle = MAX_HALF_ANGLE ; 
 	} 
@@ -252,7 +252,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		camera_distance = radius * HOW_FAR ;  
 	} else {
 			//----- Calc camera distance from half view angle
-		camera_distance = radius / sin ( half_view_angle );
+		camera_distance = radius / std::sin ( half_view_angle );
 		camera_distance -= fVP.GetDolly();
 	}
 
@@ -265,8 +265,8 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		//----- CALC camera direction
 	const G4Vector3D& camera_direction \
 	  = fVP.GetViewpointDirection().unit();
-	const G4double v_angle =  (180.0 / M_PI) * camera_direction.theta() ;
-	const G4double h_angle =  (180.0 / M_PI) * camera_direction.phi  () ;
+	const G4double v_angle =  (180.0 / pi) * camera_direction.theta() ;
+	const G4double h_angle =  (180.0 / pi) * camera_direction.phi  () ;
 
 
 	//########### Generation of the file .DAWN.history for DAWN GUI
@@ -298,7 +298,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	} else {
 		const G4double FR_HALF_SCREEN_SIZE = 0.5 ;
 		G4double  focal_distance \
-		  = FR_HALF_SCREEN_SIZE / tan( half_view_angle ); 
+		  = FR_HALF_SCREEN_SIZE / std::tan( half_view_angle ); 
 		focal_distance *= zoom_factor ;
 
 		gui_out << "fd" << focal_distance << G4endl;

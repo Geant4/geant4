@@ -21,22 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.24 2004/01/26 09:03:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Trap.cc,v 1.28 2004/12/02 09:31:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // class G4Trap
 //
 // Implementation for G4Trap class
 //
 // History:
-// 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 09.09.96 V. Grichine: Final modifications before to commit
-// 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
-// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
-// 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
-// 19.11.99 V.Grichine: kUndef was added to Eside enum
+// 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
-// --------------------------------------------------------------------
+// 19.11.99 V.Grichine: kUndef was added to Eside enum
+// 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
+// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
+// 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
+// 09.09.96 V.Grichine: Final modifications before to commit
+// 21.03.95 P.Kent: Modified for `tolerant' geometry
+// 
 
 #include "G4Trap.hh"
 #include "globals.hh"
@@ -89,18 +90,18 @@ G4Trap::G4Trap( const G4String& pName,
        pDx2 > 0 && pDy2 > 0 && pDx3 > 0 && pDx4 > 0 )
   {
     fDz=pDz;
-    fTthetaCphi=tan(pTheta)*cos(pPhi);
-    fTthetaSphi=tan(pTheta)*sin(pPhi);
+    fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
+    fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
       
     fDy1=pDy1;
     fDx1=pDx1;
     fDx2=pDx2;
-    fTalpha1=tan(pAlp1);
+    fTalpha1=std::tan(pAlp1);
      
     fDy2=pDy2;
     fDx3=pDx3;
     fDx4=pDx4;
-    fTalpha2=tan(pAlp2);
+    fTalpha2=std::tan(pAlp2);
 
     MakePlanes();
   }
@@ -127,20 +128,25 @@ G4Trap::G4Trap( const G4String& pName,
                 const G4ThreeVector pt[8] )
   : G4CSGSolid(pName)
 {
-  if ( pt[0].z()<0 && pt[0].z()==pt[1].z()
-    && pt[0].z()==pt[2].z() && pt[0].z()==pt[3].z()
-    && pt[4].z()>0 && pt[4].z()==pt[5].z()
-    && pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()
-    && (pt[0].z()+pt[4].z())== 0
-    && pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()
-    && pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()
-    && (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0 )
+  // Start with check of centering - the center of gravity trap line
+  // should cross the origin of frame
+
+  if (   pt[0].z() < 0 
+      && pt[0].z() == pt[1].z() && pt[0].z() == pt[2].z() && pt[0].z() == pt[3].z()
+      && pt[4].z() > 0 
+      && pt[4].z() == pt[5].z() && pt[4].z() == pt[6].z() && pt[4].z() == pt[7].z()
+      && ( pt[0].z() + pt[4].z() ) == 0
+      && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
+      && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
+      && ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 
+      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0 )
   {
     G4bool good;
     
     // Bottom side with normal approx. -Y
-    //
-    good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+    
+    good = MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+
     if (!good)
     {
       DumpInfo();
@@ -149,8 +155,9 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Top side with normal approx. +Y
-    //
-    good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+    
+    good = MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
@@ -159,8 +166,9 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Front side with normal approx. -X
-    //
-    good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+    
+    good = MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
@@ -169,29 +177,28 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Back side iwth normal approx. +X
-    //
-    good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+    
+    good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                   "Face at ~+X not planar.");
     }
-
     fDz = (pt[7]).z() ;
       
-    fDy1 = ((pt[2]).y()-(pt[1]).y())*0.5 ;
-    fDx1 = ((pt[1]).x()-(pt[0]).x())*0.5 ;
-    fDx2 = ((pt[3]).x()-(pt[2]).x())*0.5 ;
-    fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1 ;
+    fDy1     = ((pt[2]).y()-(pt[1]).y())*0.5;
+    fDx1     = ((pt[1]).x()-(pt[0]).x())*0.5;
+    fDx2     = ((pt[3]).x()-(pt[2]).x())*0.5;
+    fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1;
 
-    fDy2 = ((pt[6]).y()-(pt[5]).y())*0.5 ;
-    fDx3 = ((pt[5]).x()-(pt[4]).x())*0.5 ;
-    fDx4 = ((pt[7]).x()-(pt[6]).x())*0.5 ;
-    fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2 ;
+    fDy2     = ((pt[6]).y()-(pt[5]).y())*0.5;
+    fDx3     = ((pt[5]).x()-(pt[4]).x())*0.5;
+    fDx4     = ((pt[7]).x()-(pt[6]).x())*0.5;
+    fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2;
 
-    fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz ;
-    fTthetaSphi = ((pt[4]).y()+fDy2)/fDz ;
+    fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz;
+    fTthetaSphi = ((pt[4]).y()+fDy2)/fDz;
   }
   else
   {
@@ -408,13 +415,13 @@ G4Trap::G4Trap( const G4String& pName,
   if ( pDz>0 && pDy>0 && pDx>0 )
   {
     fDz = pDz ;
-    fTthetaCphi = tan(pTheta)*cos(pPhi) ;
-    fTthetaSphi = tan(pTheta)*sin(pPhi) ;
+    fTthetaCphi = std::tan(pTheta)*std::cos(pPhi) ;
+    fTthetaSphi = std::tan(pTheta)*std::sin(pPhi) ;
      
     fDy1 = pDy ;
     fDx1 = pDx ;
     fDx2 = pDx ;
-    fTalpha1 = tan(pAlpha) ;
+    fTalpha1 = std::tan(pAlpha) ;
     
     fDy2 = pDy ;
     fDx3 = pDx ;
@@ -528,21 +535,23 @@ void G4Trap::SetAllParameters ( G4double pDz,
                                 G4double pDx4,
                                 G4double pAlp2 )
 {
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
   if ( pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0 )
   {
     fDz=pDz;
-    fTthetaCphi=tan(pTheta)*cos(pPhi);
-    fTthetaSphi=tan(pTheta)*sin(pPhi);
+    fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
+    fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
      
     fDy1=pDy1;
     fDx1=pDx1;
     fDx2=pDx2;
-    fTalpha1=tan(pAlp1);
+    fTalpha1=std::tan(pAlp1);
     
     fDy2=pDy2;
     fDx3=pDx3;
     fDx4=pDx4;
-    fTalpha2=tan(pAlp2);
+    fTalpha2=std::tan(pAlp2);
 
     MakePlanes();
   }
@@ -654,7 +663,7 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
   v14 = p4-p1;
   Vcross=v12.cross(v13);
 
-  if (fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag())) > kCoplanar_Tolerance)
+  if (std::fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag())) > kCoplanar_Tolerance)
   {
     good=false;
   }
@@ -683,7 +692,7 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     // c = +(p4.x() - p2.x())*(p3.y() - p1.y())
     //     - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
 
-    s=sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
+    s=std::sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
 
     if( s > 0 )
     {
@@ -796,7 +805,7 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
     temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMax-pt[2].z())
                        /(pt[6].z()-pt[2].z()) ;
 
-    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
+    yMax = yoffset - std::fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
     yMin = -yMax ;
 
     for( i = 0 ; i < 4 ; i++ )
@@ -840,7 +849,7 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
     temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())
                        *(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
       
-    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
+    xMax = xoffset - std::fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
     xMin = -xMax ;
 
     for( i = 0 ; i < 8 ; i++ )
@@ -1021,7 +1030,7 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
   EInside in;
   G4double Dist;
   G4int i;
-  if (fabs(p.z())<=fDz-kCarTolerance/2)
+  if (std::fabs(p.z())<=fDz-kCarTolerance/2)
   {
     in=kInside;
     for (i=0;i<4;i++)
@@ -1038,7 +1047,7 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
       } 
     }
   }
-  else if (fabs(p.z())<=fDz+kCarTolerance/2)
+  else if (std::fabs(p.z())<=fDz+kCarTolerance/2)
   {
     in=kSurface;
     for (i=0;i<4;i++)
@@ -1069,7 +1078,7 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
   G4int i,imin=0;
   for (i=0;i<4;i++)
   {
-    Dist=fabs(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
+    Dist=std::fabs(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
         +fPlanes[i].c*p.z()+fPlanes[i].d);
     if (Dist<safe)
     {
@@ -1077,7 +1086,7 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
       imin=i;
     }
   }
-  safez=fabs(fabs(p.z())-fDz);
+  safez=std::fabs(std::fabs(p.z())-fDz);
   if (safe<safez)
   {
     return G4ThreeVector(fPlanes[imin].a,fPlanes[imin].b,fPlanes[imin].c);
@@ -1143,7 +1152,7 @@ G4double G4Trap::DistanceToIn( const G4ThreeVector& p,
   }
   else
   {
-    if (fabs(p.z())<fDz - 0.5*kCarTolerance) // Inside was <=fDz
+    if (std::fabs(p.z())<fDz - 0.5*kCarTolerance) // Inside was <=fDz
     {
       smin=0;
       smax=kInfinity;
@@ -1230,7 +1239,7 @@ G4double G4Trap::DistanceToIn( const G4ThreeVector& p ) const
 {
   G4double safe=0.0,Dist;
   G4int i;
-  safe=fabs(p.z())-fDz;
+  safe=std::fabs(p.z())-fDz;
   for (i=0;i<4;i++)
   {
     Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
@@ -1556,7 +1565,7 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  safe=fDz-fabs(p.z());
+  safe=fDz-std::fabs(p.z());
   if (safe<0) safe=0;
   else
   {
@@ -1651,10 +1660,10 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
      << "    half length Y of face +fDz: " << fDy2/mm << " mm \n"
      << "    half length X of side -fDy2, face +fDz: " << fDx3/mm << " mm \n"
      << "    half length X of side +fDy2, face +fDz: " << fDx4/mm << " mm \n"
-     << "    tan(theta)*cos(phi): " << fTthetaCphi/degree << " degrees \n"
-     << "    tan(theta)*sin(phi): " << fTthetaSphi/degree << " degrees \n"
-     << "    tan(alpha), -fDz: " << fTalpha1/degree << " degrees \n"
-     << "    tan(alpha), +fDz: " << fTalpha2/degree << " degrees \n"
+     << "    std::tan(theta)*std::cos(phi): " << fTthetaCphi/degree << " degrees \n"
+     << "    std::tan(theta)*std::sin(phi): " << fTthetaSphi/degree << " degrees \n"
+     << "    std::tan(alpha), -fDz: " << fTalpha1/degree << " degrees \n"
+     << "    std::tan(alpha), +fDz: " << fTalpha2/degree << " degrees \n"
      << "    trap side plane equations:\n"
      << "        " << fPlanes[0].a << " X + " << fPlanes[0].b << " Y + "
                    << fPlanes[0].c << " Z + " << fPlanes[0].d << " = 0\n"
@@ -1680,10 +1689,10 @@ void G4Trap::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 G4Polyhedron* G4Trap::CreatePolyhedron () const
 {
-  G4double phi = atan2(fTthetaSphi, fTthetaCphi);
-  G4double alpha1 = atan(fTalpha1);
-  G4double alpha2 = atan(fTalpha2);
-  G4double theta = atan(sqrt(fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi));
+  G4double phi = std::atan2(fTthetaSphi, fTthetaCphi);
+  G4double alpha1 = std::atan(fTalpha1);
+  G4double alpha2 = std::atan(fTalpha2);
+  G4double theta = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi));
 
   return new G4PolyhedronTrap(fDz, theta, phi,
                               fDy1, fDx1, fDx2, alpha1,

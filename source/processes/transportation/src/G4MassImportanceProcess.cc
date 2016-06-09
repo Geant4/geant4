@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.16 2003/11/26 14:51:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MassImportanceProcess.cc,v 1.17 2004/10/19 00:59:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -114,7 +114,7 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 
 void G4MassImportanceProcess::KillTrack() const
 {
-  fParticleChange->SetStatusChange(fStopAndKill);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 const G4String &G4MassImportanceProcess::GetName() const

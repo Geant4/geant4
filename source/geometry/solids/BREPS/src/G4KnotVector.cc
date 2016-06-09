@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.cc,v 1.6 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4KnotVector.cc,v 1.7 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -162,7 +162,7 @@ G4int G4KnotVector::CheckKnotVector(G4double val) const
   
   for ( G4int i = 0; i < k_size; i++) 
   {
-    //	  if ( abs(val - knots[i]) < kCarTolerance)
+    //	  if ( std::abs(val - knots[i]) < kCarTolerance)
     if ( val == knots[i] )
       num++;
   }

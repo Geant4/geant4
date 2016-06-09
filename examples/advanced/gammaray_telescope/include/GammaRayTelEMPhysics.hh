@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelEMPhysics.hh,v 1.1 2003/05/28 13:54:14 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------

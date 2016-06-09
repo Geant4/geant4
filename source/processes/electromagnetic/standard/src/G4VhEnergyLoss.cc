@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.46 2003/06/16 17:02:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VhEnergyLoss.cc,v 1.48 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 // -----------------------------------------------------------------------------
@@ -114,6 +114,8 @@ G4double G4VhEnergyLoss::cN       = 0.077*MeV*cm2/g;
 G4int    G4VhEnergyLoss::Ndeltamax = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4VhEnergyLoss::G4VhEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
@@ -411,7 +413,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
  // compute the (random) Step limit
  //
- G4double r = std::min(finalRange, couple->GetProductionCuts()
+ G4double r = min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
  G4double StepLimit;
  if (fRangeNow > r)
@@ -526,7 +528,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                                                    ->GetNavigatorForTracking();
      G4double postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
-     G4double safety = std::min(presafety,postsafety);
+     G4double safety = min(presafety,postsafety);
 
      if (safety < rcut)
       {
@@ -565,7 +567,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
          {
           G4double T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
-                                             std::min(presafety,postsafety),
+                                             min(presafety,postsafety),
                                              couple);
           // absolute lower limit for T0
     	  if((T0<MinDeltaEnergyNow)||(LowerLimitForced[index]))
@@ -667,7 +669,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                } while (subdelta<N);
 
             // update the particle direction and kinetic energy
-            if(subdelta > 0) aParticleChange.SetMomentumChange(Px,Py,Pz);
+            if(subdelta > 0) aParticleChange.ProposeMomentumDirection(Px,Py,Pz);
             E = Tkin;
            }
           }
@@ -693,12 +695,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   {
    finalT = 0.;
    if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
-          aParticleChange.SetStatusChange(fStopAndKill);
-   else   aParticleChange.SetStatusChange(fStopButAlive);
+          aParticleChange.ProposeTrackStatus(fStopAndKill);
+   else   aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
 
-  aParticleChange.SetEnergyChange(finalT);
-  aParticleChange.SetLocalEnergyDeposit(E-finalT);
+  aParticleChange.ProposeEnergy(finalT);
+  aParticleChange.ProposeLocalEnergyDeposit(E-finalT);
 
   return &aParticleChange;
 }

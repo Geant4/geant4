@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.23 2003/11/12 13:05:10 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.25 2004/09/22 19:50:32 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -99,6 +99,9 @@ void G4PhysicalVolumeModel::CalculateExtent () {
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
     fExtent = bsScene.GetBoundingSphereExtent ();
+    if (!(fExtent.GetXmin() < fExtent.GetXmax())) {
+      fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
+    }
     fpMP = tempMP;
     fRequestedDepth = tempRequestedDepth;
   }
@@ -298,9 +301,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
   if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
 
-  const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
-  const Hep3Vector&  translation     = pVPV -> GetTranslation ();
-  G4Transform3D theLT (G4Transform3D (*pObjectRotation, translation));
+  const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
+  const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
+  G4Transform3D theLT (G4Transform3D (objectRotation, translation));
 
   // Compute the accumulated transformation...
   // Note that top volume's transformation relative to the world
@@ -317,7 +320,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	 << pVPV -> GetName () << "." << pVPV -> GetCopyNo ();
   G4cout << "\n  theAT: ";
   G4cout << "\n    Rotation: ";
-  HepRotation rotation = theAT.getRotation ();
+  G4RotationMatrix rotation = theAT.getRotation ();
   G4cout << rotation.thetaX() << ", "
 	 << rotation.phiX() << ", "
 	 << rotation.thetaY() << ", "

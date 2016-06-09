@@ -47,7 +47,7 @@ G4double G4AngularDistributionPP::CosTheta(G4double s, G4double m1, G4double m2)
         je1 = midBin;
     } while (je2 - je1 > 1);
     //    G4int j;
-    //abs(ek-elab[je1]) < abs(ek-elab[je2]) ? j = je1 : j = je2;
+    //std::abs(ek-elab[je1]) < std::abs(ek-elab[je2]) ? j = je1 : j = je2;
     G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
@@ -102,14 +102,14 @@ G4double G4AngularDistributionPP::CosTheta(G4double s, G4double m1, G4double m2)
     G4double theta = (0.5 + kint)*pi/180.;
 
     //    G4int k;
-    //abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
+    //std::abs(sample-sig[j][ke1]) < std::abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
     //    G4double theta = (0.5 + k)*pi/180.;
 
     if (verboseLevel > 1) {
       G4cout << "   energy bin " << je1 << " energy=" << elab[je1] << G4endl;
       G4cout << "   angle bin " << kint << " angle=" << theta/degree << G4endl;
     }
-    G4double costh= cos(theta);
+    G4double costh= std::cos(theta);
 //    G4cout << "scattering angle hpw "<<costh<<" "<<s<<" "<<m1<<" "<<m2<<G4endl;
     return costh;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4VLeadingParticleBiasing.hh,v 1.4 2003/07/01 15:05:32 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 #ifndef G4VLeadingParticleBiasing_h

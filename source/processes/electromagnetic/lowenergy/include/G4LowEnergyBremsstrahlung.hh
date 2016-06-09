@@ -23,7 +23,7 @@
 // 
 // -------------------------------------------------------------------
 // $Id: G4LowEnergyBremsstrahlung.hh,v 1.36 2003/11/10 17:50:46 trindade Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: A. Forti
 //

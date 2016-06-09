@@ -100,8 +100,8 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double z0 = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   G4double y0 = 0.*cm, x0 = 0.*cm;
   if (rndmFlag == "on")
-    {y0 = (XrayFluoDetector->GetDia3SizeXY())/sqrt(2.)*(G4UniformRand()-0.5); // it was GetSampleSizeXY(), 
-    x0 = (XrayFluoDetector->GetDia3SizeXY())/sqrt(2.)*(G4UniformRand()-0.5); // not divided by sqrt(2.)
+    {y0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // it was GetSampleSizeXY(), 
+    x0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // not divided by std::sqrt(2.)
     } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   
@@ -109,12 +109,12 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if (beam == "on")
     {
       G4double radius = 0.5 * mm;
-      G4double rho = radius*sqrt(G4UniformRand());
+      G4double rho = radius*std::sqrt(G4UniformRand());
       G4double theta = 2*pi*G4UniformRand()*rad;
       G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
       
-      G4double y = rho * sin(theta);
-      G4double x = rho * cos(theta);
+      G4double y = rho * std::sin(theta);
+      G4double x = rho * std::cos(theta);
       
       particleGun->SetParticlePosition(G4ThreeVector(x,y,position));
     }
@@ -177,9 +177,9 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double theta = (pi/2)*G4UniformRand();
       //phi in [-pi;pi]
       G4double phi = (G4UniformRand()*2*pi)- pi;
-      G4double x = rho*sin(theta)*sin(phi);
-      G4double y = rho*sin(theta)*cos(phi);
-      G4double z = -(rho*cos(theta));
+      G4double x = rho*std::sin(theta)*std::sin(phi);
+      G4double y = rho*std::sin(theta)*std::cos(phi);
+      G4double z = -(rho*std::cos(theta));
       particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
       
       G4double Xdim = XrayFluoDetector->GetSampleSizeXY();

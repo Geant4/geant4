@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.6 2003/06/16 16:55:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisAttributes.icc,v 1.7 2004/07/28 15:44:29 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  18th November 1996
@@ -48,9 +48,14 @@ inline G4double G4VisAttributes::GetLineWidth () const {
 inline G4bool G4VisAttributes::IsForceDrawingStyle () const {
   return fForceDrawingStyle;
 }
+
 inline G4VisAttributes::ForcedDrawingStyle
 G4VisAttributes::GetForcedDrawingStyle () const {
   return fForcedStyle;
+}
+
+inline G4bool G4VisAttributes::IsForceAuxEdgeVisible () const {
+  return fForceAuxEdgeVisible;
 }
 
 inline const std::vector<G4AttValue>*
@@ -102,6 +107,10 @@ inline void G4VisAttributes::SetForceWireframe (G4bool force) {
 inline void G4VisAttributes::SetForceSolid (G4bool force) {
   fForceDrawingStyle = force;
   fForcedStyle = G4VisAttributes::solid;
+}
+
+inline void G4VisAttributes::SetForceAuxEdgeVisible (G4bool force) {
+  fForceAuxEdgeVisible = force;
 }
 
 inline void G4VisAttributes::SetAttValues

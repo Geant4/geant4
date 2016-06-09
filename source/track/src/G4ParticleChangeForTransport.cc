@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.16 2004/01/20 15:29:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.17 2004/08/12 00:50:11 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -81,6 +81,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theTouchableHandle = right.theTouchableHandle;
       theMaterialChange = right.theMaterialChange;
       theMaterialCutsCoupleChange = right.theMaterialCutsCoupleChange;
+      theSensitiveDetectorChange = right.theSensitiveDetectorChange;
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
@@ -204,6 +205,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
 
     pPostStepPoint->SetMaterial( theMaterialChange );
     pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
+    pPostStepPoint->SetSensitiveDetector( theSensitiveDetectorChange );
   }
   // It used to call base class's method
   //   - but this would copy uninitialised data members

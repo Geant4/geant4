@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VEMDataSet.hh,v 1.6 2002/05/28 09:15:26 pia Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

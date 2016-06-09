@@ -64,7 +64,7 @@ G4WilsonRadius::G4WilsonRadius ()
 {
   G4double r0 = 0.84*fermi;
   r0sq        = r0 * r0;
-  factor      = sqrt(5.0/3.0) * fermi;
+  factor      = std::sqrt(5.0/3.0) * fermi;
   third       = 1.0 / 3.0;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ G4double G4WilsonRadius::GetWilsonRMSRadius (G4double A)
 {
   G4double radius;
   if (A > 26.0)
-    radius = factor * (0.84*pow(A,third) + 0.55);
+    radius = factor * (0.84*std::pow(A,third) + 0.55);
   else
   {
     G4double r[27] = {0.0, 0.85,  2.095, 1.976, 1.671, 1.986,
@@ -95,7 +95,7 @@ G4double G4WilsonRadius::GetWilsonRMSRadius (G4double A)
 G4double G4WilsonRadius::GetWilsonRadius (G4double A)
 {
   G4double r  = GetWilsonRMSRadius(A);
-  return  1.29*sqrt(r*r-r0sq);
+  return  1.29*std::sqrt(r*r-r0sq);
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

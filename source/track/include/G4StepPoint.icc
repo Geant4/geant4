@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.8 2003/05/07 20:08:37 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4StepPoint.icc,v 1.10 2004/12/02 06:38:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
    inline const G4ThreeVector& G4StepPoint::GetPosition() const
@@ -69,7 +69,7 @@
     
    inline G4ThreeVector G4StepPoint::GetMomentum() const
    { 
-     G4double tMomentum = sqrt(fKineticEnergy*fKineticEnergy +
+     G4double tMomentum = std::sqrt(fKineticEnergy*fKineticEnergy +
                                2*fKineticEnergy*fMass);
      return G4ThreeVector(fMomentumDirection.x()*tMomentum,
 			  fMomentumDirection.y()*tMomentum,
@@ -167,6 +167,11 @@
    inline 
      void G4StepPoint::SetMaterialCutsCouple(const G4MaterialCutsCouple* materialCutsCouple)
    {fpMaterialCutsCouple = materialCutsCouple; }
+
+   inline G4VSensitiveDetector* G4StepPoint::GetSensitiveDetector() const
+   { return fpSensitiveDetector; }
+   inline void G4StepPoint::SetSensitiveDetector(G4VSensitiveDetector* aValue)
+   { fpSensitiveDetector = aValue; }
 
    inline void G4StepPoint::SetWeight(G4double aValue)
    { fWeight = aValue; }

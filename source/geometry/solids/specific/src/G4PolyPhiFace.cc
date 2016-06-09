@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.7 2003/10/28 17:15:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PolyPhiFace.cc,v 1.8 2004/12/02 09:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -72,7 +72,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   // Build radial vector
   //
-  radial = G4ThreeVector( cos(phi), sin(phi), 0.0 );
+  radial = G4ThreeVector( std::cos(phi), std::sin(phi), 0.0 );
   
   //
   // Build normal
@@ -83,14 +83,14 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   // Is allBehind?
   //
-  allBehind = (zSign*(cos(phiOther)*radial.y() - sin(phiOther)*radial.x()) < 0);
+  allBehind = (zSign*(std::cos(phiOther)*radial.y() - std::sin(phiOther)*radial.x()) < 0);
   
   //
   // Adjacent edges
   //
   G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
-  G4double cosMid = cos(midPhi), 
-                 sinMid = sin(midPhi);
+  G4double cosMid = std::cos(midPhi), 
+                 sinMid = std::sin(midPhi);
 
   //
   // Allocate corners
@@ -120,8 +120,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   // Fill them
   //
-  G4double rFact = cos(0.5*deltaPhi);
-  G4double rFactNormalize = 1.0/sqrt(1.0+rFact*rFact);
+  G4double rFact = std::cos(0.5*deltaPhi);
+  G4double rFactNormalize = 1.0/std::sqrt(1.0+rFact*rFact);
 
   G4PolyPhiFaceVertex *prev = corners+numEdges-1,
                       *here = corners;
@@ -136,7 +136,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
     G4double dr = here->r - prev->r,
              dz = here->z - prev->z;
                          
-    edge->length = sqrt( dr*dr + dz*dz );
+    edge->length = std::sqrt( dr*dr + dz*dz );
 
     edge->tr = dr/edge->length;
     edge->tz = dz/edge->length;
@@ -149,8 +149,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
       // PolyconeSide or PolyhedraSide, but the opposite PolyPhiFace.
       //
       G4double zSignOther = start ? -1 : 1;
-      sideNorm = G4ThreeVector(  zSignOther*sin(phiOther), 
-                                -zSignOther*cos(phiOther), 0 );
+      sideNorm = G4ThreeVector(  zSignOther*std::sin(phiOther), 
+                                -zSignOther*std::cos(phiOther), 0 );
     }
     else
     {
@@ -176,7 +176,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
     //
     G4double rPart = prevEdge->tr + edge->tr;
     G4double zPart = prevEdge->tz + edge->tz;
-    G4double norm = sqrt( rPart*rPart + zPart*zPart );
+    G4double norm = std::sqrt( rPart*rPart + zPart*zPart );
     G4double rNorm = +zPart/norm;
     G4double zNorm = -rPart/norm;
     
@@ -201,8 +201,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
       // We also know that rNorm < 0
       //
       G4double zSignOther = start ? -1 : 1;
-      G4ThreeVector normalOther(  zSignOther*sin(phiOther), 
-                                 -zSignOther*cos(phiOther), 0 );
+      G4ThreeVector normalOther(  zSignOther*std::sin(phiOther), 
+                                 -zSignOther*std::cos(phiOther), 0 );
                 
       xyVector = - normal - normalOther;
     }
@@ -437,7 +437,7 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, G4bool outgoing )
     //
     // Nope. Penalize by distance out
     //
-    return sqrt( distPhi*distPhi + distRZ2 );
+    return std::sqrt( distPhi*distPhi + distRZ2 );
   }
 }  
   
@@ -473,7 +473,7 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
     //
     // Looks like we're inside. Distance is distance in phi.
     //
-    *bestDistance = fabs(distPhi);
+    *bestDistance = std::fabs(distPhi);
     
     //
     // Use distPhi to decide fate
@@ -488,7 +488,7 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
     // We're outside the extent of the face,
     // so the distance is penalized by distance from edges in RZ
     //
-    *bestDistance = sqrt( distPhi*distPhi + distRZ2 );
+    *bestDistance = std::sqrt( distPhi*distPhi + distRZ2 );
     
     //
     // Use edge normal to decide fate
@@ -543,14 +543,14 @@ G4ThreeVector G4PolyPhiFace::Normal( const G4ThreeVector &p,
     //
     // Yup, answer is just distPhi
     //
-    *bestDistance = fabs(distPhi);
+    *bestDistance = std::fabs(distPhi);
   }
   else
   {
     //
     // Nope. Penalize by distance out
     //
-    *bestDistance = sqrt( distPhi*distPhi + distRZ2 );
+    *bestDistance = std::sqrt( distPhi*distPhi + distRZ2 );
   }
   
   return normal;
@@ -741,7 +741,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
     }
   } while( prevZ = cornZ, prev=corn, ++corn < corners+numEdges );
   
-//  G4int fanswer = abs(answer);
+//  G4int fanswer = std::abs(answer);
 //  if (fanswer==1 || fanswer>2) {
 //    G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is "
 //           << answer << G4endl;

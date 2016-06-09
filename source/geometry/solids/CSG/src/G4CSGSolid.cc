@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.6 2003/11/03 18:17:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4CSGSolid.cc,v 1.9 2004/10/13 13:14:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 
@@ -32,7 +32,7 @@
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-   G4VSolid(name)
+  G4VSolid(name), fCubicVolume(0.), fpPolyhedron(0)
 {
 }
 
@@ -51,4 +51,13 @@ std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+G4Polyhedron* G4CSGSolid::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }

@@ -179,10 +179,10 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
   } else {
     G4double zeff = (material->GetElectronDensity())/
                     (material->GetTotNbOfAtomsPerVolume()) ;
-    factor = charge * pow(charge/zeff, 0.3333) ;
+    factor = charge * std::pow(charge/zeff, 0.3333) ;
 
     if( kStateGas == material->GetState() ) {
-      energy /= (charge * sqrt(charge)) ;      
+      energy /= (charge * std::sqrt(charge)) ;      
 
       if(1 == (material->GetNumberOfElements())) {
         i = 2 ;
@@ -191,12 +191,12 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
       }
 
     } else {
-      energy /= (charge * sqrt(charge*zeff)) ;      
+      energy /= (charge * std::sqrt(charge*zeff)) ;      
       i = 4 ;
     }
   }
 
-  G4double x = b[i][2] * (1.0 - exp( - energy * b[i][3] )) ;
+  G4double x = b[i][2] * (1.0 - std::exp( - energy * b[i][3] )) ;
 
   G4double q = factor * x * b[i][0] / 
              ((energy - b[i][1])*(energy - b[i][1]) + x*x) ;

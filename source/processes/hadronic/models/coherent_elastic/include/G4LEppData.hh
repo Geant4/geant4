@@ -26,7 +26,7 @@
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
 
  // Table of Cumulative nn or pp Scattering Probabilities
- // To be used for generation as a function of cos(theta cm)
+ // To be used for generation as a function of std::cos(theta cm)
  // Coulomb effects are SUPPRESSED
  // -- including pp Coulomb-nuclear interference  
  // NOTE: Assumes angle range to be generated is 0-180 degrees  
@@ -663,7 +663,7 @@
 
 
 // Table of Cumulative pp Scattering Probabilities
-// To be used for generation as a function of cos(theta cm)
+// To be used for generation as a function of std::cos(theta cm)
 // Coulomb effects are NOT suppressed
 // -- including pp Coulomb-nuclear interference
 // NOTE: Assumes angle range to be generated is 0-180 degrees

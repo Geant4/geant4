@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2004/05/22 12:57:03 guatelli Exp $
+$Id: History,v 1.7 2004/11/23 14:39:27 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,8 +8,14 @@ $Id: History,v 1.4 2004/05/22 12:57:03 guatelli Exp $
 
                       Category History file
                       ---------------------
-05.2005 - 
-05.2005 - Design iteration with Decorator Design pattern
+
+11.2004 - Binary cascade approach added
+
+11.2004 - Option to define the format of the output file hbook or xml
+
+11.2004 - Add histograms 
+ 
+05.2004 - Design iteration with Decorator Design pattern
 
 01.2004 - S.Guatelli
           First implementation

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.2 2003/11/03 17:53:02 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EvaporationProbability.cc,v 1.3 2004/12/07 13:46:39 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -99,7 +99,7 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
     G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
 									       static_cast<G4int>(fragment.GetZ()));
 
-    G4double SystemEntropy = 2.0*sqrt(theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
+    G4double SystemEntropy = 2.0*std::sqrt(theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
 									   static_cast<G4int>(fragment.GetZ()),U)*
 				      (U-delta0));
 								  
@@ -114,17 +114,17 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
 						      static_cast<G4int>(ResidualZ),
 						      Rmax);
     G4double GlobalFactor = static_cast<G4double>(Gamma) * (Alpha/(a*a)) *
-	(NuclearMass*RN*RN*pow(ResidualA,2./3.))/
+	(NuclearMass*RN*RN*std::pow(ResidualA,2./3.))/
 	(2.*pi* hbar_Planck*hbar_Planck);
     G4double Term1 = (2.0*Beta*a-3.0)/2.0 + Rmax*a;
-    G4double Term2 = (2.0*Beta*a-3.0)*sqrt(Rmax*a) + 2.0*a*Rmax;
+    G4double Term2 = (2.0*Beta*a-3.0)*std::sqrt(Rmax*a) + 2.0*a*Rmax;
 	
     G4double ExpTerm1 = 0.0;
-    if (SystemEntropy <= 600.0) ExpTerm1 = exp(-SystemEntropy);
+    if (SystemEntropy <= 600.0) ExpTerm1 = std::exp(-SystemEntropy);
 	
-    G4double ExpTerm2 = 2.*sqrt(a*Rmax) - SystemEntropy;
+    G4double ExpTerm2 = 2.*std::sqrt(a*Rmax) - SystemEntropy;
     if (ExpTerm2 > 700.0) ExpTerm2 = 700.0;
-    ExpTerm2 = exp(ExpTerm2);
+    ExpTerm2 = std::exp(ExpTerm2);
 	
     G4double Width = GlobalFactor*(Term1*ExpTerm1 + Term2*ExpTerm2);
 	

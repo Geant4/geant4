@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2004/05/11 15:17:18 kurasige Exp $
+$Id: History,v 1.36 2004/12/02 23:30:04 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-Dec. 02, 2004 H.Kurashige (procman-V06-02-03)
+- migration to cmath
+
+- Dev. 02, 2004 H.Kurasige (procman-V06-02-03)
+- Implemented migration to <cmath> for G4VProcess.hh.
+
+- Nov. 10, 2004 V.Ivanchenko (procman-V06-02-02)
+- Add const cast for argument of one method used in Store/Retrieve PhysicsTable
+
+- Nov. 7, 2004 H.Kurashige (procman-V06-02-01)
+- Add const cast for arguments in Store/Retrieve PhysicsTable
+
+-Oct 25, 2004 H.Kurashige (procman-V06-02-00)
+- Add PreparePhysicsTable in G4VProcess
+
 - May 10 2004  H.Kurashige (procman-V06-01-00)
 - Fixed a bug in G4ProcessManager::RemoveProcess for the case 
    the removed process is inactive

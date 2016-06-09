@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HENeutronInelastic.hh,v 1.12 2004/04/22 20:30:17 dwright Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // G4 Gheisha High Energy model class -- header file

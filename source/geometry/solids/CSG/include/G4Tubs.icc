@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.1 2002/10/28 11:43:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Tubs.icc,v 1.4 2004/10/10 10:44:19 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -66,30 +66,40 @@ inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
   fRMin= newRMin;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
   fRMax= newRMax;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Tubs::SetZHalfLength (G4double newDz)
 {
   fDz= newDz;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Tubs::SetStartPhiAngle (G4double newSPhi)
 {
   fSPhi= newSPhi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
   fDPhi= newDPhi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 //  Older names for access functions
@@ -122,4 +132,14 @@ inline
 G4double G4Tubs::GetDPhi () const
 {
   return GetDeltaPhiAngle();
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Tubs::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = fDPhi*fDz*(fRMax*fRMax-fRMin*fRMin); 
+  return fCubicVolume;
 }

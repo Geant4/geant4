@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh,v 1.7 2003/06/16 16:55:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisExtent.hh,v 1.8 2004/12/07 08:42:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // A.Walkden 28/11/95
@@ -37,7 +37,7 @@
 // bounding sphere; inverting this will produce a cube which *might*
 // *not* include the object.  E.g., a long thin object of length l
 // will have a bounding sphere of diameter l; the corresponding cube
-// will have side l/sqrt(3) so that the bounding sphere diameter is
+// will have side l/std::sqrt(3) so that the bounding sphere diameter is
 // still l.  Thus the long thin object will stick out of the cube.
 // So, if you once use the concept of bounding sphere you must stick
 // with it and abandon the concept of bounding box.

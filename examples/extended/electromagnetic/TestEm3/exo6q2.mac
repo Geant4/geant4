@@ -1,4 +1,4 @@
-# $Id: exo6q2.mac,v 1.5 2003/09/23 17:27:32 maire Exp $
+# $Id: exo6q2.mac,v 1.6 2004/10/20 14:32:28 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -8,7 +8,7 @@
 #
 /testem/det/setNbOfLayers 1
 /testem/det/setNbOfAbsor  1
-/testem/det/setAbsor 0 Iron 10 m
+/testem/det/setAbsor 1 Iron 10 m
 /testem/det/setSizeYZ 10 m
 #
 /testem/phys/setCuts 10 cm

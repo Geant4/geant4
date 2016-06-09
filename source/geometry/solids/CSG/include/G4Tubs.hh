@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.8 2003/06/16 16:53:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Tubs.hh,v 1.9 2004/09/08 15:13:52 grichine Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -91,6 +91,8 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetZHalfLength   () const;
     inline G4double GetStartPhiAngle () const;
     inline G4double GetDeltaPhiAngle () const;
+    inline G4double GetCubicVolume();
+
 
     // Modifiers
 

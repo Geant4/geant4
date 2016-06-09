@@ -34,6 +34,7 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 24/11/2004: migrated to cmath
 //
 // ********************************************************************
 
@@ -133,13 +134,13 @@
     (StructTube_sol, Al6061, "StructTube_log");
   G4VPhysicalVolume* StructTube_phys;
   StructTube_phys = new G4PVPlacement(0, spacecraft_pos + 
-    G4ThreeVector(+0.5*StructTube_sep/cos(30.*deg),0,0),
+    G4ThreeVector(+0.5*StructTube_sep/std::cos(30.*deg),0,0),
     "StructTube_phys", StructTube_log, wld_phys, false, 0);
   StructTube_phys = new G4PVPlacement(0, spacecraft_pos + 
-    G4ThreeVector(-0.5*StructTube_sep*tan(30.*deg),+0.5*StructTube_sep,0),
+    G4ThreeVector(-0.5*StructTube_sep*std::tan(30.*deg),+0.5*StructTube_sep,0),
     "StructTube_phys", StructTube_log, wld_phys, false, 1);
   StructTube_phys = new G4PVPlacement(0, spacecraft_pos + 
-    G4ThreeVector(-0.5*StructTube_sep*tan(30.*deg),-0.5*StructTube_sep,0),
+    G4ThreeVector(-0.5*StructTube_sep*std::tan(30.*deg),-0.5*StructTube_sep,0),
     "StructTube_phys", StructTube_log, wld_phys, false, 2);
   StructTube_log->SetVisAttributes(sol_white_vat);
 
@@ -152,17 +153,17 @@
     (StructTubeSpacer_sol, Al6061, "StructTubeSpacer_log");
   G4VPhysicalVolume* StructTubeSpacer_phys;
   StructTubeSpacer_phys = new G4PVPlacement
-    (0, spacecraft_pos + G4ThreeVector(+0.5*StructTube_sep/cos(30.*deg),0,
+    (0, spacecraft_pos + G4ThreeVector(+0.5*StructTube_sep/std::cos(30.*deg),0,
     +0.5*StructTube_hei+UpperDeckCore_thi+2*UpperDeckSkin_thi
     +0.5*StructTubeSpacer_hei+UpperDeck_zoff),
     "StructTubeSpacer_phys", StructTubeSpacer_log, wld_phys, false, 0);
   StructTubeSpacer_phys = new G4PVPlacement
-    (0, spacecraft_pos + G4ThreeVector(-0.5*StructTube_sep*tan(30.*deg),
+    (0, spacecraft_pos + G4ThreeVector(-0.5*StructTube_sep*std::tan(30.*deg),
     +0.5*StructTube_sep, +0.5*StructTube_hei+UpperDeckCore_thi
     +2*UpperDeckSkin_thi+0.5*StructTubeSpacer_hei+UpperDeck_zoff),
     "StructTubeSpacer_phys", StructTubeSpacer_log, wld_phys, false, 1);
   StructTubeSpacer_phys = new G4PVPlacement
-    (0, spacecraft_pos + G4ThreeVector(-0.5*StructTube_sep*tan(30.*deg),
+    (0, spacecraft_pos + G4ThreeVector(-0.5*StructTube_sep*std::tan(30.*deg),
     -0.5*StructTube_sep,+0.5*StructTube_hei+UpperDeckCore_thi
     +2*UpperDeckSkin_thi+0.5*StructTubeSpacer_hei+UpperDeck_zoff),
     "StructTubeSpacer_phys", StructTubeSpacer_log, wld_phys, false, 2);
@@ -190,19 +191,19 @@
   G4VPhysicalVolume* DiagPanelCore_phys;
   G4RotationMatrix SMS_rot2; SMS_rot2.rotateZ(90.*deg);
   DiagPanelCore_phys = new G4PVPlacement(G4Transform3D(SMS_rot2, 
-    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*tan(30.*deg),0,0)), 
+    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*std::tan(30.*deg),0,0)), 
     "DiagPanelCore_phys", DiagPanelCore_log, wld_phys, false, 0);
   G4RotationMatrix SMS_rot3; SMS_rot3.rotateZ(-30.*deg);
   DiagPanelCore_phys = new G4PVPlacement(G4Transform3D(SMS_rot3, 
     spacecraft_pos + G4ThreeVector
-    (.5*DiagPanelCore_len*sin(30.*deg)*tan(30.*deg),
-    0.5*DiagPanelCore_len*sin(30.*deg),0)), "DiagPanelCore_phys", 
+    (.5*DiagPanelCore_len*std::sin(30.*deg)*std::tan(30.*deg),
+    0.5*DiagPanelCore_len*std::sin(30.*deg),0)), "DiagPanelCore_phys", 
     DiagPanelCore_log, wld_phys, false, 1);
   G4RotationMatrix SMS_rot4; SMS_rot4.rotateZ(+30.*deg);
   DiagPanelCore_phys = new G4PVPlacement(G4Transform3D(SMS_rot4, 
     spacecraft_pos + G4ThreeVector
-    (0.5*DiagPanelCore_len*sin(30*deg)*tan(30*deg),
-    -0.5*DiagPanelCore_len*sin(30.*deg),0)), 
+    (0.5*DiagPanelCore_len*std::sin(30*deg)*std::tan(30*deg),
+    -0.5*DiagPanelCore_len*std::sin(30.*deg),0)), 
     "DiagPanelCore_phys", DiagPanelCore_log, wld_phys, false, 2);
   DiagPanelCore_log->SetVisAttributes(sol_white_vat);
 
@@ -217,40 +218,40 @@
     (DiagPanelSkin_sol, CFRP, "DiagPanelSkin_log");
   G4VPhysicalVolume* DiagPanelSkin_phys;
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot2, 
-    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*tan(30.*deg) +
+    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*std::tan(30.*deg) +
     0.5*(DiagPanelCore_thi+DiagPanelSkin_thi),0,0)),
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 0);
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot2, 
-    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*tan(30.*deg) -
+    spacecraft_pos + G4ThreeVector(-0.5*DiagPanelCore_len*std::tan(30.*deg) -
     0.5*(DiagPanelCore_thi+DiagPanelSkin_thi),0,0)), 
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 1);
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot3, 
     spacecraft_pos + G4ThreeVector
-    (0.5*DiagPanelCore_len*sin(30*deg)*tan(30*deg), 
-    0.5*DiagPanelCore_len*sin(30.*deg),0) + 
-    G4ThreeVector(0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*sin(30.*deg),
-    0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*cos(30.*deg),0)),
+    (0.5*DiagPanelCore_len*std::sin(30*deg)*std::tan(30*deg), 
+    0.5*DiagPanelCore_len*std::sin(30.*deg),0) + 
+    G4ThreeVector(0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::sin(30.*deg),
+    0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::cos(30.*deg),0)),
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 2);
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot3, 
     spacecraft_pos + G4ThreeVector
-    (0.5*DiagPanelCore_len*sin(30*deg)*tan(30*deg), 
-    0.5*DiagPanelCore_len*sin(30.*deg),0) + 
-    G4ThreeVector(-0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*sin(30.*deg),
-    -0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*cos(30.*deg),0)),
+    (0.5*DiagPanelCore_len*std::sin(30*deg)*std::tan(30*deg), 
+    0.5*DiagPanelCore_len*std::sin(30.*deg),0) + 
+    G4ThreeVector(-0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::sin(30.*deg),
+    -0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::cos(30.*deg),0)),
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 3);
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot4, 
     spacecraft_pos + G4ThreeVector
-    (0.5*DiagPanelCore_len*sin(30*deg)*tan(30*deg), 
-    -0.5*DiagPanelCore_len*sin(30.*deg),0) + 
-    G4ThreeVector(0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*sin(30.*deg),
-    -0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*cos(30.*deg),0)),
+    (0.5*DiagPanelCore_len*std::sin(30*deg)*std::tan(30*deg), 
+    -0.5*DiagPanelCore_len*std::sin(30.*deg),0) + 
+    G4ThreeVector(0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::sin(30.*deg),
+    -0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::cos(30.*deg),0)),
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 3);
   DiagPanelSkin_phys = new G4PVPlacement(G4Transform3D(SMS_rot4, 
     spacecraft_pos + G4ThreeVector
-    (0.5*DiagPanelCore_len*sin(30*deg)*tan(30*deg), 
-    -0.5*DiagPanelCore_len*sin(30.*deg),0) + 
-    G4ThreeVector(-0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*sin(30.*deg),
-    +0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*cos(30.*deg),0)),
+    (0.5*DiagPanelCore_len*std::sin(30*deg)*std::tan(30*deg), 
+    -0.5*DiagPanelCore_len*std::sin(30.*deg),0) + 
+    G4ThreeVector(-0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::sin(30.*deg),
+    +0.5*(DiagPanelCore_thi+DiagPanelSkin_thi)*std::cos(30.*deg),0)),
     "DiagPanelSkin_phys", DiagPanelSkin_log, wld_phys, false, 4);
   DiagPanelSkin_log->SetVisAttributes(sol_white_vat);
 
@@ -268,19 +269,19 @@
   G4RotationMatrix SMS_rot5; SMS_rot5.rotateX(-90.*deg);
   RadialPanelSkin_phys = new G4PVPlacement
     (G4Transform3D(SMS_rot5, spacecraft_pos + 
-    G4ThreeVector(+RadialPanel_roff/cos(30.*deg),0,0)),
+    G4ThreeVector(+RadialPanel_roff/std::cos(30.*deg),0,0)),
     "RadialPanelSkin_phys", RadialPanelSkin_log, wld_phys, false, 0);
   G4RotationMatrix SMS_rot6; 
   SMS_rot6.rotateX(-90.*deg); SMS_rot6.rotateZ(120.*deg);
   RadialPanelSkin_phys = new G4PVPlacement
     (G4Transform3D(SMS_rot6, spacecraft_pos + 
-    G4ThreeVector(-RadialPanel_roff*tan(30.*deg),+RadialPanel_roff,0)),
+    G4ThreeVector(-RadialPanel_roff*std::tan(30.*deg),+RadialPanel_roff,0)),
     "RadialPanelSkin_phys", RadialPanelSkin_log, wld_phys, false, 1);
   G4RotationMatrix SMS_rot7; 
   SMS_rot7.rotateX(-90.*deg); SMS_rot7.rotateZ(-120.*deg);
   RadialPanelSkin_phys = new G4PVPlacement
     (G4Transform3D(SMS_rot7, spacecraft_pos + 
-    G4ThreeVector(-RadialPanel_roff*tan(30.*deg),-RadialPanel_roff,0)),
+    G4ThreeVector(-RadialPanel_roff*std::tan(30.*deg),-RadialPanel_roff,0)),
     "RadialPanelSkin_phys", RadialPanelSkin_log, wld_phys, false, 2);
   RadialPanelSkin_log->SetVisAttributes(sol_white_vat);
   // Radial Panels: core
@@ -439,13 +440,13 @@
   G4SubtractionSolid* RadPanel2_sol = 
     new G4SubtractionSolid("RadPanel2_sol", RadPanel1_sol, 
     RadPanelCutout_tub, G4Transform3D(SMS_rot9, G4ThreeVector
-    (RadPanelCutout_roff*sin(49.*deg),RadPanelCutout_roff*cos(49.*deg),0)));
+    (RadPanelCutout_roff*std::sin(49.*deg),RadPanelCutout_roff*std::cos(49.*deg),0)));
   G4RotationMatrix SMS_rot10; 
   SMS_rot10.rotateY(90.*deg); SMS_rot10.rotateZ(131.*deg);
   G4SubtractionSolid* RadPanel3_sol = 
     new G4SubtractionSolid("RadPanel3_sol", RadPanel2_sol, 
     RadPanelCutout_tub, G4Transform3D(SMS_rot10, G4ThreeVector
-    (RadPanelCutout_roff*sin(131.*deg),RadPanelCutout_roff*cos(131.*deg),0)));
+    (RadPanelCutout_roff*std::sin(131.*deg),RadPanelCutout_roff*std::cos(131.*deg),0)));
   // box cutouts
   G4Box* RadPanelCutout_box = new G4Box("RadPanelCutout_box", 
     0.5*RadPanelCutout2_len, 0.5*RadPanelCutout2_wid, 0.5*RadPanelCutout2_hei);
@@ -457,14 +458,14 @@
   G4SubtractionSolid* RadPanel5_sol = 
     new G4SubtractionSolid("RadPanel5_sol", RadPanel4_sol, 
     RadPanelCutout_box, G4Transform3D(SMS_rot11, 
-    G4ThreeVector(RadPanelCutout_roff*cos(120.*deg), 
-    RadPanelCutout_roff*sin(120.*deg), RadPanelCutout2_zoff)));
+    G4ThreeVector(RadPanelCutout_roff*std::cos(120.*deg), 
+    RadPanelCutout_roff*std::sin(120.*deg), RadPanelCutout2_zoff)));
   G4RotationMatrix SMS_rot12; SMS_rot12.rotateZ(-120.*deg);
   G4SubtractionSolid* RadPanel6_sol = 
     new G4SubtractionSolid("RadPanel6_sol", RadPanel5_sol, 
     RadPanelCutout_box, G4Transform3D(SMS_rot12, 
-    G4ThreeVector(RadPanelCutout_roff*cos(-120.*deg), 
-    RadPanelCutout_roff*sin(-120.*deg), RadPanelCutout2_zoff)));
+    G4ThreeVector(RadPanelCutout_roff*std::cos(-120.*deg), 
+    RadPanelCutout_roff*std::sin(-120.*deg), RadPanelCutout2_zoff)));
   G4LogicalVolume* RadPanel_log = 
     new G4LogicalVolume(RadPanel6_sol, Al6061, "RadPanel_log");
   G4VPhysicalVolume* RadPanel_phys = 

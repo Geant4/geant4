@@ -34,6 +34,7 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 24/11/2004: migrated to cmath
 //
 // ********************************************************************
 
@@ -51,9 +52,11 @@
 
   G4double ST_rad = 0.5*2270*mm;
   G4RotationMatrix ST_rot1; ST_rot1.rotateZ(+30.*deg); 
-  G4ThreeVector ST_pos1(ST_rad*cos(56*deg),+ST_rad*sin(56*deg),180.*mm);
+  G4ThreeVector ST_pos1(ST_rad*std::cos(56*deg),
+	+ST_rad*std::sin(56*deg),180.*mm);
   G4RotationMatrix ST_rot2; ST_rot2.rotateZ(-30.*deg);
-  G4ThreeVector ST_pos2(ST_rad*cos(56*deg),-ST_rad*sin(56*deg),180.*mm);
+  G4ThreeVector ST_pos2(ST_rad*std::cos(56*deg),
+	-ST_rad*std::sin(56*deg),180.*mm);
   G4RotationMatrix ST_rot3; ST_rot3.rotateY(90.*deg);
 
   // Star Tracker: 2 kg
@@ -92,10 +95,12 @@
   G4ThreeVector FEEP_pos1(FEEP_rad,0,170.*mm);
   G4RotationMatrix FEEP_rot2; 
   FEEP_rot2.rotateZ(+30.*deg); FEEP_rot2.rotateX(180.*deg); 
-  G4ThreeVector FEEP_pos2(-FEEP_rad*cos(60*deg),-FEEP_rad*sin(60*deg),170.*mm);
+  G4ThreeVector FEEP_pos2(-FEEP_rad*std::cos(60*deg),
+	-FEEP_rad*std::sin(60*deg),170.*mm);
   G4RotationMatrix FEEP_rot3; 
   FEEP_rot3.rotateZ(150.*deg); FEEP_rot3.rotateX(180.*deg); 
-  G4ThreeVector FEEP_pos3(-FEEP_rad*cos(60*deg),+FEEP_rad*sin(60*deg),170.*mm);
+  G4ThreeVector FEEP_pos3(-FEEP_rad*std::cos(60*deg),
+	+FEEP_rad*std::sin(60*deg),170.*mm);
 
   // 1 support + 2 FEEPs: ~11 kg
   G4double FEEP_dia_o    = 140.*mm;
@@ -178,7 +183,7 @@
 
   // Dish
   G4Sphere* Antenna_sol = new G4Sphere("Antenna_sol", Antenna_rad-Antenna_thi, 
-    Antenna_rad, 0., 360.*deg, 0, asin(0.5*Antenna_dia/Antenna_rad));
+    Antenna_rad, 0., 360.*deg, 0, std::asin(0.5*Antenna_dia/Antenna_rad));
   G4LogicalVolume* Antenna_log = new G4LogicalVolume
     (Antenna_sol, Al6061, "Antenna_log");
   G4VPhysicalVolume* Antenna_phys;

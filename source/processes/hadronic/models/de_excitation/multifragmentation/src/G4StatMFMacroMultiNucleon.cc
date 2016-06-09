@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.3 2004/12/07 13:47:45 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -73,14 +73,14 @@ G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & )
 G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol, const G4double mu,
 							 const G4double nu, const G4double T)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 	
-    const G4double A23 = pow(static_cast<G4double>(theA),2./3.);
+    const G4double A23 = std::pow(static_cast<G4double>(theA),2./3.);
 	
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 	
     G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() + T*T/_InvLevelDensity 
 			 - G4StatMFParameters::GetGamma0()*(1.0 - 2.0*theZARatio)*
@@ -92,8 +92,8 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
     if (exponent > 30.0) exponent = 30.0;
 	
     _MeanMultiplicity = std::max((FreeVol * static_cast<G4double>(theA) * 
-				    sqrt(static_cast<G4double>(theA))/lambda3) *
-				   exp(exponent),1.0e-30);
+				    std::sqrt(static_cast<G4double>(theA))/lambda3) *
+				   std::exp(exponent),1.0e-30);
     return _MeanMultiplicity;	
 }
 
@@ -101,9 +101,9 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
 {
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 
-    G4double den = 8.0*G4StatMFParameters::GetGamma0()+2.0*Coulomb*pow(static_cast<G4double>(theA),2./3.);
+    G4double den = 8.0*G4StatMFParameters::GetGamma0()+2.0*Coulomb*std::pow(static_cast<G4double>(theA),2./3.);
     G4double num = 4.0*G4StatMFParameters::GetGamma0()+nu;
 	
     return theZARatio = num/den;
@@ -116,9 +116,9 @@ G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
 G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
 {
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 	
-    const G4double A23 = pow(static_cast<G4double>(theA),2./3.);
+    const G4double A23 = std::pow(static_cast<G4double>(theA),2./3.);
 
     // Volume term 
     G4double EVol = static_cast<G4double>(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
@@ -142,7 +142,7 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
 
 G4double G4StatMFMacroMultiNucleon::CalcEntropy(const G4double T, const G4double FreeVol)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 
     G4double Entropy = 0.0;
@@ -151,10 +151,10 @@ G4double G4StatMFMacroMultiNucleon::CalcEntropy(const G4double T, const G4double
 	G4double SV = 2.0*static_cast<G4double>(theA)*T/_InvLevelDensity;
 		
 	// Surface term
-	G4double SS = -G4StatMFParameters::DBetaDT(T)*pow(static_cast<G4double>(theA),2./3.);
+	G4double SS = -G4StatMFParameters::DBetaDT(T)*std::pow(static_cast<G4double>(theA),2./3.);
 		
 	// Translational term
-	G4double ST = (5./2.)+log(FreeVol * sqrt(static_cast<G4double>(theA)) * 
+	G4double ST = (5./2.)+std::log(FreeVol * std::sqrt(static_cast<G4double>(theA)) * 
 				  static_cast<G4double>(theA)/(lambda3*_MeanMultiplicity));
 		
 		

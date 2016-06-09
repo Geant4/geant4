@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.15 2003/06/16 17:14:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VVisCommand.hh,v 1.16 2004/08/03 15:57:44 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -44,20 +44,20 @@ public:
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
-  static G4double ValueOf(G4String unitName);
-  static G4String ConvertToString(G4bool blValue);
-  static G4String ConvertToString(G4double x, G4double y,
-				  const char * unitName);
-  static G4String ConvertToString(const G4ThreeVector& vec);
-  static G4bool        GetNewBoolValue(const G4String& paramString);
-  static G4int         GetNewIntValue(const G4String& paramString);
-  static G4ThreeVector GetNew3VectorValue(const G4String& paramString);
-  static void          GetNewDoublePairValue(const G4String& paramString,
-					     G4double& xval,
-					     G4double& yval);
-  void UpdateVisManagerScene (const G4String& sceneName = "");
 
 protected:
+
+  // Conversion routines augmenting those in G4UIcommand.
+  static G4String ConvertToString(G4double x, G4double y,
+				  const char * unitName);
+  static void  ConvertToDoublePair(const G4String& paramString,
+				   G4double& xval,
+				   G4double& yval);
+
+  // Other utilities.
+  void UpdateVisManagerScene (const G4String& sceneName = "");
+
+  // Data members.
   static G4VisManager* fpVisManager;
   static  std::vector<G4UIcommand*> sceneNameCommands;
   typedef std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 

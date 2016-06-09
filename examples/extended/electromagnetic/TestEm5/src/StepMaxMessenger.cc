@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.1 2003/08/11 10:21:56 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: StepMaxMessenger.cc,v 1.2 2004/09/24 09:58:08 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,7 +30,6 @@
 
 #include "StepMax.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

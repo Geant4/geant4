@@ -1,4 +1,4 @@
-$Id: History,v 1.203 2004/06/07 07:42:57 gcosmo Exp $
+$Id: History,v 1.220 2004/12/10 18:46:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.12.2004   G.Cosmo, tag emlowen-V06-02-15
+             Replaced M_PI with CLHEP's pi.
+
+10.12.2004   MGP, tag emlowen-V06-02-14
+             Bug fix in G4AtomicDeexcitation (by A. Mantero)
+
+02.12.2004   MGP, tag emlowen-V06-02-13
+             Migration to <cmath>
+ 
+01.12.2004   MGP, tag emlowen-V06-02-12
+             Fixes for uninitialized variables in Auger classes provided
+             by A. Mantero.
+
+01.12.2004   MGP, tag emlowen-V06-02-11
+             On top of emlowen-V06-02-09, with fixes for missing
+             ParticleChange migration changes, not spotted by
+             the migration script
+
+01.12.2004   Alfonso Mantero, tag emlowen-V06-02-10
+             Fixes for uninitialized variables spotted by Valgrind
+             Introduces new files still on the head by mistake
+
+30.11.2004   MGP, tag emlowen-V06-02-09
+             Corrected uninitialized variables in G4hShellCrossSection*,
+             spotted by Valgrind
+
+18.11.2004   MGP, tag emlowen-V06-02-08
+             Cleaned up code in G4hShellCrossSection* 
+             (further code review urgently needed!) 
+
+23.11.2004   Mark Donszelmann, tag emlowen-V06-02-07
+             Fix for compilation error of G4hShellCrossSectionDoubleExp.cc
+             on Linux-icc, WIN32-VC, SUN-CC
+
+18.11.2004   MGP, tag emlowen-V06-02-06
+             Migration for new ParticleChange
+
+18.11.2004   MGP, tag emlowen-V06-02-05
+             Improved Paul&Sacher PIXE model added; it becomes the default one
+
+18.11.2004   MGP, tag emlowen-V06-02-04
+             First Paul&Sacher PIXE model becomes the default one
+
+17.11.2004   MGP, tag emlowen-V06-02-03
+             Software improvement in G4PenelopeCompton (by L. Pandola)
+
+17.11.2004   MGP, tag emlowen-V06-02-02
+             Revision of G4LowEnergyPhotoelectric to allow for new
+             development of precise angular distributions
+
+12.11.2004   MGP, tag emlowen-V06-02-01
+             Fixes to tables manipulation, effective charge, graphite
+             problem and Bremsstrhalung low energy edge of the
+             spectrum by Vladimir Ivanchenko 
+
+27.09.2004   MGP, tag emlowen-V06-02-00
+             Fixes for compilation with gcc 3.4 (mostly by Gabriele)
 
 07.06.2004   G.Cosmo, tag emlowen-V06-01-02
              Fix in G4hShellCrossSectionExp for compilation error on WIN32-VC.

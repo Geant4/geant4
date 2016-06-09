@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsList.cc,v 1.7 2004/09/27 09:35:38 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PhysicsList.cc,v 1.6 2003/10/24 12:20:58 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -207,6 +205,8 @@ void PhysicsList::SetGammaToMuPairFac(G4double fac)
 {
   if(theGammaToMuPairProcess) theGammaToMuPairProcess->SetCrossSecFactor(fac);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 {

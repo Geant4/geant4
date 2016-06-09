@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.1 2004/06/18 15:43:40 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunActionMessenger.hh,v 1.2 2004/09/17 10:51:38 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "G4UImessenger.hh"
 
 class RunAction;
+class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWith3Vector;
 
@@ -48,9 +49,13 @@ class RunActionMessenger: public G4UImessenger
     
   private:
     RunAction*          Run;
-    G4UIcmdWith3Vector* accCmd;    
+    
+    G4UIdirectory*      runDir;
+    G4UIcmdWith3Vector* accCmd;
+            
+    G4UIdirectory*      histoDir;        
     G4UIcmdWithAString* factoryCmd;
-    G4UIcmdWithAString* fileCmd;    
+    G4UIcmdWithAString* typeCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.10 2004/04/27 00:27:30 gum Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpRayleigh.cc,v 1.12 2004/12/02 23:10:57 gum Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -127,8 +127,8 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double rand = G4UniformRand();
 
-	G4double CosTheta = pow(rand, 1./3.);
-	G4double SinTheta = sqrt(1.-CosTheta*CosTheta);
+	G4double CosTheta = std::pow(rand, 1./3.);
+	G4double SinTheta = std::sqrt(1.-CosTheta*CosTheta);
 
         if(G4UniformRand() < 0.5)CosTheta = -CosTheta;
 
@@ -137,8 +137,8 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	rand = G4UniformRand();
 
 	G4double Phi = twopi*rand;
-	G4double SinPhi = sin(Phi); 
-	G4double CosPhi = cos(Phi); 
+	G4double SinPhi = std::sin(Phi); 
+	G4double CosPhi = std::cos(Phi); 
 	
 	G4double unit_x = SinTheta * CosPhi; 
 	G4double unit_y = SinTheta * SinPhi;  
@@ -164,19 +164,19 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if(G4UniformRand() < 0.5)NewMomentumDirection = -NewMomentumDirection;
         NewMomentumDirection = NewMomentumDirection.unit();
 
-	aParticleChange.SetPolarizationChange(NewPolarization);
+	aParticleChange.ProposePolarization(NewPolarization);
 
-	aParticleChange.SetMomentumChange(NewMomentumDirection);
+	aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
 
         if (verboseLevel>0) {
 		G4cout << "New Polarization: " 
 		     << NewPolarization << G4endl;
 		G4cout << "Polarization Change: "
-		     << *(aParticleChange.GetPolarizationChange()) << G4endl;  
+		     << *(aParticleChange.GetPolarization()) << G4endl;  
 		G4cout << "New Momentum Direction: " 
 		     << NewMomentumDirection << G4endl;
 		G4cout << "Momentum Change: "
-		     << *(aParticleChange.GetMomentumChange()) << G4endl; 
+		     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
 	}
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -332,8 +332,8 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 		}
 
                 c1 = 1 / (6.0 * pi);
-                c2 = pow((2.0 * pi / xlambda), 4);
-                c3 = pow( ( (refsq - 1.0) * (refsq + 2.0) / 3.0 ), 2);
+                c2 = std::pow((2.0 * pi / xlambda), 4);
+                c3 = std::pow( ( (refsq - 1.0) * (refsq + 2.0) / 3.0 ), 2);
                 c4 = betat * temp * kboltz;
 
                 Dist = 1.0 / (c1*c2*c3*c4);

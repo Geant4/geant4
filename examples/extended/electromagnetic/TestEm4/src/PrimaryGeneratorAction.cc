@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003/06/23 16:16:34 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004/12/02 16:16:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -71,9 +71,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //distribution uniform in solid angle
   //
   G4double cosTheta = 2*G4UniformRand() - 1., phi = twopi*G4UniformRand();
-  G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
-  G4double ux = sinTheta*cos(phi),
-           uy = sinTheta*sin(phi),
+  G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
+  G4double ux = sinTheta*std::cos(phi),
+           uy = sinTheta*std::sin(phi),
            uz = cosTheta;
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.16 2004/05/20 19:46:14 urban Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.18 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +66,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
+
 G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
@@ -80,6 +82,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   theLPMflag(true)
 {
   if(p) SetParticle(p);
+  theGamma = G4Gamma::Gamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -151,7 +154,7 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     G4DataVector* dv = ComputePartialSumSigma(material, 0.5*highKinEnergy,
-                             std::min(cuts[i], 0.25*highKinEnergy));
+                             min(cuts[i], 0.25*highKinEnergy));
     partialSumSigma.push_back(dv);
   }
 
@@ -169,7 +172,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
   const G4double thigh = 100.*GeV;
 
-  G4double cut = std::min(cutEnergy, kineticEnergy);
+  G4double cut = min(cutEnergy, kineticEnergy);
 
   G4double rate, loss;
   const G4double factorHigh = 36./(1450.*GeV);
@@ -334,7 +337,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      G4double dz = abs(Z-ZZ[ii]);
+      G4double dz = fabs(Z-ZZ[ii]);
       if(dz < delz)  {
         iz = ii;
         delz = dz;
@@ -402,8 +405,8 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* couple
 {
   if(!particle) SetParticle(p);
   G4double cross = 0.0;
-  G4double tmax = std::min(maxEnergy, kineticEnergy);
-  G4double cut  = std::max(cutEnergy, minThreshold);
+  G4double tmax = min(maxEnergy, kineticEnergy);
+  G4double cut  = max(cutEnergy, minThreshold);
   if(cut >= tmax) return cross;
 
   const G4Material* material = couple->GetMaterial();
@@ -536,10 +539,10 @@ G4double G4eBremsstrahlungModel::CrossSectionPerAtom(G4double kineticEnergy,
   G4double delz = 1.e6 ;
   for (G4int ii=0; ii<NZ; ii++)
   {
-    if(abs(Z-ZZ[ii]) < delz)
+    if(fabs(Z-ZZ[ii]) < delz)
     {
       iz = ii ;
-      delz = abs(Z-ZZ[ii]);
+      delz = fabs(Z-ZZ[ii]);
     }
   }
 
@@ -639,7 +642,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 //    (Nuc Phys 20(1960),15).
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  G4double tmax = min(maxEnergy, kineticEnergy);
   if(tmin > tmax) tmin = tmax;
 
 //
@@ -721,8 +724,8 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
     G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
 
     // Compute the maximum of the rejection function
-    G4double F1 = std::max(ScreenFunction1(screenmin) - FZ ,0.);
-    G4double F2 = std::max(ScreenFunction2(screenmin) - FZ ,0.);
+    G4double F1 = max(ScreenFunction1(screenmin) - FZ ,0.);
+    G4double F2 = max(ScreenFunction2(screenmin) - FZ ,0.);
     grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
 
   } else {  
@@ -739,9 +742,9 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
     bh = bl0 + bl1*U + bl2*U2;
 
     // Compute the maximum of the rejection function
-    grejmax = std::max(1. + xmin* (ah + bh*xmin), 1.+ah+bh);
+    grejmax = max(1. + xmin* (ah + bh*xmin), 1.+ah+bh);
     G4double xm = -ah/(2.*bh);
-    if ( xmin < xm && xm < xmax) grejmax = std::max(grejmax, 1.+ xm* (ah + bh*xm));
+    if ( xmin < xm && xm < xmax) grejmax = max(grejmax, 1.+ xm* (ah + bh*xm));
   }
 
   //
@@ -755,8 +758,8 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
         x = pow(xmin, q + kappa*(1.0 - q));
         epsil = x*kineticEnergy/totalEnergy;
         G4double screenvar = screenfac*epsil/(1.0-epsil);
-        G4double F1 = std::max(ScreenFunction1(screenvar) - FZ ,0.);
-        G4double F2 = std::max(ScreenFunction2(screenvar) - FZ ,0.);
+        G4double F1 = max(ScreenFunction1(screenvar) - FZ ,0.);
+        G4double F2 = max(ScreenFunction2(screenvar) - FZ ,0.);
         migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
         greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);      
 	/*
@@ -823,14 +826,14 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle(G4Gamma::Gamma(),gammaDirection,gammaEnergy);
+  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
 
   return g;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double,

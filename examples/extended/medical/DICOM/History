@@ -6,12 +6,18 @@
                       Category History file
                       ---------------------
 
+10.12.2004 - MG Pia, tag DICOM-V06-02-02
+             Update README to announce further improvements and fixes
+             by Akinori Kimura.
+
+3.12.2004 - Gabriele Cosmo (DICOM-V06-02-01)
+            Implemented migration to <cmath>.
+
 13.5.2004 - Susanna Guatelli
             updated compiler: gcc3.2.3
 
 11.3.2003 - Susanna Guatelli
             README changed
-             
 
 6.2003 - Susanna Guatelli
          First public release of the example

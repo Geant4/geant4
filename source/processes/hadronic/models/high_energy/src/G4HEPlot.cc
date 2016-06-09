@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPlot.cc,v 1.8 2002/12/12 19:18:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4HEPlot.cc,v 1.9 2004/12/07 13:48:31 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 
@@ -228,18 +228,18 @@ G4HEPlot::Log( G4double s, const G4HEPlot & p)
      for(G4int i=0; i<Nbin; i++)
        { 
          if(s*p.Yvalue[i] <= 0.) Yvalue[i] = 0.;
-         else  Yvalue[i] = log10(s*p.Yvalue[i]);
+         else  Yvalue[i] = std::log10(s*p.Yvalue[i]);
        }
      
      Entries = p.Entries ;
      EntriesOverflow = p.EntriesOverflow;
      EntriesUnderflow = p.EntriesUnderflow;
      if(p.Weight > 0)
-       Weight = log10(s*p.Weight);
+       Weight = std::log10(s*p.Weight);
      if(p.WeightUnderflow > 0)
-       WeightUnderflow = log10(s*p.WeightUnderflow);
+       WeightUnderflow = std::log10(s*p.WeightUnderflow);
      if(p.WeightOverflow > 0)
-       WeightOverflow = log10(s*p.WeightOverflow);
+       WeightOverflow = std::log10(s*p.WeightOverflow);
      return;
    }
 
@@ -254,14 +254,14 @@ G4HEPlot::Sqrt(G4double s, const G4HEPlot & p)
      for (G4int i=0; i<Nbin; i++)
        {
          if(s*p.Yvalue[i] <= 0.) Yvalue[i] = 0.;
-         else   Yvalue[i] = sqrt(s*p.Yvalue[i]);
+         else   Yvalue[i] = std::sqrt(s*p.Yvalue[i]);
        }
      Entries = p.Entries;
      EntriesOverflow = p.EntriesOverflow;
      EntriesUnderflow = p.EntriesUnderflow;
-     if(s*p.Weight > 0.) Weight = sqrt(s*p.Weight);
-     if(s*p.WeightUnderflow > 0.) WeightUnderflow = sqrt(s*p.WeightUnderflow);
-     if(s*p.WeightOverflow > 0.) WeightOverflow = sqrt(s*p.WeightOverflow);
+     if(s*p.Weight > 0.) Weight = std::sqrt(s*p.Weight);
+     if(s*p.WeightUnderflow > 0.) WeightUnderflow = std::sqrt(s*p.WeightUnderflow);
+     if(s*p.WeightOverflow > 0.) WeightOverflow = std::sqrt(s*p.WeightOverflow);
      return;
    } 
 

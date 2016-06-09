@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UImanager.hh,v 1.20 2003/06/16 16:55:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifndef G4UImanager_h

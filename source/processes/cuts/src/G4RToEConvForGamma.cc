@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.1 2003/09/19 14:47:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RToEConvForGamma.cc,v 1.2 2004/12/02 06:53:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // --------------------------------------------------------------
@@ -118,40 +118,40 @@ G4double G4RToEConvForGamma::ComputeCrossSection(G4double AtomicNumber,
   static G4double smin, slow;
   static G4double cmin, clow, chigh;
   //  compute Z dependent quantities in the case of a new AtomicNumber
-  if(abs(AtomicNumber-Z)>0.1)  {
+  if(std::abs(AtomicNumber-Z)>0.1)  {
     Z = AtomicNumber;
     G4double Zsquare = Z*Z;
-    G4double Zlog = log(Z);
+    G4double Zlog = std::log(Z);
     G4double Zlogsquare = Zlog*Zlog;
 
     s200keV = (0.2651-0.1501*Zlog+0.02283*Zlogsquare)*Zsquare;
     tmin = (0.552+218.5/Z+557.17/Zsquare)*MeV;
-    smin = (0.01239+0.005585*Zlog-0.000923*Zlogsquare)*exp(1.5*Zlog);
-    cmin=log(s200keV/smin)/(log(tmin/t200keV)*log(tmin/t200keV));
-    tlow = 0.2*exp(-7.355/sqrt(Z))*MeV;
-    slow = s200keV*exp(0.042*Z*log(t200keV/tlow)*log(t200keV/tlow));
+    smin = (0.01239+0.005585*Zlog-0.000923*Zlogsquare)*std::exp(1.5*Zlog);
+    cmin=std::log(s200keV/smin)/(std::log(tmin/t200keV)*std::log(tmin/t200keV));
+    tlow = 0.2*std::exp(-7.355/std::sqrt(Z))*MeV;
+    slow = s200keV*std::exp(0.042*Z*std::log(t200keV/tlow)*std::log(t200keV/tlow));
     s1keV = 300.*Zsquare;
-    clow =log(s1keV/slow)/log(tlow/t1keV);
+    clow =std::log(s1keV/slow)/std::log(tlow/t1keV);
 
-    chigh=(7.55e-5-0.0542e-5*Z)*Zsquare*Z/log(t100MeV/tmin);
+    chigh=(7.55e-5-0.0542e-5*Z)*Zsquare*Z/std::log(t100MeV/tmin);
   }
 
   //  calculate the cross section (using an approximate empirical formula)
   G4double s;
   if ( KineticEnergy<tlow ) {
-    if(KineticEnergy<t1keV) s = slow*exp(clow*log(tlow/t1keV));
-    else                    s = slow*exp(clow*log(tlow/KineticEnergy));
+    if(KineticEnergy<t1keV) s = slow*std::exp(clow*std::log(tlow/t1keV));
+    else                    s = slow*std::exp(clow*std::log(tlow/KineticEnergy));
 
   } else if ( KineticEnergy<t200keV ) {
     s = s200keV
-         * exp(0.042*Z*log(t200keV/KineticEnergy)*log(t200keV/KineticEnergy));
+         * std::exp(0.042*Z*std::log(t200keV/KineticEnergy)*std::log(t200keV/KineticEnergy));
 
   } else if( KineticEnergy<tmin ){
     s = smin
-         * exp(cmin*log(tmin/KineticEnergy)*log(tmin/KineticEnergy));
+         * std::exp(cmin*std::log(tmin/KineticEnergy)*std::log(tmin/KineticEnergy));
 
   } else {
-    s = smin + chigh*log(KineticEnergy/tmin);
+    s = smin + chigh*std::log(KineticEnergy/tmin);
 
   }
   return s * barn;

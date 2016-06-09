@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.6 2001/07/11 10:08:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.7 2004/07/01 15:28:09 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -100,7 +100,7 @@ void G4OpenGLXmViewer::dolly_callback (Widget w,
 
   G4double dolly = (G4double)(cbs->value) / ten_to_the_dp;
 
-  pView->fVP.IncrementDolly (dolly);
+  pView->fVP.SetDolly (dolly);
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();

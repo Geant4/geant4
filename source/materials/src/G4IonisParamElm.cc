@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.8 2002/10/17 09:00:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4IonisParamElm.cc,v 1.11 2004/12/07 08:50:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 06-09-04, Update calculated values after any change of ionisation 
+//           potential change. V.Ivanchenko
 // 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
 // 08-03-01, correct handling of fShellCorrectionVector. M.Maire
 // 22-11-00, tabulation of ionisation potential from 
@@ -46,9 +48,9 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     
     // some basic functions of the atomic number
     fZ = Z;
-    fZ3  = pow(fZ, 1./3.);
-    fZZ3 = pow(fZ*(fZ+1.), 1./3.);
-    flogZ3 = log(fZ)/3.;
+    fZ3  = std::pow(fZ, 1./3.);
+    fZZ3 = std::pow(fZ*(fZ+1.), 1./3.);
+    flogZ3 = std::log(fZ)/3.;
    
      // Parameters for energy loss by ionisation   
 
@@ -79,21 +81,26 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     // compute the Bethe-Bloch formula for energy = fTaul*particle mass
     G4double rate = fMeanExcitationEnergy/electron_mass_c2 ;
     G4double w = fTaul*(fTaul+2.) ;
-    fBetheBlochLow = (fTaul+1.)*(fTaul+1.)*log(2.*w/rate)/w - 1. ;
+    fBetheBlochLow = (fTaul+1.)*(fTaul+1.)*std::log(2.*w/rate)/w - 1. ;
     fBetheBlochLow = 2.*fZ*twopi_mc2_rcl2*fBetheBlochLow ; 
   
-    fClow = sqrt(fTaul)*fBetheBlochLow;
+    fClow = std::sqrt(fTaul)*fBetheBlochLow;
     fAlow = 6.458040 * fClow/fTau0;
     G4double Taum = 0.035*fZ3*MeV/proton_mass_c2;
-    fBlow =-3.229020*fClow/(fTau0*sqrt(Taum));
+    fBlow =-3.229020*fClow/(fTau0*std::sqrt(Taum));
 
     // Shell correction factors
     fShellCorrectionVector = new G4double[3];
+    rate = 0.001*fMeanExcitationEnergy/eV;
     G4double rate2 = rate*rate;
-    
+    /*    
     fShellCorrectionVector[0] = ( 1.10289e5 + 5.14781e8*rate)*rate2 ;
     fShellCorrectionVector[1] = ( 7.93805e3 - 2.22565e7*rate)*rate2 ;
     fShellCorrectionVector[2] = (-9.92256e1 + 2.10823e5*rate)*rate2 ;
+    */
+    fShellCorrectionVector[0] = ( 0.422377   + 3.858019*rate)*rate2 ;
+    fShellCorrectionVector[1] = ( 0.0304043  - 0.1667989*rate)*rate2 ;
+    fShellCorrectionVector[2] = (-0.00038106 + 0.00157955*rate)*rate2 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StateManager.cc,v 1.10 2003/10/31 17:44:47 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------

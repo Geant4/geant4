@@ -48,6 +48,10 @@ G4VhShellCrossSection::G4VhShellCrossSection()
 G4VhShellCrossSection::~G4VhShellCrossSection() 
 { }
 
+void G4VhShellCrossSection :: SetTotalCS(G4double)
+{
+}
+
 
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
                                                G4double incidentEnergy,

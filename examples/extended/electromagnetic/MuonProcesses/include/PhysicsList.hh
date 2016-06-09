@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2004/06/14 10:09:23 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysicsList.hh,v 1.2 2004/08/17 18:07:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +59,7 @@ class PhysicsList: public G4VModularPhysicsList
     G4double currentDefaultCut;
     
     G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  muNuclPhysicsList;
     G4String emName;
 
     PhysicsListMessenger* pMessenger;

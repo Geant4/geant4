@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HadronPhysics.cc,v 1.6 2003/10/13 02:13:38 tkoi Exp $
+// $Id: A01HadronPhysics.cc,v 1.7 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi
@@ -44,26 +44,6 @@ A01HadronPhysics::~A01HadronPhysics()
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-void A01HadronPhysics::ConstructParticle()
-{
-  //  Construct all mesons
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  //  Construct all barions 
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  //  Construct  resonaces and quarks
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();
-}
-
 
 #include "G4ProcessManager.hh"
 

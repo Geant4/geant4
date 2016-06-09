@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ParticlesBuilder.hh,v 1.1 2004/05/04 08:32:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: ParticlesBuilder.hh,v 1.3 2004/11/24 13:17:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

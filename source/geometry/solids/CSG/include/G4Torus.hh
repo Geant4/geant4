@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.15 2003/06/16 16:53:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Torus.hh,v 1.16 2004/09/08 15:13:51 grichine Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -116,6 +116,7 @@ class G4Torus : public G4CSGSolid
     inline G4double GetRtor() const;
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
+    inline G4double GetCubicVolume();
 
     // Methods of solid
 

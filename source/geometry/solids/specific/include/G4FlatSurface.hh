@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.4 2004/05/24 12:09:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4FlatSurface.hh,v 1.6 2004/11/13 18:26:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for G4VSolid.
+//  Class describing a flat boundary surface for a cylinder.
 
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -46,8 +46,6 @@
 #define __G4FLATSURFACE__
 
 #include "G4VSurface.hh"
-
-// class G4TwistedTubs;
 
 class G4FlatSurface : public G4VSurface
 {

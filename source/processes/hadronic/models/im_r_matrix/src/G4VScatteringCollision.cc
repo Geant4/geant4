@@ -103,15 +103,15 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   toZ.rotateY(-1*TempPtr.theta());
   G4LorentzRotation toCMS(toZ.inverse());
 
-  G4ThreeVector pFinal1(sin(acos(cosTheta))*cos(phi), sin(acos(cosTheta))*sin(phi), cosTheta);
+  G4ThreeVector pFinal1(std::sin(std::acos(cosTheta))*std::cos(phi), std::sin(std::acos(cosTheta))*std::sin(phi), cosTheta);
 
   // Three momentum in cm system
-  G4double pCM = sqrt( (s-(outm1+outm2)*(outm1+outm2)) * (s-(outm1-outm2)*(outm1-outm2)) /(4.*s));
+  G4double pCM = std::sqrt( (s-(outm1+outm2)*(outm1+outm2)) * (s-(outm1-outm2)*(outm1-outm2)) /(4.*s));
   pFinal1 = pFinal1 * pCM;
   G4ThreeVector pFinal2 = -pFinal1;
 
-  G4double eFinal1 = sqrt(pFinal1.mag2() + outm1*outm1);
-  G4double eFinal2 = sqrt(pFinal2.mag2() + outm2*outm2);
+  G4double eFinal1 = std::sqrt(pFinal1.mag2() + outm1*outm1);
+  G4double eFinal2 = std::sqrt(pFinal2.mag2() + outm2*outm2);
 
   G4LorentzVector p4Final1(pFinal1, eFinal1);
   G4LorentzVector p4Final2(pFinal2, eFinal2);
@@ -129,7 +129,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   G4double chargeBalance = OutputDefinitions[0]->GetPDGCharge()+OutputDefinitions[1]->GetPDGCharge();
   chargeBalance-= trk1.GetDefinition()->GetPDGCharge();
   chargeBalance-= trk2.GetDefinition()->GetPDGCharge();
-  if(abs(chargeBalance) >.1)
+  if(std::abs(chargeBalance) >.1)
   {
     G4cout << "Charges in "<<typeid(*this).name()<<G4endl;
     G4cout << OutputDefinitions[0]->GetPDGCharge()<<" "<<OutputDefinitions[0]->GetParticleName()

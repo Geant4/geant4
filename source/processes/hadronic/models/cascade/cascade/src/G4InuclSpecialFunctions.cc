@@ -30,7 +30,7 @@ G4double G4InuclSpecialFunctions::getAL(G4double A) {
     G4cout << " >>> G4InuclSpecialFunctions::getAL" << G4endl;
   }
 
-  return 0.76 + 2.2 / pow(A, 0.333333);
+  return 0.76 + 2.2 / std::pow(A, 0.333333);
 }
 
 G4double G4InuclSpecialFunctions::csNN(G4double e) {
@@ -83,10 +83,10 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4double A, G4double Z, G4int ntyp
   G4double Ef;
 
   if (ntype == 0) {
-    Ef = C * pow((A - Z) / A, 0.666667);
+    Ef = C * std::pow((A - Z) / A, 0.666667);
 
   } else {
-    Ef = C * pow(Z / A, 0.666667);
+    Ef = C * std::pow(Z / A, 0.666667);
   };
 
   return Ef; 
@@ -119,7 +119,7 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   r2 = r2 > eps ? r2 : eps;
   r2 = r2 < 1.0 - eps ? r2 : 1.0 - eps; 
 
-  return sigma * sin(twopi * r1) * sqrt(-2.0 * log(r2)); 
+  return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * std::log(r2)); 
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
@@ -143,7 +143,7 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
   G4double CT = 1.0 - 2.0 * inuclRndm();
 
-  return std::pair<G4double, G4double>(CT, sqrt(1.0 - CT * CT));
+  return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT * CT));
 }
 
 std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
@@ -156,10 +156,10 @@ std::vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double c
 
   std::vector<G4double> momr(4);
   G4double phi = randomPHI();
-  G4double pt = p * sqrt(fabs(1.0 - ct * ct));
+  G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
   std::vector<G4double> mom1(4);
-  momr[1] = pt * cos(phi);
-  momr[2] = pt * sin(phi);
+  momr[1] = pt * std::cos(phi);
+  momr[2] = pt * std::sin(phi);
   momr[3] = p * ct;
 
   return momr;

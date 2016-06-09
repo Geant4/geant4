@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LowEIonFragmentation.hh,v 1.1 2003/08/26 18:54:27 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // by H.P. Wellisch
 

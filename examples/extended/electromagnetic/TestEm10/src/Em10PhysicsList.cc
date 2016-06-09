@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.8 2003/08/28 09:36:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: Em10PhysicsList.cc,v 1.9 2004/08/30 15:47:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "G4Timer.hh"
@@ -32,7 +32,6 @@
 #include "Em10PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -166,25 +165,25 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering52.hh"
+#include "G4MultipleScattering.hh"
 
-#include "G4eIonisation52.hh"
-#include "G4eBremsstrahlung52.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
-#include "G4MuIonisation52.hh"
-#include "G4MuBremsstrahlung52.hh"
-#include "G4MuPairProduction52.hh"
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
 
-#include "G4hIonisation52.hh"
-#include "G4PAIonisation.hh"
+#include "G4hIonisation.hh"
 
 #include "G4ForwardXrayTR.hh"
 #include "G4RegularXTRadiator.hh"
 
 #include "Em10StepCut.hh"
 
-#include "G4IonisationByLogicalVolume.hh"
+#include "G4PAIModel.hh"
+
 
 void Em10PhysicsList::ConstructEM()
 {
@@ -206,7 +205,6 @@ void Em10PhysicsList::ConstructEM()
 
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
-
       pmanager->AddDiscreteProcess(theGammaConversion);
 
     }
@@ -214,24 +212,23 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for electron
 
-      // theeminusMultipleScattering = new G4MultipleScattering();
-      //   theeminusIonisation = new G4eIonisation();
-      theeminusBremsstrahlung = new G4eBremsstrahlung52();
+      theeminusMultipleScattering = new G4MultipleScattering();
+      theeminusIonisation = new G4eIonisation();
+      theeminusBremsstrahlung = new G4eBremsstrahlung();
 
-     //   fPAIonisation = new G4PAIonisation("Xenon") ;
+     // fPAIonisation = new G4PAIonisation("Xenon") ;
      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeminusStepCut = new Em10StepCut();
 
-      //  pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
+      pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
+      pmanager->AddProcess(theeminusIonisation,-1,2,2);
+      pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
 
-      //   pmanager->AddProcess(theeminusIonisation,-1,2,2);
+      //G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      //eion->AddEmModel(0,pai,pai,gas);
 
-       pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-                                     pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVol"),-1,1,-1);
-
-       pmanager->AddContinuousProcess(
+      pmanager->AddContinuousProcess(
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
 						    pDet->GetFoilMaterial(),
 						    pDet->GetGasMaterial(),
@@ -240,10 +237,6 @@ void Em10PhysicsList::ConstructEM()
 						    pDet->GetFoilNumber(),
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
-
-       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,-1);
-
-       //   pmanager->AddProcess(fPAIonisation,-1,2,2);
 
        //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
 
@@ -255,23 +248,19 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for positron
 
-      //   theeplusMultipleScattering = new G4MultipleScattering();
-      theeplusIonisation = new G4eIonisation52();
-      theeplusBremsstrahlung = new G4eBremsstrahlung52();
-      // theeplusAnnihilation = new G4eplusAnnihilation();
+      theeplusMultipleScattering = new G4MultipleScattering();
+      theeplusIonisation = new G4eIonisation();
+      theeplusBremsstrahlung = new G4eBremsstrahlung();
+      theeplusAnnihilation = new G4eplusAnnihilation();
 
-      //  fPAIonisation = new G4PAIonisation("Xenon") ;
       // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeplusStepCut = new Em10StepCut();
 
-      //  pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
+      pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
-      //  pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
-
-      //  pmanager->AddProcess(fPAIonisation,-1,2,2);
-
+      pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
 
       // pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
 
@@ -284,17 +273,16 @@ void Em10PhysicsList::ConstructEM()
     {
      // Construct processes for muon+
 
-      //   Em10StepCut* muonStepCut = new Em10StepCut();
+      Em10StepCut* muonStepCut = new Em10StepCut();
 
-      // G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-     //  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-     //  pmanager->AddProcess(themuIonisation,-1,2,2);
-     //  pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     //  pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
+      G4MuIonisation* themuIonisation = new G4MuIonisation() ;
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(themuIonisation,-1,2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
+      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
 
-      //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      // pmanager->AddProcess( muonStepCut,-1,-1,3);
-      //  muonStepCut->SetMaxStep(MaxChargedStep) ;
+      pmanager->AddProcess( muonStepCut,-1,-1,5);
+      muonStepCut->SetMaxStep(MaxChargedStep) ;
 
     }
     else if (
@@ -306,25 +294,18 @@ void Em10PhysicsList::ConstructEM()
                || particleName == "kaon-"
               )
     {
-        Em10StepCut* thehadronStepCut = new Em10StepCut();
+      Em10StepCut* thehadronStepCut = new Em10StepCut();
 
-      //  G4hIonisation* thehIonisation = new G4hIonisation() ;
-      //   G4MultipleScattering* thehMultipleScattering =
-      //                  new G4MultipleScattering() ;
+      G4hIonisation* thehIonisation = new G4hIonisation() ;
+      G4MultipleScattering* thehMultipleScattering =
+                        new G4MultipleScattering() ;
 
-        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-                                     pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVolHadr"),-1,2,-2);
 
-      //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
-      //  pmanager->AddProcess(thehIonisation,-1,2,2);
+      pmanager->AddProcess(thehMultipleScattering,-1,1,1);
+      pmanager->AddProcess(thehIonisation,-1,2,2);
 
-      //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
-
-        pmanager->AddProcess( thehadronStepCut,-1,-1,3);
-        thehadronStepCut->SetMaxStep(MaxChargedStep) ;
-      // thehadronStepCut->SetMaxStep(10*mm) ;
+      pmanager->AddProcess( thehadronStepCut,-1,-1,3);
+      thehadronStepCut->SetMaxStep(MaxChargedStep) ;
 
     }
   }
@@ -383,8 +364,6 @@ void Em10PhysicsList::AddParameterisation()
 
 void Em10PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
   if (verboseLevel >0)
   {
     G4cout << "Em10PhysicsList::SetCuts:";
@@ -393,18 +372,12 @@ void Em10PhysicsList::SetCuts()
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
  
-   SetCutValue(cutForGamma,"gamma");
+  SetCutValue(cutForGamma,"gamma");
 
-   SetCutValue(cutForElectron,"e-");
-   SetCutValue(cutForElectron,"e+");
+  SetCutValue(cutForElectron,"e-");
+  SetCutValue(cutForElectron,"e+");
 
   if (verboseLevel>1)     DumpCutValuesTable();
-
-  theTimer.Stop();
-  G4cout.precision(6);
-  G4cout << G4endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
-
 }
 
 ///////////////////////////////////////////////////////////////////////////

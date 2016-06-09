@@ -95,7 +95,7 @@ G4double G4KaonMinusField::GetBarrier()
 {
   G4double A = theNucleus->GetMassNumber();
   G4double Z = theNucleus->GetCharge();
-  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + pow(A,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + std::pow(A,1./3.));
   return -coulombBarrier;
 }
 

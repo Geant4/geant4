@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PrimaryGeneratorAction.cc,v 1.4 2002/02/05 11:06:38 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10PrimaryGeneratorAction.cc,v 1.5 2004/12/03 09:12:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -109,10 +109,10 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double r0,phi0 ;
   if (rndmFlag == "on")
   {
-      r0 = (Em10Detector->GetAbsorberRadius())*sqrt(G4UniformRand());
+      r0 = (Em10Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
       phi0 = twopi*G4UniformRand();
-      x0 = r0*cos(phi0);
-      y0 = r0*sin(phi0);
+      x0 = r0*std::cos(phi0);
+      y0 = r0*std::sin(phi0);
   } 
   ********************************************* */
   //  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));

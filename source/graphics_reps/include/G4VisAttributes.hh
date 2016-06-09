@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.11 2003/06/16 16:55:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisAttributes.hh,v 1.12 2004/07/28 15:44:27 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -40,7 +40,9 @@
 // instance of class G4VisAttributes defined in the graphics_reps 
 // category. The followings are commonly-used attributes:
 //   - visibility
+//   - visibility of daughters
 //   - force wireframe style, force solid style
+//   - force auxiliary edge visibility
 //   - colour 
 // Class Description - End:
 
@@ -86,23 +88,25 @@ public: // With description
   G4double        GetLineWidth                   () const;
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
-  const std::vector<G4AttValue>* GetAttValues  () const;
-  const std::vector<G4AttDef>*   GetAttDefs    () const;
+  G4bool          IsForceAuxEdgeVisible          () const;
+  const std::vector<G4AttValue>* GetAttValues    () const;
+  const std::vector<G4AttDef>*   GetAttDefs      () const;
 
-  void SetVisibility         (G4bool);
-  void SetDaughtersInvisible (G4bool);
-  void SetColour             (const G4Colour&);
-  void SetColor              (const G4Color&);
-  void SetColour             (G4double red, G4double green, G4double blue,
-			      G4double alpha = 1.);
-  void SetColor              (G4double red, G4double green, G4double blue,
-			      G4double alpha = 1.);
-  void SetLineStyle          (LineStyle);
-  void SetLineWidth          (G4double);
-  void SetForceWireframe     (G4bool);
-  void SetForceSolid         (G4bool);
-  void SetAttValues          (const std::vector<G4AttValue>*);
-  void SetAttDefs            (const std::vector<G4AttDef>*);
+  void SetVisibility          (G4bool);
+  void SetDaughtersInvisible  (G4bool);
+  void SetColour              (const G4Colour&);
+  void SetColor               (const G4Color&);
+  void SetColour              (G4double red, G4double green, G4double blue,
+			       G4double alpha = 1.);
+  void SetColor               (G4double red, G4double green, G4double blue,
+			       G4double alpha = 1.);
+  void SetLineStyle           (LineStyle);
+  void SetLineWidth           (G4double);
+  void SetForceWireframe      (G4bool);
+  void SetForceSolid          (G4bool);
+  void SetForceAuxEdgeVisible (G4bool);
+  void SetAttValues           (const std::vector<G4AttValue>*);
+  void SetAttDefs             (const std::vector<G4AttDef>*);
 
 private:
 
@@ -114,6 +118,7 @@ private:
                                    // pixels for screen, 0.1 mm for paper.
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
+  G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
   const std::vector<G4AttValue>* fAttValues;  // For picking, etc.
   const std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
 };

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.41 2003/10/31 14:35:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MagIntegratorDriver.cc,v 1.42 2004/12/02 09:55:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 //
@@ -273,12 +273,12 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 // #endif
 
      // Check the proposed next stepsize
-     if(fabs(hnext) <= Hmin())
+     if(std::fabs(hnext) <= Hmin())
      {
 #ifdef  G4DEBUG_FIELD
         // If simply a very small interval is being integrated, do not warn
         if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
-            (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
+            (std::fabs(hstep) > Hmin())     //   and if we are asked, it's OK
             //   && (hnext < hstep * PerThousand ) 
 	  ){
              if(dbg>0){ 
@@ -486,11 +486,11 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
           errvel_sq *= inv_eps_vel_sq;
 
           errmax_sq = std::max( errpos_sq, errvel_sq ); // Square of maximum error
-          // errmax = sqrt( errmax_sq );
+          // errmax = std::sqrt( errmax_sq );
 	  if(errmax_sq <= 1.0 ) break ; // Step succeeded. 
 
 	  // Step failed; compute the size of retrial Step.
-	  htemp = GetSafety()*h* pow( errmax_sq, 0.5*GetPshrnk() );
+	  htemp = GetSafety()*h* std::pow( errmax_sq, 0.5*GetPshrnk() );
 
 	  if(htemp >= 0.1*h) h = htemp ;  // Truncation error too large,
 	  else h = 0.1*h ;                // reduce stepsize, but no more
@@ -516,7 +516,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
       // Compute size of next Step
       if(errmax_sq > errcon*errcon) 
-               hnext = GetSafety()*h*pow(errmax_sq, 0.5*GetPgrow()) ;
+               hnext = GetSafety()*h*std::pow(errmax_sq, 0.5*GetPgrow()) ;
       else hnext = max_stepping_increase*h ;
                      // No more than a factor of 5 increase
 
@@ -625,7 +625,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 
 #ifdef RETURN_A_NEW_STEP_LENGTH
     // The following step cannot be done here because "eps" is not known.
-    dyerr_len = sqrt( dyerr_len_sq ); 
+    dyerr_len = std::sqrt( dyerr_len_sq ); 
     dyerr_len_sq /= eps ;
 
     // Look at the velocity deviation ?
@@ -636,10 +636,10 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 #endif
 
     if( dyerr_pos_sq > ( dyerr_mom_rel_sq * sqr(hstep) ) ) {
-       dyerr = sqrt(dyerr_pos_sq);
+       dyerr = std::sqrt(dyerr_pos_sq);
     }else{
        // Scale it to the current step size - for now
-       dyerr = sqrt(dyerr_mom_rel_sq) * hstep;
+       dyerr = std::sqrt(dyerr_mom_rel_sq) * hstep;
     }
 
     return true;
@@ -678,10 +678,10 @@ G4MagInt_Driver::ComputeNewStepSize(
   if(errMaxNorm > 1.0 ) {
 
     // Step failed; compute the size of retrial Step.
-    hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPshrnk()) ;
+    hnew = GetSafety()*hstepCurrent*std::pow(errMaxNorm,GetPshrnk()) ;
   }else if(errMaxNorm > 0.0 ){
     // Compute size of next Step for a successful step
-    hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPgrow()) ;
+    hnew = GetSafety()*hstepCurrent*std::pow(errMaxNorm,GetPgrow()) ;
   }else {
     // if error estimate is zero (possible) or negative (dubious)
     hnew = max_stepping_increase * hstepCurrent; 
@@ -707,7 +707,7 @@ G4MagInt_Driver::ComputeNewStepSize_WithinLimits(
   if(errMaxNorm > 1.0 ) {
 
     // Step failed; compute the size of retrial Step.
-    hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPshrnk()) ;
+    hnew = GetSafety()*hstepCurrent*std::pow(errMaxNorm,GetPshrnk()) ;
   
     if(hnew < max_stepping_decrease*hstepCurrent) 
          hnew = max_stepping_decrease*hstepCurrent ;
@@ -715,7 +715,7 @@ G4MagInt_Driver::ComputeNewStepSize_WithinLimits(
                          // than this factor (value= 1/10)
   }else{
     // Compute size of next Step for a successful step
-    if(errMaxNorm > errcon) hnew = GetSafety()*hstepCurrent*pow(errMaxNorm,GetPgrow()) ;
+    if(errMaxNorm > errcon) hnew = GetSafety()*hstepCurrent*std::pow(errMaxNorm,GetPgrow()) ;
     else                    hnew = max_stepping_increase * hstepCurrent ;
       // No more than a factor of 5 increase
   }
@@ -897,8 +897,8 @@ void G4MagInt_Driver::PrintStatisticsReport()
 	 << " maximum= " << fDyerr_max 
 	 // << " 2nd max= " << fDyerr_mx2
 	 << " Sum small= " << fDyerrPos_smTot 
-	 << " sqrt(Sum large^2): pos= " << sqrt(fDyerrPos_lgTot)
-	 << " vel= " << sqrt( fDyerrVel_lgTot )
+	 << " std::sqrt(Sum large^2): pos= " << std::sqrt(fDyerrPos_lgTot)
+	 << " vel= " << std::sqrt( fDyerrVel_lgTot )
 	 << " Total h-distance: small= " << fSumH_sm 
 	 << " large= " << fSumH_lg
 	 << G4endl;

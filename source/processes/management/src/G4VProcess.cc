@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.10 2003/11/03 03:27:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VProcess.cc,v 1.11 2004/11/10 08:48:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
@@ -171,12 +171,12 @@ G4int G4VProcess::operator!=(const G4VProcess &right) const
 
 void G4VProcess::DumpInfo() const
 {
-  G4cout << "Process Name " << theProcessName ;   
+  G4cout << "Process Name " << theProcessName ;
   G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< G4endl;
 }
 
 
-const G4String&  G4VProcess::GetPhysicsTableFileName(G4ParticleDefinition* particle,
+const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition* particle,
 						     const G4String& directory,
 						     const G4String& tableName,
 						     G4bool ascii)

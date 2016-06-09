@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2004/06/21 10:57:14 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: HistoManager.cc,v 1.13 2004/12/02 16:19:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
+#include <memory>       //for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
@@ -39,7 +40,12 @@
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
-  fileName = "testem5.paw";
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif 
+ 
+  fileName = "testem5.aida";
   fileType = "hbook";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -57,6 +63,10 @@ HistoManager::HistoManager()
 HistoManager::~HistoManager()
 {
   delete histoMessenger;
+  
+#ifdef G4ANALYSIS_USE  
+  delete af;
+#endif    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,16 +74,13 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(fileName, fileType, readOnly, createNew);
+  tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
   hf = af->createHistogramFactory(*tree);
@@ -89,8 +96,6 @@ void HistoManager::book()
   if(factoryOn) 
       G4cout << "\n----> Histogram Tree is opened " << G4endl;
 
-  delete tf;
-  delete af;
 #endif
 }
 
@@ -103,7 +108,7 @@ void HistoManager::save()
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
-
+    
     delete hf;
     delete tree;
     factoryOn = false;
@@ -142,7 +147,7 @@ void HistoManager::SetHisto(G4int ih,
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
-                  "energy of gammas at creation (log10(ekin/MeV))",	//3
+                  "energy of gammas at creation (std::log10(ekin/MeV))",	//3
 		  "(transmit, charged) : kinetic energy at exit",	//4
 		  "(transmit, charged) : space angle at exit",		//5
 		  "(transmit, charged) : projected angle at exit",	//6
@@ -162,7 +167,7 @@ void HistoManager::SetHisto(G4int ih,
   G4double vmin = valmin, vmax = valmax;
   Unit[ih] = 1.;
 
-  if (ih == 3) { vmin = log10(valmin/MeV); vmax = log10(valmax/MeV);}
+  if (ih == 3) { vmin = std::log10(valmin/MeV); vmax = std::log10(valmax/MeV);}
   else if (unit != "none") {
     titl = title[ih] + " (" + unit + ")";
     Unit[ih] = G4UnitDefinition::GetValueOf(unit);
@@ -193,8 +198,7 @@ void HistoManager::RemoveHisto(G4int ih)
     return;
   }
 
-  histo[ih] = 0;
-  exist[ih] = false;
+  histo[ih] = 0;  exist[ih] = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

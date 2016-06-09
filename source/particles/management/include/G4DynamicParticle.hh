@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.13 2003/10/21 20:56:13 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4DynamicParticle.hh,v 1.14 2004/12/02 08:08:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@
 
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 
 #include "G4ParticleDefinition.hh"

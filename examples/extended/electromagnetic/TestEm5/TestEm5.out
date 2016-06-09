@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,13 +54,22 @@ physicsList->Construct() start.
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
-###/testem/histo/setHisto 6 100 -0.25 0.25 mrad
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
+/testem/histo/setHisto 6 100 -0.25 0.25 mrad
+----> SetHisto 6: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
+#
+#
+/testem/histo/setFileType hbook		#for paw	
+###/testem/histo/setFileType root		#for root
+###/testem/histo/setFileType XML		#for jaida
+/testem/histo/setFileName run0.aida 
+#
 /run/beamOn 100000
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -112,34 +121,50 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -202,21 +227,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=45.97s Real=1123.29s Sys=85.2s
+  User=43.93s Real=922.95s Sys=89.32s
 
  ======================== run summary ======================
 
- Number of Events = 100000
+ The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
 
- Total energy deposit in absorber per event = 6.7 keV +- 21.82 eV 
+ Total energy deposit in absorber per event = 6.701 keV +- 21.71 eV 
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15.24 nm 
- Total track length (neutral) in absorber per event = 1.319 nm  +- 9.342 Ang
+ Mean dE/dx  = 3.269 MeV/cm	 stopping Power = 1.403 MeV*cm2/g
+ (from Table = 2.803 MeV/cm)	 (from Table    = 1.203 MeV*cm2/g)
 
- Number of steps (charged) in absorber per event = 1.08 +- 1.234e-05
- Number of steps (neutral) in absorber per event = 3e-05 +- 1.234e-05
+ Total track length (charged) in absorber per event = 20.97 mum +- 15.49 nm 
+ Total track length (neutral) in absorber per event = 6173 fm  +- 4626 fm 
 
- Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03719;   positrons = 0
+ Number of steps (charged) in absorber per event = 1.081 +- 1.245e-05
+ Number of steps (neutral) in absorber per event = 2e-05 +- 1.245e-05
+
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.03751;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -224,9 +252,12 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
+ MultipleScattering: rms proj angle of transmit primary particle = 0.04418 mrad 
+ MultipleScattering: computed theta0 (Highland formula)          = 0.02663 mrad
+
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1636731634, 910890274
+ Current couple of seeds = 1492258000, 1938858686
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

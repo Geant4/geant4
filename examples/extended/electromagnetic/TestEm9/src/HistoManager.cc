@@ -163,7 +163,7 @@ void HistoManager::EndOfRun()
     edep[j] *= x/beamEnergy;
     G4double y = erms[j]*x/(beamEnergy*beamEnergy) - edep[j]*edep[j];
     if(y < 0.0) y = 0.0;
-    erms[j] = sqrt(y);
+    erms[j] = std::sqrt(y);
   }
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
@@ -177,7 +177,7 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   for(j=0; j<3; j++) {
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << edep[j]
-           << " +- " << erms[j]*sqrt(x) << G4endl;
+           << " +- " << erms[j]*std::sqrt(x) << G4endl;
   }
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
@@ -282,7 +282,7 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
       G4double beta = 1.;
 	if(mass > 0.) {
           G4double gamma = kinE/mass + 1.;
-          beta = sqrt(1. - 1./(gamma*gamma));
+          beta = std::sqrt(1. - 1./(gamma*gamma));
 	}
     }
 

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EventAction.hh,v 1.9 2004/10/22 15:53:44 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: EventAction.hh,v 1.7 2004/06/15 11:39:57 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,16 +52,13 @@ class EventAction : public G4UserEventAction
     void SetPrintModulo(G4int    val)  {printModulo = val;};
     
     void SumEnergy(G4int k, G4double de, G4double dl)
-        {energyDeposit[k] += de; trackLengthCh[k] += dl;};
-	
-    void SumEnLeaving(G4int k, G4double En) {energyLeaving[k] += En;};   	
+        {energyDeposit[k] += de; trackLengthCh[k] += dl;};  	
         
   private:  
     DetectorConstruction* detector;
     RunAction*            runAct;
     
     G4double              energyDeposit[MaxAbsor];
-    G4double              energyLeaving[MaxAbsor];
     G4double              trackLengthCh[MaxAbsor];
         
     G4String              drawFlag; 

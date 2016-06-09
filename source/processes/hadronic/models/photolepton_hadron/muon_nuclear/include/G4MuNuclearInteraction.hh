@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.1 2003/11/11 19:10:34 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MuNuclearInteraction.hh,v 1.2 2004/11/11 09:19:27 hpw Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -57,7 +57,7 @@ class G4MuNuclearInteraction : public G4VDiscreteProcess
 { 
   public:
  
-     G4MuNuclearInteraction(const G4String& processName = "MuNucl");
+     G4MuNuclearInteraction(const G4String& processName = "muNuclear");
  
     ~G4MuNuclearInteraction();
 

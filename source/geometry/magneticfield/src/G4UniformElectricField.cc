@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.10 2003/11/05 10:41:00 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UniformElectricField.cc,v 1.11 2004/12/02 09:55:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 //
@@ -55,9 +55,9 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
       fFieldComponents[0] = 0.0;
       fFieldComponents[1] = 0.0;
       fFieldComponents[2] = 0.0;
-      fFieldComponents[3] = vField*sin(vTheta)*cos(vPhi) ;
-      fFieldComponents[4] = vField*sin(vTheta)*sin(vPhi) ;
-      fFieldComponents[5] = vField*cos(vTheta) ;
+      fFieldComponents[3] = vField*std::sin(vTheta)*std::cos(vPhi) ;
+      fFieldComponents[4] = vField*std::sin(vTheta)*std::sin(vPhi) ;
+      fFieldComponents[5] = vField*std::cos(vTheta) ;
    }
    else
    {

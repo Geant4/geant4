@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.21 2004/05/07 16:47:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MuPairProduction.hh,v 1.24 2004/11/10 08:49:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 28-04-04 Fix minor bug in energy balance (V.Ivanchenko)
+// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -73,12 +75,11 @@ class G4MuPairProduction : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuPairProduction(const G4String& processName = "MuPairProd");
+  G4MuPairProduction(const G4String& processName = "muPairProd");
 
-  ~G4MuPairProduction();
+  virtual ~G4MuPairProduction();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p)
-            {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
@@ -95,7 +96,7 @@ public:
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
-  
+
   void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition();
@@ -103,13 +104,13 @@ public:
 
 protected:
 
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
-
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
-private:
 
-  void InitialiseProcess();
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*);
+
+private:
 
 
   G4MuPairProduction & operator=(const G4MuPairProduction &right);
@@ -120,10 +121,18 @@ private:
 
   G4double                    lowestKinEnergy;
   G4bool                      subCutoff;
+  G4bool                      isInitialised;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4MuPairProduction::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,

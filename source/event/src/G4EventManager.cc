@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.20 2004/05/26 17:08:33 asaim Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4EventManager.cc,v 1.21 2004/08/10 23:59:37 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //

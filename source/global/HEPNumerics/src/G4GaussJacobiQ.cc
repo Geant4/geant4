@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussJacobiQ.cc,v 1.4 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4GaussJacobiQ.cc,v 1.5 2004/11/12 17:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G4GaussJacobiQ.hh"
 
@@ -66,7 +66,7 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
      {
 	root1=(4.1002+alpha)/((1.0+alpha)*(1.0+0.155998*alpha)) ;
 	root2=1.0+0.06*(nJacobi-8.0)*(1.0+0.12*alpha)/nJacobi ;
-	root3=1.0+0.012002*beta*(1.0+0.24997*fabs(alpha))/nJacobi ;
+	root3=1.0+0.012002*beta*(1.0+0.24997*std::fabs(alpha))/nJacobi ;
 	root -= (1.0-root)*root1*root2*root3 ;
      } 
      else if (i == 3) 
@@ -115,7 +115,7 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
 	     (temp*(1.0 - root*root)) ;
 	rootTemp = root ;
 	root = rootTemp - newton1/newton ;
-	if (fabs(root-rootTemp) <= tolerance)
+	if (std::fabs(root-rootTemp) <= tolerance)
 	{
 	   break ;
 	}
@@ -125,11 +125,11 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
         G4Exception("Too many iterations in G4GaussJacobiQ::G4GaussJacobiQ") ;
      }
      fAbscissa[i-1] = root ;
-     fWeight[i-1] = exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
+     fWeight[i-1] = std::exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
 		        GammaLogarithm((G4double)(beta+nJacobi)) - 
 		        GammaLogarithm((G4double)(nJacobi+1.0)) -
 		        GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-		        *temp*pow(2.0,alphaBeta)/(newton*newton2)                          ;
+		        *temp*std::pow(2.0,alphaBeta)/(newton*newton2)                          ;
   }
 }
 

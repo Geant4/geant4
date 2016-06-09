@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: DetectorConstruction.hh,v 1.11 2004/11/23 14:05:26 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: DetectorConstruction.hh,v 1.9 2004/06/09 14:18:45 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,10 +37,9 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
-class G4UserLimits;
 class DetectorMessenger;
 
-     const G4int MaxAbsor = 10;
+     const G4int MaxAbsor = 10;			// 0 + 9  
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,7 +61,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetNbOfLayers    (G4int);   
 
      void SetMagField   (G4double);
-     void SetMaxStepSize(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -123,7 +119,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiAbsor[MaxAbsor];
 
      G4UniformMagField* magField;
-     G4UserLimits*      userLimits;
 
      DetectorMessenger* detectorMessenger;
 

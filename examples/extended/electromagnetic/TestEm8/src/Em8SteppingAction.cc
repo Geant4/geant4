@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.cc,v 1.7 2003/11/24 17:52:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: Em8SteppingAction.cc,v 1.8 2004/12/03 09:45:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -150,13 +150,13 @@ void Em8SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+       Theta = std::acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
        runaction->FillTh(Theta) ;
        Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
        runaction->FillTt(Ttrans) ;
        yend= aStep->GetTrack()->GetPosition().y() ;
        zend= aStep->GetTrack()->GetPosition().z() ;
-       rend = sqrt(yend*yend+zend*zend) ;
+       rend = std::sqrt(yend*yend+zend*zend) ;
        runaction->FillR(rend);
      }
        
@@ -175,7 +175,7 @@ void Em8SteppingAction::UserSteppingAction(const G4Step* aStep)
                                                         )
      {
        eventaction->SetRef();
-       Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+       Thetaback = std::acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
        Thetaback -= 0.5*pi ;
        runaction->FillThBack(Thetaback) ;
        Tback  = aStep->GetTrack()->GetKineticEnergy() ;

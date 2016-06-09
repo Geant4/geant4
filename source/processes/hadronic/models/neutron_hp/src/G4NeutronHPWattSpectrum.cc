@@ -31,13 +31,13 @@
     G4double b = theBpar.GetY(anEnergy)/eV;
     G4double result;
     G4double random, cut, max;
-    max = sinh(sqrt(b*15.*a));
+    max = std::sinh(std::sqrt(b*15.*a));
     do
     {
       random = G4UniformRand();
-      result = -a*log(random);
+      result = -a*std::log(random);
       cut = G4UniformRand();
     }
-    while(cut>sinh(sqrt(b*result))/max);
+    while(cut>std::sinh(std::sqrt(b*result))/max);
     return result;
   }

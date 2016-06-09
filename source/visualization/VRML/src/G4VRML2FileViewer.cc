@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileViewer.cc,v 1.8 2001/09/18 07:53:16 stanaka Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VRML2FileViewer.cc,v 1.9 2004/12/07 23:41:01 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -30,7 +30,7 @@
 
 //#define DEBUG_FR_VIEW
 
-#include <math.h>
+#include <cmath>
 
 #include "G4Scene.hh"
 #include "G4VRML2FileViewer.hh"
@@ -45,7 +45,7 @@ G4VRML2FileViewer::G4VRML2FileViewer(G4VRML2FileSceneHandler& scene,
  fDest(scene.fDest)
 {
 	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
-	fsin_VHA       = sin ( fViewHalfAngle ) ;	
+	fsin_VHA       = std::sin ( fViewHalfAngle ) ;	
 }
 
 G4VRML2FileViewer::~G4VRML2FileViewer()

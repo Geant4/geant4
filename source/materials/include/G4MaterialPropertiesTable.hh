@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MaterialPropertiesTable.hh,v 1.15 2004/05/17 13:42:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

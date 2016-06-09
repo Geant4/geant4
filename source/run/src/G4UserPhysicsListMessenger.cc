@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.23 2003/06/16 17:12:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.24 2004/11/01 16:47:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -233,6 +233,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
   }  else if( command == buildPTCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
     if (particle == 0) return;
+    thePhysicsList->PreparePhysicsTable(particle);
     thePhysicsList->BuildPhysicsTable(particle);
     
   } else if ( command == storeCmd ){

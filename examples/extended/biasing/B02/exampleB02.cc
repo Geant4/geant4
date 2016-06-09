@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.16 2003/07/31 08:28:16 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: exampleB02.cc,v 1.17 2004/12/08 19:18:45 daquinog Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -126,7 +126,7 @@ int main(int , char **)
   G4int cell(1);
   for (cell=1; cell<=18; cell++) {
     G4GeometryCell gCell = pdet->GetGeometryCell(cell);
-    G4double imp = pow(2,cell-1);
+    G4double imp = std::pow(2.0,cell-1);
     aIstore.AddImportanceGeometryCell(imp, gCell);
     // adding the standard G4CellScorer for 17 concrete cells
     if (cell<18) {
@@ -154,7 +154,7 @@ int main(int , char **)
   // create importance geometry cell pair for the "rest"cell
   // with the same importance as the last concrete cell 
   gCell = pdet->GetGeometryCell(19);
-  G4double imp = pow(2,18); 
+  G4double imp = std::pow(2.0,18); 
   aIstore.AddImportanceGeometryCell(imp, gCell);
   
 

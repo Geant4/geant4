@@ -244,7 +244,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4double pnuc = momentum_out[1] * momentum_out[1] + 
 	  momentum_out[2] * momentum_out[2] +
 	  momentum_out[3] * momentum_out[3]; 
-	G4double ekin = sqrt(mass * mass + pnuc) - mass;
+	G4double ekin = std::sqrt(mass * mass + pnuc) - mass;
 	G4double Eex = 1000.0 * (momentum_out[0] - ekin);
 
 	if (verboseLevel > 3) {

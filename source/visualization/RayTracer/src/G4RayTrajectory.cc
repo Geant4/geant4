@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RayTrajectory.cc,v 1.14 2004/06/11 14:30:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //

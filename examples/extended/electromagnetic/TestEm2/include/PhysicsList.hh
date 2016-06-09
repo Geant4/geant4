@@ -20,21 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.hh,v 1.2 2004/05/04 07:36:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsList
-//
-// Author:      V.Ivanchenko 03.05.2004
+// $Id: PhysicsList.hh,v 1.5 2004/11/29 14:49:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Modified:
-//
-//----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,9 +44,9 @@ public:
   PhysicsList();
   ~PhysicsList();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+  void ConstructParticle();
+  void ConstructProcess();
+  void SetCuts();
 
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
@@ -67,16 +56,14 @@ public:
   void SetVerbose(G4int val);
 
 private:
-
-  // hide assignment operator
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
-
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
   G4int    verbose;
   G4bool   emBuilderIsRegisted;
+  G4bool   decayIsRegisted;
+  G4bool   stepLimiterIsRegisted;
+  G4bool   heIsRegisted;
 
   PhysicsListMessenger* pMessenger;
 

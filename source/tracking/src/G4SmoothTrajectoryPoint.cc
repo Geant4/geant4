@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SmoothTrajectoryPoint.cc,v 1.12 2004/06/11 14:30:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // ---------------------------------------------------------------

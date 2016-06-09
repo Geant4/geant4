@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.5 2003/11/19 19:13:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PreCompoundModel.cc,v 1.6 2004/12/07 13:50:41 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 
@@ -189,7 +189,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     
     G4double g = (6.0/pi2)*aFragment.GetA()*
       G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-    G4int EquilibriumExcitonNumber = static_cast<G4int>(sqrt(2.0*g*aFragment.GetExcitationEnergy())
+    G4int EquilibriumExcitonNumber = static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())
                                                         + 0.5);
     
     // Loop for transitions, it is performed while there are preequilibrium transitions.
@@ -204,7 +204,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
             test -= 1.0;
             test = test*test;
             test /= 0.32;
-            test = 1.0 - exp(-test);
+            test = 1.0 - std::exp(-test);
             go_ahead = (G4UniformRand() < test);
           }
       
@@ -320,7 +320,7 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
 	     << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	     << theInitialState.GetZ() - ProductsZ << '\n';
     }
-  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) 
+  if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) 
     {
       G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!\n" 
 	     << "G4PreCompoundModel.cc: Energy Conservation test for just preequilibrium fragments\n"  
@@ -328,9 +328,9 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
 	     << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	     << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV\n";
     } 
-  if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-      abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) 
+  if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+      std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+      std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) 
     {
       G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!\n"
 	     << "G4PreCompoundModel.cc: Momentum Conservation test for just preequilibrium fragments\n" 

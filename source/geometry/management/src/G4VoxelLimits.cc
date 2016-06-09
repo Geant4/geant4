@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.9 2003/11/02 14:01:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VoxelLimits.cc,v 1.10 2004/12/02 09:31:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // class G4VoxelLimits
 // 
@@ -136,15 +136,15 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
     y2 = pEnd.y() ;
     z2 = pEnd.z() ;
     /*
-    if( abs(x1-x2) < kCarTolerance*kCarTolerance)
+    if( std::abs(x1-x2) < kCarTolerance*kCarTolerance)
     {
       G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl; 
     }   
-    if( abs(y1-y2) < kCarTolerance*kCarTolerance)
+    if( std::abs(y1-y2) < kCarTolerance*kCarTolerance)
     {
       G4cout<<"y1 = "<<y1<<"\t"<<"y2 = "<<y2<<G4endl; 
     }   
-    if( abs(z1-z2) < kCarTolerance*kCarTolerance)
+    if( std::abs(z1-z2) < kCarTolerance*kCarTolerance)
     {
       G4cout<<"z1 = "<<z1<<"\t"<<"z2 = "<<z2<<G4endl; 
     } 

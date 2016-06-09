@@ -21,13 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.3 2004/02/03 08:29:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ProductionCutsTable.hh,v 1.5 2004/12/02 06:53:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
+// Class Description
+//  G4ProductionCutsTable is a static singleton class of a table of
+//  G4ProductionCuts objects. This class also manages tables of
+//  production cut and energy cut for each particle type.
 //
 // ------------------------------------------------------------
 //   First Implementation          05 Oct. 2002  M.Asai    
@@ -35,6 +39,10 @@
 //   Modified                      03 Feb 2004 H.Kurashige
 //    Modify RetrieveCutsTable to allow ordering of materials and 
 //    couples can be different from one in file (i.e. at storing)
+//   Modified                      20 Aug. 2004 H.Kurashige
+//    Modify RetrieveCutsTable to allow materials and 
+//    couples can be different from one in file (i.e. at storing)
+//
 // ------------------------------------------------------------
 
 #ifndef G4ProductionCutsTable_h 
@@ -46,19 +54,16 @@ class G4LogicalVolume;
 class G4ProductionCuts;
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 #include <vector>
 #include "G4MaterialCutsCouple.hh"
+#include "G4MCCIndexConversionTable.hh"
 #include "G4Region.hh"
 
 
 class G4ProductionCutsTable  
 {
-  // Class Description
-  //  G4ProductionCutsTable is a static singleton class of a table of
-  //  G4ProductionCuts objects. This class also manages tables of
-  //  production cut and energy cut for each particle type.
-
   public: // with description
     static G4ProductionCutsTable* GetProductionCutsTable();
     // This static method returns the singleton pointer of this class object.
@@ -86,6 +91,9 @@ class G4ProductionCutsTable
     void DumpCouples() const;
     // Display a list of registored couples
 
+    const G4MCCIndexConversionTable* GetMCCIndexConversionTable() const;
+    // gives the pointer to the MCCIndexConversionTable
+
   private:
 
    static G4ProductionCutsTable* fG4ProductionCutsTable;
@@ -102,6 +110,8 @@ class G4ProductionCutsTable
    G4VRangeToEnergyConverter* converters[NumberOfG4CutIndex]; 
 
    G4ProductionCuts* defaultProductionCuts;
+
+   G4MCCIndexConversionTable mccConversionTable;
 
 // These two vectors are for the backward comparibility
    G4double* rangeDoubleVector[NumberOfG4CutIndex];
@@ -156,7 +166,8 @@ class G4ProductionCutsTable
   G4bool  StoreCutsTable(const G4String& directory, 
 			 G4bool          ascii = false);
   
-  // Retrieve cuts values information in files under the specified directory.
+  // Retrieve material cut couple information 
+  //  in files under the specified directory.
   G4bool  RetrieveCutsTable(const G4String& directory,
 			    G4bool          ascii = false);
   
@@ -178,10 +189,6 @@ class G4ProductionCutsTable
   virtual G4bool  StoreMaterialCutsCoupleInfo(const G4String& directory, 
 				    G4bool          ascii = false);
 
-  // Retreive materialCutsCouple information in files under the specified directory.
-  virtual G4bool  RetrieveMaterialCutsCoupleInfo(const G4String& directory, 
-				   G4bool          ascii = false);
-
   // check stored materialCutsCouple is consistent with the current detector setup. 
   virtual G4bool  CheckMaterialCutsCoupleInfo(const G4String& directory, 
 				    G4bool          ascii = false);
@@ -190,13 +197,12 @@ class G4ProductionCutsTable
   virtual G4bool  StoreCutsInfo(const G4String& directory, 
                                 G4bool          ascii = false);
   
-  // Retrieve cut values information in files under the specified directory.
+ // Retrieve cut values information in files under the specified directory.
   virtual G4bool  RetrieveCutsInfo(const G4String& directory,
                                    G4bool          ascii = false);
 
   private:
    G4bool firstUse;
-   G4bool isNeedForRestoreCoupleInfo;
    enum { FixedStringLengthForStore = 32 }; 
 
   public: // with description  
@@ -332,6 +338,12 @@ inline
    return verboseLevel;
 }
 
+inline
+ const G4MCCIndexConversionTable* 
+   G4ProductionCutsTable::GetMCCIndexConversionTable() const
+{
+  return &mccConversionTable;
+}
 
 #endif
 

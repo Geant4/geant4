@@ -22,8 +22,8 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.19 2003/11/03 17:49:00 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ElectroNuclearReaction.hh,v 1.21 2004/12/10 22:11:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file
@@ -83,7 +83,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   static const G4double dM=G4Proton::Proton()->GetPDGMass()+G4Neutron::Neutron()->GetPDGMass(); // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double me=G4Electron::Electron()->GetPDGMass();      // electron mass
   static const G4double me2=me*me;        // squared electron mass
-  static const G4double dpi=2*M_PI; // 2*pi
+  static const G4double dpi=twopi; // 2*pi
   G4DynamicParticle theTempEl(const_cast<G4ParticleDefinition *>(aTrack.GetDefinition()), 
                               aTrack.Get4Momentum().vect());
   const G4DynamicParticle* theElectron=&theTempEl;
@@ -96,7 +96,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ()+.1);
   for(size_t ii=0; ii<aTab->size(); ii++)
   {
-    if ( abs((*aTab)[ii]->GetZ()-aZ) < .1)
+    if ( std::abs((*aTab)[ii]->GetZ()-aZ) < .1)
     {
       anElement = (*aTab)[ii];
       break;
@@ -165,19 +165,19 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   G4double finE=iniE-photonEnergy;       // Final total energy of electron
   theResult.SetEnergyChange(std::max(0.,finE-me));    // Modifies the KINETIC ENERGY (Why not in the name?)
   G4double EEm=iniE*finE-me2;            // Just an intermediate value to avoid "2*"
-  G4double iniP=sqrt(iniE*iniE-me2);     // Initial momentum of the electron
-  G4double finP=sqrt(finE*finE-me2);     // Final momentum of the electron
-  G4double cost=(EEm+EEm-photonQ2)/iniP/finP; // cos(theta) for the electron scattering
+  G4double iniP=std::sqrt(iniE*iniE-me2);     // Initial momentum of the electron
+  G4double finP=std::sqrt(finE*finE-me2);     // Final momentum of the electron
+  G4double cost=(EEm+EEm-photonQ2)/iniP/finP; // std::cos(theta) for the electron scattering
   if(cost>1.) cost=1.;
   if(cost<-1.) cost=-1.;
   G4ThreeVector dir=theElectron->GetMomentumDirection(); // Direction of primary electron
   G4ThreeVector ort=dir.orthogonal();    // Not normed orthogonal vector (!) (to dir)
   G4ThreeVector ortx = ort.unit();       // First unit vector orthogonal to the direction
   G4ThreeVector orty = dir.cross(ortx);  // Second unit vector orthoganal to the direction
-  G4double sint=sqrt(1.-cost*cost);      // Perpendicular component
+  G4double sint=std::sqrt(1.-cost*cost);      // Perpendicular component
   G4double phi=dpi*G4UniformRand();      // phi of scattered electron
-  G4double sinx=sint*sin(phi);           // x-component
-  G4double siny=sint*cos(phi);           // y-component
+  G4double sinx=sint*std::sin(phi);           // x-component
+  G4double siny=sint*std::cos(phi);           // y-component
   G4ThreeVector findir=cost*dir+sinx*ortx+siny*orty;
   theResult.SetMomentumChange(findir); // new direction for the electron
   G4ThreeVector photonMomentum=iniP*dir-finP*findir;

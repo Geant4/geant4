@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TritonEvaporationProbability.cc,v 1.2 2003/11/03 17:53:02 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)

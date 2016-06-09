@@ -22,7 +22,7 @@
 //
 //
 // $Id: TiaraTimedEventAction.cc,v 1.2 2003/06/13 16:05:33 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: SbMath.h,v 1.2 2004/06/14 09:27:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SbMath.h,v 1.3 2004/12/07 23:40:59 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef HEPVis_SbMath_h
 #define HEPVis_SbMath_h
 
-#include <math.h>
+#include <cmath>
 #ifndef M_PI
 #define M_PI       3.1415926535897931160E0
 #define M_PI_2     1.5707963267948965580E0  

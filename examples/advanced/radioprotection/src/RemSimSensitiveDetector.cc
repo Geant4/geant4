@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.6 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RemSimSensitiveDetector.cc,v 1.8 2004/11/23 15:43:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -62,19 +62,31 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   if(edep==0.) return false;
 
   G4int i = ROhist -> GetReplicaNumber();
-  
+
   RemSimHit* newHit = new RemSimHit();
   newHit -> SetEdep(edep);
   newHit -> SetIndexes(i);
   newHit->SetPosition(aStep->GetPreStepPoint()->GetPosition());
   trackerCollection -> insert( newHit );
 
+
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
  
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
+  
+  G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
+  G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
+
+  // Project the hits of primary and secondary particles
+  // in the phantom in the plane x, y
+  analysis -> particleShape(xx/cm, yy/cm);
  
+  // Project the energy deposit of primary and secondary particles 
+  // in the phantom in the plane x,y
+  analysis -> energyDepShape(xx/cm,yy/cm, edep/MeV);
+
   // Energy deposit of secondary particles in the phantom
   if(aStep -> GetTrack() -> GetTrackID()!= 1)
     analysis -> SecondaryEnergyDeposit(i,edep/MeV);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.5 2004/04/08 09:39:38 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorTransform3D.hh,v 1.6 2004/11/22 14:20:19 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // jck  17 Dec 1996
@@ -36,13 +36,12 @@
 
 #include "G4Transform3D.hh"
 
-class SoSFMatrix;
+class SbMatrix;
 
 class G4OpenInventorTransform3D : public G4Transform3D {
 public:
   G4OpenInventorTransform3D (const G4Transform3D &t);
-  SoSFMatrix* GetOIMatrix () const;
-
+  SbMatrix* GetSbMatrix () const;
 private:
   G4float m[16];
 };

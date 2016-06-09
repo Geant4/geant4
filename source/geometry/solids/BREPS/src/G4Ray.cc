@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.cc,v 1.9 2003/03/28 13:12:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Ray.cc,v 1.10 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -106,25 +106,25 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,
   }
  
   //      Find component closest to zero 
-  f = fabs(in.x());
+  f = std::fabs(in.x());
   i_Which=0;
   
-  if( fabs(in.y()) < f )
+  if( std::fabs(in.y()) < f )
   {
-    f = fabs(in.y());
+    f = std::fabs(in.y());
     i_Which=1;
   }
   
-  if( fabs(in.z()) < f )
+  if( std::fabs(in.z()) < f )
     i_Which=2;
   
   if(!i_Which)
-    f = sqrt((in.y())*(in.y())+(in.z())*(in.z()));    // hypot(in.y(),in.z())
+    f = std::sqrt((in.y())*(in.y())+(in.z())*(in.z()));    // hypot(in.y(),in.z())
   else
     if(i_Which==1)
-      f = sqrt((in.z())*(in.z())+(in.x())*(in.x()));  // hypot(in.z(),in.x())
+      f = std::sqrt((in.z())*(in.z())+(in.x())*(in.x()));  // hypot(in.z(),in.x())
     else
-      f = sqrt((in.x())*(in.x())+(in.y())*(in.y()));  // hypot(in.x(),in.y())
+      f = std::sqrt((in.x())*(in.x())+(in.y())*(in.y()));  // hypot(in.x(),in.y())
   
     if( NearZero( f, SMALL ) )
     {
@@ -311,5 +311,5 @@ G4double G4Ray::Magsq(const G4Plane &a)
 
 G4double G4Ray::Magnitude(const G4Plane &a) 
 {
-  return (sqrt( Magsq( a )) );
+  return (std::sqrt( Magsq( a )) );
 }

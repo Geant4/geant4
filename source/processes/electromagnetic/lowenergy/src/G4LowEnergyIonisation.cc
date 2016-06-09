@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.95 2003/06/16 17:00:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4LowEnergyIonisation.cc,v 1.101 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 // --------------------------------------------------------------
 //
@@ -95,6 +95,7 @@
 // 21.01.03 VI              Cut per region
 // 12.02.03 VI              Change signature for Deexcitation
 // 12.04.03 V.Ivanchenko    Cut per region for fluo AlongStep
+// 31.08.04 V.Ivanchenko    Add density correction
 //
 // --------------------------------------------------------------
 
@@ -276,7 +277,6 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
-
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector =
@@ -306,6 +306,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * theAtomicNumDensityVector[iel];
+
           if(verboseLevel > 1 || (Z == 14 && lowEdgeEnergy>1. && lowEdgeEnergy<0.)) {
             G4cout << "Z= " << Z
                    << " shell= " << n
@@ -319,6 +320,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
         }
         G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
         ionloss   += esp * theAtomicNumDensityVector[iel];
+
       }
       if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
             G4cout << "Sum: "
@@ -434,17 +436,17 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   G4double primaryKinE = kineticEnergy + 2.0*bindingEnergy;
 
   // sampling of scattering angle neglecting atomic motion
-  G4double deltaMom = sqrt(deltaKinE*(deltaKinE + 2.0*electron_mass_c2));
-  G4double primaryMom = sqrt(primaryKinE*(primaryKinE + 2.0*electron_mass_c2));
+  G4double deltaMom = std::sqrt(deltaKinE*(deltaKinE + 2.0*electron_mass_c2));
+  G4double primaryMom = std::sqrt(primaryKinE*(primaryKinE + 2.0*electron_mass_c2));
 
   G4double cost = deltaKinE * (primaryKinE + 2.0*electron_mass_c2)
                             / (deltaMom * primaryMom);
 
   if (cost > 1.) cost = 1.;
-  G4double sint = sqrt(1. - cost*cost);
+  G4double sint = std::sqrt(1. - cost*cost);
   G4double phi  = twopi * G4UniformRand();
-  G4double dirx = sint * cos(phi);
-  G4double diry = sint * sin(phi);
+  G4double dirx = sint * std::cos(phi);
+  G4double diry = sint * std::sin(phi);
   G4double dirz = cost;
 
   // Rotate to incident electron direction
@@ -460,12 +462,12 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   // kinetic energy of the motion == bindingEnergy in V.Ivanchenko model
 
   cost = 2.0*G4UniformRand() - 1.0;
-  sint = sqrt(1. - cost*cost);
+  sint = std::sqrt(1. - cost*cost);
   phi  = twopi * G4UniformRand();
-  G4double del = sqrt(bindingEnergy *(bindingEnergy + 2.0*electron_mass_c2))
+  G4double del = std::sqrt(bindingEnergy *(bindingEnergy + 2.0*electron_mass_c2))
                / deltaMom;
-  dirx += del* sint * cos(phi);
-  diry += del* sint * sin(phi);
+  dirx += del* sint * std::cos(phi);
+  diry += del* sint * std::sin(phi);
   dirz += del* cost;
 
   // Find out new primary electron direction
@@ -476,7 +478,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* theDeltaRay = new G4DynamicParticle();
   theDeltaRay->SetKineticEnergy(tDelta);
-  G4double norm = 1.0/sqrt(dirx*dirx + diry*diry + dirz*dirz);
+  G4double norm = 1.0/std::sqrt(dirx*dirx + diry*diry + dirz*dirz);
   dirx *= norm;
   diry *= norm;
   dirz *= norm;
@@ -492,18 +494,18 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
-    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   } else {
 
-    G4double norm = 1.0/sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+    G4double norm = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
     finalPx *= norm;
     finalPy *= norm;
     finalPz *= norm;
-    aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
+    aParticleChange.ProposeMomentumDirection(finalPx, finalPy, finalPz);
   }
 
-  aParticleChange.SetEnergyChange(finalKinEnergy);
+  aParticleChange.ProposeEnergy(finalKinEnergy);
 
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
@@ -572,7 +574,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
            << theEnergyDeposit/eV << " eV" << G4endl;
     theEnergyDeposit = 0.0;
   }
-  aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(theEnergyDeposit);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }

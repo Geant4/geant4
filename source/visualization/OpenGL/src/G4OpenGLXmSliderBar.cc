@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSliderBar.cc,v 1.5 2001/07/11 10:08:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmSliderBar.cc,v 1.6 2004/12/07 23:40:59 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -49,9 +49,9 @@ G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
   callback = c;
   show = s;
   decimal_places = dp;
-  initial_value = int(v * pow(10.0, (G4double)dp));
-  max_value = int(max * pow(10.0, (G4double)dp));
-  min_value = int(min * pow(10.0, (G4double)dp));
+  initial_value = int(v * std::pow(10.0, (G4double)dp));
+  max_value = int(max * std::pow(10.0, (G4double)dp));
+  min_value = int(min * std::pow(10.0, (G4double)dp));
   orientation = o;
   direction = d;
 }
@@ -76,17 +76,17 @@ short G4OpenGLXmSliderBar::GetDecimalPlaces ()
 
 G4double G4OpenGLXmSliderBar::GetInitialValue () 
 {
-  return (G4double)initial_value / pow(10.0, (G4double)GetDecimalPlaces());
+  return (G4double)initial_value / std::pow(10.0, (G4double)GetDecimalPlaces());
 }
 
 G4double G4OpenGLXmSliderBar::GetMaxValue () 
 {
-  return (G4double)max_value / pow(10.0, (G4double)GetDecimalPlaces());
+  return (G4double)max_value / std::pow(10.0, (G4double)GetDecimalPlaces());
 }
 
 G4double G4OpenGLXmSliderBar::GetMinValue () 
 {
-  return (G4double)min_value / pow(10.0, (G4double)GetDecimalPlaces());
+  return (G4double)min_value / std::pow(10.0, (G4double)GetDecimalPlaces());
 }
 
 unsigned char G4OpenGLXmSliderBar::GetOrientation () 
@@ -129,7 +129,7 @@ void G4OpenGLXmSliderBar::SetDecimalPlaces (short dp)
 
 void G4OpenGLXmSliderBar::SetInitialValue (G4double v) 
 {
-  initial_value = int(v * pow(10.0, (G4double)GetDecimalPlaces()));
+  initial_value = int(v * std::pow(10.0, (G4double)GetDecimalPlaces()));
   XtVaSetValues (sliderbar,
 		 XmNvalue, initial_value,
 		 NULL);
@@ -138,7 +138,7 @@ void G4OpenGLXmSliderBar::SetInitialValue (G4double v)
 
 void G4OpenGLXmSliderBar::SetMaxValue (G4double v) 
 {
-  max_value = int(v * pow(10.0, (G4double)GetDecimalPlaces()));
+  max_value = int(v * std::pow(10.0, (G4double)GetDecimalPlaces()));
   XtVaSetValues (sliderbar,
 		 XmNmaximum, max_value,
 		 NULL);
@@ -147,7 +147,7 @@ void G4OpenGLXmSliderBar::SetMaxValue (G4double v)
 
 void G4OpenGLXmSliderBar::SetMinValue (G4double v) 
 {
-  min_value = int(v * pow(10.0, (G4double)GetDecimalPlaces()));
+  min_value = int(v * std::pow(10.0, (G4double)GetDecimalPlaces()));
   XtVaSetValues (sliderbar,
 		 XmNminimum, min_value,
 		 NULL);

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.9 2004/06/18 15:43:41 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.13 2004/12/02 14:57:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,8 @@
 
 #include "Randomize.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
+#include <memory>	//for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
@@ -74,7 +75,12 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   rmstrue  = 1.;
   limittrue = DBL_MAX;
   
-  histoName = "testem2.paw";
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif
+    
+  histoName = "testem2.aida";
   histoType = "hbook";  
 }
 
@@ -82,28 +88,29 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 
 RunAction::~RunAction()
 {
-  cleanHisto();
-  delete runMessenger;  
+  delete runMessenger;
+  
+#ifdef G4ANALYSIS_USE
+  delete af;
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::bookHisto()
 {
-#ifdef USE_AIDA
-  // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-
+#ifdef G4ANALYSIS_USE
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(histoName, histoType, readOnly, createNew);
+  tree = tf->create(histoName, histoType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+  std::auto_ptr<AIDA::IHistogramFactory> hf(af->createHistogramFactory(*tree));
+  
   G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Det->GetdLradl();
   G4double dRradl = Det->GetdRradl();
@@ -145,17 +152,14 @@ void RunAction::bookHisto()
 
   histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
-
-  delete hf;
-  delete tf;
-  delete af;
 #endif
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   delete tree;
@@ -178,34 +182,35 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   G4int nLtot = Det->GetnLtot();
   if(nLbin != nLtot)
-    {dEdL.resize(nLbin=nLtot, 0.0);
-     sumELongit.resize(nLbin, 0.0);
-     sumE2Longit.resize(nLbin, 0.0);
-     sumELongitCumul.resize(nLbin, 0.0);
-     sumE2LongitCumul.resize(nLbin, 0.0);
-     gammaFlux.resize(nLbin, 0.0);
-     electronFlux.resize(nLbin, 0.0);
-     positronFlux.resize(nLbin, 0.0);
+    {dEdL.resize(nLbin=nLtot);
+     sumELongit.resize(nLbin);
+     sumE2Longit.resize(nLbin);
+     sumELongitCumul.resize(nLbin);
+     sumE2LongitCumul.resize(nLbin);
+     gammaFlux.resize(nLbin);
+     electronFlux.resize(nLbin);
+     positronFlux.resize(nLbin);
      rebin=true;
     }
 
   G4int nRtot = Det->GetnRtot();
   if(nRbin != nRtot)
-    {dEdR.resize(nRbin=nRtot, 0.0);
-     sumERadial.resize(nRbin, 0.0);
-     sumE2Radial.resize(nRbin, 0.0);
-     sumERadialCumul.resize(nRbin, 0.0);
-     sumE2RadialCumul.resize(nRbin, 0.0);
+    {dEdR.resize(nRbin=nRtot);
+     sumERadial.resize(nRbin);
+     sumE2Radial.resize(nRbin);
+     sumERadialCumul.resize(nRbin);
+     sumE2RadialCumul.resize(nRbin);
      rebin=true;
     }
 
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<nLbin; i++)
+  for (G4int i=0; i<nLbin; i++) {
      sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
-
+     gammaFlux[i]=electronFlux[i]=positronFlux[i]=0.;  
+  }
   for (G4int j=0; j<nRbin; j++)
-     sumELongit[j]=sumE2Longit[j]=sumELongitCumul[j]=sumE2LongitCumul[j]=0.;
+     sumERadial[j]=sumE2Radial[j]=sumERadialCumul[j]=sumE2RadialCumul[j]=0.;
 
   //initialize track length
   sumChargTrLength=sum2ChargTrLength=sumNeutrTrLength=sum2NeutrTrLength=0.;
@@ -247,7 +252,7 @@ void RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   //fill histograms
   //
   G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
@@ -284,18 +289,18 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (i=0; i<nLbin; i++)
    {
     MeanELongit[i] = norme*sumELongit[i];
-     rmsELongit[i] = norme*sqrt(abs(NbOfEvents*sumE2Longit[i]
+     rmsELongit[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2Longit[i]
                                 - sumELongit[i]*sumELongit[i]));
 
     MeanELongitCumul[i] = norme*sumELongitCumul[i];
-     rmsELongitCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2LongitCumul[i]
+     rmsELongitCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2LongitCumul[i]
                                     - sumELongitCumul[i]*sumELongitCumul[i]));
 
     gammaFlux   [i] /= NbOfEvents;
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
     G4double bin = i*dLradl;
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
@@ -318,14 +323,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (i=0; i<nRbin; i++)
    {
     MeanERadial[i] = norme*sumERadial[i];
-     rmsERadial[i] = norme*sqrt(abs(NbOfEvents*sumE2Radial[i]
+     rmsERadial[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2Radial[i]
                                 - sumERadial[i]*sumERadial[i]));
 
     MeanERadialCumul[i] = norme*sumERadialCumul[i];
-     rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i]
+     rmsERadialCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2RadialCumul[i]
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
     G4double bin = i*dRradl;
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
@@ -338,11 +343,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   norme = 1./(NbOfEvents*(Det->GetMaterial()->GetRadlen()));
   G4double MeanChargTrLength = norme*sumChargTrLength;
-  G4double  rmsChargTrLength = norme*sqrt(abs(NbOfEvents*sum2ChargTrLength
+  G4double  rmsChargTrLength = 
+            norme*std::sqrt(std::fabs(NbOfEvents*sum2ChargTrLength
                                          - sumChargTrLength*sumChargTrLength));
 
   G4double MeanNeutrTrLength = norme*sumNeutrTrLength;
-  G4double  rmsNeutrTrLength = norme*sqrt(abs(NbOfEvents*sum2NeutrTrLength
+  G4double  rmsNeutrTrLength = 
+            norme*std::sqrt(std::fabs(NbOfEvents*sum2NeutrTrLength
                                          - sumNeutrTrLength*sumNeutrTrLength));
 
   //print
@@ -408,6 +415,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
+  // save histos and close AnalysisFactory
+  cleanHisto();
+  
   // show Rndm status
   HepRandom::showEngineStatus();
 

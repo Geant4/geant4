@@ -303,6 +303,7 @@ private:
   G4double charge;       //
   G4double chargeSquare; //
   G4double initialMass;  // mass to calculate Lambda tables
+  G4double fBarkas;
 
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;

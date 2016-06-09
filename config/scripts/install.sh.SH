@@ -40,7 +40,7 @@ export G4INSTALL
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-if [ X$g4include != X ] ; then
+if [ X$g4include != X -a X$g4include != Xn ] ; then
 G4INCLUDE="$g4include"
 export G4INCLUDE
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
@@ -105,6 +105,12 @@ fi
 # g4clhep.U
 #
 if [ X$g4clhep_base_dir != X ] ; then 
+CLHEP_BASE_DIR="$g4clhep_base_dir"
+export CLHEP_BASE_DIR
+echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
+fi
+
+if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
 CLHEP_BASE_DIR="$g4clhep_base_dir"
 export CLHEP_BASE_DIR
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
@@ -362,7 +368,7 @@ mkdir -p \$G4LIB/\$G4SYSTEM
 $g4make -n -p -f \$G4INSTALL/config/scripts/GNUmakefile > \$G4LIB/\$G4SYSTEM/GNUmakefile.db
 
 echo ""
-echo "Starting installation..."
+echo "Starting build..."
 echo ""
 cd $g4install/source
 #echo `pwd`
@@ -401,11 +407,13 @@ if test -f \$g4conf/g4make.log ; then
 # different arithmetic expansion...So we are doing it by 'text'
 # in two steps...
  
-err=\`grep Error $g4conf/g4make.log | wc -w\` 
-int=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
+err=\`grep " Error " $g4conf/g4make.log | wc -w\` 
+int=\`grep " Interrupt " $g4conf/g4make.log | wc -w\` 
+stp=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
 
 err2=\`echo \$err\`
 int2=\`echo \$int\`
+stp2=\`echo \$stp\`
 
 if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""
@@ -434,11 +442,6 @@ echo "# You have no log file:				      	  "
 echo "# $g4conf/g4make.log					  "
 echo "############################################################"
 echo ""
-fi
-
-# There is no env!
-if [ X$g4includes_flag = Xy ] ; then
-$g4make includes
 fi
 
 !GROK!THIS!

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SimpleRunge.hh,v 1.7 2003/11/05 16:30:55 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // class G4SimpleRunge

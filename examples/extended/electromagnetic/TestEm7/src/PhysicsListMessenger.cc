@@ -20,18 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsListMessenger.cc,v 1.2 2004/09/27 14:42:27 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2003/04/22 16:25:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -39,7 +37,10 @@
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
-{   
+{
+  physDir = new G4UIdirectory("/testem/phys/");
+  physDir->SetGuidance("physics list commands");
+   
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
@@ -83,6 +84,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete protoCutCmd;
   delete allCutCmd;
   delete pListCmd;
+  delete physDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

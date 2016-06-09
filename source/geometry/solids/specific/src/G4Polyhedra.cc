@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.17 2003/11/22 10:11:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Polyhedra.cc,v 1.19 2004/12/10 16:22:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // --------------------------------------------------------------------
@@ -90,9 +90,9 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   // Calculate conversion factor from G3 radius to G4 radius
   //
   G4double phiTotal = thePhiTotal;
-  if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
-    phiTotal = 2*M_PI;
-  G4double convertRad = cos(0.5*phiTotal/theNumSide);
+  if ( (phiTotal <=0) || (phiTotal >= twopi*(1-DBL_EPSILON)) )
+    phiTotal = twopi;
+  G4double convertRad = std::cos(0.5*phiTotal/theNumSide);
 
   //
   // Some historical stuff
@@ -230,15 +230,15 @@ void G4Polyhedra::Create( G4double phiStart,
 
 
   startPhi = phiStart;
-  while( startPhi < 0 ) startPhi += 2*M_PI;
+  while( startPhi < 0 ) startPhi += twopi;
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
   //
-  if ( (phiTotal <= 0) || (phiTotal > 2.0*M_PI*(1-DBL_EPSILON)) )
+  if ( (phiTotal <= 0) || (phiTotal > twopi*(1-DBL_EPSILON)) )
   {
     phiIsOpen = false;
-    endPhi = phiStart+2*M_PI;
+    endPhi = phiStart+twopi;
   }
   else
   {
@@ -248,7 +248,7 @@ void G4Polyhedra::Create( G4double phiStart,
     // Convert phi into our convention
     //
     endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi ) endPhi += 2*M_PI;
+    while( endPhi < startPhi ) endPhi += twopi;
   }
   
   //
@@ -469,9 +469,9 @@ G4bool G4Polyhedra::Reset()
   // Calculate conversion factor
   //
   G4double phiTotal = original_parameters->Opening_angle;
-  if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
-    phiTotal = 2*M_PI;
-  G4double convertRad = cos(0.5*phiTotal/original_parameters->numSide);
+  if ( (phiTotal <=0) || (phiTotal >= twopi*(1-DBL_EPSILON)) )
+    phiTotal = twopi;
+  G4double convertRad = std::cos(0.5*phiTotal/original_parameters->numSide);
   rz->ScaleA( 1/convertRad );
 
   Create( original_parameters->Start_angle, phiTotal,

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.4 2003/11/04 11:31:16 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMicroPartition.cc,v 1.5 2004/12/07 13:47:52 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4bool G4StatMFMicroPartition::operator!=(const G4StatMFMicroPartition & ) const
 void G4StatMFMicroPartition::CoulombFreeEnergy(const G4double anA)
 {
   // This Z independent factor in the Coulomb free energy 
-  G4double  CoulombConstFactor = 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);
+  G4double  CoulombConstFactor = 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);
 	
   CoulombConstFactor = elm_coupling * (3./5.) *
     (1. - CoulombConstFactor)/G4StatMFParameters::Getr0();
@@ -79,12 +79,12 @@ void G4StatMFMicroPartition::CoulombFreeEnergy(const G4double anA)
   else if (anA == 2 || anA == 3 || anA == 4) 
     {
       // Z/A ~ 1/2
-      _theCoulombFreeEnergy.push_back(CoulombConstFactor*0.5*pow(anA,5./3.));
+      _theCoulombFreeEnergy.push_back(CoulombConstFactor*0.5*std::pow(anA,5./3.));
     } 
   else  // anA > 4
     {
       _theCoulombFreeEnergy.push_back(CoulombConstFactor*(theZ/theA)*(theZ/theA)*
-                                      pow(anA,5./3.));	
+                                      std::pow(anA,5./3.));	
 												
     }
 }
@@ -93,14 +93,14 @@ void G4StatMFMicroPartition::CoulombFreeEnergy(const G4double anA)
 G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 {
   G4double  CoulombFactor = 1.0/
-    pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);	
+    std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);	
 			
   G4double CoulombEnergy = elm_coupling*(3./5.)*theZ*theZ*CoulombFactor/
-    (G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.));
+    (G4StatMFParameters::Getr0()*std::pow(static_cast<G4double>(theA),1./3.));
 	
   for (unsigned int i = 0; i < _thePartition.size(); i++) 
     CoulombEnergy += _theCoulombFreeEnergy[i] - elm_coupling*(3./5.)*
-      (theZ/theA)*(theZ/theA)*pow(static_cast<G4double>(_thePartition[i]),5./3.)/
+      (theZ/theA)*(theZ/theA)*std::pow(static_cast<G4double>(_thePartition[i]),5./3.)/
       G4StatMFParameters::Getr0();
 		
   return CoulombEnergy;
@@ -109,7 +109,7 @@ G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
 {
   G4double  CoulombFactor = 1.0/
-    pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);	
+    std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0);	
   
   G4double PartitionEnergy = 0.0;
   
@@ -154,7 +154,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
             
             // Surface term
             (G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T))*
-            pow(static_cast<G4double>(_thePartition[i]),2./3.) +
+            std::pow(static_cast<G4double>(_thePartition[i]),2./3.) +
             
             // Coulomb term 
             _theCoulombFreeEnergy[i];
@@ -162,7 +162,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
     }
 	
   PartitionEnergy += elm_coupling*(3./5.)*theZ*theZ*CoulombFactor/
-    (G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.))
+    (G4StatMFParameters::Getr0()*std::pow(static_cast<G4double>(theA),1./3.))
     + (3./2.)*T*(_thePartition.size()-1);
   
   return PartitionEnergy;
@@ -176,13 +176,13 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(const G4double U,
   
   // If this happens, T = 0 MeV, which means that probability for this
   // partition will be 0
-  if (abs(U + FreeInternalE0 - PartitionEnergy) < 0.003) return -1.0;
+  if (std::abs(U + FreeInternalE0 - PartitionEnergy) < 0.003) return -1.0;
     
   // Calculate temperature by midpoint method
 	
   // Bracketing the solution
   G4double Ta = 0.001;
-  G4double Tb = std::max(sqrt(8.0*U/theA),0.0012*MeV);
+  G4double Tb = std::max(std::sqrt(8.0*U/theA),0.0012*MeV);
   G4double Tmid = 0.0;
   
   G4double Da = (U + FreeInternalE0 - GetPartitionEnergy(Ta))/U;
@@ -196,14 +196,14 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(const G4double U,
       Db = (U + FreeInternalE0 - GetPartitionEnergy(Tb))/U;
     }
   
-  G4double eps = 1.0e-14*abs(Ta-Tb);
+  G4double eps = 1.0e-14*std::abs(Ta-Tb);
   
   for (G4int i = 0; i < 1000; i++) 
     {
       Tmid = (Ta+Tb)/2.0;
-      if (abs(Ta-Tb) <= eps) return Tmid;
+      if (std::abs(Ta-Tb) <= eps) return Tmid;
       G4double Dmid = (U + FreeInternalE0 - GetPartitionEnergy(Tmid))/U;
-      if (abs(Dmid) < 0.003) return Tmid;
+      if (std::abs(Dmid) < 0.003) return Tmid;
       if (Da*Dmid < 0.0) 
         {
           Tb = Tmid;
@@ -253,7 +253,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
     {
       ProbDegeneracy *= GetDegeneracyFactor(static_cast<G4int>(_thePartition[i]));
       ProbA32 *= static_cast<G4double>(_thePartition[i])*
-        sqrt(static_cast<G4double>(_thePartition[i]));
+        std::sqrt(static_cast<G4double>(_thePartition[i]));
     }
 	
   // Compute entropy
@@ -272,33 +272,33 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
           PartitionEntropy += 
             2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i])
             - G4StatMFParameters::DBetaDT(T)
-            * pow(static_cast<G4double>(_thePartition[i]),2.0/3.0);
+            * std::pow(static_cast<G4double>(_thePartition[i]),2.0/3.0);
         } 
     }
 	
-  // Thermal Wave Lenght = sqrt(2 pi hbar^2 / nucleon_mass T)
-  G4double ThermalWaveLenght3 = 16.15*fermi/sqrt(T);
+  // Thermal Wave Lenght = std::sqrt(2 pi hbar^2 / nucleon_mass T)
+  G4double ThermalWaveLenght3 = 16.15*fermi/std::sqrt(T);
   ThermalWaveLenght3 = ThermalWaveLenght3*ThermalWaveLenght3*ThermalWaveLenght3;
   
   // Translational Entropy
-  G4double kappa = (1. + elm_coupling*(pow(static_cast<G4double>(_thePartition.size()),1./3.)-1.0)
-                    /(G4StatMFParameters::Getr0()*pow(static_cast<G4double>(theA),1./3.)));
+  G4double kappa = (1. + elm_coupling*(std::pow(static_cast<G4double>(_thePartition.size()),1./3.)-1.0)
+                    /(G4StatMFParameters::Getr0()*std::pow(static_cast<G4double>(theA),1./3.)));
   kappa = kappa*kappa*kappa;
   kappa -= 1.;
   G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*
     G4StatMFParameters::Getr0();
   G4double FreeVolume = kappa*V0;
-  G4double TranslationalS = std::max(0.0, log(ProbA32/Fact) +
-                                     (_thePartition.size()-1.0)*log(FreeVolume/ThermalWaveLenght3) +
-                                     1.5*(_thePartition.size()-1.0) - (3./2.)*log(theA));
+  G4double TranslationalS = std::max(0.0, std::log(ProbA32/Fact) +
+                                     (_thePartition.size()-1.0)*std::log(FreeVolume/ThermalWaveLenght3) +
+                                     1.5*(_thePartition.size()-1.0) - (3./2.)*std::log(theA));
   
-  PartitionEntropy += log(ProbDegeneracy) + TranslationalS;
+  PartitionEntropy += std::log(ProbDegeneracy) + TranslationalS;
   _Entropy = PartitionEntropy;
 	
   // And finally compute probability of fragment configuration
   G4double exponent = PartitionEntropy-SCompound;
   if (exponent > 700.0) exponent = 700.0;
-  return _Probability = exp(exponent);
+  return _Probability = std::exp(exponent);
 }
 
 
@@ -333,7 +333,7 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
           G4double Af = _thePartition[i];
           if (Af > 1.5 && Af < 4.5) ZMean = 0.5*Af;
           else ZMean = Af*Z0/A0;
-          G4double ZDispersion = sqrt(Af * MeanT/CC);
+          G4double ZDispersion = std::sqrt(Af * MeanT/CC);
           G4int Zf;
           do 
             {
@@ -345,7 +345,7 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
 	}
       ZBalance = static_cast<G4int>(Z0) - SumZ;
     } 
-  while (abs(ZBalance) > 1.1);
+  while (std::abs(ZBalance) > 1.1);
   FragmentsZ[0] += ZBalance;
 	
   G4StatMFChannel * theChannel = new G4StatMFChannel;

@@ -40,6 +40,8 @@
 #include "G4SoftStringBuilder.hh"
 #include "G4PartonPair.hh"
 
+#include <cmath>
+
 //*********************************************************************************************** 
 
 

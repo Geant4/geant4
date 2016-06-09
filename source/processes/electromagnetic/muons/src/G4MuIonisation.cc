@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.42 2004/05/27 17:29:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MuIonisation.cc,v 1.46 2004/12/02 08:20:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,7 +60,9 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
-// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
+// 27-05-04 Set integral to be a default regime (V.Ivanchenko)
+// 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -79,6 +81,8 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4MuIonisation::G4MuIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
@@ -100,42 +104,37 @@ G4MuIonisation::~G4MuIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisation::InitialiseProcess()
+void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                 const G4ParticleDefinition* bpart)
 {
-  if(isInitialised) return;
-  mass = theParticle->GetPDGMass();
-  SetSecondaryParticle(G4Electron::Electron());
+  if(!isInitialised) {
 
-  flucModel = new G4UniversalFluctuation();
+    theParticle = part;
+    theBaseParticle = bpart;
 
-  G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(0.2*MeV);
-  AddEmModel(1, em, flucModel);
-  G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(0.2*MeV);
-  em1->SetHighEnergyLimit(1.0*GeV);
-  AddEmModel(2, em1, flucModel);
-  G4VEmModel* em2 = new G4MuBetheBlochModel();
-  em2->SetLowEnergyLimit(1.0*GeV);
-  em2->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(3, em2, flucModel);
+    mass = theParticle->GetPDGMass();
+    SetSecondaryParticle(G4Electron::Electron());
 
-  SetStepLimits(0.2, 1.0*mm);
+    flucModel = new G4UniversalFluctuation();
 
-  ratio = electron_mass_c2/mass;
-  isInitialised = true;
-}
+    G4VEmModel* em = new G4BraggModel();
+    em->SetLowEnergyLimit(0.1*keV);
+    em->SetHighEnergyLimit(0.2*MeV);
+    AddEmModel(1, em, flucModel);
+    G4VEmModel* em1 = new G4BetheBlochModel();
+    em1->SetLowEnergyLimit(0.2*MeV);
+    em1->SetHighEnergyLimit(1.0*GeV);
+    AddEmModel(2, em1, flucModel);
+    G4VEmModel* em2 = new G4MuBetheBlochModel();
+    em2->SetLowEnergyLimit(1.0*GeV);
+    em2->SetHighEnergyLimit(100.0*TeV);
+    AddEmModel(3, em2, flucModel);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    SetStepLimits(0.2, 1.0*mm);
 
-const G4ParticleDefinition* G4MuIonisation::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
-{
-  if(p) theParticle = p;
-  theBaseParticle = BaseParticle();
-  if(theParticle && !isInitialised) InitialiseProcess();
-  return theBaseParticle;
+    ratio = electron_mass_c2/mass;
+    isInitialised = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

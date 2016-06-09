@@ -37,6 +37,11 @@
 
 # Add the world volume to the current scene
 /vis/scene/add/volume
+#/vis/scene/add/volume Layer
+# Name of the absorbers = name of their material (Lead) !
+#/vis/scene/add/volume Lead
+# Name of the gaps = name of their material (liquidArgon) !
+#/vis/scene/add/volume liquidArgon
 #/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 
@@ -44,19 +49,14 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi   45 45 
 
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
 /vis/scene/notifyHandlers
 
-/run/beamOn 1
-
+/control/verbose 2
 #######################################################################
 #   Controls on an Inventor examiner viewer are :                     #
 #  - in picking mode (cursor is the upper left arrow)                 #
-#   Ctrl + pick an volume : see daughters.                            #
-#   Shift + pick an volume : see mother.                              #
+#   Ctrl + pick a volume : see daughters.                             #
+#   Shift + pick a volume : see mother.                               #
 #  - in viewing mode (cursor is the hand)                             #
 #   Left-button + pointer move : rotate.                              #
 #   Ctrl+Left-button + pointer move : pane.                           #
@@ -64,3 +64,9 @@
 #   Middle-button + pointer move : pane.                              #
 #                                                                     #
 #######################################################################
+
+/vis/viewer/update
+
+/run/beamOn 1
+
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.37 2003/11/04 01:58:00 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RunManager.hh,v 1.39 2004/11/25 19:01:13 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -225,7 +225,6 @@ class G4RunManager
   protected:
     G4bool geometryInitialized;
     G4bool physicsInitialized;
-    G4bool geometryNeedsToBeClosed;
     G4bool runAborted;
     G4bool initializedAtLeastOnce;
     G4bool geometryToBeOptimized;
@@ -255,7 +254,10 @@ class G4RunManager
     inline void SetUserInitialization(G4VUserDetectorConstruction* userInit)
     { userDetector = userInit; }
     inline void SetUserInitialization(G4VUserPhysicsList* userInit)
-    { physicsList = userInit; }
+    {
+      physicsList = userInit;
+      kernel->SetPhysics(userInit);
+    }
     inline void SetUserAction(G4UserRunAction* userAction)
     { userRunAction = userAction; }
     inline void SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
@@ -325,7 +327,7 @@ class G4RunManager
 
   public: // with description
     inline void GeometryHasBeenModified()
-    { geometryNeedsToBeClosed = true; }
+    { kernel->GeometryHasBeenModified(); }
     //  This method must be invoked (or equivalent UI command can be used)
     // in case the user changes his/her detector geometry after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
@@ -357,7 +359,7 @@ class G4RunManager
       if(geometryToBeOptimized != vl)
       {
         geometryToBeOptimized = vl;
-        geometryNeedsToBeClosed = true;
+        kernel->GeometryHasBeenModified();
         kernel->SetGeometryToBeOptimized(vl);
       }
     }

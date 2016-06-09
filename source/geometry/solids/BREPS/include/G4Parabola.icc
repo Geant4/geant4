@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.icc,v 1.6 2001/07/11 09:59:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Parabola.icc,v 1.7 2004/12/02 09:31:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -100,7 +100,7 @@ void G4Parabola::IntersectRay2D(const G4Ray& ray,
   if (discr >= 0) {
 
     // 2 intersections (maybe 1, but this case is rare)
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
     // find the smallest positive i
     G4double i= -bHalf-sqrtdiscr;
     if (i<kCarTolerance) {
@@ -137,7 +137,7 @@ G4int G4Parabola::IntersectRay2D(const G4Ray& ray)
   if (discr >= 0) 
   {
     // 2 intersections (maybe 1, but this case is rare)
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
     
     G4double i= -bHalf-sqrtdiscr;
     if (i>kCarTolerance) 

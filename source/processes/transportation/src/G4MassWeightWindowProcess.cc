@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassWeightWindowProcess.cc,v 1.4 2003/11/26 14:51:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MassWeightWindowProcess.cc,v 1.5 2004/10/19 00:59:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -115,7 +115,7 @@ G4MassWeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 
 void G4MassWeightWindowProcess::KillTrack() const
 {
-  fParticleChange->SetStatusChange(fStopAndKill);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 const G4String &G4MassWeightWindowProcess::GetName() const

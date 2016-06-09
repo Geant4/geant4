@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.cc,v 1.3 2001/07/11 10:00:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VGaussianQuadrature.cc,v 1.5 2004/11/12 17:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //
@@ -70,7 +70,7 @@ G4VGaussianQuadrature::GetWeight(G4int index) const
 
 // ----------------------------------------------------------------------------
 //
-// Auxiliary function which returns the value of log(gamma-function(x))
+// Auxiliary function which returns the value of std::log(gamma-function(x))
 //
 
 G4double 
@@ -84,10 +84,10 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
-  register HepInt j;
+  register G4int j;
   G4double x = xx - 1.0;
   G4double tmp = x + 5.5;
-  tmp -= (x + 0.5) * log(tmp);
+  tmp -= (x + 0.5) * std::log(tmp);
   G4double ser = 1.000000000190015;
 
   for ( j = 0; j <= 5; j++ )
@@ -95,7 +95,7 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
     x += 1.0;
     ser += cof[j]/x;
   }
-  return -tmp + log(2.5066282746310005*ser);
+  return -tmp + std::log(2.5066282746310005*ser);
 }
 
 

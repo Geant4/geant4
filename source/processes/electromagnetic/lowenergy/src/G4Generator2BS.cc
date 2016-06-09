@@ -81,10 +81,10 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   G4double initialTotalEnergy = (initial_energy+electron_mass_c2)/electron_mass_c2;
   G4double finalTotalEnergy = (final_energy+electron_mass_c2)/electron_mass_c2;
   EnergyRatio = finalTotalEnergy/initialTotalEnergy;
-  G4double gMaxEnergy = (M_PI*initialTotalEnergy)*(M_PI*initialTotalEnergy);
+  G4double gMaxEnergy = (pi*initialTotalEnergy)*(pi*initialTotalEnergy);
 
-  G4double Zeff = sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
-  z = (0.00008116224*(pow(Zeff,0.3333333)));
+  G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
+  z = (0.00008116224*(std::pow(Zeff,0.3333333)));
 
   // Rejection arguments
   rejection_argument1 = (1.0+EnergyRatio*EnergyRatio); 
@@ -112,7 +112,7 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
 
   }while(randTest > (gfunctionTest/gMaximum));
 
-  theta = sqrt(rand)/initialTotalEnergy;
+  theta = std::sqrt(rand)/initialTotalEnergy;
 
 
   return theta;
@@ -124,7 +124,7 @@ G4double G4Generator2BS::RejectionFunction(G4double value) const
 
   G4double argument = (1+value)*(1+value);
 
-  G4double gfunction = (4+log(rejection_argument3+(z/argument)))*
+  G4double gfunction = (4+std::log(rejection_argument3+(z/argument)))*
     ((4*EnergyRatio*value/argument)-rejection_argument1)+rejection_argument2;
 
   return gfunction;

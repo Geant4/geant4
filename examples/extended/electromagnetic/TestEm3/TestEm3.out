@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -57,13 +57,18 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle e-
 /gun/energy 1 GeV
 #
-###/testem/histo/setFileName testem3.paw
-###/testem/histo/setHisto 0 100 700. 1000. MeV
-###/testem/histo/setHisto 1 100   0.  300. MeV
+#/testem/histo/setFileName PblqArg.paw
+#/testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
+#/testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
+#/testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
+#/testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
+#/testem/histo/setHisto 21 102  0.   102. none	#energy flow of primary
+#/testem/histo/setHisto 22 102  0.   102. none	#energy flow of secondaries
 #
 /testem/event/printModulo 50
 #
 /run/beamOn 100
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -115,34 +120,50 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -208,19 +229,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=42.97s Real=52.04s Sys=6.01s
+  User=45.21s Real=54.57s Sys=5.93s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 810.29 MeV +- 15.56 MeV      1.92 +- 0.192 %      56.1 cm  +- 1.22 cm 
-liquidArgon: 179.93 MeV +- 14.46 MeV     8.035 +- 0.8035 %      88.8 cm  +- 7.75 cm 
+      Lead:  809.7 MeV +- 14.34 MeV     1.771 +- 0.1771 %        56 cm  +- 1.08 cm 
+liquidArgon: 180.62 MeV +- 13.92 MeV     7.706 +- 0.7706 %      89.4 cm  +- 7.09 cm 
 
 ------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 405591755, 816799671
+ Current couple of seeds = 680049547, 1607879973
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

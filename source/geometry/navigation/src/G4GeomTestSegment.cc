@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4GeomTestSegment.cc,v 1.4 2004/09/02 14:44:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -274,17 +274,19 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
         return;
       }
+      
       s += sign*dist;
       entering = false;
       break;
     case kOutside:
       dist = solid->DistanceToIn(p,vSearch);
       if (dist >= kInfinity) return;
+      
       s += sign*dist;
       entering = true;
       break;
     case kSurface:
-      entering = (v.dot(solid->SurfaceNormal(p)) > 0);
+      entering = (v.dot(solid->SurfaceNormal(p)) < 0);
       break;
     default:
       logger->SolidProblem( solid,
@@ -352,11 +354,41 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
         return;
       }
+      
+      if ( (dist > kCarTolerance)
+        && (solid->Inside(p + (dist*0.999)*vSearch) == kOutside) ) {
+        //
+        // This shouldn't have happened
+        //
+        if (solid->Inside(p) == kOutside)
+          logger->SolidProblem(solid,
+                  "Entering point is outside (possible roundoff error)",p);
+        else
+          logger->SolidProblem(solid,
+                  "DistanceToOut(p,v) brings trajectory well outside solid",p);
+        return;
+      }
+      
       entering = false;
     }
     else {
       dist = solid->DistanceToIn(p,vSearch);
       if (dist >= kInfinity) return;
+      
+      if ( (dist > kCarTolerance)
+        && (solid->Inside(p + (dist*0.999)*vSearch) == kInside) ) {
+        //
+        // This shouldn't have happened
+        //
+        if (solid->Inside(p) == kInside)
+          logger->SolidProblem(solid,
+                  "Exiting point is inside (possible roundoff error)", p);
+        else
+          logger->SolidProblem(solid,
+                  "DistanceToIn(p,v) brings trajectory well inside solid", p);
+        return;
+      }
+      
       entering = true;
     }
     

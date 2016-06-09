@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2004/05/27 17:44:45 duns Exp $
+$Id: History,v 1.28 2004/12/13 16:02:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,19 @@ $Id: History,v 1.24 2004/05/27 17:44:45 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+13th December 2004 Gabriele Cosmo (exampleA01-V06-02-03)
+- Modified hadlists.gmk to new phys-lists structure.
+
+3rd December 2004 Gabriele Cosmo (exampleA01-V06-02-02)
+- Implemented migration to <cmath>.
+
+23rd November 2004 Mark Donszelmann (exampleA01-V06-02-01)
+- Removed dependency from user hadronics lists
+
+14th July 2004 Gabriele Cosmo (exampleA01-V06-02-00)
+- hadlist.gmk: removed unnecessary kernel libraries list.
+  Fixes problem report #647.
 
 27th May 2004 Mark Donszelmann (exampleA01-V06-01-01)
 - Updated Mac file to write separate geometry.

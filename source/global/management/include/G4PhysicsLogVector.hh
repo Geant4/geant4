@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.8 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PhysicsLogVector.hh,v 1.9 2004/11/12 17:38:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 //--------------------------------------------------------------------
@@ -100,7 +100,7 @@ inline
   // not through pointers or references. In this case, the 'inline' will
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  return size_t( log10(theEnergy)/dBin - baseBin );
+  return size_t( std::log10(theEnergy)/dBin - baseBin );
 }
 
 #endif

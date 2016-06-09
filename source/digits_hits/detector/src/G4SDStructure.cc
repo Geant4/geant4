@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SDStructure.cc,v 1.2 2004/05/03 08:14:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 // G4SDStructure

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.11 2003/11/26 13:55:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: Em8RunAction.cc,v 1.12 2004/12/03 09:45:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -195,7 +195,7 @@ void Em8RunAction::BeginOfRunAction(const G4Run* aRun)
 
   if(nbinGamma>0)
   {
-    dEGamma = log(EhighGamma/ElowGamma)/nbinGamma ;
+    dEGamma = std::log(EhighGamma/ElowGamma)/nbinGamma ;
     entryGamma = 0.;
     underGamma=0.;
     overGamma=0.;
@@ -219,28 +219,28 @@ void Em8RunAction::BeginOfRunAction(const G4Run* aRun)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em8RunAction::EndOfRunAction(const G4Run* aRun)
+void Em8RunAction::EndOfRunAction(const G4Run*)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
 
   tlSumAbs /= TotNbofEvents ;
   sAbs = tlsquareSumAbs/TotNbofEvents-tlSumAbs*tlSumAbs ;
   if(sAbs>0.)
-    sAbs = sqrt(sAbs/TotNbofEvents) ;
+    sAbs = std::sqrt(sAbs/TotNbofEvents) ;
   else
     sAbs = 0. ;
   
   EnergySumAbs /= TotNbofEvents ;
   sigAbs = EnergySquareSumAbs/TotNbofEvents-EnergySumAbs*EnergySumAbs;
   if(sigAbs>0.)
-    sigAbs = sqrt(sigAbs/TotNbofEvents);
+    sigAbs = std::sqrt(sigAbs/TotNbofEvents);
   else
     sigAbs = 0.;
 
   nStepSumCharged /= TotNbofEvents ;
   sigstep = nStepSum2Charged/TotNbofEvents-nStepSumCharged*nStepSumCharged;
   if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
+    sigstep = std::sqrt(sigstep/TotNbofEvents);
   else
     sigstep = 0.;
   G4double sigch=sigstep ;
@@ -248,7 +248,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   nStepSumNeutral /= TotNbofEvents ;
   sigstep = nStepSum2Neutral/TotNbofEvents-nStepSumNeutral*nStepSumNeutral;
   if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
+    sigstep = std::sqrt(sigstep/TotNbofEvents);
   else
     sigstep = 0.;
   G4double signe=sigstep ;
@@ -256,14 +256,14 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
   SumCharged /= TotNbofEvents;
   sigcharged = Sum2Charged/TotNbofEvents-SumCharged*SumCharged; 
   if(sigcharged>0.)
-    sigcharged = sqrt(sigcharged/TotNbofEvents);
+    sigcharged = std::sqrt(sigcharged/TotNbofEvents);
   else
     sigcharged = 0. ;
  
   SumNeutral /= TotNbofEvents;
   signeutral = Sum2Neutral/TotNbofEvents-SumNeutral*SumNeutral; 
   if(signeutral>0.)
-    signeutral = sqrt(signeutral/TotNbofEvents);
+    signeutral = std::sqrt(signeutral/TotNbofEvents);
   else
     signeutral = 0. ;
  
@@ -411,7 +411,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      if(sig<=0.)
        sig=0.;
      else
-       sig=sqrt(sig/entryTt) ;
+       sig=std::sqrt(sig/entryTt) ;
      G4cout << " mean energy of transmitted particles=" << Ttmean/keV << 
                " +- " << sig/keV << "  keV." << G4endl;
      E = Ttlow - dTt ;
@@ -441,7 +441,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      if(sig<=0.)
        sig=0.;
      else
-       sig=sqrt(sig/entryTb) ;
+       sig=std::sqrt(sig/entryTb) ;
      G4cout << " mean energy of backscattered particles=" << Tbmean/keV << 
                " +- " << sig/keV << "  keV." << G4endl;
      E = Tblow - dTb ;
@@ -490,7 +490,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      Rmean /= entryR;
      sig = R2mean/entryR - Rmean*Rmean;
      if(sig<=0.) sig=0. ;
-     else        sig = sqrt(sig/entryR) ;
+     else        sig = std::sqrt(sig/entryR) ;
      G4cout << " mean lateral displacement at exit=" << Rmean/mm << " +- "
             << sig/mm << "  mm." << G4endl ; 
      R = Rlow - dR  ;
@@ -521,7 +521,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
        fac0 = 1. ;
      else
        fac0 = 1./distTh[0] ;
-     pere = 1./exp(1.) ;
+     pere = 1./std::exp(1.) ;
 
      G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
                " entries         normalized " << G4endl ;
@@ -567,7 +567,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
        fac0b = 1. ;
      else
        fac0b = 1./distThback[0] ;
-     pereb = 1./exp(1.) ;
+     pereb = 1./std::exp(1.) ;
 
      G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
                " entries         normalized " << G4endl ;
@@ -607,7 +607,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
              "    #overflows=" << overGamma << G4endl ;
    if( entryGamma>0.)
    {
-     fact=exp(dEGamma) ;
+     fact=std::exp(dEGamma) ;
      E = ElowGamma/fact  ;
      norm = TotNbofEvents*dEGamma;
      G4cout << " bin nb         Elow      entries       normalized " << G4endl ;
@@ -636,7 +636,7 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      for(G4int iez=0; iez<nbinvertexz ; iez++)
      {
       z+= dz  ;
-      if(abs(z)<1.e-12) z=0.;
+      if(std::fabs(z)<1.e-12) z=0.;
       dnorm = distvertexz[iez]/norm;
       G4cout << std::setw(5) << iez << std::setw(10) << z  <<
                 std::setw(12) << distvertexz[iez] <<

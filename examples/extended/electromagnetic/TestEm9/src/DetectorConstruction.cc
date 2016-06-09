@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.5 2004/05/27 13:43:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: DetectorConstruction.cc,v 1.6 2004/12/02 19:06:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -335,7 +335,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4int npads = (G4int)(vertWidth/padWidth);
   npads = (npads/2)*2 + 1;
   x0 = -0.5*padWidth*((G4double)(npads-1));
-  G4double x1 = abs(x0) + 0.5*padWidth + gap; 
+  G4double x1 = std::fabs(x0) + 0.5*padWidth + gap; 
   G4double z  = -(vertexLength+absLength);
 
   G4Box* solidVD = new G4Box("VertDet",x1,ecalWidth*0.5+gap,padLength*0.5);

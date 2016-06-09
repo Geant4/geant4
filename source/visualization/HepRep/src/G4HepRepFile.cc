@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepFile.cc,v 1.8 2003/07/12 19:48:15 duns Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Joseph Perl  1 October 2001

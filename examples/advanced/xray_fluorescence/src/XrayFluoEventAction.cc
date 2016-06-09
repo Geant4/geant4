@@ -132,9 +132,10 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
     if ( eventNumber % (G4int)5e6 != 0 ) G4cout << "#" << std::flush;
     else G4cout << "#"<< G4endl;
     //    if ( eventNumber % 5e6 == 0 ) G4cout << "#"<< G4endl;
-
+    //    #ifdef G4ANALYSIS_USE
     //    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
     //    analysis->PlotCurrentResults();
+    //    #endif
   }
 
   if (HPGeCollID==-1)
@@ -167,7 +168,7 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
     {
       n_hit = HPGeHC->entries();
       
-      // if (n_hit) {G4cout << "Ecco quante hit ho nel detector "<< n_hit << G4endl;}
+      // if (n_hit) {G4cout << "Number of Hits in the detector "<< n_hit << G4endl;}
       
       for (G4int i=0;i<n_hit;i++)
 	{
@@ -179,10 +180,10 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 	  energyD = detectorType->ResponseFunction(totEnergy);
 	  // energyD = totEnergy;
 	  // G4cout << "energy deposit: "<< totEnergy  << G4endl;
-	  
+#ifdef G4ANALYSIS_USE
 	  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
 	  analysis->analyseEnergyDep(energyD);
-	  
+#endif	  
 	  totEnergyDetect += energyD;
 	  
 	  
@@ -231,7 +232,7 @@ G4double XrayFluoEventAction::RandomCut(G4double energy)
 
     if ( Random<efficiency )
       {
-	G4double sigma = sqrt(F*epsilon*energy+pow(deltaE/2355,2));
+	G4double sigma = std::sqrt(F*epsilon*energy+std::pow(deltaE/2355,2));
 
 	EdepDetect = G4RandGauss::shoot(energy, sigma );
 

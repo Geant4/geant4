@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003/11/12 13:05:48 johna Exp $
+$Id: History,v 1.30 2004/11/11 16:07:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,36 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+11th November 2004  John Allison  (vis-V06-02-05)
+- Made use use of smart method GetPolyhedron for solids.  This greatly
+  speeds 2nd and subsequent drawings when kernel access is required.
+
+22nd September 2004  John Allison  (modeling-V06-02-01)
+- Changed use of deprecated G4VPhysicalVolume::GetRotation to GetRotationValue.
+- Fixed memory leak in G4PhysicalVolumeMassScene.
+
+13th September 2004  John Allison  (modeling-V06-02-00)
+- Added G4PhysicalVolumeMassScene.  From the header file:
+// Calculates the mass of a geometry tree taking into account daughters
+// up to the depth specified in the G4PhysicalVolumeModel.  Culling is
+// ignored so that all volumes are seen.
+//
+// The calculation is quite tricky, since it involves subtracting the
+// mass of that part of the mother that is occupied by each daughter and
+// then adding the mass of the daughter, and so on down the heirarchy.
+//
+// Usage for a given G4PhysicalVolumeModel* pvModel:
+//   G4PhysicalVolumeMassScene massScene;
+//   massScene.EstablishSpecials (*pvModel);
+//   pvModel->DescribeYourselfTo (massScene);
+//   G4double volume = massScene.GetVolume();
+//   G4double mass = massScene.GetMass();
+//   massScene.Reset();
+// See, for example, G4ASCIITreeSceneHandler::EndModeling().
+- Added some access functions to G4PhysicalVolumeModel:
+    GetTopPhysicalVolume, GetRequestedDepth, SetRequestedDepth.
+- Protected GetPhysicalVolumeModel when all volumes "invisible".
 
 12th November 2003  John Allison  (modeling-V05-02-02)
 - CalculateExtent always searches complete hierarchy.

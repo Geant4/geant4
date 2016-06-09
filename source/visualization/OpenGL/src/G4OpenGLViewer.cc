@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.18 2003/06/10 17:58:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLViewer.cc,v 1.19 2004/07/09 15:44:26 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -201,90 +201,6 @@ void G4OpenGLViewer::HaloingSecondPass () {
   glDepthFunc (GL_LEQUAL);
   glLineWidth (1.0);
 
-}
-
-void G4OpenGLViewer::HLRFirstPass () {
-
-  G4cout << "First pass HLR" << G4endl;
-
-  //Hidden line drawing requires three renderings to different buffers, so it
-  //cannot be treated in G4OpenGLSceneHandler alone (as can wireframe or hidden 
-  //surface (solid) mode)
-
-  //So, after SIGGRAPH97
-
-  //1) Disable the colour and depth buffers, and Draw polygons in wireframe 
-  //   mode to the stencil buffer, setting stencil value to 1 where pixels go.
-
-  //First, disable writing to the colo(u)r buffer...
-  glColorMask (GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-
-  //Enable the stencil buffer...
-  glEnable (GL_STENCIL_TEST);
-
-  //Now disable writing to the depth buffer...
-  glDisable (GL_DEPTH_TEST);
-
-  //Clear all stencil buffer values to 0...
-  glClearStencil (0);
-  glClear (GL_STENCIL_BUFFER_BIT);
-
-  //Prepare stencil buffer...
-  glStencilFunc (GL_ALWAYS, //When to pass a pixel in the stencil test
-		 0x1,       //The ref val to compare with masked stencil val
-		 0x1);      //The mask to AND with ref and val before test
-
-  glStencilOp (GL_KEEP,     //If stencil test fails *irrelevant*
-	       GL_KEEP,     //If depth test passes *irrelevant*
-	       GL_REPLACE); //If no depth test *this is applied to every pixel
-                            //drawn to the stencil buffer in this pass*
-
-  //Hence, everywhere a pixel is drawn, stencil value=1, 0 everywhere else.
-
-  //Set the drawing style to wireframe...
-  fVP.SetDrawingStyle (G4ViewParameters::wireframe);
-
-  NeedKernelVisit ();
-  ProcessView ();
-}
-
-void G4OpenGLViewer::HLRSecondPass () {
-
-  G4cout << "Second pass HLR" << G4endl;
-
-  //2) Use the stencil buffer to mask out pixels where stencil value = 1, and
-  //   render to the stencil buffer as depth tested filled polygons.
-
-  glStencilFunc (GL_EQUAL, 0x1, 0x1);
-  glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
-  glDepthFunc (GL_LEQUAL);
-  glEnable (GL_DEPTH_TEST);
-
-  //Set the drawing style to hlhsr (solid)...
-  fVP.SetDrawingStyle (G4ViewParameters::hsr);
-  
-  NeedKernelVisit ();
-  ProcessView ();
-
-}
-
-void G4OpenGLViewer::HLRThirdPass () {
-  
-  //3) Turn off the stencil buffer, turn on the colour buffer
-  //   and render polygons in wireframe mode.
-
-  G4cout << "Third pass HLR" << G4endl;
-
-  glDisable (GL_STENCIL_TEST);
-  glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-  //Set the drawing style to  hlr wireframe...
-  fVP.SetDrawingStyle (G4ViewParameters::wireframe);
-
-  NeedKernelVisit ();
-  ProcessView ();
-
-  fVP.SetDrawingStyle (G4ViewParameters::hlr);
 }
 
 #endif

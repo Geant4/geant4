@@ -195,7 +195,7 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
 
 G4double G4AugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transitionId, G4int augerIndex) const
 {
-  G4double n = 0;
+  G4double energy = 0;
   
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
     {G4Exception("G4AugerData::vacancyIndex outside boundaries");}
@@ -203,16 +203,16 @@ G4double G4AugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transi
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
     std::vector<G4AugerTransition> dataSet = (*element).second;
-    n = dataSet[vacancyIndex].AugerTransitionEnergy(augerIndex,transitionId);
+    energy = dataSet[vacancyIndex].AugerTransitionEnergy(augerIndex,transitionId);
       
   }
-  return n;
+  return energy;
 }
 
 
 G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitionId,G4int augerIndex) const
 {
-  G4double n = 0;
+  G4double prob = 0;
     
     if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
       {G4Exception("G4AugerData::vacancyIndex outside boundaries");}
@@ -220,12 +220,12 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
     std::vector<G4AugerTransition> dataSet = (*element).second;
-    n = dataSet[vacancyIndex].AugerTransitionProbability(augerIndex, transitionId);
+    prob = dataSet[vacancyIndex].AugerTransitionProbability(augerIndex, transitionId);
 
 
 
   }
-     return n;
+     return prob;
 }
 
 std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
@@ -388,10 +388,11 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    
 	    if(initIds->size() == 0) {
 	      
-	      // if this is the first data of the shell, alla the colums are equal 
+	      // if this is the first data of the shell, all the colums are equal 
 	      // to the shell Id; so we skip the next colums ang go to the next row
 	      
 	      initIds->push_back((G4int)a);
+	      // first line of initIds is the original shell of the vacancy
 	      file >> a;
 	      file >> a;
 	      file >> a;
@@ -409,8 +410,8 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		else {
 
 		  initIds->push_back((G4int)a);
-		  G4int augerShellId = *vectorIndex;
-		  
+		  G4int augerShellId = 0;
+		  augerShellId = *vectorIndex;
 		  
 		  (*newIdMap)[augerShellId] = *newIds;
 		  (*newEnergyMap)[augerShellId] = *transEnergies;

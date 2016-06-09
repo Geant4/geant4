@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2004/06/23 11:29:59 maire Exp $
+$Id: README,v 1.13 2004/09/27 09:35:30 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -113,7 +113,7 @@ $Id: README,v 1.12 2004/06/23 11:29:59 maire Exp $
   Testem6 produces 6 histograms which illustrate the final state of 
   the GammaConversionToMuons process. See their definitions in RunAction.cc
    
-  The histograms are saved as testem7.paw
+  The histograms are saved as testem6.paw
    
   Note that, by default, histograms are disabled. To activate them, uncomment
   G4ANALYSIS_USE in GNUmakefile.
@@ -150,7 +150,10 @@ Before running the example the command should be issued:
 
 eval `aida-config --runtime csh`
 
- 
+It is possible to choose the format of the histogram file (hbook, root, XML):
+comment/uncomment 1 line in the constructor of RunAction.
+
+  
  9- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
  
      The processes of gamma -> mu+mu-  and e+e- -> mu+mu-

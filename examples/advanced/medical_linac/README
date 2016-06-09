@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2004/05/21 11:52:32 mpiergen Exp $
+$Id: README,v 1.4 2004/11/25 16:28:39 mpiergen Exp $
 -------------------------------------------------------------------
 
 
@@ -32,14 +32,16 @@ The elements simulated are:
 5-The flattening filter
 6-The ion chamber
 7-The mirror
-8-The secondary movable collimators (jaws)
-9-The light field reticle
-10-The phantom (filled with water)
+8-The light field reticle
+9-The secondary movable collimators (jaws)
+10-The Multi Leaf Collimator
+11-The phantom (filled with water)
 
 The objects (2) and (3) are in a box filled with vacuum.
 The world volume is filled with air.
 The distance between the upper surface of the target and the upper surface
 of the phantom (SSD) is 100 cm.
+The particles exiting from the target with an angle>25deg are killed.
   
 ------------------------------------------------------------------------
 ----> 2.Setting up the environment variables
@@ -111,6 +113,23 @@ idle>/Jaws/Y1/DistanceFromAxis -20. cm
 idle>/Jaws/Y2/DistanceFromAxis 20. cm
 idle>/Jaws/update
 
+The user can select the position of every single leaf of the Multi-Leaf Collimator, for example:
+Idle> /MLC/leaf_selection  a1
+Idle> /MLC/position 0. cm
+Idle> /MLC/leaf_selection  a2
+Idle> /MLC/position 0. cm
+..
+..
+..
+Idle> /MLC/leaf_selection  b39
+Idle> /MLC/position 0. cm
+Idle> /MLC/leaf_selection  b40
+Idle> /MLC/position 0. cm
+
+The distance selected represent the distance between the leaf tip and the beam axis projected at isocenter.
+
+
+
 The user can select the mean energy ad the standard deviation of the electrons:
 idle>/energy 6.0 MeV
 idle>/sourceType 0.127 MeV
@@ -154,7 +173,7 @@ The default cut in range value is 0.1 mm, a bigger cut is associated to the firs
  7) 1Dhistogram with the distribution of energy along the x axis 
     (Y and Z Thickness = 5. mm) at a depth in the phantom of 100 mm,
     from which the user can calculate the flatness
- 
+
  8) 1Dhistogram with the distribution of energy along the x axis 
     (Y and Z Thickness = 5. mm) at a depth in the phantom of 200 mm,  
     from which the user can calculate the flatness 
@@ -169,13 +188,10 @@ The default cut in range value is 0.1 mm, a bigger cut is associated to the firs
 
  To use analisys remember to set G4ANALYSIS_USE. 
 
-------------------------------------------------------------------------
-----> 6. Future plans
-In next future I will put in this example the multi leaf collimator
-------------------------------------------------------------------------
+--------------------------------------------------------------------------
 
 for comments, advices, doubts and questions: Michela.Piergentili@ge.infn.it
 
-last modified: Michela Piergentili 06/05/2004
+last modified: Michela Piergentili 24/11/2004
 
 

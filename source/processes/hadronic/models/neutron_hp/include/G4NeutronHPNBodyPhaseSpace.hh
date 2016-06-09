@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.9 2003/06/16 17:10:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.10 2004/12/07 13:49:36 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1
@@ -62,16 +62,16 @@ class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
   inline G4double Prob(G4double anEnergy, G4double eMax, G4int n)
   {
     G4double result;
-    result = sqrt(anEnergy)*pow(eMax-anEnergy, 3.*n/2.-4.);
+    result = std::sqrt(anEnergy)*std::pow(eMax-anEnergy, 3.*n/2.-4.);
     return result;
   }
   
   inline G4double C(G4double anEnergy, G4double mass)
   {
     G4double result(0);
-    if(theTotalCount==3) result = 4./pi/pow(GetEmax(anEnergy, mass),2);
-    if(theTotalCount==4) result = 105./32./pow(GetEmax(anEnergy, mass), 3.5);
-    if(theTotalCount==5) result = 256./14./pi/pow(GetEmax(anEnergy, mass), 5.);
+    if(theTotalCount==3) result = 4./pi/std::pow(GetEmax(anEnergy, mass),2);
+    if(theTotalCount==4) result = 105./32./std::pow(GetEmax(anEnergy, mass), 3.5);
+    if(theTotalCount==5) result = 256./14./pi/std::pow(GetEmax(anEnergy, mass), 5.);
     return result;
   }
   

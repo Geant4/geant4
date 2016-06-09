@@ -199,13 +199,14 @@ G4VParticleChange* G4PionMinusAbsorptionAtRest::AtRestDoIt(
     localtime = globalTime + gkin[isec].GetTOF();
 
     G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
+		aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
     aParticleChange.AddSecondary( aNewTrack );
 
   }
 
-  aParticleChange.SetLocalEnergyDeposit( 0.0*GeV );
+  aParticleChange.ProposeLocalEnergyDeposit( 0.0*GeV );
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident PionMinus
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident PionMinus
 
 //   clear InteractionLengthLeft
 
@@ -315,7 +316,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
     }
     *nopt = isw;
     ran = G4UniformRand();
-    tof1 = log(ran) * G4float(-25.);
+    tof1 = std::log(ran) * G4float(-25.);
     tof1 *= G4float(20.);
     if (isw != 1) {
       pv[2].SetZero();
@@ -339,7 +340,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
     evapEnergy3 = G4float(.0058);
     nt = 1;
     tex = evapEnergy1;
-    black = log(targetAtomicMass) * G4float(.5);
+    black = std::log(targetAtomicMass) * G4float(.5);
     Poisso(black, &nbl);
     if (nbl <= 0) {
       nbl = 1;
@@ -354,7 +355,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
 	continue;
       }
       ran2 = G4UniformRand();
-      ekin1 = -G4double(ekin) * log(ran2);
+      ekin1 = -G4double(ekin) * std::log(ran2);
       ekin2 += ekin1;
       ipa1 = pdefNeutron;
       pnrat = G4float(1.) - targetCharge / targetAtomicMass;
@@ -372,7 +373,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
       }
     }
     tex = evapEnergy3;
-    black = log(targetAtomicMass) * G4float(.5);
+    black = std::log(targetAtomicMass) * G4float(.5);
     Poisso(black, &nbl);
     if (nt + nbl > (MAX_SECONDARIES - 2)) {
       nbl = (MAX_SECONDARIES - 2) - nt;
@@ -387,7 +388,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
 	continue;
       }
       ran2 = G4UniformRand();
-      ekin1 = -G4double(ekin) * log(ran2);
+      ekin1 = -G4double(ekin) * std::log(ran2);
       ekin2 += ekin1;
       ++nt;
       ran = G4UniformRand();
@@ -411,7 +412,7 @@ void G4PionMinusAbsorptionAtRest::PionMinusAbsorption(G4int *nopt)
     // ** STORE ON EVENT COMMON
     // **
     ran = G4UniformRand();
-    tof1 = log(ran) * G4float(-25.);
+    tof1 = std::log(ran) * G4float(-25.);
     tof1 *= G4float(20.);
     for (i = 2; i <= nt; ++i) {
       pv[i].SetTOF( result.GetTOF() + tof1 );
@@ -443,7 +444,7 @@ void G4PionMinusAbsorptionAtRest::Poisso(G4float xav, G4int *iran)
   if (xav > G4float(9.9)) {
     // ** NORMAL DISTRIBUTION WITH SIGMA**2 = <X>
     Normal(&ran1);
-    ran1 = xav + ran1 * sqrt(xav);
+    ran1 = xav + ran1 * std::sqrt(xav);
     *iran = G4int(ran1);
     if (*iran < 0) {
       *iran = 0;
@@ -453,19 +454,19 @@ void G4PionMinusAbsorptionAtRest::Poisso(G4float xav, G4int *iran)
     mm = G4int(xav * G4float(5.));
     *iran = 0;
     if (mm > 0) {
-      r = exp(-G4double(xav));
+      r = std::exp(-G4double(xav));
       ran1 = G4UniformRand();
       if (ran1 > r) {
 	rr = r;
 	for (i = 1; i <= mm; ++i) {
 	  ++(*iran);
 	  if (i <= 5) {
-	    rrr = pow(xav, G4float(i)) / NFac(i);
+	    rrr = std::pow(xav, G4float(i)) / NFac(i);
 	  }
 	  // ** STIRLING' S FORMULA FOR LARGE NUMBERS
 	  if (i > 5) {
-	    rrr = exp(i * log(xav) -
-		      (i + G4float(.5)) * log(i * G4float(1.)) +
+	    rrr = std::exp(i * std::log(xav) -
+		      (i + G4float(.5)) * std::log(i * G4float(1.)) +
 		      i - G4float(.9189385));
 	  }
 	  rr += r * rrr;
@@ -477,7 +478,7 @@ void G4PionMinusAbsorptionAtRest::Poisso(G4float xav, G4int *iran)
     }
     else {
       // ** FOR VERY SMALL XAV TRY IRAN=1,2,3
-      p1 = xav * exp(-G4double(xav));
+      p1 = xav * std::exp(-G4double(xav));
       p2 = xav * p1 / G4float(2.);
       p3 = xav * p2 / G4float(3.);
       ran = G4UniformRand();

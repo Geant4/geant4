@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2004/06/18 12:45:10 gcosmo Exp $
+$Id: History,v 1.39 2004/12/02 09:36:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,60 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2nd, 2004 - G.Cosmo  (geomnav-V06-02-08)
+-----------------------
+- Implemented migration to <cmath> for standard mathematical functions.
+
+Nov 24th, 2004 - G.Cosmo  (geomnav-V06-02-07)
+------------------------
+- Fix in G4ReplicaNavigation::DistanceToOutPhi() for the case of phi
+  sections on convex surfaces. Fixes problem report #651.
+
+Nov 19th, 2004 - J.Apostolakis  (geomnav-V06-02-06)
+------------------------------
+- New access method in G4Navigator for SeverityOfZeroStepping().
+
+Nov 17th, 2004 - G.Cosmo  (geomnav-V06-02-05)
+------------------------
+- Allow consecutive corrections for stuck tracks in G4Navigator::ComputeStep()
+  up to 10 times before aborting the event.
+
+Sep 28th, 2004 - G.Cosmo  (geomnav-V06-02-04)
+------------------------
+- Invoke G4LogicalVolume::UpdateMaterial() instead of SetMaterial() for
+  parameterised navigation in G4Navigator and G4ParameterisedNavigation
+  (M.Asai).
+- Coworks with tag "geommng-V06-02-02".
+
+Sep 13th, 2004 - G.Cosmo  (geomnav-V06-02-03)
+------------------------
+- G4Navigator: corrected computation of fGrandMotherExitNormal in ComputeStep()
+  in the case where a not valid exit-normal exists.
+
+Sep 11th, 2004 - G.Cosmo  (geomnav-V06-02-02)
+------------------------
+- Dump out contents from the solid when a fatal G4Exception is thrown from
+  the navigators in ComputeStep().
+  Modified files G4NormalNavigation.cc, G4ParameterisedNavigation.cc,
+                 G4ReplicaNavigation.cc, G4VoxelNavigation.cc.
+
+Aug 31st, 2004 - D.C.Williams  (geomnav-V06-02-01)
+-----------------------------
+- G4GeomTestSegment: fix to correctly determine whether starting trajectory
+  is entering or exiting the solid when the starting point is on a surface.
+  Added additional tests on solid consistencies (from roundoff sometimes) to
+  avoid incorrect overlap warnings. Addresses problem reports #610 and #652.
+
+Jun 29th, 2004 - G.Cosmo  (geomnav-V06-02-00)
+------------------------
+- Fixed zero step-length problem in G4ReplicaNavigation::ComputeStep()
+  for cases where different replica types are coincident. Resolves
+  problem report #633.
+- G4NormalNavigation: added extra verbosity to print out information
+  for each solid which returns a 'lowest-yet' step, including the
+  mother volume. It is activated by setting verbose level to 2 or
+  more (J.Apostolakis).
 
 Jun 18th, 2004 - G.Cosmo  (geomnav-V06-01-03)
 ------------------------

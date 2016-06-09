@@ -1,4 +1,4 @@
-.$Id: History,v 1.75 2004/06/17 06:50:35 duns Exp $
+.$Id: History,v 1.78 2004/11/22 19:31:37 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+22 November 2004 Mark Donszelmann (vis-HepRep-V06-02-02 against geant4-06-02-ref)
+- Upgraded to latest version C++ HepRep driver from FreeHEP.
+- Fixed GEANT-51, upgrade zlib to version 1.2.2 (for AMD64 compatibility).
+
+22 August 2004 Mark Donszelmann (vis-HepRep-V06-02-01)
+- Fixed a compilation problem in zlib for AMD64, reported by Peter Niessen.
+
 17 June 2004 Mark Donszelmann (vis-HepRep-V06-01-05 against geant4-06-02-cand-02)
 - Fixed GEANT-50:
   - Renamed zlib prefix from z_ to heprep_z_

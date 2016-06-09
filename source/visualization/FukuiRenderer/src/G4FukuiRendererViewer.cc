@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.7 2001/07/11 10:08:46 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4FukuiRendererViewer.cc,v 1.9 2004/12/10 18:16:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 12:09:11 JST 1996
@@ -200,14 +200,14 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
-	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
+	const    G4double        MAX_HALF_ANGLE     = 0.499 * pi ;
 
 		//----- (2A) CALC camera distance
 		//..... Note: Camera cannot enter inside object
 	G4double  camera_distance ;
 	G4double  radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 
-	G4double half_view_angle  = fabs ( fVP.GetFieldHalfAngle () ) ;
+	G4double half_view_angle  = std::fabs ( fVP.GetFieldHalfAngle () ) ;
 	if( half_view_angle > MAX_HALF_ANGLE ) { 
 	  half_view_angle = MAX_HALF_ANGLE ; 
 	} 
@@ -217,7 +217,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		camera_distance = radius * HOW_FAR ;  
 	} else {
 			//----- Calc camera distance from half view angle
-		camera_distance = radius / sin ( half_view_angle );
+		camera_distance = radius / std::sin ( half_view_angle );
 		camera_distance -= fVP.GetDolly();
 	}
 
@@ -230,8 +230,8 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		//----- (3A) CALC camera direction
 	const G4Vector3D& camera_direction \
 	  = fVP.GetViewpointDirection().unit();
-	const G4double v_angle =  (180.0 / M_PI) * camera_direction.theta() ;
-	const G4double h_angle =  (180.0 / M_PI) * camera_direction.phi  () ;
+	const G4double v_angle =  (180.0 / pi) * camera_direction.theta() ;
+	const G4double h_angle =  (180.0 / pi) * camera_direction.phi  () ;
 
 		//----- (2B), (3B) SEND camera position
 	fSceneHandler.SendStrDouble3( FR_CAMERA_POSITION, 
@@ -271,7 +271,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 	} else {
 		const G4double FR_HALF_SCREEN_SIZE = 0.5 ;
 		G4double  focal_distance \
-		  = FR_HALF_SCREEN_SIZE / tan( half_view_angle ); 
+		  = FR_HALF_SCREEN_SIZE / std::tan( half_view_angle ); 
 		focal_distance *= zoom_factor ;
 		fSceneHandler.SendStrDouble ( FR_FOCAL_DISTANCE, focal_distance );
 	}

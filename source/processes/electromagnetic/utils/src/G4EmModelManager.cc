@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.23 2004/05/10 18:45:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4EmModelManager.cc,v 1.24 2004/08/06 11:30:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -228,6 +228,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 						       G4double theMinSubRange,
                                                        G4int val)
 {
+  verboseLevel = val;
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::Initialise() for "
            << p->GetParticleName()
@@ -240,7 +241,6 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   particle = p;
   secondaryParticle = sp;
   minSubRange = theMinSubRange;
-  verboseLevel = val;
 
   Clear();
 

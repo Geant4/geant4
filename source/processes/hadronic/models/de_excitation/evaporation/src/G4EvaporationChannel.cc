@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.2 2003/11/03 17:53:02 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EvaporationChannel.cc,v 1.3 2004/12/07 13:46:38 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -164,7 +164,7 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
     G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
 
-    G4ThreeVector momentum(IsotropicVector(sqrt(EvaporatedKineticEnergy*
+    G4ThreeVector momentum(IsotropicVector(std::sqrt(EvaporatedKineticEnergy*
 						(EvaporatedKineticEnergy+2.0*EvaporatedMass))));
   
     momentum.rotateUz(theNucleus.GetMomentum().vect().unit());
@@ -195,15 +195,15 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 #ifdef debug
     G4double Efinal = ResidualMomentum.e() + EvaporatedMomentum.e();
     G4ThreeVector Pfinal = ResidualMomentum.vect() + EvaporatedMomentum.vect();
-    if (abs(Efinal-theNucleus.GetMomentum().e()) > 1.0*keV) {
+    if (std::abs(Efinal-theNucleus.GetMomentum().e()) > 1.0*keV) {
 	G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: ENERGY @@@@@@@@@@@@@@@@" << G4endl;
 	G4cout << "Initial : " << theNucleus.GetMomentum().e()/MeV << " MeV    Final :" 
 	       <<Efinal/MeV << " MeV    Delta: " <<  (Efinal-theNucleus.GetMomentum().e())/MeV 
 	       << " MeV" << G4endl;
     }
-    if (abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 1.0*keV ||
-	abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 1.0*keV ||
-	abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 1.0*keV ) {
+    if (std::abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 1.0*keV ||
+	std::abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 1.0*keV ||
+	std::abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 1.0*keV ) {
 	G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: MOMENTUM @@@@@@@@@@@@@@@@" << G4endl;
 	G4cout << "Initial : " << theNucleus.GetMomentum().vect() << " MeV    Final :" 
 	       <<Pfinal/MeV << " MeV    Delta: " <<  Pfinal-theNucleus.GetMomentum().vect()
@@ -258,24 +258,24 @@ G4double G4EvaporationChannel::CalcKineticEnergy(void)
 
     G4double Rb = 4.0*theLevelDensityPtr->LevelDensityParameter(AResidual+A,ZResidual+Z,MaximalKineticEnergy)*
 	MaximalKineticEnergy;
-    G4double RbSqrt = sqrt(Rb);
+    G4double RbSqrt = std::sqrt(Rb);
     G4double PEX1 = 0.0;
-    if (RbSqrt < 160.0) PEX1 = exp(-RbSqrt);
+    if (RbSqrt < 160.0) PEX1 = std::exp(-RbSqrt);
     G4double Rk = 0.0;
     G4double FRk = 0.0;
     do {
 	G4double RandNumber = G4UniformRand();
-	Rk = 1.0 + (1./RbSqrt)*log(RandNumber + (1.0-RandNumber)*PEX1);
+	Rk = 1.0 + (1./RbSqrt)*std::log(RandNumber + (1.0-RandNumber)*PEX1);
 	G4double Q1 = 1.0;
 	G4double Q2 = 1.0;
 	if (Z == 0) { // for emitted neutron
-	    G4double Beta = (2.12/pow(G4double(AResidual),2./3.) - 0.05)*MeV/
-		(0.76 + 2.2/pow(G4double(AResidual),1./3.));
+	    G4double Beta = (2.12/std::pow(G4double(AResidual),2./3.) - 0.05)*MeV/
+		(0.76 + 2.2/std::pow(G4double(AResidual),1./3.));
 	    Q1 = 1.0 + Beta/(MaximalKineticEnergy);
-	    Q2 = Q1*sqrt(Q1);
+	    Q2 = Q1*std::sqrt(Q1);
 	} 
     
-	FRk = (3.0*sqrt(3.0)/2.0)/Q2 * Rk * (Q1 - Rk*Rk);
+	FRk = (3.0*std::sqrt(3.0)/2.0)/Q2 * Rk * (Q1 - Rk*Rk);
     
     } while (FRk < G4UniformRand());
 
@@ -290,10 +290,10 @@ G4ThreeVector G4EvaporationChannel::IsotropicVector(const G4double Magnitude)
     // By default Magnitude = 1.0
 {
     G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
     G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-			 Magnitude*sin(Phi)*SinTheta,
+    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+			 Magnitude*std::sin(Phi)*SinTheta,
 			 Magnitude*CosTheta);
     return Vector;
 }

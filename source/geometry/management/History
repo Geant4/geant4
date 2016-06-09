@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2004/05/13 14:54:15 gcosmo Exp $
+$Id: History,v 1.78 2004/12/02 09:34:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2004  G.Cosmo                      geommng-V06-02-08
+- Implemented migration to <cmath> for standard mathematical functions.
+
+Nov 19, 2004  G.Cosmo                      geommng-V06-02-07
+- Added GetCopyNumber() method to G4VTouchable, clone of GetReplicaNumber().
+
+Nov 16, 2004  M.Asai                       geommng-V06-02-06
+- Fix in G4LogicalVolume::UpdateMaterial() for checking the existance of
+  root-region pointer for logical-volume. Fixes report #684.
+
+Nov 13, 2004  G.Cosmo                      geommng-V06-02-05
+- Added method TotalVolumeEntities() to G4LogicalVolume, returning the
+  total number of physical volumes (placed or replicated/parameterised)
+  included in the tree represented by the current logical volume.
+- Correction in the computation of mass for parameterised volumes.
+
+Nov 12, 2004  G.Cosmo                      geommng-V06-02-04
+- Added method GetMass() to G4LogicalVolume, returning the value in absolute
+  units of the mass of the logical volume tree. The mass is computed from the
+  estimated geometrical volume of each solid and material's density associated
+  to the logical volume and its daughters.
+  The returned value is cached and can be used for successive calls (default),
+  unless recomputation is forced by providing 'true' as the first boolean
+  argument in input. Computation should be forced if the geometry setup has
+  changed after the previous call. An optional argument to specify a material
+  is provided; it is implicitely used for geometrical parameterisations by
+  material.
+
+Oct 10, 2004  J.Allison                    geommng-V06-02-03
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
+
+Sep 28, 2004  M.Asai                       geommng-V06-02-02
+- G4Region:
+  o Added map for storage of materials/cuts.
+  o Added methods for handling registration of couples in the map, finding
+    a couple according to a given material, clearing the map's storage.
+- G4LogicalVolume:
+  o Added method UpdateMaterial() to refresh a material/cut couple in
+    the corresponding region.
+
+Sep 22, 2004  G.Cosmo                      geommng-V06-02-01
+- Introduced virtual method GetCubicVolume() to G4VSolid, returning an
+  estimation of the solid volume in internal units. This method may be
+  overloaded by derived classes to compute the exact geometrical
+  quantity for solids where this is possible, or anyway to cache the
+  computed value. By default it uses the new protected method
+  EstimateCubicVolume(stat, eps) with fixed statistics and error
+  accuracy, and does not cache the computed value.
+
+Sep 02, 2004  G.Cosmo                      geommng-V06-02-00
+- Introduced abstract class G4VStoreNotifier to be optionally associated
+  to stores by the user for the notification of the registration and
+  deregistration of objects in the stores.
+- Added notification mechanism to volume, solid, and region stores.
+- Fixed G4RegionStore::Clean() to avoid deletion of world region.
 
 May 07, 2004  G.Cosmo                      geommng-V06-01-00
 - Imported G4ReflectedSolid class from solids/Boolean.

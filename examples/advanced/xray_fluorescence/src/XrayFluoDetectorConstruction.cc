@@ -86,13 +86,13 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       =  sqrt(40) * mm; // should be sqrt(40) * mm
+  PixelSizeXY       =  std::sqrt(40.) * mm; // should be std::sqrt(40) * mm
   PixelThickness = 3.5 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
 
-  ContactSizeXY     = sqrt(40) * mm; //should be the same as PixelSizeXY
+  ContactSizeXY     = std::sqrt(40.) * mm; //should be the same as PixelSizeXY
   SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
@@ -255,8 +255,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiHPGe.rotateX(PhiHPGe);
       G4double x,y,z;
-      z = DistDe * cos(ThetaHPGe);
-      y =DistDe * sin(ThetaHPGe);
+      z = DistDe * std::cos(ThetaHPGe);
+      y =DistDe * std::sin(ThetaHPGe);
       x = 0.*cm;
       physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)), 
 				    "HPGeDetector",	//its name
@@ -285,8 +285,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	/*
 	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
-	z = DistDe * cos(ThetaHPGe);
-	y =DistDe * sin(ThetaHPGe);
+	z = DistDe * std::cos(ThetaHPGe);
+	y =DistDe * std::sin(ThetaHPGe);
 	x = 0.*cm;*/ 
 	physiPixel = new G4PVPlacement(0,	       
 				       G4ThreeVector(0,
@@ -387,17 +387,17 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 
     G4int nbOfGrainsX = ((G4int)(SampleSizeXY/grainDia)) -1 ;
     
-    // y dim of a max density plane is 2rn-(n-1)ar, wehere a = (1-(sqrt(3)/2)), n is 
+    // y dim of a max density plane is 2rn-(n-1)ar, wehere a = (1-(std::sqrt(3)/2)), n is 
     // number of rows and r the radius of the grain. so the Y-dim of the sample must 
     // be greater or equal to this. It results that nmust be <= (SampleY-a)/(1-a).
-    // Max Y shift of the planes superimposing along Z axis is minor (2/sqrt(3)r)
+    // Max Y shift of the planes superimposing along Z axis is minor (2/std::sqrt(3)r)
 
-    G4double a = (1.-(sqrt(3.)/2.));
+    G4double a = (1.-(std::sqrt(3.)/2.));
     G4int nbOfGrainsY =  (G4int) ( ((SampleSizeXY/(grainDia/2.)) -a)/(2.-a) ) -1;
 
-    // same for the z axis, but a = 2 * (sqrt(3) - sqrt(2))/sqrt(3)
+    // same for the z axis, but a = 2 * (std::sqrt(3) - std::sqrt(2))/std::sqrt(3)
 
-    G4double b = 2. * (sqrt(3.) - sqrt(2.))/sqrt(3.);
+    G4double b = 2. * (std::sqrt(3.) - std::sqrt(2.))/std::sqrt(3.);
     G4int nbOfGrainsZ =  (G4int) ( ((SampleThickness/(grainDia/2.)) -b)/(2.-b) )-1;
 
     if (SampleThickness > 0.){
@@ -410,12 +410,12 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				       sampleMaterial,	//its material
 				       "Grain");	        //its name
       G4ThreeVector grainPosition; 
-      G4double grainInitPositionX;
-      G4double grainInitPositionY;
+      G4double grainInitPositionX = 0.;
+      G4double grainInitPositionY = 0.;
       G4double grainInitPositionZ = (-1.*SampleThickness/2.+grainDia/2.);
       G4double grainStepX = grainDia;
-      G4double grainStepY = grainDia*(1.-(0.5-(sqrt(3.)/4.)));
-      G4double grainStepZ = grainDia*sqrt(2./3.);
+      G4double grainStepY = grainDia*(1.-(0.5-(std::sqrt(3.)/4.)));
+      G4double grainStepZ = grainDia*std::sqrt(2./3.);
       
       for ( G4int k=0; k < nbOfGrainsZ ; k++ ) {
 	for ( G4int j=0; j < nbOfGrainsY ; j++ ) {
@@ -438,7 +438,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	    }	      
 	    else if ( ((k+2) % 3) == 0 ) { // B-layer
 	      
-	      grainInitPositionY = ( (-1.*SampleSizeXY/2.) + (grainDia/2.)*(1. + (1./sqrt(3.)) ) );
+	      grainInitPositionY = ( (-1.*SampleSizeXY/2.) + (grainDia/2.)*(1. + (1./std::sqrt(3.)) ) );
 	      
 	      if (j%2 ==0) { //first or (3-multiple)th row
 		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia);
@@ -452,7 +452,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	    
 	    else if ( (k+1)%3 == 0 ) { // B-layer
 	      
-	      grainInitPositionY = (-1.*SampleSizeXY/2.+(grainDia/2.)*(1.+2./sqrt(3.)) );
+	      grainInitPositionY = (-1.*SampleSizeXY/2.+(grainDia/2.)*(1.+2./std::sqrt(3.)) );
 	      
 	      if (j%2 ==0) { //first or (3-multiple)th row
 		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2.);
@@ -523,8 +523,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiDia1.rotateX(AlphaDia1);
       G4double x,y,z;
-      z = DistDia * cos(ThetaDia1);
-      y =DistDia * sin(ThetaDia1);
+      z = DistDia * std::cos(ThetaDia1);
+      y =DistDia * std::sin(ThetaDia1);
       x = 0.*cm;
       physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),
 				    "Diaphragm1",	//its name
@@ -554,8 +554,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiDia3.rotateX(AlphaDia3);
       G4double x,y,z;
-      z = Dia3Dist * cos(ThetaDia3);
-      y =Dia3Dist * sin(ThetaDia3);
+      z = Dia3Dist * std::cos(ThetaDia3);
+      y =Dia3Dist * std::sin(ThetaDia3);
       x = 0.*cm;
       physiDia3 = new G4PVPlacement(G4Transform3D(zRotPhiDia3,G4ThreeVector(x,y,z)),                                           "Diaphragm3",	//its name
 				    logicDia3,	//its logical volume

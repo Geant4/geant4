@@ -78,7 +78,7 @@
     ek += tkin;
     modifiedOriginal.SetKineticEnergy( ek*MeV );
     G4double et = ek + amas;
-    G4double p = sqrt( abs((et-amas)*(et+amas)) );
+    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
     if( pp > 0.0 )
     {
@@ -92,7 +92,7 @@
     ek -= tkin;
     modifiedOriginal.SetKineticEnergy( ek*MeV );
     et = ek + amas;
-    p = sqrt( abs((et-amas)*(et+amas)) );
+    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     pp = modifiedOriginal.GetMomentum().mag()/MeV;
     if( pp > 0.0 )
     {
@@ -158,17 +158,17 @@
         cost1 = -1.0 + 2.0*G4UniformRand();
         eka = 1.0 + 2.0*cost1*A + A*A;
       }
-      G4double cost = std::min( 1.0, std::max( -1.0, (A*cost1+1.0)/sqrt(eka) ) );
+      G4double cost = std::min( 1.0, std::max( -1.0, (A*cost1+1.0)/std::sqrt(eka) ) );
       eka /= (1.0+A)*(1.0+A);
       G4double ek = currentKinetic*MeV/GeV;
       G4double amas = currentMass*MeV/GeV;
       ek *= eka;
       G4double en = ek + amas;
-      G4double p = sqrt(abs(en*en-amas*amas));
-      G4double sint = sqrt(abs(1.0-cost*cost));
+      G4double p = std::sqrt(std::abs(en*en-amas*amas));
+      G4double sint = std::sqrt(std::abs(1.0-cost*cost));
       G4double phi = G4UniformRand()*twopi;
-      G4double px = sint*sin(phi);
-      G4double py = sint*cos(phi);
+      G4double px = sint*std::sin(phi);
+      G4double py = sint*std::cos(phi);
       G4double pz = cost;
       targetParticle.SetMomentum( px*GeV, py*GeV, pz*GeV );
       G4double pxO = originalIncident->Get4Momentum().x()/GeV;
@@ -177,14 +177,14 @@
       G4double ptO = pxO*pxO + pyO+pyO;
       if( ptO > 0.0 )
       {
-        G4double pO = sqrt(pxO*pxO+pyO*pyO+pzO*pzO);
+        G4double pO = std::sqrt(pxO*pxO+pyO*pyO+pzO*pzO);
         cost = pzO/pO;
-        sint = 0.5*(sqrt(abs((1.0-cost)*(1.0+cost)))+sqrt(ptO)/pO);
+        sint = 0.5*(std::sqrt(std::abs((1.0-cost)*(1.0+cost)))+std::sqrt(ptO)/pO);
         G4double ph = pi/2.0;
         if( pyO < 0.0 )ph = ph*1.5;
-        if( abs(pxO) > 0.000001 )ph = atan2(pyO,pxO);
-        G4double cosp = cos(ph);
-        G4double sinp = sin(ph);
+        if( std::abs(pxO) > 0.000001 )ph = std::atan2(pyO,pxO);
+        G4double cosp = std::cos(ph);
+        G4double sinp = std::sin(ph);
         px = cost*cosp*px - sinp*py+sint*cosp*pz;
         py = cost*sinp*px + cosp*py+sint*sinp*pz;
         pz = -sint*px     + cost*pz;
@@ -193,7 +193,7 @@
       {
         if( pz < 0.0 )pz *= -1.0;
       }
-      G4double pu = sqrt(px*px+py*py+pz*pz);
+      G4double pu = std::sqrt(px*px+py*py+pz*pz);
       modifiedOriginal.SetMomentum( targetParticle.GetMomentum() * (p/pu) );
       modifiedOriginal.SetKineticEnergy( ek*GeV );
       
@@ -201,7 +201,7 @@
        originalIncident->Get4Momentum().vect() - modifiedOriginal.GetMomentum() );
       G4double pp = targetParticle.GetMomentum().mag();
       G4double tarmas = targetParticle.GetMass();
-      targetParticle.SetTotalEnergy( sqrt( pp*pp + tarmas*tarmas ) );
+      targetParticle.SetTotalEnergy( std::sqrt( pp*pp + tarmas*tarmas ) );
       
       theParticleChange.SetEnergyChange( modifiedOriginal.GetKineticEnergy() );
       G4DynamicParticle *pd = new G4DynamicParticle;
@@ -267,7 +267,7 @@
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
     const G4double targetMass = targetParticle.GetMass()/MeV;
-    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
+    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
@@ -357,7 +357,7 @@
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aNeutron )
       {
-        test = exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
+        test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test/2.0;
         wm = test;
         if( G4UniformRand() < w0/(w0+wm) )
@@ -365,10 +365,10 @@
         else
           nm = 1;
       } else { // target is a proton
-        test = exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+        test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test/2.0;        
-        test = exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
+        test = std::exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
         wm = test/2.0;
         wt = w0+wp+wm;
         wp += w0;
@@ -399,9 +399,9 @@
                 nt = np+nm+nz;
                 if( nt > 0 )
                 {
-                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                  if( fabs(dum) < 1.0 ) {
+                  if( std::fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;
                   } else {
                     excs += dum*test;
@@ -430,9 +430,9 @@
                 nt = np+nm+nz;
                 if( (nt>=1) && (nt<=numSec) )
                 {
-                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                  if( fabs(dum) < 1.0 ) {
+                  if( std::fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;
                   } else {
                     excs += dum*test;

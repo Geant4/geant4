@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.3 2004/05/14 18:25:38 mpiergen Exp $
+// $Id: MedLinac.cc,v 1.4 2004/11/24 16:53:28 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -45,6 +45,7 @@
 #include "MedLinacPrimaryGeneratorAction.hh"
 #include "MedLinacEventAction.hh"
 #include "MedLinacRunAction.hh"
+#include "MedLinacTrackingAction.hh"
 #include "G4SDManager.hh"
 
 
@@ -113,7 +114,7 @@ int main(int argc ,char ** argv)
   MedLinacRunAction *pRunAction = new MedLinacRunAction(sensitiveDetectorName);
 
   runManager->SetUserAction(pRunAction);  
-
+  runManager->SetUserAction(new MedLinacTrackingAction);
 
 
   // Initialize  G4 kernel

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.4 2004/05/24 12:09:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4HyperbolicSurface.hh,v 1.7 2004/12/02 09:31:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // Class description:
 //
-//  Class describing a hyperbolic boundary surface for G4VSolid.
+//  Class describing a hyperbolic boundary surface for a cylinder.
 
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -55,8 +55,8 @@ class G4HyperbolicSurface : public G4VSurface
                        const G4RotationMatrix &rot,  // 0.5*(phi-width segment)
                        const G4ThreeVector    &tlate,
                        const G4int     handedness,// R-hand = 1, L-hand = -1
-                       const G4double  kappa,     // tan(TwistAngle/2)/fZHalfLen
-                       const G4double  tanstereo, // tan(stereo angle)
+                       const G4double  kappa,     // std::tan(TwistAngle/2)/fZHalfLen
+                       const G4double  tanstereo, // std::tan(stereo angle)
                        const G4double  r0,        // radius at z = 0
                        const EAxis     axis0 = kPhi,
                        const EAxis     axis1 = kZAxis,
@@ -117,9 +117,9 @@ class G4HyperbolicSurface : public G4VSurface
 
   private:
    
-   G4double          fKappa;        // tan(TwistedAngle/2)/HalfLenZ;
-   G4double          fTanStereo;    // tan(StereoAngle)
-   G4double          fTan2Stereo;   // tan(StereoAngle)**2
+   G4double          fKappa;        // std::tan(TwistedAngle/2)/HalfLenZ;
+   G4double          fTanStereo;    // std::tan(StereoAngle)
+   G4double          fTan2Stereo;   // std::tan(StereoAngle)**2
    G4double          fR0;           // radius at z = 0
    G4double          fR02;          // radius**2 at z = 0
    class Insidetype
@@ -146,7 +146,7 @@ G4double G4HyperbolicSurface::GetRhoAtPZ(const G4ThreeVector &p,
   } else {
      tmpp = p;
   }
-  return sqrt(fR02 + tmpp.z() * tmpp.z() * fTan2Stereo); 
+  return std::sqrt(fR02 + tmpp.z() * tmpp.z() * fTan2Stereo); 
 }
 
 #endif

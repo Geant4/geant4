@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroTemperature.cc,v 1.3 2004/12/07 13:47:48 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -59,7 +59,7 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
 {
     // Temperature
     G4double Ta = 0.00012; 
-    G4double Tb = std::max(sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
+    G4double Tb = std::max(std::sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
     
     G4double fTa = this->operator()(Ta); 
     G4double fTb = this->operator()(Tb); 
@@ -81,7 +81,7 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
     // Usually, fTb will be less than 0, but if it is not the case: 
     iterations = 0;  
     while (fTa*fTb > 0.0 && iterations++ < 10) {
-	Tb += 1.5*abs(Tb-Ta);
+	Tb += 1.5*std::abs(Tb-Ta);
 	fTb = this->operator()(Tb);
     }
 	
@@ -106,8 +106,8 @@ G4double G4StatMFMacroTemperature::FragsExcitEnergy(const G4double T)
 {
 
     // Model Parameters
-    G4double R0 = G4StatMFParameters::Getr0()*pow(theA,1./3.);
-    G4double R = R0*pow(1.0+G4StatMFParameters::GetKappaCoulomb(), 1./3.);
+    G4double R0 = G4StatMFParameters::Getr0()*std::pow(theA,1./3.);
+    G4double R = R0*std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(), 1./3.);
     G4double FreeVol = _Kappa*(4.*pi/3.)*R0*R0*R0; 
  
  

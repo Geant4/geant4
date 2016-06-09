@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.2 2003/11/03 17:53:04 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4GEMChannel.cc,v 1.3 2004/12/07 13:47:08 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -170,7 +170,7 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
     G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
     G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
     
-    G4ThreeVector momentum(IsotropicVector(sqrt(EvaporatedKineticEnergy*
+    G4ThreeVector momentum(IsotropicVector(std::sqrt(EvaporatedKineticEnergy*
                                                 (EvaporatedKineticEnergy+2.0*EvaporatedMass))));
     
     momentum.rotateUz(theNucleus.GetMomentum().vect().unit());
@@ -204,15 +204,15 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
 #ifdef debug
     G4double Efinal = ResidualMomentum.e() + EvaporatedMomentum.e();
     G4ThreeVector Pfinal = ResidualMomentum.vect() + EvaporatedMomentum.vect();
-    if (abs(Efinal-theNucleus.GetMomentum().e()) > 10.0*eV) {
+    if (std::abs(Efinal-theNucleus.GetMomentum().e()) > 10.0*eV) {
 	G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4GEMChanel: ENERGY @@@@@@@@@@@@@@@@" << G4endl;
 	G4cout << "Initial : " << theNucleus.GetMomentum().e()/MeV << " MeV    Final :" 
 	       <<Efinal/MeV << " MeV    Delta: " <<  (Efinal-theNucleus.GetMomentum().e())/MeV 
 	       << " MeV" << G4endl;
     }
-    if (abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 10.0*eV ||
-	abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 10.0*eV ||
-        abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 10.0*eV ) {
+    if (std::abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 10.0*eV ||
+	std::abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 10.0*eV ||
+        std::abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 10.0*eV ) {
         G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4GEMChanel: MOMENTUM @@@@@@@@@@@@@@@@" << G4endl;
         G4cout << "Initial : " << theNucleus.GetMomentum().vect() << " MeV    Final :" 
                <<Pfinal/MeV << " MeV    Delta: " <<  Pfinal-theNucleus.GetMomentum().vect()
@@ -263,17 +263,17 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     
     G4double Ux = (2.5 + 150.0/AResidual)*MeV;
     G4double Ex = Ux + delta0;
-    G4double T = 1.0/(sqrt(a/Ux) - 1.5/Ux);
-    G4double E0 = Ex - T*(log(T*MeV) - log(a/MeV)/4.0 - 1.25*log(Ux*MeV) + 2.0*sqrt(a*Ux));
+    G4double T = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
+    G4double E0 = Ex - T*(std::log(T*MeV) - std::log(a/MeV)/4.0 - 1.25*std::log(Ux*MeV) + 2.0*std::sqrt(a*Ux));
 
     G4double InitialLevelDensity;
     if ( U < Ex ) 
       {
-        InitialLevelDensity = (pi/12.0)*exp((U-E0)/T)/T;
+        InitialLevelDensity = (pi/12.0)*std::exp((U-E0)/T)/T;
       } 
     else 
       {
-        InitialLevelDensity = (pi/12.0)*exp(2*sqrt(a*(U-delta0)))/pow(a*pow(U-delta0,5.0),1.0/4.0);
+        InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(a*(U-delta0)))/std::pow(a*std::pow(U-delta0,5.0),1.0/4.0);
       }
 
     const G4double Spin = theEvaporationProbabilityPtr->GetSpin();
@@ -281,8 +281,8 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     G4double RN = 0.0;
     if (A > 4) 
     {
-	G4double R1 = pow(G4double(fragment.GetA()-A),1.0/3.0);
-	G4double R2 = pow(G4double(A),1.0/3.0);
+	G4double R1 = std::pow(G4double(fragment.GetA()-A),1.0/3.0);
+	G4double R2 = std::pow(G4double(A),1.0/3.0);
 	RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
 	RN *= fermi;
     }
@@ -290,7 +290,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     {
 	RN = 1.5*fermi;
     }
-    G4double GeometricalXS = pi*RN*RN*pow(G4double(fragment.GetA()-A),2./3.); 
+    G4double GeometricalXS = pi*RN*RN*std::pow(G4double(fragment.GetA()-A),2./3.); 
     
 
     G4double ConstantFactor = g*GeometricalXS*Alpha/InitialLevelDensity;
@@ -308,12 +308,12 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
         Probability = ConstantFactor*(KineticEnergy + Beta);
         if ( theEnergy-KineticEnergy < Ex) 
 	  {
-            Probability *= exp((theEnergy-KineticEnergy-E0)/T)/T;
+            Probability *= std::exp((theEnergy-KineticEnergy-E0)/T)/T;
 	  } 
 	else 
 	  {
-            Probability *= exp(2*sqrt(a*(theEnergy-KineticEnergy-delta0)))/
-	      pow(a*pow(theEnergy-KineticEnergy-delta0,5.0),1.0/4.0);
+            Probability *= std::exp(2*std::sqrt(a*(theEnergy-KineticEnergy-delta0)))/
+	      std::pow(a*std::pow(theEnergy-KineticEnergy-delta0,5.0),1.0/4.0);
 	  }
         Probability /= Normalization;
     }
@@ -331,10 +331,10 @@ G4ThreeVector G4GEMChannel::IsotropicVector(const G4double Magnitude)
     // By default Magnitude = 1.0
 {
     G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
     G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-                         Magnitude*sin(Phi)*SinTheta,
+    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+                         Magnitude*std::sin(Phi)*SinTheta,
                          Magnitude*CosTheta);
     return Vector;
 }

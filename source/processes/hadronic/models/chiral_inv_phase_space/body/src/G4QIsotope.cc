@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.3 2004/06/18 09:19:28 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4QIsotope.cc,v 1.4 2004/11/09 11:11:16 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -41,27 +41,30 @@
 //#define sdebug
 
 #include "G4QIsotope.hh"
-std::vector<std::vector<std::pair<G4int,G4double>*>*>G4QIsotope::natElements;//NaturalElems
-std::vector<std::vector<std::pair<G4int,G4double>*>*>G4QIsotope::natSumAbund;//NaturalSumAb
-std::vector<std::vector<std::pair<G4int,G4double>*>*>G4QIsotope::natIsoCrosS;//CSOfNatElems
-std::vector<std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>*>G4QIsotope::newElems;
-std::vector<std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>*>G4QIsotope::newSumAb;
-std::vector<std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>*>G4QIsotope::newIsoCS;
+#include <cmath>
+using namespace std;
+
+vector<vector<pair<G4int,G4double>*>*>G4QIsotope::natElements;//NaturalElems
+vector<vector<pair<G4int,G4double>*>*>G4QIsotope::natSumAbund;//NaturalSumAb
+vector<vector<pair<G4int,G4double>*>*>G4QIsotope::natIsoCrosS;//CSOfNatElems
+vector<pair<G4int,vector<pair<G4int,G4double>*>*>*>G4QIsotope::newElems;
+vector<pair<G4int,vector<pair<G4int,G4double>*>*>*>G4QIsotope::newSumAb;
+vector<pair<G4int,vector<pair<G4int,G4double>*>*>*>G4QIsotope::newIsoCS;
 
 G4QIsotope::G4QIsotope() 
 {
 #ifdef debug
   G4cout<<"G4QIsotope::Constructor is called"<<G4endl;
 #endif
- std::vector<std::vector<std::pair<G4int,G4double> >*> natEl;
+ vector<vector<pair<G4int,G4double> >*> natEl;
 #ifdef pdebug
   G4cout<<"G4QIsotope::Constructor natEl is booked"<<G4endl;
 #endif
- std::vector<std::pair<G4int,G4double> >*a0=new std::vector<std::pair<G4int,G4double> >(1);
+ vector<pair<G4int,G4double> >*a0=new vector<pair<G4int,G4double> >(1);
 #ifdef pdebug
   G4cout<<"G4QIsotope::Constructor a0 is booked"<<G4endl;
 #endif
- a0->push_back(std::make_pair(1,1.));
+ a0->push_back(make_pair(1,1.));
 #ifdef pdebug
   G4cout<<"G4QIsotope::Constructor a0 is filled by a pair"<<G4endl;
 #endif
@@ -70,537 +73,537 @@ G4QIsotope::G4QIsotope()
   G4cout<<"G4QIsotope::Constructor a0 is filled in natEl"<<G4endl;
 #endif
   // If an error is found in this initialization, please, correct the simple tree below
- std::vector<std::pair<G4int,G4double> >*a1=new std::vector<std::pair<G4int,G4double> >(2);
- a1->push_back(std::make_pair(0,.99985));
- a1->push_back(std::make_pair(1,1.));
+ vector<pair<G4int,G4double> >*a1=new vector<pair<G4int,G4double> >(2);
+ a1->push_back(make_pair(0,.99985));
+ a1->push_back(make_pair(1,1.));
  natEl.push_back(a1);
- std::vector<std::pair<G4int,G4double> >*a2=new std::vector<std::pair<G4int,G4double> >(2);
- a2->push_back(std::make_pair(2,.999999863));
- a2->push_back(std::make_pair(1,1.));
+ vector<pair<G4int,G4double> >*a2=new vector<pair<G4int,G4double> >(2);
+ a2->push_back(make_pair(2,.999999863));
+ a2->push_back(make_pair(1,1.));
  natEl.push_back(a2);
- std::vector<std::pair<G4int,G4double> >*a3=new std::vector<std::pair<G4int,G4double> >(2);
- a3->push_back(std::make_pair(4,.925));
- a3->push_back(std::make_pair(3,1.));
+ vector<pair<G4int,G4double> >*a3=new vector<pair<G4int,G4double> >(2);
+ a3->push_back(make_pair(4,.925));
+ a3->push_back(make_pair(3,1.));
  natEl.push_back(a3);
- std::vector<std::pair<G4int,G4double> >*a4=new std::vector<std::pair<G4int,G4double> >(1);
- a4->push_back(std::make_pair(5,1.));
+ vector<pair<G4int,G4double> >*a4=new vector<pair<G4int,G4double> >(1);
+ a4->push_back(make_pair(5,1.));
  natEl.push_back(a4);
- std::vector<std::pair<G4int,G4double> >*a5=new std::vector<std::pair<G4int,G4double> >(2);
- a5->push_back(std::make_pair(6,.801));
- a5->push_back(std::make_pair(5,1.));
+ vector<pair<G4int,G4double> >*a5=new vector<pair<G4int,G4double> >(2);
+ a5->push_back(make_pair(6,.801));
+ a5->push_back(make_pair(5,1.));
  natEl.push_back(a5);
- std::vector<std::pair<G4int,G4double> >*a6=new std::vector<std::pair<G4int,G4double> >(2);
- a6->push_back(std::make_pair(6,.989));
- a6->push_back(std::make_pair(7,1.));
+ vector<pair<G4int,G4double> >*a6=new vector<pair<G4int,G4double> >(2);
+ a6->push_back(make_pair(6,.989));
+ a6->push_back(make_pair(7,1.));
  natEl.push_back(a6);
- std::vector<std::pair<G4int,G4double> >*a7=new std::vector<std::pair<G4int,G4double> >(2);
- a7->push_back(std::make_pair(7,.9963));
- a7->push_back(std::make_pair(8,1.));
+ vector<pair<G4int,G4double> >*a7=new vector<pair<G4int,G4double> >(2);
+ a7->push_back(make_pair(7,.9963));
+ a7->push_back(make_pair(8,1.));
  natEl.push_back(a7);
- std::vector<std::pair<G4int,G4double> >*a8=new std::vector<std::pair<G4int,G4double> >(3);
- a8->push_back(std::make_pair(6,.9976));
- a8->push_back(std::make_pair(8,.9996));
- a8->push_back(std::make_pair(7,1.));
+ vector<pair<G4int,G4double> >*a8=new vector<pair<G4int,G4double> >(3);
+ a8->push_back(make_pair(6,.9976));
+ a8->push_back(make_pair(8,.9996));
+ a8->push_back(make_pair(7,1.));
  natEl.push_back(a8);
- std::vector<std::pair<G4int,G4double> >*a9=new std::vector<std::pair<G4int,G4double> >(1);
- a9->push_back(std::make_pair(10,1.));
+ vector<pair<G4int,G4double> >*a9=new vector<pair<G4int,G4double> >(1);
+ a9->push_back(make_pair(10,1.));
  natEl.push_back(a9);
- std::vector<std::pair<G4int,G4double> >*b0=new std::vector<std::pair<G4int,G4double> >(3);
- b0->push_back(std::make_pair(10,.9948));
- b0->push_back(std::make_pair(11,.9975));
- b0->push_back(std::make_pair(12,1.));
+ vector<pair<G4int,G4double> >*b0=new vector<pair<G4int,G4double> >(3);
+ b0->push_back(make_pair(10,.9948));
+ b0->push_back(make_pair(11,.9975));
+ b0->push_back(make_pair(12,1.));
  natEl.push_back(b0);
- std::vector<std::pair<G4int,G4double> >*b1=new std::vector<std::pair<G4int,G4double> >(1);
- b1->push_back(std::make_pair(12,1.));
+ vector<pair<G4int,G4double> >*b1=new vector<pair<G4int,G4double> >(1);
+ b1->push_back(make_pair(12,1.));
  natEl.push_back(b1);
- std::vector<std::pair<G4int,G4double> >*b2=new std::vector<std::pair<G4int,G4double> >(3);
- b2->push_back(std::make_pair(12,.7899));
- b2->push_back(std::make_pair(13,.8899));
- b2->push_back(std::make_pair(14,1.));
+ vector<pair<G4int,G4double> >*b2=new vector<pair<G4int,G4double> >(3);
+ b2->push_back(make_pair(12,.7899));
+ b2->push_back(make_pair(13,.8899));
+ b2->push_back(make_pair(14,1.));
  natEl.push_back(b2);
- std::vector<std::pair<G4int,G4double> >*b3=new std::vector<std::pair<G4int,G4double> >(1);
- b3->push_back(std::make_pair(14,1.));
+ vector<pair<G4int,G4double> >*b3=new vector<pair<G4int,G4double> >(1);
+ b3->push_back(make_pair(14,1.));
  natEl.push_back(b3);
- std::vector<std::pair<G4int,G4double> >*b4=new std::vector<std::pair<G4int,G4double> >(3);
- b4->push_back(std::make_pair(14,.9223));
- b4->push_back(std::make_pair(15,.969));
- b4->push_back(std::make_pair(16,1.));
+ vector<pair<G4int,G4double> >*b4=new vector<pair<G4int,G4double> >(3);
+ b4->push_back(make_pair(14,.9223));
+ b4->push_back(make_pair(15,.969));
+ b4->push_back(make_pair(16,1.));
  natEl.push_back(b4);
- std::vector<std::pair<G4int,G4double> >*b5=new std::vector<std::pair<G4int,G4double> >(1);
- b5->push_back(std::make_pair(16,1.));
+ vector<pair<G4int,G4double> >*b5=new vector<pair<G4int,G4double> >(1);
+ b5->push_back(make_pair(16,1.));
  natEl.push_back(b5);
- std::vector<std::pair<G4int,G4double> >*b6=new std::vector<std::pair<G4int,G4double> >(4);
- b6->push_back(std::make_pair(16,.9502));
- b6->push_back(std::make_pair(18,.9923));
- b6->push_back(std::make_pair(17,.9998));
- b6->push_back(std::make_pair(20,1.));
+ vector<pair<G4int,G4double> >*b6=new vector<pair<G4int,G4double> >(4);
+ b6->push_back(make_pair(16,.9502));
+ b6->push_back(make_pair(18,.9923));
+ b6->push_back(make_pair(17,.9998));
+ b6->push_back(make_pair(20,1.));
  natEl.push_back(b6);
- std::vector<std::pair<G4int,G4double> >*b7=new std::vector<std::pair<G4int,G4double> >(2);
- b7->push_back(std::make_pair(18,.7577));
- b7->push_back(std::make_pair(20,1.));
+ vector<pair<G4int,G4double> >*b7=new vector<pair<G4int,G4double> >(2);
+ b7->push_back(make_pair(18,.7577));
+ b7->push_back(make_pair(20,1.));
  natEl.push_back(b7);
- std::vector<std::pair<G4int,G4double> >*b8=new std::vector<std::pair<G4int,G4double> >(3);
- b8->push_back(std::make_pair(22,.996));
- b8->push_back(std::make_pair(18,.99937));
- b8->push_back(std::make_pair(20,1.));
+ vector<pair<G4int,G4double> >*b8=new vector<pair<G4int,G4double> >(3);
+ b8->push_back(make_pair(22,.996));
+ b8->push_back(make_pair(18,.99937));
+ b8->push_back(make_pair(20,1.));
  natEl.push_back(b8);
- std::vector<std::pair<G4int,G4double> >*b9=new std::vector<std::pair<G4int,G4double> >(3);
- b9->push_back(std::make_pair(20,.932581));
- b9->push_back(std::make_pair(22,.999883));
- b9->push_back(std::make_pair(21,1.));
+ vector<pair<G4int,G4double> >*b9=new vector<pair<G4int,G4double> >(3);
+ b9->push_back(make_pair(20,.932581));
+ b9->push_back(make_pair(22,.999883));
+ b9->push_back(make_pair(21,1.));
  natEl.push_back(b9);
- std::vector<std::pair<G4int,G4double> >*c0=new std::vector<std::pair<G4int,G4double> >(6);
- c0->push_back(std::make_pair(20,.96941));
- c0->push_back(std::make_pair(24,.99027));
- c0->push_back(std::make_pair(22,.99674));
- c0->push_back(std::make_pair(28,.99861));
- c0->push_back(std::make_pair(23,.99996));
- c0->push_back(std::make_pair(26,1.));
+ vector<pair<G4int,G4double> >*c0=new vector<pair<G4int,G4double> >(6);
+ c0->push_back(make_pair(20,.96941));
+ c0->push_back(make_pair(24,.99027));
+ c0->push_back(make_pair(22,.99674));
+ c0->push_back(make_pair(28,.99861));
+ c0->push_back(make_pair(23,.99996));
+ c0->push_back(make_pair(26,1.));
  natEl.push_back(c0);
- std::vector<std::pair<G4int,G4double> >*c1=new std::vector<std::pair<G4int,G4double> >(1);
- c1->push_back(std::make_pair(24,1.));
+ vector<pair<G4int,G4double> >*c1=new vector<pair<G4int,G4double> >(1);
+ c1->push_back(make_pair(24,1.));
  natEl.push_back(c1);
- std::vector<std::pair<G4int,G4double> >*c2=new std::vector<std::pair<G4int,G4double> >(5);
- c2->push_back(std::make_pair(1,.738));
- c2->push_back(std::make_pair(1,.818));
- c2->push_back(std::make_pair(1,.891));
- c2->push_back(std::make_pair(1,.946));
- c2->push_back(std::make_pair(1,1.));
+ vector<pair<G4int,G4double> >*c2=new vector<pair<G4int,G4double> >(5);
+ c2->push_back(make_pair(1,.738));
+ c2->push_back(make_pair(1,.818));
+ c2->push_back(make_pair(1,.891));
+ c2->push_back(make_pair(1,.946));
+ c2->push_back(make_pair(1,1.));
  natEl.push_back(c2);
- std::vector<std::pair<G4int,G4double> >*c3=new std::vector<std::pair<G4int,G4double> >(2);
- c3->push_back(std::make_pair(28,.9975));
- c3->push_back(std::make_pair(27,1.));
+ vector<pair<G4int,G4double> >*c3=new vector<pair<G4int,G4double> >(2);
+ c3->push_back(make_pair(28,.9975));
+ c3->push_back(make_pair(27,1.));
  natEl.push_back(c3);
- std::vector<std::pair<G4int,G4double> >*c4=new std::vector<std::pair<G4int,G4double> >(4);
- c4->push_back(std::make_pair(28,.8379));
- c4->push_back(std::make_pair(29,.9329));
- c4->push_back(std::make_pair(26,.97635));
- c4->push_back(std::make_pair(30,1.));
+ vector<pair<G4int,G4double> >*c4=new vector<pair<G4int,G4double> >(4);
+ c4->push_back(make_pair(28,.8379));
+ c4->push_back(make_pair(29,.9329));
+ c4->push_back(make_pair(26,.97635));
+ c4->push_back(make_pair(30,1.));
  natEl.push_back(c4);
- std::vector<std::pair<G4int,G4double> >*c5=new std::vector<std::pair<G4int,G4double> >(1);
- c5->push_back(std::make_pair(30,1.));
+ vector<pair<G4int,G4double> >*c5=new vector<pair<G4int,G4double> >(1);
+ c5->push_back(make_pair(30,1.));
  natEl.push_back(c5);
- std::vector<std::pair<G4int,G4double> >*c6=new std::vector<std::pair<G4int,G4double> >(4);
- c6->push_back(std::make_pair(30,.9172));
- c6->push_back(std::make_pair(28,.9762));
- c6->push_back(std::make_pair(31,.9972));
- c6->push_back(std::make_pair(32,1.));
+ vector<pair<G4int,G4double> >*c6=new vector<pair<G4int,G4double> >(4);
+ c6->push_back(make_pair(30,.9172));
+ c6->push_back(make_pair(28,.9762));
+ c6->push_back(make_pair(31,.9972));
+ c6->push_back(make_pair(32,1.));
  natEl.push_back(c6);
- std::vector<std::pair<G4int,G4double> >*c7=new std::vector<std::pair<G4int,G4double> >(1);
- c7->push_back(std::make_pair(32,1.));
+ vector<pair<G4int,G4double> >*c7=new vector<pair<G4int,G4double> >(1);
+ c7->push_back(make_pair(32,1.));
  natEl.push_back(c7);
- std::vector<std::pair<G4int,G4double> >*c8=new std::vector<std::pair<G4int,G4double> >(5);
- c8->push_back(std::make_pair(30,.68077));
- c8->push_back(std::make_pair(32,.943));
- c8->push_back(std::make_pair(34,.97934));
- c8->push_back(std::make_pair(33,.99074));
- c8->push_back(std::make_pair(36,1.));
+ vector<pair<G4int,G4double> >*c8=new vector<pair<G4int,G4double> >(5);
+ c8->push_back(make_pair(30,.68077));
+ c8->push_back(make_pair(32,.943));
+ c8->push_back(make_pair(34,.97934));
+ c8->push_back(make_pair(33,.99074));
+ c8->push_back(make_pair(36,1.));
  natEl.push_back(c8);
- std::vector<std::pair<G4int,G4double> >*c9=new std::vector<std::pair<G4int,G4double> >(2);
- c9->push_back(std::make_pair(34,.6917));
- c9->push_back(std::make_pair(36,1.));
+ vector<pair<G4int,G4double> >*c9=new vector<pair<G4int,G4double> >(2);
+ c9->push_back(make_pair(34,.6917));
+ c9->push_back(make_pair(36,1.));
  natEl.push_back(c9);
- std::vector<std::pair<G4int,G4double> >*d0=new std::vector<std::pair<G4int,G4double> >(5);
- d0->push_back(std::make_pair(34,.486));
- d0->push_back(std::make_pair(36,.765));
- d0->push_back(std::make_pair(38,.953));
- d0->push_back(std::make_pair(37,.994));
- d0->push_back(std::make_pair(40,1.));
+ vector<pair<G4int,G4double> >*d0=new vector<pair<G4int,G4double> >(5);
+ d0->push_back(make_pair(34,.486));
+ d0->push_back(make_pair(36,.765));
+ d0->push_back(make_pair(38,.953));
+ d0->push_back(make_pair(37,.994));
+ d0->push_back(make_pair(40,1.));
  natEl.push_back(d0);
- std::vector<std::pair<G4int,G4double> >*d1=new std::vector<std::pair<G4int,G4double> >(2);
- d1->push_back(std::make_pair(38,.60108));
- d1->push_back(std::make_pair(40,1.));
+ vector<pair<G4int,G4double> >*d1=new vector<pair<G4int,G4double> >(2);
+ d1->push_back(make_pair(38,.60108));
+ d1->push_back(make_pair(40,1.));
  natEl.push_back(d1);
- std::vector<std::pair<G4int,G4double> >*d2=new std::vector<std::pair<G4int,G4double> >(5);
- d2->push_back(std::make_pair(42,.3594));
- d2->push_back(std::make_pair(40,.6360));
- d2->push_back(std::make_pair(38,.8484));
- d2->push_back(std::make_pair(41,.9256));
- d2->push_back(std::make_pair(44,1.));
+ vector<pair<G4int,G4double> >*d2=new vector<pair<G4int,G4double> >(5);
+ d2->push_back(make_pair(42,.3594));
+ d2->push_back(make_pair(40,.6360));
+ d2->push_back(make_pair(38,.8484));
+ d2->push_back(make_pair(41,.9256));
+ d2->push_back(make_pair(44,1.));
  natEl.push_back(d2);
- std::vector<std::pair<G4int,G4double> >*d3=new std::vector<std::pair<G4int,G4double> >(1);
- d3->push_back(std::make_pair(42,1.));
+ vector<pair<G4int,G4double> >*d3=new vector<pair<G4int,G4double> >(1);
+ d3->push_back(make_pair(42,1.));
  natEl.push_back(d3);
- std::vector<std::pair<G4int,G4double> >*d4=new std::vector<std::pair<G4int,G4double> >(6);
- d4->push_back(std::make_pair(46,.4961));
- d4->push_back(std::make_pair(44,.7378));
- d4->push_back(std::make_pair(42,.8274));
- d4->push_back(std::make_pair(48,.9148));
- d4->push_back(std::make_pair(43,.9911));
- d4->push_back(std::make_pair(40,1.));
+ vector<pair<G4int,G4double> >*d4=new vector<pair<G4int,G4double> >(6);
+ d4->push_back(make_pair(46,.4961));
+ d4->push_back(make_pair(44,.7378));
+ d4->push_back(make_pair(42,.8274));
+ d4->push_back(make_pair(48,.9148));
+ d4->push_back(make_pair(43,.9911));
+ d4->push_back(make_pair(40,1.));
  natEl.push_back(d4);
- std::vector<std::pair<G4int,G4double> >*d5=new std::vector<std::pair<G4int,G4double> >(2);
- d5->push_back(std::make_pair(44,.5069));
- d5->push_back(std::make_pair(46,1.));
+ vector<pair<G4int,G4double> >*d5=new vector<pair<G4int,G4double> >(2);
+ d5->push_back(make_pair(44,.5069));
+ d5->push_back(make_pair(46,1.));
  natEl.push_back(d5);
- std::vector<std::pair<G4int,G4double> >*d6=new std::vector<std::pair<G4int,G4double> >(6);
- d6->push_back(std::make_pair(48,.57));
- d6->push_back(std::make_pair(50,.743));
- d6->push_back(std::make_pair(46,.859));
- d6->push_back(std::make_pair(47,.974));
- d6->push_back(std::make_pair(44,.9965));
- d6->push_back(std::make_pair(42,1.));
+ vector<pair<G4int,G4double> >*d6=new vector<pair<G4int,G4double> >(6);
+ d6->push_back(make_pair(48,.57));
+ d6->push_back(make_pair(50,.743));
+ d6->push_back(make_pair(46,.859));
+ d6->push_back(make_pair(47,.974));
+ d6->push_back(make_pair(44,.9965));
+ d6->push_back(make_pair(42,1.));
  natEl.push_back(d6);
- std::vector<std::pair<G4int,G4double> >*d7=new std::vector<std::pair<G4int,G4double> >(2);
- d7->push_back(std::make_pair(48,.7217));
- d7->push_back(std::make_pair(50,1.));
+ vector<pair<G4int,G4double> >*d7=new vector<pair<G4int,G4double> >(2);
+ d7->push_back(make_pair(48,.7217));
+ d7->push_back(make_pair(50,1.));
  natEl.push_back(d7);
- std::vector<std::pair<G4int,G4double> >*d8=new std::vector<std::pair<G4int,G4double> >(4);
- d8->push_back(std::make_pair(50,.8258));
- d8->push_back(std::make_pair(48,.9244));
- d8->push_back(std::make_pair(49,.9944));
- d8->push_back(std::make_pair(46,1.));
+ vector<pair<G4int,G4double> >*d8=new vector<pair<G4int,G4double> >(4);
+ d8->push_back(make_pair(50,.8258));
+ d8->push_back(make_pair(48,.9244));
+ d8->push_back(make_pair(49,.9944));
+ d8->push_back(make_pair(46,1.));
  natEl.push_back(d8);
- std::vector<std::pair<G4int,G4double> >*d9=new std::vector<std::pair<G4int,G4double> >(1);
- d9->push_back(std::make_pair(50,1.));
+ vector<pair<G4int,G4double> >*d9=new vector<pair<G4int,G4double> >(1);
+ d9->push_back(make_pair(50,1.));
  natEl.push_back(d9);
- std::vector<std::pair<G4int,G4double> >*e0=new std::vector<std::pair<G4int,G4double> >(5);
- e0->push_back(std::make_pair(50,.5145));
- e0->push_back(std::make_pair(54,.6883));
- e0->push_back(std::make_pair(53,.8598));
- e0->push_back(std::make_pair(51,.972));
- e0->push_back(std::make_pair(56,1.));
+ vector<pair<G4int,G4double> >*e0=new vector<pair<G4int,G4double> >(5);
+ e0->push_back(make_pair(50,.5145));
+ e0->push_back(make_pair(54,.6883));
+ e0->push_back(make_pair(53,.8598));
+ e0->push_back(make_pair(51,.972));
+ e0->push_back(make_pair(56,1.));
  natEl.push_back(e0);
- std::vector<std::pair<G4int,G4double> >*e1=new std::vector<std::pair<G4int,G4double> >(1);
- e1->push_back(std::make_pair(52,1.));
+ vector<pair<G4int,G4double> >*e1=new vector<pair<G4int,G4double> >(1);
+ e1->push_back(make_pair(52,1.));
  natEl.push_back(e1);
- std::vector<std::pair<G4int,G4double> >*e2=new std::vector<std::pair<G4int,G4double> >(7);
- e2->push_back(std::make_pair(56,.2413));
- e2->push_back(std::make_pair(54,.4081));
- e2->push_back(std::make_pair(53,.5673));
- e2->push_back(std::make_pair(50,.7157));
- e2->push_back(std::make_pair(58,.8120));
- e2->push_back(std::make_pair(55,.9075));
- e2->push_back(std::make_pair(52,1.));
+ vector<pair<G4int,G4double> >*e2=new vector<pair<G4int,G4double> >(7);
+ e2->push_back(make_pair(56,.2413));
+ e2->push_back(make_pair(54,.4081));
+ e2->push_back(make_pair(53,.5673));
+ e2->push_back(make_pair(50,.7157));
+ e2->push_back(make_pair(58,.8120));
+ e2->push_back(make_pair(55,.9075));
+ e2->push_back(make_pair(52,1.));
  natEl.push_back(e2);
- std::vector<std::pair<G4int,G4double> >*e3=new std::vector<std::pair<G4int,G4double> >(1);
- e3->push_back(std::make_pair(55,1.));
+ vector<pair<G4int,G4double> >*e3=new vector<pair<G4int,G4double> >(1);
+ e3->push_back(make_pair(55,1.));
  natEl.push_back(e3);
- std::vector<std::pair<G4int,G4double> >*e4=new std::vector<std::pair<G4int,G4double> >(7);
- e4->push_back(std::make_pair(58,.316));
- e4->push_back(std::make_pair(60,.502));
- e4->push_back(std::make_pair(57,.673));
- e4->push_back(std::make_pair(55,.8));
- e4->push_back(std::make_pair(56,.926));
- e4->push_back(std::make_pair(52,.9814));
- e4->push_back(std::make_pair(54,1.));
+ vector<pair<G4int,G4double> >*e4=new vector<pair<G4int,G4double> >(7);
+ e4->push_back(make_pair(58,.316));
+ e4->push_back(make_pair(60,.502));
+ e4->push_back(make_pair(57,.673));
+ e4->push_back(make_pair(55,.8));
+ e4->push_back(make_pair(56,.926));
+ e4->push_back(make_pair(52,.9814));
+ e4->push_back(make_pair(54,1.));
  natEl.push_back(e4);
- std::vector<std::pair<G4int,G4double> >*e5=new std::vector<std::pair<G4int,G4double> >(1);
- e5->push_back(std::make_pair(58,1.));
+ vector<pair<G4int,G4double> >*e5=new vector<pair<G4int,G4double> >(1);
+ e5->push_back(make_pair(58,1.));
  natEl.push_back(e5);
- std::vector<std::pair<G4int,G4double> >*e6=new std::vector<std::pair<G4int,G4double> >(6);
- e6->push_back(std::make_pair(60,.2733));
- e6->push_back(std::make_pair(62,.5379));
- e6->push_back(std::make_pair(59,.7612));
- e6->push_back(std::make_pair(55,.8784));
- e6->push_back(std::make_pair(58,.9898));
- e6->push_back(std::make_pair(56,1.));
+ vector<pair<G4int,G4double> >*e6=new vector<pair<G4int,G4double> >(6);
+ e6->push_back(make_pair(60,.2733));
+ e6->push_back(make_pair(62,.5379));
+ e6->push_back(make_pair(59,.7612));
+ e6->push_back(make_pair(55,.8784));
+ e6->push_back(make_pair(58,.9898));
+ e6->push_back(make_pair(56,1.));
  natEl.push_back(e6);
- std::vector<std::pair<G4int,G4double> >*e7=new std::vector<std::pair<G4int,G4double> >(2);
- e7->push_back(std::make_pair(60,.51839));
- e7->push_back(std::make_pair(62,1.));
+ vector<pair<G4int,G4double> >*e7=new vector<pair<G4int,G4double> >(2);
+ e7->push_back(make_pair(60,.51839));
+ e7->push_back(make_pair(62,1.));
  natEl.push_back(e7);
- std::vector<std::pair<G4int,G4double> >*e8=new std::vector<std::pair<G4int,G4double> >(8);
- e8->push_back(std::make_pair(66,.2873));
- e8->push_back(std::make_pair(64,.5286));
- e8->push_back(std::make_pair(59,.6566));
- e8->push_back(std::make_pair(62,.7815));
- e8->push_back(std::make_pair(65,.9037));
- e8->push_back(std::make_pair(68,.9786));
- e8->push_back(std::make_pair(58,.9911));
- e8->push_back(std::make_pair(60,1.));
+ vector<pair<G4int,G4double> >*e8=new vector<pair<G4int,G4double> >(8);
+ e8->push_back(make_pair(66,.2873));
+ e8->push_back(make_pair(64,.5286));
+ e8->push_back(make_pair(59,.6566));
+ e8->push_back(make_pair(62,.7815));
+ e8->push_back(make_pair(65,.9037));
+ e8->push_back(make_pair(68,.9786));
+ e8->push_back(make_pair(58,.9911));
+ e8->push_back(make_pair(60,1.));
  natEl.push_back(e8);
- std::vector<std::pair<G4int,G4double> >*e9=new std::vector<std::pair<G4int,G4double> >(2);
- e9->push_back(std::make_pair(66,.9577));
- e9->push_back(std::make_pair(64,1.));
+ vector<pair<G4int,G4double> >*e9=new vector<pair<G4int,G4double> >(2);
+ e9->push_back(make_pair(66,.9577));
+ e9->push_back(make_pair(64,1.));
  natEl.push_back(e9);
- std::vector<std::pair<G4int,G4double> >*f0=new std::vector<std::pair<G4int,G4double> >(9);
- f0->push_back(std::make_pair(70,.3259));
- f0->push_back(std::make_pair(68,.5681));
- f0->push_back(std::make_pair(66,.7134));
- f0->push_back(std::make_pair(69,.7992));
- f0->push_back(std::make_pair(67,.8760));
- f0->push_back(std::make_pair(74,.9339));
- f0->push_back(std::make_pair(72,.9802));
- f0->push_back(std::make_pair(62,.9899));
- f0->push_back(std::make_pair(64,1.));
- //f0->push_back(std::make_pair(64,.9964));
- //f0->push_back(std::make_pair(65,1.)); // Nine isotopes is the maximum, so Sn155 is out
+ vector<pair<G4int,G4double> >*f0=new vector<pair<G4int,G4double> >(9);
+ f0->push_back(make_pair(70,.3259));
+ f0->push_back(make_pair(68,.5681));
+ f0->push_back(make_pair(66,.7134));
+ f0->push_back(make_pair(69,.7992));
+ f0->push_back(make_pair(67,.8760));
+ f0->push_back(make_pair(74,.9339));
+ f0->push_back(make_pair(72,.9802));
+ f0->push_back(make_pair(62,.9899));
+ f0->push_back(make_pair(64,1.));
+ //f0->push_back(make_pair(64,.9964));
+ //f0->push_back(make_pair(65,1.)); // Nine isotopes is the maximum, so Sn155 is out
  natEl.push_back(f0);
- std::vector<std::pair<G4int,G4double> >*f1=new std::vector<std::pair<G4int,G4double> >(2);
- f1->push_back(std::make_pair(70,.5736));
- f1->push_back(std::make_pair(72,1.));
+ vector<pair<G4int,G4double> >*f1=new vector<pair<G4int,G4double> >(2);
+ f1->push_back(make_pair(70,.5736));
+ f1->push_back(make_pair(72,1.));
  natEl.push_back(f1);
- std::vector<std::pair<G4int,G4double> >*f2=new std::vector<std::pair<G4int,G4double> >(8);
- f2->push_back(std::make_pair(78,.3387));
- f2->push_back(std::make_pair(76,.6557));
- f2->push_back(std::make_pair(74,.8450));
- f2->push_back(std::make_pair(73,.9162));
- f2->push_back(std::make_pair(72,.9641));
- f2->push_back(std::make_pair(70,.9900));
- f2->push_back(std::make_pair(71,.99905));
- f2->push_back(std::make_pair(68,1.));
+ vector<pair<G4int,G4double> >*f2=new vector<pair<G4int,G4double> >(8);
+ f2->push_back(make_pair(78,.3387));
+ f2->push_back(make_pair(76,.6557));
+ f2->push_back(make_pair(74,.8450));
+ f2->push_back(make_pair(73,.9162));
+ f2->push_back(make_pair(72,.9641));
+ f2->push_back(make_pair(70,.9900));
+ f2->push_back(make_pair(71,.99905));
+ f2->push_back(make_pair(68,1.));
  natEl.push_back(f2);
- std::vector<std::pair<G4int,G4double> >*f3=new std::vector<std::pair<G4int,G4double> >(1);
- f3->push_back(std::make_pair(74,1.));
+ vector<pair<G4int,G4double> >*f3=new vector<pair<G4int,G4double> >(1);
+ f3->push_back(make_pair(74,1.));
  natEl.push_back(f3);
- std::vector<std::pair<G4int,G4double> >*f4=new std::vector<std::pair<G4int,G4double> >(9);
- f4->push_back(std::make_pair(78,.269));
- f4->push_back(std::make_pair(75,.533));
- f4->push_back(std::make_pair(77,.745));
- f4->push_back(std::make_pair(80,.849));
- f4->push_back(std::make_pair(82,.938));
- f4->push_back(std::make_pair(76,.979));
- f4->push_back(std::make_pair(74,.9981));
- f4->push_back(std::make_pair(70,.9991));
- f4->push_back(std::make_pair(72,1.));
+ vector<pair<G4int,G4double> >*f4=new vector<pair<G4int,G4double> >(9);
+ f4->push_back(make_pair(78,.269));
+ f4->push_back(make_pair(75,.533));
+ f4->push_back(make_pair(77,.745));
+ f4->push_back(make_pair(80,.849));
+ f4->push_back(make_pair(82,.938));
+ f4->push_back(make_pair(76,.979));
+ f4->push_back(make_pair(74,.9981));
+ f4->push_back(make_pair(70,.9991));
+ f4->push_back(make_pair(72,1.));
  natEl.push_back(f4);
- std::vector<std::pair<G4int,G4double> >*f5=new std::vector<std::pair<G4int,G4double> >(1);
- f5->push_back(std::make_pair(78,1.));
+ vector<pair<G4int,G4double> >*f5=new vector<pair<G4int,G4double> >(1);
+ f5->push_back(make_pair(78,1.));
  natEl.push_back(f5);
- std::vector<std::pair<G4int,G4double> >*f6=new std::vector<std::pair<G4int,G4double> >(7);
- f6->push_back(std::make_pair(82,.717));
- f6->push_back(std::make_pair(81,.8293));
- f6->push_back(std::make_pair(80,.9078));
- f6->push_back(std::make_pair(79,.97373));
- f6->push_back(std::make_pair(78,.99793));
- f6->push_back(std::make_pair(74,.99899));
- f6->push_back(std::make_pair(76,1.));
+ vector<pair<G4int,G4double> >*f6=new vector<pair<G4int,G4double> >(7);
+ f6->push_back(make_pair(82,.717));
+ f6->push_back(make_pair(81,.8293));
+ f6->push_back(make_pair(80,.9078));
+ f6->push_back(make_pair(79,.97373));
+ f6->push_back(make_pair(78,.99793));
+ f6->push_back(make_pair(74,.99899));
+ f6->push_back(make_pair(76,1.));
  natEl.push_back(f6);
- std::vector<std::pair<G4int,G4double> >*f7=new std::vector<std::pair<G4int,G4double> >(2);
- f7->push_back(std::make_pair(82,.999098));
- f7->push_back(std::make_pair(81,1.));
+ vector<pair<G4int,G4double> >*f7=new vector<pair<G4int,G4double> >(2);
+ f7->push_back(make_pair(82,.999098));
+ f7->push_back(make_pair(81,1.));
  natEl.push_back(f7);
- std::vector<std::pair<G4int,G4double> >*f8=new std::vector<std::pair<G4int,G4double> >(4);
- f8->push_back(std::make_pair(82,.8843));
- f8->push_back(std::make_pair(84,.9956));
- f8->push_back(std::make_pair(80,.9981));
- f8->push_back(std::make_pair(78,1.));
+ vector<pair<G4int,G4double> >*f8=new vector<pair<G4int,G4double> >(4);
+ f8->push_back(make_pair(82,.8843));
+ f8->push_back(make_pair(84,.9956));
+ f8->push_back(make_pair(80,.9981));
+ f8->push_back(make_pair(78,1.));
  natEl.push_back(f8);
- std::vector<std::pair<G4int,G4double> >*f9=new std::vector<std::pair<G4int,G4double> >(1);
- f9->push_back(std::make_pair(82,1.));
+ vector<pair<G4int,G4double> >*f9=new vector<pair<G4int,G4double> >(1);
+ f9->push_back(make_pair(82,1.));
  natEl.push_back(f9);
- std::vector<std::pair<G4int,G4double> >*g0=new std::vector<std::pair<G4int,G4double> >(7);
- g0->push_back(std::make_pair(82,.2713));
- g0->push_back(std::make_pair(84,.5093));
- g0->push_back(std::make_pair(86,.6812));
- g0->push_back(std::make_pair(83,.8030));
- g0->push_back(std::make_pair(85,.8860));
- g0->push_back(std::make_pair(88,.9436));
- g0->push_back(std::make_pair(90,1.));
+ vector<pair<G4int,G4double> >*g0=new vector<pair<G4int,G4double> >(7);
+ g0->push_back(make_pair(82,.2713));
+ g0->push_back(make_pair(84,.5093));
+ g0->push_back(make_pair(86,.6812));
+ g0->push_back(make_pair(83,.8030));
+ g0->push_back(make_pair(85,.8860));
+ g0->push_back(make_pair(88,.9436));
+ g0->push_back(make_pair(90,1.));
  natEl.push_back(g0);
- std::vector<std::pair<G4int,G4double> >*g1=new std::vector<std::pair<G4int,G4double> >(1);
- g1->push_back(std::make_pair(85,1.));
+ vector<pair<G4int,G4double> >*g1=new vector<pair<G4int,G4double> >(1);
+ g1->push_back(make_pair(85,1.));
  natEl.push_back(g1);
- std::vector<std::pair<G4int,G4double> >*g2=new std::vector<std::pair<G4int,G4double> >(7);
- g2->push_back(std::make_pair(90,.267));
- g2->push_back(std::make_pair(92,.494));
- g2->push_back(std::make_pair(85,.644));
- g2->push_back(std::make_pair(87,.782));
- g2->push_back(std::make_pair(86,.895));
- g2->push_back(std::make_pair(88,.969));
- g2->push_back(std::make_pair(82,1.));
+ vector<pair<G4int,G4double> >*g2=new vector<pair<G4int,G4double> >(7);
+ g2->push_back(make_pair(90,.267));
+ g2->push_back(make_pair(92,.494));
+ g2->push_back(make_pair(85,.644));
+ g2->push_back(make_pair(87,.782));
+ g2->push_back(make_pair(86,.895));
+ g2->push_back(make_pair(88,.969));
+ g2->push_back(make_pair(82,1.));
  natEl.push_back(g2);
- std::vector<std::pair<G4int,G4double> >*g3=new std::vector<std::pair<G4int,G4double> >(2);
- g3->push_back(std::make_pair(90,.522));
- g3->push_back(std::make_pair(89,1.));
+ vector<pair<G4int,G4double> >*g3=new vector<pair<G4int,G4double> >(2);
+ g3->push_back(make_pair(90,.522));
+ g3->push_back(make_pair(89,1.));
  natEl.push_back(g3);
- std::vector<std::pair<G4int,G4double> >*g4=new std::vector<std::pair<G4int,G4double> >(7);
- g4->push_back(std::make_pair(94,.2484));
- g4->push_back(std::make_pair(96,.4670));
- g4->push_back(std::make_pair(92,.6717));
- g4->push_back(std::make_pair(93,.8282));
- g4->push_back(std::make_pair(91,.9762));
- g4->push_back(std::make_pair(90,.9980));
- g4->push_back(std::make_pair(88,1.));
+ vector<pair<G4int,G4double> >*g4=new vector<pair<G4int,G4double> >(7);
+ g4->push_back(make_pair(94,.2484));
+ g4->push_back(make_pair(96,.4670));
+ g4->push_back(make_pair(92,.6717));
+ g4->push_back(make_pair(93,.8282));
+ g4->push_back(make_pair(91,.9762));
+ g4->push_back(make_pair(90,.9980));
+ g4->push_back(make_pair(88,1.));
  natEl.push_back(g4);
- std::vector<std::pair<G4int,G4double> >*g5=new std::vector<std::pair<G4int,G4double> >(1);
- g5->push_back(std::make_pair(94,1.));
+ vector<pair<G4int,G4double> >*g5=new vector<pair<G4int,G4double> >(1);
+ g5->push_back(make_pair(94,1.));
  natEl.push_back(g5);
- std::vector<std::pair<G4int,G4double> >*g6=new std::vector<std::pair<G4int,G4double> >(7);
- g6->push_back(std::make_pair(98,.282));
- g6->push_back(std::make_pair(96,.537));
- g6->push_back(std::make_pair(97,.786));
- g6->push_back(std::make_pair(95,.975));
- g6->push_back(std::make_pair(94,.9984));
- g6->push_back(std::make_pair(92,.9994));
- g6->push_back(std::make_pair(90,1.));
+ vector<pair<G4int,G4double> >*g6=new vector<pair<G4int,G4double> >(7);
+ g6->push_back(make_pair(98,.282));
+ g6->push_back(make_pair(96,.537));
+ g6->push_back(make_pair(97,.786));
+ g6->push_back(make_pair(95,.975));
+ g6->push_back(make_pair(94,.9984));
+ g6->push_back(make_pair(92,.9994));
+ g6->push_back(make_pair(90,1.));
  natEl.push_back(g6);
- std::vector<std::pair<G4int,G4double> >*g7=new std::vector<std::pair<G4int,G4double> >(1);
- g7->push_back(std::make_pair(98,1.));
+ vector<pair<G4int,G4double> >*g7=new vector<pair<G4int,G4double> >(1);
+ g7->push_back(make_pair(98,1.));
  natEl.push_back(g7);
- std::vector<std::pair<G4int,G4double> >*g8=new std::vector<std::pair<G4int,G4double> >(6);
- g8->push_back(std::make_pair( 98,.3360));
- g8->push_back(std::make_pair(100,.6040));
- g8->push_back(std::make_pair( 99,.8335));
- g8->push_back(std::make_pair(102,.9825));
- g8->push_back(std::make_pair( 96,.9986));
- g8->push_back(std::make_pair( 94,1.));
+ vector<pair<G4int,G4double> >*g8=new vector<pair<G4int,G4double> >(6);
+ g8->push_back(make_pair( 98,.3360));
+ g8->push_back(make_pair(100,.6040));
+ g8->push_back(make_pair( 99,.8335));
+ g8->push_back(make_pair(102,.9825));
+ g8->push_back(make_pair( 96,.9986));
+ g8->push_back(make_pair( 94,1.));
  natEl.push_back(g8);
- std::vector<std::pair<G4int,G4double> >*g9=new std::vector<std::pair<G4int,G4double> >(1);
- g9->push_back(std::make_pair(100,1.));
+ vector<pair<G4int,G4double> >*g9=new vector<pair<G4int,G4double> >(1);
+ g9->push_back(make_pair(100,1.));
  natEl.push_back(g9);
- std::vector<std::pair<G4int,G4double> >*h0=new std::vector<std::pair<G4int,G4double> >(7);
- h0->push_back(std::make_pair(104,.3180));
- h0->push_back(std::make_pair(102,.5370));
- h0->push_back(std::make_pair(103,.6982));
- h0->push_back(std::make_pair(101,.8412));
- h0->push_back(std::make_pair(106,.9682));
- h0->push_back(std::make_pair(100,.9987));
- h0->push_back(std::make_pair( 98,1.));
+ vector<pair<G4int,G4double> >*h0=new vector<pair<G4int,G4double> >(7);
+ h0->push_back(make_pair(104,.3180));
+ h0->push_back(make_pair(102,.5370));
+ h0->push_back(make_pair(103,.6982));
+ h0->push_back(make_pair(101,.8412));
+ h0->push_back(make_pair(106,.9682));
+ h0->push_back(make_pair(100,.9987));
+ h0->push_back(make_pair( 98,1.));
  natEl.push_back(h0);
- std::vector<std::pair<G4int,G4double> >*h1=new std::vector<std::pair<G4int,G4double> >(2);
- h1->push_back(std::make_pair(104,.9741));
- h1->push_back(std::make_pair(105,1.));
+ vector<pair<G4int,G4double> >*h1=new vector<pair<G4int,G4double> >(2);
+ h1->push_back(make_pair(104,.9741));
+ h1->push_back(make_pair(105,1.));
  natEl.push_back(h1);
- std::vector<std::pair<G4int,G4double> >*h2=new std::vector<std::pair<G4int,G4double> >(6);
- h2->push_back(std::make_pair(108,.35100));
- h2->push_back(std::make_pair(106,.62397));
- h2->push_back(std::make_pair(105,.81003));
- h2->push_back(std::make_pair(107,.94632));
- h2->push_back(std::make_pair(104,.99838));
- h2->push_back(std::make_pair(102,1.));
+ vector<pair<G4int,G4double> >*h2=new vector<pair<G4int,G4double> >(6);
+ h2->push_back(make_pair(108,.35100));
+ h2->push_back(make_pair(106,.62397));
+ h2->push_back(make_pair(105,.81003));
+ h2->push_back(make_pair(107,.94632));
+ h2->push_back(make_pair(104,.99838));
+ h2->push_back(make_pair(102,1.));
  natEl.push_back(h2);
- std::vector<std::pair<G4int,G4double> >*h3=new std::vector<std::pair<G4int,G4double> >(2);
- h3->push_back(std::make_pair(108,.99988));
- h3->push_back(std::make_pair(107,1.));
+ vector<pair<G4int,G4double> >*h3=new vector<pair<G4int,G4double> >(2);
+ h3->push_back(make_pair(108,.99988));
+ h3->push_back(make_pair(107,1.));
  natEl.push_back(h3);
- std::vector<std::pair<G4int,G4double> >*h4=new std::vector<std::pair<G4int,G4double> >(5);
- h4->push_back(std::make_pair(110,.307));
- h4->push_back(std::make_pair(112,.593));
- h4->push_back(std::make_pair(108,.856));
- h4->push_back(std::make_pair(109,.9988));
- h4->push_back(std::make_pair(106,1.));
+ vector<pair<G4int,G4double> >*h4=new vector<pair<G4int,G4double> >(5);
+ h4->push_back(make_pair(110,.307));
+ h4->push_back(make_pair(112,.593));
+ h4->push_back(make_pair(108,.856));
+ h4->push_back(make_pair(109,.9988));
+ h4->push_back(make_pair(106,1.));
  natEl.push_back(h4);
- std::vector<std::pair<G4int,G4double> >*h5=new std::vector<std::pair<G4int,G4double> >(2);
- h5->push_back(std::make_pair(112,.626));
- h5->push_back(std::make_pair(110,1.));
+ vector<pair<G4int,G4double> >*h5=new vector<pair<G4int,G4double> >(2);
+ h5->push_back(make_pair(112,.626));
+ h5->push_back(make_pair(110,1.));
  natEl.push_back(h5);
- std::vector<std::pair<G4int,G4double> >*h6=new std::vector<std::pair<G4int,G4double> >(7);
- h6->push_back(std::make_pair(116,.410));
- h6->push_back(std::make_pair(114,.674));
- h6->push_back(std::make_pair(113,.835));
- h6->push_back(std::make_pair(112,.968));
- h6->push_back(std::make_pair(111,.984));
- h6->push_back(std::make_pair(110,.9998));
- h6->push_back(std::make_pair(108,1.));
+ vector<pair<G4int,G4double> >*h6=new vector<pair<G4int,G4double> >(7);
+ h6->push_back(make_pair(116,.410));
+ h6->push_back(make_pair(114,.674));
+ h6->push_back(make_pair(113,.835));
+ h6->push_back(make_pair(112,.968));
+ h6->push_back(make_pair(111,.984));
+ h6->push_back(make_pair(110,.9998));
+ h6->push_back(make_pair(108,1.));
  natEl.push_back(h6);
- std::vector<std::pair<G4int,G4double> >*h7=new std::vector<std::pair<G4int,G4double> >(2);
- h7->push_back(std::make_pair(116,.627));
- h7->push_back(std::make_pair(114,1.));
+ vector<pair<G4int,G4double> >*h7=new vector<pair<G4int,G4double> >(2);
+ h7->push_back(make_pair(116,.627));
+ h7->push_back(make_pair(114,1.));
  natEl.push_back(h7);
- std::vector<std::pair<G4int,G4double> >*h8=new std::vector<std::pair<G4int,G4double> >(6);
- h8->push_back(std::make_pair(117,.338));
- h8->push_back(std::make_pair(116,.667));
- h8->push_back(std::make_pair(118,.920));
- h8->push_back(std::make_pair(120,.992));
- h8->push_back(std::make_pair(114,.9999));
- h8->push_back(std::make_pair(112,1.));
+ vector<pair<G4int,G4double> >*h8=new vector<pair<G4int,G4double> >(6);
+ h8->push_back(make_pair(117,.338));
+ h8->push_back(make_pair(116,.667));
+ h8->push_back(make_pair(118,.920));
+ h8->push_back(make_pair(120,.992));
+ h8->push_back(make_pair(114,.9999));
+ h8->push_back(make_pair(112,1.));
  natEl.push_back(h8);
- std::vector<std::pair<G4int,G4double> >*h9=new std::vector<std::pair<G4int,G4double> >(1);
- h9->push_back(std::make_pair(118,1.));
+ vector<pair<G4int,G4double> >*h9=new vector<pair<G4int,G4double> >(1);
+ h9->push_back(make_pair(118,1.));
  natEl.push_back(h9);
- std::vector<std::pair<G4int,G4double> >*i0=new std::vector<std::pair<G4int,G4double> >(7);
- i0->push_back(std::make_pair(122,.2986));
- i0->push_back(std::make_pair(120,.5296));
- i0->push_back(std::make_pair(119,.6983));
- i0->push_back(std::make_pair(121,.8301));
- i0->push_back(std::make_pair(118,.9298));
- i0->push_back(std::make_pair(124,.9985));
- i0->push_back(std::make_pair(116,1.));
+ vector<pair<G4int,G4double> >*i0=new vector<pair<G4int,G4double> >(7);
+ i0->push_back(make_pair(122,.2986));
+ i0->push_back(make_pair(120,.5296));
+ i0->push_back(make_pair(119,.6983));
+ i0->push_back(make_pair(121,.8301));
+ i0->push_back(make_pair(118,.9298));
+ i0->push_back(make_pair(124,.9985));
+ i0->push_back(make_pair(116,1.));
  natEl.push_back(i0);
- std::vector<std::pair<G4int,G4double> >*i1=new std::vector<std::pair<G4int,G4double> >(2);
- i1->push_back(std::make_pair(124,.70476));
- i1->push_back(std::make_pair(122,1.));
+ vector<pair<G4int,G4double> >*i1=new vector<pair<G4int,G4double> >(2);
+ i1->push_back(make_pair(124,.70476));
+ i1->push_back(make_pair(122,1.));
  natEl.push_back(i1);
- std::vector<std::pair<G4int,G4double> >*i2=new std::vector<std::pair<G4int,G4double> >(4);
- i2->push_back(std::make_pair(126,.524));
- i2->push_back(std::make_pair(124,.765));
- i2->push_back(std::make_pair(125,.986));
- i2->push_back(std::make_pair(122,1.));
+ vector<pair<G4int,G4double> >*i2=new vector<pair<G4int,G4double> >(4);
+ i2->push_back(make_pair(126,.524));
+ i2->push_back(make_pair(124,.765));
+ i2->push_back(make_pair(125,.986));
+ i2->push_back(make_pair(122,1.));
  natEl.push_back(i2);
- std::vector<std::pair<G4int,G4double> >*i3=new std::vector<std::pair<G4int,G4double> >(1);
- i3->push_back(std::make_pair(126,1.));
+ vector<pair<G4int,G4double> >*i3=new vector<pair<G4int,G4double> >(1);
+ i3->push_back(make_pair(126,1.));
  natEl.push_back(i3);
- std::vector<std::pair<G4int,G4double> >*i4=new std::vector<std::pair<G4int,G4double> >(1);
- i4->push_back(std::make_pair(125,1.));
+ vector<pair<G4int,G4double> >*i4=new vector<pair<G4int,G4double> >(1);
+ i4->push_back(make_pair(125,1.));
  natEl.push_back(i4);
- std::vector<std::pair<G4int,G4double> >*i5=new std::vector<std::pair<G4int,G4double> >(1);
- i5->push_back(std::make_pair(136,1.));
+ vector<pair<G4int,G4double> >*i5=new vector<pair<G4int,G4double> >(1);
+ i5->push_back(make_pair(136,1.));
  natEl.push_back(i5);
- std::vector<std::pair<G4int,G4double> >*i6=new std::vector<std::pair<G4int,G4double> >(1);
- i6->push_back(std::make_pair(136,1.));
+ vector<pair<G4int,G4double> >*i6=new vector<pair<G4int,G4double> >(1);
+ i6->push_back(make_pair(136,1.));
  natEl.push_back(i6);
- std::vector<std::pair<G4int,G4double> >*i7=new std::vector<std::pair<G4int,G4double> >(1);
- i7->push_back(std::make_pair(138,1.));
+ vector<pair<G4int,G4double> >*i7=new vector<pair<G4int,G4double> >(1);
+ i7->push_back(make_pair(138,1.));
  natEl.push_back(i7);
- std::vector<std::pair<G4int,G4double> >*i8=new std::vector<std::pair<G4int,G4double> >(1);
- i8->push_back(std::make_pair(138,1.));
+ vector<pair<G4int,G4double> >*i8=new vector<pair<G4int,G4double> >(1);
+ i8->push_back(make_pair(138,1.));
  natEl.push_back(i8);
- std::vector<std::pair<G4int,G4double> >*i9=new std::vector<std::pair<G4int,G4double> >(1);
- i9->push_back(std::make_pair(142,1.));
+ vector<pair<G4int,G4double> >*i9=new vector<pair<G4int,G4double> >(1);
+ i9->push_back(make_pair(142,1.));
  natEl.push_back(i9);
- std::vector<std::pair<G4int,G4double> >*j0=new std::vector<std::pair<G4int,G4double> >(1);
- j0->push_back(std::make_pair(142,1.));
+ vector<pair<G4int,G4double> >*j0=new vector<pair<G4int,G4double> >(1);
+ j0->push_back(make_pair(142,1.));
  natEl.push_back(j0);
- std::vector<std::pair<G4int,G4double> >*j1=new std::vector<std::pair<G4int,G4double> >(1);
- j1->push_back(std::make_pair(140,1.));
+ vector<pair<G4int,G4double> >*j1=new vector<pair<G4int,G4double> >(1);
+ j1->push_back(make_pair(140,1.));
  natEl.push_back(j1);
- std::vector<std::pair<G4int,G4double> >*j2=new std::vector<std::pair<G4int,G4double> >(3);
- j2->push_back(std::make_pair(146,.992745));
- j2->push_back(std::make_pair(143,.999945));
- j2->push_back(std::make_pair(142,1.));
+ vector<pair<G4int,G4double> >*j2=new vector<pair<G4int,G4double> >(3);
+ j2->push_back(make_pair(146,.992745));
+ j2->push_back(make_pair(143,.999945));
+ j2->push_back(make_pair(142,1.));
  natEl.push_back(j2);
- std::vector<std::pair<G4int,G4double> >*j3=new std::vector<std::pair<G4int,G4double> >(1);
- j3->push_back(std::make_pair(144,1.));
+ vector<pair<G4int,G4double> >*j3=new vector<pair<G4int,G4double> >(1);
+ j3->push_back(make_pair(144,1.));
  natEl.push_back(j3);
- std::vector<std::pair<G4int,G4double> >*j4=new std::vector<std::pair<G4int,G4double> >(1);
- j4->push_back(std::make_pair(150,1.));
+ vector<pair<G4int,G4double> >*j4=new vector<pair<G4int,G4double> >(1);
+ j4->push_back(make_pair(150,1.));
  natEl.push_back(j4);
- std::vector<std::pair<G4int,G4double> >*j5=new std::vector<std::pair<G4int,G4double> >(1);
- j5->push_back(std::make_pair(148,1.));
+ vector<pair<G4int,G4double> >*j5=new vector<pair<G4int,G4double> >(1);
+ j5->push_back(make_pair(148,1.));
  natEl.push_back(j5);
- std::vector<std::pair<G4int,G4double> >*j6=new std::vector<std::pair<G4int,G4double> >(1);
- j6->push_back(std::make_pair(151,1.));
+ vector<pair<G4int,G4double> >*j6=new vector<pair<G4int,G4double> >(1);
+ j6->push_back(make_pair(151,1.));
  natEl.push_back(j6);
- std::vector<std::pair<G4int,G4double> >*j7=new std::vector<std::pair<G4int,G4double> >(1);
- j7->push_back(std::make_pair(150,1.));
+ vector<pair<G4int,G4double> >*j7=new vector<pair<G4int,G4double> >(1);
+ j7->push_back(make_pair(150,1.));
  natEl.push_back(j7);
- std::vector<std::pair<G4int,G4double> >*j8=new std::vector<std::pair<G4int,G4double> >(1);
- j8->push_back(std::make_pair(153,1.));
+ vector<pair<G4int,G4double> >*j8=new vector<pair<G4int,G4double> >(1);
+ j8->push_back(make_pair(153,1.));
  natEl.push_back(j8);
- std::vector<std::pair<G4int,G4double> >*j9=new std::vector<std::pair<G4int,G4double> >(1);
- j9->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*j9=new vector<pair<G4int,G4double> >(1);
+ j9->push_back(make_pair(157,1.));
  natEl.push_back(j9);
- std::vector<std::pair<G4int,G4double> >*k0=new std::vector<std::pair<G4int,G4double> >(1);
- k0->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k0=new vector<pair<G4int,G4double> >(1);
+ k0->push_back(make_pair(157,1.));
  natEl.push_back(k0);
- std::vector<std::pair<G4int,G4double> >*k1=new std::vector<std::pair<G4int,G4double> >(1);
- k1->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k1=new vector<pair<G4int,G4double> >(1);
+ k1->push_back(make_pair(157,1.));
  natEl.push_back(k1);
- std::vector<std::pair<G4int,G4double> >*k2=new std::vector<std::pair<G4int,G4double> >(1);
- k2->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k2=new vector<pair<G4int,G4double> >(1);
+ k2->push_back(make_pair(157,1.));
  natEl.push_back(k2);
- std::vector<std::pair<G4int,G4double> >*k3=new std::vector<std::pair<G4int,G4double> >(1);
- k3->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k3=new vector<pair<G4int,G4double> >(1);
+ k3->push_back(make_pair(157,1.));
  natEl.push_back(k3);
- std::vector<std::pair<G4int,G4double> >*k4=new std::vector<std::pair<G4int,G4double> >(1);
- k4->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k4=new vector<pair<G4int,G4double> >(1);
+ k4->push_back(make_pair(157,1.));
  natEl.push_back(k4);
- std::vector<std::pair<G4int,G4double> >*k5=new std::vector<std::pair<G4int,G4double> >(1);
- k5->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k5=new vector<pair<G4int,G4double> >(1);
+ k5->push_back(make_pair(157,1.));
  natEl.push_back(k5);
- std::vector<std::pair<G4int,G4double> >*k6=new std::vector<std::pair<G4int,G4double> >(1);
- k6->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k6=new vector<pair<G4int,G4double> >(1);
+ k6->push_back(make_pair(157,1.));
  natEl.push_back(k6);
- std::vector<std::pair<G4int,G4double> >*k7=new std::vector<std::pair<G4int,G4double> >(1);
- k7->push_back(std::make_pair(155,1.));
+ vector<pair<G4int,G4double> >*k7=new vector<pair<G4int,G4double> >(1);
+ k7->push_back(make_pair(155,1.));
  natEl.push_back(k7);
- std::vector<std::pair<G4int,G4double> >*k8=new std::vector<std::pair<G4int,G4double> >(1);
- k8->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k8=new vector<pair<G4int,G4double> >(1);
+ k8->push_back(make_pair(157,1.));
  natEl.push_back(k8);
- std::vector<std::pair<G4int,G4double> >*k9=new std::vector<std::pair<G4int,G4double> >(1);
- k9->push_back(std::make_pair(157,1.));
+ vector<pair<G4int,G4double> >*k9=new vector<pair<G4int,G4double> >(1);
+ k9->push_back(make_pair(157,1.));
  natEl.push_back(k9);
  // Now fill natElements and natIsoCrossS
  G4int nona=natEl.size();
@@ -609,21 +612,21 @@ G4QIsotope::G4QIsotope()
 #endif
  for(G4int i=0; i<nona; i++)
  {
-   std::vector<std::pair<G4int,G4double> >* is=natEl[i]; // Pointer to theElement
+   vector<pair<G4int,G4double> >* is=natEl[i]; // Pointer to theElement
    G4int n=is->size();
 #ifdef pdebug
    G4cout<<"G4QIsotope::Constructor: Element # "<<i<<", nOfIsotopes="<<n<<G4endl;
 #endif
-  std::vector<std::pair<G4int,G4double>*>*a=new std::vector<std::pair<G4int,G4double>*>(n);
-  std::vector<std::pair<G4int,G4double>*>*s=new std::vector<std::pair<G4int,G4double>*>(n);
+  vector<pair<G4int,G4double>*>*a=new vector<pair<G4int,G4double>*>(n);
+  vector<pair<G4int,G4double>*>*s=new vector<pair<G4int,G4double>*>(n);
    G4double last=0.;
    if(n) for(G4int j=0; j<n; j++)
    {
      G4int    nn =is->operator[](j).first; // #ofNeutrons in the isotope
      G4double cur=is->operator[](j).second;// value of the summed abundancy
-     std::pair<G4int,G4double>* aP = new std::pair<G4int,G4double>(nn,cur-last);
+     pair<G4int,G4double>* aP = new pair<G4int,G4double>(nn,cur-last);
      last=cur;                     // Update the summed value
-     std::pair<G4int,G4double>* sP = new std::pair<G4int,G4double>(is->operator[](j));
+     pair<G4int,G4double>* sP = new pair<G4int,G4double>(is->operator[](j));
      a->push_back(aP);
      s->push_back(sP);
 #ifdef pdebug
@@ -635,10 +638,10 @@ G4QIsotope::G4QIsotope()
 #ifdef pdebug
    G4cout<<"G4QIsotope::Constructor: natElements is filled"<<G4endl;
 #endif
- std::vector<std::pair<G4int,G4double>*>*c=new std::vector<std::pair<G4int,G4double>*>(n);
+ vector<pair<G4int,G4double>*>*c=new vector<pair<G4int,G4double>*>(n);
    if(n) for(G4int j=0; j<n; j++)  // Cross sections are 0. by default
    {
-     std::pair<G4int,G4double>* cP = new std::pair<G4int,G4double>(is->operator[](j).first,0.);
+     pair<G4int,G4double>* cP = new pair<G4int,G4double>(is->operator[](j).first,0.);
      c->push_back(cP);
 #ifdef pdebug
 	 G4cout<<"G4QIsotope::Constructor: CrosSecPair i="<<i<<", j="<<j<<" is filled"<<G4endl;
@@ -662,15 +665,15 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
   G4int uP=natElements.size();     // uP, nP, and sP must be the same
   if(uP) for(G4int i=0; i<uP; i++)
   {
-    std::vector<std::pair<G4int,G4double>*>* curA=natElements[i];
+    vector<pair<G4int,G4double>*>* curA=natElements[i];
     G4int nn=curA->size();         // Can not be 0 by definition
     if(nn) for(G4int n=0; n<nn; n++) delete curA->operator[](n); // Delete pair(N,Ab)
     delete curA;                   // Delet abundancy vector
-    std::vector<std::pair<G4int,G4double>*>* curS=natSumAbund[i];
+    vector<pair<G4int,G4double>*>* curS=natSumAbund[i];
     G4int ns=curS->size();         // Can not be 0 by definition
     if(ns) for(G4int m=0; m<ns; m++) delete curS->operator[](m); // Delete pair(N,Ab)
     delete curS;                   // Delet abundancy vector
-    std::vector<std::pair<G4int,G4double>*>* curC=natIsoCrosS[i];
+    vector<pair<G4int,G4double>*>* curC=natIsoCrosS[i];
     G4int nc=curC->size();         // Can not be 0 by definition
     if(nc) for(G4int k=0; k<nc; k++) delete curC->operator[](k); // Delete pair(N,CS)
     delete curC;                   // Delete cross section vector
@@ -678,29 +681,29 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
   G4int nP=newElems.size();
   if(nP) for(G4int j=0; j<nP; j++) // LOOP over new UserDefinedElements
   {
-    std::pair<G4int, std::vector<std::pair<G4int,G4double>*>* >* nEl= newElems[j];
+    pair<G4int, vector<pair<G4int,G4double>*>* >* nEl= newElems[j];
     G4int nEn=nEl->second->size();
     if(nEn) for(G4int k=0; k<nEn; k++)
     {
-      std::pair<G4int,G4double>* curA=nEl->second->operator[](k);
+      pair<G4int,G4double>* curA=nEl->second->operator[](k);
       delete curA;                 // Delete vect<pair(N,Abundancy)*>
     }
     delete nEl;                    // Delete vect<IndZ,vect<pair(N,Ab)*>*> newElementVector
     //
-    std::pair<G4int, std::vector<std::pair<G4int,G4double>*>* >* nSA= newSumAb[j];
+    pair<G4int, vector<pair<G4int,G4double>*>* >* nSA= newSumAb[j];
     G4int nSn=nSA->second->size();
     if(nSn) for(G4int n=0; n<nSn; n++)
     {
-      std::pair<G4int,G4double>* curS=nSA->second->operator[](n);
+      pair<G4int,G4double>* curS=nSA->second->operator[](n);
       delete curS;                 // Delete vect<pair(N,SumAbund)*>
     }
     delete nSA;                    // Delete vect<IndZ,vect<pair(N,SA)*>*> newSumAbunVector
     //
-    std::pair<G4int, std::vector<std::pair<G4int,G4double>*>* >* nCS= newIsoCS[j];
+    pair<G4int, vector<pair<G4int,G4double>*>* >* nCS= newIsoCS[j];
     G4int nCn=nCS->second->size();
     if(nCn) for(G4int m=0; m<nCn; m++)
     {
-      std::pair<G4int,G4double>* curC = nCS->second->operator[](m);
+      pair<G4int,G4double>* curC = nCS->second->operator[](m);
       delete curC;                 // Delete vect<pair(N,CrossSect)*>
     }
     delete nCS;                    // Delete vect<IndZ,vect<pair(N,CS)*>*> newIsoCroSVector
@@ -722,7 +725,7 @@ G4QIsotope* G4QIsotope::Get()
 }
 
 // #ofProtons in stable isotopes with fixed A=Z+N. Returns length and fils VectOfIsotopes
-G4int G4QIsotope::GetProtons(G4int A, std::vector<G4int>& isoV) 
+G4int G4QIsotope::GetProtons(G4int A, vector<G4int>& isoV) 
 //    =========================================================
 {
   const G4int nAZ=270;  // Dimension of the table
@@ -1552,7 +1555,7 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
 
 // Returns the input index (if it is >0 & unique) or theFirstFreeIndex (<=0 or nonunique)
 G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wrong (sum>1)
-                              std::vector<std::pair<G4int,G4double> >* abund)
+                              vector<pair<G4int,G4double> >* abund)
 //    =======================================================================
 {
 #ifdef debug
@@ -1580,9 +1583,9 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
   }
   if(found || index<=0) index=mind+1; // Index must be substituted by the NewFirstFreeIndex
   G4int ZInd=1000*index+Z;            // Fake Z increased by the UserDefinedIndex
-  std::vector<std::pair<G4int,G4double>*>*A=new std::vector<std::pair<G4int,G4double>*>(I);
-  std::vector<std::pair<G4int,G4double>*>*S=new std::vector<std::pair<G4int,G4double>*>(I);
-  std::vector<std::pair<G4int,G4double>*>*C=new std::vector<std::pair<G4int,G4double>*>(I);
+  vector<pair<G4int,G4double>*>*A = new vector<pair<G4int,G4double>*>(I);
+  vector<pair<G4int,G4double>*>*S = new vector<pair<G4int,G4double>*>(I);
+  vector<pair<G4int,G4double>*>*C = new vector<pair<G4int,G4double>*>(I);
   G4double sumAbu=0;                  // Summ of abbundancies
   for(G4int j=0; j<I; j++)
   {
@@ -1612,21 +1615,21 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
         return -2;
       }
     }
-    std::pair<G4int,G4double>* abP= new std::pair<G4int,G4double>(N,abu);
+    pair<G4int,G4double>* abP= new pair<G4int,G4double>(N,abu);
     A->push_back(abP);
-    std::pair<G4int,G4double>* saP= new std::pair<G4int,G4double>(N,sumAbu);
+    pair<G4int,G4double>* saP= new pair<G4int,G4double>(N,sumAbu);
     S->push_back(saP);
-    std::pair<G4int,G4double>* csP= new std::pair<G4int,G4double>(N,0.);
+    pair<G4int,G4double>* csP= new pair<G4int,G4double>(N,0.);
     C->push_back(csP);
   }
-  std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>* newAP=
-	new std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>(ZInd,A);
+  pair<G4int,vector<pair<G4int,G4double>*>*>* newAP=
+	new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,A);
   newElems.push_back(newAP);
-  std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>* newSA=
-	new std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>(ZInd,S);
+  pair<G4int,vector<pair<G4int,G4double>*>*>* newSA=
+	new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,S);
   newSumAb.push_back(newSA);
-  std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>* newCP=
-	new std::pair<G4int,std::vector<std::pair<G4int,G4double>*>*>(ZInd,C);
+  pair<G4int,vector<pair<G4int,G4double>*>*>* newCP=
+	new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,C);
   newIsoCS.push_back(newCP);
   return index;
 }
@@ -1666,7 +1669,7 @@ G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist,
     G4cerr<<"--Worning--G4QIsotope::GetNeutrons:(-1) NotFound Z="<<Z<<",i="<<index<<G4endl;
     return -1;
   }
-  std::vector<std::pair<G4int,G4double>*>* abu = newSumAb[i]->second;
+  vector<pair<G4int,G4double>*>* abu = newSumAb[i]->second;
   G4int nn = abu->size();             // A#Of UserDefinedIsotopes for the newElement
   if(nn>0)
   {
@@ -1688,7 +1691,7 @@ G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist,
 }
 
 // Get a pointer to the vector of pairs(N,CrosSec), where N is used to calculate CrosSec
-std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetCSVector(G4int Z, G4int index)
+vector<pair<G4int,G4double>*>* G4QIsotope::GetCSVector(G4int Z, G4int index)
 //                                       =============================================
 {
 #ifdef debug
@@ -1724,7 +1727,7 @@ std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetCSVector(G4int Z, G4int 
 }
 
 // Get a pointer to the vector of pairs(N,IntAbundancy) for the element with Z
-std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetAbuVector(G4int Z, G4int index)
+vector<pair<G4int,G4double>*>* G4QIsotope::GetAbuVector(G4int Z, G4int index)
 //                                       ==============================================
 {
 #ifdef debug
@@ -1760,7 +1763,7 @@ std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetAbuVector(G4int Z, G4int
 }
 
 // Get a pointer to the vector of pairs(N,SumAbundancy) for the element with Z
-std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetSumAVector(G4int Z, G4int index)
+vector<pair<G4int,G4double>*>* G4QIsotope::GetSumAVector(G4int Z, G4int index)
 //                                       ===============================================
 {
 #ifdef debug
@@ -1799,8 +1802,8 @@ std::vector<std::pair<G4int,G4double>*>* G4QIsotope::GetSumAVector(G4int Z, G4in
 G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
 //                   =========================================
 {
-  std::vector<std::pair<G4int,G4double>*>* ab;
-  std::vector<std::pair<G4int,G4double>*>* cs;
+  vector<pair<G4int,G4double>*>* ab;
+  vector<pair<G4int,G4double>*>* cs;
 #ifdef debug
   G4cout<<"G4QIsotope::GetMeanCrossSection is called"<<G4endl;
 #endif
@@ -1864,8 +1867,8 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
 G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
 //                ===================================
 {
-  std::vector<std::pair<G4int,G4double>*>* ab;
-  std::vector<std::pair<G4int,G4double>*>* cs;
+  vector<pair<G4int,G4double>*>* ab;
+  vector<pair<G4int,G4double>*>* cs;
 #ifdef debug
   G4cout<<"G4QIsotope::GetCSNeutrons is called"<<G4endl;
 #endif
@@ -1914,7 +1917,7 @@ G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
   else
   {
     G4double sum=0.;
-    std::vector<G4double> scs(nis);
+    vector<G4double> scs(nis);
     for(G4int j=0; j<nis; j++)
 	{
       G4double cur=ab->operator[](j)->second;

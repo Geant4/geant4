@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2004/05/27 16:43:08 vnivanch Exp $
+$Id: History,v 1.76 2004/12/03 17:32:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 04: V.Ivant (muons-V06-02-07)
+- Migration to cmath for G4MuBetheBlochModel
+
+02 Dec 04: V.Ivant (muons-V06-02-06)
+- Migration to cmath
+
+29 Nov 04: V.Ivant (muons-V06-02-05)
+- Cleanup GNUmakefile
+
+11 Nov 04: V.Ivant (muons-V06-02-04)
+- Migration to new algorithm to Store/Retrieve tables
+
+03 Nov 04: V.Ivant (muons-V06-02-03)
+- Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
+
+25 Oct 04: V.Ivant (muons-V06-02-02)
+- Migrate to new interfaces for ParticleChange
+
+25 Aug 04: V.Ivant (muons-V06-02-01)
+- Fix problem of use of common tables
+
+17 Aug 04: V.Ivant (muons-V06-02-00)
+- Provide the common use of tables for mu+ and mu- to save 
+  initialisation time;
+- rename processes "Mu" -> "mu"
+- substitute obsolete interface to particles
 
 27 May 04: V.Ivant (muons-V06-01-01)
 - Set default regime of MuIonisation integral 

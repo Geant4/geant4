@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.13 2003/11/08 03:55:16 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FieldManager.hh,v 1.14 2003/12/09 14:44:59 japost Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //  
 // class G4FieldManager
@@ -161,13 +161,17 @@ class G4FieldManager
      G4double  fEpsilonMax;
 };
 
-// Our current design envisions that one Field manager is valid for a region of the detector.
-// (eg a detector with electric E and magnetic B field will now treat
-// them as one field - and could treat any other field of importance 
-// as additional components of a single field.)
-// Does it make sense to have several instead ?
-// Is the lack of elegance of the design (of G4Field) made up 
-// for by the simplification it allows ?
+// Our current design and implementation expect that a particular
+// geometrical region has a Field manager.
+//  By default a Field Manager is created for the world volume, and
+//  will be utilised for all volumes unless it is overridden by a 'local'
+//  field manager.
+
+// Note also that a region with both electric E and magnetic B field will 
+//  have these treated as one field.
+// Similarly it could be extended to treat other fields as additional components
+//  of a single field type.
+
 
 // Implementation of inline functions
 

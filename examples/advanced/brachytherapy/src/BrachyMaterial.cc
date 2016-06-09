@@ -30,7 +30,7 @@
 //    *******************************
 //
 // $Id: BrachyMaterial.cc,v 1.5 2004/03/11 15:38:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "G4MaterialPropertiesTable.hh"

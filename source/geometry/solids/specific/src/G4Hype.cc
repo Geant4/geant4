@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.11 2003/10/28 17:15:56 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.16 2004/12/10 16:22:38 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // --------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4Hype::G4Hype(const G4String& pName,
                      G4double newInnerStereo,
                      G4double newOuterStereo,
                      G4double newHalfLenZ)
-  : G4VSolid(pName)
+  : G4VSolid(pName), fCubicVolume(0.), fpPolyhedron(0)
 {
   // Check z-len
   //
@@ -170,8 +170,8 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
   // defined in meshdefs.hh
   //
   G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = 2*M_PI/numPhi;
-  G4double rFudge = 1.0/cos(0.5*sigPhi);
+  G4double sigPhi = twopi/numPhi;
+  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
   
   //
   // We work around in phi building polygons along the way.
@@ -224,8 +224,8 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
   G4ClippablePolygon endPoly1, endPoly2;
   
   G4double phi = 0, 
-     cosPhi = cos(phi),
-     sinPhi = sin(phi);
+     cosPhi = std::cos(phi),
+     sinPhi = std::sin(phi);
   G4ThreeVector v0( rFudge*endOuterRadius*cosPhi,
                     rFudge*endOuterRadius*sinPhi,
                     +halfLenZ ),
@@ -292,8 +292,8 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff
-          cosPhi = cos(phi), 
-    sinPhi = sin(phi);
+          cosPhi = std::cos(phi), 
+    sinPhi = std::sin(phi);
     
     G4double r(rFudge*endOuterRadius);
     w0 = G4ThreeVector( r*cosPhi, r*sinPhi, +halfLenZ );
@@ -455,7 +455,7 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
   //
   // Check z extents: are we outside?
   //
-  const G4double absZ(fabs(p.z()));
+  const G4double absZ(std::fabs(p.z()));
   if (absZ > halfLenZ + halfTol) return kOutside;
   
   //
@@ -499,19 +499,19 @@ G4ThreeVector G4Hype::SurfaceNormal( const G4ThreeVector& p ) const
   //
   // Which of the three or four surfaces are we closest to?
   //
-  const G4double absZ(fabs(p.z()));
+  const G4double absZ(std::fabs(p.z()));
   const G4double distZ(absZ - halfLenZ);
   const G4double dist2Z(distZ*distZ);
   
   const G4double xR2( p.x()*p.x()+p.y()*p.y() );
-  const G4double dist2Outer( fabs(xR2 - HypeOuterRadius2(absZ)) );
+  const G4double dist2Outer( std::fabs(xR2 - HypeOuterRadius2(absZ)) );
   
   if (InnerSurfaceExists())
   {
     //
     // Has inner surface: is this closest?
     //
-    const G4double dist2Inner( fabs(xR2 - HypeInnerRadius2(absZ)) );
+    const G4double dist2Inner( std::fabs(xR2 - HypeInnerRadius2(absZ)) );
     if (dist2Inner < dist2Z && dist2Inner < dist2Outer)
       return G4ThreeVector( -p.x(), -p.y(), p.z()*tanInnerStereo2 ).unit();
   }
@@ -548,7 +548,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
   //
   // Quick test. Beware! This assumes v is a unit vector!
   //
-  if (fabs(p.x()*v.y() - p.y()*v.x()) > endOuterRadius+kCarTolerance)
+  if (std::fabs(p.x()*v.y() - p.y()*v.x()) > endOuterRadius+kCarTolerance)
     return kInfinity;
   
   //
@@ -643,7 +643,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
           // trajectory cannot miss the inner hyperbolic surface
           // for z > 0, if the normal is correct.
           //
-          G4double dot1 = (xi*v.x() + yi*v.y())*endInnerRadius/sqrt(pr2);
+          G4double dot1 = (xi*v.x() + yi*v.y())*endInnerRadius/std::sqrt(pr2);
           couldMissInner = (dot1 - halfLenZ*tanInnerStereo2*vz <= 0);
           
           if (pr2 > endInnerRadius2*(1 - 2*DBL_EPSILON) )
@@ -653,7 +653,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
             // surface is a cylinder
             //
             if ( (innerStereo < DBL_MIN)
-              && ((fabs(v.x()) > DBL_MIN) || (fabs(v.y()) > DBL_MIN)) )
+              && ((std::fabs(v.x()) > DBL_MIN) || (std::fabs(v.y()) > DBL_MIN)) )
               cantMissInnerCylinder = true;
           }
         }
@@ -681,7 +681,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
           // trajectory cannot miss the outer hyperbolic surface
           // for z > 0, if the normal is correct.
           //
-          G4double dot1 = dotR*endOuterRadius/sqrt(pr2);
+          G4double dot1 = dotR*endOuterRadius/std::sqrt(pr2);
           couldMissOuter = (dot1 - halfLenZ*tanOuterStereo2*vz>= 0);
         }
       }
@@ -705,7 +705,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
     if (pz < halfLenZ+halfTol)
     {
       G4double dr2 = p.x()*p.x() + p.y()*p.y() - HypeOuterRadius2(pz);
-      if (fabs(dr2) < kCarTolerance*endOuterRadius)
+      if (std::fabs(dr2) < kCarTolerance*endOuterRadius)
       {
         //
         // Sure, but make sure we're traveling inwards at
@@ -768,7 +768,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
   if (pz < halfLenZ+halfTol)
   {
     G4double dr2 = p.x()*p.x() + p.y()*p.y() - HypeInnerRadius2(pz);
-    if (fabs(dr2) < kCarTolerance*endInnerRadius)
+    if (std::fabs(dr2) < kCarTolerance*endInnerRadius)
     {
       //
       // Sure, but make sure we're traveling outwards at
@@ -841,13 +841,13 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 {
   static const G4double halfTol(0.5*kCarTolerance);
   
-  G4double absZ(fabs(p.z()));
+  G4double absZ(std::fabs(p.z()));
   
   //
   // Check region
   //
   G4double r2 = p.x()*p.x() + p.y()*p.y();
-  G4double r = sqrt(r2);
+  G4double r = std::sqrt(r2);
   
   G4double sigz = absZ - halfLenZ;
   
@@ -866,7 +866,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
           //
           // In region 5
           //
-          G4double answer = sqrt( dr*dr + sigz*sigz );
+          G4double answer = std::sqrt( dr*dr + sigz*sigz );
           return answer < halfTol ? 0 : answer;
         }
       }
@@ -887,7 +887,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
       //
       // In region 2
       //
-      G4double answer = sqrt( dr*dr + sigz*sigz );
+      G4double answer = std::sqrt( dr*dr + sigz*sigz );
       return answer < halfTol ? 0 : answer;
     }
   }
@@ -984,7 +984,7 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
     // We hit somewhere. Are we on the surface?
     //  
     G4double dr2 = r2 - HypeOuterRadius2(pz);
-    if (fabs(dr2) < endOuterRadius*kCarTolerance)
+    if (std::fabs(dr2) < endOuterRadius*kCarTolerance)
     {
       G4ThreeVector normHere( p.x(), p.y(), -p.z()*tanOuterStereo2 );
       //
@@ -1035,7 +1035,7 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p, const G4ThreeVector& v,
       // On surface?
       //
       G4double dr2 = r2 - HypeInnerRadius2(pz);
-      if (fabs(dr2) < endInnerRadius*kCarTolerance)
+      if (std::fabs(dr2) < endInnerRadius*kCarTolerance)
       {
         G4ThreeVector normHere( -p.x(), -p.y(), p.z()*tanInnerStereo2 );
         if (normHere.dot(v) > 0)
@@ -1100,7 +1100,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
   //
   // Try each surface and remember the closest
   //
-  G4double absZ(fabs(p.z()));
+  G4double absZ(std::fabs(p.z()));
   G4double r(p.perp());
   
   G4double sBest = halfLenZ - absZ;
@@ -1188,7 +1188,7 @@ G4NURBS* G4Hype::CreateNURBS () const
 //     p       - (in) Point on trajectory
 //     v       - (in) Vector along trajectory
 //     r2      - (in) Square of radius at z = 0
-//     tan2phi - (in) tan(phi)**2
+//     tan2phi - (in) std::tan(phi)**2
 //     s       - (out) Up to two points of intersection, where the
 //                     intersection point is p + s*v, and if there are
 //                     two intersections, s[0] < s[1]. May be negative.
@@ -1227,13 +1227,13 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
   G4double b = 2*( x0*tx + y0*ty - z0*tz*tan2Phi );
   G4double c = x0*x0 + y0*y0 - r2 - z0*z0*tan2Phi;
   
-  if (fabs(a) < DBL_MIN)
+  if (std::fabs(a) < DBL_MIN)
   {
     //
     // The trajectory is parallel to the asympotic limit of
     // the surface: single solution
     //
-    if (fabs(b) < DBL_MIN) return 0;  // Unless we travel through exact center
+    if (std::fabs(b) < DBL_MIN) return 0;  // Unless we travel through exact center
     
     s[0] = c/b;
     return 1;
@@ -1253,7 +1253,7 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
     return 1;
   }
   
-  radical = sqrt(radical);
+  radical = std::sqrt(radical);
   
   G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
   G4double sa = q/a;
@@ -1295,13 +1295,13 @@ G4double G4Hype::ApproxDistOutside( G4double pr, G4double pz,
   // First point
   //
   G4double z1 = pz;
-  G4double r1 = sqrt( r0*r0 + z1*z1*tan2Phi );
+  G4double r1 = std::sqrt( r0*r0 + z1*z1*tan2Phi );
   
   //
   // Second point
   //
   G4double z2 = (pr*tanPhi + pz)/(1 + tan2Phi);
-  G4double r2 = sqrt( r0*r0 + z2*z2*tan2Phi );
+  G4double r2 = std::sqrt( r0*r0 + z2*z2*tan2Phi );
   
   //
   // Line between them
@@ -1309,7 +1309,7 @@ G4double G4Hype::ApproxDistOutside( G4double pr, G4double pz,
   G4double dr = r2-r1;
   G4double dz = z2-z1;
   
-  G4double len = sqrt(dr*dr + dz*dz);
+  G4double len = std::sqrt(dr*dr + dz*dz);
   if (len < DBL_MIN)
   {
     //
@@ -1318,13 +1318,13 @@ G4double G4Hype::ApproxDistOutside( G4double pr, G4double pz,
     //
     dr = pr-r1;
     dz = pz-z1;
-    return sqrt( dr*dr + dz*dz );
+    return std::sqrt( dr*dr + dz*dz );
   }
   
   //
   // Distance
   //
-  return fabs((pr-r1)*dz - (pz-z1)*dr)/len;
+  return std::fabs((pr-r1)*dz - (pz-z1)*dr)/len;
 }
 
 //
@@ -1350,14 +1350,33 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
   //
   // Corresponding position and normal on hyperbolic
   //
-  G4double rh = sqrt( r0*r0 + pz*pz*tan2Phi );
+  G4double rh = std::sqrt( r0*r0 + pz*pz*tan2Phi );
   
   G4double dr = -rh;
   G4double dz = pz*tan2Phi;
-  G4double len = sqrt(dr*dr + dz*dz);
+  G4double len = std::sqrt(dr*dr + dz*dz);
   
   //
   // Answer
   //
-  return fabs((pr-rh)*dr)/len;
+  return std::fabs((pr-rh)*dr)/len;
+}
+
+//
+// GetCubicVolume
+//
+G4double G4Hype::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  return fCubicVolume;
+}
+
+G4Polyhedron* G4Hype::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }

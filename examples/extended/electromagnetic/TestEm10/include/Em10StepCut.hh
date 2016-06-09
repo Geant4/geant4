@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10StepCut.hh,v 1.2 2001/07/11 09:57:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10StepCut.hh,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -113,9 +113,9 @@ inline G4VParticleChange* Em10StepCut::PostStepDoIt(
    return &aParticleChange;
 }
 
-inline G4double Em10StepCut::GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
+inline G4double Em10StepCut::GetMeanFreePath(const G4Track&,
+                             G4double,
+                             G4ForceCondition*
                             )
 {
   return 0.;

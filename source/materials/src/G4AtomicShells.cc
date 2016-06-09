@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc,v 1.3 2001/07/11 10:01:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4AtomicShells.cc,v 1.4 2004/07/19 11:27:21 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 24-04-98, implementation of the first version, V. Grichine
 // 16-11-98, GetBindingEnergy(Z,ShellNb), M.Maire
+// 19-07-04, add a protection in GetNumberOfShells(), mma
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -517,6 +518,7 @@ G4AtomicShells::fBindingEnergies[1540] =
 G4int
 G4AtomicShells::GetNumberOfShells(G4int Z)  
 {
+  assert (Z>=1 && Z<=101);
   return fNumberOfShells[Z];
 }
 

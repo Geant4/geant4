@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.1 2003/10/07 11:26:00 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PomeronCrossSection.cc,v 1.2 2004/12/07 13:50:18 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include "G4PomeronCrossSection.hh"
@@ -37,9 +37,9 @@ G4PomeronCrossSection::~G4PomeronCrossSection()
 
 G4PomeronCrossSection::G4PomeronCrossSection(const G4ParticleDefinition * particle)
     {
-    G4int Encoding = abs(particle->GetPDGEncoding());
+    G4int Encoding = std::abs(particle->GetPDGEncoding());
 
-    if (abs(particle->GetBaryonNumber())!=0)
+    if (std::abs(particle->GetBaryonNumber())!=0)
 	InitForNucleon();
     else if (Encoding/100== 3 || Encoding/10 == 3)
 	InitForKaon();
@@ -123,7 +123,7 @@ G4double G4PomeronCrossSection::GetInelasticCrossSection(const G4double s)
 G4double G4PomeronCrossSection::GetTotalProbability(const G4double s, 
 				  const G4double impactsquare)
 {
-	return 2/pomeron_C*(1-exp(-1*Eikonal(s,impactsquare)));	
+	return 2/pomeron_C*(1-std::exp(-1*Eikonal(s,impactsquare)));	
 }
 
 G4double G4PomeronCrossSection::GetDiffractiveProbability(const G4double s, 
@@ -137,7 +137,7 @@ G4double G4PomeronCrossSection::GetDiffractiveProbability(const G4double s,
 G4double G4PomeronCrossSection::GetNondiffractiveProbability(const G4double s, 
 				  const G4double impactsquare)
 {
-	return (1-exp(-2*Eikonal(s,impactsquare)))/pomeron_C;	
+	return (1-std::exp(-2*Eikonal(s,impactsquare)))/pomeron_C;	
 }
 
 G4double G4PomeronCrossSection::GetElasticProbability(const G4double s, 
@@ -162,8 +162,8 @@ G4double G4PomeronCrossSection::GetCutPomeronProbability(const G4double s,
 	{   factorial *= i;
 	}
 	 
-	return exp(-2*Eikonal(s,impactsquare))/pomeron_C*
-	        pow(2*Eikonal(s,impactsquare),nPomerons)/factorial;
+	return std::exp(-2*Eikonal(s,impactsquare))/pomeron_C*
+	        std::pow(2*Eikonal(s,impactsquare),nPomerons)/factorial;
 }
 
 // ---------------Temporary --- GF
@@ -246,7 +246,7 @@ G4double G4PomeronCrossSection::Expand(G4double z)
 
 inline G4double G4PomeronCrossSection::Power(const G4double s)
 {
-	return pomeron_Gamma *pow(s/pomeron_S, pomeron_Alpha -1);
+	return pomeron_Gamma *std::pow(s/pomeron_S, pomeron_Alpha -1);
 }
 
 inline G4double G4PomeronCrossSection::Z(const G4double s)
@@ -256,7 +256,7 @@ inline G4double G4PomeronCrossSection::Z(const G4double s)
 
 inline G4double G4PomeronCrossSection::Lambda(const G4double s)
 {
-	return pomeron_Rsquare+pomeron_Alphaprime*log(s/pomeron_S);
+	return pomeron_Rsquare+pomeron_Alphaprime*std::log(s/pomeron_S);
 }
 
 inline G4double G4PomeronCrossSection::SigP(const G4double s)
@@ -267,27 +267,27 @@ inline G4double G4PomeronCrossSection::SigP(const G4double s)
 inline G4double G4PomeronCrossSection::Eikonal(const G4double s,
 					       const G4double impactsquare)
 {
-	return Z(s)/2 * exp(-impactsquare/(4*Lambda(s)*hbarc_squared));
+	return Z(s)/2 * std::exp(-impactsquare/(4*Lambda(s)*hbarc_squared));
 }
 //*************************************************************************************************
 inline G4double G4PomeronCrossSection::PowerSoft(const G4double s)
     {
-    return pomeron_Gamma *pow(s/pomeron_S, pomeron_Alpha -1);
+    return pomeron_Gamma *std::pow(s/pomeron_S, pomeron_Alpha -1);
     }
 
 inline G4double G4PomeronCrossSection::PowerHard(const G4double s)
     {
-    return pomeron_Gamma_Hard*pow(s/pomeron_S, pomeron_Alpha_Hard -1);
+    return pomeron_Gamma_Hard*std::pow(s/pomeron_S, pomeron_Alpha_Hard -1);
     }
 
 inline G4double G4PomeronCrossSection::LambdaSoft(const G4double s)
     {
-    return pomeron_Rsquare+pomeron_Alphaprime*log(s/pomeron_S);
+    return pomeron_Rsquare+pomeron_Alphaprime*std::log(s/pomeron_S);
     }
     
 inline G4double G4PomeronCrossSection::LambdaHard(const G4double /*s*/)
     {
-    return pomeron_Rsquare; //+pomeron_Alphaprime*log(s/pomeron_S);
+    return pomeron_Rsquare; //+pomeron_Alphaprime*std::log(s/pomeron_S);
     }
 
 inline G4double G4PomeronCrossSection::Zsoft(const G4double s)
@@ -302,12 +302,12 @@ inline G4double G4PomeronCrossSection::Zhard(const G4double s)
 
 G4double G4PomeronCrossSection::SoftEikonal(G4double s, G4double impactsquare)
     {
-    return Zsoft(s)/2*exp(-impactsquare/LambdaSoft(s)/hbarc_squared/4);
+    return Zsoft(s)/2*std::exp(-impactsquare/LambdaSoft(s)/hbarc_squared/4);
     }
      
 G4double G4PomeronCrossSection::HardEikonal(G4double s, G4double impactsquare)
     {
-    return Zhard(s)/2*exp(-impactsquare/LambdaHard(s)/hbarc_squared/4);
+    return Zhard(s)/2*std::exp(-impactsquare/LambdaHard(s)/hbarc_squared/4);
     }
     
 //*************************************************************************************************

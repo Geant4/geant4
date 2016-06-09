@@ -13,7 +13,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10 Nov 2004 Fan Lei (radioactive_decay-V06-02-01)
+- added G4MshellECDecayChannel.hh and changed G4RadioactiveDecay.cc accordingly.
 
+09 Nov 2004 Fan Lei
+- Changes to G4RaioactiveDecay.cc (radioactive_decay-V06-02-00) 
+	i) better handling to incomplete data files; 
+	ii) correct treatment of metastables as initial tracks in VR mode; 
+  	iii) default decay window in VR model to 9.9x10^9 - 10^10 seconds; 
+	iv) individual time stamp for splitted isotope; 
+	v) bug fix #662; 
+	vi) bug fix #396.
+- Changes to G4NuclearDecayChannel.cc
+	i) apply atomic relaxation only to 5 < z < 101
+	ii) no more fast/slow beta decay mode with a faster 3-body decay implementation.
+- G4RIsotopeTable.cc: line 223, no longer reset the excitaion energy. 
+
+    
 12 Jun 2003 Gabriele Cosmo (radiative_decay-V05-01-00)
 - Fix in G4ITDecayChannel.hh and G4RadioactiveDecay.cc for porting
   on Windows .NET compiler: changed signature in constructor for

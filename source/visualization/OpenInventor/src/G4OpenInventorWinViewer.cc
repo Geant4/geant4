@@ -21,16 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.2 2004/04/08 10:49:57 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorWinViewer.cc,v 1.22 2004/11/25 14:45:06 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 /*
- * jck 05 Feb 1997 - Initial Implementation
- * jck 21 Apr 1997 
- *	Mods for SoXtHepViewer
+ * jck : 05 Feb 1997 : Initial Implementation
+ * jck : 21 Apr 1997 : Mods for SoXtHepViewer
  * gb : on Win32 use an SoXtExaminerViewer.
- * gb 05 April 2004 : creation.
+ * gb : 05 April 2004 : creation.
+ * gb : 09 November 2004 : Pulldown menu with the escape menu item.
+ * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
+
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
 
 // this :
@@ -41,110 +43,59 @@
 #include <Inventor/Win/SoWin.h>
 #include <Inventor/Win/viewers/SoWinExaminerViewer.h>
 
+#include "HEPVis/actions/SoGL2PSAction.h"
+
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 
 #include <windowsx.h>
 
-//
-// Global variables 
-//
+// To have sizeChanged public :
+class Geant4_SoWinExaminerViewer : public SoWinExaminerViewer {
+public:
+  Geant4_SoWinExaminerViewer(HWND parent,const char* name,SbBool embed)
+  :SoWinExaminerViewer(parent,name,embed){}
+  virtual void sizeChanged(const SbVec2s & size){
+    SoWinExaminerViewer::sizeChanged(size);
+  }
+};
+
+#define SIZE 400
+// File : 
+#define ID_FILE_POSTSCRIPT 1
+#define ID_FILE_PIXMAP_POSTSCRIPT 2
+#define ID_FILE_INVENTOR 3
+#define ID_FILE_ESCAPE 4
+// Etc : 
+#define ID_ETC_ERASE_DETECTOR 101
+#define ID_ETC_ERASE_EVENT 102
+#define ID_ETC_SET_SOLID 103
+#define ID_ETC_SET_WIRE_FRAME 104
+#define ID_ETC_SET_REDUCED_WIRE_FRAME 105
+#define ID_ETC_SET_FULL_WIRE_FRAME 106
+#define ID_ETC_SET_PREVIEW 107
+#define ID_ETC_SET_PREVIEW_AND_FULL 108
+#define ID_ETC_UPDATE_SCENE 109
+#define ID_ETC_STATS 110
+// Help :
+#define ID_HELP_CONTROLS 201
 
 //static void SecondaryLoopPostAction ();
 
-static LRESULT CALLBACK WindowProc (HWND,UINT,WPARAM,LPARAM);
-
 static const char className[] = "G4OpenInventorShellWindow";
 
-void G4OpenInventorWinViewer::FinishView () {
-  if(!fViewer) return;
-  fViewer->viewAll();
-  fViewer->saveHomePosition();
-}
-
-void G4OpenInventorWinViewer::KernelVisitDecision () {
-  
-  // If there's a significant difference with the last view parameters
-  // of either the scene handler or this viewer, trigger a rebuild.
-
-  if (
-      //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
-      // We need a test for empty scene graph, such as
-      // staticRoot.size() or something??????????  See temporary fix
-      // in contructor.  (John Allison Aug 2001)
-      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
-      CompareForKernelVisit(fLastVP)) {
-    NeedKernelVisit ();
-  }      
-  fLastVP = fVP;
-  fG4OpenInventorSceneHandler.fLastVP = fVP;
-}
- 
-G4bool G4OpenInventorWinViewer::CompareForKernelVisit
-(G4ViewParameters&) {
-
-  if (
-      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
-      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (fLastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
-      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
-      ) {
-      return true;;
-  }
-  if (fLastVP.IsDensityCulling () &&
-      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    return true;
-
-  if (fLastVP.IsExplode () &&
-      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    return true;
-      
-  return false;
-}
-
-G4OpenInventorWinViewer::G4OpenInventorWinViewer
-(G4OpenInventorSceneHandler& sceneHandler,
- const G4String& name)
-:G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
-,fG4OpenInventorSceneHandler(sceneHandler)
+G4OpenInventorWinViewer::G4OpenInventorWinViewer(
+ G4OpenInventorSceneHandler& sceneHandler
+,const G4String& name)
+:G4OpenInventorViewer (sceneHandler, name)
 ,fShell(0)
 ,fViewer(0)
-,fSelection(0)
-,fInteractorManager(0)
 {
-  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
-
-  fInteractorManager = 
-    ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
-    GetInteractorManager();
-  //Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
-
-  //fInteractorManager->
-  //AddSecondaryLoopPostAction((G4SecondaryLoopAction)SecondaryLoopPostAction);
-
   G4cout << "Window name: " << fName << G4endl;
-  // 
-  // Selection
-  //
-  fSelection = new SoSelection;
-  fSelection->policy = SoSelection::SINGLE;
-  fSelection->ref();
-  fSelection->addChild(fG4OpenInventorSceneHandler.root);
 
   G4String wName = fName;
 
-#define SIZE 400
   HWND parent = (HWND)fInteractorManager->GetParentInteractor ();
   if(!parent) {
     //Create a shell window :
@@ -152,6 +103,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     shellName += "_shell"; 
     static SbBool done = FALSE;
     if(done==FALSE) {
+      HBRUSH brush = (HBRUSH) GetSysColorBrush(COLOR_BTNFACE);
       WNDCLASS wc;
       wc.style = CS_HREDRAW | CS_VREDRAW;
       wc.lpfnWndProc = (WNDPROC)WindowProc;
@@ -160,18 +112,49 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
       wc.hInstance = ::GetModuleHandle(0);
       wc.hIcon = ::LoadIcon(0, IDI_APPLICATION);
       wc.hCursor = ::LoadCursor(0, IDC_ARROW);
-      wc.hbrBackground = 0;
+      wc.hbrBackground = brush;
       wc.lpszMenuName = className;
       wc.lpszClassName = className;
       ::RegisterClass(&wc);
       done = TRUE;
     }
-    //  Compell window to be created at 0,0 to bypass 
-    // the 'black border' problem. 
+
+    HMENU menuBar = CreateMenu();
+
+   {HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"File");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_POSTSCRIPT,"PS (gl2ps)");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_PIXMAP_POSTSCRIPT,"PS (pixmap)");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_INVENTOR,"IV");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_ESCAPE,"Escape");}
+
+   {HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Etc");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
+    //::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_REDUCED_WIRE_FRAME,
+                      "Set (G4) reduced wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_FULL_WIRE_FRAME,
+                      "Set (G4) full wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW,
+                      "Visible mothers + invisible daughters");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW_AND_FULL,
+                      "Visible mothers + visible daughters");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_STATS,"Scene graph stats");}
+
+   {HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Help");
+    ::AppendMenu(casc,MF_STRING,ID_HELP_CONTROLS,"Controls");}
+
     fShell = ::CreateWindow(className, shellName.c_str(), 
-                            WS_OVERLAPPEDWINDOW,
-                            //CW_USEDEFAULT, CW_USEDEFAULT, 
-                            0,0,400,400,0, 0,::GetModuleHandle(0),0);
+                            WS_OVERLAPPEDWINDOW |
+                            WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                            CW_USEDEFAULT, CW_USEDEFAULT, 
+                            SIZE,SIZE,
+                            0,menuBar,::GetModuleHandle(0),0);
     // Retreive window and client sizez :
     RECT wrect,crect;
     GetWindowRect((HWND)fShell,&wrect);
@@ -180,8 +163,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     int wh = wrect.bottom-wrect.top;
     int cw = crect.right-crect.left;
     int ch = crect.bottom-crect.top;
-    // Compell client rect to be 400 400 :
-    MoveWindow((HWND)fShell,wrect.left,wrect.top,400+ww-cw,400+wh-ch,TRUE);
+    // Compell client rect to be SIZE SIZE :
+    MoveWindow((HWND)fShell,wrect.left,wrect.top,SIZE+ww-cw,SIZE+wh-ch,TRUE);
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(this));
     ::SetWindowText((HWND)fShell,shellName.c_str());
     parent = fShell;
@@ -190,9 +173,15 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
   }
-  fViewer = new SoWinExaminerViewer(parent,wName.c_str(),TRUE);
+  fViewer = new Geant4_SoWinExaminerViewer(parent,wName.c_str(),TRUE);
+
+  // Have a GL2PS render action :
+  const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
+  fGL2PSAction = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(fGL2PSAction);
+
   fViewer->setSize(SbVec2s(SIZE,SIZE));
-  fViewer->setSceneGraph(fSelection);
+  fViewer->setSceneGraph(fSoSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();
   fViewer->setTitle(fName);
@@ -206,32 +195,35 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
 
 G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
   if(fShell) fInteractorManager->RemoveShell(fShell);
-  if(fViewer) delete fViewer;
+  if(fViewer) {
+    fViewer->setSceneGraph(0);
+    delete fViewer;
+  }
   if(fShell) {
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(0));
     ::DestroyWindow((HWND)fShell);
   }
-  if(fSelection) fSelection->unref();
 }
 
-void G4OpenInventorWinViewer::ClearView () {
+void G4OpenInventorWinViewer::FinishView () {
+  if(!fViewer) return;
+  fViewer->viewAll();
+  fViewer->saveHomePosition();
 }
 
-void G4OpenInventorWinViewer::SetView () {
+void G4OpenInventorWinViewer::ViewerRender () {
+  if(!fViewer) return;
+  fViewer->render();
 }
 
-void G4OpenInventorWinViewer::DrawView () {
-  G4cout << "debug Iv::DrawViewer " <<G4endl;
-  KernelVisitDecision();
-  ProcessView();
-  FinishView();
+SoCamera* G4OpenInventorWinViewer::GetCamera () {
+  if(!fViewer) return 0;
+  return fViewer->getCamera();
 }
 
-void G4OpenInventorWinViewer::ShowView () {
-  fInteractorManager -> SecondaryLoop ();
-}
+
 //////////////////////////////////////////////////////////////////////////////
-LRESULT CALLBACK WindowProc ( 
+LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc ( 
  HWND   aWindow
 ,UINT   aMessage
 ,WPARAM aWParam
@@ -249,9 +241,10 @@ LRESULT CALLBACK WindowProc (
     int width = LOWORD(aLParam);
     int height = HIWORD(aLParam);
     //printf("debug : G4SoWindow : WMS_SIZE : %d %d\n",width,height);
-    HWND hwnd = ::GetFirstChild(aWindow);
-    if(hwnd!=0) {
-      ::MoveWindow(hwnd,0,0,width,height,TRUE);
+    G4OpenInventorWinViewer* This = 
+      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This && This->fViewer) {
+      This->fViewer->sizeChanged(SbVec2s(width,height));
     }
   }return 0;
   case WM_SETFOCUS:{ // Assume one child window !
@@ -262,6 +255,48 @@ LRESULT CALLBACK WindowProc (
     //G4OpenInventorWinViewer* This = 
     //  (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     //::PostQuitMessage(0);
+  }return 0;
+  case WM_COMMAND:{
+    G4OpenInventorWinViewer* This = 
+      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This) {
+      if(aLParam==0) { //From menu.
+        // File :
+        if(aWParam==ID_FILE_POSTSCRIPT) {
+          This->WritePostScript();
+        } else if(aWParam==ID_FILE_PIXMAP_POSTSCRIPT) {
+          This->WritePixmapPostScript();
+        } else if(aWParam==ID_FILE_INVENTOR) {
+          This->WriteInventor();
+        } else if(aWParam==ID_FILE_ESCAPE) {
+          This->Escape();
+        // Etc :
+        } else if(aWParam==ID_ETC_ERASE_DETECTOR) {
+          This->EraseDetector();
+        } else if(aWParam==ID_ETC_ERASE_EVENT) {
+          This->EraseEvent();
+        } else if(aWParam==ID_ETC_SET_SOLID) {
+          This->SetSolid();
+        } else if(aWParam==ID_ETC_SET_WIRE_FRAME) {
+          This->SetWireFrame();
+        } else if(aWParam==ID_ETC_SET_REDUCED_WIRE_FRAME) {
+          This->SetReducedWireFrame(true);
+        } else if(aWParam==ID_ETC_SET_FULL_WIRE_FRAME) {
+          This->SetReducedWireFrame(false);
+        } else if(aWParam==ID_ETC_SET_PREVIEW) {
+          This->SetPreview();
+        } else if(aWParam==ID_ETC_SET_PREVIEW_AND_FULL) {
+          This->SetPreviewAndFull();
+        } else if(aWParam==ID_ETC_UPDATE_SCENE) {
+          This->UpdateScene();
+        } else if(aWParam==ID_ETC_STATS) {
+          This->SceneGraphStatistics();
+        // Help :
+        } else if(aWParam==ID_HELP_CONTROLS) {
+          G4cout << This->Help() << G4endl;
+        }
+      }
+    }
   }return 0;
   default:
     return (::DefWindowProc(aWindow,aMessage,aWParam,aLParam));

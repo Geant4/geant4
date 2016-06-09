@@ -122,7 +122,7 @@
                              +theTarget.GetKineticEnergy(); // gammas come from Q-value
        G4double theResMass = aRecoil->GetPDGMass();
        G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
-       G4double theAbsMom = sqrt(theResE*theResE - theResMass*theResMass);
+       G4double theAbsMom = std::sqrt(theResE*theResE - theResMass*theResMass);
        G4ThreeVector theMomentum = theAbsMom*theMomUnit;
        theOne->SetMomentum(theMomentum);
        theResult.AddSecondary(theOne);
@@ -152,7 +152,7 @@
     G4String filename = aFile.GetName();
     theBaseA = A;
     theBaseZ = G4int(Z+.5);
-    if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
+    if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
     {
       hasAnyData = false;
       hasFSData = false; 

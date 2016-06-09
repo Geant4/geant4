@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.cc,v 1.16 2003/06/16 16:52:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4FConicalSurface.cc,v 1.18 2004/12/10 16:22:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -176,7 +176,7 @@ G4int G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
   G4Vector3D q = G4Vector3D( x - origin );
   
   G4double qmag = q.mag();
-  G4double s    = sin( atan2(large_radius-small_radius, length) );
+  G4double s    = std::sin( std::atan2(large_radius-small_radius, length) );
   G4double ls   = small_radius / s;
   G4double ll   = large_radius / s;
   
@@ -204,8 +204,8 @@ G4double G4FConicalSurface::Area() const
  //  Returns the Area of a G4FConicalSurface
   G4double rdif = large_radius - small_radius; 
   
-  return ( M_PI * ( small_radius + large_radius ) * 
-	   sqrt( length * length  +  rdif * rdif ) );
+  return ( pi * ( small_radius + large_radius ) * 
+	   std::sqrt( length * length  +  rdif * rdif ) );
 }
 
 
@@ -306,7 +306,7 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
     return 0;
   else 
   {
-    G4double root = sqrt( radical );
+    G4double root = std::sqrt( radical );
     s[0] = ( - B + root ) / ( 2. * A );
     s[1] = ( - B - root ) / ( 2. * A );
   }
@@ -357,7 +357,7 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
   G4Vector3D downcorner = G4Vector3D ( large_radius, 0 , origin.z());
   G4Vector3D xd;  
   
-  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+  xd = G4Vector3D ( std::sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
     
   G4double m = (upcorner.z() - downcorner.z()) / (upcorner.x() - downcorner.x());
   G4double q = (downcorner.z()*upcorner.x() - upcorner.z()*downcorner.x()) /
@@ -367,7 +367,7 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
   
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ||
        ((Zinter >= upcorner.z()) && (Zinter <=downcorner.z())) ) {
-    hownear = fabs(m*xd.x()-xd.z()+q)/sqrt(1+m*m);
+    hownear = std::fabs(m*xd.x()-xd.z()+q)/std::sqrt(1+m*m);
     return hownear;
   } else {
     hownear = std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
@@ -384,7 +384,7 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   //  on (or nearly on) the G4ConicalSurface
   G4Vector3D s  = G4Vector3D( p - origin );
   G4double   da = s * Position.GetAxis();
-  G4double   r  = sqrt( s*s - da*da);
+  G4double   r  = std::sqrt( s*s - da*da);
   G4double   z  = tan_angle * r; 
   
   if (Position.GetAxis().z() < 0)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003/10/06 10:02:33 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2004/08/03 11:31:44 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -35,7 +35,6 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
@@ -47,7 +46,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
 :Detector(DC)					       
 {
   particleGun  = new G4ParticleGun(1);
-  SetDefaultKinematic(0);
+  SetDefaultKinematic(1);
   rndmBeam = 0.;
     
   //create a messenger for this class

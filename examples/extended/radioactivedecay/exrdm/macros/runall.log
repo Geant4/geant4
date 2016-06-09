@@ -1,0 +1,2376 @@
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 5 MeV> *****
+***** Command ignored *****
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 1 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 1 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 15 MeV> *****
+***** Command ignored *****
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 10 MeV> *****
+***** Command ignored *****
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 10 MeV> *****
+***** Command ignored *****
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+ The number of particle source is 3
+   source 0 intensity is 2
+   source 1 intensity is 1
+   source 2 intensity is 1.5
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 m    e- 10 m    e+ 10 m
+ Energy thresholds :  gamma 7.99559 keV    e- 2.39817 MeV    e+ 2.25501 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 10 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 10 MeV> *****
+***** Command ignored *****
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+ Material:NaI with formula: Na-I added! 
+     Nb of Material = 8
+     Nb of Isotope =  0
+     Nb of Element =  10
+
+----> The target has been changed to 1 cm of NaI
+
+phot:  Total cross sections from Sandia parametrisation. 
+Thank you for using G4BinaryCascade. 
+/molly/geant4/g4/geant4/data/G4NDL
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : NaI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+ G4Decay::BuildPhysicsTable() 
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 396.666 keV    e- 115.873 MeV    e+ 110.306 MeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     2e-06        0        0         0 Target           initStep
+    1        0        0 2.15e-06         0    2e-06 5.72e-06  5.72e-06 Target           hIoni
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+----> The target has been changed to 1 cm of Lead
+
+phot:  Total cross sections from Sandia parametrisation. 
+Thank you for using G4BinaryCascade. 
+/molly/geant4/g4/geant4/data/G4NDL
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 396.844 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+----> The target has been changed to 1 cm of Lead
+
+phot:  Total cross sections from Sandia parametrisation. 
+Thank you for using G4BinaryCascade. 
+/molly/geant4/g4/geant4/data/G4NDL
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 120500656, 1464021611
+----------------------------------------
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 396.844 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 15 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 15 MeV> *****
+***** Command ignored *****
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+***** COMMAND NOT FOUND </histo/setHisto 0 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 1 50 0 20 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 2 50 0 25 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 3 50 0 25 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 4 50 0 5 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 5 50 0 20 MeV> *****
+***** Command ignored *****
+***** COMMAND NOT FOUND </histo/setHisto 6 50 0 10 MeV> *****
+***** Command ignored *****
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 32 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 55 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+Graphics systems deleted.
+Visualization Manager deleting...
+
+*************************************************************
+ Geant4 version $Name: geant4-07-00-cand-01 $   (25-June-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ Material:Vacuum with formula: H added! 
+     Nb of Material = 1
+     Nb of Isotope =  0
+     Nb of Element =  1
+ Material:Air with formula: N0.78-O0.22 added! 
+     Nb of Material = 2
+     Nb of Isotope =  0
+     Nb of Element =  3
+ Material:Aluminium with formula: Al added! 
+     Nb of Material = 3
+     Nb of Isotope =  0
+     Nb of Element =  4
+ Material:Silicon with formula: Si added! 
+     Nb of Material = 4
+     Nb of Isotope =  0
+     Nb of Element =  5
+ Material:Lead with formula: Pb added! 
+     Nb of Material = 5
+     Nb of Isotope =  0
+     Nb of Element =  6
+ Material:Germanium with formula: Ge added! 
+     Nb of Material = 6
+     Nb of Isotope =  0
+     Nb of Element =  7
+ Material:CsI with formula: Cs-I added! 
+     Nb of Material = 7
+     Nb of Isotope =  0
+     Nb of Element =  9
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  RayTracer (RayTracer)
+
+phot:  Total cross sections from Sandia parametrisation. 
+world cuts are set
+Target cuts are set
+Detector cuts are set
+1 VRML2FILE scene handlers extanct.
+WARNING: objects with visibility flag set to "false" will not be drawn!
+  "/vis/viewer/set/culling global false" to Draw such objects.
+  Also see other "/vis/viewer/set" commands.
+WARNING: For systems which are not "auto-refresh" you will need to
+  issue "/vis/viewer/refresh" or "/vis/viewer/flush".
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [500 (mm)]   is too big   for material  idx=5
+The cut in energy is set1.79769e+305GeV 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10 m    e- 10 m    e+ 10 m
+ Energy thresholds :  gamma 7.99559 keV    e- 2.39817 MeV    e+ 2.25501 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 10 cm    e- 10 cm    e+ 10 cm
+ Energy thresholds :  gamma 550.166 keV    e- 90.585 MeV    e+ 84.1353 MeV
+ Region(s) which use this couple : 
+    Target
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 50 cm    e- 50 cm    e+ 50 cm
+ Energy thresholds :  gamma 2.88022e+295 J    e- 1.91846 GeV    e+ 1.73853 GeV
+ Region(s) which use this couple : 
+    Detector
+
+====================================================================
+
+### Run : 0
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0112       20        20 Target           Transportation
+    2   -0.351   -0.176     2.83      84.6     15.3     7.84      27.8 Target           hIoni
+    3   -0.335   -0.122        5      80.4     4.26     2.18        30 World           Transportation
+    4   0.0592   -0.205       25      80.4   0.0188       20        50  OutOfWorld Transportation
+===========================================
+Output VRML 2.0 file: g4_00.wrl
+Maximum number of files in the destination directory: 100
+  (Customizable with the environment variable: G4VRMLFILE_MAX_FILE_NUM) 
+===========================================
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0112       20        20 Target           Transportation
+    2    0.206    0.336     2.83      85.4     14.5     7.84      27.8 Target           hIoni
+    3    0.258     0.31        5      81.2     4.25     2.18        30 World           Transportation
+    4    0.858   0.0741       25      81.2   0.0196       20        50  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0139       20        20 Target           Transportation
+    2    0.376   -0.131     2.83      84.8     15.2     7.84      27.8 Target           hIoni
+    3    0.281   -0.137        5      79.6     5.13     2.18        30 World           Transportation
+    4   -0.904   -0.354       25      79.6   0.0688       20      50.1  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0151       20        20 Target           Transportation
+    2    0.151   -0.365     2.83      83.8     16.2     7.84      27.8 Target           hIoni
+    3   0.0692   -0.463        5      78.9     4.92     2.18        30 World           Transportation
+    4   -0.222    -1.53       25      78.9   0.0142       20        50  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100    0.025       20        20 Target           Transportation
+    2    0.384  -0.0863     2.82      84.2     15.8     7.84      27.8 Target           hIoni
+    3    0.439   -0.114        5      79.4     4.71     2.18        30 World           Transportation
+    4     1.01   -0.301       25      79.4   0.0172       20        50  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0128       20        20 Target           Transportation
+    2   -0.392   0.0103     2.83      84.7     15.3     7.84      27.8 Target           hIoni
+    3   -0.318    0.105        5      80.2     4.57     2.18        30 World           Transportation
+    4    0.621     1.32       25      80.1    0.015     20.1      50.1  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0127       20        20 Target           Transportation
+    2    0.387    0.083     2.83      84.1     15.8     7.84      27.8 Target           hIoni
+    3    0.752     0.24        5      79.1     5.07     2.21      30.1 World           Transportation
+    4     4.27     1.79       25      79.1   0.0152     20.4      50.4  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0131       20        20 Target           Transportation
+    2   0.0357    0.389     2.83      84.5     15.4     7.84      27.8 Target           hIoni
+    3    0.029    0.369        5      79.9     4.61     2.18        30 World           Transportation
+    4    -1.15     0.31       25      79.9    0.024       20        50  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0137       20        20 Target           Transportation
+    2   -0.207    0.339     2.83      84.9     15.1     7.84      27.8 Target           hIoni
+    3   -0.293    0.443        5      80.1     4.73     2.18        30 World           Transportation
+    4   -0.731     1.52       25      80.1   0.0217       20      50.1  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -25       100        0        0         0 World           initStep
+    1        0        0       -5       100   0.0114       20        20 Target           Transportation
+    2    0.317   -0.217     2.83      84.4     15.6     7.84      27.8 Target           hIoni
+    3    0.283   -0.178        5      79.7     4.69     2.18        30 World           Transportation
+    4   -0.437    0.545       25      79.7   0.0121       20        50  OutOfWorld Transportation
+*** VRML 2.0 File  g4_00.wrl  is generated.
+MESSAGE from VRML2FILE driver:
+    Set an environmental variable  G4VRMLFILE_VIEWER
+    if you want to visualize the generated VRML file
+    automatically.  For example, 
+    setenv  G4VRMLFILE_VIEWER  vrwave 
+Graphics systems deleted.
+Visualization Manager deleting...

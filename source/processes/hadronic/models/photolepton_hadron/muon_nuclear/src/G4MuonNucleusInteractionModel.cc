@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.1 2003/11/11 19:08:58 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.3 2004/12/07 13:50:30 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc
@@ -105,7 +105,7 @@
         = 0.0003*millibarn;
     } else {
       microscopicCrossSection
-        = 0.0003*pow((totalEnergy/(30.0*GeV)), 0.25)*millibarn;
+        = 0.0003*std::pow((totalEnergy/(30.0*GeV)), 0.25)*millibarn;
     }
 
     return microscopicCrossSection;
@@ -188,12 +188,12 @@
         if(interpolated) {
           // calculate energy, momentum and angle of outgoing muon
           RandFlat::shootArray(3, rndm);
-          G4double theta = acos(tetal[icos-1]) 
-                          + rndm[0]*(acos(tetal[icos])-acos(tetal[icos-1]));
-          cosTheta = cos(theta);
+          G4double theta = std::acos(tetal[icos-1]) 
+                          + rndm[0]*(std::acos(tetal[icos])-std::acos(tetal[icos-1]));
+          cosTheta = std::cos(theta);
           E1 = (xeml[ie1] + rndm[1]*(xeml[ie1-1]-xeml[ie1])) * totalEnergy;
             if(E1<muonMass) E1 = muonMass + 0.0001*GeV;
-          P1 = sqrt(abs(E1*E1-muonMass*muonMass));
+          P1 = std::sqrt(std::abs(E1*E1-muonMass*muonMass));
 
           // invariant mass of final hadron state must be greater than zero
           W2 = proton_mass_c2*proton_mass_c2
@@ -209,19 +209,19 @@
     }
 
     // calculate momentum of outgoing muon / pion(photon)
-    G4double sinTheta = sqrt(abs(1.0 - cosTheta*cosTheta));
+    G4double sinTheta = std::sqrt(std::abs(1.0 - cosTheta*cosTheta));
     G4double phi = rndm[2]*twopi;
-    G4ThreeVector muonDirection(sinTheta*cos(phi),sinTheta*sin(phi),cosTheta);
+    G4ThreeVector muonDirection(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
     G4ThreeVector muonDirectionInit = muonTrack.GetMomentumDirection();
     muonDirection.rotateUz(muonDirectionInit);
 
     G4ParticleMomentum pionMomentum 
       = muonDynamics->GetMomentum() - P1*muonDirection;
     G4double muonKineticEnergy 
-      = sqrt(P1*P1 + muonMass*muonMass) - muonMass;
-    aParticleChange.SetMomentumChange(muonDirection);
-    aParticleChange.SetEnergyChange(muonKineticEnergy);
-    aParticleChange.SetStatusChange(fAlive);
+      = std::sqrt(P1*P1 + muonMass*muonMass) - muonMass;
+    aParticleChange.ProposeMomentumDirection(muonDirection);
+    aParticleChange.ProposeEnergy(muonKineticEnergy);
+    aParticleChange.ProposeTrackStatus(fAlive);
 
 
     // virtual photon is exchanged with a pion of same Q2
@@ -277,7 +277,7 @@
     // add local energy deposit
     G4double localEnergyDeposited = 0.0;
     localEnergyDeposited = pionChange->GetLocalEnergyDeposit();
-    aParticleChange.SetLocalEnergyDeposit(localEnergyDeposited);
+    aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposited);
 
 
     // register secondary particles
@@ -307,9 +307,9 @@
     if(aCosTheta >= 1.0) return DBL_MAX;
 
     G4double initialMomentum 
-      = sqrt(initialEnergy*initialEnergy - muonMass*muonMass);
+      = std::sqrt(initialEnergy*initialEnergy - muonMass*muonMass);
     G4double finalMomentum 
-      = sqrt(finalEnergy*finalEnergy - muonMass*muonMass);
+      = std::sqrt(finalEnergy*finalEnergy - muonMass*muonMass);
 
 
     // calculate momentum transfer (Q2)

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProcessTable.icc,v 1.4 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //  History:
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige

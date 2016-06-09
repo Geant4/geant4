@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02ElectricFieldSetup.hh,v 1.1 2003/11/12 16:36:14 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //    A class for control of the Electric Field of the detector.
 //  The field for this case is uniform.

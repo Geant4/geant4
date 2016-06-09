@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.9 2004/06/09 07:30:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4Types.hh,v 1.10 2004/11/12 16:25:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // GEANT4 native types
@@ -61,7 +61,6 @@
   #undef __DEPRECATED
 #endif
   
-#include <CLHEP/config/CLHEP.h>
 #include <complex>
 
 // Typedefs to decouple from library classes

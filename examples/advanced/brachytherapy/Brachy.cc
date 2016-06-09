@@ -22,7 +22,7 @@
 //
 //
 // $Id: Brachy.cc
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -74,13 +74,13 @@
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 
+#ifdef G4ANALYSIS_USE
+#include "BrachyAnalysisManager.hh"
+#endif
+
 int main(int argc ,char ** argv)
 
 {
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed = time(0);
-  HepRandom :: setTheSeed(seed);
-
   G4RunManager* pRunManager = new G4RunManager;
 
   G4String sensitiveDetectorName = "Phantom";
@@ -138,6 +138,10 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
+#ifdef G4ANALYSIS_USE
+  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+  analysis -> finish();
+#endif
   
   // Job termination
 #ifdef G4VIS_USE

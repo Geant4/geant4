@@ -12,6 +12,10 @@
 #
 #/testem/phys/addPhysics  g4v52
 #
+#/testem/phys/addPhysics  modelPAI
+#
+#/testem/phys/addPhysics  paiPhoton
+#
 /testem/phys/addPhysics  standard
 #
 #/testem/phys/addPhysics model
@@ -30,29 +34,58 @@
 #
 #  PLOT: energy deposit distribution in absorber
 #
-/plots/setnbinEn 20
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.060  MeV  
+/plots/setnbinEn 30
+/plots/setEnlow 0.00 MeV
+/plots/setEnhigh 1.2  MeV  
 #
+#
+#/process/eLoss/verbose 2
 #
 /run/initialize
 /run/particle/dumpCutValues
 #
-#/gun/particle e-
+/gun/particle e-
 #
-/gun/particle proton
+#/gun/particle proton
+#
+#/gun/particle pi+
 #
 #/gun/particle mu-
 # 
-/gun/energy 200000.00 MeV
+#/gun/energy 4862.38 MeV
+# 
+#/gun/energy 2210.00 MeV
+# 
+/gun/energy 1.00 MeV
+# 
+#/gun/energy 8861.00 MeV
 #
-#/gun/energy 200.0 MeV
+#/gun/energy 2864.00 MeV
+#
+#/gun/energy 318.0 MeV
+#
+#/gun/energy 10.46 MeV
 #
 #/tracking/verbose 1
 #
-/event/printModulo 100
-/run/beamOn 1000
+/calor/setGammaCut 10.0
+/calor/setElectronCut 10.0
+/calor/setPositronCut 100.
+/calor/update
 #
+#/testem/stepMax 10 mm
+#
+/run/initialize
+#
+#/tracking/verbose 1
+#
+/event/printModulo 1000
+/run/beamOn 10000
+#
+#/run/beamOn 3820
+#/tracking/verbose 6
+#/event/printModulo 1
+#/run/beamOn 10
 #
 
 

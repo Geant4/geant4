@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.11 2004/06/16 10:35:41 maire Exp $
+# $Id: run02.mac,v 1.12 2004/10/20 14:32:28 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -13,8 +13,8 @@
 #
 /testem/det/setNbOfLayers 50
 /testem/det/setNbOfAbsor 2
-/testem/det/setAbsor 0 Tungsten 2 mm
-/testem/det/setAbsor 1 Silicon 0.3 mm
+/testem/det/setAbsor 1 Tungsten 2 mm
+/testem/det/setAbsor 2 Silicon 0.3 mm
 #
 /testem/phys/setCuts 100 mum
 #
@@ -25,8 +25,8 @@
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName run02.paw
-/testem/histo/setHisto 0 100 900. 1000. MeV
-/testem/histo/setHisto 1 100   0.   50. MeV
+/testem/histo/setHisto 1 100 900. 1000. MeV
+/testem/histo/setHisto 2 100   0.   50. MeV
 #
 /testem/event/printModulo 50
 #

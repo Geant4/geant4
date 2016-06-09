@@ -192,7 +192,7 @@ G4double G4PiMinusStopAbsorption::Energy()
   G4double productBinding = (G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ),static_cast<G4int>(_nucleusA)) / _nucleusA) * nAbsorptionProducts;
   G4double mass = G4NucleiProperties::GetNuclearMass(_nucleusA - (nP + nN),_nucleusZ - nP);
   G4double pNucleus = pProducts.mag();
-  G4double eNucleus = sqrt(pNucleus*pNucleus + mass*mass);
+  G4double eNucleus = std::sqrt(pNucleus*pNucleus + mass*mass);
   G4double tNucleus = eNucleus - mass;
   G4double temp = G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ - nP),static_cast<G4int>(_nucleusA - (nP + nN))) - 
     G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ),static_cast<G4int>(_nucleusA));

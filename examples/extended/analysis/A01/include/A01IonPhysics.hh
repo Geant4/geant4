@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.hh,v 1.5 2004/01/06 02:53:22 tkoi Exp $
+// $Id: A01IonPhysics.hh,v 1.6 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //
@@ -58,7 +58,7 @@ class A01IonPhysics : public G4VPhysicsConstructor
   public:
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    virtual void ConstructParticle(){;};
 
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and

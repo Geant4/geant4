@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.4 2004/02/05 10:48:48 stesting Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.5 2004/12/07 13:48:46 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -155,7 +155,7 @@ BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition *
      G4ThreeVector aPosition(0,0,0);
      G4double aM = aP->GetPDGMass();
      G4double aE = aM+aT;
-     G4ThreeVector aMom(0,0,sqrt(aE*aE-aM*aM));
+     G4ThreeVector aMom(0,0,std::sqrt(aE*aE-aM*aM));
      G4LorentzVector a4Momentum(aE, aMom);
      G4KineticTrack a(const_cast<G4ParticleDefinition *>(aP), atime, aPosition, a4Momentum);
 

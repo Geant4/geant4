@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.cc,v 1.11 2003/11/05 17:31:59 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EqMagElectricField.cc,v 1.12 2004/12/02 09:55:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -61,10 +61,10 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
-   G4double Energy   = sqrt( pSquared + fMassCof );
+   G4double Energy   = std::sqrt( pSquared + fMassCof );
    G4double cof2     = Energy/c_light ;
 
-   G4double pModuleInverse  = 1.0/sqrt(pSquared) ;
+   G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
    //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;

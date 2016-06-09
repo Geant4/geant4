@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachySimulation.cc
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example

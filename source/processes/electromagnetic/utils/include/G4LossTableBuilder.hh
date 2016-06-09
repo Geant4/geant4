@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh,v 1.3 2003/07/21 12:52:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LossTableBuilder.hh,v 1.4 2004/11/10 08:54:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // Creation date: 03.01.2002
 //
 // Modifications: 
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //
 // Class Description: 
@@ -53,7 +54,7 @@
 #include "G4PhysicsTable.hh"
 
 
-class G4LossTableBuilder 
+class G4LossTableBuilder
 {
 
 public:
@@ -62,12 +63,12 @@ public:
 
   ~G4LossTableBuilder() {};
 
-  G4PhysicsTable* BuildDEDXTable(const std::vector<G4PhysicsTable*>&);
+  void BuildDEDXTable(G4PhysicsTable* dedxTable, const std::vector<G4PhysicsTable*>&);
 
-  G4PhysicsTable* BuildRangeTable(const G4PhysicsTable* dedxTable);
+  void BuildRangeTable(const G4PhysicsTable* dedxTable, G4PhysicsTable* rangeTable);
 
-  G4PhysicsTable* BuildInverseRangeTable(const G4PhysicsTable* dedxTable,
-                                         const G4PhysicsTable* rangeTable);
+  void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
+			            G4PhysicsTable* invRangeTable);
  
 private:
 

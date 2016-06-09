@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.2 2004/06/21 10:57:11 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PrimaryGeneratorMessenger.hh,v 1.3 2004/09/24 09:58:00 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "globals.hh"
 
 class PrimaryGeneratorAction;
+class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 
@@ -47,7 +48,9 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action; 
+    PrimaryGeneratorAction* Action;
+    
+    G4UIdirectory*             gunDir;      
     G4UIcmdWithoutParameter*   DefaultCmd;
     G4UIcmdWithADouble*        RndmCmd;    
 };

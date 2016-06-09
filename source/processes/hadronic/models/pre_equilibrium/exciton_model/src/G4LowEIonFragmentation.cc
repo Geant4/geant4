@@ -70,7 +70,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
       y = 2*G4UniformRand() - 1;
     }
     while(x*x + y*y > 1);
-    impactParameter = sqrt(x*x+y*y)*(targetOuterRadius+projectileOuterRadius);
+    impactParameter = std::sqrt(x*x+y*y)*(targetOuterRadius+projectileOuterRadius);
     totalTries++;
     area = pi*(targetOuterRadius+projectileOuterRadius)*
               (targetOuterRadius+projectileOuterRadius);

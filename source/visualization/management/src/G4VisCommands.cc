@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.7 2003/05/30 13:01:28 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisCommands.cc,v 1.8 2004/08/03 15:57:51 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -60,7 +60,7 @@ G4String G4VisCommandEnable::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandEnable::SetNewValue (G4UIcommand* command,
 				      G4String newValue) {
   if (command == fpCommand) {
-    G4bool enable (GetNewBoolValue(newValue));
+    G4bool enable = G4UIcommand::ConvertToBool(newValue);
     if (enable) fpVisManager->Enable();  // Printing is in vis manager.
     else fpVisManager->Disable();        // Printing is in vis manager.
   } else fpVisManager->Disable();        // Printing is in vis manager.

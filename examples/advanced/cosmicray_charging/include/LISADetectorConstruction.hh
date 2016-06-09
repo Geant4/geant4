@@ -71,7 +71,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-#include <math.h>
+#include <cmath>
 
 
 class LISADetectorConstruction : public G4VUserDetectorConstruction {

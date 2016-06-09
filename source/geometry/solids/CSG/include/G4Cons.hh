@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.8 2003/06/16 16:53:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Cons.hh,v 1.11 2004/12/10 16:22:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 // --------------------------------------------------------------------
@@ -36,7 +36,7 @@
 //   half-length fDz, inner and outer radii specified at -fDz and +fDz.
 //   The Phi segment is described by a starting fSPhi angle, and the
 //   +fDPhi delta angle for the shape.
-//   If the delta angle is >=2*M_PI, the shape is treated as continuous
+//   If the delta angle is >=2*pi, the shape is treated as continuous
 //   in Phi
 //
 //   Member Data:
@@ -88,6 +88,7 @@ class G4Cons : public G4CSGSolid
   
         inline G4double    GetStartPhiAngle () const;
         inline G4double    GetDeltaPhiAngle () const;
+        inline G4double    GetCubicVolume();
   
   // Modifiers
 

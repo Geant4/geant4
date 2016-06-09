@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02DetectorConstruction.cc,v 1.10 2003/11/25 14:51:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

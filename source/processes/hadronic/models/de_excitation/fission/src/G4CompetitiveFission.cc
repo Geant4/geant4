@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.2 2003/11/03 17:53:02 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4CompetitiveFission.cc,v 1.3 2004/12/07 13:46:45 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -194,7 +194,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     G4double U2 = FragmentsExcitationEnergy * (static_cast<G4double>(A2)/static_cast<G4double>(A));
 
 
-    G4double Pmax = sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
+    G4double Pmax = std::sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
 				( (M1+U1)+(M2+U2) ) ) * FragmentsKineticEnergy);
 
     G4ParticleMomentum momentum1 = IsotropicVector( Pmax );
@@ -207,11 +207,11 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
     // Create 4-momentum for first fragment
     // Warning!! Energy conservation is broken
-    G4LorentzVector FourMomentum1( momentum1 , sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
+    G4LorentzVector FourMomentum1( momentum1 , std::sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
 
     // Create 4-momentum for second fragment
     // Warning!! Energy conservation is broken
-    G4LorentzVector FourMomentum2( momentum2 , sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
+    G4LorentzVector FourMomentum2( momentum2 , std::sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
 
     // Create Fragments
     G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
@@ -252,10 +252,10 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
     const G4double w = theParam.GetW();
 
   
-//    G4double FasymAsym = 2.0*exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
-//	exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
+//    G4double FasymAsym = 2.0*std::exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
+//	std::exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
 
-//    G4double FsymA1A2 = exp(-((As-(A1+A2))*(As-(A1+A2)))/(2.0*SigmaS*SigmaS));
+//    G4double FsymA1A2 = std::exp(-((As-(A1+A2))*(As-(A1+A2)))/(2.0*SigmaS*SigmaS));
 
 
     G4double C2A = A2 + 3.72*Sigma2;
@@ -309,16 +309,16 @@ G4double G4CompetitiveFission::MassDistribution(const G4double x, const G4double
     // This method gives mass distribution F(x) = F_{asym}(x)+w*F_{sym}(x)
     // which consist of symmetric and asymmetric sum of gaussians components.
 {
-    G4double Xsym = exp(-0.5*(x-theParam.GetAs())*(x-theParam.GetAs())/
+    G4double Xsym = std::exp(-0.5*(x-theParam.GetAs())*(x-theParam.GetAs())/
 			(theParam.GetSigmaS()*theParam.GetSigmaS()));
 
-    G4double Xasym = exp(-0.5*(x-theParam.GetA2())*(x-theParam.GetA2())/
+    G4double Xasym = std::exp(-0.5*(x-theParam.GetA2())*(x-theParam.GetA2())/
 			 (theParam.GetSigma2()*theParam.GetSigma2())) + 
-	exp(-0.5*(x-(A-theParam.GetA2()))*(x-(A-theParam.GetA2()))/
+	std::exp(-0.5*(x-(A-theParam.GetA2()))*(x-(A-theParam.GetA2()))/
 	    (theParam.GetSigma2()*theParam.GetSigma2())) +
-	0.5*exp(-0.5*(x-theParam.GetA1())*(x-theParam.GetA1())/
+	0.5*std::exp(-0.5*(x-theParam.GetA1())*(x-theParam.GetA1())/
 		(theParam.GetSigma1()*theParam.GetSigma1())) +
-	0.5*exp(-0.5*(x-(A-theParam.GetA1()))*(x-(A-theParam.GetA1()))/
+	0.5*std::exp(-0.5*(x-(A-theParam.GetA1()))*(x-(A-theParam.GetA1()))/
 		(theParam.GetSigma1()*theParam.GetSigma1()));
 
     if (theParam.GetW() > 1000) return Xsym;
@@ -368,10 +368,10 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
     G4double Pas;
     if (theParam.GetW() > 1000) Pas = 0.0;
     else {
-	G4double P1 = 0.5*exp(-0.5*(AfMax-theParam.GetA1())*(AfMax-theParam.GetA1())/
+	G4double P1 = 0.5*std::exp(-0.5*(AfMax-theParam.GetA1())*(AfMax-theParam.GetA1())/
 			      (theParam.GetSigma1()*theParam.GetSigma1()));
 
-	G4double P2 = exp(-0.5*(AfMax-theParam.GetA2())*(AfMax-theParam.GetA2())/
+	G4double P2 = std::exp(-0.5*(AfMax-theParam.GetA2())*(AfMax-theParam.GetA2())/
 			  (theParam.GetSigma2()*theParam.GetSigma2()));
 
 	Pas = P1+P2;
@@ -381,7 +381,7 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
     G4double Ps;
     if (theParam.GetW() < 0.001) Ps = 0.0;
     else 
-	Ps = theParam.GetW()*exp(-0.5*(AfMax-theParam.GetAs())*(AfMax-theParam.GetAs())/
+	Ps = theParam.GetW()*std::exp(-0.5*(AfMax-theParam.GetAs())*(AfMax-theParam.GetAs())/
 				 (theParam.GetSigmaS()*theParam.GetSigmaS()));
  
 
@@ -397,7 +397,7 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
 
 
     // Average kinetic energy for symmetric and asymmetric components
-    G4double Eaverage = 0.1071*MeV*(Z*Z)/pow(A,1.0/3.0) + 22.2*MeV;
+    G4double Eaverage = 0.1071*MeV*(Z*Z)/std::pow(A,1.0/3.0) + 22.2*MeV;
 
 
     // Compute maximal average kinetic energy of fragments and Energy Dispersion (sqrt)
@@ -474,10 +474,10 @@ G4ThreeVector G4CompetitiveFission::IsotropicVector(const G4double Magnitude)
     // By default Magnitude = 1.0
 {
     G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
     G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-			 Magnitude*sin(Phi)*SinTheta,
+    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+			 Magnitude*std::sin(Phi)*SinTheta,
 			 Magnitude*CosTheta);
     return Vector;
 }
@@ -516,7 +516,7 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
 	       << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	       << theInitialState.GetZ() - ProductsZ << G4endl;
     }
-    if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+    if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Energy Conservation test for fission fragments" 
 	       << G4endl; 
@@ -524,9 +524,9 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
 	       << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	       << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
     } 
-    if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-	abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-	abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+    if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+	std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+	std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Momentum Conservation test for fission fragments" 
 	       << G4endl; 

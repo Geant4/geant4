@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SDManager.hh,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifndef G4SDManager_h

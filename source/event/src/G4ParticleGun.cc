@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.7 2003/11/19 19:28:43 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParticleGun.cc,v 1.8 2004/12/02 06:40:37 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 // G4ParticleGun
@@ -98,7 +98,7 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
     G4double mass =  particle_definition->GetPDGMass();
     G4double p = aMomentum.mag();
     particle_momentum_direction =  aMomentum.unit();
-    if ((particle_energy>0.0)&&(abs(particle_energy+mass-sqrt(p*p+mass*mass))>keV))
+    if ((particle_energy>0.0)&&(std::abs(particle_energy+mass-std::sqrt(p*p+mass*mass))>keV))
     {
       G4cout << "G4ParticleGun::" << particle_definition->GetParticleName() << G4endl;
       G4cout << "  KineticEnergy and Momentum could be inconsistent" << G4endl;
@@ -106,9 +106,9 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
       G4cout << "  Mass:" << mass/GeV << " GeV/c/c)" << G4endl;
       G4cout << "  KineticEnergy is overwritten!! ";
       G4cout << particle_energy/GeV << "->";
-      G4cout << (sqrt(p*p+mass*mass)-mass)/GeV << "GeV" << G4endl;
+      G4cout << (std::sqrt(p*p+mass*mass)-mass)/GeV << "GeV" << G4endl;
     }
-    particle_energy = sqrt(p*p+mass*mass)-mass;
+    particle_energy = std::sqrt(p*p+mass*mass)-mass;
   }
 }
 
@@ -123,7 +123,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
   // create new primaries and set them to the vertex
   G4double mass =  particle_definition->GetPDGMass();
   G4double energy = particle_energy + mass;
-  G4double pmom = sqrt(energy*energy-mass*mass);
+  G4double pmom = std::sqrt(energy*energy-mass*mass);
   G4double px = pmom*particle_momentum_direction.x();
   G4double py = pmom*particle_momentum_direction.y();
   G4double pz = pmom*particle_momentum_direction.z();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.hh,v 1.2 2003/07/01 16:28:45 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Mars5GeV.hh,v 1.3 2004/11/29 01:17:22 tkoi Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,6 +34,7 @@
 // 
 //   History:
 //   modified as hadronic model 28 Oct 2001 N.Kanaya
+//   remodified by T. Koi 18 Nov 2004 
 // ------------------------------------------------------------
 //  Class Description
 //  This is a Event Biasing mechanism based on MARS code
@@ -98,7 +99,8 @@ public: // with description
   void CreatePionZero(G4int ib, G4int pType, G4double  pE);
   // Create secondary particles and add them into the list 
    
-  void     AddSecondary(); 
+  //void     AddSecondary(); 
+  void     AddSecondaryToMarsList(); 
   // Add a secondary particle  into the list
    
   G4double SelBS(G4int pType, G4double aNucl, G4double zNucl);
@@ -136,6 +138,7 @@ public: // with description
   G4MarsSecondaryVector secondaries;
     
  private:
+   G4bool IsApplicable(const G4HadProjectile& , G4Nucleus& ) { return true; };
   G4bool IsApplicable(G4int marsEncoding) const;
 
  private:

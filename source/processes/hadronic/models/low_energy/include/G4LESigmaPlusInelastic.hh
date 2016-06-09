@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LESigmaPlusInelastic.hh,v 1.8 2003/10/31 18:04:16 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
  // Hadronic Process: Low Energy SigmaPlus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997

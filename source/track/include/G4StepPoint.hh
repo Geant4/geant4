@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.13 2003/09/19 19:08:14 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StepPoint.hh,v 1.15 2004/12/02 06:38:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +47,7 @@
 #define G4StepPoint_h 1
 
 #include "globals.hh"                // Include from 'global'
+#include <cmath>                    // Include from 'system'
 #include "G4Allocator.hh"            // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"      // Include from 'geometry'
@@ -58,6 +59,7 @@ class G4VProcess;
 #include "G4LogicalVolume.hh"
 
 class G4MaterialCutsCouple;
+class G4VSensitiveDetector;
 /////////////////
 class G4StepPoint
 ///////////////// 
@@ -135,6 +137,9 @@ class G4StepPoint
   const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
   void SetMaterialCutsCouple(const G4MaterialCutsCouple*);
 
+  G4VSensitiveDetector* GetSensitiveDetector() const;
+  void SetSensitiveDetector(G4VSensitiveDetector*);
+
   G4double GetSafety() const;
   void SetSafety(const G4double aValue);
 
@@ -189,6 +194,7 @@ class G4StepPoint
       // Material of the volmue
    const G4MaterialCutsCouple* fpMaterialCutsCouple;
       // MaterialCutsCouple of the volmue
+   G4VSensitiveDetector* fpSensitiveDetector;
    G4double fSafety;
    G4ThreeVector fPolarization;
    G4StepStatus fStepStatus;

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.1 2004/06/18 15:43:41 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunActionMessenger.cc,v 1.2 2004/09/17 10:51:40 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 #include "RunActionMessenger.hh"
 
 #include "RunAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -36,19 +37,26 @@
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
-{    
+{
+  runDir = new G4UIdirectory("/testem/run/");
+  runDir->SetGuidance("run control");
+      
   accCmd = new G4UIcmdWith3Vector("/testem/run/acceptance",this);
   accCmd->SetGuidance("set Edep and RMS");
   accCmd->SetGuidance("acceptance values for first layer");
   accCmd->SetParameterName("edep","rms","limit",true);
   accCmd->SetRange("edep>0 && edep<1 && rms>0");
   accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
+  
+  histoDir = new G4UIdirectory("/testem/histo/");
+  histoDir->SetGuidance("histograms control");
+  
+  factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
   factoryCmd->SetGuidance("set name for the histograms file");
 
-  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
-  fileCmd->SetGuidance("set type (hbook, root, XML) for the histograms file");         
+  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
+  typeCmd->SetGuidance("set type (hbook, root, XML) for the histograms file");
+  typeCmd->SetCandidates("hbook root XML");         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,8 +64,10 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 RunActionMessenger::~RunActionMessenger()
 {
   delete accCmd;
+  delete runDir;
   delete factoryCmd;
-  delete fileCmd;
+  delete typeCmd;
+  delete histoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +80,7 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == factoryCmd)
    { Run->SetHistoName(newValue);}
 
-  if (command == fileCmd)
+  if (command == typeCmd)
    { Run->SetHistoType(newValue);}
 }
 

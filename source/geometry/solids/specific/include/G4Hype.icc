@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.icc,v 1.3 2002/10/28 11:47:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Hype.icc,v 1.6 2004/12/02 09:31:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -68,7 +68,9 @@ void G4Hype::SetInnerRadius (G4double newIRad)
     innerRadius= newIRad;
     innerRadius2= newIRad*newIRad;
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
+    endInnerRadius=std::sqrt(endInnerRadius2);
+    fCubicVolume = 0.;
+    fpPolyhedron = 0;
   }
 
 inline
@@ -77,33 +79,41 @@ void G4Hype::SetOuterRadius (G4double newORad)
     outerRadius= newORad;
     outerRadius2=newORad*newORad;
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
+    endOuterRadius=std::sqrt(endOuterRadius2);
+    fCubicVolume = 0.;
+    fpPolyhedron = 0;
   } 
 
 inline
 void G4Hype::SetZHalfLength (G4double newHLZ)
   {
     halfLenZ   = newHLZ ;
+    fCubicVolume = 0.;
+    fpPolyhedron = 0;
   }
 
 inline
 void G4Hype::SetInnerStereo (G4double newISte) 
   { 
-    innerStereo= fabs(newISte);
-    tanInnerStereo=tan(innerStereo);
+    innerStereo= std::fabs(newISte);
+    tanInnerStereo=std::tan(innerStereo);
     tanInnerStereo2=tanInnerStereo*tanInnerStereo;
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
+    endInnerRadius=std::sqrt(endInnerRadius2);
+    fCubicVolume = 0.;
+    fpPolyhedron = 0;
   }
 
 inline
 void G4Hype::SetOuterStereo (G4double newOSte)
   { 
-    outerStereo= fabs(newOSte);
-    tanOuterStereo=tan(outerStereo);
+    outerStereo= std::fabs(newOSte);
+    tanOuterStereo=std::tan(outerStereo);
     tanOuterStereo2=tanOuterStereo*tanOuterStereo;
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
+    endOuterRadius=std::sqrt(endOuterRadius2);
+    fCubicVolume = 0.;
+    fpPolyhedron = 0;
   }
 
 inline

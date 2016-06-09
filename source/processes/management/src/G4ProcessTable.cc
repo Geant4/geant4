@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.10 2003/04/01 16:43:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ProcessTable.cc,v 1.11 2004/06/12 13:07:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -93,6 +93,7 @@ G4ProcessTable::~G4ProcessTable()
     fProcNameVector ->clear();
     delete fProcNameVector;
   }
+  fProcessTable =0;
 }
 
 /////////////////////////

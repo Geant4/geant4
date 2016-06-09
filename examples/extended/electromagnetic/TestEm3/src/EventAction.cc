@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.8 2004/06/21 10:52:55 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: EventAction.cc,v 1.12 2004/11/23 14:05:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,10 +36,6 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,23 +68,16 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   //initialize EnergyDeposit per event
   //
   for (G4int k=0; k<MaxAbsor; k++)
-    energyDeposit[k] = energyLeaving[k] = trackLengthCh[k] = 0.0;   
+    energyDeposit[k] = trackLengthCh[k] = 0.0;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
-     runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
-                       energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
-		       
-#ifdef USE_AIDA
-      if (histoManager->GetHisto(k)) {
-	G4double unit = histoManager->GetHistoUnit(k); 
-	histoManager->GetHisto(k)->fill(energyDeposit[k]/unit);
-      }  
-#endif
+  for (G4int k=1; k<=detector->GetNbOfAbsor(); k++) {
+     runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k]);		       
+     if (energyDeposit[k] > 0.) histoManager->FillHisto(k, energyDeposit[k]);
   }
 
   if (G4VVisManager::GetConcreteInstance())

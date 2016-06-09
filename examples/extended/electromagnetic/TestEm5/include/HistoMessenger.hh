@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: HistoMessenger.hh,v 1.5 2004/06/21 10:57:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

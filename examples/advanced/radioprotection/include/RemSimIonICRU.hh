@@ -20,8 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef REMSIMPROTONICRU_HH
-#define REMSIMPROTONICRU_HH 1
+// $Id: RemSimIonICRU.hh,v 1.3 2004/12/15 15:41:04 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+
+#ifndef REMSIMIONICRU_HH
+#define REMSIMIONICRU_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"

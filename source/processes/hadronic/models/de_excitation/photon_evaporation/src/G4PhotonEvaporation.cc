@@ -349,7 +349,7 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
 	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	   << theInitialState.GetZ() - ProductsZ << G4endl;
   }
-  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+  if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Energy Conservation test for evaporation fragments" 
 	   << G4endl; 
@@ -357,9 +357,9 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
 	   << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	   << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
   } 
-  if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-      abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+  if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+      std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+      std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Momentum Conservation test for evaporation fragments" 
 	   << G4endl; 

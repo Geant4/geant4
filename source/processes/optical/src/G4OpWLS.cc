@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.2 2003/12/01 15:20:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4OpWLS.cc,v 1.5 2004/12/10 18:53:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -87,7 +87,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
   aParticleChange.Initialize(aTrack);
   
-  aParticleChange.SetStatusChange(fStopAndKill);
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   if (verboseLevel>0) {
     G4cout << "\n** Photon absorbed! **" << G4endl;
@@ -145,11 +145,11 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // Generate random photon direction
     
     G4double cost = 1. - 2.*G4UniformRand();
-    G4double sint = sqrt((1.-cost)*(1.+cost));
+    G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
-    G4double phi = 2*M_PI*G4UniformRand();
-    G4double sinp = sin(phi);
-    G4double cosp = cos(phi);
+    G4double phi = twopi*G4UniformRand();
+    G4double sinp = std::sin(phi);
+    G4double cosp = std::cos(phi);
     
     G4double px = sint*cosp;
     G4double py = sint*sinp;
@@ -169,9 +169,9 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     
     G4ThreeVector perp = photonMomentum.cross(photonPolarization);
     
-    phi = 2*M_PI*G4UniformRand();
-    sinp = sin(phi);
-    cosp = cos(phi);
+    phi = twopi*G4UniformRand();
+    sinp = std::sin(phi);
+    cosp = std::cos(phi);
     
     photonPolarization = cosp * photonPolarization + sinp * perp;
     

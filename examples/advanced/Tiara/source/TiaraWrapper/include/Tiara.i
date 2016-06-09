@@ -1,6 +1,6 @@
-# $Id: Tiara.i,v 1.7 2003/12/08 17:53:26 gcosmo Exp $
+# $Id: Tiara.i,v 1.8 2004/12/08 15:37:14 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-00-patch-01 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 
 %module Tiara
@@ -20,12 +20,12 @@
 #include "TiaraCellScorer.hh"
 #include "TiaraCellScorerStore.hh"
 #include "TiaraPhysicsList.hh"
-#include "Physics_LHEP_PRECO.hh"
-#include "Physics_LHEP_PRECO_HP.hh"
-#include "Physics_LHEP_LEAD_HP.hh"
-#include "Physics_CASCADE_HP.hh"
-#include "LHEP_BIC.hh"
 #include "LHEP_BIC_HP.hh"
+#include "LHEP_BIC.hh"
+#include "LHEP.hh"
+#include "LHEP_PRECO.hh"
+#include "LHEP_LEAD.hh"
+#include "LHEP_PRECO_HP.hh"
 #include "TiaraVisEventAction.hh"
 #include "TiaraTimedEventAction.hh"
 #include "TiaraMeasure.hh"
@@ -87,53 +87,50 @@
 
 %include TiaraRandom.hh
 
-%include TiaraPhysicsList.hh
-%extend TiaraPhysicsList {
-  std::string  getName() const {
-    return std::string("Test12");
-  }
-}
-
-%include Physics_LHEP_PRECO.hh
-%extend Physics_LHEP_PRECO {
-  std::string  getName() const {
-    return std::string("LHEP_PRECO");
-  }
-}
-
-%include Physics_LHEP_PRECO_HP.hh
-%extend Physics_LHEP_PRECO_HP {
-  std::string  getName() const {
-    return std::string("LHEP_PRECO_HP");
-  }
-}
-
-%include Physics_LHEP_LEAD_HP.hh
-%extend Physics_LHEP_LEAD_HP {
-  std::string  getName() const {
-    return std::string("LHEP_LEAD_HP");
-  }
-}
-
-%include Physics_CASCADE_HP.hh
-%extend Physics_CASCADE_HP {
-  std::string  getName() const {
-    return std::string("CASCADE_HP");
-  }
-}
-
-%include LHEP_BIC.hh 
-%extend LHEP_BIC {
-  std::string  getName() const {
-    return std::string("LHEP_BIC");
-  }
-}
-
 %include LHEP_BIC_HP.hh
-%extend LHEP_BIC_HP {
+%template(LHEP_BIC_HP) TLHEP_BIC_HP<G4VModularPhysicsList>; 
+%extend TLHEP_BIC_HP<G4VModularPhysicsList> {
   std::string  getName() const {
     return std::string("LHEP_BIC_HP");
   }
 }
 
+%include LHEP_BIC.hh
+%template(LHEP_BIC) TLHEP_BIC<G4VModularPhysicsList>;
+%extend TLHEP_BIC<G4VModularPhysicsList> {
+  std::string  getName() const {
+    return std::string("LHEP_BIC");
+  }
+}
 
+%include LHEP.hh
+%template(LHEP) TLHEP<G4VModularPhysicsList>;
+%extend TLHEP<G4VModularPhysicsList> {
+  std::string  getName() const {
+    return std::string("LHEP");
+  }
+}
+
+%include LHEP_PRECO.hh
+%template(LHEP_PRECO) TLHEP_PRECO<G4VModularPhysicsList>;
+%extend TLHEP_PRECO<G4VModularPhysicsList> {
+  std::string  getName() const {
+    return std::string("LHEP_PRECO");
+  }
+}
+
+%include LHEP_LEAD.hh
+%template(LHEP_LEAD) TLHEP_LEAD<G4VModularPhysicsList>;
+%extend TLHEP_LEAD<G4VModularPhysicsList> {
+  std::string  getName() const {
+    return std::string("LHEP_LEAD");
+  }
+}
+
+%include LHEP_PRECO_HP.hh
+%template(LHEP_PRECO_HP) TLHEP_PRECO_HP<G4VModularPhysicsList>;
+%extend TLHEP_PRECO_HP<G4VModularPhysicsList> {
+  std::string  getName() const {
+    return std::string("LHEP_PRECO_HP");
+  }
+}

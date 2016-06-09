@@ -1,6 +1,6 @@
-# $Id: History,v 1.19 2004/06/09 15:04:34 daquinog Exp $
+# $Id: History,v 1.24 2004/12/14 13:12:55 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-05 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 14th, 2004 G.Daquino - Tiara-V06-02-02
+- update of GNUmakefiles to the new phys_lists structure
+
+Dec 13th, 2004 G.Cosmo - Tiara-V06-02-01
+- Use new phys-lists structure.
+
+Dec 8th, 2004 G.Daquino - Tiara-V06-02-00
+- Corrected link to the centralized hadronic physics lists. Eliminated all the old 
+  links to the tiara-dedicated shared libraries for the Packaging and the physics lists 
+  SWIG wraps based on the templated physics list classes 
+  Migration to the <cmath> completed
+  runSim.py still needs to be modified in order to obtain the plotting through PI
+
+Jun 18th, 2004 G.Daquino - Tiara-V06-01-03
+- Corrected some errors in the README and in the script envCommon.csh. Besides, the file
+  hadronic_list.gmk in the subdirectory source was not correct.
+
 Jun 9th, 2004 G.Daquino - Tiara-V06-01-00
 - Passing from Anaphe to PI, Tiara has been partly fixed. Still problems 
   are present on the compatibility between the PI and Anaphe pointers for hf.

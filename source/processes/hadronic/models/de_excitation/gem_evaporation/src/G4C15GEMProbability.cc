@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4C15GEMProbability.cc,v 1.2 2003/11/03 17:53:03 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4C15GEMProbability.cc,v 1.3 2004/12/07 13:47:03 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -41,67 +41,67 @@ G4C15GEMProbability::G4C15GEMProbability() :
 
   ExcitEnergies.push_back(3105*keV);
   ExcitSpins.push_back(1.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(40*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(40*keV));
 
   ExcitEnergies.push_back(4221*keV);
   ExcitSpins.push_back(5.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(14*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(14*keV));
 
   ExcitEnergies.push_back(6370*keV);
   ExcitSpins.push_back(9.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(6429*keV);
   ExcitSpins.push_back(7.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(50*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(50*keV));
 
   ExcitEnergies.push_back(6461*keV);
   ExcitSpins.push_back(11.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(14*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(14*keV));
 
   ExcitEnergies.push_back(6639*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(6845*keV);
   ExcitSpins.push_back(11.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(14*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(14*keV));
 
   ExcitEnergies.push_back(6884*keV);
   ExcitSpins.push_back(9.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(7098*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(15*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(15*keV));
 
   ExcitEnergies.push_back(7352*keV);
   ExcitSpins.push_back(11.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(8470*keV);
   ExcitSpins.push_back(13.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(40*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(40*keV));
 
   ExcitEnergies.push_back(8559*keV);
   ExcitSpins.push_back(13.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(40*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(40*keV));
 
   ExcitEnergies.push_back(9789*keV);
   ExcitSpins.push_back(15.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(10248*keV);
   ExcitSpins.push_back(9.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(20*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(20*keV));
 
   ExcitEnergies.push_back(11123*keV);
   ExcitSpins.push_back(19.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(30*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(30*keV));
 
   ExcitEnergies.push_back(11825*keV);
   ExcitSpins.push_back(13.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(70*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(70*keV));
 
   SetExcitationEnergiesPtr(&ExcitEnergies);
   SetExcitationSpinsPtr(&ExcitSpins);

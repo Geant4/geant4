@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.39 2003/11/12 13:14:27 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.42 2004/12/07 23:41:01 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -118,7 +118,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   std::istrstream is ((char*)s);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
-  G4double unit = ValueOf(unitString);
+  G4double unit = G4UIcommand::ValueOf(unitString);
   x0 *= unit; y0 *= unit; z0 *= unit; length *= unit;
 
   G4VModel* model = new G4AxesModel(x0, y0, z0, length);
@@ -460,8 +460,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
      >> auto_manual
      >> xmid >> ymid >> zmid >> positionUnit;
 
-  G4double length = userLength * ValueOf(userLengthUnit);
-  G4double unit = ValueOf(positionUnit);
+  G4double length = userLength * G4UIcommand::ValueOf(userLengthUnit);
+  G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
   char tempcharstring [50];
@@ -685,7 +685,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   std::istrstream is ((char*)s);
   is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
 
-  G4double unit = ValueOf(unitString);
+  G4double unit = G4UIcommand::ValueOf(unitString);
   x *= unit; y *= unit; z *= unit;
 
   G4Text g4text(text, G4Point3D(x,y,z));
@@ -723,7 +723,7 @@ G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
      "\nevent. The drawing mode is an integer that is passed to the"
      "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
      "\nif drawing-mode > 0, draws the trajectory as a polyline and, if"
-     "\ndrawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000"
+     "\ndrawing-mode != 0, draws markers of screen size std::abs(drawing-mode)/1000"
      "\nin pixels at each step and auxiliary point, if any.  So drawing-mode"
      "\n== 5000 is a good choice."
      "\nEnable storing with \"/tracking/storeTrajectory 1\"."
@@ -856,8 +856,8 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     // Create search scene, model and modeling parameters with
     // long-enough life...
     G4PhysicalVolumeSearchScene searchScene (name, copyNo);
-    G4PhysicalVolumeModel searchModel (world);
-    G4ModelingParameters mp;
+    G4PhysicalVolumeModel searchModel (world);  // Default - unlimited depth.
+    G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
 
     // Initiate search...

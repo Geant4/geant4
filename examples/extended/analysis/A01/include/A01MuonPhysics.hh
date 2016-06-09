@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.hh,v 1.4 2003/10/11 02:59:59 tkoi Exp $
+// $Id: A01MuonPhysics.hh,v 1.5 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi
@@ -48,7 +48,7 @@ class A01MuonPhysics : public G4VPhysicsConstructor
   public:
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    virtual void ConstructParticle(){;};
 
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and

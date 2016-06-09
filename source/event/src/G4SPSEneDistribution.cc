@@ -222,7 +222,7 @@ void G4SPSEneDistribution::CalculateCdgSpectrum()
     {
       omalpha = 1. - spind[i];
       CDGhist[i+1] = CDGhist[i] + (pfact[i]/omalpha)*
-	(pow(ene_line[i+1],omalpha)-pow(ene_line[i],omalpha));
+	(std::pow(ene_line[i+1],omalpha)-std::pow(ene_line[i],omalpha));
       i++;
     }
   
@@ -242,7 +242,7 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
   // Proved very hard to integrate indefinitely, so different
   // method. User inputs emin, emax and T. These are used to
   // create a 10,000 bin histogram.
-  // Use photon density spectrum = 2 nu**2/c**2 * (exp(h nu/kT)-1)
+  // Use photon density spectrum = 2 nu**2/c**2 * (std::exp(h nu/kT)-1)
   // = 2 E**2/h**2c**2 times the exponential
   G4double erange = Emax - Emin;
   G4double steps = erange/10000.;
@@ -258,8 +258,8 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
   while(count < 10000)
     {
       Bbody_x[count] = Emin + G4double(count*steps);
-      Bbody_y[count] = (2.*pow(Bbody_x[count],2.))/
-      	(h2*c2*(exp(Bbody_x[count]/(k*Temp)) - 1.));
+      Bbody_y[count] = (2.*std::pow(Bbody_x[count],2.))/
+      	(h2*c2*(std::exp(Bbody_x[count]/(k*Temp)) - 1.));
       sum = sum + Bbody_y[count];
       BBHist[count+1] = BBHist[count] + Bbody_y[count];
       count++;
@@ -348,7 +348,7 @@ void G4SPSEneDistribution::LinearInterpolation()
       // convert point to energy unit and its value to per energy unit
       G4double total_energy;
       for(count=0;count<maxi;count++) {
-	total_energy = sqrt((Arb_x[count]*Arb_x[count]) 
+	total_energy = std::sqrt((Arb_x[count]*Arb_x[count]) 
 			    + (mass*mass)); // total energy
 	
 	Arb_y[count] = Arb_y[count] * Arb_x[count]/total_energy; 
@@ -449,7 +449,7 @@ void G4SPSEneDistribution::LogInterpolation()
       // convert point to energy unit and its value to per energy unit
       G4double total_energy;
       for(count=0;count<maxi;count++) {
-	total_energy = sqrt((Arb_x[count]*Arb_x[count]) 
+	total_energy = std::sqrt((Arb_x[count]*Arb_x[count]) 
 			    + (mass*mass)); // total energy
 	
 	Arb_y[count] = Arb_y[count] * Arb_x[count]/total_energy; 
@@ -486,10 +486,10 @@ void G4SPSEneDistribution::LogInterpolation()
 	    Arb_y[i] = 1e-20;
 	}
 
-      Arb_alpha[i] = (log10(Arb_y[i])-log10(Arb_y[i-1]))/(log10(Arb_x[i])-log10(Arb_x[i-1]));
-      Arb_Const[i] = Arb_y[i]/(pow(Arb_x[i],Arb_alpha[i]));
+      Arb_alpha[i] = (std::log10(Arb_y[i])-std::log10(Arb_y[i-1]))/(std::log10(Arb_x[i])-std::log10(Arb_x[i-1]));
+      Arb_Const[i] = Arb_y[i]/(std::pow(Arb_x[i],Arb_alpha[i]));
       alp = Arb_alpha[i] + 1;
-      Area_seg[i] = (Arb_Const[i]/alp) * (pow(Arb_x[i],alp) - pow(Arb_x[i-1],alp));
+      Area_seg[i] = (Arb_Const[i]/alp) * (std::pow(Arb_x[i],alp) - std::pow(Arb_x[i-1],alp));
       sum = sum + Area_seg[i];
       Arb_Cum_Area[i] = Arb_Cum_Area[i-1] + Area_seg[i];
       if(verbosityLevel == 2)
@@ -546,7 +546,7 @@ void G4SPSEneDistribution::ExpInterpolation()
       // convert point to energy unit and its value to per energy unit
       G4double total_energy;
       for(count=0;count<maxi;count++) {
-	total_energy = sqrt((Arb_x[count]*Arb_x[count]) 
+	total_energy = std::sqrt((Arb_x[count]*Arb_x[count]) 
 			    + (mass*mass)); // total energy
 	
 	Arb_y[count] = Arb_y[count] * Arb_x[count]/total_energy; 
@@ -562,13 +562,13 @@ void G4SPSEneDistribution::ExpInterpolation()
   Arb_Cum_Area[0] = 0.;
   while(i < maxi)
     {
-      G4double test = log(Arb_y[i]) - log(Arb_y[i-1]);
+      G4double test = std::log(Arb_y[i]) - std::log(Arb_y[i-1]);
       if(test > 0. || test < 0.)
 	{
-	  Arb_ezero[i] = -(Arb_x[i] - Arb_x[i-1])/(log(Arb_y[i]) - log(Arb_y[i-1]));
-	  Arb_Const[i] = Arb_y[i]/(exp(-Arb_x[i]/Arb_ezero[i]));
-	  Area_seg[i]=-(Arb_Const[i]*Arb_ezero[i])*(exp(-Arb_x[i]/Arb_ezero[i])
-						    -exp(-Arb_x[i-1]/Arb_ezero[i]));
+	  Arb_ezero[i] = -(Arb_x[i] - Arb_x[i-1])/(std::log(Arb_y[i]) - std::log(Arb_y[i-1]));
+	  Arb_Const[i] = Arb_y[i]/(std::exp(-Arb_x[i]/Arb_ezero[i]));
+	  Area_seg[i]=-(Arb_Const[i]*Arb_ezero[i])*(std::exp(-Arb_x[i]/Arb_ezero[i])
+						    -std::exp(-Arb_x[i-1]/Arb_ezero[i]));
 	}
       else 
 	{
@@ -630,7 +630,7 @@ void G4SPSEneDistribution::SplineInterpolation()
       // convert point to energy unit and its value to per energy unit
       G4double total_energy;
       for(count=0;count<maxi;count++) {
-	total_energy = sqrt((Arb_x[count]*Arb_x[count]) 
+	total_energy = std::sqrt((Arb_x[count]*Arb_x[count]) 
 			    + (mass*mass)); // total energy
 	
 	Arb_y[count] = Arb_y[count] * Arb_x[count]/total_energy; 
@@ -685,9 +685,9 @@ void G4SPSEneDistribution::GenerateGaussEnergies()
 void G4SPSEneDistribution::GenerateLinearEnergies(G4bool bArb = false)
 {
   G4double rndm;
-  G4double emaxsq = pow(Emax,2.); //Emax squared
-  G4double eminsq = pow(Emin,2.); //Emin squared
-  G4double intersq = pow(cept,2.); //cept squared
+  G4double emaxsq = std::pow(Emax,2.); //Emax squared
+  G4double eminsq = std::pow(Emin,2.); //Emin squared
+  G4double intersq = std::pow(cept,2.); //cept squared
 
   if (bArb) rndm = G4UniformRand();
   else rndm = eneRndm->GenRandEnergy();
@@ -702,7 +702,7 @@ void G4SPSEneDistribution::GenerateLinearEnergies(G4bool bArb = false)
     {
       G4double sqbrack = (intersq - 4*(grad/2.)*(bracket));
       //      G4cout << "SQBRACK" << sqbrack << G4endl;
-      sqbrack = sqrt(sqbrack);
+      sqbrack = std::sqrt(sqbrack);
       G4double root1 = -cept + sqbrack; 
       root1 = root1/(2.*(grad/2.));
       
@@ -735,8 +735,8 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
   G4double rndm;
   G4double emina, emaxa;
 
-  emina = pow(Emin,alpha+1);
-  emaxa = pow(Emax,alpha+1);
+  emina = std::pow(Emin,alpha+1);
+  emaxa = std::pow(Emax,alpha+1);
 
   if (bArb) rndm = G4UniformRand();
   else rndm = eneRndm->GenRandEnergy();
@@ -744,12 +744,12 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
   if(alpha != -1.)
     {
       particle_energy = ((rndm*(emaxa - emina)) + emina);
-      particle_energy = pow(particle_energy,(1./(alpha+1.)));
+      particle_energy = std::pow(particle_energy,(1./(alpha+1.)));
     }
   else if(alpha == -1.)
     {
-      particle_energy = (log(Emin) + rndm*(log(Emax) - log(Emin)));
-      particle_energy = exp(particle_energy);
+      particle_energy = (std::log(Emin) + rndm*(std::log(Emax) - std::log(Emin)));
+      particle_energy = std::exp(particle_energy);
     }
   if(verbosityLevel >= 1)
     G4cout << "Energy is " << particle_energy << G4endl;
@@ -764,8 +764,8 @@ void G4SPSEneDistribution::GenerateExpEnergies(G4bool bArb = false)
   if (bArb) rndm = G4UniformRand();
   else rndm = eneRndm->GenRandEnergy();
 
-  particle_energy = -Ezero*(log(rndm*(exp(-Emax/Ezero) - exp(-Emin/Ezero)) + 
-				exp(-Emin/Ezero)));
+  particle_energy = -Ezero*(std::log(rndm*(std::exp(-Emax/Ezero) - std::exp(-Emin/Ezero)) + 
+				std::exp(-Emin/Ezero)));
   if(verbosityLevel >= 1)
     G4cout << "Energy is " << particle_energy << G4endl;
 }
@@ -781,11 +781,11 @@ void G4SPSEneDistribution::GenerateBremEnergies()
   G4double expmax, expmin, k;
 
   k = 8.6181e-11; // Boltzmann's const in MeV/K
-  G4double ksq = pow(k,2.); // k squared
-  G4double Tsq = pow(Temp,2.); // Temp squared
+  G4double ksq = std::pow(k,2.); // k squared
+  G4double Tsq = std::pow(Temp,2.); // Temp squared
 
-  expmax = exp(-Emax/(k*Temp));
-  expmin = exp(-Emin/(k*Temp));
+  expmax = std::exp(-Emax/(k*Temp));
+  expmin = std::exp(-Emin/(k*Temp));
 
   // If either expmax or expmin are zero then this will cause problems
   // Most probably this will be because T is too low or E is too high
@@ -815,7 +815,7 @@ void G4SPSEneDistribution::GenerateBremEnergies()
     {
       etest = Emin + (i-1)*steps;
       
-      diff = etest*(exp(-etest/(k*Temp))) + k*Temp*(exp(-etest/(k*Temp))) - bigc;
+      diff = etest*(std::exp(-etest/(k*Temp))) + k*Temp*(std::exp(-etest/(k*Temp))) - bigc;
 
       if(diff < 0.)
 	diff = -diff;
@@ -907,9 +907,9 @@ void G4SPSEneDistribution::GenerateCdgEnergies()
       i++;
     }
   // Generate final energy.
-  particle_energy = (pow(ene_line[i-1],omalpha[i-1]) + (pow(ene_line[i],omalpha[i-1])
-					- pow(ene_line[i-1],omalpha[i-1]))*rndm2);
-  particle_energy = pow(particle_energy,(1./omalpha[i-1]));
+  particle_energy = (std::pow(ene_line[i-1],omalpha[i-1]) + (std::pow(ene_line[i],omalpha[i-1])
+					- std::pow(ene_line[i-1],omalpha[i-1]))*rndm2);
+  particle_energy = std::pow(particle_energy,(1./omalpha[i-1]));
 
   if(verbosityLevel >= 1)
     G4cout << "Energy is " << particle_energy << G4endl;
@@ -964,7 +964,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 	  // to make evals counts/s/energy
 	  for(ii=0;ii<maxbin;ii++)
 	    {
-	      bins[ii] = sqrt((bins[ii]*bins[ii]) + (mass*mass)) - mass; //kinetic energy
+	      bins[ii] = std::sqrt((bins[ii]*bins[ii]) + (mass*mass)) - mass; //kinetic energy
 	    }
 	  for(ii=1;ii<maxbin;ii++)
 	    {

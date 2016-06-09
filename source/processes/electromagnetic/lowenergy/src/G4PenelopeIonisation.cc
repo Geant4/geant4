@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.13 2004/06/01 15:09:12 pandola Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4PenelopeIonisation.cc,v 1.16 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 // --------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 // 20.01.04 L.Pandola           Changed returns in CalculateDiscreteForPositrons()
 //                              to eliminate the same bug 
 // 10.03.04 L.Pandola           Bug fixed with reference system of delta rays
-// 17.03.04 L.Pandola           Removed unnecessary calls to pow(a,b)
+// 17.03.04 L.Pandola           Removed unnecessary calls to std::pow(a,b)
 // 18.03.04 L.Pandola           Bug fixed in the destructor
 // 01.06.04 L.Pandola           StopButAlive for positrons on PostStepDoIt
 // --------------------------------------------------------------
@@ -304,9 +304,9 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   }
   // the method CalculateDiscrete() sets the private variables:
   // kineticEnergy1 = energy of the primary electron after the interaction
-  // cosThetaPrimary = cos(theta) of the primary after the interaction
+  // cosThetaPrimary = std::cos(theta) of the primary after the interaction
   // energySecondary = energy of the secondary electron
-  // cosThetaSecondary = cos(theta) of the secondary
+  // cosThetaSecondary = std::cos(theta) of the secondary
  
   if(energySecondary == 0.0)
     {    
@@ -314,31 +314,31 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
     }
 
   //Update the primary particle
-  G4double sint = sqrt(1. - cosThetaPrimary*cosThetaPrimary);
+  G4double sint = std::sqrt(1. - cosThetaPrimary*cosThetaPrimary);
   G4double phi  = twopi * G4UniformRand();
-  G4double dirx = sint * cos(phi);
-  G4double diry = sint * sin(phi);
+  G4double dirx = sint * std::cos(phi);
+  G4double diry = sint * std::sin(phi);
   G4double dirz = cosThetaPrimary;
 
   G4ThreeVector electronDirection1(dirx,diry,dirz);
   electronDirection1.rotateUz(electronDirection0);
-  aParticleChange.SetMomentumDirectionChange(electronDirection1) ;
+  aParticleChange.ProposeMomentumDirection(electronDirection1) ;
 
   if (kineticEnergy1 > 0.)
     {
-      aParticleChange.SetEnergyChange(kineticEnergy1) ;
+      aParticleChange.ProposeEnergy(kineticEnergy1) ;
     }
   else
     {    
-      aParticleChange.SetEnergyChange(0.) ;
+      aParticleChange.ProposeEnergy(0.) ;
       if (aParticleType->GetProcessManager()->GetAtRestProcessVector()->size()) 
 	//In this case there is at least one AtRest process
 	{
-	  aParticleChange.SetStatusChange(fStopButAlive);
+	  aParticleChange.ProposeTrackStatus(fStopButAlive);
 	}
       else
 	{
-	  aParticleChange.SetStatusChange(fStopAndKill);
+	  aParticleChange.ProposeTrackStatus(fStopAndKill);
 	}
     }
 
@@ -403,12 +403,12 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4int nbOfSecondaries=nPhotons;
 
   // Generate the delta ray 
-  G4double sin2 = sqrt(1. - cosThetaSecondary*cosThetaSecondary);
+  G4double sin2 = std::sqrt(1. - cosThetaSecondary*cosThetaSecondary);
   G4double phi2  = twopi * G4UniformRand();
   G4DynamicParticle* electron = 0;
   
-  G4double xEl = sin2 * cos(phi2); 
-  G4double yEl = sin2 * sin(phi2);
+  G4double xEl = sin2 * std::cos(phi2); 
+  G4double yEl = sin2 * std::sin(phi2);
   G4double zEl = cosThetaSecondary;
   G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
   eDirection.rotateUz(electronDirection0);
@@ -431,7 +431,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
 	     << G4endl;
       energyDeposit=0;
     }
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }
 
@@ -498,10 +498,10 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double amol = (gamma-1.0)*(gamma-1.0)/gamma2;
   G4double cps = ene*rb;
-  G4double cp = sqrt(cps);
+  G4double cp = std::sqrt(cps);
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
-  G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
+  G4double distantTransvCS0 = std::max(std::log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
 
@@ -521,7 +521,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
       rl=cutoff/ene;
       rl1=1.0-rl;
       if (rl < 0.5)
-	closeCS0 = (amol*(0.5-rl)+(1.0/rl)-(1.0/rl1)+(1.0-amol)*log(rl/rl1))/ene;
+	closeCS0 = (amol*(0.5-rl)+(1.0/rl)-(1.0/rl1)+(1.0-amol)*std::log(rl/rl1))/ene;
     }
 
   // Cross sections for the different oscillators
@@ -557,8 +557,8 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
     if (wi>cutoff && wi<ene)
       {
 	if (wi>(1e-6*ene)){
-	  G4double cpp=sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
-	  qm->push_back(sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2);
+	  G4double cpp=std::sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
+	  qm->push_back(std::sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2);
 	}
 	else
 	  {
@@ -568,7 +568,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
 	if ((*qm)[i] < wi)
 	  {
 	    
-	    G4double distantLongitCS =  occupNb*log(wi*((*qm)[i]+2.0*electron_mass_c2)/
+	    G4double distantLongitCS =  occupNb*std::log(wi*((*qm)[i]+2.0*electron_mass_c2)/
 					 ((*qm)[i]*(wi+2.0*electron_mass_c2)))/wi;
 	    cumulHardCS->push_back(totalHardCS);
 	    typeOfInteraction->push_back(1.0); //distant longitudinal
@@ -596,7 +596,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
 	{
 	  rl=wi/ene;
 	  rl1=1.0-rl;
-	  closeCS = occupNb*(amol*(0.5-rl)+(1.0/rl)-(1.0/rl1)+(1.0-amol)*log(rl/rl1))/ene;
+	  closeCS = occupNb*(amol*(0.5-rl)+(1.0/rl)-(1.0/rl1)+(1.0-amol)*std::log(rl/rl1))/ene;
 	  cumulHardCS->push_back(totalHardCS);
 	  typeOfInteraction->push_back(3.0); //close
 	  nbOfLevel->push_back((G4double) i);
@@ -651,10 +651,10 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
       dde= (*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       G4double qs=(*qm)[iOsc]/(1.0+((*qm)[iOsc]/(2.0*electron_mass_c2)));
-      G4double q=qs/(pow((qs/dde)*(1.0+(0.5*dde/electron_mass_c2)),G4UniformRand())-(0.5*qs/electron_mass_c2));
+      G4double q=qs/(std::pow((qs/dde)*(1.0+(0.5*dde/electron_mass_c2)),G4UniformRand())-(0.5*qs/electron_mass_c2));
       G4double qtrev = q*(q+2.0*electron_mass_c2);
       G4double cpps = kineticEnergy1*(kineticEnergy1+2.0*electron_mass_c2);
-      cosThetaPrimary = (cpps+cps-qtrev)/(2.0*cp*sqrt(cpps));
+      cosThetaPrimary = (cpps+cps-qtrev)/(2.0*cp*std::sqrt(cpps));
       if (cosThetaPrimary>1.0) cosThetaPrimary=1.0;
       //Energy and emission angle of the delta ray
       kks = (G4int) (*(shellFlag->find(Z)->second))[iOsc];
@@ -666,7 +666,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
 	{
 	  energySecondary=dde-(*(ionizationEnergy->find(Z)->second))[iOsc];
 	}
-      cosThetaSecondary = 0.5*(dde*(ene+rb-dde)+qtrev)/sqrt(cps*qtrev);
+      cosThetaSecondary = 0.5*(dde*(ene+rb-dde)+qtrev)/std::sqrt(cps*qtrev);
       if (cosThetaSecondary>1.0) cosThetaSecondary=1.0;
     }
 
@@ -726,10 +726,10 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
     }while ((G4UniformRand()*(1.0+A*rk2)) > phi);
     //Energy and scattering angle (primary electron);
     kineticEnergy1 = ene*(1.0-rk);
-    cosThetaPrimary = sqrt(kineticEnergy1*rb/(ene*(rb-(rk*ene))));
+    cosThetaPrimary = std::sqrt(kineticEnergy1*rb/(ene*(rb-(rk*ene))));
     //Energy and scattering angle of the delta ray
     energySecondary = ene-kineticEnergy1-UII;
-    cosThetaSecondary = sqrt(rk*ene*rb/(ene*(rk*ene+2.0*electron_mass_c2)));
+    cosThetaSecondary = std::sqrt(rk*ene*rb/(ene*(rk*ene+2.0*electron_mass_c2)));
     }
 
   else
@@ -798,7 +798,7 @@ void G4PenelopeIonisation::ReadData()
       G4Exception(excep);
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
-};
+}
 
 
 G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
@@ -806,7 +806,7 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
 {
   G4double plasmaEnergyCoefficient = 1.377e-39; //(e*hbar)^2/(epsilon0*electron_mass)
   G4double plasmaEnergySquared = plasmaEnergyCoefficient*(electronVolumeDensity*m3);
-  // sqrt(plasmaEnergySquared) is the plasma energy of the solid (MeV)
+  // std::sqrt(plasmaEnergySquared) is the plasma energy of the solid (MeV)
   G4double gam = 1.0+ene/electron_mass_c2;
   G4double gam2=gam*gam;
   G4double delta = 0.0;
@@ -863,7 +863,7 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
    for (size_t kk=0;kk<nbOsc;kk++){
       G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[kk];
       wr = (*(resonanceEnergy->find(Z)->second))[kk];
-      delta += occupNb*log(1.0+wl2/(wr*wr));
+      delta += occupNb*std::log(1.0+wl2/(wr*wr));
     }
    delta = (delta/((G4double) Z))-wl2/(gam2*plasmaEnergySquared); 
    return delta;
@@ -916,8 +916,8 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
 
   //Distant interactions
   G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
-  G4double cp1 = sqrt(cp1s);
-  G4double cp = sqrt(cps);
+  G4double cp1 = std::sqrt(cp1s);
+  G4double cp = std::sqrt(cps);
   G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
 
   //Distant longitudinal interactions
@@ -925,7 +925,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
+      qm = std::sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -935,7 +935,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
 
   if (qm < resEne)
     {
-      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+      sdLong = std::log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
     }
   else
     {
@@ -943,7 +943,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
     }
   
   if (sdLong > 0) {
-    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(std::log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) sPower = sdDist;
   }
@@ -956,8 +956,8 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
   if (wl < (wu-1*eV)) wu=wl;
   wl = resEne;
   if (wl > (wu-1*eV)) return sPower;
-  sPower += log(wu/wl)+(ene/(ene-wu))-(ene/(ene-wl))
-    + (2.0 - amol)*log((ene-wu)/(ene-wl))
+  sPower += std::log(wu/wl)+(ene/(ene-wu))-(ene/(ene-wl))
+    + (2.0 - amol)*std::log((ene-wu)/(ene-wl))
     + amol*((wu*wu)-(wl*wl))/(2.0*ene*ene);
 
   return sPower;
@@ -983,8 +983,8 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
 
   //Distant interactions
   G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
-  G4double cp1 = sqrt(cp1s);
-  G4double cp = sqrt(cps);
+  G4double cp1 = std::sqrt(cp1s);
+  G4double cp = std::sqrt(cps);
   G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
 
   //Distant longitudinal interactions
@@ -992,7 +992,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
+      qm = std::sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1002,7 +1002,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
 
   if (qm < resEne)
     {
-      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+      sdLong = std::log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
     }
   else
     {
@@ -1010,7 +1010,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
     }
   
   if (sdLong > 0) {
-    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(std::log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) sPower = sdDist;
   }
@@ -1023,7 +1023,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
   if (wl < (wu-1*eV)) wu=wl;
   wl = resEne;
   if (wl > (wu-1*eV)) return sPower;
-  sPower += log(wu/wl)-bha1*(wu-wl)/ene
+  sPower += std::log(wu/wl)-bha1*(wu-wl)/ene
     + bha2*((wu*wu)-(wl*wl))/(2.0*ene*ene)
     - bha3*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene)
     + bha4*((wu*wu*wu*wu)-(wl*wl*wl*wl))/(4.0*ene*ene*ene*ene);
@@ -1047,7 +1047,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double amol = (gamma-1.0)*(gamma-1.0)/gamma2;
   G4double cps = ene*rb;
-  G4double cp = sqrt(cps);
+  G4double cp = std::sqrt(cps);
   G4double help = (gamma+1.0)*(gamma+1.0);
   G4double bha1 = amol*(2.0*help-1.0)/(gamma2-1.0);
   G4double bha2 = amol*(3.0+1.0/help);
@@ -1055,7 +1055,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   G4double bha4 = amol*(gamma-1.0)*(gamma-1.0)/help;
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
-  G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
+  G4double distantTransvCS0 = std::max(std::log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
 
@@ -1076,7 +1076,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
       rl=cutoff/ene;
       rl1=1.0-rl;
       if (rl < 1.0)
-	closeCS0 = (((1.0/rl)-1.0) + bha1*log(rl) + bha2*rl1
+	closeCS0 = (((1.0/rl)-1.0) + bha1*std::log(rl) + bha2*rl1
 		    + (bha3/2.0)*((rl*rl)-1.0)
 		    + (bha4/3.0)*(1.0-(rl*rl*rl)))/ene;
     }
@@ -1114,8 +1114,8 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
     if (wi>cutoff && wi<ene)
       {
 	if (wi>(1e-6*ene)){
-	  G4double cpp=sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
-	  qm->push_back(sqrt((cp-cpp)*(cp-cpp)+ electron_mass_c2 * electron_mass_c2)-electron_mass_c2);
+	  G4double cpp=std::sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
+	  qm->push_back(std::sqrt((cp-cpp)*(cp-cpp)+ electron_mass_c2 * electron_mass_c2)-electron_mass_c2);
 	}
 	else
 	  {
@@ -1125,7 +1125,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
 	if ((*qm)[i] < wi)
 	  {
 	    
-	    G4double distantLongitCS =  occupNb*log(wi*((*qm)[i]+2.0*electron_mass_c2)/
+	    G4double distantLongitCS =  occupNb*std::log(wi*((*qm)[i]+2.0*electron_mass_c2)/
 					 ((*qm)[i]*(wi+2.0*electron_mass_c2)))/wi;
 	    cumulHardCS->push_back(totalHardCS);
 	    typeOfInteraction->push_back(1.0); //distant longitudinal
@@ -1153,7 +1153,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
 	{
 	  rl=wi/ene;
 	  rl1=1.0-rl;
-	  closeCS = occupNb*(((1.0/rl)-1.0)+bha1*log(rl)+bha2*rl1
+	  closeCS = occupNb*(((1.0/rl)-1.0)+bha1*std::log(rl)+bha2*rl1
 			     + (bha3/2.0)*((rl*rl)-1.0)
 			     + (bha4/3.0)*(1.0-(rl*rl*rl)))/ene;
 	  cumulHardCS->push_back(totalHardCS);
@@ -1210,10 +1210,10 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
       dde= (*(resonanceEnergy->find(Z)->second))[iOsc];
       kineticEnergy1=ene-dde;
       G4double qs=(*qm)[iOsc]/(1.0+((*qm)[iOsc]/(2.0*electron_mass_c2)));
-      G4double q=qs/(pow((qs/dde)*(1.0+(0.5*dde/electron_mass_c2)),G4UniformRand())-(0.5*qs/electron_mass_c2));
+      G4double q=qs/(std::pow((qs/dde)*(1.0+(0.5*dde/electron_mass_c2)),G4UniformRand())-(0.5*qs/electron_mass_c2));
       G4double qtrev = q*(q+2.0*electron_mass_c2);
       G4double cpps = kineticEnergy1*(kineticEnergy1+2.0*electron_mass_c2);
-      cosThetaPrimary = (cpps+cps-qtrev)/(2.0*cp*sqrt(cpps));
+      cosThetaPrimary = (cpps+cps-qtrev)/(2.0*cp*std::sqrt(cpps));
       if (cosThetaPrimary>1.0) cosThetaPrimary=1.0;
       //Energy and emission angle of the delta ray
       kks = (G4int) (*(shellFlag->find(Z)->second))[iOsc];
@@ -1225,7 +1225,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
 	{
 	  energySecondary=dde-(*(ionizationEnergy->find(Z)->second))[iOsc];
 	}
-      cosThetaSecondary = 0.5*(dde*(ene+rb-dde)+qtrev)/sqrt(cps*qtrev);
+      cosThetaSecondary = 0.5*(dde*(ene+rb-dde)+qtrev)/std::sqrt(cps*qtrev);
       if (cosThetaSecondary>1.0) cosThetaSecondary=1.0;
     }
 
@@ -1274,10 +1274,10 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
       }while ( G4UniformRand() > phi);
       //Energy and scattering angle (primary electron);
       kineticEnergy1 = ene*(1.0-rk);
-      cosThetaPrimary = sqrt(kineticEnergy1*rb/(ene*(rb-(rk*ene))));
+      cosThetaPrimary = std::sqrt(kineticEnergy1*rb/(ene*(rb-(rk*ene))));
       //Energy and scattering angle of the delta ray
       energySecondary = ene-kineticEnergy1-UII;
-      cosThetaSecondary = sqrt(rk*ene*rb/(ene*(rk*ene+2.0*electron_mass_c2)));
+      cosThetaSecondary = std::sqrt(rk*ene*rb/(ene*(rk*ene+2.0*electron_mass_c2)));
     }      
       else
     {
@@ -1347,8 +1347,8 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
   
   //Distant interactions
   G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
-  G4double cp1 = sqrt(cp1s);
-  G4double cp = sqrt(cps);
+  G4double cp1 = std::sqrt(cp1s);
+  G4double cp = std::sqrt(cps);
   G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
 
   //Distant longitudinal interactions
@@ -1356,7 +1356,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
+      qm = std::sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1366,7 +1366,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
 
   if (qm < resEne)
     {
-      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+      sdLong = std::log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
     }
   else
     {
@@ -1374,7 +1374,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
     }
   
   if (sdLong > 0) {
-    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(std::log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) 
       {
@@ -1395,7 +1395,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
     { 
       hardCont += (1.0/(ene-wu))-(1.0/(ene-wl))
 	- (1.0/wu)+(1.0/wl)
-	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
+	+ (1.0-amol)*std::log(((ene-wu)*wl)/((ene-wl)*wu))/ene
 	+ amol*(wu-wl)/(ene*ene);
       wu=wl;
     }
@@ -1407,7 +1407,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
   }
   softCont += (1.0/(ene-wu))-(1.0/(ene-wl))
 	- (1.0/wu)+(1.0/wl)
-	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
+	+ (1.0-amol)*std::log(((ene-wu)*wl)/((ene-wl)*wu))/ene
 	+ amol*(wu-wl)/(ene*ene);
   if (index == 1) return softCont;
   return hardCont;
@@ -1434,8 +1434,8 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
 
   //Distant interactions
   G4double cp1s = (ene-resEne)*(ene-resEne+2.0*electron_mass_c2);
-  G4double cp1 = sqrt(cp1s);
-  G4double cp = sqrt(cps);
+  G4double cp1 = std::sqrt(cp1s);
+  G4double cp = std::sqrt(cps);
   G4double sdLong=0.0, sdTrans = 0.0, sdDist=0.0;
 
   //Distant longitudinal interactions
@@ -1443,7 +1443,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
+      qm = std::sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1453,7 +1453,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
 
   if (qm < resEne)
     {
-      sdLong = log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
+      sdLong = std::log(resEne*(qm+2.0*electron_mass_c2)/(qm*(resEne+2.0*electron_mass_c2)));
     }
   else
     {
@@ -1461,7 +1461,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
     }
   
   if (sdLong > 0) {
-    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(std::log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) 
       {
@@ -1479,7 +1479,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
   G4double wu = ene;
  
   if (wl < (wu-1*eV)) {
-    hardCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
+    hardCont += (1.0/wl)-(1.0/wu)-bha1*std::log(wu/wl)/ene
       + bha2*(wu-wl)/(ene*ene) -bha3*((wu*wu)-(wl*wl))/(2.0*ene*ene*ene)
       + bha4*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene*ene);
     wu=wl;
@@ -1490,7 +1490,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
       if (index == 1) return softCont;
       if (index == 2) return hardCont;
     }
-  softCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
+  softCont += (1.0/wl)-(1.0/wu)-bha1*std::log(wu/wl)/ene
     + bha2*(wu-wl)/(ene*ene) -bha3*((wu*wu)-(wl*wl))/(2.0*ene*ene*ene)
     + bha4*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene*ene);
   

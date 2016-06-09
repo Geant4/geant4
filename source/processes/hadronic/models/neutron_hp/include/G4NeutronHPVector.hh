@@ -266,7 +266,7 @@ class G4NeutronHPVector
         m++;
         a++;
         G4double xp = passive->GetEnergy(p);
-        if( abs(abs(xp-xa)/xa)<0.001 ) p++;
+        if( std::abs(std::abs(xp-xa)/xa)<0.001 ) p++;
       } else {
         tmp = active; 
         t=a;
@@ -284,7 +284,7 @@ class G4NeutronHPVector
     }
     while (p!=passive->GetVectorLength())
     {
-      if(abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       {
         SetData(m, passive->GetEnergy(p), passive->GetXsec(p));
         theManager.AppendScheme(m++, active->GetScheme(p));
@@ -328,7 +328,7 @@ class G4NeutronHPVector
       x1 = theIntegral[i-1];
       y2 = theData[i].GetX();
       x2 = theIntegral[i];
-      if(abs((y2-y1)/y2)<0.0000001) // not really necessary, since the case is excluded by construction
+      if(std::abs((y2-y1)/y2)<0.0000001) // not really necessary, since the case is excluded by construction
       {
 	y1 = theData[i-2].GetX();
 	x1 = theIntegral[i-2];
@@ -359,7 +359,7 @@ class G4NeutronHPVector
     G4double sum = 0;
     for(i=1;i<GetVectorLength();i++)
     {
-      if(abs((theData[i].GetX()-theData[i-1].GetX())/theData[i].GetX())>0.0000001)
+      if(std::abs((theData[i].GetX()-theData[i-1].GetX())/theData[i].GetX())>0.0000001)
       {
         sum+= 0.5*(theData[i].GetY()+theData[i-1].GetY())*
                   (theData[i].GetX()-theData[i-1].GetX());
@@ -384,7 +384,7 @@ class G4NeutronHPVector
     G4double sum = 0;
     for(i=1;i<GetVectorLength();i++)
     {
-      if(abs((theData[i].GetX()-theData[i-1].GetX())/theData[i].GetX())>0.0000001)
+      if(std::abs((theData[i].GetX()-theData[i-1].GetX())/theData[i].GetX())>0.0000001)
       {
         G4double x1 = theData[i-1].GetX();
         G4double x2 = theData[i].GetX();
@@ -398,14 +398,14 @@ class G4NeutronHPVector
         else if(aScheme==LINLOG||aScheme==CLINLOG||aScheme==ULINLOG)
         {
           G4double a = y1;
-          G4double b = (y2-y1)/(log(x2)-log(x1));
-          sum+= (a-b)*(x2-x1) + b*(x2*log(x2)-x1*log(x1));
+          G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
+          sum+= (a-b)*(x2-x1) + b*(x2*std::log(x2)-x1*std::log(x1));
         }
         else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
         {
-          G4double a = log(y1);
-          G4double b = (log(y2)-log(y1))/(x2-x1);
-          sum += (exp(a)/b)*(exp(b*x2)-exp(b*x1));
+          G4double a = std::log(y1);
+          G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
+          sum += (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
         }
         else if(aScheme==HISTO||aScheme==CHISTO||aScheme==UHISTO)
         {
@@ -413,9 +413,9 @@ class G4NeutronHPVector
         }
         else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
         {
-          G4double a = log(y1);
-          G4double b = (log(y2)-log(y1))/(log(x2)-log(x1));
-          sum += (exp(a)/(b+1))*(pow(x2,b+1)-pow(x1,b+1));
+          G4double a = std::log(y1);
+          G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
+          sum += (std::exp(a)/(b+1))*(std::pow(x2,b+1)-std::pow(x1,b+1));
         }
         else
         {

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VGlobalFastSimulationManager.hh,v 1.4 2002/11/20 14:46:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.

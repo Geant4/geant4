@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.5 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4DalitzDecayChannel.cc,v 1.7 2004/12/10 18:02:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // ------------------------------------------------------------
@@ -90,21 +90,21 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   //daughters'mass
   G4double leptonmass = daughters[idLepton]->GetPDGMass(); 
 
- // Generate t ( = exp(x):mass Square of (l+ l-) system) 
-  G4double xmin  = 2.0*log(2.0*leptonmass);
-  G4double xmax  = 2.0*log(parentmass);
+ // Generate t ( = std::exp(x):mass Square of (l+ l-) system) 
+  G4double xmin  = 2.0*std::log(2.0*leptonmass);
+  G4double xmax  = 2.0*std::log(parentmass);
   G4double wmax = 1.5;
   G4double x, w, ww, w1, w2, w3, t;
   do {
     x = G4UniformRand()*(xmax-xmin) + xmin;
     w = G4UniformRand()*wmax;
-    t = exp(x);
+    t = std::exp(x);
     w1 = (1.0-4.0*leptonmass*leptonmass/t);
     if ( w1 > 0.0) {
       w2 = ( 1.0 + 2.0*leptonmass*leptonmass/t );
       w3 = ( 1.0 - t/parentmass/parentmass );
       w3 = w3 * w3 * w3;
-      ww = w3 * w2 * sqrt(w1);
+      ww = w3 * w2 * std::sqrt(w1);
     } else {
       ww = 0.0;
     }
@@ -112,11 +112,11 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
  
   // calculate gamma momentum
   G4double Pgamma = 
-      G4PhaseSpaceDecayChannel::Pmx(parentmass, 0.0, sqrt(t)); 
+      G4PhaseSpaceDecayChannel::Pmx(parentmass, 0.0, std::sqrt(t)); 
   G4double costheta = 2.*G4UniformRand()-1.0;
-  G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
-  G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ThreeVector gdirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
+  G4double phi  = twopi*G4UniformRand()*rad;
+  G4ThreeVector gdirection(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 
   //create G4DynamicParticle for gamma 
   G4DynamicParticle * gammaparticle
@@ -127,12 +127,12 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 
   // calculate lepton momentum in the rest frame of (l+ l-)system
   G4double Plepton = 
-      G4PhaseSpaceDecayChannel::Pmx(sqrt(t),leptonmass, leptonmass); 
-  G4double Elepton = sqrt(Plepton*Plepton + leptonmass*leptonmass );
+      G4PhaseSpaceDecayChannel::Pmx(std::sqrt(t),leptonmass, leptonmass); 
+  G4double Elepton = std::sqrt(Plepton*Plepton + leptonmass*leptonmass );
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ThreeVector ldirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
+  phi  = twopi*G4UniformRand()*rad;
+  G4ThreeVector ldirection(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
   //create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
   G4DynamicParticle * leptonparticle 
     = new G4DynamicParticle(daughters[idLepton] , 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.icc,v 1.5 2004/05/08 15:28:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParticleChangeForMSC.icc,v 1.6 2004/10/19 00:51:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -89,30 +89,5 @@ inline void G4ParticleChangeForMSC::Initialize(const G4Track& track)
   theStatusChange = track.GetTrackStatus();
   theMomentumDirection = track.GetMomentumDirection();
   thePosition = track.GetPosition();
-}
-
-// Following methods will be removed in release 7.0
-inline
- void G4ParticleChangeForMSC::SetMomentumChange(const G4ThreeVector& P)
-{
-  ProposeMomentumDirection(P);
-}
-
-inline
- void G4ParticleChangeForMSC::SetMomentumChange(G4double Px, G4double Py, G4double Pz)
-{
-  ProposeMomentumDirection(Px, Py, Pz);
-}
-
-inline
- void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& P)
-{
-  ProposePosition(P);
-}
-
-inline
- const G4ThreeVector* G4ParticleChangeForMSC::GetPositionChange() const
-{
-  return GetPosition();
 }
 

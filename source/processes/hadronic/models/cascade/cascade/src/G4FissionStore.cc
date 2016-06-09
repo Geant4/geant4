@@ -50,7 +50,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
     G4double pr = ez - amax;
 
     if (pr < small) pr = small;
-    pr = exp(pr); 
+    pr = std::exp(pr); 
     //  configurations[i].print();
     //  G4cout << " probability " << pr << G4endl; 
     totProb += pr;

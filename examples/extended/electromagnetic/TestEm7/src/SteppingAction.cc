@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2004/03/31 17:09:46 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SteppingAction.cc,v 1.6 2004/08/06 11:35:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,10 +32,6 @@
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,20 +50,22 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
- 	   
-#ifdef USE_AIDA
- G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
- G4double binLength = runAction->GetBinLength();
- runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));
-#endif
+ 
+ //Bragg curve
+ //	
+
+ G4StepPoint* prePoint  = aStep->GetPreStepPoint();
+ G4StepPoint* postPoint = aStep->GetPostStepPoint();
+   
+ G4double x = (prePoint->GetPosition().x() + postPoint->GetPosition().x()) * 0.5;
+ x += runAction->GetOffsetX();
+ runAction->FillHisto(0, x/mm , edep);
 
  //fill tallies
  //
- G4VPhysicalVolume* pVolume = aStep->GetTrack()->GetVolume();
- if (pVolume->GetLogicalVolume() == detector->GetLogicalTally()) {
-   G4double* tallyEdep = runAction->GetTallyEdep();
-   tallyEdep[pVolume->GetCopyNo()] += edep;
- } 
+ G4VPhysicalVolume* pVolume = prePoint->GetPhysicalVolume();
+ if (pVolume->GetLogicalVolume() == detector->GetLogicalTally()) 
+    runAction->FillTallyEdep(pVolume->GetCopyNo(), edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

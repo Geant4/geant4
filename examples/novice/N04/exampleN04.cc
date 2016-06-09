@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.7 2003/09/27 13:27:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: exampleN04.cc,v 1.8 2004/12/02 14:28:03 santin Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4UItcsh.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "ExN04PhysicsList.hh"
+#include "QGSP.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -61,7 +61,7 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 
   runManager->SetUserInitialization(new ExN04DetectorConstruction);
-  runManager->SetUserInitialization(new ExN04PhysicsList);
+  runManager->SetUserInitialization(new QGSP);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

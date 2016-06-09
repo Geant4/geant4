@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ne19GEMProbability.cc,v 1.2 2003/11/03 17:53:04 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Ne19GEMProbability.cc,v 1.3 2004/12/07 13:47:27 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -62,27 +62,27 @@ G4Ne19GEMProbability::G4Ne19GEMProbability() :
 
   ExcitEnergies.push_back(10460.0*keV);
   ExcitSpins.push_back(1.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(355.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(355.0*keV));
 
   ExcitEnergies.push_back(10480.0*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(45.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(45.0*keV));
 
   ExcitEnergies.push_back(11510.0*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(24.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(24.0*keV));
 
   ExcitEnergies.push_back(12230.0*keV);
   ExcitSpins.push_back(5.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(200.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(200.0*keV));
 
   ExcitEnergies.push_back(12500.0*keV);
   ExcitSpins.push_back(7.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(150.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(150.0*keV));
 
   ExcitEnergies.push_back(12690.0*keV);
   ExcitSpins.push_back(1.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(180.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(180.0*keV));
 
 }
 

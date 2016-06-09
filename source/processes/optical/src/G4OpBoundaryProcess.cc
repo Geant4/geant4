@@ -39,7 +39,7 @@
 //                           method: GetLocalExitNormal(&valid) to get
 //                           the surface normal in all cases
 //              1998-11-07 - NULL OpticalSurface pointer before use
-//                           comparison not sharp for: abs(cost1) < 1.0
+//                           comparison not sharp for: std::abs(cost1) < 1.0
 //                           remove sin1, sin2 in lines 556,567
 //                           (thanks to Stefano Magni)
 //              1999-10-10 - Accommodate changes done in DoAbsorption by
@@ -132,10 +132,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
-	Material1 = pPreStepPoint ->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
-	Material2 = pPostStepPoint->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
+	Material1 = pPreStepPoint  -> GetMaterial();
+	Material2 = pPostStepPoint -> GetMaterial();
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -152,7 +150,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
-		aParticleChange.SetStatusChange(fStopAndKill);
+		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
@@ -161,7 +159,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
-		aParticleChange.SetStatusChange(fStopAndKill);
+		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
@@ -224,7 +222,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   }
                   else {
 		     theStatus = NoRINDEX;
-                     aParticleChange.SetStatusChange(fStopAndKill);
+                     aParticleChange.ProposeTrackStatus(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
               }
@@ -280,7 +278,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	   }
            else if (theFinish == polishedbackpainted ||
                     theFinish == groundbackpainted ) {
-                      aParticleChange.SetStatusChange(fStopAndKill);
+                      aParticleChange.ProposeTrackStatus(fStopAndKill);
                       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
         }
@@ -301,7 +299,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               }
               else {
 		 theStatus = NoRINDEX;
-                 aParticleChange.SetStatusChange(fStopAndKill);
+                 aParticleChange.ProposeTrackStatus(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
            }
@@ -339,7 +337,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
 	                                TransformAxis(theLocalNormal);
-
+        if (OldMomentum * theGlobalNormal > 0.0) {
+#ifdef G4DEBUG_OPTICAL
+           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
+                  << " theGlobalNormal points the wrong direction "
+                  << G4endl;
+#endif
+           theGlobalNormal = -theGlobalNormal;
+        }
 	if (type == dielectric_metal) {
 
 	  DielectricMetal();
@@ -395,10 +400,18 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 			G4cout << " *** Absorption *** " << G4endl;
 		if ( theStatus == Detection )
 			G4cout << " *** Detection *** " << G4endl;
+                if ( theStatus == NotAtBoundary )
+                        G4cout << " *** NotAtBoundary *** " << G4endl;
+                if ( theStatus == SameMaterial )
+                        G4cout << " *** SameMaterial *** " << G4endl;
+                if ( theStatus == StepTooSmall )
+                        G4cout << " *** StepTooSmall *** " << G4endl;
+                if ( theStatus == NoRINDEX )
+                        G4cout << " *** NoRINDEX *** " << G4endl;
         }
 
-	aParticleChange.SetMomentumChange(NewMomentum);
-	aParticleChange.SetPolarizationChange(NewPolarization);
+	aParticleChange.ProposeMomentumDirection(NewMomentum);
+	aParticleChange.ProposePolarization(NewPolarization);
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -412,7 +425,7 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 	if (theModel == unified) {
 
 	/* This function code alpha to a random value taken from the
-           distribution p(alpha) = g(alpha; 0, sigma_alpha)*sin(alpha), 
+           distribution p(alpha) = g(alpha; 0, sigma_alpha)*std::sin(alpha), 
            for alpha > 0 and alpha < 90, where g(alpha; 0, sigma_alpha) 
            is a gaussian distribution with mean 0 and standard deviation 
            sigma_alpha.  */
@@ -427,14 +440,14 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 	   do {
 	      do {
 	         alpha = G4RandGauss::shoot(0.0,sigma_alpha);
-	      } while (G4UniformRand()*f_max > sin(alpha) || alpha >= halfpi );
+	      } while (G4UniformRand()*f_max > std::sin(alpha) || alpha >= halfpi );
 
 	      G4double phi = G4UniformRand()*twopi;
 
-	      G4double SinAlpha = sin(alpha);
-	      G4double CosAlpha = cos(alpha);
-              G4double SinPhi = sin(phi);
-              G4double CosPhi = cos(phi);
+	      G4double SinAlpha = std::sin(alpha);
+	      G4double CosAlpha = std::cos(alpha);
+              G4double SinPhi = std::sin(phi);
+              G4double CosPhi = std::cos(phi);
 
               G4double unit_x = SinAlpha * CosPhi;
               G4double unit_y = SinAlpha * SinPhi;
@@ -476,16 +489,48 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 
 void G4OpBoundaryProcess::DielectricMetal()
 {
-	do {
-           if( !G4BooleanRand(theReflectivity) ) {
+        G4int n = 0;
 
-	     DoAbsorption();
+	do {
+
+           n++;
+
+           if( !G4BooleanRand(theReflectivity) && n == 1 ) {
+
+             DoAbsorption();
              break;
 
            }
            else {
 
-	     DoReflection();
+             if ( theModel == glisur || theFinish == polished || 
+                                        prob_ss+prob_sl+prob_bs == 0.0 ) {
+
+                DoReflection();
+
+             } else {
+
+                if ( n == 1 ) ChooseReflection();
+                                                                                
+                if ( theStatus == LambertianReflection ) {
+                   DoReflection();
+                }
+                else if ( theStatus == BackScattering ) {
+                   NewMomentum = -OldMomentum;
+                   NewPolarization = -OldPolarization;
+                }
+                else {
+
+                   if(theStatus==LobeReflection)theFacetNormal = 
+                             GetFacetNormal(OldMomentum,theGlobalNormal);
+
+                   G4double PdotN = OldMomentum * theFacetNormal;
+                   NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+                   G4double EdotN = OldPolarization * theFacetNormal;
+                   NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;                                                                                
+                }
+
+             }
 
              OldMomentum = NewMomentum;
              OldPolarization = NewPolarization;
@@ -527,8 +572,8 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	   G4double EdotN = OldPolarization * theFacetNormal;
 
 	   cost1 = - PdotN;
-	   if (abs(cost1) < 1.0-kCarTolerance){
-	      sint1 = sqrt(1-cost1*cost1);
+	   if (std::abs(cost1) < 1.0-kCarTolerance){
+	      sint1 = std::sqrt(1.-cost1*cost1);
 	      sint2 = sint1*Rindex1/Rindex2;     // *** Snell's Law ***
 	   }
 	   else {
@@ -568,10 +613,10 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      // Calculate amplitude for transmission (Q = P x N)
 
 	      if (cost1 > 0.0) {
-	         cost2 =  sqrt(1-sint2*sint2);
+	         cost2 =  std::sqrt(1.-sint2*sint2);
 	      }
 	      else {
-	         cost2 = -sqrt(1-sint2*sint2);
+	         cost2 = -std::sqrt(1.-sint2*sint2);
 	      }
 
 	      G4ThreeVector A_trans, A_paral, E1pp, E1pl;
@@ -618,6 +663,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
                  if (Swap) Swap = !Swap;
 
 		 theStatus = FresnelReflection;
+
 		 if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();
 
@@ -640,7 +686,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
 		       E2_total  = E2_perp*E2_perp + E2_parl*E2_parl;
                        A_paral   = NewMomentum.cross(A_trans);
                        A_paral   = A_paral.unit();
-		       E2_abs    = sqrt(E2_total);
+		       E2_abs    = std::sqrt(E2_total);
 		       C_parl    = E2_parl/E2_abs;
 		       C_perp    = E2_perp/E2_abs;
 
@@ -676,7 +722,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
 		    PdotN = -cost2;
                     A_paral = NewMomentum.cross(A_trans);
                     A_paral = A_paral.unit();
-		    E2_abs     = sqrt(E2_total);
+		    E2_abs     = std::sqrt(E2_total);
 		    C_parl     = E2_parl/E2_abs;
 		    C_perp     = E2_perp/E2_abs;
 

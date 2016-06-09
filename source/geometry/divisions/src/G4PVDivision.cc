@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.11 2004/05/13 14:57:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4PVDivision.cc,v 1.12 2004/08/26 07:58:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class G4PVDivision Implementation file
 //
@@ -166,8 +166,6 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   //      daughter solid (otherwise, the corresponding
   //      Parameterisation::ComputeDimension() will not be called)
   //
-  G4cout << " GetMotherLogical " << GetMotherLogical() << G4endl;
-  G4cout << " GetLogicalVolume " << GetLogicalVolume() << G4endl;
   G4String msolType = pMotherLogical->GetSolid()->GetEntityType();
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
   if( msolType != dsolType )

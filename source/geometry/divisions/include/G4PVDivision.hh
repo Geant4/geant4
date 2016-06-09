@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PVDivision.hh,v 1.8 2004/05/13 14:57:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 // class G4PVDivision
 //

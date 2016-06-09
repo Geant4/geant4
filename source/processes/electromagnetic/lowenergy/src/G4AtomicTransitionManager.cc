@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -221,7 +221,10 @@ const G4FluoTransition* G4AtomicTransitionManager::ReachableShell(G4int Z,size_t
       }
   }
   else{
-    G4Exception("G4AtomicTransitionManager:Z not found");
+    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+
+    //    G4Exception("G4AtomicTransitionManager:Z not found");
     return 0;
   } 
 }
@@ -250,7 +253,10 @@ std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> >::const_iterator po
   }
 
   else{
-    G4Exception( "G4AtomicTransitionManager: Z not found" );
+    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+
+    //    G4Exception("G4AtomicTransitionManager:Z not found");
     return 0;
   } 
 }
@@ -271,7 +277,10 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::const_iterator
     }
   else
     {
-      G4Exception( "G4AtomicTransitionManager: Z not found" );
+      G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+      G4cout << "Absorbed enrgy deposited locally" << G4endl;
+
+      //    G4Exception("G4AtomicTransitionManager:Z not found");
       return 0;
     } 
 }
@@ -319,7 +328,11 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::iterator pos;
     }
   }
   else{
-    G4Exception( "G4AtomicTransitionManager: Z not found");
+    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+
+    //    G4Exception("G4AtomicTransitionManager:Z not found");
+
     return 0;
   } 
 }
@@ -358,7 +371,10 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
     }
   }
   else{
-    G4Exception("Z not found");
+    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+
+    //    G4Exception("G4AtomicTransitionManager:Z not found");
     return 0;
   } 
 }

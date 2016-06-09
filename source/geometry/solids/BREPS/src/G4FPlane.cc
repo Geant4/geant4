@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.cc,v 1.14 2002/01/28 16:29:42 radoone Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4FPlane.cc,v 1.15 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -231,7 +231,7 @@ G4int G4FPlane::Intersect(const G4Ray& rayref)
 
   b = norm.x() * dirx + norm.y() * diry + norm.z() * dirz;
 
-  if ( fabs(b) < perMillion )    
+  if ( std::fabs(b) < perMillion )    
   {
     // G4cout << "\nLine is parallel to G4Plane.No Hit.";
   }  

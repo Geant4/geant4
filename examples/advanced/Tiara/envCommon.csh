@@ -1,12 +1,12 @@
-# $Id: envCommon.csh,v 1.9 2004/06/09 15:04:34 daquinog Exp $
+# $Id: envCommon.csh,v 1.12 2004/12/08 17:25:34 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 # Before sourcing this script make sure you have set the 
 # environment variables according to the description in README.
 # -------------------------------------------------------------------
 
-# setup in case Anaphe is used --------------------------------------
+# setup in case PI is used --------------------------------------
 
 if (${?PI_BASE_DIR} == 1 && ${?SWIG_BASE_DIR} == 1) then
 
@@ -36,7 +36,7 @@ endif
   setenv SWIG_INCDIRS "-I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION} -I${SWIG_BASE_DIR}/lib/swig-${SWIG_VERSION}/python"
   setenv SWIG ${SWIG_BASE_DIR}/bin/swig-${SWIG_VERSION}
 
-else   # not using Anaphe
+else   # not using PI
 
   echo "-- WARNING: histograms are not activated !"
   echo "            Either PI_BASE_DIR or SWIG_BASE_DIR are not set."
@@ -45,7 +45,7 @@ else   # not using Anaphe
          ${?PYTHON_BASE_DIR} == 1 && \
          ${?SWIG_BASE_DIR} == 1 && \
          ${?SWIG_VERSION} == 1 && \
-         ${?CLHEP_BASE_DIR} == 1) then  # settings without Anaphe
+         ${?CLHEP_BASE_DIR} == 1) then  # settings without PI
     setenv PYTHON_LIB_DIR ${PYTHON_BASE_DIR}/lib/python${PYTHONVERSION}/config
     setenv PYTHON_INCLUDE_DIR ${PYTHON_BASE_DIR}/include/python${PYTHONVERSION}
     #
@@ -64,7 +64,7 @@ else   # not using Anaphe
     else 
       echo -- ERROR: could not find swig executable !
     endif
-  else    # environment not completed in case no Anaphe is used
+  else    # environment not completed in case no PI is used
     echo "-- ERROR: PYTHONVERSION or PYTHON_BASE_DIR or SWIG_BASE_DIR or SWIG_VERSION or CLHEP_BASE_DIR not set!"
     exit
   endif
@@ -82,8 +82,6 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/TiaraWrap
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/G4KernelWrapper
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/CLHEPWrapper
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiara
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiaraPhysicsPackaging
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/tiaraPhysicsLists
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON_LIB_DIR}
 setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$LD_LIBRARY_PATH

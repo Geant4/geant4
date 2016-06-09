@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimBasicGenerator.cc,v 1.5 2004/05/22 12:57:06 guatelli Exp $
+// $Id: RemSimBasicGenerator.cc,v 1.6 2004/11/22 16:51:38 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
@@ -74,6 +74,13 @@ void RemSimBasicGenerator::GeneratePrimaries(G4Event* anEvent)
 
 G4double RemSimBasicGenerator:: GetInitialEnergy()
 {
+
  G4double primaryParticleEnergy = particleGun -> GetParticleEnergy();
  return primaryParticleEnergy;
+}
+void RemSimBasicGenerator:: SetParticle(G4String particle)
+{ 
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName = particle;
+  particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
 }

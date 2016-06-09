@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.cc,v 1.7 2004/01/06 02:53:22 tkoi Exp $
+// $Id: A01IonPhysics.cc,v 1.8 2004/11/23 04:02:03 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 13-Oct-2003 Add Comment for Ionisation of Generic Ion by T. Koi 
@@ -45,17 +45,6 @@ A01IonPhysics::~A01IonPhysics()
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-
-// Nuclei
-#include "G4IonConstructor.hh"
-
-void A01IonPhysics::ConstructParticle()
-{
-  //  Construct light ions
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();
-}
-
 
 #include "G4ProcessManager.hh"
 

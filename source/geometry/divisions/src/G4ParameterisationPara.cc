@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.8 2004/05/17 07:20:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParameterisationPara.cc,v 1.10 2004/12/10 16:20:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // class G4ParameterisationPara Implementation file
 //
@@ -63,8 +63,8 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
                    msol->GetXHalfLength(), 
                    msol->GetYHalfLength(),
                    msol->GetZHalfLength(),
-                   atan(msol->GetTanAlpha()),
-                   M_PI - msol->GetSymAxis().theta(),
+                   std::atan(msol->GetTanAlpha()),
+                   pi - msol->GetSymAxis().theta(),
                    msol->GetSymAxis().phi());
    
     msol = newSolid;
@@ -161,7 +161,7 @@ ComputeDimensions(G4Para& para, const G4int,
   G4double pDx = fwidth/2.;
   G4double pDy = msol->GetYHalfLength();
   G4double pDz = msol->GetZHalfLength();
-  G4double pAlpha = atan(msol->GetTanAlpha());
+  G4double pAlpha = std::atan(msol->GetTanAlpha());
   G4double pTheta = msol->GetSymAxis().theta();
   G4double pPhi = msol->GetSymAxis().phi();
  
@@ -263,7 +263,7 @@ ComputeDimensions(G4Para& para, const G4int,
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = fwidth/2.;
   G4double pDz = msol->GetZHalfLength();
-  G4double pAlpha = atan(msol->GetTanAlpha());
+  G4double pAlpha = std::atan(msol->GetTanAlpha());
   G4double pTheta = msol->GetSymAxis().theta();
   G4double pPhi = msol->GetSymAxis().phi();
  
@@ -362,7 +362,7 @@ ComputeDimensions(G4Para& para, const G4int,
   //---- Get
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = msol->GetYHalfLength();
-  G4double pAlpha = atan(msol->GetTanAlpha());
+  G4double pAlpha = std::atan(msol->GetTanAlpha());
   G4double pTheta = msol->GetSymAxis().theta();
   G4double pPhi = msol->GetSymAxis().phi();
   G4double pDz = fwidth/2.;

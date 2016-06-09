@@ -69,18 +69,18 @@ void G4BENeutronChannel::calculateProbability()
       return;
     }
 
-  // In HETC88 s-s0 was used in exp( s ), in which s0 was either 50 or
+  // In HETC88 s-s0 was used in std::exp( s ), in which s0 was either 50 or
   // max(s_i), where i goes over all channels.
 
   const G4double levelParam = getLevelDensityParameter();
   
-  const G4double s    = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-  // const G4double temp = ( pow( s, 2. ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2. ) ) 
+  const G4double s    = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+  // const G4double temp = ( std::pow( s, 2. ) - 3 * s + 3 ) / ( 4 * std::pow( levelParam, 2. ) ) 
   //  + beta() * ( s - 1 ) /  ( 2 * levelParam );
-  const G4double eye0 = exp( s ) * ( s - 1 ) /  ( 2 * levelParam );
-  const G4double eye1 = ( pow( s, 2. ) - 3*s +3 ) * exp( s ) / ( 4 * pow( levelParam, 2. ) ) ;
+  const G4double eye0 = std::exp( s ) * ( s - 1 ) /  ( 2 * levelParam );
+  const G4double eye1 = ( std::pow( s, 2. ) - 3*s +3 ) * std::exp( s ) / ( 4 * std::pow( levelParam, 2. ) ) ;
   
-  emissionProbability = pow( G4double(residualA), 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
+  emissionProbability = std::pow( G4double(residualA), 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
   
   if ( verboseLevel >= 6 )
     G4cout << "G4BENeutronChannel : calculateProbability " << G4endl
@@ -120,11 +120,11 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
 //    e2 = RandExponential::shoot( 1 );
 
 //    levelParam  = getLevelDensityParameter();
-//    s = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-//    eye0 = 0.5 * ( s - 1 ) * exp( s ) / levelParam;
-//    eye1 = ( pow( s, 2. ) - 3*s + 3 ) * exp( s ) / ( 4 * pow( levelParam, 2. ) );
-//    kineticEnergyAv = 2 * ( pow( s, 3. ) - 6.0 * pow( s, 2. ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
+//    s = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+//    eye0 = 0.5 * ( s - 1 ) * std::exp( s ) / levelParam;
+//    eye1 = ( std::pow( s, 2. ) - 3*s + 3 ) * std::exp( s ) / ( 4 * std::pow( levelParam, 2. ) );
+//    kineticEnergyAv = 2 * ( std::pow( s, 3. ) - 6.0 * std::pow( s, 2. ) + 15.0 * s - 15.0 )  / 
+//        ( ( 2.0 * std::pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
 //    kineticEnergyAv = ( kineticEnergyAv + beta() ) / ( 1.0 + beta() * eye0
 //  	   / eye1 );
   
@@ -132,7 +132,7 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
 
   ////////////////
   // A random number is sampled from the density function
-  // P(x) = x * exp ( 2 sqrt ( a ( xMax - x ) ) )  [not normalized],
+  // P(x) = x * std::exp ( 2 std::sqrt ( a ( xMax - x ) ) )  [not normalized],
   // x belongs to [ 0, xMax ]
   // with the 'Hit or Miss' -method
   // Kinetic energy is this energy scaled properly
@@ -141,8 +141,8 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
   levelParam = getLevelDensityParameter();
   
   const G4double xMax  = excitationEnergy - getThresh() - correction + beta(); // maximum number
-  const G4double xProb = ( - 1 + sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
-  const G4double m = xProb * exp ( 2 * sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
+  const G4double xProb = ( - 1 + std::sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
+  const G4double m = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
 
   // Sample x according to density function P(x) with rejection method
   G4double r1;
@@ -154,7 +154,7 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
       r2 = G4UniformRand() * m;
       koe++;
     }
-  while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
+  while (  r1 * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
 //  G4cout <<  koe << G4endl;
   G4double kineticEnergy = r1 - beta();
@@ -189,13 +189,13 @@ G4DynamicParticle *  G4BENeutronChannel::emit()
 G4double G4BENeutronChannel::alpha()
 {
   const G4double residualA = nucleusA - particleA;
-  return 0.76 + 1.93 * pow( residualA, -0.33333 );
+  return 0.76 + 1.93 * std::pow( residualA, -0.33333 );
 }
 
 
 G4double G4BENeutronChannel::beta()
 {
   G4double residualA = nucleusA - particleA;
-  return ( 1.66 * pow ( residualA, -0.66666 ) - 0.05 )/alpha()*MeV;
+  return ( 1.66 * std::pow ( residualA, -0.66666 ) - 0.05 )/alpha()*MeV;
 }
 

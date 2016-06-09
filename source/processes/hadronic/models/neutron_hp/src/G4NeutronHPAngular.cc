@@ -90,11 +90,11 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
 //  G4cout << "Angular result "<<aHadron.GetTotalMomentum()<<" ";
 // @@@ add code for isotropic emission in CMS.
       G4double costheta = 2.*G4UniformRand()-1;
-      G4double theta = acos(costheta);
+      G4double theta = std::acos(costheta);
       G4double phi = twopi*G4UniformRand();
-      G4double sinth = sin(theta);
+      G4double sinth = std::sin(theta);
       G4double en = aHadron.GetTotalMomentum();
-      G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       aHadron.SetMomentum( temp );
       aHadron.Lorentz(aHadron, -1.*theTarget);
   }
@@ -107,10 +107,10 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       boosted.Lorentz(theNeutron, theTarget);
       G4double kineticEnergy = boosted.GetKineticEnergy();
       G4double cosTh = theCoefficients->SampleMax(kineticEnergy);
-      G4double theta = acos(cosTh);
+      G4double theta = std::acos(cosTh);
       G4double phi = twopi*G4UniformRand();
-      G4double sinth = sin(theta);
-      G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4double sinth = std::sin(theta);
+      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       aHadron.SetMomentum( temp );
     }
     else if(theAngularDistributionType == 2) // costh in CMS
@@ -119,11 +119,11 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       boostedN.Lorentz(theNeutron, theTarget);
       G4double kineticEnergy = boostedN.GetKineticEnergy();
       G4double cosTh = theProbArray->Sample(kineticEnergy); 
-      G4double theta = acos(cosTh);
+      G4double theta = std::acos(cosTh);
       G4double phi = twopi*G4UniformRand();
-      G4double sinth = sin(theta);      
+      G4double sinth = std::sin(theta);      
       
-      G4ThreeVector temp(sinth*cos(phi), sinth*sin(phi), cos(theta) ); //CMS
+      G4ThreeVector temp(sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) ); //CMS
       G4double en = aHadron.GetTotalEnergy(); // Target rest
       
       // get trafo from Target rest frame to CMS
@@ -138,8 +138,8 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       G4ThreeVector the3trafo = -the3Target-the3Neutron;
       G4ReactionProduct trafo; // for transformation from CMS to target rest frame
       trafo.SetMomentum(the3trafo);
-      G4double cmsMom = sqrt(the3trafo*the3trafo);
-      G4double sqrts = sqrt((totE-cmsMom)*(totE+cmsMom));
+      G4double cmsMom = std::sqrt(the3trafo*the3trafo);
+      G4double sqrts = std::sqrt((totE-cmsMom)*(totE+cmsMom));
       trafo.SetMass(sqrts);
       trafo.SetTotalEnergy(totE);
       
@@ -149,7 +149,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       fac*=gamma;
       
       G4double mom;
-      mom = sqrt( en*fac*en*fac - 
+      mom = std::sqrt( en*fac*en*fac - 
                    (fac*fac - gamma*gamma)*
                    (en*en - gamma*gamma*aHadron.GetMass()*aHadron.GetMass())
                 );
@@ -158,7 +158,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       temp = mom*temp;
       
       aHadron.SetMomentum( temp ); // now all in CMS
-      aHadron.SetTotalEnergy( sqrt( mom*mom + aHadron.GetMass()*aHadron.GetMass() ) );
+      aHadron.SetTotalEnergy( std::sqrt( mom*mom + aHadron.GetMass()*aHadron.GetMass() ) );
       aHadron.Lorentz(aHadron, trafo); // now in target rest frame
     }
     else

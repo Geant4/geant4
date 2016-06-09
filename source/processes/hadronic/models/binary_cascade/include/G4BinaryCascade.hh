@@ -83,16 +83,14 @@ private:
     std::vector<G4KineticTrack *>::iterator i;
     for(i = aV.begin(); i != aV.end(); ++i)
     {
-       if((*i)->GetDefinition() == G4Proton::Proton())
-       {
-          ++result;
-       }
+       result += G4lrint((*i)->GetDefinition()->GetPDGCharge());
     }
     return result;
   }
   void PrintWelcomeMessage();
   void BuildTargetList();
   void FindCollisions(G4KineticTrackVector * secondaries);
+  void FindDecayCollision(G4KineticTrack * secondary);
   G4bool ApplyCollision(G4CollisionInitialState * collision);
   G4bool Capture(G4bool verbose=false);
   G4bool Absorb();
@@ -133,6 +131,7 @@ private:
   G4CollisionManager * theCollisionMgr;
 
   std::vector<G4BCAction *> theImR;
+  G4BCDecay * theDecay;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
   G4double theCutOnP;
@@ -140,6 +139,7 @@ private:
   G4LorentzVector theInitial4Mom;
   G4int currentA, currentZ;
   G4double massInNucleus;
+  G4double currentInitialEnergy;   // for debugging
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;
   G4bool thePrimaryEscape;

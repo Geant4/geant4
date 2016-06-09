@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03FieldSetup.cc,v 1.3 2004/03/23 15:41:38 japost Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //  
 //   Field Setup class implementation.

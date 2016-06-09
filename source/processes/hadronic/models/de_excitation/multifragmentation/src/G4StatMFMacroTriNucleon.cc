@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTriNucleon.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroTriNucleon.cc,v 1.3 2004/12/07 13:47:50 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -57,25 +57,25 @@ G4bool G4StatMFMacroTriNucleon::operator!=(const G4StatMFMacroTriNucleon & ) con
 G4double G4StatMFMacroTriNucleon::CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
 						       const G4double nu, const G4double T)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 	
     const G4double degeneracy = 2.0+2.0;  // H3 + He3
 	
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 
     const G4double BindingE = G4NucleiPropertiesTable::GetBindingEnergy(1,theA); // old value was 9.224*MeV
 //							+ G4NucleiProperties::GetBindingEnergy(2,theA);
 
     G4double exponent = (BindingE+ theA*(mu+nu*theZARatio) - 
-			 Coulomb*theZARatio*theZARatio*pow(static_cast<G4double>(theA),5./3.))/T;
+			 Coulomb*theZARatio*theZARatio*std::pow(static_cast<G4double>(theA),5./3.))/T;
     if (exponent > 700.0) exponent = 700.0;
 
     _MeanMultiplicity = (degeneracy*FreeVol*static_cast<G4double>(theA)*
-			 sqrt(static_cast<G4double>(theA))/lambda3)*
-	exp(exponent);
+			 std::sqrt(static_cast<G4double>(theA))/lambda3)*
+	std::exp(exponent);
 			 
     return _MeanMultiplicity;
 }
@@ -84,10 +84,10 @@ G4double G4StatMFMacroTriNucleon::CalcMeanMultiplicity(const G4double FreeVol, c
 G4double G4StatMFMacroTriNucleon::CalcEnergy(const G4double T)
 {
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 									
     return _Energy  = -G4NucleiPropertiesTable::GetBindingEnergy(1,theA) + 
-	Coulomb * theZARatio * theZARatio * pow(static_cast<G4double>(theA),5./3.) +
+	Coulomb * theZARatio * theZARatio * std::pow(static_cast<G4double>(theA),5./3.) +
 	(3./2.) * T;
 							
 }
@@ -95,14 +95,14 @@ G4double G4StatMFMacroTriNucleon::CalcEnergy(const G4double T)
 
 G4double G4StatMFMacroTriNucleon::CalcEntropy(const G4double T, const G4double FreeVol)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 
     G4double Entropy = 0.0;
     if (_MeanMultiplicity > 0.0)
 	Entropy = _MeanMultiplicity*(5./2.+
-				     log(4.0*static_cast<G4double>(theA)*
-					 sqrt(static_cast<G4double>(theA))*FreeVol/(lambda3*_MeanMultiplicity)));
+				     std::log(4.0*static_cast<G4double>(theA)*
+					 std::sqrt(static_cast<G4double>(theA))*FreeVol/(lambda3*_MeanMultiplicity)));
 								
 								
     return Entropy;

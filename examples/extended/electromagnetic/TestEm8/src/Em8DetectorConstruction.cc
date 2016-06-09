@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.13 2004/05/27 08:39:05 grichine Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: Em8DetectorConstruction.cc,v 1.17 2004/12/03 10:51:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -81,7 +81,9 @@ fCalorimeterSD(NULL),fRegGasDet(NULL)
 
   // G4double delta = 0.0001*mm;
 
+  // fAbsorberThickness = 85.*mm;
   fAbsorberThickness = 23.0*mm;
+
   fAbsorberRadius    = 10.*cm;
   fAbsorberZ         = 0.*cm ;
 
@@ -204,11 +206,6 @@ H2O->AddElement(elO, natoms=1);
   Kapton->AddElement(elC,5);
   Kapton->AddElement(elH,4);
 
-  // Silicon as detector material
-
-  density = 2.330*g/cm3;
-  a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
 
   // Carbon dioxide
 
@@ -281,6 +278,12 @@ H2O->AddElement(elO, natoms=1);
   CH2->AddElement(elC,1);
 
 ************************ */
+  // Aluminium
+
+  a = 26.98*g/mole;
+  density = 2.7*g/cm3;
+  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
+  if(Al);
   // Mylar
 
   density = 1.39*g/cm3;
@@ -289,7 +292,12 @@ H2O->AddElement(elO, natoms=1);
   Mylar->AddElement(elC,5);
   Mylar->AddElement(elH,4);
 
+  // Silicon as detector material
 
+  density = 2.330*g/cm3;
+  a = 28.09*g/mole;
+  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
+  if(Si);
   // Krypton as detector gas, STP
 
   density = 3.700*mg/cm3 ;
@@ -325,13 +333,6 @@ H2O->AddElement(elO, natoms=1);
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
 
-  // 93% Ar + 7% CH4, STP
-
-  //  density = 1.709*mg/cm3 ;      
-  //  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density, 
-  //                                                           ncomponents=2);
-  //  Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
-  //  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
 
   // 93% Kr + 7% CH4, STP
 
@@ -385,10 +386,17 @@ H2O->AddElement(elO, natoms=1);
   metane->AddElement(elC,1) ;
   metane->AddElement(elH,4) ;
 
+  // C3H8,20 C, 2 atm
+
+  density = 3.758*mg/cm3 ;
+  G4Material* C3H8 = new G4Material(name="C3H8",density,nel=2) ;
+  C3H8->AddElement(elC,3) ;
+  C3H8->AddElement(elH,8) ;
+
   // Propane, STP
 
   density = 2.005*mg/cm3 ;
-  G4Material* propane = new G4Material(name="C3H8",density,nel=2) ;
+  G4Material* propane = new G4Material(name="propane",density,nel=2) ;
   propane->AddElement(elC,3) ;
   propane->AddElement(elH,8) ;
 
@@ -402,6 +410,12 @@ H2O->AddElement(elO, natoms=1);
   XeCH4C3H8->AddMaterial( metane,   fractionmass = 0.010 ) ;
   XeCH4C3H8->AddMaterial( propane,  fractionmass = 0.019 ) ;
 
+  // 93% Ar + 7% CH4, STP
+
+  density = 1.709*mg/cm3 ;      
+  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4", density, ncomponents=2);
+  Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
+  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
 
   // Carbon dioxide, STP
 
@@ -430,22 +444,16 @@ H2O->AddElement(elO, natoms=1);
 
   density = 3.601*mg/cm3 ;      
   G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density, 
-                                                             ncomponents=2);
+                                        ncomponents=2);
   Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
   Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
 
-
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
-  //default materials of the absorber and window 
-
-  
+  // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
   // fWindowMat = Mylar ;
  
-
-  fAbsorberMaterial = XeCH4C3H8; // Kr20CO2 ; // lH2 ; // Al; // Be; // XeCO2CF4  ; 
-
+  fAbsorberMaterial = XeCH4C3H8;
+  // Al; // Si; // Xe; // Ar7CH4; // C3H8; // XeCH4C3H8; 
 
   fWorldMaterial    = Mylar; // Air ;
 }

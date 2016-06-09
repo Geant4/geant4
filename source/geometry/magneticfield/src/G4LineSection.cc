@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.8 2003/10/31 14:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LineSection.cc,v 1.9 2004/12/02 09:55:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
   }  
   if( dist_sq < 0.0 ) dist_sq = 0.0 ;
 
-  return sqrt(dist_sq) ;  
+  return std::sqrt(dist_sq) ;  
 }
 
 G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt, 

@@ -1,6 +1,6 @@
-# $Id: tiaraApplication.py,v 1.4 2004/06/09 15:04:36 daquinog Exp $
+# $Id: tiaraApplication.py,v 1.5 2004/12/08 15:37:14 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 #
 import string
@@ -62,6 +62,10 @@ class TiaraApplet(object):
         self.createdDPS = 0
         self.tiaraSim.SetGeometry(self.tiaraHall)
 
+    def specifyPhysicsList(self, pl, particleCut):
+        self.particleCut = particleCut
+        self.physicsList = pl
+        
     def setScoreDetectorCreator(self, creator):
         self.scoreDetectorCreator=creator
         
@@ -84,11 +88,7 @@ class TiaraApplet(object):
             self.tiaraSim.AddTiaraEventAction(self.eventAction)
         return
     
-
-    def specifyPhysicsList(self, pl, particleCut):
-        self.particleCut = particleCut
-        self.physicsList = pl
-    
+   
     def buildColimator(self):
         posColi = \
                 CLHEP.Hep3Vector(0,0, self.tiaraSpecs.
@@ -223,11 +223,9 @@ class TiaraApplet(object):
     def config(self):
 
         self.tiaraSim.SetPhysicsList(self.physicsList)
-
         self.buildDetectors()
-    
-
         self.tiaraSim.initialize()
+
         if len(self.particleCut) > 0:
             for p in self.particleCut:
                 self.tiaraSim.AddParticleCut(p, self.particleCut[p]);
@@ -235,4 +233,4 @@ class TiaraApplet(object):
         self.sampler.PrepareScoring(self.scorer)
         self.sampler.Configure()
 
-
+ 

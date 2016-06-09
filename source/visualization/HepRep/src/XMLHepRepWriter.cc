@@ -69,17 +69,18 @@ bool XMLHepRepWriter::write(HepRep* heprep, string name) {
         zip->putNextEntry(ZipCDirEntry(name));
     }
     xml->openDoc();
+    xml->setAttribute("version", "2.0");
     xml->setAttribute("xmlns", "http://java.freehep.org/schemas/heprep/2.0");
     xml->setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
     xml->setAttribute("xsi", "schemaLocation", "http://java.freehep.org/schemas/heprep/2.0 http://java.freehep.org/schemas/heprep/2.0/HepRep.xsd");
     xml->openTag(nameSpace, "heprep");
     write(heprep->getLayerOrder());
-    set<HepRepTypeTree*> typeTreeSet = heprep->getTypeTrees();
-    for (set<HepRepTypeTree*>::iterator i1=typeTreeSet.begin(); i1 != typeTreeSet.end(); i1++) {
+    vector<HepRepTypeTree*> typeTreeSet = heprep->getTypeTreeList();
+    for (vector<HepRepTypeTree*>::iterator i1=typeTreeSet.begin(); i1 != typeTreeSet.end(); i1++) {
         write(*i1);
     }
-    set<HepRepInstanceTree*> instanceTreeSet = heprep->getInstanceTrees();
-    for (set<HepRepInstanceTree*>::iterator i2=instanceTreeSet.begin(); i2 != instanceTreeSet.end(); i2++) {
+    vector<HepRepInstanceTree*> instanceTreeSet = heprep->getInstanceTreeList();
+    for (vector<HepRepInstanceTree*>::iterator i2=instanceTreeSet.begin(); i2 != instanceTreeSet.end(); i2++) {
         write(*i2);
     }
     xml->closeTag();
@@ -111,8 +112,8 @@ bool XMLHepRepWriter::write(HepRepTypeTree* typeTree) {
     xml->setAttribute("version", typeTree->getVersion());
     xml->openTag(nameSpace, "typetree");
 
-    set<HepRepType*> types = typeTree->getTypes();
-    for (set<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
+    vector<HepRepType*> types = typeTree->getTypeList();
+    for (vector<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
         write(*i);
     }
     xml->closeTag();
@@ -125,8 +126,8 @@ bool XMLHepRepWriter::write(HepRepType* type) {
     write((HepRepDefinition*)type);
     write((HepRepAttribute*)type);
     
-    set<HepRepType*> types = type->getTypes();
-    for (set<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
+    vector<HepRepType*> types = type->getTypeList();
+    for (vector<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
         write(*i);
     }
     xml->closeTag();
@@ -155,8 +156,8 @@ bool XMLHepRepWriter::write(HepRepInstanceTree* instanceTree) {
     xml->setAttribute("typetreeversion", instanceTree->getTypeTree()->getVersion());
     xml->openTag(nameSpace, "instancetree");
     // refs
-    set<HepRepTreeID*> instanceTreeSet = instanceTree->getInstanceTrees();
-    for (set<HepRepTreeID*>::iterator i1=instanceTreeSet.begin(); i1 != instanceTreeSet.end(); i1++) {
+    vector<HepRepTreeID*> instanceTreeSet = instanceTree->getInstanceTreeList();
+    for (vector<HepRepTreeID*>::iterator i1=instanceTreeSet.begin(); i1 != instanceTreeSet.end(); i1++) {
         write(*i1);
     }
 

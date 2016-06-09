@@ -29,15 +29,17 @@
 //
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
-// and the low energy two-body model. Not included are the low energy stuff like
-// nuclear reactions, nuclear fission without any cascading and all processes for
-// particles at rest.  
+// and the low energy two-body model. Not included is the low energy stuff 
+// like nuclear reactions, nuclear fission without any cascading and all 
+// processes for particles at rest.
+//
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
 // Last modified: 29-July-1998 
 // HPW, fixed bug in getting pdgencoding for nuclei
 // Hisaya, fixed HighEnergyCascading
 // Fesefeldt, fixed bug in TuningOfHighEnergyCascading, 23 June 2000 
 // Fesefeldt, fixed next bug in TuningOfHighEnergyCascading, 14 August 2000
+//
 #include "G4HEInelastic.hh"
 #include "G4HEVector.hh"
 #include "G4ParticleDefinition.hh"
@@ -148,27 +150,28 @@ G4HEInelastic::NuclearInelasticity(G4double incidentKineticEnergy,
                                    G4double atomicWeight,
                                    G4double /* atomicNumber*/)
   {
-    G4double expu   = log(MAXFLOAT);
+    G4double expu   = std::log(MAXFLOAT);
     G4double expl   = -expu;
-    G4double ala    = log(atomicWeight);
-    G4double ale    = log(incidentKineticEnergy);
+    G4double ala    = std::log(atomicWeight);
+    G4double ale    = std::log(incidentKineticEnergy);
     G4double sig1   = 0.5;
     G4double sig2   = 0.5;
     G4double em     = Amin(0.239 + 0.0408*ala*ala, 1.);
-    G4double cinem  = Amin(0.0019*pow(ala,3.), 0.15);
+    G4double cinem  = Amin(0.0019*std::pow(ala,3.), 0.15);
     G4double sig    = (ale > em) ? sig2 : sig1; 
-    G4double corr   = Amin(Amax(-pow(ale-em,2.)/(2.*sig*sig),expl), expu);
+    G4double corr   = Amin(Amax(-std::pow(ale-em,2.)/(2.*sig*sig),expl), expu);
     G4double dum1   = -(incidentKineticEnergy)*cinem;
-    G4double dum2   = abs(dum1);
-    G4double dum3   = exp(corr);
+    G4double dum2   = std::abs(dum1);
+    G4double dum3   = std::exp(corr);
     G4double cinema = 0.;
     if (dum2 >= 1.)           cinema = dum1*dum3;
     else if (dum3 > 1.e-10) cinema = dum1*dum3;    
     cinema = - Amax(-incidentKineticEnergy, cinema);
-    if(verboseLevel > 1)
-      { G4cout << " NuclearInelasticity: " << ala << " " <<  ale << " "  << em << " " << corr
-             << " " <<  dum1 << " "  << dum2 << " " <<  dum3 << " " <<  cinema << G4endl;
-      }                 
+    if(verboseLevel > 1) {
+      G4cout << " NuclearInelasticity: " << ala << " " <<  ale << " "  
+             << em << " " << corr << " " <<  dum1 << " "  << dum2 << " " 
+             <<  dum3 << " " <<  cinema << G4endl;
+    }                 
     return cinema;
   }
 
@@ -189,14 +192,14 @@ G4HEInelastic::NuclearExcitation(G4double  incidentKineticEnergy,
        {
          G4int    magic = ((G4int)(atomicNumber+0.1) == 82) ? 1 : 0;
          G4double ekin  = Amin(Amax(incidentKineticEnergy, 0.1), 4.);
-         G4double cfa   = Amax(0.35 +((0.35 - 0.05)/2.3)*log(ekin), 0.15);
-                  exnu  = 7.716*cfa*exp(-cfa);
+         G4double cfa   = Amax(0.35 +((0.35 - 0.05)/2.3)*std::log(ekin), 0.15);
+                  exnu  = 7.716*cfa*std::exp(-cfa);
          G4double atno  = Amin(atomicWeight, 120.);
-                  cfa   = ((atno - 1.)/120.) * exp(-(atno-1.)/120.);
+                  cfa   = ((atno - 1.)/120.) * std::exp(-(atno-1.)/120.);
                   exnu  = exnu * cfa;
          G4double fpdiv = Amax(1.-0.25*ekin*ekin, 0.5);
          G4double gfa   = 2.*((atomicWeight-1.)/70.) 
-                            * exp(-(atomicWeight-1.)/70.);
+                            * std::exp(-(atomicWeight-1.)/70.);
 
          excitationEnergyGPN = exnu * fpdiv;
          excitationEnergyDTA = exnu - excitationEnergyGPN;  
@@ -209,12 +212,12 @@ G4HEInelastic::NuclearExcitation(G4double  incidentKineticEnergy,
          excitationEnergyGPN = Amax(excitationEnergyGPN*(1.+ran1*gfa),0.);
          excitationEnergyDTA = Amax(excitationEnergyDTA*(1.+ran2*gfa),0.);
          exnu = excitationEnergyGPN + excitationEnergyDTA;
-         if(verboseLevel > 1)
-           {
-             G4cout << " NuclearExcitation: " << magic << " " <<  ekin << " " << cfa
-                  << " " <<  atno << " " << fpdiv << " " <<  gfa << " " << excitationEnergyGPN
+         if(verboseLevel > 1) {
+           G4cout << " NuclearExcitation: " << magic << " " <<  ekin 
+                  << " " << cfa << " " <<  atno << " " << fpdiv << " " 
+                  <<  gfa << " " << excitationEnergyGPN
                   << " " <<  excitationEnergyDTA << G4endl;
-           } 
+         } 
 
          while (exnu >= incidentKineticEnergy)
 	    {
@@ -227,17 +230,18 @@ G4HEInelastic::NuclearExcitation(G4double  incidentKineticEnergy,
   }     
      
 G4double 
-G4HEInelastic::pmltpc(G4int np, G4int nm, G4int nz, G4int n, G4double b, G4double c)
+G4HEInelastic::pmltpc(G4int np, G4int nm, G4int nz, G4int n, 
+                      G4double b, G4double c)
  { 
-   G4double expxu = log(MAXFLOAT);
+   G4double expxu = std::log(MAXFLOAT);
    G4double expxl = -expxu;
    G4int i;
    G4double npf = 0.0, nmf = 0.0, nzf = 0.0;
-   for(i=2;i<=np;i++) npf += log((G4double)i);
-   for(i=2;i<=nm;i++) nmf += log((G4double)i);
-   for(i=2;i<=nz;i++) nzf += log((G4double)i);
+   for(i=2;i<=np;i++) npf += std::log((G4double)i);
+   for(i=2;i<=nm;i++) nmf += std::log((G4double)i);
+   for(i=2;i<=nz;i++) nzf += std::log((G4double)i);
    G4double r = Amin(expxu,Amax(expxl,-(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf));
-   return exp(r);
+   return std::exp(r);
  }
 
 G4int G4HEInelastic::Factorial(G4int n)
@@ -261,14 +265,14 @@ G4int G4HEInelastic::Poisson( G4double x )
    G4double ran;
    if ( x > 9.9 )
       {
-        iran = G4int( Amax( 0.0, x + normal() * sqrt( x ) ) );
+        iran = G4int( Amax( 0.0, x + normal() * std::sqrt( x ) ) );
       }
    else
       {
         G4int mm = G4int( 5.0 * x );
         if ( mm <= 0 )
 	   {
-             G4double p1 = x * exp( -x );
+             G4double p1 = x * std::exp( -x );
              G4double p2 = x * p1/2.;
              G4double p3 = x * p2/3.;
              ran = G4UniformRand();
@@ -277,7 +281,7 @@ G4int G4HEInelastic::Poisson( G4double x )
              else if ( ran < p1 ) iran = 1;
            }
         else
-	   { G4double r = exp( -x );
+	   { G4double r = std::exp( -x );
              ran = G4UniformRand();
              if (ran > r)
 	        {
@@ -286,8 +290,8 @@ G4int G4HEInelastic::Poisson( G4double x )
                   for (i=1; i <= mm; i++)
 		      {
                         iran++;
-                        if ( i > 5 ) rrr = exp(i*log(x)-(i+0.5)*log((G4double)i)+i-0.9189385);
-                        else     rrr = pow(x,i)*Factorial(i);
+                        if ( i > 5 ) rrr = std::exp(i*std::log(x)-(i+0.5)*std::log((G4double)i)+i-0.9189385);
+                        else     rrr = std::pow(x,i)*Factorial(i);
                         rr += r * rrr;
                         if (ran <= rr) break;
 		      }
@@ -300,25 +304,25 @@ G4double
 G4HEInelastic::GammaRand( G4double avalue )
  {
    G4double ga = avalue -1.;
-   G4double la = sqrt(2.*avalue - 1.);
-   G4double ep = 1.570796327 + atan(ga/la);
+   G4double la = std::sqrt(2.*avalue - 1.);
+   G4double ep = 1.570796327 + std::atan(ga/la);
    G4double ro = 1.570796327 - ep;
    G4double y  = 1.;
    G4double xtrial;
    repeat:
-   xtrial = ga + la * tan(ep*G4UniformRand() + ro);
+   xtrial = ga + la * std::tan(ep*G4UniformRand() + ro);
    if(xtrial == 0.) goto repeat;
-   y = log(1.+sqr((xtrial-ga)/la))+ga*log(xtrial/ga)-xtrial+ga;
-   if(log(G4UniformRand()) > y) goto repeat;  
+   y = std::log(1.+sqr((xtrial-ga)/la))+ga*std::log(xtrial/ga)-xtrial+ga;
+   if(std::log(G4UniformRand()) > y) goto repeat;  
    return xtrial;
  }
 G4double 
 G4HEInelastic::Erlang( G4int mvalue )
  {
    G4double ran = G4UniformRand();
-   G4double xtrial = 0.62666*log((1.+ran)/(1.-ran));
+   G4double xtrial = 0.62666*std::log((1.+ran)/(1.-ran));
    if(G4UniformRand()<0.5) xtrial = -xtrial;
-   return mvalue+xtrial*sqrt(G4double(mvalue));
+   return mvalue+xtrial*std::sqrt(G4double(mvalue));
  }  
 
 void
@@ -333,9 +337,10 @@ G4HEInelastic::StrangeParticlePairProduction(
    // Choose charge combinations K+ K-, K+ K0, K0 K0, K0 K-,
    //                            K+ Y0, K0 Y+,  K0 Y-
    // For antibaryon induced reactions half of the cross sections KB YB
-   // pairs are produced.  Charge is not conserved, no experimental data available
-   // for exclusive reactions, therefore some average behaviour assumed.
-   // The ratio L/SIGMA is taken as 3:1 (from experimental low energy data)
+   // pairs are produced.  Charge is not conserved, no experimental data 
+   // available for exclusive reactions, therefore some average behavior 
+   // assumed.  The ratio L/SIGMA is taken as 3:1 (from experimental low 
+   // energy data)
 
  {
    static G4double avrs[]  = {3.,4.,5.,6.,7.,8.,9.,10.,20.,30.,40.,50.};
@@ -370,44 +375,43 @@ G4HEInelastic::StrangeParticlePairProduction(
 
    G4double targetMass = targetParticle.getMass();
 
-                     // protection against annihilation processes like pbar p -> pi pi.
+     // protection against annihilation processes like pbar p -> pi pi.
 
    if (vecLen <= 2) return;   
 
-                     // determine the center of mass energy bin
+     // determine the center of mass energy bin
 
    i = 1;
    while ( (i<12) && (centerOfMassEnergy > avrs[i]) )i++;
    if    ( i == 12 ) ibin = 11;
    else              ibin = i;
 
-                     // the fortran code chooses a random replacement of produced kaons
-                     //  but does not take into account charge conservation 
+     // the fortran code chooses a random replacement of produced kaons
+     // but does not take into account charge conservation 
 
-   if( vecLen == 3 ) 
-     {                                        // we know that vecLen > 2
-        i3 = 2;
-        i4 = 3;                               // note that we will be adding a new 
-     }                                        // secondary particle in this case only
+   if( vecLen == 3 ) {               // we know that vecLen > 2
+     i3 = 2;
+     i4 = 3;                         // note that we will be adding a new 
+   }                                 // secondary particle in this case only
    else 
-     {                                        // otherwise  2 <= i3,i4 <= vecLen
-        i4 = i3 = 2 + G4int( (vecLen-2)*G4UniformRand() );
-        while ( i3 == i4 ) i4 = 2 + G4int( (vecLen-2)*G4UniformRand() );
-     }
+   {                                 // otherwise  2 <= i3,i4 <= vecLen
+     i4 = i3 = 2 + G4int( (vecLen-2)*G4UniformRand() );
+     while ( i3 == i4 ) i4 = 2 + G4int( (vecLen-2)*G4UniformRand() );
+   }
 
-                // use linear interpolation or extrapolation by y=centerofmassEnergy*x+b
+     // use linear interpolation or extrapolation by y=centerofmassEnergy*x+b
 
-   avk = (log(avkkb[ibin])-log(avkkb[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
-          /(avrs[ibin]-avrs[ibin-1]) + log(avkkb[ibin-1]);
-   avk = exp(avk);
+   avk = (std::log(avkkb[ibin])-std::log(avkkb[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
+          /(avrs[ibin]-avrs[ibin-1]) + std::log(avkkb[ibin-1]);
+   avk = std::exp(avk);
 
-   avy = (log(avky[ibin])-log(avky[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
-          /(avrs[ibin]-avrs[ibin-1]) + log(avky[ibin-1]);
-   avy = exp(avy);
+   avy = (std::log(avky[ibin])-std::log(avky[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
+          /(avrs[ibin]-avrs[ibin-1]) + std::log(avky[ibin-1]);
+   avy = std::exp(avy);
 
-   avn = (log(avnnb[ibin])-log(avnnb[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
-          /(avrs[ibin]-avrs[ibin-1]) + log(avnnb[ibin-1]);
-   avn = exp(avn);
+   avn = (std::log(avnnb[ibin])-std::log(avnnb[ibin-1]))*(centerOfMassEnergy-avrs[ibin-1])
+          /(avrs[ibin]-avrs[ibin-1]) + std::log(avnnb[ibin-1]);
+   avn = std::exp(avn);
 
    if ( avk+avy+avn <= 0.0 ) return;
 
@@ -417,10 +421,10 @@ G4HEInelastic::StrangeParticlePairProduction(
 
    ran = G4UniformRand();
    if (  ran < avn ) 
-      {                                                // p pbar && n nbar production
+      {                                         // p pbar && n nbar production
          if ( availableEnergy < 2.0) return;
          if ( vecLen == 3 )                 
-            {                                          // add a new secondary
+            {                                   // add a new secondary
               if ( G4UniformRand() < 0.5 ) 
                 {
                   pv[i3] = Neutron;;
@@ -433,7 +437,7 @@ G4HEInelastic::StrangeParticlePairProduction(
                 }
             } 
          else 
-            {                                          // replace two secondaries
+            {                                   // replace two secondaries
               if ( G4UniformRand() < 0.5 ) 
                 {
                   pv[i3] = Neutron;
@@ -447,7 +451,7 @@ G4HEInelastic::StrangeParticlePairProduction(
             }
       } 
    else if ( ran < avk ) 
-      {                                                // K Kbar production
+      {                                         // K Kbar production
         if ( availableEnergy < 1.0) return;
         G4double ran1 = G4UniformRand();
         i = 0;
@@ -496,11 +500,11 @@ G4HEInelastic::StrangeParticlePairProduction(
         if ( (incidentMass<protonMass) || (G4UniformRand()<0.5) ) 
            {
 
-                          // ipaky[] = { 18,10, 18,11, 18,12, 20,10, 20,11, 20,12,
-                          //             L0 K+  L0 K0S L0 K0L S+ K+  S+ K0S S+ K0L 
-                          //
-                          //             21,10, 21,11, 21,12, 22,10, 22,11, 22,12 }
-                          //             S0 K+  S0 K0S S0 K0L S- K+  S- K0S S- K0L
+                    // ipaky[] = { 18,10, 18,11, 18,12, 20,10, 20,11, 20,12,
+                    //             L0 K+  L0 K0S L0 K0L S+ K+  S+ K0S S+ K0L 
+                    //
+                    //             21,10, 21,11, 21,12, 22,10, 22,11, 22,12 }
+                    //             S0 K+  S0 K0S S0 K0L S- K+  S- K0S S- K0L
 
               switch( ipaky[i*2] ) 
                  {
@@ -517,12 +521,12 @@ G4HEInelastic::StrangeParticlePairProduction(
                  }
            } 
         else 
-           {                                          // Lbar K && Sigmabar K production 
+           {                               // Lbar K && Sigmabar K production 
 
-                          // ipakyb[] = { 19,13, 19,12, 19,11,  23,13,  23,12,  23,11,
-                          //              Lb K-  Lb K0L Lb K0S  S+b K- S+b K0L S+b K0S 
-                          //              24,13, 24,12, 24,11, 25,13, 25,12, 25,11 };
-                          //             S0b K-  S0BK0L S0BK0S S-BK- S-B K0L S-BK0S    
+                  // ipakyb[] = { 19,13, 19,12, 19,11,  23,13,  23,12,  23,11,
+                  //              Lb K-  Lb K0L Lb K0S  S+b K- S+b K0L S+b K0S 
+                  //              24,13, 24,12, 24,11, 25,13, 25,12, 25,11 };
+                  //             S0b K-  S0BK0L S0BK0S S-BK- S-B K0L S-BK0S    
       
               if( (incidentCode==antiprotonCode) || (incidentCode==antineutronCode) ||
                   (incidentCode==antilambdaCode) || (incidentMass>sigmaMinusMass) ) 
@@ -604,13 +608,13 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
 //
 //  The multiplicity of particles produced in the first interaction has been
 //  calculated in one of the FirstIntInNuc.... routines. The nuclear
-//  cascading particles are parametrized from experimental data.
+//  cascading particles are parameterized from experimental data.
 //  A simple single variable description E D3S/DP3= F(Q) with
-//  Q^2 = (M*X)^2 + PT^2 is used. Final state kinematic is produced
+//  Q^2 = (M*X)^2 + PT^2 is used. Final state kinematics are produced
 //  by an FF-type iterative cascade method.
 //  Nuclear evaporation particles are added at the end of the routine.
 
-//  All quantities on the G4HEVector Array pv are in GeV- units.
+//  All quantities in the G4HEVector Array pv are in GeV- units.
 //  The method is a copy of MediumEnergyCascading with some special tuning
 //  for high energy interactions.
 
@@ -644,15 +648,16 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
 //   G4double incidentTOF           = incidentParticle.getTOF();   
    G4double incidentTOF           = 0.;
    
-                                                              // some local variables
+     // some local variables
 
    G4int i, j, l;
 
-   if (verboseLevel > 1) G4cout << " G4HEInelastic::HighEnergyCascading " << G4endl;
+   if (verboseLevel > 1) 
+            G4cout << " G4HEInelastic::HighEnergyCascading " << G4endl;
    successful = false; 
    if(incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
  
-                              // define annihilation channels.
+     // define annihilation channels.
                                  
    G4bool annihilation = false;
    if (incidentCode < 0 && incidentType == antiBaryonType && 
@@ -680,7 +685,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    start:
 
    if (annihilation)
-      {                        // do some corrections of incident particle kinematic
+      {                  // do some corrections of incident particle kinematic
         G4double ekcor = Amax( 1., 1./incidentKineticEnergy);
         incidentKineticEnergy = 2*targetMass + incidentKineticEnergy*(1.+ekcor/atomicWeight);
         G4double excitation = NuclearExcitation(incidentKineticEnergy,
@@ -692,7 +697,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         if (incidentKineticEnergy < excitationEnergyDTA) incidentKineticEnergy = 0.;
         incidentEnergy = incidentKineticEnergy + incidentMass;
         incidentTotalMomentum =
-                 sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
+                 std::sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
       }  
     
    G4HEVector pTemp;
@@ -703,9 +708,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        pv[j] = pv[i];
        pv[i] = pTemp;
      }                         
-                              // randomize the first two leading particles
-                              // for kaon induced reactions only 
-                              // (need from experimental data)
+         // randomize the first two leading particles
+         // for kaon induced reactions only 
+         // (need from experimental data)
 
    if(   (incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
           incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
@@ -716,15 +721,15 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
          pv[1] = pv[0];
          pv[0] = pTemp;
      }
-                              // mark leading particles for incident strange particles 
-                              // and antibaryons, for all other we assume that the first 
-                              // and second particle are the leading particles. 
-                              // We need this later for kinematic aspects of strangeness
-                              // conservation.
+         // mark leading particles for incident strange particles 
+         // and antibaryons, for all other we assume that the first 
+         // and second particle are the leading particles. 
+         // We need this later for kinematic aspects of strangeness
+         // conservation.
                           
    G4int lead = 0;                   
    G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)          
+   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode) 
                                            && (incidentCode != neutronCode) ) 
          {       
            G4double pMass = pv[0].getMass();
@@ -748,9 +753,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                   }
          }
 
-                              //  distribute particles in forward and backward 
-                              //  hemispheres in center of mass system
-                              //  incident goes in forward hemisphere
+     // Distribute particles in forward and backward hemispheres in center 
+     // of mass system.  Incident particle goes in forward hemisphere.
    
    G4HEVector pvI = incidentParticle;  // for the incident particle
    pvI.setSide( 1 );
@@ -761,15 +765,15 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    pvT.setTOF( -1.); 
 
 
-   G4double centerOfMassEnergy = sqrt( sqr(incidentMass)+sqr(targetMass)
+   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass)+sqr(targetMass)
                                       +2.0*targetMass*incidentEnergy );
 //   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
 
    G4double tavai1      = centerOfMassEnergy/2.0 - incidentMass;
    G4double tavai2      = centerOfMassEnergy/2.0 - targetMass;           
    
-                              // define G4HEVector- array for kinematic manipulations,
-                              // with a one by one correspondence to the pv-Array. 
+    // define G4HEVector- array for kinematic manipulations,
+    // with a one by one correspondence to the pv-Array. 
    
    G4int ntb = 1;
    for( i=0; i < vecLen; i++ ) 
@@ -798,16 +802,16 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
       } 
 
-                              //  add particles from intranuclear cascade
-                              //  nuclearCascadeCount = number of new secondaries 
-                              //  produced by nuclear cascading.
-                              //  extraCount = number of nucleons within these new secondaries
+    // Add particles from intranuclear cascade
+    // nuclearCascadeCount = number of new secondaries produced by nuclear 
+    // cascading.
+    // extraCount = number of nucleons within these new secondaries
 
    G4double s, xtarg, ran;
    s = centerOfMassEnergy*centerOfMassEnergy;
    G4double afc;
-   afc = Amin(0.5, 0.312 + 0.200 * log(log(s))+ pow(s,1.5)/6000.0); 
-   xtarg = Amax(0.01, afc * (pow(atomicWeight, 0.33) - 1.0) * tb);
+   afc = Amin(0.5, 0.312 + 0.200 * std::log(std::log(s))+ std::pow(s,1.5)/6000.0); 
+   xtarg = Amax(0.01, afc * (std::pow(atomicWeight, 0.33) - 1.0) * tb);
    G4int nstran = Poisson( 0.03*xtarg);
    G4int momentumBin = 0;
    G4double nucsup[] = { 1.00, 0.7, 0.5, 0.4, 0.5, 0.5 };
@@ -820,8 +824,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4double rpnhmf = 0.81*xpnhmf;
    G4double xhmf=0;
    if(verboseLevel > 1)
-     { G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << G4endl;
-     }
+     G4cout << "xtarg= " << xtarg << " xpnhmf = " << xpnhmf << G4endl;
+
    G4int nshhmf, npnhmf;
    if (rshhmf > 1.1)
      {
@@ -834,8 +838,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      }
    nshhmf = Poisson( xshhmf );   
    if(verboseLevel > 1)
-     { G4cout << "xshhmf = " << xshhmf << " xhmf = " << xhmf << " rshhmf = " << rshhmf << G4endl;
-     }
+     G4cout << "xshhmf = " << xshhmf << " xhmf = " << xhmf 
+            << " rshhmf = " << rshhmf << G4endl;
 
    if (rpnhmf > 1.1)
      {
@@ -848,8 +852,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      }
    npnhmf = Poisson( xpnhmf );
    if(verboseLevel > 1)
-     { G4cout << "nshhmf = " << nshhmf << " npnhmf = " <<  npnhmf << " nstran = " << nstran << G4endl;
-     } 
+     G4cout << "nshhmf = " << nshhmf << " npnhmf = " <<  npnhmf 
+            << " nstran = " << nstran << G4endl;
+
    G4int ntarg = nshhmf + npnhmf + nstran;          
 
    G4int targ = 0;
@@ -902,8 +907,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
            pv[vecLen] = PionMinus;
        if (G4UniformRand() > 0.2)
           {
-            pv[vecLen].setSide( -2 );                             // backward cascade particles
-            pv[vecLen].setFlag( true );                           // true is the same as IPA(i)<0
+            pv[vecLen].setSide( -2 );        // backward cascade particles
+            pv[vecLen].setFlag( true );      // true is the same as IPA(i)<0
           }
        else
           {
@@ -916,8 +921,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        nshhmf--;
      }
                                          
-                                         //  assume conservation of kinetic energy 
-                                         //  in forward & backward hemispheres
+     //  assume conservation of kinetic energy 
+     //  in forward & backward hemispheres
+
    G4int is, iskip, iavai1;
    if(vecLen <= 1) return;
 
@@ -935,7 +941,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    if ( iavai1 == 0) return;
 
    while( tavai1 <= 0.0 ) 
-        {                                // must eliminate a particle from the forward side
+        {                   // must eliminate a particle from the forward side
            iskip = G4int(G4UniformRand()*iavai1) + 1; 
            is = 0;  
            for( i=vecLen-1; i>=0; i-- ) 
@@ -975,7 +981,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      if (iavai2 == 0) return;
 
      while( tavai2 <= 0.0 ) 
-        {                               // must eliminate a particle from the backward side
+        {             // must eliminate a particle from the backward side
            iskip = G4int(G4UniformRand()*iavai2) + 1; 
            is = 0;
            for( i = vecLen-1; i >= 0; i-- ) 
@@ -1010,7 +1016,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
       } 
    
-                                 //  define some vectors for Lorentz transformations
+    //  define some vectors for Lorentz transformations
    
    G4HEVector* pvmx = new G4HEVector [10];
    
@@ -1034,10 +1040,11 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      { G4cout << " General Vectors after Definition " << G4endl;
        for (i=0; i<10; i++) pvmx[i].Print(i);
      }
-                                                 //  main loop for 4-momentum generation
-                                                 //  see Pitha-report (Aachen) 
-                                                 //  for a detailed description of the method
-                                                 // process the secondary particles in reverse order
+
+   // Main loop for 4-momentum generation - see Pitha-report (Aachen) 
+   // for a detailed description of the method.
+   // Process the secondary particles in reverse order.
+
    G4double dndl[20];
    G4double binl[20];
    G4double pvMass(0), pvEnergy(0);
@@ -1048,10 +1055,10 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4double ekin2 = 0.;
    G4int npg   = 0;
    G4double rmg0 = 0.;
-   G4int targ1 = 0;                           // no fragmentation model for nucleons from the
-   phi = G4UniformRand()*M_2PI;
-   for( i=vecLen-1; i>=0; i-- )               // intranuclear cascade. Mark them with -3 and 
-      {                                       // leave the loop
+   G4int targ1 = 0;                // No fragmentation model for nucleons from
+   phi = G4UniformRand()*twopi;
+   for( i=vecLen-1; i>=0; i-- )    // the intranuclear cascade. Mark them with
+      {                            // -3 and leave the loop
         if( i == 1)
           {
             if ( (pv[i].getMass() > neutronMass + 0.05) && (G4UniformRand() < 0.2))
@@ -1084,20 +1091,22 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                      pv[i].setSide( -3 );
                      rmg0 += pv[i].getMass(); 
                      targ1++;
-                     continue;                                    // leave the for loop !!
+                     continue;                // leave the for loop !!
                    }     
                }
           }
-                                              //  set pt and phi values, 
-                                              //  they are changed somewhat in the iteration loop
-                                              //  set mass parameter for lambda fragmentation model
+         // Set pt and phi values - they are changed somewhat in the  
+         // iteration loop.
+         // Set mass parameter for lambda fragmentation model
+
         G4double maspar[] = { 0.75, 0.70, 0.65, 0.60, 0.50, 0.40, 0.20, 0.10};
         G4double     bp[] = { 4.00, 2.50, 2.20, 3.00, 3.00, 1.70, 3.50, 3.50};
         G4double   ptex[] = { 1.70, 1.70, 1.50, 1.70, 1.40, 1.20, 1.70, 1.20};    
 
-                                              // set parameters for lambda simulation 
-                                              // pt is the average transverse momentum
-                                              // aspar is average transverse mass  
+        // Set parameters for lambda simulation 
+        // pt is the average transverse momentum
+        // aspar is average transverse mass
+  
         pvMass = pv[i].getMass();       
         j = 2;                                              
         if (pv[i].getType() == mesonType ) j = 1;
@@ -1105,40 +1114,43 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         if ( i <= 1 ) j += 3;
         if (pv[i].getSide() <= -2) j = 6;
         if (j == 6 && (pv[i].getType() == baryonType || pv[i].getType() == antiBaryonType)) j = 7;
-        pt    = sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j]));
+        pt    = std::sqrt(std::pow(-std::log(1.-G4UniformRand())/bp[j],ptex[j]));
         if(pt<0.05) pt = Amax(0.001, 0.3*G4UniformRand());
         aspar = maspar[j]; 
-        phi = G4UniformRand()*M_2PI;
-        pv[i].setMomentum( pt*cos(phi), pt*sin(phi) );        // set x- and y-momentum
+        phi = G4UniformRand()*twopi;
+        pv[i].setMomentum( pt*std::cos(phi), pt*std::sin(phi) );  // set x- and y-momentum
 
-        for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);           // set the lambda - bins.
+        for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);  // set the lambda - bins.
      
         if( pv[i].getSide() > 0 )
            et = pvmx[0].getEnergy();
         else
            et = pvmx[1].getEnergy();
      
-        dndl[0] = 0.0;     
-                                                              // start of outer iteration loop
-        G4int outerCounter = 0, innerCounter = 0;             // three times.
+        dndl[0] = 0.0;
+     
+        // Start of outer iteration loop
+
+        G4int outerCounter = 0, innerCounter = 0;        // three times.
         G4bool eliminateThisParticle = true;
         G4bool resetEnergies = true;
         while( ++outerCounter < 3 ) 
              {
                for( l=1; l<20; l++ ) 
                   {
-                    xval  = (binl[l]+binl[l-1])/2.;              // x = lambda /GeV 
+                    xval  = (binl[l]+binl[l-1])/2.;      // x = lambda /GeV 
                     if( xval > 1./pt )
                        dndl[l] = dndl[l-1];
                     else
                        dndl[l] = dndl[l-1] + 
-                                 aspar/sqrt( pow((1.+aspar*xval*aspar*xval),3) ) *
-                                 (binl[l]-binl[l-1]) * et / 
-                                 sqrt( pt*xval*et*pt*xval*et + pt*pt + pvMass*pvMass );
+                         aspar/std::sqrt( std::pow((1.+aspar*xval*aspar*xval),3) ) *
+                         (binl[l]-binl[l-1]) * et / 
+                         std::sqrt( pt*xval*et*pt*xval*et + pt*pt + pvMass*pvMass );
                   }  
        
-                                                               // start of inner iteration loop
-               innerCounter = 0;                               // try this not more than 7 times. 
+               // Start of inner iteration loop
+
+               innerCounter = 0;          // try this not more than 7 times. 
                while( ++innerCounter < 7 ) 
                     {
                       l = 1;
@@ -1147,20 +1159,20 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                       l = Imin( 19, l );
                       xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
-                      pv[i].setMomentumAndUpdate( xval*et );                  // set the z-momentum
+                      pv[i].setMomentumAndUpdate( xval*et );  // Set the z-momentum
                       pvEnergy = pv[i].getEnergy();
-                      if( pv[i].getSide() > 0 )                               // forward side 
+                      if( pv[i].getSide() > 0 )               // Forward side 
                         {
                           if ( i < 2 )
                              { 
                                ekin = tavai1 - ekin1;
-                               if (ekin < 0.) ekin = 0.04*fabs(normal());
+                               if (ekin < 0.) ekin = 0.04*std::fabs(normal());
                                G4double pp1 = pv[i].Length();
                                if (pp1 >= 1.e-6)
                                   {
-                                    G4double pp = sqrt(ekin*(ekin+2*pvMass));
+                                    G4double pp = std::sqrt(ekin*(ekin+2*pvMass));
                                     pp = Amax(0., pp*pp - pt*pt);
-                                    pp = sqrt(pp)*pv[i].getSide()/fabs(G4double(pv[i].getSide())); // cast for aCC 
+                                    pp = std::sqrt(pp)*pv[i].getSide()/std::fabs(G4double(pv[i].getSide())); // cast for aCC 
                                     pv[i].setMomentumAndUpdate( pp );
                                   }
                                else
@@ -1180,20 +1192,15 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                               ekin1 += pvEnergy - pvMass;
                               pvmx[6].Add( pvmx[4], pvmx[5] );
                               pvmx[6].setMomentum( 0.0 );
-                              phi = pvmx[6].Ang( pvmx[8] );
-                              if( pvmx[6].getMomentum().y() < 0.0 ) phi = M_2PI - phi;
-                              phi += M_PI + normal()*M_PI/12.0;
-                              if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI + phi;
-                              outerCounter = 2;                     // leave outer loop
+                              outerCounter = 2;            // leave outer loop
                               eliminateThisParticle = false;        // don't eliminate this particle
                               resetEnergies = false;
-                              break;                                // next particle
+                              break;                       // next particle
                             }
-                          if( innerCounter > 5 ) break;             // leave inner loop
+                          if( innerCounter > 5 ) break;    // leave inner loop
                           
                           if( tavai2 >= pvMass ) 
-                            {                                       // switch sides
+                            {                              // switch sides
                               pv[i].setSide( -1 );
                               tavai1 += pvMass;
                               tavai2 -= pvMass;
@@ -1201,28 +1208,23 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                             }
                         } 
                       else 
-                        {                                            // backward side
+                        {                                  // backward side
                           xval = Amin(0.999,0.95+0.05*targ/20.0);
                           if( (ekin2+pvEnergy-pvMass) < xval*tavai2 ) 
                             {
                               pvmx[5].Add( pvmx[5], pv[i] );
                               ekin2 += pvEnergy - pvMass;
                               pvmx[6].Add( pvmx[4], pvmx[5] );
-                              pvmx[6].setMomentum( 0.0 );             // set z-momentum
-                              phi = pvmx[6].Ang( pvmx[8] );
-                              if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
-                              phi += M_PI + normal() * M_PI / 12.0;
-                              if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI + phi;
-                              outerCounter = 2;                    // leave outer iteration
+                              pvmx[6].setMomentum( 0.0 );    // set z-momentum
+                              outerCounter = 2;       // leave outer iteration
                               eliminateThisParticle = false;       // don't eliminate this particle
                               resetEnergies = false;
-                              break;                               // leave inner iteration
+                              break;                   // leave inner iteration
                             }
-                          if( innerCounter > 5 )break;             // leave inner iteration
+                          if( innerCounter > 5 )break; // leave inner iteration
                           
                           if( tavai1 >= pvMass ) 
-                            {                                      // switch sides
+                            {                          // switch sides
                               pv[i].setSide( 1 );
                               tavai1  -= pvMass;
                               tavai2  += pvMass;
@@ -1233,16 +1235,15 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                          pv[i].getMomentum().y() * 0.9);
                       pt *= 0.9;
                       dndl[19] *= 0.9;
-                    }                                           // closes inner loop
+                    }                                 // closes inner loop
 
                if (resetEnergies)
                     {
-                      if (verboseLevel > 1) 
-                         {
-                           G4cout << " Reset energies for index " << i << " " << ekin1 
-                                << " " << tavai1 << G4endl;
-                           pv[i].Print(i);
-                         }
+                      if (verboseLevel > 1) {
+                        G4cout << " Reset energies for index " << i << " " 
+                               << ekin1 << " " << tavai1 << G4endl;
+                        pv[i].Print(i);
+                      }
                       ekin1 = 0.0;
                       ekin2 = 0.0;
                       pvmx[4].setZero();
@@ -1267,19 +1268,18 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                              }
                          }
                     }
-             }                                                           // closes outer iteration
+             }                                  // closes outer iteration
 
-        if( eliminateThisParticle )                                      // not enough energy, 
-          {                                                              // eliminate this particle
-            if (verboseLevel > 1)
-               {
+        if( eliminateThisParticle )             // not enough energy, 
+          {                                     // eliminate this particle
+            if (verboseLevel > 1) {
                   G4cout << " Eliminate particle index " << i << G4endl;
                   pv[i].Print(i);
-               }
+            }
             if(i != vecLen-1)
                {
                  for( j=i; j < vecLen-1; j++ ) 
-                   {                                                         // shift down
+                   {                            // shift down
                      pv[j] = pv[j+1];
                    }
                }
@@ -1287,14 +1287,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
             if(vecLen < 2) return;
             i++;
             pvmx[6].Add( pvmx[4], pvmx[5] );
-            pvmx[6].setMomentum( 0.0 );                                  // set z-momentum
-            phi = pvmx[6].Ang( pvmx[8] );
-            if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
-            phi += M_PI + normal() * M_PI / 12.0;
-            if( phi > M_2PI )phi -= M_2PI;
-            if( phi < 0.0 )phi = M_2PI + phi;
+            pvmx[6].setMomentum( 0.0 );          // set z-momentum
           }
-      }                                                                  // closes main for loop
+      }                                          // closes main for loop
    if (verboseLevel > 1)
       { G4cout << " pv Vector after lambda fragmentation " << vecLen << G4endl;
         pvI.Print(-1);
@@ -1302,11 +1297,10 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
         for (i=0; i < 10; i++) pvmx[i].Print(i);
       } 
+   
+   
+   // Backward nucleons produced with a cluster model
 
-   
-   
-                                                                   // backward nucleons produced 
-                                                                   // with a cluster model
    G4double gpar[] = {2.6, 2.6, 1.80, 1.30, 1.20};
    G4double cpar[] = {0.6, 0.6, 0.35, 0.15, 0.10};
  
@@ -1317,7 +1311,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
           {
             G4int npg1 = npg-1;
             if (npg1 >4) npg1 = 4;
-            rmg += pow( -log(1.-G4UniformRand()), cpar[npg1])/gpar[npg1];
+            rmg += std::pow( -std::log(1.-G4UniformRand()), cpar[npg1])/gpar[npg1];
           }
        G4double ga = 1.2;
        G4double ekit1 = 0.04, ekit2 = 0.6;
@@ -1326,32 +1320,32 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
            ekit1 *= sqr(incidentKineticEnergy)/25.;
            ekit2 *= sqr(incidentKineticEnergy)/25.;
          }
-       G4double avalue = (1.-ga)/(pow(ekit2,1.-ga)-pow(ekit1,1.-ga));
+       G4double avalue = (1.-ga)/(std::pow(ekit2,1.-ga)-std::pow(ekit1,1.-ga));
        for (i = 0; i < vecLen; i++)
           {
             if (pv[i].getSide() == -3)
               {
-                G4double ekit = pow(G4UniformRand()*(1.-ga)/avalue + pow(ekit1,1.-ga), 1./(1.-ga) );
-                G4double cost = Amax(-1., Amin(1., log(2.23*G4UniformRand()+0.383)/0.96));
-                G4double sint = sqrt(1. - cost*cost);
-                G4double phi  = M_2PI*G4UniformRand();
-                G4double pp   = sqrt(ekit*(ekit+2*pvMass));
-                pv[i].setMomentum( pp*sint*sin(phi),
-                                   pp*sint*cos(phi),
+                G4double ekit = std::pow(G4UniformRand()*(1.-ga)/avalue + std::pow(ekit1,1.-ga), 1./(1.-ga) );
+                G4double cost = Amax(-1., Amin(1., std::log(2.23*G4UniformRand()+0.383)/0.96));
+                G4double sint = std::sqrt(1. - cost*cost);
+                G4double phi  = twopi*G4UniformRand();
+                G4double pp   = std::sqrt(ekit*(ekit+2*pvMass));
+                pv[i].setMomentum( pp*sint*std::sin(phi),
+                                   pp*sint*std::cos(phi),
                                    pp*cost          );
                 pv[i].Lor( pv[i], pvmx[2] );
                 pvmx[5].Add( pvmx[5], pv[i] );
               }
           } 
-     }        
-   if  (vecLen <= 2)
-     {
-       successful = false;
-       return;
-     }  
+     }
+        
+   if (vecLen <= 2) {
+     successful = false;
+     return;
+   }  
 
+   // Lorentz transformation in lab system
 
-                                                   //  Lorentz transformation in lab system
    targ = 0;
    for( i=0; i < vecLen; i++ ) 
       {
@@ -1442,10 +1436,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
             ekin += pvmx[6].getKineticEnergy();
           }
        teta = pvmx[7].Ang( pvmx[3] );
-       if (verboseLevel > 1) 
-         { 
-           G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << G4endl;
-         }
+       if (verboseLevel > 1)
+         G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 
+                << " " << ekin1 << " " << ekin << G4endl;
      }
 
    if( ekin1 != 0.0 ) 
@@ -1462,53 +1455,47 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
             pvmx[6].Add( pvmx[6], pv[i] );
           }
        teta = pvmx[6].Ang( pvmx[3] );
-       if (verboseLevel > 1) 
-	 {
-            G4cout << " ekin1 != 0 " << teta << " " <<  ekin0 << " " <<  ekin1 << G4endl;
-            incidentParticle.Print(0);
-            targetParticle.Print(1);
-            for(i=0;i<vecLen;i++) pv[i].Print(i);
-         }
+       if (verboseLevel > 1) {
+         G4cout << " ekin1 != 0 " << teta << " " <<  ekin0 << " " 
+                <<  ekin1 << G4endl;
+         incidentParticle.Print(0);
+         targetParticle.Print(1);
+         for(i=0;i<vecLen;i++) pv[i].Print(i);
+       }
      }
 
-                          //    Rotate in direction of z-axis, this does disturb in some way our
-                          //    inclusive distributions, but it is necessary for momentum conservation
-
-   pvmx[6].setZero();
-   for( i=0; i < vecLen; i++ ) pvmx[6].Add( pvmx[6], pv[i] );
+   // Do some smearing in the transverse direction due to Fermi motion
    
-                          //  Some smearing in transverse direction from Fermi motion
-   
-
-
-                                                  // RANNOR
    G4double ry   = G4UniformRand();
    G4double rz   = G4UniformRand();
-   G4double rx   = M_2PI*rz;
-   G4double a1   = sqrt(-2.0*log(ry));
-   G4double ran1 = a1*sin(rx);
-   G4double ran2 = a1*cos(rx);
+   G4double rx   = twopi*rz;
+   G4double a1   = std::sqrt(-2.0*std::log(ry));
+   G4double rantarg1 = a1*std::cos(rx)*0.02*targ/G4double(vecLen);
+   G4double rantarg2 = a1*std::sin(rx)*0.02*targ/G4double(vecLen);
                                                   
-   pvmx[6].setMomentum( pvmx[6].getMomentum().x()+ran1*0.020*targ,
-                        pvmx[6].getMomentum().y()+ran2*0.020*targ );
-   pvmx[7].Defs( pvmx[3], pvmx[6], pvmx[8], pvmx[9] );
-   pvmx[6].setZero();
    for (i = 0; i < vecLen; i++) 
-      { 
-        pv[i].Trac( pv[i], pvmx[7] , pvmx[8], pvmx[9] );
-        pvmx[6].Add( pvmx[6], pv[i] );  
-      }
-   teta = pvmx[6].Ang( pvmx[3] );   
-   if (verboseLevel > 1) G4cout << " After smearing " << teta << G4endl;
+     pv[i].setMomentum( pv[i].getMomentum().x()+rantarg1,
+                        pv[i].getMomentum().y()+rantarg2 );
 
-                               //  Rotate in direction of primary particle, subtract binding energies
-                               //   and make some further corrections if required
+   if (verboseLevel > 1) {
+     pvmx[6].setZero();
+     for (i = 0; i < vecLen; i++) pvmx[6].Add( pvmx[6], pv[i] );
+     teta = pvmx[6].Ang( pvmx[3] );   
+     G4cout << " After smearing " << teta << G4endl;
+   }
+
+   // Rotate in the direction of the primary particle momentum (z-axis).
+   // This does disturb our inclusive distributions somewhat, but it is 
+   // necessary for momentum conservation
+
+   // Also subtract binding energies and make some further corrections 
+   // if required
 
    G4double dekin = 0.0;
    G4int npions = 0;    
    G4double ek1 = 0.0;
    G4double alekw, xxh;
-   G4double cfa = 0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.);
+   G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
    G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00, 10.00};
    G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65,  0.70};
    
@@ -1523,13 +1510,13 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         if (atomicWeight > 1.5)
            {
              ekin  = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
-             alekw = log( incidentKineticEnergy );
+             alekw = std::log( incidentKineticEnergy );
              xxh   = 1.;
              if(incidentCode == pionPlusCode || incidentCode == pionMinusCode)
 	       {
                  if(pv[i].getCode() == pionZeroCode)
                    {
-                     if(G4UniformRand() < log(atomicWeight))
+                     if(G4UniformRand() < std::log(atomicWeight))
                        { 
                          if (alekw > alem[0])
                            {
@@ -1575,35 +1562,37 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
-                                       //  add black track particles
-                                       //  the total number of particles produced is restricted to 198
-                                       //  this may have influence on very high energies
+   // Add black track particles
+   // the total number of particles produced is restricted to 198
+   // this may have influence on very high energies
 
    if (verboseLevel > 1) 
-      G4cout << " Evaporation : " <<  atomicWeight << " " << excitationEnergyGNP << " " 
-           <<  excitationEnergyDTA << G4endl;
+      G4cout << " Evaporation : " <<  atomicWeight << " " 
+             << excitationEnergyGNP << " " <<  excitationEnergyDTA << G4endl;
 
    G4double sprob = 0.;
    if (incidentKineticEnergy > 5.)
-//       sprob = Amin(1., (0.394-0.063*log(atomicWeight))*log(incidentKineticEnergy-4.) );
-     sprob = Amin(1., 0.000314*atomicWeight*log(incidentKineticEnergy-4.)); 
+//       sprob = Amin(1., (0.394-0.063*std::log(atomicWeight))*std::log(incidentKineticEnergy-4.) );
+     sprob = Amin(1., 0.000314*atomicWeight*std::log(incidentKineticEnergy-4.)); 
      if( atomicWeight > 1.5 && G4UniformRand() > sprob ) 
      {
 
        G4double cost, sint, pp, eka;
        G4int spall(0), nbl(0);
-                                     //  first add protons and neutrons
+
+       // first add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
          {
-                                     //  nbl = number of proton/neutron black track particles
-                                     //  tex is their total kinetic energy (GeV)
+           //  nbl = number of proton/neutron black track particles
+           //  tex is their total kinetic energy (GeV)
        
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = (int)(atomicWeight - targ);
            if (verboseLevel > 1) 
-              G4cout << " evaporation " << targ << " " << nbl << " " << sprob << G4endl; 
+              G4cout << " evaporation " << targ << " " << nbl << " " 
+                     << sprob << G4endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -1618,8 +1607,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                       }
                     if( ekin2 > excitationEnergyGNP) break;
                     ran = G4UniformRand();
-                    ekin1 = -ekin*log(ran) - cfa*(1.0+0.5*normal());
-                    if (ekin1 < 0) ekin1 = -0.010*log(ran);
+                    ekin1 = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+                    if (ekin1 < 0) ekin1 = -0.010*std::log(ran);
                     ekin2 += ekin1;
                     if( ekin2 > excitationEnergyGNP)
                     ekin1 = Amax( 1.0e-6, excitationEnergyGNP-(ekin2-ekin1) );
@@ -1629,16 +1618,16 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                        pv[vecLen] = Neutron;
                     spall++;
                     cost = G4UniformRand() * 2.0 - 1.0;
-                    sint = sqrt(fabs(1.0-cost*cost));
-                    phi = M_2PI * G4UniformRand();
-                    pv[vecLen].setFlag( true );                 // true is the same as IPA(i)<0
+                    sint = std::sqrt(std::fabs(1.0-cost*cost));
+                    phi = twopi * G4UniformRand();
+                    pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                     pv[vecLen].setSide( -4 );
                     pv[vecLen].setTOF( 1.0 );
                     pvMass = pv[vecLen].getMass();
                     pvEnergy = ekin1 + pvMass;
-                    pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                    pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                     pp*sint*cos(phi),
+                    pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                    pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                     pp*sint*std::cos(phi),
                                                      pp*cost );
                     if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                     vecLen++;
@@ -1649,7 +1638,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                     eka = incidentKineticEnergy;
                     if( eka > 1.0 )eka *= eka;
                     eka = Amax( 0.1, eka );
-                    ika = G4int(3.6*exp((atomicNumber*atomicNumber
+                    ika = G4int(3.6*std::exp((atomicNumber*atomicNumber
                                 /atomicWeight-35.56)/6.45)/eka);
                     if( ika > 0 ) 
                       {
@@ -1669,18 +1658,19 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
              }
          }
 
-                                              // finished adding proton/neutron black track particles
-                                              //  now, try to add deuterons, tritons and alphas
+     // finished adding proton/neutron black track particles
+     // now, try to add deuterons, tritons and alphas
      
      if( excitationEnergyDTA >= 0.001 ) 
        {
          nbl = Poisson( (1.5+1.25*targ)*excitationEnergyDTA
                                       /(excitationEnergyGNP+excitationEnergyDTA));
        
-                                      //    nbl is the number of deutrons, tritons, and alphas produced
+         // nbl is the number of deutrons, tritons, and alphas produced
 
          if (verboseLevel > 1) 
-            G4cout << " evaporation " << targ << " " << nbl << " " << sprob << G4endl;        
+            G4cout << " evaporation " << targ << " " << nbl << " " 
+                   << sprob << G4endl;        
          if( nbl > 0 ) 
            {
              ekin = excitationEnergyDTA/nbl;
@@ -1694,14 +1684,14 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                     } 
                   if( ekin2 > excitationEnergyDTA) break;
                   ran = G4UniformRand();
-                  ekin1 = -ekin*log(ran)-cfa*(1.+0.5*normal());
-                  if( ekin1 < 0.0 ) ekin1 = -0.010*log(ran);
+                  ekin1 = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+                  if( ekin1 < 0.0 ) ekin1 = -0.010*std::log(ran);
                   ekin2 += ekin1;
                   if( ekin2 > excitationEnergyDTA)
                      ekin1 = Amax( 1.0e-6, excitationEnergyDTA-(ekin2-ekin1));
                   cost = G4UniformRand()*2.0 - 1.0;
-                  sint = sqrt(fabs(1.0-cost*cost));
-                  phi = M_2PI*G4UniformRand();
+                  sint = std::sqrt(std::fabs(1.0-cost*cost));
+                  phi = twopi*G4UniformRand();
                   ran = G4UniformRand();
                   if( ran <= 0.60 ) 
                       pv[vecLen] = Deuteron;
@@ -1711,14 +1701,14 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                       pv[vecLen] = Alpha;
                   spall += (int)(pv[vecLen].getMass() * 1.066);
                   if( spall > atomicWeight ) break;
-                  pv[vecLen].setFlag( true );                    // true is the same as IPA(i)<0
+                  pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                   pv[vecLen].setSide( -4 );
                   pvMass = pv[vecLen].getMass();
                   pv[vecLen].setTOF( 1.0 );
                   pvEnergy = pvMass + ekin1;
-                  pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                  pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                   pp*sint*cos(phi),
+                  pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                  pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                   pp*sint*std::cos(phi),
                                                    pp*cost );
                   if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                   vecLen++;
@@ -1751,12 +1741,13 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      { G4cout << " After Tuning: " << G4endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
-                                                     //  calculate time delay for nuclear reactions
+
+   // Calculate time delay for nuclear reactions
 
    G4double tof = incidentTOF;
    if(     (atomicWeight >= 1.5) && (atomicWeight <= 230.0) 
         && (incidentKineticEnergy <= 0.2) )
-           tof -= 500.0 * exp(-incidentKineticEnergy /0.04) * log( G4UniformRand() );
+           tof -= 500.0 * std::exp(-incidentKineticEnergy /0.04) * std::log( G4UniformRand() );
 
    for(i=0; i<vecLen; i++)
    {
@@ -1810,10 +1801,10 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
 
    if ( incidentKineticEnergy > (25.+G4UniformRand()*75.) )
      {
-       G4double reden = -0.7 + 0.29*log10(incidentKineticEnergy);
-//       G4double redat =  1.0 - 0.40*log10(atomicWeight);
-//       G4double redat = 0.5 - 0.18*log10(atomicWeight);
-       G4double redat = 0.722 - 0.278*log10(atomicWeight);
+       G4double reden = -0.7 + 0.29*std::log10(incidentKineticEnergy);
+//       G4double redat =  1.0 - 0.40*std::log10(atomicWeight);
+//       G4double redat = 0.5 - 0.18*std::log10(atomicWeight);
+       G4double redat = 0.722 - 0.278*std::log10(atomicWeight);
        G4double pmax   = -200.;
        G4double pmapim = -200.;
        G4double pmapi0 = -200.;
@@ -1824,7 +1815,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        G4int maxpip = 0;
        G4int iphmf; 
        if (   (G4UniformRand() > (atomicWeight/100.-0.28)) 
-           && (fabs(incidentCharge) > 0.) )
+           && (std::fabs(incidentCharge) > 0.) )
          { 
            for (i=0; i < vecLen; i++)
              { 
@@ -1992,18 +1983,18 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
            G4double hfmass;
            if (cost > 0.)
              { 
-               reddec[0] = fabs( incidentMass - pv[i].getMass() );
-               reddec[1] = fabs( incidentCharge - pv[i].getCharge());
-               reddec[2] = fabs( G4double(incidentS - particleS) ); // cast for aCC
-               reddec[3] = fabs( G4double(incidentB - particleB) ); // cast for aCC
+               reddec[0] = std::fabs( incidentMass - pv[i].getMass() );
+               reddec[1] = std::fabs( incidentCharge - pv[i].getCharge());
+               reddec[2] = std::fabs( G4double(incidentS - particleS) ); // cast for aCC
+               reddec[3] = std::fabs( G4double(incidentB - particleB) ); // cast for aCC
                hfmass = incidentMass;  
              }
            else
              { 
-               reddec[0] = fabs( targetMass - pv[i].getMass() );
-               reddec[1] = fabs( atomicNumber/atomicWeight - pv[i].getCharge());
-               reddec[2] = fabs( G4double(particleS) ); // cast for aCC
-               reddec[3] = fabs( 1. - particleB );
+               reddec[0] = std::fabs( targetMass - pv[i].getMass() );
+               reddec[1] = std::fabs( atomicNumber/atomicWeight - pv[i].getCharge());
+               reddec[2] = std::fabs( G4double(particleS) ); // cast for aCC
+               reddec[3] = std::fabs( 1. - particleB );
                hfmass = targetMass;  
              } 
            reddec[5] = reddec[0]+reddec[1]+reddec[2]+reddec[3];
@@ -2023,7 +2014,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
            ppp = pvmx[5].Length();
            if ( (sbqwgt>0.) && (ppp>1.e-6) )
              { 
-               G4double pthmf = ppp*sqrt(1.-cost*cost);
+               G4double pthmf = ppp*std::sqrt(1.-cost*cost);
                G4double plhmf = ppp*cost*(1.-sbqwgt);
                pvmx[7].Cross( pvmx[3], pvmx[5] );
                pvmx[7].Cross( pvmx[7], pvmx[3] );
@@ -2036,7 +2027,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
                else if(verboseLevel > 1)
                  G4cout << "NaNQ in Tuning of High Energy Hadronic Interactions" << G4endl;
                pvmx[5].Add3(pvmx[6], pvmx[7] );
-               pvmx[5].setEnergy( sqrt(sqr(pvmx[5].Length()) + sqr(pv[i].getMass())));
+               pvmx[5].setEnergy( std::sqrt(sqr(pvmx[5].Length()) + sqr(pv[i].getMass())));
                pv[i].Lor( pvmx[5], pvmx[4] );
                if(verboseLevel > 1) 
                  {
@@ -2156,7 +2147,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    successful = false; 
    if(incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
 
-   G4double centerOfMassEnergy = sqrt( sqr(incidentMass) + sqr(targetMass)
+   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass) + sqr(targetMass)
                                        +2.*targetMass*incidentEnergy);
 
    G4HEVector pvI = incidentParticle;  // for the incident particle
@@ -2227,8 +2218,8 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    G4double  psup[]   = { 3. , 6. , 20., 50., 100.,1000.};   
    G4double s = centerOfMassEnergy*centerOfMassEnergy;
 
-   G4double xtarg = Amax(0.01, Amin(0.50, 0.312+0.2*log(log(s))+pow(s,1.5)/6000.) 
-                             * (pow(atomicWeight,0.33)-1.) * tb);
+   G4double xtarg = Amax(0.01, Amin(0.50, 0.312+0.2*std::log(std::log(s))+std::pow(s,1.5)/6000.) 
+                             * (std::pow(atomicWeight,0.33)-1.) * tb);
    G4int momentumBin = 0;
    while( (momentumBin < 6) && (incidentTotalMomentum > psup[momentumBin])) momentumBin++;
    momentumBin = Imin(5, momentumBin);
@@ -2287,15 +2278,15 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
        vecLen++;
        nshhmf--;
      }    
-                              // mark leading particles for incident strange particles 
-                              // and antibaryons, for all other we assume that the first 
-                              // and second particle are the leading particles. 
-                              // We need this later for kinematic aspects of strangeness
-                              // conservation.
+
+   // Mark leading particles for incident strange particles 
+   // and antibaryons, for all other we assume that the first 
+   // and second particle are the leading particles. 
+   // We need this later for kinematic aspects of strangeness conservation.
                           
    G4int lead = 0;                   
    G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)          
+   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)  
                                            && (incidentCode != neutronCode) ) 
          {       
            G4double pMass = pv[0].getMass();
@@ -2352,10 +2343,12 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                  }
             }    
       }
-                                          // now we produce 3 Clusters:
-                                          // 1. forward cluster
-                                          // 2. backward meson cluster
-                                          // 3. backward nucleon cluster
+
+   // Now produce 3 Clusters:
+   // 1. forward cluster
+   // 2. backward meson cluster
+   // 3. backward nucleon cluster
+
    G4double rmc0 = 0., rmd0 = 0., rme0 = 0.;
    G4int    ntc  = 0,  ntd  = 0,  nte  = 0;
    
@@ -2412,9 +2405,9 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    G4int ntc1 = Imin(4,ntc-1);
    G4int ntd1 = Imin(4,ntd-1);
    G4int nte1 = Imin(4,nte-1);
-   if (ntc > 1) rmc = rmc0 + pow(-log(1.-G4UniformRand()),cpar[ntc1])/gpar[ntc1];
-   if (ntd > 1) rmd = rmd0 + pow(-log(1.-G4UniformRand()),cpar[ntd1])/gpar[ntd1];
-   if (nte > 1) rme = rme0 + pow(-log(1.-G4UniformRand()),cpar[nte1])/gpar[nte1];
+   if (ntc > 1) rmc = rmc0 + std::pow(-std::log(1.-G4UniformRand()),cpar[ntc1])/gpar[ntc1];
+   if (ntd > 1) rmd = rmd0 + std::pow(-std::log(1.-G4UniformRand()),cpar[ntd1])/gpar[ntd1];
+   if (nte > 1) rme = rme0 + std::pow(-std::log(1.-G4UniformRand()),cpar[nte1])/gpar[nte1];
    while( (rmc+rmd) > centerOfMassEnergy)
       {
         if ((rmc == rmc0) && (rmd == rmd0))
@@ -2428,10 +2421,10 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
             rmd = 0.1*rmd0 + 0.9*rmd;
           }   
       }             
-   if(verboseLevel > 1) G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd
-                             << " " << rmd << " " << nte << " " << rme << G4endl;
+   if(verboseLevel > 1) 
+     G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd
+            << " " << rmd << " " << nte << " " << rme << G4endl;
  
-   
    G4HEVector* pvmx = new G4HEVector[11];
 
    pvmx[1].setMass( incidentMass);
@@ -2442,23 +2435,23 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    pvmx[1].Lor( pvmx[1], pvmx[0] );
    pvmx[2].Lor( pvmx[2], pvmx[0] );
 
-   G4double pf = sqrt(Amax(0.0001,  sqr(sqr(centerOfMassEnergy) + rmd*rmd -rmc*rmc)
+   G4double pf = std::sqrt(Amax(0.0001,  sqr(sqr(centerOfMassEnergy) + rmd*rmd -rmc*rmc)
                                  - 4*sqr(centerOfMassEnergy)*rmd*rmd))/(2.*centerOfMassEnergy);
    pvmx[3].setMass( rmc );
    pvmx[4].setMass( rmd );
-   pvmx[3].setEnergy( sqrt(pf*pf + rmc*rmc) );
-   pvmx[4].setEnergy( sqrt(pf*pf + rmd*rmd) );
+   pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
+   pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
    G4double tvalue = -MAXFLOAT;
-   G4double bvalue = Amax(0.01, 4.0 + 1.6*log(incidentTotalMomentum));
-   if (bvalue != 0.0) tvalue = log(G4UniformRand())/bvalue;
+   G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
+   if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();
    G4double tacmin = sqr( pvmx[1].getEnergy() - pvmx[3].getEnergy()) - sqr( pin - pf);
    G4double ctet   = Amax(-1., Amin(1., 1.+2.*(tvalue-tacmin)/Amax(1.e-10, 4.*pin*pf)));
-   G4double stet   = sqrt(Amax(0., 1.0 - ctet*ctet));
-   G4double phi    = M_2PI * G4UniformRand();
-   pvmx[3].setMomentum( pf * stet * sin(phi), 
-                        pf * stet * cos(phi),
+   G4double stet   = std::sqrt(Amax(0., 1.0 - ctet*ctet));
+   G4double phi    = twopi * G4UniformRand();
+   pvmx[3].setMomentum( pf * stet * std::sin(phi), 
+                        pf * stet * std::cos(phi),
                         pf * ctet           );
    pvmx[4].Smul( pvmx[3], -1.);
    
@@ -2472,20 +2465,20 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
              ekit1 *= sqr(incidentKineticEnergy)/25.;
              ekit2 *= sqr(incidentKineticEnergy)/25.;
            }
-        G4double avalue = (1.-gaval)/(pow(ekit2, 1.-gaval)-pow(ekit1, 1.-gaval));
+        G4double avalue = (1.-gaval)/(std::pow(ekit2, 1.-gaval)-std::pow(ekit1, 1.-gaval));
         for (i=0; i < vecLen; i++)
             {
               if (pv[i].getSide() == -2)
                  {
-                   G4double ekit = pow(G4UniformRand()*(1.-gaval)/avalue +pow(ekit1, 1.-gaval),
+                   G4double ekit = std::pow(G4UniformRand()*(1.-gaval)/avalue +std::pow(ekit1, 1.-gaval),
                                        1./(1.-gaval));
                    pv[i].setKineticEnergyAndUpdate( ekit );
-                   ctet = Amax(-1., Amin(1., log(2.23*G4UniformRand()+0.383)/0.96));
-                   stet = sqrt( Amax( 0.0, 1. - ctet*ctet ));
-                   phi  = G4UniformRand()*M_2PI;
+                   ctet = Amax(-1., Amin(1., std::log(2.23*G4UniformRand()+0.383)/0.96));
+                   stet = std::sqrt( Amax( 0.0, 1. - ctet*ctet ));
+                   phi  = G4UniformRand()*twopi;
                    G4double pp = pv[i].Length();
-                   pv[i].setMomentum( pp * stet * sin(phi),
-                                      pp * stet * cos(phi),
+                   pv[i].setMomentum( pp * stet * std::sin(phi),
+                                      pp * stet * std::cos(phi),
                                       pp * ctet           );
                    pv[i].Lor( pv[i], pvmx[0] );
                  }              
@@ -2496,11 +2489,10 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    pvmx[5].SmulAndUpdate( pvmx[3], -1.);
    pvmx[6].SmulAndUpdate( pvmx[4], -1.);
 
-   if (verboseLevel > 1)
-      { G4cout << " General vectors before Phase space Generation " << G4endl;
-        for (i=0; i<7; i++) pvmx[i].Print(i);
-      }  
-
+   if (verboseLevel > 1) { 
+     G4cout << " General vectors before Phase space Generation " << G4endl;
+     for (i=0; i<7; i++) pvmx[i].Print(i);
+   }  
 
    G4HEVector* tempV = new G4HEVector[18];
    G4bool constantCrossSection = true;
@@ -2580,7 +2572,9 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
        G4cout << " Vectors after PhaseSpace generation " << G4endl;
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }
-                                                   //  Lorentz transformation in lab system
+
+   // Lorentz transformation in lab system
+
    targ = 0;
    for( i=0; i < vecLen; i++ ) 
       {
@@ -2590,11 +2584,10 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
       }
    if (targ<1) targ = 1;
 
-   if(verboseLevel > 1)
-     {
-       G4cout << " Transformation in Lab- System " << G4endl;
-       for(i=0; i<vecLen; i++) pv[i].Print(i);
-     }
+   if(verboseLevel > 1) {
+     G4cout << " Transformation in Lab- System " << G4endl;
+     for(i=0; i<vecLen; i++) pv[i].Print(i);
+   }
 
    G4bool dum(0);
    G4double ekin, teta;
@@ -2679,7 +2672,8 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
           }
        teta = pvmx[8].Ang( pvmx[4] );
        if (verboseLevel > 1) 
-           G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 << " " << ekin1 << " " << ekin << G4endl;
+         G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " 
+                << ekin0 << " " << ekin1 << " " << ekin << G4endl;
      }
 
    if( ekin1 != 0.0 ) 
@@ -2696,7 +2690,9 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
             pvmx[7].Add( pvmx[7], pv[i] );
           }
        teta = pvmx[7].Ang( pvmx[4] );
-       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " << ekin1 << G4endl;
+       if (verboseLevel > 1) 
+         G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
+                << ekin1 << G4endl;
      }
 
    if(verboseLevel > 1)
@@ -2705,44 +2701,38 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
        for(i=0; i<vecLen; i++) pv[i].Print(i);
      }      
 
-                          //    Rotate in direction of z-axis, this does disturb in some way our
-                          //    inclusive distributions, but it is necessary for momentum conservation
-
-   pvmx[7].setZero();
-   for( i=0; i < vecLen; i++ ) pvmx[7].Add( pvmx[7], pv[i] );
+   // Do some smearing in the transverse direction due to Fermi motion
    
-                          //  Some smearing in transverse direction from Fermi motion
-   
-
-
-                                                  // RANNOR
    G4double ry   = G4UniformRand();
    G4double rz   = G4UniformRand();
-   G4double rx   = M_2PI*rz;
-   G4double a1   = sqrt(-2.0*log(ry));
-   G4double ran1 = a1*sin(rx);
-   G4double ran2 = a1*cos(rx);
-                                                  
-   pvmx[7].setMomentum( pvmx[7].getMomentum().x()+ran1*0.020*targ,
-                        pvmx[7].getMomentum().y()+ran2*0.020*targ );
-   pvmx[8].Defs( pvmx[4], pvmx[7], pvmx[9], pvmx[10] );
-   pvmx[7].setZero();
-   for (i = 0; i < vecLen; i++) 
-      { 
-        pv[i].Trac( pv[i], pvmx[8] , pvmx[9], pvmx[10] );
-        pvmx[7].Add( pvmx[7], pv[i] );  
-      }
-   teta = pvmx[7].Ang( pvmx[4] );   
-   if (verboseLevel > 1) G4cout << " After smearing " << teta << G4endl;
+   G4double rx   = twopi*rz;
+   G4double a1   = std::sqrt(-2.0*std::log(ry));
+   G4double rantarg1 = a1*std::cos(rx)*0.02*targ/G4double(vecLen);
+   G4double rantarg2 = a1*std::sin(rx)*0.02*targ/G4double(vecLen);
 
-                               //  Rotate in direction of primary particle, subtract binding energies
-                               //   and make some further corrections if required
+   for (i = 0; i < vecLen; i++)
+     pv[i].setMomentum( pv[i].getMomentum().x()+rantarg1,
+                        pv[i].getMomentum().y()+rantarg2 );
+
+   if (verboseLevel > 1) {                         
+     pvmx[7].setZero();
+     for (i = 0; i < vecLen; i++) pvmx[7].Add( pvmx[7], pv[i] );  
+     teta = pvmx[7].Ang( pvmx[4] );   
+     G4cout << " After smearing " << teta << G4endl;
+   }
+
+   // Rotate in the direction of the primary particle momentum (z-axis).
+   // This does disturb our inclusive distributions somewhat, but it is 
+   // necessary for momentum conservation
+
+   // Also subtract binding energies and make some further corrections 
+   // if required
 
    G4double dekin = 0.0;
    G4int npions = 0;    
    G4double ek1 = 0.0;
    G4double alekw, xxh;
-   G4double cfa = 0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.);
+   G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
    G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00, 10.0};
    G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65, 0.70};
    
@@ -2753,14 +2743,14 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
         if (atomicWeight > 1.5)
            {
              ekin  = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
-             alekw = log( incidentKineticEnergy );
+             alekw = std::log( incidentKineticEnergy );
              xxh   = 1.;
              xxh   = 1.;
              if(incidentCode == pionPlusCode || incidentCode == pionMinusCode)
 	       {
                  if(pv[i].getCode() == pionZeroCode)
                    {
-                     if(G4UniformRand() < log(atomicWeight))
+                     if(G4UniformRand() < std::log(atomicWeight))
                        { 
                          if (alekw > alem[0])
                            {
@@ -2804,9 +2794,9 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
-                                       //  add black track particles
-                                       //  the total number of particles produced is restricted to 198
-                                       //  this may have influence on very high energies
+   // Add black track particles
+   // The total number of particles produced is restricted to 198
+   // - this may have influence on very high energies
 
    if (verboseLevel > 1) 
        G4cout << " Evaporation " << atomicWeight << " " << excitationEnergyGNP
@@ -2814,24 +2804,27 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
 
    G4double sprob = 0.;
    if (incidentKineticEnergy > 5. )
-//       sprob = Amin( 1., (0.394-0.063*log(atomicWeight))*log(incidentKineticEnergy-4.) );
-     sprob = Amin(1., 0.000314*atomicWeight*log(incidentKineticEnergy-4.)); 
+//       sprob = Amin( 1., (0.394-0.063*std::log(atomicWeight))*std::log(incidentKineticEnergy-4.) );
+     sprob = Amin(1., 0.000314*atomicWeight*std::log(incidentKineticEnergy-4.)); 
      if( atomicWeight > 1.5 && G4UniformRand() > sprob) 
      {
 
        G4double cost, sint, ekin2, ran, pp, eka;
        G4int spall(0), nbl(0);
-                                     //  first add protons and neutrons
+
+       //  first add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
          {
-                                     //  nbl = number of proton/neutron black track particles
-                                     //  tex is their total kinetic energy (GeV)
+           //  nbl = number of proton/neutron black track particles
+           //  tex is their total kinetic energy (GeV)
        
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = (int)(atomicWeight - targ);
-           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " << sprob << G4endl; 
+           if (verboseLevel > 1) 
+              G4cout << " evaporation " << targ << " " << nbl << " " 
+                     << sprob << G4endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -2842,8 +2835,8 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                     if( G4UniformRand() < sprob ) continue;
                     if( ekin2 > excitationEnergyGNP) break;
                     ran = G4UniformRand();
-                    ekin1 = -ekin*log(ran) - cfa*(1.0+0.5*normal());
-                    if (ekin1 < 0) ekin1 = -0.010*log(ran);
+                    ekin1 = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+                    if (ekin1 < 0) ekin1 = -0.010*std::log(ran);
                     ekin2 += ekin1;
                     if( ekin2 > excitationEnergyGNP)
                     ekin1 = Amax( 1.0e-6, excitationEnergyGNP-(ekin2-ekin1) );
@@ -2853,16 +2846,16 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                        pv[vecLen].setDefinition( "Neutron" );
                     spall++;
                     cost = G4UniformRand() * 2.0 - 1.0;
-                    sint = sqrt(fabs(1.0-cost*cost));
-                    phi = M_2PI * G4UniformRand();
-                    pv[vecLen].setFlag( true );                 // true is the same as IPA(i)<0
+                    sint = std::sqrt(std::fabs(1.0-cost*cost));
+                    phi = twopi * G4UniformRand();
+                    pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                     pv[vecLen].setSide( -4 );
                     pvMass = pv[vecLen].getMass();
                     pv[vecLen].setTOF( 1.0 );
                     pvEnergy = ekin1 + pvMass;
-                    pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                    pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                     pp*sint*cos(phi),
+                    pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                    pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                     pp*sint*std::cos(phi),
                                                      pp*cost );
                     if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                     vecLen++;
@@ -2873,7 +2866,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                     eka = incidentKineticEnergy;
                     if( eka > 1.0 )eka *= eka;
                     eka = Amax( 0.1, eka );
-                    ika = G4int(3.6*exp((atomicNumber*atomicNumber
+                    ika = G4int(3.6*std::exp((atomicNumber*atomicNumber
                                 /atomicWeight-35.56)/6.45)/eka);
                     if( ika > 0 ) 
                       {
@@ -2893,15 +2886,15 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
              }
          }
 
-                                              // finished adding proton/neutron black track particles
-                                              //  now, try to add deuterons, tritons and alphas
+     // Finished adding proton/neutron black track particles
+     // now, try to add deuterons, tritons and alphas
      
      if( excitationEnergyDTA >= 0.001 ) 
        {
          nbl = Poisson( (1.5+1.25*targ)*excitationEnergyDTA
                                       /(excitationEnergyGNP+excitationEnergyDTA));
        
-                                      //    nbl is the number of deutrons, tritons, and alphas produced
+         //    nbl is the number of deutrons, tritons, and alphas produced
        
          if( nbl > 0 ) 
            {
@@ -2912,14 +2905,14 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                   if( G4UniformRand() < sprob ) continue;
                   if( ekin2 > excitationEnergyDTA) break;
                   ran = G4UniformRand();
-                  ekin1 = -ekin*log(ran)-cfa*(1.+0.5*normal());
-                  if( ekin1 < 0.0 ) ekin1 = -0.010*log(ran);
+                  ekin1 = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+                  if( ekin1 < 0.0 ) ekin1 = -0.010*std::log(ran);
                   ekin2 += ekin1;
                   if( ekin2 > excitationEnergyDTA )
                      ekin1 = Amax( 1.0e-6, excitationEnergyDTA-(ekin2-ekin1));
                   cost = G4UniformRand()*2.0 - 1.0;
-                  sint = sqrt(fabs(1.0-cost*cost));
-                  phi = M_2PI*G4UniformRand();
+                  sint = std::sqrt(std::fabs(1.0-cost*cost));
+                  phi = twopi*G4UniformRand();
                   ran = G4UniformRand();
                   if( ran <= 0.60 ) 
                       pv[vecLen].setDefinition( "Deuteron");
@@ -2929,14 +2922,14 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                       pv[vecLen].setDefinition( "Alpha" );
                   spall += (int)(pv[vecLen].getMass() * 1.066);
                   if( spall > atomicWeight ) break;
-                  pv[vecLen].setFlag( true );                    // true is the same as IPA(i)<0
+                  pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                   pv[vecLen].setSide( -4 );
                   pvMass = pv[vecLen].getMass();
                   pv[vecLen].setTOF( 1.0 );
                   pvEnergy = pvMass + ekin1;
-                  pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                  pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                   pp*sint*cos(phi),
+                  pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                  pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                   pp*sint*std::cos(phi),
                                                    pp*cost );
                   if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                   vecLen++;
@@ -2958,11 +2951,12 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
                                 incidentParticle, targetParticle,
                                 atomicWeight, atomicNumber);    
 
-                                                     //  calculate time delay for nuclear reactions
+   // Calculate time delay for nuclear reactions
+
    G4double tof = incidentTOF;
    if(     (atomicWeight >= 1.5) && (atomicWeight <= 230.0) 
         && (incidentKineticEnergy <= 0.2) )
-           tof -= 500.0 * exp(-incidentKineticEnergy /0.04) * log( G4UniformRand() );
+           tof -= 500.0 * std::exp(-incidentKineticEnergy /0.04) * std::log( G4UniformRand() );
    for ( i=0; i < vecLen; i++)     
      { 
        
@@ -3037,13 +3031,14 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 //   G4double incidentTOF           = incidentParticle.getTOF();   
    G4double incidentTOF           = 0.;
    
-                                                              // some local variables
+   // some local variables
 
    G4int i, j, l;
 
-   if(verboseLevel > 1) G4cout << " G4HEInelastic::MediumEnergyCascading " << G4endl;
+   if(verboseLevel > 1) 
+     G4cout << " G4HEInelastic::MediumEnergyCascading " << G4endl;
 
-                              // define annihilation channels.
+   // define annihilation channels.
                                  
    G4bool annihilation = false;
    if (incidentCode < 0 && incidentType == antiBaryonType && 
@@ -3070,7 +3065,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    start:  
    
    if (annihilation)
-      {                        // do some corrections of incident particle kinematic
+      {            // do some corrections of incident particle kinematic
         G4double ekcor = Amax( 1., 1./incidentKineticEnergy);
         incidentKineticEnergy = 2*targetMass + incidentKineticEnergy*(1.+ekcor/atomicWeight);
         G4double excitation = NuclearExcitation(incidentKineticEnergy,
@@ -3082,7 +3077,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         if (incidentKineticEnergy < excitationEnergyDTA) incidentKineticEnergy = 0.;
         incidentEnergy = incidentKineticEnergy + incidentMass;
         incidentTotalMomentum =
-                 sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
+                 std::sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
       }  
                   
    G4HEVector pTemp;
@@ -3094,9 +3089,9 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
        pv[i] = pTemp;
      }
 
-                              // randomize the first two leading particles
-                              // for kaon induced reactions only 
-                              // (need from experimental data)
+   // randomize the first two leading particles
+   // for kaon induced reactions only 
+   // (need from experimental data)
 
    if(   (incidentCode==kaonPlusCode  || incidentCode==kaonMinusCode    ||
           incidentCode==kaonZeroCode  || incidentCode==antiKaonZeroCode ||
@@ -3107,15 +3102,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
        pv[1] = pv[0];
        pv[0] = pTemp;
      }
-                              // mark leading particles for incident strange particles 
-                              // and antibaryons, for all other we assume that the first 
-                              // and second particle are the leading particles. 
-                              // We need this later for kinematic aspects of strangeness
-                              // conservation.
+
+   // mark leading particles for incident strange particles 
+   // and antibaryons, for all other we assume that the first 
+   // and second particle are the leading particles. 
+   // We need this later for kinematic aspects of strangeness
+   // conservation.
                           
    G4int lead = 0;                   
    G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)          
+   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)  
                                            && (incidentCode != neutronCode) ) 
          {       
            G4double pMass = pv[0].getMass();
@@ -3131,7 +3127,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                     pMass = pv[1].getMass();
                     pCode = pv[1].getCode();
                     if( (pMass >= kaonPlusMass-0.05) && (pCode != protonCode) 
-                                                     && (pCode != neutronCode) ) 
+                                                   && (pCode != neutronCode) ) 
                         {       
                           lead = pCode;
                           leadParticle = pv[1];
@@ -3139,9 +3135,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                   }
          }
 
-                              //  distribute particles in forward and backward 
-                              //  hemispheres in center of mass system
-                              //  incident goes in forward hemisphere
+   // Distribute particles in forward and backward hemispheres in center of 
+   // mass system.  Incident particle goes in forward hemisphere.
    
    G4HEVector pvI = incidentParticle;  // for the incident particle
    pvI.setSide( 1 );
@@ -3152,7 +3147,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    pvT.setTOF( -1.);  
 
 
-   G4double centerOfMassEnergy = sqrt( sqr(incidentMass)+sqr(targetMass)
+   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass)+sqr(targetMass)
                                       +2.0*targetMass*incidentEnergy );
 //   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
 
@@ -3186,16 +3181,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
       } 
 
-                              //  add particles from intranuclear cascade
-                              //  nuclearCascadeCount = number of new secondaries 
-                              //  produced by nuclear cascading.
-                              //  extraCount = number of nucleons within these new secondaries
+   // Add particles from intranuclear cascade
+   // nuclearCascadeCount = number of new secondaries 
+   // produced by nuclear cascading.
+   //  extraCount = number of nucleons within these new secondaries
    
    G4double s, xtarg, ran;
    s = centerOfMassEnergy*centerOfMassEnergy;
-   xtarg = Amax( 0.01, Amin( 0.75, 0.312 + 0.200 * log(log(s)) 
-                                       + pow(s,1.5)/6000.0 ) 
-                     *(pow(atomicWeight, 0.33) - 1.0) * tb);
+   xtarg = Amax( 0.01, Amin( 0.75, 0.312 + 0.200 * std::log(std::log(s)) 
+                                       + std::pow(s,1.5)/6000.0 ) 
+                     *(std::pow(atomicWeight, 0.33) - 1.0) * tb);
 
    G4int ntarg = Poisson( xtarg );
    G4int targ = 0;
@@ -3209,8 +3204,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
              momentumBin++;
        momentumBin = Imin( 5, momentumBin );
      
-                              // NOTE: in GENXPT, these new particles were given negative codes
-                              //       here I use  flag = true  instead
+       // NOTE: in GENXPT, these new particles were given negative codes
+       //       here I use  flag = true  instead
      
        for( i=0; i<ntarg; i++ ) 
         {
@@ -3232,15 +3227,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
               else 
                   pv[vecLen].setDefinition( "PionMinus" );
             }
-          pv[vecLen].setSide( -2 );                             // backward cascade particles
-          pv[vecLen].setFlag( true );                           // true is the same as IPA(i)<0
+          pv[vecLen].setSide( -2 );            // backward cascade particles
+          pv[vecLen].setFlag( true );          // true is the same as IPA(i)<0
           pv[vecLen].setTOF( incidentTOF );
           vecLen++; 
         }
      }
                                          
-                                         //  assume conservation of kinetic energy 
-                                         //  in forward & backward hemispheres
+   //  assume conservation of kinetic energy 
+   //  in forward & backward hemispheres
+
    G4int is, iskip;
    tavai1 = centerOfMassEnergy/2.;
    G4int iavai1 = 0;
@@ -3256,7 +3252,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    if ( iavai1 == 0) return;
 
    while( tavai1 <= 0.0 ) 
-        {                                // must eliminate a particle from the forward side
+        {                // must eliminate a particle from the forward side
            iskip = G4int(G4UniformRand()*iavai1) + 1; 
            is = 0;  
            for( i=vecLen-1; i>=0; i-- ) 
@@ -3296,7 +3292,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
      if (iavai2 == 0) return;
 
      while( tavai2 <= 0.0 ) 
-        {                               // must eliminate a particle from the backward side
+        {                 // must eliminate a particle from the backward side
            iskip = G4int(G4UniformRand()*iavai2) + 1; 
            is = 0;
            for( i = vecLen-1; i >= 0; i-- ) 
@@ -3322,15 +3318,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
               }
         }
 
-   if (verboseLevel > 1)
-      { G4cout << " pv Vector after Energy checks " << vecLen << " " << tavai1 << " " 
-             << iavai1 << " " << tavai2 << " " << iavai2 << " " << ntarg << G4endl;
-        pvI.Print(-1);
-        pvT.Print(-1);
-        for (i=0; i < vecLen ; i++) pv[i].Print(i);
-      } 
+     if (verboseLevel > 1) {
+       G4cout << " pv Vector after Energy checks " << vecLen << " " 
+              << tavai1 << " " << iavai1 << " " << tavai2 << " " 
+              << iavai2 << " " << ntarg << G4endl;
+       pvI.Print(-1);
+       pvT.Print(-1);
+       for (i=0; i < vecLen ; i++) pv[i].Print(i);
+     } 
    
-                                 //  define some vectors for Lorentz transformations
+   // Define some vectors for Lorentz transformations
    
    G4HEVector* pvmx = new G4HEVector [10];
    
@@ -3350,14 +3347,15 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    pvmx[0].Lor( pvmx[0], pvmx[2] );
    pvmx[1].Lor( pvmx[1], pvmx[2] );
 
-   if (verboseLevel > 1)
-     { G4cout << " General Vectors after Definition " << G4endl;
-       for (i=0; i<10; i++) pvmx[i].Print(i);
-     }
-                                                 //  main loop for 4-momentum generation
-                                                 //  see Pitha-report (Aachen) 
-                                                 //  for a detailed description of the method
-                                                 // process the secondary particles in reverse order
+   if (verboseLevel > 1) {
+     G4cout << " General Vectors after Definition " << G4endl;
+     for (i=0; i<10; i++) pvmx[i].Print(i);
+   }
+
+   // Main loop for 4-momentum generation - see Pitha-report (Aachen) 
+   // for a detailed description of the method.
+   // Process the secondary particles in reverse order
+
    G4double dndl[20];
    G4double binl[20];
    G4double pvMass, pvEnergy;
@@ -3366,11 +3364,11 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    G4double ekin  = 0.;
    G4double ekin1 = 0.;
    G4double ekin2 = 0.;
-   phi = G4UniformRand()*M_2PI;
+   phi = G4UniformRand()*twopi;
    G4int npg   = 0;
-   G4int targ1 = 0;                           // no fragmentation model for nucleons from the
-   for( i=vecLen-1; i>=0; i-- )               // intranuclear cascade. Mark them with -3 and 
-      {                                       // leave the loop.
+   G4int targ1 = 0;                // No fragmentation model for nucleons 
+   for( i=vecLen-1; i>=0; i-- )    // from the intranuclear cascade. Mark
+      {                            // them with -3 and leave the loop.
         if( (pv[i].getSide() == -2) || (i == 1) ) 
           { 
             if ( pv[i].getType() == baryonType ||
@@ -3380,20 +3378,22 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                    {
                      pv[i].setSide( -3 );
                      targ1++;
-                     continue;                                    // leave the for loop !!
+                     continue;                // leave the for loop !!
                    }     
                }
           }
-                                              //  set pt and phi values, 
-                                              //  they are changed somewhat in the iteration loop
-                                              //  set mass parameter for lambda fragmentation model
+
+        // Set pt and phi values - they are changed somewhat in the 
+        // iteration loop.
+        // Set mass parameter for lambda fragmentation model
+
         G4double maspar[] = { 0.75, 0.70, 0.65, 0.60, 0.50, 0.40, 0.75, 0.20};
         G4double     bp[] = { 3.50, 3.50, 3.50, 6.00, 5.00, 4.00, 3.50, 3.50};
         G4double   ptex[] = { 1.70, 1.70, 1.50, 1.70, 1.40, 1.20, 1.70, 1.20};    
-
-                                              // set parameters for lambda simulation 
-                                              // pt is the average transverse momentum
-                                              // aspar is average transverse mass  
+        // Set parameters for lambda simulation: 
+        // pt is the average transverse momentum
+        // aspar the is average transverse mass
+  
         pvMass = pv[i].getMass();       
         j = 2;                                              
         if ( pv[i].getType() == mesonType ) j = 1;
@@ -3401,12 +3401,12 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         if ( i <= 1 ) j += 3;
         if (pv[i].getSide() <= -2) j = 6;
         if (j == 6 && (pv[i].getType() == baryonType || pv[i].getType()==antiBaryonType) ) j = 7;
-        pt    = Amax(0.001, sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j])));
+        pt    = Amax(0.001, std::sqrt(std::pow(-std::log(1.-G4UniformRand())/bp[j],ptex[j])));
         aspar = maspar[j]; 
-        phi = G4UniformRand()*M_2PI;
-        pv[i].setMomentum( pt*cos(phi), pt*sin(phi) );        // set x- and y-momentum
+        phi = G4UniformRand()*twopi;
+        pv[i].setMomentum( pt*std::cos(phi), pt*std::sin(phi) );  // set x- and y-momentum
 
-        for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);           // set the lambda - bins.
+        for( j=0; j<20; j++ ) binl[j] = j/(19.*pt);   // set the lambda - bins.
      
         if( pv[i].getSide() > 0 )
            et = pvmx[0].getEnergy();
@@ -3415,26 +3415,28 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
      
         dndl[0] = 0.0;
      
-                                                              // start of outer iteration loop
-        G4int outerCounter = 0, innerCounter = 0;             // three times.
+        // Start of outer iteration loop
+
+        G4int outerCounter = 0, innerCounter = 0;           // three times.
         G4bool eliminateThisParticle = true;
         G4bool resetEnergies = true;
         while( ++outerCounter < 3 ) 
              {
                for( l=1; l<20; l++ ) 
                   {
-                    xval  = (binl[l]+binl[l-1])/2.;              // x = lambda /GeV 
+                    xval  = (binl[l]+binl[l-1])/2.;      // x = lambda /GeV 
                     if( xval > 1./pt )
                        dndl[l] = dndl[l-1];
                     else
                        dndl[l] = dndl[l-1] + 
-                                 aspar/sqrt( pow((1.+aspar*xval*aspar*xval),3) ) *
-                                 (binl[l]-binl[l-1]) * et / 
-                                 sqrt( pt*xval*et*pt*xval*et + pt*pt + pvMass*pvMass );
+                         aspar/std::sqrt( std::pow((1.+aspar*xval*aspar*xval),3) ) *
+                         (binl[l]-binl[l-1]) * et / 
+                         std::sqrt( pt*xval*et*pt*xval*et + pt*pt + pvMass*pvMass );
                   }  
        
-                                                               // start of inner iteration loop
-               innerCounter = 0;                               // try this not more than 7 times. 
+               // Start of inner iteration loop
+
+               innerCounter = 0;          // try this not more than 7 times. 
                while( ++innerCounter < 7 ) 
                     {
                       l = 1;
@@ -3443,20 +3445,20 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       l = Imin( 19, l );
                       xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
-                      pv[i].setMomentumAndUpdate( xval*et );                  // set the z-momentum
+                      pv[i].setMomentumAndUpdate( xval*et );   // set the z-momentum
                       pvEnergy = pv[i].getEnergy();
-                      if( pv[i].getSide() > 0 )                               // forward side 
+                      if( pv[i].getSide() > 0 )              // forward side 
                         {
                           if ( i < 2 )
                              { 
                                ekin = tavai1 - ekin1;
-                               if (ekin < 0.) ekin = 0.04*fabs(normal());
+                               if (ekin < 0.) ekin = 0.04*std::fabs(normal());
                                G4double pp1 = pv[i].Length();
                                if (pp1 >= 1.e-6)
 			          { 
-                                    G4double pp = sqrt(ekin*(ekin+2*pvMass));
+                                    G4double pp = std::sqrt(ekin*(ekin+2*pvMass));
                                     pp = Amax(0.,pp*pp-pt*pt);
-                                    pp = sqrt(pp)*pv[i].getSide()/fabs(G4double(pv[i].getSide()));
+                                    pp = std::sqrt(pp)*pv[i].getSide()/std::fabs(G4double(pv[i].getSide()));
                                     pv[i].setMomentumAndUpdate( pp );
                                   }
                                else
@@ -3476,20 +3478,15 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                               ekin1 += pvEnergy - pvMass;
                               pvmx[6].Add( pvmx[4], pvmx[5] );
                               pvmx[6].setMomentum( 0.0 );
-                              phi = pvmx[6].Ang( pvmx[8] );
-                              if( pvmx[6].getMomentum().y() < 0.0 ) phi = M_2PI - phi;
-                              phi += M_PI + normal()*M_PI/12.0;
-                              if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI + phi;
-                              outerCounter = 2;                     // leave outer loop
-                              eliminateThisParticle = false;        // don't eliminate this particle
+                              outerCounter = 2;            // leave outer loop
+                              eliminateThisParticle = false;   // don't eliminate this particle
                               resetEnergies = false;
-                              break;                                // next particle
+                              break;                       // next particle
                             }
-                          if( innerCounter > 5 ) break;             // leave inner loop
+                          if( innerCounter > 5 ) break;    // leave inner loop
                           
                           if( tavai2 >= pvMass ) 
-                            {                                       // switch sides
+                            {                              // switch sides
                               pv[i].setSide( -1 );
                               tavai1 += pvMass;
                               tavai2 -= pvMass;
@@ -3497,28 +3494,23 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                             }
                         } 
                       else 
-                        {                                            // backward side
+                        {                                  // backward side
                           xval = Amin(0.999,0.95+0.05*targ/20.0);
                           if( (ekin2+pvEnergy-pvMass) < xval*tavai2 ) 
                             {
                               pvmx[5].Add( pvmx[5], pv[i] );
                               ekin2 += pvEnergy - pvMass;
                               pvmx[6].Add( pvmx[4], pvmx[5] );
-                              pvmx[6].setMomentum( 0.0 );             // set z-momentum
-                              phi = pvmx[6].Ang( pvmx[8] );
-                              if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
-                              phi += M_PI + normal() * M_PI / 12.0;
-                              if( phi > M_2PI )phi -= M_2PI;
-                              if( phi < 0.0 )phi = M_2PI + phi;
-                              outerCounter = 2;                    // leave outer iteration
-                              eliminateThisParticle = false;       // don't eliminate this particle
+                              pvmx[6].setMomentum( 0.0 );    // set z-momentum
+                              outerCounter = 2;              // leave outer iteration
+                              eliminateThisParticle = false; // don't eliminate this particle
                               resetEnergies = false;
-                              break;                               // leave inner iteration
+                              break;                   // leave inner iteration
                             }
-                          if( innerCounter > 5 )break;             // leave inner iteration
+                          if( innerCounter > 5 )break; // leave inner iteration
                           
                           if( tavai1 >= pvMass ) 
-                            {                                      // switch sides
+                            {                          // switch sides
                               pv[i].setSide( 1 );
                               tavai1  -= pvMass;
                               tavai2  += pvMass;
@@ -3529,7 +3521,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                                          pv[i].getMomentum().y() * 0.9);
                       pt *= 0.9;
                       dndl[19] *= 0.9;
-                    }                                           // closes inner loop
+                    }                                  // closes inner loop
 
                if (resetEnergies)
                     {
@@ -3537,7 +3529,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       ekin2 = 0.0;
                       pvmx[4].setZero();
                       pvmx[5].setZero();
-                      if (verboseLevel > 1) G4cout << " Reset energies for index " << i << G4endl;
+                      if (verboseLevel > 1) 
+                        G4cout << " Reset energies for index " << i << G4endl;
                       for( l=i+1; l < vecLen; l++ ) 
                          {
                            if( (pv[l].getMass() < protonMass) || (pv[l].getSide() > 0) ) 
@@ -3558,31 +3551,26 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                              }
                          }
                     }
-             }                                                           // closes outer iteration
+             }                           // closes outer iteration
 
-        if( eliminateThisParticle )                                      // not enough energy, 
-          {                                                              // eliminate this particle
+        if( eliminateThisParticle )      // not enough energy, 
+          {                              // eliminate this particle
             if (verboseLevel > 1)
                {
                   G4cout << " Eliminate particle with index " << i << G4endl;
                   pv[i].Print(i);
                }
             for( j=i; j < vecLen; j++ ) 
-               {                                                         // shift down
+               {                                  // shift down
                   pv[j] = pv[j+1];
                }
             vecLen--;
             if(vecLen < 2) return;
             i++;
             pvmx[6].Add( pvmx[4], pvmx[5] );
-            pvmx[6].setMomentum( 0.0 );                                  // set z-momentum
-            phi = pvmx[6].Ang( pvmx[8] );
-            if( pvmx[6].getMomentum().y() < 0.0 )phi = M_2PI - phi;
-            phi += M_PI + normal() * M_PI / 12.0;
-            if( phi > M_2PI )phi -= M_2PI;
-            if( phi < 0.0 )phi = M_2PI + phi;
+            pvmx[6].setMomentum( 0.0 );           // set z-momentum
           }
-      }                                                                  // closes main for loop
+      }                                           // closes main for loop
    if (verboseLevel > 1)
       { G4cout << " pv Vector after lambda fragmentation " << vecLen << G4endl;
         pvI.Print(-1);
@@ -3590,11 +3578,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         for (i=0; i < vecLen ; i++) pv[i].Print(i);
         for (i=0; i < 10; i++) pvmx[i].Print(i);
       } 
-
    
-   
-                                                                   // backward nucleons produced 
-                                                                   // with a cluster model
+   // Backward nucleons produced with a cluster model
    
    pvmx[6].Lor( pvmx[3], pvmx[2] );
    pvmx[6].Sub( pvmx[6], pvmx[4] );
@@ -3615,10 +3600,10 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
           }
      }  
    if( targ1 == 1 || npg < 2) 
-     {                                                  // target particle is the only backward nucleon
+     {                     // target particle is the only backward nucleon
        ekin = Amin( tavai2-ekin2, centerOfMassEnergy/2.0-protonMass );
-       if( ekin < 0.04 ) ekin = 0.04 * fabs( normal() );
-       G4double pp = sqrt(ekin*(ekin+2*pv[1].getMass()));
+       if( ekin < 0.04 ) ekin = 0.04 * std::fabs( normal() );
+       G4double pp = std::sqrt(ekin*(ekin+2*pv[1].getMass()));
        G4double pp1 = pvmx[6].Length();
        if(pp1 < 1.e-6)
          {
@@ -3638,21 +3623,21 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
        G4int tempCount = Imin( 5, targ1 ) - 1;
 
-       rmb = rmb0 + pow(-log(1.0-G4UniformRand()), cpar[tempCount])/gpar[tempCount];
+       rmb = rmb0 + std::pow(-std::log(1.0-G4UniformRand()), cpar[tempCount])/gpar[tempCount];
        pvEnergy = pvmx[6].getEnergy();
        if ( rmb > pvEnergy ) rmb = pvEnergy; 
        pvmx[6].setMass( rmb );
        pvmx[6].setEnergyAndUpdate( pvEnergy );
        pvmx[6].Smul( pvmx[6], -1. );
-       if (verboseLevel > 1)
-          { G4cout << " General Vectors before input to NBodyPhaseSpace "
-                 << targ1 << " " << tempCount << " " << rmb0 << " " << rmb << " " 
-                 << pvEnergy << G4endl;
-            for (i=0; i<10; i++) pvmx[i].Print(i);
-          }
-                                                             //  tempV contains the backward nucleons
+       if (verboseLevel > 1) {
+         G4cout << " General Vectors before input to NBodyPhaseSpace "
+                << targ1 << " " << tempCount << " " << rmb0 << " " 
+                << rmb << " " << pvEnergy << G4endl;
+         for (i=0; i<10; i++) pvmx[i].Print(i);
+       }
 
-     
+       //  tempV contains the backward nucleons
+
        G4HEVector* tempV = new G4HEVector[18];
        npg = 0;
        for( i=0; i < vecLen; i++ )  
@@ -3680,7 +3665,9 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
        successful = false;
        return;
      }
-                                                   //  Lorentz transformation in lab system
+
+   // Lorentz transformation in lab system
+
    targ = 0;
    for( i=0; i < vecLen; i++ ) 
       {
@@ -3770,8 +3757,9 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
             ekin += pvmx[6].getKineticEnergy();
           }
        teta = pvmx[7].Ang( pvmx[3] );
-       if (verboseLevel > 1) G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0
-                                  << " " << ekin1 << " " << ekin << G4endl;
+       if (verboseLevel > 1) 
+         G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0
+                << " " << ekin1 << " " << ekin << G4endl;
      }
 
    if( ekin1 != 0.0 ) 
@@ -3788,48 +3776,43 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
             pvmx[6].Add( pvmx[6], pv[i] );
           }
        teta = pvmx[6].Ang( pvmx[3] );
-       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
-                                  << ekin1 << G4endl;
+       if (verboseLevel > 1) 
+         G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
+                << ekin1 << G4endl;
      }
 
-                          //    Rotate in direction of z-axis, this does disturb in some way our
-                          //    inclusive distributions, but it is necessary for momentum conservation
+   // Do some smearing in the transverse direction due to Fermi motion.
 
-   pvmx[6].setZero();
-   for( i=0; i < vecLen; i++ ) pvmx[6].Add( pvmx[6], pv[i] );
-   
-                          //  Some smearing in transverse direction from Fermi motion
-   
-
-
-                                                  // RANNOR
    G4double ry   = G4UniformRand();
    G4double rz   = G4UniformRand();
-   G4double rx   = M_2PI*rz;
-   G4double a1   = sqrt(-2.0*log(ry));
-   G4double ran1 = a1*sin(rx);
-   G4double ran2 = a1*cos(rx);
-                                                  
-   pvmx[6].setMomentum( pvmx[6].getMomentum().x()+ran1*0.020*targ,
-                        pvmx[6].getMomentum().y()+ran2*0.020*targ );
-   pvmx[7].Defs( pvmx[3], pvmx[6], pvmx[8], pvmx[9] );
-   pvmx[6].setZero();
-   for (i = 0; i < vecLen; i++) 
-      { 
-        pv[i].Trac( pv[i], pvmx[7] , pvmx[8], pvmx[9] );
-        pvmx[6].Add( pvmx[6], pv[i] );  
-      }
-   teta = pvmx[6].Ang( pvmx[3] );   
-   if (verboseLevel > 1) G4cout << " After smearing " << teta << G4endl;
+   G4double rx   = twopi*rz;
+   G4double a1   = std::sqrt(-2.0*std::log(ry));
+   G4double rantarg1 = a1*std::cos(rx)*0.02*targ/G4double(vecLen);
+   G4double rantarg2 = a1*std::sin(rx)*0.02*targ/G4double(vecLen);
 
-                               //  Rotate in direction of primary particle, subtract binding energies
-                               //   and make some further corrections if required
+   for (i = 0; i < vecLen; i++)
+     pv[i].setMomentum( pv[i].getMomentum().x()+rantarg1,
+                        pv[i].getMomentum().y()+rantarg2 );
+                                         
+   if (verboseLevel > 1) {
+     pvmx[6].setZero();
+     for (i = 0; i < vecLen; i++) pvmx[6].Add( pvmx[6], pv[i] );  
+     teta = pvmx[6].Ang( pvmx[3] );   
+     G4cout << " After smearing " << teta << G4endl;
+   }
+
+   // Rotate in the direction of the primary particle momentum (z-axis).
+   // This does disturb our inclusive distributions somewhat, but it is 
+   // necessary for momentum conservation.
+
+   // Also subtract binding energies and make some further corrections 
+   // if required.
 
    G4double dekin = 0.0;
    G4int npions = 0;    
    G4double ek1 = 0.0;
    G4double alekw, xxh;
-   G4double cfa = 0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.);
+   G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
    G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00, 10.00};
    G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65,  0.70};
    
@@ -3840,13 +3823,13 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         if (atomicWeight > 1.5)
            {
              ekin  = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
-             alekw = log( incidentKineticEnergy );
+             alekw = std::log( incidentKineticEnergy );
              xxh   = 1.;
              if(incidentCode == pionPlusCode || incidentCode == pionMinusCode)
                {
                  if(pv[i].getCode() == pionZeroCode)
                    {
-                     if(G4UniformRand() < log(atomicWeight))
+                     if(G4UniformRand() < std::log(atomicWeight))
                        {            
                          if (alekw > alem[0])
                            {
@@ -3890,9 +3873,9 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
-                                       //  add black track particles
-                                       //  the total number of particles produced is restricted to 198
-                                       //  this may have influence on very high energies
+   // Add black track particles
+   // The total number of particles produced is restricted to 198
+   // this may have influence on very high energies
 
    if (verboseLevel > 1) G4cout << " Evaporation " << atomicWeight << " " <<
                      excitationEnergyGNP << " " << excitationEnergyDTA << G4endl;
@@ -3902,25 +3885,27 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
        G4double sprob, cost, sint, pp, eka;
        G4int spall(0), nbl(0);
-                                     //  sprob is the probability of self-absorption in heavy molecules
+       //  sprob is the probability of self-absorption in heavy molecules
 
        if( incidentKineticEnergy < 5.0 )
          sprob = 0.0;
        else
-	 //	 sprob = Amin( 1.0, 0.6*log(incidentKineticEnergy-4.0) );
-         sprob = Amin(1., 0.000314*atomicWeight*log(incidentKineticEnergy-4.)); 
+	 //	 sprob = Amin( 1.0, 0.6*std::log(incidentKineticEnergy-4.0) );
+         sprob = Amin(1., 0.000314*atomicWeight*std::log(incidentKineticEnergy-4.)); 
 
-                                     //  first add protons and neutrons
+       // First add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
          {
-                                     //  nbl = number of proton/neutron black track particles
-                                     //  tex is their total kinetic energy (GeV)
+           //  nbl = number of proton/neutron black track particles
+           //  tex is their total kinetic energy (GeV)
        
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
                                          (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = (int)(atomicWeight - targ);
-           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " << sprob << G4endl; 
+           if (verboseLevel > 1) 
+             G4cout << " evaporation " << targ << " " << nbl << " " 
+                    << sprob << G4endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -3931,8 +3916,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                     if( G4UniformRand() < sprob ) continue;
                     if( ekin2 > excitationEnergyGNP) break;
                     ran = G4UniformRand();
-                    ekin1 = -ekin*log(ran) - cfa*(1.0+0.5*normal());
-                    if (ekin1 < 0) ekin1 = -0.010*log(ran);
+                    ekin1 = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+                    if (ekin1 < 0) ekin1 = -0.010*std::log(ran);
                     ekin2 += ekin1;
                     if( ekin2 > excitationEnergyGNP)
                     ekin1 = Amax( 1.0e-6, excitationEnergyGNP-(ekin2-ekin1) );
@@ -3942,16 +3927,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                        pv[vecLen].setDefinition( "Neutron");
                     spall++;
                     cost = G4UniformRand() * 2.0 - 1.0;
-                    sint = sqrt(fabs(1.0-cost*cost));
-                    phi = M_2PI * G4UniformRand();
-                    pv[vecLen].setFlag( true );                 // true is the same as IPA(i)<0
+                    sint = std::sqrt(std::fabs(1.0-cost*cost));
+                    phi = twopi * G4UniformRand();
+                    pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                     pv[vecLen].setSide( -4 );
                     pvMass = pv[vecLen].getMass();
                     pv[vecLen].setTOF( 1.0 );
                     pvEnergy = ekin1 + pvMass;
-                    pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                    pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                     pp*sint*cos(phi),
+                    pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                    pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                     pp*sint*std::cos(phi),
                                                      pp*cost );
                     if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                     vecLen++;
@@ -3962,7 +3947,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                     eka = incidentKineticEnergy;
                     if( eka > 1.0 )eka *= eka;
                     eka = Amax( 0.1, eka );
-                    ika = G4int(3.6*exp((atomicNumber*atomicNumber
+                    ika = G4int(3.6*std::exp((atomicNumber*atomicNumber
                                 /atomicWeight-35.56)/6.45)/eka);
                     if( ika > 0 ) 
                       {
@@ -3982,15 +3967,15 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
              }
          }
 
-                                              // finished adding proton/neutron black track particles
-                                              //  now, try to add deuterons, tritons and alphas
+     // Finished adding proton/neutron black track particles
+     // now, try to add deuterons, tritons and alphas
      
      if( excitationEnergyDTA >= 0.001 ) 
        {
          nbl = Poisson( (1.5+1.25*targ)*excitationEnergyDTA
                                       /(excitationEnergyGNP+excitationEnergyDTA));
-       
-                                      //    nbl is the number of deutrons, tritons, and alphas produced
+  
+         //    nbl is the number of deutrons, tritons, and alphas produced
        
          if( nbl > 0 ) 
            {
@@ -4001,14 +3986,14 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                   if( G4UniformRand() < sprob ) continue;
                   if( ekin2 > excitationEnergyDTA) break;
                   ran = G4UniformRand();
-                  ekin1 = -ekin*log(ran)-cfa*(1.+0.5*normal());
-                  if( ekin1 < 0.0 ) ekin1 = -0.010*log(ran);
+                  ekin1 = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+                  if( ekin1 < 0.0 ) ekin1 = -0.010*std::log(ran);
                   ekin2 += ekin1;
                   if( ekin2 > excitationEnergyDTA)
                      ekin1 = Amax( 1.0e-6, excitationEnergyDTA-(ekin2-ekin1));
                   cost = G4UniformRand()*2.0 - 1.0;
-                  sint = sqrt(fabs(1.0-cost*cost));
-                  phi = M_2PI*G4UniformRand();
+                  sint = std::sqrt(std::fabs(1.0-cost*cost));
+                  phi = twopi*G4UniformRand();
                   ran = G4UniformRand();
                   if( ran <= 0.60 ) 
                       pv[vecLen].setDefinition( "Deuteron");
@@ -4018,15 +4003,15 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       pv[vecLen].setDefinition( "Alpha");
                   spall += (int)(pv[vecLen].getMass() * 1.066);
                   if( spall > atomicWeight ) break;
-                  pv[vecLen].setFlag( true );                    // true is the same as IPA(i)<0
+                  pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                   pv[vecLen].setSide( -4 );
                   pvMass = pv[vecLen].getMass();
                   pv[vecLen].setSide( pv[vecLen].getCode());
                   pv[vecLen].setTOF( 1.0 );
                   pvEnergy = pvMass + ekin1;
-                  pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                  pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                   pp*sint*cos(phi),
+                  pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                  pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                   pp*sint*std::cos(phi),
                                                    pp*cost );
                   if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                   vecLen++;
@@ -4043,12 +4028,13 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
               pv[i].setKineticEnergyAndUpdate( incidentKineticEnergy );
          }
      }
-                                                     //  calculate time delay for nuclear reactions
+
+   // Calculate time delay for nuclear reactions
 
    G4double tof = incidentTOF;
    if(     (atomicWeight >= 1.5) && (atomicWeight <= 230.0) 
         && (incidentKineticEnergy <= 0.2) )
-           tof -= 500.0 * exp(-incidentKineticEnergy /0.04) * log( G4UniformRand() );
+           tof -= 500.0 * std::exp(-incidentKineticEnergy /0.04) * std::log( G4UniformRand() );
    for ( i=0; i < vecLen; i++)     
      { 
        
@@ -4083,8 +4069,8 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                                              G4double atomicWeight,
                                              G4double atomicNumber)
  {   
-// For low multiplicity in the first intranuclear interaction the cascading process
-// as described in G4HEInelastic::MediumEnergyCascading does not work 
+// For low multiplicity in the first intranuclear interaction the cascading 
+// process as described in G4HEInelastic::MediumEnergyCascading does not work 
 // satisfactorily. From experimental data it is strongly suggested to use 
 // a two- body resonance model.   
 //  
@@ -4112,7 +4098,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
 //   G4double incidentTOF           = incidentParticle.getTOF();   
    G4double incidentTOF           = 0.;
    
-                                                              // some local variables
+   // some local variables
 
    G4int i, j;
    
@@ -4123,7 +4109,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
         successful = false;
         return;
       }
-   G4double centerOfMassEnergy = sqrt( sqr(incidentMass) + sqr(targetMass)
+   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass) + sqr(targetMass)
                                        +2.*targetMass*incidentEnergy);
 
    G4HEVector pvI = incidentParticle;  // for the incident particle
@@ -4132,11 +4118,12 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    G4HEVector pvT = targetParticle;   // for the target particle
    pvT.setMomentumAndUpdate( 0.0, 0.0, 0.0 );
    pvT.setSide( -1 );
-   pvT.setTOF( -1.); 
-                              // distribute particles in forward and backward
-                              // hemispheres. Note that only low multiplicity
-                              // events from FirstIntInNuc.... should go into 
-                              // this routine. 
+   pvT.setTOF( -1.);
+ 
+   // Distribute particles in forward and backward hemispheres. Note that 
+   // only low multiplicity events from FirstIntInNuc.... should go into 
+   // this routine.
+ 
    G4int targ  = 0;  
    G4int ifor  = 0; 
    G4int iback = 0;
@@ -4192,8 +4179,8 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    
    G4double nucsup[] = { 1.0, 0.8, 0.6, 0.5, 0.4}; 
 
-   G4double xtarg = Amax(0.01,  (0.312+0.2*log(log(centerOfMassEnergy*centerOfMassEnergy)))
-                             * (pow(atomicWeight,0.33)-1.) * tb);
+   G4double xtarg = Amax(0.01,  (0.312+0.2*std::log(std::log(centerOfMassEnergy*centerOfMassEnergy)))
+                             * (std::pow(atomicWeight,0.33)-1.) * tb);
    G4int ntarg = Poisson(xtarg);
    if (ntarg > 0)
       {
@@ -4224,15 +4211,15 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                vecLen++;
             }
       }
-                              // mark leading particles for incident strange particles 
-                              // and antibaryons, for all other we assume that the first 
-                              // and second particle are the leading particles. 
-                              // We need this later for kinematic aspects of strangeness
-                              // conservation.
+
+   // Mark leading particles for incident strange particles and antibaryons, 
+   // for all other we assume that the first and second particle are the 
+   // leading particles. 
+   // We need this later for kinematic aspects of strangeness conservation.
                           
    G4int lead = 0;                   
    G4HEVector leadParticle;
-   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)          
+   if( (incidentMass >= kaonPlusMass-0.05) && (incidentCode != protonCode)  
                                            && (incidentCode != neutronCode) ) 
          {       
            G4double pMass = pv[0].getMass();
@@ -4256,12 +4243,12 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                   }
          }
 
-   if (verboseLevel > 1)
-      { G4cout << " pv Vector after initialization " << vecLen << G4endl;
-        pvI.Print(-1);
-        pvT.Print(-1);
-        for (i=0; i < vecLen ; i++) pv[i].Print(i);
-      }     
+   if (verboseLevel > 1) {
+     G4cout << " pv Vector after initialization " << vecLen << G4endl;
+     pvI.Print(-1);
+     pvT.Print(-1);
+     for (i=0; i < vecLen ; i++) pv[i].Print(i);
+   }     
 
    G4double tavai = 0.;
    for(i=0;i<vecLen;i++) if(pv[i].getSide() != -2) tavai  += pv[i].getMass();
@@ -4289,10 +4276,12 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                  }
             }    
       }
-                                          // now we produce 3 Clusters:
-                                          // 1. forward cluster
-                                          // 2. backward meson cluster
-                                          // 3. backward nucleon cluster
+
+   // Now produce 3 Clusters:
+   // 1. forward cluster
+   // 2. backward meson cluster
+   // 3. backward nucleon cluster
+
    G4double rmc0 = 0., rmd0 = 0., rme0 = 0.;
    G4int    ntc  = 0,  ntd  = 0,  nte  = 0;
    
@@ -4349,9 +4338,9 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    G4int ntc1 = Imin(4,ntc-1);
    G4int ntd1 = Imin(4,ntd-1);
    G4int nte1 = Imin(4,nte-1);
-   if (ntc > 1) rmc = rmc0 + pow(-log(1.-G4UniformRand()),cpar[ntc1])/gpar[ntc1];
-   if (ntd > 1) rmd = rmd0 + pow(-log(1.-G4UniformRand()),cpar[ntd1])/gpar[ntd1];
-   if (nte > 1) rme = rme0 + pow(-log(1.-G4UniformRand()),cpar[nte1])/gpar[nte1];
+   if (ntc > 1) rmc = rmc0 + std::pow(-std::log(1.-G4UniformRand()),cpar[ntc1])/gpar[ntc1];
+   if (ntd > 1) rmd = rmd0 + std::pow(-std::log(1.-G4UniformRand()),cpar[ntd1])/gpar[ntd1];
+   if (nte > 1) rme = rme0 + std::pow(-std::log(1.-G4UniformRand()),cpar[nte1])/gpar[nte1];
    while( (rmc+rmd) > centerOfMassEnergy)
       {
         if ((rmc == rmc0) && (rmd == rmd0))
@@ -4365,8 +4354,9 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             rmd = 0.1*rmd0 + 0.9*rmd;
           }   
       }             
-   if(verboseLevel > 1) G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd << " "
-                             << rmd << " " << nte << " " << rme << G4endl;
+   if(verboseLevel > 1) 
+     G4cout << " Cluster Masses: " << ntc << " " << rmc << " " << ntd << " "
+            << rmd << " " << nte << " " << rme << G4endl;
  
    
    G4HEVector* pvmx = new G4HEVector[11];
@@ -4379,23 +4369,23 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    pvmx[1].Lor( pvmx[1], pvmx[0] );
    pvmx[2].Lor( pvmx[2], pvmx[0] );
 
-   G4double pf = sqrt(Amax(0.0001,  sqr(sqr(centerOfMassEnergy) + rmd*rmd -rmc*rmc)
+   G4double pf = std::sqrt(Amax(0.0001,  sqr(sqr(centerOfMassEnergy) + rmd*rmd -rmc*rmc)
                                  - 4*sqr(centerOfMassEnergy)*rmd*rmd))/(2.*centerOfMassEnergy);
    pvmx[3].setMass( rmc );
    pvmx[4].setMass( rmd );
-   pvmx[3].setEnergy( sqrt(pf*pf + rmc*rmc) );
-   pvmx[4].setEnergy( sqrt(pf*pf + rmd*rmd) );
+   pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
+   pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
    G4double tvalue = -MAXFLOAT;
-   G4double bvalue = Amax(0.01, 4.0 + 1.6*log(incidentTotalMomentum));
-   if (bvalue != 0.0) tvalue = log(G4UniformRand())/bvalue;
+   G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
+   if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();
    G4double tacmin = sqr( pvmx[1].getEnergy() - pvmx[3].getEnergy()) - sqr( pin - pf);
    G4double ctet   = Amax(-1., Amin(1., 1.+2.*(tvalue-tacmin)/Amax(1.e-10, 4.*pin*pf)));
-   G4double stet   = sqrt(Amax(0., 1.0 - ctet*ctet));
-   G4double phi    = M_2PI * G4UniformRand();
-   pvmx[3].setMomentum( pf * stet * sin(phi), 
-                      pf * stet * cos(phi),
+   G4double stet   = std::sqrt(Amax(0., 1.0 - ctet*ctet));
+   G4double phi    = twopi * G4UniformRand();
+   pvmx[3].setMomentum( pf * stet * std::sin(phi), 
+                      pf * stet * std::cos(phi),
                       pf * ctet           );
    pvmx[4].Smul( pvmx[3], -1.);
    
@@ -4409,20 +4399,20 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
              ekit1 *= sqr(incidentKineticEnergy)/25.;
              ekit2 *= sqr(incidentKineticEnergy)/25.;
            }
-        G4double avalue = (1.-gaval)/(pow(ekit2, 1.-gaval)-pow(ekit1, 1.-gaval));
+        G4double avalue = (1.-gaval)/(std::pow(ekit2, 1.-gaval)-std::pow(ekit1, 1.-gaval));
         for (i=0; i < vecLen; i++)
             {
               if (pv[i].getSide() == -2)
                  {
-                   G4double ekit = pow(G4UniformRand()*(1.-gaval)/avalue +pow(ekit1, 1.-gaval),
+                   G4double ekit = std::pow(G4UniformRand()*(1.-gaval)/avalue +std::pow(ekit1, 1.-gaval),
                                        1./(1.-gaval));
                    pv[i].setKineticEnergyAndUpdate( ekit );
-                   ctet = Amax(-1., Amin(1., log(2.23*G4UniformRand()+0.383)/0.96));
-                   stet = sqrt( Amax( 0.0, 1. - ctet*ctet ));
-                   phi  = G4UniformRand()*M_2PI;
+                   ctet = Amax(-1., Amin(1., std::log(2.23*G4UniformRand()+0.383)/0.96));
+                   stet = std::sqrt( Amax( 0.0, 1. - ctet*ctet ));
+                   phi  = G4UniformRand()*twopi;
                    G4double pp = pv[i].Length();
-                   pv[i].setMomentum( pp * stet * sin(phi),
-                                      pp * stet * cos(phi),
+                   pv[i].setMomentum( pp * stet * std::sin(phi),
+                                      pp * stet * std::cos(phi),
                                       pp * ctet           );
                    pv[i].Lor( pv[i], pvmx[0] );
                  }              
@@ -4433,10 +4423,10 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    pvmx[5].SmulAndUpdate( pvmx[3], -1.);
    pvmx[6].SmulAndUpdate( pvmx[4], -1.);
 
-   if (verboseLevel > 1)
-      { G4cout << " General vectors before Phase space Generation " << G4endl;
-        for (i=0; i<7; i++) pvmx[i].Print(i);
-      }  
+   if (verboseLevel > 1) {
+     G4cout << " General vectors before Phase space Generation " << G4endl;
+     for (i=0; i<7; i++) pvmx[i].Print(i);
+   }  
 
 
    G4HEVector* tempV = new G4HEVector[18];
@@ -4524,7 +4514,8 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
        for(i=0;i<vecLen; i++) pv[i].Print(i);
      } 
 
-                                                   //  Lorentz transformation in lab system
+   // Lorentz transformation in lab system
+
    targ = 0;
    for( i=0; i < vecLen; i++ ) 
       {
@@ -4534,11 +4525,10 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
       }
    if (targ <1) targ =1;
 
-   if(verboseLevel > 1)
-     {
-       G4cout << " Transformation in Lab- System " << G4endl;
-       for(i=0; i<vecLen; i++) pv[i].Print(i);
-     }
+   if(verboseLevel > 1) {
+     G4cout << " Transformation in Lab- System " << G4endl;
+     for(i=0; i<vecLen; i++) pv[i].Print(i);
+   }
 
    G4bool dum(0);
    G4double ekin, teta;
@@ -4620,8 +4610,9 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             ekin += pvmx[7].getKineticEnergy();
           }
        teta = pvmx[8].Ang( pvmx[4] );
-       if (verboseLevel > 1) G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 
-                                  << " " << ekin1 << " " << ekin << G4endl;
+       if (verboseLevel > 1) 
+         G4cout << " vecLen > 1 && vecLen < 19 " << teta << " " << ekin0 
+                << " " << ekin1 << " " << ekin << G4endl;
      }
 
    if( ekin1 != 0.0 ) 
@@ -4638,48 +4629,43 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
             pvmx[7].Add( pvmx[7], pv[i] );
           }
        teta = pvmx[7].Ang( pvmx[4] );
-       if (verboseLevel > 1) G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
-                                  << ekin1 << G4endl;
+       if (verboseLevel > 1) 
+         G4cout << " ekin1 != 0 " << teta << " " << ekin0 << " " 
+                << ekin1 << G4endl;
      }
 
-                          //    Rotate in direction of z-axis, this does disturb in some way our
-                          //    inclusive distributions, but it is necessary for momentum conservation
+   // Do some smearing in the transverse direction due to Fermi motion.
 
-   pvmx[7].setZero();
-   for( i=0; i < vecLen; i++ ) pvmx[7].Add( pvmx[7], pv[i] );
-   
-                          //  Some smearing in transverse direction from Fermi motion
-   
-
-
-                                                  // RANNOR
    G4double ry   = G4UniformRand();
    G4double rz   = G4UniformRand();
-   G4double rx   = M_2PI*rz;
-   G4double a1   = sqrt(-2.0*log(ry));
-   G4double ran1 = a1*sin(rx);
-   G4double ran2 = a1*cos(rx);
-                                                  
-   pvmx[7].setMomentum( pvmx[7].getMomentum().x()+ran1*0.020*targ,
-                        pvmx[7].getMomentum().y()+ran2*0.020*targ );
-   pvmx[8].Defs( pvmx[4], pvmx[7], pvmx[9], pvmx[10] );
-   pvmx[7].setZero();
-   for (i = 0; i < vecLen; i++) 
-      { 
-        pv[i].Trac( pv[i], pvmx[8] , pvmx[9], pvmx[10] );
-        pvmx[7].Add( pvmx[7], pv[i] );  
-      }
-   teta = pvmx[7].Ang( pvmx[4] );   
-   if (verboseLevel > 1) G4cout << " After smearing " << teta << G4endl;
+   G4double rx   = twopi*rz;
+   G4double a1   = std::sqrt(-2.0*std::log(ry));
+   G4double rantarg1 = a1*std::cos(rx)*0.02*targ/G4double(vecLen);
+   G4double rantarg2 = a1*std::sin(rx)*0.02*targ/G4double(vecLen);
 
-                               //  Rotate in direction of primary particle, subtract binding energies
-                               //   and make some further corrections if required
+   for (i = 0; i < vecLen; i++)
+     pv[i].setMomentum( pv[i].getMomentum().x()+rantarg1,
+                        pv[i].getMomentum().y()+rantarg2 );
+
+   if (verboseLevel > 1) {
+     pvmx[7].setZero();
+     for (i = 0; i < vecLen; i++) pvmx[7].Add( pvmx[7], pv[i] );  
+     teta = pvmx[7].Ang( pvmx[4] );   
+     G4cout << " After smearing " << teta << G4endl;
+   }
+
+   // Rotate in the direction of the primary particle momentum (z-axis).
+   // This does disturb our inclusive distributions somewhat, but it is 
+   // necessary for momentum conservation.
+
+   // Also subtract binding energies and make some further corrections 
+   // if required.
 
    G4double dekin = 0.0;
    G4int npions = 0;    
    G4double ek1 = 0.0;
    G4double alekw, xxh;
-   G4double cfa = 0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.);
+   G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
    G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00};
    G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65};
    
@@ -4690,14 +4676,14 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
         if (atomicWeight > 1.5)
            {
              ekin  = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
-             alekw = log( incidentKineticEnergy );
+             alekw = std::log( incidentKineticEnergy );
              xxh   = 1.;
              xxh   = 1.;
              if(incidentCode == pionPlusCode || incidentCode == pionMinusCode)
 	       {
                  if(pv[i].getCode() == pionZeroCode)
                    {
-                     if(G4UniformRand() < log(atomicWeight))
+                     if(G4UniformRand() < std::log(atomicWeight))
                        { 
                          if (alekw > alem[0])
                            {
@@ -4741,37 +4727,39 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
         for (i=0; i<vecLen; i++) pv[i].Print(i);
       }
 
-                                       //  add black track particles
-                                       //  the total number of particles produced is restricted to 198
-                                       //  this may have influence on very high energies
+   // Add black track particles
+   // The total number of particles produced is restricted to 198
+   // this may have influence on very high energies
 
-   if (verboseLevel > 1) G4cout << " Evaporation " <<  atomicWeight << " " <<
-                     excitationEnergyGNP << " " << excitationEnergyDTA << G4endl;
+   if (verboseLevel > 1) 
+     G4cout << " Evaporation " <<  atomicWeight << " " 
+            << excitationEnergyGNP << " " << excitationEnergyDTA << G4endl;
 
    if( atomicWeight > 1.5 ) 
      {
 
        G4double sprob, cost, sint, ekin2, ran, pp, eka;
        G4int spall(0), nbl(0);
-                                     //  sprob is the probability of self-absorption in heavy molecules
+       //  sprob is the probability of self-absorption in heavy molecules
 
        if( incidentKineticEnergy < 5.0 )
          sprob = 0.0;
        else
-//         sprob = Amin( 1.0, 0.6*log(incidentKineticEnergy-4.0) );
-         sprob = Amin(1., 0.000314*atomicWeight*log(incidentKineticEnergy-4.)); 
-                                     //  first add protons and neutrons
+//         sprob = Amin( 1.0, 0.6*std::log(incidentKineticEnergy-4.0) );
+         sprob = Amin(1., 0.000314*atomicWeight*std::log(incidentKineticEnergy-4.)); 
+       // First add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
          {
-                                     //  nbl = number of proton/neutron black track particles
-                                     //  tex is their total kinetic energy (GeV)
+           //  nbl = number of proton/neutron black track particles
+           //  tex is their total kinetic energy (GeV)
        
            nbl = Poisson( (1.5+1.25*targ)*excitationEnergyGNP/
-                                         (excitationEnergyGNP+excitationEnergyDTA));
+                                    (excitationEnergyGNP+excitationEnergyDTA));
            if( targ+nbl > atomicWeight ) nbl = (int)(atomicWeight - targ);
-           if (verboseLevel > 1) G4cout << " evaporation " << targ << " " << nbl << " " 
-                                      << sprob << G4endl; 
+           if (verboseLevel > 1) 
+             G4cout << " evaporation " << targ << " " << nbl << " " 
+                                       << sprob << G4endl; 
            spall = targ;
            if( nbl > 0) 
              {
@@ -4782,8 +4770,8 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                     if( G4UniformRand() < sprob ) continue;
                     if( ekin2 > excitationEnergyGNP) break;
                     ran = G4UniformRand();
-                    ekin1 = -ekin*log(ran) - cfa*(1.0+0.5*normal());
-                    if (ekin1 < 0) ekin1 = -0.010*log(ran);
+                    ekin1 = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+                    if (ekin1 < 0) ekin1 = -0.010*std::log(ran);
                     ekin2 += ekin1;
                     if( ekin2 > excitationEnergyGNP )
                     ekin1 = Amax( 1.0e-6, excitationEnergyGNP-(ekin2-ekin1) );
@@ -4793,16 +4781,16 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                        pv[vecLen].setDefinition( "Neutron");
                     spall++;
                     cost = G4UniformRand() * 2.0 - 1.0;
-                    sint = sqrt(fabs(1.0-cost*cost));
-                    phi = M_2PI * G4UniformRand();
-                    pv[vecLen].setFlag( true );                 // true is the same as IPA(i)<0
+                    sint = std::sqrt(std::fabs(1.0-cost*cost));
+                    phi = twopi * G4UniformRand();
+                    pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                     pv[vecLen].setSide( -4 );
                     pvMass = pv[vecLen].getMass();
                     pv[vecLen].setTOF( 1.0 );
                     pvEnergy = ekin1 + pvMass;
-                    pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                    pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                     pp*sint*cos(phi),
+                    pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                    pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                     pp*sint*std::cos(phi),
                                                      pp*cost );
                     if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                     vecLen++;
@@ -4813,7 +4801,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                     eka = incidentKineticEnergy;
                     if( eka > 1.0 )eka *= eka;
                     eka = Amax( 0.1, eka );
-                    ika = G4int(3.6*exp((atomicNumber*atomicNumber
+                    ika = G4int(3.6*std::exp((atomicNumber*atomicNumber
                                 /atomicWeight-35.56)/6.45)/eka);
                     if( ika > 0 ) 
                       {
@@ -4833,15 +4821,15 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
              }
          }
 
-                                              // finished adding proton/neutron black track particles
-                                              //  now, try to add deuterons, tritons and alphas
+     // Finished adding proton/neutron black track particles
+     // now, try to add deuterons, tritons and alphas
      
      if( excitationEnergyDTA >= 0.001 ) 
        {
          nbl = Poisson( (1.5+1.25*targ)*excitationEnergyDTA
                                       /(excitationEnergyGNP+excitationEnergyDTA));
        
-                                      //    nbl is the number of deutrons, tritons, and alphas produced
+         //  nbl is the number of deutrons, tritons, and alphas produced
        
          if( nbl > 0 ) 
            {
@@ -4852,14 +4840,14 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                   if( G4UniformRand() < sprob ) continue;
                   if( ekin2 > excitationEnergyDTA) break;
                   ran = G4UniformRand();
-                  ekin1 = -ekin*log(ran)-cfa*(1.+0.5*normal());
-                  if( ekin1 < 0.0 ) ekin1 = -0.010*log(ran);
+                  ekin1 = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+                  if( ekin1 < 0.0 ) ekin1 = -0.010*std::log(ran);
                   ekin2 += ekin1;
                   if( ekin2 > excitationEnergyDTA)
                      ekin1 = Amax( 1.0e-6, excitationEnergyDTA-(ekin2-ekin1));
                   cost = G4UniformRand()*2.0 - 1.0;
-                  sint = sqrt(fabs(1.0-cost*cost));
-                  phi = M_2PI*G4UniformRand();
+                  sint = std::sqrt(std::fabs(1.0-cost*cost));
+                  phi = twopi*G4UniformRand();
                   ran = G4UniformRand();
                   if( ran <= 0.60 ) 
                       pv[vecLen].setDefinition( "Deuteron");
@@ -4869,14 +4857,14 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
                       pv[vecLen].setDefinition( "Alpha");
                   spall += (int)(pv[vecLen].getMass() * 1.066);
                   if( spall > atomicWeight ) break;
-                  pv[vecLen].setFlag( true );                    // true is the same as IPA(i)<0
+                  pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                   pv[vecLen].setSide( -4 );
                   pvMass = pv[vecLen].getMass();
                   pv[vecLen].setTOF( 1.0 );
                   pvEnergy = pvMass + ekin1;
-                  pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                  pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                   pp*sint*cos(phi),
+                  pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                  pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                   pp*sint*std::cos(phi),
                                                    pp*cost );
                   if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                   vecLen++;
@@ -4893,12 +4881,13 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
               pv[i].setKineticEnergyAndUpdate( incidentKineticEnergy );
          }
      }
-                                                     //  calculate time delay for nuclear reactions
+
+   // Calculate time delay for nuclear reactions
 
    G4double tof = incidentTOF;
    if(     (atomicWeight >= 1.5) && (atomicWeight <= 230.0) 
         && (incidentKineticEnergy <= 0.2) )
-           tof -= 500.0 * exp(-incidentKineticEnergy /0.04) * log( G4UniformRand() );
+           tof -= 500.0 * std::exp(-incidentKineticEnergy /0.04) * std::log( G4UniformRand() );
    for ( i=0; i < vecLen; i++)     
      { 
        
@@ -4954,18 +4943,19 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
 //   G4double incidentTOF           = incidentParticle.getTOF();   
    G4double incidentTOF           = 0.;
    
-                                                              // some local variables
+   // some local variables
 
    G4int i;
    
-   if(verboseLevel > 1) G4cout << " G4HEInelastic::QuasiElasticScattering " << G4endl;
+   if(verboseLevel > 1) 
+     G4cout << " G4HEInelastic::QuasiElasticScattering " << G4endl;
 
    if (incidentTotalMomentum < 0.01 || vecLen < 2 )
       {
         successful = false;
         return;
       }
-   G4double centerOfMassEnergy = sqrt( sqr(incidentMass) + sqr(targetMass)
+   G4double centerOfMassEnergy = std::sqrt( sqr(incidentMass) + sqr(targetMass)
                                        +2.*targetMass*incidentEnergy);
 
    G4HEVector pvI = incidentParticle;  // for the incident particle
@@ -4978,7 +4968,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
 
    G4HEVector* pvmx = new G4HEVector[3];
 
-   if (atomicWeight > 1.5)                   // for the following case better use ElasticScattering.
+   if (atomicWeight > 1.5)   // for the following case better use ElasticScattering.
       {
         if (    (pvI.getCode() == pv[0].getCode() )
              && (pvT.getCode() == pv[1].getCode() )
@@ -5012,7 +5002,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
         pvmx[1].Lor( pvI, pvmx[0] );
         pvmx[2].Lor( pvT, pvmx[0] );
         G4double pin = pvmx[1].Length();
-        G4double bvalue = Amax(0.01 , 4.225+1.795*log(incidentTotalMomentum));
+        G4double bvalue = Amax(0.01 , 4.225+1.795*std::log(incidentTotalMomentum));
         G4double pf =   sqr( sqr(centerOfMassEnergy) + sqr(pv[1].getMass()) - sqr(pv[0].getMass()))
                       - 4 * sqr(centerOfMassEnergy) * sqr(pv[1].getMass());
         if ( pf < 0.001)
@@ -5020,16 +5010,16 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
              successful = false;
              return;
            }
-        pf = sqrt(pf)/(2.*centerOfMassEnergy);
+        pf = std::sqrt(pf)/(2.*centerOfMassEnergy);
         G4double btrang = 4. * bvalue * pin * pf;
         G4double exindt = -1.;
-        if (btrang < 46.) exindt += exp(-btrang);
-        G4double tdn = log(1. + G4UniformRand()*exindt)/btrang;
+        if (btrang < 46.) exindt += std::exp(-btrang);
+        G4double tdn = std::log(1. + G4UniformRand()*exindt)/btrang;
         G4double ctet = Amax( -1., Amin(1., 1. + 2.*tdn));
-        G4double stet = sqrt((1.-ctet)*(1.+ctet));
-        G4double phi  = M_2PI * G4UniformRand();
-        pv[0].setMomentumAndUpdate( pf*stet*sin(phi),
-                                    pf*stet*cos(phi),
+        G4double stet = std::sqrt((1.-ctet)*(1.+ctet));
+        G4double phi  = twopi * G4UniformRand();
+        pv[0].setMomentumAndUpdate( pf*stet*std::sin(phi),
+                                    pf*stet*std::cos(phi),
                                     pf*ctet         );
         pv[1].SmulAndUpdate( pv[0], -1.); 
         
@@ -5040,7 +5030,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
              if (atomicWeight > 1.5)
                {
                  G4double ekin =    pv[i].getKineticEnergy() 
-                                 -  0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.)
+                                 -  0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.)
                                    *(1. + 0.5*normal()); 
                  ekin = Amax(0.0001, ekin);
                  pv[i].setKineticEnergyAndUpdate( ekin );
@@ -5048,12 +5038,14 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
            }
       }
    vecLen = 2;
-                                       //  add black track particles
-                                       //  the total number of particles produced is restricted to 198
-                                       //  this may have influence on very high energies
 
-   if (verboseLevel > 1) G4cout << " Evaporation " << atomicWeight << " " << 
-                     excitationEnergyGNP << " " <<  excitationEnergyDTA << G4endl;
+   //  add black track particles
+   //  the total number of particles produced is restricted to 198
+   //  this may have influence on very high energies
+
+   if (verboseLevel > 1) 
+     G4cout << " Evaporation " << atomicWeight << " " << 
+               excitationEnergyGNP << " " <<  excitationEnergyDTA << G4endl;
 
    if( atomicWeight > 1.5 ) 
      {
@@ -5061,20 +5053,21 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
        G4double sprob, cost, sint, ekin2, ran, pp, eka;
        G4double ekin, cfa, ekin1, phi, pvMass, pvEnergy;
        G4int spall(0), nbl(0);
-                                     //  sprob is the probability of self-absorption in heavy molecules
+       //  sprob is the probability of self-absorption in heavy molecules
 
        sprob = 0.;
-       cfa   = 0.025*((atomicWeight-1.)/120.)*exp(-(atomicWeight-1.)/120.);
+       cfa   = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
                                      //  first add protons and neutrons
 
        if( excitationEnergyGNP >= 0.001 ) 
          {
-                                     //  nbl = number of proton/neutron black track particles
-                                     //  tex is their total kinetic energy (GeV)
+           //  nbl = number of proton/neutron black track particles
+           //  tex is their total kinetic energy (GeV)
        
            nbl = Poisson( excitationEnergyGNP/0.02);
            if( nbl > atomicWeight ) nbl = (int)(atomicWeight);
-           if (verboseLevel > 1) G4cout << " evaporation " << nbl << " " << sprob << G4endl; 
+           if (verboseLevel > 1) 
+             G4cout << " evaporation " << nbl << " " << sprob << G4endl; 
            spall = 0;
            if( nbl > 0) 
              {
@@ -5085,8 +5078,8 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                     if( G4UniformRand() < sprob ) continue;
                     if( ekin2 > excitationEnergyGNP) break;
                     ran = G4UniformRand();
-                    ekin1 = -ekin*log(ran) - cfa*(1.0+0.5*normal());
-                    if (ekin1 < 0) ekin1 = -0.010*log(ran);
+                    ekin1 = -ekin*std::log(ran) - cfa*(1.0+0.5*normal());
+                    if (ekin1 < 0) ekin1 = -0.010*std::log(ran);
                     ekin2 += ekin1;
                     if( ekin2 > excitationEnergyGNP)
                     ekin1 = Amax( 1.0e-6, excitationEnergyGNP-(ekin2-ekin1) );
@@ -5096,16 +5089,16 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                        pv[vecLen].setDefinition( "Neutron");
                     spall++;
                     cost = G4UniformRand() * 2.0 - 1.0;
-                    sint = sqrt(fabs(1.0-cost*cost));
-                    phi = M_2PI * G4UniformRand();
-                    pv[vecLen].setFlag( true );                 // true is the same as IPA(i)<0
+                    sint = std::sqrt(std::fabs(1.0-cost*cost));
+                    phi = twopi * G4UniformRand();
+                    pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                     pv[vecLen].setSide( -4 );
                     pvMass = pv[vecLen].getMass();
                     pv[vecLen].setTOF( 1.0 );
                     pvEnergy = ekin1 + pvMass;
-                    pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                    pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                     pp*sint*cos(phi),
+                    pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                    pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                     pp*sint*std::cos(phi),
                                                      pp*cost );
                     if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                     vecLen++;
@@ -5116,7 +5109,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                     eka = incidentKineticEnergy;
                     if( eka > 1.0 )eka *= eka;
                     eka = Amax( 0.1, eka );
-                    ika = G4int(3.6*exp((atomicNumber*atomicNumber
+                    ika = G4int(3.6*std::exp((atomicNumber*atomicNumber
                                 /atomicWeight-35.56)/6.45)/eka);
                     if( ika > 0 ) 
                       {
@@ -5134,14 +5127,14 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
              }
          }
 
-                                              // finished adding proton/neutron black track particles
-                                              //  now, try to add deuterons, tritons and alphas
+     // finished adding proton/neutron black track particles
+     //  now, try to add deuterons, tritons and alphas
      
      if( excitationEnergyDTA >= 0.001 ) 
        {
-         nbl = (G4int)(2.*log(atomicWeight));
+         nbl = (G4int)(2.*std::log(atomicWeight));
        
-                                      //    nbl is the number of deutrons, tritons, and alphas produced
+         //    nbl is the number of deutrons, tritons, and alphas produced
        
          if( nbl > 0 ) 
            {
@@ -5152,14 +5145,14 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                   if( G4UniformRand() < sprob ) continue;
                   if( ekin2 > excitationEnergyDTA) break;
                   ran = G4UniformRand();
-                  ekin1 = -ekin*log(ran)-cfa*(1.+0.5*normal());
-                  if( ekin1 < 0.0 ) ekin1 = -0.010*log(ran);
+                  ekin1 = -ekin*std::log(ran)-cfa*(1.+0.5*normal());
+                  if( ekin1 < 0.0 ) ekin1 = -0.010*std::log(ran);
                   ekin2 += ekin1;
                   if( ekin2 > excitationEnergyDTA)
                      ekin1 = Amax( 1.0e-6, excitationEnergyDTA-(ekin2-ekin1));
                   cost = G4UniformRand()*2.0 - 1.0;
-                  sint = sqrt(fabs(1.0-cost*cost));
-                  phi = M_2PI*G4UniformRand();
+                  sint = std::sqrt(std::fabs(1.0-cost*cost));
+                  phi = twopi*G4UniformRand();
                   ran = G4UniformRand();
                   if( ran <= 0.60 ) 
                       pv[vecLen].setDefinition( "Deuteron");
@@ -5169,14 +5162,14 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
                       pv[vecLen].setDefinition( "Alpha");
                   spall += (int)(pv[vecLen].getMass() * 1.066);
                   if( spall > atomicWeight ) break;
-                  pv[vecLen].setFlag( true );                    // true is the same as IPA(i)<0
+                  pv[vecLen].setFlag( true );  // true is the same as IPA(i)<0
                   pv[vecLen].setSide( -4 );
                   pvMass = pv[vecLen].getMass();
                   pv[vecLen].setTOF( 1.0 );
                   pvEnergy = pvMass + ekin1;
-                  pp = sqrt( fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
-                  pv[vecLen].setMomentumAndUpdate( pp*sint*sin(phi),
-                                                   pp*sint*cos(phi),
+                  pp = std::sqrt( std::fabs( pvEnergy*pvEnergy - pvMass*pvMass ) );
+                  pv[vecLen].setMomentumAndUpdate( pp*sint*std::sin(phi),
+                                                   pp*sint*std::cos(phi),
                                                    pp*cost );
                   if (verboseLevel > 1) pv[vecLen].Print(vecLen);
                   vecLen++;
@@ -5184,12 +5177,13 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
             }
         }
     }
-                                                     //  calculate time delay for nuclear reactions
+
+   // Calculate time delay for nuclear reactions
 
    G4double tof = incidentTOF;
    if(     (atomicWeight >= 1.5) && (atomicWeight <= 230.0) 
         && (incidentKineticEnergy <= 0.2) )
-           tof -= 500.0 * exp(-incidentKineticEnergy /0.04) * log( G4UniformRand() );
+           tof -= 500.0 * std::exp(-incidentKineticEnergy /0.04) * std::log( G4UniformRand() );
    for ( i=0; i < vecLen; i++)     
      { 
        
@@ -5221,11 +5215,13 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
                                  G4double atomicWeight,
                                  G4double /* atomicNumber*/)
  {
-   if(verboseLevel > 1) G4cout << " G4HEInelastic::ElasticScattering " << G4endl;
+   if(verboseLevel > 1) 
+     G4cout << " G4HEInelastic::ElasticScattering " << G4endl;
 
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
    if (verboseLevel > 1)
-      G4cout << "DoIt: Incident particle momentum=" << incidentTotalMomentum << " GeV" << G4endl;
+     G4cout << "DoIt: Incident particle momentum=" 
+            << incidentTotalMomentum << " GeV" << G4endl;
    if (incidentTotalMomentum < 0.01) 
       { 
         successful = false;
@@ -5242,16 +5238,16 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
    G4double aa, bb, cc, dd, rr;
    if (atomicWeight <= 62.) 
      {
-       aa = pow(atomicWeight, 1.63);
-       bb = 14.5*pow(atomicWeight, 0.66);
-       cc = 1.4*pow(atomicWeight, 0.33);
+       aa = std::pow(atomicWeight, 1.63);
+       bb = 14.5*std::pow(atomicWeight, 0.66);
+       cc = 1.4*std::pow(atomicWeight, 0.33);
        dd = 10.;
      }
    else 
      {
-       aa = pow(atomicWeight, 1.33);
-       bb = 60.*pow(atomicWeight, 0.33);
-       cc = 0.4*pow(atomicWeight, 0.40);
+       aa = std::pow(atomicWeight, 1.33);
+       bb = 60.*std::pow(atomicWeight, 0.33);
+       cc = 0.4*std::pow(atomicWeight, 0.40);
        dd = 10.;
      }
    aa = aa/bb;
@@ -5261,43 +5257,41 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
    if (verboseLevel > 1) 
      {
        G4cout << "ElasticScattering: aa,bb,cc,dd,rr" << G4endl;
-       G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << G4endl;
+       G4cout << aa << " " << bb << " " << cc << " " << dd << " " 
+              << rr << G4endl;
      }
-   G4double t1 = -log(ran)/bb;
-   G4double t2 = -log(ran)/dd;
-   if (verboseLevel > 1) 
-     {
-       G4cout << "t1,fctcos " << t1 << " " << fctcos(t1, aa, bb, cc, dd, rr) << 
-               G4endl;
-       G4cout << "t2,fctcos " << t2 << " " << fctcos(t2, aa, bb, cc, dd, rr) << 
-               G4endl;
-     }
+   G4double t1 = -std::log(ran)/bb;
+   G4double t2 = -std::log(ran)/dd;
+   if (verboseLevel > 1) {
+       G4cout << "t1,fctcos " << t1 << " " << fctcos(t1, aa, bb, cc, dd, rr) 
+              << G4endl;
+       G4cout << "t2,fctcos " << t2 << " " << fctcos(t2, aa, bb, cc, dd, rr) 
+              << G4endl;
+   }
    G4double eps = 0.001;
    G4int ind1 = 10;
    G4double t;
    G4int ier1;
    ier1 = rtmi(&t, t1, t2, eps, ind1, aa, bb, cc, dd, rr);
-   if (verboseLevel > 1) 
-     {
-       G4cout << "From rtmi, ier1=" << ier1 << G4endl;
-       G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
-               G4endl;
-     }
+   if (verboseLevel > 1) {
+     G4cout << "From rtmi, ier1=" << ier1 << G4endl;
+     G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) 
+            << G4endl;
+   }
    if (ier1 != 0) t = 0.25*(3.*t1 + t2);
    if (verboseLevel > 1) 
-     {
-       G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) << 
-               G4endl;
-     }
-   G4double phi = G4UniformRand()*2.*M_PI;
+     G4cout << "t, fctcos " << t << " " << fctcos(t, aa, bb, cc, dd, rr) 
+            << G4endl;
+
+   G4double phi = G4UniformRand()*twopi;
    rr = 0.5*t/sqr(incidentTotalMomentum);
    if (rr > 1.) rr = 0.;
    if (verboseLevel > 1)
       G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(Amax(rr*(2. - rr), 0.));
+   G4double sint = std::sqrt(Amax(rr*(2. - rr), 0.));
    if (verboseLevel > 1)
-      G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
+      G4cout << "cos(t)=" << cost << "  std::sin(t)=" << sint << G4endl;
                                          // Scattered particle referred to axis of incident particle
    G4HEVector pv0;
    G4HEVector pvI;
@@ -5306,8 +5300,8 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
    pvI.SmulAndUpdate( pvI, 1. );    
    pv0.setMass( pvI.getMass() );
    
-   pv0.setMomentumAndUpdate( incidentTotalMomentum * sint * sin(phi),
-                             incidentTotalMomentum * sint * cos(phi),
+   pv0.setMomentumAndUpdate( incidentTotalMomentum * sint * std::sin(phi),
+                             incidentTotalMomentum * sint * std::cos(phi),
                              incidentTotalMomentum * cost           );    
    pv0.Defs1( pv0, pvI );
       
@@ -5337,23 +5331,25 @@ G4HEInelastic::rtmi(G4double *x, G4double xli, G4double xri, G4double eps,
    if (f == 0.) return ier;
    fr = f;
 
-                                     // Error return in case of wrong input data
+   // Error return in case of wrong input data
    if (fl*fr >= 0.) 
      {
        ier = 2;
        return ier;
      }
 
-                                     // Basic assumption fl*fr less than 0 is satisfied.
-                                     // Generate tolerance for function values.
+   // Basic assumption fl*fr less than 0 is satisfied.
+   // Generate tolerance for function values.
    G4int i = 0;
    G4double tolf = 100.*eps;
 
-                                     // Start iteration loop
+   // Start iteration loop
+
    label4:   // <-------------
    i++;
 
-                                     // Start bisection loop
+   // Start bisection loop
+
    for (G4int k = 1; k <= iend; k++) 
      {
        *x = 0.5*(xl + xr);
@@ -5361,8 +5357,8 @@ G4HEInelastic::rtmi(G4double *x, G4double xli, G4double xri, G4double eps,
        f = fctcos(tol, aa, bb, cc, dd, rr);
        if (f == 0.) return 0;
        if (f*fr < 0.) 
-         {                          // Interchange xl and xr in order to get the
-           tol = xl;                // same sign in f and fr
+         {                  // Interchange xl and xr in order to get the
+           tol = xl;        // same sign in f and fr
            xl = xr;
            xr = tol;
            tol = fl;
@@ -5376,28 +5372,28 @@ G4HEInelastic::rtmi(G4double *x, G4double xli, G4double xri, G4double eps,
        xr = *x;
        fr = f;
 
-                                    // Test on satisfactory accuracy in bisection loop
+       // Test on satisfactory accuracy in bisection loop
        tol = eps;
-       a = fabs(xr);
+       a = std::fabs(xr);
        if (a > 1.) tol = tol*a;
-       if (fabs(xr - xl) <= tol && fabs(fr - fl) <= tolf) goto label14;
+       if (std::fabs(xr - xl) <= tol && std::fabs(fr - fl) <= tolf) goto label14;
      }
-                                    // End of bisection loop
+   // End of bisection loop
 
-                                    // No convergence after iend iteration steps followed by iend
-                                    // successive steps of bisection or steadily increasing function
-                                    // values at right bounds.  Error return.
+   // No convergence after iend iteration steps followed by iend
+   // successive steps of bisection or steadily increasing function
+   // values at right bounds.  Error return.
    ier = 1;
 
    label14:  // <---------------
-   if (fabs(fr) > fabs(fl)) 
+   if (std::fabs(fr) > std::fabs(fl)) 
      {
        *x = xl;
        f = fl;
      }
    return ier;
 
-                                     // Computation of iterated x-value by inverse parabolic interp
+   // Computation of iterated x-value by inverse parabolic interp
    label17:  // <---------------
    G4double a = fr - f;
    G4double dx = (*x - xl)*fl*(1. + f*(a - tol)/(a*(fr - fl)))/tol;
@@ -5408,13 +5404,13 @@ G4HEInelastic::rtmi(G4double *x, G4double xli, G4double xri, G4double eps,
    f = fctcos(tol, aa, bb, cc, dd, rr);
    if (f == 0.) return ier;
 
-                                      // Test on satisfactory accuracy in iteration loop
+   // Test on satisfactory accuracy in iteration loop
    tol = eps;
-   a = fabs(*x);
+   a = std::fabs(*x);
    if (a > 1) tol = tol*a;
-   if (fabs(dx) <= tol && fabs(f) <= tolf) return ier;
+   if (std::fabs(dx) <= tol && std::fabs(f) <= tolf) return ier;
 
-                                       // Preparation of next bisection loop
+   // Preparation of next bisection loop
    if (f*fl < 0.) 
      {
        xr = *x;
@@ -5434,9 +5430,8 @@ G4HEInelastic::rtmi(G4double *x, G4double xli, G4double xri, G4double eps,
 // Test function for root-finder
 
 G4double
-G4HEInelastic::fctcos(G4double t, 
-                            G4double aa, G4double bb, G4double cc, G4double dd, 
-                            G4double rr)
+G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc, 
+                      G4double dd, G4double rr)
  {
    const G4double expxl = -82.;
    const G4double expxu = 82.;
@@ -5449,11 +5444,11 @@ G4HEInelastic::fctcos(G4double t,
    if (test2 > expxu) test2 = expxu;
    if (test2 < expxl) test2 = expxl;
 
-   return aa*exp(test1) + cc*exp(test2) - rr;
+   return aa*std::exp(test1) + cc*std::exp(test2) - rr;
  }
 
  G4double G4HEInelastic::NBodyPhaseSpace
-                               ( const G4double totalEnergy,                // MeV
+                               ( const G4double totalEnergy,        // MeV
                                  const G4bool constantCrossSection,
                                  G4HEVector  vec[],
                                  G4int& vecLen )
@@ -5463,13 +5458,14 @@ G4HEInelastic::fctcos(G4double t,
 
     G4int i;
     
-    const G4double expxu =  log(FLT_MAX);  // upper bound for arg. of exp
+    const G4double expxu =  std::log(FLT_MAX);  // upper bound for arg. of exp
     const G4double expxl = -expxu;         // lower bound for arg. of exp
     
     if( vecLen < 2 ) {
       G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
       G4cerr << "    number of particles < 2" << G4endl;
-      G4cerr << "totalEnergy = " << totalEnergy << ", vecLen = " << vecLen << G4endl;
+      G4cerr << "totalEnergy = " << totalEnergy << ", vecLen = " 
+             << vecLen << G4endl;
       return -1.0;
     }
     
@@ -5525,7 +5521,7 @@ G4HEInelastic::fctcos(G4double t,
     }
     emm[vecLen-1] = totalEnergy;
     
-    //   Weight is the sum of logarithms of terms instead of the product of terms
+    // Weight is the sum of logarithms of terms instead of the product of terms
     
     G4bool lzero = true;    
     G4double wtmax = 0.0;
@@ -5540,21 +5536,21 @@ G4HEInelastic::fctcos(G4double t,
           G4double arg = emmax*emmax
             + (emmin*emmin-mass[i]*mass[i])*(emmin*emmin-mass[i]*mass[i])/(emmax*emmax)
             - 2.0*(emmin*emmin+mass[i]*mass[i]);
-          if( arg > 0.0 )wtfc = 0.5*sqrt( arg );
+          if( arg > 0.0 )wtfc = 0.5*std::sqrt( arg );
         }
         if( wtfc == 0.0 ) {
           lzero = false;
           break;
         }
-        wtmax += log( wtfc );
+        wtmax += std::log( wtfc );
       }
       if( lzero )
         wtmax = -wtmax;
       else
         wtmax = expxu;
     } else {
-      wtmax = log( pow( kineticEnergy, vecLen-2 ) *
-                   pi * pow( twopi, vecLen-2 ) / Factorial(vecLen-2) );
+      wtmax = std::log( std::pow( kineticEnergy, vecLen-2 ) *
+                   pi * std::pow( twopi, vecLen-2 ) / Factorial(vecLen-2) );
     }
     lzero = true;
     G4double* pd = new G4double [vecLen-1];
@@ -5565,15 +5561,15 @@ G4HEInelastic::fctcos(G4double t,
           + (emm[i]*emm[i]-mass[i+1]*mass[i+1])*(emm[i]*emm[i]-mass[i+1]*mass[i+1])
             /(emm[i+1]*emm[i+1])
           - 2.0*(emm[i]*emm[i]+mass[i+1]*mass[i+1]);
-        if( arg > 0.0 )pd[i] = 0.5*sqrt( arg );
+        if( arg > 0.0 )pd[i] = 0.5*std::sqrt( arg );
       }
       if( pd[i] == 0.0 )
         lzero = false;
       else
-        wtmax += log( pd[i] );
+        wtmax += std::log( pd[i] );
     }
-    G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
-    if( lzero )weight = exp( Amax(Amin(wtmax,expxu),expxl) );
+    G4double weight = 0.0;        // weight is returned by GenerateNBodyEvent
+    if( lzero )weight = std::exp( Amax(Amin(wtmax,expxu),expxl) );
     
     G4double bang, cb, sb, s0, s1, s2, c, s, esys, a, b, gama, beta;
     pcm[0][0] = 0.0;
@@ -5584,19 +5580,19 @@ G4HEInelastic::fctcos(G4double t,
       pcm[1][i] = -pd[i-1];
       pcm[2][i] = 0.0;
       bang = twopi*G4UniformRand();
-      cb = cos(bang);
-      sb = sin(bang);
+      cb = std::cos(bang);
+      sb = std::sin(bang);
       c = 2.0*G4UniformRand() - 1.0;
-      s = sqrt( fabs( 1.0-c*c ) );
+      s = std::sqrt( std::fabs( 1.0-c*c ) );
       if( i < vecLen-1 ) {
-        esys = sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
+        esys = std::sqrt(pd[i]*pd[i] + emm[i]*emm[i]);
         beta = pd[i]/esys;
         gama = esys/emm[i];
         for( G4int j=0; j<=i; ++j ) {
           s0 = pcm[0][j];
           s1 = pcm[1][j];
           s2 = pcm[2][j];
-          energy[j] = sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
+          energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
           a = s0*c - s1*s;                           //  rotation
           pcm[1][j] = s0*s + s1*c;
           b = pcm[2][j];
@@ -5609,7 +5605,7 @@ G4HEInelastic::fctcos(G4double t,
           s0 = pcm[0][j];
           s1 = pcm[1][j];
           s2 = pcm[2][j];
-          energy[j] = sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
+          energy[j] = std::sqrt( s0*s0 + s1*s1 + s2*s2 + mass[j]*mass[j] );
           a = s0*c - s1*s;                           //  rotation
           pcm[1][j] = s0*s + s1*c;
           b = pcm[2][j];
@@ -5621,7 +5617,7 @@ G4HEInelastic::fctcos(G4double t,
     G4double pModule; 
     for( i=0; i<vecLen; ++i ) {
       kineticEnergy = energy[i] - mass[i];
-      pModule = sqrt( sqr(kineticEnergy) + 2*kineticEnergy*mass[i] );    
+      pModule = std::sqrt( sqr(kineticEnergy) + 2*kineticEnergy*mass[i] );    
       vec[i].setMomentum( pcm[0][i]/pModule, 
                           pcm[1][i]/pModule, 
                           pcm[2][i]/pModule );
@@ -5653,7 +5649,7 @@ G4HEInelastic::gpdk( G4double a, G4double b, G4double c )
           } 
         else 
           {
-            return 0.5*sqrt(fabs(arg));
+            return 0.5*std::sqrt(std::fabs(arg));
           }
       }
  }
@@ -5680,11 +5676,11 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
        for (i=2;i<npart;i++) rm += pv[i].getMass();
        G4double rm1 = pvcms.getMass() - rm;
        rm -= pv[2].getMass();
-       wps = (npart-3)*pow(rm1/sqr(M_2PI), npart-4)/(4*M_PI*pvcms.getMass());
+       wps = (npart-3)*std::pow(rm1/sqr(twopi), npart-4)/(4*pi*pvcms.getMass());
        for (i=3; (i=npart-1);i++) wps /= i-2; // @@@@@@@@@@ bug @@@@@@@@@
-       G4double xxx = rm1/sqr(M_2PI);
+       G4double xxx = rm1/sqr(twopi);
        for (i=1; (i=npart-4); i++) wps /= xxx/i; // @@@@@@@@@@ bug @@@@@@@@@
-       wps /= (4*M_PI*pvcms.getMass());
+       wps /= (4*pi*pvcms.getMass());
        G4double p2,cost,sint,phi;
        j = 1;
        while (j)
@@ -5695,25 +5691,25 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
            p2 = Alam(sqr(pvcms.getMass()), sqr(pv[j].getMass()),
                      sqr(rmass))/(4.*sqr(pvcms.getMass()));
            cost = 1. - 2.*ranarr[npart+2*j-9];
-           sint = sqrt(1.-cost*cost);
-           phi  = M_2PI*ranarr[npart+2*j-8];
-           p2   = sqrt( Amax(0., p2));
+           sint = std::sqrt(1.-cost*cost);
+           phi  = twopi*ranarr[npart+2*j-8];
+           p2   = std::sqrt( Amax(0., p2));
            wps *= p2;
-           pv[j].setMomentumAndUpdate( p2*sint*sin(phi), p2*sint*cos(phi),p2*cost);
+           pv[j].setMomentumAndUpdate( p2*sint*std::sin(phi), p2*sint*std::cos(phi),p2*cost);
            pv[j].Lor(pv[j], pvcms);
            pvcms.Add3( pvcms, pv[j] );
            pvcms.setEnergy(pvcms.getEnergy()-pv[j].getEnergy());
-           pvcms.setMass( sqrt(sqr(pvcms.getEnergy()) - sqr(pvcms.Length())));
+           pvcms.setMass( std::sqrt(sqr(pvcms.getEnergy()) - sqr(pvcms.Length())));
          }        
        p2 = Alam(sqr(pvcms.getMass()), sqr(pv[j].getMass()),
                  sqr(rm))/(4.*sqr(pvcms.getMass()));
        cost = 1. - 2.*ranarr[npart+2*j-9];
-       sint = sqrt(1.-cost*cost);
-       phi  = M_2PI*ranarr[npart+2*j-8];
-       p2   = sqrt( Amax(0. , p2));
+       sint = std::sqrt(1.-cost*cost);
+       phi  = twopi*ranarr[npart+2*j-8];
+       p2   = std::sqrt( Amax(0. , p2));
        wps *= p2;
-       pv[j].setMomentumAndUpdate( p2*sint*sin(phi), p2*sint*cos(phi), p2*cost);
-       pv[j+1].setMomentumAndUpdate( -p2*sint*sin(phi), -p2*sint*cos(phi), -p2*cost);
+       pv[j].setMomentumAndUpdate( p2*sint*std::sin(phi), p2*sint*std::cos(phi), p2*cost);
+       pv[j+1].setMomentumAndUpdate( -p2*sint*std::sin(phi), -p2*sint*std::cos(phi), -p2*cost);
        pv[j].Lor( pv[j], pvcms );
        pv[j+1].Lor( pv[j+1], pvcms );
        wfcn = CalculatePhaseSpaceWeight( npart );
@@ -5731,7 +5727,7 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
 
 void 
 G4HEInelastic::QuickSort(G4double arr[], const G4int lidx, const G4int ridx)
- {                                   // sorts the Array arr[] in ascending order
+ {                         // sorts the Array arr[] in ascending order
    G4double buffer;
    G4int k, e, mid;
    if(lidx>=ridx) return;

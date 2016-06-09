@@ -37,7 +37,7 @@ void G4KineticTrackVector::BoostBeam(G4ThreeVector& BeamMom)
         {
         G4KineticTrack& KT =**(begin()+c1);
         G4LorentzVector Mom = KT.Get4Momentum();        
-        G4ThreeVector Velocity = (1/sqrt(BeamMom.mag2() + sqr(KT.GetDefinition()->GetPDGMass())))*BeamMom;
+        G4ThreeVector Velocity = (1/std::sqrt(BeamMom.mag2() + sqr(KT.GetDefinition()->GetPDGMass())))*BeamMom;
         Mom.boost(Velocity);
         KT.Set4Momentum(Mom);
         }

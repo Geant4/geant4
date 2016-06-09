@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.9 2003/10/31 14:35:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.11 2004/12/02 09:55:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -39,7 +39,10 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) {}
+  : G4Mag_EqRhs( MagField ) 
+{
+   anomaly = 1.165923e-3;
+}
 
 G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs() {}
 
@@ -52,10 +55,10 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
    G4Mag_EqRhs::SetChargeMomentumMass(particleCharge, MomentumXc, mass);
 
    omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss);
-   anomaly = 1.165923e-3;
+
    ParticleCharge = particleCharge;
 
-   E = sqrt(sqr(MomentumXc)+sqr(mass));
+   E = std::sqrt(sqr(MomentumXc)+sqr(mass));
    beta  = MomentumXc/E;
    gamma = E/mass;
 
@@ -67,7 +70,7 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 				    G4double dydx[] ) const
 {
    G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
-   G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
+   G4double inv_momentum_magnitude = 1.0 / std::sqrt( momentum_mag_square );
    G4double cof = FCof()*inv_momentum_magnitude;
 
    dydx[0] = y[3] * inv_momentum_magnitude;       //  (d/ds)x = Vx/V

@@ -1,6 +1,6 @@
-# $Id: myUtils.py,v 1.5 2004/06/09 15:04:36 daquinog Exp $
+# $Id: myUtils.py,v 1.6 2004/12/08 15:37:14 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 #
 import CLHEP
@@ -114,12 +114,11 @@ def getStoreName():
 def getConfigurationInfo(impGeo, experiment, physicsList, totalTime,
                          comment):
     configInfo = {}
-
+    
 
     configInfo["energy"] = experiment.energy
 
     configInfo["shieldMaterial"] = experiment.shieldMaterial
-
 
     width = experiment.shieldWidth / CLHEP.cm
     s_width = "%(width)d" % vars()
@@ -134,9 +133,7 @@ def getConfigurationInfo(impGeo, experiment, physicsList, totalTime,
 
     configInfo["biasing"] = simp
 
-
     configInfo["physListName"] = physicsList.getName()
-
 
     particles = ""
 

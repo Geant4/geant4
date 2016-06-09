@@ -20,18 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2004/09/27 14:42:27 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003/04/22 16:25:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +38,9 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                                    PrimaryGeneratorAction* Gun)
 :Action(Gun)
 { 
+  gunDir = new G4UIdirectory("/testem/gun/");
+  gunDir->SetGuidance("gun control");
+
   RndmCmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/rndm",this);
   RndmCmd->SetGuidance("random lateral extension on the beam");
   RndmCmd->SetParameterName("rBeam",false);
@@ -53,6 +54,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete RndmCmd;
+  delete gunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

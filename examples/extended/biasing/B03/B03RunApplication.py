@@ -32,10 +32,10 @@ if 'af' in  dir():
 	tr = tf.create("TracksEntering.hbook","hbook")
 	hf = af.createHistogramFactory(tr)
 	n = Bapp.nevents
-	minm = int(min(Bapp.messurements))-0.5
-	maxm = int(max(Bapp.messurements)+1)+0.5
+	minm = int(min(Bapp.measurements))-0.5
+	maxm = int(max(Bapp.measurements)+1)+0.5
 	h = hf.createHistogram1D ("10","Tracks entering in " + '%(n)d' % vars() + " events",30, minm, maxm)
-	for v in Bapp.messurements:
+	for v in Bapp.measurements:
 	    h.fill(v)
 #   	hplot(h)
 tr.commit()

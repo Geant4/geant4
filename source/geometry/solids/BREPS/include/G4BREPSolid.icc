@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.icc,v 1.4 2001/07/11 09:59:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4BREPSolid.icc,v 1.6 2004/09/22 09:52:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -137,4 +137,33 @@ inline void G4BREPSolid::QuickSort( register G4Surface** SrfVec,
       
     if( left < j  ) QuickSort(SrfVec,left, j );
     if( i < right ) QuickSort(SrfVec,i, right);    
+}
+
+inline G4int G4BREPSolid::GetCubVolStatistics() const
+{
+  return fCubVolStatistics;
+}
+
+inline G4double G4BREPSolid::GetCubVolEpsilon() const
+{
+  return fCubVolEpsilon;
+}
+
+inline void G4BREPSolid::SetCubVolStatistics(G4int st)
+{
+  fCubVolStatistics=st;
+}
+
+inline void G4BREPSolid::SetCubVolEpsilon(G4double ep)
+{
+  fCubVolEpsilon=ep;
+}
+
+///////////////////////////////////////////////////
+
+inline G4double G4BREPSolid::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
+  return fCubicVolume;
 }

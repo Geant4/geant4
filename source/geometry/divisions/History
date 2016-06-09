@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2004/05/17 07:20:59 gcosmo Exp $
+$Id: History,v 1.15 2004/12/02 09:33:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 2nd, 2004      G.Cosmo  (geomdiv-V06-02-02)
+- Implemented migration to <cmath> for standard mathematical functions.
+
+August 26th, 2004       G.Cosmo  (geomdiv-V06-02-01)
+- G4PVDivision.cc: removed unnecessary debub printout in
+  CheckAndSetParamenters().
+
+June 15th, 2004         G.Cosmo  (geomdiv-V06-02-00)
+- Removed unnecessary forward declaration of HepTransform3D from
+  G4ParameterisationBox.hh and G4VDivisionParameterisation.hh.
 
 May 17th, 2004          G.Cosmo  (geomdiv-V06-01-01)
 - Corrected handling of offset in Z for reflection.

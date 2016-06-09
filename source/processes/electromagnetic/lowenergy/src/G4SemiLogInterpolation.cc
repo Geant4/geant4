@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SemiLogInterpolation.cc,v 1.4 2002/05/28 09:20:21 pia Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SemiLogInterpolation.cc,v 1.5 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -65,7 +65,7 @@ G4double G4SemiLogInterpolation::Calculate(G4double x, G4int bin,
       G4double e2 = points[bin+1];
       G4double d1 = data[bin];
       G4double d2 = data[bin+1];
-      value = (d1*log10(e2/x) + d2*log10(x/e1)) / log10(e2/e1);
+      value = (d1*std::log10(e2/x) + d2*std::log10(x/e1)) / std::log10(e2/e1);
     }
   else
     {

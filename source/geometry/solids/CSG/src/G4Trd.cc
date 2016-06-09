@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.19 2004/01/26 09:03:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Trd.cc,v 1.22 2004/12/02 09:31:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // Implementation for G4Trd class
@@ -97,6 +97,8 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
                   "Invalid parameters.");
     }
   }
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -318,7 +320,7 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
   EInside in=kOutside;
   G4double x,y,zbase1,zbase2;
     
-  if (fabs(p.z())<=fDz-kCarTolerance/2)
+  if (std::fabs(p.z())<=fDz-kCarTolerance/2)
   {
     zbase1=p.z()+fDz;  // Dist from -ve z plane
     zbase2=fDz-p.z();  // Dist from +ve z plane
@@ -326,30 +328,30 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
     // Check whether inside x tolerance
     //
     x=0.5*(fDx2*zbase1+fDx1*zbase2)/fDz - kCarTolerance/2;
-    if (fabs(p.x())<=x)
+    if (std::fabs(p.x())<=x)
     {
       y=0.5*((fDy2*zbase1+fDy1*zbase2))/fDz - kCarTolerance/2;
-      if (fabs(p.y())<=y)
+      if (std::fabs(p.y())<=y)
       {
         in=kInside;
       }
-      else if (fabs(p.y())<=y+kCarTolerance)
+      else if (std::fabs(p.y())<=y+kCarTolerance)
       {
         in=kSurface;
       }
     }
-    else if (fabs(p.x())<=x+kCarTolerance)
+    else if (std::fabs(p.x())<=x+kCarTolerance)
     {
       // y = y half width of shape at z of point + tolerant boundary
       //
       y=0.5*((fDy2*zbase1+fDy1*zbase2))/fDz + kCarTolerance/2;
-      if (fabs(p.y())<=y)
+      if (std::fabs(p.y())<=y)
       {
         in=kSurface;
       }
     }
   }
-  else if (fabs(p.z())<=fDz+kCarTolerance/2)
+  else if (std::fabs(p.z())<=fDz+kCarTolerance/2)
   {
     // Only need to check outer tolerant boundaries
     //
@@ -359,12 +361,12 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
     // x = x half width of shape at z of point plus tolerance
     //
     x=0.5*(fDx2*zbase1+fDx1*zbase2)/fDz + kCarTolerance/2;
-    if (fabs(p.x())<=x)
+    if (std::fabs(p.x())<=x)
     {
       // y = y half width of shape at z of point
       //
       y=0.5*((fDy2*zbase1+fDy1*zbase2))/fDz + kCarTolerance/2;
-      if (fabs(p.y())<=y) in=kSurface;
+      if (std::fabs(p.y())<=y) in=kSurface;
     }
   }  
   return in;
@@ -386,18 +388,18 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   z=2.0*fDz;
 
   tanx=(fDx2-fDx1)/z;
-  secx=sqrt(1.0+tanx*tanx);
-  newpx=fabs(p.x())-p.z()*tanx;
+  secx=std::sqrt(1.0+tanx*tanx);
+  newpx=std::fabs(p.x())-p.z()*tanx;
   widx=fDx2-fDz*tanx;
 
   tany=(fDy2-fDy1)/z;
-  secy=sqrt(1.0+tany*tany);
-  newpy=fabs(p.y())-p.z()*tany;
+  secy=std::sqrt(1.0+tany*tany);
+  newpy=std::fabs(p.y())-p.z()*tany;
   widy=fDy2-fDz*tany;
 
-  distx=fabs(newpx-widx)/secx;  // perpendicular distance to x side
-  disty=fabs(newpy-widy)/secy;  //                        to y side
-  distz=fabs(fabs(p.z())-fDz);  //                        to z side
+  distx=std::fabs(newpx-widx)/secx;  // perpendicular distance to x side
+  disty=std::fabs(newpy-widy)/secy;  //                        to y side
+  distz=std::fabs(std::fabs(p.z())-fDz);  //                        to z side
 
   // find closest side
   //
@@ -408,7 +410,7 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
       // Closest to X
       //
       fcos=1.0/secx;
-      // normal=(+/-cos(ang),0,-sin(ang))
+      // normal=(+/-std::cos(ang),0,-std::sin(ang))
       if (p.x()>=0)
         norm=G4ThreeVector(fcos,0,-tanx*fcos);
       else
@@ -505,7 +507,7 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p,
   }
   else // v.z=0
   {
-    if (fabs(p.z()) >= fDz ) return snxt ;     // Outside & no intersect
+    if (std::fabs(p.z()) >= fDz ) return snxt ;     // Outside & no intersect
     else
     {
       smin = 0 ;    // Always inside z range
@@ -553,8 +555,8 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p,
   {
     // Inside Area - calculate leaving distance
     // *Don't* use exact distance to side for tolerance
-    //                                             = ss1*cos(ang xz)
-    //                                             = ss1/sqrt(1.0+tanxz*tanxz)
+    //                                             = ss1*std::cos(ang xz)
+    //                                             = ss1/std::sqrt(1.0+tanxz*tanxz)
     sn1 = 0 ;
 
     if ( ds1 > 0 )
@@ -635,8 +637,8 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p,
   {
     // Inside Area - calculate leaving distance
     // *Don't* use exact distance to side for tolerance
-    //                                          = ss1*cos(ang yz)
-    //                                          = ss1/sqrt(1.0+tanyz*tanyz)
+    //                                          = ss1*std::cos(ang yz)
+    //                                          = ss1/std::sqrt(1.0+tanyz*tanyz)
     sn1 = 0 ;
 
     if ( ds1 > 0 )
@@ -702,7 +704,7 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p ) const
   G4double tanyz,disty,safy;
   G4double zbase;
 
-  safe=fabs(p.z())-fDz;
+  safe=std::fabs(p.z())-fDz;
   if (safe<0) safe=0;      // Also used to ensure x/y distances
                            // POSITIVE 
 
@@ -712,22 +714,22 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p ) const
   //
   tanxz=(fDx2-fDx1)*0.5/fDz;
   //    widx=fDx1+tanxz*(fDz+p.z()); // x width at p.z
-  //    distx=fabs(p.x())-widx;      // distance to plane
-  distx=fabs(p.x())-(fDx1+tanxz*zbase);
+  //    distx=std::fabs(p.x())-widx;      // distance to plane
+  distx=std::fabs(p.x())-(fDx1+tanxz*zbase);
   if (distx>safe)
   {
-    safx=distx/sqrt(1.0+tanxz*tanxz); // vector Dist=Dist*cos(ang)
+    safx=distx/std::sqrt(1.0+tanxz*tanxz); // vector Dist=Dist*std::cos(ang)
     if (safx>safe) safe=safx;
   }
 
   // Find distance along y direction to slanted wall
   tanyz=(fDy2-fDy1)*0.5/fDz;
   //    widy=fDy1+tanyz*(fDz+p.z()); // y width at p.z
-  //    disty=fabs(p.y())-widy;      // distance to plane
-  disty=fabs(p.y())-(fDy1+tanyz*zbase);
+  //    disty=std::fabs(p.y())-widy;      // distance to plane
+  disty=std::fabs(p.y())-(fDy1+tanyz*zbase);
   if (disty>safe)    
   {
-    safy=disty/sqrt(1.0+tanyz*tanyz); // distance along vector
+    safy=disty/std::sqrt(1.0+tanyz*tanyz); // distance along vector
     if (safy>safe) safe=safy;
   }
   return safe;
@@ -1097,19 +1099,19 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
     switch (side)
     {
       case kPX:
-        cosxz=1.0/sqrt(1.0+tanxz*tanxz);
+        cosxz=1.0/std::sqrt(1.0+tanxz*tanxz);
         *n=G4ThreeVector(cosxz,0,-tanxz*cosxz);
         break;
       case kMX:
-        cosxz=-1.0/sqrt(1.0+tanxz*tanxz);
+        cosxz=-1.0/std::sqrt(1.0+tanxz*tanxz);
         *n=G4ThreeVector(cosxz,0,tanxz*cosxz);
         break;
       case kPY:
-        cosyz=1.0/sqrt(1.0+tanyz*tanyz);
+        cosyz=1.0/std::sqrt(1.0+tanyz*tanyz);
         *n=G4ThreeVector(0,cosyz,-tanyz*cosyz);
         break;
       case kMY:
-        cosyz=-1.0/sqrt(1.0+tanyz*tanyz);
+        cosyz=-1.0/std::sqrt(1.0+tanyz*tanyz);
         *n=G4ThreeVector(0,cosyz,tanyz*cosyz);
         break;
       case kPZ:
@@ -1155,21 +1157,21 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  safe=fDz-fabs(p.z());  // z perpendicular Dist
+  safe=fDz-std::fabs(p.z());  // z perpendicular Dist
 
   zbase=fDz+p.z();
 
   // xdist = distance perpendicular to z axis to closest x plane from p
-  //       = (x half width of shape at p.z) - fabs(p.x)
+  //       = (x half width of shape at p.z) - std::fabs(p.x)
   //
   tanxz=(fDx2-fDx1)*0.5/fDz;
-  xdist=fDx1+tanxz*zbase-fabs(p.x());
-  saf1=xdist/sqrt(1.0+tanxz*tanxz); // x*cos(ang_xz) =
+  xdist=fDx1+tanxz*zbase-std::fabs(p.x());
+  saf1=xdist/std::sqrt(1.0+tanxz*tanxz); // x*std::cos(ang_xz) =
                                     // shortest (perpendicular)
                                     // distance to plane
   tanyz=(fDy2-fDy1)*0.5/fDz;
-  ydist=fDy1+tanyz*zbase-fabs(p.y());
-  saf2=ydist/sqrt(1.0+tanyz*tanyz);
+  ydist=fDy1+tanyz*zbase-std::fabs(p.y());
+  saf2=ydist/std::sqrt(1.0+tanyz*tanyz);
 
   // Return minimum x/y/z distance
   //

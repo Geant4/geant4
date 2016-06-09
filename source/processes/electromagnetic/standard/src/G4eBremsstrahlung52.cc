@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.cc,v 1.1 2003/08/08 11:30:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlung52.cc,v 1.4 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //      ------------ G4eBremsstrahlung52 physics process --------
@@ -50,6 +50,7 @@
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
 //
 // --------------------------------------------------------------
 
@@ -69,8 +70,8 @@ G4double G4eBremsstrahlung52::probsup = 1.00;
 G4bool   G4eBremsstrahlung52::LPMflag = true;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-// constructor
+
+using namespace std;
  
 G4eBremsstrahlung52::G4eBremsstrahlung52(const G4String& processName)
   : G4VeEnergyLoss(processName),      // initialization
@@ -376,7 +377,7 @@ G4double G4eBremsstrahlung52::ComputeBremLoss(G4double Z,G4double,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      if(abs(Z-ZZ[ii]) < delz)  { iz = ii; delz = abs(Z-ZZ[ii]);}
+      if(fabs(Z-ZZ[ii]) < delz)  { iz = ii; delz = fabs(Z-ZZ[ii]);}
     }
 
   G4double xx = log10(T);
@@ -617,10 +618,10 @@ G4double G4eBremsstrahlung52::ComputeCrossSectionPerAtom(
   G4double delz = 1.e6 ;
   for (G4int ii=0; ii<NZ; ii++)
   {
-    if(abs(AtomicNumber-ZZ[ii]) < delz)
+    if(fabs(AtomicNumber-ZZ[ii]) < delz)
     {
       iz = ii ;
-      delz = abs(AtomicNumber-ZZ[ii]) ;
+      delz = fabs(AtomicNumber-ZZ[ii]) ;
     }
   }
 
@@ -774,9 +775,9 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
    // check against insufficient energy
     if (KineticEnergy < GammaEnergyCut)
        {
-         aParticleChange.SetMomentumChange( ParticleDirection );
-         aParticleChange.SetEnergyChange( KineticEnergy );
-         aParticleChange.SetLocalEnergyDeposit (0.);
+         aParticleChange.ProposeMomentumDirection( ParticleDirection );
+         aParticleChange.ProposeEnergy( KineticEnergy );
+         aParticleChange.ProposeLocalEnergyDeposit (0.);
          aParticleChange.SetNumberOfSecondaries(0);
          return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
        }
@@ -829,8 +830,8 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
        G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
 
        // Compute the maximum of the rejection function
-       G4double F1 = std::max(ScreenFunction1(screenmin) - FZ ,0.);
-       G4double F2 = std::max(ScreenFunction2(screenmin) - FZ ,0.);
+       G4double F1 = max(ScreenFunction1(screenmin) - FZ ,0.);
+       G4double F2 = max(ScreenFunction2(screenmin) - FZ ,0.);
        grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
 
        // sample the energy rate of the emitted Gamma
@@ -842,8 +843,8 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
              x = pow(xmin, G4UniformRand());
              epsil = x*KineticEnergy/TotalEnergy;
              screenvar = screenfac*epsil/(1-epsil);
-             F1 = std::max(ScreenFunction1(screenvar) - FZ ,0.);
-             F2 = std::max(ScreenFunction2(screenvar) - FZ ,0.);
+             F1 = max(ScreenFunction1(screenvar) - FZ ,0.);
+             F2 = max(ScreenFunction2(screenvar) - FZ ,0.);
              migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
              greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);
         }  while( greject < G4UniformRand()*grejmax );
@@ -867,9 +868,9 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
        G4double bl = bl0 + bl1*U + bl2*U2;
 
        // Compute the maximum of the rejection function
-       grejmax = std::max(1. + xmin* (al + bl*xmin), 1.+al+bl);
+       grejmax = max(1. + xmin* (al + bl*xmin), 1.+al+bl);
        G4double xm = -al/(2.*bl);
-       if ((xmin < xm)&&(xm < 1.)) grejmax = std::max(grejmax, 1.+ xm* (al + bl*xm));
+       if ((xmin < xm)&&(xm < 1.)) grejmax = max(grejmax, 1.+ xm* (al + bl*xm));
 
        // sample the energy rate of the emitted Gamma
 
@@ -930,16 +931,16 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
    G4double NewKinEnergy = KineticEnergy - GammaEnergy;
    if (NewKinEnergy > 0.)
      {
-      aParticleChange.SetMomentumChange( ParticleDirection );
-      aParticleChange.SetEnergyChange( NewKinEnergy );
-      aParticleChange.SetLocalEnergyDeposit (0.);
+      aParticleChange.ProposeMomentumDirection( ParticleDirection );
+      aParticleChange.ProposeEnergy( NewKinEnergy );
+      aParticleChange.ProposeLocalEnergyDeposit (0.);
      }
    else
      {
-      aParticleChange.SetEnergyChange( 0. );
-      aParticleChange.SetLocalEnergyDeposit (0.);
-      if (charge<0.) aParticleChange.SetStatusChange(fStopAndKill);
-          else       aParticleChange.SetStatusChange(fStopButAlive);
+      aParticleChange.ProposeEnergy( 0. );
+      aParticleChange.ProposeLocalEnergyDeposit (0.);
+      if (charge<0.) aParticleChange.ProposeTrackStatus(fStopAndKill);
+          else       aParticleChange.ProposeTrackStatus(fStopButAlive);
      }
 
    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -1014,122 +1015,6 @@ G4double G4eBremsstrahlung52::SupressionFunction(const G4Material* aMaterial,
 
   supr /= sp;
   return supr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4eBremsstrahlung52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory,
-				              G4bool          ascii)
-{
-  G4String filename;
-
-  // store stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // store PartialSumSigma table (G4OrderedTable)
-  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
-  if ( !PartialSumSigma.Store(filename, ascii) ){
-    G4cout << " FAIL PartialSumSigma.store in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4eBremsstrahlung52::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory,
-				                 G4bool          ascii)
-{
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-
-    // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss();
-  HighestKineticEnergy = GetUpperBoundEloss();
-  TotBin               = GetNbinEloss();
-
-  G4String filename;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(0);
-
-  // retreive stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  theLossTable = new G4PhysicsTable(numOfCouples);
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retrieve PartialSumSigma table (G4OrderedTable)
-  PartialSumSigma.clearAndDestroy();
-  PartialSumSigma.reserve(numOfCouples);
-  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
-  if ( !PartialSumSigma.Retrieve(filename, ascii) ){
-    G4cout << " FAIL PartialSumSigma.retrieve in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  if (particle==G4Electron::Electron())
-   {
-    RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable;
-    CounterOfElectronProcess++;
-   }
-  else
-   {
-    RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
-    CounterOfPositronProcess++;
-   }
-
-  BuildDEDXTable (*particle);
-
-  if (particle==G4Electron::Electron()) PrintInfoDefinition();
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

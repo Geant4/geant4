@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.13 2003/11/04 10:38:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PhysicsTable.hh,v 1.15 2004/10/29 11:38:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -38,6 +38,8 @@
 // The constructor given the 'capacity' of the table, pre-allocates
 // memory for the specified value by invoking the STL's reserve()
 // function, in order to avoid reallocation during insertions.
+// G4PhysicsTable has a vector of boolean which are used 
+// as 'recalc-needed' flags when processes calculate physics tables. 
 // ------------------------------------------------------------
 //
 // History:
@@ -47,6 +49,7 @@
 // - 1st March 1996, modified. K.Amako
 // - 24th February 2001, migration to STL vectors. H.Kurashige
 // - 9th March 2001, added Store/RetrievePhysicsTable. H.Kurashige
+// - 20th August 2004, added FlagArray and related methods   H.Kurashige
 //-------------------------------------
 
 #ifndef G4PhysicsTable_h
@@ -62,7 +65,8 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
 {
 
   typedef std::vector<G4PhysicsVector*> G4PhysCollection;
-
+  typedef std::vector<G4bool> G4FlagCollection;
+ 
  public: // with description
 
   G4PhysicsTable();
@@ -83,12 +87,16 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   void clearAndDestroy();
     // Removes all items and deletes them at the same time.
 
+  void   push_back( G4PhysicsVector* );
   void   insert (G4PhysicsVector*);
     // Pushes new element to collection.
 
   void   insertAt (size_t, G4PhysicsVector*); 
-    // Inserts element at the specified position in the collection.
-
+    // insert element at the specified position in the collection.
+  
+  void   resize(size_t, G4PhysicsVector* vec = (G4PhysicsVector*)(0));
+  // resize collection
+ 
   size_t entries() const;
   size_t length() const;
     // Return collection's size.
@@ -105,11 +113,23 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii=false);
     // Retrieves Physics from a file (returns false in case of failure).
 
+  void ResetFlagArray();
+    // Reset the array of flags and all flags are set "true" 
+    // This flag is supposed to be used as "recalc-needed" flag
+    //   associated with each physics vector  
+
+  G4bool GetFlag(size_t i) const;
+  void   ClearFlag(size_t i);
+    // Get/Clear the flag for the 'i-th' physics vector    
+   
+ public:
   friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
+
 
  protected:
 
   G4PhysicsVector* CreatePhysicsVector(G4int type);  
+  G4FlagCollection vecFlag; 
 
  private:
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionBarrier.cc,v 1.2 2003/11/03 17:53:02 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FissionBarrier.cc,v 1.3 2004/12/07 13:46:46 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -57,7 +57,7 @@ G4bool G4FissionBarrier::operator!=(const G4FissionBarrier & ) const
 G4double G4FissionBarrier::FissionBarrier(const G4int A, const G4int Z, const G4double U)
     // Compute fission barrier according with Barashenkov's prescription for A >= 65
 {
-    if (A >= 65) return BarashenkovFissionBarrier(A,Z)/(1.0 + sqrt(U/(2.0*static_cast<G4double>(A))));
+    if (A >= 65) return BarashenkovFissionBarrier(A,Z)/(1.0 + std::sqrt(U/(2.0*static_cast<G4double>(A))));
     else return 100.0*GeV;
 }
 
@@ -79,7 +79,7 @@ G4double G4FissionBarrier::BarashenkovFissionBarrier(const G4int A, const G4int 
 	  (static_cast<G4double>(N-Z)/static_cast<G4double>(A)));
   
     // Liquid drop model part of Fission Barrier
-    G4double BF0 = aSurf*pow(static_cast<G4double>(A),2./3.);
+    G4double BF0 = aSurf*std::pow(static_cast<G4double>(A),2./3.);
     if (x <= 2./3.) BF0 *= 0.38*(3./4.-x);
     else BF0 *= 0.83*(1. - x)*(1. - x)*(1. - x);
 

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: DetectorMessenger.cc,v 1.2 2004/09/15 13:17:19 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: DetectorMessenger.cc,v 1.1 2003/10/06 10:02:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,7 +41,10 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 { 
   testemDir = new G4UIdirectory("/testem/");
   testemDir->SetGuidance("commands specific to this example");
-      
+  
+  detDir = new G4UIdirectory("/testem/det/");
+  detDir->SetGuidance("detector construction commands");
+        
   MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select material of the box.");
   MaterCmd->SetParameterName("choice",false);
@@ -79,6 +79,7 @@ DetectorMessenger::~DetectorMessenger()
   delete SizeCmd; 
   delete MagFieldCmd;
   delete UpdateCmd;
+  delete detDir;
   delete testemDir;
 }
 

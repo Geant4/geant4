@@ -22,7 +22,7 @@
 //
 // ====================================================================
 //    H02DetectorConstruction.cc
-//    $Id: H02DetectorConstruction.cc,v 1.3 2003/12/09 15:31:19 gunter Exp $
+//    $Id: H02DetectorConstruction.cc,v 1.4 2004/12/03 15:52:39 gcosmo Exp $
 //
 // ====================================================================
 #include "H02DetectorConstruction.hh"
@@ -66,7 +66,7 @@ static const G4double DZ_ENDCAP_CAL= 0.5*m;
 // [muon system]
 static const G4double RIN_BARREL_MUON= 4.3*m;
 static const G4double ROUT_BARREL_MUON= 4.5*m;
-static const G4double DX_BARREL_MUON= RIN_BARREL_MUON*cos(67.5*deg)-5.*cm;
+static const G4double DX_BARREL_MUON= RIN_BARREL_MUON*std::cos(67.5*deg)-5.*cm;
 static const G4double DY_BARREL_MUON= 10.*cm;
 static const G4double DZ_BARREL_MUON= 7.*m;
 

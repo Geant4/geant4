@@ -96,12 +96,12 @@ void G4BEGammaDeexcitation::isotropicCosines( G4double & u,
 {
   // Samples isotropic random direction cosines.
   G4double CosTheta = 1.0 - 2.0 * G4UniformRand();
-  G4double SinTheta = sqrt( 1.0 - CosTheta * CosTheta );
+  G4double SinTheta = std::sqrt( 1.0 - CosTheta * CosTheta );
   G4double Phi = twopi * G4UniformRand();
 
-  u = cos( Phi ) * SinTheta;
-  v = cos( Phi ) * CosTheta,
-  w = sin( Phi );
+  u = std::cos( Phi ) * SinTheta;
+  v = std::cos( Phi ) * CosTheta,
+  w = std::sin( Phi );
 
   return;
 }

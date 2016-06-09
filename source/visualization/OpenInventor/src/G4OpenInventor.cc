@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.11 2004/06/14 09:27:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventor.cc,v 1.16 2004/11/22 20:02:48 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -34,7 +34,13 @@
 #include "HEPVis/nodes/SoCons.h"
 #include "HEPVis/nodes/SoTrd.h"
 #include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodes/SoMarkerSet.h"
+#include "HEPVis/nodes/SoImageWriter.h"
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
+#include "HEPVis/actions/SoGL2PSAction.h"
+#include "HEPVis/actions/SoCounterAction.h"
+
+#include "Geant4_SoPolyhedron.h"
 
 #include "G4OpenInventorSceneHandler.hh"
 
@@ -71,6 +77,12 @@ void G4OpenInventor::InitNodes()
   SoTrd::initClass();
   SoTrap::initClass();
   SoDetectorTreeKit::initClass();
+  HEPVis_SoMarkerSet::initClass();
+  SoImageWriter::initClass();
+  Geant4_SoPolyhedron::initClass();
+
+  SoGL2PSAction::initClass();
+  SoCounterAction::initClass();
 }
 
 

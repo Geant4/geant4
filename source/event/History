@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2004/06/11 14:52:16 gcosmo Exp $
+$Id: History,v 1.84 2004/12/02 06:40:37 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2004, M.Asai (event-V06-02-04)
+- Migration to <cmath>.
+
+Oct 28, 2004, F.Lei  (event-V06-02-03)
+- Added new features, focused beam and multiple vertexes, to GeneralParticleSource.
+
+Aug 10, 2004, M.Asai (event-V06-02-02)
+- G4PrimaryTransformer becomes a base class.
+
+Jul 7, 2004, M.Asai (event-V06-02-01)
+- Treatment of G4UnknownParticle is added to G4PrimaryTransformer.
+
+Jul 1, 2004, G.Cosmo (event-V06-02-00)
+- Trivial fix for porting on gcc-3.4.0 compiler: removed extra semicolons
+  in G4CellScorerStore.cc.
 
 Jun 11, 2004, G.Cosmo (event-V06-01-07)
 - Use global flag G4EVENT_ALLOC_EXPORT to export extern symbols for DLLs.

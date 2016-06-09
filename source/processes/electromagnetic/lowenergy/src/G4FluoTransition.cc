@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FluoTransition.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //

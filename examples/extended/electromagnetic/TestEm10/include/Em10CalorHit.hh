@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10CalorHit.hh,v 1.2 2001/07/11 09:57:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10CalorHit.hh,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -40,34 +40,33 @@
 
 class Em10CalorHit : public G4VHit
 {
-  public:
+public:
 
-      Em10CalorHit();
-     ~Em10CalorHit();
-      Em10CalorHit(const Em10CalorHit&);
-      const Em10CalorHit& operator=(const Em10CalorHit&);
-      int operator==(const Em10CalorHit&) const;
+  Em10CalorHit();
+  ~Em10CalorHit();
+  Em10CalorHit(const Em10CalorHit&);
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
+  void* operator new(size_t);
+  void  operator delete(void*);
 
-      void Print();
+  const Em10CalorHit& operator=(const Em10CalorHit&);
+
+  void Print();
       
-  public:
+public:
   
-      void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
-                 
-      G4double GetEdepAbs()     { return EdepAbs; };
-      G4double GetTrakAbs()     { return TrackLengthAbs; };
-      G4double GetEdepGap()     { return EdepGap; };
-      G4double GetTrakGap()     { return TrackLengthGap; };
+  void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
+  
+  G4double GetEdepAbs()     { return EdepAbs; };
+  G4double GetTrakAbs()     { return TrackLengthAbs; };
+  G4double GetEdepGap()     { return EdepGap; };
+  G4double GetTrakGap()     { return TrackLengthGap; };
      
-  private:
-  
-      G4double EdepAbs, TrackLengthAbs;
-      G4double EdepGap, TrackLengthGap;
-      
+private:
+
+  G4double EdepAbs, TrackLengthAbs;
+  G4double EdepGap, TrackLengthGap;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

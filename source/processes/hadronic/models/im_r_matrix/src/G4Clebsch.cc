@@ -38,7 +38,7 @@ G4Clebsch::G4Clebsch()
   for (i=1; i<nLogs; i++)
     {
       G4double previousLog = logs.back();
-      G4double value = previousLog + log((G4double)i);
+      G4double value = previousLog + std::log((G4double)i);
       logs.push_back(value);
     }
 }
@@ -75,10 +75,10 @@ G4double G4Clebsch::Weight(G4int isoIn1,  G4int iso3In1,
   
   G4int m = iso3In1 + iso3In2;
 
-  G4int jMinIn = std::max(abs(isoIn1 - isoIn2), abs(m));
+  G4int jMinIn = std::max(std::abs(isoIn1 - isoIn2), std::abs(m));
   G4int jMaxIn = isoIn1 + isoIn2;
 
-  G4int jMinOut = std::max(abs(isoOut1 - isoOut2), abs(m));
+  G4int jMinOut = std::max(std::abs(isoOut1 - isoOut2), std::abs(m));
   G4int jMaxOut = isoOut1 + isoOut2;
 
   G4int jMin = std::max(jMinIn,jMinOut);
@@ -112,7 +112,7 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
   G4double argument = 2. * j3 + 1.;
   if (argument < 0.) 
     throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::ClebschGordan - sqrt of negative argument");
-  G4double coeff = sqrt(argument) / (pow(-1.,n));
+  G4double coeff = std::sqrt(argument) / (std::pow(-1.,n));
   G4double clebsch = coeff * Wigner3J(j1,j2,j3, m1,m2,m3);
   G4double value = clebsch * clebsch;
 
@@ -191,7 +191,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 	n[j*3-3] = n[iMin+j*3-4];
 	n[iMin+j*3-4] = tmp;
       }
-      sign = (G4int) pow(-1.,sigma);
+      sign = (G4int) std::pow(-1.,sigma);
     }
 
     if (jMin > 1)
@@ -202,7 +202,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 	n[i-1] = n[i+jMin*3-4];
 	n[i+jMin*3-4] = tmp;
       }
-      sign *= (G4int) pow(-1.,sigma);
+      sign *= (G4int) std::pow(-1.,sigma);
     }
 
     const std::vector<G4double> logVector = GetLogs();
@@ -243,8 +243,8 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     G4double ls = logVector[static_cast<G4int>(sigma1+.00001)];
     G4double hlp1 = (l2 + l3 + l4 +l7 -ls -l1 -l5 -l9 -l6 -l8) / 2.;
     G4int expon = static_cast<G4int>(r6 + r8+.00001);
-    G4double sgn = pow(-1., expon);
-    G4double coeff = exp(hlp1) * sgn;
+    G4double sgn = std::pow(-1., expon);
+    G4double coeff = std::exp(hlp1) * sgn;
 
     G4int n61 = static_cast<G4int>(r6 - r1+.00001);
     if (n61 < 0. || n61 > logEntries)
@@ -254,7 +254,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
       throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - Outside logVector boundaries, n81");
 
     G4double hlp2 = l6 - logVector[n61] + l8 - logVector[n81];
-    G4double sum = exp(hlp2);
+    G4double sum = std::exp(hlp2);
     std::vector<G4double> s;
     s.push_back(sum);
     n1 = (size_t)r1;
@@ -320,7 +320,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
   }
   
   // Number of possible states, in 
-  G4int jMinIn = std::max(abs(isoIn1 - isoIn2), abs(iso3));
+  G4int jMinIn = std::max(std::abs(isoIn1 - isoIn2), std::abs(iso3));
   G4int jMaxIn = isoIn1 + isoIn2;
 
   // Number of possible states, out
@@ -332,11 +332,11 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    {
      for(j=-1; j<=1; j+=2)
      {
-       jTmp= abs(i*isoA + j*isoB);
+       jTmp= std::abs(i*isoA + j*isoB);
        if(jTmp < jMinOut) jMinOut = jTmp;
      }
    }
-   jMinOut = std::max(jMinOut, abs(iso3));
+   jMinOut = std::max(jMinOut, std::abs(iso3));
    G4int jMaxOut = isoA + isoB;
 
    // Possible in and out common states 
@@ -433,7 +433,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    G4int m1pr(0), m2pr(0);
 
    sum = 0.;
-   for(j12 = abs(isoA-isoB); j12<=(isoA+isoB); j12+=2)
+   for(j12 = std::abs(isoA-isoB); j12<=(isoA+isoB); j12+=2)
    {
      m1pos = -1;
      for (m1pr = static_cast<G4int>(mMin[0]+.00001); m1pr <= mMax[0]; m1pr+=2)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.7 2003/03/28 13:11:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4BezierSurface.cc,v 1.8 2004/12/02 09:31:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -347,17 +347,17 @@ void G4BezierSurface::ClipSurface()
   smin =  1.0e8;
   smax = -1.0e8;
   
-  G4double norm = sqrt(v3.x() * v3.x() + v3.y() * v3.y());
+  G4double norm = std::sqrt(v3.x() * v3.x() + v3.y() * v3.y());
   if(!norm)
   {
     G4cout << "\nNormal zero!";
     G4cout << "\nLINE & DIR: " << line.x() << " " << line.y() << "  " << dir; 
     G4cout << "\n";
     
-    if((abs(line.x())) > kCarTolerance) 
+    if((std::abs(line.x())) > kCarTolerance) 
       line.setX(-line.x());
     else
-      if((abs(line.y())) > kCarTolerance)
+      if((std::abs(line.y())) > kCarTolerance)
 	line.setY(-line.y());
       else
       {
@@ -467,7 +467,7 @@ void G4BezierSurface::ClipSurface()
     i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
     j = Sign(ch_tmp->GetMax());
     
-    if ( abs(i-j) > kCarTolerance ) smax = 1.0;
+    if ( std::abs(i-j) > kCarTolerance ) smax = 1.0;
     //	if ( i != j)  smax = 1.0;
     
   } 
@@ -554,7 +554,7 @@ void G4BezierSurface::ClipSurface()
     j = Sign(ch_tmp->GetMax());
 
     //
-    if ( (abs(i-j) > kCarTolerance)) smax = 1.0;
+    if ( (std::abs(i-j) > kCarTolerance)) smax = 1.0;
   }
 
   ch_ptr=ch_first;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.3 2003/11/04 11:31:17 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMicroCanonical.cc,v 1.4 2004/12/07 13:47:51 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -101,7 +101,7 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   G4double Z = theFragment.GetZ();
   
   // Configuration temperature
-  G4double TConfiguration = sqrt(8.0*U/A);
+  G4double TConfiguration = std::sqrt(8.0*U/A);
   
   // Free internal energy at Temperature T = 0
   __FreeInternalE0 = A*( 
@@ -111,9 +111,9 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
 			G4StatMFParameters::GetGamma0()*(1.0-2.0*Z/A)*(1.0-2.0*Z/A) 
 			) + 
     // Surface term (for T = 0)
-    G4StatMFParameters::GetBeta0()*pow(A,2.0/3.0) + 
+    G4StatMFParameters::GetBeta0()*std::pow(A,2.0/3.0) + 
     // Coulomb term 
-    elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*pow(A,1.0/3.0));
+    elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*std::pow(A,1.0/3.0));
   
   // Statistical weight
   G4double W = 0.0;
@@ -132,7 +132,7 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   G4double SCompoundNucleus = CalcEntropyOfCompoundNucleus(theFragment,TConfiguration);
   
   // Statistical weight of compound nucleus
-  _WCompoundNucleus = 1.0; // exp(SCompoundNucleus - SCompoundNucleus);
+  _WCompoundNucleus = 1.0; // std::exp(SCompoundNucleus - SCompoundNucleus);
   
   W += _WCompoundNucleus;
   
@@ -187,7 +187,7 @@ G4double G4StatMFMicroCanonical::CalcFreeInternalEnergy(const G4Fragment & theFr
 {
   G4double A = theFragment.GetA();
   G4double Z = theFragment.GetZ();
-  G4double A13 = pow(A,1.0/3.0);
+  G4double A13 = std::pow(A,1.0/3.0);
   
   G4double InvLevelDensityPar = G4StatMFParameters::GetEpsilon0()*(1.0 + 3.0/(A-1.0));
   
@@ -210,9 +210,9 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   const G4double A = theFragment.GetA();
   //    const G4double Z = theFragment.GetZ();
   const G4double U = theFragment.GetExcitationEnergy();
-  const G4double A13 = pow(A,1.0/3.0);
+  const G4double A13 = std::pow(A,1.0/3.0);
   
-  G4double Ta = std::max(sqrt(U/(0.125*A)),0.0012*MeV); 
+  G4double Ta = std::max(std::sqrt(U/(0.125*A)),0.0012*MeV); 
   G4double Tb = Ta;
   
   G4double ECompoundNucleus = CalcFreeInternalEnergy(theFragment,Ta);
@@ -242,11 +242,11 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   }
   
   
-  G4double eps = 1.0e-14 * abs(Tb-Ta);
+  G4double eps = 1.0e-14 * std::abs(Tb-Ta);
   
   for (G4int i = 0; i < 1000; i++) {
     G4double Tc = (Ta+Tb)/2.0;
-    if (abs(Ta-Tb) <= eps) {
+    if (std::abs(Ta-Tb) <= eps) {
       TConf = Tc;
       return 2*Tc*A/InvLevelDensity - G4StatMFParameters::DBetaDT(Tc)*A13*A13;
     }

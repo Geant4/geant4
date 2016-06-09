@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.5 2003/11/07 12:25:35 pandola Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.6 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 // --------------------------------------------------------------
 //
@@ -101,11 +101,11 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
   for (i=0;i<NumberofEPoints;i++){
     for (j=0;j<NumberofKPoints;j++){
       for (k=0;k<NumberofZPoints;k++){
-	pX[k]=log(QQ1[k][i][j]);
+	pX[k]=std::log(QQ1[k][i][j]);
 	pY[k]=QQ2[k][i][j];
       }
       G4PenelopeInterpolator* interpolator1 = new G4PenelopeInterpolator(pZ,pX,NumberofZPoints);
-      Q1[i][j]=exp(interpolator1->CubicSplineInterpolation((G4double) Zmat));
+      Q1[i][j]=std::exp(interpolator1->CubicSplineInterpolation((G4double) Zmat));
       delete interpolator1;
       G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator(pZ,pY,NumberofZPoints);    
       Q2[i][j]=interpolator2->CubicSplineInterpolation((G4double) Zmat);
@@ -137,7 +137,7 @@ void G4PenelopeBremsstrahlungAngular::InterpolationForK()
   }
 
   for(i=0;i<NumberofEPoints;i++){
-    betas[i]=sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
+    betas[i]=std::sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
   }
 
   for (i=0;i<NumberofEPoints;i++){
@@ -149,7 +149,7 @@ void G4PenelopeBremsstrahlungAngular::InterpolationForK()
   //Expanded table of distribution parameters
   for (i=0;i<NumberofEPoints;i++){
     for (j=0;j<NumberofKPoints;j++){
-      pX[j]=log(Q1[i][j]); //logarithmic 
+      pX[j]=std::log(Q1[i][j]); //logarithmic 
     }
     G4PenelopeInterpolator* interpolator = new G4PenelopeInterpolator(pK,pX,NumberofKPoints);
     for (j=0;j<reducedEnergyGrid;j++){
@@ -172,7 +172,7 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   //e1 = kinetic energy of the electron
   //e2 = energy of the bremsstrahlung photon
 
-  G4double beta = sqrt(e1*(e1+2*electron_mass_c2))/(e1+electron_mass_c2);
+  G4double beta = std::sqrt(e1*(e1+2*electron_mass_c2))/(e1+electron_mass_c2);
   
 
 
@@ -218,7 +218,7 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   P2=P20+(RK-(G4double) ik)*(P21-P20);
   
   //Sampling from the Lorenz-trasformed dipole distributions
-  P1=std::min(exp(P1)/beta,1.0);
+  P1=std::min(std::exp(P1)/beta,1.0);
   G4double betap = std::min(std::max(beta*(1.0+P2/beta),0.0),0.9999);
   
   G4double cdt=0,testf=0;

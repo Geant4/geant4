@@ -144,3 +144,10 @@ void RemSimInterplanetarySpaceConfiguration::SetMoon(G4bool value)
 {
   moon = value;
 }
+void RemSimInterplanetarySpaceConfiguration::SetParticle(G4String particle)
+{
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName = particle;
+  particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
+}
+

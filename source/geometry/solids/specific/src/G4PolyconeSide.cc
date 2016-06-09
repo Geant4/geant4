@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.7 2003/03/28 09:52:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PolyconeSide.cc,v 1.10 2004/12/10 16:22:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // --------------------------------------------------------------------
@@ -73,26 +73,26 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
     //
     // Set phi values to our conventions
     //
-    while (deltaPhi < 0.0) deltaPhi += 2.0*M_PI;
-    while (startPhi < 0.0) startPhi += 2.0*M_PI;
+    while (deltaPhi < 0.0) deltaPhi += twopi;
+    while (startPhi < 0.0) startPhi += twopi;
     
     //
     // Calculate corner coordinates
     //
     corners = new G4ThreeVector[4];
     
-    corners[0] = G4ThreeVector( tail->r*cos(startPhi),
-                                tail->r*sin(startPhi), tail->z );
-    corners[1] = G4ThreeVector( head->r*cos(startPhi),
-                                head->r*sin(startPhi), head->z );
-    corners[2] = G4ThreeVector( tail->r*cos(startPhi+deltaPhi),
-                                tail->r*sin(startPhi+deltaPhi), tail->z );
-    corners[3] = G4ThreeVector( head->r*cos(startPhi+deltaPhi),
-                                head->r*sin(startPhi+deltaPhi), head->z );
+    corners[0] = G4ThreeVector( tail->r*std::cos(startPhi),
+                                tail->r*std::sin(startPhi), tail->z );
+    corners[1] = G4ThreeVector( head->r*std::cos(startPhi),
+                                head->r*std::sin(startPhi), head->z );
+    corners[2] = G4ThreeVector( tail->r*std::cos(startPhi+deltaPhi),
+                                tail->r*std::sin(startPhi+deltaPhi), tail->z );
+    corners[3] = G4ThreeVector( head->r*std::cos(startPhi+deltaPhi),
+                                head->r*std::sin(startPhi+deltaPhi), head->z );
   }
   else
   {
-    deltaPhi = 2*M_PI;
+    deltaPhi = twopi;
     startPhi = 0.0;
   }
   
@@ -107,7 +107,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   // Calculate vectors in r,z space
   //
   rS = r[1]-r[0]; zS = z[1]-z[0];
-  length = sqrt( rS*rS + zS*zS);
+  length = std::sqrt( rS*rS + zS*zS);
   rS /= length; zS /= length;
   
   rNorm = +zS;
@@ -117,25 +117,25 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   
   prevRS = r[0]-prevRZ->r;
   prevZS = z[0]-prevRZ->z;
-  lAdj = sqrt( prevRS*prevRS + prevZS*prevZS );
+  lAdj = std::sqrt( prevRS*prevRS + prevZS*prevZS );
   prevRS /= lAdj;
   prevZS /= lAdj;
 
   rNormEdge[0] = rNorm + prevZS;
   zNormEdge[0] = zNorm - prevRS;
-  lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
+  lAdj = std::sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
   rNormEdge[0] /= lAdj;
   zNormEdge[0] /= lAdj;
 
   nextRS = nextRZ->r-r[1];
   nextZS = nextRZ->z-z[1];
-  lAdj = sqrt( nextRS*nextRS + nextZS*nextZS );
+  lAdj = std::sqrt( nextRS*nextRS + nextZS*nextZS );
   nextRS /= lAdj;
   nextZS /= lAdj;
 
   rNormEdge[1] = rNorm + nextZS;
   zNormEdge[1] = zNorm - nextRS;
-  lAdj = sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
+  lAdj = std::sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
   rNormEdge[1] /= lAdj;
   zNormEdge[1] /= lAdj;
 }
@@ -368,9 +368,9 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
     // Good answer
     //
     if (distOut2 > 0) 
-      return sqrt( distFrom*distFrom + distOut2 );
+      return std::sqrt( distFrom*distFrom + distOut2 );
     else 
-      return fabs(distFrom);
+      return std::fabs(distFrom);
   }
   
   //
@@ -381,9 +381,9 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
   {
 
     if (distOut2 > 0) 
-      return sqrt( distFrom*distFrom + distOut2 );
+      return std::sqrt( distFrom*distFrom + distOut2 );
     else
-      return fabs(distFrom);
+      return std::fabs(distFrom);
   }
   
   return kInfinity;
@@ -412,14 +412,14 @@ EInside G4PolyconeSide::Inside( const G4ThreeVector &p,
   //
   // Who's closest?
   //
-  G4int i = fabs(dist2[0]) < fabs(dist2[1]) ? 0 : 1;
+  G4int i = std::fabs(dist2[0]) < std::fabs(dist2[1]) ? 0 : 1;
   
-  *bestDistance = sqrt( dist2[i] );
+  *bestDistance = std::sqrt( dist2[i] );
   
   //
   // Okay then, inside or out?
   //
-  if ( (fabs(edgeRZnorm[i]) < tolerance)
+  if ( (std::fabs(edgeRZnorm[i]) < tolerance)
     && (distOut2[i] < tolerance*tolerance) )
     return kSurface;
   else if (edgeRZnorm[i] < 0)
@@ -440,7 +440,7 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
   
   dFrom = DistanceAway( p, false, dOut2 );
   
-  *bestDistance = sqrt( dFrom*dFrom + dOut2 );
+  *bestDistance = std::sqrt( dFrom*dFrom + dOut2 );
   
   G4double rad = p.perp();
   return G4ThreeVector( rNorm*p.x()/rad, rNorm*p.y()/rad, zNorm );
@@ -466,7 +466,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   if (phiIsOpen)
   {
     G4double phi = axis.phi();
-    while( phi < startPhi ) phi += 2*M_PI;
+    while( phi < startPhi ) phi += twopi;
     
     if (phi > deltaPhi+startPhi)
     {
@@ -474,10 +474,10 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
       // Yeah, looks so. Make four three vectors defining the phi
       // opening
       //
-      G4double cosP = cos(startPhi), sinP = sin(startPhi);
+      G4double cosP = std::cos(startPhi), sinP = std::sin(startPhi);
       G4ThreeVector a( r[0]*cosP, r[0]*sinP, z[0] );
       G4ThreeVector b( r[1]*cosP, r[1]*sinP, z[1] );
-      cosP = cos(startPhi+deltaPhi); sinP = sin(startPhi+deltaPhi);
+      cosP = std::cos(startPhi+deltaPhi); sinP = std::sin(startPhi+deltaPhi);
       G4ThreeVector c( r[0]*cosP, r[0]*sinP, z[0] );
       G4ThreeVector d( r[1]*cosP, r[1]*sinP, z[1] );
       
@@ -544,7 +544,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   //
   // Determine radius factor to keep segments outside
   //
-  G4double rFudge = 1.0/cos(0.5*sigPhi);
+  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
   
   //
   // Decide which radius to use on each end of the side,
@@ -674,8 +674,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   // Loop
   //
   G4double phi = startPhi, 
-           cosPhi = cos(phi), 
-           sinPhi = sin(phi);
+           cosPhi = std::cos(phi), 
+           sinPhi = std::sin(phi);
   
   G4ThreeVector v0( r0*cosPhi, r0*sinPhi, z0 ),
                     v1( r1*cosPhi, r1*sinPhi, z1 ),
@@ -693,8 +693,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   {
     phi += sigPhi;
     if (numPhi == 1) phi = startPhi+deltaPhi;  // Try to avoid roundoff
-    cosPhi = cos(phi), 
-    sinPhi = sin(phi);
+    cosPhi = std::cos(phi), 
+    sinPhi = std::sin(phi);
     
     w0 = G4ThreeVector( r0*cosPhi, r0*sinPhi, z0 );
     w1 = G4ThreeVector( r1*cosPhi, r1*sinPhi, z1 );
@@ -767,8 +767,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   //
   if (phiIsOpen && rNorm > DBL_MIN)
   {    
-    G4double cosPhi = cos(startPhi),
-       sinPhi = sin(startPhi);
+    G4double cosPhi = std::cos(startPhi),
+       sinPhi = std::sin(startPhi);
 
     G4ThreeVector a0( r[0]*cosPhi, r[0]*sinPhi, z[0] ),
                   a1( r[1]*cosPhi, r[1]*sinPhi, z[1] ),
@@ -795,8 +795,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
       extentList.AddSurface( polygon );
     }
     
-    cosPhi = cos(startPhi+deltaPhi);
-    sinPhi = sin(startPhi+deltaPhi);
+    cosPhi = std::cos(startPhi+deltaPhi);
+    sinPhi = std::sin(startPhi+deltaPhi);
     
     a0 = G4ThreeVector( r[0]*cosPhi, r[0]*sinPhi, z[0] ),
     a1 = G4ThreeVector( r[1]*cosPhi, r[1]*sinPhi, z[1] ),
@@ -834,13 +834,13 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 // of any phi segmentation
 //
 // Arguments:
-//  p    - (in) Point to check
-//  opposite  - (in) If true, check opposite hemisphere (see below)
-//  distOutside  - (out) Additional distance outside the edges of the
-//         surface
-//  edgeRZnorm  - (out) if negative, point is inside
+//  p             - (in) Point to check
+//  opposite      - (in) If true, check opposite hemisphere (see below)
+//  distOutside   - (out) Additional distance outside the edges of the surface
+//  edgeRZnorm    - (out) if negative, point is inside
+//
 //  return value = distance from the conical plane, if extrapolated beyond edges,
-//           signed by whether the point is in inside or outside the shape
+//                 signed by whether the point is in inside or outside the shape
 //
 // Notes:
 //  * There are two answers, depending on which hemisphere is considered.
@@ -896,7 +896,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
     // Finally, check phi
     //
     G4double phi = p.phi();
-    while( phi < startPhi ) phi += 2*M_PI;
+    while( phi < startPhi ) phi += twopi;
     
     if (phi > startPhi+deltaPhi)
     {
@@ -904,7 +904,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       // Oops. Are we closer to the start phi or end phi?
       //
       G4double d1 = phi-startPhi-deltaPhi;
-      while( phi > startPhi ) phi -= 2*M_PI;
+      while( phi > startPhi ) phi -= twopi;
       G4double d2 = startPhi-phi;
       
       if (d2 < d1) d1 = d2;
@@ -915,7 +915,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       G4double dist = d1*rx;
       
       distOutside2 += dist*dist;
-      if (edgeRZnorm) *edgeRZnorm = fabs(dist);
+      if (edgeRZnorm) *edgeRZnorm = std::max(*edgeRZnorm,std::fabs(dist));
     }
   }
 
@@ -949,7 +949,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
     // PolyPhiFace. See PolyPhiFace::InsideEdgesExact
     //
     G4double phi = hit.phi();
-    while( phi < startPhi-phiTolerant ) phi += 2*M_PI;
+    while( phi < startPhi-phiTolerant ) phi += twopi;
     
     if (phi > startPhi+deltaPhi+phiTolerant) return false;
     

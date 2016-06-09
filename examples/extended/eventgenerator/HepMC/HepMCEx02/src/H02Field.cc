@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H02Field.hh
-//   $Id: H02Field.cc,v 1.2 2003/12/09 15:31:21 gunter Exp $
+//   $Id: H02Field.cc,v 1.3 2004/12/03 15:52:39 gcosmo Exp $
 //
 // ====================================================================
 
@@ -39,7 +39,7 @@ void H02Field::GetFieldValue(const G4double Point[3], G4double* Bfield) const
 
   Bfield[0]= 0.;
   Bfield[1] = 0.;
-  if(abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq) {
+  if(std::abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq) {
     Bfield[2]= Bz;
   } else { 
     Bfield[2]= 0.; 

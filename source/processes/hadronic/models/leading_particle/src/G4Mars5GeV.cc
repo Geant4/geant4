@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.9 2004/03/14 14:14:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4Mars5GeV.cc,v 1.12 2004/12/07 13:49:05 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -68,6 +68,12 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
   std::cout << " INCLUSIVE HADRON(photon)-NUCLEUS VERTEX AT E < 5 GEV !!! "<<std::endl;
   std::cout << " THREE WEIGHTED HADRONS IN FINAL STATE:     !!!"<<std::endl;
   std::cout << " IP+A -> N/P(CASC)+ PI+/PI-(K+/K-) + PI0 "<<std::endl;
+  std::cout << " *********************************************************"<<std::endl;
+   std::cout << " Important notice! "<< std::endl; 
+   std::cout << " Since 1998 MARS codes used CEM (Cascade-Exciton Model) " << std::endl; 
+   std::cout << " for nuclear interactions below 5 GeV " << std::endl;
+   std::cout << " and do NOT use this inclusive model. " << std::endl;
+
   std::cout << std::endl;
 
   SetMinEnergy( 1.0*MeV );
@@ -83,7 +89,7 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
 }
 
 G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
-                                             G4Nucleus& 
+                                             G4Nucleus& aTarget
                                             )
 {
   theParticleChange.Clear();
@@ -95,12 +101,13 @@ G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
 
   // get the incident particle type
   incidentParticle = &aTrack;
-
   // get the incident particle energy/momentum
   incidentMarsEncoding = GetMarsEncoding(incidentParticle->GetDefinition());
 
   // Atomic and charge number 
-  GetTargetNuclei( aTrack.GetMaterial() );
+  //GetTargetNuclei( aTrack.GetMaterial() );
+   fANucl = aTarget.GetN(); 
+   fZNucl = aTarget.GetZ();
 
   // initialize secondary information 
   numberOfSecondaries = 0;
@@ -137,6 +144,7 @@ G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
 #endif 
     } else {
       G4HadSecondary *track = new G4HadSecondary(secondaries[idx], fweight);
+//    Remain unchanged, because this is a member function of G4HadFinalSate 
       theParticleChange.AddSecondary(track);
     }
   }
@@ -171,14 +179,14 @@ void G4Mars5GeV::GetTargetNuclei(const G4Material* material)
     fANucl +=
       theAtomicNumDensityVector[iel]*((*theElementVector)[iel]->GetN());
 
-#ifdef G4VERBOSE
-    if (GetVerboseLevel() > 2) {
+//#ifdef G4VERBOSE
+//    if (GetVerboseLevel() > 2) {
       G4cout << iel << ": " << theAtomicNumDensityVector[iel];
       G4cout << "  Z=" << (*theElementVector)[iel]->GetZ() << "  A=" <<
 	(*theElementVector)[iel]->GetN();
       G4cout << G4endl; 
-    }
-#endif 
+//    }
+//#endif 
   }
   fANucl /= totNumAtoms;
   fZNucl /= totNumAtoms;
@@ -249,7 +257,7 @@ G4bool G4Mars5GeV::CoulombBarrier(G4int pType, G4double  pE){
   if ( (  pType == MarsP) || (  pType ==MarsPIplus) || ( pType ==MarsKplus) ) { 
     if ( ( pE < EthCoulombBarrier ) && (fANucl >=1.5) ) {   
       G4double pMass =  GetParticleDefinition(pType)->GetPDGMass();
-      G4double vCoulomb = AvCoulomb*pow(fZNucl/fANucl, 1./3.);
+      G4double vCoulomb = AvCoulomb*std::pow(fZNucl/fANucl, 1./3.);
       G4double tc = pE*(fANucl*ProtonMass)/(pMass+(fANucl*ProtonMass));
       G4double rCoulomb = 1.0-vCoulomb/tc;
       if ( rCoulomb < RCoulombTh ) {
@@ -300,7 +308,8 @@ void G4Mars5GeV::CreateNucleon(G4int ib, G4int pType, G4double  )
     selec1.V10 = 2.0;
   }
 
-  if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondary();
+  //if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondary();
+  if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondaryToMarsList();
 
 }
 
@@ -352,7 +361,8 @@ void G4Mars5GeV::CreatePion(G4int ib, G4int pType, G4double  pE)
 	}
       }
     }
-    AddSecondary();
+    //AddSecondary();
+    AddSecondaryToMarsList();
   }
 }
 
@@ -388,15 +398,17 @@ void G4Mars5GeV::CreatePionZero(G4int ib, G4int pType, G4double  pE)
   selec1.V10 = 1.0;
   if ( SelBS(pType, fANucl, fZNucl) >0.0 ) {
     selec1.Tprod = MarsPI0;
-    AddSecondary();
+    //AddSecondary();
+    AddSecondaryToMarsList();
   }
 }
 
-void G4Mars5GeV::AddSecondary()
+//void G4Mars5GeV::AddSecondary()
+void G4Mars5GeV::AddSecondaryToMarsList()
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeV::AddSecondary()" << G4endl;
+    G4cout << " G4Mars5GeV::AddSecondaryToMarsList()" << G4endl;
     G4cout << " Particle :" << selec1.Tprod;
     G4cout << ":" << GetParticleName(selec1.Tprod) <<G4endl;
     G4cout << " Energy   :" << selec1.EN <<G4endl;
@@ -418,7 +430,7 @@ void G4Mars5GeV::AddSecondary()
 
   Trans(&pin, &pout);
   if (numberOfSecondaries>=FastVectorSize) {
-    G4String text = " G4Mars5GeV::AddSecondary() too many secondaries";
+    G4String text = " G4Mars5GeV::AddSecondaryToMarsList() too many secondaries";
     throw G4HadronicException(__FILE__, __LINE__, text);
   }
 
@@ -470,10 +482,10 @@ G4double G4Mars5GeV::SelBS(G4int pType, G4double aNucl, G4double zNucl)
 	dw = selec3.Emax-selec3.Eth;
 	en = selec3.Eth + g1*dw;
       } else {
-	G4double cb = log(ea/selec3.Eth);
+	G4double cb = std::log(ea/selec3.Eth);
 	G4double ca = cb + 99.0;
 	if (g1<cb/ca) {
-	  en = selec3.Eth*exp(g1*ca);
+	  en = selec3.Eth*std::exp(g1*ca);
 	  dw = en*ca;
 	} else {
 	  en = ea*(g1*ca + 1.0 - cb);
@@ -481,8 +493,8 @@ G4double G4Mars5GeV::SelBS(G4int pType, G4double aNucl, G4double zNucl)
 	}
       }
     } else {
-      en = selec3.Eth*pow(selec3.Emax/selec3.Eth, g1);
-      dw = en*log(selec3.Emax/selec3.Eth);
+      en = selec3.Eth*std::pow(selec3.Emax/selec3.Eth, g1);
+      dw = en*std::log(selec3.Emax/selec3.Eth);
     }
     
     selec1.EN = en;
@@ -500,11 +512,11 @@ G4double G4Mars5GeV::SelBS(G4int pType, G4double aNucl, G4double zNucl)
     
     // calculate direction cosine
     G4double tau = en/Atau/e0*(Btau+e0)/GeV;
-    G4double c5 = 1.0-exp(-pi*tau);
+    G4double c5 = 1.0-std::exp(-pi*tau);
     G4double c4 = 1.0-g2*c5; 
-    G4double t1 = -log(c4)/tau;
-    G4double rcs = cos(t1);
-    G4double rss = sqrt(1.0-rcs*rcs);
+    G4double t1 = -std::log(c4)/tau;
+    G4double rcs = std::cos(t1);
+    G4double rss = std::sqrt(1.0-rcs*rcs);
     G4double da  = 2.0*pi*rss*c5/(tau*c4);
     selec2.Cs = rcs;
     selec2.Ss = rss;
@@ -573,7 +585,7 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
   //C     LAST CHANGE: 16-JUL-1998 BY NVM
 
   static const G4double o2pi = 1./twopi;
-  static const G4double ospi = 1./sqrt(pi);
+  static const G4double ospi = 1./std::sqrt(pi);
 
   static G4double abu = 0.0;
   static G4double alga = 0.0;
@@ -618,16 +630,16 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     }
     else
     {
-      alga = log(a);
-      a13 = pow(a,1./3.);
+      alga = std::log(a);
+      a13 = std::pow(a,1./3.);
       a23 = a13*a13;
-      a125 = pow(a,-1.25);
-      am25 = pow(a-1.0,0.25);
-      sqa = sqrt(a);
-      sqa1 = sqrt(a-1.);
+      a125 = std::pow(a,-1.25);
+      am25 = std::pow(a-1.0,0.25);
+      sqa = std::sqrt(a);
+      sqa1 = std::sqrt(a-1.);
       bm = 1.0 + sqa;
     }
-    sl = 0.72/pow(1.+alga,0.4);
+    sl = 0.72/std::pow(1.+alga,0.4);
     sa = 0.087*a23 + 4.15;
   }
 
@@ -639,24 +651,24 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     if(i>=3) bn = 1.0;
   }
   else
-  { bn = bm*exp(-sa*pow(3.68/e0,sl)); }
+  { bn = bm*std::exp(-sa*std::pow(3.68/e0,sl)); }
     
   G4double emm = e0;
   G4double e1ge = 0.001*e0;
   G4double e2ge = e1ge*e1ge;
   G4double f21 = 0.04/(e2ge*e2ge);
-  G4double f31 = 0.38*pow(e1ge,-0.65);
+  G4double f31 = 0.38*std::pow(e1ge,-0.65);
   G4double f22 = 0.25/e2ge;
   G4double f32 = am25*0.7/(e1ge+1.);
   G4double ei2 = 0.0;
   G4double x1 = f21 + f31;
-  if(x1<60.) ei2 = 0.8*exp(-x1);
+  if(x1<60.) ei2 = 0.8*std::exp(-x1);
   G4double ei1 = ei2;
   if(a>2.0)
   {
     ei1 = 0.;
     x1 = f22 + f32;
-    if(x1<60.) ei1 = exp(-x1);
+    if(x1<60.) ei1 = std::exp(-x1);
   }
 
   G4double ew1 = ei2;
@@ -677,11 +689,11 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
   G4double qel = 1.0 - ei1;
   if(a>2.0)
   {
-    G4double e02 = pow(e0/350.,1.5);
+    G4double e02 = std::pow(e0/350.,1.5);
     G4double ex2 = 1.0;
-    if(e02<60.) ex2 = 1.0-exp(-e02);
+    if(e02<60.) ex2 = 1.0-std::exp(-e02);
     qel = 0.0;
-    if(t<halfpi) qel = 1.17*ex2*exp(-0.08*sqa1)*(1.-ew1);
+    if(t<halfpi) qel = 1.17*ex2*std::exp(-0.08*sqa1)*(1.-ew1);
   }
 
   G4int in = i;       // save i
@@ -695,36 +707,36 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     if(qel>1.e-25)
     {
       eql = qel*e0*(sql+1.)/(sql+2.);
-      G4double bp1x = -60./log(e/e0);
+      G4double bp1x = -60./std::log(e/e0);
       if(sql<=bp1x)
       { 
-        bp1x = pow(e/e0,sql);
+        bp1x = std::pow(e/e0,sql);
         dnq = qel/e0*(sql+1.)*bp1x;
       }
     }
   }
 
   G4double bp1 = e0;
-  if(e0<1.e9) bp1 = sqrt(e0*e0+1880.*e0);
+  if(e0<1.e9) bp1 = std::sqrt(e0*e0+1880.*e0);
   G4double pul = 1.e-3*bp1;
-  bp1 = 3.*pow(pul,0.25) - 2.0;
+  bp1 = 3.*std::pow(pul,0.25) - 2.0;
   if(bp1<1.) bp1 = 1.;
   G4double bpi = 0.0;
-  if(ei1>0.) bpi = bp1*exp(0.075*sqa1)*ei1;
+  if(ei1>0.) bpi = bp1*std::exp(0.075*sqa1)*ei1;
   G4double ec = 0.0;
   if(a>2.0) ec = 10.5 - 0.02*a;
   G4double g = 0.1*alga + 0.2;
-  G4double eog = pow(e0,g);
+  G4double eog = std::pow(e0,g);
   G4double f1 = 1./3.*ec*a/(1.8*eog);
   x1 = 1.0;
-  if(f1<60.) x1 = 1.0 - exp(-f1);
+  if(f1<60.) x1 = 1.0 - std::exp(-f1);
   G4double fm = 1.8*eog*x1;
   G4double ez = ec + fm;
   if(fm>=e0) ez = ec + e0;
   G4double d = 1.0;
   if(i>=3) d = 0.0;
   x1 = 1.0;
-  if(a<=44.) x1 = exp(-exp(4.-a));
+  if(a<=44.) x1 = std::exp(-std::exp(4.-a));
   G4double ez2 = 33.5*a125*x1*(ez-ec)*(1.-ez/(ec-e0));
   G4double epw = e0 - ez - (bn-d)*ec - 140.*bpi - ez2;
   G4double e2 = epw - eli - eql;
@@ -732,11 +744,11 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
   G4double ak1 = 3.0;
   G4double ak20 = 5.e-4*(1.+a13)*e0;
   x1 = 1.0;
-  if(ak20<60.) x1 = 1.0 - exp(-ak20);
-  G4double ga = pow(e1ge,0.06)*ak1*x1;
+  if(ak20<60.) x1 = 1.0 - std::exp(-ak20);
+  G4double ga = std::pow(e1ge,0.06)*ak1*x1;
   G4double egr = e0/(ga+1.);
-  G4double d2 = 250.*(1.+2.5*e0*exp(-0.02*a)/(e0+1.e3))/sqa;
-  G4double aea = e2/(e0*(1./(1.+ga)-d2*log(1.+egr/d2)/e0));
+  G4double d2 = 250.*(1.+2.5*e0*std::exp(-0.02*a)/(e0+1.e3))/sqa;
+  G4double aea = e2/(e0*(1./(1.+ga)-d2*std::log(1.+egr/d2)/e0));
   aea *= 1./(1.+d2*(ga+1.)/(3.*e0*(d2/e0+1.75)));
   if(i<=2 && j>=3)
   {
@@ -744,7 +756,7 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     if(j!=5 && a!=1. && (i+j)!=5) emm = e0 - 280;
   }
   G4double dn = 0.0;
-  if(e<=emm) dn = aea*(e0/emm)*pow(1.-e/emm,ga)/(e+d2);
+  if(e<=emm) dn = aea*(e0/emm)*std::pow(1.-e/emm,ga)/(e+d2);
   if(i>=3) bpi += 1;
   dnde = dn + dnq + dnl;
   // In original code, check nupr. But in this code, nupr is aliways set to 0
@@ -770,9 +782,9 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     { dp = 0.2; }
     if(a<=2.&&i==1&&j<=2) dp = 0.5;
     if(a<=2.&&i==2&&j==2) dp = 1.0;
-    G4double eq = e0*sqr(cos(t))/(1.+e0*sqr(sin(t))/1880.) - 25.0;
+    G4double eq = e0*sqr(std::cos(t))/(1.+e0*sqr(std::sin(t))/1880.) - 25.0;
     G4double exq = sqr((e-eq)/d1) + 0.5*sw2*t*t;
-    if(exq<60.) qe = qel*sw2*exp(-exq)*dp*ospi/d1;
+    if(exq<60.) qe = qel*sw2*std::exp(-exq)*dp*ospi/d1;
   }
 
   G4int iold = i;
@@ -791,7 +803,7 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     { az = (a+1.-z)/z; }
     x1 = 0.5*e1ge;
     pn = az;
-    if(x1<60.) pn *= 1. + exp(-x1);
+    if(x1<60.) pn *= 1. + std::exp(-x1);
     if(i==j)
     { pr = bn*pn/(1.+pn); }
     else
@@ -803,7 +815,7 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     if(i==2) az = (a-z)/z;
     G4double bp = 1.0;
     G4double e0g = e1ge*e2ge;
-    if(e0g<60.) bp -= 0.5*exp(-e0g);
+    if(e0g<60.) bp -= 0.5*std::exp(-e0g);
     G4double ap = az * bp;
     bp = 6.*(1.+ap);
     if((i==1&&j==3)||(i==2&&j==4)) pr = pna*(bp1/3.-(2.+ap)/bp);
@@ -839,19 +851,19 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
     }
   }
 
-  G4double ek3 = 0.01*sqrt(e1ge)*(1.+alga/4.);
+  G4double ek3 = 0.01*std::sqrt(e1ge)*(1.+alga/4.);
   G4double tay = 200.*e0/(e0+560.);
   G4double w = e/tay;
-  G4double ek4 = 1.21*e0*w/(sqrt(1.+alga)*(e0+2000.));
+  G4double ek4 = 1.21*e0*w/(std::sqrt(1.+alga)*(e0+2000.));
   if(j>=3) ek4 = 0.3*w*(e0-1000.)/(e0+1000.);
   G4double wpic = w*pi;
   G4double w2 = w*w;
   G4double ex8 = 1.0;
-  if(wpic<60.) ex8 /= 1.0 + exp(-wpic);
+  if(wpic<60.) ex8 /= 1.0 + std::exp(-wpic);
   G4double ek = (1.+w2)*(1.+5.2*ek4/(2.+w2))*ex8;
-  G4double wtw = 2.*(sqrt(1.+ek3*e*t*1.e-3)-1.)/(tay*ek3*1.e-3)+ek4*t*t;
+  G4double wtw = 2.*(std::sqrt(1.+ek3*e*t*1.e-3)-1.)/(tay*ek3*1.e-3)+ek4*t*t;
   G4double sm = 0.0;
-  if(dn>=1.e-26 && wtw<60.) sm = pr*dn*ek*exp(-wtw)/pns;
+  if(dn>=1.e-26 && wtw<60.) sm = pr*dn*ek*std::exp(-wtw)/pns;
 
   G4double dl = 0.0;
   i = iold;
@@ -861,16 +873,16 @@ G4double G4Mars5GeV::D2N2(G4int    pType,       G4double incidentE,
   {
     tay = 200.*e0/(e0+2600.);
     w = e/tay;
-    ek4 = 1.21*e0*w/(sqrt(1.+alga)*(e0+2000.));
+    ek4 = 1.21*e0*w/(std::sqrt(1.+alga)*(e0+2000.));
     i = in;
     wpic = w*pi;
     w2 = w*w;
     ex8 = 1.0;
-    if(wpic<60.) ex8 /= 1.0 + exp(-wpic);
+    if(wpic<60.) ex8 /= 1.0 + std::exp(-wpic);
     wtw = w*t + ek4*t*t;
     if(wtw<60.)
     {
-      G4double ft = (1.+w2)*(1.+5.2*ek4/(2.+w2))*exp(-wtw)*ex8;
+      G4double ft = (1.+w2)*(1.+5.2*ek4/(2.+w2))*std::exp(-wtw)*ex8;
       if(ft>=1.-16)
       {
         G4double dp;
@@ -925,7 +937,7 @@ G4double G4Mars5GeV::Rkaon(G4int ib, G4int jp, G4double eRaw)
   G4double eGeV = eRaw / GeV;
   G4double rK = 0.;
   if(eGeV < 2.1) return rK;
-  G4double ale = log(eGeV);
+  G4double ale = std::log(eGeV);
 
   // No.1
   rK = rkp;
@@ -978,7 +990,7 @@ void G4Mars5GeV::Trans(G4ThreeVector* d1,G4ThreeVector* d2)
   G4double sz = dx1*dx1 + dy1*dy1;
   if(sz > 1.e-50)
   {
-    sz = sqrt(sz);
+    sz = std::sqrt(sz);
     sss = ss*(ch*dz1*dx1-sh*dy1)/sz + cs*dx1;
     ttt = ss*(ch*dz1*dy1+sh*dx1)/sz + cs*dy1;
     uuu = - ss*ch*sz + cs*dz1;
@@ -989,7 +1001,7 @@ void G4Mars5GeV::Trans(G4ThreeVector* d1,G4ThreeVector* d2)
     ttt = ss*sh + dy1;
     uuu = cs*dz1;
   }
-  G4double den = sqrt(sss*sss+uuu*uuu+ttt*ttt);
+  G4double den = std::sqrt(sss*sss+uuu*uuu+ttt*ttt);
   d2->setX(sss/den);
   d2->setY(ttt/den);
   d2->setZ(uuu/den);

@@ -87,7 +87,7 @@
              for( ii = 0; ii<iPoE; ii++)
              {
                curE         = Energies[ii]*dPower;
-               curP         = sqrt(curE*curE-mHadr*mHadr);  //  MeV
+               curP         = std::sqrt(curE*curE-mHadr*mHadr);  //  MeV
                pTableE[ii+ik*iPoE] = curE;
                inVector.setZ(curP);                //  MeV
                innerHadron->SetMomentum(inVector);
@@ -210,7 +210,7 @@
         iKindWork      = 4;
 //	G4cout<<" R1 (1) "<<R1<<G4endl;
         G4double   nuclMass = (G4double) iNnucl;
-        R1             = 0.74*pow(nuclMass,0.3333)*5.0;
+        R1             = 0.74*std::pow(nuclMass,0.3333)*5.0;
         maxQ2          = GetQ2limit(R1);   //   MeV^2
 
 //G4cout<<" R1 (2) "<<R1<<G4endl;
@@ -234,7 +234,7 @@
 
    for(ik=0; ik<AreaNumb; ik++)
    {
-           dPower = pow(10.0,ik);
+           dPower = std::pow(10.0,ik);
 
      for(kk=0; kk<iPoE; kk++)  
      {
@@ -508,14 +508,14 @@
         G4double   invS      = sqrMass+2*inEnHadr*MassNucl;   // MeV^2
         G4double   invU      = 2*sqrMass-invS+ranQ2;          // MeV^2
         G4double   outEnHadr = (sqrMass-invU)/2/MassNucl;     // MeV
-        G4double   outMomHdr = sqrt(outEnHadr*outEnHadr-      // MeV
+        G4double   outMomHdr = std::sqrt(outEnHadr*outEnHadr-      // MeV
                                     MassHadr*MassHadr);
         G4double   cosHadr   = (-ranQ2-2*MassHadr*MassHadr+
                                2*inEnHadr*outEnHadr)/2
                                /inLabMom/outMomHdr;        
 //----------------     For final state of nucleus   -----------------
         G4double   outEnNucl = (2*MassNucl*MassNucl+ranQ2)/2/MassNucl;
-        G4double   outMomNcl = sqrt(outEnNucl*outEnNucl-  //  MeV
+        G4double   outMomNcl = std::sqrt(outEnNucl*outEnNucl-  //  MeV
                                     MassNucl*MassNucl);
         G4double   cosNucl   = (invU-sqrMass+2*inEnHadr*outEnNucl)
                                 /2/inLabMom/outMomNcl;   
@@ -527,14 +527,14 @@
              G4double   NucMomHdrSys[3];
              G4double   NucMomOldSys[3];
 //   ------------ The hadron angles in its own system ------------
-             G4double   sinHadr   = sqrt(1-cosHadr*cosHadr);
-             G4double   sinFiHadr = sin(ranFi);
-             G4double   cosFiHadr = cos(ranFi);
+             G4double   sinHadr   = std::sqrt(1-cosHadr*cosHadr);
+             G4double   sinFiHadr = std::sin(ranFi);
+             G4double   cosFiHadr = std::cos(ranFi);
 //   ---- The unit vector of a hadron momentum in its own system ---
                    NewMomHdrSys[0] = sinHadr*cosFiHadr; 
                    NewMomHdrSys[1] = sinHadr*sinFiHadr;
                    NewMomHdrSys[2] = cosHadr;          
-        G4double   sinNucl         = sqrt(1-cosNucl*cosNucl);
+        G4double   sinNucl         = std::sqrt(1-cosNucl*cosNucl);
 //   -----------  The unit vector of  a nucleus momentum  -----------
                    NucMomHdrSys[0] = -sinNucl*cosFiHadr;
                    NucMomHdrSys[1] = -sinNucl*sinFiHadr;
@@ -552,7 +552,7 @@
                      }
                  else
                      {
-               sinTet  = sqrt(1-cosTet*cosTet);
+               sinTet  = std::sqrt(1-cosTet*cosTet);
                sinFi   = aParticle->GetMomentumDirection().y()/
                          sinTet;
                cosFi   = aParticle->GetMomentumDirection().x()/
@@ -611,16 +611,16 @@
 
   if(iContr == 137)
   {
-  G4cout<<" HadrEn from Mom. "<<sqrt(hadrMass*hadrMass+pxnew*pxnew+
+  G4cout<<" HadrEn from Mom. "<<std::sqrt(hadrMass*hadrMass+pxnew*pxnew+
     pynew*pynew+pznew*pznew)<<G4endl;
 
 G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
-      <<" "<< acos(cosHadr)*180/3.1416
-      <<" Nucl Mom Tet "<<sqrt(pow(NucMomOldSys[0],2)+
-                               pow(NucMomOldSys[1],2)+
-                               pow(NucMomOldSys[2],2))
+      <<" "<< std::acos(cosHadr)*180/3.1416
+      <<" Nucl Mom Tet "<<std::sqrt(std::pow(NucMomOldSys[0],2)+
+                               std::pow(NucMomOldSys[1],2)+
+                               std::pow(NucMomOldSys[2],2))
                               *outMomNcl<<"  "
-      <<acos(cosNucl)*180/3.1416<<G4endl<<G4endl;
+      <<std::acos(cosNucl)*180/3.1416<<G4endl<<G4endl;
  G4cout<<" HadronEn "<<outEnHadr<<G4endl;
  G4cout<<" Rotation: old UnitVec "
        <<NewMomHdrSys[0]<<" "<<NewMomHdrSys[1]<<" "
@@ -661,7 +661,7 @@ G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
        <<SecPartNuc->GetDefinition()->GetParticleName()<<G4endl;
    G4ThreeVector outVectorN =  SecPartNuc->GetMomentum();
 //   G4double        outENucl =  SecPartNuc->GetTotalEnergy();
-//   G4double        outPNucl =  sqrt(outENucl*outENucl-
+//   G4double        outPNucl =  std::sqrt(outENucl*outENucl-
 //                        938.27*938.27*MassNucl*MassNucl);
 //   G4double   secEnergyNucl =  SecPartNuc->GetKineticEnergy();
     G4cout<<"----------- End Applay ------------"<<G4endl<<G4endl;
@@ -871,7 +871,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
       G4double    Stot     = HadrTot*MbToB;     //  Gev^-2
       G4double    Bhad     = HadrSlope;         //  GeV^-2
       G4double    Asq      = 1+HadrReIm*HadrReIm;
-      G4double    Rho2     = sqrt(Asq);
+      G4double    Rho2     = std::sqrt(Asq);
 
       G4double    R12      = R1*R1;
       G4double    R22      = R2*R2;
@@ -895,17 +895,17 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
       G4double    R23      = Pnucl*R22*R2/R22B;
       G4double    Unucl    = Stot/2/Pi1/Norm*R13;
 ////      G4double    Unclprod = Stot/2/Pi1/NormP*R13Ap;
-      G4double    FiH      = asin(HadrReIm/Rho2);
+      G4double    FiH      = std::asin(HadrReIm/Rho2);
       G4double    NN2      = R23/R13;
 
 ///      G4double    DDSec1p  = (DDSect2+
-///                    DDSect3*log(1.06*2*Ehad/R1/4));
+///                    DDSect3*std::log(1.06*2*Ehad/R1/4));
 
 ///      G4double    DDSec2p  = (DDSect2+
-///                    DDSect3*log(1.06*2*Ehad/sqrt((R12+R22)/2)/4));
+///                    DDSect3*std::log(1.06*2*Ehad/std::sqrt((R12+R22)/2)/4));
 
 ///      G4double    DDSec3p  = (DDSect2+
-///                    DDSect3*log(1.06*2*Ehad/R2/4));
+///                    DDSect3*std::log(1.06*2*Ehad/R2/4));
 
 ///      G4double    R12ApdR22Ap = 0.5*(R12Apd+R22Apd);
 
@@ -933,7 +933,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
              for(G4int i2 = 1; i2<=Nucleus; i2++) ////+++++++++ i2
                  {
                 N2    = -N2*Unucl*(Nucleus-i2+1)/i2*Rho2;
-                G4double Prod2  = 0; //exp(-Q2/i2*R12B/4)/i2*R12B;
+                G4double Prod2  = 0; //std::exp(-Q2/i2*R12B/4)/i2*R12B;
                 G4double N5     = -1/NN2;
 
                     for(G4int m2=0; m2<= i2; m2++) ////+++++++++ m2
@@ -948,7 +948,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
                             exp1  = m1/R22B+(i1-m1)/R12B;
                             N4    = -N4*NN2;
                             Prod3 = Prod3+N4/exp1/exp2*
-                                   (1-exp(-Q2*(1/exp1+1/exp2)/4))/
+                                   (1-std::exp(-Q2*(1/exp1+1/exp2)/4))/
                                    (1/exp1+1/exp2)*4*
                                    Factorials1[i1]/
                                    Factorials1[m1]/
@@ -963,14 +963,14 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
                      Factorials1[i2-m2];
 
                       }                                      // m2
-                 Prod1 = Prod1 + Prod2*N2*cos(FiH*(i1-i2));
-                 Tot0  = Tot0  + Prod2*N2*sin(FiH*(i1-i2));
-            if (abs(Prod2*N2/Prod1)<1e-6) break;
+                 Prod1 = Prod1 + Prod2*N2*std::cos(FiH*(i1-i2));
+                 Tot0  = Tot0  + Prod2*N2*std::sin(FiH*(i1-i2));
+            if (std::abs(Prod2*N2/Prod1)<1e-6) break;
 
                    }                                         // i2
                   // ImDistr = Tot0  + Tot0*N1;
                      Prod0   = Prod0 + Prod1*N1;
-            if(abs(N1*Prod1/Prod0) < 1e-6) break;
+            if(std::abs(N1*Prod1/Prod0) < 1e-6) break;
 
                  }                                           // i1
              Prod0        = Prod0*Pi1/2.568/4;  //  This is in mb
@@ -994,7 +994,7 @@ G4double G4ElasticHadrNucleusHE::InterPol(
          G4double F32 = X3*X3;
          G4double D0  = F12*X2+X1*F32+X3*F22-F32*X2-F22*X1-F12*X3;
 
-          if(abs(D0) < 1e-8 || D0 == 0) 
+          if(std::abs(D0) < 1e-8 || D0 == 0) 
                   ranQ2 = (Y2+(X-X2)*(Y3-Y2) /(X3-X2));   //   MeV^2
 
           else    {

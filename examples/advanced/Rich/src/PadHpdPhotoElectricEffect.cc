@@ -197,8 +197,8 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
   // coord system.
     G4double GLx=GlobalElectronOrigin.x();
     G4double GLy=GlobalElectronOrigin.y();
-    // G4double PhotCkvRad = pow((pow(GLx,2)+pow(GLy,2)),0.5);
-    G4double PhotCkvPhi = atan2(GLy,GLx)*180.0/pi;
+    // G4double PhotCkvRad = std::pow((std::pow(GLx,2)+std::pow(GLy,2)),0.5);
+    G4double PhotCkvPhi = std::atan2(GLy,GLx)*180.0/pi;
 
     if( PhotCkvPhi < - 180.0 )PhotCkvPhi+= 360.0;
   
@@ -212,8 +212,8 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
 
   G4double PsfRandomAzimuth = twopi*G4UniformRand();
   G4double PsfRandomRad= G4RandGauss::shoot(0.0,PSFsigma);
-  G4double PsfX= PsfRandomRad*cos( PsfRandomAzimuth);
-  G4double PsfY= PsfRandomRad*sin( PsfRandomAzimuth);
+  G4double PsfX= PsfRandomRad*std::cos( PsfRandomAzimuth);
+  G4double PsfY= PsfRandomRad*std::sin( PsfRandomAzimuth);
 
   
   G4ThreeVector LocalElectronDirection(
@@ -241,9 +241,9 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
 
   // Kill the incident photon when it has converted to photoelectron.
 
-   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);
-   aParticleChange.SetEnergyChange(0.);  
-   aParticleChange.SetStatusChange(fStopAndKill); 
+   aParticleChange.ProposeLocalEnergyDeposit(PhotonEnergy);
+   aParticleChange.ProposeEnergy(0.);  
+   aParticleChange.ProposeTrackStatus(fStopAndKill); 
   }
   //photon is not killed if it is not converted to photoelectron
   //SE 26-09-01.

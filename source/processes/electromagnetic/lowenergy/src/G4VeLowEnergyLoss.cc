@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.23 2003/06/16 17:00:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VeLowEnergyLoss.cc,v 1.24 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // --------------------------------------------------------------
@@ -232,7 +232,7 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   for (G4int i=0; i<=nbin; i++)
   {
     ui = ltaulow+dltau*i;
-    taui = exp(ui);
+    taui = std::exp(ui);
     ti = ParticleMass*taui;
     lossi = physicsVector->GetValue(ti,isOut);
     if(i==0)
@@ -337,9 +337,9 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
-  clim=sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = log(taulim);
-  ltaumax = log(highestKineticEnergy/ParticleMass) ;
+  clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
+  ltaulim = std::log(taulim);
+  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -351,13 +351,13 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
     tau = LowEdgeEnergy/ParticleMass ;
     if ( tau <= taulim )
     {
-      Value = clim*exp(ppar*log(tau/taulim)) ;
+      Value = clim*std::exp(ppar*std::log(tau/taulim)) ;
     }
     else
     {
       timelim=clim ;
-      ltaulow = log(taulim);
-      ltauhigh = log(tau);
+      ltaulow = std::log(taulim);
+      ltauhigh = std::log(tau);
       Value = timelim+LabTimeIntLog(physicsVector,nbin);
     }
     timeVector->PutValue(i,Value);
@@ -369,8 +369,8 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
-    ltaulow = log(tauold);
-    ltauhigh = log(tau);
+    ltaulow = std::log(tauold);
+    ltauhigh = std::log(tau);
     Value = oldValue+LabTimeIntLog(physicsVector,nbin);
     timeVector->PutValue(j,Value);
     oldValue = Value ;
@@ -398,9 +398,9 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
-  clim=sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = log(taulim);
-  ltaumax = log(highestKineticEnergy/ParticleMass) ;
+  clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
+  ltaulim = std::log(taulim);
+  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -412,13 +412,13 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
     tau = LowEdgeEnergy/ParticleMass ;
     if ( tau <= taulim )
     {
-      Value = clim*exp(ppar*log(tau/taulim)) ;
+      Value = clim*std::exp(ppar*std::log(tau/taulim)) ;
     }
     else
     {
       timelim=clim ;
-      ltaulow = log(taulim);
-      ltauhigh = log(tau);
+      ltaulow = std::log(taulim);
+      ltauhigh = std::log(tau);
       Value = timelim+ProperTimeIntLog(physicsVector,nbin);
     }
     timeVector->PutValue(i,Value);
@@ -430,8 +430,8 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
-    ltaulow = log(tauold);
-    ltauhigh = log(tau);
+    ltaulow = std::log(tauold);
+    ltauhigh = std::log(tau);
     Value = oldValue+ProperTimeIntLog(physicsVector,nbin);
     timeVector->PutValue(j,Value);
     oldValue = Value ;
@@ -454,7 +454,7 @@ G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   for (G4int i=0; i<=nbin; i++)
   {
     ui = ltaulow+dltau*i;
-    taui = exp(ui);
+    taui = std::exp(ui);
     ti = ParticleMass*taui;
     lossi = physicsVector->GetValue(ti,isOut);
     if(i==0)
@@ -466,7 +466,7 @@ G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
       else
         ci=0.5;
     }
-    Value += ci*taui*(ti+ParticleMass)/(sqrt(ti*(ti+2.*ParticleMass))*lossi);
+    Value += ci*taui*(ti+ParticleMass)/(std::sqrt(ti*(ti+2.*ParticleMass))*lossi);
   }
   Value *= ParticleMass*dltau/c_light;
   return Value;
@@ -487,7 +487,7 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   for (G4int i=0; i<=nbin; i++)
   {
     ui = ltaulow+dltau*i;
-    taui = exp(ui);
+    taui = std::exp(ui);
     ti = ParticleMass*taui;
     lossi = physicsVector->GetValue(ti,isOut);
     if(i==0)
@@ -499,7 +499,7 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
       else
         ci=0.5;
     }
-    Value += ci*taui*ParticleMass/(sqrt(ti*(ti+2.*ParticleMass))*lossi);
+    Value += ci*taui*ParticleMass/(std::sqrt(ti*(ti+2.*ParticleMass))*lossi);
   }
   Value *= ParticleMass*dltau/c_light;
   return Value;
@@ -537,7 +537,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
     G4double rlow  = pv->GetValue(elow, b);
     G4double rhigh = pv->GetValue(ehigh, b);
 
-    rhigh *= exp(log(rhigh/rlow)/((G4double)(nbins-1)));
+    rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
     G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
 
@@ -564,9 +564,9 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
 	}
       }
 
-      G4double e = log(energy1) + log(energy2/energy1)*log(range/range1)/log(range2/range1);
+      G4double e = std::log(energy1) + std::log(energy2/energy1)*std::log(range/range1)/std::log(range2/range1);
 
-      v->PutValue(j,exp(e));
+      v->PutValue(j,std::exp(e));
     }
     theInverseRangeTable->insert(v);
 
@@ -586,7 +586,7 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
 //  invert range vector for a material
 {
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
-  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
+  G4double RTable = std::exp(std::log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double Tbin = lowestKineticEnergy/RTable ;
   G4double rangebin = 0.0 ;
   G4int binnumber = -1 ;
@@ -621,7 +621,7 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
       else
       {
          discr = B*B - 4.*A*(C-LowEdgeRange);
-         discr = discr>0. ? sqrt(discr) : 0.;
+         discr = discr>0. ? std::sqrt(discr) : 0.;
          KineticEnergy = 0.5*(discr-B)/A ;
       }
     }
@@ -647,7 +647,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
     delete theRangeCoeffATable; }
   theRangeCoeffATable = new G4PhysicsTable(numOfCouples);
 
-  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
+  G4double RTable = std::exp(std::log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -709,7 +709,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
     delete theRangeCoeffBTable; }
   theRangeCoeffBTable = new G4PhysicsTable(numOfCouples);
 
-  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
+  G4double RTable = std::exp(std::log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -770,7 +770,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
     delete theRangeCoeffCTable; }
   theRangeCoeffCTable = new G4PhysicsTable(numOfCouples);
 
-  G4double RTable = exp(log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
+  G4double RTable = std::exp(std::log(highestKineticEnergy/lowestKineticEnergy)/TotBin) ;
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -825,7 +825,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 {
    static const G4double minLoss = 1.*eV ;
    static const G4double probLim = 0.01 ;
-   static const G4double sumaLim = -log(probLim) ;
+   static const G4double sumaLim = -std::log(probLim) ;
    static const G4double alim=10.;
    static const G4double kappa = 10. ;
    static const G4double factor = twopi_mc2_rcl2 ;
@@ -880,7 +880,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if(MeanLoss >= kappa*Tm || MeanLoss <= kappa*ipotFluct)
   {
     G4double electronDensity = aMaterial->GetElectronDensity() ;
-    siga = sqrt(Tm*(1.0-0.5*beta2)*step*
+    siga = std::sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity/beta2) ;
     do {
       loss = G4RandGauss::shoot(MeanLoss,siga) ;
@@ -889,13 +889,13 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   }
 
   w1 = Tm/ipotFluct;
-  w2 = log(2.*electron_mass_c2*tau2);
+  w2 = std::log(2.*electron_mass_c2*tau2);
 
   C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*std::log(w1));
 
   suma = a1+a2+a3;
 
@@ -912,7 +912,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
 	  if(a3>alim)
 	    {
-	      siga=sqrt(a3) ;
+	      siga=std::sqrt(a3) ;
 	      p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else p3 = G4Poisson(a3);
@@ -936,13 +936,13 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	    }
 	  else
 	    {
-	      a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
+	      a3 = MeanLoss*(Tm-e0)/(Tm*e0*std::log(Tm/e0));
 
 	      // G4cout << "MGP new Tm = " << Tm << " " << ipotFluct << " " << e0 << " a3= " << a3 << G4endl;
 	      
 	      if(a3>alim)
 		{
-		  siga=sqrt(a3) ;
+		  siga=std::sqrt(a3) ;
 		  p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 		}
 	      else
@@ -976,7 +976,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       // excitation type 1
       if(a1>alim)
       {
-        siga=sqrt(a1) ;
+        siga=std::sqrt(a1) ;
         p1 = std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
@@ -985,7 +985,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       // excitation type 2
       if(a2>alim)
       {
-        siga=sqrt(a2) ;
+        siga=std::sqrt(a2) ;
         p2 = std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
@@ -1004,7 +1004,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	{
 	  if(a3>alim)
 	    {
-	      siga=sqrt(a3) ;
+	      siga=std::sqrt(a3) ;
 	      p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else
@@ -1025,9 +1025,9 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 		  if (na > 0.)
 		    {
 		      alfa   = w1*G4double(nmaxCont2+p3)/(w1*G4double(nmaxCont2)+G4double(p3));
-		      alfa1  = alfa*log(alfa)/(alfa-1.);
+		      alfa1  = alfa*std::log(alfa)/(alfa-1.);
 		      ea     = na*ipotFluct*alfa1;
-		      sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+		      sea    = ipotFluct*std::sqrt(na*(alfa-alfa1*alfa1));
 		      lossc += G4RandGauss::shoot(ea,sea);
 		    }
 		}

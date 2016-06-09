@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.11 2004/05/08 15:28:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VParticleChange.hh,v 1.13 2004/12/02 06:38:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -67,11 +67,14 @@
 //   add accuracy leveles            5  May, 99 H.Kurashige
 //   add check secondaries          11  June, 03 H.Kurashige
 //   add new methods of ProposeXXX  08  May, 04 H.Kurashige  
+//   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
+
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include <cmath>
 
 class G4Track;
 class G4Step;
@@ -186,7 +189,7 @@ class G4VParticleChange
     G4bool   IsParentWeightSetByProcess() const;  
     // If fParentWeightByProcess flag is false (true in default),
     // G4VParticleChange can change the weight of the parent track,
-    // in any DoIt by using  SetParentWeight(G4double)
+    // in any DoIt by using  ProposeParentWeight(G4double)
  
 
     void     SetSecondaryWeightByProcess(G4bool);
@@ -200,18 +203,6 @@ class G4VParticleChange
 
     void SetVerboseLevel(G4int vLevel);
     G4int GetVerboseLevel() const;
-
-  public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4VParticleChange   
-
-    void  SetTrueStepLength(G4double truePathLength);
-    void  SetLocalEnergyDeposit(G4double anEnergyPart);
-    G4TrackStatus GetStatusChange() const;
-    void  SetStatusChange(G4TrackStatus status);
-    void  SetSteppingControl(G4SteppingControl StepControlFlag);
-    void  SetParentWeight(G4double);
 
   protected:
 

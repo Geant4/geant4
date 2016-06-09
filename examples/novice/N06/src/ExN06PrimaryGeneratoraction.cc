@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN06PrimaryGeneratorAction.cc,v 1.3 2004/04/02 11:54:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.2 2003/11/03 17:53:06 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.3 2004/12/07 13:48:11 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -75,12 +75,12 @@ G4double G4EvaporationLevelDensityParameter::LevelDensityParameter(const G4int A
     G4int N = A - Z;
 
     // Asymptotic Level Density Parameter
-    G4double AsymptoticLDP = (alpha*static_cast<G4double>(A) + beta*pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
+    G4double AsymptoticLDP = (alpha*static_cast<G4double>(A) + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
 	
     // Shape of the LDP U dependence
     G4double exponent = -gamma*U;
     G4double f = 1.;
-    if (exponent > -300.) f -= exp(exponent);
+    if (exponent > -300.) f -= std::exp(exponent);
 	
     // Level Density Parameter
     G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.7 2003/06/16 17:00:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PenelopePhotoElectric.cc,v 1.8 2004/11/18 12:09:14 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: L. Pandola
 //
@@ -122,9 +122,9 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   if (photonEnergy <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
  
@@ -261,11 +261,11 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
     }
   
   // Kill the incident photon 
-  aParticleChange.SetMomentumChange( 0., 0., 0. );
-  aParticleChange.SetEnergyChange( 0. );
+  aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
+  aParticleChange.ProposeEnergy( 0. );
   
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);  
-  aParticleChange.SetStatusChange( fStopAndKill ); 
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);  
+  aParticleChange.ProposeTrackStatus( fStopAndKill ); 
   
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );

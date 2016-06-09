@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2004/02/17 18:17:20 johna Exp $
+$Id: History,v 1.42 2004/11/18 15:19:05 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,61 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+18th November 2004  John Allison  (opengl-V06-02-07)
+- Removed redundant fLastVP from G4OpenGLStoredSceneHandler.
+
+15th November 2004  Guy Barrand
+- G4OpenGLWin32Viewer::ShowView : glFlush was not sufficient 
+  to see trajectories (for example with N03). Correct so that
+  ShowView do a FinishView that does : glFlush, wglSwapBuffer
+  and empty the Windows message queue.
+
+22nd September 2004  John Allison  (opengl-V06-02-06)
+- doxygen output to tmp area.
+- Trap non-regular polyhedrons.
+
+13th September 2004  Gabriele Cosmo  (opengl-V06-02-05)
+- G4OpenGLTransform3D.cc: simplified implementation for GetMatrix()
+  to allow for porting on CLHEP-1.9.X series.
+
+23rd July 2004  John Allison
+- Draws auxiliary edges if required.
+- Added auxiliary edge button.
+
+16th July 2004  John Allison  (opengl-V06-02-04)
+- Refinements to hidden line, hidden surface removal.
+
+14th July 2004  John Allison  (opengl-V06-02-03)
+- Removed superfluous #include "G4VisManager.hh" from G4OpenGLXmViewer.cc.
+
+13th July 2004  John Allison  (opengl-V06-02-02)
+- Hidden line *and* hidden surface removal now works.
+
+9th July 2004  John Allison  (opengl-V06-02-01)
+- Fixed long-standing problem with hidden line removal.
+- Improved messages on failure to get visual.
+- Added GLX_STENCIL_SIZE explicit request to visual attributes - most
+  systems provided by default anyway, so no effect.
+
+1st July 2004  John Allison  (opengl-V06-02-00)
+- Rationalised G4OpenGLSceneHandler ready for hidden line removal.
+- Bug fix in G4OpenGLXmPanningCallbacks.cc for dolly control.
+
+18th June 2004  Gunter Folger (geant4-06-02)
+9th June 2004  Gabriele Cosmo  (vis-V06-01-03)
+7th June 2004  Gabriele Cosmo  (vis-V06-01-02)
+- GNUmakefile and disclaimer changes - see visualization/History.
+
+9th April 2004  John Allison  (vis-V06-01-01 + interfaces-V06-01-00)
+- Tagged OpenGL as below.  Joint with interfaces-V06-01-00.
+
+7th April 2004  Guy Barrand
+- visualization/OpenGL/* : use the G4OpenGL.hh file.
+- Added : visualization/OpenGL/include/G4OpenGL.hh to encapsulate
+  the include of gl/gl.h and gl/glu.h that may be platform dependant.
+  It permits to rm some #ifdef WIN32 spread in the code. It opens also
+  the way to the usage of the Apple OpenGL on a Mac.
 
 17th February 2004  John Allison  (opengl-V06-00-00)
 - Fixed bug #581: wrong order of statements in

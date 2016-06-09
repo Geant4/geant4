@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.9 2002/12/05 15:39:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Integrator.icc,v 1.11 2004/11/12 17:38:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Implementation of G4Integrator methods. 
 //
@@ -41,7 +41,7 @@ G4double G4Integrator<T,F>::Simpson( T&       typeT,
                                      F        f,
                                      G4double xInitial,
                                      G4double xFinal,
-			             G4int    iterationNumber ) 
+                                     G4int    iterationNumber ) 
 {
    G4int    i ;
    G4double step = (xFinal - xInitial)/iterationNumber ;
@@ -72,7 +72,7 @@ G4double G4Integrator<T,F>::Simpson( T*       ptrT,
                                 F        f,
                                 G4double xInitial,
                                 G4double xFinal,
-			        G4int    iterationNumber ) 
+                                G4int    iterationNumber ) 
 {
    G4int    i ;
    G4double step = (xFinal - xInitial)/iterationNumber ;
@@ -103,7 +103,7 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Simpson( G4double (*f)(G4double),
                                 G4double xInitial,
                                 G4double xFinal,
-			        G4int    iterationNumber ) 
+                                G4int    iterationNumber ) 
 {
    G4int    i ;
    G4double step = (xFinal - xInitial)/iterationNumber ;
@@ -134,9 +134,9 @@ G4double G4Integrator<T,F>::Simpson( G4double (*f)(G4double),
 
 template <class T, class F> 
 G4double G4Integrator<T,F>::Gauss( T& typeT, F f,
-                              G4double xInitial, G4double xFinal   ) 
+                                   G4double xInitial, G4double xFinal   ) 
 {
-   static G4double root = 1.0/sqrt(3.0) ;
+   static G4double root = 1.0/std::sqrt(3.0) ;
    
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step = (xFinal - xInitial)/2.0 ;
@@ -165,7 +165,7 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Gauss( G4double (*f)(G4double), 
                               G4double xInitial, G4double xFinal) 
 {
-   static G4double root = 1.0/sqrt(3.0) ;
+   static G4double root = 1.0/std::sqrt(3.0) ;
    
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step  = (xFinal - xInitial)/2.0 ;
@@ -182,8 +182,8 @@ G4double G4Integrator<T,F>::Gauss( G4double (*f)(G4double),
 template <class T, class F>  
 void G4Integrator<T,F>::AdaptGauss( T& typeT, F f, G4double  xInitial,
                                G4double  xFinal, G4double fTolerance,
-			       G4double& sum,
-			       G4int&    depth      ) 
+                               G4double& sum,
+                               G4int&    depth      ) 
 {
    if(depth > 100)
    {
@@ -197,7 +197,7 @@ G4cout
    G4double leftHalf  = Gauss(typeT,f,xInitial,xMean) ;
    G4double rightHalf = Gauss(typeT,f,xMean,xFinal) ;
    G4double full = Gauss(typeT,f,xInitial,xFinal) ;
-   if(fabs(leftHalf+rightHalf-full) < fTolerance)
+   if(std::fabs(leftHalf+rightHalf-full) < fTolerance)
    {
       sum += full ;
    }
@@ -212,8 +212,8 @@ G4cout
 template <class T, class F>  
 void G4Integrator<T,F>::AdaptGauss( T* ptrT, F f, G4double  xInitial,
                                G4double  xFinal, G4double fTolerance,
-			       G4double& sum,
-			       G4int&    depth      ) 
+                               G4double& sum,
+                               G4int&    depth      ) 
 {
   AdaptGauss(*ptrT,f,xInitial,xFinal,fTolerance,sum,depth) ;
 }
@@ -239,7 +239,7 @@ void G4Integrator<T,F>::AdaptGauss( G4double (*f)(G4double),
    G4double leftHalf  = Gauss(f,xInitial,xMean) ;
    G4double rightHalf = Gauss(f,xMean,xFinal) ;
    G4double full = Gauss(f,xInitial,xFinal) ;
-   if(fabs(leftHalf+rightHalf-full) < fTolerance)
+   if(std::fabs(leftHalf+rightHalf-full) < fTolerance)
    {
       sum += full ;
    }
@@ -338,24 +338,24 @@ G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegen
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
-	 temp1 = 1.0 ;
-	 temp2 = 0.0 ;
-	 for(j=1;j<=k;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-	    temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
-	 }
-	 temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
-	 newton1 = newton ;
-	 newton  = newton1 - temp1/temp ;       // Newton's method
+         temp1 = 1.0 ;
+         temp2 = 0.0 ;
+         for(j=1;j<=k;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+            temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
+         }
+         temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
+         newton1 = newton ;
+         newton  = newton1 - temp1/temp ;       // Newton's method
       }
-      while(fabs(newton - newton1) > tolerance) ;
-	 
+      while(std::fabs(newton - newton1) > tolerance) ;
+         
       fAbscissa[fNumber-i] =  newton ;
       fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;
    }
@@ -412,24 +412,24 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      newton = cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
-	 temp1 = 1.0 ;
-	 temp2 = 0.0 ;
-	 for(j=1;j<=k;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-	    temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
-	 }
-	 temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
-	 newton1 = newton ;
-	 newton  = newton1 - temp1/temp ;       // Newton's method
+         temp1 = 1.0 ;
+         temp2 = 0.0 ;
+         for(j=1;j<=k;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+            temp1 = ((2.0*j - 1.0)*newton*temp2 - (j - 1.0)*temp3)/j ;
+         }
+         temp = k*(newton*temp1 - temp2)/(newton*newton - 1.0) ;
+         newton1 = newton ;
+         newton  = newton1 - temp1/temp ;       // Newton's method
       }
-      while(fabs(newton - newton1) > tolerance) ;
-	 
+      while(std::fabs(newton - newton1) > tolerance) ;
+         
       fAbscissa[fNumber-i] =  newton ;
       fWeight[fNumber-i] = 2.0/((1.0 - newton*newton)*temp*temp) ;
    }
@@ -470,11 +470,11 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
    
    static G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
                                   0.679409568299024, 0.865063366688985,
-				  0.973906528517172                      } ;
+                                  0.973906528517172                      } ;
    
    static G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
                                   0.219086362515982, 0.149451349150581,
-				  0.066671344308688                      } ;
+                                  0.066671344308688                      } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
    integral = 0.0 ;
@@ -510,11 +510,11 @@ G4Integrator<T,F>::Legendre10( G4double (*f)(G4double), G4double a, G4double b)
    
    static G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
                                   0.679409568299024, 0.865063366688985,
-				  0.973906528517172                      } ;
+                                  0.973906528517172                      } ;
    
    static G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
                                   0.219086362515982, 0.149451349150581,
-				  0.066671344308688                      } ;
+                                  0.066671344308688                      } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
    integral = 0.0 ;
@@ -550,67 +550,67 @@ G4double G4Integrator<T,F>::Legendre96( T& typeT, F f,G4double a, G4double b)
                   0.145973714654896941989, 0.178096882367618602759,  // 6
                            
                   0.210031310460567203603, 0.241743156163840012328,
-	          0.273198812591049141487, 0.304364944354496353024,
-	          0.335208522892625422616, 0.365696861472313635031,  // 12
-			   
-	          0.395797649828908603285, 0.425478988407300545365,
-		  0.454709422167743008636, 0.483457973920596359768,
-		  0.511694177154667673586, 0.539388108324357436227,  // 18
-			   
-		  0.566510418561397168404, 0.593032364777572080684,
-		  0.618925840125468570386, 0.644163403784967106798,
-		  0.668718310043916153953, 0.692564536642171561344,  // 24
-			   
-		  0.715676812348967626225, 0.738030643744400132851,
-		  0.759602341176647498703, 0.780369043867433217604,
-		  0.800308744139140817229, 0.819400310737931675539,  // 30
-			   
-	          0.837623511228187121494, 0.854959033434601455463,
-		  0.871388505909296502874, 0.886894517402420416057,
-		  0.901460635315852341319, 0.915071423120898074206,  // 36
-			   
-		  0.927712456722308690965, 0.939370339752755216932,
-		  0.950032717784437635756, 0.959688291448742539300,
-		  0.968326828463264212174, 0.975939174585136466453,  // 42
-			   
-	          0.982517263563014677447, 0.988054126329623799481,
-		  0.992543900323762624572, 0.995981842987209290650,
-		  0.998364375863181677724, 0.999689503883230766828   // 48
+                  0.273198812591049141487, 0.304364944354496353024,
+                  0.335208522892625422616, 0.365696861472313635031,  // 12
+                           
+                  0.395797649828908603285, 0.425478988407300545365,
+                  0.454709422167743008636, 0.483457973920596359768,
+                  0.511694177154667673586, 0.539388108324357436227,  // 18
+                           
+                  0.566510418561397168404, 0.593032364777572080684,
+                  0.618925840125468570386, 0.644163403784967106798,
+                  0.668718310043916153953, 0.692564536642171561344,  // 24
+                           
+                  0.715676812348967626225, 0.738030643744400132851,
+                  0.759602341176647498703, 0.780369043867433217604,
+                  0.800308744139140817229, 0.819400310737931675539,  // 30
+                           
+                  0.837623511228187121494, 0.854959033434601455463,
+                  0.871388505909296502874, 0.886894517402420416057,
+                  0.901460635315852341319, 0.915071423120898074206,  // 36
+                           
+                  0.927712456722308690965, 0.939370339752755216932,
+                  0.950032717784437635756, 0.959688291448742539300,
+                  0.968326828463264212174, 0.975939174585136466453,  // 42
+                           
+                  0.982517263563014677447, 0.988054126329623799481,
+                  0.992543900323762624572, 0.995981842987209290650,
+                  0.998364375863181677724, 0.999689503883230766828   // 48
                                                                             } ;
    
    static G4double 
    weight[] = {  
                   0.032550614492363166242, 0.032516118713868835987,
                   0.032447163714064269364, 0.032343822568575928429,
-	          0.032206204794030250669, 0.032034456231992663218,  // 6
-			   
-	          0.031828758894411006535, 0.031589330770727168558,
-		  0.031316425596862355813, 0.031010332586313837423,
-		  0.030671376123669149014, 0.030299915420827593794,  // 12
-			   
-		  0.029896344136328385984, 0.029461089958167905970,
-		  0.028994614150555236543, 0.028497411065085385646,
-		  0.027970007616848334440, 0.027412962726029242823,  // 18
-			   
-		  0.026826866725591762198, 0.026212340735672413913,
-		  0.025570036005349361499, 0.024900633222483610288,
-		  0.024204841792364691282, 0.023483399085926219842,  // 24
-			   
-		  0.022737069658329374001, 0.021966644438744349195,
-		  0.021172939892191298988, 0.020356797154333324595,
-		  0.019519081140145022410, 0.018660679627411467385,  // 30
-			   
-		  0.017782502316045260838, 0.016885479864245172450,
-		  0.015970562902562291381, 0.015038721026994938006,
-		  0.014090941772314860916, 0.013128229566961572637,  // 36
-			   
-		  0.012151604671088319635, 0.011162102099838498591,
-		  0.010160770535008415758, 0.009148671230783386633,
-		  0.008126876925698759217, 0.007096470791153865269,  // 42
-			   
-		  0.006058545504235961683, 0.005014202742927517693,
-		  0.003964554338444686674, 0.002910731817934946408,
-		  0.001853960788946921732, 0.000796792065552012429   // 48
+                  0.032206204794030250669, 0.032034456231992663218,  // 6
+                           
+                  0.031828758894411006535, 0.031589330770727168558,
+                  0.031316425596862355813, 0.031010332586313837423,
+                  0.030671376123669149014, 0.030299915420827593794,  // 12
+                           
+                  0.029896344136328385984, 0.029461089958167905970,
+                  0.028994614150555236543, 0.028497411065085385646,
+                  0.027970007616848334440, 0.027412962726029242823,  // 18
+                           
+                  0.026826866725591762198, 0.026212340735672413913,
+                  0.025570036005349361499, 0.024900633222483610288,
+                  0.024204841792364691282, 0.023483399085926219842,  // 24
+                           
+                  0.022737069658329374001, 0.021966644438744349195,
+                  0.021172939892191298988, 0.020356797154333324595,
+                  0.019519081140145022410, 0.018660679627411467385,  // 30
+                           
+                  0.017782502316045260838, 0.016885479864245172450,
+                  0.015970562902562291381, 0.015038721026994938006,
+                  0.014090941772314860916, 0.013128229566961572637,  // 36
+                           
+                  0.012151604671088319635, 0.011162102099838498591,
+                  0.010160770535008415758, 0.009148671230783386633,
+                  0.008126876925698759217, 0.007096470791153865269,  // 42
+                           
+                  0.006058545504235961683, 0.005014202742927517693,
+                  0.003964554338444686674, 0.002910731817934946408,
+                  0.001853960788946921732, 0.000796792065552012429   // 48
                                                                             } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
@@ -652,67 +652,67 @@ G4Integrator<T,F>::Legendre96( G4double (*f)(G4double), G4double a, G4double b)
                   0.145973714654896941989, 0.178096882367618602759,  // 6
                            
                   0.210031310460567203603, 0.241743156163840012328,
-	          0.273198812591049141487, 0.304364944354496353024,
-	          0.335208522892625422616, 0.365696861472313635031,  // 12
-			   
-	          0.395797649828908603285, 0.425478988407300545365,
-		  0.454709422167743008636, 0.483457973920596359768,
-		  0.511694177154667673586, 0.539388108324357436227,  // 18
-			   
-		  0.566510418561397168404, 0.593032364777572080684,
-		  0.618925840125468570386, 0.644163403784967106798,
-		  0.668718310043916153953, 0.692564536642171561344,  // 24
-			   
-		  0.715676812348967626225, 0.738030643744400132851,
-		  0.759602341176647498703, 0.780369043867433217604,
-		  0.800308744139140817229, 0.819400310737931675539,  // 30
-			   
-	          0.837623511228187121494, 0.854959033434601455463,
-		  0.871388505909296502874, 0.886894517402420416057,
-		  0.901460635315852341319, 0.915071423120898074206,  // 36
-			   
-		  0.927712456722308690965, 0.939370339752755216932,
-		  0.950032717784437635756, 0.959688291448742539300,
-		  0.968326828463264212174, 0.975939174585136466453,  // 42
-			   
-	          0.982517263563014677447, 0.988054126329623799481,
-		  0.992543900323762624572, 0.995981842987209290650,
-		  0.998364375863181677724, 0.999689503883230766828   // 48
+                  0.273198812591049141487, 0.304364944354496353024,
+                  0.335208522892625422616, 0.365696861472313635031,  // 12
+                           
+                  0.395797649828908603285, 0.425478988407300545365,
+                  0.454709422167743008636, 0.483457973920596359768,
+                  0.511694177154667673586, 0.539388108324357436227,  // 18
+                           
+                  0.566510418561397168404, 0.593032364777572080684,
+                  0.618925840125468570386, 0.644163403784967106798,
+                  0.668718310043916153953, 0.692564536642171561344,  // 24
+                           
+                  0.715676812348967626225, 0.738030643744400132851,
+                  0.759602341176647498703, 0.780369043867433217604,
+                  0.800308744139140817229, 0.819400310737931675539,  // 30
+                           
+                  0.837623511228187121494, 0.854959033434601455463,
+                  0.871388505909296502874, 0.886894517402420416057,
+                  0.901460635315852341319, 0.915071423120898074206,  // 36
+                           
+                  0.927712456722308690965, 0.939370339752755216932,
+                  0.950032717784437635756, 0.959688291448742539300,
+                  0.968326828463264212174, 0.975939174585136466453,  // 42
+                           
+                  0.982517263563014677447, 0.988054126329623799481,
+                  0.992543900323762624572, 0.995981842987209290650,
+                  0.998364375863181677724, 0.999689503883230766828   // 48
                                                                             } ;
    
    static G4double 
    weight[] = {  
                   0.032550614492363166242, 0.032516118713868835987,
                   0.032447163714064269364, 0.032343822568575928429,
-	          0.032206204794030250669, 0.032034456231992663218,  // 6
-			   
-	          0.031828758894411006535, 0.031589330770727168558,
-		  0.031316425596862355813, 0.031010332586313837423,
-		  0.030671376123669149014, 0.030299915420827593794,  // 12
-			   
-		  0.029896344136328385984, 0.029461089958167905970,
-		  0.028994614150555236543, 0.028497411065085385646,
-		  0.027970007616848334440, 0.027412962726029242823,  // 18
-			   
-		  0.026826866725591762198, 0.026212340735672413913,
-		  0.025570036005349361499, 0.024900633222483610288,
-		  0.024204841792364691282, 0.023483399085926219842,  // 24
-			   
-		  0.022737069658329374001, 0.021966644438744349195,
-		  0.021172939892191298988, 0.020356797154333324595,
-		  0.019519081140145022410, 0.018660679627411467385,  // 30
-			   
-		  0.017782502316045260838, 0.016885479864245172450,
-		  0.015970562902562291381, 0.015038721026994938006,
-		  0.014090941772314860916, 0.013128229566961572637,  // 36
-			   
-		  0.012151604671088319635, 0.011162102099838498591,
-		  0.010160770535008415758, 0.009148671230783386633,
-		  0.008126876925698759217, 0.007096470791153865269,  // 42
-			   
-		  0.006058545504235961683, 0.005014202742927517693,
-		  0.003964554338444686674, 0.002910731817934946408,
-		  0.001853960788946921732, 0.000796792065552012429   // 48
+                  0.032206204794030250669, 0.032034456231992663218,  // 6
+                           
+                  0.031828758894411006535, 0.031589330770727168558,
+                  0.031316425596862355813, 0.031010332586313837423,
+                  0.030671376123669149014, 0.030299915420827593794,  // 12
+                           
+                  0.029896344136328385984, 0.029461089958167905970,
+                  0.028994614150555236543, 0.028497411065085385646,
+                  0.027970007616848334440, 0.027412962726029242823,  // 18
+                           
+                  0.026826866725591762198, 0.026212340735672413913,
+                  0.025570036005349361499, 0.024900633222483610288,
+                  0.024204841792364691282, 0.023483399085926219842,  // 24
+                           
+                  0.022737069658329374001, 0.021966644438744349195,
+                  0.021172939892191298988, 0.020356797154333324595,
+                  0.019519081140145022410, 0.018660679627411467385,  // 30
+                           
+                  0.017782502316045260838, 0.016885479864245172450,
+                  0.015970562902562291381, 0.015038721026994938006,
+                  0.014090941772314860916, 0.013128229566961572637,  // 36
+                           
+                  0.012151604671088319635, 0.011162102099838498591,
+                  0.010160770535008415758, 0.009148671230783386633,
+                  0.008126876925698759217, 0.007096470791153865269,  // 42
+                           
+                  0.006058545504235961683, 0.005014202742927517693,
+                  0.003964554338444686674, 0.002910731817934946408,
+                  0.001853960788946921732, 0.000796792065552012429   // 48
                                                                             } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
@@ -748,8 +748,8 @@ G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a,
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
    {
-      fAbscissa[i] = cos(cof*(i + 0.5)) ;
-      fWeight[i] = cof*sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
+      fAbscissa[i] = std::cos(cof*(i + 0.5)) ;
+      fWeight[i] = cof*std::sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
    }
 //
 // Now we ready to estimate the integral
@@ -793,8 +793,8 @@ G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
    {
-      fAbscissa[i] = cos(cof*(i + 0.5)) ;
-      fWeight[i] = cof*sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
+      fAbscissa[i] = std::cos(cof*(i + 0.5)) ;
+      fWeight[i] = cof*std::sqrt(1 - fAbscissa[i]*fAbscissa[i]) ;
    }
 //
 // Now we ready to estimate the integral
@@ -817,7 +817,7 @@ G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
 //
 //////////////////////////////////////////////////////////////////////
 //
-// Integral from zero to infinity of pow(x,alpha)*exp(-x)*f(x). 
+// Integral from zero to infinity of std::pow(x,alpha)*std::exp(-x)*f(x). 
 // The value of nLaguerre sets the accuracy.
 // The function creates arrays fAbscissa[0,..,nLaguerre-1] and 
 // fWeight[0,..,nLaguerre-1] . 
@@ -841,46 +841,46 @@ G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha, G4int nLaguerre )
    {
       if(i == 1)
       {
-	 newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
+         newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
       }
       else if(i == 2)
       {
-	 newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
+         newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
       }
       else
       {
-	 cofi = i - 2 ;
-	 newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
-	           (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
+         cofi = i - 2 ;
+         newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
+                   (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
       }
       for(k=1;k<=maxNumber;k++)
       {
-	 temp1 = 1.0 ;
-	 temp2 = 0.0 ;
+         temp1 = 1.0 ;
+         temp2 = 0.0 ;
 
-	 for(j=1;j<=fNumber;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-	 temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
-	 }
-	 temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
-	 newton1 = newton ;
-	 newton  = newton1 - temp1/temp ;
+         for(j=1;j<=fNumber;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+         temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
+         }
+         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
+         newton1 = newton ;
+         newton  = newton1 - temp1/temp ;
 
-         if(fabs(newton - newton1) <= tolerance) 
-	 {
-	    break ;
-	 }
+         if(std::fabs(newton - newton1) <= tolerance) 
+         {
+            break ;
+         }
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integration::Laguerre") ;
+         G4Exception("Too many (>12) iterations in G4Integration::Laguerre") ;
       }
-	 
+         
       fAbscissa[i-1] =  newton ;
-      fWeight[i-1] = -exp(GammaLogarithm(alpha + fNumber) - 
-		GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
+      fWeight[i-1] = -std::exp(GammaLogarithm(alpha + fNumber) - 
+                GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
    }
 //
 // Integral evaluation
@@ -912,7 +912,7 @@ G4Integrator<T,F>::Laguerre( T* ptrT, F f, G4double alpha, G4int nLaguerre )
 
 template <class T, class F> G4double 
 G4Integrator<T,F>::Laguerre( G4double (*f)(G4double), 
-                         G4double alpha, G4int nLaguerre) 
+                             G4double alpha, G4int nLaguerre) 
 {
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
@@ -928,46 +928,48 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
    {
       if(i == 1)
       {
-newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
+         newton = (1.0 + alpha)*(3.0 + 0.92*alpha)
+                / (1.0 + 2.4*fNumber + 1.8*alpha) ;
       }
       else if(i == 2)
       {
-	 newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
+         newton += (15.0 + 6.25*alpha)/(1.0 + 0.9*alpha + 2.5*fNumber) ;
       }
       else
       {
-	 cofi = i - 2 ;
-newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
-	           (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
+         cofi = i - 2 ;
+         newton += ((1.0+2.55*cofi)/(1.9*cofi)
+                    + 1.26*cofi*alpha/(1.0+3.5*cofi))
+                 * (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
       }
       for(k=1;k<=maxNumber;k++)
       {
-	 temp1 = 1.0 ;
-	 temp2 = 0.0 ;
+         temp1 = 1.0 ;
+         temp2 = 0.0 ;
 
-	 for(j=1;j<=fNumber;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-	 temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
-	 }
-	 temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
-	 newton1 = newton ;
-	 newton  = newton1 - temp1/temp ;
+         for(j=1;j<=fNumber;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+         temp1 = ((2*j - 1 + alpha - newton)*temp2 - (j - 1 + alpha)*temp3)/j ;
+         }
+         temp = (fNumber*temp1 - (fNumber +alpha)*temp2)/newton ;
+         newton1 = newton ;
+         newton  = newton1 - temp1/temp ;
 
-         if(fabs(newton - newton1) <= tolerance) 
-	 {
-	    break ;
-	 }
+         if(std::fabs(newton - newton1) <= tolerance) 
+         {
+            break ;
+         }
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integration::Laguerre") ;
+         G4Exception("Too many (>12) iterations in G4Integration::Laguerre") ;
       }
-	 
+         
       fAbscissa[i-1] =  newton ;
-      fWeight[i-1] = -exp(GammaLogarithm(alpha + fNumber) - 
-		GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
+      fWeight[i-1] = -std::exp(GammaLogarithm(alpha + fNumber) - 
+                GammaLogarithm((G4double)fNumber))/(temp*fNumber*temp2) ;
    }
 //
 // Integral evaluation
@@ -983,7 +985,7 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
 
 ///////////////////////////////////////////////////////////////////////
 //
-// Auxiliary function which returns the value of log(gamma-function(x))
+// Auxiliary function which returns the value of std::log(gamma-function(x))
 // Returns the value ln(Gamma(xx) for xx > 0.  Full accuracy is obtained for 
 // xx > 1. For 0 < xx < 1. the reflection formula (6.1.4) can be used first.
 // (Adapted from Numerical Recipes in C)
@@ -995,10 +997,10 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
-  register HepInt j;
+  register G4int j;
   G4double x = xx - 1.0 ;
   G4double tmp = x + 5.5 ;
-  tmp -= (x + 0.5) * log(tmp) ;
+  tmp -= (x + 0.5) * std::log(tmp) ;
   G4double ser = 1.000000000190015 ;
 
   for ( j = 0; j <= 5; j++ )
@@ -1006,7 +1008,7 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
     x += 1.0 ;
     ser += cof[j]/x ;
   }
-  return -tmp + log(2.5066282746310005*ser) ;
+  return -tmp + std::log(2.5066282746310005*ser) ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1016,7 +1018,7 @@ G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
 ///////////////////////////////////////////////////////////////////////
 //
 //
-// Gauss-Hermite method for integration of exp(-x*x)*f(x) 
+// Gauss-Hermite method for integration of std::exp(-x*x)*f(x) 
 // from minus infinity to plus infinity . 
 //
 
@@ -1030,7 +1032,7 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
    G4double integral = 0.0 ;
    G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1040,49 +1042,49 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
    {
       if(i == 1)
       {
-	 newton = sqrt((G4double)(2*nHermite + 1)) - 
-	          1.85575001*pow((G4double)(2*nHermite + 1),-0.16666999) ;
+         newton = std::sqrt((G4double)(2*nHermite + 1)) - 
+                  1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-	 newton -= 1.14001*pow((G4double)nHermite,0.425999)/newton ;
+         newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
       }
       else if(i == 3)
       {
-	 newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
+         newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
       }
       else if(i == 4)
       {
-	 newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
+         newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
       }
       else 
       {
-	 newton = 2.0*newton - fAbscissa[i - 3] ;
+         newton = 2.0*newton - fAbscissa[i - 3] ;
       }
       for(k=1;k<=maxNumber;k++)
       {
-	 temp1 = piInMinusQ ;
-	 temp2 = 0.0 ;
+         temp1 = piInMinusQ ;
+         temp2 = 0.0 ;
 
-	 for(j=1;j<=nHermite;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-            temp1 = newton*sqrt(2.0/j)*temp2 - 
-                    sqrt(((G4double)(j - 1))/j)*temp3 ;
-	 }
-	 temp = sqrt((G4double)2*nHermite)*temp2 ;
-	 newton1 = newton ;
-	 newton = newton1 - temp1/temp ;
+         for(j=1;j<=nHermite;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+            temp1 = newton*std::sqrt(2.0/j)*temp2 - 
+                    std::sqrt(((G4double)(j - 1))/j)*temp3 ;
+         }
+         temp = std::sqrt((G4double)2*nHermite)*temp2 ;
+         newton1 = newton ;
+         newton = newton1 - temp1/temp ;
 
-         if(fabs(newton - newton1) <= tolerance) 
-	 {
-	    break ;
-	 }
+         if(std::fabs(newton - newton1) <= tolerance) 
+         {
+            break ;
+         }
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
+         G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
       }
       fAbscissa[i-1] =  newton ;
       fWeight[i-1] = 2.0/(temp*temp) ;
@@ -1125,7 +1127,7 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    G4double integral = 0.0 ;
    G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1135,49 +1137,49 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    {
       if(i == 1)
       {
-	 newton = sqrt((G4double)(2*nHermite + 1)) - 
-	          1.85575001*pow((G4double)(2*nHermite + 1),-0.16666999) ;
+         newton = std::sqrt((G4double)(2*nHermite + 1)) - 
+                  1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-	 newton -= 1.14001*pow((G4double)nHermite,0.425999)/newton ;
+         newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
       }
       else if(i == 3)
       {
-	 newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
+         newton = 1.86002*newton - 0.86002*fAbscissa[0] ;
       }
       else if(i == 4)
       {
-	 newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
+         newton = 1.91001*newton - 0.91001*fAbscissa[1] ;
       }
       else 
       {
-	 newton = 2.0*newton - fAbscissa[i - 3] ;
+         newton = 2.0*newton - fAbscissa[i - 3] ;
       }
       for(k=1;k<=maxNumber;k++)
       {
-	 temp1 = piInMinusQ ;
-	 temp2 = 0.0 ;
+         temp1 = piInMinusQ ;
+         temp2 = 0.0 ;
 
-	 for(j=1;j<=nHermite;j++)
-	 {
-	    temp3 = temp2 ;
-	    temp2 = temp1 ;
-            temp1 = newton*sqrt(2.0/j)*temp2 - 
-                    sqrt(((G4double)(j - 1))/j)*temp3 ;
-	 }
-	 temp = sqrt((G4double)2*nHermite)*temp2 ;
-	 newton1 = newton ;
-	 newton = newton1 - temp1/temp ;
+         for(j=1;j<=nHermite;j++)
+         {
+            temp3 = temp2 ;
+            temp2 = temp1 ;
+            temp1 = newton*std::sqrt(2.0/j)*temp2 - 
+                    std::sqrt(((G4double)(j - 1))/j)*temp3 ;
+         }
+         temp = std::sqrt((G4double)2*nHermite)*temp2 ;
+         newton1 = newton ;
+         newton = newton1 - temp1/temp ;
 
-         if(fabs(newton - newton1) <= tolerance) 
-	 {
-	    break ;
-	 }
+         if(std::fabs(newton - newton1) <= tolerance) 
+         {
+            break ;
+         }
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
+         G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
       }
       fAbscissa[i-1] =  newton ;
       fWeight[i-1] = 2.0/(temp*temp) ;
@@ -1222,83 +1224,83 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
   {
      if (i == 1)
      {
-	alphaReduced = alpha/nJacobi ;
-	betaReduced = beta/nJacobi ;
-	root1 = (1.0+alpha)*(2.78002/(4.0+nJacobi*nJacobi)+
-	      0.767999*alphaReduced/nJacobi) ;
-	root2 = 1.0+1.48*alphaReduced+0.96002*betaReduced +
-	        0.451998*alphaReduced*alphaReduced +
+        alphaReduced = alpha/nJacobi ;
+        betaReduced = beta/nJacobi ;
+        root1 = (1.0+alpha)*(2.78002/(4.0+nJacobi*nJacobi)+
+              0.767999*alphaReduced/nJacobi) ;
+        root2 = 1.0+1.48*alphaReduced+0.96002*betaReduced +
+                0.451998*alphaReduced*alphaReduced +
                 0.83001*alphaReduced*betaReduced      ;
-	root  = 1.0-root1/root2 ;
+        root  = 1.0-root1/root2 ;
      } 
      else if (i == 2)
      {
-	root1=(4.1002+alpha)/((1.0+alpha)*(1.0+0.155998*alpha)) ;
-	root2=1.0+0.06*(nJacobi-8.0)*(1.0+0.12*alpha)/nJacobi ;
-	root3=1.0+0.012002*beta*(1.0+0.24997*fabs(alpha))/nJacobi ;
-	root -= (1.0-root)*root1*root2*root3 ;
+        root1=(4.1002+alpha)/((1.0+alpha)*(1.0+0.155998*alpha)) ;
+        root2=1.0+0.06*(nJacobi-8.0)*(1.0+0.12*alpha)/nJacobi ;
+        root3=1.0+0.012002*beta*(1.0+0.24997*std::fabs(alpha))/nJacobi ;
+        root -= (1.0-root)*root1*root2*root3 ;
      } 
      else if (i == 3) 
      {
-	root1=(1.67001+0.27998*alpha)/(1.0+0.37002*alpha) ;
-	root2=1.0+0.22*(nJacobi-8.0)/nJacobi ;
-	root3=1.0+8.0*beta/((6.28001+beta)*nJacobi*nJacobi) ;
-	root -= (fAbscissa[0]-root)*root1*root2*root3 ;
+        root1=(1.67001+0.27998*alpha)/(1.0+0.37002*alpha) ;
+        root2=1.0+0.22*(nJacobi-8.0)/nJacobi ;
+        root3=1.0+8.0*beta/((6.28001+beta)*nJacobi*nJacobi) ;
+        root -= (fAbscissa[0]-root)*root1*root2*root3 ;
      }
      else if (i == nJacobi-1)
      {
-	root1=(1.0+0.235002*beta)/(0.766001+0.118998*beta) ;
-	root2=1.0/(1.0+0.639002*(nJacobi-4.0)/(1.0+0.71001*(nJacobi-4.0))) ;
-	root3=1.0/(1.0+20.0*alpha/((7.5+alpha)*nJacobi*nJacobi)) ;
-	root += (root-fAbscissa[nJacobi-4])*root1*root2*root3 ;
+        root1=(1.0+0.235002*beta)/(0.766001+0.118998*beta) ;
+        root2=1.0/(1.0+0.639002*(nJacobi-4.0)/(1.0+0.71001*(nJacobi-4.0))) ;
+        root3=1.0/(1.0+20.0*alpha/((7.5+alpha)*nJacobi*nJacobi)) ;
+        root += (root-fAbscissa[nJacobi-4])*root1*root2*root3 ;
      } 
      else if (i == nJacobi) 
      {
-	root1 = (1.0+0.37002*beta)/(1.67001+0.27998*beta) ;
-	root2 = 1.0/(1.0+0.22*(nJacobi-8.0)/nJacobi) ;
-	root3 = 1.0/(1.0+8.0*alpha/((6.28002+alpha)*nJacobi*nJacobi)) ;
-	root += (root-fAbscissa[nJacobi-3])*root1*root2*root3 ;
+        root1 = (1.0+0.37002*beta)/(1.67001+0.27998*beta) ;
+        root2 = 1.0/(1.0+0.22*(nJacobi-8.0)/nJacobi) ;
+        root3 = 1.0/(1.0+8.0*alpha/((6.28002+alpha)*nJacobi*nJacobi)) ;
+        root += (root-fAbscissa[nJacobi-3])*root1*root2*root3 ;
      } 
      else
      {
-	root = 3.0*fAbscissa[i-2]-3.0*fAbscissa[i-3]+fAbscissa[i-4] ;
+        root = 3.0*fAbscissa[i-2]-3.0*fAbscissa[i-3]+fAbscissa[i-4] ;
      }
      alphaBeta = alpha + beta ;
      for (k=1;k<=maxNumber;k++)
      {
-	temp = 2.0 + alphaBeta ;
-	newton1 = (alpha-beta+temp*root)/2.0 ;
-	newton2 = 1.0 ;
-	for (j=2;j<=nJacobi;j++)
-	{
-	   newton3 = newton2 ;
-	   newton2 = newton1 ;
-	   temp = 2*j+alphaBeta ;
-	   a = 2*j*(j+alphaBeta)*(temp-2.0) ;
- 	   b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
-	   c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
-	   newton1 = (b*newton2-c*newton3)/a ;
-	}
-	newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
-	      2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
-	     (temp*(1.0 - root*root)) ;
-	rootTemp = root ;
-	root = rootTemp - newton1/newton ;
-	if (fabs(root-rootTemp) <= tolerance)
-	{
-	   break ;
-	}
+        temp = 2.0 + alphaBeta ;
+        newton1 = (alpha-beta+temp*root)/2.0 ;
+        newton2 = 1.0 ;
+        for (j=2;j<=nJacobi;j++)
+        {
+           newton3 = newton2 ;
+           newton2 = newton1 ;
+           temp = 2*j+alphaBeta ;
+           a = 2*j*(j+alphaBeta)*(temp-2.0) ;
+            b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
+           c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
+           newton1 = (b*newton2-c*newton3)/a ;
+        }
+        newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
+              2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
+             (temp*(1.0 - root*root)) ;
+        rootTemp = root ;
+        root = rootTemp - newton1/newton ;
+        if (std::fabs(root-rootTemp) <= tolerance)
+        {
+           break ;
+        }
      }
      if (k > maxNumber) 
      {
         G4Exception("Too many iterations (>12) in G4Integrator<T,F>::Jacobi") ;
      }
      fAbscissa[i-1] = root ;
-     fWeight[i-1] = exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
-		        GammaLogarithm((G4double)(beta+nJacobi)) - 
-		        GammaLogarithm((G4double)(nJacobi+1.0)) -
-		        GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-		        *temp*pow(2.0,alphaBeta)/(newton*newton2)             ;
+     fWeight[i-1] = std::exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
+                        GammaLogarithm((G4double)(beta+nJacobi)) - 
+                        GammaLogarithm((G4double)(nJacobi+1.0)) -
+                        GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
+                        *temp*std::pow(2.0,alphaBeta)/(newton*newton2)             ;
   }
 //
 // Calculation of the integral
@@ -1347,83 +1349,84 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
   {
      if (i == 1)
      {
-	alphaReduced = alpha/nJacobi ;
-	betaReduced = beta/nJacobi ;
-	root1 = (1.0+alpha)*(2.78002/(4.0+nJacobi*nJacobi)+
-	      0.767999*alphaReduced/nJacobi) ;
-	root2 = 1.0+1.48*alphaReduced+0.96002*betaReduced +
-	        0.451998*alphaReduced*alphaReduced +
+        alphaReduced = alpha/nJacobi ;
+        betaReduced = beta/nJacobi ;
+        root1 = (1.0+alpha)*(2.78002/(4.0+nJacobi*nJacobi)+
+              0.767999*alphaReduced/nJacobi) ;
+        root2 = 1.0+1.48*alphaReduced+0.96002*betaReduced +
+                0.451998*alphaReduced*alphaReduced +
                 0.83001*alphaReduced*betaReduced      ;
-	root  = 1.0-root1/root2 ;
+        root  = 1.0-root1/root2 ;
      } 
      else if (i == 2)
      {
-	root1=(4.1002+alpha)/((1.0+alpha)*(1.0+0.155998*alpha)) ;
-	root2=1.0+0.06*(nJacobi-8.0)*(1.0+0.12*alpha)/nJacobi ;
-	root3=1.0+0.012002*beta*(1.0+0.24997*fabs(alpha))/nJacobi ;
-	root -= (1.0-root)*root1*root2*root3 ;
+        root1=(4.1002+alpha)/((1.0+alpha)*(1.0+0.155998*alpha)) ;
+        root2=1.0+0.06*(nJacobi-8.0)*(1.0+0.12*alpha)/nJacobi ;
+        root3=1.0+0.012002*beta*(1.0+0.24997*std::fabs(alpha))/nJacobi ;
+        root -= (1.0-root)*root1*root2*root3 ;
      } 
      else if (i == 3) 
      {
-	root1=(1.67001+0.27998*alpha)/(1.0+0.37002*alpha) ;
-	root2=1.0+0.22*(nJacobi-8.0)/nJacobi ;
-	root3=1.0+8.0*beta/((6.28001+beta)*nJacobi*nJacobi) ;
-	root -= (fAbscissa[0]-root)*root1*root2*root3 ;
+        root1=(1.67001+0.27998*alpha)/(1.0+0.37002*alpha) ;
+        root2=1.0+0.22*(nJacobi-8.0)/nJacobi ;
+        root3=1.0+8.0*beta/((6.28001+beta)*nJacobi*nJacobi) ;
+        root -= (fAbscissa[0]-root)*root1*root2*root3 ;
      }
      else if (i == nJacobi-1)
      {
-	root1=(1.0+0.235002*beta)/(0.766001+0.118998*beta) ;
-	root2=1.0/(1.0+0.639002*(nJacobi-4.0)/(1.0+0.71001*(nJacobi-4.0))) ;
-	root3=1.0/(1.0+20.0*alpha/((7.5+alpha)*nJacobi*nJacobi)) ;
-	root += (root-fAbscissa[nJacobi-4])*root1*root2*root3 ;
+        root1=(1.0+0.235002*beta)/(0.766001+0.118998*beta) ;
+        root2=1.0/(1.0+0.639002*(nJacobi-4.0)/(1.0+0.71001*(nJacobi-4.0))) ;
+        root3=1.0/(1.0+20.0*alpha/((7.5+alpha)*nJacobi*nJacobi)) ;
+        root += (root-fAbscissa[nJacobi-4])*root1*root2*root3 ;
      } 
      else if (i == nJacobi) 
      {
-	root1 = (1.0+0.37002*beta)/(1.67001+0.27998*beta) ;
-	root2 = 1.0/(1.0+0.22*(nJacobi-8.0)/nJacobi) ;
-	root3 = 1.0/(1.0+8.0*alpha/((6.28002+alpha)*nJacobi*nJacobi)) ;
-	root += (root-fAbscissa[nJacobi-3])*root1*root2*root3 ;
+        root1 = (1.0+0.37002*beta)/(1.67001+0.27998*beta) ;
+        root2 = 1.0/(1.0+0.22*(nJacobi-8.0)/nJacobi) ;
+        root3 = 1.0/(1.0+8.0*alpha/((6.28002+alpha)*nJacobi*nJacobi)) ;
+        root += (root-fAbscissa[nJacobi-3])*root1*root2*root3 ;
      } 
      else
      {
-	root = 3.0*fAbscissa[i-2]-3.0*fAbscissa[i-3]+fAbscissa[i-4] ;
+        root = 3.0*fAbscissa[i-2]-3.0*fAbscissa[i-3]+fAbscissa[i-4] ;
      }
      alphaBeta = alpha + beta ;
      for (k=1;k<=maxNumber;k++)
      {
-	temp = 2.0 + alphaBeta ;
-	newton1 = (alpha-beta+temp*root)/2.0 ;
-	newton2 = 1.0 ;
-	for (j=2;j<=nJacobi;j++)
-	{
-	   newton3 = newton2 ;
-	   newton2 = newton1 ;
-	   temp = 2*j+alphaBeta ;
-	   a = 2*j*(j+alphaBeta)*(temp-2.0) ;
- 	   b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
-	   c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
-	   newton1 = (b*newton2-c*newton3)/a ;
-	}
-	newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
-	      2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2)/
-	     (temp*(1.0 - root*root)) ;
-	rootTemp = root ;
-	root = rootTemp - newton1/newton ;
-	if (fabs(root-rootTemp) <= tolerance)
-	{
-	   break ;
-	}
+        temp = 2.0 + alphaBeta ;
+        newton1 = (alpha-beta+temp*root)/2.0 ;
+        newton2 = 1.0 ;
+        for (j=2;j<=nJacobi;j++)
+        {
+           newton3 = newton2 ;
+           newton2 = newton1 ;
+           temp = 2*j+alphaBeta ;
+           a = 2*j*(j+alphaBeta)*(temp-2.0) ;
+           b = (temp-1.0)*(alpha*alpha-beta*beta+temp*(temp-2.0)*root) ;
+           c = 2.0*(j-1+alpha)*(j-1+beta)*temp ;
+           newton1 = (b*newton2-c*newton3)/a ;
+        }
+        newton = (nJacobi*(alpha - beta - temp*root)*newton1 +
+             2.0*(nJacobi + alpha)*(nJacobi + beta)*newton2) /
+             (temp*(1.0 - root*root)) ;
+        rootTemp = root ;
+        root = rootTemp - newton1/newton ;
+        if (std::fabs(root-rootTemp) <= tolerance)
+        {
+           break ;
+        }
      }
      if (k > maxNumber) 
      {
         G4Exception("Too many iterations (>12) in G4Integrator<T,F>::Jacobi") ;
      }
      fAbscissa[i-1] = root ;
-     fWeight[i-1] = exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
-		        GammaLogarithm((G4double)(beta+nJacobi)) - 
-		        GammaLogarithm((G4double)(nJacobi+1.0)) -
-		        GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
-		        *temp*pow(2.0,alphaBeta)/(newton*newton2)             ;
+     fWeight[i-1] =
+        std::exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
+                 GammaLogarithm((G4double)(beta+nJacobi)) - 
+                 GammaLogarithm((G4double)(nJacobi+1.0)) -
+                 GammaLogarithm((G4double)(nJacobi + alphaBeta + 1.0)))
+        *temp*std::pow(2.0,alphaBeta)/(newton*newton2);
   }
 //
 // Calculation of the integral
@@ -1438,12 +1441,6 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
    return integral ;
 }
 
-
-
 //
 //
 ///////////////////////////////////////////////////////////////////
-
-
-
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronGEMProbability.hh,v 1.1 2003/08/26 18:43:05 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NeutronGEMProbability.hh,v 1.2 2004/12/07 13:46:49 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
@@ -57,12 +57,12 @@ private:
     
     virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
         {
-            return 0.76+2.2/pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);
+            return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);
         }
 	
     virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
         {
-            return (2.12/pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0)-0.05)*MeV/
+            return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0)-0.05)*MeV/
 	      CalcAlphaParam(fragment);
         }
     

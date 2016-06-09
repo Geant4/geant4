@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.7 2003/03/28 13:12:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ToroidalSurface.cc,v 1.9 2004/12/10 16:22:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -318,14 +318,14 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
     if (IsZero(u))
       u = 0;
     else if (u > 0)
-      u = sqrt(u);
+      u = std::sqrt(u);
     else
       return 0;
 
     if (IsZero(v))
       v = 0;
     else if (v > 0)
-      v = sqrt(v);
+      v = std::sqrt(v);
     else
       return 0;
 
@@ -386,7 +386,7 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     }
     else // one single and one G4double solution 
     {
-      G4double u = pow(-q,1./3.);
+      G4double u = std::pow(-q,1./3.);
       s[ 0 ] = 2 * u;
       s[ 1 ] = - u;
       num = 2;
@@ -394,19 +394,19 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   }
   else if (D < 0) // Casus irreducibilis: three real solutions
   {
-    G4double phi = 1.0/3 * acos(-q / sqrt(-cb_p));
-    G4double t = 2 * sqrt(-p);
+    G4double phi = 1.0/3 * std::acos(-q / std::sqrt(-cb_p));
+    G4double t = 2 * std::sqrt(-p);
     
-    s[ 0 ] =   t * cos(phi);
-    s[ 1 ] = - t * cos(phi + M_PI / 3);
-    s[ 2 ] = - t * cos(phi - M_PI / 3);
+    s[ 0 ] =   t * std::cos(phi);
+    s[ 1 ] = - t * std::cos(phi + pi / 3);
+    s[ 2 ] = - t * std::cos(phi - pi / 3);
     num = 3;
   }
   else // one real solution 
   {
-    G4double sqrt_D = sqrt(D);
-    G4double u = pow(sqrt_D - q,1./3.);
-    G4double v = - pow(sqrt_D + q,1./3.);
+    G4double sqrt_D = std::sqrt(D);
+    G4double u = std::pow(sqrt_D - q,1./3.);
+    G4double v = - std::pow(sqrt_D + q,1./3.);
     
     s[ 0 ] = u + v;
     num = 1;
@@ -444,7 +444,7 @@ G4int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
   }
   else if (D > 0)
   {
-    G4double sqrt_D = sqrt(D);
+    G4double sqrt_D = std::sqrt(D);
     
     s[ 0 ] =   sqrt_D - p;
     s[ 1 ] = - sqrt_D - p;

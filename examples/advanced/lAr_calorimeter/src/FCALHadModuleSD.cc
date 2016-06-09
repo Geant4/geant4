@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALHadModuleSD.cc,v 1.6 2004/01/27 09:08:05 ribon Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: FCALHadModuleSD.cc,v 1.7 2004/11/29 18:03:06 ribon Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

@@ -196,7 +196,7 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
   // a problem with rounding errors for on-shell lorentz-vectors in CLHEP.
   // HPW Apr 1999 @@@@@@@ 
   
-  if(abs(theExcitationEnergy)<10*eV) return 0; 
+  if(std::abs(theExcitationEnergy)<10*eV) return 0; 
   return theExcitationEnergy;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.12 2003/11/12 13:16:56 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4XXXSceneHandler.cc,v 1.17 2004/11/11 16:04:27 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -63,10 +63,7 @@ G4int G4XXXSceneHandler::fSceneCount = 0;
 
 G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
-  G4VSceneHandler(system, fSceneIdCount++, name),
-  fCurrentDepth                 (0),
-  fpCurrentPV                   (0),
-  fpCurrentLV                   (0)
+  G4VSceneHandler(system, fSceneIdCount++, name)
 {
   fSceneCount++;
 }
@@ -77,7 +74,10 @@ G4XXXSceneHandler::~G4XXXSceneHandler() {}
 void G4XXXSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
-	 << (void*)fpObjectTransformation;
+	 << (void*)fpObjectTransformation
+	 << " from " << fpModel->GetCurrentDescription()
+	 << " (tag " << fpModel->GetCurrentTag()
+	 << ')';
   if (fpCurrentPV) {
     G4cout <<
       "\n  current physical volume: "
@@ -242,6 +242,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	 << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (polyline.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
@@ -252,6 +255,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
 	 << G4endl;
   PrintThings();
 #endif
+  // Get text colour - special method since default text colour is
+  // determined by the default text vis attributes, which may be
+  // specified independent of default vis attributes of other types of
+  // visible objects.
+  //const G4Colour& c = GetTextColour (text);  // Picks up default if none.
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
@@ -274,6 +282,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
   G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (circle.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
@@ -296,6 +307,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
   G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (square.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
@@ -306,15 +320,25 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   PrintThings();
 #endif
 
-  if (polyhedron.GetNoFacets() == 0) return;
-
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
   //Get colour, etc..
-  // const G4Colour& c = GetColour (polyhedron);
+  if (polyhedron.GetNoFacets() == 0) return;
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
   
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  //Get colour, etc..
+  //const G4Colour& c = pVA -> GetColour ();
+  
+  // Initial action depending on drwaing style.
   switch (drawing_style) {
   case (G4ViewParameters::hsr):
     {
@@ -344,41 +368,39 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
         
     //Loop through the four edges of each G4Facet...
     G4bool notLastEdge;
-    G4Point3D vertex[4];
-    G4int edgeFlag[4], lastEdgeFlag (true);
-    edgeFlag[0] = G4int (true);
+    G4Point3D vertex;
+    G4int edgeFlag;
     G4int edgeCount = 0;
-    // glEdgeFlag (GL_TRUE);
     do {  // loop over edges...
-      notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
-                                              edgeFlag[edgeCount]);
+      notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
       // Check to see if edge is visible or not...
-      if (edgeFlag[edgeCount] != lastEdgeFlag) {
-        lastEdgeFlag = edgeFlag[edgeCount];
-        if (edgeFlag[edgeCount]) {
-          // glEdgeFlag (GL_TRUE);
-        } else {
-          // glEdgeFlag (GL_FALSE);
-        }
+      if (isAuxEdgeVisible) {
+	edgeFlag = G4int (true);
       }
-      // glVertex3d (vertex[edgeCount].x(), 
-      //             vertex[edgeCount].y(),
-      //             vertex[edgeCount].z());
+      if (edgeFlag) {
+	// glEdgeFlag (GL_TRUE);
+      } else {
+	// glEdgeFlag (GL_FALSE);
+      }
+      // glVertex3d (vertex.x(), 
+      //             vertex.y(),
+      //             vertex.z());
       edgeCount++;
     } while (notLastEdge);
 
     // Duplicate last real vertex if necessary to guarantee quadrilateral....
     while (edgeCount < 4) {
-      vertex[edgeCount] = vertex[edgeCount-1];
-      // glVertex3d (vertex[edgeCount].x(),
-      //             vertex[edgeCount].y(), 
-      //             vertex[edgeCount].z());
+      // glEdgeFlag (GL_FALSE);
+      // glVertex3d (vertex.x(),
+      //             vertex.y(), 
+      //             vertex.z());
       edgeCount++;
     }
 
   } while (notLastFace);  
 }
 
+//void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<
@@ -386,13 +408,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 	 << G4endl;
   PrintThings();
 #endif
-}
-
-void G4XXXSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace(&fCurrentDepth,
-				       &fpCurrentPV,
-				       &fpCurrentLV);
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (nurbs.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::ClearTransientStore () {

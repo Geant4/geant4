@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.21 2004/01/21 13:17:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UnitsTable.cc,v 1.22 2004/11/12 17:38:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -416,8 +416,8 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
   G4double rsup(DBL_MAX), rinf(0.);
 
   //for a ThreeVector, choose the best unit for the biggest value 
-  G4double value = std::max(std::max(fabs(a.Value[0]),fabs(a.Value[1])),
-                              fabs(a.Value[2]));
+  G4double value = std::max(std::max(std::fabs(a.Value[0]),std::fabs(a.Value[1])),
+                              std::fabs(a.Value[2]));
 
   for (size_t k=0; k<List.size(); k++)
      {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.20 2004/06/11 14:25:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4DynamicParticle.cc,v 1.21 2004/12/02 07:46:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -125,8 +125,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
     G4double mass = theDynamicalMass;
-    SetKineticEnergy(sqrt(pModule2+mass*mass)-mass);
-    G4double pModule = sqrt(pModule2);
+    SetKineticEnergy(std::sqrt(pModule2+mass*mass)-mass);
+    G4double pModule = std::sqrt(pModule2);
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
@@ -156,7 +156,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                        + aParticleMomentum.y()*aParticleMomentum.y()
                         + aParticleMomentum.z()*aParticleMomentum.z();
   if (pModule2>0.0) {
-    G4double pModule = sqrt(pModule2);
+    G4double pModule = std::sqrt(pModule2);
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
@@ -166,7 +166,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
       theDynamicalMass = 0.;
       SetKineticEnergy(totalenergy);
     } else {
-      theDynamicalMass = sqrt(mass2);
+      theDynamicalMass = std::sqrt(mass2);
       SetKineticEnergy(totalenergy-theDynamicalMass);
     }
 
@@ -194,7 +194,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   // total energy and momentum direction are given
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
-    G4double pModule = sqrt(pModule2);
+    G4double pModule = std::sqrt(pModule2);
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
@@ -204,7 +204,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
       theDynamicalMass = 0.;
       SetKineticEnergy(totalEnergy);
     } else {
-      theDynamicalMass = sqrt(mass2);
+      theDynamicalMass = std::sqrt(mass2);
       SetKineticEnergy(totalEnergy-theDynamicalMass);
     }
   } else {
@@ -351,11 +351,11 @@ void G4DynamicParticle::SetMomentum(const G4ThreeVector &momentum)
   G4double pModule2 = momentum.mag2();
   if (pModule2>0.0) {
     G4double mass = theDynamicalMass;
-    G4double pModule = sqrt(pModule2);
+    G4double pModule = std::sqrt(pModule2);
     SetMomentumDirection(momentum.x()/pModule,
                          momentum.y()/pModule,
                          momentum.z()/pModule);
-    SetKineticEnergy(sqrt(pModule2 + mass*mass)-mass);
+    SetKineticEnergy(std::sqrt(pModule2 + mass*mass)-mass);
   } else {
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
@@ -369,7 +369,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
                        + momentum.y()*momentum.y()
                         + momentum.z()*momentum.z();
   if (pModule2>0.0) {
-    G4double pModule = sqrt(pModule2);
+    G4double pModule = std::sqrt(pModule2);
     SetMomentumDirection(momentum.x()/pModule,
                          momentum.y()/pModule,
                          momentum.z()/pModule);
@@ -379,7 +379,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
       theDynamicalMass = 0.;
       SetKineticEnergy(totalenergy);
     } else {
-      theDynamicalMass = sqrt(mass2);
+      theDynamicalMass = std::sqrt(mass2);
       SetKineticEnergy(totalenergy-theDynamicalMass);
     }
 

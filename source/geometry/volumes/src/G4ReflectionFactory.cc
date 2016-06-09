@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.1 2004/05/13 14:51:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ReflectionFactory.cc,v 1.3 2004/12/02 09:31:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -52,7 +52,8 @@
 // --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
-#include "G4ReflectedSolid.hh"  
+#include "G4ReflectedSolid.hh"
+#include "G4Region.hh" 
 #include "G4LogicalVolume.hh"  
 #include "G4PVPlacement.hh"  
 #include "G4PVReplica.hh"  
@@ -376,10 +377,17 @@ G4LogicalVolume* G4ReflectionFactory::ReflectLV(G4LogicalVolume* LV)
     // process daughters  
     //
     ReflectDaughters(LV, refLV);
-  }   
-  
+
+    // check if to be set as root region
+    //
+    if (LV->IsRootRegion())
+    {
+       LV->GetRegion()->AddRootLogicalVolume(refLV);
+    }
+  }
+
   return refLV;
-}               
+}
 
 //_____________________________________________________________________________
 
@@ -413,7 +421,13 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
                           LV->GetFieldManager(),
                           LV->GetSensitiveDetector(),
                           LV->GetUserLimits());
-        
+  refLV->SetVisAttributes(LV->GetVisAttributes());  // vis-attributes
+  refLV->SetBiasWeight(LV->GetBiasWeight());        // biasing weight
+  if (LV->IsRegion())
+  {
+    refLV->SetRegion(LV->GetRegion());              // set a region in case
+  }
+
   fConstituentLVMap[LV] = refLV;
   fReflectedLVMap[refLV] = LV;
 
@@ -760,7 +774,7 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
   G4double diff = 0.;
   for (G4int i=0; i<4; i++)
     for (G4int j=0; j<4; j++) 
-      diff += abs(scale(i,j) - fScale(i,j));  
+      diff += std::abs(scale(i,j) - fScale(i,j));  
 
   if (diff > fScalePrecision)
   {

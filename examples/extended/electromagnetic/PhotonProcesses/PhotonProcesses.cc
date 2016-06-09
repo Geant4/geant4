@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhotonProcesses.cc,v 1.2 2004/06/10 15:55:35 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhotonProcesses.cc,v 1.5 2004/09/29 10:37:47 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -73,10 +72,7 @@ int main(int argc,char** argv) {
    visManager->Initialize();
   #endif
   
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif
+  HistoManager*  histo = new HistoManager();
       
   // set user action classes
   RunAction* run;  
@@ -105,14 +101,12 @@ int main(int argc,char** argv) {
      UI->ApplyCommand(command+fileName);
     }
 
-  // job termination
-#ifdef G4ANALYSIS_USE
-  delete histo;
-#endif      
+  // job termination     
 #ifdef G4VIS_USE
  delete visManager;
 #endif
- 
+
+  delete histo; 
   delete runManager;
 
   return 0;

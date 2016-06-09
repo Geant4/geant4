@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.10 2004/05/17 07:20:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParameterisationTrd.cc,v 1.11 2004/12/02 09:31:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // class G4ParameterisationTrd Implementation file
 //
@@ -190,7 +190,7 @@ void G4ParameterisationTrdX::CheckParametersValidity()
   G4double mpDx1 = msol->GetXHalfLength1();
   G4double mpDx2 = msol->GetXHalfLength2();
 
-  if( fabs(mpDx1 - mpDx2) > kCarTolerance )
+  if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
     G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()"
            << G4endl
@@ -318,7 +318,7 @@ void G4ParameterisationTrdY::CheckParametersValidity()
   G4double mpDy1 = msol->GetYHalfLength1();
   G4double mpDy2 = msol->GetYHalfLength2();
 
-  if( fabs(mpDy1 - mpDy2) > kCarTolerance )
+  if( std::fabs(mpDy1 - mpDy2) > kCarTolerance )
   {
     G4cerr << "ERROR - G4ParameterisationTrdY::CheckParametersValidity()"
            << G4endl

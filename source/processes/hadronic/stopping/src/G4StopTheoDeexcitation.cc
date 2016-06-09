@@ -80,7 +80,7 @@ G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
   G4double atomicMass = G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(Z),static_cast<G4int>(A));
   G4double m = atomicMass + excitation;
   G4double pMag = p.mag();
-  G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),sqrt(pMag*pMag + m*m));
+  G4LorentzVector initialMomentum(p.x(),p.y(),p.z(),std::sqrt(pMag*pMag + m*m));
   G4Fragment theExcitedNucleus(static_cast<G4int>(A),static_cast<G4int>(Z),initialMomentum);
 
   //  theExcitedNucleus.SetA(A);

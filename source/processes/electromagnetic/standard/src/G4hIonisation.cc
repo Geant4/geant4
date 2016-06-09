@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.51 2004/05/27 17:23:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4hIonisation.cc,v 1.54 2004/12/01 19:37:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -84,6 +85,8 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
@@ -108,9 +111,18 @@ G4hIonisation::~G4hIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisation::InitialiseProcess()
+void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                const G4ParticleDefinition* bpart)
 {
   if(isInitialised) return;
+
+  theParticle = part;
+
+  if(part == bpart || part == G4Proton::Proton()) theBaseParticle = 0;
+  else if(bpart == 0) theBaseParticle = G4Proton::Proton();
+  else                theBaseParticle = bpart;
+
+  SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
@@ -131,18 +143,6 @@ void G4hIonisation::InitialiseProcess()
   SetStepLimits(0.2, 1.0*mm);
 
   isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4hIonisation::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
-{
-  if(!theParticle) theParticle = p;
-  if(p != BaseParticle() && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
-  if(!isInitialised) InitialiseProcess();
-
-  return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -57,15 +57,15 @@ G4double G4NeutronHPKallbachMannSyst::Kallbach(G4double cosTh, G4double anEnergy
   // Kallbach-Mann systematics without normalization.
   G4double result;
   G4double theX = A(anEnergy)*cosTh;
-  result = 0.5*(exp( theX)*(1+theCompoundFraction)
-               +exp(-theX)*(1-theCompoundFraction));
+  result = 0.5*(std::exp( theX)*(1+theCompoundFraction)
+               +std::exp(-theX)*(1-theCompoundFraction));
   return result;
 }
 
 G4double G4NeutronHPKallbachMannSyst::GetKallbachZero(G4double anEnergy)
 {
   G4double result;
-  result = 0.5 * (1./A(anEnergy)) * log((1-theCompoundFraction)/(1+theCompoundFraction));
+  result = 0.5 * (1./A(anEnergy)) * std::log((1-theCompoundFraction)/(1+theCompoundFraction));
   return result;
 }
 
@@ -115,7 +115,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     throw G4HadronicException(__FILE__, __LINE__, "Severe error in the sampling of Kallbach-Mann Systematics");
   }
   
-  result = C1*X1 + C2*pow(X1, 3.) + C3*Ma*mb*pow(X3, 4.);
+  result = C1*X1 + C2*std::pow(X1, 3.) + C3*Ma*mb*std::pow(X3, 4.);
   return result;
 }
 
@@ -126,9 +126,9 @@ G4double G4NeutronHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int
   G4int Zc = Ac-Nc;
   result = 15.68*(Ac-AA);
   result += -28.07*((Nc-Zc)*(Nc-Zc)/Ac - (NA-ZA)*(NA-ZA)/AA);
-  result += -18.56*(pow(G4double(Ac), 2./3.) - pow(G4double(AA), 2./3.));
-  result +=  33.22*((Nc-Zc)*(Nc-Zc)/pow(G4double(Ac), 4./3.) - (NA-ZA)*(NA-ZA)/pow(G4double(AA), 4./3.));
-  result += -0.717*(Zc*Zc/pow(G4double(Ac),1./3.)-ZA*ZA/pow(G4double(AA),1./3.));
+  result += -18.56*(std::pow(G4double(Ac), 2./3.) - std::pow(G4double(AA), 2./3.));
+  result +=  33.22*((Nc-Zc)*(Nc-Zc)/std::pow(G4double(Ac), 4./3.) - (NA-ZA)*(NA-ZA)/std::pow(G4double(AA), 4./3.));
+  result += -0.717*(Zc*Zc/std::pow(G4double(Ac),1./3.)-ZA*ZA/std::pow(G4double(AA),1./3.));
   result +=  1.211*(Zc*Zc/Ac-ZA*ZA/AA);
   G4double totalBinding(0);
   G4int productA = theTargetA+1-theResidualA;

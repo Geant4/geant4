@@ -1,4 +1,4 @@
-# $Id: run1.mac,v 1.2 2003/06/12 08:50:50 pmendez Exp $
+# $Id: run1.mac,v 1.3 2004/07/15 19:10:02 johna Exp $
 #
 # Macro file for "LHCbRichSim.cc"
 # 
@@ -23,7 +23,7 @@
 
 /vis/viewer/update
 
-/vis/viewer/viewpointThetaPhi -90. -90.
+/vis/viewer/set/viewpointThetaPhi -90. -90.
 /hits/list 
 /hits/activate
 /hits/verbose 4

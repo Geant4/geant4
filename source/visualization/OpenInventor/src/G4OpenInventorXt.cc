@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.cc,v 1.1 2004/04/08 09:41:11 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorXt.cc,v 1.2 2004/11/22 15:00:48 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -48,8 +48,30 @@ G4OpenInventorXt::G4OpenInventorXt ()
   GetInteractorManager () -> 
     AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
 
-  Widget toplevel = (Widget)GetInteractorManager()->GetMainInteractor();
-  SoXt::init(toplevel);
+  Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
+
+
+  if(getenv("XENVIRONMENT")==NULL) {
+    XrmDatabase database = XrmGetDatabase(XtDisplay(top));
+    if(database!=NULL) {
+      XrmPutLineResource(&database,"*topShadowColor:white");
+      XrmPutLineResource(&database,"*bottomShadowColor:black");
+      XrmPutLineResource(&database,"*foreground:black");
+      XrmPutLineResource(&database,"*background:lightgrey");
+      XrmPutLineResource(&database,"*borderColor:lightgrey");
+      XrmPutLineResource(&database,"*fontList:-*-helvetica-bold-r-*-*-*-120-*-*-*-*-iso8859-1");
+      XrmPutLineResource(&database,"*help_popup.title:Help");
+      XrmPutLineResource(&database,"*helpCancel.labelString:Cancel");
+      XrmPutLineResource(&database,"*helpText.editMode:multi_line_edit");
+      XrmPutLineResource(&database,"*helpText.columns:60");
+      XrmPutLineResource(&database,"*helpText.rows:20");
+      XrmPutLineResource(&database,"*helpText.background:white");
+      XrmPutLineResource(&database,"*helpText.fontList:*courier*-r-*--14-*");
+      XrmPutLineResource(&database,"*helpText.maxLength:8000");
+    }
+  }
+
+  SoXt::init(top);
 
   InitNodes();
 }

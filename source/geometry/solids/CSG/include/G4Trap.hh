@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.8 2003/06/16 16:53:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Trap.hh,v 1.10 2004/12/02 09:31:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -62,8 +62,8 @@
 //   Member Data:
 //
 //      fDz     Half-length along the z axis
-//      fTthetaCphi = tan(pTheta)*cos(pPhi)  These combinations are suitable for
-//      fTthetaSphi = tan(pTheta)*sin(pPhi)  creation of the trapezoid corners
+//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)  These combinations are suitable for
+//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)  creation of the trapezoid corners
 //
 //      fDy1    Half-length along y of the face at -fDz
 //      fDx1    Half-length along x of the side at y=-fDy1 of the face at -fDz
@@ -163,8 +163,10 @@ class G4Trap : public G4CSGSolid
     inline G4double GetXHalfLength4() const;
     inline G4double GetTanAlpha2()    const;
     inline TrapSidePlane GetSidePlane( G4int n ) const;
-
     inline G4ThreeVector GetSymAxis() const;
+    inline G4double GetCubicVolume();
+
+
       //
       // Returns coordinates of unit vector along straight
       // line joining centers of -/+fDz planes   

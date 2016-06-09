@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.9 2003/06/16 17:10:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.10 2004/12/07 13:49:32 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1
@@ -72,11 +72,11 @@ class G4NeutronHPDeExGammas
       *theCurrent = *(theResult->operator[](i));
       delete theResult->operator[](i);
       G4double costheta = 2.*G4UniformRand()-1;
-      G4double theta = acos(costheta);
+      G4double theta = std::acos(costheta);
       G4double phi = twopi*G4UniformRand();
-      G4double sinth = sin(theta);
+      G4double sinth = std::sin(theta);
       G4double en = theCurrent->GetTotalMomentum();
-      G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*costheta );
+      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta );
       theCurrent->SetMomentum( temp ) ;
       result->push_back(theCurrent);
     }

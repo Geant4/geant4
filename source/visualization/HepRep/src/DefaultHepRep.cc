@@ -8,10 +8,10 @@ DefaultHepRep::DefaultHepRep() {
 }
 
 DefaultHepRep::~DefaultHepRep() {
-    for (set<HepRepTypeTree*>::iterator i1 = typeTrees.begin(); i1 != typeTrees.end(); i1++) {
+    for (vector<HepRepTypeTree*>::iterator i1 = typeTrees.begin(); i1 != typeTrees.end(); i1++) {
         delete (*i1);
     }
-    for (set<HepRepInstanceTree*>::iterator i2 = instanceTrees.begin(); i2 != instanceTrees.end(); i2++) {
+    for (vector<HepRepInstanceTree*>::iterator i2 = instanceTrees.begin(); i2 != instanceTrees.end(); i2++) {
         delete (*i2);
     }
 }
@@ -30,7 +30,8 @@ void DefaultHepRep::addLayer(string layer) {
 }
 
 void DefaultHepRep::addTypeTree(HepRepTypeTree* typeTree) {
-    typeTrees.insert(typeTree);
+    // FIXME check if already exist    
+    typeTrees.push_back(typeTree);
 }
 
 void DefaultHepRep::removeTypeTree(HepRepTypeTree*) {
@@ -42,12 +43,13 @@ HepRepTypeTree* DefaultHepRep::getTypeTree(string, string) {
     return NULL;
 }
 
-set<HepRepTypeTree*> DefaultHepRep::getTypeTrees() {
+vector<HepRepTypeTree*> DefaultHepRep::getTypeTreeList() {
     return typeTrees;
 }
 
 void DefaultHepRep::addInstanceTree(HepRepInstanceTree* instanceTree) {
-    instanceTrees.insert(instanceTree);
+    // FIXME check if already exist    
+    instanceTrees.push_back(instanceTree);
 }
 
 void DefaultHepRep::overlayInstanceTree(HepRepInstanceTree *) {
@@ -86,7 +88,7 @@ string DefaultHepRep::checkForException() {
     return NULL;
 }
 
-set<HepRepInstanceTree*> DefaultHepRep::getInstanceTrees() {
+vector<HepRepInstanceTree*> DefaultHepRep::getInstanceTreeList() {
     return instanceTrees;
 }
 

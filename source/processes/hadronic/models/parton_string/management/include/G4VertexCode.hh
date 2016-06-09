@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VertexCode.hh,v 1.1 2003/10/07 11:26:00 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1

@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2004/06/21 10:57:09 maire Exp $
+$Id: History,v 1.56 2004/12/02 16:19:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 04: V.Ivant (testem5-V06-02-06)
+- Migration to cmath
+     
+22-11-04 mma (testem5-V06-02-05)
+- change in call G4EmCalculator. Need utils-V06-02-16
+     
+24-09-04 mma (testem5-V06-02-04)
+- define correctly all UI subdirectories.
+- do not delete AnalysisFactory (for Jaida)
+- add neutron.mac and hadron.mac 
+
+23-09-04 V.Ivant (testem5-V06-02-03)
+- Fix compilation problem for 2.95.2 (include <memory>)
+
+07-09-04 V.Ivant (testem5-V06-02-02)
+- Fix problem of PhysicsList for hadrons
+- Remove deletion of histo factories, add auto_ptr
+
+07-09-04 V.Ivant (testem5-V06-02-01)
+- fix a minor problem is energy deposit
+
+28-07-04 mma (testem5-V06-02-00)
+- print stopping power.
+- example of use of G4EmCalculator.
+- add dedx1.mac and dedx2.mac
      
 21-06-04 mma (testem5-V06-01-04)
 - simplifications in HistoManager.

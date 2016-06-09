@@ -1,0 +1,29 @@
+# $Id: dedx1.mac,v 1.2 2004/08/02 11:30:05 maire Exp $
+#
+# macro file for TestEm5.cc
+#
+# to control dE/dx calculation
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Graphite   
+/testem/det/setAbsThick 10 mum  
+/testem/det/setAbsYZ    10 mum
+#
+###/testem/phys/addPhysics g4v52
+/testem/phys/addPhysics standard
+/testem/phys/setCuts 1 km
+#    
+/run/initialize
+#
+/process/inactivate msc
+/process/eLoss/fluct false
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 1 MeV
+#
+/tracking/verbose 1
+#
+/run/beamOn 2

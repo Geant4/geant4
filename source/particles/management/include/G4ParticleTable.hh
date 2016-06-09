@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.16 2003/06/16 16:58:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleTable.hh,v 1.17 2004/08/31 19:10:49 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -203,6 +203,14 @@ class G4ParticleTable
    G4ShortLivedTable*     fShortLivedTable;
 
    G4String               noName;
+
+   G4bool  readyToUse;
+ 
+ public:
+   void SetReadiness();
+   G4bool GetReadiness() const;
+ private:
+   void CheckReadiness();
 };
 #include "G4ParticleTable.icc"
 

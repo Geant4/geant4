@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALSteppingAction.cc,v 1.4 2003/12/09 15:30:33 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: FCALSteppingAction.cc,v 1.5 2004/11/29 18:03:06 ribon Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -158,7 +158,7 @@ void FCALSteppingAction::UserSteppingAction(const G4Step* astep)
 	    };	  
 	  DistOfClosestApproach = Distance * VectorProductNorm ;
 	  
-	  if(abs(DistOfClosestApproach) < DCACut) 
+	  if(std::abs(DistOfClosestApproach) < DCACut) 
 	    {
 	      NSecondaries++;	      
 	      Secondaries[0][0] = NSecondaries;

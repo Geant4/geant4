@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolynomialSolver.icc,v 1.6 2001/07/11 10:00:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PolynomialSolver.icc,v 1.7 2004/11/12 17:38:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 // class G4PolynomialSolver
 //
@@ -100,7 +100,7 @@ G4PolynomialSolver<T,F>::BezierClipping(/*T* typeF,F func,F deriv,*/
   P[0][1] = (FunctionClass->*Function)(*IntervalMin);
   
 
-  if (fabs(P[0][1]) < Precision) {
+  if (std::fabs(P[0][1]) < Precision) {
     return 1;
   }
   
@@ -192,7 +192,7 @@ G4double G4PolynomialSolver<T,F>::Newton (G4double IntervalMin,
   Value = (FunctionClass->*Function)(Lambda);
 
 
-  //  while ((fabs(Value) > Precision)) {
+  //  while ((std::fabs(Value) > Precision)) {
   while (j != -1) {
 	  
     Value = (FunctionClass->*Function)(Lambda);
@@ -201,7 +201,7 @@ G4double G4PolynomialSolver<T,F>::Newton (G4double IntervalMin,
 
     Lambda = Lambda - Value/Gradient ;
 
-    if (fabs(Value) <= Precision) {
+    if (std::fabs(Value) <= Precision) {
       j ++;
       if (j == 2) {
 	j = -1;	

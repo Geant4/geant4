@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.5 2004/05/28 13:13:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4TwistedTubs.cc,v 1.10 2004/12/02 09:31:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -67,21 +67,22 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi), 
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+     fCubicVolume(0.)
 {
    if (endinnerrad < DBL_MIN) {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
                   FatalException, "Invalid end-inner-radius!");
    }
             
-   G4double sinhalftwist = sin(0.5 * twistedangle);
+   G4double sinhalftwist = std::sin(0.5 * twistedangle);
 
    G4double endinnerradX = endinnerrad * sinhalftwist;
-   G4double innerrad     = sqrt( endinnerrad * endinnerrad
+   G4double innerrad     = std::sqrt( endinnerrad * endinnerrad
                                  - endinnerradX * endinnerradX );
 
    G4double endouterradX = endouterrad * sinhalftwist;
-   G4double outerrad     = sqrt( endouterrad * endouterrad
+   G4double outerrad     = std::sqrt( endouterrad * endouterrad
                                  - endouterradX * endouterradX );
    
    // temporary treatment!!
@@ -110,14 +111,14 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                   FatalException, "Invalid total-phi or end-inner-radius!");
    }    
          
-   G4double sinhalftwist = sin(0.5 * twistedangle);
+   G4double sinhalftwist = std::sin(0.5 * twistedangle);
 
    G4double endinnerradX = endinnerrad * sinhalftwist;
-   G4double innerrad     = sqrt( endinnerrad * endinnerrad
+   G4double innerrad     = std::sqrt( endinnerrad * endinnerrad
                                  - endinnerradX * endinnerradX );
 
    G4double endouterradX = endouterrad * sinhalftwist;
-   G4double outerrad     = sqrt( endouterrad * endouterrad
+   G4double outerrad     = std::sqrt( endouterrad * endouterrad
                                  - endouterradX * endouterradX );
    
    // temporary treatment!!
@@ -211,8 +212,8 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
                              fEndOuterRadius[0] : fEndOuterRadius[1]);
   G4double maxEndInnerRad = (fEndInnerRadius[0] > fEndInnerRadius[1] ?
                              fEndInnerRadius[0] : fEndInnerRadius[1]);
-  G4double maxphi         = (fabs(fEndPhi[0]) > fabs(fEndPhi[1]) ?
-                             fabs(fEndPhi[0]) : fabs(fEndPhi[1]));
+  G4double maxphi         = (std::fabs(fEndPhi[0]) > std::fabs(fEndPhi[1]) ?
+                             std::fabs(fEndPhi[0]) : std::fabs(fEndPhi[1]));
    
   //
   // Choose phi size of our segment(s) based on constants as
@@ -220,7 +221,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   //
   // G4int numPhi = kMaxMeshSections;
   G4double sigPhi = 2*maxphi + fDPhi;
-  G4double rFudge = 1.0/cos(0.5*sigPhi);
+  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
   G4double fudgeEndOuterRad = rFudge * maxEndOuterRad;
   
   //
@@ -278,8 +279,8 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   // decide verticies of -ve phi boundary
   //
   
-  G4double cosPhi = cos(phimin);
-  G4double sinPhi = sin(phimin);
+  G4double cosPhi = std::cos(phimin);
+  G4double sinPhi = std::sin(phimin);
 
   // Outer hyperbolic surface  
 
@@ -333,8 +334,8 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   // decide vertices of +ve phi boundary
   // 
 
-  cosPhi = cos(phimax);
-  sinPhi = sin(phimax);
+  cosPhi = std::cos(phimax);
+  sinPhi = std::sin(phimax);
   
   // Outer hyperbolic surface  
   
@@ -1010,4 +1011,14 @@ void G4TwistedTubs::CreateSurfaces()
 G4GeometryType G4TwistedTubs::GetEntityType() const
 {
   return G4String("G4TwistedTubs");
+}
+
+//=====================================================================
+//* GetCubicVolume ----------------------------------------------------
+
+G4double G4TwistedTubs::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  return fCubicVolume;
 }

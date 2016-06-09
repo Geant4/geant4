@@ -154,7 +154,7 @@
         m++;
         a++;
         G4double xp = aPassive->GetEnergy(p);
-        if( abs(abs(xp-xa)/xa)<0.001 )
+        if( std::abs(std::abs(xp-xa)/xa)<0.001 )
         {
           p++;
         }
@@ -171,7 +171,7 @@
     }
     while (p!=aPassive->GetVectorLength())
     {
-      if(abs(theMerge->GetEnergy(std::max(0,m-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
+      if(std::abs(theMerge->GetEnergy(std::max(0,m-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
         theMerge->SetData(m++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
       p++;
     }

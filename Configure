@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.60 2004/06/29 09:33:29 stesting Exp $
+# $Id: Configure,v 1.68 2004/12/17 15:36:11 stesting Exp $
 #
-# Generated on Tue Jun 29 11:27:51 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 17 16:33:20 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -158,6 +158,7 @@ contains=''
 d_portable=''
 g4base=''
 g4conf=''
+g4final_install=''
 g4include=''
 g4includes_flag=''
 g4install=''
@@ -444,12 +445,13 @@ while test $# -gt 0; do
 	case "$1" in
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
+	-build) shift; g4build=yes;;
+	-incflags) shift; g4incflags=yes;;
 	-install) shift; install=yes;;
-	-ldlibs) shift; g4ldlibs=yes;;
-	-ldflags) shift; g4ldflags=yes;;
 	-cppflags) shift; g4cppflags=yes;;
 	-cxxflags) shift; g4cxxflags=yes;;
-	-incflags) shift; g4incflags=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -504,16 +506,17 @@ done
 case "$error" in
 true)
 	cat >&2 <<EOM
-Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
+Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start configuration AND installation of Geant4 libraries. 
-  -ldlibs : retrieve the list of libraries to link
-  -ldflags : retrieve the list of directories where libraries are placed
-  -cxxflags : retrieve the list of cxxflags
+  -build : start configuration AND build of Geant4 libraries. 
   -cppflags : retrieve the list of cppflags
+  -cxxflags : retrieve the list of cxxflags
   -incflags : retrieve the list of incflags
+  -install : start installation of Geant4 libraries. 
+  -ldflags : retrieve the list of directories where libraries are placed
+  -ldlibs : retrieve the list of libraries to link
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
@@ -941,12 +944,37 @@ user=`(logname) 2>/dev/null`
 case "$user" in
 '') user=`whoami 2>&1`;;
 esac
-if [ X$install = Xyes ] ; then
+
+#if [ X$install = Xyes ] ; then
+#
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo " "
+#echo " "
+#echo " "
+#echo " "
+#
+##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
+##	firsttime=false
+##	echo " "
+##	rp='Would you like to see the instructions?'
+##	dflt=n
+##	. ./myread
+##	case "$ans" in
+##	[yY]*) ;;
+##	*) needman=false;;
+##	esac
+##fi
+#fi
+
+if [ X$g4build = Xyes ] ; then
 
 echo " "
 echo " "
 echo " "
-echo "                --- Geant4 Toolkit Installation  ---"
+echo "                --- Geant4 Toolkit Build  ---"
 echo " "
 echo " "
 echo " "
@@ -965,7 +993,11 @@ if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 fi
 fi
 
-if [ X$install = X ] ; then
+if [ X$install = Xyes ] ; then
+needman=false
+fi
+
+if [ X$install = X -a X$g4build = X ] ; then
 needman=false
 fi
 
@@ -1642,14 +1674,14 @@ case  "$g4compiler" in
 				g4compiler=CC
 				;;
 		'WIN32')
-				g4compiler=VC7
+				g4compiler=VC
 	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
 				case $clcompiler in
-				*"Version 12"*) g4compiler=VC
+				*"Version 12"*) g4compiler=VC6
 				;;
-				*"Version 13"*) g4compiler=VC7
+				*"Version 13"*) g4compiler=VC
 				;;
-				*) g4compiler=VC7
+				*) g4compiler=VC
 				;;
 				esac				
 				;;
@@ -1659,7 +1691,7 @@ case  "$g4compiler" in
 	esac
 esac
 
-if [ X$install = Xyes ] ; then
+if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1813,8 +1845,9 @@ newmyuname="$myuname"
 dflt=n
 
 cd ../..
-if [ X$install = X ] ; then
 
+
+if [ X$g4build = X ] ; then
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
@@ -1824,6 +1857,16 @@ if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags !=
 	g4non_display=yes
 #	echo g4non_display=$g4non_display
 fi
+
+	if [ X$install = Xyes ] ; then
+
+	$rm -rf .config/UU
+	
+	. $src/.config/bin/$g4system/move.sh
+
+	exit 1
+
+	fi #end of cppflags
 
 	if [ X$g4cppflags = Xyes ] ; then
 
@@ -1994,9 +2037,9 @@ echo " "
 echo " "
 
 	echo " "
-	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "WARNING: Geant4 is NOT built yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/Configure -install."
+	echo "should start with \$G4INSTALL/Configure -build."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 	$rm -rf .config/UU
@@ -2400,12 +2443,14 @@ esac
 case "$g4install" in
 '')
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-	g4install="c:/geant4"
+#	g4install="c:/geant4"
+	g4install=$abssrc
 else
-	if [ X"$HOME" = X/ ] ; then
-	HOME=""
-	fi
-	g4install="$HOME"/geant4
+#	if [ X"$HOME" = X/ ] ; then
+#	HOME=""
+#	fi
+#	g4install="$HOME"/geant4
+	g4install=$abssrc
 
 fi
 
@@ -2427,6 +2472,12 @@ fi
 	;;
 esac
 
+case "$g4final_install" in
+'')
+	g4final_install=$g4install
+	;;
+esac
+
 case "$g4workdir" in
 '')
 	g4workdir=$g4install
@@ -2442,7 +2493,7 @@ esac
 
 g4message=`cat << EOM
 
-Where is Geant4 installed?
+Where is Geant4 source installed?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2452,7 +2503,22 @@ rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
+#################################
+g4message=`cat << EOM
 
+Specify the path where Geant4 libraries and source files should be
+installed.
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4final_install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4final_install=$ans
+#g4workdir=$g4install
+
+##################################
 g4message=`cat << EOM
 
 Do you want to copy all Geant4 headers 
@@ -2475,18 +2541,25 @@ case "$g4include" in
 	;;
 esac
 
-g4message=`cat << EOM
+#g4message=`cat << EOM
+#
+#Where will be directory to copy all Geant4 headers?
+#EOM`
+#
+##dflt="NO DEFAULT ANSWER"
+####dflt=$g4install/include
+#dflt=$g4include
+#fn='d~+'
+#rp=$g4message
+#. ./getfile
+#g4include=$ans
 
-Where will be directory to copy all Geant4 headers?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-###dflt=$g4install/include
-dflt=$g4include
-fn='d~+'
-rp=$g4message
-. ./getfile
-g4include=$ans
+# Set constantly!
+if [ X$g4install != X$g4final_install ] ; then
+g4include=$g4final_install/include/geant4
+else
+g4include=$g4final_install/include
+fi
 
 fi
 
@@ -2514,7 +2587,7 @@ esac
 #	;;
 #esac
 
-while test 1 = 1  ; do
+while test 1 = 0  ; do
 
 g4message=`cat << EOM
 
@@ -2750,7 +2823,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You can customise these settings next.
 EOM`
@@ -2768,7 +2840,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You will be asked about customizing these next.
 EOM`
@@ -2824,21 +2895,32 @@ rp=$g4message
 
 while test 1 = 1  ; do
 
-g4message=`cat << EOM
+g4message_1=`cat << You
 
-You can customize paths of you CLHEP installation:
+You can customize paths and library name of you CLHEP installation:
 
 1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-To modify default settings, select number above (e.g. 2) 
+You`
+
+g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
+
+g4message_3=`cat << EOM
+
+To modify default settings, select number above (e.g. 2)
 EOM`
 
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+rp=$g4message_1$g4message_3
+else
+rp=$g4message_1$g4message_2$g4message_3
+fi
+
 dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
 . ./myread
 gans=$ans
 
@@ -2874,6 +2956,17 @@ gans=$ans
 	esac
 done
 
+if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+g4clhep_base_dir=""
+fi
+
+if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+g4clhep_include_dir=""
+fi
+
+if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+g4clhep_lib_dir=""
+fi
 
 echo " "
 
@@ -4039,9 +4132,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-This driver is based on the "Hepvis" class library.
-The OpenInventor driver and the Hepvis class library are based
-on OpenInventor technology for scientific visualization.
+The OpenInventor driver is based on OpenInventor technology 
+for scientific visualizarion.
 The X11 version of OpenInventor is required.
 
 EOM`
@@ -4515,6 +4607,7 @@ g4conf='$g4conf'
 g4data='$g4data'
 g4debug='$g4debug'
 g4elasticdata='$g4elasticdata'
+g4final_install='$g4final_install'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
@@ -4693,11 +4786,16 @@ EOM
 elif test -f [Mm]akefile; then
 	echo " "
 	echo "Now you must run a make."
-elif test -f $g4conf/install.sh; then
+elif [ -f $g4conf/install.sh -a X$g4build = Xyes ] ; then
+	echo " "
+	echo "Now starting Geant4 libraries build..."
+	echo " "
+	. $g4conf/install.sh
+elif [ -f $g4conf/install.sh -a X$install = Xyes ] ; then
 	echo " "
 	echo "Now starting Geant4 libraries installation..."
 	echo " "
-	. $g4conf/install.sh
+	. $g4conf/move.sh
 else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"

@@ -54,25 +54,25 @@ vector<double>* DefaultHepRepPoint::getXYZ(vector<double>* xyz) {
 }
 
 double DefaultHepRepPoint::getRho() {
-    return sqrt(x*x + y*y);
+    return std::sqrt(x*x + y*y);
 }
 
 double DefaultHepRepPoint::getPhi() {
-    return atan2(y, x);
+    return std::atan2(y, x);
 }
 
 double DefaultHepRepPoint::getTheta() {
-    return atan2(getRho(), z);
+    return std::atan2(getRho(), z);
 }
 
 double DefaultHepRepPoint::getR() {
     double r = getRho();
-    return sqrt(r*r + z*z);
+    return std::sqrt(r*r + z*z);
 }
 
 double DefaultHepRepPoint::getEta() {
-    double ct = cos(getTheta());
-    return -0.5*log((1.-ct)/(1.+ct));
+    double ct = std::cos(getTheta());
+    return -0.5*std::log((1.-ct)/(1.+ct));
 }
 
 double DefaultHepRepPoint::getX(double xVertex, double, double) {
@@ -90,26 +90,26 @@ double DefaultHepRepPoint::getZ(double, double, double zVertex) {
 double DefaultHepRepPoint::getRho(double xVertex, double yVertex, double zVertex) {
     double dx = getX(xVertex, yVertex, zVertex);
     double dy = getY(xVertex, yVertex, zVertex);
-    return sqrt(dx*dx + dy*dy);
+    return std::sqrt(dx*dx + dy*dy);
 }
 
 double DefaultHepRepPoint::getPhi(double xVertex, double yVertex, double zVertex) {
-    return atan2(getY(xVertex, yVertex, zVertex), getX(xVertex, yVertex, zVertex));
+    return std::atan2(getY(xVertex, yVertex, zVertex), getX(xVertex, yVertex, zVertex));
 }
 
 double DefaultHepRepPoint::getTheta(double xVertex, double yVertex, double zVertex) {
-    return atan2(getRho(xVertex, yVertex, zVertex), getZ(xVertex, yVertex, zVertex));
+    return std::atan2(getRho(xVertex, yVertex, zVertex), getZ(xVertex, yVertex, zVertex));
 }
 
 double DefaultHepRepPoint::getR(double xVertex, double yVertex, double zVertex) {
     double dr = getRho(xVertex, yVertex, zVertex);
     double dz = getZ(xVertex, yVertex, zVertex);
-    return sqrt(dr*dr + dz*dz);
+    return std::sqrt(dr*dr + dz*dz);
 }
 
 double DefaultHepRepPoint::getEta(double xVertex, double yVertex, double zVertex) {
-    double ct = cos(getTheta(xVertex, yVertex, zVertex));
-    return -0.5*log((1.-ct)/(1.+ct));
+    double ct = std::cos(getTheta(xVertex, yVertex, zVertex));
+    return -0.5*std::log((1.-ct)/(1.+ct));
 }
 
 

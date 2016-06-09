@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.9 2003/06/16 16:53:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Para.hh,v 1.10 2004/09/13 16:26:53 grichine Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -91,6 +91,7 @@ class G4Para : public G4CSGSolid
     inline G4double GetYHalfLength()  const;
     inline G4double GetXHalfLength()  const;
     inline G4double GetTanAlpha()     const;
+    inline G4double GetCubicVolume();
     
   // Modifiers
 

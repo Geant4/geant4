@@ -21,8 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2004/05/27 18:04:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+
+// $Id: PhysicsList.cc,v 1.6 2004/12/03 10:51:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +35,12 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
+
+#include "PhysListEmModelPai.hh"
+#include "PhysListEmPaiPhoton.hh"
+
 #include "PhysListEmPAI.hh"
+
 #include "PhysListEmG4v52.hh"
 
 #include "G4Gamma.hh"
@@ -110,26 +116,35 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
-
+  if (name == "standard") 
+  {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "g4v52") {
-
+  } 
+  else if (name == "g4v52") 
+  {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
 
-  } else if (name == "PAI") {
 
+  } 
+  else if (name == "pai") 
+  {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPAI(name);
-
-  } else {
-
+    emPhysicsList = new PhysListEmModelPai(name);
+  }
+  else if (name == "pai_photon") 
+  {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPaiPhoton(name);
+  } 
+  else 
+  {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
@@ -152,14 +167,16 @@ void PhysicsList::AddStepMax()
   stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
-        {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (stepMaxProcess->IsApplicable(*particle))
+    {
+      pmanager ->AddDiscreteProcess(stepMaxProcess);
+    }
   }
 }
 
@@ -168,18 +185,20 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
 
-  if (verboseLevel >0){
+  if ( verboseLevel > 0 )
+  {
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
+
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
-  if (verboseLevel>0) DumpCutValuesTable();
+  if ( verboseLevel > 0 ) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

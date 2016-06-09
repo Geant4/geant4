@@ -36,7 +36,7 @@ extern void InitializeRichTbGeometry();
 extern G4double GetCurAerogelLength(G4int);
 //
 //
-static const G4double sqroot3=pow(3.0,0.5);
+static const G4double sqroot3=std::pow(3.0,0.5);
 
 //Size of the LHCb Rich Testbeam Hall. 
 static const G4double ExpHallHalfX=4000.0*mm;
@@ -235,7 +235,7 @@ static const   G4double HpdPhCathodeStartPhi=0.0*rad;
 // Z locations of the various parts.
 static const   G4double HpdQuartzPartFromEndZ=4.0*mm;
 //static const   G4double HpdEnvelopePartFromEndZ=18.0*mm;
-// The following obtained by requiring 100-sqrt(100*100-63.5*63.5)=22.75 
+// The following obtained by requiring 100-std::sqrt(100*100-63.5*63.5)=22.75 
 // for the quartz region in Z. The total is 22.75+4+4=30.75.  
 static const   G4double HpdEnvelopePartFromEndZ=30.75*mm;
 static const G4double HpdPhotoCathodeSiZdist=100.0*mm;
@@ -250,12 +250,12 @@ static const G4int NumberOfSiDetSectors=16;
 static const G4double SiSectAngSize=(22.5*pi/180)*rad;
 static const G4double SiSectAngHalfSize=SiSectAngSize/2.0;
 static const G4double SiSectHeight=25.0*mm;
-static const G4double SiSectSide= SiSectHeight/cos(SiSectAngHalfSize);
+static const G4double SiSectSide= SiSectHeight/std::cos(SiSectAngHalfSize);
 static const G4double SiSectHalfMoonGap=0.0*mm;
 static const G4double SiSectTrapHalfY1=0.15*mm;  // halfthickness of Si.
 static const G4double SiSectTrapHalfY2= SiSectTrapHalfY1;
 static const G4double SiSectTrapHalfX1=0.0001*mm;
-static const G4double SiSectTrapHalfX2 = SiSectHeight*tan(SiSectAngHalfSize);
+static const G4double SiSectTrapHalfX2 = SiSectHeight*std::tan(SiSectAngHalfSize);
 static const G4double SiSectTrapHalfZ  = SiSectHeight/2.0 ;
 static const G4double SiSectRotX=(90*pi/180)*rad;
 static const G4double SiSectAngStart=(pi/2.0)*rad-SiSectAngSize/2.0;

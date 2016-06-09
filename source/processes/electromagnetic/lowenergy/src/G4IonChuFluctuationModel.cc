@@ -270,8 +270,8 @@ G4double G4IonChuFluctuationModel::ChuFluctuationModel(const G4Material* materia
   if( 0 > iz ) iz = 0 ;
   if(95 < iz ) iz = 95 ;
 
-  G4double q = 1.0 / (1.0 + a[iz][0]*pow(energy,a[iz][1])+
-                          + a[iz][2]*pow(energy,a[iz][3])) ; 
+  G4double q = 1.0 / (1.0 + a[iz][0]*std::pow(energy,a[iz][1])+
+                          + a[iz][2]*std::pow(energy,a[iz][3])) ; 
 
   return q ;    
 }

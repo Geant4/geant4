@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XPDGElastic.cc,v 1.1 2003/10/07 12:37:41 hpw Exp $ //
+// $Id: G4XPDGElastic.cc,v 1.2 2004/12/07 13:48:59 gunter Exp $ //
 // -------------------------------------------------------------------
 //      
 // PDG  Elastic cross section 
@@ -168,7 +168,7 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 
   if (m > 0. && sqrtS > (m1 + m2)) 
     {
-      pLab = sqrt( (sqrtS*sqrtS - (m1+m2)*(m1+m2) ) * (sqrtS*sqrtS - (m1-m2)*(m1-m2)) ) / (2*m);
+      pLab = std::sqrt( (sqrtS*sqrtS - (m1+m2)*(m1+m2) ) * (sqrtS*sqrtS - (m1-m2)*(m1-m2)) ) / (2*m);
       
       // The PDG fit formula requires p in GeV/c
       
@@ -225,8 +225,8 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 		  pLab /= GeV;
 		  if (pLab > 0.) 
 		    {
-		      G4double logP = log(pLab);
-		      sigma = aFit + bFit * pow(pLab, nFit) + cFit * logP*logP + dFit * logP;
+		      G4double logP = std::log(pLab);
+		      sigma = aFit + bFit * std::pow(pLab, nFit) + cFit * logP*logP + dFit * logP;
 		      sigma = sigma * millibarn;
 		    }
 		}

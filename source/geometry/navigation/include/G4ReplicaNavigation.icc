@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.icc,v 1.3 2004/03/10 18:21:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ReplicaNavigation.icc,v 1.4 2004/12/10 16:20:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // class G4ReplicaNavigation Inline implementation
@@ -68,7 +68,7 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
       break;
     case kPhi:
       coord = localPoint.phi();
-      if ( (coord<0) && (coord<targetHeaderMin) ) coord += 2.0*M_PI;
+      if ( (coord<0) && (coord<targetHeaderMin) ) coord += 2.0*pi;
       break;
     case kRadial3D:
     default:
@@ -108,7 +108,7 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
       // the last voxel to the zeroth and vice versa
       //                                        H.Boie, April 30, 2001  
       if ( (targetHeaderAxis==kPhi)
-           && (targetHeaderMin==0) && (targetHeaderMax==2*M_PI) )
+           && (targetHeaderMin==0) && (targetHeaderMax==2*pi) )
       {
         if ( targetNodeNo<0 ) 
           targetNodeNo = targetHeaderNoSlices-1;

@@ -1,0 +1,4 @@
+This directory contains the code re-implementing the gflash package
+in C++ for geant4. At the time of first release, the homogenous shower parametrization
+part is included.
+

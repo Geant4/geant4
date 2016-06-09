@@ -90,7 +90,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       //
       E += G4Proton::Proton()->GetPDGMass();
       G4double E02 = E*E - P*P;
-      E0 = sqrt(abs(E02));
+      E0 = std::sqrt(std::abs(E02));
       if (E02 < 0)E0 *= -1;
       Q += Z;
       G4cout << "G4LEnp:ApplyYourself: total:" << G4endl;
@@ -112,7 +112,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
         je1 = midBin;
     } while (je2 - je1 > 1); 
     //    G4int j;
-    //abs(ek-elab[je1]) < abs(ek-elab[je2]) ? j = je1 : j = je2;
+    //std::abs(ek-elab[je1]) < std::abs(ek-elab[je2]) ? j = je1 : j = je2;
     G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
@@ -167,7 +167,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double theta = (0.5 + kint)*pi/180.;
 
     //    G4int k;
-    //abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
+    //std::abs(sample-sig[j][ke1]) < std::abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
     //    G4double theta = (0.5 + k)*pi/180.;
 
     if (verboseLevel > 1) {
@@ -185,15 +185,15 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double E2 = targetParticle->GetTotalEnergy();
     G4double M2 = targetParticle->GetDefinition()->GetPDGMass();
     G4double totalEnergy = E1 + E2;
-    G4double pseudoMass = sqrt(totalEnergy*totalEnergy - P*P);
-    // pseudoMass also = sqrt(M1*M1 + M2*M2 + 2*M2*E1)
+    G4double pseudoMass = std::sqrt(totalEnergy*totalEnergy - P*P);
+    // pseudoMass also = std::sqrt(M1*M1 + M2*M2 + 2*M2*E1)
 
     // Transform into centre of mass system
 
     G4double px = (M2/pseudoMass)*Px;
     G4double py = (M2/pseudoMass)*Py;
     G4double pz = (M2/pseudoMass)*Pz;
-    G4double p = sqrt(px*px + py*py + pz*pz);
+    G4double p = std::sqrt(px*px + py*py + pz*pz);
 
     if (verboseLevel > 1) {
       G4cout << "  E1, M1 (GeV) " << E1/GeV << " " << M1/GeV << G4endl;
@@ -204,19 +204,19 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 
     // First scatter w.r.t. Z axis
     G4double phi = G4UniformRand()*twopi;
-    G4double pxnew = p*sin(theta)*cos(phi);
-    G4double pynew = p*sin(theta)*sin(phi);
-    G4double pznew = p*cos(theta);
+    G4double pxnew = p*std::sin(theta)*std::cos(phi);
+    G4double pynew = p*std::sin(theta)*std::sin(phi);
+    G4double pznew = p*std::cos(theta);
 
     // Rotate according to the direction of the incident particle
     if (px*px + py*py > 0) {
       G4double cost, sint, ph, cosp, sinp;
       cost = pz/p;
-      sint = (sqrt(abs((1-cost)*(1+cost))) + sqrt(px*px+py*py)/p)/2;
+      sint = (std::sqrt(std::abs((1-cost)*(1+cost))) + std::sqrt(px*px+py*py)/p)/2;
       py < 0 ? ph = 3*halfpi : ph = halfpi;
-      if (abs(px) > 0.000001*GeV) ph = atan2(py,px);
-      cosp = cos(ph);
-      sinp = sin(ph);
+      if (std::abs(px) > 0.000001*GeV) ph = std::atan2(py,px);
+      cosp = std::cos(ph);
+      sinp = std::sin(ph);
       px = (cost*cosp*pxnew - sinp*pynew + sint*cosp*pznew);
       py = (cost*sinp*pxnew + cosp*pynew + sint*sinp*pznew);
       pz = (-sint*pxnew                  + cost*pznew);
@@ -244,7 +244,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double betaCMx = Px/E1pM2;
     G4double betaCMy = Py/E1pM2;
     G4double betaCMz = Pz/E1pM2;
-    G4double gammaCM = E1pM2/sqrt(E1pM2*E1pM2 - P*P);
+    G4double gammaCM = E1pM2/std::sqrt(E1pM2*E1pM2 - P*P);
 
     if (verboseLevel > 1) {
       G4cout << "  betaCM " << betaCMx << " " << betaCMy << " "
@@ -265,7 +265,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     PA[1] = px;
     PA[2] = py;
     PA[3] = pz;
-    PA[4] = sqrt(M1*M1 + p*p);
+    PA[4] = std::sqrt(M1*M1 + p*p);
 
     G4double BETPA  = BETA[1]*PA[1] + BETA[2]*PA[2] + BETA[3]*PA[3];
     G4double BPGAM  = (BETPA * BETA[4]/(BETA[4] + 1.) - PA[4]) * BETA[4];
@@ -284,7 +284,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     PA[1] = -px;
     PA[2] = -py;
     PA[3] = -pz;
-    PA[4] = sqrt(M2*M2 + p*p);
+    PA[4] = std::sqrt(M2*M2 + p*p);
 
     BETPA  = BETA[1]*PA[1] + BETA[2]*PA[2] + BETA[3]*PA[3];
     BPGAM  = (BETPA * BETA[4]/(BETA[4] + 1.) - PA[4]) * BETA[4];

@@ -136,7 +136,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
       }
       do
       {
-        if (abs(myZ-Z)>theMaxOffSet||myZ==0||myA==0)
+        if (std::abs(myZ-Z)>theMaxOffSet||myZ==0||myA==0)
           if(inc>0)
           {
             inc*= -1;
@@ -152,7 +152,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
             theFileName = "";
             return result;
           }
-        if (abs(myA-A)>theMaxOffSet)
+        if (std::abs(myA-A)>theMaxOffSet)
         {
           first = true;
           myA = A;

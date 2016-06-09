@@ -1,4 +1,4 @@
-# $Id: lockwood.mac,v 1.2 2003/10/06 10:09:19 maire Exp $
+# $Id: lockwood.mac,v 1.4 2004/11/23 14:05:24 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -15,9 +15,9 @@
 #
 /testem/det/setNbOfLayers 1
 /testem/det/setNbOfAbsor  3
-/testem/det/setAbsor 0 Aluminium 170 mum
-/testem/det/setAbsor 1 Gold 23 mum
-/testem/det/setAbsor 2 Aluminium 850 mum
+/testem/det/setAbsor 1 Aluminium 170 mum
+/testem/det/setAbsor 2 Gold 23 mum
+/testem/det/setAbsor 3 Aluminium 850 mum
 /testem/det/setSizeYZ 1050 mum
 #
 /testem/phys/setCuts 1 mum
@@ -29,7 +29,7 @@
 /gun/energy 1 MeV
 /testem/gun/rndm 0.8
 #
-/testem/tracking/stepMax 5 mum
+/testem/stepMax/absorber 2 5 mum
 #
 /testem/event/printModulo 1000
 #

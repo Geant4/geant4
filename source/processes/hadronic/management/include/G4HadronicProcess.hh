@@ -131,7 +131,7 @@ class G4ParticleChange;
     
     virtual void ResetNumberOfInteractionLengthLeft()
     {
-      G4VProcess::theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
+      G4VProcess::theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
       theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
       // hpw ReStarted = true;
     }

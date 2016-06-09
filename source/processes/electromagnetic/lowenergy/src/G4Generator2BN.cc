@@ -190,7 +190,7 @@ G4double G4Generator2BN::PolarAngle(const G4double initial_energy,
 G4double G4Generator2BN::CalculateFkt(G4double k, G4double theta, G4double A, G4double c) const
 {
   G4double Fkt_value = 0;
-  Fkt_value = A*pow(k,-b)*theta/(1+c*theta*theta);
+  Fkt_value = A*std::pow(k,-b)*theta/(1+c*theta*theta);
   return Fkt_value;
 }
 
@@ -220,25 +220,25 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
      }
 
 
-     G4double p0 = sqrt(E0*E0-1);
-     G4double p = sqrt(E*E-1);
-     G4double L = log((E*E0-1+p*p0)/(E*E0-1-p*p0));
-     G4double delta0 = E0 - p0*cos(theta);
-     G4double epsilon = log((E+p)/(E-p));
+     G4double p0 = std::sqrt(E0*E0-1);
+     G4double p = std::sqrt(E*E-1);
+     G4double L = std::log((E*E0-1+p*p0)/(E*E0-1-p*p0));
+     G4double delta0 = E0 - p0*std::cos(theta);
+     G4double epsilon = std::log((E+p)/(E-p));
      G4double Z2 = Z*Z;
-     G4double sintheta2 = sin(theta)*sin(theta);
+     G4double sintheta2 = std::sin(theta)*std::sin(theta);
      G4double E02 = E0*E0;
      G4double E2 = E*E;
      G4double p02 = E0*E0-1;
      G4double k2 = k*k;
      G4double delta02 = delta0*delta0;
      G4double delta04 =  delta02* delta02;
-     G4double Q = sqrt(p02+k2-2*k*p0*cos(theta));
+     G4double Q = std::sqrt(p02+k2-2*k*p0*std::cos(theta));
      G4double Q2 = Q*Q;
-     G4double epsilonQ = log((Q+p)/(Q-p));
+     G4double epsilonQ = std::log((Q+p)/(Q-p));
 
 
-     dsdkdt_value = Z2 * (r02/(8*M_PI*137)) * (1/k) * (p/p0) *
+     dsdkdt_value = Z2 * (r02/(8*pi*137)) * (1/k) * (p/p0) *
        ( (8 * (sintheta2*(2*E02+1))/(p02*delta04)) -
          ((2*(5*E02+2*E*E0+3))/(p02 * delta02)) -
          ((2*(p02-k2))/((Q2*delta02))) +
@@ -256,7 +256,7 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
 
 
 
-     dsdkdt_value = dsdkdt_value*sin(theta);
+     dsdkdt_value = dsdkdt_value*std::sin(theta);
      return dsdkdt_value;
 }
 
@@ -282,14 +282,14 @@ void G4Generator2BN::ConstructMajorantSurface()
   for(G4int index = index_min; index < index_max; index++){
 
   G4double fraction = index/100.;
-  Ek = pow(10.,fraction);
+  Ek = std::pow(10.,fraction);
   Eel = Ek + electron_mass_c2;
 
   // find x-section maximum at k=kmin
   dsmax = 0.;
   thetamax = 0.;
 
-  for(theta = 0.; theta < M_PI; theta = theta + dtheta){
+  for(theta = 0.; theta < pi; theta = theta + dtheta){
 
     ds = Calculatedsdkdt(kmin, theta, Eel);
 
@@ -305,7 +305,7 @@ void G4Generator2BN::ConstructMajorantSurface()
     A = 0;
   }else{
     c = 1/(thetamax*thetamax);
-    A = 2*sqrt(c)*dsmax/(pow(kmin,-b));
+    A = 2*std::sqrt(c)*dsmax/(std::pow(kmin,-b));
   }
 
   // look for correction factor to normalization at kmin 
@@ -317,13 +317,13 @@ void G4Generator2BN::ConstructMajorantSurface()
   k0 = 0.;
   theta0 = 0.;
 
-  vmax = G4int(100.*log10(Ek/kmin));
+  vmax = G4int(100.*std::log10(Ek/kmin));
 
   for(G4int v = 0; v < vmax; v++){
     G4double fraction = (v/100.);
-    k = pow(10.,fraction)*kmin;
+    k = std::pow(10.,fraction)*kmin;
 
-    for(theta = 0.; theta < M_PI; theta = theta + dtheta){
+    for(theta = 0.; theta < pi; theta = theta + dtheta){
       dk = k - k0;
       dt = theta - theta0;
       ds = Calculatedsdkdt(k,theta, Eel);
@@ -369,7 +369,7 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
   G4int index;
 
   // find table index
-  index = G4int(log10(Ek)*100) - index_min;
+  index = G4int(std::log10(Ek)*100) - index_min;
   Eel = Ek + electron_mass_c2;
 
   kmax = Ek;
@@ -383,24 +383,24 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
   }
 
   do{
-  // generate k accordimg to pow(k,-b)
+  // generate k accordimg to std::pow(k,-b)
   trials++;
 
   // normalization constant 
-//  cte1 = (1-b)/(pow(kmax,(1-b))-pow(kmin2,(1-b)));
+//  cte1 = (1-b)/(std::pow(kmax,(1-b))-std::pow(kmin2,(1-b)));
 //  y = G4UniformRand();
-//  k = pow(((1-b)/cte1*y+pow(kmin2,(1-b))),(1/(1-b)));
+//  k = std::pow(((1-b)/cte1*y+std::pow(kmin2,(1-b))),(1/(1-b)));
 
-  // generate theta accordimg to theta/(1+c*pow(theta,2)
+  // generate theta accordimg to theta/(1+c*std::pow(theta,2)
   // Normalization constant
-  cte2 = 2*c/log(1+c*M_PI*M_PI);
+  cte2 = 2*c/std::log(1+c*pi2);
 
   y = G4UniformRand();
-  t = sqrt((exp(2*c*y/cte2)-1)/c);
+  t = std::sqrt((std::exp(2*c*y/cte2)-1)/c);
   u = G4UniformRand();
 
   // point acceptance algorithm
-  fk = pow(k,-b);
+  fk = std::pow(k,-b);
   ft = t/(1+c*t*t);
   ds = Calculatedsdkdt(k,t,Eel);
 

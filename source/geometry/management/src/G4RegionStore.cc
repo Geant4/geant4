@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.6 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RegionStore.cc,v 1.8 2004/09/03 08:17:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4RegionStore
 //
@@ -35,6 +35,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4GeometryManager.hh"
+#include "G4VStoreNotifier.hh"
 
 #include "G4ios.hh"
 
@@ -43,6 +44,7 @@
 // ***************************************************************************
 //
 G4RegionStore* G4RegionStore::fgInstance = 0;
+G4VStoreNotifier* G4RegionStore::fgNotifier = 0;
 G4bool G4RegionStore::locked = false;
 
 // ***************************************************************************
@@ -66,7 +68,7 @@ G4RegionStore::~G4RegionStore()
 }
 
 // ***************************************************************************
-// Delete all elements from the store
+// Delete all regions from the store except for the world region
 // ***************************************************************************
 //
 void G4RegionStore::Clean()
@@ -90,12 +92,13 @@ void G4RegionStore::Clean()
   std::vector<G4Region*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << "Deleting Solids ... ";
+  G4cout << "Deleting Regions ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(pos=store->begin()+1; pos!=store->end(); pos++)
   {
-    if (*pos) delete *pos; i++;
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
+    if (*pos) delete *pos; i++;   // Do NOT delete world region !
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -110,22 +113,34 @@ void G4RegionStore::Clean()
 }
 
 // ***************************************************************************
-// Add Solid to container
+// Associate user notifier to the store
+// ***************************************************************************
+//
+void G4RegionStore::SetNotifier(G4VStoreNotifier* pNotifier)
+{
+  GetInstance();
+  fgNotifier = pNotifier;
+}
+
+// ***************************************************************************
+// Add Region to container
 // ***************************************************************************
 //
 void G4RegionStore::Register(G4Region* pRegion)
 {
   GetInstance()->push_back(pRegion);
+  if (fgNotifier) fgNotifier->NotifyRegistration();
 }
 
 // ***************************************************************************
-// Remove Solid from container
+// Remove Region from container
 // ***************************************************************************
 //
 void G4RegionStore::DeRegister(G4Region* pRegion)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pRegion)

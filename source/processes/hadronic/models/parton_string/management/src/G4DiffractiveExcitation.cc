@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.3 2004/12/07 13:50:17 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -210,7 +210,7 @@ G4ExcitedString * G4DiffractiveExcitation::
 
 
 	G4double maxAvailMomentumSquared=
-		 sqr( sqrt(transverseMassSquared) - sqrt(ptSquared) );
+		 sqr( std::sqrt(transverseMassSquared) - std::sqrt(ptSquared) );
 
 	G4ThreeVector pt=GaussianPt(widthOfPtSquare,maxAvailMomentumSquared);
 
@@ -222,7 +222,7 @@ G4ExcitedString * G4DiffractiveExcitation::
 	G4double tm1=hadron->Get4Momentum().minus() +
 	  ( Pend.perp2()-Pstart.perp2() ) / hadron->Get4Momentum().plus();
 
-	G4double tm2= sqrt( std::max(0., sqr(tm1) -
+	G4double tm2= std::sqrt( std::max(0., sqr(tm1) -
 	     4. * Pend.perp2() * hadron->Get4Momentum().minus()
 	      /  hadron->Get4Momentum().plus() ));
 
@@ -286,14 +286,14 @@ G4ThreeVector G4DiffractiveExcitation::GaussianPt(G4double widthSquare, G4double
 	G4double pt2;
 
 	do {
-	    pt2=widthSquare * log( G4UniformRand() );
+	    pt2=widthSquare * std::log( G4UniformRand() );
 	} while ( pt2 > maxPtSquare);
 	
-	pt2=sqrt(pt2);
+	pt2=std::sqrt(pt2);
 	
 	G4double phi=G4UniformRand() * twopi;
 	
-	return G4ThreeVector (pt2*cos(phi), pt2*sin(phi), 0.);    
+	return G4ThreeVector (pt2*std::cos(phi), pt2*std::sin(phi), 0.);    
 }
 
 G4DiffractiveExcitation::G4DiffractiveExcitation(const G4DiffractiveExcitation &)

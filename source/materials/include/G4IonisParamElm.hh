@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh,v 1.6 2001/07/11 10:01:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4IonisParamElm.hh,v 1.7 2004/12/07 08:50:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 // class description
@@ -56,12 +56,12 @@ public:  // with description
     // retrieval methods
     
     G4double  GetZ()        const {return fZ;};       // atomic number Z
-    G4double  GetZ3()       const {return fZ3;};      // pow (Z,1/3)
-    G4double  GetZZ3()      const {return fZZ3;};     // pow (Z(Z+1),1/3)
-    G4double  GetlogZ3()    const {return flogZ3;};   // log(Z)/3
+    G4double  GetZ3()       const {return fZ3;};      // std::pow (Z,1/3)
+    G4double  GetZZ3()      const {return fZZ3;};     // std::pow (Z(Z+1),1/3)
+    G4double  GetlogZ3()    const {return flogZ3;};   // std::log(Z)/3
 
     G4double  GetTau0() const {return fTau0;};
-                       // 0.1*pow(Z,1/3)*MeV/proton_mass_c2
+                       // 0.1*std::pow(Z,1/3)*MeV/proton_mass_c2
     
     G4double  GetTaul() const {return fTaul;};        // 2*MeV/proton mass
     
@@ -71,7 +71,7 @@ public:  // with description
                        // parameters for the low energy ion.loss
     
     G4double  GetMeanExcitationEnergy()  const {return fMeanExcitationEnergy;};
-                                        // 16*pow(Z,0.9)*eV 
+                                        // 16*std::pow(Z,0.9)*eV 
       
     G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;};
                                        // shell correction coefficients
@@ -90,13 +90,13 @@ private:
   //  data members
   //
     G4double fZ;                 // effective Z
-    G4double fZ3;                // pow (Z,1/3)
-    G4double fZZ3;               // pow (Z(Z+1),1/3)
-    G4double flogZ3;             // log(Z)/3
+    G4double fZ3;                // std::pow (Z,1/3)
+    G4double fZZ3;               // std::pow (Z(Z+1),1/3)
+    G4double flogZ3;             // std::log(Z)/3
 
     //  ------ ionisation loss ---------------------------------
     
-    G4double  fTau0 ;                 // 0.1*pow(Z,1/3)*MeV/proton_mass_c2
+    G4double  fTau0 ;                 // 0.1*std::pow(Z,1/3)*MeV/proton_mass_c2
     G4double  fTaul ;                 // 2*MeV/proton mass
     G4double  fBetheBlochLow;         // Bethe-Bloch at fTaul*particle mass   
     G4double  fAlow,fBlow,fClow;      // parameters for the low energy ion.loss

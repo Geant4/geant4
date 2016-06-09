@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.hh,v 1.3 2002/12/13 11:34:28 gunter Exp $
+// $Id: A01GeneralPhysics.hh,v 1.4 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 //
 
@@ -31,9 +31,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-
-#include "G4Decay.hh"
 
 class A01GeneralPhysics : public G4VPhysicsConstructor
 {
@@ -51,8 +48,6 @@ class A01GeneralPhysics : public G4VPhysicsConstructor
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
-  protected:
-    G4Decay fDecayProcess;
 };
 
 

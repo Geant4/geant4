@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.33 2003/05/20 20:16:13 pia Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4LowEnergyRayleigh.cc,v 1.35 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -125,9 +125,9 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
 
   if (photonEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -156,30 +156,30 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
       fcostheta = ( 1. + cosTheta*cosTheta)/2.;
       } while (fcostheta < G4UniformRand());
 
-      G4double sinThetaHalf = sqrt((1. - cosTheta) / 2.);
+      G4double sinThetaHalf = std::sqrt((1. - cosTheta) / 2.);
       x = sinThetaHalf / (wlPhoton/cm);
       if (x > 1.e+005)
          dataFormFactor = formFactorData->FindValue(x,Z-1);
       else
          dataFormFactor = formFactorData->FindValue(0.,Z-1);
       randomFormFactor = G4UniformRand() * Z * Z;
-      sinTheta = sqrt(1. - cosTheta*cosTheta);
+      sinTheta = std::sqrt(1. - cosTheta*cosTheta);
       gReject = dataFormFactor * dataFormFactor;
 
     } while( gReject < randomFormFactor);
 
   // Scattered photon angles. ( Z - axis along the parent photon)
   G4double phi = twopi * G4UniformRand() ;
-  G4double dirX = sinTheta*cos(phi);
-  G4double dirY = sinTheta*sin(phi);
+  G4double dirX = sinTheta*std::cos(phi);
+  G4double dirY = sinTheta*std::sin(phi);
   G4double dirZ = cosTheta;
 
   // Update G4VParticleChange for the scattered photon
   G4ThreeVector photonDirection1(dirX, dirY, dirZ);
 
   photonDirection1.rotateUz(photonDirection0);
-  aParticleChange.SetEnergyChange(photonEnergy0);
-  aParticleChange.SetMomentumChange(photonDirection1);
+  aParticleChange.ProposeEnergy(photonEnergy0);
+  aParticleChange.ProposeMomentumDirection(photonDirection1);
 
   aParticleChange.SetNumberOfSecondaries(0);
 

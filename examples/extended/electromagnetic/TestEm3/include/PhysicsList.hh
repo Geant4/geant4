@@ -20,13 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.hh,v 1.3 2004/04/28 17:40:42 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// $Id: PhysicsList.hh,v 1.5 2004/11/23 14:05:27 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +32,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+class StepMax;
 class PhysicsListMessenger;
 class G4VPhysicsConstructor;
 
@@ -50,8 +46,10 @@ class PhysicsList: public G4VModularPhysicsList
 
     void ConstructParticle();
     void ConstructProcess();
+    
     void AddPhysicsList(const G4String& name);
-
+    void AddStepMax();
+    
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
@@ -65,7 +63,9 @@ class PhysicsList: public G4VModularPhysicsList
     
     G4VPhysicsConstructor*  emPhysicsList;
     G4String emName;
-
+    
+    StepMax* stepMaxProcess;
+    
     PhysicsListMessenger* pMessenger;
 };
 

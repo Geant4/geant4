@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.37 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eIonisation.cc,v 1.39 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -67,10 +68,11 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
-//#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eIonisation::G4eIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
@@ -92,33 +94,21 @@ G4eIonisation::~G4eIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eIonisation::InitialiseProcess()
+void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                const G4ParticleDefinition*)
 {
-  SetSecondaryParticle(theElectron);
+  if(!isInitialised) {
+    if(part == G4Positron::Positron()) isElectron = false;
+    SetSecondaryParticle(theElectron);
 
-  if(IsIntegral()) {
-    //    flucModel = new G4BohrFluctuations();
     flucModel = new G4UniversalFluctuation();
 
-  } else {
-    flucModel = new G4UniversalFluctuation();
+    G4VEmModel* em = new G4MollerBhabhaModel();
+    em->SetLowEnergyLimit(0.1*keV);
+    em->SetHighEnergyLimit(100.0*TeV);
+    AddEmModel(1, em, flucModel);
+    isInitialised = true;
   }
-
-  G4VEmModel* em = new G4MollerBhabhaModel();
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em, flucModel);
-  isInitialised = true;
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4eIonisation::DefineBaseParticle(const G4ParticleDefinition* p)
-{
-  if(p == G4Positron::Positron()) isElectron = false;
-  if(!isInitialised) InitialiseProcess();
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

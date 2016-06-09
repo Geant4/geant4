@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.7 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Region.hh,v 1.9 2004/09/28 14:16:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class G4Region
 //
@@ -45,8 +45,10 @@ class G4ProductionCuts;
 class G4LogicalVolume;
 class G4Material;
 class G4VUserRegionInformation;
+class G4MaterialCutsCouple;
 
 #include <vector>
+#include <map>
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -55,6 +57,8 @@ class G4Region
 {
     typedef std::vector<G4LogicalVolume*> G4RootLVList;
     typedef std::vector<G4Material*> G4MaterialList;
+    typedef std::pair<G4Material*,G4MaterialCutsCouple*> G4MaterialCouplePair;
+    typedef std::map<G4Material*,G4MaterialCutsCouple*> G4MaterialCoupleMap;
 
   public:  // with description
 
@@ -106,7 +110,17 @@ class G4Region
 
     void SetUserInformation(G4VUserRegionInformation* ui);
     G4VUserRegionInformation* GetUserInformation() const;
-      // Set and Get methods for user information
+      // Set and Get methods for user information.
+
+    void ClearMap();
+      // Reset G4MaterialCoupleMap
+
+    void RegisterMaterialCouplePair(G4Material* mat, G4MaterialCutsCouple*);
+      // Method invoked by G4ProductionCutsTable to register the pair.
+
+    G4MaterialCutsCouple* FindCouple(G4Material* mat);
+      // Find a G4MaterialCutsCouple which corresponds to the material
+      // in this region.
 
   private:
 
@@ -120,6 +134,7 @@ class G4Region
 
     G4RootLVList fRootVolumes;
     G4MaterialList fMaterials;
+    G4MaterialCoupleMap fMaterialCoupleMap;
 
     G4bool fRegionMod;
     G4ProductionCuts* fCut;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelGeometrySampler.cc,v 1.10 2003/11/26 14:51:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

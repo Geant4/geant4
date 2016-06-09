@@ -1,5 +1,4 @@
-$Id: History,v 1.254 2004/06/23 10:56:23 gcosmo Exp $
-$Name: geant4-06-02 $
+$Id: History,v 1.260 2004/12/08 12:46:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th December 2004 John Allison (config-V06-02-03)
+- Darwin-g++.gmk: fixes on setup for dynamic libraries.
+
+30th November 2004 Gabriele Cosmo (config-V06-02-02)
+- binmake.gmk: added electromagnetic/highenergy module to INCLUDE path.
+
+27th November 2004 Gabriele Cosmo (config-V06-02-01)
+- binmake.gmk: added parameterisations/trd_clusters and
+  parameterisations/gflash modules to INCLUDE path.
+
+29th October 2004 Gabriele Cosmo (config-V06-02-00)
+- Archived setup for Windows/VC++6. WIN32-VC now corresponds to WIN32-VC7.
+  Archived WIN32-VC7.gmk.
+- Removed strict compilation options for SUN-CC and thread specific.
+
+12th October 2004 John Allison
+- Darwin-g++.gmk : added -lXi to X11LIBS.
+
+08th July 2004 Guy Barrand
+- Darwin-g++.gmk : correct options to build granular shared libs.
+  Have "-undefined define_a_way" instead of "-undefined error" since
+  granular libs are not linked for the moment.
 
 23rd June 2004 Gabriele Cosmo (config-V06-01-10)
 - Updated win32def.c program to fix retrivial of public static data for

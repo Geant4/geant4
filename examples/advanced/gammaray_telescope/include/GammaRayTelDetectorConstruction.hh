@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelDetectorConstruction.hh,v 1.7 2004/06/02 15:21:29 flongo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

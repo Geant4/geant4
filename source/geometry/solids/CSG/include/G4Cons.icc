@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.1 2002/10/28 11:43:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Cons.icc,v 1.4 2004/10/10 10:44:15 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -78,41 +78,55 @@ inline
 void G4Cons::SetInnerRadiusMinusZ( G4double Rmin1 )
 {
   fRmin1= Rmin1 ;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Cons::SetOuterRadiusMinusZ( G4double Rmax1 )
 {
   fRmax1= Rmax1 ;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Cons::SetInnerRadiusPlusZ ( G4double Rmin2 )
 {
   fRmin2= Rmin2 ;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Cons::SetOuterRadiusPlusZ ( G4double Rmax2 )
 {
   fRmax2= Rmax2 ;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Cons::SetZHalfLength ( G4double newDz )
 {
   fDz= newDz ;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Cons::SetStartPhiAngle ( G4double newSPhi )
 {
   fSPhi= newSPhi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 void G4Cons::SetDeltaPhiAngle ( G4double newDPhi )
 {
   fDPhi=  newDPhi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 // Old access methods ...
@@ -157,4 +171,25 @@ inline
 G4double G4Cons::GetDPhi() const
 {
   return GetDeltaPhiAngle();
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Cons::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   
+  {
+    G4double Rmean, rMean, deltaR, deltar;
+
+    Rmean  = 0.5*(fRmax1+fRmax2);
+    deltaR = fRmax1-fRmax2;
+
+    rMean  = 0.5*(fRmin1+fRmin2);
+    deltar = fRmin1-fRmin2;
+    fCubicVolume = fDPhi*fDz*(Rmean*Rmean-rMean*rMean
+                            +(deltaR*deltaR-deltar*deltar)/12); 
+  }
+  return fCubicVolume;
 }

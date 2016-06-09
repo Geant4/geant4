@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2004/06/21 10:57:13 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: DetectorConstruction.cc,v 1.6 2004/11/22 15:43:40 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,6 +107,7 @@ G4Element* Xe = new G4Element("Xenon",   symbol="Xe", z=54, a= 131.29*g/mole);
 // define simple materials
 //
 
+new G4Material("H2Liq"    , z= 1, a= 1.01*g/mole, density= 70.8*mg/cm3);
 new G4Material("Beryllium", z= 4, a= 9.01*g/mole, density= 1.848*g/cm3);
 new G4Material("Aluminium", z=13, a=26.98*g/mole, density= 2.700*g/cm3);
 new G4Material("Silicon"  , z=14, a=28.09*g/mole, density= 2.330*g/cm3);
@@ -130,6 +131,10 @@ H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
 H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
 
+G4Material* CH = new G4Material("Plastic", density= 1.04*g/cm3, ncomponents=2);
+CH->AddElement(C, natoms=1);
+CH->AddElement(H, natoms=1);
+
 //
 // define a material from elements.   case 2: mixture by fractional mass
 //
@@ -137,6 +142,28 @@ H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
 G4Material* Air = new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
+
+//Graphite
+//
+G4Material* Graphite = 
+new G4Material("Graphite", density= 1.7*g/cm3, ncomponents=1);
+Graphite->AddElement(C, fractionmass=1.);
+
+//Havar
+//
+G4Element* Cr = new G4Element("Chrome", "Cr", z=25, a=  51.996*g/mole);
+G4Element* Fe = new G4Element("Iron"  , "Fe", z=26, a=  55.845*g/mole);
+G4Element* Co = new G4Element("Cobalt", "Co", z=27, a=  58.933*g/mole);
+G4Element* Ni = new G4Element("Nickel", "Ni", z=28, a=  58.693*g/mole);
+G4Element* W  = new G4Element("Tungsten","W", z=74, a= 183.850*g/mole);
+
+G4Material* Havar = 
+new G4Material("Havar", density= 8.3*g/cm3, ncomponents=5);
+Havar->AddElement(Cr, fractionmass=0.1785);
+Havar->AddElement(Fe, fractionmass=0.1822);
+Havar->AddElement(Co, fractionmass=0.4452);
+Havar->AddElement(Ni, fractionmass=0.1310);
+Havar->AddElement(W , fractionmass=0.0631);
 
 //
 // examples of gas

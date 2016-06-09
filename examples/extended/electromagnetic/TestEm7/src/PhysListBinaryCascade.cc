@@ -20,8 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.cc,v 1.5 2003/12/05 11:17:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysListBinaryCascade.cc,v 1.6 2004/09/27 14:42:26 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"

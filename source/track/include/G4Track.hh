@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.16 2002/12/16 11:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Track.hh,v 1.17 2004/12/02 06:38:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //---------------------------------------------------------------
@@ -45,6 +45,7 @@
 #define G4Track_h 1
 
 #include "globals.hh"                 // Include from 'global'
+#include <cmath>                      // Include from 'system'
 #include "G4ThreeVector.hh"           // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'

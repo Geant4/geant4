@@ -22,7 +22,7 @@
 //
 //
 // $Id: ProcessesCount.hh,v 1.9 2003/10/06 10:02:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

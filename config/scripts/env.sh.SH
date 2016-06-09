@@ -37,24 +37,42 @@ fi
 # g4dirs.U
 #
 #+
+if [ X$g4install != X$g4final_install ] ; then
+G4INSTALL="$g4final_install/src/geant4"
+else
 G4INSTALL="$g4install"
+fi
 export G4INSTALL
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 fi
 
 #+
-if [ X$g4include != X ] ; then 
-G4INCLUDE="$g4include"
+if [ X$g4includes_flag != Xn ] ; then 
+if [ X$g4install != X$g4final_install ] ; then
+G4INCLUDE="$g4final_install/include/geant4"
+else
+G4INCLUDE="$g4install/include/"
+fi
 export G4INCLUDE
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
 fi
+#else
+#G4BASE="$g4final_install/include/geant4/source"
+#export G4BASE
+#if [ X\$g4non_display = X ] ; then
+#echo "On this machine the G4BASE=\$G4BASE"
+#fi
 fi
 
 #+
 if [ X$g4lib != X ] ; then 
-G4LIB="$g4lib"
+if [ X$g4install != X$g4final_install ] ; then
+G4LIB="$g4final_install/lib/geant4"
+else
+G4LIB="$g4install/lib"
+fi
 export G4LIB
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB=\$G4LIB"
@@ -414,6 +432,19 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 fi
 fi 
+
+# Check for Windows!
+if test "X$G4SYSTEM" != "XWIN32-VC" -a "X$G4SYSTEM" != "XWIN32-VC7"; then
+#+
+#
+# UI_USE_TCSH for Unix
+#
+G4UI_USE_TCSH=1
+export G4UI_USE_TCSH
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
+fi 
+fi
 
 #####################################################################
 

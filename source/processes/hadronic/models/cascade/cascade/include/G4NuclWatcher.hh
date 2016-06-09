@@ -55,12 +55,12 @@ public:
 
     const G4double small = 0.001;
 
-    if(fabs(z - nuclz) < small) {
+    if(std::fabs(z - nuclz) < small) {
       G4bool here = false;
       G4int  simulatedAsSize = simulated_as.size();
       for(G4int i = 0; i < simulatedAsSize; i++) {
 
-	if(fabs(simulated_as[i] - a) < small) {
+	if(std::fabs(simulated_as[i] - a) < small) {
 	  simulated_cs[i] += 1.0;
 	  here = true;
 	  break;
@@ -77,7 +77,7 @@ public:
 		  G4int nev) { 
     G4int  simulatedAsSize = simulated_as.size();
     for(G4int i = 0; i < simulatedAsSize ; i++) {
-      double err = sqrt(simulated_cs[i]) / simulated_cs[i];
+      double err = std::sqrt(simulated_cs[i]) / simulated_cs[i];
 
       simulated_prob.push_back(simulated_cs[i] / nev);
       simulated_cs[i] *= csec / nev;
@@ -162,12 +162,12 @@ public:
     G4int  simulatedAsSize = simulated_as.size();
       for(G4int i = 0; i < simulatedAsSize; i++) {
 
-	if(fabs(simulated_as[i] - a) < small) {
+	if(std::fabs(simulated_as[i] - a) < small) {
 	  G4double rat = simulated_cs[i] / exper_cs[iz];
 
-	  lhood += log10(rat) * log10(rat);
+	  lhood += std::log10(rat) * std::log10(rat);
 
-	  G4double rat_err = sqrt(simulated_errors[i] * simulated_errors[i] +
+	  G4double rat_err = std::sqrt(simulated_errors[i] * simulated_errors[i] +
 				  exper_err[iz] * exper_err[iz] * rat * rat) / exper_cs[iz];
 	  average_ratio += rat;
 	  aver_rat_err += rat_err; 
@@ -211,9 +211,9 @@ public:
     if(matched > 0) {
       aver_lhood = lhood;
       aver_matched = matched;    
-      lhood = pow(10.0, sqrt(lhood / matched));
+      lhood = std::pow(10.0, std::sqrt(lhood / matched));
 
-      G4cout << " matched " << matched << " CHSQ " << sqrt(izotop_chsq) / matched
+      G4cout << " matched " << matched << " CHSQ " << std::sqrt(izotop_chsq) / matched
 	     << G4endl
 	     << " raw chsq " << izotop_chsq << G4endl
 	     << " average ratio " << average_ratio / matched 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.30 2004/03/10 16:48:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4PhotoElectricEffect.cc,v 1.33 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +66,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
@@ -80,6 +80,14 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
  
 G4PhotoElectricEffect::~G4PhotoElectricEffect()
 { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition&
+                                                        particle)
+{
+   return ( &particle == G4Gamma::Gamma() ); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,6 +125,29 @@ G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
                   SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
           
  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
+                                                       G4double,
+                                                       G4ForceCondition*)
+
+// returns the gamma mean free path in GEANT4 internal units
+{
+ G4double  GammaEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+ G4double* SandiaCof   = aTrack.GetMaterial()->GetSandiaTable()
+                                   ->GetSandiaCofForMaterial(GammaEnergy);
+				    
+ G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+          energy4 = energy2*energy2;
+
+ 
+ G4double SIGMA = SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+                  SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+          
+ MeanFreePath = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+ return MeanFreePath;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,9 +208,9 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    //
    // Kill the incident photon 
    //
-   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);
-   aParticleChange.SetEnergyChange(0.);  
-   aParticleChange.SetStatusChange(fStopAndKill); 
+   aParticleChange.ProposeLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);
+   aParticleChange.ProposeEnergy(0.);  
+   aParticleChange.ProposeTrackStatus(fStopAndKill); 
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);

@@ -159,7 +159,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
 
   // ===  Throw for capture  time.
 
-  G4double tDelay = -log(G4UniformRand()) / lambda;
+  G4double tDelay = -std::log(G4UniformRand()) / lambda;
   
   G4ReactionProductVector * captureResult=0;
   G4int nEmSecondaries = nCascade;
@@ -193,6 +193,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
       aNewParticle->SetMomentum(itV.vect());
       G4double localtime = globalTime + tDelay + aParticle->GetTOF();
       G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position);
+	  	aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
       aParticleChange.AddSecondary( aNewTrack );
     }
   }
@@ -211,14 +212,15 @@ AtRestDoIt(const G4Track& track,const G4Step&)
         aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
 
         G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
+		    aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
         aParticleChange.AddSecondary( aNewTrack );
       }
     }
   }
 
-  aParticleChange.SetLocalEnergyDeposit(0.0);
+  aParticleChange.ProposeLocalEnergyDeposit(0.0);
 
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident MuonMinus
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident MuonMinus
 
 //   clear InteractionLengthLeft
 
@@ -302,7 +304,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
 
     // Gett the nu momentum in the CMS
     G4double aNMass = G4Proton::ProtonDefinition()->GetPDGMass()/2.;
-    G4LorentzVector theNeutronMom(sqrt(aNMass*aNMass+fermiMom.mag2()), fermiMom);
+    G4LorentzVector theNeutronMom(std::sqrt(aNMass*aNMass+fermiMom.mag2()), fermiMom);
     G4LorentzVector theCMS = theNeutronMom+aMuMom;
     G4double p1 = (theCMS.mag()*theCMS.mag()-aNMass*aNMass)/(2.*theCMS.mag());
     G4LorentzRotation toCMS = theCMS.boostVector();
@@ -311,9 +313,9 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
     // make the nu, and transform to lab;
     G4double cosTh = G4UniformRand();
     G4double phi = twopi*G4UniformRand();
-    G4double theta = acos(cosTh);
-    G4double sinth = sin(theta);
-    G4ThreeVector randUnit(sinth*cos(phi), sinth*sin(phi), cos(theta) );
+    G4double theta = std::acos(cosTh);
+    G4double sinth = std::sin(theta);
+    G4ThreeVector randUnit(sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
     G4LorentzVector finNuMom(p1, p1*randUnit);
 
     // make the neutrino an mu-neutrino with the above momentum and get the residual properties
@@ -335,7 +337,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
     eRest = targetMass+availableEnergy-residualMass-finNuMom.t();
 
     // Call pre-compound on the rest.
-    eEx = sqrt( (residualMass+eRest)*(residualMass+eRest) - pResInCMS.mag2() ) - residualMass;
+    eEx = std::sqrt( (residualMass+eRest)*(residualMass+eRest) - pResInCMS.mag2() ) - residualMass;
   }
   while(eEx<=0);
   G4LorentzVector resV(residualMass+eRest, pResInCMS);

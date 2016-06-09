@@ -207,9 +207,9 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
 //  if(squareP < 0)  // should never happen
 //    squareP = 0;
   G4ThreeVector mom1CMS = GetRandomDirection();
-  mom1CMS = sqrt(squareP)*mom1CMS;
-  G4LorentzVector final4Mom1CMS(mom1CMS, sqrt(squareP+m1*m1));
-  G4LorentzVector final4Mom2CMS((-1)*mom1CMS, sqrt(squareP+m2*m2));
+  mom1CMS = std::sqrt(squareP)*mom1CMS;
+  G4LorentzVector final4Mom1CMS(mom1CMS, std::sqrt(squareP+m1*m1));
+  G4LorentzVector final4Mom2CMS((-1)*mom1CMS, std::sqrt(squareP+m2*m2));
 
 // Go back to the lab frame
   G4LorentzVector mom1 = toLabFrame*final4Mom1CMS;
@@ -225,7 +225,7 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
        << (1/MeV)*temp.x() << " " << (1/MeV)*temp.y() << " "
        << (1/MeV)*temp.z() << " " << (1/MeV)*temp.t() << " "
        << (1/MeV)*temp.vect().mag() << " " << (1/MeV)*temp.mag() << " "
-       << (1/MeV)*sqrt(squareP) << endl;
+       << (1/MeV)*std::sqrt(squareP) << endl;
 
 */
 // ------ end debug
@@ -275,9 +275,9 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
 G4ThreeVector G4Absorber::GetRandomDirection()
 {
   G4double theta = 2.0*G4UniformRand()-1.0;
-  theta = acos(theta);
+  theta = std::acos(theta);
   G4double phi = G4UniformRand()*2*pi;
-  G4ThreeVector direction(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
+  G4ThreeVector direction(std::sin(theta)*std::cos(phi), std::sin(theta)*std::sin(phi), std::cos(theta));
   return direction;
 }
 

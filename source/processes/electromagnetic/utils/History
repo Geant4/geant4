@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2004/05/26 15:21:16 vnivanch Exp $
+$Id: History,v 1.185 2004/12/09 10:38:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,116 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 Dec 04: V.Ivant (utils-V06-02-22)
+- Fix bug related to hadron tests
+
+06 Dec 04: V.Ivant (utils-V06-02-21)
+- Minor but critical fix in BuildPhysicsTables for muons
+- Fix of BuildDEDXtables for e-, e+, mu+, mu-
+
+01 Dec 04: V.Ivant (utils-V06-02-20)
+- Migration to cmath
+
+01 Dec 04: V.Ivant (utils-V06-02-19)
+- Move the classes with real models from utils to standard
+
+29 November 04: V.Ivanchenko (utils-V06-02-18)
+- Restructure of standard subdirectories
+- Cleanup GNUmakefile
+
+29 November 04: V.Ivanchenko (utils-V06-02-17)
+- Fix control on verboseLevel for energy loss and msc
+- Fix BuildPhysicsTable for case of sharing processes between particles
+
+18 November 04: V.Ivanchenko (utils-V06-02-16)
+- Update signature of G4EmCalculator
+- Add method CrossSectionPerAtom to G4VEmModel
+- Fix bug at initialisation for ion
+- Improve printout for G4VEnergyLossProcess
+- Fix bug - initialisation of map for particle/processes for external
+  access to dE/dx tables
+
+15 November 04: V.Ivanchenko (utils-V06-02-15)
+- Remove ProposeTrackStatus from AlongStep
+
+18 November 04: V.Ivanchenko (utils-V06-02-14b)
+- Fix bug - initialisation of map for particle/processes for external
+  access to dE/dx tables
+
+17 November 04: V.Ivanchenko (utils-V06-02-14a)
+- Fix bug at initialisation for ion
+
+11 November 04: V.Ivanchenko (utils-V06-02-14)
+- The fix in Retrieve tables
+
+11 November 04: V.Ivanchenko (utils-V06-02-13)
+- Migration to new algorithm to Store/Retrieve tables
+
+02 November 04: L.Urban (utils-V06-02-12)
+- Precision problem for very high energy ions in gases(or with
+  small stepsize) has been solved in src/G4MscModel.cc
+
+25 October 04: V.Ivanchenko (utils-V06-02-11)
+- Migrate to new interfaces for ParticleChange
+
+14 October 04: V.Ivanchenko (utils-V06-02-10)
+- Bug fix in effective charge sampling
+     
+27 september 04: L.Urban (utils-V06-02-09)
+- G4Mscmodel.cc: change in the tail of the angular distribution, 
+  contributing to step independance.
+
+13 September 04: V.Ivanchenko (utils-V06-02-08)
+- Extend G4BraggModel below 1 keV
+- Add verbose for G4EmCalculator
+- Fix problem of integral regime for cross sections with more
+  than 1 peak 
+
+26 Augest 04: V.Ivanchenko (utils-V06-02-07)
+- Update G4EmCalculator class - add protections and cleanup
+- Fix effective charge for He4
+- Fix deuteron energy loss
+- For G4VEnergyLossProcess and G4VMultipleScattring introduce new methods
+  to perform initialisation in both cases Build or Retrieve tables 
+     
+17 August 04: L.Urban (utils-V06-02-06)
+- Name of data member facxsi changed to factail together with the corresponding 
+  set function.
+- Changes in the angle distribution (slightly modified Highland formula for the
+  width of the central part, changes in the numerical values of some other 
+  parameters) ---> approximately step independent distribution.
+    
+06 Augest 04: V.Ivanchenko (utils-V06-02-05)
+- Change names of private member functions to make they be more clear
+- Optimise MFP and step limit calculation
+- Remove random step feature from G4VEnergyLossProcess
+- Add interfaces to G4Emcalculator
+- Clear up interfaces in G4VEmProcess
+- Use new interfaces from G4VParticleChange
+- Remove obsolete interfaces for particles
+
+27 July 04: V.Ivanchenko (utils-V06-02-04)
+- Fix a compilation problem connected with removal of the dependence
+  of particle cathegory on G4Material
+- Add G4EmCalculator - a class to access/calculate dedx, range, cross
+  sections of EM processes
+- Add G4ionEffectiveCharge class needed both to ion physics and 
+  G4EmCalculator
+
+23 July 04: V.Ivanchenko (utils-V06-02-03)
+- Fix a problem of cut dependence of transmission energy of low energy e- 
+  via thin foil
+
+21 July 04: V.Ivanchenko (utils-V06-02-02)
+- Fix a problem tried after desactivation of muon ionisation
+     
+19 July 04: mma (utils-V06-02-01)
+- G4MscModel.cc: correction in SampleCosineTheta in order to avoid
+  num. precision problems at high energy/small step(L.Urban) 
+
+05 July 04: V.Ivanchenko (utils-V06-02-00)
+- Fix a problem of G4VEnergyLossProcess seen for ions at small cuts in range
 
 26 May 04: V.Ivanchenko (utils-V06-01-07)
 - Critical fix in msc to avoid crash in case of use of G4hLowEnergyIonisation

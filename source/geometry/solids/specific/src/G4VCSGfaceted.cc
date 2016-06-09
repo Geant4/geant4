@@ -26,8 +26,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.10 2003/06/16 16:54:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VCSGfaceted.cc,v 1.14 2004/10/13 13:34:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -59,7 +59,8 @@
 //
 G4VCSGfaceted::G4VCSGfaceted( G4String name )
   : G4VSolid(name),
-    numFace(0), faces(0)
+    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron(0),
+    fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
 {
 }
 
@@ -114,6 +115,8 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   do {
     *face = (*sourceFace)->Clone();
   } while( ++sourceFace, ++face < faces+numFace );
+  fCubicVolume = source.fCubicVolume;
+  fpPolyhedron = source.fpPolyhedron;
 }
 
 
@@ -318,7 +321,8 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
     }
   }
   else
-  {
+  { 
+    if (Inside(p) == kSurface) distance = 0;
     if (calcNorm) *validNorm = false;
   }
 
@@ -420,4 +424,60 @@ std::ostream& G4VCSGfaceted::StreamInfo( std::ostream& os ) const
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+
+//
+// GetCubVolStatistics
+//
+G4int G4VCSGfaceted::GetCubVolStatistics() const
+{
+  return fCubVolStatistics;
+}
+
+
+//
+// GetCubVolEpsilon
+//
+G4double G4VCSGfaceted::GetCubVolEpsilon() const
+{
+  return fCubVolEpsilon;
+}
+
+
+//
+// SetCubVolStatistics
+//
+void G4VCSGfaceted::SetCubVolStatistics(G4int st)
+{
+  fCubVolStatistics=st;
+}
+
+
+//
+// SetCubVolEpsilon
+//
+void G4VCSGfaceted::SetCubVolEpsilon(G4double ep)
+{
+  fCubVolEpsilon=ep;
+}
+
+
+//
+// GetCubicVolume
+//
+G4double G4VCSGfaceted::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
+  return fCubicVolume;
+}
+
+G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }

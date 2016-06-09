@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EventAction.cc,v 1.1 2004/04/28 11:12:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
+// $Id: EventAction.cc,v 1.2 2004/09/29 10:38:02 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

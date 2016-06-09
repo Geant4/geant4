@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003/12/03 11:31:22 gcosmo Exp $
+$Id: History,v 1.9 2004/12/03 15:54:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 03, 2004  G.Cosmo (exHepMC-V06-02-00)
+- Implemented migration to <cmath>.
 
 Dec 02, 2003  G.Cosmo (exHepMC-V05-02-01)
 - Brought up-to-date with original novice examples.

@@ -58,15 +58,15 @@ void G4BEChargedChannel::calculateProbability()
       return;
     }
 
-  // In HETC88 s-s0 was used in exp( s ), in which s0 was either 50 or
+  // In HETC88 s-s0 was used in std::exp( s ), in which s0 was either 50 or
   // max(s_i), where i goes over all channels.
 
   G4double levelParam = getLevelDensityParameter();
-  G4double s        = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+  G4double s        = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
   G4double constant = A / 2 * ( 2 * spin + 1 ) * ( 1 + coulombFactor() );
-  G4double eye1     = ( pow( s, 2. ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2. ) ) * exp( s );
+  G4double eye1     = ( std::pow( s, 2. ) - 3 * s + 3 ) / ( 4 * std::pow( levelParam, 2. ) ) * std::exp( s );
 
-  emissionProbability = constant * pow( G4double(residualA), 0.6666666 ) * eye1;
+  emissionProbability = constant * std::pow( G4double(residualA), 0.6666666 ) * eye1;
 
   if ( verboseLevel >= 6 )
     G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << G4endl
@@ -99,9 +99,9 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
 //    randExp1 = RandExponential::shoot( 1 );
 //    randExp2 = RandExponential::shoot( 1 );
 //    levelParam = getLevelDensityParameter();
-//    s = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-//    kineticEnergyAv = 2 * ( pow( s, 3. ) - 6.0 * pow( s, 2. ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
+//    s = 2 * std::sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
+//    kineticEnergyAv = 2 * ( std::pow( s, 3. ) - 6.0 * std::pow( s, 2. ) + 15.0 * s - 15.0 )  / 
+//        ( ( 2.0 * std::pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
   
 //    kineticEnergy = 0.5 * ( randExp1 + randExp2 ) * kineticEnergyAv + getThresh() - getQ();
 
@@ -118,8 +118,8 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
   levelParam = getLevelDensityParameter();
   
   const G4double xMax  = excitationEnergy - getThresh() - correction; // maximum number
-  const G4double xProb = ( - 1 + sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
-  const G4double m = xProb * exp ( 2 * sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
+  const G4double xProb = ( - 1 + std::sqrt ( 1 + 4 * levelParam * xMax ) ) / ( 2 * levelParam ); // most probable value
+  const G4double m = xProb * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - xProb ) ) ); // maximum value of P(x)
 
   // Sample x according to density function P(x) with rejection method
   G4double r1;
@@ -131,7 +131,7 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
       r2 = G4UniformRand() * m;
       koe++;
     }
-  while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
+  while (  r1 * std::exp ( 2 * std::sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
 //  G4cout << "Q ch " << koe << G4endl;
   G4double kineticEnergy = r1 + getCoulomb(); // add coulomb potential;

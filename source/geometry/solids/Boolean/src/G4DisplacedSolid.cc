@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.19 2003/11/03 17:48:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4DisplacedSolid.cc,v 1.21 2004/10/13 13:19:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -55,7 +55,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                           G4RotationMatrix* rotMatrix,
                                     const G4ThreeVector& transVector    )
-  : G4VSolid(pName)
+  : G4VSolid(pName), fpPolyhedron (0)
 {
   fPtrSolid = pSolid ;
   fPtrTransform = new G4AffineTransform(rotMatrix,transVector) ;
@@ -70,7 +70,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName)
+  : G4VSolid(pName), fpPolyhedron (0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
@@ -89,7 +89,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4AffineTransform directTransform )
-  : G4VSolid(pName)
+  : G4VSolid(pName), fpPolyhedron (0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform( directTransform );
@@ -145,6 +145,7 @@ G4AffineTransform  G4DisplacedSolid::GetTransform() const
 void G4DisplacedSolid::SetTransform(G4AffineTransform& transform) 
 {
   fPtrTransform = &transform ;
+  fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -158,6 +159,7 @@ G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 void G4DisplacedSolid::SetDirectTransform(G4AffineTransform& transform) 
 {
   fDirectTransform = &transform ;
+  fpPolyhedron = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -171,6 +173,7 @@ G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 void G4DisplacedSolid::SetFrameRotation(const G4RotationMatrix& matrix)
 {
   fDirectTransform->SetNetRotation(matrix);
+  fpPolyhedron = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -183,6 +186,7 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 void G4DisplacedSolid::SetFrameTranslation(const G4ThreeVector& vector)
 {
   fPtrTransform->SetNetTranslation(vector);
+  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -196,6 +200,7 @@ G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 void G4DisplacedSolid::SetObjectRotation(const G4RotationMatrix& matrix)
 {
   fPtrTransform->SetNetRotation(matrix);
+  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -208,6 +213,7 @@ G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
 {
   fDirectTransform->SetNetTranslation(vector);
+  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -381,4 +387,17 @@ G4DisplacedSolid::CreateNURBS () const
   // Take into account local transformation - see CreatePolyhedron.
   // return fPtrSolid->CreateNURBS() ;
   return 0;
+}
+
+/////////////////////////////////////////////////////////
+//
+//
+
+G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }

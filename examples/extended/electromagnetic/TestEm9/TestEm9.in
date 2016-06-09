@@ -1,5 +1,5 @@
-# $Id: TestEm9.in,v 1.10 2004/05/27 13:43:17 vnivanch Exp $
-# GEANT4 tag $Name: geant4-06-02 $
+# $Id: TestEm9.in,v 1.11 2004/12/03 10:54:06 vnivanch Exp $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
@@ -19,9 +19,9 @@
 /testem/phys/MuonCuts  10.0 mm
 /testem/stepMax         100 mm
 #
-/testem/det/acceptance1  0.8380 0.0319 3.0
-/testem/det/acceptance9  0.9605 0.0146 3.0
-/testem/det/acceptance25 0.9805 0.0118 3.0
+/testem/det/acceptance1  0.8260 0.0351 3.0
+/testem/det/acceptance9  0.9564 0.0160 3.0
+/testem/det/acceptance25 0.9790 0.0119 3.0
 #
 #/process/eLoss/preciseRange  true
 #/process/eLoss/integral      true

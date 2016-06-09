@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2003/06/06 14:56:31 gcosmo Exp $
+$Id: README,v 1.6 2004/09/29 10:00:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -71,6 +71,10 @@ Extended level examples
  geometry
    - Specific geometry examples and tools: binding to CAD systems,
      OLAP tool for detection of overlapping geometries
+ medical
+   - Specific examples for medical physics applications
+ optical
+   - Examples of generic optical processes simulation setups
  parallel
    - Examples of event-level parallelism in Geant4 using the
      TOP-C distribution
@@ -82,18 +86,35 @@ Advanced level examples
    - Setup for brachytherapy Ir-192 HDR source
  composite_calorimeter
    - Test-beam simulation used in CMS against real data taken
-     in 1996 in a CMS Hadron calorimeter test-beam at LHC.
+     in 1996 in a CMS Hadron calorimeter test-beam at LHC
+ cosmicray_charging
+   - Simulation of electrostatic charging in the LISA mission by
+     galactic cosmic ray protons and helium nuclei
  gammaray_telescope
    - Simulation of a typical telescope for gamma ray analysis
+ hadrontherapy
+   - Simulation of a hadron therapy beam line
  lAr_calorimeter
    - Simulation of the Liquid Argon Calorimeter of the ATLAS
-     Detector at LHC.
+     Detector at LHC
+ medical_linac
+   - Simulation of energy deposit in a Phantom filled with water
+     for a typical linac used for intensity modulated radiation therapy
+ purging_magnet
+   - Simulation of electrons traveling through a 3D magnetic field of a
+     strong purging magnet used for treatment head in a medical environment
+ radioprotection
+   - Application for the evaluation of dose in astronauts, vehicle concepts
+     and Moon surface habitat configurations, in a space radiation environment
  Rich
-   - Rich Test Beam Simulation.
+   - Rich Test Beam Simulation
+ Tiara
+   - Simulation of the TIARA experiment using importance sampling
  underground_physics
-   - Setup of an underground dark matter experiment.
+   - Setup of an underground dark matter experiment
  xray_fluorescence
    - Test beam to characterize the response function of an
-     HPGe detector used to measure fluorescence emissions.
+     HPGe detector used to measure fluorescence emissions
  xray_telescope
    - Realistic simulation of an X-ray Telescope
+

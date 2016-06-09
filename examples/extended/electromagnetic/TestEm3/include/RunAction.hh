@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.13 2004/06/15 11:39:57 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.hh,v 1.14 2004/10/22 15:53:44 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void fillPerEvent(G4int,G4double,G4double,G4double);
+    void fillPerEvent(G4int,G4double,G4double);
     
     void PrintDedxTables();
     
@@ -69,7 +69,6 @@ class RunAction : public G4UserRunAction
 
     G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
     G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
-    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];           
 
     DetectorConstruction*   Detector;
     PrimaryGeneratorAction* Primary;    

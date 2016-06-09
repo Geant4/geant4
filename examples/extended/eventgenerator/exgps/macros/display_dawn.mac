@@ -1,0 +1,10 @@
+/vis/scene/create 
+/vis/open DAWNFILE
+/vis/viewer/reset
+/vis/viewer/zoom 1.
+/visviewer/set/style wireframe
+/vis/drawVolume
+/vis/viewer/update
+
+/tracking/storeTrajectory 1
+

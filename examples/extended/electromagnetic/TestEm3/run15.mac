@@ -1,4 +1,4 @@
-# $Id: run15.mac,v 1.11 2004/06/16 10:35:41 maire Exp $
+# $Id: run15.mac,v 1.12 2004/10/20 14:32:28 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -13,8 +13,8 @@
 #
 /testem/det/setNbOfLayers 20
 /testem/det/setNbOfAbsor  2
-/testem/det/setAbsor 0 Iron 14 mm
-/testem/det/setAbsor 1 Scintillator 3 mm
+/testem/det/setAbsor 1 Iron 14 mm
+/testem/det/setAbsor 2 Scintillator 3 mm
 /testem/det/setSizeYZ 30 cm
 #
 /testem/phys/setCuts 10 mum
@@ -26,8 +26,8 @@
 /gun/energy 20 GeV
 #
 /testem/histo/setFileName run15.paw
-/testem/histo/setHisto 0 100 0.   2. GeV
-/testem/histo/setHisto 1 100 0. 100. MeV
+/testem/histo/setHisto 1 100 0.   2. GeV
+/testem/histo/setHisto 2 100 0. 100. MeV
 #
 /testem/event/printModulo 1000
 #

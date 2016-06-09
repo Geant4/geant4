@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.11 2001/07/11 10:08:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.13 2004/12/10 18:16:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -82,14 +82,14 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   const G4Vector3D& up = pView->fVP.GetUpVector ().unit ();
   const G4Vector3D& zprime = up;
   G4double cosalpha = up.dot (vp);
-  G4double sinalpha = sqrt (1. - pow (cosalpha, 2));
+  G4double sinalpha = std::sqrt (1. - std::pow (cosalpha, 2));
   G4Vector3D yprime = (zprime.cross (vp)).unit ();
   G4Vector3D xprime = yprime.cross (zprime);
   // Projection of vp on plane perpendicular to up...
   G4Vector3D a1 = sinalpha * xprime;
   // Required new projection...
   G4Vector3D a2 =
-    sinalpha * (cos (delta_theta) * xprime + sin (delta_theta) * yprime);
+    sinalpha * (std::cos (delta_theta) * xprime + std::sin (delta_theta) * yprime);
   // Required Increment vector...
   G4Vector3D delta = a2 - a1;
   // So new viewpoint is...
@@ -154,7 +154,7 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
   G4Vector3D yprime = (up.cross(xprime)).unit();
   G4Vector3D zprime = (xprime.cross(yprime)).unit();
 
-  G4Vector3D new_vp = cos(delta_alpha) * xprime + sin(delta_alpha) * zprime;
+  G4Vector3D new_vp = std::cos(delta_alpha) * xprime + std::sin(delta_alpha) * zprime;
 
   pView->fVP.SetViewAndLights (new_vp.unit());
 
@@ -250,9 +250,9 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   const G4Vector3D& up = pView->fVP.GetUpVector();
   G4Vector3D third_axis = up.cross(pView->original_vp);
-  G4double pi_div_by_ten = M_PI / 10.0;
-  G4Vector3D d_up = 0.1 * (sin ((G4double)pView->frameNo * pi_div_by_ten * 2.)) * up;
-  G4Vector3D d_third_axis = 0.1 * (sin ((G4double)pView->frameNo * (pi_div_by_ten))) * third_axis;
+  G4double pi_div_by_ten = pi / 10.0;
+  G4Vector3D d_up = 0.1 * (std::sin ((G4double)pView->frameNo * pi_div_by_ten * 2.)) * up;
+  G4Vector3D d_third_axis = 0.1 * (std::sin ((G4double)pView->frameNo * (pi_div_by_ten))) * third_axis;
 
   pView->fVP.SetViewAndLights (pView->original_vp + d_up + d_third_axis);
 

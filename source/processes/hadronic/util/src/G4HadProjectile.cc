@@ -68,7 +68,7 @@ G4double G4HadProjectile::
 GetKineticEnergy() const 
 {
   G4double m=GetDefinition()->GetPDGMass();
-  return sqrt(Get4Momentum().vect().mag2()+m*m)-m;
+  return std::sqrt(Get4Momentum().vect().mag2()+m*m)-m;
 }
 
 const G4Material * G4HadProjectile::

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.13 2003/06/16 17:00:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VCrossSectionHandler.cc,v 1.14 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -413,11 +413,11 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   // in the material table
 
   G4DataVector energyVector;
-  G4double dBin = log10(eMax/eMin) / nBins;
+  G4double dBin = std::log10(eMax/eMin) / nBins;
 
   for (G4int i=0; i<nBins+1; i++)
     {
-      energyVector.push_back(pow(10., log10(eMin)+i*dBin));
+      energyVector.push_back(std::pow(10., std::log10(eMin)+i*dBin));
     }
 
   // Factory method to build cross sections in derived classes,

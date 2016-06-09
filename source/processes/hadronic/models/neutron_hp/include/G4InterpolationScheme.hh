@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4InterpolationScheme.hh,v 1.6 2004/01/23 16:58:59 hpw Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #ifndef G4InterpolationScheme_h
 #define G4InterpolationScheme_h 1

@@ -44,7 +44,7 @@
           result->SetData(running++, x, y);
           j++;
         }
-        else if(abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j)))>0.001)
+        else if(std::abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j)))>0.001)
         {
           x = left.GetX(i);
           y = left.GetY(i)+right.GetY(x);
@@ -229,7 +229,7 @@
         m++;
         a++;
         G4double xp = passive->GetEnergy(p);
-        if( abs(abs(xp-xa)/xa)<0.0000001&&a<active->GetVectorLength() ) 
+        if( std::abs(std::abs(xp-xa)/xa)<0.0000001&&a<active->GetVectorLength() ) 
         {
           p++;
           tmp = active; t=a;
@@ -250,7 +250,7 @@
       anX = passive->GetXsec(p)-deltaX;
       if(anX>0)
       {
-        if(abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.0000001)
+        if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.0000001)
         {
           SetData(m, passive->GetEnergy(p), anX);
           theManager.AppendScheme(m++, passive->GetScheme(p));
@@ -289,7 +289,7 @@
 	x = theData[j].GetX();
 	if(x1-x2 == 0) y = (y2+y1)/2.;
 	else y = theInt.Lin(x, x1, x2, y1, y2);
-	if (abs(y-theData[j].GetY())>precision*y)
+	if (std::abs(y-theData[j].GetY())>precision*y)
 	{
 	  aBuff[++count] = theData[current-1]; // for this one, everything was fine
           start = current; // the next candidate
@@ -318,7 +318,7 @@
     for(i=theBlocked.begin(); i!=theBlocked.end(); i++)
     {
       G4double aBlock = *i;
-      if(abs(aX-aBlock) < 0.1*MeV)
+      if(std::abs(aX-aBlock) < 0.1*MeV)
       {
         result = true;
 	theBlocked.erase(i);

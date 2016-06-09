@@ -47,7 +47,7 @@ G4double G4HETCTriton::K(const G4Fragment & aFragment)
 	 H*(Na*(Na-1.0)*r+2.0*Na*Pa*(1.0-r)) +
 	 Pa*Na*(Na-1.0));
 
-      result /= 3.0*(TargetZ/TargetA)*pow((TargetA-TargetZ)/TargetA,2.0);
+      result /= 3.0*(TargetZ/TargetA)*std::pow((TargetA-TargetZ)/TargetA,2.0);
     }
 
   return std::max(0.0,result);

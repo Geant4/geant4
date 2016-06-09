@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.3 2003/11/20 10:08:56 jwellisc Exp $ //
+// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.4 2004/12/07 13:48:47 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -41,7 +41,7 @@ G4ConcreteNNToDeltaDeltastar::G4ConcreteNNToDeltaDeltastar(const G4ParticleDefin
   G4double chargeBalance = aPrimary->GetPDGCharge()+bPrimary->GetPDGCharge();
   chargeBalance -= aSecondary->GetPDGCharge();
   chargeBalance -= bSecondary->GetPDGCharge();
-  if(abs(chargeBalance) >.1)
+  if(std::abs(chargeBalance) >.1)
   {
     G4cout << "Charge conservation problem in G4ConcreteNNToDeltaDeltastar"<<G4endl;
     G4cout << "Initial charges in "<<typeid(*this).name()<<G4endl;

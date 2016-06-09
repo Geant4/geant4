@@ -155,8 +155,8 @@ G4double G4TripathiLightCrossSection::GetCrossSection
   G4double r_p = 1.29*r_rms_p;
   G4double r_t = 1.29*r_rms_t;
 
-  G4double Radius = (r_p + r_t)/fermi + 1.2*(pow(AT, third) + pow(AP, third))/
-    pow(E_cm, third);
+  G4double Radius = (r_p + r_t)/fermi + 1.2*(std::pow(AT, third) + std::pow(AP, third))/
+    std::pow(E_cm, third);
 
   G4double B = 1.44 * ZP * ZT / Radius;
 //
@@ -171,17 +171,17 @@ G4double G4TripathiLightCrossSection::GetCrossSection
   if ((AT==1 && ZT==1) || (AP==1 && ZP==1))
   {
     T1 = 23.0;
-    D  = 1.85 + 0.16/(1+exp((500.0-E)/200.0));
+    D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
   }
   else if ((AT==1 && ZT==0) || (AP==1 && ZP==0))
   {
     T1 = 18.0;
-    D  = 1.85 + 0.16/(1+exp((500.0-E)/200.0));
+    D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
   }
   else if ((AT==2 && ZT==1) || (AP==2 && ZP==1))
   {
     T1 = 23.0;
-    D  = 1.65 + 0.1/(1+exp((500.0-E)/200.0));
+    D  = 1.65 + 0.1/(1+std::exp((500.0-E)/200.0));
   }
   else if ((AT==3 && ZT==2) || (AP==3 && ZP==2))
   {
@@ -196,7 +196,7 @@ G4double G4TripathiLightCrossSection::GetCrossSection
     else if (ZT==13)         {T1 = 25.0; G = 300.0;}
     else if (ZT==26)         {T1 = 40.0; G = 300.0;}
     else                     {T1 = 40.0; G = 75.0;}
-    D = 2.77 - 8.0E-3*AT + 1.8E-5*AT*AT-0.8/(1.0+exp((250.0-E)/G));
+    D = 2.77 - 8.0E-3*AT + 1.8E-5*AT*AT-0.8/(1.0+std::exp((250.0-E)/G));
   }
   else if (AT==4 && ZT==2)
   {
@@ -206,32 +206,32 @@ G4double G4TripathiLightCrossSection::GetCrossSection
     else if (ZP==13)         {T1 = 25.0; G = 300.0;}
     else if (ZP==26)         {T1 = 40.0; G = 300.0;}
     else                     {T1 = 40.0; G = 75.0;}
-    D = 2.77 - 8.0E-3*AP + 1.8E-5*AP*AP-0.8/(1.0+exp((250.0-E)/G));
+    D = 2.77 - 8.0E-3*AP + 1.8E-5*AP*AP-0.8/(1.0+std::exp((250.0-E)/G));
   }
 //
 //
 // C_E, S, deltaE, X1, S_L and X_m correspond directly with the original
 // formulae of Tripathi et al in his report.
 //
-  G4double C_E = D*(1.0-exp(-E/T1)) -
-                 0.292*exp(-E/792.0)*cos(0.229*pow(E,0.453));
+  G4double C_E = D*(1.0-std::exp(-E/T1)) -
+                 0.292*std::exp(-E/792.0)*std::cos(0.229*std::pow(E,0.453));
 
-  G4double S = pow(AP,third)*pow(AT,third)/(pow(AP,third) + pow(AT,third));
+  G4double S = std::pow(AP,third)*std::pow(AT,third)/(std::pow(AP,third) + std::pow(AT,third));
 
   G4double deltaE = 0.0;
   G4double X1     = 0.0;
   if (AT >= AP)
   {
-    deltaE = 1.85*S + 0.16*S/pow(E_cm,third) - C_E + 0.91*(AT-2.0*ZT)*ZP/AT/AP;
+    deltaE = 1.85*S + 0.16*S/std::pow(E_cm,third) - C_E + 0.91*(AT-2.0*ZT)*ZP/AT/AP;
     X1     = 2.83 - 3.1E-2*AT + 1.7E-4*AT*AT;
   }
   else
   {
-    deltaE = 1.85*S + 0.16*S/pow(E_cm,third) - C_E + 0.91*(AP-2.0*ZP)*ZT/AT/AP;
+    deltaE = 1.85*S + 0.16*S/std::pow(E_cm,third) - C_E + 0.91*(AP-2.0*ZP)*ZT/AT/AP;
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
-  G4double S_L = 1.2 + 1.6*(1.0-exp(-E/15.0));
-  G4double X_m = 1.0 - X1*exp(-E/X1*S_L);
+  G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
+  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
 //
 //
 // R_c is also highly dependent upon the A and Z of the projectile and
@@ -275,7 +275,7 @@ G4double G4TripathiLightCrossSection::GetCrossSection
 // set to zero.
 //
   result = pi * r_0*r_0 *
-           pow((pow(AT,third) + pow(AP,third) + deltaE),2.0) *
+           std::pow((std::pow(AT,third) + std::pow(AP,third) + deltaE),2.0) *
            (1.0 - R_c*B/E_cm) * X_m;
   if (!lowEnergyCheck)
   {

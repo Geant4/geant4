@@ -11,7 +11,8 @@
 #
 #/testem/phys/addPhysics  g4v52
 #/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  PAI
+/testem/phys/addPhysics  pai
+#/testem/phys/addPhysics  pai_photon
 #
 /testem/phys/setCuts    1 mm
 #/testem/stepMax         10 mm

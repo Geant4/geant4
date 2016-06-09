@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.6 2004/05/27 13:32:46 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RemSimPhysicsList.cc,v 1.8 2004/11/23 15:43:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: Susanna Guatelli
 
@@ -32,10 +32,10 @@
 #include "RemSimElectronEEDL.hh"
 #include "RemSimPositronStandard.hh"
 #include "RemSimIonICRU.hh"
-#include "RemSimIonStandard.hh"
 #include "RemSimMuonStandard.hh"
 #include "RemSimDecay.hh"
-#include "RemSimHadronicPhysics.hh"
+#include "RemSimHadronicBertini.hh"
+#include "RemSimHadronicBinary.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
@@ -51,7 +51,7 @@ RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
                                         muonIsRegistered(false)
 {
   defaultCutValue = 1.* mm;
-  SetVerboseLevel(1);
+  //  SetVerboseLevel(1);
 
   messenger = new RemSimPhysicsListMessenger(this);
  
@@ -140,26 +140,10 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
- if (name == "ion-standard") 
-    {
-      if (ionIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ----ion e.m. List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimIonStandard(name) );
-	  ionIsRegistered = true;
-	}
-    }
+  // Register hadronic process for p and alpha particle, activating the
+  // Binary model
 
-
-  // Register hadronic process for p and alpha particle
-  if (name == "hadronic") 
+  if (name == "hadronic-binary") 
     {
       if (hadronicIsRegistered) 
 	{
@@ -170,10 +154,31 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimHadronicPhysics(name) );
+	  RegisterPhysics( new RemSimHadronicBinary(name) );
 	  hadronicIsRegistered = true;
 	}
     }
+
+
+  // Register hadronic process for p and alpha particle, activating the
+  // Bertini model
+
+  if (name == "hadronic-bertini") 
+    {
+      if (hadronicIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- hadronic physics List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimHadronicBertini(name) );
+	  hadronicIsRegistered = true;
+	}
+    }
+
 
 if (name == "muon-standard") 
     {
@@ -216,7 +221,7 @@ if (name == "decay")
   
   if (muonIsRegistered && decayIsRegistered && hadronicIsRegistered) 
     {
-      G4cout << "The hadronic physics is registered for p and alpha (up to 100 GeV), the e.m. physics for muons is registered, the decay is registered" 
+      G4cout << "The hadronic physics is registered for p (up to 100 GeV) and alpha (up to 10 GeV), the e.m. physics for muons is registered, the decay is registered" 
              << G4endl;
     }
     }

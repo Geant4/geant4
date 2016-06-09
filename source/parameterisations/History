@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2004/06/07 13:36:16 gcosmo Exp $
+$Id: History,v 1.13 2004/12/15 08:54:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,54 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jun 7th, 2004 G.Cosmo (parmodels-V06-01-00)
-- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+Dec 15th, 2004 G.Cosmo (gpara-V06-02-02)
+----------------------
+- Corrected library names (global library and trd_models library)
+  to allow DLL build on Windows.
 
-Oct 4th, 2003 G.Cosmo (parmodels-V05-02-01)
+Dec 7th, 2004 G.Cosmo (gpara-V06-02-01)
 ---------------------
-- GNUmakefile:
-  o replaced "digits+hits" with "digits_hits".
-  o added dependency to new module "geometry/navigation".
-- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
+- Implemented migration to <cmath>.
 
-Sep 25th, 2003 H.Kurashige (parmodels-V05-02-00)
---------------------------
-- Modify GNUmakefile to use  processes/cuts category
-
-May 21st, 2003 G.Cosmo - (parmodels-V05-01-00)
-----------------------
-- Fixed pedantic warnings in G4IrregularXrayTRmodel.cc and G4VXrayTRmodel.cc.
-
-Feb 12th, 2003 G.Cosmo - (parmodels-V05-00-01)
-----------------------
-- Replaced call to RandPoisson::shoot() with G4Poisson(), more performant.
-  Affected files: G4IrregularXrayTRmodel.cc, G4VXTRdEdx.cc, G4VXrayTRadModel.cc.
-
-Jan 23rd, 2003 G.Cosmo - (parmodels-V05-00-00)
-----------------------
-- Updated header files to remove redundant header inclusions
-  and properly order inclusion for complex numbers, to allow
-  porting on Windows .NET VC++ compiler.
-
-Nov 8th, 2001 M.Verderi - (parmodels-V03-02-02)
------------------------
-- Minor change in G4VClusterModel.cc
-
-Nov 8th, 2001 G.Cosmo - (parmodels-V03-02-01)
----------------------
-- Introduced changes in G4VClusterModel[.hh.cc] for reference-counted
-  touchables (R.Chytracek).
-
-Sep 18th, 2001 V.Grichine - (parmodels-V03-02-00)
--------------------------
-- Added new classes describing X-ray transition radiation generation
-  inside radiators (i.e. just along incident particle track):
-  G4FoamXTRdEdx[.hh.cc], G4GamDistrXTRdEdx[.hh.cc], G4IrregularXTRdEdx[.hh.cc],
-  G4PlateIrrGasXTRdEdx[.hh.cc], G4RegularXTRdEdx[.hh.cc], G4VXTRdEdx[.hh.cc]
-  and G4VXrayTRadModel[.hh.cc]
-- Modifications in existing classes, introducing some new parameters,
-  class fields and methods.
-
-Nov 14th, 2000 G.Cosmo - (parmodels-V02-00-00)
-----------------------
-- Created.
+Nov 26th, 2004 H.P.Wellisch (gpara-V06-02-00)
+---------------------------
+- New 'gflash' submodule, contribution of CMS and ATLAS.
+- Moved original TRD classes to 'trd_models' submodule.
+- Created History file

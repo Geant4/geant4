@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2002/02/01 10:30:25 japost Exp $
+$Id: README,v 1.5 2004/09/01 09:56:08 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,15 @@ $Id: README,v 1.4 2002/02/01 10:30:25 japost Exp $
     Test for investigation of tracking in electric field 
     and field dependent electromagnetic processes.
 
+ 1- FIELD DEFINITION
+        The field is a constant electric field.
+
+        Technical note: in order to use any electric field, it is
+ 	necessary to create the objects for its equation of motion,
+	the stepper and driver for the integration, and the 
+	chord finder.
+
+        The class that does these is F02ElectricFieldSetup.
 	
  1- GEOMETRY DEFINITION
  

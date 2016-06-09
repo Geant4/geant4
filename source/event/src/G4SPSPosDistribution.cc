@@ -152,7 +152,7 @@ void G4SPSPosDistribution::SetRadius0(G4double rad)
 void G4SPSPosDistribution::SetBeamSigmaInR(G4double r)
 {
   SR = r;
-  SX = SY = r/sqrt(2.);
+  SX = SY = r/std::sqrt(2.);
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInX(G4double r)
@@ -257,7 +257,7 @@ void G4SPSPosDistribution::GeneratePointsInBeam()
     {
       x = Radius + 100.;
       y = Radius + 100.;
-      while(sqrt((x*x) + (y*y)) > Radius)
+      while(std::sqrt((x*x) + (y*y)) > Radius)
 	{
 	  x = posRndm->GenRandX();
 	  y = posRndm->GenRandY();
@@ -320,7 +320,7 @@ void G4SPSPosDistribution::GeneratePointsInPlane()
     {
       x = Radius + 100.;
       y = Radius + 100.;
-      while(sqrt((x*x) + (y*y)) > Radius)
+      while(std::sqrt((x*x) + (y*y)) > Radius)
 	{
 	  x = posRndm->GenRandX();
 	  y = posRndm->GenRandY();
@@ -333,7 +333,7 @@ void G4SPSPosDistribution::GeneratePointsInPlane()
     {
       x = Radius + 100.;
       y = Radius + 100.;
-      while(sqrt((x*x) + (y*y)) > Radius || sqrt((x*x) + (y*y)) < Radius0 )
+      while(std::sqrt((x*x) + (y*y)) > Radius || std::sqrt((x*x) + (y*y)) < Radius0 )
 	{
 	  x = posRndm->GenRandX();
 	  y = posRndm->GenRandY();
@@ -436,16 +436,15 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
   if(Shape == "Sphere")
     {
       G4double tantheta;
-      theta = posRndm->GenRandTheta();
-      phi = posRndm->GenRandPhi();
-
-      theta = acos(1. - 2.*theta); // theta isotropic
+      theta = posRndm->GenRandPosTheta();
+      phi = posRndm->GenRandPosPhi();
+      theta = std::acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
-      tantheta = tan(theta);
+      tantheta = std::tan(theta);
       
-      x = Radius * sin(theta) * cos(phi);
-      y = Radius * sin(theta) * sin(phi);
-      z = Radius * cos(theta);
+      x = Radius * std::sin(theta) * std::cos(phi);
+      y = Radius * std::sin(theta) * std::sin(phi);
+      z = Radius * std::cos(theta);
       
       RandPos.setX(x);
       RandPos.setY(y);
@@ -469,31 +468,31 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	twopi/(halfz*halfz);
       
       // simplified approach
-      theta = posRndm->GenRandTheta();
-      phi = posRndm->GenRandPhi();
-
-      theta = acos(1. - 2.*theta);
+      theta = posRndm->GenRandPosTheta();
+      phi = posRndm->GenRandPosPhi();
+      
+      theta = std::acos(1. - 2.*theta);
       minphi = 0.;
       maxphi = twopi;
       while(maxphi-minphi > 0.)
 	{
 	  middlephi = (maxphi+minphi)/2.;
-	  answer = (1./(halfx*halfx))*(middlephi/2. + sin(2*middlephi)/4.)
-	    + (1./(halfy*halfy))*(middlephi/2. - sin(2*middlephi)/4.)
+	  answer = (1./(halfx*halfx))*(middlephi/2. + std::sin(2*middlephi)/4.)
+	    + (1./(halfy*halfy))*(middlephi/2. - std::sin(2*middlephi)/4.)
 	       + middlephi/(halfz*halfz);
 	  answer = answer/constant;
 	  if(answer > phi) maxphi = middlephi;
 	  if(answer < phi) minphi = middlephi;
-	  if(fabs(answer-phi) <= 0.00001)
+	  if(std::fabs(answer-phi) <= 0.00001)
 	    {
 	      minphi = maxphi +1;
 	      phi = middlephi;
 	    }
 	}
 
-      x = sin(theta)*cos(phi);
-      y = sin(theta)*sin(phi);
-      z = cos(theta);
+      x = std::sin(theta)*std::cos(phi);
+      y = std::sin(theta)*std::sin(phi);
+      z = std::cos(theta);
       // x,y and z form a unit vector. Put this onto the ellipse.
       G4double lhs;
       // solve for x
@@ -504,7 +503,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	+ (numZinX*numZinX)/(halfz*halfz);
 
       tempxvar = 1./tempxvar;
-      G4double coordx = sqrt(tempxvar);
+      G4double coordx = std::sqrt(tempxvar);
   
       //solve for y
       G4double numXinY = x/y;
@@ -513,7 +512,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       tempyvar=(numXinY*numXinY)/(halfx*halfx)+1./(halfy*halfy)
 	+(numZinY*numZinY)/(halfz*halfz);
       tempyvar = 1./tempyvar;
-      G4double coordy = sqrt(tempyvar);
+      G4double coordy = std::sqrt(tempyvar);
       
       //solve for z
       G4double numXinZ = x/z;
@@ -522,13 +521,13 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       tempzvar=(numXinZ*numXinZ)/(halfx*halfx)
 	+(numYinZ*numYinZ)/(halfy*halfy)+1./(halfz*halfz);
       tempzvar = 1./tempzvar;
-      G4double coordz = sqrt(tempzvar);
+      G4double coordz = std::sqrt(tempzvar);
 
-      lhs = sqrt((coordx*coordx)/(halfx*halfx) + 
+      lhs = std::sqrt((coordx*coordx)/(halfx*halfx) + 
 		 (coordy*coordy)/(halfy*halfy) + 
 		 (coordz*coordz)/(halfz*halfz));
       
-      if(fabs(lhs-1.) > 0.001 && verbosityLevel >= 1)
+      if(std::fabs(lhs-1.) > 0.001 && verbosityLevel >= 1)
 	G4cout << "Error: theta, phi not really on ellipsoid" << G4endl;
 
       // coordx, coordy and coordz are all positive
@@ -579,7 +578,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       prob1 = AreaTop / AreaTotal;
       prob2 = AreaBot / AreaTotal;
       prob3 = 1.00 - prob1 - prob2;
-      if(fabs(prob3 - (AreaLat/AreaTotal)) >= 0.001)
+      if(std::fabs(prob3 - (AreaLat/AreaTotal)) >= 0.001)
 	{
 	  if(verbosityLevel >= 1)
 	    G4cout << AreaLat/AreaTotal << " " << prob3<<G4endl;
@@ -636,11 +635,11 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  G4double rand;
 	  //Point on Lateral Surface
 
-	  rand = G4UniformRand();
+	  rand = posRndm->GenRandPosPhi();
 	  rand = rand * 2. * pi;
 
-	  x = Radius * cos(rand);
-	  y = Radius * sin(rand);
+	  x = Radius * std::cos(rand);
+	  y = Radius * std::sin(rand);
 
 	  z = posRndm->GenRandZ();
 
@@ -699,14 +698,14 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       if(testrand < Probs[0])
 	{
 	  // side is +x
-	  x = halfx + z*tan(ParTheta)*cos(ParPhi) + y*tan(ParAlpha);
-	  y = y + z*tan(ParTheta)*sin(ParPhi);
+	  x = halfx + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
+	  y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
 	  z = z;
 	  // Cosine-law
-	  G4ThreeVector xdash(halfz*tan(ParTheta)*cos(ParPhi),
-			      halfz*tan(ParTheta)*sin(ParPhi), 
-			      halfz/cos(ParPhi));
-	  G4ThreeVector ydash(halfy*tan(ParAlpha), -halfy, 0.0);
+	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
+			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
+			      halfz/std::cos(ParPhi));
+	  G4ThreeVector ydash(halfy*std::tan(ParAlpha), -halfy, 0.0);
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
@@ -717,14 +716,14 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       else if(testrand >= Probs[0] && testrand < Probs[1])
 	{
 	  // side is -x
-	  x = -halfx + z*tan(ParTheta)*cos(ParPhi) + y*tan(ParAlpha);
-	  y = y + z*tan(ParTheta)*sin(ParPhi);
+	  x = -halfx + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
+	  y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
 	  z = z;
 	  // Cosine-law
-	  G4ThreeVector xdash(halfz*tan(ParTheta)*cos(ParPhi),
-			      halfz*tan(ParTheta)*sin(ParPhi), 
-			      halfz/cos(ParPhi));
-	  G4ThreeVector ydash(halfy*tan(ParAlpha), halfy, 0.0);
+	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
+			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
+			      halfz/std::cos(ParPhi));
+	  G4ThreeVector ydash(halfy*std::tan(ParAlpha), halfy, 0.0);
 	  xdash = xdash.unit();
 	  ydash = ydash.unit();
 	  G4ThreeVector zdash = xdash.cross(ydash);
@@ -735,13 +734,13 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       else if(testrand >= Probs[1] && testrand < Probs[2])
 	{
 	  // side is +y
-	  x = x + z*tan(ParTheta)*cos(ParPhi) + halfy*tan(ParAlpha);
-	  y = halfy + z*tan(ParTheta)*sin(ParPhi);
+	  x = x + z*std::tan(ParTheta)*std::cos(ParPhi) + halfy*std::tan(ParAlpha);
+	  y = halfy + z*std::tan(ParTheta)*std::sin(ParPhi);
 	  z = z;
 	  // Cosine-law
-	  G4ThreeVector ydash(halfz*tan(ParTheta)*cos(ParPhi),
-			      halfz*tan(ParTheta)*sin(ParPhi), 
-			      halfz/cos(ParPhi));
+	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
+			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
+			      halfz/std::cos(ParPhi));
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
@@ -752,13 +751,13 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
       else if(testrand >= Probs[2] && testrand < Probs[3])
 	{
 	  // side is -y
-	  x = x + z*tan(ParTheta)*cos(ParPhi) - halfy*tan(ParAlpha);
-	  y = -halfy + z*tan(ParTheta)*sin(ParPhi);
+	  x = x + z*std::tan(ParTheta)*std::cos(ParPhi) - halfy*std::tan(ParAlpha);
+	  y = -halfy + z*std::tan(ParTheta)*std::sin(ParPhi);
 	  z = z;
 	  // Cosine-law
-	  G4ThreeVector ydash(halfz*tan(ParTheta)*cos(ParPhi),
-			      halfz*tan(ParTheta)*sin(ParPhi), 
-			      halfz/cos(ParPhi));
+	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
+			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
+			      halfz/std::cos(ParPhi));
 	  ydash = ydash.unit();
 	  G4ThreeVector xdash = Roty.cross(ydash);
 	  G4ThreeVector zdash = xdash.cross(ydash);
@@ -770,8 +769,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	{
 	  // side is +z
 	  z = halfz;
-	  y = y + halfz*sin(ParPhi)*tan(ParTheta);
-	  x = x + halfz*cos(ParPhi)*tan(ParTheta) + y*tan(ParAlpha);
+	  y = y + halfz*std::sin(ParPhi)*std::tan(ParTheta);
+	  x = x + halfz*std::cos(ParPhi)*std::tan(ParTheta) + y*std::tan(ParAlpha);
 	  // Cosine-law
 	  SideRefVec1 = Rotx;
 	  SideRefVec2 = Roty;
@@ -781,8 +780,8 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	{
 	  // side is -z
 	  z = -halfz;
-	  y = y - halfz*sin(ParPhi)*tan(ParTheta);
-	  x = x - halfz*cos(ParPhi)*tan(ParTheta) + y*tan(ParAlpha);
+	  y = y - halfz*std::sin(ParPhi)*std::tan(ParTheta);
+	  x = x - halfz*std::cos(ParPhi)*std::tan(ParTheta) + y*std::tan(ParAlpha);
 	  // Cosine-law
 	  SideRefVec1 = Rotx;
 	  SideRefVec2 = -Roty;
@@ -894,8 +893,8 @@ void G4SPSPosDistribution::GeneratePointsInVolume()
       x = (x*2.*halfx) - halfx;
       y = (y*2.*halfy) - halfy;
       z = (z*2.*halfz) - halfz;
-      x = x + z*tan(ParTheta)*cos(ParPhi) + y*tan(ParAlpha);
-      y = y + z*tan(ParTheta)*sin(ParPhi);
+      x = x + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
+      y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
       z = z;
     }
   else

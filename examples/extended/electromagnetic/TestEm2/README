@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2004/06/23 11:30:51 maire Exp $
+$Id: README,v 1.17 2004/09/17 10:51:34 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -121,11 +121,11 @@ $Id: README,v 1.16 2004/06/23 11:30:51 maire Exp $
  the flag G4ANALYSIS_USE in GNUmakefile. To define the output file name with
  histograms and the type of these file the following UI commands can be used:
 
-   "/testem/histo/fileName name"
-   "/testem/histo/fileType type"
+   "/testem/histo/setFileName name"
+   "/testem/histo/setFileType type"
 
- The following types are available: "hbook", "XML", "root"
- By default the name is "testem2.paw" and the type "hbook".
+ The following types are available: "hbook", "root", "XML"
+ By default the name is "testem2.aida" and the type "hbook".
 
 
  8- Using histograms
@@ -164,4 +164,4 @@ histograms using UI command:
 
 /testem/histo/setFileType type
 
-The following types are available: hbook, root, xml.
+The following types are available: hbook, root, XML.

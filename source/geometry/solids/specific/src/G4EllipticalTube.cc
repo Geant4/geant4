@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.15 2003/10/28 17:15:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EllipticalTube.cc,v 1.20 2004/12/10 16:22:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // --------------------------------------------------------------------
@@ -55,7 +55,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double theDx,
                                           G4double theDy,
                                           G4double theDz )
-  : G4VSolid( name )
+  : G4VSolid( name ), fCubicVolume(0.), fpPolyhedron(0)
 {
   dx = theDx;
   dy = theDy;
@@ -90,7 +90,7 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
   // defined in meshdefs.hh
   //
   G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = 2*M_PI/numPhi;
+  G4double sigPhi = twopi/numPhi;
   
   //
   // We have to be careful to keep our segments completely outside
@@ -98,7 +98,7 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
   // a simple (unit radius) circular cross section (as in G4Tubs) 
   // and then "stretch" the dimensions as necessary to fit the ellipse.
   //
-  G4double rFudge = 1.0/cos(0.5*sigPhi);
+  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
   G4double dxFudge = dx*rFudge,
            dyFudge = dy*rFudge;
   
@@ -110,8 +110,8 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
   G4ClippablePolygon endPoly1, endPoly2, phiPoly;
   
   G4double phi = 0, 
-           cosPhi = cos(phi),
-           sinPhi = sin(phi);
+           cosPhi = std::cos(phi),
+           sinPhi = std::sin(phi);
   G4ThreeVector v0( dxFudge*cosPhi, dyFudge*sinPhi, +dz ),
                 v1( dxFudge*cosPhi, dyFudge*sinPhi, -dz ),
                 w0, w1;
@@ -121,8 +121,8 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff
-    cosPhi = cos(phi), 
-    sinPhi = sin(phi);
+    cosPhi = std::cos(phi), 
+    sinPhi = std::sin(phi);
     
     w0 = G4ThreeVector( dxFudge*cosPhi, dyFudge*sinPhi, +dz );
     w1 = G4ThreeVector( dxFudge*cosPhi, dyFudge*sinPhi, -dz );
@@ -200,7 +200,7 @@ EInside G4EllipticalTube::Inside( const G4ThreeVector& p ) const
   //
   // Check z extents: are we outside?
   //
-  G4double absZ = fabs(p.z());
+  G4double absZ = std::fabs(p.z());
   if (absZ > dz+halfTol) return kOutside;
   
   //
@@ -232,7 +232,7 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   //
   // Which of the three surfaces are we closest to (approximately)?
   //
-  G4double distZ = fabs(p.z()) - dz;
+  G4double distZ = std::fabs(p.z()) - dz;
   
   G4double rxy = CheckXY( p.x(), p.y() );
   G4double distR2 = (rxy < DBL_MIN) ? DBL_MAX : 1.0/rxy;
@@ -367,7 +367,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   //
   // Is the original point on the surface?
   //
-  if (fabs(p.z()) < dz+halfTol) {
+  if (std::fabs(p.z()) < dz+halfTol) {
     if (CheckXY( p.x(), p.y(), halfTol ) < 1.0)
     {
       //
@@ -379,7 +379,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   
   //
   // We are now certain that point p is not on the surface of 
-  // the solid (and thus fabs(s[0]) > halfTol). 
+  // the solid (and thus std::fabs(s[0]) > halfTol). 
   // Return kInfinity if the intersection is "behind" the point.
   //
   if (s[0] < 0) return kInfinity;
@@ -445,7 +445,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
   G4double qnorm = CheckXY( p.x(), p.y() );
   if (qnorm < DBL_MIN) return 0;  // This should never happen
   
-  G4double q = 1.0/sqrt(qnorm);
+  G4double q = 1.0/std::sqrt(qnorm);
   
   G4double xe = q*p.x(), ye = q*p.y();
      
@@ -453,7 +453,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
   // Get tangent to ellipse
   //
   G4double tx = -ye*dx*dx, ty = +xe*dy*dy;
-  G4double tnorm = sqrt( tx*tx + ty*ty );
+  G4double tnorm = std::sqrt( tx*tx + ty*ty );
   
   //
   // Calculate distance
@@ -468,9 +468,9 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
   // than the quadrature sum
   //
   if (p.z() < -dz) 
-    return sqrt( (p.z()+dz)*(p.z()+dz) + distR*distR );
+    return std::sqrt( (p.z()+dz)*(p.z()+dz) + distR*distR );
   else if (p.z() > dz)
-    return sqrt( (p.z()-dz)*(p.z()-dz) + distR*distR );
+    return std::sqrt( (p.z()-dz)*(p.z()-dz) + distR*distR );
 
   return distR;
 }
@@ -629,7 +629,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   //
   // Check -dz and +dz surface
   //
-  G4double sBest = dz - fabs(p.z());
+  G4double sBest = dz - std::fabs(p.z());
   if (sBest < halfTol) return 0;
   
   //
@@ -639,7 +639,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   G4double radical = 1.0 - p.y()*p.y()/dy/dy;
   if (radical < +DBL_MIN) return 0;
   
-  G4double xi = dx*sqrt( radical );
+  G4double xi = dx*std::sqrt( radical );
   if (p.x() < 0) xi = -xi;
   
   //
@@ -648,7 +648,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   radical = 1.0 - p.x()*p.x()/dx/dx;
   if (radical < +DBL_MIN) return 0;
   
-  G4double yi = dy*sqrt( radical );
+  G4double yi = dy*std::sqrt( radical );
   if (p.y() < 0) yi = -yi;
   
   //
@@ -658,7 +658,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   G4double xdi = p.x() - xi,
      ydi = yi - p.y();
 
-  G4double normi = sqrt( xdi*xdi + ydi*ydi );
+  G4double normi = std::sqrt( xdi*xdi + ydi*ydi );
   if (normi < halfTol) return 0;
   xdi /= normi;
   ydi /= normi;
@@ -788,11 +788,31 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
     return 1;
   }
   
-  radical = sqrt(radical);
+  radical = std::sqrt(radical);
   
   G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
   G4double sa = q/a;
   G4double sb = c/q;    
   if (sa < sb) { s[0] = sa; s[1] = sb; } else { s[0] = sb; s[1] = sa; }
   return 2;
+}
+
+
+//
+// GetCubicVolume
+//
+G4double G4EllipticalTube::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  return fCubicVolume;
+}
+
+G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }

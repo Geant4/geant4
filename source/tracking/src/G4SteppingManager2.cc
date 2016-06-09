@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.13 2003/09/19 10:17:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SteppingManager2.cc,v 1.23 2004/12/07 09:16:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //---------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4GPILSelection.hh"
 #include "G4SteppingControl.hh"
 #include "G4TransportationManager.hh"
-#include "G4UserLimits.hh"
+//#include "G4UserLimits.hh"
 #include "G4SteppingManager.hh"
 #include "G4LossTableManager.hh"
 
@@ -102,23 +102,25 @@ void G4SteppingManager::GetProcessNumber()
 
 // Obtain the user defined maximum allowed Step in the volume
 //   1997.12.13 adds argument for  GetMaxAllowedStep by K.Kurashige
-   G4UserLimits* ul= fCurrentVolume->GetLogicalVolume()->GetUserLimits();
-   if (ul) {
-      physIntLength = ul->GetMaxAllowedStep(*fTrack);
-#ifdef G4VERBOSE
-                         // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->DPSLUserLimit();
-#endif
-   }
-
-   if(physIntLength < PhysicalStep ){
-      PhysicalStep = physIntLength;
-      fStepStatus = fUserDefinedLimit;
-      fStep->GetPostStepPoint()
-           ->SetProcessDefinedStep(NULL);
-      // Take note that the process pointer is 'NULL' if the Step
-      // is defined by the user defined limit.
-   }
+//   2004.01.20 This block will be removed by Geant4 7.0 
+//   G4UserLimits* ul= fCurrentVolume->GetLogicalVolume()->GetUserLimits();
+//   if (ul) {
+//      physIntLength = ul->GetMaxAllowedStep(*fTrack);
+//#ifdef G4VERBOSE
+//                         // !!!!! Verbose
+//           if(verboseLevel>0) fVerbose->DPSLUserLimit();
+//#endif
+//   }
+//
+//   if(physIntLength < PhysicalStep ){
+//      PhysicalStep = physIntLength;
+//      fStepStatus = fUserDefinedLimit;
+//      fStep->GetPostStepPoint()
+//           ->SetProcessDefinedStep(NULL);
+//      // Take note that the process pointer is 'NULL' if the Step
+//      // is defined by the user defined limit.
+//   }
+//   2004.01.20 This block will be removed by Geant4 7.0 
 
 // GPIL for PostStep
    fPostStepDoItProcTriggered = MAXofPostStepLoops;
@@ -231,7 +233,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    G4double lifeTime, shortestLifeTime;
 
    fAtRestDoItProcTriggered = 0;
-   fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
    unsigned int NofInactiveProc=0;
@@ -262,10 +263,11 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 // at least one process is necessary to destory the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
+     //     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
+     G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
+   } else {
+        (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
    }
-
-   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
 
    fStep->SetStepLength( 0. );  //the particle has stopped
    fTrack->SetStepLength( 0. );
@@ -291,11 +293,13 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        fParticleChange->UpdateStepForAtRest(fStep);
 
        // Now Store the secondaries from ParticleChange to SecondaryList
-       G4Track*  tempSecondaryTrack;
+       G4Track* tempSecondaryTrack;
+       G4int    num2ndaries;
 
-       fN2ndariesAtRestDoIt = fParticleChange->GetNumberOfSecondaries();
+       num2ndaries = fParticleChange->GetNumberOfSecondaries();
+       fN2ndariesAtRestDoIt += num2ndaries;
 
-       for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAtRestDoIt; DSecLoop++){
+       for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -309,7 +313,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
-	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -347,8 +351,6 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
    }
 
 // Invoke the all active continuous processes
-   fN2ndariesAlongStepDoIt = 0;
-
    for( size_t ci=0 ; ci<MAXofAlongStepLoops ; ci++ ){
      fCurrentProcess = (*fAlongStepDoItVector)[ci];
      if (fCurrentProcess== NULL) continue;
@@ -366,10 +368,12 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
      // Now Store the secondaries from ParticleChange to SecondaryList
      G4Track* tempSecondaryTrack;
+     G4int    num2ndaries;
 
-     fN2ndariesAlongStepDoIt = fParticleChange->GetNumberOfSecondaries();
+     num2ndaries = fParticleChange->GetNumberOfSecondaries();
+     fN2ndariesAlongStepDoIt += num2ndaries;
 
-     for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAlongStepDoIt; DSecLoop++){
+     for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -383,7 +387,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
-	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -397,11 +401,22 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      } //end of loop on secondary 
      
      // Set the track status according to what the process defined
-     fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
-
+     // if kinetic energy >0, otherwise set  fStopButAlive
+     //     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
+     
      // clear ParticleChange
      fParticleChange->Clear();
    }
+
+   fStep->UpdateTrack();
+   G4TrackStatus fNewStatus = fTrack->GetTrackStatus();
+
+   if ( fNewStatus == fAlive && fTrack->GetKineticEnergy() <= DBL_MIN ) {
+     if(MAXofAtRestLoops>0) fNewStatus = fStopButAlive;
+     else                   fNewStatus = fStopAndKill;
+     fTrack->SetTrackStatus( fNewStatus );
+   }
+
 }
 
 ////////////////////////////////////////////////////////
@@ -410,8 +425,6 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 {
 
 // Invoke the specified discrete processes
-   fN2ndariesPostStepDoIt = 0;
-
    for(size_t np=0; np < MAXofPostStepLoops; np++){
    //
    // Note: DoItVector has inverse order against GetPhysIntVector
@@ -466,14 +479,16 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
          // Now Store the secondaries from ParticleChange to SecondaryList
          G4Track* tempSecondaryTrack;
+         G4int    num2ndaries;
 
-         fN2ndariesPostStepDoIt = fParticleChange->GetNumberOfSecondaries();
+         num2ndaries = fParticleChange->GetNumberOfSecondaries();
+         fN2ndariesPostStepDoIt += num2ndaries;
 
-         for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesPostStepDoIt; DSecLoop++){
+         for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-    
-           if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
-           { ApplyProductionCut(tempSecondaryTrack); }
+   
+            if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+            { ApplyProductionCut(tempSecondaryTrack); }
 
             // Set parentID 
             tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
@@ -483,7 +498,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
             // If this 2ndry particle has 'zero' kinetic energy, make sure
             // it invokes a rest process at the beginning of the tracking
-	    if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -497,7 +512,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          } //end of loop on secondary 
 
          // Set the track status according to what the process defined
-         fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
+         fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
 
          // clear ParticleChange
          fParticleChange->Clear();
@@ -521,7 +536,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
   if( aSecondary->GetKineticEnergy()<tProdThreshold )
   {
     tBelowCutEnergyAndSafety = true;
-    if(aSecondary->GetDynamicParticle()->GetCharge() !=0.0)
+    if(std::abs(aSecondary->GetDynamicParticle()->GetCharge()) > DBL_MIN)
     {
       G4double currentRange
         = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),

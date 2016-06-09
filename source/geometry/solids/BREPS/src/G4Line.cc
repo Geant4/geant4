@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Line.cc,v 1.8 2003/03/28 13:12:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Line.cc,v 1.9 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -74,7 +74,7 @@ G4Curve* G4Line::Project(const G4Transform3D& tr)
 {
   G4Vector3D newDir= tr*dir;
   
-  if (abs(newDir.x())+abs(newDir.y()) < kCarTolerance){
+  if (std::abs(newDir.x())+std::abs(newDir.y()) < kCarTolerance){
   
      newDir.setX(kCarTolerance);
      newDir.setY(kCarTolerance);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayTelAnalysis.hh,v 1.8 2004/05/28 15:56:58 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copy of his UserAnalyser class)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.6 2003/10/03 16:00:33 gcosmo Exp $
-// GEANT4 tag $Name: partman-V05-02-00 $
+// $Id: G4ParticleDefinition.icc,v 1.8 2004/12/02 08:08:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 inline 

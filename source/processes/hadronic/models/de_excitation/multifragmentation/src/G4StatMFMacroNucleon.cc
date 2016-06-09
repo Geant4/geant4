@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroNucleon.cc,v 1.3 2004/12/07 13:47:47 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -56,14 +56,14 @@ G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, cons
 						    const G4double nu, const G4double T)
 {
     if (T <= 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroNucleon::CalcMeanMultiplicity: Temperature less or equal 0");
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 	
     const G4double degeneracy = 2.0;
 	
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 
     G4double exponent_proton = (mu+nu-Coulomb)/T;
     G4double exponent_neutron = mu/T;
@@ -71,10 +71,10 @@ G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, cons
     if (exponent_neutron > 700.0) exponent_proton = 700.0;
     if (exponent_proton > 700.0) exponent_proton = 700.0;
 
-    _NeutronMeanMultiplicity = (degeneracy*FreeVol/lambda3)*exp(mu/T);
+    _NeutronMeanMultiplicity = (degeneracy*FreeVol/lambda3)*std::exp(mu/T);
 	
     _ProtonMeanMultiplicity = (degeneracy*FreeVol/lambda3)*
-	exp((mu+nu-Coulomb)/T);
+	std::exp((mu+nu-Coulomb)/T);
 
 	
 
@@ -86,7 +86,7 @@ G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, cons
 G4double G4StatMFMacroNucleon::CalcEnergy(const G4double T)
 {
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 									
     return _Energy = Coulomb * theZARatio + (3./2.) * T;
 							
@@ -94,20 +94,20 @@ G4double G4StatMFMacroNucleon::CalcEnergy(const G4double T)
 
 G4double G4StatMFMacroNucleon::CalcEntropy(const G4double T, const G4double FreeVol)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
+    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
 
     G4double NeutronEntropy = 0.0;
     if (_NeutronMeanMultiplicity > 0.0)
 	NeutronEntropy = _NeutronMeanMultiplicity*(5./2.+
-						   log(2.0*static_cast<G4double>(theA)*FreeVol/
+						   std::log(2.0*static_cast<G4double>(theA)*FreeVol/
 						       (lambda3*_NeutronMeanMultiplicity)));
 								
 								
     G4double ProtonEntropy = 0.0;
     if (_ProtonMeanMultiplicity > 0.0)
 	ProtonEntropy = _ProtonMeanMultiplicity*(5./2.+
-						 log(2.0*static_cast<G4double>(theA)*FreeVol/
+						 std::log(2.0*static_cast<G4double>(theA)*FreeVol/
 						     (lambda3*_ProtonMeanMultiplicity)));
 								
 								

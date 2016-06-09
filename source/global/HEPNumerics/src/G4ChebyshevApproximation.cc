@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChebyshevApproximation.cc,v 1.3 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ChebyshevApproximation.cc,v 1.4 2004/11/12 17:38:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include "G4ChebyshevApproximation.hh"
@@ -55,7 +55,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
    
    for (i=0;i<fNumber;i++)
    {
-      rootSum = cos(cof*(i+0.5)) ;
+      rootSum = std::cos(cof*(i+0.5)) ;
       tempFunction[i]= fFunction(rootSum*fDiff+fMean) ;
    }
    for (j=0;j<fNumber;j++) 
@@ -65,7 +65,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
       
       for (i=0;i<fNumber;i++)
       {
-         rootSum += tempFunction[i]*cos(cofj*(i+0.5)) ;
+         rootSum += tempFunction[i]*std::cos(cofj*(i+0.5)) ;
       }
       fChebyshevCof[j] = weight*rootSum ;
    }
@@ -108,7 +108,7 @@ G4ChebyshevApproximation( function pFunction,
    
    for (i=0;i<fNumber;i++)
    {
-      rootSum = cos(cof*(i+0.5)) ;
+      rootSum = std::cos(cof*(i+0.5)) ;
       tempFunction[i] = fFunction(rootSum*fDiff+fMean) ;
    }
    for (j=0;j<fNumber;j++) 
@@ -118,7 +118,7 @@ G4ChebyshevApproximation( function pFunction,
       
       for (i=0;i<fNumber;i++)
       {
-         rootSum += tempFunction[i]*cos(cofj*(i+0.5)) ;
+         rootSum += tempFunction[i]*std::cos(cofj*(i+0.5)) ;
       }
       fChebyshevCof[j] = weight*rootSum ; // corresponds to pFunction
    }
@@ -162,7 +162,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
    
    for (i=0;i<fNumber;i++)
    {
-      rootSum = cos(cof*(i+0.5)) ;
+      rootSum = std::cos(cof*(i+0.5)) ;
       tempFunction[i]= fFunction(rootSum*fDiff+fMean) ;
    }
    for (j=0;j<fNumber;j++) 
@@ -172,7 +172,7 @@ G4ChebyshevApproximation::G4ChebyshevApproximation( function pFunction,
       
       for (i=0;i<fNumber;i++)
       {
-         rootSum += tempFunction[i]*cos(cofj*(i+0.5)) ;
+         rootSum += tempFunction[i]*std::cos(cofj*(i+0.5)) ;
       }
       fChebyshevCof[j] = weight*rootSum ; // corresponds to pFunction
    }

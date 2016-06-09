@@ -1,0 +1,19 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    example/extended/eventgenerator/exgps History file
+                    ------------------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+03/12/2004, G.Cosmo,  (exgps-V06-02-01)
+- Implemented migration to <cmath>.
+
+28/10/2004, F.Lei,  (exgps-V06-02-00)
+- Created.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.icc,v 1.5 2001/07/11 09:59:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Curve.icc,v 1.6 2004/12/02 09:31:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -105,7 +105,7 @@ void G4Curve::SetBoundsRest()
   if (pMax>0) 
   {     
     // Find the range in the first determination
-    pRange-= (ceil(pRange/pMax)-1)*pMax;
+    pRange-= (std::ceil(pRange/pMax)-1)*pMax;
   }
 
   bounded= true;
@@ -151,7 +151,7 @@ G4bool G4Curve::IsPOn(G4double param) const
   G4double pMax= GetPMax();
 
   if (pMax>0) 
-    diff-= floor(diff/pMax)*pMax;
+    diff-= std::floor(diff/pMax)*pMax;
   
   return diff<=pRange;
 }

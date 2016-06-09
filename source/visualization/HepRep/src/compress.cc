@@ -1,10 +1,11 @@
 /* compress.c -- compress a memory buffer
- * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id: compress.cc,v 1.2 2004/02/03 19:34:44 duns Exp $ */
+/* @(#) $Id: compress.cc,v 1.3 2004/11/18 22:45:29 duns Exp $ */
 
+#define ZLIB_INTERNAL
 #include "HepRep-zlib.h"
 
 /* ===========================================================================
@@ -19,11 +20,6 @@
    Z_STREAM_ERROR if the level parameter is invalid.
 */
 int ZEXPORT compress2 (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen, int level)
-//    Bytef *dest;
-//    uLongf *destLen;
-//    const Bytef *source;
-//    uLong sourceLen;
-//    int level;
 {
     z_stream stream;
     int err;
@@ -59,10 +55,15 @@ int ZEXPORT compress2 (Bytef *dest, uLongf *destLen, const Bytef *source, uLong 
 /* ===========================================================================
  */
 int ZEXPORT compress (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen)
-//    Bytef *dest;
-//    uLongf *destLen;
-//    const Bytef *source;
-//    uLong sourceLen;
 {
     return compress2(dest, destLen, source, sourceLen, Z_DEFAULT_COMPRESSION);
+}
+
+/* ===========================================================================
+     If the default memLevel or windowBits for deflateInit() is changed, then
+   this function needs to be updated.
+ */
+uLong ZEXPORT compressBound (uLong sourceLen)
+{
+    return sourceLen + (sourceLen >> 12) + (sourceLen >> 14) + 11;
 }

@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.16 2004/06/16 10:35:40 maire Exp $
+# $Id: TestEm3.in,v 1.18 2004/10/22 15:53:41 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -16,9 +16,13 @@
 /gun/particle e-
 /gun/energy 1 GeV
 #
-###/testem/histo/setFileName testem3.paw
-###/testem/histo/setHisto 0 100 700. 1000. MeV
-###/testem/histo/setHisto 1 100   0.  300. MeV
+#/testem/histo/setFileName PblqArg.paw
+#/testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
+#/testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
+#/testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
+#/testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
+#/testem/histo/setHisto 21 102  0.   102. none	#energy flow of primary
+#/testem/histo/setHisto 22 102  0.   102. none	#energy flow of secondaries
 #
 /testem/event/printModulo 50
 #

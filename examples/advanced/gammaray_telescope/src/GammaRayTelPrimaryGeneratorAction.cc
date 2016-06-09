@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.6 2001/11/29 11:19:18 griccard Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.7 2004/12/10 22:52:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -112,10 +112,10 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   case 1:
     // GS: Generate random position on the 4PIsphere to create a unif. distrib.
     // GS: on the sphere
-    phi = G4UniformRand() * 2.0 * M_PI;
+    phi = G4UniformRand() * twopi;
     do {
       y = G4UniformRand()*1.0;
-      theta = G4UniformRand() * M_PI;
+      theta = G4UniformRand() * pi;
       f = sin(theta);
     } while (y > f);
     vertex0 = G4ThreeVector(1.,0.,0.);
@@ -126,10 +126,10 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     dir0 = G4ThreeVector(1.,0.,0.);
     do {
-      phi = G4UniformRand() * 2.0 * M_PI;
+      phi = G4UniformRand() * twopi;
       do {
 	y = G4UniformRand()*1.0;
-	theta = G4UniformRand() * M_PI;
+	theta = G4UniformRand() * pi;
 	f = sin(theta);
       } while (y > f);
       dir0.setPhi(phi);
@@ -141,10 +141,10 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   case 2:
     // GS: Generate random position on the upper semi-sphere z>0 to create a unif. distrib.
     // GS: on a plane
-    phi = G4UniformRand() * 2.0 * M_PI;
+    phi = G4UniformRand() * twopi;
     do {
       y = G4UniformRand()*1.0;
-      theta = G4UniformRand() * M_PI/2;
+      theta = G4UniformRand() * halfpi;
       f = sin(theta) * cos(theta);
     } while (y > f);
     vertex0 = G4ThreeVector(1.,0.,0.);
@@ -184,8 +184,8 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     if (theta0!=0.) 
       {
 	G4ThreeVector rotationAxis(1.,0.,0.);
-	rotationAxis.setPhi(phi0+M_PI/2.);
-	vertex0.rotate(theta0+M_PI,rotationAxis);
+	rotationAxis.setPhi(phi0+halfpi);
+	vertex0.rotate(theta0+pi,rotationAxis);
       }
     particleGun->SetParticlePosition(vertex0);
     break;

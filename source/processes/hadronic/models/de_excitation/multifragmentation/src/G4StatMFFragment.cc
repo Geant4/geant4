@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.3 2003/11/04 11:30:35 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFFragment.cc,v 1.4 2004/12/07 13:47:41 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -66,8 +66,8 @@ G4double G4StatMFFragment::GetCoulombEnergy(void) const
 {
     if (theZ <= 0.1) return 0.0;
     G4double Coulomb = (3./5.)*(elm_coupling*theZ*theZ)*
-	pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-	(G4StatMFParameters::Getr0()*pow(theA,1./3.));
+	std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
+	(G4StatMFParameters::Getr0()*std::pow(theA,1./3.));
 						
     return Coulomb;
 }
@@ -88,7 +88,7 @@ G4double G4StatMFFragment::GetEnergy(const G4double T) const
 	
     G4double SurfaceEnergy;
     if (G4StatMFParameters::DBetaDT(T) == 0.0) SurfaceEnergy = 0.0;
-    else SurfaceEnergy = (5./2.)*pow(theA,2.0/3.0)*T*T*
+    else SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*T*T*
 	     G4StatMFParameters::GetBeta0()/
 	     (G4StatMFParameters::GetCriticalTemp()*
 	      G4StatMFParameters::GetCriticalTemp());
@@ -119,7 +119,7 @@ G4Fragment * G4StatMFFragment::GetFragment(const G4double T)
 	
     G4double M = GetNuclearMass();
 
-    G4LorentzVector FourMomentum(_momentum,sqrt(_momentum.mag2()+(M+U)*(M+U)));
+    G4LorentzVector FourMomentum(_momentum,std::sqrt(_momentum.mag2()+(M+U)*(M+U)));
 
     G4Fragment * theFragment = new G4Fragment(static_cast<G4int>(theA),static_cast<G4int>(theZ),FourMomentum);
 
@@ -138,10 +138,10 @@ G4double G4StatMFFragment::CalcExcitationEnergy(const G4double T)
 	
     // Term connected with surface energy
     G4double SurfaceEnergy = 0.0;
-    if (abs(G4StatMFParameters::DBetaDT(T)) > 1.0e-20) 
-// 		SurfaceEnergy = (5./2.)*pow(theA,2.0/3.0)*T*T*G4StatMFParameters::GetBeta0()/
+    if (std::abs(G4StatMFParameters::DBetaDT(T)) > 1.0e-20) 
+// 		SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*T*T*G4StatMFParameters::GetBeta0()/
 // 			(G4StatMFParameters::GetCriticalTemp()*G4StatMFParameters::GetCriticalTemp());
-	SurfaceEnergy = (5./2.)*pow(theA,2.0/3.0)*(G4StatMFParameters::Beta(T) - 
+	SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*(G4StatMFParameters::Beta(T) - 
 						   T*G4StatMFParameters::DBetaDT(T) - G4StatMFParameters::GetBeta0());
 		
     return BulkEnergy + SurfaceEnergy;

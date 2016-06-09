@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation52.hh,v 1.1 2003/08/08 11:30:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4hIonisation52.hh,v 1.2 2004/11/10 08:53:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------- G4hIonisation52 physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997
@@ -38,6 +38,7 @@
 // 29-10-01 all static functions no more inlined
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 09-11-04 Remove Store/Retrieve tables (V.Ivantchenko)
 //
 // -----------------------------------------------------------------------------
 
@@ -83,16 +84,6 @@ class G4hIonisation52 : public G4VhEnergyLoss
     void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
       // build mean free path tables for the delta rays production.
       // the tables are built for every materials.
-
-    G4bool StorePhysicsTable(G4ParticleDefinition* ,
-		             const G4String& directory, G4bool);
-      // store eLoss and MeanFreePath tables into an external file
-      // specified by 'directory' (must exist before invokation)
-
-    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-			        const G4String& directory, G4bool);
-      // retrieve eLoss and MeanFreePath tables from an external file
-      // specified by 'directory'
 
     virtual void PrintInfoDefinition();
       // Print few lines of informations about the process: validity range,

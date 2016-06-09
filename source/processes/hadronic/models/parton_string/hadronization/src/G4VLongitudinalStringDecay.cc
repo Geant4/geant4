@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.3 2004/12/07 13:50:16 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -166,10 +166,10 @@ G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPai
 
 G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
    {
-   G4double Pt = -log(G4UniformRand());
-   Pt = SigmaQT * sqrt(Pt);
+   G4double Pt = -std::log(G4UniformRand());
+   Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();
-   return G4ThreeVector(Pt * cos(phi),Pt * sin(phi),0);
+   return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
    }
 
 //----------------------------------------------------------------------------------------------------------
@@ -258,8 +258,8 @@ G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
       //... Build new Diquark
       G4int QuarkEncoding=QuarkPair.second->GetPDGEncoding();
-      G4int i10  = std::max(abs(QuarkEncoding), abs(stableQuarkEncoding));
-      G4int i20  = std::min(abs(QuarkEncoding), abs(stableQuarkEncoding));
+      G4int i10  = std::max(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
+      G4int i20  = std::min(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
       G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
       G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
       created = FindParticle(NewDecayEncoding);
@@ -614,7 +614,7 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 
 	       G4ThreeVector Mom3 = string->Get4Momentum().vect();
 	       G4LorentzVector Mom(Mom3, 
-	       			   sqrt(Mom3.mag2() + sqr(hadrons.first->GetPDGMass())));
+	       			   std::sqrt(Mom3.mag2() + sqr(hadrons.first->GetPDGMass())));
                result->push_back(new G4KineticTrack(hadrons.first, 0, string->GetPosition(), Mom));
 	} else 
 	{
@@ -651,21 +651,21 @@ G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding)
 void G4VLongitudinalStringDecay::Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass) 
     {
     G4double r_val = sqr(InitialMass*InitialMass - Mass*Mass - AntiMass*AntiMass) - sqr(2.*Mass*AntiMass);
-    G4double Pabs = (r_val > 0.)? sqrt(r_val)/(2.*InitialMass) : 0;
+    G4double Pabs = (r_val > 0.)? std::sqrt(r_val)/(2.*InitialMass) : 0;
 
     //... sample unit vector       
     G4double pz = 1. - 2.*G4UniformRand();  
-    G4double st     = sqrt(1. - pz * pz)*Pabs;
+    G4double st     = std::sqrt(1. - pz * pz)*Pabs;
     G4double phi    = 2.*pi*G4UniformRand();
-    G4double px = st*cos(phi);
-    G4double py = st*sin(phi);
+    G4double px = st*std::cos(phi);
+    G4double py = st*std::sin(phi);
     pz *= Pabs;
     
     Mom->setPx(px); Mom->setPy(py); Mom->setPz(pz);
-    Mom->setE(sqrt(Pabs*Pabs + Mass*Mass));
+    Mom->setE(std::sqrt(Pabs*Pabs + Mass*Mass));
 
     AntiMom->setPx(-px); AntiMom->setPy(-py); AntiMom->setPz(-pz);
-    AntiMom->setE (sqrt(Pabs*Pabs + AntiMass*AntiMass));
+    AntiMom->setE (std::sqrt(Pabs*Pabs + AntiMass*AntiMass));
     }
 
 //----------------------------------------------------------------------------------------------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.24 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SmartVoxelHeader.cc,v 1.25 2004/12/02 09:31:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -366,8 +366,8 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
         G4VoxelLimits limits;
         G4AffineTransform origin;
         pVolume->GetSolid()->CalculateExtent(axis, limits, origin, min, max);
-        if ( (fabs((min-fminExtent)/fminExtent) +
-              fabs((max-fmaxExtent)/fmaxExtent)) > 0.05)
+        if ( (std::fabs((min-fminExtent)/fminExtent) +
+              std::fabs((max-fmaxExtent)/fmaxExtent)) > 0.05)
         {
           G4cerr << "ERROR - G4SmartVoxelHeader::BuildReplicaVoxels()"
                  << G4endl

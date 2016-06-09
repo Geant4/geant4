@@ -1,0 +1,34 @@
+$Id: History,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+              electromagnetic_lists History file
+              ----------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+13-12-04 G.Cosmo (emphys-V06-02-03)
+- Moved from top-level to new structure.
+
+06-12-04 V.Ivanchenko (emphys-V06-02-02)
+- Return back muon builder from 6.2 for the 7.0
+
+06-12-04 V.Ivanchenko (emphys-V06-02-01)
+- Fix bug in SetCuts between runs
+
+28-11-04 V.Ivanchenko (emphys-V06-02-00)
+- for muons instantiate processes only once
+- use ionIonisation for GenericIon, alpha, He3 
+
+28-05-04 V.Ivanchenko (emphys-V06-01-00)
+- first tag
+

@@ -69,12 +69,12 @@ RichTbSiDet::RichTbSiDet(RichTbMaterial* RMaterial,
     SiSectRotationX.rotateX(SiSectRotX);
     SiSectRotZ = SiSectAngStart-isec*SiSectAngSize;    
     SiSectRotationZ.rotateZ(SiSectRotZ);
-    SiSectPosX=SiSectTrapHalfZ*cos(SiSectRotZ-pi/2.0);
+    SiSectPosX=SiSectTrapHalfZ*std::cos(SiSectRotZ-pi/2.0);
     //
     if(isec < NumberOfSiDetSectors/2 ) {
-    SiSectPosY=SiSectTrapHalfZ*sin(SiSectRotZ-pi/2.0)-SiSectHalfMoonGap/2.0;
+    SiSectPosY=SiSectTrapHalfZ*std::sin(SiSectRotZ-pi/2.0)-SiSectHalfMoonGap/2.0;
     }else{
-    SiSectPosY=SiSectTrapHalfZ*sin(SiSectRotZ-pi/2.0)+SiSectHalfMoonGap/2.0;
+    SiSectPosY=SiSectTrapHalfZ*std::sin(SiSectRotZ-pi/2.0)+SiSectHalfMoonGap/2.0;
     }
 
     G4ThreeVector SiSectTrapPos(SiSectPosX,SiSectPosY,SiSectPosZ);

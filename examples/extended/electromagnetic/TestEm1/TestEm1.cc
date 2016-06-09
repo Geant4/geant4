@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.9 2003/10/06 10:02:20 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TestEm1.cc,v 1.11 2004/08/03 11:31:39 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -42,6 +42,7 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
+#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "VisManager.hh"
@@ -62,24 +63,27 @@ int main(int argc,char** argv) {
 
   // set mandatory initialization classes
   DetectorConstruction* det;
+  PrimaryGeneratorAction* prim;
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList(det));
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
   
   #ifdef G4VIS_USE
    // visualization manager
    G4VisManager* visManager = new VisManager;
    visManager->Initialize();
   #endif
-    
+ 
+  HistoManager*  histo = new HistoManager();
+      
   // set user action classes
-  RunAction*   RunAct;
-  EventAction* EvtAct;
+  RunAction*   run;
+  EventAction* event;
   
-  runManager->SetUserAction(RunAct = new RunAction); 
-  runManager->SetUserAction(EvtAct = new EventAction);
-  runManager->SetUserAction(new TrackingAction(RunAct));
-  runManager->SetUserAction(new SteppingAction(RunAct,EvtAct));
+  runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
+  runManager->SetUserAction(event = new EventAction);
+  runManager->SetUserAction(new TrackingAction(prim,run,histo));
+  runManager->SetUserAction(new SteppingAction(run,event,histo));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -106,7 +110,8 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
  delete visManager;
 #endif
- 
+
+  delete histo;  
   delete runManager;
 
   return 0;

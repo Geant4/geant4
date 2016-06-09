@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaXTRadiator.cc,v 1.2 2003/06/16 17:02:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4GammaXTRadiator.cc,v 1.3 2004/12/02 08:31:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include <complex>
@@ -31,6 +31,8 @@
 #include "Randomize.hh"
 
 #include "G4Gamma.hh"
+
+using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -89,19 +91,19 @@ G4GammaXTRadiator::GetStackFactor( G4double energy,
   G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate) ; 
   G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas) ; 
 
-  G4complex Ha = std::pow(Ca,-fAlphaPlate) ;  
-  G4complex Hb = std::pow(Cb,-fAlphaGas) ;
+  G4complex Ha = pow(Ca,-fAlphaPlate) ;  
+  G4complex Hb = pow(Cb,-fAlphaGas) ;
   G4complex H  = Ha*Hb ;
 
   G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
                  * G4double(fPlateNumber) ;
 
   G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
-                 * (1.0 - std::pow(H,fPlateNumber)) ;
+                 * (1.0 - pow(H,fPlateNumber)) ;
 
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle) ;
 
-  result       = 2.0*std::real(R) ;
+  result       = 2.0*real(R) ;
   
   return      result ;
 }

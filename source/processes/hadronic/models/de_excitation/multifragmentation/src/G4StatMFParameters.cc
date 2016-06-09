@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFParameters.cc,v 1.1 2003/08/26 18:47:53 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFParameters.cc,v 1.2 2004/12/07 13:47:53 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -58,7 +58,7 @@ G4double G4StatMFParameters::Beta(const G4double T)
     G4double TempSqr = T*T;
     G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
 		
-    return _Beta0*tmp*pow(tmp,1.0/4.0);
+    return _Beta0*tmp*std::pow(tmp,1.0/4.0);
   }
 }
 
@@ -70,7 +70,7 @@ G4double G4StatMFParameters::DBetaDT(const G4double T)
     G4double TempSqr = T*T;
     G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
 		
-    return -5.0*_Beta0*pow(tmp,1.0/4.0)*(CriticalTempSqr*T)/
+    return -5.0*_Beta0*std::pow(tmp,1.0/4.0)*(CriticalTempSqr*T)/
       ((CriticalTempSqr+TempSqr)*(CriticalTempSqr+TempSqr));
   }
 }

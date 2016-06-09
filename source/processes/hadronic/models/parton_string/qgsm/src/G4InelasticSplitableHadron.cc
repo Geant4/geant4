@@ -88,7 +88,7 @@ G4Parton * G4InelasticSplitableHadron::GetNextParton()
 void G4InelasticSplitableHadron::GetValenceQuarkFlavors(G4int PDGcode, G4int& aEnd, G4int& bEnd)
    {
    // Note! convention aEnd = q or qqbar and bEnd = qbar or qq.
-   G4int absPDGcode = abs(PDGcode);
+   G4int absPDGcode = std::abs(PDGcode);
    if (absPDGcode < 1000)   
       {
       G4int heavy =  absPDGcode/100;
@@ -113,7 +113,7 @@ void G4InelasticSplitableHadron::GetValenceQuarkFlavors(G4int PDGcode, G4int& aE
    G4int j100  = (PDGcode % 1000)/100;
    G4int j10   = (PDGcode % 100)/10;
    G4double random = G4UniformRand();
-   if (abs(j100) >= abs(j10) )
+   if (std::abs(j100) >= std::abs(j10) )
       {  	    
       if ( random < udspin1 )
 	 {

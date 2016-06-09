@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.1 2004/05/13 14:49:42 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.3 2004/10/13 13:06:51 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -53,7 +53,7 @@
 G4ReflectedSolid::G4ReflectedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName)
+  : G4VSolid(pName), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   G4RotationMatrix rotMatrix ;
@@ -116,6 +116,7 @@ G4AffineTransform  G4ReflectedSolid::GetTransform() const
 void G4ReflectedSolid::SetTransform(G4AffineTransform& transform) 
 {
    fPtrTransform = &transform ;
+   fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -129,6 +130,7 @@ G4AffineTransform  G4ReflectedSolid::GetDirectTransform() const
 void G4ReflectedSolid::SetDirectTransform(G4AffineTransform& transform) 
 {
   fDirectTransform = &transform ;
+  fpPolyhedron = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -142,6 +144,7 @@ G4Transform3D  G4ReflectedSolid::GetTransform3D() const
 void G4ReflectedSolid::SetTransform3D(G4Transform3D& transform) 
 {
   fPtrTransform3D = &transform ;
+  fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -155,6 +158,7 @@ G4Transform3D  G4ReflectedSolid::GetDirectTransform3D() const
 void G4ReflectedSolid::SetDirectTransform3D(G4Transform3D& transform) 
 {
   fDirectTransform3D = &transform ;
+  fpPolyhedron = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -546,4 +550,18 @@ G4ReflectedSolid::CreateNURBS      () const
   // Take into account local transformation - see CreatePolyhedron.
   // return fPtrSolid->CreateNURBS() ;
   return 0;
+}
+
+/////////////////////////////////////////////////////////
+//
+//
+
+G4Polyhedron*
+G4ReflectedSolid::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+  {
+    fpPolyhedron = CreatePolyhedron ();
+  }
+  return fpPolyhedron;
 }

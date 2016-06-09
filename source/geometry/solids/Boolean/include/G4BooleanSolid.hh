@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.8 2003/11/03 17:48:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4BooleanSolid.hh,v 1.11 2004/10/10 10:50:46 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // class G4BooleanSolid
@@ -54,35 +54,42 @@ class G4BooleanSolid : public G4VSolid
  
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
-                          G4VSolid* pSolidB   ) ;
+                          G4VSolid* pSolidB   );
 
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
                           G4VSolid* pSolidB,
                           G4RotationMatrix* rotMatrix,
-                    const G4ThreeVector& transVector    ) ;
+                    const G4ThreeVector& transVector    );
 
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
                           G4VSolid* pSolidB , 
-                    const G4Transform3D& transform   ) ;
+                    const G4Transform3D& transform   );
 
-    virtual ~G4BooleanSolid() ;
+    virtual ~G4BooleanSolid();
 
     virtual const G4VSolid* GetConstituentSolid(G4int no) const;
     virtual       G4VSolid* GetConstituentSolid(G4int no);
       // If Solid is made up from a Boolean operation of two solids,
-      //    return the corresponding solid (for no=0 and 1)
+      // return the corresponding solid (for no=0 and 1).
       // If the solid is not a "Boolean", return 0.
 
     virtual G4GeometryType  GetEntityType() const;
+    inline G4double GetCubicVolume();
+    virtual G4Polyhedron* GetPolyhedron () const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
+    inline G4int GetCubVolStatistics() const;
+    inline G4double GetCubVolEpsilon() const;
+    inline void SetCubVolStatistics(G4int st);
+    inline void SetCubVolEpsilon(G4double ep);
+
   protected:
   
-    G4VSolid* fPtrSolidA ;
-    G4VSolid* fPtrSolidB ;
+    G4VSolid* fPtrSolidA;
+    G4VSolid* fPtrSolidB;
 
   private:
 
@@ -92,8 +99,16 @@ class G4BooleanSolid : public G4VSolid
 
   private:
 
+    G4int    fCubVolStatistics;
+    G4double fCubVolEpsilon;
+    G4double fCubicVolume;
+    mutable G4Polyhedron* fpPolyhedron;
+
     G4bool  createdDisplacedSolid;
       // If & only if this object created it, it must delete it
+
 } ;
+
+#include "G4BooleanSolid.icc"
 
 #endif

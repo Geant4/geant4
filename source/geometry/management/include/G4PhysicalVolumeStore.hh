@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.11 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PhysicalVolumeStore.hh,v 1.12 2004/09/02 07:49:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class G4PhysicalVolume
 //
@@ -56,6 +56,8 @@
 
 #include "G4VPhysicalVolume.hh"
 
+class G4VStoreNotifier;
+
 class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
 {
   public:  // with description
@@ -66,6 +68,8 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
       // Remove the volume from the collection.
     static G4PhysicalVolumeStore* GetInstance();
       // Get a ptr to the unique G4PhysicalVolumeStore, creating it if necessary.
+    static void SetNotifier(G4VStoreNotifier* pNotifier);
+      // Assign a notifier for allocation/deallocation of the physical volumes.
     static void Clean(G4bool notifyLV=false);
       // Delete all volumes from the store. The flag 'notifyLV' must be set to
       // true when the whole geometry tree is cleared at run-time through this
@@ -82,6 +86,7 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
   private:
 
     static G4PhysicalVolumeStore* fgInstance;
+    static G4VStoreNotifier* fgNotifier;
     static G4bool locked;
 };
 

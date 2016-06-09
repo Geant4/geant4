@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.6 2003/11/24 13:11:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FermiConfiguration.cc,v 1.7 2004/12/07 13:46:42 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -45,7 +45,7 @@ const G4double G4FermiConfiguration::r0 = 1.3*fermi;
 G4double G4FermiConfiguration::CoulombBarrier(void)
 {
   //  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
-  const G4double Coef = (3./5.)*(elm_coupling/r0)*pow(1./(1.+Kappa), 1./3.);
+  const G4double Coef = (3./5.)*(elm_coupling/r0)*std::pow(1./(1.+Kappa), 1./3.);
 
   G4double SumA = 0;
   G4double SumZ = 0;
@@ -55,11 +55,11 @@ G4double G4FermiConfiguration::CoulombBarrier(void)
     {
       G4double z = static_cast<G4double>((*i)->GetZ());
       G4double a = static_cast<G4double>((*i)->GetA());
-      CoulombEnergy += (z*z) / pow(a, 1./3.);
+      CoulombEnergy += (z*z) / std::pow(a, 1./3.);
       SumA += a;
       SumZ += z;
     }
-  CoulombEnergy -= SumZ*SumZ/pow(SumA, 1./3.);
+  CoulombEnergy -= SumZ*SumZ/std::pow(SumA, 1./3.);
   return -Coef * CoulombEnergy;
 }
 
@@ -100,14 +100,14 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
 
 
   G4double MassFactor = ProdMass/SumMass;
-  MassFactor *= sqrt(MassFactor);  
+  MassFactor *= std::sqrt(MassFactor);  
   
   // Number of fragments
   G4int K = Configuration.size();
 
   // This is the constant (doesn't depend on nucleus) part
-  const G4double ConstCoeff = pow(r0/hbarc,3.0)*Kappa*sqrt(2.0/pi)/3.0;
-  G4double Coeff = pow(ConstCoeff*A,K-1);
+  const G4double ConstCoeff = std::pow(r0/hbarc,3.0)*Kappa*std::sqrt(2.0/pi)/3.0;
+  G4double Coeff = std::pow(ConstCoeff*A,K-1);
 
 
   // Calculation of 1/Gamma(3(k-1)/2)
@@ -118,7 +118,7 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
       Gamma *= arg; 
       arg--;
     }
-  if ((K-1)%2 == 1) Gamma *= sqrt(pi);
+  if ((K-1)%2 == 1) Gamma *= std::sqrt(pi);
 
   
   
@@ -130,7 +130,7 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
     }
 
   G4double Weight = Coeff * MassFactor * (S_n / G_n) / Gamma;
-  Weight *= pow(KineticEnergy,3.0*(K-1)/2.0)/KineticEnergy;
+  Weight *= std::pow(KineticEnergy,3.0*(K-1)/2.0)/KineticEnergy;
 
   return Weight; 
 }
@@ -201,10 +201,10 @@ G4ParticleMomentum G4FermiConfiguration::IsotropicVector(const G4double Magnitud
   // By default Magnitude = 1.0
 {
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
   G4double Phi = twopi*G4UniformRand();
-  G4ParticleMomentum Vector(Magnitude*cos(Phi)*SinTheta,
-			    Magnitude*sin(Phi)*SinTheta,
+  G4ParticleMomentum Vector(Magnitude*std::cos(Phi)*SinTheta,
+			    Magnitude*std::sin(Phi)*SinTheta,
 			    Magnitude*CosTheta);
   return Vector;
 }

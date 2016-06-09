@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.6 2001/11/12 18:22:09 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.7 2004/07/23 15:23:58 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -244,6 +244,36 @@ void G4OpenGLXmViewer::haloing_callback (Widget w,
     G4Exception("Unrecognised case in haloing_callback.");
   }
 
+  pView->SetView ();
+  pView->ClearView ();
+  pView->DrawView ();
+}
+
+void G4OpenGLXmViewer::aux_edge_callback (Widget w, 
+				       XtPointer clientData, 
+				       XtPointer) 
+{
+  G4long choice = (G4long)clientData;
+  G4OpenGLXmViewer* pView;
+  XtVaGetValues (XtParent(w),
+		 XmNuserData, &pView,
+		 NULL);
+
+  switch (choice) {
+    
+  case 0:
+    pView->fVP.SetAuxEdgeVisible(false);
+    break;
+
+  case 1:
+    pView->fVP.SetAuxEdgeVisible(true);
+    break;
+
+  default:
+    G4Exception("Unrecognised case in aux_edge_callback.");
+  }
+
+  pView->SetNeedKernelVisit ();
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();

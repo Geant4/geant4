@@ -1,7 +1,10 @@
-$Id: History,v 1.56 2004/06/17 14:27:32 gcosmo Exp $
+$Id: History,v 1.57 2004/12/07 08:36:31 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V06-02-00 07-Dec-2004 G.Cosmo
+- Implemented migration to <cmath>.
 
 g3tog4-V06-01-02 17-Jun-2004 G.Cosmo
 - GNUmakefile: added definition of GLOBLIBS.

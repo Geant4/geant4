@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.icc,v 1.7 2003/11/26 14:51:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Transportation.icc,v 1.8 2004/11/23 17:45:43 japost Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 // 
@@ -64,3 +64,62 @@ inline G4int G4Transportation::GetVerboseLevel( ) const
 {
   return fVerboseLevel;
 }
+
+inline G4double G4Transportation::GetThresholdWarningEnergy() const
+{
+  return fThreshold_Warning_Energy;
+}
+ 
+inline G4double G4Transportation::GetThresholdImportantEnergy() const
+{ 
+  return fThreshold_Important_Energy;
+} 
+
+inline G4int G4Transportation::GetThresholdTrials() const
+{
+  return fThresholdTrials;
+}
+
+inline void G4Transportation::SetThresholdWarningEnergy( G4double newEnWarn )
+{
+  fThreshold_Warning_Energy= newEnWarn;
+}
+
+inline void G4Transportation::SetThresholdImportantEnergy( G4double newEnImp )
+{
+  fThreshold_Important_Energy = newEnImp; 
+}
+
+inline void G4Transportation::SetThresholdTrials(G4int newMaxTrials )
+{
+  fThresholdTrials = newMaxTrials; 
+}
+
+     // Get/Set parameters for killing loopers: 
+     //   Above 'important' energy a 'looping' particle in field will 
+     //   *NOT* be abandoned, except after fThresholdTrials attempts.
+     // Below Warning energy, no verbosity for looping particles is issued
+
+inline G4double G4Transportation::GetMaxEnergyKilled() const
+{
+  return fMaxEnergyKilled; 
+}
+
+inline G4double G4Transportation::GetSumEnergyKilled() const
+{
+  return fSumEnergyKilled;
+}
+
+inline void G4Transportation::ResetKilledStatistics(G4int report)
+{
+  if( report ) { 
+    G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
+    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
+    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
+  } 
+
+  fSumEnergyKilled= 0;
+  fMaxEnergyKilled= -1.0*GeV;
+}
+     // Statistics for tracks killed (currently due to looping in field)
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLImmediateXm.cc,v 1.9 2004/04/07 15:18:22 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  10th February 1997

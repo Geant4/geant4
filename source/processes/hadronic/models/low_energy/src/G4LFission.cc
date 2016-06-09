@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.10 2003/07/01 15:49:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LFission.cc,v 1.11 2004/12/07 13:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // G4 Model: Low Energy Fission
@@ -63,12 +63,12 @@ G4LFission::init()
 {
    G4int i;
    G4double xx = 1. - 0.5;
-   G4double xxx = sqrt(2.29*xx);
-   spneut[0] = exp(-xx/0.965)*(exp(xxx) - exp(-xxx))/2.;
+   G4double xxx = std::sqrt(2.29*xx);
+   spneut[0] = std::exp(-xx/0.965)*(std::exp(xxx) - std::exp(-xxx))/2.;
    for (i = 2; i <= 10; i++) {
       xx = i*1. - 0.5;
-      xxx = sqrt(2.29*xx);
-      spneut[i-1] = spneut[i-2] + exp(-xx/0.965)*(exp(xxx) - exp(-xxx))/2.;
+      xxx = std::sqrt(2.29*xx);
+      spneut[i-1] = spneut[i-2] + std::exp(-xx/0.965)*(std::exp(xxx) - std::exp(-xxx))/2.;
    }
    for (i = 1; i <= 10; i++) {
       spneut[i-1] = spneut[i-1]/spneut[9];
@@ -116,7 +116,7 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
    }
    E = E + Atomas(N, Z);
    G4double E02 = E*E - P*P;
-   E0 = sqrt(abs(E02));
+   E0 = std::sqrt(std::abs(E02));
    if (E02 < 0) E0 = -E0;
    Q = Q + Z;
    if (verboseLevel > 1) {
@@ -133,13 +133,13 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
    if (e1 < 1.) e1 = 1.;
 
 // Average number of neutrons
-   G4double avern = 2.569 + 0.559*log(e1);
+   G4double avern = 2.569 + 0.559*std::log(e1);
    G4bool photofission = 0;      // For now
 // Take the following value if photofission is not included
-   if (!photofission) avern = 2.569 + 0.900*log(e1);
+   if (!photofission) avern = 2.569 + 0.900*std::log(e1);
 
 // Average number of gammas
-   G4double averg = 9.500 + 0.600*log(e1);
+   G4double averg = 9.500 + 0.600*std::log(e1);
 
    G4double ran = G4RandGauss::shoot();
 // Number of neutrons
@@ -176,7 +176,7 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
    G4DynamicParticle* aGamma;
    for (i = 1; i <= ng; i++) {
       ran = G4UniformRand();
-      G4double ekin = -0.87*log(ran);
+      G4double ekin = -0.87*std::log(ran);
       exg = exg + ekin;
       aGamma = new G4DynamicParticle(G4Gamma::GammaDefinition(),
                                      G4ParticleMomentum(1.,0.,0.),
@@ -192,14 +192,14 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
       G4double ran1 = G4UniformRand();
       G4double ran2 = G4UniformRand();
       G4double cost = -1. + 2.*ran1;
-      G4double sint = sqrt(abs(1. - cost*cost));
+      G4double sint = std::sqrt(std::abs(1. - cost*cost));
       G4double phi = ran2*twopi;
       //      G4cout << ran1 << " " << ran2 << G4endl;
       //      G4cout << cost << " " << sint << " " << phi << G4endl;
       theSecondary = theParticleChange.GetSecondary(i - 1);
       G4double pp = theSecondary->GetParticle()->GetTotalMomentum()/MeV;
-      G4double px = pp*sint*sin(phi);
-      G4double py = pp*sint*cos(phi);
+      G4double px = pp*sint*std::sin(phi);
+      G4double py = pp*sint*std::cos(phi);
       G4double pz = pp*cost;
       //      G4cout << pp << G4endl;
       //      G4cout << px << " " << py << " " << pz << G4endl;
@@ -213,8 +213,8 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
       py = py + a*Py;
       pz = pz + a*Pz;
       G4double p2 = px*px + py*py + pz*pz;
-      pp = sqrt(p2);
-      e = sqrt(e0*e0 + p2);
+      pp = std::sqrt(p2);
+      e = std::sqrt(e0*e0 + p2);
       G4double ekin = e - theSecondary->GetParticle()->GetDefinition()->GetPDGMass()/MeV;
       theSecondary->GetParticle()->SetMomentumDirection(G4ParticleMomentum(px/pp,
                                                             py/pp,
@@ -256,12 +256,12 @@ G4LFission::Atomas(const G4double A, const G4double Z)
 
    G4double mass = (A - Z)*rmn + Z*rmp + Z*rmel
                    - 15.67*A
-                   + 17.23*pow(A, 2./3.)
+                   + 17.23*std::pow(A, 2./3.)
                    + 93.15*(A/2. - Z)*(A/2. - Z)/A
-                   + 0.6984523*Z*Z/pow(A, 1./3.);
+                   + 0.6984523*Z*Z/std::pow(A, 1./3.);
    G4int ipp = (ia - iz)%2;
    G4int izz = iz%2;
-   if (ipp == izz) mass = mass + (ipp + izz -1)*12.*pow(A, -0.5);
+   if (ipp == izz) mass = mass + (ipp + izz -1)*12.*std::pow(A, -0.5);
 
    return mass;
 }

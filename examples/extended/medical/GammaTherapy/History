@@ -1,0 +1,46 @@
+$Id: History,v 1.8 2004/12/15 12:07:39 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    GammaTherapy History file
+                    -------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+15 Dec 04: V.Ivant (gtherapy-V06-02-07)
+- Uncomment out the StepFunction in GammaTherapy.in
+- Uncommnet line in PhysicsList constructor,w hich is needed to 
+  get UI command
+
+13 Dec 04: S.Sadilov (gtherapy-V06-02-06)
+- Comment out the StepFunction in GammaTherapy.in
+
+02 Dec 04: V.Ivant (gtherapy-V06-02-05)
+- Migration to cmath
+
+02-12-04 V.Ivan. (gtherapy-V06-02-04)
+- Fix bug - miration in ParticleChange
+- Use EM PhysicsList for 7.0
+
+30-11-04 V.Ivan. (gtherapy-V06-02-03)
+- Fix bug - comment out step max
+
+01-11-04 V.Ivan. (gtherapy-V06-02-02)
+- cleanup for the release
+     
+13-09-04 V.Ivan. (gtherapy-V06-02-01)
+- fix normalisation of histograms; 
+- change position of plane for scoring radial distribution 
+  from 10 cm to 7 cm;  
+
+03-08-04 V.Ivan. (gtherapy-V06-02-00)
+- created;
+     

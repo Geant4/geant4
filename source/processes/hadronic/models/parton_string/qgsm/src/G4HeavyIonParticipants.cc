@@ -121,7 +121,7 @@ void G4HeavyIonParticipants::BuildInteractions(const G4ReactionProduct  &thePrim
 	if (Probability > rndNumber)
         {
 
-//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<sqrt(Distance2)<<G4endl;
+//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<std::sqrt(Distance2)<<G4endl;
           hitOneOrMore = 1;
 	  G4IonParticipants_NPart ++;
 	  G4VSplitableHadron* aTarget;

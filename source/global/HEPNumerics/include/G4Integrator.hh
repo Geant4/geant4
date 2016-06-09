@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.hh,v 1.5 2001/07/11 10:00:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Integrator.hh,v 1.6 2004/11/12 16:25:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Class description:
 //
@@ -39,8 +39,8 @@
 #ifndef G4INTEGRATOR_HH
 #define G4INTEGRATOR_HH 1
 
-#include "globals.hh"
-#include <math.h>
+#include "G4Types.hh"
+#include <cmath>
 
 template <class T, class F>
 class G4Integrator

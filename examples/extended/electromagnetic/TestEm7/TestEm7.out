@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,16 +42,8 @@ Current available graphics systems are:
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
-#
 /testem/phys/addPhysics  standard	# em physics     
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52	# em physics
 ###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize
@@ -59,13 +51,6 @@ userDetector->Construct() start.
 
 ---------------------------------------------------------
 ---> The Absorber is 20 cm  of Water
-
----------------------------------------------------------
----> There are 4 tallies : 2 2 2 mm  of Water
-tally 0: position = -9.9 0 0 cm 
-tally 1: position = -5 0 0 cm 
-tally 2: position = 0 0 0 fm 
-tally 3: position = 5 0 0 cm 
 
 ---------------------------------------------------------
 World is registered to the default region.
@@ -78,12 +63,12 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /gun/particle proton
 /gun/energy 160 MeV
-/testem/gun/rndm 2 mm
 #
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
 #
 /run/beamOn 10000
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -135,34 +120,50 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -195,16 +196,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k Absorber
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1        5          8         0.00    Absorber
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -235,20 +226,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=154.28s Real=375.56s Sys=54.77s
+  User=138.46s Real=498.97s Sys=57.36s
 
----------------------------------------------------------
- Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.400219 GeV	0.65001367 % 	0.00020828743 Gy
-tally 1: 	 	7.9906299 GeV	0.49941437 % 	0.00016003008 Gy
-tally 2: 	 	3.6423712 GeV	0.2276482 % 	7.2946557e-05 Gy
-tally 3: 	 	1.8338852 GeV	0.11461782 % 	3.6727615e-05 Gy
+ The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
----------------------------------------------------------
+ projected Range= 17.694 cm    rms= 2.8027 mm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1800509887, 111688235
+ Current couple of seeds = 1666420419, 901908397
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

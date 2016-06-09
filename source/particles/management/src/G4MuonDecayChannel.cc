@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.9 2001/07/11 10:02:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4MuonDecayChannel.cc,v 1.11 2004/12/10 18:02:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // ------------------------------------------------------------
@@ -123,13 +123,13 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
    } while (energy <0.0);
   //create daughter G4DynamicParticle 
   // daughter 0 (electron)
-  daughtermomentum[0] = sqrt(energy*energy + 2.0*energy* daughtermass[0]);
+  daughtermomentum[0] = std::sqrt(energy*energy + 2.0*energy* daughtermass[0]);
   G4double costheta, sintheta, phi, sinphi, cosphi; 
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphi = sin(phi);
-  cosphi = cos(phi);
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+  phi  = twopi*G4UniformRand()*rad;
+  sinphi = std::sin(phi);
+  cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
@@ -138,13 +138,13 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   // daughter 1 ,2 (nutrinos)
   // create neutrinos in the C.M frame of two neutrinos
   G4double energy2 = parentmass*(1.0 - x/2.0); 
-  G4double vmass   = sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
+  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
-  G4double sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
-  G4double phin  = 2.0*M_PI*G4UniformRand()*rad;
-  G4double sinphin = sin(phin);
-  G4double cosphin = cos(phin);
+  G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
+  G4double phin  = twopi*G4UniformRand()*rad;
+  G4double sinphin = std::sin(phin);
+  G4double cosphin = std::cos(phin);
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 

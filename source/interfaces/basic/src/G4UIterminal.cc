@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIterminal.cc,v 1.19 2003/06/16 16:56:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "G4Types.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.12 2004/06/11 14:30:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4SmoothTrajectory.cc,v 1.13 2004/11/18 23:10:10 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // ---------------------------------------------------------------
@@ -141,6 +141,10 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
 			      "Physics","","G4ThreeVector");
 
+    G4String IMag("IMag");
+    (*store)[IMag] = G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
+			      "Physics","","G4double");
+
     G4String NTP("NTP");
     (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
 
@@ -177,6 +181,10 @@ std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
   s.seekp(std::ios::beg);
   s << G4BestUnit(initialMomentum,"Energy") << std::ends;
   values->push_back(G4AttValue("IMom",c,""));
+
+  s.seekp(std::ios::beg);
+  s << initialMomentum.mag() << std::ends;
+  values->push_back(G4AttValue("IMag",c,""));
 
   s.seekp(std::ios::beg);
   s << GetPointEntries() << std::ends;

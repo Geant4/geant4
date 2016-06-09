@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10CalorHit.cc,v 1.2 2001/07/11 09:57:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10CalorHit.cc,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -47,13 +47,13 @@ Em10CalorHit::~Em10CalorHit()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 Em10CalorHit::Em10CalorHit(const Em10CalorHit& right)
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const Em10CalorHit& Em10CalorHit::operator=(const Em10CalorHit& right)
@@ -61,13 +61,6 @@ const Em10CalorHit& Em10CalorHit::operator=(const Em10CalorHit& right)
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
   return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-int Em10CalorHit::operator==(const Em10CalorHit& right) const
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

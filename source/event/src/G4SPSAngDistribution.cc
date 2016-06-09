@@ -64,6 +64,7 @@ G4SPSAngDistribution::G4SPSAngDistribution()
   DR = 0.;
   DX = 0.;
   DY = 0.;
+  FocusPoint = G4ThreeVector(0., 0., 0.);
   UserDistType = "NULL";
   UserWRTSurface = true;
   UserAngRef = false;
@@ -79,8 +80,8 @@ G4SPSAngDistribution::~G4SPSAngDistribution()
 void G4SPSAngDistribution::SetAngDistType(G4String atype)
 {
   if(atype != "iso" && atype != "cos" && atype != "user" && atype != "planar"
-     && atype != "beam1d" && atype != "beam2d")
-    G4cout << "Error, distribution must be iso, cos, planar, beam1d, beam2d or user" << G4endl;
+     && atype != "beam1d" && atype != "beam2d"  && atype != "focused")
+    G4cout << "Error, distribution must be iso, cos, planar, beam1d, beam2d, focused or user" << G4endl;
   else
     AngDistType = atype;
   if (AngDistType == "cos") MaxTheta = pi/2. ;
@@ -172,6 +173,11 @@ void G4SPSAngDistribution::UserDefAngPhi(G4ThreeVector input)
   UDefPhiH.InsertValues(phhi, val); 
 }
 
+void G4SPSAngDistribution::SetFocusPoint(G4ThreeVector input)
+{
+  FocusPoint = input;
+}
+
 void G4SPSAngDistribution::SetUserWRTSurface(G4bool wrtSurf)
 {
   // This is only applied in user mode?
@@ -202,9 +208,9 @@ void G4SPSAngDistribution::GenerateBeamFlux()
     { 
       px = G4RandGauss::shoot(0.0,DX);
       py = G4RandGauss::shoot(0.0,DY);
-      theta = sqrt (px*px + py*py);
+      theta = std::sqrt (px*px + py*py);
       if (theta != 0.) { 
-	phi = acos(px/theta);
+	phi = std::acos(px/theta);
 	if ( py < 0.) phi = -phi;
       }
       else
@@ -212,9 +218,9 @@ void G4SPSAngDistribution::GenerateBeamFlux()
 	  phi = 0.0;
 	}
     }
-  px = -sin(theta) * cos(phi);
-  py = -sin(theta) * sin(phi);
-  pz = -cos(theta);
+  px = -std::sin(theta) * std::cos(phi);
+  py = -std::sin(theta) * std::sin(phi);
+  pz = -std::cos(theta);
   G4double finx, finy,  finz ;
   finx = px, finy =py, finz =pz;
   if (UserAngRef){
@@ -223,7 +229,7 @@ void G4SPSAngDistribution::GenerateBeamFlux()
     finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
     finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
     finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
-    G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+    G4double ResMag = std::sqrt((finx*finx) + (finy*finy) + (finz*finz));
     finx = finx/ResMag;
     finy = finy/ResMag;
     finz = finz/ResMag;
@@ -237,6 +243,15 @@ void G4SPSAngDistribution::GenerateBeamFlux()
     G4cout << "Generating beam vector: " << particle_momentum_direction << G4endl;
 }
 
+void G4SPSAngDistribution::GenerateFocusedFlux()
+{
+  particle_momentum_direction = (FocusPoint - posDist->particle_position).unit();
+  // 
+  // particle_momentum_direction now holds unit momentum vector.
+  if(verbosityLevel >= 1)
+    G4cout << "Generating focused vector: " << particle_momentum_direction << G4endl;
+}
+
 void G4SPSAngDistribution::GenerateIsotropicFlux()
 {
   // generates isotropic flux.
@@ -247,13 +262,13 @@ void G4SPSAngDistribution::GenerateIsotropicFlux()
   //
   G4double sintheta, sinphi,costheta,cosphi;
   rndm = angRndm->GenRandTheta();
-  costheta = cos(MinTheta) - rndm * (cos(MinTheta) - cos(MaxTheta));
-  sintheta = sqrt(1. - costheta*costheta);
+  costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+  sintheta = std::sqrt(1. - costheta*costheta);
   
   rndm2 = angRndm->GenRandPhi();
   Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
-  sinphi = sin(Phi);
-  cosphi = cos(Phi);
+  sinphi = std::sin(Phi);
+  cosphi = std::cos(Phi);
 
   px = -sintheta * cosphi;
   py = -sintheta * sinphi;
@@ -288,7 +303,7 @@ void G4SPSAngDistribution::GenerateIsotropicFlux()
       finz = (px*posDist->SideRefVec1.z()) + (py*posDist->SideRefVec2.z()) + (pz*posDist->SideRefVec3.z());
     }
   }
-  G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+  G4double ResMag = std::sqrt((finx*finx) + (finy*finy) + (finz*finz));
   finx = finx/ResMag;
   finy = finy/ResMag;
   finz = finz/ResMag;
@@ -310,14 +325,14 @@ void G4SPSAngDistribution::GenerateCosineLawFlux()
   //
   G4double sintheta, sinphi,costheta,cosphi;
   rndm = angRndm->GenRandTheta();
-  sintheta = sqrt( rndm * (sin(MaxTheta)*sin(MaxTheta) - sin(MinTheta)*sin(MinTheta) ) 
-		   +sin(MinTheta)*sin(MinTheta) );
-  costheta = sqrt(1. -sintheta*sintheta);
+  sintheta = std::sqrt( rndm * (std::sin(MaxTheta)*std::sin(MaxTheta) - std::sin(MinTheta)*std::sin(MinTheta) ) 
+		   +std::sin(MinTheta)*std::sin(MinTheta) );
+  costheta = std::sqrt(1. -sintheta*sintheta);
   
   rndm2 = angRndm->GenRandPhi();
   Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
-  sinphi = sin(Phi);
-  cosphi = cos(Phi);
+  sinphi = std::sin(Phi);
+  cosphi = std::cos(Phi);
 
   px = -sintheta * cosphi;
   py = -sintheta * sinphi;
@@ -350,7 +365,7 @@ void G4SPSAngDistribution::GenerateCosineLawFlux()
       finz = (px*posDist->SideRefVec1.z()) + (py*posDist->SideRefVec2.z()) + (pz*posDist->SideRefVec3.z());
     }
   }
-  G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+  G4double ResMag = std::sqrt((finx*finx) + (finy*finy) + (finz*finz));
   finx = finx/ResMag;
   finy = finy/ResMag;
   finz = finz/ResMag;
@@ -398,7 +413,7 @@ void G4SPSAngDistribution::GenerateUserDefFlux()
     while(Theta > MaxTheta || Theta < MinTheta)
       {
 	rndm = angRndm->GenRandTheta();
-	Theta = acos(1. - (2. * rndm));
+	Theta = std::acos(1. - (2. * rndm));
       }
     Phi = 10.;
     while(Phi > MaxPhi || Phi < MinPhi)
@@ -413,11 +428,11 @@ void G4SPSAngDistribution::GenerateUserDefFlux()
       while(Phi > MaxPhi || Phi < MinPhi)
 	Phi = GenerateUserDefPhi();
     }
-  px = -sin(Theta) * cos(Phi);
-  py = -sin(Theta) * sin(Phi);
-  pz = -cos(Theta);
+  px = -std::sin(Theta) * std::cos(Phi);
+  py = -std::sin(Theta) * std::sin(Phi);
+  pz = -std::cos(Theta);
 
-  pmag = sqrt((px*px) + (py*py) + (pz*pz));
+  pmag = std::sqrt((px*px) + (py*py) + (pz*pz));
 
   if(!UserWRTSurface) {
     G4double finx, finy, finz;      
@@ -432,7 +447,7 @@ void G4SPSAngDistribution::GenerateUserDefFlux()
       finy = py;
       finz = pz;
     }
-    G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+    G4double ResMag = std::sqrt((finx*finx) + (finy*finy) + (finz*finz));
     finx = finx/ResMag;
     finy = finy/ResMag;
     finz = finz/ResMag;
@@ -458,7 +473,7 @@ void G4SPSAngDistribution::GenerateUserDefFlux()
     G4double resultz = (pxh*posDist->SideRefVec1.z()) + (pyh*posDist->SideRefVec2.z()) + 
       (pzh*posDist->SideRefVec3.z());
     
-    G4double ResMag = sqrt((resultx*resultx) + (resulty*resulty) + (resultz*resultz));
+    G4double ResMag = std::sqrt((resultx*resultx) + (resulty*resulty) + (resultz*resultz));
     resultx = resultx/ResMag;
     resulty = resulty/ResMag;
     resultz = resultz/ResMag;
@@ -592,6 +607,8 @@ G4ParticleMomentum G4SPSAngDistribution::GenerateOne()
     GenerateBeamFlux();
   else if(AngDistType == "user")
     GenerateUserDefFlux();
+  else if(AngDistType == "focused")
+    GenerateFocusedFlux();
   else
     G4cout << "Error: AngDistType has unusual value" << G4endl;
   return particle_momentum_direction;

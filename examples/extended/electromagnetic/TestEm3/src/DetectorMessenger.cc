@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.cc,v 1.5 2004/06/09 14:18:47 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: DetectorMessenger.cc,v 1.7 2004/11/23 14:05:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +44,9 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   testemDir = new G4UIdirectory("/testem/");
   testemDir->SetGuidance("UI commands specific to this example");
   
+  detDir = new G4UIdirectory("/testem/det/");
+  detDir->SetGuidance("detector construction commands");
+  
   SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
   SizeYZCmd->SetParameterName("Size",false);
@@ -66,13 +68,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
    
   AbsorCmd = new G4UIcommand("/testem/det/setAbsor",this);
   AbsorCmd->SetGuidance("Set the absor nb, the material, the thickness.");
-  AbsorCmd->SetGuidance("  absor number : from 0 to NbOfAbsor-1");
+  AbsorCmd->SetGuidance("  absor number : from 1 to NbOfAbsor");
   AbsorCmd->SetGuidance("  material name");
   AbsorCmd->SetGuidance("  thickness (with unit) : t>0.");
   //
   G4UIparameter* AbsNbPrm = new G4UIparameter("AbsorNb",'i',false);
-  AbsNbPrm->SetGuidance("absor number : from 0 to NbOfAbsor-1");
-  AbsNbPrm->SetParameterRange("AbsorNb>=0");
+  AbsNbPrm->SetGuidance("absor number : from 1 to NbOfAbsor");
+  AbsNbPrm->SetParameterRange("AbsorNb>0");
   AbsorCmd->SetParameter(AbsNbPrm);
   //
   G4UIparameter* MatPrm = new G4UIparameter("material",'s',false);
@@ -104,13 +106,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
-      
-  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
-  MaxStepCmd->SetGuidance("Set max allowed step size");
-  MaxStepCmd->SetParameterName("Size",false);
-  MaxStepCmd->SetRange("Size>0.");
-  MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +118,7 @@ DetectorMessenger::~DetectorMessenger()
   delete AbsorCmd;
   delete MagFieldCmd;
   delete UpdateCmd;
-  delete MaxStepCmd;
+  delete detDir;  
   delete testemDir;
 }
 
@@ -158,9 +153,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
            
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
-   
-  if( command == MaxStepCmd )
-   { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

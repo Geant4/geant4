@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.15 2003/06/16 17:14:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ViewParameters.cc,v 1.17 2004/12/07 23:41:01 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // John Allison  19th July 1996
@@ -36,6 +36,7 @@
 
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
+  fAuxEdgeVisible (false),
   fRepStyle (polyhedron),
   fCulling (true),
   fCullInvisible (true),
@@ -97,7 +98,7 @@ G4double G4ViewParameters::GetCameraDistance (G4double radius) const {
     cameraDistance = radius;
   }
   else {
-    cameraDistance = radius / sin (fFieldHalfAngle) - fDolly;
+    cameraDistance = radius / std::sin (fFieldHalfAngle) - fDolly;
   }
   return cameraDistance;
 }
@@ -125,7 +126,7 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
     frontHalfHeight = radius / fZoomFactor;
   }
   else {
-    frontHalfHeight = nearDistance * tan (fFieldHalfAngle) / fZoomFactor;
+    frontHalfHeight = nearDistance * std::tan (fFieldHalfAngle) / fZoomFactor;
   }
   return frontHalfHeight;
 }
@@ -220,6 +221,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
 
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
+      (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
       (fRepStyle             != v.fRepStyle)             ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||
@@ -292,6 +294,10 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "View parameters and options:";
 
   os << "\n  Drawing style: " << v.fDrawingStyle;
+
+  os << "\n  Auxiliary edges: ";
+  if (!v.fAuxEdgeVisible) os << "in";
+  os << "visible";
 
   os << "\n  Representation style: ";
   switch (v.fRepStyle) {
@@ -425,6 +431,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
+      (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
       (fRepStyle             != v.fRepStyle)             ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||

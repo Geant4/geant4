@@ -28,7 +28,7 @@
  // J.P.Wellisch: 23-Apr-97: minor simplifications
  // modified by J.L.Chuma 24-Jul-97  to set the total momentum in Cinema and
  //                                  EvaporationEffects
- // modified by J.L.Chuma 21-Oct-97  put abs() around the totalE^2-mass^2
+ // modified by J.L.Chuma 21-Oct-97  put std::abs() around the totalE^2-mass^2
  //                                  in calculation of total momentum in
  //                                  Cinema and EvaporationEffects
  // Chr. Volcker, 10-Nov-1997: new methods and class variables.
@@ -77,7 +77,7 @@ GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) 
   G4ReactionProduct result;
   G4double value = 0;
   G4double random = 1;
-  G4double norm = 3.*sqrt(k_Boltzmann*temp*aMass*G4Neutron::Neutron()->GetPDGMass());
+  G4double norm = 3.*std::sqrt(k_Boltzmann*temp*aMass*G4Neutron::Neutron()->GetPDGMass());
   norm /= G4Neutron::Neutron()->GetPDGMass();
   norm *= 5.;
   norm += velMag;
@@ -103,8 +103,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     py = GetThermalPz(theTarget.GetMass(), currentTemp);
     pz = GetThermalPz(theTarget.GetMass(), currentTemp);
     theTarget.SetMomentum(px, py, pz);
-    G4double tMom = sqrt(px*px+py*py+pz*pz);
-    G4double tEtot = sqrt((tMom+theTarget.GetMass())*
+    G4double tMom = std::sqrt(px*px+py*py+pz*pz);
+    G4double tEtot = std::sqrt((tMom+theTarget.GetMass())*
                           (tMom+theTarget.GetMass())-
                           2.*tMom*theTarget.GetMass());
     if(1-tEtot/theTarget.GetMass()>0.001)
@@ -208,12 +208,12 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double mass =
       (A-Z)*neutron_mass + Z*proton_mass + Z*electron_mass
       - 15.67*A                                          // nuclear volume
-      + 17.23*pow(A,2./3.)                               // surface energy
-      + 93.15*pow(A/2.-Z,2.)/A                           // asymmetry
-      + 0.6984523*pow(Z,2.)*pow(A,-1./3.);               // coulomb
+      + 17.23*std::pow(A,2./3.)                               // surface energy
+      + 93.15*std::pow(A/2.-Z,2.)/A                           // asymmetry
+      + 0.6984523*std::pow(Z,2.)*std::pow(A,-1./3.);               // coulomb
     G4int ipp = (myA - myZ)%2;            // pairing
     G4int izz = myZ%2;
-    if( ipp == izz )mass += (ipp+izz-1) * 12.0 * pow(A,-0.5);
+    if( ipp == izz )mass += (ipp+izz-1) * 12.0 * std::pow(A,-0.5);
     return mass*MeV;
   }
  
@@ -221,7 +221,7 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
   G4Nucleus::GetThermalPz( const G4double mass, const G4double temp ) const
   {
     G4double result = G4RandGauss::shoot();
-    result *= sqrt(k_Boltzmann*temp*mass); // Das ist impuls (Pz),
+    result *= std::sqrt(k_Boltzmann*temp*mass); // Das ist impuls (Pz),
                                            // nichtrelativistische rechnung
                                            // Maxwell verteilung angenommen
     return result;
@@ -245,14 +245,14 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double ek = kineticEnergy/GeV;
     G4float ekin = std::min( 4.0, std::max( 0.1, ek ) );
     const G4float atno = std::min( 120., aEff ); 
-    const G4float gfa = 2.0*((aEff-1.0)/70.)*exp(-(aEff-1.0)/70.);
+    const G4float gfa = 2.0*((aEff-1.0)/70.)*std::exp(-(aEff-1.0)/70.);
     //
     // 0.35 value at 1 GeV
     // 0.05 value at 0.1 GeV
     //
-    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*log(ekin) );
-    G4float exnu = 7.716 * cfa * exp(-cfa)
-      * ((atno-1.0)/120.)*exp(-(atno-1.0)/120.);
+    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*std::log(ekin) );
+    G4float exnu = 7.716 * cfa * std::exp(-cfa)
+      * ((atno-1.0)/120.)*std::exp(-(atno-1.0)/120.);
     G4float fpdiv = std::max( 0.5, 1.0-0.25*ekin*ekin );
     //
     // pnBlackTrackEnergy  is the kinetic energy (in GeV) available for
@@ -301,13 +301,13 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     static const G4double expxl = -expxu;         // lower bound for arg. of exp
     
     G4double ek = kineticEnergy/GeV;
-    G4double ekLog = log( ek );
-    G4double aLog = log( aEff );
+    G4double ekLog = std::log( ek );
+    G4double aLog = std::log( aEff );
     G4double em = std::min( 1.0, 0.2390 + 0.0408*aLog*aLog );
     G4double temp1 = -ek * std::min( 0.15, 0.0019*aLog*aLog*aLog );
-    G4double temp2 = exp( std::max( expxl, std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
+    G4double temp2 = std::exp( std::max( expxl, std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
     G4double result = 0.0;
-    if( abs( temp1 ) < 1.0 )
+    if( std::abs( temp1 ) < 1.0 )
     {
       if( temp2 > 1.0e-10 )result = temp1*temp2;
     }
@@ -325,20 +325,20 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     // chv: .. we assume zero temperature!
     
     // momentum is equally distributed in each phasespace volume dpx, dpy, dpz.
-    G4double ranflat1=RandFlat::shoot((HepDouble)0.,(HepDouble)fermiMomentum);   
-    G4double ranflat2=RandFlat::shoot((HepDouble)0.,(HepDouble)fermiMomentum);   
-    G4double ranflat3=RandFlat::shoot((HepDouble)0.,(HepDouble)fermiMomentum);   
+    G4double ranflat1=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+    G4double ranflat2=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+    G4double ranflat3=RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
     G4double ranmax = (ranflat1>ranflat2? ranflat1: ranflat2);
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
     // - random decay angle
     G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
-    G4double phi  =RandFlat::shoot((HepDouble)0.,(HepDouble)2*pi);  // isotropic decay angle phi
+    G4double phi  =RandFlat::shoot((G4double)0.,(G4double)2*pi);  // isotropic decay angle phi
     
     // - setup ThreeVector
-    G4double pz=cos(theta)*ranmax;
-    G4double px=sin(theta)*cos(phi)*ranmax;
-    G4double py=sin(theta)*sin(phi)*ranmax;
+    G4double pz=std::cos(theta)*ranmax;
+    G4double px=std::sin(theta)*std::cos(phi)*ranmax;
+    G4double py=std::sin(theta)*std::sin(phi)*ranmax;
     G4ThreeVector p(px,py,pz);
     return p;
   }

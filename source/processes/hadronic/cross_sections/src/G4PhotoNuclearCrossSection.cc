@@ -22,7 +22,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: gcross-V05-02-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -57,11 +57,11 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
   static const G4double Emin=THmin+(nL-1)*dE; // minE for the HighE part
   static const G4double Emax=50000.;       // maxE for the HighE part
   static const G4int    nH=224;            // A#of HResonance points in lnE
-  static const G4double milE=log(Emin);    // Low logarithm energy for the HighE part
-  static const G4double malE=log(Emax);    // High logarithm energy (each 2.75 percent)
+  static const G4double milE=std::log(Emin);    // Low logarithm energy for the HighE part
+  static const G4double malE=std::log(Emax);    // High logarithm energy (each 2.75 percent)
   static const G4double dlE=(malE-milE)/(nH-1); // Step in logarithm energy in the HighE part
   //
-  //static const G4double shd=1.075-.0023*log(2.);  // HE PomShadowing(D)
+  //static const G4double shd=1.075-.0023*std::log(2.);  // HE PomShadowing(D)
   static const G4double shd=1.0734;                 // HE PomShadowing(D)
   static const G4double shc=0.072;                  // HE Shadowing constant
   static const G4double poc=0.0375;                 // HE Pomeron coefficient
@@ -108,7 +108,7 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 #endif
 	  if(!in)                                 // Fill the new set of parameters for the new nucleus
 	  {
-        G4double lnA=log(A);                  // The nucleus is not found in DB. It is new.
+        G4double lnA=std::log(A);                  // The nucleus is not found in DB. It is new.
         if(A==1.) lastSP=1.;                  // The Reggeon shadowing (A=1)
         else      lastSP=A*(1.-shc*lnA);      // The Reggeon shadowing
 #ifdef debug
@@ -156,7 +156,7 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 	}
 	else if (Energy<Emax)                     // High Energy region
 	{
-      G4double lE=log(Energy);
+      G4double lE=std::log(Energy);
 #ifdef debug
       G4cout<<"G4PNCS::GetCS: before HEN nH="<<nH<<",iE="<<milE<<",dlE="<<dlE<<G4endl;
 #endif
@@ -164,10 +164,10 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 	}
 	else                                      // UHE region (calculation, but not so frequent)
 	{
-      G4double lE=log(Energy);
+      G4double lE=std::log(Energy);
       //G4double sh=shd;
       //if(A==1.)sh=shp;
-      sigma=lastSP*(poc*(lE-pos)+shd*exp(-reg*lE));
+      sigma=lastSP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
 	}
 #ifdef debug
     G4cout<<"G4PNCS::GetCS: sigma="<<sigma<<G4endl;
@@ -223,7 +223,7 @@ G4double G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, const G4d
   return sigma;
 }
 
-// Calculate the functions for the log(A)
+// Calculate the functions for the std::log(A)
 G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
 {
   static const G4int nLA=49;               // A#of GDResonance basic nuclei
@@ -1494,13 +1494,13 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
     return -1;
   }
   G4int r=0;                            // Low channel for GDR (filling-flag for GDR)
-  for(G4int i=0; i<nLA; i++) if(abs(a-LA[i])<.0005)
+  for(G4int i=0; i<nLA; i++) if(std::abs(a-LA[i])<.0005)
   {
     for(G4int k=0; k<nL; k++) y[k]=SL[i][k];
     r=1;                                // Flag of filled GDR part 
   }
   G4int h=0;
-  for(G4int j=0; j<nHA; j++) if(abs(a-HA[j])<.0005)
+  for(G4int j=0; j<nHA; j++) if(std::abs(a-HA[j])<.0005)
   {
     for(G4int k=0; k<nH; k++) z[k]=SH[j][k];
     h=1;                                // Flag of filled GDR part 

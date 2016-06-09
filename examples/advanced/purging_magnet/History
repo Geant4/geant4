@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2004/06/10 10:25:16 gcosmo Exp $
+$Id: History,v 1.6 2004/11/29 14:13:10 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.4 2004/06/10 10:25:16 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+29.11.2004 - S. Guatelli     purtag-V06-02-00
+  Compilation warnings concelead
+  Migration to <cmath>
 
 10.06.2004 - G. Cosmo        purtag-V06-01-02
   Leave out the field-map file, now provided through web in compressed format:

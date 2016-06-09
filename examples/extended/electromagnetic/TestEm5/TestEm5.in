@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.13 2004/06/21 10:57:09 maire Exp $
+# $Id: TestEm5.in,v 1.14 2004/09/24 09:57:57 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -17,11 +17,18 @@
 /testem/phys/setPCut 7.0  mum
 #
 /run/initialize
-###/testem/histo/setHisto 6 100 -0.25 0.25 mrad
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
 /gun/energy 5 GeV
+#
+/testem/histo/setHisto 6 100 -0.25 0.25 mrad
+#
+#
+/testem/histo/setFileType hbook		#for paw	
+###/testem/histo/setFileType root		#for root
+###/testem/histo/setFileType XML		#for jaida
+/testem/histo/setFileName run0.aida 
 #
 /run/beamOn 100000
 

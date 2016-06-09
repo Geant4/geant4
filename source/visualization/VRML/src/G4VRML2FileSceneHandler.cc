@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.10 2004/04/19 09:08:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.11 2004/12/07 23:41:01 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"

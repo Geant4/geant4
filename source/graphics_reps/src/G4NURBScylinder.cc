@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBScylinder.cc,v 1.5 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NURBScylinder.cc,v 1.6 2004/12/07 08:42:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -58,7 +58,7 @@ G4NURBScylinder::G4NURBScylinder(G4double R, G4double DZ)
 
   // define control points
 
-  const G4double sr2o2 = sqrt(2.)/2. ;
+  const G4double sr2o2 = std::sqrt(2.)/2. ;
 
   CP(mpCtrlPts[ 0] ,  0,  0,  DZ, 1 );
   CP(mpCtrlPts[ 1] ,  R, 0,  DZ, 1 );

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.25 2003/11/03 02:16:36 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VUserPhysicsList.hh,v 1.29 2004/11/29 06:13:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -97,20 +97,17 @@ class G4VUserPhysicsList
     virtual ~G4VUserPhysicsList();
 
   public:  // with description
-    // By calling the "Construct" method, 
-    // particles and processes are created    
-    void Construct();
- 
-
-  protected: // with description
-   // These two methods of  ConstructParticle() and ConstructProcess()
-   // will be invoked in the Construct() method. 
-
-   // each particle type will be instantiated
+   // Each particle type will be instantiated
+   // This method is invoked by the RunManger 
    virtual void ConstructParticle() = 0;
+
+   // By calling the "Construct" method, 
+   // process manager and processes are created. 
+   void Construct();
  
-   // each physics process will be instantiated and
+   // Each physics process will be instantiated and
    // registered to the process manager of each particle type 
+   // This method is invoked in Construct" method 
    virtual void ConstructProcess() = 0;
 
   protected: // with description
@@ -139,6 +136,9 @@ class G4VUserPhysicsList
     // retrieved from files
     void BuildPhysicsTable();    
   
+   // do PreparePhysicsTable for specified particle type
+    void PreparePhysicsTable(G4ParticleDefinition* );    
+
    // do BuildPhysicsTable for specified particle type
     void BuildPhysicsTable(G4ParticleDefinition* );    
 
@@ -181,22 +181,8 @@ class G4VUserPhysicsList
     // at the proper moment.
     void DumpCutValuesTableIfRequested();
 
-    void DumpCutValues(const G4String &particle_name = "ALL")
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " Obsolete DumpCutValues() method is invoked for " << particle_name << G4endl;
-    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-    DumpCutValuesTable();
-   }
-    void DumpCutValues(G4ParticleDefinition* )
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " DumpCutValues() became obsolete." << G4endl;
-    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-    DumpCutValuesTable();
-   }
+    void DumpCutValues(const G4String &particle_name = "ALL");
+    void DumpCutValues(G4ParticleDefinition* );
 
   public: // with description
     void  SetVerboseLevel(G4int value);
@@ -310,25 +296,24 @@ class G4VUserPhysicsList
 // Following method is for backward compatibility and removed soon
 ////////////////////////////////////////////////////////////////////////////
   protected:
-   void SetCutValueForOthers(G4double)
-   {
-    G4cerr << "WARNING !" << G4endl;
-    G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
-    G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
-    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-   }
+  void SetCutValueForOthers(G4double) const;
 
 };
 
+inline
+ void G4VUserPhysicsList::SetCutValueForOthers(G4double) const
+{
+  G4cerr << "WARNING !" << G4endl;
+  G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
+  G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
+  G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+}
 
 inline void G4VUserPhysicsList::Construct()
 {
 #ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
-
-  if (verboseLevel >1) G4cout << "Construct particles " << G4endl;  
 #endif
-  ConstructParticle();
 
   InitializeProcessManager();
 

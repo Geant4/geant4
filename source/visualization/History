@@ -1,4 +1,4 @@
-$Id: History,v 1.247 2004/06/09 07:40:49 gcosmo Exp $
+$Id: History,v 1.266 2004/12/10 18:15:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,139 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th December 2004 Gabriele Cosmo (vis-V06-02-09)
+- Replaced M_PI with CLHEP's pi.
+
+7th December 2004 Joseph Perl (vis-V06-02-08)
+- Tagged right after migration to cmath
+- All occurences of include <math.h> have now become include <cmath>.
+- All math functions are now prefaced with std::
+
+7th December 2004 Joseph Perl (vis-V06-02-07)
+- Tagged right before migration to cmath
+
+26th November 2004 Joseph Perl (vis-V06-02-06)
+- Tagged for release 7.0.
+- Made from vis-V06-02-05
+- plus opengl-V06-02-07 by John Allison
+- plus vis-HepRep-V06-02-02 by Mark Donszelmann
+- plus openinventor-V07-00-00 by Guy Barrand
+
+18th November 2004  John Allison
+- Included opengl-V06-02-07.
+
+11th November 2004  John Allison  (vis-V06-02-05)
+- Made use of smart method GetPolyhedron for solids.  This greatly
+  speeds 2nd and subsequent drawings when kernel access is required.
+- Rationalised use of EstablishSpecials: functionality moved to base class.
+- Removed use of obsolete G4Polymarker::line.
+
+22nd September 2004  John Allison  (vis-V06-02-04)
+- Moved Doxyfile to management.  doxygen output to tmp area.
+- modeling-V06-02-01 - small fixes.
+- vistree-V06-02-01 - small fixes.
+- opengl-V06-02-06 - Trap non-regular polyhedra and other small changes.
+- DAWN-V06-02-00 - Improve diagnostic on trapping non-regular polyhedra.
+- vistest-V06-02-02: refined rotated tube test.
+
+13th September 2004  John Allison  (vis-V06-02-03)
+- vistree-V06-02-00: Improved ASCIITree:
+  verbosity >= 3: prints volume, density of all volumes in hierarchy.
+  verbosity >= 4: calculates the mass of the complete geometry tree taking
+    into account daughters up to the depth specified for each physical
+    volume in the current scene.  Culling is ignored so that all volumes
+    are processed.  The calculation is quite tricky, since it involves
+    subtracting the mass of that part of the mother that is occupied by
+    each daughter and then adding the mass of the daughter, and so on
+    down the heirarchy.  Uses G4PhysicalVolumeMassScene - see below.
+  Added option to write to file (/vis/ASCIITree/set/outFile).
+- modeling-V06-02-00: Added G4PhysicalVolumeMassScene and improvements
+  to G4PhysicalVolumeModel.  See modeling/History for more details.
+- Removed obsolete file: G4VisToOldVisCommands.hh
+- Corrected mistake in /vis/viewer/set/*Vector commands.
+- Augmented ParameterisedBox and rotated a tracker tube in test directory.
+- Brought README.built_in_commands up to date for Geant4 6.2.  Removed all
+  references to old commands.'
+
+3rd August 2004  John Allison
+- Rationalised vis command code (uses G4UIcommand static conversion
+  functions where possible).
+- Removed G4ViewParameters::DrawingStyle GetDrawingStyle (const
+  G4Visible&).  Instead, developer has to:
+    // Get vis attributes - pick up defaults if none.
+    const G4VisAttributes* pVA =
+      fpViewer -> GetApplicableVisAttributes (v.GetVisAttributes ());
+  where v is the visible object (polyline, circle, polyhedron, etc.), and:
+    // Get view parameters that the user can force through the vis
+    // attributes, thereby over-riding the current view parameter.
+    G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+    G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  Most developers do this anyway, so the removed routine was redundant
+  and resulting code is more efficient and transparent.  To get
+  colour, the developer can pick up directly from the vis attrributes,
+  pVA, obtained as above:
+    const G4Colour& c = pVA -> GetColour ();
+  or use a slightly less efficient method:
+    const G4Colour& c = GetColour (v);
+  where v is the visible object.
+  Note that for text, the developer must use a different procedure,
+  since the default text colour is determined by the default text vis
+  attributes, which may be specified independent of default vis
+  attributes of other types of visible objects.  A function,
+  GetTextColour, is provided and the recommended use is:
+    const G4Colour& c = GetTextColour (text);  // Picks up default if none.
+- Rationalised use of vis attributes in OpenGL and XXX.
+
+28th July 2004  John Allison  (vis-V06-02-02 with greps-V06-02-00)
+- Implemented force auxiliary edge visible feature of G4VisAttributes.
+- Included openinventor-V06-02-00 (minor revision - Guy Barrand).
+
+23rd July 2004  John Allison
+- Added auxiliary edge visible flag to G4ViewParameters and a new
+  command, /vis/viewer/set/auxiliaryEdge.  (Auxiliary edges are not
+  genuine edges of the volume.  They may be in a curved surface made
+  out of polygons, for example, or in plane surface of complicated
+  shape that has to be broken down into simpler polygons.
+  HepPolyhedron breaks all surfaces into triangles or quadrilaterals.
+  There will be auxiliary edges for any volumes with a curved surface,
+  such as a tube or a sphere, or a volume resulting from a Boolean
+  operation.  Normally, they are not shown, but sometimes it is useful
+  to see them.  In particular, a sphere, because it has no egdes, will
+  not be seen in wireframe mode in some graphics systems unless this
+  flag is turned on.)
+
+16th July 2004  John Allison
+- Refined forced wireframe algorithm - *always* force wireframe even
+  if hidden line removal is specified.
+- opengl-V06-02-04.
+
+15th July 2004  John Allison
+- Small improvement to G4XXX (sample graphics system).
+
+14th July 2004  John Allison  (vis-V06-02-01)
+- Removed deprecated commands:
+    /vis/viewer/show               (use /vis/viewer/update)
+    /vis/viewer/lightsThetaPhi     (use /vis/viewer/set/lightsThetaPhi)
+    /vis/viewer/lightsVector       (use /vis/viewer/set/lightsVector)
+    /vis/viewer/viewpointThetaPhi  (use /vis/viewer/set/viewpointThetaPhi)
+    /vis/viewer/viewpointVector    (use /vis/viewer/set/viewpointVector)
+  (See geant4/source/visualization/README.built_in_commands for list
+  of current commands.)
+- Tidied guidance for /vis/viewer/set.
+- Included opengl-V06-02-03 (cosmetic).
+
+14th July 2004  John Allison  (vis-V06-02-00)
+- opengl-V06-02-02 and vistest-V06-02-01:
+  Hidden line *and/or* hidden surface removal now work for OGL*X and OGL*Xm.
+
+1st July 2004  John Allison
+- Correction to guidance of /vis/viewer/set/hiddenEdge.
+- Small improvement to README of /vis/scene/add/axes.
+- vistest-V06-02-00.
+- opengl-V06-02-00.
+- visman-V06-02-00: Fix for porting on gcc-3.4.0: made ProcessView()
+  public, since used as private friend (Gabriele Cosmo).
 
 9th June 2004  Gabriele Cosmo  (vis-V06-01-03)
 - Adopt G4DLLIMPORT/G4DLLEXPORT technique to handle extern simbols for

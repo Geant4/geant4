@@ -36,9 +36,12 @@
 // -------------------------------------------------------------------
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
+// Based on Fitted empirical Reference Cross Sections for K-Shell Ionization 
+// by Protons by H.Paul and J.Sacher, At. Data Nucl. Data Tables 42 (1989) 105
+
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExp.hh,v 1.1 2004/04/27 09:45:48 saliceti Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4hShellCrossSectionExp.hh,v 1.2 2004/11/26 08:50:47 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 #ifndef G4HSHELLCROSSSECTIONEXP_HH
 #define G4HSHELLCROSSSECTIONEXP_HH 1

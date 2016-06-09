@@ -29,7 +29,7 @@
  // J.P.Wellisch: 23-Apr-97: minor simplifications
  // modified by J.L.Chuma 24-Jul-97  to set the total momentum in Cinema and
  //                                  EvaporationEffects
- // modified by J.L.Chuma 21-Oct-97  put abs() around the totalE^2-mass^2
+ // modified by J.L.Chuma 21-Oct-97  put std::abs() around the totalE^2-mass^2
  //                                  in calculation of total momentum in
  //                                  Cinema and EvaporationEffects
  // Chr. Volcker, 10-Nov-1997: new methods and class variables.

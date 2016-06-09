@@ -21,8 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.6 2004/05/08 15:28:11 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParticleChangeForDecay.hh,v 1.8 2004/10/19 00:51:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
+
 //
 // 
 // ------------------------------------------------------------
@@ -90,12 +91,10 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     G4double GetGlobalTime(G4double timeDelay) const;
     //  Convert the time delay to the global time.
 
-  public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4ParticleChangeForDecay   
-    G4double GetTimeChange() const;
-    void     SetTimeChange(G4double t);
+    const G4ThreeVector* GetPolarization() const;
+    void  ProposePolarization(G4double Px, G4double Py, G4double Pz);
+    void  ProposePolarization(const G4ThreeVector& finalPoralization);
+    // Get/Propose the final Polarization vector.
 
   public:
     virtual void DumpInfo() const;
@@ -103,6 +102,9 @@ class G4ParticleChangeForDecay: public G4VParticleChange
   protected:
     G4double theTimeChange;
     //  The change of global time of a given particle.
+
+    G4ThreeVector thePolarizationChange;
+    //  The changed (final) polarization of a given track
  
  public:
     // for Debug 
@@ -128,19 +130,28 @@ inline
   return theTimeChange + timeDelay;
 }
 
-// Following methods will be removed in release 7.0
-inline 
-  G4double G4ParticleChangeForDecay::GetTimeChange() const
+inline
+ const G4ThreeVector* G4ParticleChangeForDecay::GetPolarization() const
 {
-  return  theTimeChange;
+  return &thePolarizationChange;
 }
 
-inline 
-  void G4ParticleChangeForDecay::SetTimeChange(G4double t)
+inline
+ void G4ParticleChangeForDecay::ProposePolarization(const G4ThreeVector& finalPoralization)
 {
-  theTimeChange = t;
+  thePolarizationChange = finalPoralization;
 }
 
+inline
+ void G4ParticleChangeForDecay::ProposePolarization(
+                                                G4double Px,
+                                                G4double Py,
+                                                G4double Pz     )
+{
+  thePolarizationChange.setX(Px);
+  thePolarizationChange.setY(Py);
+  thePolarizationChange.setZ(Pz);
+}
 
 #endif
 

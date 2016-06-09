@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Win32.hh,v 1.7 2004/04/08 08:16:34 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.

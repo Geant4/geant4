@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.19 2004/05/25 11:30:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VMultipleScattering.hh,v 1.25 2004/11/10 08:54:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +46,9 @@
 //
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 // 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
+// 30-06-04 make destructor virtual (V.Ivanchenko)
+// 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 
 // -------------------------------------------------------------------
 //
@@ -79,11 +82,14 @@ public:
   G4VMultipleScattering(const G4String& name = "msc",
                               G4ProcessType type = fElectromagnetic);
 
- ~G4VMultipleScattering();
+  virtual ~G4VMultipleScattering();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  // Initialise for build of tables
+  
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
     // Build physics table during initialisation
 
@@ -116,15 +122,15 @@ public:
   G4double MaxKinEnergy() const;
     // Print out of the class parameters
 
-  G4bool StorePhysicsTable(G4ParticleDefinition*,
-                     const G4String& directory,
-                           G4bool ascii = false);
+  G4bool StorePhysicsTable(const G4ParticleDefinition*,
+                           const G4String& directory,
+                                 G4bool ascii = false);
     // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
 
-  G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                        const G4String& directory,
-                              G4bool ascii);
+  G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
+                              const G4String& directory,
+                                    G4bool ascii);
     // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
@@ -149,14 +155,21 @@ public:
 
   void SetBuildLambdaTable(G4bool val);
 
+  const G4PhysicsTable* LambdaTable() const;
+
   virtual G4double TruePathLengthLimit(const G4Track& track,
                                              G4double& lambda,
                                              G4double currentMinimalStep) = 0;
 
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
+
+  // Define particle definition
+  const G4ParticleDefinition* Particle() const;
+  void SetParticle(const G4ParticleDefinition*);
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition&) = 0;
+  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
   G4double GetMeanFreePath(const G4Track& track,
                                  G4double,
@@ -205,6 +218,7 @@ private:
   G4PhysicsTable*             theLambdaTable;
 
   // cash
+  const G4ParticleDefinition* firstParticle;
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
@@ -331,7 +345,7 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
      trueStepLength = truePathLength;
   else
      trueStepLength = currentModel->TrueStepLength(geomStepLength);
-  fParticleChange.SetTrueStepLength(trueStepLength);
+  fParticleChange.ProposeTrueStepLength(trueStepLength);
   return &fParticleChange;
 }
 
@@ -340,6 +354,14 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
 {
   currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
+                                           G4double kinEnergy, size_t& idxRegion) const
+{
+  return modelManager->SelectModel(kinEnergy, idxRegion);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -417,6 +439,13 @@ inline  void G4VMultipleScattering::SetBoundary(G4bool val)
 inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 {
   buildLambdaTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
+{
+  return currentParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

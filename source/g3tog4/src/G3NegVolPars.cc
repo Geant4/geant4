@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3NegVolPars.cc,v 1.10 2003/06/16 16:50:50 gunter Exp $ 
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G3NegVolPars.cc,v 1.11 2004/12/07 08:33:38 gcosmo Exp $ 
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 
@@ -131,7 +131,7 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
       }
       if (Rpar[0] < 0) {
         if (Rparm != 0) Rpar[0] = std::min(Rparm[0],Rparm[1]) +
-                                  abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[3];
+                                  std::abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[3];
 	if (Rpar[0] < 0) NegPresent = TRUE;
       }
     }
@@ -142,12 +142,12 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
       }
       if (Rpar[0] < 0) {
         if (Rparm != 0) Rpar[0] = std::min(Rparm[0],Rparm[1]) +
-                                  abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[4];
+                                  std::abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[4];
         if (Rpar[0]<0) NegPresent = TRUE;
       }
       if (Rpar[1] < 0) {
         if (Rparm != 0) Rpar[1] = std::min(Rparm[2],Rparm[3]) +
-                                  abs(Rparm[2]-Rparm[3])*.5*Rpar[2]/Rparm[4];
+                                  std::abs(Rparm[2]-Rparm[3])*.5*Rpar[2]/Rparm[4];
         if (Rpar[1]<0) NegPresent = TRUE;
       }
     }
@@ -159,16 +159,16 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
       if (Rpar[0] < 0) {
         if (Rparm != 0) {
           G4double xlo = std::min(Rparm[4],Rparm[8]) +
-            abs(Rparm[4]-Rparm[8])*.5*Rpar[2]/Rparm[0];
+            std::abs(Rparm[4]-Rparm[8])*.5*Rpar[2]/Rparm[0];
           G4double xhi = std::min(Rparm[5],Rparm[9]) +
-            abs(Rparm[5]-Rparm[9])*.5*Rpar[2]/Rparm[0];
+            std::abs(Rparm[5]-Rparm[9])*.5*Rpar[2]/Rparm[0];
           Rpar[0] = std::min(xlo,xhi);
         }
         if (Rpar[0] < 0) NegPresent = TRUE;
       }
       if (Rpar[1] < 0) {
         if (Rparm != 0) Rpar[1] = std::min(Rparm[3],Rparm[7]) +
-                        abs(Rparm[3]-Rparm[7])*.5*Rpar[2]/Rparm[0];
+                        std::abs(Rparm[3]-Rparm[7])*.5*Rpar[2]/Rparm[0];
         if (Rpar[1] < 0) NegPresent = TRUE;
       }
     }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.19 2004/02/09 12:02:22 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PropagatorInField.cc,v 1.20 2004/12/02 09:31:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -344,7 +344,7 @@ G4PropagatorInField::ComputeStep(
 #ifdef G4VERBOSE
   // Check that "s" is correct
   //
-  if( fabs(OriginalState.GetCurveLength() + TruePathLength 
+  if( std::fabs(OriginalState.GetCurveLength() + TruePathLength 
       - End_PointAndTangent.GetCurveLength()) > 3.e-4 * TruePathLength )
   {
     G4cerr << " ERROR - G4PropagatorInField::ComputeStep():" << G4endl
@@ -816,7 +816,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     {
         currentSafety = 0.0 ;
     }else{
-        currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
+        currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
     }
 
     if( fUseSafetyForOptimisation && (ChordAB_Length <= currentSafety) )
@@ -950,7 +950,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
              <<   " an adjustment in the step's endpoint."  << G4endl
              << "   Two mid-points are further apart than their"
              <<   " curve length difference"                << G4endl 
-             << "   Dist = "       << sqrt(linearDistSq)
+             << "   Dist = "       << std::sqrt(linearDistSq)
              << " curve length = " << curveDist             << G4endl; 
       G4cerr << " Correction applied is " 
              << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()

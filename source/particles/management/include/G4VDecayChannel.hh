@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh,v 1.10 2002/11/20 15:05:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VDecayChannel.hh,v 1.11 2004/12/02 08:08:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // ------------------------------------------------------------
@@ -38,6 +38,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include <cmath>
 
 class    G4ParticleDefinition;
 class    G4DecayProducts;

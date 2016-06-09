@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussHermiteQ.cc,v 1.4 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4GaussHermiteQ.cc,v 1.5 2004/11/12 17:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G4GaussHermiteQ.hh"
 
@@ -41,7 +41,7 @@ G4GaussHermiteQ::G4GaussHermiteQ(      function pFunction,
    G4int i, j, k ;
    G4double newton=0.;
    G4double newton1, temp1, temp2, temp3, temp ;
-   G4double piInMinusQ = pow(pi,-0.25) ;                // 1.0/sqrt(sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(pi,-0.25) ;                // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    fNumber = (nHermite +1)/2 ;
    fAbscissa = new G4double[fNumber] ;
@@ -51,12 +51,12 @@ G4GaussHermiteQ::G4GaussHermiteQ(      function pFunction,
    {
       if(i == 1)
       {
-	 newton = sqrt((G4double)(2*nHermite + 1)) - 
-	          1.85575001*pow((G4double)(2*nHermite + 1),-0.16666999) ;
+	 newton = std::sqrt((G4double)(2*nHermite + 1)) - 
+	          1.85575001*std::pow((G4double)(2*nHermite + 1),-0.16666999) ;
       }
       else if(i == 2)
       {
-	 newton -= 1.14001*pow((G4double)nHermite,0.425999)/newton ;
+	 newton -= 1.14001*std::pow((G4double)nHermite,0.425999)/newton ;
       }
       else if(i == 3)
       {
@@ -78,12 +78,12 @@ G4GaussHermiteQ::G4GaussHermiteQ(      function pFunction,
 	 {
 	    temp3 = temp2 ;
 	    temp2 = temp1 ;
-	    temp1 = newton*sqrt(2.0/j)*temp2 - sqrt(((G4double)(j - 1))/j)*temp3 ;
+	    temp1 = newton*std::sqrt(2.0/j)*temp2 - std::sqrt(((G4double)(j - 1))/j)*temp3 ;
 	 }
-	 temp = sqrt((G4double)2*nHermite)*temp2 ;
+	 temp = std::sqrt((G4double)2*nHermite)*temp2 ;
 	 newton1 = newton ;
 	 newton = newton1 - temp1/temp ;
-         if(fabs(newton - newton1) <= tolerance) 
+         if(std::fabs(newton - newton1) <= tolerance) 
 	 {
 	    break ;
 	 }
@@ -100,7 +100,7 @@ G4GaussHermiteQ::G4GaussHermiteQ(      function pFunction,
 
 // ----------------------------------------------------------
 //
-// Gauss-Hermite method for integration of exp(-x*x)*nFunction(x) from minus infinity
+// Gauss-Hermite method for integration of std::exp(-x*x)*nFunction(x) from minus infinity
 // to plus infinity . 
 
 G4double 

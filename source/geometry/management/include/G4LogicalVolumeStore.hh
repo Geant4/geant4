@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.9 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalVolumeStore.hh,v 1.10 2004/09/02 07:49:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class G4LogicalVolumeStore
 //
@@ -56,6 +56,8 @@
 
 #include "G4LogicalVolume.hh"
 
+class G4VStoreNotifier;
+
 class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
 {
   public:  // with description
@@ -66,6 +68,8 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
       // Remove the logical volume from the collection.
     static G4LogicalVolumeStore* GetInstance();
       // Get a ptr to the unique G4LogicalVolumeStore, creating it if necessary.
+    static void SetNotifier(G4VStoreNotifier* pNotifier);
+      // Assign a notifier for allocation/deallocation of the logical volumes.
     static void Clean();
       // Delete all volumes from the store.
 
@@ -79,6 +83,7 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
   private:
 
     static G4LogicalVolumeStore* fgInstance;
+    static G4VStoreNotifier* fgNotifier;
     static G4bool locked;
 };
 

@@ -1,4 +1,4 @@
-# $Id: dedx.mac,v 1.1 2004/03/17 12:32:57 maire Exp $
+# $Id: dedx.mac,v 1.2 2004/10/20 14:32:27 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 #
 /testem/det/setNbOfLayers 1
 /testem/det/setNbOfAbsor 1
-/testem/det/setAbsor 0 Water 1 cm
+/testem/det/setAbsor 1 Water 1 cm
 /testem/det/setSizeYZ 1 cm
 #
 /testem/phys/addPhysics  standard

@@ -76,7 +76,11 @@ G4SPSRandomGenerator::G4SPSRandomGenerator()
   IPDFPhiBias = false;
   EnergyBias = false;
   IPDFEnergyBias = false;
-  bweights[0] = bweights[1] = bweights[2] = bweights[3] = bweights[4] = bweights[5] = 1. ;
+  PosThetaBias = false;
+  IPDFPosThetaBias = false;
+  PosPhiBias = false;
+  IPDFPosPhiBias = false;
+  bweights[0] = bweights[1] = bweights[2] = bweights[3] = bweights[4] = bweights[5] = bweights[6] = bweights[7]= 1. ;
   verbosityLevel = 0 ;
 }
 
@@ -145,6 +149,23 @@ void G4SPSRandomGenerator::SetEnergyBias(G4ThreeVector input)
   EnergyBias = true;
 }
 
+void G4SPSRandomGenerator::SetPosThetaBias(G4ThreeVector input)
+{
+  G4double ehi, val;
+  ehi = input.x();
+  val = input.y();
+  PosThetaBiasH.InsertValues(ehi, val);
+  PosThetaBias = true;
+}
+
+void G4SPSRandomGenerator::SetPosPhiBias(G4ThreeVector input)
+{
+  G4double ehi, val;
+  ehi = input.x();
+  val = input.y();
+  PosPhiBiasH.InsertValues(ehi, val);
+  PosPhiBias = true;
+}
 
 void G4SPSRandomGenerator::ReSetHist(G4String atype)
 {
@@ -172,12 +193,18 @@ void G4SPSRandomGenerator::ReSetHist(G4String atype)
     EnergyBias = false ;
     IPDFEnergyBias = false;
     EnergyBiasH = IPDFEnergyBiasH = ZeroPhysVector ;}
+  else if ( atype == "biaspt") {
+    PosThetaBias = false ;
+    IPDFPosThetaBias = false;
+    PosThetaBiasH = IPDFPosThetaBiasH = ZeroPhysVector ;}
+  else if ( atype == "biaspp") {
+    PosPhiBias = false ;
+    IPDFPosPhiBias = false;
+    PosPhiBiasH = IPDFPosPhiBiasH = ZeroPhysVector ;}
   else {
     G4cout << "Error, histtype not accepted " << G4endl;
   }
 }
-
-
 
 G4double G4SPSRandomGenerator::GenRandX()
 {
@@ -557,7 +584,132 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
 }
 
 
+G4double G4SPSRandomGenerator::GenRandPosTheta()
+{
+  if(verbosityLevel >= 1)
+    {
+      G4cout << "In GenRandPosTheta" << G4endl;
+      G4cout << "Verbosity " << verbosityLevel << G4endl;
+    }
+  if(PosThetaBias == false)
+    {
+      // Theta is not biased
+      G4double rndm = G4UniformRand();
+      return(rndm);
+    }
+  else
+    {
+      // Theta is biased
+      if(IPDFPosThetaBias == false)
+	{
+	  // IPDF has not been created, so create it
+	  G4double bins[1024],vals[1024], sum;
+	  G4int ii;
+	  G4int maxbin = G4int(ThetaBiasH.GetVectorLength());
+	  bins[0] = PosThetaBiasH.GetLowEdgeEnergy(size_t(0));
+	  vals[0] = PosThetaBiasH(size_t(0));
+	  sum = vals[0];
+	  for(ii=1;ii<maxbin;ii++)
+	    {
+	      bins[ii] = PosThetaBiasH.GetLowEdgeEnergy(size_t(ii));
+	      vals[ii] = PosThetaBiasH(size_t(ii)) + vals[ii-1];
+	      sum = sum + PosThetaBiasH(size_t(ii));
+	    }
 
+	  for(ii=0;ii<maxbin;ii++)
+	    {
+	      vals[ii] = vals[ii]/sum;
+	      IPDFPosThetaBiasH.InsertValues(bins[ii], vals[ii]);
+	    }
+	  // Make IPDFThetaBias = true
+	  IPDFPosThetaBias = true;
+	}
+      // IPDF has been create so carry on
+      G4double rndm = G4UniformRand();
+      //      size_t weight_bin_no = IPDFThetaBiasH.FindValueBinLocation(rndm);
+      size_t numberOfBin = IPDFPosThetaBiasH.GetVectorLength();
+      G4int biasn1 = 0;
+      G4int biasn2 = numberOfBin/2;
+      G4int biasn3 = numberOfBin - 1;
+      while (biasn1 != biasn3 - 1) {
+      if (rndm > IPDFPosThetaBiasH(biasn2))
+         biasn1 = biasn2;
+      else
+         biasn3 = biasn2;
+      biasn2 = biasn1 + (biasn3 - biasn1 + 1)/2;
+      }
+      bweights[6] =  IPDFPosThetaBiasH(biasn2) - IPDFPosThetaBiasH(biasn2 - 1);
+      G4double xaxisl = IPDFPosThetaBiasH.GetLowEdgeEnergy(size_t(biasn2-1));
+      G4double xaxisu = IPDFPosThetaBiasH.GetLowEdgeEnergy(size_t(biasn2));
+      G4double NatProb = xaxisu - xaxisl;
+      bweights[6] = NatProb/bweights[6];
+      if(verbosityLevel >= 1)
+	G4cout << "PosTheta bin weight " << bweights[6] << " " << rndm << G4endl;
+      return(IPDFPosThetaBiasH.GetEnergy(rndm));
+    }
+}
+
+G4double G4SPSRandomGenerator::GenRandPosPhi()
+{
+  if(verbosityLevel >= 1)
+    G4cout << "In GenRandPosPhi" << G4endl;
+  if(PosPhiBias == false)
+    {
+      // PosPhi is not biased
+      G4double rndm = G4UniformRand();
+      return(rndm);
+    }
+  else
+    {
+      // PosPhi is biased
+      if(IPDFPosPhiBias == false)
+	{
+	  // IPDF has not been created, so create it
+	  G4double bins[1024],vals[1024], sum;
+	  G4int ii;
+	  G4int maxbin = G4int(PosPhiBiasH.GetVectorLength());
+	  bins[0] = PosPhiBiasH.GetLowEdgeEnergy(size_t(0));
+	  vals[0] = PosPhiBiasH(size_t(0));
+	  sum = vals[0];
+	  for(ii=1;ii<maxbin;ii++)
+	    {
+	      bins[ii] = PosPhiBiasH.GetLowEdgeEnergy(size_t(ii));
+	      vals[ii] = PosPhiBiasH(size_t(ii)) + vals[ii-1];
+	      sum = sum + PosPhiBiasH(size_t(ii));
+	    }
+
+	  for(ii=0;ii<maxbin;ii++)
+	    {
+	      vals[ii] = vals[ii]/sum;
+	      IPDFPosPhiBiasH.InsertValues(bins[ii], vals[ii]);
+	    }
+	  // Make IPDFPosPhiBias = true
+	  IPDFPosPhiBias = true;
+	}
+      // IPDF has been create so carry on
+      G4double rndm = G4UniformRand();
+      //      size_t weight_bin_no = IPDFPosPhiBiasH.FindValueBinLocation(rndm);
+      size_t numberOfBin = IPDFPosPhiBiasH.GetVectorLength();
+      G4int biasn1 = 0;
+      G4int biasn2 = numberOfBin/2;
+      G4int biasn3 = numberOfBin - 1;
+      while (biasn1 != biasn3 - 1) {
+      if (rndm > IPDFPosPhiBiasH(biasn2))
+         biasn1 = biasn2;
+      else
+         biasn3 = biasn2;
+      biasn2 = biasn1 + (biasn3 - biasn1 + 1)/2;
+      }
+      bweights[7] =  IPDFPosPhiBiasH(biasn2) - IPDFPosPhiBiasH(biasn2 - 1);
+      G4double xaxisl = IPDFPosPhiBiasH.GetLowEdgeEnergy(size_t(biasn2-1));
+      G4double xaxisu = IPDFPosPhiBiasH.GetLowEdgeEnergy(size_t(biasn2));
+      G4double NatProb = xaxisu - xaxisl;
+      bweights[7] = NatProb/bweights[7];
+      if(verbosityLevel >= 1)
+	G4cout << "PosPhi bin weight " << bweights[4] << " " << rndm << G4endl;
+      return(IPDFPosPhiBiasH.GetEnergy(rndm));
+    }
+}
 
 
 

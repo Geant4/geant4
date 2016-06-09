@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list History
+                  -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+13.12.2004, G.Cosmo - phys-lists-V06-02-00
+- Imported hadronic lists and electromagnetic lists from top-level.
+- Created.

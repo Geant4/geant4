@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2004/02/09 14:45:20 gcosmo Exp $
+$Id: History,v 1.98 2004/12/02 09:56:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2nd, 2004  G.Cosmo - field-V06-02-02
+----------------------
+- Implemented migration to <cmath> for standard mathematical functions.
+
+Dec 2nd, 2004  J.Apostolakis - field-V06-02-01
+----------------------------
+- Improvements to comments in key Field classes
+- Changes to test/NTST, renaming 'main()' file & modifying input files
+- Several improvements to test files
+   testProElectroMagField.cc
+     * updating for new Electric Field inheritance (& need for
+       different ChordFinder creation )
+     * adding columns to print-outs in spin case for better diagnosis
+   testPropagateMagField.cc
+     * Added verbosity level 1 to field Propagator, relabelled old method.
+   testPropagateSpin.cc
+     * Added more printout of parameters (state) of G4PropagatorInField
+       and G4FieldManager before running each test.
+   test/NTST
+     * Renamed main() file to testNTST.cc and added G4UItcsh terminal.
+
+
+Oct 20th, 2004  P.Gumplinger - field-V06-02-00
+----------------------------
+- Added Set/GetAnomaly() methods in G4Mag_SpinEqRhs.
 
 Feb 9th, 2004  G.Cosmo - field-V06-00-00
 ----------------------

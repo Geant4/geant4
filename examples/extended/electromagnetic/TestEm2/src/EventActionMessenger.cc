@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventActionMessenger.cc,v 1.1 2003/10/08 17:28:47 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: EventActionMessenger.cc,v 1.2 2004/09/17 10:51:39 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -32,6 +32,7 @@
 #include "EventActionMessenger.hh"
 
 #include "EventAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh" 
 #include "G4UIcmdWithAnInteger.hh"
 
@@ -39,7 +40,10 @@
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 :eventAction(EvAct)
-{ 
+{
+  eventDir = new G4UIdirectory("/testem/event/");
+  eventDir->SetGuidance("event control");
+  
   DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged, all");
@@ -61,6 +65,7 @@ EventActionMessenger::~EventActionMessenger()
 {
   delete DrawCmd;
   delete PrintCmd;
+  delete eventDir;     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

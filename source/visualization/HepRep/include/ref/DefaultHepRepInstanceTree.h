@@ -25,7 +25,7 @@ class DefaultHepRepInstanceTree : public DefaultHepRepTreeID, public virtual HEP
     private:
         HEPREP::HepRepTreeID* typeTree;
         std::vector<HEPREP::HepRepInstance*> instances;
-        std::set<HEPREP::HepRepTreeID*> instanceTrees;
+        std::vector<HEPREP::HepRepTreeID*> instanceTrees;
 
     public:
         DefaultHepRepInstanceTree(std::string name, std::string version, HEPREP::HepRepTreeID* typeTree);
@@ -38,7 +38,7 @@ class DefaultHepRepInstanceTree : public DefaultHepRepTreeID, public virtual HEP
         std::vector<HEPREP::HepRepInstance*> getInstances();
         void addInstanceTree(HEPREP::HepRepTreeID* treeID);
         HEPREP::HepRepTreeID* getTypeTree();
-        std::set<HEPREP::HepRepTreeID*> getInstanceTrees();
+        std::vector<HEPREP::HepRepTreeID*> getInstanceTreeList();
 };
 
 #endif

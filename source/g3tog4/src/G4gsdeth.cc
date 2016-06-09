@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsdeth.cc,v 1.7 2003/04/03 11:30:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"

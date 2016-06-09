@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4V3DNucleus.hh,v 1.3 2003/12/11 11:54:13 hpw Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1

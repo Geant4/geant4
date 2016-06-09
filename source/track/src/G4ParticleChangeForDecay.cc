@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.9 2003/06/19 14:45:07 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.10 2004/09/21 21:32:32 gum Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -64,6 +64,7 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDecay &right): G4VParticleChange(right)
 {
   theTimeChange = right.theTimeChange;
+  thePolarizationChange = right.thePolarizationChange;
 }
 
 
@@ -78,7 +79,8 @@ G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleC
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
      
-     theTimeChange = right.theTimeChange;
+      theTimeChange = right.theTimeChange;
+      thePolarizationChange = right.thePolarizationChange;
    }
    return *this;
 }
@@ -101,8 +103,13 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
   // use base class's method at first
   G4VParticleChange::Initialize(track);
 
+  const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
+
   // set Time e equal to those of the parent track
   theTimeChange          = track.GetGlobalTime();
+
+  // set the Polarization equal to those of the parent track
+  thePolarizationChange  = pParticle->GetPolarization();
 }
 
 //----------------------------------------------------------------
@@ -122,6 +129,9 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
 
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+
+  // update polarization
+  pPostStepPoint->SetPolarization( thePolarizationChange );
  
   // update time
   pPostStepPoint->SetGlobalTime( theTimeChange  );

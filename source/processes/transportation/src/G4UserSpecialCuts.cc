@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.12 2004/01/23 02:47:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UserSpecialCuts.cc,v 1.14 2004/10/19 00:59:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------
 // History
@@ -31,6 +31,7 @@
 // 07-04-03 migrade to cut per region (V.Ivanchenko)
 // 18-09-03 substitute manager for the loss tables (V.Ivanchenko)
 // 23-01-04 add protection for charged geantino in range cut (H.Kurashige)
+// 09-09-04 tracking cut applied only if Rmin or Emin > DBL_MIN
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -98,24 +99,30 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
                  
      // min remaining range 
      // (only for charged particle except for chargedGeantino)
+     //
      G4ParticleDefinition* Particle = aTrack.GetDefinition();
      if ( (Particle->GetPDGCharge() != 0.) 
 	  && (Particle->GetParticleType() != "geantino"))
      {
-       G4double              Ekine    = aTrack.GetKineticEnergy();
+       G4double Ekine = aTrack.GetKineticEnergy();
        const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
        G4double RangeNow = theLossTableManager->GetRange(Particle,Ekine,couple);
-       temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
-       if (temp < 0.) return 0.;
-       if (ProposedStep > temp) ProposedStep = temp;
+       G4double Rmin = pUserLimits->GetUserMinRange(aTrack);
+       if (Rmin > DBL_MIN) {
+         temp = RangeNow - Rmin;
+         if (temp < 0.) return 0.;
+         if (ProposedStep > temp) ProposedStep = temp;
+       }	 
 
        // min kinetic energy (only for charged particle)
        //
        G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
-       G4double Rmin = theLossTableManager->GetRange(Particle,Emin,couple);
-       temp = RangeNow - Rmin;
-       if (temp < 0.) return 0.;
-       if (ProposedStep > temp) ProposedStep = temp;
+       if (Emin > DBL_MIN) {
+         Rmin = theLossTableManager->GetRange(Particle,Emin,couple);
+         temp = RangeNow - Rmin;
+         if (temp < 0.) return 0.;
+         if (ProposedStep > temp) ProposedStep = temp;
+       }	 
      }
    }
    return ProposedStep;
@@ -131,9 +138,9 @@ G4UserSpecialCuts::PostStepDoIt( const G4Track& aTrack,
 //
 {
    aParticleChange.Initialize(aTrack);
-   aParticleChange.SetEnergyChange(0.) ;
-   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeEnergy(0.) ;
+   aParticleChange.ProposeLocalEnergyDeposit(aTrack.GetKineticEnergy()) ;
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
    return &aParticleChange;
 }
 

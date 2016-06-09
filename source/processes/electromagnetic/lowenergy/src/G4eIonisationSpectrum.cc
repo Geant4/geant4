@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.22 2003/06/16 17:00:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4eIonisationSpectrum.cc,v 1.24 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -317,7 +317,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       z1 = p[1];
       z2 = p[3];
       dx = (p[2] - p[1]) / 3.0;
-      dx1= exp(log(p[3]/p[2]) / 16.0);
+      dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
       for (i=4; i<iMax-1; i++) {
 
         if (i < 7) {
@@ -412,7 +412,7 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
     y1 = p[4];
 
     G4double dx = (p[2] - p[1]) / 3.0;
-    G4double dx1= exp(log(p[3]/p[2]) / 16.0);
+    G4double dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
 
     for (size_t i=0; i<19; i++) {
 
@@ -447,7 +447,7 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 	  } 
           if (xs2 > xs1) {
             q = (ys1*xs2 - ys2*xs1)/(xs1*xs2) 
-              +  log(xs2/xs1)*(ys2 - ys1)/(xs2 - xs1);
+              +  std::log(xs2/xs1)*(ys2 - ys1)/(xs2 - xs1);
             sum += q;
             if(p.size() == 26) G4cout << "i= " << i << "  q= " << q << " sum= " << sum << G4endl;
 	  }
@@ -467,10 +467,10 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
   xs1 = 1./x1;
   xs2 = 1./x2;
   q = (xs1 - xs2)*(1.0 - p[0]) 
-       - p[iMax]*log(x2/x1) 
+       - p[iMax]*std::log(x2/x1) 
        + (1. - p[iMax])*(x2 - x1)
        + 1./(1. - x2) - 1./(1. - x1) 
-       + p[iMax]*log((1. - x2)/(1. - x1))
+       + p[iMax]*std::log((1. - x2)/(1. - x1))
        + 0.25*p[0]*(xs1*xs1 - xs2*xs2);
   sum += q;
   if(p.size() == 26) G4cout << "param...  q= " << q <<  " sum= " << sum << G4endl;
@@ -495,7 +495,7 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
     y1 = p[4];
 
     G4double dx = (p[2] - p[1]) / 3.0;
-    G4double dx1= exp(log(p[3]/p[2]) / 16.0);
+    G4double dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
 
     for (size_t i=0; i<19; i++) {
 
@@ -528,7 +528,7 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
             ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
 	  } 
           if (xs2 > xs1) {
-            sum += log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1) 
+            sum += std::log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1) 
                 +  ys2 - ys1;
 	  }
 	}  
@@ -548,10 +548,10 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
   xs1 = 1./x1;
   xs2 = 1./x2;
 
-  sum  += log(x2/x1)*(1.0 - p[0]) 
+  sum  += std::log(x2/x1)*(1.0 - p[0]) 
         + 0.5*(1. - p[iMax])*(x2*x2 - x1*x1)
         + 1./(1. - x2) - 1./(1. - x1) 
-        + (1. + p[iMax])*log((1. - x2)/(1. - x1))
+        + (1. + p[iMax])*std::log((1. - x2)/(1. - x1))
         + 0.5*p[0]*(xs1 - xs2);
 
   return sum;
@@ -566,8 +566,6 @@ void G4eIonisationSpectrum::PrintData() const
 G4double G4eIonisationSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
 						       G4int, // Z = 0,
 						       const G4ParticleDefinition* ) const
-  { return 0.5 * kineticEnergy; };
-
-
-
-
+{
+  return 0.5 * kineticEnergy;
+}

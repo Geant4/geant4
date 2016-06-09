@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003/12/03 14:51:56 gcosmo Exp $
+$Id: History,v 1.9 2004/11/17 03:12:05 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov. 17, 2004 Hisaya Kurashige (exampleN07-V06-02-00)
+- Modify for new cut-per-region scheme
 
 
 13-11-03 John Allison (exampleN07-V05-02-01)

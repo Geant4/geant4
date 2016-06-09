@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepMessenger.hh,v 1.5 2004/05/27 05:55:19 duns Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 #ifndef G4HepRepMessenger_HH

@@ -64,7 +64,7 @@ public:
 
   G4PAIPhotonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
 
-  ~G4PAIPhotonModel();
+  virtual ~G4PAIPhotonModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -134,7 +134,7 @@ public:
   G4double GetPostStepTransfer(G4PhysicsTable*, G4PhysicsLogVector*,
                                G4int iPlace, G4double scaledTkin );
   G4double GetAlongStepTransfer(G4PhysicsTable*, G4PhysicsLogVector*,
-                               G4int iPlace, G4double scaledTkin, G4double cof );
+                               G4int iPlace, G4double scaledTkin,G4double step, G4double cof );
   G4double GetEnergyTransfer(G4PhysicsTable*, G4int iPlace,
                              G4double position, G4int iTransfer );
 

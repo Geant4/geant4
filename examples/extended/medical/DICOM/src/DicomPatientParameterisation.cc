@@ -204,7 +204,7 @@ void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4V
   physVol->SetTranslation(origin);
 }
 
-void DicomPatientParameterisation::ComputeDimensions(G4Box& voxels, const G4int, const G4VPhysicalVolume*) const
+void DicomPatientParameterisation::ComputeDimension(G4Box& voxels, const G4int, const G4VPhysicalVolume*) const
 {
   voxels.SetXHalfLength((pixelSpacingX * compression/2.0) * mm);
   voxels.SetYHalfLength((pixelSpacingY * compression/2.0) * mm);
@@ -282,8 +282,8 @@ void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mind
     {
       dicomConfiguration->ReadG4File( dicomConfiguration->GetListOfFile()[z] );
       G4int compressionValue = dicomConfiguration->GetCompressionValue(); 
-      G4int lenRows = abs(rows/compressionValue);
-      G4int lenColumns=abs(columns/compressionValue);
+      G4int lenRows = std::abs(rows/compressionValue);
+      G4int lenColumns=std::abs(columns/compressionValue);
 
       G4int i = 0;
       for ( G4int j = 1; j <= lenRows; j++ )

@@ -77,12 +77,12 @@ public:
 private:
   virtual G4double GetAlpha()
   {
-    return 0.76+2.2/pow(GetRestA(),1.0/3.0);
+    return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
   }
   
   virtual G4double GetBeta() 
   {
-    return (2.12/pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
+    return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
   }
 
   virtual G4double GetSpinFactor()

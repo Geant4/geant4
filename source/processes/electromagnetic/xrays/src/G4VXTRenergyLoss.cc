@@ -22,8 +22,8 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.11 2003/06/20 15:10:20 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VXTRenergyLoss.cc,v 1.14 2004/12/02 08:31:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -53,6 +53,8 @@ G4double G4VXTRenergyLoss::fMinProtonTkin = 100.0*GeV  ;
 G4double G4VXTRenergyLoss::fMaxProtonTkin = 100.0*TeV  ;
 G4int    G4VXTRenergyLoss::fTotBin        =  50        ;
 // Proton energy vector initialization
+
+using namespace std;
 
 G4PhysicsLogVector* G4VXTRenergyLoss::
 fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
@@ -415,7 +417,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
       }
       sumEnergyTR += energyTR ;
 
-      theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
+      theta = fabs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
       if( theta >= 0.1 ) theta = 0.1 ;
 
@@ -457,7 +459,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 	aParticleChange.AddSecondary(aSecondaryTrack);
       }
       kinEnergy -= sumEnergyTR ;
-      aParticleChange.SetEnergyChange(kinEnergy) ;
+      aParticleChange.ProposeEnergy(kinEnergy) ;
     }
   }
   // return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
@@ -741,7 +743,7 @@ void G4VXTRenergyLoss::ComputeGasPhotoAbsCof()
    for(i=0;i<fGasIntervalNumber;i++)
    {
      fGasPhotoAbsCof[i] = new G4double[5] ;
-   }
+   } 
    for(i=0;i<fGasIntervalNumber;i++)
    {
       fGasPhotoAbsCof[i][0] = thisMaterialSandiaTable.
@@ -805,8 +807,8 @@ G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetPlateZmuProduct() 
 {
-  std::ofstream outPlate("plateZmu.dat", std::ios::out ) ;
-  outPlate.setf( std::ios::scientific, std::ios::floatfield );
+  ofstream outPlate("plateZmu.dat", ios::out ) ;
+  outPlate.setf( ios::scientific, ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma ;
@@ -840,8 +842,8 @@ G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetGasZmuProduct() 
 {
-  std::ofstream outGas("gasZmu.dat", std::ios::out ) ;
-  outGas.setf( std::ios::scientific, std::ios::floatfield );
+  ofstream outGas("gasZmu.dat", ios::out ) ;
+  outGas.setf( ios::scientific, ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
@@ -943,11 +945,11 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE ;
 
-  std::ofstream outEn("numberE.dat", std::ios::out ) ;
-  outEn.setf( std::ios::scientific, std::ios::floatfield );
+  ofstream outEn("numberE.dat", ios::out ) ;
+  outEn.setf( ios::scientific, ios::floatfield );
 
-  std::ofstream outAng("numberAng.dat", std::ios::out ) ;
-  outAng.setf( std::ios::scientific, std::ios::floatfield );
+  ofstream outAng("numberAng.dat", ios::out ) ;
+  outAng.setf( ios::scientific, ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {

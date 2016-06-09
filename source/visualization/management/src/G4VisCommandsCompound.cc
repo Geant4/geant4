@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.25 2003/06/16 17:14:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisCommandsCompound.cc,v 1.26 2004/07/15 15:39:11 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -155,7 +155,7 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
   vp.SetAutoRefresh(false);
   currentViewer->SetViewParameters(vp);
   UImanager->ApplyCommand(
-    G4String("/vis/viewer/viewpointThetaPhi " + thetaDeg + " " + phiDeg + " deg"));
+    G4String("/vis/viewer/set/viewpointThetaPhi " + thetaDeg + " " + phiDeg + " deg"));
   UImanager->ApplyCommand(
     G4String("/vis/viewer/panTo " + panRight + " " + panUp + " " + panUnit));
   UImanager->ApplyCommand(

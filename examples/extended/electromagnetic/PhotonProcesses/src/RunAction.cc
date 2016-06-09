@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.2 2004/06/10 15:55:38 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
+// $Id: RunAction.cc,v 1.5 2004/12/03 09:36:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,9 +65,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   totalCount = 0;
   sumTrack = sumTrack2 = 0.;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SetFactory();
-#endif  
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,7 +124,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double MeanFreePath = sumTrack /totalCount;     
   G4double MeanTrack2   = sumTrack2/totalCount;     
-  G4double rms = sqrt(abs(MeanTrack2 - MeanFreePath*MeanFreePath));
+  G4double rms = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
   G4double AttenuationCoef = 1./MeanFreePath;     
   G4double massicMFP = MeanFreePath*density;
   G4double massicAC  = 1./massicMFP;
@@ -153,9 +149,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SaveFactory();
-#endif  
+  histoManager->save();
 
   // show Rndm status
   HepRandom::showEngineStatus();

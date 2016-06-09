@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsList.cc,v 1.12 2004/07/08 16:15:17 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PhysicsList.cc,v 1.10 2004/06/09 16:20:31 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,8 +114,6 @@ PhysicsList::~PhysicsList()
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
 
-#include "IonC12.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
@@ -168,7 +164,6 @@ void PhysicsList::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,7 +193,7 @@ void PhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)) { 
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
 
       pmanager ->AddProcess(fDecayProcess);
 

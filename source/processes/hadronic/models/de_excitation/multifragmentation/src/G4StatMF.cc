@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.2 2003/11/03 17:53:05 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMF.cc,v 1.3 2004/12/07 13:47:39 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -188,10 +188,10 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
       G4double Mass = (*j)->GetMomentum().m();
       G4LorentzVector NewMomentum;
       NewMomentum.setVect(ScaledMomentum);
-      NewMomentum.setE(sqrt(ScaledMomentum.mag2()+Mass*Mass));
+      NewMomentum.setE(std::sqrt(ScaledMomentum.mag2()+Mass*Mass));
       (*j)->SetMomentum(NewMomentum);		
     }
-  } while (ScaleFactor > 1.0+1.e-5 && abs(ScaleFactor-SavedScaleFactor)/ScaleFactor > 1.e-10);
+  } while (ScaleFactor > 1.0+1.e-5 && std::abs(ScaleFactor-SavedScaleFactor)/ScaleFactor > 1.e-10);
   // ~~~~~~ End of patch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
   // Perform Lorentz boost
@@ -240,7 +240,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     return true;
   } else if (Da < 0.0) {
     do {
-      Tb -= 0.5 * abs(Tb);
+      Tb -= 0.5 * std::abs(Tb);
       T = Tb;
       if (Tb < 0.001*MeV) return false;
       
@@ -251,7 +251,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     
   } else {
     do {
-      Tb += 0.5 * abs(Tb);
+      Tb += 0.5 * std::abs(Tb);
       T = Tb;
       
       TotalEnergy = CalcEnergy(A,Z,aChannel,T);
@@ -260,13 +260,13 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     } while (Db > 0.0); 
   }
   
-  G4double eps = 1.0e-14 * abs(Tb-Ta);
+  G4double eps = 1.0e-14 * std::abs(Tb-Ta);
   //G4double eps = 1.0e-3 ;
   
   // Start the bisection method
   for (G4int j = 0; j < 1000; j++) {
     G4double Tc =  (Ta+Tb)/2.0;
-    if (abs(Ta-Tc) <= eps) {
+    if (std::abs(Ta-Tc) <= eps) {
       Temperature = Tc;
       return true;
     }
@@ -302,8 +302,8 @@ G4double G4StatMF::CalcEnergy(const G4double A, const G4double Z, const G4StatMF
 {
     G4double MassExcess0 = G4NucleiProperties::GetMassExcess(static_cast<G4int>(A),static_cast<G4int>(Z));
 	
-    G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)*pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-	(G4StatMFParameters::Getr0()*pow(A,1./3.));
+    G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)*std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
+	(G4StatMFParameters::Getr0()*std::pow(A,1./3.));
 
     G4double ChannelEnergy = aChannel->GetFragmentsEnergy(T);
 	

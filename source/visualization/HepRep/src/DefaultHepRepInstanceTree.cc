@@ -37,14 +37,14 @@ vector<HepRepInstance*> DefaultHepRepInstanceTree::getInstances() {
 }
 
 void DefaultHepRepInstanceTree::addInstanceTree(HepRepTreeID* treeID) {
-    instanceTrees.insert(treeID);
+    instanceTrees.push_back(treeID);
 }
 
 HepRepTreeID* DefaultHepRepInstanceTree::getTypeTree() {
     return typeTree;
 }
 
-set<HepRepTreeID*> DefaultHepRepInstanceTree::getInstanceTrees() {
+vector<HepRepTreeID*> DefaultHepRepInstanceTree::getInstanceTreeList() {
     return instanceTrees;
 }
 

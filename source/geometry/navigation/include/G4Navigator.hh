@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.8 2004/06/18 12:47:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4Navigator.hh,v 1.10 2004/11/24 08:27:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // class G4Navigator
@@ -82,7 +82,7 @@
 // discretion.
 
 // History:
-// - Created. Paul Kent, July 95/96
+// - Created. Paul Kent,         July 95/96
 // ********************************************************************
 
 #ifndef G4NAVIGATOR_HH
@@ -268,6 +268,12 @@ class G4Navigator
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.
     // [Does not perform clears, resizes, or reset fLastLocatedPointLocal]
+
+  inline G4int SeverityOfZeroStepping( G4int* noZeroSteps ) const; 
+    // Report on severity of error and number of zero steps,
+    // in case Navigator is stuck and is returning zero steps.
+    // Values: 1 (small problem),  5 (correcting), 
+    //         9 (ready to abandon), 10 (abandoned)
 
  protected:  // with description
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HadronElasticDataSet.cc,v 1.6 2003/07/01 15:08:46 hpw Exp $
-// GEANT4 tag $Name: gcross-V05-02-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // G4 Physics class: HadronElasticDataSet for cross sections

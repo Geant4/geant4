@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.3 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.4 2004/12/07 13:50:08 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 // ------------------------------------------------------------
@@ -115,14 +115,14 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	const G4double uuspin1= 1./3.;
 //	const G4double udspin0= 1./2.; //@
 	
-	G4int absPDGcode=abs(PDGcode);
+	G4int absPDGcode=std::abs(PDGcode);
 	
 	if ( absPDGcode < 1000 )   //--------------------  Meson -------------
 	{
 	   G4int heavy=  absPDGcode/ 100;
 	   G4int light= (absPDGcode %100)/10;
 	   
-//	    G4int anti= pow(-1 , std::max( heavy, light));
+//	    G4int anti= std::pow(-1 , std::max( heavy, light));
 	    G4int anti= 1 -2 * ( std::max( heavy, light ) % 2 );
 	    if (PDGcode < 0 ) anti *=-1;
 	    
@@ -149,7 +149,7 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	    G4double random= G4UniformRand();
 
 	
-	     if ( abs(j100) >= abs(j10) )
+	     if ( std::abs(j100) >= std::abs(j10) )
 	     {  	    
 	        if ( random < udspin1 )
 	        {
@@ -196,8 +196,8 @@ G4int G4DiffractiveSplitableHadron::Diquark(G4int aquark,G4int bquark,G4int Spin
 {
 	G4int diquarkPDG;
 	
-	diquarkPDG = std::max( abs(aquark), abs(bquark) )*1000 +
-	             std::min( abs(aquark), abs(bquark) )*100  +
+	diquarkPDG = std::max( std::abs(aquark), std::abs(bquark) )*1000 +
+	             std::min( std::abs(aquark), std::abs(bquark) )*100  +
 	             2*Spin + 1;
 	return ( aquark > 0 && bquark > 0 ) ?  diquarkPDG : -1*diquarkPDG;
 }	      

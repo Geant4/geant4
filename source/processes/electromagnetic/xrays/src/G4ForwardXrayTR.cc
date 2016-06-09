@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.10 2003/06/03 08:11:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ForwardXrayTR.cc,v 1.12 2004/12/02 08:31:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -81,6 +81,7 @@ G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
 
 G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi ;
 
+using namespace std;
 
 /*   ************************************************************************
 
@@ -676,7 +677,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
         kinEnergy -= energyTR ;
-        aParticleChange.SetEnergyChange(kinEnergy);
+        aParticleChange.ProposeEnergy(kinEnergy);
 
         anglePos = (*(*fAngleDistrTable)(iPlace))(0)*G4UniformRand() ;
         for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
@@ -749,7 +750,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
           kinEnergy -= energyTR ;
-          aParticleChange.SetEnergyChange(kinEnergy);
+          aParticleChange.ProposeEnergy(kinEnergy);
 
           anglePos = ((*(*fAngleDistrTable)(iPlace))(0)*W1+
                        (*(*fAngleDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;

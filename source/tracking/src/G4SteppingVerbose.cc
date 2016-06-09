@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.14 2003/06/16 17:13:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SteppingVerbose.cc,v 1.16 2004/07/08 03:46:43 amako Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -182,54 +182,59 @@ void G4SteppingVerbose::PostStepDoItAllDone()
 
    CopyState();
 
-   if(fStepStatus != fPostStepDoItProc) return;
+   if( (fStepStatus == fPostStepDoItProc) |
+       (fCondition  == Forced)            |
+       (fCondition  == Conditionally)     |
+       (fCondition  == ExclusivelyForced) |
+       (fCondition  == StronglyForced) ){
 
-   if(verboseLevel >= 3){ 
-      G4int npt=0;
-      G4cout << G4endl;
-      G4cout << " **PostStepDoIt (after all invocations):" << G4endl;
-      G4cout << "    ++List of invoked processes " << G4endl;
+     if(verboseLevel >= 3){
+        G4int npt=0;
+        G4cout << G4endl;
+        G4cout << " **PostStepDoIt (after all invocations):" << G4endl;
+        G4cout << "    ++List of invoked processes " << G4endl;
 
-      for(size_t np=0; np < MAXofPostStepLoops; np++){
-	      size_t npGPIL = MAXofPostStepLoops-np-1;
-        if( (*fSelectedPostStepDoItVector)[npGPIL] == 2){
-           npt++;                
-           ptProcManager = (*fPostStepDoItVector)[np];
-           G4cout << "      " << npt << ") " 
-                  << ptProcManager->GetProcessName()  
-                  << " (Forced)" << G4endl;
-	      } else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1){
-             npt++;                
+        for(size_t np=0; np < MAXofPostStepLoops; np++){
+           size_t npGPIL = MAXofPostStepLoops-np-1;
+           if( (*fSelectedPostStepDoItVector)[npGPIL] == 2){
+             npt++;
+             ptProcManager = (*fPostStepDoItVector)[np];
+             G4cout << "      " << npt << ") "
+                    << ptProcManager->GetProcessName()
+                    << " (Forced)" << G4endl;
+           } else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1){
+             npt++;
              ptProcManager = (*fPostStepDoItVector)[np];
              G4cout << "      " << npt << ") " << ptProcManager->GetProcessName() << G4endl;
-	      }
-	    }
+           }
+        }
 
-      ShowStep();
-      G4cout << G4endl;
-      G4cout << "    ++List of secondaries generated " 
-             << "(x,y,z,kE,t,PID):"
-             << "  No. of secodaries = " 
-             << (*fSecondary).size() << G4endl;
-      G4cout << "      [Note]Secondaries from AlongStepDoIt included." << G4endl; 
+        ShowStep();
+        G4cout << G4endl;
+        G4cout << "    ++List of secondaries generated "
+               << "(x,y,z,kE,t,PID):"
+               << "  No. of secodaries = "
+               << (*fSecondary).size() << G4endl;
+        G4cout << "      [Note]Secondaries from AlongStepDoIt included." << G4endl;
 
-      if((*fSecondary).size()>0){
-	      for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
-          G4cout  << "      "
-                  << std::setw( 9)
-                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
-                  << std::setw( 9)
-                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length") << " "
-                  << std::setw( 9)
-                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
-                  << std::setw( 9)
-                  << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy") << " "
-                  << std::setw( 9)
-                  << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time") << " "
-                  << std::setw(18)
-                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
-	      }
-	    }
+        if((*fSecondary).size()>0){
+          for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
+            G4cout  << "      "
+                    << std::setw( 9)
+                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
+                    << std::setw( 9)
+                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length") << " "
+                    << std::setw( 9)
+                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
+                    << std::setw( 9)
+                    << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy") << " "
+                    << std::setw( 9)
+                    << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time") << " "
+                    << std::setw(18)
+                    << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
+          }
+        }
+     }
    }
 }
 
@@ -238,7 +243,7 @@ void G4SteppingVerbose::StepInfo()
 /////////////////////////////////////////
 {
   CopyState();
- 
+  G4cout.precision(16); 
   G4int prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
@@ -491,8 +496,6 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
 {
   CopyState();
 
-  if(fStepStatus != fPostStepDoItProc) return;
-
   if(verboseLevel >= 4){ 
     G4cout << G4endl;
     G4cout << " >>PostStepDoIt (process by process): "
@@ -713,7 +716,7 @@ void G4SteppingVerbose::ShowStep() const
 // Show header
    G4cout << G4endl;
    G4cout << "    ++G4Step Information " << G4endl;
-   G4cout.precision(3);
+   G4cout.precision(16);
 
 // Show G4Step specific information
    G4cout << "      Address of G4Track    : " << fStep->GetTrack() << G4endl;

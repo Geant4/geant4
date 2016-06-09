@@ -30,22 +30,22 @@ G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4double anA, G4double aZ
         const G4double r0sq=0.8133*fermi*fermi;
 	theA = G4int(anA);
 	theZ = G4int(aZ);
-	theRsquare= r0sq * pow(G4double(theA), 2./3. );
-	Setrho0(pow(1./(pi*theRsquare),3./2.));
+	theRsquare= r0sq * std::pow(G4double(theA), 2./3. );
+	Setrho0(std::pow(1./(pi*theRsquare),3./2.));
 }
 
 G4NuclearShellModelDensity::~G4NuclearShellModelDensity() {}
     
 G4double G4NuclearShellModelDensity::GetRelativeDensity(const G4ThreeVector & aPosition) const
 {
-	return exp(-1*aPosition.mag2()/theRsquare);
+	return std::exp(-1*aPosition.mag2()/theRsquare);
 }
     
 G4double G4NuclearShellModelDensity::GetRadius(const G4double maxRelativeDensity) const
 {
 
      return (maxRelativeDensity>0 && maxRelativeDensity <= 1 ) ?
-             sqrt(theRsquare * log(1/maxRelativeDensity) ) : DBL_MAX;
+             std::sqrt(theRsquare * std::log(1/maxRelativeDensity) ) : DBL_MAX;
 }
    
 G4double   G4NuclearShellModelDensity::GetDeriv(const G4ThreeVector & aPosition) const

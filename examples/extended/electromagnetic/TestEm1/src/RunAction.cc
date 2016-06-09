@@ -20,86 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.5 2004/03/31 11:34:59 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.12 2004/12/02 14:53:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
 
-#ifdef USE_AIDA
- #include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-  : ProcCounter(0)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
+                     HistoManager* histo)
+:detector(det), primary(kin), ProcCounter(0), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{
- cleanHisto();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::bookHisto()
-{
-#ifdef USE_AIDA
- // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
- 
- // Creating the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create("testem1.paw", "hbook", readOnly, createNew);
-
- // Creating a histogram factory, whose histograms will be handled by the tree
- AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
- // booking histograms
- histo[0] = hf->createHistogram1D("1","track length (mm) of a charged particle",
-                         100,0.,50*cm);
- histo[1] = hf->createHistogram1D("2","Nb steps per track (charged particle)",
-                         100,0.,100.);
- histo[2] = hf->createHistogram1D("3","step length (mm) charged particle",
-                         100,0.,10*mm);
-		       
- delete hf;
- delete tf;
- delete af;		       
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::cleanHisto()
-{
-#ifdef USE_AIDA
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file) 
-  delete tree;
-#endif
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,13 +61,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
 
-  NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;
-  edep = 0.0;
+  NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
+  edep = 0.;
+  csdaRange = csdaRange2 = 0.;
+  projRange = projRange2 = 0.;
+  transvDev = transvDev2 = 0.;    
   ProcCounter = new ProcessesCount;
      
   //histograms
   //
-  if (aRun->GetRunID() == 0) bookHisto();
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -137,42 +90,99 @@ void RunAction::CountProcesses(G4String procName)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  if (NbOfEvents)
-    { //nb of tracks and steps per event
-      G4double dNbOfEvents = double(NbOfEvents);
+  if (NbOfEvents == 0) return;
+  G4double dNbOfEvents = double(NbOfEvents);
     
-      std::ios::fmtflags mode = G4cout.flags();
-      G4cout.setf(std::ios::fixed,std::ios::floatfield);
-
-      G4int  prec = G4cout.precision(4);
+  G4ParticleDefinition* particle = primary->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4String partName = particle->GetParticleName();    
+  G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  
+  G4double length      = detector->GetSize();    
+  G4Material* material = detector->GetMaterial();
+  G4double density     = material->GetDensity();
+   
+  G4cout << "\n ======================== run summary ======================\n";
+  
+  G4int prec = G4cout.precision(2);
+  
+  G4cout << "\n The run was: " << NbOfEvents << " " << partName << " of "
+         << G4BestUnit(energy,"Energy") << " through " 
+	 << G4BestUnit(length,"Length") << " of "
+	 << material->GetName() << " (density: " 
+	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+	 
+ G4cout << "\n ============================================================\n";
       
-      G4cout << "\n nb tracks/event"
-             << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
-             << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
-             << "\n nb  steps/event"
-             << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
-             << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
-             << G4endl;
+ G4cout.precision(3);
+ 
+ G4cout << "\n total energy deposit: " 
+        << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
 	     
-      G4cout << "\n total energy deposit: " 
-             << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
+ //nb of tracks and steps per event
+ //           
+ G4cout << "\n nb tracks/event"
+        << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
+        << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
+        << "\n nb  steps/event"
+        << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
+        << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
+        << G4endl;
       
-      //frequency of processes call       
-      G4cout << "\n nb of process calls per event: \n   ";       
-      for (size_t i=0; i< ProcCounter->size();i++)
-           G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
+ //frequency of processes call       
+ G4cout << "\n nb of process calls per event: \n   ";       
+ for (size_t i=0; i< ProcCounter->size();i++)
+     G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
            
-      G4cout << "\n   ";       
-      for (size_t j=0; j< ProcCounter->size();j++)
-      G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())
-                                                               /dNbOfEvents;
-      G4cout << G4endl;    
-                         
-      G4cout.setf(mode,std::ios::floatfield);
-      G4cout.precision(prec);       
-    }         
+ G4cout << "\n   ";       
+ for (size_t j=0; j< ProcCounter->size();j++)
+ G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+ G4cout << G4endl;
+      
+ //compute csda and projected ranges, and transverse dispersion
+ //
+ csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
+ G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
+ if (csdaRms>0.) csdaRms = std::sqrt(csdaRms); else csdaRms = 0.;
+      
+ projRange /= NbOfEvents; projRange2 /= NbOfEvents;
+ G4double projRms = projRange2 - projRange*projRange;        
+ if (projRms>0.) projRms = std::sqrt(projRms); else projRms = 0.;
+       
+ transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
+ G4double trvsRms = transvDev2 - transvDev*transvDev;        
+ if (trvsRms>0.) trvsRms = std::sqrt(trvsRms); else trvsRms = 0.;
+ 
+ //compare csda range with PhysicsTables
+ //
+ G4EmCalculator emCalculator;
+ G4double rangeTable = 0.;
+ if (particle->GetPDGCharge() != 0.)
+   rangeTable = emCalculator.GetRange(energy,particle,material);
+      
+ G4cout << "\n---------------------------------------------------------\n";
+ G4cout << " Primary particle : " ;
+ G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
+        << "   rms = "        << G4BestUnit(csdaRms,  "Length");
 
+ G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
+        << "   rms = "        << G4BestUnit(projRms,  "Length");
+	     
+ G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
+      	     
+ G4cout << "\n transverse dispersion at end = " 
+        << G4BestUnit(trvsRms,"Length") << G4endl;
+	
+ G4cout << "\n mass CSDA Range from simulation = " 
+        << csdaRange*density/(g/cm2) << " g/cm2"
+	<< "\n               from PhysicsTable = " 
+        << rangeTable*density/(g/cm2) << " g/cm2";	
+ G4cout << "\n---------------------------------------------------------\n";
+                                    
   // delete and remove all contents in ProcCounter 
   while (ProcCounter->size()>0){
     OneProcessCount* aProcCount=ProcCounter->back();
@@ -180,9 +190,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     delete aProcCount;
   }
   delete ProcCounter;
-
+  
+  // reset default formats
+  G4cout.setf(mode,std::ios::floatfield);
+  G4cout.precision(prec);
+ 
+  //save histograms      
+  histoManager->save();
+  
   // show Rndm status
-  HepRandom::showEngineStatus();
+  HepRandom::showEngineStatus(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

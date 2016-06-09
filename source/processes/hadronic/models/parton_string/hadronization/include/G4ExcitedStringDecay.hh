@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.2 2004/01/29 17:39:14 hpw Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ExcitedStringDecay.hh,v 1.3 2004/12/07 13:50:10 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1
@@ -109,7 +109,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 	}
 	
 	
-	if  ( abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
+	if  ( std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
 	   NeedEnergyCorrector=true;
  	}

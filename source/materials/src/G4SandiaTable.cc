@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.19 2004/04/14 10:19:06 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4SandiaTable.cc,v 1.20 2004/12/07 08:50:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -180,7 +180,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 	      {
 	       coef = NbOfAtomsPerVolume[elm]*fSandiaCofPerAtom[j-1];
                (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[j] += coef;
-	       newsum += abs(coef);
+	       newsum += std::abs(coef);
 	      }						       
          }	      
 			      			      	 
@@ -634,7 +634,7 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
    G4int row = fCumulInterval[Z-1] + interval;
    if (j==0) return fSandiaTable[row][0]*keV;
    G4double AoverAvo = Z*amu/fZtoAratio[Z];         
-   return AoverAvo*(fSandiaTable[row][j]*cm2*pow(keV,G4double(j))/g);     
+   return AoverAvo*(fSandiaTable[row][j]*cm2*std::pow(keV,G4double(j))/g);     
 }
 
 ///////////////////////////////////////////////////////////////////////

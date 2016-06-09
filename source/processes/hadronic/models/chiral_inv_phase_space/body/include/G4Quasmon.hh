@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Quasmon.hh,v 1.34 2004/03/25 10:44:49 gunter Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.

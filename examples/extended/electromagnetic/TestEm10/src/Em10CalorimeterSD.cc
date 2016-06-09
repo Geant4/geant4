@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10CalorimeterSD.cc,v 1.2 2001/07/11 09:57:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10CalorimeterSD.cc,v 1.3 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -61,7 +61,7 @@ Em10CalorimeterSD::~Em10CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em10CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void Em10CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new Em10CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -70,7 +70,7 @@ void Em10CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool Em10CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool Em10CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   

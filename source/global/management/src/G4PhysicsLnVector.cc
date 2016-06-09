@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc,v 1.12 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PhysicsLnVector.cc,v 1.13 2004/11/12 17:38:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -84,11 +84,11 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
-  dBin = log(theEmax/theEmin) / numberOfBin;
-  baseBin = log(theEmin)/dBin;
+  dBin = std::log(theEmax/theEmin) / numberOfBin;
+  baseBin = std::log(theEmin)/dBin;
 
   for (size_t i=0; i<numberOfBin+1; i++) {
-    binVector.push_back(exp(log(theEmin)+i*dBin));
+    binVector.push_back(std::exp(std::log(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
 
@@ -108,8 +108,8 @@ G4bool G4PhysicsLnVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success){
     G4double theEmin = binVector[0];
-    dBin = log(binVector[1]/theEmin);
-    baseBin = log(theEmin)/dBin;
+    dBin = std::log(binVector[1]/theEmin);
+    baseBin = std::log(theEmin)/dBin;
   }
   return success;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.13.2.2 2004/05/07 15:09:21 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.13.2.3 2004/12/07 13:48:50 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -64,10 +64,10 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
   G4double time = DBL_MAX;
     G4double distance_fast;
   G4LorentzVector mom1 = trk1.GetTrackingMomentum();
-//  G4cout << "zcomp=" << abs(mom1.vect().unit().z() -1 ) << G4endl;
+//  G4cout << "zcomp=" << std::abs(mom1.vect().unit().z() -1 ) << G4endl;
   G4double collisionTime;
   
-  if ( abs(mom1.vect().unit().z() -1 ) < 1e-6 ) 
+  if ( std::abs(mom1.vect().unit().z() -1 ) < 1e-6 ) 
   {
      G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();
      G4double deltaz=position.z();
@@ -117,7 +117,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	   G4double distance = pos * pos - (pos*mom) * (pos*mom) / (mom.mag2());
 
 //     G4cout << " disDiff " << distance-disLab << " " << disLab 
-//            << " " << abs(distance-disLab)/distance << G4endl
+//            << " " << std::abs(distance-disLab)/distance << G4endl
 //	    << " mom/Lab " << mom << " " << momLab << G4endl
 //	    << " pos/Lab " << pos << " " << posLab 
 //	    << G4endl;
@@ -128,8 +128,8 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	   
 	   // charged particles special
 	   static const G4double maxChargedCrossSection = 200*millibarn;
-	   if(abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
-	      abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
+	   if(std::abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
+	      std::abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
 	      pi*distance>maxChargedCrossSection) return time;
 	      
            G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
@@ -144,7 +144,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
  * 	    time = collisionTime;
  * 	  
  * *
- *  * 	     G4cout << "Scatter distance/time: " << sqrt(distance)/fermi <<
+ *  * 	     G4cout << "Scatter distance/time: " << std::sqrt(distance)/fermi <<
  *  * 	         " / "<< time/ns << G4endl;
  *  * 	      G4ThreeVector pos1=trk1.GetPosition(); 
  *  * 	      G4ThreeVector pos2=trk2.GetPosition();
@@ -219,9 +219,9 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 /*
  * 	      if(distance <= sqr(5.*fermi))
  * 	       {
- * 		  G4cout << " distance,xsect, sqrt(xsect/pi) : " << sqrt(distance)/fermi
+ * 		  G4cout << " distance,xsect, std::sqrt(xsect/pi) : " << std::sqrt(distance)/fermi
  * 			 << " " << totalCrossSection/sqr(fermi)
- * 			 << " " << sqrt(totalCrossSection / pi)/fermi << G4endl;
+ * 			 << " " << std::sqrt(totalCrossSection / pi)/fermi << G4endl;
  * 	       }
  */
 

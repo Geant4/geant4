@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.8 2003/06/16 16:52:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4BoundingBox3D.cc,v 1.9 2004/12/02 09:31:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -199,9 +199,9 @@ G4int G4BoundingBox3D::BoxIntersect(const G4Point3D&      ,
   fdy = GeantBox.y();    
   fdz = GeantBox.z();
 
-  safx=fabs(p.x())-fdx;   // minimum distance to x surface of shape
-  safy=fabs(p.y())-fdy;
-  safz=fabs(p.z())-fdz;
+  safx=std::fabs(p.x())-fdx;   // minimum distance to x surface of shape
+  safy=std::fabs(p.y())-fdy;
+  safz=std::fabs(p.z())-fdz;
   
   // Will we Intersect?
   // If safx/y/z is >=0 the point is outside/on the box's x/y/z extent.
@@ -253,9 +253,9 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
     fdy = GeantBox.y();        
     fdz = GeantBox.z();    
 
-    safx = fabs(p.x())-fdx;   // minimum distance to x surface of shape
-    safy = fabs(p.y())-fdy;
-    safz = fabs(p.z())-fdz;
+    safx = std::fabs(p.x())-fdx;   // minimum distance to x surface of shape
+    safy = std::fabs(p.y())-fdy;
+    safz = std::fabs(p.z())-fdz;
 
     // Will we Intersect?
     // If safx/y/z is >=0 the point is outside/on the box's x/y/z extent.
@@ -273,7 +273,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
       // Inside x extent => Calc distance until trajectory leaves extent
       sminx=0.0;
       if (v.x()) 
-	smaxx = fdx/fabs(v.x()) - p.x()/v.x();
+	smaxx = fdx/std::fabs(v.x()) - p.x()/v.x();
       else
 	smaxx = kBig;
     }
@@ -284,9 +284,9 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 	return snxt; // Travel parallel
       else
       {
-	stmp  = fabs(v.x());
+	stmp  = std::fabs(v.x());
 	sminx = safx/stmp;
-	smaxx = (fdx+fabs(p.x()))/stmp;
+	smaxx = (fdx+std::fabs(p.x()))/stmp;
       }
     }
     
@@ -295,7 +295,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
       // Inside y extent => Calc distance until trajectory leaves extent
       sminy=0.0;
       if (v.y()) 
-	smaxy = fdy/fabs(v.y()) - p.y()/v.y();
+	smaxy = fdy/std::fabs(v.y()) - p.y()/v.y();
       else
 	smaxy = kBig;
     }
@@ -306,9 +306,9 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 	return snxt; // Travel parallel
       else
       {
-	stmp  = fabs(v.y());
+	stmp  = std::fabs(v.y());
 	sminy = safy/stmp;
-	smaxy = (fdy+fabs(p.y()))/stmp;
+	smaxy = (fdy+std::fabs(p.y()))/stmp;
       }
     }
     
@@ -317,7 +317,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
       // Inside z extent => Calc distance until trajectory leaves extent
       sminz=0.0;
       if (v.z()) 
-	smaxz = fdz/fabs(v.z()) - p.z()/v.z();
+	smaxz = fdz/std::fabs(v.z()) - p.z()/v.z();
       else 
 	smaxz = kBig;
     }
@@ -328,9 +328,9 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 	return snxt; // Travel parallel
       else
       {
-	stmp  = fabs(v.z());
+	stmp  = std::fabs(v.z());
 	sminz = safz/stmp;
-	smaxz = (fdz+fabs(p.z()))/stmp;
+	smaxz = (fdz+std::fabs(p.z()))/stmp;
       }
     }
 

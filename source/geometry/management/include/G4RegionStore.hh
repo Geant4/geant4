@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.5 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RegionStore.hh,v 1.6 2004/09/02 07:49:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class G4RegionStore
 //
@@ -50,11 +50,12 @@
 #ifndef G4REGIONSTORE_HH
 #define G4REGIONSTORE_HH
 
-class G4Region;
-
 #include <vector>
 #include "G4Types.hh"
 #include "G4String.hh"
+
+class G4Region;
+class G4VStoreNotifier;
 
 class G4RegionStore : public std::vector<G4Region*>
 {
@@ -66,8 +67,10 @@ class G4RegionStore : public std::vector<G4Region*>
       // Remove the region from the collection.
     static G4RegionStore* GetInstance();
       // Get a ptr to the unique G4RegionStore, creating it if necessary.
+    static void SetNotifier(G4VStoreNotifier* pNotifier);
+      // Assign a notifier for allocation/deallocation of regions.
     static void Clean();
-      // Delete all regions from the store.
+      // Delete all regions from the store except for the world region.
 
     G4bool IsModified() const;
       // Loops through all regions to verify if a region has been
@@ -99,6 +102,7 @@ class G4RegionStore : public std::vector<G4Region*>
   private:
 
     static G4RegionStore* fgInstance;
+    static G4VStoreNotifier* fgNotifier;
     static G4bool locked;
 };
 

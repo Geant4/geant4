@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.hh,v 1.1 2003/08/08 11:30:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlung52.hh,v 1.2 2004/11/10 08:53:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 //      ------------ G4eBremsstrahlung5252 physics process ------
@@ -38,6 +38,7 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 09-11-04 Remove Store/Retrieve tables (V.Ivantchenko)
 //
 // ------------------------------------------------------------
 
@@ -97,16 +98,6 @@ class G4eBremsstrahlung52 : public G4VeEnergyLoss
                                      const G4Step&  step);
 
      G4double GetLambda(G4double KineticEnergy, const G4MaterialCutsCouple* couple);
-
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
-  		              const G4String& directory, G4bool);
-      // store eLoss and MeanFreePath tables into an external file
-      // specified by 'directory' (must exist before invokation)
-
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-			         const G4String& directory, G4bool);
-      // retrieve eLoss and MeanFreePath tables from an external file
-      // specified by 'directory'
 
   protected:
 

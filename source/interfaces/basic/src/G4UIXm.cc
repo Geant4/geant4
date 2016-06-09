@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.11 2003/06/16 16:56:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIXm.cc,v 1.12 2004/11/21 16:56:34 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G.Barrand
 
@@ -55,9 +55,12 @@
 
 #include "G4Xt.hh"
 
+#include <stdlib.h>
+
 static void XmTextAppendString (Widget,char*);
 
 static void clearButtonCallback (Widget,XtPointer,XtPointer);
+
 static char* XmConvertCompoundStringToString (XmString,int);
 static G4bool ConvertStringToInt(const char*,int&);
 static void ExecuteChangeSizeFunction(Widget);
@@ -85,6 +88,21 @@ G4UIXm::G4UIXm (
   G4Xt* interactorManager = G4Xt::getInstance (argc,argv,(char*)"Xm");
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
+
+  if(getenv("XENVIRONMENT")==NULL) {
+    XrmDatabase database = XrmGetDatabase(XtDisplay(top));
+    if(database!=NULL) {
+      XrmPutLineResource(&database,"*topShadowColor:white");
+      XrmPutLineResource(&database,"*bottomShadowColor:black");
+      XrmPutLineResource(&database,"*foreground:black");
+      XrmPutLineResource(&database,"*background:lightgrey");
+      XrmPutLineResource(&database,"*borderColor:lightgrey");
+      XrmPutLineResource(&database,"*fontList:-*-helvetica-bold-r-*-*-*-120-*-*-*-*-iso8859-1");
+      XrmPutLineResource(&database,"*text.background:white");
+      XrmPutLineResource(&database,"*text.fontList:*courier*-r-*--14-*");
+      XrmPutLineResource(&database,"*text.maxLength:8000");
+    }
+  }
 
   Arg args[9];
   XtSetArg(args[0],XmNkeyboardFocusPolicy,XmPOINTER); // For completion.

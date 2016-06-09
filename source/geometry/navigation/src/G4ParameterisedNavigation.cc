@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.3 2004/03/11 13:08:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4ParameterisedNavigation.cc,v 1.4 2004/09/10 15:38:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -112,6 +112,7 @@ G4double G4ParameterisedNavigation::
              << " gave negative safety: " << motherSafety << G4endl
              << "        for the current (local) point " << localPoint
              << G4endl;
+      motherSolid->DumpInfo();
       G4Exception("G4ParameterisedNavigation::ComputeStep()",
                   "NegativeSafetyMotherVol", FatalException,
                   "Negative Safety In Voxel Navigation !" ); 
@@ -125,10 +126,13 @@ G4double G4ParameterisedNavigation::
       G4double  estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid << G4endl;
-      if( estDistToSolid > 100.0 * kCarTolerance ) 
+      if( estDistToSolid > 100.0 * kCarTolerance )
+      {
+        motherSolid->DumpInfo();
         G4Exception("G4ParameterisedNavigation::ComputeStep()",
                     "FarOutsideCurrentVolume", FatalException,
                     "Point is far outside Current Volume !"); 
+      }
       else
         G4Exception("G4ParameterisedNavigation::ComputeStep()",
                     "OutsideCurrentVolume", JustWarning,
@@ -296,6 +300,7 @@ G4double G4ParameterisedNavigation::
                      << localPoint << G4endl
                      << "        Local Direction: " << localDirection << G4endl
                      << "        Solid: " << motherSolid->GetName() << G4endl; 
+              motherSolid->DumpInfo();
               G4Exception("G4ParameterisedNavigation::ComputeStep()",
                           "PointOutsideCurrentVolume", FatalException,
                           "Current point is outside the current solid !");

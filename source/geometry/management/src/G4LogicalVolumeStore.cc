@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.12 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalVolumeStore.cc,v 1.14 2004/09/03 08:17:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4LogicalVolumeStore
 //
@@ -35,12 +35,14 @@
 #include "G4Types.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
+#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables
 // ***************************************************************************
 //
 G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
+G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
 G4bool G4LogicalVolumeStore::locked = false;
 
 // ***************************************************************************
@@ -93,6 +95,7 @@ void G4LogicalVolumeStore::Clean()
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     if (*pos) delete *pos; i++;
   }
 
@@ -108,12 +111,23 @@ void G4LogicalVolumeStore::Clean()
 }
 
 // ***************************************************************************
+// Associate user notifier to the store
+// ***************************************************************************
+//
+void G4LogicalVolumeStore::SetNotifier(G4VStoreNotifier* pNotifier)
+{
+  GetInstance();
+  fgNotifier = pNotifier;
+}
+
+// ***************************************************************************
 // Add volume to container
 // ***************************************************************************
 //
 void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
 {
   GetInstance()->push_back(pVolume);
+  if (fgNotifier) fgNotifier->NotifyRegistration();
 }
 
 // ***************************************************************************
@@ -124,6 +138,7 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)

@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSimNoAnalysis.py,v 1.4 2004/06/09 15:04:35 daquinog Exp $
+# $Id: runSimNoAnalysis.py,v 1.5 2004/12/08 15:37:14 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 
 
@@ -50,9 +50,12 @@ shieldWidth = 150 * CLHEP.cm
 totalTime = 3 * myUtils.min
 timeForOneRun = 1 * myUtils.min
 
-# available physics lists: TiaraPhysicsList, LHEP_LEAD_HP, LHEP_PRECO_HP
-# CASCADE_HP LHEP_BIC  LHEP_BIC_BIC
-physList = Tiara.LHEP_BIC_HP()
+# available physics lists: LHEP_LEAD, LHEP_PRECO_HP
+# LHEP_PRECO, LHEP
+##physList = Tiara.LHEP()
+##physList = Tiara.LHEP_PRECO()
+physList = Tiara.LHEP_LEAD()
+##physList = Tiara.LHEP_PRECO_HP()
 
 # specify the detectors
 scoreDetectorCreator = tiaraDetectors.ThreeZylindricDetectors()
@@ -60,15 +63,6 @@ scoreDetectorCreator = tiaraDetectors.ThreeZylindricDetectors()
 
 
 comment = ""
-
-
-
-
-
-
-
-
-
 
 
 
@@ -84,12 +78,6 @@ experiment = tiaraSpecifications.Experiment(beamEnergy,
 tiaraSpecs = tiaraSpecifications.Specifications(Tiara.TiaraDimensions(),
                                                 experiment,
                                                 Tiara.TiaraMaterials())
-
-
-
-
-
-
 
 
 
@@ -111,10 +99,6 @@ impGeo.construct()
 
 
 impScorer = G4Kernel.G4Scorer()
-
-
-
-
 
 
 
@@ -151,12 +135,16 @@ tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
 
 tApp.noComponents = 0
+
+## The following lines should be probably moved here after release Geant4-7.0
+##physList = Tiara.LHEP()
+##physList = Tiara.LHEP_PRECO()
+##physList = Tiara.LHEP_PRECO_HP()
+##physList = Tiara.LHEP_LEAD()
+##tApp.specifyPhysicsList(physList, particleCut)
+##tApp.setPrimaryGenerator(primGenBuilder.primGen)
+
 tApp.config()
-
-
-
-
-
 
 
 
@@ -166,13 +154,6 @@ tApp.config()
 ##########################################################################
 parallelSampler = myUtils.createParallelSampler(impGeo,
                                                 impScorer)
-
-
-
-
-
-
-
 
 
 

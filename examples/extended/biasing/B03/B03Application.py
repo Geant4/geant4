@@ -30,8 +30,8 @@ class B03Application:
 
         # nevents is the number of events per run
         self.nevents = nevents
-        # an array to store the messurments
-        self.messurements = []
+        # an array to store the measurements
+        self.measurements = []
 
     def initializeApplication(self):
         if "base" in dir(self):
@@ -148,9 +148,9 @@ class B03Application:
             r.BeamOn(self.nevents)
             tin = self.CellScorerList[17].GetCellScoreValues().fSumTracksEntering
             v = tin-tinold
-            self.messurements.append(v)
+            self.measurements.append(v)
             tinold = tin
-            print "run number:", i+1, "messured: ", v
+            print "run number:", i+1, "measured: ", v
 
         # create a G4ScoreTable
         st = G4ScoreTable(self.istore)

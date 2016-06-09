@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorAction.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01PrimaryGeneratorAction.cc,v 1.4 2004/12/03 15:30:34 gcosmo Exp $
 // --------------------------------------------------------------
 //
 
@@ -100,11 +100,11 @@ void A01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4double pp = momentum + (G4UniformRand()-0.5)*sigmaMomentum;
   G4double mass = particle->GetPDGMass();
-  G4double Ekin = sqrt(pp*pp+mass*mass)-mass;
+  G4double Ekin = std::sqrt(pp*pp+mass*mass)-mass;
   particleGun->SetParticleEnergy(Ekin);
 
   G4double angle = (G4UniformRand()-0.5)*sigmaAngle;
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(sin(angle),0.,cos(angle)));
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
 
   particleGun->GeneratePrimaryVertex(anEvent);
 }

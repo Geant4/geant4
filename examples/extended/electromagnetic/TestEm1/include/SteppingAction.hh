@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.hh,v 1.3 2004/07/23 15:39:34 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: SteppingAction.hh,v 1.2 2003/10/28 10:27:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,23 +31,24 @@
 
 #include "G4UserSteppingAction.hh"
 
-class EventAction;
 class RunAction;
+class EventAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(RunAction*,EventAction*);
-   ~SteppingAction();
+    SteppingAction(RunAction*, EventAction*, HistoManager*);
+   ~SteppingAction() {};
 
     void UserSteppingAction(const G4Step*);
     
   private:
-    RunAction*   runAction;
-    EventAction* eventAction;
-
+    RunAction*    runAction;
+    EventAction*  eventAction;
+    HistoManager* histoManager;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.38 2004/03/25 10:44:59 gunter Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4QHadron.cc,v 1.39 2004/11/09 11:11:15 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -34,6 +34,8 @@
 //#define sdebug
 
 #include "G4QHadron.hh"
+#include <cmath>
+using namespace std;
 
 G4QHadron::G4QHadron() :
   theQPDG(0),theMomentum(0.,0.,0.,0.),valQ(0,0,0,0,0,0),nFragm(0)
@@ -179,7 +181,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   if(minCost<-1.) minCost=-1.;
   if(maxCost<-1.) maxCost=-1.;
   if(minCost> 1.) minCost= 1.;
-  if (abs(iM-fM-sM)<.001)
+  if (fabs(iM-fM-sM)<.001)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;
@@ -248,7 +250,7 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   G4cout<<"G4QHadron::DecIn2: iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<" = "<<fM+sM<<G4endl;
 #endif
   //@@ Later on make a quark content check for the decay
-  if (abs(iM-fM-sM)<.001)
+  if (fabs(iM-fM-sM)<.001)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;
@@ -319,7 +321,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
 #endif
   G4double dE=iM-fM-corM;
   //@@ Later on make a quark content check for the decay
-  if (abs(dE)<.001)
+  if (fabs(dE)<.001)
   {
     G4double fR=fM/iM;
     G4double cR=corM/iM;
@@ -457,7 +459,7 @@ G4bool G4QHadron::DecayIn3
   G4double sM  = s4Mom.m();        // Mass of the 2nd hadron
   G4double tM  = t4Mom.m();        // Mass of the 3rd hadron
   G4double eps = 0.001;            // Accuracy of the split condition
-  if (abs(iM-fM-sM-tM)<=eps)
+  if (fabs(iM-fM-sM-tM)<=eps)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;

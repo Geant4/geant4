@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.12 2004/01/26 09:05:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Orb.cc,v 1.15 2004/12/02 09:31:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // class G4Orb
 //
@@ -29,8 +29,10 @@
 //
 // History:
 //
+// 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
-// --------------------------------------------------------------------
+//
+//////////////////////////////////////////////////////////////
 
 #include <assert.h>
 
@@ -211,8 +213,8 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1=sqrt(fRmax*fRmax-yoff1*yoff1);
-          diff2=sqrt(fRmax*fRmax-yoff2*yoff2);
+          diff1=std::sqrt(fRmax*fRmax-yoff1*yoff1);
+          diff2=std::sqrt(fRmax*fRmax-yoff2*yoff2);
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=xoffset-maxDiff;
           newMax=xoffset+maxDiff;
@@ -235,8 +237,8 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1=sqrt(fRmax*fRmax-xoff1*xoff1);
-          diff2=sqrt(fRmax*fRmax-xoff2*xoff2);
+          diff1=std::sqrt(fRmax*fRmax-xoff1*xoff1);
+          diff2=std::sqrt(fRmax*fRmax-xoff2*xoff2);
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=yoffset-maxDiff;
           newMax=yoffset+maxDiff;
@@ -272,7 +274,7 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
   rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
 
-  // G4double rad = sqrt(rad2);
+  // G4double rad = std::sqrt(rad2);
   // Check radial surface
   // sets `in'
   
@@ -298,7 +300,7 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 {
   ENorm side = kNRMax;
   G4ThreeVector norm;
-  G4double rad = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double rad = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
   switch (side)
   {
@@ -354,20 +356,20 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   // => (px^2+py^2+pz^2) +2s(pxvx+pyvy+pzvz)+s^2(vx^2+vy^2+vz^2)=R^2
   // =>      rad2        +2s(pDotV3d)       +s^2                =R^2
   //
-  // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
+  // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
   c = rad2 - fRmax*fRmax ;
 
   if ( c > fRmaxTolerance*fRmax )
   {
     // If outside tolerant boundary of outer G4Orb
-    // [ should be sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
+    // [ should be std::sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
 
     d2 = pDotV3d*pDotV3d - c ;
 
     if ( d2 >= 0 )
     {
-      s = -pDotV3d - sqrt(d2) ;
+      s = -pDotV3d - std::sqrt(d2) ;
 
       if (s >= 0 ) return snxt = s;
            
@@ -380,8 +382,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   else
   {
     if ( c > -fRmaxTolerance*fRmax )  // on surface  
-    {             
-      if ( pDotV3d >= 0 ) return snxt = kInfinity;
+    {
+      d2 = pDotV3d*pDotV3d - c ;             
+      //  if ( pDotV3d >= 0 ) return snxt = kInfinity;
+      if ( d2 < fRmaxTolerance*fRmax || pDotV3d >= 0 ) return snxt = kInfinity;
       else                return snxt = 0.;
     }
     else // inside ???
@@ -401,7 +405,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe=0.0, rad  = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double safe=0.0, rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
                  safe = rad - fRmax;
   if( safe < 0 ) safe = 0. ;
   return safe;
@@ -442,7 +446,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   // => (px^2+py^2+pz^2) +2s(pxvx+pyvy+pzvz)+s^2(vx^2+vy^2+vz^2)=R^2
   // =>      rad2        +2s(pDotV3d)       +s^2                =R^2
   //
-  // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
+  // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
   
   const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
 
@@ -463,8 +467,8 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
       d2 = pDotV3d*pDotV3d - c;
 
-      if( ( c > -fRmaxTolerance*fRmax) &&    // on tolerant surface
-          ( ( pDotV3d >= 0 ) || ( d2 < 0 )) )     // leaving outside from Rmax 
+      if( ( c > -fRmaxTolerance*fRmax) &&         // on tolerant surface
+	  ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
                                                   // not re-entering
       {
         if(calcNorm)
@@ -476,7 +480,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
       }
       else 
       {
-        snxt = -pDotV3d + sqrt(d2);    // second root since inside Rmax
+        snxt = -pDotV3d + std::sqrt(d2);    // second root since inside Rmax
         side = kRMax ; 
       }
     }
@@ -490,7 +494,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
+    G4cout << "Rp = "<< std::sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
            << G4endl << G4endl;
     G4cout << "Direction:" << G4endl << G4endl;
     G4cout << "v.x() = "   << v.x() << G4endl;
@@ -540,7 +544,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe=0.0,rad = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double safe=0.0,rad = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )

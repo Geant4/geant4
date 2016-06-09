@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorMessenger.cc,v 1.2 2003/04/08 15:47:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ExN07DetectorMessenger.cc,v 1.3 2004/11/17 03:07:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "ExN07DetectorMessenger.hh"
@@ -42,6 +42,11 @@ ExN07DetectorMessenger::ExN07DetectorMessenger(
   N07Dir = new G4UIdirectory("/N07/");
   N07Dir->SetGuidance("UI commands of this example");
   
+  AddMaterCmd = new G4UIcmdWithAString("/N07/addMat",this);
+  AddMaterCmd->SetGuidance("Add Material");
+  AddMaterCmd->SetParameterName("choice",false);
+  AddMaterCmd->AvailableForStates(G4State_PreInit);
+
   G4String matList;
   const G4MaterialTable* matTbl = G4Material::GetMaterialTable();
   for(size_t i=0;i<G4Material::GetNumberOfMaterials();i++)
@@ -81,6 +86,7 @@ ExN07DetectorMessenger::ExN07DetectorMessenger(
 
 ExN07DetectorMessenger::~ExN07DetectorMessenger()
 {
+  delete AddMaterCmd;
   delete AbsMaterCmd;
   delete GapMaterCmd;
   delete numLayerCmd;
@@ -91,16 +97,33 @@ ExN07DetectorMessenger::~ExN07DetectorMessenger()
 
 void ExN07DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-  { ExN07Detector->SetAbsorberMaterial(newValue);}
-  else if( command == GapMaterCmd )
-  { ExN07Detector->SetGapMaterial(newValue);}
-  else if( command == numLayerCmd )
-  { ExN07Detector->SetNumberOfLayers(numLayerCmd->GetNewIntValue(newValue));}
-  else if( command == SerialCmd )
-  { ExN07Detector->SetSerialGeometry(SerialCmd->GetNewBoolValue(newValue));}
-  else if( command == verboseCmd )
-  { ExN07EventAction::SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));}
+  if( command == AddMaterCmd ){
+    ExN07Detector->CreateMaterial(newValue);
+    // update candidate list 
+    G4String matList;
+    const G4MaterialTable* matTbl = G4Material::GetMaterialTable();
+    for(size_t i=0;i<G4Material::GetNumberOfMaterials();i++){
+      matList += (*matTbl)[i]->GetName();
+      matList += " ";
+    }
+    GapMaterCmd->SetCandidates(matList);
+    AbsMaterCmd->SetCandidates(matList);
+
+  } else if( command == AbsMaterCmd ) {
+    ExN07Detector->SetAbsorberMaterial(newValue);
+
+  } else if( command == GapMaterCmd ){
+    ExN07Detector->SetGapMaterial(newValue);
+  
+  } else if( command == numLayerCmd ) {
+   ExN07Detector->SetNumberOfLayers(numLayerCmd->GetNewIntValue(newValue));
+
+  } else if( command == SerialCmd ) {
+    ExN07Detector->SetSerialGeometry(SerialCmd->GetNewBoolValue(newValue));
+
+  }else if( command == verboseCmd ) {
+   ExN07EventAction::SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
+  }
 }
 
 G4String ExN07DetectorMessenger::GetCurrentValue(G4UIcommand * command)

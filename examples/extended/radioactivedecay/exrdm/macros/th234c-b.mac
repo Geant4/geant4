@@ -1,0 +1,41 @@
+################################################################################
+#                                                                              #
+#                                                                              #
+# THIS TEST DECAYS Th234 AND RDM GENERATES ALL ITS SECONDARIES IN	       #	 
+# THE DECAY CHAIN in VR MODE		               				       #
+#                                                                              #
+#                                                                              #
+################################################################################
+#
+/histo/fileName th234c-b.aida
+/histo/setHisto 0 50 0 15 MeV
+/histo/setHisto 1 50 0 15 MeV
+/histo/setHisto 2 50 0 15 MeV
+/histo/setHisto 3 50 0 15 MeV
+/histo/setHisto 4 50 0 15 MeV
+/histo/setHisto 5 50 0 15 MeV
+/histo/setHisto 6 50 0 15 MeV
+/exrdm/det/setTargetRadius 0.01 mm
+/exrdm/det/setTargetLength 0.01 mm
+/exrdm/det/setDetectorThickness 20 cm
+/exrdm/det/setDetectorLength 40 cm
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+
+/grdm/analogueMC 0
+/grdm/verbose 0
+
+/gps/position 0 0 0
+/gps/particle ion
+/gps/ion 90 234 0  0
+/gps/energy 0 keV
+/run/beamOn 100
+
+

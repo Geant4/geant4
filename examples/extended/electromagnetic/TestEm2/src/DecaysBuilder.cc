@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DecaysBuilder.cc,v 1.1 2004/05/04 08:33:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: DecaysBuilder.cc,v 1.2 2004/11/24 13:18:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -74,11 +74,12 @@ void DecaysBuilder::ConstructProcess()
 
     if (fDecayProcess->IsApplicable(*particle)) {
 
-      pmanager ->AddProcess(fDecayProcess);
+      //      pmanager ->AddProcess(fDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+      //pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      //pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+      pmanager->AddProcess(fDecayProcess, 1,-1, 5);
 
     }
   }

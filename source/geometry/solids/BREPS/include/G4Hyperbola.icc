@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.icc,v 1.7 2001/07/11 09:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Hyperbola.icc,v 1.8 2004/12/02 09:31:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -73,8 +73,8 @@ inline
 G4Point3D G4Hyperbola::GetPoint(G4double param) const
 {
   return G4Point3D( position.GetLocation()
-                    + semiAxis*cosh(param)*position.GetPX()
-                    + semiImagAxis*sinh(param)*position.GetPY() );
+                    + semiAxis*std::cosh(param)*position.GetPX()
+                    + semiImagAxis*std::sinh(param)*position.GetPY() );
 }
 
 inline
@@ -82,7 +82,7 @@ G4double G4Hyperbola::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
   G4double xval= ptLocal.y()/ptLocal.x()*ratioAxisImagAxis;
-  return 0.5*log((1+xval)/(1-xval));  // atanh(xval)
+  return 0.5*std::log((1+xval)/(1-xval));  // atanh(xval)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ void G4Hyperbola::IntersectRay2D(const G4Ray& ray,
   G4double dd= d.x()*d.x()-d.y()*d.y(); // can be 0
   G4double ss= s.x()*s.x()-s.y()*s.y();
 
-  if (abs(dd) < kCarTolerance*kCarTolerance) {
+  if (std::abs(dd) < kCarTolerance*kCarTolerance) {
 
     // coeff of i^2 == 0
     G4double i= (1-ss)/(2*sd);
@@ -123,7 +123,7 @@ void G4Hyperbola::IntersectRay2D(const G4Ray& ray,
   if (discr >= 0) {
 
     // 2 intersections (maybe 1, but this case is rare)
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
     // find the smallest positive i
     G4double i= -sd-sqrtdiscr;
     if (i<kCarTolerance) {
@@ -158,7 +158,7 @@ G4int G4Hyperbola::IntersectRay2D(const G4Ray& ray)
   G4double dd= d.x()*d.x()-d.y()*d.y(); // can be 0
   G4double ss= s.x()*s.x()-s.y()*s.y();
 
-  if (abs(dd) < kCarTolerance*kCarTolerance) {
+  if (std::abs(dd) < kCarTolerance*kCarTolerance) {
 
     // coeff of i^2 == 0
     return 0;
@@ -171,7 +171,7 @@ G4int G4Hyperbola::IntersectRay2D(const G4Ray& ray)
   if (discr >= 0) 
   {
     // 2 intersections (maybe 1, but this case is rare)
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
     // find the smallest positive i
     G4double i= -sd-sqrtdiscr;
     if (i > kCarTolerance) 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.7 2004/05/08 15:28:11 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.8 2004/10/19 00:51:29 kurasige Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -96,15 +96,6 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     void  SetProposedPosition(const G4ThreeVector& finalPosition);
     //  Get/Set the final position of the current particle.
 
-  public:
-   // Following methods will be removed in release 7.0
-   // Using ProposeXXXX methods is recommended to setting
-   // properties in G4ParticleChangeForMSC 
-    void SetMomentumChange(const G4ThreeVector& Pfinal);
-    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
-    const G4ThreeVector* GetPositionChange() const;
-    void SetPositionChange(const G4ThreeVector& finalPosition);
- 
   public:
     virtual void DumpInfo() const;
     // for Debug

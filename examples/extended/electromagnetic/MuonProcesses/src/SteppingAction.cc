@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2004/06/14 10:09:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SteppingAction.cc,v 1.4 2004/12/03 09:38:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,10 +31,6 @@
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,18 +63,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double E2 = endPoint->GetKineticEnergy();
   G4double etrans = E1 - E2;
   G4double lgepsE = 0.;
-  if (etrans > 0.) lgepsE = log10(etrans/E1);
+  if (etrans > 0.) lgepsE = std::log10(etrans/E1);
 
-#ifdef USE_AIDA  	       	  
-  //
   G4int id = 0;
-  if (procName == "MuIoni")     id = 1; 
-  if (procName == "MuPairProd") id = 2;
-  if (procName == "MuBrems")    id = 3;
-  if (procName == "MuNucl")     id = 4;    
-  if ((id > 0) && (histoManager->GetHisto(id)))
-                       histoManager->GetHisto(id)->fill(lgepsE);
-#endif
+  if (procName == "muIoni")     id = 1; 
+  if (procName == "muPairProd") id = 2;
+  if (procName == "muBrems")    id = 3;
+  if (procName == "muNucl")     id = 4;    
+  histoManager->FillHisto(id,lgepsE);		       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

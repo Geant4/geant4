@@ -29,8 +29,8 @@
 //    *                                   *
 //    *************************************
 //
-// $Id: PurgMagTabulatedField3D.cc,v 1.2 2004/06/18 09:18:03 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PurgMagTabulatedField3D.cc,v 1.3 2004/11/29 14:13:20 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "PurgMagTabulatedField3D.hh"
@@ -163,9 +163,9 @@ void PurgMagTabulatedField3D::GetFieldValue(const double point[4],
     
     // Position of the point within the cuboid defined by the
     // nearest surrounding tabulated points
-    double xlocal = ( modf(xfraction*(nx-1), &xdindex));
-    double ylocal = ( modf(yfraction*(ny-1), &ydindex));
-    double zlocal = ( modf(zfraction*(nz-1), &zdindex));
+    double xlocal = ( std::modf(xfraction*(nx-1), &xdindex));
+    double ylocal = ( std::modf(yfraction*(ny-1), &ydindex));
+    double zlocal = ( std::modf(zfraction*(nz-1), &zdindex));
     
     // The indices of the nearest tabulated point whose coordinates
     // are all less than those of the given point

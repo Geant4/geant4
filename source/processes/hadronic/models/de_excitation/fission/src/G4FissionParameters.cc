@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.2 2003/11/03 17:53:03 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FissionParameters.cc,v 1.3 2004/12/07 13:46:47 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -49,26 +49,26 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
 
     Sigma1 = 0.5*Sigma2; // MeV
 
-    SigmaS = exp(0.00553*U/MeV + 2.1386); // MeV
+    SigmaS = std::exp(0.00553*U/MeV + 2.1386); // MeV
     if (SigmaS > 20.0) SigmaS = 20.0;
 
-    G4double FasymAsym = 2.0*exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
-	exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
+    G4double FasymAsym = 2.0*std::exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
+	std::exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
   
-    G4double FsymA1A2 = exp(-((As-(A1+A2)/2.0)*(As-(A1+A2)/2.0))/(2.0*SigmaS*SigmaS));
+    G4double FsymA1A2 = std::exp(-((As-(A1+A2)/2.0)*(As-(A1+A2)/2.0))/(2.0*SigmaS*SigmaS));
   
 
     G4double wa = 0.0;
     w = 0.0;
     if (Z >= 90) {         // Z >= 90
-	if (U <= 16.25) wa = exp(0.5385*U/MeV-9.9564);  // U <= 16.25 MeV
-	else wa = exp(0.09197*U/MeV-2.7003);            // U  > 16.25 MeV
+	if (U <= 16.25) wa = std::exp(0.5385*U/MeV-9.9564);  // U <= 16.25 MeV
+	else wa = std::exp(0.09197*U/MeV-2.7003);            // U  > 16.25 MeV
     } else if (Z == 89) {  // Z == 89
-	wa = exp(0.09197*U-1.0808);
+	wa = std::exp(0.09197*U-1.0808);
     } else if (Z >= 82) {  //  82 <= Z <= 88
 	G4double X = FissionBarrier - 7.5*MeV;
 	if (X < 0.0) X = 0.0;
-	wa = exp(0.09197*(U-X)/MeV-1.0808);
+	wa = std::exp(0.09197*(U-X)/MeV-1.0808);
     } else {               // Z < 82
 	w = 1001.0;
     }
@@ -79,7 +79,7 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
     
 	w = w1/w2;
 
-	if (82 <= Z && Z < 89 && A < 227)  w *= exp(0.3*(227-A));
+	if (82 <= Z && Z < 89 && A < 227)  w *= std::exp(0.3*(227-A));
     }
   
 }

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.19 2004/05/28 04:59:54 perl Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.20 2004/11/11 16:02:08 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -62,10 +62,7 @@ G4int G4HepRepFileSceneHandler::fSceneCount = 0;
 
 G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
-  G4VSceneHandler(system, fSceneIdCount++, name),
-  fCurrentDepth                 (0),
-  fpCurrentPV                   (0),
-  fpCurrentLV                   (0)
+  G4VSceneHandler(system, fSceneIdCount++, name)
 {
   fSceneCount++;
 
@@ -75,14 +72,6 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 
 
 G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
-
-
-void G4HepRepFileSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-					&fpCurrentPV,
-					&fpCurrentLV);
-}
 
 
 void G4HepRepFileSceneHandler::BeginModeling() {

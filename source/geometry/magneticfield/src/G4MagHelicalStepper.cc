@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.13 2003/10/31 14:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MagHelicalStepper.cc,v 1.14 2004/12/02 09:55:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
     vpar = B_d_P * Bnorm;       // the component parallel      to B
     vperp= initTangent - vpar;  // the component perpendicular to B
     
-    // B_v_P  = sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
+    // B_v_P  = std::sqrt( 1 - B_d_P * B_d_P); // Fraction of P perp to B
 
     // calculate the radius^-1 of the helix and the stepping angle
 
@@ -103,7 +103,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
     R_1  = - fCoefficient * Bmag;  // / B_v_P - but this cancels
 
     // again in Theta - so we don't need it.
-    if( fabs(R_1) < 1e-10 ) {
+    if( std::fabs(R_1) < 1e-10 ) {
       LinearStep( yIn, h, yHelix );
     } else {
       
@@ -111,11 +111,11 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
       // Trigonometrix
       
-      if( fabs(Theta) > approc_limit ) {
-	SinT2    = sin(0.5 * Theta);
-	CosT2    = cos(0.5 * Theta);
-	// SinT     = sin(Theta);
-	// CosT     = cos(Theta);
+      if( std::fabs(Theta) > approc_limit ) {
+	SinT2    = std::sin(0.5 * Theta);
+	CosT2    = std::cos(0.5 * Theta);
+	// SinT     = std::sin(Theta);
+	// CosT     = std::cos(Theta);
 	SinT     = 2.0 * SinT2 * CosT2;
 	CosT     = 1.0 - 2.0 * SinT2 * SinT2;
       } else {

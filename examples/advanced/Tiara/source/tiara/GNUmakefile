@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004/06/09 15:04:37 daquinog Exp $
+# $Id: GNUmakefile,v 1.8 2004/12/14 13:11:07 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -12,11 +12,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-EXTRALIBS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiaraPhysicsPackaging \
-	     -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiaraPhysicsLists \
-             -ltiaraPhysicsLists \
-	     -ltiaraPhysicsPackaging-handMade
 
 include $(TIARA_BASE)/source/hadronic_lists.gmk
 
@@ -33,8 +28,12 @@ endif
 
 
 CPPFLAGS += -I$(PYTHON_INCLUDE_DIR) \
-	    -I$(TIARA_BASE)/source/tiaraPhysicsPackaging/include \
-	    -I$(TIARA_BASE)/source/tiaraPhysicsLists/include 
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include
 
 LDFLAGS += -L$(PYTHON_LIB_DIR)
 

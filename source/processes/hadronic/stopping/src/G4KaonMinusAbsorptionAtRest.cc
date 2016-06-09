@@ -254,7 +254,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   if (fragmentationProducts != 0) delete fragmentationProducts;
   
   // finally ...
-  aParticleChange.SetStatusChange(fStopAndKill); // Kill the incident Kaon
+  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident Kaon
   return &aParticleChange;
 }
 

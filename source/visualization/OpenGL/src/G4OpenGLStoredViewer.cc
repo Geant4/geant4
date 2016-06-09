@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.10 2003/06/10 17:13:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.11 2004/11/18 15:19:40 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -56,12 +56,10 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
   // of either the scene handler or this viewer, trigger a rebuild.
 
   if (!fG4OpenGLStoredSceneHandler.fTopPODL ||
-      CompareForKernelVisit(fG4OpenGLStoredSceneHandler.fLastVP)  ||
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }      
   fLastVP = fVP;
-  fG4OpenGLStoredSceneHandler.fLastVP = fVP;
 }
 
 G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {

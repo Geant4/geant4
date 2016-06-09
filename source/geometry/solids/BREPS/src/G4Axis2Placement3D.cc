@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement3D.cc,v 1.6 2001/07/11 09:59:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Axis2Placement3D.cc,v 1.7 2004/12/02 09:31:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -135,7 +135,7 @@ G4Axis2Placement3D::EvaluateIntersection(register const G4Ray& rray)
     G4double dirz =  RayDir.Z();
     b = Normal.X() * dirx + Normal.Y() * diry + Normal.Z() * dirz;
 
-    if (fabs(b) < 0.001)//== 0.0)
+    if (std::fabs(b) < 0.001)//== 0.0)
        // or some better test involving a small positive e     
     {
 //    G4cout << "\nLine is parallel to G4Plane.No Hit.";

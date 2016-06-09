@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.2 2003/11/08 06:10:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.3 2004/12/02 06:53:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // ------------------------------------------------------------
@@ -42,6 +42,7 @@
 #define G4VRangeToEnergyConverter_h 1
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 #include <vector>
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.31 2004/01/26 09:03:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Cons.cc,v 1.34 2004/12/10 16:22:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // class G4Cons
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 26.07.04 V.Grichine: bugs fixed in   Distance ToIn(p,v):dIn=dOut=0 in 3/10^8
 // 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
@@ -125,9 +126,9 @@ G4Cons::G4Cons( const G4String& pName,
 
   // Check angles
 
-  if ( pDPhi >= 2.0*M_PI )
+  if ( pDPhi >= twopi )
   {
-    fDPhi=2*M_PI;
+    fDPhi=twopi;
     fSPhi=0;
   }
   else
@@ -144,10 +145,10 @@ G4Cons::G4Cons( const G4String& pName,
 
     // Ensure pSPhi in 0-2PI or -2PI-0 range if shape crosses 0
 
-    if ( pSPhi < 0 ) fSPhi = 2.0*M_PI - fmod(fabs(pSPhi),2.0*M_PI) ;
-    else             fSPhi = fmod(pSPhi,2.0*M_PI) ;
+    if ( pSPhi < 0 ) fSPhi = twopi - std::fmod(std::fabs(pSPhi),twopi) ;
+    else             fSPhi = std::fmod(pSPhi,twopi) ;
       
-    if (fSPhi + fDPhi > 2.0*M_PI) fSPhi -= 2.0*M_PI ;
+    if (fSPhi + fDPhi > twopi) fSPhi -= twopi ;
   }
 }
 
@@ -160,8 +161,8 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
   G4double r2, rl, rh, pPhi, tolRMin, tolRMax ;
   EInside in;
 
-  if (fabs(p.z()) > fDz + kCarTolerance*0.5 ) return in = kOutside;
-  else if(fabs(p.z()) >= fDz - kCarTolerance*0.5 )   in = kSurface;
+  if (std::fabs(p.z()) > fDz + kCarTolerance*0.5 ) return in = kOutside;
+  else if(std::fabs(p.z()) >= fDz - kCarTolerance*0.5 )   in = kSurface;
   else                                               in = kInside;
 
   r2 = p.x()*p.x() + p.y()*p.y() ;
@@ -182,13 +183,13 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
   {
     if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
   }
-  if ( ( fDPhi < 2*M_PI - kAngTolerance ) &&
+  if ( ( fDPhi < twopi - kAngTolerance ) &&
        ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
   {
-    pPhi = atan2(p.y(),p.x()) ;
+    pPhi = std::atan2(p.y(),p.x()) ;
 
-    if ( pPhi < fSPhi - kAngTolerance*0.5  )             pPhi += 2*M_PI ; 
-    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 ) pPhi -= 2*M_PI; 
+    if ( pPhi < fSPhi - kAngTolerance*0.5  )             pPhi += twopi ; 
+    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 ) pPhi -= twopi; 
     
     if ( (pPhi < fSPhi - kAngTolerance*0.5) ||          
          (pPhi > fSPhi + fDPhi + kAngTolerance*0.5) )   return in = kOutside;
@@ -199,7 +200,7 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
              (pPhi > fSPhi + fDPhi - kAngTolerance*0.5) )  in = kSurface ;
     }
   }
-  else if( fDPhi < 2*M_PI - kAngTolerance )  in = kSurface ;
+  else if( fDPhi < twopi - kAngTolerance )  in = kSurface ;
 
   return in ;
 }
@@ -228,7 +229,7 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
                     G4double&          pMax  ) const
 {
   if ( !pTransform.IsRotated() && 
-        fDPhi == 2.0*M_PI && fRmin1 == 0 && fRmin2 == 0 )
+        fDPhi == twopi && fRmin1 == 0 && fRmin2 == 0 )
   {
     // Special case handling for unrotated solid cones
     // Compute z/x/y mins and maxs for bounding box respecting limits,
@@ -331,8 +332,8 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
          
-          diff1   = sqrt(RMax*RMax - yoff1*yoff1) ;
-          diff2   = sqrt(RMax*RMax - yoff2*yoff2) ;
+          diff1   = std::sqrt(RMax*RMax - yoff1*yoff1) ;
+          diff2   = std::sqrt(RMax*RMax - yoff2*yoff2) ;
           maxDiff = (diff1>diff2) ? diff1:diff2 ;
           newMin  = xoffset - maxDiff ;
           newMax  = xoffset + maxDiff ;
@@ -355,8 +356,8 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
 
-          diff1   = sqrt(RMax*RMax - xoff1*xoff1) ;
-          diff2   = sqrt(RMax*RMax-xoff2*xoff2) ;
+          diff1   = std::sqrt(RMax*RMax - xoff1*xoff1) ;
+          diff2   = std::sqrt(RMax*RMax-xoff2*xoff2) ;
           maxDiff = (diff1 > diff2) ? diff1:diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
@@ -446,20 +447,20 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   G4double tanRMin, secRMin, pRMin, widRMin ;
   G4double tanRMax, secRMax, pRMax, widRMax ;
 
-  distZ = fabs(fabs(p.z()) - fDz) ;
-  rho   = sqrt(p.x()*p.x() + p.y()*p.y()) ;
+  distZ = std::fabs(std::fabs(p.z()) - fDz) ;
+  rho   = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
 
   tanRMin  = (fRmin2 - fRmin1)*0.5/fDz ;
-  secRMin  = sqrt(1 + tanRMin*tanRMin) ;
+  secRMin  = std::sqrt(1 + tanRMin*tanRMin) ;
   pRMin    = rho - p.z()*tanRMin ;
   widRMin  = fRmin2 - fDz*tanRMin ;
-  distRMin = fabs(pRMin - widRMin)/secRMin ;
+  distRMin = std::fabs(pRMin - widRMin)/secRMin ;
 
   tanRMax  = (fRmax2 - fRmax1)*0.5/fDz ;
-  secRMax  = sqrt(1+tanRMax*tanRMax) ;
+  secRMax  = std::sqrt(1+tanRMax*tanRMax) ;
   pRMax    = rho - p.z()*tanRMax ;
   widRMax  = fRmax2 - fDz*tanRMax ;
-  distRMax = fabs(pRMax - widRMax)/secRMax ;
+  distRMax = std::fabs(pRMax - widRMax)/secRMax ;
   
   if (distRMin < distRMax)  // First minimum
   {
@@ -487,16 +488,16 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       side    = kNRMax ;
     }
   }
-  if ( fDPhi < 2.0*M_PI && rho )  // Protected against (0,0,z) 
+  if ( fDPhi < twopi && rho )  // Protected against (0,0,z) 
   {
-    phi = atan2(p.y(),p.x()) ;
+    phi = std::atan2(p.y(),p.x()) ;
 
-    if (phi < 0) phi += 2*M_PI ;
+    if (phi < 0) phi += twopi ;
 
-    if (fSPhi < 0) distSPhi = fabs(phi - (fSPhi + 2.0*M_PI))*rho ;
-    else           distSPhi = fabs(phi - fSPhi)*rho ;
+    if (fSPhi < 0) distSPhi = std::fabs(phi - (fSPhi + twopi))*rho ;
+    else           distSPhi = std::fabs(phi - fSPhi)*rho ;
 
-    distEPhi = fabs(phi - fSPhi - fDPhi)*rho ;
+    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
 
     // Find new minimum
 
@@ -524,10 +525,10 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       else           norm = G4ThreeVector(0,0,-1) ; 
       break ;
     case kNSPhi:
-      norm = G4ThreeVector(sin(fSPhi),-cos(fSPhi),0) ;
+      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
       break ;
     case kNEPhi:
-      norm=G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0) ;
+      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
       break ;
     default:
       DumpInfo();
@@ -592,24 +593,24 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   //
   // Set phi divided flag and precalcs
   //
-  if (fDPhi < 2.0*M_PI)
+  if (fDPhi < twopi)
   {
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
     cPhi       = fSPhi + hDPhi ; ;
     hDPhiOT    = hDPhi + 0.5*kAngTolerance ;  // outers tol' half delta phi 
     hDPhiIT    = hDPhi - 0.5*kAngTolerance ;
-    sinCPhi    = sin(cPhi) ;
-    cosCPhi    = cos(cPhi) ;
-    cosHDPhiOT = cos(hDPhiOT) ;
-    cosHDPhiIT = cos(hDPhiIT) ;
+    sinCPhi    = std::sin(cPhi) ;
+    cosCPhi    = std::cos(cPhi) ;
+    cosHDPhiOT = std::cos(hDPhiOT) ;
+    cosHDPhiIT = std::cos(hDPhiIT) ;
   }
   else     seg = false ;
 
   // Cone Precalcs
 
   tanRMin = (fRmin2 - fRmin1)*0.5/fDz ;
-  secRMin = sqrt(1.0 + tanRMin*tanRMin) ;
+  secRMin = std::sqrt(1.0 + tanRMin*tanRMin) ;
   rMinAv  = (fRmin1 + fRmin2)*0.5 ;
 
   if (rMinAv > kRadTolerance*0.5)
@@ -623,7 +624,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     rMinIAv = 0.0 ;
   }  
   tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
-  secRMax = sqrt(1.0 + tanRMax*tanRMax) ;
+  secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
   rMaxAv  = (fRmax1 + fRmax2)*0.5 ;
   rMaxOAv = rMaxAv + kRadTolerance*0.5 ;
    
@@ -632,11 +633,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   tolIDz = fDz - kCarTolerance*0.5 ;
   tolODz = fDz + kCarTolerance*0.5 ;
 
-  if (fabs(p.z()) >= tolIDz)
+  if (std::fabs(p.z()) >= tolIDz)
   {
     if ( p.z()*v.z() < 0 )    // at +Z going in -Z or visa versa
     {
-      s = (fabs(p.z()) - fDz)/fabs(v.z()) ;  // Z intersect distance
+      s = (std::fabs(p.z()) - fDz)/std::fabs(v.z()) ;  // Z intersect distance
 
       if( s < 0.0 ) s = 0.0 ;                  // negative dist -> zero
 
@@ -682,7 +683,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   {
     // Psi = angle made with central (average) phi of shape
 
-    cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
+    cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
 
     if (cosPsi >= cosHDPhiIT) return s ;
   }
@@ -695,7 +696,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   {
     // Psi = angle made with central (average) phi of shape
 
-    cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
+    cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
 
     if (cosPsi >= cosHDPhiIT) return s ;
   }
@@ -741,16 +742,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   nt2 = t2 - tanRMax*v.z()*rout ;
   nt3 = t3 - rout*rout ;
 
-  if (fabs(nt1) > kRadTolerance)  // Equation quadratic => 2 roots
+  if (std::fabs(nt1) > kRadTolerance)  // Equation quadratic => 2 roots
   {
-    if ( nt3 > rout*kRadTolerance*secRMax || rout < 0 )
-    {
-      // If outside real cone (should be rho-rout>kRadTolerance*0.5
-      // NOT rho^2 etc) saves a sqrt() at expense of accuracy
-
       b = nt2/nt1 ;
       c = nt3/nt1 ;
       d = b*b-c   ;
+    if ( nt3 > rout*kRadTolerance*secRMax || rout < 0 )
+    {
+      // If outside real cone (should be rho-rout>kRadTolerance*0.5
+      // NOT rho^2 etc) saves a std::sqrt() at expense of accuracy
+
 
       if (d >= 0)
       {
@@ -760,19 +761,19 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           // Inside `shadow cone' with -ve radius
           // -> 2nd root could be on real cone
 
-          s = -b + sqrt(d) ;
+          s = -b + std::sqrt(d) ;
         }
         else
         {
           if ( b <= 0 && c >= 0 ) // both >=0, try smaller root
           {
-            s = -b - sqrt(d) ;
+            s = -b - std::sqrt(d) ;
           }
           else
           {
             if ( c <= 0 ) // second >=0
             {
-              s = -b + sqrt(d) ;
+              s = -b + std::sqrt(d) ;
             }
             else  // both negative, travel away
             {
@@ -784,7 +785,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         {
           zi = p.z() + s*v.z() ;
 
-          if (fabs(zi) <= tolODz)
+          if (std::fabs(zi) <= tolODz)
           {
             // Z ok. Check phi intersection if reqd
 
@@ -809,14 +810,18 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       if ( t3  > (rin + kRadTolerance*0.5*secRMin)*
                  (rin + kRadTolerance*0.5*secRMin) && 
-           nt2 < 0                                 && 
-           fabs(p.z()) <= tolIDz )
+	   nt2 < 0                                 && 
+	   d >= 0                                  && 
+	   //  nt2 < -kCarTolerance*secRMax/2/fDz                  && 
+           // t2 < std::sqrt(t3)*v.z()*tanRMax                          && 
+	   // d > kCarTolerance*secRMax*(rout-b*tanRMax*v.z())/nt1 && 
+           std::fabs(p.z()) <= tolIDz )
       {
         // Inside cones, delta r -ve, inside z extent
 
         if (seg)
         {
-          cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/sqrt(t3) ;
+          cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/std::sqrt(t3) ;
 
           if (cosPsi >= cosHDPhiIT) return 0.0 ;
         }
@@ -826,7 +831,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   }
   else  //  Single root case 
   {
-    if ( fabs(nt2) > kRadTolerance )
+    if ( std::fabs(nt2) > kRadTolerance )
     {
       s = -0.5*nt3/nt2 ;
 
@@ -835,7 +840,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
       {
         zi = p.z() + s*v.z() ;
 
-        if (fabs(zi) <= tolODz && nt2 < 0)
+        if (std::fabs(zi) <= tolODz && nt2 < 0)
         {
           // Z ok. Check phi intersection if reqd
 
@@ -885,13 +890,13 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         d = b*b-c ;
         if (d >= 0)   // > 0
         {
-          s = -b + sqrt(d) ;
+          s = -b + std::sqrt(d) ;
 
           if ( s >= 0 )   // > 0
           {
             zi = p.z() + s*v.z() ;
 
-            if ( fabs(zi) <= tolODz )
+            if ( std::fabs(zi) <= tolODz )
             {
               if ( seg )
               {
@@ -920,13 +925,13 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
         if ( d >= 0 )  // > 0
         {
-          s  = -b + sqrt(d) ;
+          s  = -b + std::sqrt(d) ;
           zi = p.z() + s*v.z() ;
           ri = rMinAv + zi*tanRMin ;
 
           if ( ri >= 0 )
           {
-            if ( s >= 0 && fabs(zi) <= tolODz )  // s > 0
+            if ( s >= 0 && std::fabs(zi) <= tolODz )  // s > 0
             {
               if ( seg )
               {
@@ -941,11 +946,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           }
           else
           {
-            s  = -b - sqrt(d) ;
+            s  = -b - std::sqrt(d) ;
             zi = p.z() + s*v.z() ;
             ri = rMinAv + zi*tanRMin ;
 
-            if ( s >= 0 && ri >= 0 && fabs(zi) <= tolODz ) // s>0
+            if ( s >= 0 && ri >= 0 && std::fabs(zi) <= tolODz ) // s>0
             {
               if ( seg )
               {
@@ -967,7 +972,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         // ----> if not:
         //    -2nd root with validity check
 
-        if ( fabs(p.z()) <= tolODz )
+        if ( std::fabs(p.z()) <= tolODz )
         {
           if ( nt2 > 0 )
           {
@@ -975,7 +980,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( seg )
             {
-              cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/sqrt(t3) ;
+              cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/std::sqrt(t3) ;
 
               if (cosPsi >= cosHDPhiIT)  return 0.0 ;
             }
@@ -992,16 +997,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( d >= 0 )   // > 0
             {
-              s  = -b - sqrt(d) ;
+              s  = -b - std::sqrt(d) ;
               zi = p.z() + s*v.z() ;
               ri = rMinAv + zi*tanRMin ;
 
               if ( ri > 0 )   // 2nd root
               {
-                s  = -b + sqrt(d) ;
+                s  = -b + std::sqrt(d) ;
                 zi = p.z() + s*v.z() ;
 
-                if ( s >= 0 && fabs(zi) <= tolODz )  // s>0
+                if ( s >= 0 && std::fabs(zi) <= tolODz )  // s>0
                 {
                   if ( seg )
                   {
@@ -1027,10 +1032,10 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           if ( d > 0 )
           {  
-            s  = -b + sqrt(d) ;
+            s  = -b + std::sqrt(d) ;
             zi = p.z() + s*v.z() ;
 
-            if ( s >= 0 && fabs(zi) <= tolODz )  // s>0
+            if ( s >= 0 && std::fabs(zi) <= tolODz )  // s>0
             {
               if ( seg )
               {
@@ -1062,8 +1067,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   {
     // First phi surface (`S'tarting phi)
 
-    sinSPhi = sin(fSPhi) ;
-    cosSPhi = cos(fSPhi) ;
+    sinSPhi = std::sin(fSPhi) ;
+    cosSPhi = std::cos(fSPhi) ;
     Comp    = v.x()*sinSPhi - v.y()*cosSPhi ;
                     
     if ( Comp < 0 )    // Component in outwards normal dirn
@@ -1080,7 +1085,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           zi = p.z() + s*v.z() ;
 
-          if ( fabs(zi) <= tolODz )
+          if ( std::fabs(zi) <= tolODz )
           {
             xi        = p.x() + s*v.x() ;
             yi        = p.y() + s*v.y() ;
@@ -1102,8 +1107,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     // Second phi surface (`E'nding phi)
 
     ePhi    = fSPhi + fDPhi ;
-    sinEPhi = sin(ePhi) ;
-    cosEPhi = cos(ePhi) ;
+    sinEPhi = std::sin(ePhi) ;
+    cosEPhi = std::cos(ePhi) ;
     Comp    = -(v.x()*sinEPhi - v.y()*cosEPhi) ;
         
     if ( Comp < 0 )   // Component in outwards normal dirn
@@ -1119,7 +1124,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           zi = p.z() + s*v.z() ;
 
-          if (fabs(zi) <= tolODz)
+          if (std::fabs(zi) <= tolODz)
           {
             xi        = p.x() + s*v.x() ;
             yi        = p.y() + s*v.y() ;
@@ -1158,18 +1163,18 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi ;
   G4double cosPsi ;
 
-  rho   = sqrt(p.x()*p.x() + p.y()*p.y()) ;
-  safeZ = fabs(p.z()) - fDz ;
+  rho   = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
+  safeZ = std::fabs(p.z()) - fDz ;
 
   if ( fRmin1 || fRmin2 )
   {
     tanRMin = (fRmin2 - fRmin1)*0.5/fDz ;
-    secRMin = sqrt(1.0 + tanRMin*tanRMin) ;
+    secRMin = std::sqrt(1.0 + tanRMin*tanRMin) ;
     pRMin   = tanRMin*p.z() + (fRmin1 + fRmin2)*0.5 ;
     safeR1  = (pRMin - rho)/secRMin ;
 
     tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
-    secRMax = sqrt(1.0 + tanRMax*tanRMax) ;
+    secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
     pRMax   = tanRMax*p.z() + (fRmax1 + fRmax2)*0.5 ;
     safeR2  = (rho - pRMax)/secRMax ;
 
@@ -1179,32 +1184,32 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
   else
   {
     tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
-    secRMax = sqrt(1.0 + tanRMax*tanRMax) ;
+    secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
     pRMax   = tanRMax*p.z() + (fRmax1 + fRmax2)*0.5 ;
     safe    = (rho - pRMax)/secRMax ;
   }
   if ( safeZ > safe ) safe = safeZ ;
 
-  if ( fDPhi < 2.0*M_PI && rho )
+  if ( fDPhi < twopi && rho )
   {
     phiC    = fSPhi + fDPhi*0.5 ;
-    cosPhiC = cos(phiC) ;
-    sinPhiC = sin(phiC) ;
+    cosPhiC = std::cos(phiC) ;
+    sinPhiC = std::sin(phiC) ;
 
     // Psi=angle from central phi to point
 
     cosPsi = (p.x()*cosPhiC + p.y()*sinPhiC)/rho ;
 
-    if ( cosPsi < cos(fDPhi*0.5) ) // Point lies outside phi range
+    if ( cosPsi < std::cos(fDPhi*0.5) ) // Point lies outside phi range
     {
       if ( (p.y()*cosPhiC - p.x()*sinPhiC) <= 0.0 )
       {
-        safePhi = fabs(p.x()*sin(fSPhi) - p.y()*cos(fSPhi)) ;
+        safePhi = std::fabs(p.x()*std::sin(fSPhi) - p.y()*std::cos(fSPhi)) ;
       }
       else
       {
         ePhi    = fSPhi + fDPhi ;
-        safePhi = fabs(p.x()*sin(ePhi) - p.y()*cos(ePhi)) ;
+        safePhi = std::fabs(p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
       }
       if ( safePhi > safe ) safe = safePhi ;
     }
@@ -1311,7 +1316,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
   //  \--------u-------/       \-----------v----------/ \---------w--------/
 
   tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
-  secRMax = sqrt(1.0 + tanRMax*tanRMax) ;
+  secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
   rMaxAv  = (fRmax1 + fRmax2)*0.5 ;
 
 
@@ -1353,7 +1358,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       {
         if (calcNorm)
         {
-          risec      = sqrt(t3)*secRMax ;
+          risec      = std::sqrt(t3)*secRMax ;
           *validNorm = true ;
           *n         = G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax) ;
         }
@@ -1362,7 +1367,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       else
       {
         sider = kRMax  ;
-        sr    = -b - sqrt(d) ; // was +srqrt(d), vmg 28.04.99
+        sr    = -b - std::sqrt(d) ; // was +srqrt(d), vmg 28.04.99
         zi    = p.z() + sr*v.z() ;
         ri    = tanRMax*zi + rMaxAv ;
           
@@ -1380,7 +1385,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           // Safety: if both roots -ve ensure that sr cannot `win'
           //         distance to out
 
-          sr2 = -b + sqrt(d) ;
+          sr2 = -b + std::sqrt(d) ;
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMax*zi + rMaxAv ;
 
@@ -1409,7 +1414,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
       if ( calcNorm )
       {
-        risec      = sqrt(t3)*secRMax ;
+        risec      = std::sqrt(t3)*secRMax ;
         *validNorm = true ;
         *n         = G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax) ;
       }
@@ -1422,7 +1427,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
     if ( calcNorm )
     {
-      risec      = sqrt(t3)*secRMax ;
+      risec      = std::sqrt(t3)*secRMax ;
       *validNorm = true ;
       *n         = G4ThreeVector(p.x()/risec,p.y()/risec,-tanRMax/secRMax) ;
     }
@@ -1451,7 +1456,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
     xi    = p.x() + slentol*v.x() ;
     yi    = p.y() + slentol*v.y() ;
-    risec = sqrt(xi*xi + yi*yi)*secRMax ;
+    risec = std::sqrt(xi*xi + yi*yi)*secRMax ;
     G4ThreeVector Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax) ;
 
     if ( Normal.dot(v) > 0 )    // We will leave the Cone immediatelly
@@ -1478,7 +1483,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
     if ( nt1 )
     {
-      secRMin = sqrt(1.0 + tanRMin*tanRMin) ;
+      secRMin = std::sqrt(1.0 + tanRMin*tanRMin) ;
       rMinAv  = (fRmin1 + fRmin2)*0.5 ;    
       rin     = tanRMin*p.z() + rMinAv ;
       nt2     = t2 - tanRMin*v.z()*rin ;
@@ -1505,7 +1510,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         }
         else
         {
-          sr2 = -b - sqrt(d) ;
+          sr2 = -b - std::sqrt(d) ;
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMin*zi + rMinAv ;
 
@@ -1520,7 +1525,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           }
           if( (ri<0) || (sr2 < kRadTolerance*0.5) )
           {
-            sr3 = -b + sqrt(d) ;
+            sr3 = -b + std::sqrt(d) ;
 
             // Safety: if both roots -ve ensure that sr cannot `win'
             //         distancetoout
@@ -1570,7 +1575,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
             xi     = p.x() + slentol*v.x() ;
             yi     = p.y() + slentol*v.y() ;
-            risec  = sqrt(xi*xi + yi*yi)*secRMin ;
+            risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
             Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMin/secRMin) ;
             
             if( Normal.dot(v) > 0 )
@@ -1600,16 +1605,16 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
   //
   // Phi Intersection
   
-  if ( fDPhi < 2.0*M_PI )
+  if ( fDPhi < twopi )
   {
-    sinSPhi = sin(fSPhi) ;
-    cosSPhi = cos(fSPhi) ;
+    sinSPhi = std::sin(fSPhi) ;
+    cosSPhi = std::cos(fSPhi) ;
     ePhi    = fSPhi + fDPhi ;
-    sinEPhi = sin(ePhi) ;
-    cosEPhi = cos(ePhi) ;
+    sinEPhi = std::sin(ePhi) ;
+    cosEPhi = std::cos(ePhi) ;
     cPhi    = fSPhi + fDPhi*0.5 ;
-    sinCPhi = sin(cPhi) ;
-    cosCPhi = cos(cPhi) ;
+    sinCPhi = std::sin(cPhi) ;
+    cosCPhi = std::cos(cPhi) ;
 
     if ( p.x() || p.y() )   // Check if on z axis (rho not needed later)
     {
@@ -1681,7 +1686,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         if ( pDistS <= pDistE )  sidephi = kSPhi ;
         else                     sidephi = kEPhi ;
 
-        if ( fDPhi > M_PI )
+        if ( fDPhi > pi )
         {
           if (compS < 0 && compE < 0) sphi = 0.0 ;
           else                        sphi = kInfinity ;
@@ -1699,7 +1704,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       {
         // Outside full starting plane, inside full ending plane
 
-        if ( fDPhi > M_PI )
+        if ( fDPhi > pi )
         {
           if ( compE < 0.0 )
           {
@@ -1759,7 +1764,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         // Must be pDistS<0&&pDistE>0
         // Inside full starting plane, outside full ending plane
 
-        if (fDPhi > M_PI)
+        if (fDPhi > pi)
         {
           if ( compS < 0.0 )
           {
@@ -1815,7 +1820,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       // On z axis + travel not || to z axis -> if phi of vector direction
       // within phi of shape, Step limited by rmax, else Step =0
 
-      vphi = atan2(v.y(),v.x()) ;
+      vphi = std::atan2(v.y(),v.x()) ;
 
       if ( fSPhi < vphi && vphi < fSPhi + fDPhi ) sphi = kInfinity ;
       else
@@ -1844,7 +1849,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           // (divide by frmax for unit vector)
         xi         = p.x() + snxt*v.x() ;
         yi         = p.y() + snxt*v.y() ;
-        risec      = sqrt(xi*xi + yi*yi)*secRMax ;
+        risec      = std::sqrt(xi*xi + yi*yi)*secRMax ;
         *n         = G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax) ;
         *validNorm = true ;
         break ;
@@ -1852,17 +1857,17 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         *validNorm=false ;  // Rmin is inconvex
         break ;
       case kSPhi:
-        if ( fDPhi <= M_PI )
+        if ( fDPhi <= pi )
         {
-          *n         = G4ThreeVector(sin(fSPhi),-cos(fSPhi),0) ;
+          *n         = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
           *validNorm = true ;
         }
         else   *validNorm = false ;
         break ;
       case kEPhi:
-        if ( fDPhi <= M_PI )
+        if ( fDPhi <= pi )
         {
-          *n         = G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0) ;
+          *n         = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
           *validNorm = true ;
         }
         else  *validNorm = false ;
@@ -1883,11 +1888,11 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
         G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
         G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-        G4cout << "pho at z = "   << sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm"
+        G4cout << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm"
                << G4endl << G4endl ;
         if( p.x() != 0. || p.x() != 0.)
         {
-           G4cout << "point phi = "   << atan2(p.y(),p.x())/degree << " degree" 
+           G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree << " degree" 
                   << G4endl << G4endl ; 
         }
         G4cout << "Direction:" << G4endl << G4endl ;
@@ -1926,11 +1931,11 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    G4cout << "pho at z = "   << sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm" 
+    G4cout << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm" 
            << G4endl << G4endl ;
     if( p.x() != 0. || p.x() != 0.)
     {
-      G4cout << "point phi = "   << atan2(p.y(),p.x())/degree << " degree" 
+      G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree << " degree" 
              << G4endl << G4endl ; 
     }
     G4Exception("G4Cons::DistanceToOut(p)", "Notification", JustWarning, 
@@ -1938,20 +1943,20 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
   }
 #endif
 
-  rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
-  safeZ = fDz - fabs(p.z()) ;
+  rho = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
+  safeZ = fDz - std::fabs(p.z()) ;
 
   if (fRmin1 || fRmin2)
   {
     tanRMin = (fRmin2 - fRmin1)*0.5/fDz ;
-    secRMin = sqrt(1.0 + tanRMin*tanRMin) ;
+    secRMin = std::sqrt(1.0 + tanRMin*tanRMin) ;
     pRMin   = tanRMin*p.z() + (fRmin1 + fRmin2)*0.5 ;
     safeR1  = (rho - pRMin)/secRMin ;
   }
   else safeR1 = kInfinity ;
 
   tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
-  secRMax = sqrt(1.0 + tanRMax*tanRMax) ;
+  secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
   pRMax   = tanRMax*p.z() + (fRmax1+fRmax2)*0.5 ;
   safeR2  = (pRMax - rho)/secRMax ;
 
@@ -1961,22 +1966,22 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
 
   // Check if phi divided, Calc distances closest phi plane
 
-  if (fDPhi < 2.0*M_PI)
+  if (fDPhi < twopi)
   {
     // Above/below central phi of G4Cons?
 
     phiC    = fSPhi + fDPhi*0.5 ;
-    cosPhiC = cos(phiC) ;
-    sinPhiC = sin(phiC) ;
+    cosPhiC = std::cos(phiC) ;
+    sinPhiC = std::sin(phiC) ;
 
     if ( (p.y()*cosPhiC - p.x()*sinPhiC) <= 0 )
     {
-      safePhi = -(p.x()*sin(fSPhi) - p.y()*cos(fSPhi)) ;
+      safePhi = -(p.x()*std::sin(fSPhi) - p.y()*std::cos(fSPhi)) ;
     }
     else
     {
       ePhi    = fSPhi + fDPhi ;
-      safePhi = (p.x()*sin(ePhi) - p.y()*cos(ePhi)) ;
+      safePhi = (p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
     }
     if (safePhi < safe) safe = safePhi ;
   }
@@ -2021,13 +2026,13 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 
   // G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1  ;
 
-  meshRMax1 = fRmax1/cos(meshAngle*0.5) ;
-  meshRMax2 = fRmax2/cos(meshAngle*0.5) ;
+  meshRMax1 = fRmax1/std::cos(meshAngle*0.5) ;
+  meshRMax2 = fRmax2/std::cos(meshAngle*0.5) ;
 
   // If complete in phi, set start angle such that mesh will be at RMax
   // on the x axis. Will give better extent calculations when not rotated.
 
-  if (fDPhi == M_PI*2.0 && fSPhi == 0.0 )
+  if (fDPhi == twopi && fSPhi == 0.0 )
   {
     sAngle = -meshAngle*0.5 ;
   }
@@ -2045,8 +2050,8 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       // Compute coordinates of cross section at section crossSection
 
       crossAngle    = sAngle + crossSection*meshAngle ;
-      cosCrossAngle = cos(crossAngle) ;
-      sinCrossAngle = sin(crossAngle) ;
+      cosCrossAngle = std::cos(crossAngle) ;
+      sinCrossAngle = std::sin(crossAngle) ;
 
       rMaxX1 = meshRMax1*cosCrossAngle ;
       rMaxY1 = meshRMax1*sinCrossAngle ;

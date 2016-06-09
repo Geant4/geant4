@@ -104,11 +104,14 @@ shown in the macro vis.mac.
 The example is provided of:
 - Low Energy electromagnetic processes for photons, e- 
 - Standard electromagnetic processes for e+
-- Low Energy or Standard electromagnetic processes with ICRU parameterisation 
+- Low Energy electromagnetic processes with ICRU parameterisation 
   for p, alpha and ions
 - Muon electromagnetic processes
 - Decay
 - Hadronic processes for p and alpha particles as primary particles.
+
+The user can choose the Bertini cascade approach or the
+ binary cascade approach for the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
 
@@ -153,13 +156,14 @@ p: speZ=1.txt
 alpha: speZ=2.txt
 
 3.1 UI
+
 The user can define primary particles with the following command:
-/gun/particle proton
-/gun/particle alpha
-/gun/particle IonC12
-/gun/particle IonO16
-/gun/particle IonSi28
-/gun/particle IonFe52
+/gun/particleType proton
+/gun/particleType alpha
+/gun/particleType IonC12
+/gun/particleType IonO16
+/gun/particleType IonSi28
+/gun/particleType IonFe52
 
 The user can select interactively the configuration with the following
 UI commands:
@@ -169,7 +173,7 @@ UI commands:
 
 In the Basic configuration, the user can change interactively the 
 energy of primary particles:
-example: /gun/energy 1.MeV
+example: /gun/energy 1. MeV
 
 4. STEPPING
 
@@ -183,7 +187,10 @@ Available UI command:
 5. ANALYSIS
 
 if ANALYSIS_USE = 1 in the variable environment, the output of
-the simulation is remsim.hbk           
+the simulation is remsim.hbk or remsim.xml.
+The default output file is remsim.hbk. 
+The user can change the format of the output file interactively as shown
+in section 5.1
                                  
 The file contains histograms:                                              
     - 10 (1)   Energy Deposit (MeV)in the phantom (astronaut) versus 
@@ -201,6 +208,18 @@ The file contains histograms:
     - 60 (1)   Energy (MeV) of primaries reaching the phantom          
      
     - 70 (1)   Energy (MeV) of primaries outgoing the phantom
+
+    - 80 (2)   Project the coordinate of the hits on the plane xy
+  
+    - 90 (2)   Project the  energy  deposit of the hits on the plane xy
+
+5.1 UI
+
+- The user can select the format of the output file if the analysis
+is active:
+
+/analysis/formatFile hbook
+/analysis/formatFile xml
 
 6.SET-UP 
                                                                         
@@ -237,13 +256,13 @@ example macros are provided:
                                                                         
 - Interative mode:                                                      
   $G4WORDIR/bin/Linux-g++/remsim
-  -> the vis.mac is loaded automatically                                |
+  -> the vis.mac is loaded automatically                                
 
 ------------------------------------------------------------------------
 Author : Susanna Guatelli
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 
-last modified: Susanna Guatelli 27/5/2004
+last modified: Susanna Guatelli 23/11/2004
 
 

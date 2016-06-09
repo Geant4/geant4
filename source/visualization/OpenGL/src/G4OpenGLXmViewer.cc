@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.12 2004/04/07 15:18:23 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenGLXmViewer.cc,v 1.14 2004/07/23 15:24:01 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -43,7 +43,6 @@
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 
-#include "G4VisManager.hh"
 #include "G4OpenGLXmSliderBar.hh"
 
 #include "G4Xt.hh"
@@ -386,6 +385,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   trans_str = XmStringCreateLocalized ((char*)"Transparency");
   anti_str = XmStringCreateLocalized ((char*)"Antialiasing");
   halo_str = XmStringCreateLocalized ((char*)"Haloing");
+  aux_edge_str = XmStringCreateLocalized ((char*)"Auxiliary edges");
 
   //*********Create special pulldown menu on menubar*********
   spec_cascade = XmVaCreateSimplePulldownMenu
@@ -396,6 +396,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XmVaCASCADEBUTTON, trans_str, 'T',
      XmVaCASCADEBUTTON, anti_str, 'A',
      XmVaCASCADEBUTTON, halo_str, 'H',
+     XmVaCASCADEBUTTON, aux_edge_str, 'E',
      XtNvisual, vi -> visual, 
      XtNdepth, vi -> depth, 
      XtNcolormap, cmap, 
@@ -406,6 +407,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (trans_str);
   XmStringFree (anti_str);
   XmStringFree (halo_str);
+  XmStringFree (aux_edge_str);
 
   //  G4cout << "Created Special pulldown menu" << G4endl;
 
@@ -506,6 +508,36 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     }
   } else {
     G4Exception("haloing_enabled in G4OpenGLXmViewer is neither true nor false!!");
+  }
+
+  //Add Aux_Edge pullright menu to special cascade...
+  aux_edge_pullright = XmVaCreateSimplePulldownMenu 
+    (spec_cascade,
+     (char*)"aux_edge",
+     3,
+     aux_edge_callback,
+     XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
+     XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
+     XmNradioBehavior, True, 
+     XmNradioAlwaysOne, True, 
+     XmNuserData, this,
+     XtNvisual, vi -> visual, 
+     XtNdepth, vi -> depth, 
+     XtNcolormap, cmap, 
+     XtNborderColor, borcol,
+     XtNbackground, bgnd,
+     NULL);
+  
+  if (!fVP.IsAuxEdgeVisible()) {
+    special_widget = XtNameToWidget(aux_edge_pullright, "button_0");
+    if(special_widget) {
+      XtVaSetValues (special_widget, XmNset, True, NULL);
+    }
+  } else {
+    special_widget = XtNameToWidget(aux_edge_pullright, "button_1");
+    if(special_widget) {
+      XtVaSetValues (special_widget, XmNset, True, NULL);
+    }
   }
 
   XtManageChild (menubar);

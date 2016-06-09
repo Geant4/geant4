@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.10 2004/06/07 13:49:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4SynchrotronRadiation.cc,v 1.12 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -44,6 +44,8 @@
 //
 //  Constructor
 //
+
+using namespace std;
  
 G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
@@ -256,22 +258,22 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       
       if (newKinEnergy > 0.)
       {
-        aParticleChange.SetMomentumChange( particleDirection );
-        aParticleChange.SetEnergyChange( newKinEnergy );
-        aParticleChange.SetLocalEnergyDeposit (0.); 
+        aParticleChange.ProposeMomentumDirection( particleDirection );
+        aParticleChange.ProposeEnergy( newKinEnergy );
+        aParticleChange.ProposeLocalEnergyDeposit (0.); 
       } 
       else
       { 
-        aParticleChange.SetEnergyChange( 0. );
-        aParticleChange.SetLocalEnergyDeposit (0.);
+        aParticleChange.ProposeEnergy( 0. );
+        aParticleChange.ProposeLocalEnergyDeposit (0.);
         G4double charge = aDynamicParticle->GetDefinition()->GetPDGCharge();   
         if (charge<0.)
         {
-           aParticleChange.SetStatusChange(fStopAndKill) ;
+           aParticleChange.ProposeTrackStatus(fStopAndKill) ;
 	}
         else      
         {
-          aParticleChange.SetStatusChange(fStopButAlive) ;
+          aParticleChange.ProposeTrackStatus(fStopButAlive) ;
 	}
       } 
     }       

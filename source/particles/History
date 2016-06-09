@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2004/06/11 15:14:30 gcosmo Exp $
+$Id: History,v 1.112 2004/12/02 08:14:23 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Dec 2, 2004  H.Kurashige  (particles-V06-02-05)
+- migration to cmath
+
+- Sep 17, 2004  P.Gumplinger (particles-V06-02-04)
+- Introducing G4MuonDecayChannelWithSpin class.
+- Does NOT include changes introduced with "particles-V06-02-03".
+
+- Sep 01, 2004  M.Asai (particles-V06-02-03)
+- All particles except shortlived become direct instances of G4particleDefinition class.
+- Intermediate level abstract classes except G4VShortLivedParticle are eliminated.
+- Classes with particle names (e.g. G4Gamma) are no longer derived from G4ParticleDefinition nor
+  intermediate level abstract classes (e.g. G4VLepton), but they are now utility classes which
+  return corresponting pointer of G4particleDefinition. These classes instantiate corresponding
+  G4particleDefinition objects at the first access to these classes, if and only if corresponding
+  particles have not yet instantiated elsewhere (typically by the user).
+
+- Aug 31, 2004  M.Asai (particles-V06-02-02)
+- G4Exception is added to G4ParticleTable to prohibit its use before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+
+- Jul 26, 2004  H.Kurashige (particles-V06-02-01)
+- Remove obsolete dependency to G4Material from G4ParticleDefinition and related class 
+
+- Jul 07, 2004  M.Asai (particles-V06-02-00)
+- Introducing G4UnknownParticle class.
 
 - Jun 11, 2004  G.Cosmo (particles-V06-01-01)
 - Use global flag G4PARTICLES_ALLOC_EXPORT to export extern symbols for DLLs.

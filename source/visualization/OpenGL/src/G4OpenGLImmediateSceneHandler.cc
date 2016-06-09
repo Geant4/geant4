@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.9 2003/06/16 17:13:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.10 2004/07/01 15:29:10 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -97,16 +97,9 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives () {
 
 void G4OpenGLImmediateSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = true;
-  }
 }
 
 void G4OpenGLImmediateSceneHandler::EndModeling () {
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = true;
-    //    glDisable (GL_POLYGON_OFFSET_FILL);
-  }
   G4VSceneHandler::EndModeling ();
 }
 

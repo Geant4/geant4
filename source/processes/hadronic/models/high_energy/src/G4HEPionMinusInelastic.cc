@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.9 2003/07/01 15:42:24 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HEPionMinusInelastic.cc,v 1.11 2004/12/10 22:04:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 
@@ -96,7 +96,7 @@ ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
 
     incidentKineticEnergy -= excitation;
     incidentTotalEnergy    = incidentKineticEnergy + incidentMass;
-    incidentTotalMomentum  = sqrt( (incidentTotalEnergy-incidentMass)                    
+    incidentTotalMomentum  = std::sqrt( (incidentTotalEnergy-incidentMass)                    
                                   *(incidentTotalEnergy+incidentMass));
 
     G4HEVector targetParticle;
@@ -111,7 +111,7 @@ ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
       }
 
     G4double targetMass         = targetParticle.getMass();
-    G4double centerOfMassEnergy = sqrt( incidentMass*incidentMass + targetMass*targetMass
+    G4double centerOfMassEnergy = std::sqrt( incidentMass*incidentMass + targetMass*targetMass
                                        + 2.0*targetMass*incidentTotalEnergy);
     G4double availableEnergy    = centerOfMassEnergy - targetMass - incidentMass;
 
@@ -205,7 +205,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 // multiplicity per inelastic reaction.
 
  {
-   static const G4double expxu =  log(MAXFLOAT); // upper bound for arg. of exp
+   static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
    static const G4double expxl = -expxu;         // lower bound for arg. of exp
 
    static const G4double protb = 0.7;
@@ -328,9 +328,9 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
        if( targetCode == protonCode )                    // target is a proton 
          {
            w0 = - sqr(1.+protb)/(2.*c*c);
-           wp = w0 = exp(w0);
+           wp = w0 = std::exp(w0);
            wm = - sqr(-1.+protb)/(2.*c*c);
-           wm = exp(wm);
+           wm = std::exp(wm);
            wp *= 10.;
            wt = w0+wp+wm;
            wp = w0+wp;
@@ -346,8 +346,8 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
          {                                               // target is a neutron
            w0 = -sqr(1.+neutb)/(2.*c*c);
            wm = -sqr(-1.+neutb)/(2.*c*c);
-           w0 = exp(w0);
-           wm = exp(wm);
+           w0 = std::exp(w0);
+           wm = std::exp(wm);
            if( G4UniformRand() < w0/(w0+wm) )
              { np = 0; nm = 0; nz = 1; }       
            else
@@ -358,7 +358,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
      {
 //                    number of total particles vs. centre of mass Energy - 2*proton mass
    
-       G4double aleab = log(availableEnergy);
+       G4double aleab = std::log(availableEnergy);
        G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
                     + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
@@ -368,9 +368,9 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 
        for( nt=1; nt<=numSec; nt++ ) 
          {
-           test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-           dum = M_PI*nt/(2.0*n*n);
-           if( fabs(dum) < 1.0 ) 
+           test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+           dum = pi*nt/(2.0*n*n);
+           if( std::fabs(dum) < 1.0 ) 
              if( test >= 1.0e-10 )anpn += dum*test;
            else 
              anpn += dum*test;
@@ -392,9 +392,9 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>0) && (nt<=numSec) ) 
                                 {
-                                  test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                  if( fabs(dum) < 1.0 ) 
+                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                                  if( std::fabs(dum) < 1.0 ) 
                                         if( test >= 1.0e-10 )excs += dum*test;
                                    else 
                                         excs += dum*test;
@@ -423,9 +423,9 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>=1) && (nt<=numSec) ) 
                                 {
-                                  test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                  if( fabs(dum) < 1.0 ) 
+                                  test = std::exp( Amin( expxu, Amax( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                                  if( std::fabs(dum) < 1.0 ) 
                                       if( test >= 1.0e-10 )excs += dum*test;
                                   else 
                                       excs += dum*test;

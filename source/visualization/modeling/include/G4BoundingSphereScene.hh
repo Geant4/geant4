@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BoundingSphereScene.hh,v 1.13 2003/05/30 13:01:31 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  7th June 1997

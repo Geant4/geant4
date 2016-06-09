@@ -51,7 +51,7 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
   };
 
   G4double ra = rr - rp * rp / pp;
-  pp = sqrt(pp);
+  pp = std::sqrt(pp);
   G4double ds;
   G4double d2;
  
@@ -76,7 +76,7 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
     };
   };
 
-  path = ds * sqrt(d2) - rp / pp;
+  path = ds * std::sqrt(d2) - rp / pp;
 
   return path;    
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.icc,v 1.6 2001/07/11 09:59:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Ellipse.icc,v 1.7 2004/12/02 09:31:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -76,15 +76,15 @@ G4Point3D G4Ellipse::GetPoint(G4double param) const
 {
   param-= GetPShift();
   return G4Point3D( position.GetLocation()
-                    + semiAxis1*cos(param)*position.GetPX()
-                    + semiAxis2*sin(param)*position.GetPY() );
+                    + semiAxis1*std::cos(param)*position.GetPX()
+                    + semiAxis2*std::sin(param)*position.GetPY() );
 }
 
 inline
 G4double G4Ellipse::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
-  G4double angle= atan2(ptLocal.y(), ptLocal.x()*ratioAxis2Axis1);
+  G4double angle= std::atan2(ptLocal.y(), ptLocal.x()*ratioAxis2Axis1);
   G4double r= (angle<0)? angle+twopi: angle;
   return r+GetPShift();
 }
@@ -117,7 +117,7 @@ void G4Ellipse::IntersectRay2D(const G4Ray& ray,
   if (discr >= 0) {
 
     // 2 intersections (maybe 1, but this case is rare)
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
     // find the smallest positive i
     G4double i= -sd-sqrtdiscr;
     if (i<kCarTolerance) {
@@ -157,7 +157,7 @@ G4int G4Ellipse::IntersectRay2D(const G4Ray& ray)
   if (discr > 0) 
   {
     // 2 intersections 
-    G4double sqrtdiscr= sqrt(discr);
+    G4double sqrtdiscr= std::sqrt(discr);
    
     // if i is positive, we have an intersection
     i= -sd-sqrtdiscr;

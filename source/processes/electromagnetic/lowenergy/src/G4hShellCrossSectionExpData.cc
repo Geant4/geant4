@@ -30,7 +30,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionExpData.cc,v 1.1 2004/04/27 09:45:49 saliceti Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 #include "G4hShellCrossSectionExpData.hh"
 #include <fstream>

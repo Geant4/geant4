@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.8 2003/07/01 15:42:23 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 

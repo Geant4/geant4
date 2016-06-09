@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.13 2004/06/18 12:47:05 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.17 2004/12/02 09:31:23 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -198,7 +198,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               G4LogicalVolume *pLogical;
               pLogical = fBlockedPhysicalVolume->GetLogicalVolume();
               pLogical->SetSolid( pSolid );
-              pLogical->SetMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
+              pLogical->UpdateMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
                                                       fBlockedPhysicalVolume));
               break;
           }
@@ -624,7 +624,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       //
       if( shiftOriginSafSq >= sqr(fPreviousSafety) )
       {
-        G4double shiftOrigin = sqrt(shiftOriginSafSq);
+        G4double shiftOrigin = std::sqrt(shiftOriginSafSq);
         G4double diffShiftSaf = shiftOrigin - fPreviousSafety;
 
         if( diffShiftSaf > fAccuracyForWarning )
@@ -633,7 +633,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                       "UnexpectedPositionShift", JustWarning,
                       "Accuracy ERROR or slightly inaccurate position shift.");
           G4cerr << "     The Step's starting point has moved " 
-                 << sqrt(moveLenSq)/mm << " mm " << G4endl
+                 << std::sqrt(moveLenSq)/mm << " mm " << G4endl
                  << "     since the last call to a Locate method." << G4endl;
           G4cerr << "     This has resulted in moving " 
                  << shiftOrigin/mm << " mm " 
@@ -674,7 +674,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         {
           G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
                  << "          The Step's starting point has moved "
-                 << sqrt(moveLenSq) << "," << G4endl
+                 << std::sqrt(moveLenSq) << "," << G4endl
                  << "          which has taken it to the limit of"
                  << " the current safety. " << G4endl;
         }
@@ -809,38 +809,41 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
               << G4endl;
     }
 #endif
-    if( (fNumberZeroSteps > fActionThreshold_NoZeroSteps-1) && (!fPushed) )
+    if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
     {
-       // Act to recover this stuck track. Pushing it once along direction
+       // Act to recover this stuck track. Pushing it along direction
        //
        Step += 0.9*kCarTolerance;
-       fPushed = true;
 #ifdef G4VERBOSE
-       G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
-              << "          Track stuck, not moving for " 
-              << fNumberZeroSteps << " steps" << G4endl
-              << "          in volume -" << motherPhysical->GetName()
-              << "- at point " << pGlobalpoint << G4endl
-              << "          direction: " << pDirection << "." << G4endl
-              << "          Potential geometry or navigation problem !"
-              << G4endl
-              << "          Trying pushing it of " << Step << " mm ..."
-              << G4endl;
+       if (!fPushed)
+       {
+         G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
+                << "          Track stuck, not moving for " 
+                << fNumberZeroSteps << " steps" << G4endl
+                << "          in volume -" << motherPhysical->GetName()
+                << "- at point " << pGlobalpoint << G4endl
+                << "          direction: " << pDirection << "." << G4endl
+                << "          Potential geometry or navigation problem !"
+                << G4endl
+                << "          Trying pushing it of " << Step << " mm ..."
+                << G4endl;
+       }
 #endif
-     }
-     if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
-     {
-        // Must kill this stuck track
-        //
-        G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-               << "        Track stuck, not moving for " 
-               << fNumberZeroSteps << " steps" << G4endl
-               << "        in volume -" << motherPhysical->GetName()
-               << "- at point " << pGlobalpoint << G4endl
-               << "        direction: " << pDirection << "." << G4endl;
-        G4Exception("G4Navigator::ComputeStep()",
-                    "StuckTrack", EventMustBeAborted, 
-                    "Stuck Track: potential geometry or navigation problem.");
+       fPushed = true;
+    }
+    if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
+    {
+      // Must kill this stuck track
+      //
+      G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
+             << "        Track stuck, not moving for " 
+             << fNumberZeroSteps << " steps" << G4endl
+             << "        in volume -" << motherPhysical->GetName()
+             << "- at point " << pGlobalpoint << G4endl
+             << "        direction: " << pDirection << "." << G4endl;
+      G4Exception("G4Navigator::ComputeStep()",
+                  "StuckTrack", EventMustBeAborted, 
+                  "Stuck Track: potential geometry or navigation problem.");
     }
   }
   else
@@ -864,38 +867,23 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // Convention: fExitNormal is in the 'grand-mother' coordinate system
       //
       fGrandMotherExitNormal= fExitNormal;
-
-      // If no relocation were made, we would need to rotate it back to 
-      // this (the mother) coordinate system
-      // const G4RotationMatrix* motherRotation= motherPhysical->GetRotation();
-      // G4ThreeVector trueMotherExitNormal = fGrandMotherExitNormal;
-      // Un-rotate gran->mother
-      //
-      // trueMotherExitNormal *= (*motherRotation);
-
-      // However, relocation will put us either in
-      //   - the grand-mother (OK)
-      //   - in the grand-grand mother (to BE checked if this is dealt with)
     }
     else
     {  
-      // We must calculate the normal anyway
-      // (in order to have it if requested)
+      // We must calculate the normal anyway (in order to have it if requested)
       //
-      G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
-      finalLocalPoint = fLastLocatedPointLocal + localDirection*Step;
-      localExitNormal  = motherLogical->GetSolid()->
-                         SurfaceNormal(finalLocalPoint);
+      G4ThreeVector finalLocalPoint =
+        fLastLocatedPointLocal + localDirection*Step;
+
+      // Now fGrandMotherExitNormal is in the 'grand-mother' coordinate system
+      //
+      fGrandMotherExitNormal =
+        motherLogical->GetSolid()->SurfaceNormal(finalLocalPoint);
+
       const G4RotationMatrix* mRot = motherPhysical->GetRotation();
       if( mRot )
       { 
-         G4ThreeVector grandMotherExitNormal = localExitNormal;
-         grandMotherExitNormal *= (*mRot);
-
-         // Now fGrandMotherExitNormal is in the 'grand-mother'
-         // coordinate system
-         //
-         fGrandMotherExitNormal = grandMotherExitNormal;
+        fGrandMotherExitNormal *= (*mRot);
       }
     }
 #ifdef G4DEBUG_NAVIGATION
@@ -1003,7 +991,7 @@ void G4Navigator::SetupHierarchy()
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
-        pLogical->SetMaterial( pParam->ComputeMaterial(replicaNo, current));
+        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current));
         break;
     }
     mother = current;
@@ -1028,6 +1016,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
     *valid = true;
   }
   else
+  {
     if( fExitedMother )
     {
       ExitNormal = fGrandMotherExitNormal;
@@ -1040,6 +1029,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       //
       *valid = false;
     }
+  }
   return ExitNormal;
 }
 

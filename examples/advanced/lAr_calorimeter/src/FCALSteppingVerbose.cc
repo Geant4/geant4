@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALSteppingVerbose.cc,v 1.5 2003/12/09 15:30:34 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: FCALSteppingVerbose.cc,v 1.6 2004/11/29 18:03:07 ribon Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------

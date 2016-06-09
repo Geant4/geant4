@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventMessenger.cc,v 1.2 2004/06/21 10:57:13 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: EventMessenger.cc,v 1.3 2004/09/24 09:58:07 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,15 +29,18 @@
 #include "EventMessenger.hh"
 
 #include "EventAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::EventMessenger(EventAction* EvAct)
 :eventAction(EvAct)
-{   
+{
+  eventDir = new G4UIdirectory("/testem/event/");
+  eventDir->SetGuidance("event control");
+  
   DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none,charged, all");
@@ -58,7 +61,8 @@ EventMessenger::EventMessenger(EventAction* EvAct)
 EventMessenger::~EventMessenger()
 {
   delete DrawCmd;
-  delete PrintCmd;    
+  delete PrintCmd;
+  delete eventDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

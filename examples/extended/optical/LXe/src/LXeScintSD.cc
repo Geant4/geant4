@@ -56,7 +56,7 @@ void LXeScintSD::Initialize(G4HCofThisEvent* HCE){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-G4bool LXeScintSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist){ 
+G4bool LXeScintSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ){ 
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false; //No edep so dont count as hit
 
@@ -82,7 +82,7 @@ G4bool LXeScintSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-void LXeScintSD::EndOfEvent(G4HCofThisEvent* HCE){
+void LXeScintSD::EndOfEvent(G4HCofThisEvent* ){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_

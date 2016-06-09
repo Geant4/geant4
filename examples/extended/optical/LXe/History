@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/06/01 07:02:16 gcosmo Exp $
+$Id: History,v 1.3 2004/12/03 16:26:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 3rd, 2004 Gabriele Cosmo (LXe-V06-02-01)
+---------------------------------
+- Implemented migration to <cmath>.
+
+August 25th, 2004 Trevor MacPhail (LXe-V06-02-00)
+---------------------------------
+- fixed compilation error in LXeSteppingVerbose.cc
+- fixed compilation warnings in LXePMTSD.cc, LXeScintHit.cc, LXeScintSD.cc
 
 May 31st, 2004 Trevor MacPhail (LXe-V06-01-00)
 ------------------------------

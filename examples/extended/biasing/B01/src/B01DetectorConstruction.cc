@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.13 2004/03/24 10:10:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: B01DetectorConstruction.cc,v 1.14 2004/12/08 17:39:07 daquinog Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 #include "G4Types.hh"
@@ -255,7 +255,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
   {
     if (*it != pWorldVolume)
     {
-      imp = pow(2., n++);
+      imp = std::pow(2., n++);
       G4cout << "Going to assign importance: " << imp << ", to volume: " 
 	     << (*it)->GetName() << G4endl;
       istore->AddImportanceGeometryCell(imp, *(*it)); 
@@ -304,7 +304,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
   {
     if (*it != pWorldVolume)
     {
-      lowerWeight = 1./pow(2., n++);
+      lowerWeight = 1./std::pow(2., n++);
       G4cout << "Going to assign lower weight: " << lowerWeight 
 	     << ", to volume: " 
 	     << (*it)->GetName() << G4endl;

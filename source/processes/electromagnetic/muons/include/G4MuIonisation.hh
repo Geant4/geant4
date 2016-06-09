@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.21 2004/05/07 16:47:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MuIonisation.hh,v 1.25 2004/12/02 08:20:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,8 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -82,12 +84,11 @@ class G4MuIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4MuIonisation(const G4String& name = "MuIoni");
+  G4MuIonisation(const G4String& name = "muIoni");
 
-  ~G4MuIonisation();
+  virtual ~G4MuIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p)
-    {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
@@ -112,13 +113,12 @@ public:
 
 protected:
 
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
-
-  void InitialiseProcess();
 
   // hide assignment operator
   G4MuIonisation & operator=(const G4MuIonisation &right);
@@ -138,12 +138,19 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4bool G4MuIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                     const G4Material*,
                                                           G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + sqrt((1. + x)*(1. + x*ratio*ratio));
+  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
 }
 

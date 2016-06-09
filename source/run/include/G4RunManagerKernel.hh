@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.4 2004/05/04 16:43:25 asaim Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4RunManagerKernel.hh,v 1.5 2004/08/10 23:57:16 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -58,6 +58,7 @@ class G4Region;
 class G4ExceptionHandler;
 class G4StackManager;
 class G4TrackingManager;
+class G4PrimaryTransformer;
 
 #include "globals.hh"
 #include "G4EventManager.hh"
@@ -88,14 +89,17 @@ class G4RunManagerKernel
     // set to false, so that the original optimisation and navigation history is
     // preserved. This method is invoked also at initialisation.
 
-
-    void InitializePhysics(G4VUserPhysicsList* uPhys);
+    void SetPhysics(G4VUserPhysicsList* uPhys);
     //  This method must be invoked at least once by the user with a valid
     // concrete implementation of user physics list. 
 
+    void InitializePhysics();
+    //  This method must be invoked at least once by the user to build physics
+    // processes.
+
     G4bool RunInitialization();
     //  Trigger geometry closing and physics table constructions.
-    // It returns TRUE is all procedures went well.
+    // It returns TRUE if all procedures went well.
 
     void RunTermination();
     //  Set the application state to G4State_Idle so that the user can modify
@@ -156,6 +160,8 @@ class G4RunManagerKernel
     { return eventManager->GetStackManager(); }
     inline G4TrackingManager* GetTrackingManager() const
     { return eventManager->GetTrackingManager(); }
+    inline G4PrimaryTransformer* GetPrimaryTransformer() const
+    { return eventManager->GetPrimaryTransformer(); }
 
     inline G4String GetVersionString() const
     { return versionString; }

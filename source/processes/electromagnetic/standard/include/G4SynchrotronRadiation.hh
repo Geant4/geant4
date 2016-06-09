@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.10 2004/06/07 13:49:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4SynchrotronRadiation.hh,v 1.12 2004/11/10 08:53:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -59,16 +59,16 @@
 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
- 
-class G4SynchrotronRadiation : public G4VDiscreteProcess 
-{ 
+
+class G4SynchrotronRadiation : public G4VDiscreteProcess
+{
   public:
- 
-     G4SynchrotronRadiation(const G4String& processName = 
+
+     G4SynchrotronRadiation(const G4String& processName =
 			                    "SynchrotronRadiation",
 		                  G4ProcessType type = fElectromagnetic);
- 
-    ~G4SynchrotronRadiation();
+
+    virtual ~G4SynchrotronRadiation();
 
   private:
 
@@ -76,18 +76,18 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
      G4SynchrotronRadiation(const G4SynchrotronRadiation&);
 
-  public:  /////////////////    Post Step functions  //////////////////////////  
+  public:  /////////////////    Post Step functions  //////////////////////////
 
      G4double GetMeanFreePath( const G4Track& track,
                                      G4double previousStepSize,
                                      G4ForceCondition* condition ) ;
- 
-     G4VParticleChange *PostStepDoIt( const G4Track& track,         
+
+     G4VParticleChange *PostStepDoIt( const G4Track& track,
                                       const G4Step& Step    ) ;
 
      G4double GetPhotonEnergy( const G4Track& trackData,
                                const G4Step&  stepData      ) ;
-                 
+
 
      G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -105,19 +105,19 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
      static const G4double fIntegralProbabilityOfSR[200] ;
 
 
-     const G4double 
+     const G4double
      LowestKineticEnergy;   // low  energy limit of the cross-section formula
 
-     const G4double 
+     const G4double
      HighestKineticEnergy;  // high energy limit of the cross-section formula
- 
+
      G4int TotBin;          // number of bins in the tables
 
      G4double CutInRange;
 
-     const G4Gamma*    theGamma; 
-     const G4Electron* theElectron;
-     const G4Positron* thePositron;
+     const G4ParticleDefinition* theGamma; 
+     const G4ParticleDefinition* theElectron;
+     const G4ParticleDefinition* thePositron;
 
      const G4double* GammaCutInKineticEnergy;
      const G4double* ElectronCutInKineticEnergy;

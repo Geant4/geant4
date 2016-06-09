@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2004/06/23 16:15:45 gcosmo Exp $
+$Id: History,v 1.91 2004/12/16 19:01:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th December 2004  Gabriele Cosmo (examples-V06-02-06)
+- Updated reference outputs according to reference tag geant4-07-00-ref-00
+- Includes tags: air_shower-V06-02-02, brachy-V06-02-01, ccal-V06-02-02,
+                 cosmicray_charging-V06-02-03, gammaraytel-V06-02-01, hadrontherapy-V06-02-01,
+                 lAr_calorimeter-V06-02-02, medical_linac-V06-02-00, purtag-V06-02-01,
+                 radioprotection-V06-02-00, Rich-V06-02-02, Tiara-V06-02-02, DMX-V06-02-02,
+                 XrayFluo-V06-02-01, exampleA01-V06-02-03, testem1-V06-02-07,
+                 testem2-V06-02-05, testem3-V06-02-06, exgps-V06-02-01, fieldex-V06-02-00,
+                 exgdml-V06-02-00, DICOM-V06-02-02, gtherapy-V06-02-07, exparallel-V06-02-00,
+                 exrdm-V06-02-02, exampleRE01-V06-02-02, exampleN04-V06-02-03,
+                 exampleN05-V06-02-02.
+
+26th November 2004  Gabriele Cosmo (examples-V06-02-05)
+- Updated reference outputs according to reference tag geant4-06-02-ref-05
+- Includes tags: muonprocesses-V06-02-07, testem1-V06-02-05, testem5-V06-02-05,
+                 exgps-V06-02-00, exrdm-V06-02-00, exampleN03-V06-02-00,
+                 exampleN07-V06-02-00.
+
+29th October 2004  Gabriele Cosmo (examples-V06-02-04)
+- Updated reference outputs according to reference tag geant4-06-02-ref-04
+- Includes tags: muonprocesses-V06-02-05, photonprocesses-V06-02-02,
+                 testem3-V06-02-02, testem7-V06-02-03, exampleN05-V06-02-00.
+
+25th October 2004  Sergei Sadilov (examples-V06-02-03)
+- Tag for 6.2.patch-02. Updated reference outputs.
+
+29th September 2004  Gabriele Cosmo (examples-V06-02-02)
+- Updated reference outputs according to reference tag geant4-06-02-ref-03.
+- Includes tags: cosmicray_charging-V06-02-01, muonprocesses-V06-02-03,
+                 photonprocesses-V06-02-01, testem1-V06-02-03,
+                 testem2-V06-02-01, testem4-V06-02-00, testem5-V06-02-04,
+                 testem6-V06-02-00, testem10-V06-02-00, fieldex01-V06-02-00,
+                 fieldex02-V06-02-00, fieldex03-V06-02-00, gtherapy-V06-02-01,
+                 LXe-V06-02-00, exampleN02-V06-02-01.
+
+27th August 2004  Gabriele Cosmo (examples-V06-02-01)
+- Updated reference outputs according to reference tag geant4-06-02-ref-02.
+- Includes tags: testem1-V06-02-01, testem5-V06-02-00, testem7-V06-02-02.
+
+28th July 2004  Gabriele Cosmo (examples-V06-02-00)
+- Updated reference outputs according to reference tag geant4-06-02-ref-01.
+- Includes tags: ccal-V06-02-00, lAr_calorimeter-V06-02-00, Rich-V06-02-00,
+                 xraytel-V06-02-00, exampleA01-V06-02-00,
+                 muonprocesses-V06-02-00, photonprocesses-V06-02-00,
+                 testem3-V06-02-00, testem7-V06-02-00, olapex-V06-02-00.
 
 24th June 2004  Gabriele Cosmo (examples-V06-01-02)
 - Updated reference outputs according to reference tag geant4-06-02-ref-00.

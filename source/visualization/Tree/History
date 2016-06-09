@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003/11/06 15:01:30 johna Exp $
+$Id: History,v 1.16 2004/09/22 20:00:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,24 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+22nd September 2004  John Allison  (vistree-V06-02-01)
+- Fixed directory name (trailing /).
+- Fixed memory leak in G4ASCIITreeSceneHandler.
+
+13th September 2004  John Allison  (vistree-V06-02-00)
+- Improved ASCIITree:
+  verbosity >= 3: prints volume, density of all volumes in hierarchy.
+  verbosity >= 4: calculates the mass of the complete geometry tree taking
+    into account daughters up to the depth specified for each physical
+    volume in the current scene.  Culling is ignored so that all volumes
+    are processed.  The calculation is quite tricky, since it involves
+    subtracting the mass of that part of the mother that is occupied by
+    each daughter and then adding the mass of the daughter, and so on
+    down the heirarchy.  Uses G4PhysicalVolumeMassScene.
+  Added option to write to file (/vis/ASCIITree/set/outFile).
+- Minor changes to comments in header files of G4VTreeScenehandler and
+  G4GAGTreeScenehandler.
 
 6th November 2003  John Allison  (vis-V05-02-03)
 - Improved printing.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.3 2003/11/06 18:11:44 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4StatMFMacroCanonical.cc,v 1.4 2004/12/07 13:47:43 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -91,9 +91,9 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
   __FreeInternalE0 = A*( -G4StatMFParameters::GetE0() +          // Volume term (for T = 0)
 			 G4StatMFParameters::GetGamma0()*        // Symmetry term
 			 (1.0-2.0*Z/A)*(1.0-2.0*Z/A) ) +
-    G4StatMFParameters::GetBeta0()*pow(A,2.0/3.0) +              // Surface term (for T = 0)
+    G4StatMFParameters::GetBeta0()*std::pow(A,2.0/3.0) +              // Surface term (for T = 0)
     (3.0/5.0)*elm_coupling*Z*Z/(G4StatMFParameters::Getr0()*     // Coulomb term 
-				pow(A,1.0/3.0));
+				std::pow(A,1.0/3.0));
   
   
   
@@ -119,8 +119,8 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
 
 
   // Parameter Kappa
-  _Kappa = (1.0+elm_coupling*(pow(FragMult,1./3.)-1)/
-	    (G4StatMFParameters::Getr0()*pow(A,1./3.)));
+  _Kappa = (1.0+elm_coupling*(std::pow(FragMult,1./3.)-1)/
+	    (G4StatMFParameters::Getr0()*std::pow(A,1./3.)));
   _Kappa = _Kappa*_Kappa*_Kappa - 1.0;
 
 	
@@ -228,7 +228,7 @@ G4double G4StatMFMacroCanonical::ChooseA(const G4double A, std::vector<G4double>
       
     } while (CheckA > 0);
     
-  } while (CheckA < 0 || abs(__MeanMultiplicity - multiplicity) > sqrt(__MeanMultiplicity) + 1./2.);
+  } while (CheckA < 0 || std::abs(__MeanMultiplicity - multiplicity) > std::sqrt(__MeanMultiplicity) + 1./2.);
   
   return multiplicity;
 }
@@ -242,7 +242,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
   
   G4double DeltaZ = 0.0;
   G4double CP = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-    (1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+    (1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
   
   G4int multiplicity = FragmentsA.size();
   
@@ -266,11 +266,11 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 	  else 
 	    {
 	      G4double RandZ;
-	      G4double CC = 8.0*G4StatMFParameters::GetGamma0()+2.0*CP*pow(FragmentsA[i],2./3.);
+	      G4double CC = 8.0*G4StatMFParameters::GetGamma0()+2.0*CP*std::pow(FragmentsA[i],2./3.);
 	      G4double ZMean;
 	      if (FragmentsA[i] > 1.5 && FragmentsA[i] < 4.5) ZMean = 0.5*FragmentsA[i];
 	      else ZMean = FragmentsA[i]*(4.0*G4StatMFParameters::GetGamma0()+_ChemPotentialNu)/CC;
-	      G4double ZDispersion = sqrt(FragmentsA[i]*__MeanTemperature/CC);
+	      G4double ZDispersion = std::sqrt(FragmentsA[i]*__MeanTemperature/CC);
 	      G4int z;
 	      do 
 		{
@@ -283,7 +283,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 	}
       DeltaZ = Z - SumZ;
     }
-  while (abs(DeltaZ) > 1.1);
+  while (std::abs(DeltaZ) > 1.1);
     
   // DeltaZ can be 0, 1 or -1
   G4int idx = 0;

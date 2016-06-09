@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.10 2003/06/06 16:17:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PhysicsLogVector.cc,v 1.11 2004/11/12 17:38:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -88,11 +88,11 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
   binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
-  dBin = log10(theEmax/theEmin) / numberOfBin;
-  baseBin = log10(theEmin)/dBin;
+  dBin = std::log10(theEmax/theEmin) / numberOfBin;
+  baseBin = std::log10(theEmin)/dBin;
 
   for (size_t i=0; i<numberOfBin+1; i++) {
-    binVector.push_back(pow(10., log10(theEmin)+i*dBin));
+    binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
 
@@ -112,8 +112,8 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success){
     G4double theEmin = binVector[0];
-    dBin = log10(binVector[1]/theEmin);
-    baseBin = log10(theEmin)/dBin;
+    dBin = std::log10(binVector[1]/theEmin);
+    baseBin = std::log10(theEmin)/dBin;
   }
   return success;
 }

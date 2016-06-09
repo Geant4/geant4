@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.1 2002/10/28 11:43:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Sphere.icc,v 1.5 2004/12/02 09:31:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -71,36 +71,48 @@ inline
 void G4Sphere::SetInsideRadius(G4double newRmin)
 {
   fRmin= newRmin;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Sphere::SetOuterRadius(G4double newRmax)
 {
   fRmax= newRmax;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Sphere::SetStartPhiAngle(G4double newSphi)
 {
   fSPhi= newSphi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Sphere::SetDeltaPhiAngle(G4double newDphi)
 {
   fDPhi= newDphi;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Sphere::SetStartThetaAngle(G4double newSTheta)
 {
   fSTheta=newSTheta;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void G4Sphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   fDTheta=newDTheta;
+  fCubicVolume= 0.;
+  fpPolyhedron = 0;
 }
 
 // Old access functions
@@ -139,4 +151,14 @@ inline
 G4double G4Sphere::GetDTheta() const
 {
   return GetDeltaThetaAngle();
+}
+///////////////////////////////////////////////////
+
+inline
+G4double G4Sphere::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
+                              (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; 
+  return fCubicVolume;
 }

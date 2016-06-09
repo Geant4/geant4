@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.7 2004/05/27 10:33:11 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.8 2004/11/22 16:51:38 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
@@ -50,7 +50,7 @@ public:
   void MoonConfiguration();
   G4double  GetInitialEnergy();
   void SetMoon(G4bool);
-
+  void SetParticle(G4String);
 private:
   G4ParticleGun* particleGun;
   G4String spectrum;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagErrorStepper.cc,v 1.12 2003/10/31 14:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // --------------------------------------------------------------------
 

@@ -10,10 +10,13 @@
 #include "geant321/gcbank.inc"
 #include "geant321/gcflag.inc"
 #include "geant321/gckine.inc"
-#include "calor.inc"                                                          
+#include "calor.inc"
+#include "histo.inc"                                                          
 *                                                                               
       DIMENSION VERTEX(3),PLAB(3)
       dimension rndm(2)
+*
+      data aMeV /1.e-3/      
 *
 * *** set/reset default kinematic
       IF ((IKINE.LT.0).or.(abs(PKINE(2)).GT.0.5*worldX)) THEN
@@ -46,6 +49,10 @@
       PLAB(3) = PMOM*PKINE(7)
 *
       CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)
+*
+* *** histo of energy flow
+      ih = 2*MaxAbs + 1
+      if (histo(ih)) call hfill (ih, 1., 0., pkine(1)/(aMeV*nevent))      
 *
 * *** Kinematics debug
       IF (IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)

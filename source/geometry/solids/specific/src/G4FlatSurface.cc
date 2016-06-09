@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.5 2004/05/28 13:13:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4FlatSurface.cc,v 1.8 2004/12/02 09:31:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -162,7 +162,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    // if p is on surface, distance = 0. 
    //
 
-   if (fabs(p.z()) == 0.) {   // if p is on the plane
+   if (std::fabs(p.z()) == 0.) {   // if p is on the plane
       distance[0] = 0;
       G4ThreeVector xx = p;
       gxx[0] = ComputeGlobalPoint(xx);
@@ -226,7 +226,6 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    G4cerr << "        dist[0]     : " << distance[0] << G4endl;
    G4cerr << "        areacode[0] : " << areacode[0] << G4endl;
    G4cerr << "        isvalid[0]  : " << isvalid[0]  << G4endl;
-   }
 #endif
    return 1;
 }
@@ -268,11 +267,11 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
 
    // The plane is placed on origin with making its normal 
    // parallel to z-axis. 
-   if (fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
+   if (std::fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
       distance[0] = 0;
       xx = p;
    } else {
-      distance[0] = fabs(p.z());
+      distance[0] = std::fabs(p.z());
       xx.set(p.x(), p.y(), 0);  
    }
 
@@ -302,8 +301,8 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
 
       G4ThreeVector dphimin;   // direction of phi-minimum boundary
       G4ThreeVector dphimax;   // direction of phi-maximum boundary
-      dphimin = GetCorner(sCMax1Min);
-      dphimax = GetCorner(sCMax1Max);   
+      dphimin = GetCorner(sC0Max1Min);
+      dphimax = GetCorner(sC0Max1Max);   
       
       if (withTol) {
 
@@ -409,25 +408,25 @@ void G4FlatSurface::SetCorners()
       
       G4double x, y, z;
       // corner of Axis0min and Axis1min
-         x = fAxisMin[rhoaxis]*cos(fAxisMin[phiaxis]);
-         y = fAxisMin[rhoaxis]*sin(fAxisMin[phiaxis]);
+         x = fAxisMin[rhoaxis]*std::cos(fAxisMin[phiaxis]);
+         y = fAxisMin[rhoaxis]*std::sin(fAxisMin[phiaxis]);
          z = 0;
-         SetCorner(sCMin1Min, x, y, z);
+         SetCorner(sC0Min1Min, x, y, z);
       // corner of Axis0max and Axis1min
-         x = fAxisMax[rhoaxis]*cos(fAxisMin[phiaxis]);
-         y = fAxisMax[rhoaxis]*sin(fAxisMin[phiaxis]);
+         x = fAxisMax[rhoaxis]*std::cos(fAxisMin[phiaxis]);
+         y = fAxisMax[rhoaxis]*std::sin(fAxisMin[phiaxis]);
          z = 0;
-         SetCorner(sCMax1Min, x, y, z);
+         SetCorner(sC0Max1Min, x, y, z);
       // corner of Axis0max and Axis1max
-         x = fAxisMax[rhoaxis]*cos(fAxisMax[phiaxis]);
-         y = fAxisMax[rhoaxis]*sin(fAxisMax[phiaxis]);
+         x = fAxisMax[rhoaxis]*std::cos(fAxisMax[phiaxis]);
+         y = fAxisMax[rhoaxis]*std::sin(fAxisMax[phiaxis]);
          z = 0;
-         SetCorner(sCMax1Max, x, y, z);
+         SetCorner(sC0Max1Max, x, y, z);
       // corner of Axis0min and Axis1max
-         x = fAxisMin[rhoaxis]*cos(fAxisMax[phiaxis]);
-         y = fAxisMin[rhoaxis]*sin(fAxisMax[phiaxis]);
+         x = fAxisMin[rhoaxis]*std::cos(fAxisMax[phiaxis]);
+         y = fAxisMin[rhoaxis]*std::sin(fAxisMax[phiaxis]);
          z = 0;
-         SetCorner(sCMin1Max, x, y, z);
+         SetCorner(sC0Min1Max, x, y, z);
        
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -450,28 +449,28 @@ void G4FlatSurface::SetBoundaries()
    
       G4ThreeVector direction;
       // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMin), direction,
-                  GetCorner(sCMin1Min), sAxisPhi);
+                  GetCorner(sC0Min1Min), sAxisPhi);
                   
       // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMax), direction,
-                  GetCorner(sCMax1Min), sAxisPhi);
+                  GetCorner(sC0Max1Min), sAxisPhi);
 
       // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisRho | sAxisMin), direction,
-                  GetCorner(sCMin1Min), sAxisRho);
+                  GetCorner(sC0Min1Min), sAxisRho);
       
       // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisRho | sAxisMax), direction,
-                  GetCorner(sCMin1Max), sAxisPhi);
+                  GetCorner(sC0Min1Max), sAxisPhi);
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl

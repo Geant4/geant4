@@ -22,7 +22,7 @@
 //
 // ********************************************************************
 // *                                                                  *
-// * cosmicray_charging advanced example for Geant4                   *
+// * Cosmicray_charging advanced example for Geant4                   *
 // * (adapted simulation of test-mass charging in the LISA mission)   *
 // *                                                                  *
 // * Henrique Araujo (h.araujo@imperial.ac.uk) & Peter Wass           *
@@ -34,6 +34,10 @@
 //
 // HISTORY
 // 22/02/2004: migrated from LISA-V04
+// 24/11/2004: migrated to cmath
+// 24/11/2004: inner elec boxes made invisible
+// 24/11/2004: tweaked TelPriMir_phys (17 to 18mm) to avoid solid problem
+// 24/11/2004: G4Torus in SupportRing_sol still problematic!
 //
 // ********************************************************************
 
@@ -417,14 +421,15 @@
     "TelElecBox_phys", TelElecBox_log, TelBox_phys, false, 1);
   // Each box is made from solid Al6061 from which a volume 
   // s times smaller is removed to match assigned mass;
-  G4double s = pow(1.-0.36/(2.70*TelElecBox_wid*TelElecBox_hei*TelElecBox_len)
-      *1E6,1./3.);
+  G4double s = std::pow(1.-0.36/(2.70*TelElecBox_wid*TelElecBox_hei
+    *TelElecBox_len)*1.E6,1./3.);
   G4Box* TelElecBoxIn_sol = new G4Box("TelElecBoxIn_sol", s*0.5*TelElecBox_wid,
     s*0.5*TelElecBox_hei, s*0.5*TelElecBox_len);
   G4LogicalVolume* TelElecBoxIn_log = 
     new G4LogicalVolume(TelElecBoxIn_sol, vacuum, "TelElecBoxIn_log");
   G4VPhysicalVolume* TelElecBoxIn_phys = new G4PVPlacement
     (0, 0, "TelElecBoxIn_i", TelElecBoxIn_log, TelElecBox_phys, false, 0);
+  TelElecBoxIn_log->SetVisAttributes(G4VisAttributes::Invisible);
 
 
 
@@ -484,23 +489,23 @@
   G4SubtractionSolid* TelPriMirMount_sol0 = new G4SubtractionSolid
     ("TelPriMirMount_sol1", TelPriMirMount_tub, TelPriMirMountCutout0_tub,
     G4Transform3D(G4RotationMatrix(), 
-    G4ThreeVector(0,-TelPriMirMountCutout0_yoff,0)));
+    G4ThreeVector(0.,-TelPriMirMountCutout0_yoff,0.)));
   G4Tubs* TelPriMirMountCutout1_tub = new G4Tubs("TelPriMirMountCutout1_tub", 
     0, 0.5*TelPriMirMountCutout1_dia, TelPriMirMount_thi, 0.*deg, 360.*deg);
   G4SubtractionSolid* TelPriMirMount_sol1 = new G4SubtractionSolid
     ("TelPriMirMount_sol1", TelPriMirMount_sol0, TelPriMirMountCutout1_tub,
      G4Transform3D(G4RotationMatrix(), 
-     G4ThreeVector(0, -TelPriMirMountCutout1_yoff,0)));
+     G4ThreeVector(0., -TelPriMirMountCutout1_yoff,0.)));
   G4Tubs* TelPriMirMountCutout2_tub = new G4Tubs("TelPriMirMountCutout2_tub", 
     0, 0.5*TelPriMirMountCutout2_dia, TelPriMirMount_thi, 0.*deg, 360.*deg);
   G4SubtractionSolid* TelPriMirMount_sol2 = new G4SubtractionSolid
     ("TelPriMirMount_sol2", TelPriMirMount_sol1, TelPriMirMountCutout2_tub,
      G4Transform3D(G4RotationMatrix(), 
-     G4ThreeVector(0, -TelPriMirMountCutout2_yoff,0)));
+     G4ThreeVector(0., -TelPriMirMountCutout2_yoff, 0.)));
   G4LogicalVolume* TelPriMirMount_log = 
     new G4LogicalVolume(TelPriMirMount_sol2, Al6061, "TelPriMirMount_log");
   G4VPhysicalVolume* TelPriMirMount_phys = new G4PVPlacement(0, 
-    G4ThreeVector(0, TelPriMirMount_yoff, OpticalBench_off-TelPriMirMount_off),
+    G4ThreeVector(0.,TelPriMirMount_yoff, OpticalBench_off-TelPriMirMount_off),
     "TelPriMirMount_phys", TelPriMirMount_log, TelBox_phys, false, 0);
   TelPriMirMount_log->SetVisAttributes(sol_blue_vat);
 
@@ -528,14 +533,14 @@
   // primary mirror: dish
   G4Sphere* TelPriMir_sol = 
     new G4Sphere("TelPriMir_sol", TelPriMir_rad - TelPriMir_thi, 
-    TelPriMir_rad, 0, 360.*deg, 
-    atan(0.5*TelPriMirHol_dia/TelPriMir_rad), 
-    atan(0.5*TelPriMir_dia/TelPriMir_rad) -
-    atan(0.5*TelPriMirHol_dia/TelPriMir_rad));
+    TelPriMir_rad, 0., 360.*deg,
+    std::atan(0.5*TelPriMirHol_dia/TelPriMir_rad), 
+    std::atan(0.5*TelPriMir_dia/TelPriMir_rad) -
+    std::atan(0.5*TelPriMirHol_dia/TelPriMir_rad));
   G4LogicalVolume* TelPriMir_log = 
     new G4LogicalVolume(TelPriMir_sol, SiC, "TelPriMir_log");
   G4VPhysicalVolume* TelPriMir_phys= new G4PVPlacement(0, G4ThreeVector
-    (0,TelPriMir_yoff, OpticalBench_off-TelPriMir_off-TelPriMir_rad-17.*mm),
+    (0,TelPriMir_yoff, OpticalBench_off-TelPriMir_off-TelPriMir_rad-18.*mm),
     "TelPriMir_phys", TelPriMir_log, TelBox_phys, false, 0);
   TelPriMir_log->SetVisAttributes(sol_green_vat);
 

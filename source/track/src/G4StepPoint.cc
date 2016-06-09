@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.9 2002/12/16 11:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4StepPoint.cc,v 1.10 2004/08/12 00:50:11 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -46,7 +46,7 @@
 //////////////////////////
 G4StepPoint::G4StepPoint():
 //////////////////////////
-  fpTouchable(0), fpMaterial(0), fpMaterialCutsCouple(0),
+  fpTouchable(0), fpMaterial(0), fpMaterialCutsCouple(0), fpSensitiveDetector(0),
   fpProcessDefinedStep(0), fCharge(0.)
 {
 }
@@ -64,6 +64,7 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fpTouchable(right.fpTouchable),
   fpMaterial(right.fpMaterial),
   fpMaterialCutsCouple(right.fpMaterialCutsCouple),
+  fpSensitiveDetector(right.fpSensitiveDetector),
   fSafety(right.fSafety),
   fPolarization(right.fPolarization),
   fStepStatus(right.fStepStatus),
@@ -88,6 +89,7 @@ G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
     fpTouchable = right.fpTouchable;
     fpMaterial = right.fpMaterial;
     fpMaterialCutsCouple = right.fpMaterialCutsCouple;
+    fpSensitiveDetector = right.fpSensitiveDetector;
     fSafety = right.fSafety;
     fPolarization = right.fPolarization;
     fStepStatus = right.fStepStatus;

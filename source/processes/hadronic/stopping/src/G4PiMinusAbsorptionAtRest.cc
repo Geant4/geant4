@@ -185,10 +185,10 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
 
   if (fragmentationProducts != 0)   delete fragmentationProducts;   
 
-  if (_indexDeexcitation == 1) aParticleChange.SetLocalEnergyDeposit(excitation);
+  if (_indexDeexcitation == 1) aParticleChange.ProposeLocalEnergyDeposit(excitation);
 
   // Kill the absorbed pion
-  aParticleChange.SetStatusChange(fStopAndKill); 
+  aParticleChange.ProposeTrackStatus(fStopAndKill); 
 
   return &aParticleChange;
 

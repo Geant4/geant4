@@ -1,0 +1,30 @@
+# $Id: ioni.mac,v 1.2 2004/11/03 12:42:47 maire Exp $
+#
+# Macro file for "MuonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/process/inactivate muPairProd
+/process/inactivate muBrems
+/process/inactivate muNucl
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/histo/setFileName ioni.paw
+/testem/histo/setHisto 1 100 -10. 0.
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000

@@ -8,7 +8,14 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
-28.05.2005 - S. Guatelli
+30.11.2004 - S. Guatelli, 
+                correct analysis, tag: hadrontherapy-V06-02-00
+                
+16.07.2004 - G.A.P. Cirrone
+		AIDA classes inserted. Generation of an .hbk file 
+		containing the depth dose distribution.
+
+28.05.2004 - S. Guatelli
                 Update of the README, code review for public release.
 
 27.02.2004 - G.A.P. Cirrone

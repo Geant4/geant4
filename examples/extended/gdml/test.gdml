@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/afs/cern.ch/sw/lcg/app/releases/GDML/pro/schema/gdml_2.0.xsd" >
+ <define>
+  <position name="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS2LowerModulepvS2LowerModA1001inOTModuleslvS2LowerModulep" unit="mm" x="0" y="-15" z="0" />
+  <rotation name="OTModuleslvS2LowerModulepvS2LowerModA1001inOTModuleslvS2LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS2LowerModulepvS2LowerModP11000inOTModuleslvS2LowerModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS2LowerModulepvS2LowerModP11000inOTModuleslvS2LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1LowerModulepvS1LowerModP21002inOTModuleslvS1LowerModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS1LowerModulepvS1LowerModP21002inOTModuleslvS1LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1LowerModulepvS1LowerModA1001inOTModuleslvS1LowerModulep" unit="mm" x="0" y="-15" z="0" />
+  <rotation name="OTModuleslvS1LowerModulepvS1LowerModA1001inOTModuleslvS1LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1LowerModulepvS1LowerModP11000inOTModuleslvS1LowerModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS1LowerModulepvS1LowerModP11000inOTModuleslvS1LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvLModulepvLModP21002inOTModuleslvLModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvLModulepvLModP21002inOTModuleslvLModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvLModulepvLModA1001inOTModuleslvLModulep" unit="mm" x="0" y="0" z="0" />
+  <rotation name="OTModuleslvLModulepvLModA1001inOTModuleslvLModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvLModulepvLModP11000inOTModuleslvLModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvLModulepvLModP11000inOTModuleslvLModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3LowerModulepvS3LowerModP21002inOTModuleslvS3LowerModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS3LowerModulepvS3LowerModP21002inOTModuleslvS3LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3LowerModulepvS3LowerModA1001inOTModuleslvS3LowerModulep" unit="mm" x="0" y="-15" z="0" />
+  <rotation name="OTModuleslvS3LowerModulepvS3LowerModA1001inOTModuleslvS3LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3LowerModulepvS3LowerModP11000inOTModuleslvS3LowerModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS3LowerModulepvS3LowerModP11000inOTModuleslvS3LowerModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3UpperModulepvS3UpperModP21002inOTModuleslvS3UpperModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS3UpperModulepvS3UpperModP21002inOTModuleslvS3UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3UpperModulepvS3UpperModA1001inOTModuleslvS3UpperModulep" unit="mm" x="-0" y="15" z="-0" />
+  <rotation name="OTModuleslvS3UpperModulepvS3UpperModA1001inOTModuleslvS3UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS3UpperModulepvS3UpperModP11000inOTModuleslvS3UpperModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS3UpperModulepvS3UpperModP11000inOTModuleslvS3UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1UpperModulepvS1UpperModP21002inOTModuleslvS1UpperModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS1UpperModulepvS1UpperModP21002inOTModuleslvS1UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1UpperModulepvS1UpperModA1001inOTModuleslvS1UpperModulep" unit="mm" x="-0" y="15" z="-0" />
+  <rotation name="OTModuleslvS1UpperModulepvS1UpperModA1001inOTModuleslvS1UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS1UpperModulepvS1UpperModP11000inOTModuleslvS1UpperModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS1UpperModulepvS1UpperModP11000inOTModuleslvS1UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS2UpperModulepvS2UpperModP21002inOTModuleslvS2UpperModulep" unit="mm" x="0" y="0" z="12.9497" />
+  <rotation name="OTModuleslvS2UpperModulepvS2UpperModP21002inOTModuleslvS2UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS2UpperModulepvS2UpperModA1001inOTModuleslvS2UpperModulep" unit="mm" x="-0" y="15" z="-0" />
+  <rotation name="OTModuleslvS2UpperModulepvS2UpperModA1001inOTModuleslvS2UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTModuleslvS2UpperModulepvS2UpperModP11000inOTModuleslvS2UpperModulep" unit="mm" x="0" y="0" z="-12.9497" />
+  <rotation name="OTModuleslvS2UpperModulepvS2UpperModP11000inOTModuleslvS2UpperModuler" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide66inOTlvOTX1layerp" unit="mm" x="2816.62" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide66inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide55inOTlvOTX1layerp" unit="mm" x="2475.38" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide55inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide44inOTlvOTX1layerp" unit="mm" x="2134.12" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide44inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide33inOTlvOTX1layerp" unit="mm" x="1792.88" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide33inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide22inOTlvOTX1layerp" unit="mm" x="1451.62" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide22inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide11inOTlvOTX1layerp" unit="mm" x="1110.38" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide11inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide1029inOTlvOTX1layerp" unit="mm" x="769.125" y="1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide1029inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleCornerRightTop1028inOTlvOTX1layerp" unit="mm" x="427.875" y="1237.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleCornerRightTop1028inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleTopS21027inOTlvOTX1layerp" unit="mm" x="86.625" y="1283.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleTopS21027inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide66inOTlvOTX1layerp" unit="mm" x="-2816.62" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide66inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide55inOTlvOTX1layerp" unit="mm" x="-2475.38" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide55inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide44inOTlvOTX1layerp" unit="mm" x="-2134.12" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide44inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide33inOTlvOTX1layerp" unit="mm" x="-1792.88" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide33inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide22inOTlvOTX1layerp" unit="mm" x="-1451.62" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide22inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide11inOTlvOTX1layerp" unit="mm" x="-1110.38" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide11inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide1020inOTlvOTX1layerp" unit="mm" x="-769.125" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide1020inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleCornerLeftTop1019inOTlvOTX1layerp" unit="mm" x="-427.875" y="1237.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleCornerLeftTop1019inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleTopS31018inOTlvOTX1layerp" unit="mm" x="-170.625" y="1283.5" z="-0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleTopS31018inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide66inOTlvOTX1layerp" unit="mm" x="2816.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide66inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide55inOTlvOTX1layerp" unit="mm" x="2475.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide55inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide44inOTlvOTX1layerp" unit="mm" x="2134.12" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide44inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide33inOTlvOTX1layerp" unit="mm" x="1792.88" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide33inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide22inOTlvOTX1layerp" unit="mm" x="1451.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide22inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide11inOTlvOTX1layerp" unit="mm" x="1110.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide11inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide1011inOTlvOTX1layerp" unit="mm" x="769.125" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide1011inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleCornerRightBottom1010inOTlvOTX1layerp" unit="mm" x="427.875" y="-1237.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleCornerRightBottom1010inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleBottomS31009inOTlvOTX1layerp" unit="mm" x="170.625" y="-1283.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleBottomS31009inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide66inOTlvOTX1layerp" unit="mm" x="-2816.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide66inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide55inOTlvOTX1layerp" unit="mm" x="-2475.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide55inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide44inOTlvOTX1layerp" unit="mm" x="-2134.12" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide44inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide33inOTlvOTX1layerp" unit="mm" x="-1792.88" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide33inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide22inOTlvOTX1layerp" unit="mm" x="-1451.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide22inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide11inOTlvOTX1layerp" unit="mm" x="-1110.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide11inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide1002inOTlvOTX1layerp" unit="mm" x="-769.125" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide1002inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleCornerLeftBottom1001inOTlvOTX1layerp" unit="mm" x="-427.875" y="-1237.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleCornerLeftBottom1001inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleBottomS21000inOTlvOTX1layerp" unit="mm" x="-86.625" y="-1283.5" z="0" />
+  <rotation name="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleBottomS21000inOTlvOTX1layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide66inOTlvOTUlayerp" unit="mm" x="2932.19" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide66inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide55inOTlvOTUlayerp" unit="mm" x="2589.64" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide55inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide44inOTlvOTUlayerp" unit="mm" x="2247.08" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide44inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide33inOTlvOTUlayerp" unit="mm" x="1904.53" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide33inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide22inOTlvOTUlayerp" unit="mm" x="1561.97" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide22inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide11inOTlvOTUlayerp" unit="mm" x="1219.42" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide11inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide1029inOTlvOTUlayerp" unit="mm" x="876.868" y="1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide1029inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModuleCornerRightTop1028inOTlvOTUlayerp" unit="mm" x="537.365" y="1232.79" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModuleCornerRightTop1028inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter3pvUModuleTopS21027inOTlvOTUlayerp" unit="mm" x="198.82" y="1278.62" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter3pvUModuleTopS21027inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide66inOTlvOTUlayerp" unit="mm" x="-2722.58" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide66inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide55inOTlvOTUlayerp" unit="mm" x="-2380.03" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide55inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide44inOTlvOTUlayerp" unit="mm" x="-2037.47" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide44inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide33inOTlvOTUlayerp" unit="mm" x="-1694.92" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide33inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide22inOTlvOTUlayerp" unit="mm" x="-1352.37" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide22inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide11inOTlvOTUlayerp" unit="mm" x="-1009.81" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide11inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide1020inOTlvOTUlayerp" unit="mm" x="-667.258" y="1197.92" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide1020inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModuleCornerLeftTop1019inOTlvOTUlayerp" unit="mm" x="-321.654" y="1232.79" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModuleCornerLeftTop1019inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter2pvUModuleTopS31018inOTlvOTUlayerp" unit="mm" x="-59.4124" y="1278.62" z="-0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter2pvUModuleTopS31018inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide66inOTlvOTUlayerp" unit="mm" x="2722.58" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide66inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide55inOTlvOTUlayerp" unit="mm" x="2380.03" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide55inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide44inOTlvOTUlayerp" unit="mm" x="2037.47" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide44inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide33inOTlvOTUlayerp" unit="mm" x="1694.92" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide33inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide22inOTlvOTUlayerp" unit="mm" x="1352.37" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide22inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide11inOTlvOTUlayerp" unit="mm" x="1009.81" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide11inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide1011inOTlvOTUlayerp" unit="mm" x="667.258" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide1011inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModuleCornerRightBottom1010inOTlvOTUlayerp" unit="mm" x="321.654" y="-1232.79" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModuleCornerRightBottom1010inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter1pvUModuleBottomS31009inOTlvOTUlayerp" unit="mm" x="59.4124" y="-1278.62" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter1pvUModuleBottomS31009inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide66inOTlvOTUlayerp" unit="mm" x="-2932.19" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide66inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide55inOTlvOTUlayerp" unit="mm" x="-2589.64" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide55inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide44inOTlvOTUlayerp" unit="mm" x="-2247.08" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide44inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide33inOTlvOTUlayerp" unit="mm" x="-1904.53" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide33inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide22inOTlvOTUlayerp" unit="mm" x="-1561.97" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide22inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide11inOTlvOTUlayerp" unit="mm" x="-1219.42" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide11inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide1002inOTlvOTUlayerp" unit="mm" x="-876.868" y="-1197.92" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide1002inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModuleCornerLeftBottom1001inOTlvOTUlayerp" unit="mm" x="-537.365" y="-1232.79" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModuleCornerLeftBottom1001inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTUlayerpvOTUQuarter0pvUModuleBottomS21000inOTlvOTUlayerp" unit="mm" x="-198.82" y="-1278.62" z="0" />
+  <rotation name="OTlvOTUlayerpvOTUQuarter0pvUModuleBottomS21000inOTlvOTUlayerr" unit="degree" x="0" y="-0" z="5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide66inOTlvOTVlayerp" unit="mm" x="2722.58" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide66inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide55inOTlvOTVlayerp" unit="mm" x="2380.03" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide55inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide44inOTlvOTVlayerp" unit="mm" x="2037.47" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide44inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide33inOTlvOTVlayerp" unit="mm" x="1694.92" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide33inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide22inOTlvOTVlayerp" unit="mm" x="1352.37" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide22inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide11inOTlvOTVlayerp" unit="mm" x="1009.81" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide11inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide1029inOTlvOTVlayerp" unit="mm" x="667.258" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide1029inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModuleCornerRightTop1028inOTlvOTVlayerp" unit="mm" x="321.654" y="1232.79" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModuleCornerRightTop1028inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter3pvVModuleTopS31027inOTlvOTVlayerp" unit="mm" x="59.4124" y="1278.62" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter3pvVModuleTopS31027inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide66inOTlvOTVlayerp" unit="mm" x="-2932.19" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide66inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide55inOTlvOTVlayerp" unit="mm" x="-2589.64" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide55inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide44inOTlvOTVlayerp" unit="mm" x="-2247.08" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide44inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide33inOTlvOTVlayerp" unit="mm" x="-1904.53" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide33inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide22inOTlvOTVlayerp" unit="mm" x="-1561.97" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide22inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide11inOTlvOTVlayerp" unit="mm" x="-1219.42" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide11inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide1020inOTlvOTVlayerp" unit="mm" x="-876.868" y="1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide1020inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModuleCornerLeftTop1019inOTlvOTVlayerp" unit="mm" x="-537.365" y="1232.79" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModuleCornerLeftTop1019inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter2pvVModuleTopS21018inOTlvOTVlayerp" unit="mm" x="-198.82" y="1278.62" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter2pvVModuleTopS21018inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide66inOTlvOTVlayerp" unit="mm" x="2932.19" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide66inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide55inOTlvOTVlayerp" unit="mm" x="2589.64" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide55inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide44inOTlvOTVlayerp" unit="mm" x="2247.08" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide44inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide33inOTlvOTVlayerp" unit="mm" x="1904.53" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide33inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide22inOTlvOTVlayerp" unit="mm" x="1561.97" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide22inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide11inOTlvOTVlayerp" unit="mm" x="1219.42" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide11inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide1011inOTlvOTVlayerp" unit="mm" x="876.868" y="-1197.92" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide1011inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModuleCornerRightBottom1010inOTlvOTVlayerp" unit="mm" x="537.365" y="-1232.79" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModuleCornerRightBottom1010inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter1pvVModuleBottomS21009inOTlvOTVlayerp" unit="mm" x="198.82" y="-1278.62" z="0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter1pvVModuleBottomS21009inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide66inOTlvOTVlayerp" unit="mm" x="-2722.58" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide66inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide55inOTlvOTVlayerp" unit="mm" x="-2380.03" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide55inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide44inOTlvOTVlayerp" unit="mm" x="-2037.47" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide44inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide33inOTlvOTVlayerp" unit="mm" x="-1694.92" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide33inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide22inOTlvOTVlayerp" unit="mm" x="-1352.37" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide22inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide11inOTlvOTVlayerp" unit="mm" x="-1009.81" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide11inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide1002inOTlvOTVlayerp" unit="mm" x="-667.258" y="-1197.92" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide1002inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModuleCornerLeftBottom1001inOTlvOTVlayerp" unit="mm" x="-321.654" y="-1232.79" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModuleCornerLeftBottom1001inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTVlayerpvOTVQuarter0pvVModuleBottomS31000inOTlvOTVlayerp" unit="mm" x="-59.4124" y="-1278.62" z="-0" />
+  <rotation name="OTlvOTVlayerpvOTVQuarter0pvVModuleBottomS31000inOTlvOTVlayerr" unit="degree" x="0" y="-0" z="-5" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide66inOTlvOTX2layerp" unit="mm" x="2816.62" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide66inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide55inOTlvOTX2layerp" unit="mm" x="2475.38" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide55inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide44inOTlvOTX2layerp" unit="mm" x="2134.12" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide44inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide33inOTlvOTX2layerp" unit="mm" x="1792.88" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide33inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide22inOTlvOTX2layerp" unit="mm" x="1451.62" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide22inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide11inOTlvOTX2layerp" unit="mm" x="1110.38" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide11inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide1029inOTlvOTX2layerp" unit="mm" x="769.125" y="1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide1029inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleCornerRightTop1028inOTlvOTX2layerp" unit="mm" x="427.875" y="1237.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleCornerRightTop1028inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleTopS31027inOTlvOTX2layerp" unit="mm" x="170.625" y="1283.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleTopS31027inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide66inOTlvOTX2layerp" unit="mm" x="-2816.62" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide66inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide55inOTlvOTX2layerp" unit="mm" x="-2475.38" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide55inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide44inOTlvOTX2layerp" unit="mm" x="-2134.12" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide44inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide33inOTlvOTX2layerp" unit="mm" x="-1792.88" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide33inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide22inOTlvOTX2layerp" unit="mm" x="-1451.62" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide22inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide11inOTlvOTX2layerp" unit="mm" x="-1110.38" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide11inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide1020inOTlvOTX2layerp" unit="mm" x="-769.125" y="1202.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide1020inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleCornerLeftTop1019inOTlvOTX2layerp" unit="mm" x="-427.875" y="1237.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleCornerLeftTop1019inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleTopS21018inOTlvOTX2layerp" unit="mm" x="-86.625" y="1283.5" z="-0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleTopS21018inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide66inOTlvOTX2layerp" unit="mm" x="2816.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide66inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide55inOTlvOTX2layerp" unit="mm" x="2475.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide55inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide44inOTlvOTX2layerp" unit="mm" x="2134.12" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide44inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide33inOTlvOTX2layerp" unit="mm" x="1792.88" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide33inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide22inOTlvOTX2layerp" unit="mm" x="1451.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide22inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide11inOTlvOTX2layerp" unit="mm" x="1110.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide11inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide1011inOTlvOTX2layerp" unit="mm" x="769.125" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide1011inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleCornerRightBottom1010inOTlvOTX2layerp" unit="mm" x="427.875" y="-1237.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleCornerRightBottom1010inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleBottomS21009inOTlvOTX2layerp" unit="mm" x="86.625" y="-1283.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleBottomS21009inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide66inOTlvOTX2layerp" unit="mm" x="-2816.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide66inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide55inOTlvOTX2layerp" unit="mm" x="-2475.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide55inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide44inOTlvOTX2layerp" unit="mm" x="-2134.12" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide44inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide33inOTlvOTX2layerp" unit="mm" x="-1792.88" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide33inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide22inOTlvOTX2layerp" unit="mm" x="-1451.62" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide22inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide11inOTlvOTX2layerp" unit="mm" x="-1110.38" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide11inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide1002inOTlvOTX2layerp" unit="mm" x="-769.125" y="-1202.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide1002inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleCornerLeftBottom1001inOTlvOTX2layerp" unit="mm" x="-427.875" y="-1237.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleCornerLeftBottom1001inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleBottomS31000inOTlvOTX2layerp" unit="mm" x="-170.625" y="-1283.5" z="0" />
+  <rotation name="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleBottomS31000inOTlvOTX2layerr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTStationpvOTX2layer1003inOTlvOTStationp" unit="mm" x="0" y="0" z="70.1984" />
+  <rotation name="OTlvOTStationpvOTX2layer1003inOTlvOTStationr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTStationpvOTVlayer1002inOTlvOTStationp" unit="mm" x="0" y="0" z="23.3995" />
+  <rotation name="OTlvOTStationpvOTVlayer1002inOTlvOTStationr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTStationpvOTUlayer1001inOTlvOTStationp" unit="mm" x="0" y="0" z="-23.3995" />
+  <rotation name="OTlvOTStationpvOTUlayer1001inOTlvOTStationr" unit="degree" x="0" y="0" z="0" />
+  <position name="OTlvOTStationpvOTX1layer1000inOTlvOTStationp" unit="mm" x="0" y="0" z="-70.1984" />
+  <rotation name="OTlvOTStationpvOTX1layer1000inOTlvOTStationr" unit="degree" x="0" y="0" z="0" />
+  <position name="eLHCbOTpvOT31002inWorldp" unit="mm" x="0" y="0" z="9315" />
+  <rotation name="eLHCbOTpvOT31002inWorldr" unit="degree" x="0" y="0" z="0" />
+  <position name="eLHCbOTpvOT21001inWorldp" unit="mm" x="0" y="0" z="8625" />
+  <rotation name="eLHCbOTpvOT21001inWorldr" unit="degree" x="0" y="0" z="0" />
+  <position name="eLHCbOTpvOT11000inWorldp" unit="mm" x="0" y="0" z="7938" />
+  <rotation name="eLHCbOTpvOT11000inWorldr" unit="degree" x="0" y="0" z="0" />
+ </define>
+ <materials>
+  <material Z="7" formula=" " name="sNitrogen" >
+   <D value="0.00125" />
+   <atom value="14.01" />
+  </material>
+  <material Z="8" formula=" " name="sOxygen" >
+   <D value="0.00143" />
+   <atom value="15.999" />
+  </material>
+  <material formula=" " name="sAir" >
+   <D value="0.001205" />
+   <fraction n="0.7" ref="sNitrogen" />
+   <fraction n="0.3" ref="sOxygen" />
+  </material>
+  <material Z="7.08565" formula=" " name="sTrackerOTPassiveMix" >
+   <D value="0.08822" />
+   <atom value="14.229" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="radian" lunit="mm" name="OTStationBox" x="6410" y="4830" z="200" />
+  <box aunit="radian" lunit="mm" name="OTStationCross1" x="465" y="295" z="200.5" />
+  <subtraction name="OTStationBoxChildForOTStationBoxWithCross" >
+   <first ref="OTStationBox" />
+   <second ref="OTStationCross1" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTStationCross2" x="1170" y="105" z="200.5" />
+  <subtraction name="OTStationBoxWithCross" >
+   <first ref="OTStationBoxChildForOTStationBoxWithCross" />
+   <second ref="OTStationCross2" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTX1layerBox" x="6410" y="4830" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="OTX1layerCross1" x="465" y="295" z="42.2989" />
+  <subtraction name="OTX1layerBoxChildForOTX1layerBoxWithCross" >
+   <first ref="OTX1layerBox" />
+   <second ref="OTX1layerCross1" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTX1layerCross2" x="1170" y="105" z="42.2989" />
+  <subtraction name="OTX1layerBoxWithCross" >
+   <first ref="OTX1layerBoxChildForOTX1layerBoxWithCross" />
+   <second ref="OTX1layerCross2" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="S2LowerModBox" x="338.625" y="2243" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="S2ModPBox" x="338.625" y="2243" z="15.8995" />
+  <box aunit="radian" lunit="mm" name="S2ModABox" x="338.625" y="2213" z="10" />
+  <box aunit="radian" lunit="mm" name="S1LowerModBox" x="338.625" y="2335" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="S1ModPBox" x="338.625" y="2335" z="15.8995" />
+  <box aunit="radian" lunit="mm" name="S1ModABox" x="338.625" y="2305" z="10" />
+  <box aunit="radian" lunit="mm" name="LModBox" x="338.625" y="2405" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="LModPBox" x="338.625" y="2405" z="15.8995" />
+  <box aunit="radian" lunit="mm" name="LModABox" x="338.625" y="2405" z="10" />
+  <box aunit="radian" lunit="mm" name="S3LowerModBox" x="170.625" y="2243" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="S3ModPBox" x="170.625" y="2243" z="15.8995" />
+  <box aunit="radian" lunit="mm" name="S3ModABox" x="170.625" y="2213" z="10" />
+  <box aunit="radian" lunit="mm" name="S3UpperModBox" x="170.625" y="2243" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="S1UpperModBox" x="338.625" y="2335" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="S2UpperModBox" x="338.625" y="2243" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="OTUlayerBox" x="6410" y="4830" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="OTUlayerCross1" x="465" y="295" z="42.2989" />
+  <subtraction name="OTUlayerBoxChildForOTUlayerBoxWithCross" >
+   <first ref="OTUlayerBox" />
+   <second ref="OTUlayerCross1" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTUlayerCross2" x="1170" y="105" z="42.2989" />
+  <subtraction name="OTUlayerBoxWithCross" >
+   <first ref="OTUlayerBoxChildForOTUlayerBoxWithCross" />
+   <second ref="OTUlayerCross2" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTVlayerBox" x="6410" y="4830" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="OTVlayerCross1" x="465" y="295" z="42.2989" />
+  <subtraction name="OTVlayerBoxChildForOTVlayerBoxWithCross" >
+   <first ref="OTVlayerBox" />
+   <second ref="OTVlayerCross1" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTVlayerCross2" x="1170" y="105" z="42.2989" />
+  <subtraction name="OTVlayerBoxWithCross" >
+   <first ref="OTVlayerBoxChildForOTVlayerBoxWithCross" />
+   <second ref="OTVlayerCross2" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTX2layerBox" x="6410" y="4830" z="41.7989" />
+  <box aunit="radian" lunit="mm" name="OTX2layerCross1" x="465" y="295" z="42.2989" />
+  <subtraction name="OTX2layerBoxChildForOTX2layerBoxWithCross" >
+   <first ref="OTX2layerBox" />
+   <second ref="OTX2layerCross1" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="OTX2layerCross2" x="1170" y="105" z="42.2989" />
+  <subtraction name="OTX2layerBoxWithCross" >
+   <first ref="OTX2layerBoxChildForOTX2layerBoxWithCross" />
+   <second ref="OTX2layerCross2" />
+  </subtraction>
+  <box aunit="radian" lunit="mm" name="WorldBox" x="100000" y="100000" z="100000" />
+ </solids>
+ <structure>
+  <volume name="OTModuleslvS2ModuleP" >
+   <materialref ref="sTrackerOTPassiveMix" />
+   <solidref ref="S2ModPBox" />
+  </volume>
+  <volume name="OTModuleslvS2ModuleA" >
+   <materialref ref="sAir" />
+   <solidref ref="S2ModABox" />
+  </volume>
+  <volume name="OTModuleslvS2LowerModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S2LowerModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleP" />
+    <positionref ref="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModulep" />
+    <rotationref ref="OTModuleslvS2LowerModulepvS2LowerModP21002inOTModuleslvS2LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleA" />
+    <positionref ref="OTModuleslvS2LowerModulepvS2LowerModA1001inOTModuleslvS2LowerModulep" />
+    <rotationref ref="OTModuleslvS2LowerModulepvS2LowerModA1001inOTModuleslvS2LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleP" />
+    <positionref ref="OTModuleslvS2LowerModulepvS2LowerModP11000inOTModuleslvS2LowerModulep" />
+    <rotationref ref="OTModuleslvS2LowerModulepvS2LowerModP11000inOTModuleslvS2LowerModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvS1ModuleP" >
+   <materialref ref="sTrackerOTPassiveMix" />
+   <solidref ref="S1ModPBox" />
+  </volume>
+  <volume name="OTModuleslvS1ModuleA" >
+   <materialref ref="sAir" />
+   <solidref ref="S1ModABox" />
+  </volume>
+  <volume name="OTModuleslvS1LowerModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S1LowerModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleP" />
+    <positionref ref="OTModuleslvS1LowerModulepvS1LowerModP21002inOTModuleslvS1LowerModulep" />
+    <rotationref ref="OTModuleslvS1LowerModulepvS1LowerModP21002inOTModuleslvS1LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleA" />
+    <positionref ref="OTModuleslvS1LowerModulepvS1LowerModA1001inOTModuleslvS1LowerModulep" />
+    <rotationref ref="OTModuleslvS1LowerModulepvS1LowerModA1001inOTModuleslvS1LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleP" />
+    <positionref ref="OTModuleslvS1LowerModulepvS1LowerModP11000inOTModuleslvS1LowerModulep" />
+    <rotationref ref="OTModuleslvS1LowerModulepvS1LowerModP11000inOTModuleslvS1LowerModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvLModuleP" >
+   <materialref ref="sTrackerOTPassiveMix" />
+   <solidref ref="LModPBox" />
+  </volume>
+  <volume name="OTModuleslvLModuleA" >
+   <materialref ref="sAir" />
+   <solidref ref="LModABox" />
+  </volume>
+  <volume name="OTModuleslvLModule" >
+   <materialref ref="sAir" />
+   <solidref ref="LModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvLModuleP" />
+    <positionref ref="OTModuleslvLModulepvLModP21002inOTModuleslvLModulep" />
+    <rotationref ref="OTModuleslvLModulepvLModP21002inOTModuleslvLModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModuleA" />
+    <positionref ref="OTModuleslvLModulepvLModA1001inOTModuleslvLModulep" />
+    <rotationref ref="OTModuleslvLModulepvLModA1001inOTModuleslvLModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModuleP" />
+    <positionref ref="OTModuleslvLModulepvLModP11000inOTModuleslvLModulep" />
+    <rotationref ref="OTModuleslvLModulepvLModP11000inOTModuleslvLModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvS3ModuleP" >
+   <materialref ref="sTrackerOTPassiveMix" />
+   <solidref ref="S3ModPBox" />
+  </volume>
+  <volume name="OTModuleslvS3ModuleA" >
+   <materialref ref="sAir" />
+   <solidref ref="S3ModABox" />
+  </volume>
+  <volume name="OTModuleslvS3LowerModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S3LowerModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleP" />
+    <positionref ref="OTModuleslvS3LowerModulepvS3LowerModP21002inOTModuleslvS3LowerModulep" />
+    <rotationref ref="OTModuleslvS3LowerModulepvS3LowerModP21002inOTModuleslvS3LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleA" />
+    <positionref ref="OTModuleslvS3LowerModulepvS3LowerModA1001inOTModuleslvS3LowerModulep" />
+    <rotationref ref="OTModuleslvS3LowerModulepvS3LowerModA1001inOTModuleslvS3LowerModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleP" />
+    <positionref ref="OTModuleslvS3LowerModulepvS3LowerModP11000inOTModuleslvS3LowerModulep" />
+    <rotationref ref="OTModuleslvS3LowerModulepvS3LowerModP11000inOTModuleslvS3LowerModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvS3UpperModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S3UpperModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleP" />
+    <positionref ref="OTModuleslvS3UpperModulepvS3UpperModP21002inOTModuleslvS3UpperModulep" />
+    <rotationref ref="OTModuleslvS3UpperModulepvS3UpperModP21002inOTModuleslvS3UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleA" />
+    <positionref ref="OTModuleslvS3UpperModulepvS3UpperModA1001inOTModuleslvS3UpperModulep" />
+    <rotationref ref="OTModuleslvS3UpperModulepvS3UpperModA1001inOTModuleslvS3UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3ModuleP" />
+    <positionref ref="OTModuleslvS3UpperModulepvS3UpperModP11000inOTModuleslvS3UpperModulep" />
+    <rotationref ref="OTModuleslvS3UpperModulepvS3UpperModP11000inOTModuleslvS3UpperModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvS1UpperModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S1UpperModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleP" />
+    <positionref ref="OTModuleslvS1UpperModulepvS1UpperModP21002inOTModuleslvS1UpperModulep" />
+    <rotationref ref="OTModuleslvS1UpperModulepvS1UpperModP21002inOTModuleslvS1UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleA" />
+    <positionref ref="OTModuleslvS1UpperModulepvS1UpperModA1001inOTModuleslvS1UpperModulep" />
+    <rotationref ref="OTModuleslvS1UpperModulepvS1UpperModA1001inOTModuleslvS1UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1ModuleP" />
+    <positionref ref="OTModuleslvS1UpperModulepvS1UpperModP11000inOTModuleslvS1UpperModulep" />
+    <rotationref ref="OTModuleslvS1UpperModulepvS1UpperModP11000inOTModuleslvS1UpperModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTModuleslvS2UpperModule" >
+   <materialref ref="sAir" />
+   <solidref ref="S2UpperModBox" />
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleP" />
+    <positionref ref="OTModuleslvS2UpperModulepvS2UpperModP21002inOTModuleslvS2UpperModulep" />
+    <rotationref ref="OTModuleslvS2UpperModulepvS2UpperModP21002inOTModuleslvS2UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleA" />
+    <positionref ref="OTModuleslvS2UpperModulepvS2UpperModA1001inOTModuleslvS2UpperModulep" />
+    <rotationref ref="OTModuleslvS2UpperModulepvS2UpperModA1001inOTModuleslvS2UpperModuler" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2ModuleP" />
+    <positionref ref="OTModuleslvS2UpperModulepvS2UpperModP11000inOTModuleslvS2UpperModulep" />
+    <rotationref ref="OTModuleslvS2UpperModulepvS2UpperModP11000inOTModuleslvS2UpperModuler" />
+   </physvol>
+  </volume>
+  <volume name="OTlvOTX1layer" >
+   <materialref ref="sAir" />
+   <solidref ref="OTX1layerBoxWithCross" />
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide66inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide66inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide55inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide55inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide44inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide44inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide33inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide33inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide22inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide22inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide11inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide11inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide1029inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModulesRightUpperSide1029inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleCornerRightTop1028inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleCornerRightTop1028inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2UpperModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleTopS21027inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter3pvX1ModuleTopS21027inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide66inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide66inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide55inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide55inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide44inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide44inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide33inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide33inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide22inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide22inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide11inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide11inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide1020inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModulesLeftUpperSide1020inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleCornerLeftTop1019inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleCornerLeftTop1019inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3UpperModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleTopS31018inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter2pvX1ModuleTopS31018inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide66inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide66inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide55inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide55inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide44inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide44inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide33inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide33inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide22inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide22inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide11inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide11inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide1011inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModulesRightLowerSide1011inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleCornerRightBottom1010inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleCornerRightBottom1010inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3LowerModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleBottomS31009inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter1pvX1ModuleBottomS31009inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide66inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide66inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide55inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide55inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide44inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide44inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide33inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide33inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide22inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide22inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide11inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide11inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide1002inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModulesLeftLowerSide1002inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleCornerLeftBottom1001inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleCornerLeftBottom1001inOTlvOTX1layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2LowerModule" />
+    <positionref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleBottomS21000inOTlvOTX1layerp" />
+    <rotationref ref="OTlvOTX1layerpvOTX1Quarter0pvX1ModuleBottomS21000inOTlvOTX1layerr" />
+   </physvol>
+  </volume>
+  <volume name="OTlvOTUlayer" >
+   <materialref ref="sAir" />
+   <solidref ref="OTUlayerBoxWithCross" />
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide66inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide66inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide55inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide55inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide44inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide44inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide33inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide33inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide22inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide22inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide11inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide11inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide1029inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModulesRightUpperSide1029inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModuleCornerRightTop1028inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModuleCornerRightTop1028inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2UpperModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter3pvUModuleTopS21027inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter3pvUModuleTopS21027inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide66inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide66inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide55inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide55inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide44inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide44inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide33inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide33inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide22inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide22inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide11inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide11inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide1020inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModulesLeftUpperSide1020inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModuleCornerLeftTop1019inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModuleCornerLeftTop1019inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3UpperModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter2pvUModuleTopS31018inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter2pvUModuleTopS31018inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide66inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide66inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide55inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide55inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide44inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide44inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide33inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide33inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide22inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide22inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide11inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide11inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide1011inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModulesRightLowerSide1011inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModuleCornerRightBottom1010inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModuleCornerRightBottom1010inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3LowerModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter1pvUModuleBottomS31009inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter1pvUModuleBottomS31009inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide66inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide66inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide55inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide55inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide44inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide44inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide33inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide33inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide22inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide22inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide11inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide11inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide1002inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModulesLeftLowerSide1002inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModuleCornerLeftBottom1001inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModuleCornerLeftBottom1001inOTlvOTUlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2LowerModule" />
+    <positionref ref="OTlvOTUlayerpvOTUQuarter0pvUModuleBottomS21000inOTlvOTUlayerp" />
+    <rotationref ref="OTlvOTUlayerpvOTUQuarter0pvUModuleBottomS21000inOTlvOTUlayerr" />
+   </physvol>
+  </volume>
+  <volume name="OTlvOTVlayer" >
+   <materialref ref="sAir" />
+   <solidref ref="OTVlayerBoxWithCross" />
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide66inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide66inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide55inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide55inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide44inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide44inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide33inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide33inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide22inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide22inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide11inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide11inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide1029inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModulesRightUpperSide1029inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModuleCornerRightTop1028inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModuleCornerRightTop1028inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3UpperModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter3pvVModuleTopS31027inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter3pvVModuleTopS31027inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide66inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide66inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide55inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide55inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide44inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide44inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide33inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide33inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide22inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide22inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide11inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide11inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide1020inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModulesLeftUpperSide1020inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModuleCornerLeftTop1019inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModuleCornerLeftTop1019inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2UpperModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter2pvVModuleTopS21018inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter2pvVModuleTopS21018inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide66inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide66inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide55inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide55inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide44inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide44inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide33inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide33inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide22inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide22inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide11inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide11inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide1011inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModulesRightLowerSide1011inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModuleCornerRightBottom1010inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModuleCornerRightBottom1010inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2LowerModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter1pvVModuleBottomS21009inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter1pvVModuleBottomS21009inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide66inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide66inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide55inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide55inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide44inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide44inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide33inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide33inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide22inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide22inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide11inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide11inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide1002inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModulesLeftLowerSide1002inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModuleCornerLeftBottom1001inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModuleCornerLeftBottom1001inOTlvOTVlayerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3LowerModule" />
+    <positionref ref="OTlvOTVlayerpvOTVQuarter0pvVModuleBottomS31000inOTlvOTVlayerp" />
+    <rotationref ref="OTlvOTVlayerpvOTVQuarter0pvVModuleBottomS31000inOTlvOTVlayerr" />
+   </physvol>
+  </volume>
+  <volume name="OTlvOTX2layer" >
+   <materialref ref="sAir" />
+   <solidref ref="OTX2layerBoxWithCross" />
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide66inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide66inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide55inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide55inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide44inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide44inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide33inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide33inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide22inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide22inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide11inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide11inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide1029inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModulesRightUpperSide1029inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleCornerRightTop1028inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleCornerRightTop1028inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3UpperModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleTopS31027inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter3pvX2ModuleTopS31027inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide66inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide66inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide55inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide55inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide44inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide44inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide33inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide33inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide22inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide22inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide11inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide11inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide1020inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModulesLeftUpperSide1020inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1UpperModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleCornerLeftTop1019inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleCornerLeftTop1019inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2UpperModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleTopS21018inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter2pvX2ModuleTopS21018inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide66inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide66inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide55inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide55inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide44inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide44inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide33inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide33inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide22inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide22inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide11inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide11inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide1011inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModulesRightLowerSide1011inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleCornerRightBottom1010inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleCornerRightBottom1010inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS2LowerModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleBottomS21009inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter1pvX2ModuleBottomS21009inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide66inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide66inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide55inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide55inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide44inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide44inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide33inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide33inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide22inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide22inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide11inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide11inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvLModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide1002inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModulesLeftLowerSide1002inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS1LowerModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleCornerLeftBottom1001inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleCornerLeftBottom1001inOTlvOTX2layerr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTModuleslvS3LowerModule" />
+    <positionref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleBottomS31000inOTlvOTX2layerp" />
+    <rotationref ref="OTlvOTX2layerpvOTX2Quarter0pvX2ModuleBottomS31000inOTlvOTX2layerr" />
+   </physvol>
+  </volume>
+  <volume name="OTlvOTStation" >
+   <materialref ref="sAir" />
+   <solidref ref="OTStationBoxWithCross" />
+   <physvol>
+    <volumeref ref="OTlvOTX2layer" />
+    <positionref ref="OTlvOTStationpvOTX2layer1003inOTlvOTStationp" />
+    <rotationref ref="OTlvOTStationpvOTX2layer1003inOTlvOTStationr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTlvOTVlayer" />
+    <positionref ref="OTlvOTStationpvOTVlayer1002inOTlvOTStationp" />
+    <rotationref ref="OTlvOTStationpvOTVlayer1002inOTlvOTStationr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTlvOTUlayer" />
+    <positionref ref="OTlvOTStationpvOTUlayer1001inOTlvOTStationp" />
+    <rotationref ref="OTlvOTStationpvOTUlayer1001inOTlvOTStationr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTlvOTX1layer" />
+    <positionref ref="OTlvOTStationpvOTX1layer1000inOTlvOTStationp" />
+    <rotationref ref="OTlvOTStationpvOTX1layer1000inOTlvOTStationr" />
+   </physvol>
+  </volume>
+  <volume name="World" >
+   <materialref ref="sAir" />
+   <solidref ref="WorldBox" />
+   <physvol>
+    <volumeref ref="OTlvOTStation" />
+    <positionref ref="eLHCbOTpvOT31002inWorldp" />
+    <rotationref ref="eLHCbOTpvOT31002inWorldr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTlvOTStation" />
+    <positionref ref="eLHCbOTpvOT21001inWorldp" />
+    <rotationref ref="eLHCbOTpvOT21001inWorldr" />
+   </physvol>
+   <physvol>
+    <volumeref ref="OTlvOTStation" />
+    <positionref ref="eLHCbOTpvOT11000inWorldp" />
+    <rotationref ref="eLHCbOTpvOT11000inWorldr" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

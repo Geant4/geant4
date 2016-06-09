@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003/10/28 17:22:02 gcosmo Exp $
+$Id: History,v 1.15 2004/12/02 09:39:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December, 2nd, 2004   G. Cosmo             -  geomsolids-V06-02-01
+- Implemented migration to <cmath> for standard mathematical functions.
+
+September, 22nd, 2004   G.Cosmo            -  geomsolids-V06-02-00
+- Include tags:
+  geom-csg-V06-02-04, geom-bool-V06-02-00, geom-specific-V06-02-01,
+  breps-V06-02-01.
+  Requires tag "geommng-V06-02-01".
 
 October, 28th, 2003   G.Cosmo              -  geomsolids-V05-02-01
 - Include tags:

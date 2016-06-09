@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.6 2001/07/11 10:00:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: templates.hh,v 1.8 2004/11/12 17:38:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // -*- C++ -*-
@@ -119,5 +119,29 @@ inline void G4SwapObj(T* a, T* b) {
 }
 
 //-----------------------------
+
+#ifndef G4_SQR_DEFINED
+  #define G4_SQR_DEFINED
+  #ifdef sqr
+    #undef sqr
+  #endif
+
+template <class T>
+inline T sqr(const T& x)
+{
+  return x*x;
+}
+#endif
+
+#ifdef G4_ABS_DEFINED
+  #ifdef abs
+    #undef abs
+  #endif
+template <class T>
+inline T std::abs(const T& a)
+{
+  return a < 0 ? -a : a;
+}
+#endif
 
 #endif // templates_h

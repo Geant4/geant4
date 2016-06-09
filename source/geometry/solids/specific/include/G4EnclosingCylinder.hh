@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EnclosingCylinder.hh,v 1.6 2003/11/03 18:39:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // --------------------------------------------------------------------

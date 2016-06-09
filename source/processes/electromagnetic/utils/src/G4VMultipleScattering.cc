@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.23 2004/04/23 05:52:07 urban Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VMultipleScattering.cc,v 1.30 2004/12/01 18:01:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,8 @@
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
 // 01-03-04 SampleCosineTheta signature changed
 // 22-04-04 SampleCosineTheta signature changed back to original
+// 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -69,6 +71,7 @@
 #include "G4RegionStore.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
+#include "G4PhysicsTableHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,6 +79,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
                  G4VContinuousDiscreteProcess(name, type),
   navigator(0),
   theLambdaTable(0),
+  firstParticle(0),
+  currentParticle(0),
   currentCouple(0),
   nBins(120),
   boundary(false),
@@ -84,7 +89,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 {
   minKinEnergy = 100.0*eV;
   maxKinEnergy = 100.0*TeV;
-  SetVerboseLevel(0);
+  //SetVerboseLevel(0);
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
 
@@ -94,12 +99,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
-  (G4LossTableManager::Instance())->DeRegister(this);
   delete modelManager;
-  if (theLambdaTable) {
-    theLambdaTable->clearAndDestroy();
-    delete theLambdaTable;
-  }
+  if (theLambdaTable) theLambdaTable->clearAndDestroy();
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 
@@ -107,59 +108,82 @@ G4VMultipleScattering::~G4VMultipleScattering()
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  currentParticle = &part;
-  currentCouple = 0;
   if(0 < verboseLevel) {
-    G4cout << "========================================================" << G4endl;
+//    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
 
-  InitialiseProcess(part);
-
-  if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
-			       ->GetNavigatorForTracking();
-  const G4DataVector* theCuts = modelManager->Initialise(&part, 0, 10.0, verboseLevel);
-
-  if (buildLambdaTable) {
+  if (buildLambdaTable && firstParticle == &part) {
 
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
-    theLambdaTable = new G4PhysicsTable(numOfCouples);
 
     for (size_t i=0; i<numOfCouples; i++) {
 
-      // create physics vector and fill it
-      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-      G4PhysicsVector* aVector = PhysicsVector(couple);
-      modelManager->FillLambdaVector(aVector, couple, false);
+      if (theLambdaTable->GetFlag(i)) {
 
-      // Insert vector for this material into the table
-      theLambdaTable->insert(aVector) ;
+        // create physics vector and fill it
+        const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+        G4PhysicsVector* aVector = PhysicsVector(couple);
+        modelManager->FillLambdaVector(aVector, couple, false);
+        G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
+      }
     }
 
+    G4String num = part.GetParticleName();
     if(0 < verboseLevel) {
       G4cout << "Lambda table is built for "
-             << part.GetParticleName()
+             << num
              << G4endl;
     }
+    if((verboseLevel>=0) && ( num == "e-" || num == "mu+" || num == "proton" || num == "pi-")) 
+      PrintInfoDefinition();
     if(2 < verboseLevel) G4cout << *theLambdaTable << G4endl;
-    if(5 < verboseLevel) G4cout << theCuts << G4endl;
-
   }
-
-  G4String num = part.GetParticleName();
-  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton"
-                     || num == "pi-") PrintInfoDefinition();
 
   if(0 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
+{
+  if (!firstParticle) {
+    currentCouple = 0;
+    firstParticle = &part;
+    currentParticle = &part;
+  }
+
+  if(0 < verboseLevel) {
+//    G4cout << "========================================================" << G4endl;
+    G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+           << " local particle " << firstParticle->GetParticleName()
+           << G4endl;
+  }
+
+  if(firstParticle == &part) {
+
+    InitialiseProcess(firstParticle);
+    if(buildLambdaTable)
+      theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+    if(latDisplasment && !navigator)
+      navigator = G4TransportationManager::GetTransportationManager()
+        ->GetNavigatorForTracking();
+    const G4DataVector* theCuts = modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
+
+    if(2 < verboseLevel) G4cout << theCuts << G4endl;
+
   }
 }
 
@@ -183,15 +207,15 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
   if (kineticEnergy > 0.0) {
     G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy);
-    G4double sth  = sqrt(1.-cth*cth);
+    G4double sth  = std::sqrt(1.-cth*cth);
     G4double phi  = twopi*G4UniformRand();
-    G4double dirx = sth*cos(phi);
-    G4double diry = sth*sin(phi);
+    G4double dirx = sth*std::cos(phi);
+    G4double diry = sth*std::sin(phi);
 
     G4ThreeVector oldDirection = track.GetMomentumDirection();
     G4ThreeVector newDirection(dirx,diry,cth);
     newDirection.rotateUz(oldDirection);
-    fParticleChange.SetMomentumChange(newDirection);
+    fParticleChange.ProposeMomentumDirection(newDirection);
 
   /*
   if(0 < verboseLevel) {
@@ -212,8 +236,8 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
         // sample direction of lateral displacement
         G4double phi  = twopi*G4UniformRand();
-        G4double dirx = cos(phi);
-        G4double diry = sin(phi);
+        G4double dirx = std::cos(phi);
+        G4double diry = std::sin(phi);
 
         G4ThreeVector latDirection(dirx,diry,0.0);
         latDirection.rotateUz(oldDirection);
@@ -224,7 +248,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
         navigator->LocateGlobalPointWithinVolume(newPosition);
 
-        fParticleChange.SetPositionChange(newPosition);
+        fParticleChange.ProposePosition(newPosition);
       }
     }
   }
@@ -236,8 +260,8 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
 void G4VMultipleScattering::PrintInfoDefinition()
 {
-  G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering " 
-         << "for " << currentParticle->GetParticleName()
+  G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering "
+         << "for " << firstParticle->GetParticleName()
          << G4endl;
   if (theLambdaTable) {
     G4cout << "      Lambda tables from "
@@ -260,85 +284,78 @@ G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple
   G4int nbins = 3;
   //G4int nbins =  nDEDXBins;
   if( couple->IsUsed() ) nbins = nBins;
-  //  G4double xmax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
+  //  G4double xmax = maxKinEnergy*std::exp( std::log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   return v;
 }
 
-G4bool G4VMultipleScattering::StorePhysicsTable(G4ParticleDefinition* part,
-			 	     const G4String& directory,
-				           G4bool ascii)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
+			 	                const G4String& directory,
+				                      G4bool ascii)
 {
-  G4bool res = true;
-  if ( theLambdaTable ) {
+  G4bool yes = true;
+  if ( theLambdaTable && part == firstParticle) {
     const G4String name = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     G4bool yes = theLambdaTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
-  }
 
-  if ( res ) {
-    G4cout << "Physics table are stored for " << part->GetParticleName()
-           << " and process " << GetProcessName()
-	   << " in the directory <" << directory
-	   << "> " << G4endl;
-  } else {
-    G4cout << "Fail to store Physics Table for " << part->GetParticleName()
-           << " and process " << GetProcessName()
-	   << " in the directory <" << directory
-	   << "> " << G4endl;
+    if ( yes ) {
+      G4cout << "Physics table are stored for " << part->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    } else {
+      G4cout << "Fail to store Physics Table for " << part->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    }
   }
-  return res;
+  return yes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
-					     const G4String& directory,
-			  	                   G4bool ascii)
+G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* part,
+					           const G4String& directory,
+			  	                         G4bool ascii)
 {
-  currentParticle = part;
   if(0 < verboseLevel) {
-    G4cout << "========================================================" << G4endl;
+//    G4cout << "========================================================" << G4endl;
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
   }
+  G4bool yes = true;
 
-  InitialiseProcess(*part);
-  if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
-                               ->GetNavigatorForTracking();
+  if(!buildLambdaTable || firstParticle != part) return yes;
 
-  const G4DataVector* theCuts = modelManager->Initialise(part, 0, 10.0, verboseLevel);
-  if(5 < verboseLevel) G4cout << theCuts << G4endl;
-  if(!buildLambdaTable) return true;
-
-  G4String num = part->GetParticleName();
-  const G4ProductionCutsTable* theCoupleTable=
-          G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  const G4String particleName = part->GetParticleName();
 
   G4String filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  theLambdaTable = new G4PhysicsTable(numOfCouples);
-  G4bool res = theLambdaTable->RetrievePhysicsTable(filename,ascii);
-  if ( res ) {
+  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
+  if ( yes ) {
     if (-1 < verboseLevel) {
-        G4cout << "Lambda table for " << num << " is retrieved from <"
+        G4cout << "Lambda table for " << part->GetParticleName() << " is retrieved from <"
                << filename << ">"
                << G4endl;
     }
   } else {
-    theLambdaTable->clearAndDestroy();
-    theLambdaTable = 0;
     if (-1 < verboseLevel) {
-        G4cout << "Lambda table for " << num << " in file <"
+        G4cout << "Lambda table for " << part->GetParticleName() << " in file <"
                << filename << "> is not exist"
                << G4endl;
     }
   }
+  return yes;
+}
 
-  if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton")
-           PrintInfoDefinition();
-  return res;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+{
+  return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

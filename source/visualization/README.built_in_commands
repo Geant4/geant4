@@ -1,9 +1,8 @@
                 Visualization Built In Commands
                 ===============================
 
-The old /vis~/ commands are no longer available.  Here is some
-guidance on the new commands available from Geant4 4.0.  Note
-particularly the new compound commands:
+Here is some guidance on the vis commands available from Geant4 6.2.
+Note particularly the compound commands:
 
 /vis/drawTree
 /vis/drawVolume
@@ -74,6 +73,26 @@ See below for a more extended description.
 NI means "not implemented".
 
 
+General Commands
+================
+
+/vis/enable [true|false]
+  default:       true
+/vis/disable
+  Enables/disables visualization system.
+
+/vis/verbose [<verbosity>]
+  default:     warnings
+  Simple graded message scheme - give first letter or a digit:
+    0) quiet,         // Nothing is printed.
+    1) startup,       // Startup and endup messages are printed...
+    2) errors,        // ...and errors...
+    3) warnings,      // ...and warnings...
+    4) confirmations, // ...and confirming messages...
+    5) parameters,    // ...and parameters of scenes and views...
+    6) all            // ...and everything available.
+
+
 Scenes
 ======
 
@@ -89,6 +108,7 @@ Unless otherwise stated, commands affect the current scene only.
 /vis/scene/add/axes [<x0>] [<y0>] [<z0>] [<length>] [<unit>]
   default:             0      0      0       1         m
   Draws axes at (x0, y0, z0) of given length.
+  The x, y and z axes are red, green and blue respectively.
 
 NI /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
 NI                      [<copy-no>] [<depth>]
@@ -303,35 +323,67 @@ NI /vis/viewer/clone
   default:                    false
   View is automatically refreshed after a change of view parameters.
 
+/vis/viewer/set/auxiliaryEdge [true|false]
+  default:                      false
+  Auxiliary edges become visible/invisible.
+  Auxiliary edges are not genuine edges of the volume.  They may be in
+  a curved surface made out of polygons, for example, or in plane
+  surface of complicated shape that has to be broken down into simpler
+  polygons.  HepPolyhedron breaks all surfaces into triangles or
+  quadrilaterals.  There will be auxiliary edges for any volumes with
+  a curved surface, such as a tube or a sphere, or a volume resulting
+  from a Boolean operation.  Normally, they are not shown, but
+  sometimes it is useful to see them.  In particular, a sphere,
+  because it has no egdes, will not be seen in wireframe mode in some
+  graphics systems unless this flag is turned on.
+
 /vis/viewer/set/culling
   g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
   [density] [unit]
   default: none true 0.01 g/cm3
+  global: enables other culling options/disables culling.
+  coveredDaughters: does not send volumes that would not be seen on the
+    screen because covered by ancester volumes in surface drawing mode,
+    and then only if the volumes are visible and opaque, and then only if
+    no sections or cutways are in operation.  Intended solely to improve
+    the speed of rendering visible volumes.
+  invisible: culls objects with invisible attribute.
+  density: culls volumes with density lower than threshold.  Useful for
+    eliminating "container volumes" with no physical correspondence whose
+    material is usually air.  If this is selected, provide threshold
+    density and unit (g/cm3, mg/cm3 or kg/m3).
 
 NI /vis/viewer/set/cutawayPlane ...
   Set plane(s) for cutaway views.
 
 /vis/viewer/set/edge [true|false]
   default:              true
+  Edges become visible/invisible in surface mode.
 
 /vis/viewer/set/globalMarkerScale [<scale-factor>]
   default:                              1
+  Multiplies marker sizes by this factor.
 
 /vis/viewer/set/hiddenEdge  [true|false]
   default:                       true
+  Edges become hidden/seen in wireframe or surface mode.
 
 /vis/viewer/set/hiddenMarker  [true|false]
   default:                       true
+  Markers are hidden by/seen though closer objects.
 
 /vis/viewer/set/lightsMove with-camera|with-object
+  Note: parameter will be parsed for \"cam\" or \"obj\".
 
 /vis/viewer/set/lightsThetaPhi [<theta>] [<phi>] [deg|rad]
   default:                         60       45       deg
   after first use: <theta> and <phi> use "current as default".
+  Set direction from target to lights.
+
 /vis/viewer/set/lightsVector [<x>] [<y>] [<z>]
   default:                     1     1     1
   after first use: current as default.
-  Set direction of main lighting.
+  Set direction from target to lights.
 
 /vis/viewer/set/lineSegmentsPerCircle        [<number-of-sides-per-circle>]
   default:                                         24
@@ -340,18 +392,22 @@ NI /vis/viewer/set/cutawayPlane ...
 
 /vis/viewer/set/projection
   o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]
-  default: none                       30             deg
+  default: orthogonal                 30             deg
 
-/vis/viewer/set/sectionPlane ...
+/vis/viewer/set/sectionPlane on|off [x] [y] [z] [units] [nx] [ny] [nz]
+  default:                           0   0   0     cm     1    0    0
   Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
   e.g., for a y-z plane at x = 1 cm:
   /vis/viewer/set/sectionPlane on 1 0 0 cm 1 0 0
+  To turn off: /vis/viewer/set/sectionPlane off
 
 /vis/viewer/set/style w[ireframe]|s[urface]
 
 /vis/viewer/set/upThetaPhi [<theta>] [<phi>] [deg|rad]
   default:                     90       90      deg
   after first use: <theta> and <phi> use "current as default".
+  Set up vector.  Viewer will attempt always to show this direction upwards.
+
 /vis/viewer/set/upVector [<x>] [<y>] [<z>]
   default:                 0     1     0
   after first use: current as default.
@@ -360,6 +416,9 @@ NI /vis/viewer/set/cutawayPlane ...
 /vis/viewer/set/viewpointThetaPhi [<theta>] [<phi>] [deg|rad]
   default:                            0        0       deg
   after first use: <theta> and <phi> use "current as default".
+  Set direction from target to camera.  Also changes lightpoint direction if
+  lights are set to move with camera.
+
 /vis/viewer/set/viewpointVector [<x>] [<y>] [<z>]
   default:                        0     0     1
   after first use: current as default.
@@ -395,30 +454,8 @@ NI /vis/scene/set/attributes <logical-volume-name>
   (Move to scene when implemented.)
 
 
-General Commands
-================
-
-/vis/enable [true|false]
-  default:       true
-/vis/disable
-  Enables/disables visualization system.
-
-/vis/verbose [<verbosity>]
-  default:     warnings
-  Simple graded message scheme - give first letter or a digit:
-    0) quiet,         // Nothing is printed.
-    1) startup,       // Startup and endup messages are printed...
-    2) errors,        // ...and errors...
-    3) warnings,      // ...and warnings...
-    4) confirmations, // ...and confirming messages...
-    5) parameters,    // ...and parameters of scenes and views...
-    6) all            // ...and everything available.
-
-
 Compound Commands
 =================
-
-NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
 
 /vis/drawTree [<physical-volume-name>] [<system>]
 default:           world                ATree
@@ -436,7 +473,7 @@ default:             world
               [<zoom-factor>]
               [<dolly>] [<dolly-unit>]
 default: 0 0 0 0 cm 1 0 cm
-  /vis/viewer/viewpointThetaPhi $1 $2 deg
+  /vis/viewer/set/viewpointThetaPhi $1 $2 deg
   /vis/viewer/panTo $3 $4 $5
   /vis/viewer/zoomTo $6
   /vis/viewer/dollyTo $7 $8

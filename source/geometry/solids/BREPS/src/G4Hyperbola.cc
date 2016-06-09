@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.9 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Hyperbola.cc,v 1.10 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -97,7 +97,7 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
   newLocation.setZ(0);
   G4double axisZ= (tr*position.GetPZ()).unit().z();
 
-  if (abs(axisZ)<kAngTolerance) 
+  if (std::abs(axisZ)<kAngTolerance) 
   {
     return 0;
   }
@@ -117,13 +117,13 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 
   G4double xval = -2*a*b/(a.mag2()+b.mag2());
   
-  G4double u= (0.5*log((1+xval)/(1-xval)))/2;  // atanh(xval)/2
+  G4double u= (0.5*std::log((1+xval)/(1-xval)))/2;  // atanh(xval)/2
 
   // get the coordinate axis directions and the semiaxis lengths
-  G4Vector3D sAxis= G4Vector3D( a*cosh(u)+b*sinh(u) );
+  G4Vector3D sAxis= G4Vector3D( a*std::cosh(u)+b*std::sinh(u) );
   
   //!!!!!!!!!!!!
-  G4Vector3D sImagAxis= G4Vector3D( a*cosh(u+pi/2)+b*sinh(u+pi/2) );
+  G4Vector3D sImagAxis= G4Vector3D( a*std::cosh(u+pi/2)+b*std::sinh(u+pi/2) );
   
   //!!!!!!!!!!!!
   G4double   newSemiAxis     = sAxis.mag();
@@ -161,13 +161,13 @@ void G4Hyperbola::InitBounded()
   {
     G4double x_i= position.GetPX()(i);
     
-    if (abs(x_i) <= kAngTolerance) 
+    if (std::abs(x_i) <= kAngTolerance) 
     {
       G4double tanhu= - (semiImagAxis*position.GetPY()(i)) / (semiAxis*x_i);
       
-      if (abs(tanhu)<=1) 
+      if (std::abs(tanhu)<=1) 
       {
-        G4double u= 0.5*log((1+tanhu)/(1-tanhu));  // atanh(tanhu)
+        G4double u= 0.5*std::log((1+tanhu)/(1-tanhu));  // atanh(tanhu)
 	if (IsPOn(u))
 	  bBox.Extend(GetPoint(u));
       }

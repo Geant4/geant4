@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.16 2003/12/12 13:12:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VParticleChange.cc,v 1.17 2004/12/02 06:38:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -261,7 +261,7 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
 
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
-  accuracy = abs((aTrack.GetMomentumDirection()).mag2()-1.0);
+  accuracy = std::abs((aTrack.GetMomentumDirection()).mag2()-1.0);
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << " G4VParticleChange::CheckSecondary  :   ";

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.cc,v 1.8 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4CircularCurve.cc,v 1.9 2004/12/02 09:31:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -85,7 +85,7 @@ void G4CircularCurve::InitBounded()
   // belonging to the points with an extreme x, y and z coordinate
   for (G4int i=0; i<3; i++) 
   {
-    G4double u = atan2(position.GetPY()(i), position.GetPX()(i));
+    G4double u = std::atan2(position.GetPY()(i), position.GetPX()(i));
     
     if (IsPOn(u)) 
       bBox.Extend(GetPoint(u));
@@ -130,13 +130,13 @@ G4double G4CircularCurve::GetPMax() const
 G4Point3D G4CircularCurve::GetPoint(G4double param) const
 {
   return G4Point3D( position.GetLocation()+radius*
-    ( cos(param)*position.GetPX() + sin(param)*position.GetPY() ) );
+    ( std::cos(param)*position.GetPX() + std::sin(param)*position.GetPY() ) );
 }
 
 G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
-  G4double angle= atan2(ptLocal.y(), ptLocal.x());
+  G4double angle= std::atan2(ptLocal.y(), ptLocal.x());
   return (angle<0)? angle+twopi: angle;
 }
 

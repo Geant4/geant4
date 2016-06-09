@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.8 2003/06/16 16:53:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VCSGfaceted.hh,v 1.10 2004/10/10 10:39:46 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -87,16 +87,36 @@ class G4VCSGfaceted : public G4VSolid
 
   virtual G4VisExtent GetExtent() const;
 
+  virtual G4Polyhedron* GetPolyhedron () const;
+
+  G4int GetCubVolStatistics() const;
+  G4double GetCubVolEpsilon() const;
+  void SetCubVolStatistics(G4int st);
+  void SetCubVolEpsilon(G4double ep);
+
+  virtual G4double GetCubicVolume();
+    // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
+
   protected:  // without description
 
   G4int    numFace;
   G4VCSGface **faces;
+  G4double fCubicVolume;
+  mutable G4Polyhedron* fpPolyhedron;
 
   virtual G4double DistanceTo( const G4ThreeVector &p,
                                const G4bool outgoing ) const;
 
   void CopyStuff( const G4VCSGfaceted &source );
   void DeleteStuff();
+
+  private:
+
+  G4int    fCubVolStatistics;
+  G4double fCubVolEpsilon;
+    // Statistics, error accuracy for volume estimation.
+
 };
 
 #endif

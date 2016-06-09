@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2004/06/21 10:57:15 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.18 2004/12/02 16:19:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4ParticleGun.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -87,27 +87,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
   G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
-  if (rmsEdep>0.) rmsEdep = sqrt(rmsEdep/TotNbofEvents);
+  if (rmsEdep>0.) rmsEdep = std::sqrt(rmsEdep/TotNbofEvents);
   else            rmsEdep = 0.;
 
   TrakLenCharged /= TotNbofEvents; TrakLenCharged2 /= TotNbofEvents;
   G4double rmsTLCh = TrakLenCharged2 - TrakLenCharged*TrakLenCharged;
-  if (rmsTLCh>0.) rmsTLCh = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsTLCh>0.) rmsTLCh = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsTLCh = 0.;
 
   TrakLenNeutral /= TotNbofEvents; TrakLenNeutral2 /= TotNbofEvents;
   G4double rmsTLNe = TrakLenNeutral2 - TrakLenNeutral*TrakLenNeutral;
-  if (rmsTLNe>0.) rmsTLNe = sqrt(rmsTLNe/TotNbofEvents);
+  if (rmsTLNe>0.) rmsTLNe = std::sqrt(rmsTLNe/TotNbofEvents);
   else            rmsTLNe = 0.;
 
   nbStepsCharged /= TotNbofEvents; nbStepsCharged2 /= TotNbofEvents;
   G4double rmsStCh = nbStepsCharged2 - nbStepsCharged*nbStepsCharged;
-  if (rmsStCh>0.) rmsStCh = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStCh = 0.;
 
   nbStepsNeutral /= TotNbofEvents; nbStepsNeutral2 /= TotNbofEvents;
   G4double rmsStNe = nbStepsNeutral2 - nbStepsNeutral*nbStepsNeutral;
-  if (rmsStNe>0.) rmsStNe = sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStNe = 0.;
 
   G4double Gamma = (double)nbGamma/TotNbofEvents;
@@ -126,19 +126,60 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (Transmit[1] > 0) {
     MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
-    if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
-  }  
+    if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
+  }
+  
+  //Stopping Power from input Table.
+  //
+  G4Material* material = detector->GetAbsorberMaterial();
+  G4double length  = detector->GetAbsorberThickness();
+  G4double density = material->GetDensity();
+   
+  G4ParticleDefinition* particle = primary->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4String partName = particle->GetParticleName();
+  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+
+  G4EmCalculator emCalculator;
+  G4double dEdxTable = 0.;
+  if (particle->GetPDGCharge()!= 0.) { 
+    dEdxTable = emCalculator.GetDEDX(energy,particle,material);
+    G4double eEnd = energy - dEdxTable*length;
+    if(eEnd > 0.) {
+      dEdxTable = 0.5*(dEdxTable + emCalculator.GetDEDX(eEnd,particle,material));
+    }
+  }
+  G4double stopTable = dEdxTable/density;
+  
+  //Stopping Power from simulation.
+  //    
+  G4double meandEdx  = EnergyDeposit/length;
+  G4double stopPower = meandEdx/density;  
 
   G4cout << "\n ======================== run summary ======================\n";
 
-  G4int prec = G4cout.precision(4);
-
-  G4cout << "\n Number of Events = " << TotNbofEvents << G4endl;
-
+  G4int prec = G4cout.precision(2);
+  
+  G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
+         << G4BestUnit(energy,"Energy") << " through " 
+	 << G4BestUnit(length,"Length") << " of "
+	 << material->GetName() << " (density: " 
+	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+  
+  G4cout.precision(4);
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
-         << G4BestUnit(rmsEdep,      "Energy") << G4endl;
-
+         << G4BestUnit(rmsEdep,      "Energy") 
+         << G4endl;
+	 
+  G4cout << "\n Mean dE/dx  = " << meandEdx/(MeV/cm) << " MeV/cm"
+         << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
+	 << G4endl;
+	 	 
+  G4cout << " (from Table = " << dEdxTable/(MeV/cm) << " MeV/cm)"
+         << "\t (from Table    = " << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
@@ -202,10 +243,10 @@ G4double RunAction::ComputeMscHighland()
   G4ParticleGun* particle = primary->GetParticleGun();
   G4double T = particle->GetParticleEnergy();
   G4double M = particle->GetParticleDefinition()->GetPDGMass();
-  G4double z = abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);
+  G4double z = std::abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);
 
   G4double bpc = T*(T+2*M)/(T+M);
-  G4double teta0 = 13.6*MeV*z*sqrt(t)*(1.+0.038*log(t))/bpc;
+  G4double teta0 = 13.6*MeV*z*std::sqrt(t)*(1.+0.038*std::log(t))/bpc;
   return teta0;
 }
 

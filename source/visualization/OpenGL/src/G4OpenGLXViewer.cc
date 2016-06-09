@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.21 2004/04/07 15:18:23 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenGLXViewer.cc,v 1.23 2004/12/07 23:40:59 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -46,13 +46,24 @@
 
 #include <assert.h>
 
-int G4OpenGLXViewer::snglBuf_RGBA[10] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
-  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+int G4OpenGLXViewer::snglBuf_RGBA[12] =
+{ GLX_RGBA,
+  GLX_RED_SIZE, 1,
+  GLX_GREEN_SIZE, 1, 
+  GLX_BLUE_SIZE, 1,
+  GLX_DEPTH_SIZE, 1,
+  GLX_STENCIL_SIZE, 1,
+  None };
 
-int G4OpenGLXViewer::dblBuf_RGBA[11] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
+int G4OpenGLXViewer::dblBuf_RGBA[13] =
+{ GLX_RGBA,
+  GLX_RED_SIZE, 1,
+  GLX_GREEN_SIZE, 1,
+  GLX_BLUE_SIZE, 1,
+  GLX_DOUBLEBUFFER,
+  GLX_DEPTH_SIZE, 1,
+  GLX_STENCIL_SIZE, 1,
+  None };
 
 #define NewString(str) \
  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)
@@ -289,20 +300,29 @@ vi_stored (0)
     vi_single_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA);
   }
-  if (!vi_single_buffer) {
-    G4cout <<
-    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a single buffer visual."
-	   << G4endl;
-  }
-
   if (!vi_double_buffer) {
     vi_double_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA);
   }
-  if (!vi_double_buffer) {
-    G4cout <<
-    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
-	   << G4endl;
+
+  if (vi_single_buffer || vi_double_buffer) {
+    if (!vi_double_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
+	"\n  Working with a single buffer."
+	     << G4endl;
+    }
+  } else {
+    if (!vi_single_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a single buffer visual."
+	     << G4endl;
+    }
+    if (!vi_double_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
+	     << G4endl;
+    }
   }
 
   if (vi_single_buffer) {
@@ -353,6 +373,7 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
 
 void G4OpenGLXViewer::print() {
   
+  //using namespace std;
   //cout << "print_col_callback requested with file name: " << print_string << G4endl;
   
   if (vectored_ps) {
@@ -562,11 +583,11 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     if (dr!=0 || dg!=0 || db!=0) {
       dx=vertex[1].x - vertex[0].x;
       dy=vertex[1].y - vertex[0].y;
-      distance=sqrt(dx*dx + dy*dy);
+      distance=std::sqrt(dx*dx + dy*dy);
 
-      absR=fabs(dr);
-      absG=fabs(dg);
-      absB=fabs(db);
+      absR=std::fabs(dr);
+      absG=std::fabs(dg);
+      absB=std::fabs(db);
 
       #define Max(a, b) (((a)>(b))?(a):(b))
 

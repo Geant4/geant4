@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.1 2003/08/26 18:54:12 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PreCompoundNeutron.hh,v 1.2 2004/12/07 13:50:32 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 
@@ -79,12 +79,12 @@ public:
 private:
   virtual G4double GetAlpha()
   {
-    return 0.76+2.2/pow(GetRestA(),1.0/3.0);
+    return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
   }
   
   virtual G4double GetBeta() 
   {
-    return (2.12/pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
+    return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
   }
   
   virtual G4bool IsItPossible(const G4Fragment& aFragment)

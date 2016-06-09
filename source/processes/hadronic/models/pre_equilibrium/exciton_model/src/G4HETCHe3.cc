@@ -48,7 +48,7 @@ G4double G4HETCHe3::K(const G4Fragment & aFragment)
 	 H*(Pa*(Pa-1.0)*(r-1.0)+2.0*Na*Pa*r) +
 	 Pa*Na*(Pa-1.0));
 
-      result /= 3.0*pow(TargetZ/TargetA, 2.0) * ((TargetA-TargetZ)/TargetA);
+      result /= 3.0*std::pow(TargetZ/TargetA, 2.0) * ((TargetA-TargetZ)/TargetA);
     }
 
   return std::max(0.0,result);

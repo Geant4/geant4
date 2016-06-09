@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.10 2003/06/16 17:13:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VTrajectoryPoint.hh,v 1.11 2004/07/05 17:08:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -52,12 +52,11 @@ class G4VTrajectoryPoint
  public: // with description
 
  // Constructor/Destructor
-   G4VTrajectoryPoint() {;}
-   virtual ~G4VTrajectoryPoint() {;}
+   G4VTrajectoryPoint();
+   virtual ~G4VTrajectoryPoint();
 
  // Operators
-   inline int operator==(const G4VTrajectoryPoint& right) const
-   { return (this==&right); };
+   G4bool operator==(const G4VTrajectoryPoint& right) const;
 
  // Get/Set functions
    virtual const G4ThreeVector GetPosition() const = 0;

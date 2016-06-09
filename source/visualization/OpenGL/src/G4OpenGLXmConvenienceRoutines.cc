@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.9 2002/12/11 15:57:59 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.10 2004/12/07 23:40:59 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -397,11 +397,11 @@ void G4OpenGLXmViewer::Add_slider_box (char* label_string,
 	      XmNtitleString, slider_name_str);  j++;
     
     XtSetArg (slider_args[i][j], 
-	      XmNmaximum, G4int(max_array[i] * pow(10.0, (G4double)decimals[i]))); j++;
+	      XmNmaximum, G4int(max_array[i] * std::pow(10.0, (G4double)decimals[i]))); j++;
     XtSetArg (slider_args[i][j], 
-	      XmNminimum, G4int(min_array[i] * pow(10.0, (G4double)decimals[i]))); j++;
+	      XmNminimum, G4int(min_array[i] * std::pow(10.0, (G4double)decimals[i]))); j++;
     XtSetArg (slider_args[i][j], 
-	      XmNvalue, G4int(value_array[i] * pow(10.0, (G4double)decimals[i]))); j++;
+	      XmNvalue, G4int(value_array[i] * std::pow(10.0, (G4double)decimals[i]))); j++;
     XtSetArg (slider_args[i][j], 
 	      XmNshowValue, show[i]); j++;
     XtSetArg (slider_args[i][j], 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.15 2002/11/20 15:05:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VDecayChannel.cc,v 1.16 2004/12/02 08:09:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -400,7 +400,7 @@ G4int G4VDecayChannel::GetAngularMomentum()
     const G4int D1Parity = daughters[0]->GetPDGiParity();
     const G4int D2iSpin  = daughters[1]->GetPDGiSpin();
     const G4int D2Parity = daughters[1]->GetPDGiParity();
-    const G4int MiniSpin = abs (D1iSpin - D2iSpin);
+    const G4int MiniSpin = std::abs (D1iSpin - D2iSpin);
     const G4int MaxiSpin = D1iSpin + D2iSpin;
     const G4int lMax = (PiSpin+D1iSpin+D2iSpin)/2; // l is allways int
     G4int lMin;
@@ -411,7 +411,7 @@ G4int G4VDecayChannel::GetAngularMomentum()
     }
 #endif
     for (G4int j=MiniSpin; j<=MaxiSpin; j+=2){    // loop over all possible spin couplings
-      lMin = abs(PiSpin-j)/2;
+      lMin = std::abs(PiSpin-j)/2;
 #ifdef G4VERBOSE 
       if (verboseLevel>1)
 	G4cout << "-> checking 2*j=" << j << G4endl;

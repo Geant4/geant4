@@ -1,44 +1,19 @@
-# $Id: GNUmakefile,v 1.4 2004/06/01 15:37:23 gcosmo Exp $
-# ---------------------------------------------------------------
-# GNUmakefile for parameterisations library.  G.Cosmo, 14/11/2000
-# ---------------------------------------------------------------
+# $Id: GNUmakefile,v 1.9 2004/12/15 08:49:47 gcosmo Exp $
+# ----------------------------------------------------------------
+# GNUmakefile for parameterisations library.  HPW 09-Nov-04.
+# ----------------------------------------------------------------
 
 name := G4parmodels
 
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
+SUBDIRS := gflash trd_clusters  
+SUBLIBS = G4gflash G4trdmodels
 
 GLOBLIBS  = libG4processes.lib libG4digits_hits.lib libG4track.lib
 GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
 GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 
-include $(G4INSTALL)/config/architecture.gmk
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
 
-CPPFLAGS += -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/global/HEPNumerics/include \
-            -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/navigation/include \
-            -I$(G4BASE)/track/include \
-            -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/cuts/include \
-            -I$(G4BASE)/processes/parameterisation/include \
-            -I$(G4BASE)/processes/electromagnetic/standard/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/particles/bosons/include \
-            -I$(G4BASE)/particles/hadrons/include \
-            -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/digits_hits/detector/include \
-            -I$(G4BASE)/digits_hits/hits/include
-
-include $(G4INSTALL)/config/common.gmk
-
-.PHONY: global
-
-global: lib
+include $(G4INSTALL)/config/globlib.gmk

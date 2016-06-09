@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.11 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SolidStore.cc,v 1.13 2004/09/03 08:17:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4SolidStore
 //
@@ -35,12 +35,14 @@
 #include "globals.hh"
 #include "G4SolidStore.hh"
 #include "G4GeometryManager.hh"
+#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables
 // ***************************************************************************
 //
 G4SolidStore* G4SolidStore::fgInstance = 0;
+G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
 G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
@@ -95,6 +97,7 @@ void G4SolidStore::Clean()
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     if (*pos) delete *pos; i++;
   }
 
@@ -110,12 +113,23 @@ void G4SolidStore::Clean()
 }
 
 // ***************************************************************************
+// Associate user notifier to the store
+// ***************************************************************************
+//
+void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
+{
+  GetInstance();
+  fgNotifier = pNotifier;
+}
+
+// ***************************************************************************
 // Add Solid to container
 // ***************************************************************************
 //
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
   GetInstance()->push_back(pSolid);
+  if (fgNotifier) fgNotifier->NotifyRegistration();
 }
 
 // ***************************************************************************
@@ -126,6 +140,7 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pSolid)

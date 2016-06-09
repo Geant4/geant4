@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004/06/09 15:04:35 daquinog Exp $
+# $Id: GNUmakefile,v 1.9 2004/12/14 13:11:06 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -19,12 +19,18 @@ SWIGFLAGS = -I../G4KernelWrapper \
 	-I$(G4INSTALL)/source/event/include \
 	-I$(G4INSTALL)/source/processes/transportation/include \
 	-I$(TIARA_BASE)/source/tiara/include \
-	-I$(TIARA_BASE)/source/tiaraPhysicsLists/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	-I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+        -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
 	-I$(TIARA_BASE)/source/CLHEPWrapper/include \
 	-I$(TIARA_BASE)/source/G4KernelWrapper/include \
 	-I${CLHEP_BASE_DIR}/include 
 
-#include $(TIARA_BASE)/source/hadronic_lists.gmk
+
+include $(TIARA_BASE)/source/hadronic_lists.gmk
 #SWIGFLAGS += ${LSTFLAGS}
 
 libdirTiara = $(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara
@@ -46,23 +52,25 @@ all: $(copyDeps) $(SWIGSO)
 include $(G4INSTALL)/config/binmake.gmk
 
 ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
+CPPFLAGS += `aida-config --include`
 # LDFLAGS  += `aida-config --lib`
 endif
 
 CPPFLAGS += -I$(TIARA_BASE)/source/tiara/include\
 	    -I$(PYTHON_INCLUDE_DIR) \
-	    -I$(TIARA_BASE)/source/tiaraPhysicsPackaging/include \
-	    -I$(TIARA_BASE)/source/tiaraPhysicsLists/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/LHEP_BIC_HP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_LEAD/include \
+	    -I$(G4INSTALL)/physics_lists/hadronic/LHEP_PRECO_HP/include \
 	    -I$(TIARA_BASE)/source/G4KernelWrapper/include
 
-LDFLAGS +=  -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara \
-	    -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiaraPhysicsPackaging \
-	    -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiaraPhysicsLists \
-	    -L$(PYTHON_LIB_DIR)
 
-LDLIBS1 += -ltiaraPhysicsLists \
-	   -ltiaraPhysicsPackaging-handMade
+LDFLAGS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara \
+	-L$(G4WORKDIR)/lib/plists/$(G4SYSTEM) \
+	-L$(PYTHON_LIB_DIR)
+
 
 ifdef G4ANALYSIS_USE
  LDLIBS += `aida-config --lib`

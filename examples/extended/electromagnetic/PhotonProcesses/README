@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2004/06/23 11:28:26 maire Exp $
+$Id: README,v 1.4 2004/09/29 10:37:47 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -65,11 +65,10 @@ $Id: README,v 1.3 2004/06/23 11:28:26 maire Exp $
 	5	"neutral secondaries: energy spectrum"
 	6	"neutral secondaries: costheta distribution"			
 
-	The histograms can be viewed using PAW. See below the note on 
-	ANAPHE+AIDA.
+	See below the note on histogram tools.
 	
  	One can control the name of the histograms file with the command:
- 	/testem/histo/setFileName  name  (default photonprocesses.paw)
+ 	/testem/histo/setFileName  name  (default photonprocesses.aida)
    	
 	Note that, by default, histograms are disabled. To activate them, 
 	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
@@ -140,4 +139,4 @@ histograms using UI command:
 
 /testem/histo/setFileType type
 
-The following types are available: hbook, root, xml.
+The following types are available: hbook, root, XML.

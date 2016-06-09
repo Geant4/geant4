@@ -185,13 +185,19 @@ particle interacting with the plane representing the radiographic film.
 x direction is along the beam direction, 
 y and z directions are orthogonal to the beam direction.
 
+Alternatively, if the variable G4ANALYSIS_USE is set, an hbk file
+is produced containig the Bragg peak in a histogram and in a ntuple.
+
+Setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+
+Users can download the analysis tools from:  
+http://aida.freehep.org/
+http://www.cern.ch/PI     
+
 ------------------------------------------------------------------------
 ----> 6. FUTURE PLANS
 
 Next planned improvements will be:
-
-** Use of AIDA and PI analysis tools to store the results of the 
-   simulation in .xml/.hbk files
  
 ** Addition of messengers to interactively change position, dimension
    and composition of all the beam line elements and of the 
@@ -207,5 +213,5 @@ Next planned improvements will be:
 for comments, advices, doubts and questions please contact: 
 cirrone@lns.infn.it, giorgiorusso@lns.infn.it
 
-last modified: Susanna Guatelli, 28/5/2004
+last modified: Susanna Guatelli, 30/11/2004
 

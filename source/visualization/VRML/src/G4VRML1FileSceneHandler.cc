@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VRML1FileSceneHandler.cc,v 1.9 2004/04/19 09:08:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada

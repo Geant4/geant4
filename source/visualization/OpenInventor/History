@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2004/06/14 09:27:33 gcosmo Exp $
+$Id: History,v 1.60 2004/12/02 15:31:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,161 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+26th November 2004  Guy Barrand  (openinventor-V06-02-02)
+- G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h : 
+  correct some warnings on g++-3.2.1 (reported by Tom Roberts).
+
+25th November 2004  Guy Barrand
+- G4OpenInventor[Viewer,SceneHandle] : handle aux edges.
+- G4OpenInventorViewer : in SetSolid, etc... avoid to do a FinishView
+  that will do a viewAll that may displace the camera.
+- G4OpenInventorViewer : put the camera under a group and put
+  a sensor (fGroupCameraSensor) on the group to detect that the viewer 
+  changed the camera type.
+- G4OpenInventor[Xt,Win]Viewer : GetCamera() to get camera of the viewer.
+- G4OpenInventorViewer : delete fSoCameraSensor.
+
+24th November 2004  John Allison
+- Fixed SetView to respond to view parameters and CameraSensorCB to
+  provide view parameters. Target point not quite right. Only for
+  orthogonal view so far.
+
+24th November 2004  Guy Barrand
+- So*.cc : have #ifdef G4VIS_BUILD_OI_DRIVER instead of OIX_DRIVER !!!
+- G4OpenInventor[Xt,Win]Viewer, SceneHandler : handle reduced wire frame
+  at the level of the view.
+- SoPolyhedron : reducedWireFramw field.
+
+23th November 2004  Guy Barrand
+- So*.cc : have #ifdef G4VIS_BUILD_OIX_DRIVER.
+
+22th November 2004  Guy Barrand
+- G4OpenInventor[Xt,Win]Viewer : "Set preview", "Set preview and full" 
+  menu items.
+- G4OpenInventorViewer : count nodes and shapes.
+- SoCounterAction : to count nodes.
+- G4OpenInventorViewer : SetSolid, SetWireFrame : arrange to avoid a SetView
+  for the moment. It will move the camera ! Arrange to not clear the
+  transient store.
+- G4OpenInventorViewer : commit commented SoNodeSensor on fSoCamera.
+- G4OpenInventorXtViewer : have a help dialog.
+- G4OpenInventorSceneHandler : delete the SbMatrix returned 
+  by G4OpenInventorTransform3D::GetSbMatrix. Not done before !
+- G4OpenInventorTransform3D : use SbMatrix instead of SoSFMatrix.
+- G4OpenInventorSceneHandler : cache SoResetTransform.
+- SoStyleCache : destructor protected.
+- G4OpenInventor[Xt,Win]Viewer : Help pulldown menu.
+- G4OpenInventorViewer : in "Scene graph stats", count triangles,lines,points.
+- G4OpenInventorViewer : set auto refresh by default.
+
+21th November 2004  Guy Barrand
+- G4OpenInventor[Xt,Win]Viewer, SceneHandler : add a simple picking that
+  dumps picked SoNode address, type and name.
+- G4OpenInventor[Xt,Win]Viewer : "Help controls" menu item.
+- G4OpenInventorSceneHandler::PreAddThis : comment the "ERROR leaf protocal"
+  message. Misleading to users.
+
+19th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler::ClearStore: clear the fSeparatorMap.
+
+18th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler::PreAddThis : handle viewer style.
+- G4OpenInventorView : have an SoOrthographicCamera
+  and a first implementation of SetView.
+- Removed redundant fLastVP from G4OpenInventorSceneHandler (JA).
+
+17th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler : rm the AddThis(G4Box,....). We use
+  then only the generic AddPrimitive(G4Polyhedron). Much simpler.
+
+15th November 2004  Guy Barrand
+- G4OpenInventorViewer : //FIXME comment out on 
+  f[Default]VP.SetCulling(false) by default. Not convinced that it is
+  the right thing to do.
+- G4OpenInventorViewer : have f[Default]VP.SetCulling(false) by default.
+- On viewer have "Erase detector, event" menuitems for Xt and Win.
+- G4OpenInventorWinViewer : have it inheriting G4OpenInventorViewer.
+- G4OpenInventorSceneHandler : WIN32 : correct some warnings.
+
+14th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler.cc : handle transparency.
+- SoImageWriter, SbPainter, SbPainterPS : material to produce pixmap PS.
+- G4OpenInventorViewer : base class for Inventor viewers.
+- Menuitem "Etc/Triangles" : to count rendered triangles.
+- Menuitem "File/IV" : to write the scene in an inventor file.
+
+14th November 2004  John Allison  (openinventor-V06-02-01)
+- Tag on branch openinventor-V06-02-01-branch.
+- Consolidating the changes below, plus:
+  - forcing culling off by default;
+  - forcing solid mode;
+  so that the user:
+  - sees all of the requested geometry volume tree;
+  - can use pointer button and CTRL-left-click to uncover (SHIFT-left-click
+    to re-cover);
+  - can use the hand button and right-click to get wireframe.
+- Removed G4OpenInventorSceneHandler::EndModeling (empty function).
+
+12th November 2004  Guy Barrand
+- G4OpenInventor.cc : initClass of Geant4_SoPolyhedron.
+- G4OpenInventorWinViewer.cc : WM_COMMAND : filter only messages
+  from the window viewer menu.
+- G4OpenInventorSceneHandler.cc : rm G4Polymarker::line handling.
+
+11th November 2004  Guy Barrand
+- Add SoPolyhedron that permits to visualize directly HepPolyhedron.
+- G4OpenInventorSceneHandler::AddThis : uses the generic
+  SoPolyhedron. Modeling is wireFrame by default.
+  Solid modeling is used only in case visAtb.SetForceSolid(true).
+- G4OpenInventorSceneHandler::PreAddThis : correct a flaw
+  in the non-leaf part ; in case mother not found in fSeparatorMap
+  the SoDetectorTreeKit were added nowhere ! This induced that 
+  exaN03Vis5 displayed no gemetry.
+- SoStyleCache : permit to cache commonly used colors, line styles and
+  light models.
+- G4OpenInventorSceneHandler : use SoStyleCache to minimize number of nodes.
+- End of the first world war. 
+- Death of Arrafat.
+
+10th November 2004  Guy Barrand
+- SoMarkerSet, SoGL2PSAction : corrections to work with SGI Inventor.
+- gl2ps : gl2psPrintPostScriptPixmap : fix nbit=2,4 width truncation. 
+  (On SoMarkerSet, the last column of pixmapswere missing ).
+
+9th November 2004  Guy Barrand
+- WIN32 : G4OpenInventorWinViewer : have a File pulldown menu
+  with an Escape button to quit secondary Windows event loops.
+- Xt : G4OpenInventorXtViewer : in destructor comment (and //FIXME)
+  the "delete fViewer". With SGI, it hangs.
+- Xt : Have a menubar and put escape button in the File pulldown menu.
+- SoGL2PSAction, gl2ps : action to handle PostScript production with gl2ps.
+- Xt : "PostScript" menu item.
+- WIN32 : "PostScript" menu item.
+
+8th November 2004  Guy Barrand
+- WIN32 : Have HEPVis/SbGL.h to access GL.h properly on Windows.
+  Use by SoMarkerSet.cc.
+- G4OpenInventor.cc : initialize SoMarkerSet.
+- G4OpenInventorWinViewer : correct bad viewer look and feel.
+
+7th November 2004  Guy Barrand
+- Have SoMarkerSet.h, .cc in the repository.
+- G4OpenInventorSceneHandler : 
+  Have a AddPrimitive(G4Polymarker) using SoMarkerSet.
+  SoMarkerSet draws markers in the frame buffer. It is much
+  more performant than having SoSphere and SoCube for markers.
+
+6th November 2004  Guy Barrand
+- G4OpenInventorXtViewer : restore the escape button.
+  This button is put in the "app buttons" of the SoXtExaminerViewer.
+  (The "app buttons" are put in the left border of decoration).
+  It is ok with SGI-2.1.510 and recent SoXt of Coin, 
+
+21th July 2004  Guy Barrand (openinventor-V06-02-00)
+- G4OpenInventorXtViewer : add include X11/Shell.h to have
+  XtNgeometry that may not come throught the includes of some
+  Inventor implementation.
 
 08th April 2004  Guy Barrand (openinventor-V06-01-00)
 - Bring in the repository the necessary HEPVis code. In fact few of HEPVis

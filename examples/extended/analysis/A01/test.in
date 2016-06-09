@@ -23,7 +23,6 @@
 /gun/particle pi+
 /mydet/momentum 100. GeV
 /mydet/fieldValue 200. tesla
-/vis/viewer/refresh
 /run/beamOn 5
 #
 /gun/particle e+
@@ -43,7 +42,6 @@
 /gun/particle pi+
 /mydet/momentum 10. GeV
 /mydet/fieldValue 20. tesla
-/vis/viewer/refresh
 /run/beamOn 5
 #
 /gun/particle e+
@@ -63,7 +61,6 @@
 /gun/particle pi+
 /mydet/momentum 1. GeV
 /mydet/fieldValue 2. tesla
-/vis/viewer/refresh
 /run/beamOn 5
 #
 /gun/particle e+

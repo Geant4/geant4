@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEOmegaMinusInelastic.cc,v 1.9 2003/10/31 18:04:17 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.10 2004/12/07 13:49:21 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997
@@ -68,7 +68,7 @@
     ek += tkin;
     currentParticle.SetKineticEnergy( ek );
     G4double et = ek + amas;
-    G4double p = sqrt( abs((et-amas)*(et+amas)) );
+    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     G4double pp = currentParticle.GetMomentum().mag();
     if( pp > 0.0 )
     {
@@ -82,7 +82,7 @@
     ek -= tkin;
     currentParticle.SetKineticEnergy( ek );
     et = ek + amas;
-    p = sqrt( abs((et-amas)*(et+amas)) );
+    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     pp = currentParticle.GetMomentum().mag();
     if( pp > 0.0 )
     {
@@ -145,7 +145,7 @@
     const G4double etOriginal = originalIncident->GetTotalEnergy();
 //    const G4double pOriginal = originalIncident->GetTotalMomentum();
     const G4double targetMass = targetParticle.GetMass();
-    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
+    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
@@ -246,9 +246,9 @@
               nt = np+nm+nz;
               if( nt > 0 )
               {
-                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                if( fabs(dum) < 1.0 )
+                if( std::fabs(dum) < 1.0 )
                 {
                   if( test >= 1.0e-10 )excs += dum*test;
                 }
@@ -280,9 +280,9 @@
               nt = np+nm+nz;
               if( (nt>=1) && (nt<=numSec) )
               {
-                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                if( fabs(dum) < 1.0 )
+                if( std::fabs(dum) < 1.0 )
                 {
                   if( test >= 1.0e-10 )excs += dum*test;
                 }

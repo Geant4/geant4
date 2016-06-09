@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.cc,v 1.7 2003/08/27 17:50:29 vnivanch Exp $
-// GEANT4 tag $Name: fieldex-V05-02-00 $
+// $Id: F03PhysicsList.cc,v 1.9 2004/12/03 15:22:19 grichine Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 
 #include "G4Timer.hh"
@@ -181,12 +181,8 @@ void F03PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4PAIonisation.hh"
-#include "G4ForwardXrayTR.hh"
 
 #include "F03StepCut.hh"
-
-#include "G4IonisationByLogicalVolume.hh"
 
 void F03PhysicsList::ConstructEM()
 {
@@ -222,7 +218,7 @@ void F03PhysicsList::ConstructEM()
      theeminusStepCut = new F03StepCut();
 
      pmanager->AddProcess(theeminusIonisation,-1,2,2);
-     pmanager->AddProcess(theeminusBremsstrahlung,-1,1,1); 
+     pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
      pmanager->AddProcess(theeminusStepCut,-1,-1,4);
      theeminusStepCut->SetMaxStep(MaxChargedStep) ;
 

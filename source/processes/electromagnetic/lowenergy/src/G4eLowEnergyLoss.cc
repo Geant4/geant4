@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.32 2004/06/01 14:03:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4eLowEnergyLoss.cc,v 1.34 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -209,9 +209,9 @@ void G4eLowEnergyLoss::BuildDEDXTable(
 
   //  calculate data members LOGRTable,RTable first
 
-  G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
+  G4double lrate = std::log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
-  RTable   =exp(LOGRTable);
+  RTable   =std::exp(LOGRTable);
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.
   //
@@ -418,7 +418,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   {
     if (Step >= fRangeNow)  finalT = 0.;
    //  else finalT = E*(1.-Step/fRangeNow) ;
-    else finalT = E*(1.-sqrt(Step/fRangeNow)) ;
+    else finalT = E*(1.-std::sqrt(Step/fRangeNow)) ;
   }
 
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;
@@ -452,13 +452,13 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    if(Charge > 0.0) aParticleChange.SetStatusChange(fStopButAlive);
-    else             aParticleChange.SetStatusChange(fStopAndKill);
+    if(Charge > 0.0) aParticleChange.ProposeTrackStatus(fStopButAlive);
+    else             aParticleChange.ProposeTrackStatus(fStopAndKill);
   }
 
   G4double edep = E - finalT;
 
-  aParticleChange.SetEnergyChange(finalT);
+  aParticleChange.ProposeEnergy(finalT);
 
   // Deexcitation of ionised atoms
   std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
@@ -507,7 +507,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   }
   delete deexcitationProducts;
 
-  aParticleChange.SetLocalEnergyDeposit(edep);
+  aParticleChange.ProposeLocalEnergyDeposit(edep);
 
   return &aParticleChange;
 }

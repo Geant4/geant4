@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Li6GEMProbability.cc,v 1.2 2003/11/03 17:53:04 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Li6GEMProbability.cc,v 1.3 2004/12/07 13:47:12 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -36,35 +36,35 @@ G4Li6GEMProbability::G4Li6GEMProbability() :
 {
   ExcitEnergies.push_back(2186.0*keV);
   ExcitSpins.push_back(3.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(24.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(24.0*keV));
   
   ExcitEnergies.push_back(3562.88*keV);
   ExcitSpins.push_back(0.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(8.2*eV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(8.2*eV));
 
   ExcitEnergies.push_back(4310.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(1.7*MeV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(1.7*MeV));
 
   ExcitEnergies.push_back(5366.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(540.0*keV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(540.0*keV));
 
   ExcitEnergies.push_back(5.65E+3*keV);
   ExcitSpins.push_back(1.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(1.5*MeV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(1.5*MeV));
 
   ExcitEnergies.push_back(15800.0*keV);
   ExcitSpins.push_back(3.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(17.8*MeV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(17.8*MeV));
 
   ExcitEnergies.push_back(23.0E+3*keV);
   ExcitSpins.push_back(4.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(12.0*MeV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(12.0*MeV));
 
   ExcitEnergies.push_back(25.0E+3*keV);
   ExcitSpins.push_back(4.0);
-  ExcitLifetimes.push_back(hbar_Planck*log(2.0)/(4.0*MeV));
+  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(4.0*MeV));
   
   SetExcitationEnergiesPtr(&ExcitEnergies);
   SetExcitationSpinsPtr(&ExcitSpins);

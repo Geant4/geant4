@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.cc,v 1.9 2003/06/16 16:52:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Ellipse.cc,v 1.10 2004/12/02 09:31:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -87,7 +87,7 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
   newLocation.setZ(0);
   G4double axisZ        = ( tr*position.GetPZ() ).unit().z();
 
-  if (abs(axisZ)<kAngTolerance) 
+  if (std::abs(axisZ)<kAngTolerance) 
     return 0;
   
   G4Vector3D newAxis(0, 0, axisZ>0? +1: -1);
@@ -112,14 +112,14 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
     u = 3*pi/8;
   else if ((abmag < -FLT_MAX) && (prod < -FLT_MAX))
     u = -3*pi/8;
-  else if ((abs(abmag) < perMillion) && (abs(prod) < perMillion))
+  else if ((std::abs(abmag) < perMillion) && (std::abs(prod) < perMillion))
     u = 0.;
   else
-    u = atan2(prod,abmag) / 2;
+    u = std::atan2(prod,abmag) / 2;
 
   // get the coordinate axis directions and the semiaxis lengths
-  G4Vector3D sAxis1          = G4Vector3D( a*cos(u)+b*sin(u) );
-  G4Vector3D sAxis2          = G4Vector3D( a*cos(u+pi/2)+b*sin(u+pi/2) );
+  G4Vector3D sAxis1          = G4Vector3D( a*std::cos(u)+b*std::sin(u) );
+  G4Vector3D sAxis2          = G4Vector3D( a*std::cos(u+pi/2)+b*std::sin(u+pi/2) );
   G4double newSemiAxis1      = sAxis1.mag();
   G4double newSemiAxis2      = sAxis2.mag();
   G4Vector3D newRefDirection = sAxis1;
@@ -161,7 +161,7 @@ void G4Ellipse::InitBounded()
   // belonging to the points with an extreme x, y and z coordinate
   for (G4int i=0; i<3; i++) 
   {
-    G4double u= atan2(position.GetPY()(i)*semiAxis2,
+    G4double u= std::atan2(position.GetPY()(i)*semiAxis2,
 		      position.GetPX()(i)*semiAxis1);
     if (IsPOn(u)) 
       bBox.Extend(GetPoint(u));

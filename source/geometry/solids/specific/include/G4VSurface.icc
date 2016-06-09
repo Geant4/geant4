@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.2 2004/05/28 13:13:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VSurface.icc,v 1.6 2004/12/02 09:31:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
    //      xx = p - t*n
    //
    //         where
-   //         t = n * (p - x0) / abs(n)
+   //         t = n * (p - x0) / std::abs(n)
    //
    G4double t;
    G4ThreeVector n = n0.unit();
@@ -304,7 +304,7 @@ void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min,
    fNeighbours[0] = axis0min;
    fNeighbours[1] = axis1min;
    fNeighbours[2] = axis0max;
-   fNeighbours[4] = axis1max;
+   fNeighbours[3] = axis1max;
 }
 
 //=====================================================================
@@ -313,29 +313,38 @@ void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min,
 inline
 G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces) 
 {
+
+  int sAxis0Min = sAxis0 & sAxisMin ;
+  int sAxis1Min = sAxis1 & sAxisMin ;
+  int sAxis0Max = sAxis0 & sAxisMax ;
+  int sAxis1Max = sAxis1 & sAxisMax ;
+
    G4int i = 0;
    
-   if (areacode & (sAxis0 | sAxisMin)) {
-       surfaces[i] = fNeighbours[0];
-       i++;
-   }
-   if (areacode & (sAxis1 | sAxisMin)) {
-       surfaces[i] = fNeighbours[1];
-       i++;
-       if (i == 2) return i;
-   }
-   if (areacode & (sAxis0 | sAxisMax)) {
-       surfaces[i] = fNeighbours[2];
-       i++;
-       if (i == 2) return i;
-   }
-   if (areacode & (sAxis1 | sAxisMax)) {
-       surfaces[i] = fNeighbours[3];
-       i++;
-       if (i == 2) return i;
-   }
-   
-   return i;
+  if ( (areacode & sAxis0Min ) == sAxis0Min ) {
+    surfaces[i] = fNeighbours[0] ;
+    i++ ;
+  }
+  
+  if ( ( areacode & sAxis1Min ) == sAxis1Min ) {
+     surfaces[i] = fNeighbours[1] ;
+   i++ ;
+    if ( i == 2 ) return i ;
+  }
+
+  if ( ( areacode & sAxis0Max ) == sAxis0Max ) {
+    surfaces[i] = fNeighbours[2] ;
+    i++ ;
+    if ( i == 2 ) return i ;
+  }
+  
+  if ( ( areacode & sAxis1Max ) == sAxis1Max ) {
+    surfaces[i] = fNeighbours[3] ;
+    i++ ;
+    if ( i == 2 ) return i ;
+  }
+    
+  return i ;
 }
 
 //=====================================================================
@@ -351,13 +360,13 @@ G4ThreeVector G4VSurface::GetCorner(G4int areacode) const
                   FatalException, "Area code must represent corner.");
    }
    
-   if ((areacode & sCMin1Min) == sCMin1Min) { 
+   if ((areacode & sC0Min1Min) == sC0Min1Min) { 
       return fCorners[0];
-   } else if ((areacode & sCMax1Min) == sCMax1Min) { 
+   } else if ((areacode & sC0Max1Min) == sC0Max1Min) { 
       return fCorners[1];
-   } else if ((areacode & sCMax1Max) == sCMax1Max) {
+   } else if ((areacode & sC0Max1Max) == sC0Max1Max) {
       return fCorners[2];
-   } else if ((areacode & sCMin1Max) == sCMin1Max) { 
+   } else if ((areacode & sC0Min1Max) == sC0Min1Max) { 
       return fCorners[3];
    } else {
       G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl

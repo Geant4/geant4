@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2004/03/23 15:44:19 japost Exp $
+$Id: History,v 1.16 2004/12/03 16:07:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 3rd, 2004 Gabriele Cosmo
+----------------------------
+- Implemented migration to <cmath>.
+
+Dec 3rd, 2004 Vladimir Grichine
+-------------------------------
+- Removed dependency on old PAI and XTR models in PhysicsList.
+
+Sep 15rd, 2004 V.Ivanchenko (fieldex03-V06-02-00)
+-------------------------------------------------
+- Minor cleanup of PhysicsList.
+
 Mar 23rd, 2004 John Apostolakis (fieldex03-V06-00-00)
 -----------------------------------------------------
-- F03FieldSetup: fixed SetFieldValue methods to update equation, fld-manager
-- F03FieldMessenger: added printout of value after Set Command
+- F03FieldSetup: fixed SetFieldValue methods to update equation, fld-manager.
+- F03FieldMessenger: added printout of value after Set Command.
 
 Dec  1st, 2003 John Apostolakis (fieldex03-V05-02-00)
 -----------------------------------------------------

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.25 2004/01/21 18:05:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4hIonisation.hh,v 1.28 2004/12/01 19:37:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -84,7 +85,7 @@ public:
 
   G4hIonisation(const G4String& name = "hIoni");
 
-  ~G4hIonisation();
+  virtual ~G4hIonisation();
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
@@ -111,7 +112,8 @@ public:
 
 protected:
 
-  virtual const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
@@ -152,7 +154,7 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 {
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;
-  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
+  G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
   return mass*(g - 1.0);
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4QCaptureAtRest.hh,v 1.2 2004/03/18 08:02:37 mkossov Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
 //                 by Mikhail Kossov, December 2003.

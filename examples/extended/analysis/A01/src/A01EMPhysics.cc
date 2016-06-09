@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.cc,v 1.6 2004/01/06 02:53:22 tkoi Exp $
+// $Id: A01EMPhysics.cc,v 1.7 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 //
 //
@@ -55,21 +55,7 @@ A01EMPhysics::~A01EMPhysics()
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
 
-void A01EMPhysics::ConstructParticle()
-{
-  // gamma
-  G4Gamma::GammaDefinition();
-
-  // electron
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-}
-
-
 #include "G4ProcessManager.hh"
-
 
 void A01EMPhysics::ConstructProcess()
 {

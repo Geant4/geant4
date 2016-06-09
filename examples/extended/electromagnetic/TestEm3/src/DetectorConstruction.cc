@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorConstruction.cc,v 1.11 2004/06/09 14:18:47 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: DetectorConstruction.cc,v 1.13 2004/11/23 14:05:30 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +35,6 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4UniformMagField.hh"
-#include "G4UserLimits.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -56,8 +54,8 @@ DetectorConstruction::DetectorConstruction()
 {
   // default parameter values of the calorimeter
   NbOfAbsor = 2;
-  AbsorThickness[0] = 2.3*mm;
-  AbsorThickness[1] = 5.7*mm;
+  AbsorThickness[1] = 2.3*mm;
+  AbsorThickness[2] = 5.7*mm;
   NbOfLayers        = 50;
   CalorSizeYZ       = 40.*cm;
   ComputeCalorParameters();
@@ -65,11 +63,8 @@ DetectorConstruction::DetectorConstruction()
   // materials
   DefineMaterials();
   SetWorldMaterial("Galactic");
-  SetAbsorMaterial(0,"Lead");
-  SetAbsorMaterial(1,"liquidArgon");
-
-  // create UserLimits
-  userLimits = new G4UserLimits();
+  SetAbsorMaterial(1,"Lead");
+  SetAbsorMaterial(2,"liquidArgon");
 
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
@@ -79,7 +74,6 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction()
 {
-  delete userLimits;
   delete detectorMessenger;
 }
 
@@ -153,6 +147,11 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(O, natoms=1);
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
   H2O->SetChemicalFormula("H_2O");
+  
+  G4Material* CH = 
+  new G4Material("Polystyrene", density= 1.032*g/cm3, ncomponents=2);
+  CH->AddElement(C, natoms=1);
+  CH->AddElement(H, natoms=1);
 
   G4Material* Sci = 
   new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
@@ -254,7 +253,7 @@ void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
      LayerThickness = 0.;
-     for (G4int iAbs=0; iAbs<NbOfAbsor; iAbs++)
+     for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++)
      LayerThickness += AbsorThickness[iAbs];
      CalorThickness = NbOfLayers*LayerThickness;
      
@@ -342,15 +341,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //
 
   G4double xfront = -0.5*LayerThickness;
-  for (G4int k=0; k<NbOfAbsor; k++)
+  for (G4int k=1; k<=NbOfAbsor; k++)
      { solidAbsor[k] = new G4Box("Absorber",		//its name
                           AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
 
       logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
       			                  AbsorMaterial[k], //its material
       			                  AbsorMaterial[k]->GetName());
-
-      logicAbsor[k]->SetUserLimits(userLimits);
 
       G4double xcenter = xfront+0.5*AbsorThickness[k];
       xfront += AbsorThickness[k];
@@ -377,7 +374,7 @@ void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n-------------------------------------------------------------"
          << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
-  for (G4int i=0; i<NbOfAbsor; i++)
+  for (G4int i=1; i<=NbOfAbsor; i++)
      {
       G4cout << "\n \t" << std::setw(12) << AbsorMaterial[i]->GetName() <<": "
               << std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
@@ -385,7 +382,7 @@ void DetectorConstruction::PrintCalorParameters()
   G4cout << "\n-------------------------------------------------------------\n";
   
   G4cout << "\n" << defaultMaterial << G4endl;    
-  for (G4int j=0; j<NbOfAbsor; j++)
+  for (G4int j=1; j<=NbOfAbsor; j++)
      G4cout << "\n" << AbsorMaterial[j] << G4endl;
 
   G4cout << "\n-------------------------------------------------------------\n";
@@ -420,9 +417,9 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
 {
   // set the number of Absorbers
   //
-  if (ival < 1 || ival > MaxAbsor)
+  if (ival < 1 || ival > (MaxAbsor-1))
     { G4cout << "\n ---> warning from SetNbOfAbsor: "
-             << ival << " must be at least 1 and and most " << MaxAbsor
+             << ival << " must be at least 1 and and most " << MaxAbsor-1
 	     << ". Command refused" << G4endl;
       return;
     }
@@ -435,7 +432,7 @@ void DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
 {
   // search the material by its name
   //
-  if (ival >= NbOfAbsor)
+  if (ival > NbOfAbsor)
     { G4cout << "\n --->warning from SetAbsorMaterial: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
@@ -451,7 +448,7 @@ void DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
 {
   // change Absorber thickness
   //
-  if (ival >= NbOfAbsor)
+  if (ival > NbOfAbsor)
     { G4cout << "\n --->warning from SetAbsorThickness: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
@@ -501,21 +498,6 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetMaxStepSize(G4double val)
-{
-  // set the maximum allowed step size
-  //
-  if (val <= DBL_MIN)
-    { G4cout << "\n --->warning from SetMaxStepSize: maxStep "
-             << val  << " out of range. Command refused" << G4endl;
-      return;
-    }
-  userLimits->SetMaxAllowedStep(val);
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

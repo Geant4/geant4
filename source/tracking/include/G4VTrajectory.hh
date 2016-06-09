@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.12 2003/06/16 17:13:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VTrajectory.hh,v 1.13 2004/07/05 17:08:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -59,12 +59,11 @@ class G4VTrajectory
 
 // Constructor/Destrcutor
 
-   G4VTrajectory() {;}
-   virtual ~G4VTrajectory() {;}
+   G4VTrajectory();
+   virtual ~G4VTrajectory();
 
 // Operators
-   inline int operator == (const G4VTrajectory& right) const
-   {return (this==&right);} 
+   G4bool operator == (const G4VTrajectory& right) const;
 
 // Get/Set functions 
    virtual G4int GetTrackID() const = 0;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.28 2003/11/12 13:43:25 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VSceneHandler.cc,v 1.33 2004/12/10 18:16:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // John Allison  19th July 1996
@@ -225,7 +225,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   const G4double length(scale.GetLength());
   const G4double halfLength(length / 2.);
   const G4double tickLength(length / 20.);
-  const G4double piBy2(M_PI / 2.);
+  const G4double piBy2(halfpi);
 
   // Get size of scene...
   const G4double xmin = sceneExtent.GetXmin();
@@ -317,15 +317,6 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   switch (polymarker.GetMarkerType()) {
   default:
-  case G4Polymarker::line:
-    {
-      G4Polyline polyline (polymarker);
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	polyline.push_back (polymarker[iPoint]);
-      }
-      AddPrimitive (polyline);
-    }
-    break;
   case G4Polymarker::dots:
     {
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
@@ -403,13 +394,12 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   default:
     G4Polyhedron::SetNumberOfRotationSteps
 	(fpModel -> GetModelingParameters () -> GetNoOfSides ());
-    pPolyhedron = solid.CreatePolyhedron ();
+    pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
       pPolyhedron -> SetVisAttributes
 	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
       AddPrimitive (*pPolyhedron);
-      delete pPolyhedron;
     }
     else {
       G4VisManager::Verbosity verbosity =
@@ -529,10 +519,10 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 }
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
-  // Colour is determined by the applicable (real) vis attributes.
-  const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
-  return pVA -> GetColour ();
+  // Colour is determined by the applicable vis attributes.
+  return fpViewer ->
+    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->
+    GetColour ();
 }
 
 const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
@@ -541,16 +531,6 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
     pVA = fpViewer -> GetViewParameters (). GetDefaultTextVisAttributes ();
   }
   return pVA -> GetColour ();
-}
-
-G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
-(const G4Visible& visible) {
-  // Drawing style is determined by the applicable (real) vis
-  // attributes, except when overridden - see GetDrawingStyle (const
-  // G4VisAttributes* pVisAttribs).
-  const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
-  return GetDrawingStyle (pVA);
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
@@ -563,8 +543,8 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
       pVisAttribs -> GetForcedDrawingStyle ();
-    // This is complicated because is hidden line removal has been
-    // requested we wish to preserve this.
+    // This is complicated because if hidden line and surface removal
+    // has been requested we wish to preserve this sometimes.
     switch (forcedStyle) {
     case (G4VisAttributes::solid):
       switch (style) {
@@ -582,22 +562,21 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
       break;
     case (G4VisAttributes::wireframe):
     default:
-      switch (style) {
-      case (G4ViewParameters::hlhsr):
-	style = G4ViewParameters::hlr;
-	break;
-      case (G4ViewParameters::hsr):
-	style = G4ViewParameters::wireframe;
-	break;
-      case (G4ViewParameters::hlr):
-      case (G4ViewParameters::wireframe):
-      default:
-	break;
-      }	
+      // But if forced style is wireframe, do it, because one of its
+      // main uses is in displaying the consituent solids of a Boolean
+      // solid and their surfaces overlap with the resulting Booean
+      // solid, making a mess if hlr is specified.
+      style = G4ViewParameters::wireframe;
       break;
     }
   }
   return style;
+}
+
+G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4VisAttributes* pVisAttribs) {
+  G4bool isAuxEdgeVisible = fpViewer->GetViewParameters().IsAuxEdgeVisible ();
+  if (pVisAttribs -> IsForceAuxEdgeVisible()) isAuxEdgeVisible = true;
+  return isAuxEdgeVisible;
 }
 
 G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker, 

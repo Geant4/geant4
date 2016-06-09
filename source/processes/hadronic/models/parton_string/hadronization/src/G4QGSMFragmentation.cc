@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4QGSMFragmentation.cc,v 1.3 2004/12/07 13:50:15 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -74,7 +74,7 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 {    
   G4double z;    
   G4double theA(0), d1, d2, yf;
-  G4int absCode = abs( PartonEncoding );
+  G4int absCode = std::abs( PartonEncoding );
   if (absCode < 10)
   { 
     if(absCode == 1 || absCode == 2) theA = arho;
@@ -86,7 +86,7 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
       z  = zmin + G4UniformRand() * (zmax - zmin);
       d1 =  (1. - z);
       d2 =  (alft - theA);
-      yf = pow(d1, d2);
+      yf = std::pow(d1, d2);
     } 
     while (G4UniformRand() > yf);
   }
@@ -111,7 +111,7 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
     {
       z = zmin + G4UniformRand() * (zmax - zmin);
       d1 =  (1. - z);
-      yf = pow(d1, d2);
+      yf = std::pow(d1, d2);
     } 
     while (G4UniformRand() > yf); 
   }

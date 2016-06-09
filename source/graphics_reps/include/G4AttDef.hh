@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh,v 1.3 2002/10/24 14:35:14 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4AttDef.hh,v 1.4 2004/11/11 16:39:53 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH
@@ -81,11 +81,11 @@
     G4String m_name;
     /// A short description of the attribute
     G4String m_desc;
-    /// The category (Draw, Physics, PickAction, Association) 
+    /// The category (Draw, Physics, PickAction, Association, etc.) 
     G4String m_category;
-    /// Some extra property of the attribute (units etc)
+    /// Some extra property of the attribute (units, etc.)
     G4String m_extra;
-    /// The type of the value of the attribute (int, double, string)
+    /// The type of the value of the attribute (int, double, vector, etc.)
     G4String m_valueType;
   };
 #endif //G4ATTDEF_H

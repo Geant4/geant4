@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.16 2001/08/24 20:36:17 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.17 2004/09/13 18:04:55 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -90,6 +90,13 @@ public: // With description
   }
   G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
     return this;
+  }
+
+  const G4VPhysicalVolume* GetTopPhysicalVolume () const {return fpTopPV;}
+  G4int GetRequestedDepth () const {return fRequestedDepth;}
+
+  void SetRequestedDepth (G4int requestedDepth) {
+    fRequestedDepth = requestedDepth;
   }
 
   G4bool Validate (G4bool warn);

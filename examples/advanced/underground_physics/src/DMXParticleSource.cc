@@ -47,7 +47,7 @@
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "Randomize.hh"
-#include <math.h>
+#include <cmath>
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -272,19 +272,19 @@ void DMXParticleSource::GenerateIsotropicFlux()
 
   G4double sintheta, sinphi, costheta, cosphi;
   rndm = G4UniformRand();
-  costheta = cos(MinTheta) - rndm * (cos(MinTheta) - cos(MaxTheta));
-  sintheta = sqrt(1. - costheta*costheta);
+  costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+  sintheta = std::sqrt(1. - costheta*costheta);
   
   rndm2 = G4UniformRand();
   Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
-  sinphi = sin(Phi);
-  cosphi = cos(Phi);
+  sinphi = std::sin(Phi);
+  cosphi = std::cos(Phi);
 
   px = -sintheta * cosphi;
   py = -sintheta * sinphi;
   pz = -costheta;
 
-  G4double ResMag = sqrt((px*px) + (py*py) + (pz*pz));
+  G4double ResMag = std::sqrt((px*px) + (py*py) + (pz*pz));
   px = px/ResMag;
   py = py/ResMag;
   pz = pz/ResMag;
@@ -396,7 +396,7 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
   // create new primaries and set them to the vertex
   G4double mass =  particle_definition->GetPDGMass();
   G4double energy = particle_energy + mass;
-  G4double pmom = sqrt(energy*energy-mass*mass);
+  G4double pmom = std::sqrt(energy*energy-mass*mass);
   G4double px = pmom*particle_momentum_direction.x();
   G4double py = pmom*particle_momentum_direction.y();
   G4double pz = pmom*particle_momentum_direction.z();

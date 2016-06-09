@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.13 2003/11/25 18:06:26 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: F01DetectorConstruction.cc,v 1.14 2004/12/02 11:32:59 japost Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -31,9 +31,6 @@
 
 #include "F01CalorimeterSD.hh"
 #include "F01FieldSetup.hh"
-
-#include "G4VClusterModel.hh"
-#include "G4PAIclusterModel.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.32 2003/06/16 17:02:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VeEnergyLoss.cc,v 1.34 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 // -----------------------------------------------------------------------------
@@ -95,7 +95,7 @@ G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor and destructor
+using namespace std;
  
 G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
@@ -520,7 +520,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-      safety=std::min(presafety,postsafety);
+      safety=min(presafety,postsafety);
 
       if(safety<rcut)
       {
@@ -676,7 +676,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
              // update the particle direction and kinetic energy
              if(subdelta > 0)
-               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+               aParticleChange.ProposeMomentumDirection(Px,Py,Pz) ;
              E = Tkin ;
 
           }
@@ -704,12 +704,12 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
    if (finalT <= 0. )
    {
      finalT = 0.;
-     if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-     else             aParticleChange.SetStatusChange(fStopButAlive);
+     if (Charge < 0.) aParticleChange.ProposeTrackStatus(fStopAndKill);
+     else             aParticleChange.ProposeTrackStatus(fStopButAlive);
    }
 
-  aParticleChange.SetEnergyChange(finalT);
-  aParticleChange.SetLocalEnergyDeposit(E-finalT);
+  aParticleChange.ProposeEnergy(finalT);
+  aParticleChange.ProposeLocalEnergyDeposit(E-finalT);
 
   return &aParticleChange;
 }

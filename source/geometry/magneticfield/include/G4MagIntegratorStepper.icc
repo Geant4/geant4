@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.7 2002/11/20 18:10:44 japost Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4MagIntegratorStepper.icc,v 1.8 2004/12/02 09:55:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 inline
@@ -61,8 +61,8 @@ void G4MagIntegratorStepper::NormaliseTangentVector( G4double vec[6] )
 {
    double drds2 = vec[3]*vec[3]+vec[4]*vec[4]+vec[5]*vec[5];
 
-   if( fabs(drds2 - 1.0) > 1.e-14 ){
-      double normx = 1.0 / sqrt(drds2);
+   if( std::fabs(drds2 - 1.0) > 1.e-14 ){
+      double normx = 1.0 / std::sqrt(drds2);
       for(int i=0;i<3;i++) 
 	 vec[i+3] *= normx;   
    }

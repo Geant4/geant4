@@ -64,7 +64,7 @@ std::vector<G4double> InitN2RefIndex(G4double pressure, G4double temperature){
     pfe  = SellN2F1/(SellN2E1*SellN2E1 - epho*epho )  +
       SellN2F2/(SellN2E2*SellN2E2 - epho*epho );
     cpfe=0.3738*(GasRhoN2Cur/GasMolWeightN2)*pfe;
-    RefN2[ibinwn]=pow((1.0+2*cpfe)/(1.0-cpfe),0.5); 
+    RefN2[ibinwn]=std::pow((1.0+2*cpfe)/(1.0-cpfe),0.5); 
   }
   return RefN2;
 }
@@ -144,7 +144,7 @@ void  HistoRichTbMaterialProperties(RichTbRunConfig* RConfig) {
   for(G4int Iabin=0; Iabin<100; Iabin ++ ) {
    
     // G4double waLInmu = waL/1000.0;
-    // G4double Aetr = Aparam* exp(-Cparam * thickness / pow(waLInmu,4) );
+    // G4double Aetr = Aparam* std::exp(-Cparam * thickness / std::pow(waLInmu,4) );
 
     waL += stepsize;
   }
@@ -203,7 +203,7 @@ std::vector<G4double>GetAerogelRScatLength(AerogelType CurrentAerogelType) {
       G4double ephoton=AgelPhotW[ibinw]/eV;
       //In the following the 1000 is to convert form nm to micrometer
       G4double wphoton=(PhotMomWaveConv/ephoton)/1000.0;
-      AgelRayleighScatLength[ibinw]=(pow(wphoton,4))/aClarity;
+      AgelRayleighScatLength[ibinw]=(std::pow(wphoton,4))/aClarity;
  
     }
   }
@@ -219,8 +219,8 @@ G4double GetCurrentBulkTrans(G4double currentMatRefIndex,
   // it is only an approximate calulation. 
   G4double na=  currentMatRefIndex;
   G4double nb=  currentNeighbourRefIndex;
-  G4double LossAtEntrance=pow(((na-nb)/(na+nb)),2.0);
-  G4double LossAtExit=pow(((nb-na)/(nb+na)),2.0);
+  G4double LossAtEntrance=std::pow(((na-nb)/(na+nb)),2.0);
+  G4double LossAtExit=std::pow(((nb-na)/(nb+na)),2.0);
   
   G4double LightLossAtExternalSurface= LossAtEntrance+ LossAtExit;
   

@@ -28,7 +28,7 @@
 //
 //
 // $Id: RemSimEventAction.cc,v 1.7 2004/05/27 12:31:31 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 

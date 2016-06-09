@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.99 2004/06/14 10:42:12 gcosmo Exp $
+# $Id: architecture.gmk,v 1.100 2004/10/29 17:27:45 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,11 +13,11 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++   Linux (Red Hat 7.3), gcc-3.2.3 (default)
+#          Linux-g++   Linux (Red Hat Enterprise/SCL3), gcc-3.2.3 (default)
 #
 #          SUN-CC      SunOS 5.8, CC 5.4
 #
-#          WIN32-VC7   Windows/2000/XP and Microsoft Visual C++ 7.1 .NET
+#          WIN32-VC    Windows/XP and Microsoft Visual C++ 7.1 .NET
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 

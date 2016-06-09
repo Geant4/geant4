@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.51 2003/06/16 17:00:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.53 2004/11/18 12:08:52 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -56,10 +56,15 @@
 // 31.05.2002 V.Ivanchenko     Add path of Fluo + Auger cuts to AtomicDeexcitation
 // 14.06.2002 V.Ivanchenko     By default do not cheak range of e-
 // 21.01.2003 V.Ivanchenko     Cut per region
+// 10.05.2004 P.Rodrigues      Changes to accommodate new angular generators
 //
 // --------------------------------------------------------------
 
 #include "G4LowEnergyPhotoElectric.hh"
+
+#include "G4VPhotoElectricAngularDistribution.hh"
+#include "G4PhotoElectricAngularGenerator462.hh"
+#include "G4PhotoElectricAngularGeneratorStandard.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
@@ -99,6 +104,9 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   shellCrossSectionHandler = new G4CrossSectionHandler();
   meanFreePathTable = 0;
   rangeTest = new G4RangeNoTest;
+  generatorName = "geant4.6.2";
+  ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");              // default generator
+
 
   if (verboseLevel > 0)
     {
@@ -116,6 +124,7 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
   delete shellCrossSectionHandler;
   delete meanFreePathTable;
   delete rangeTest;
+  delete ElectronAngularGenerator;
 }
 
 void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& )
@@ -147,9 +156,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   if (photonEnergy <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
  
@@ -187,9 +196,13 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
       if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
 	{
-	  // The electron is created in the direction of the incident photon ...
+
+	  // Calculate direction of the photoelectron
+	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy);
+
+	  // The electron is created ...
 	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
-							       photonDirection,
+							       electronDirection,
 							       eKineticEnergy);
 	  electronVector.push_back(electron);
 	}
@@ -284,11 +297,11 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     }
 
   // Kill the incident photon
-  aParticleChange.SetMomentumChange( 0., 0., 0. );
-  aParticleChange.SetEnergyChange( 0. );
+  aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
+  aParticleChange.ProposeEnergy( 0. );
 
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
-  aParticleChange.SetStatusChange( fStopAndKill );
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeTrackStatus( fStopAndKill );
 
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
@@ -336,4 +349,32 @@ void G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(G4double cut)
 void G4LowEnergyPhotoElectric::ActivateAuger(G4bool val)
 {
   deexcitationManager.ActivateAugerElectronProduction(val);
+}
+
+void G4LowEnergyPhotoElectric::SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution)
+{
+  ElectronAngularGenerator = distribution;
+  ElectronAngularGenerator->PrintGeneratorInformation();
+}
+
+void G4LowEnergyPhotoElectric::SetAngularGenerator(const G4String& name)
+{
+  if (name == "default") 
+    {
+      delete ElectronAngularGenerator;
+      ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");
+      generatorName = name;
+    }
+  else if (name == "standard")
+    {
+      delete ElectronAngularGenerator;
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorStandard("GEANT4StandardEMPhysics");
+      generatorName = name;
+    }
+  else
+    {
+      G4Exception("G4LowEnergyPhotoElectric::SetAngularGenerator - generator does not exist");
+    }
+
+  ElectronAngularGenerator->PrintGeneratorInformation();
 }

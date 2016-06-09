@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.3 2004/06/21 10:57:15 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: StackingAction.cc,v 1.4 2004/12/02 16:19:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (charge != 0.) histoManager->FillHisto(2,energy);
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma())
-      histoManager->FillHisto(3, log10(energy/MeV));
+      histoManager->FillHisto(3, std::log10(energy/MeV));
 
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;

@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.5 2004/05/22 12:57:04 guatelli Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.7 2004/11/23 11:43:21 guatelli Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -39,6 +39,7 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 # include <AIDA/AIDA.h>
+#include "RemSimAnalysisMessenger.hh"
 
 namespace AIDA 
 {
@@ -51,6 +52,7 @@ namespace AIDA
   class ITreeFactory;
 };
 
+class RemSimAnalysisMessenger;
 class RemSimAnalysisManager { 
 
 public:
@@ -80,6 +82,12 @@ public:
   void PrimaryEnergyOut(G4double);
   // Energy of primary particles outgoing the phantom 
 
+  void particleShape(G4double, G4double);
+
+  void energyDepShape(G4double, G4double, G4double);
+
+  void SetFormat(G4String);
+
   void finish();
 
 private:
@@ -102,6 +110,11 @@ private:
   AIDA::IHistogram1D* primaryInitialEout;
   AIDA::IHistogram1D* initialE;
   AIDA::IHistogram1D* initialEout;
+  AIDA::IHistogram2D* shape;
+  AIDA::IHistogram2D* energyShape;
+  
+  RemSimAnalysisMessenger* messenger;
+  G4String fileFormat; 
 };
 #endif
 #endif

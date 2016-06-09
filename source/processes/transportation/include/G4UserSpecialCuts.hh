@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4UserSpecialCuts.hh,v 1.7 2003/11/26 14:51:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UserSpecialCuts.hh,v 1.8 2004/09/09 10:48:08 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // class description
 //
@@ -30,9 +29,8 @@
 // in the UserPhysicsList, in order to take into account the user limits
 // defined in the G4UserLimits object attached to a logical volume.
 
-// ------------------------------------------------------------
-//                  15 April 1998  M.Maire
-// ------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef G4UserSpecialCuts_h
 #define G4UserSpecialCuts_h 1
 
@@ -41,6 +39,8 @@
 #include "G4VProcess.hh"
 
 class G4LossTableManager;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4UserSpecialCuts : public G4VProcess 
 {
@@ -99,6 +99,8 @@ class G4UserSpecialCuts : public G4VProcess
   G4LossTableManager* theLossTableManager;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

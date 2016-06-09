@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPPhotonXSection.hh,v 1.8 2003/06/16 17:11:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #ifndef G4NeutronHPPhotonXSection_h
 #define G4NeutronHPPhotonXSection_h 1

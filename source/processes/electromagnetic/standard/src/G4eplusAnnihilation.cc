@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.16 2004/03/10 16:48:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4eplusAnnihilation.cc,v 1.20 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,7 +38,8 @@
 // 17-09-01, migration of Materials to pure STL (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)   
-// 
+// 08-11-04, Remove of Store/Retrieve tables (V.Ivantchenko)
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,7 +48,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName,
     G4ProcessType type):G4VRestDiscreteProcess (processName, type),
@@ -74,6 +75,12 @@ G4eplusAnnihilation::~G4eplusAnnihilation()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4eplusAnnihilation::IsApplicable( const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Positron::Positron() ); 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,7 +111,7 @@ void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& )
  G4double AtomicNumber;
  size_t J;
 
- for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
+ for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )
     { 
      //create physics vector then fill it ....
      ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
@@ -132,7 +139,7 @@ void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& )
  G4Material* material;
 
  for ( J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
-    { 
+    {
      //create physics vector then fill it ....
      ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
                                         NumbBinTable );
@@ -149,7 +156,7 @@ void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& )
 
     }
    
- PrintInfoDefinition();          
+ PrintInfoDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,6 +180,92 @@ G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::ComputeMeanFreePath( G4double PositKinEnergy,
+                                                   G4Material* aMaterial)
+
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0 ;
+
+  for (size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+     {             
+        SIGMA += NbOfAtomsPerVolume[elm] * 
+                 ComputeCrossSectionPerAtom(PositKinEnergy,
+                                            (*theElementVector)[elm]->GetZ());
+     }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
+                                           G4DynamicParticle* aDynamicPositron,
+                                           G4Element*         anElement)
+ 
+// return the total cross section per atom in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (PositronEnergy > HighestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+   }
+
+   return crossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+G4double G4eplusAnnihilation::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+ 
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
+  G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+  G4Material* aMaterial = aTrack.GetMaterial();
+
+  G4double MeanFreePath;
+  G4bool isOutRange ;
+
+  if (PositronEnergy > HighestEnergyLimit) MeanFreePath = DBL_MAX;
+  else 
+    {
+     if (PositronEnergy < LowestEnergyLimit)
+                                    PositronEnergy = 1.01*LowestEnergyLimit;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+    }
+
+  return MeanFreePath;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::GetMeanLifeTime(const G4Track&,
+                                                     G4ForceCondition*)
+ 
+// returns the annihilation mean life time in GEANT4 internal units
+
+{
+   return 0.0; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
  
 G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
@@ -186,7 +279,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
 // GEANT4 internal units.
 //
 // Note 1: The initial electron is assumed free and at rest.
-//          
+//
 // Note 2: The annihilation processes producing one or more than two photons are
 //         ignored, as negligible compared to the two photons process.         
  
@@ -242,7 +335,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    G4double Phot1Energy = epsil*TotalAvailableEnergy;
    if (Phot1Energy > fminimalEnergy) {
      G4ThreeVector Phot1Direction (dirx, diry, dirz);
-     Phot1Direction.rotateUz(PositDirection);   
+     Phot1Direction.rotateUz(PositDirection);
      // create G4DynamicParticle object for the particle1  
      G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Gamma::Gamma(),
                                                  Phot1Direction, Phot1Energy);
@@ -264,15 +357,14 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    }   
    else  localEnergyDeposit += Phot2Energy;
      
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident positron 
    //
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange(0.); 
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeEnergy(0.);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
    return &aParticleChange;
 }
@@ -288,7 +380,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
 // GEANT4 internal units
 //
 // Note : Effects due to binding of atomic electrons are negliged.
- 
+
 {
    aParticleChange.Initialize(aTrack);
 
@@ -303,19 +395,19 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
    aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
                                            -Direction, electron_mass_c2) ); 
 
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   aParticleChange.ProposeLocalEnergyDeposit(0.);
 
    // Kill the incident positron 
    //
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
       
    return &aParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
+G4bool G4eplusAnnihilation::StorePhysicsTable(const G4ParticleDefinition* particle,
+				              const G4String& directory,
 				              G4bool          ascii)
 {
   G4String filename;
@@ -335,17 +427,17 @@ G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
            << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "  
+         << ": Success to store the PhysicsTables in "
          << directory << G4endl;
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory, 
+/*
+G4bool G4eplusAnnihilation::RetrievePhysicsTable(const G4ParticleDefinition* particle,
+					         const G4String& directory,
 				                 G4bool          ascii)
 {
   // delete theCrossSectionTable and theMeanFreePathTable
@@ -365,7 +457,7 @@ G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
   if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
 
@@ -374,16 +466,16 @@ G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
   if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }
- 
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eplusAnnihilation::PrintInfoDefinition()

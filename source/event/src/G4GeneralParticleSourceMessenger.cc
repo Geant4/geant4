@@ -116,6 +116,12 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   setintensityCmd->SetParameterName("setintensity",false,false);
   setintensityCmd->SetRange("setintensity > 0."); 
 
+  multiplevertexCmd = new G4UIcmdWithABool("/gps/source/multiplevertex",this);
+  multiplevertexCmd->SetGuidance("true for simulaneous generation mutiple vertex");
+  multiplevertexCmd->SetGuidance("Default is false");
+  multiplevertexCmd->SetParameterName("multiplevertex",true);
+  multiplevertexCmd->SetDefaultValue(false);
+
   // below we reproduce commands awailable in G4Particle Gun
 
   listCmd = new G4UIcmdWithoutParameter("/gps/List",this);
@@ -194,7 +200,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   polCmd->SetRange("Px>=-1.&&Px<=1.&&Py>=-1.&&Py<=1.&&Pz>=-1.&&Pz<=1.");
 
   numberCmd = new G4UIcmdWithAnInteger("/gps/number",this);
-  numberCmd->SetGuidance("Set number of particles to be generated.");
+  numberCmd->SetGuidance("Set number of particles to be generated per vertex.");
   numberCmd->SetParameterName("N",true,true);
   numberCmd->SetRange("N>0");
 
@@ -429,10 +435,10 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
 
   angtypeCmd1 = new G4UIcmdWithAString("/gps/ang/type",this);
   angtypeCmd1->SetGuidance("Sets angular source distribution type");
-  angtypeCmd1->SetGuidance("Possible variables are: iso, cos planar beam1d beam2d or user");
+  angtypeCmd1->SetGuidance("Possible variables are: iso, cos, planar, beam1d, beam2d, focused or user");
   angtypeCmd1->SetParameterName("AngDis",true,true);
   angtypeCmd1->SetDefaultValue("iso");
-  angtypeCmd1->SetCandidates("iso cos planar beam1d beam2d user");
+  angtypeCmd1->SetCandidates("iso cos planar beam1d beam2d focused user");
 
   angrot1Cmd1 = new G4UIcmdWith3Vector("/gps/ang/rot1",this);
   angrot1Cmd1->SetGuidance("Sets the 1st vector for angular distribution rotation matrix");
@@ -490,6 +496,12 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   angsigmayCmd1->SetParameterName("Sigmaya",true,true);
   angsigmayCmd1->SetDefaultUnit("rad");
   angsigmayCmd1->SetUnitCandidates("rad deg");
+
+  angfocusCmd = new G4UIcmdWith3VectorAndUnit("/gps/ang/focuspoint",this);
+  angfocusCmd->SetGuidance("Set the focusing point for the beam");
+  angfocusCmd->SetParameterName("x","y","z",true,true);
+  angfocusCmd->SetDefaultUnit("cm");
+  angfocusCmd->SetUnitCandidates("micron mm cm m km");
 
   useuserangaxisCmd1 = new G4UIcmdWithABool("/gps/ang/user_coor",this);
   useuserangaxisCmd1->SetGuidance("true for using user defined angular co-ordinates");
@@ -718,13 +730,13 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   histnameCmd1->SetGuidance("Sets histogram type");
   histnameCmd1->SetParameterName("HistType",true,true);
   histnameCmd1->SetDefaultValue("biasx");
-  histnameCmd1->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
+  histnameCmd1->SetCandidates("biasx biasy biasz biast biasp biase biaspt biaspp theta phi energy arb epn");
 
   resethistCmd1 = new G4UIcmdWithAString("/gps/hist/reset",this);
   resethistCmd1->SetGuidance("Reset (clean) the histogram ");
   resethistCmd1->SetParameterName("HistType",true,true);
   resethistCmd1->SetDefaultValue("energy");
-  resethistCmd1->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
+  resethistCmd1->SetCandidates("biasx biasy biasz biast biasp biase biaspt biaspp theta phi energy arb epn");
 
   histpointCmd1 = new G4UIcmdWith3Vector("/gps/hist/point",this);
   histpointCmd1->SetGuidance("Allows user to define a histogram");
@@ -743,14 +755,14 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   histnameCmd->SetGuidance("Sets histogram type (obsolete!)");
   histnameCmd->SetParameterName("HistType",true,true);
   histnameCmd->SetDefaultValue("biasx");
-  histnameCmd->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
+  histnameCmd->SetCandidates("biasx biasy biasz biast biasp biase biaspt biaspp theta phi energy arb epn");
 
   // re-set the histograms
   resethistCmd = new G4UIcmdWithAString("/gps/resethist",this);
   resethistCmd->SetGuidance("Re-Set the histogram (obsolete!)");
   resethistCmd->SetParameterName("HistType",true,true);
   resethistCmd->SetDefaultValue("energy");
-  resethistCmd->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
+  resethistCmd->SetCandidates("biasx biasy biasz biast biasp biase biaspt biaspp theta phi energy arb epn");
 
   histpointCmd = new G4UIcmdWith3Vector("/gps/histpoint",this);
   histpointCmd->SetGuidance("Allows user to define a histogram (obsolete!)");
@@ -826,7 +838,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete maxphiCmd1;
   delete angsigmarCmd1;
   delete angsigmaxCmd1;
-  delete angsigmayCmd1;
+  delete angfocusCmd;
   delete useuserangaxisCmd1;
   delete surfnormCmd1;
 
@@ -887,6 +899,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete setsourceCmd;
   delete setintensityCmd;
   delete deletesourceCmd;
+  delete multiplevertexCmd;
 
   delete gpsDirectory;
   
@@ -1223,6 +1236,11 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     { 
       fGPS->DeleteaSource(deletesourceCmd->GetNewIntValue(newValues));
     }
+  else if(command == multiplevertexCmd)
+    {
+      fGPS->SetMultipleVertex(multiplevertexCmd->GetNewBoolValue(newValues));
+    }
+  //
   // new implementations
   //
   //
@@ -1336,6 +1354,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     {
       fParticleGun->GetAngDist()->SetBeamSigmaInAngY(angsigmayCmd1->GetNewDoubleValue(newValues));
     }
+  else if(command == angfocusCmd)
+    {
+      fParticleGun->GetAngDist()->SetFocusPoint(angfocusCmd->GetNew3VectorValue(newValues));
+    }
   else if(command == useuserangaxisCmd1)
     {
       fParticleGun->GetAngDist()->SetUseUserAngAxis(useuserangaxisCmd1->GetNewBoolValue(newValues));
@@ -1412,6 +1434,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
 	fParticleGun->GetBiasRndm()->SetThetaBias(histpointCmd1->GetNew3VectorValue(newValues));
       if(histtype == "biasp")
 	fParticleGun->GetBiasRndm()->SetPhiBias(histpointCmd1->GetNew3VectorValue(newValues));
+      if(histtype == "biaspt")
+	fParticleGun->GetBiasRndm()->SetPosThetaBias(histpointCmd1->GetNew3VectorValue(newValues));
+      if(histtype == "biaspp")
+	fParticleGun->GetBiasRndm()->SetPosPhiBias(histpointCmd1->GetNew3VectorValue(newValues));
       if(histtype == "biase")
 	fParticleGun->GetBiasRndm()->SetEnergyBias(histpointCmd1->GetNew3VectorValue(newValues));
       if(histtype == "theta")

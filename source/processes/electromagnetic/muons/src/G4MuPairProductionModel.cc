@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.19 2004/05/05 18:45:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MuPairProductionModel.cc,v 1.21 2004/12/02 08:20:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 // 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
 // 28-04-04 For complex materials repeat calculation of max energy for each
 //          material (V.Ivanchenko)
+// 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
 
 //
 // Class Description:
@@ -78,9 +79,10 @@ G4double G4MuPairProductionModel::adat[]={1.01,9.01,26.98,63.55,238.03};
 G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4double G4MuPairProductionModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
 G4double G4MuPairProductionModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
-
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
@@ -167,7 +169,7 @@ G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple
      G4double Z = (*theElementVector)[i]->GetZ();
      SetCurrentElement(Z);
      G4double tmax = MaxSecondaryEnergy(particle, kineticEnergy);
-     G4double cut  = std::min(cutEnergy,tmax);
+     G4double cut  = min(cutEnergy,tmax);
      G4double loss = ComputMuPairLoss(Z, kineticEnergy, cut, tmax);
      dedx += loss*theAtomicNumDensityVector[i];
   }
@@ -305,8 +307,10 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double xi0 = 0.25*massratio2*a1;
   G4double del = c8/a0;
 
-  G4double tmnexp = (alf+2.*del*a3)/(1.+(1.-del)*sqrt(a3));
-  if(tmnexp <= 0.) return cross;
+  G4double rta3 = sqrt(a3);
+  G4double tmnexp = alf/(1. + rta3) + del*rta3;
+  if(tmnexp >= 1.0) return cross;
+
   G4double tmn = log(tmnexp);
   G4double sum = 0.;
 
@@ -379,8 +383,8 @@ G4double G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* coupl
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
     G4double Z = (*theElementVector)[i]->GetZ();
     SetCurrentElement(Z);
-    G4double tmax = std::min(maxEnergy,MaxSecondaryEnergy(particle, kineticEnergy));
-    G4double cut  = std::max(minPairEnergy,cutEnergy);
+    G4double tmax = min(maxEnergy,MaxSecondaryEnergy(particle, kineticEnergy));
+    G4double cut  = max(minPairEnergy,cutEnergy);
     if(cut < tmax) {
       G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cut)
                   - ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
@@ -451,7 +455,7 @@ G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double cut,
@@ -473,8 +477,8 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   SetCurrentElement(anElement->GetZ());
 
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
-  G4double maxEnergy     = std::min(tmax, maxPairEnergy);
-  G4double minEnergy     = std::min(maxEnergy, cut);
+  G4double maxEnergy     = min(tmax, maxPairEnergy);
+  G4double minEnergy     = min(maxEnergy, cut);
 
   if( minEnergy > minPairEnergy)
   {
@@ -554,7 +558,7 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 						       PositKineEnergy);
 
 
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
 

@@ -21,18 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrd.cc,v 1.2 2004/06/14 09:27:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
 //
-/*-----------------------------Hepvis---------------------------------------*/
+// $Id: SoTrd.cc,v 1.7 2004/12/16 12:33:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+/*-----------------------------HEPVis---------------------------------------*/
 /*                                                                          */
-/* Node:             SoTrd                                                */
+/* Node:             SoTrd                                                  */
 /* Description:      Represents the G4Trd Geant Geometry entity             */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoAction.h>
@@ -337,3 +341,4 @@ void SoTrd::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

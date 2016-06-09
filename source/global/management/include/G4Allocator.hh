@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.14 2004/05/14 17:40:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4Allocator.hh,v 1.16 2004/11/29 17:53:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -30,30 +30,30 @@
 //
 // Class Description:
 //
-// A class for fast allocation of objects to the heap through paging
-// mechanism. It's meant to be used by associating it to the object to
-// be allocated and defining for it new and delete operators via
-// MallocSingle() and FreeSingle() methods.
+// A class for fast allocation of objects to the heap through a pool of
+// chunks organised as linked list. It's meant to be used by associating
+// it to the object to be allocated and defining for it new and delete
+// operators via MallocSingle() and FreeSingle() methods.
        
 //      ---------------- G4Allocator ----------------
-//                by Tim Bell, September 1995
+//
+// Author: G.Cosmo (CERN), November 2000
 // ------------------------------------------------------------
 
 #ifndef G4Allocator_h
 #define G4Allocator_h 1
 
-#include <stdlib.h>
-#include <stddef.h>
+#include <cstddef>
 
-#include "G4AllocatorPage.hh"
+#include "G4AllocatorPool.hh"
 
 template <class Type>
 class G4Allocator
 {
   public:  // with description
 
-    G4Allocator();
-    ~G4Allocator();
+    G4Allocator() throw();
+    ~G4Allocator() throw();
       // Constructor & destructor
 
     inline Type* MallocSingle();
@@ -66,41 +66,95 @@ class G4Allocator
       // allocator and page sizes.
       // Note: contents in memory are lost using this call !
 
-    inline int GetAllocatedSize();
+    inline size_t GetAllocatedSize() const;
       // Returns the size of the total memory allocated
 
+  public:  // without description
+
+    // This public section includes standard methods and types
+    // required if the allocator is to be used as alternative
+    // allocator for STL containers.
+    // NOTE: the code below is a trivial implementation to make
+    //       this class an STL compliant allocator.
+    //       It is anyhow NOT recommended to use this class as
+    //       alternative allocator for STL containers !
+
+    typedef Type value_type;
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    typedef Type* pointer;
+    typedef const Type* const_pointer;
+    typedef Type& reference;
+    typedef const Type& const_reference;
+
+    template <class U> G4Allocator(const G4Allocator<U>& right) throw()
+         { *this = right; }
+      // Copy constructor
+
+    pointer address(reference r) const { return &r; }
+    const_pointer address(const_reference r) const { return &r; }
+      // Returns the address of values
+
+    pointer allocate(size_type n, void* hint = 0)
+    {
+      // Allocates space for n elements of type Type, but does not initialise
+      //
+      Type* mem_alloc = 0;
+      if (n == 1)
+        mem_alloc = MallocSingle();
+      else
+        mem_alloc = static_cast<Type*>(::operator new(n*sizeof(Type)));
+      return mem_alloc;
+    }
+    void deallocate(pointer p, size_type n)
+    {
+      // Deallocates n elements of type Type, but doesn't destroy
+      //
+      if (n == 1)
+        FreeSingle(p);
+      else
+        ::operator delete((void*)p);
+      return;
+    }
+
+    void construct(pointer p, const Type& val) { new((void*)p) Type(val); }
+      // Initialises *p by val
+    void destroy(pointer p) { p->~Type(); }
+      // Destroy *p but doesn't deallocate
+
+    size_type max_size() const throw()
+    {
+      // Returns the maximum number of elements that can be allocated
+      //
+      return 2147483647/sizeof(Type);
+    }
+
+    template <class U>
+    struct rebind { typedef G4Allocator<U> other; };
+      // Rebind allocator to type U
+
   private:
 
-    void AddNewPage();
-    Type* AddNewElement();	
-
-  private:
-
-    enum { Allocated = 0x47416C, Deleted = 0xB8BE93 };
-
-    G4AllocatorPage<Type> * fPages;
-    G4AllocatorUnit<Type> * fFreeList;
-
-    size_t fUnitSize, fPageSize;
+    G4AllocatorPool mem;
+      // Pool of elements of sizeof(Type)
 };
 
 // ------------------------------------------------------------
 // Inline implementation
 // ------------------------------------------------------------
 
+// Initialization of the static pool
+//
+// template <class Type> G4AllocatorPool G4Allocator<Type>::mem(sizeof(Type));
+
 // ************************************************************
 // G4Allocator constructor
 // ************************************************************
 //
 template <class Type>
-G4Allocator<Type>::G4Allocator()
+G4Allocator<Type>::G4Allocator() throw()
+  : mem(sizeof(Type))
 {
-  fPages = 0;
-  fFreeList = 0;
-  fUnitSize = sizeof(G4AllocatorUnit<Type>);
-  fPageSize = ( (fUnitSize < 512) ? 1024 : (fUnitSize*10) );
-  AddNewPage();
-  return;
 }
 
 // ************************************************************
@@ -108,22 +162,8 @@ G4Allocator<Type>::G4Allocator()
 // ************************************************************
 //
 template <class Type>
-G4Allocator<Type>::~G4Allocator()
+G4Allocator<Type>::~G4Allocator() throw()
 {
-  G4AllocatorPage<Type> * aPage;
-  G4AllocatorPage<Type> * aNextPage;
-
-  aPage = fPages;
-  while (aPage != 0)
-  {
-    aNextPage = aPage->fNext;
-    free(aPage->fUnits);
-    delete aPage;
-    aPage = aNextPage;
-  }
-  fPages = 0;
-  fFreeList = 0;
-  return;
 }
 
 // ************************************************************
@@ -133,17 +173,7 @@ G4Allocator<Type>::~G4Allocator()
 template <class Type>
 Type* G4Allocator<Type>::MallocSingle()
 {
-  Type * anElement;
-
-  if (fFreeList != 0)
-  {
-    fFreeList->deleted = Allocated;
-    anElement = &fFreeList->fElement;
-    fFreeList = fFreeList->fNext;
-  }
-  else
-    anElement = AddNewElement();
-  return anElement;
+  return static_cast<Type*>(mem.Alloc());
 }
 
 // ************************************************************
@@ -153,53 +183,8 @@ Type* G4Allocator<Type>::MallocSingle()
 template <class Type>
 void G4Allocator<Type>::FreeSingle(Type* anElement)
 {
-  G4AllocatorUnit<Type> * fUnit;
-
-  // The gcc-3.1 compiler will complain and not correctly handle offsets
-  // computed from non-POD types. Pointers to member data should be used
-  // instead.  This C++ feature seems not to work on earlier versions of
-  // the same compiler.
-  //
-  #if (__GNUC__==3) && (__GNUC_MINOR__>0)
-    Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
-    fUnit = (G4AllocatorUnit<Type> *) ((char *)anElement - size_t(pOffset));
-  #else
-    fUnit = (G4AllocatorUnit<Type> *)
-            ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
-  #endif
-
-  if (fUnit->deleted == Allocated)
-  {
-    fUnit->deleted = Deleted;
-    fUnit->fNext = fFreeList;
-    fFreeList = fUnit;
-  }
-}
-
-// ************************************************************
-// AddNewPage
-// ************************************************************
-//
-template <class Type>
-void G4Allocator<Type>::AddNewPage()
-{
-  G4AllocatorPage<Type> * aPage;
-  register G4int unit_no;
-
-  aPage = new G4AllocatorPage<Type>;
-  aPage->fNext = fPages;
-  aPage->fUnits = (G4AllocatorUnit<Type> *)
-    malloc(fPageSize);
-  fPages = aPage;
-
-  for (unit_no = 0;
-       unit_no < G4int(fPageSize/fUnitSize - 1);
-       ++unit_no)
-  {
-    aPage->fUnits[unit_no].fNext = &aPage->fUnits[unit_no + 1];
-  }
-  aPage->fUnits[unit_no].fNext = fFreeList;
-  fFreeList = &aPage->fUnits[0];
+  mem.Free(anElement);
+  return;
 }
 
 // ************************************************************
@@ -211,25 +196,8 @@ void G4Allocator<Type>::ResetStorage()
 {
   // Clear all allocated storage and return it to the free store
   //
-  G4AllocatorPage<Type> * aPage;
-  G4AllocatorPage<Type> * aNextPage;
-
-  aPage = fPages;
-  while (aPage != 0)
-  {
-    aNextPage = aPage->fNext;
-    free(aPage->fUnits);
-    delete aPage;
-    aPage = aNextPage;
-  }
-
-  // Reset unit&page size and allocate a single page
-  //
-  fPages = 0;
-  fFreeList = 0;
-  fUnitSize = sizeof(G4AllocatorUnit<Type>);
-  fPageSize = ( (fUnitSize < 512) ? 1024 : (fUnitSize*10) );
-  AddNewPage();
+  mem.Reset();
+  return;
 }
 
 // ************************************************************
@@ -237,33 +205,29 @@ void G4Allocator<Type>::ResetStorage()
 // ************************************************************
 //
 template <class Type>
-int G4Allocator<Type>::GetAllocatedSize()
+size_t G4Allocator<Type>::GetAllocatedSize() const
 {
-  G4AllocatorPage<Type> * aPage = fPages;
-  int count = 0;
-
-  while (aPage != 0)
-  {
-    aPage = aPage->fNext;
-    count++;
-  }
-  return count*fPageSize;
+  return mem.Size();
 }
 
 // ************************************************************
-// AddNewElement
+// operator==
 // ************************************************************
 //
-template <class Type>
-Type* G4Allocator<Type>::AddNewElement()
+template <class T1, class T2>
+bool operator== (const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
 {
-  Type* anElement;
+  return true;
+}
 
-  AddNewPage();
-  fFreeList->deleted = Allocated;
-  anElement = &fFreeList->fElement;
-  fFreeList=fFreeList->fNext;
-  return anElement;
+// ************************************************************
+// operator!=
+// ************************************************************
+//
+template <class T1, class T2>
+bool operator!= (const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
+{
+  return false;
 }
 
 #endif

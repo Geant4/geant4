@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.7 2003/06/16 16:53:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4CSGSolid.hh,v 1.9 2004/10/10 10:44:14 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //  
 // --------------------------------------------------------------------
@@ -52,6 +52,13 @@ class G4CSGSolid : public G4VSolid
     virtual ~G4CSGSolid();
 
     virtual std::ostream& StreamInfo(std::ostream& os) const;
+
+    virtual G4Polyhedron* GetPolyhedron () const;
+
+  protected:
+
+  G4double fCubicVolume;
+  mutable G4Polyhedron* fpPolyhedron;
 };
 
 #endif

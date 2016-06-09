@@ -1,0 +1,21 @@
+$Id: History,v 1.5 2004/12/10 22:47:46 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+                      Geant4 - Ultra Advanced example
+     =========================================================
+
+                           History file
+                           ------------
+
+10.12.2004 -- air_shower-V06-02-02
+           -- Replaced usage of M_PI with CLHEP's pi.
+
+24.11.2004 -- air_shower-V06-02-01
+           -- Migration to the new tree-structured command format for G4GeneralParticleSource:
+              - new UI commands implemented
+              - changed access to public methods of G4GeneralParticleSource in 
+                UltraPrimaryGenerationAction; methods of G4SPSxxxDistribution are now used. 
+           -- Migration to <cmath>
+
+20.05.2004 -- Example committed

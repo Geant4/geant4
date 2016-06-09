@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2004/06/11 15:01:29 gcosmo Exp $
+$Id: History,v 1.35 2004/12/10 16:24:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 10, 2004   Gabriele Cosmo               geometry-V06-02-02
+-----------------------------
+- Replaced M_PI with CLHEP's pi.
+
+Dec 02, 2004   Gabriele Cosmo               geometry-V06-02-01
+-----------------------------
+- Implemented migration to <cmath> for standard mathematical functions.
+- Includes tags: field-V06-02-02, geomdiv-V06-02-02, geommng-V06-02-08,
+  geomnav-V06-02-08, geomsolids-V06-02-01, geomvol-V06-02-01.
+
+Oct 13, 2004   Gabriele Cosmo               geometry-V06-02-00
+-----------------------------
+- Includes tags:
+  geommng-V06-02-03, geom-csg-V06-02-05, geom-bool-V06-02-01,
+  breps-V06-02-02, geom-specific-V06-02-02, geomnav-V06-02-04.
 
 Jun 11, 2004   Gabriele Cosmo               geometry-V06-01-01
 -----------------------------

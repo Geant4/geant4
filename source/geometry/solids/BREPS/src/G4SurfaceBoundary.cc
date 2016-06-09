@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.cc,v 1.12 2003/10/28 13:42:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SurfaceBoundary.cc,v 1.13 2004/12/02 09:31:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -163,7 +163,7 @@ void G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray,
     G4CurveRayIntersection isTmp(c, ray);
     c.IntersectRay2D(ray, isTmp);
     
-    if (fabs(isTmp.GetDistance()) < fabs(is.GetDistance())) 
+    if (std::fabs(isTmp.GetDistance()) < std::fabs(is.GetDistance())) 
       is= isTmp;
   }
 

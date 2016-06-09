@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EmAcceptance.cc,v 1.3 2004/06/20 01:32:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: EmAcceptance.cc,v 1.5 2004/12/02 16:13:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,14 +63,14 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
                                            G4double avr, G4double avr0,
                                            G4double rms, G4double limit)
 {
-  G4double x = sqrt((G4double)stat);
+  G4double x = std::sqrt((G4double)stat);
   G4double dde = avr - avr0;
   G4double de = dde*x/rms;
 
   G4cout << title << ": " << avr << "  del"<< title << "= " << dde
          << " nrms= " << de << G4endl;
 
-  if (abs(de) > limit) isAccepted = false;
+  if (std::fabs(de) > limit) isAccepted = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.13 2003/09/18 11:14:04 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RayTracer.cc,v 1.14 2004/12/07 23:41:00 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //
@@ -231,11 +231,11 @@ G4bool G4RayTracer::CreateBitMap()
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
-        rayDirection = G4ThreeVector(tan(angleX)/cos(angleY),-tan(angleY)/cos(angleX),1.0);
+        rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
       }
       else
       {
-        rayDirection = G4ThreeVector(tan(angleX),-tan(angleY),1.0);
+        rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
       }
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
@@ -389,9 +389,9 @@ G4Colour G4RayTracer::Attenuate(G4RayTrajectoryPoint* point, G4Colour sourceCol)
   if(stepAlpha > 0.9999999){ stepAlpha = 0.9999999; } // patch to the next line
     attenuationFuctor = -stepAlpha/(1.0-stepAlpha)*stepLength/attenuationLength;
  
-  G4double KtRed = exp((1.0-stepRed)*attenuationFuctor);
-  G4double KtGreen = exp((1.0-stepGreen)*attenuationFuctor);
-  G4double KtBlue = exp((1.0-stepBlue)*attenuationFuctor);
+  G4double KtRed = std::exp((1.0-stepRed)*attenuationFuctor);
+  G4double KtGreen = std::exp((1.0-stepGreen)*attenuationFuctor);
+  G4double KtBlue = std::exp((1.0-stepBlue)*attenuationFuctor);
   if(KtRed>1.0){KtRed=1.0;}
   if(KtGreen>1.0){KtGreen=1.0;}
   if(KtBlue>1.0){KtBlue=1.0;}

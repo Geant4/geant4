@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN06PhysicsListMessenger.hh,v 1.1 2003/01/23 15:34:23 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

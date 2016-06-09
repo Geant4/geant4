@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEVector.hh,v 1.10 2004/04/22 21:24:31 dwright Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file

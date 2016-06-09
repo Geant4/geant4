@@ -1,0 +1,109 @@
+
+     =========================================================
+              Geant4 - ULTRA-based air shower example
+     =========================================================
+
+                             README
+                      ---------------------
+
+------------------------------------------------------------------------|
+----> Introduction.                                                     
+                                                                        |  
+The ULTRA detector is a hybrid 2-component system consisting of:                                  
+                                                                        |
+                                                                        
+1) an UV detection system - the UVscope                                 |
+2) an array of scintillator detectors - the ETscope                      
+                                                                        |
+The UVscope detects Cherenkov light associated to cosmic ray showers    
+when it is diffusively reflected on ground.                             |
+The ETscope detects in coincidence the charged particles of the shower. 
+                                                                        |
+In the current version only the UVscope simulation is included          
+------------------------------------------------------------------------|
+----> Description                                                       
+                                                                        |
+The UVscope consists of a Fresnel lens and a PMT located in the focal   
+plane, enclosed in a cylindrical aluminum housing. The lens is 457 mm   |
+in diameter and is made of UV transmitting acrylic with 5.6 grooves     
+per mm. The description of the geometry of the Fresnel lens makes use   |
+of object parameterisation/replication capabilities.                     
+                                                                        |
+The primary vertex generator describes a plane circular source of UV 
+(3eV, about 400 nm) optical photons.                                    |
+Depending on the user selection (see below for the relevant environment 
+variables) the source can be positioned such that the photons are fired |
+to a reflecting surface or, by default, directly to the UVscope 
+(no reflecting surface is present in this case).                        |
+Reflection at the surface can be chosen to be specular or diffuse.
+In both cases the normal to the surface makes an angle of 45 degrees    |
+with the UVscope axis and the photons are emitted at an angle of 
+90 degrees with the UVscope axis.                                       |
+If none of these variables is set no reflecting surface is used 
+and the photons source is positioned at the UVscope axis. 
+                                                                        |
+The definition of the relevant optical boundaries, parameters and       
+processes is made.                                                      |
+                                                                        
+------------------------------------------------------------------------|
+----> SET-UP 
+                                                                        |
+ -example enviroment with the compiler 3.2.3                              
+ -a standard Geant4 example GNUmakefile is provided                     |
+
+setup with:                                                             |
+compiler = gcc-3.2.3
+G4SYSTEM = linux-g++                                                    |
+
+The following environment variables can be set:                         |
+
+setenv G4ANALYSIS_USE    1
+
+setenv ULTRA_VERBOSE
+
+setenv ULTRA_MIRROR_USE 1 : A specular reflecting surface is used.
+setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used. 
+
+setup for analysis with PI 1.2.1 for user with account on lxplus:
+setenv PI_VERSION 1_2_1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/PI/Linux-g++/bin"
+eval `aida-config -r csh`                                                        |
+
+the following keywords can be used in order to produce HBOOK, AIDA or ROOT histograms
+"hbook" for HBOOK histograms
+"xml" for AIDA histograms
+"root" for ROOT histograms
+
+for more information on PI
+http://wenaus.home.cern.ch/wenaus/peb-app/
+http://lcgapp.cern.ch/project/pi/
+
+
+------------------------------------------------------------------------
+----> How to run the example.                                           |
+
+- batch mode:
+  $G4WORDIR/bin/Linux-g++/Ultra UltraMacro.mac                          |
+                                                                        |
+- Interative mode:                                                      
+  3) $G4WORDIR/bin/Linux-g++/Ultra                                      |
+
+------------------------------------------------------------------------
+----> Simulation output                                                 |
+
+if G4ANALYSIS_USE = 1 in the set-up, the output is ultra.aida           | 
+ It contains:
+ 1)1Dhistogram with the detected photons energy (eV)                    |
+ 2)1Dhistogram with the number of detected photons per event            |
+
+------------------------------------------------------------------------
+----> Visualisation                                                     | 
+
+a macro is provided as example of visulisation:  Visualisation.mac      | 
+to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
+------------------------------------------------------------------------
+
+for comments and questions: bernardo@lip.pt
+for more info http://www.ge.infn.it/geant4/examples/
+
+last modified: B. Tome and M.C. Espirito Santo 20/05/2004

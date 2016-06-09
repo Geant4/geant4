@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.cc,v 1.4 2003/06/16 16:47:02 gunter Exp $
+// $Id: A01GeneralPhysics.cc,v 1.5 2004/11/23 04:02:02 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 22-Nov-2004 Construt ALL Particles by T. Koi
 
 
 #include "A01GeneralPhysics.hh"
@@ -40,31 +41,66 @@ A01GeneralPhysics::~A01GeneralPhysics()
 {
 }
 
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 
 void A01GeneralPhysics::ConstructParticle()
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
+   // In Alphabetical Order 
+   
+   //  Construct all barions
+   G4BaryonConstructor* baryonConstructor = new G4BaryonConstructor();
+   baryonConstructor -> ConstructParticle();
+   delete baryonConstructor;
+
+   // Construct all bosons (including geantinos)
+   G4BosonConstructor* bosonConstructor = new G4BosonConstructor();
+   bosonConstructor -> ConstructParticle();
+   delete bosonConstructor;
+
+   // Construct all ions 
+   G4IonConstructor* ionConstructor = new G4IonConstructor();
+   ionConstructor -> ConstructParticle();
+   delete ionConstructor;
+
+   // Construct all leptons 
+   G4LeptonConstructor* leptonConstructor = new G4LeptonConstructor();
+   leptonConstructor -> ConstructParticle();
+   delete leptonConstructor;
+
+   // Construct all mesons
+   G4MesonConstructor* mesonConstructor = new G4MesonConstructor();
+   mesonConstructor -> ConstructParticle();
+   delete mesonConstructor;
+
+   //  Construct  resonaces and quarks
+   G4ShortLivedConstructor* shortLivedConstructor = new G4ShortLivedConstructor();
+   shortLivedConstructor -> ConstructParticle();
+   delete shortLivedConstructor;
+
 }
+
+#include "G4Decay.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 void A01GeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
+   G4Decay* theDecayProcess = new G4Decay();  
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess.IsApplicable(*particle)) {
-      pmanager ->AddProcess(&fDecayProcess);
+    if (theDecayProcess->IsApplicable(*particle)) {
+      pmanager ->AddProcess(theDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
+      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
   }
 }

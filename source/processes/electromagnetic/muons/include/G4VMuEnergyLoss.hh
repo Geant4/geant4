@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.9 2003/06/16 17:01:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VMuEnergyLoss.hh,v 1.10 2004/12/02 08:20:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -204,9 +204,9 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
     static G4int NbinEloss;               // number of bins in table
     static G4double LowerBoundEloss;
     static G4double UpperBoundEloss;
-    static G4double RTable,LOGRTable;    // LOGRTable=log(UpperBoundEloss-
+    static G4double RTable,LOGRTable;    // LOGRTable=std::log(UpperBoundEloss-
                                          // LowerBoundEloss)/NbinEloss
-                                         // RTable = exp(LOGRTable)
+                                         // RTable = std::exp(LOGRTable)
 
     static G4PhysicsTable* themuplusRangeCoeffATable;
     static G4PhysicsTable* themuplusRangeCoeffBTable;

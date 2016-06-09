@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.15 2003/11/02 14:01:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalVolume.icc,v 1.19 2004/11/16 13:43:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -114,6 +114,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
                 "Replica or parameterised volume must be the only daughter !");
   }
 
+  fMass = 0.;
   fDaughters.push_back(pNewDaughter);
 
   // Propagates the mother's FastSimulationManager pointer. If we are in
@@ -183,6 +184,7 @@ void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
   {
     fRegion->RegionModified(true);
   }
+  fMass = 0.;
 }
 
 // ********************************************************************
@@ -201,6 +203,7 @@ void G4LogicalVolume::ClearDaughters()
   {
     fRegion->RegionModified(true);
   }
+  fMass = 0.;
 }
 
 // ********************************************************************
@@ -222,6 +225,7 @@ void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 {
   assert(pSolid != 0);
   fSolid=pSolid;
+  fMass = 0.;
 }
 
 // ********************************************************************
@@ -242,6 +246,19 @@ inline
 void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
 {
   fMaterial=pMaterial;
+  fMass = 0.;
+}
+
+// ********************************************************************
+// UpdateMaterial
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
+{
+  fMaterial=pMaterial;
+  if(fRegion) { fCutsCouple = fRegion->FindCouple(pMaterial); }
+  fMass = 0.;
 }
 
 // ********************************************************************

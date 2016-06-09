@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.11 2004/02/15 17:46:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuBetheBlochModel.cc,v 1.14 2004/12/03 17:32:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,8 @@ G4double G4MuBetheBlochModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,
 G4double G4MuBetheBlochModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
@@ -141,7 +143,7 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
-  G4double cutEnergy = std::min(cut,tmax);
+  G4double cutEnergy = min(cut,tmax);
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
@@ -228,7 +230,7 @@ G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -242,7 +244,7 @@ G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
     if (maxEnergy > limitKinEnergy) {
 
       G4double logtmax = log(maxEnergy);
-      G4double logtmin = log(std::max(cutEnergy,limitKinEnergy));
+      G4double logtmin = log(max(cutEnergy,limitKinEnergy));
       G4double logstep = logtmax - logtmin;
       G4double dcross  = 0.0;
 
@@ -275,14 +277,14 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double maxKinEnergy = std::min(maxEnergy,tmax);
-  G4double minKinEnergy = std::min(minEnergy,maxKinEnergy);
+  G4double maxKinEnergy = min(maxEnergy,tmax);
+  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
   G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
-
+ 
   G4double grej  = 1.;
   if(tmax > limitKinEnergy) {
     G4double a0    = log(2.*totEnergy/mass);
@@ -339,13 +341,13 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple,dp,tmin,maxEnergy);
   vdp->push_back(delta);
 

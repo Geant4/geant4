@@ -207,15 +207,15 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
   //calculate daughter momentum
   daughtermomentum = Pmx(parentmass,daughtermass[0],daughtermass[1]);
   G4double costheta = 2.*G4UniformRand()-1.0;
-  G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
-  G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
+  G4double phi  = twopi*G4UniformRand()*rad;
+  G4ParticleMomentum direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 
   //create daughter G4DynamicParticle
-  G4double Etotal= sqrt(daughtermass[0]*daughtermass[0] + daughtermomentum*daughtermomentum); 
+  G4double Etotal= std::sqrt(daughtermass[0]*daughtermass[0] + daughtermomentum*daughtermomentum); 
   G4DynamicParticle * daughterparticle = new G4DynamicParticle( daughters[0],Etotal, direction*daughtermomentum);
   products->PushProducts(daughterparticle);
-  Etotal= sqrt(daughtermass[1]*daughtermass[1] + daughtermomentum*daughtermomentum);
+  Etotal= std::sqrt(daughtermass[1]*daughtermass[1] + daughtermomentum*daughtermomentum);
   daughterparticle = new G4DynamicParticle( daughters[1],Etotal, direction*(-1.0*daughtermomentum));
   products->PushProducts(daughterparticle);
 
@@ -277,19 +277,19 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
      // daughter 0
 
      energy = rd2*(parentmass - sumofdaughtermass);
-     daughtermomentum[0] = sqrt(energy*energy + 2.0*energy* daughtermass[0]);
+     daughtermomentum[0] = std::sqrt(energy*energy + 2.0*energy* daughtermass[0]);
      if ( daughtermomentum[0] >momentummax )momentummax =  daughtermomentum[0];
      momentumsum  +=  daughtermomentum[0];
 
      // daughter 1
      energy = (1.-rd1)*(parentmass - sumofdaughtermass);
-     daughtermomentum[1] = sqrt(energy*energy + 2.0*energy* daughtermass[1]);
+     daughtermomentum[1] = std::sqrt(energy*energy + 2.0*energy* daughtermass[1]);
      if ( daughtermomentum[1] >momentummax )momentummax =  daughtermomentum[1];
      momentumsum  +=  daughtermomentum[1];
 
      // daughter 2
      energy = (rd1-rd2)*(parentmass - sumofdaughtermass);
-     daughtermomentum[2] = sqrt(energy*energy + 2.0*energy* daughtermass[2]);
+     daughtermomentum[2] = std::sqrt(energy*energy + 2.0*energy* daughtermass[2]);
      if ( daughtermomentum[2] >momentummax )momentummax =  daughtermomentum[2];
      momentumsum  +=  daughtermomentum[2];
     } while (momentummax >  momentumsum - momentummax );
@@ -306,30 +306,30 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   G4double costheta, sintheta, phi, sinphi, cosphi; 
   G4double costhetan, sinthetan, phin, sinphin, cosphin; 
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphi = sin(phi);
-  cosphi = cos(phi);
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+  phi  = twopi*G4UniformRand()*rad;
+  sinphi = std::sin(phi);
+  cosphi = std::cos(phi);
   G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-  G4double Etotal=sqrt( daughtermass[0]*daughtermass[0] + daughtermomentum[0]*daughtermomentum[0]);
+  G4double Etotal=std::sqrt( daughtermass[0]*daughtermass[0] + daughtermomentum[0]*daughtermomentum[0]);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], Etotal, direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-daughtermomentum[2]*daughtermomentum[2]-daughtermomentum[0]*daughtermomentum[0])/(2.0*daughtermomentum[2]*daughtermomentum[0]);
-  sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
-  phin  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphin = sin(phin);
-  cosphin = cos(phin);
+  sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
+  phin  = twopi*G4UniformRand()*rad;
+  sinphin = std::sin(phin);
+  cosphin = std::cos(phin);
   G4ParticleMomentum direction2;
   direction2.setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 
   direction2.setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction2.setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
-  Etotal=sqrt( daughtermass[2]*daughtermass[2] + daughtermomentum[2]*daughtermomentum[2]/direction2.mag2());
+  Etotal=std::sqrt( daughtermass[2]*daughtermass[2] + daughtermomentum[2]*daughtermomentum[2]/direction2.mag2());
   daughterparticle = new G4DynamicParticle( daughters[2],Etotal, direction2*(daughtermomentum[2]/direction2.mag()));
   products->PushProducts(daughterparticle);
   G4ThreeVector mom=(direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0);
-  Etotal= sqrt( daughtermass[1]*daughtermass[1] + mom.mag2() );
+  Etotal= std::sqrt( daughtermass[1]*daughtermass[1] + mom.mag2() );
   daughterparticle = 
        new G4DynamicParticle(daughters[1], Etotal, mom);
   products->PushProducts(daughterparticle);
@@ -469,26 +469,26 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
 
   index1 = numberOfDaughters -2;
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+  phi  = twopi*G4UniformRand()*rad;
   direction.setZ(costheta);
-  direction.setY(sintheta*sin(phi));
-  direction.setX(sintheta*cos(phi));
+  direction.setY(sintheta*std::sin(phi));
+  direction.setX(sintheta*std::cos(phi));
   daughterparticle[index1] = new G4DynamicParticle( daughters[index1], direction*daughtermomentum[index1] );
   daughterparticle[index1+1] = new G4DynamicParticle( daughters[index1+1], direction*(-1.0*daughtermomentum[index1]) );
 
   for (index1 = numberOfDaughters -3;  index1 >= 0; index1--) {
     //calculate momentum direction
     costheta = 2.*G4UniformRand()-1.0;
-    sintheta = sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = 2.0*M_PI*G4UniformRand()*rad;
+    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+    phi  = twopi*G4UniformRand()*rad;
     direction.setZ(costheta);
-    direction.setY(sintheta*sin(phi));
-    direction.setX(sintheta*cos(phi));
+    direction.setY(sintheta*std::sin(phi));
+    direction.setX(sintheta*std::cos(phi));
 
     // boost already created particles 
     beta = daughtermomentum[index1];
-    beta /= sqrt( daughtermomentum[index1]*daughtermomentum[index1] + sm[index1+1]*sm[index1+1] );
+    beta /= std::sqrt( daughtermomentum[index1]*daughtermomentum[index1] + sm[index1+1]*sm[index1+1] );
     for (G4int index2 = index1+1; index2<numberOfDaughters; index2++) {
       G4LorentzVector p4;
       // make G4LorentzVector for secondaries

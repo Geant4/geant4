@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelCalorimeterSD.hh,v 1.4 2001/11/29 11:19:17 griccard Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

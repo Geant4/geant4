@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10RunAction.cc,v 1.4 2003/06/16 16:47:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em10RunAction.cc,v 1.6 2004/12/03 09:33:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 
@@ -37,10 +37,6 @@
 #include <iomanip>
 
 #include "Randomize.hh"
-#ifndef G4NOHIST
-  #include "CLHEP/Hist/HBookFile.h"
-#endif
-#include <assert.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -51,10 +47,6 @@ Em10RunAction::Em10RunAction()
 {
   runMessenger = new Em10RunMessenger(this);
   saveRndm = 1;  
-#ifndef G4NOHIST
-  histo1=0; histo2=0; histo3=0; histo4=0; histo5=0;
-  histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -62,26 +54,13 @@ Em10RunAction::Em10RunAction()
 Em10RunAction::~Em10RunAction()
 {
   delete runMessenger;
-#ifndef G4NOHIST
-  if(histo1) delete histo1 ;
-  if(histo2) delete histo2 ;
-  if(histo3) delete histo3 ;
-  if(histo4) delete histo4 ;
-  if(histo5) delete histo5 ;
-  if(histo6) delete histo6 ;
-  if(histo7) delete histo7 ;
-  if(histo8) delete histo8 ;
-  if(histo9) delete histo9 ;
-  if(histo10) delete histo10 ;
-  delete hbookManager;
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Em10RunAction::bookHisto()
 {
-#ifndef G4NOHIST
+  /*
   // init hbook
 
   hbookManager = new HBookFile(histName, 68);
@@ -147,10 +126,10 @@ void Em10RunAction::bookHisto()
   {
     histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
                                 //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
+                                ,nbinGamma,std::log10(ElowGamma),std::log10(EhighGamma))  ;
     assert (histo10 != 0);
   }
-#endif
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -290,7 +269,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
 
   if(nbinGamma>0)
   {
-    dEGamma = log(EhighGamma/ElowGamma)/nbinGamma ;
+    dEGamma = std::log(EhighGamma/ElowGamma)/nbinGamma ;
     entryGamma = 0.;
     underGamma=0.;
     overGamma=0.;
@@ -316,28 +295,28 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::EndOfRunAction(const G4Run* aRun)
+void Em10RunAction::EndOfRunAction(const G4Run*)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
 
   tlSumAbs /= TotNbofEvents ;
   sAbs = tlsquareSumAbs/TotNbofEvents-tlSumAbs*tlSumAbs ;
   if(sAbs>0.)
-    sAbs = sqrt(sAbs/TotNbofEvents) ;
+    sAbs = std::sqrt(sAbs/TotNbofEvents) ;
   else
     sAbs = 0. ;
   
   EnergySumAbs /= TotNbofEvents ;
   sigAbs = EnergySquareSumAbs/TotNbofEvents-EnergySumAbs*EnergySumAbs;
   if(sigAbs>0.)
-    sigAbs = sqrt(sigAbs/TotNbofEvents);
+    sigAbs = std::sqrt(sigAbs/TotNbofEvents);
   else
     sigAbs = 0.;
 
   nStepSumCharged /= TotNbofEvents ;
   sigstep = nStepSum2Charged/TotNbofEvents-nStepSumCharged*nStepSumCharged;
   if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
+    sigstep = std::sqrt(sigstep/TotNbofEvents);
   else
     sigstep = 0.;
   G4double sigch=sigstep ;
@@ -345,7 +324,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
   nStepSumNeutral /= TotNbofEvents ;
   sigstep = nStepSum2Neutral/TotNbofEvents-nStepSumNeutral*nStepSumNeutral;
   if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
+    sigstep = std::sqrt(sigstep/TotNbofEvents);
   else
     sigstep = 0.;
   G4double signe=sigstep ;
@@ -353,14 +332,14 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
   SumCharged /= TotNbofEvents;
   sigcharged = Sum2Charged/TotNbofEvents-SumCharged*SumCharged; 
   if(sigcharged>0.)
-    sigcharged = sqrt(sigcharged/TotNbofEvents);
+    sigcharged = std::sqrt(sigcharged/TotNbofEvents);
   else
     sigcharged = 0. ;
  
   SumNeutral /= TotNbofEvents;
   signeutral = Sum2Neutral/TotNbofEvents-SumNeutral*SumNeutral; 
   if(signeutral>0.)
-    signeutral = sqrt(signeutral/TotNbofEvents);
+    signeutral = std::sqrt(signeutral/TotNbofEvents);
   else
     signeutral = 0. ;
  
@@ -508,7 +487,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
      if(sig<=0.)
        sig=0.;
      else
-       sig=sqrt(sig/entryTt) ;
+       sig=std::sqrt(sig/entryTt) ;
      G4cout << " mean energy of transmitted particles=" << Ttmean/keV << 
                " +- " << sig/keV << "  keV." << G4endl;
      E = Ttlow - dTt ;
@@ -538,7 +517,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
      if(sig<=0.)
        sig=0.;
      else
-       sig=sqrt(sig/entryTb) ;
+       sig=std::sqrt(sig/entryTb) ;
      G4cout << " mean energy of backscattered particles=" << Tbmean/keV << 
                " +- " << sig/keV << "  keV." << G4endl;
      E = Tblow - dTb ;
@@ -587,7 +566,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
      Rmean /= entryR;
      sig = R2mean/entryR - Rmean*Rmean;
      if(sig<=0.) sig=0. ;
-     else        sig = sqrt(sig/entryR) ;
+     else        sig = std::sqrt(sig/entryR) ;
      G4cout << " mean lateral displacement at exit=" << Rmean/mm << " +- "
             << sig/mm << "  mm." << G4endl ; 
      R = Rlow - dR  ;
@@ -618,7 +597,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
        fac0 = 1. ;
      else
        fac0 = 1./distTh[0] ;
-     pere = 1./exp(1.) ;
+     pere = 1./std::exp(1.) ;
 
      G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
                " entries         normalized " << G4endl ;
@@ -664,7 +643,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
        fac0b = 1. ;
      else
        fac0b = 1./distThback[0] ;
-     pereb = 1./exp(1.) ;
+     pereb = 1./std::exp(1.) ;
 
      G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
                " entries         normalized " << G4endl ;
@@ -704,7 +683,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
              "    #overflows=" << overGamma << G4endl ;
    if( entryGamma>0.)
    {
-     fact=exp(dEGamma) ;
+     fact=std::exp(dEGamma) ;
      E = ElowGamma/fact  ;
      norm = TotNbofEvents*dEGamma;
      G4cout << " bin nb         Elow      entries       normalized " << G4endl ;
@@ -733,7 +712,7 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
      for(G4int iez=0; iez<nbinvertexz ; iez++)
      {
       z+= dz  ;
-      if(abs(z)<1.e-12) z=0.;
+      if(std::fabs(z)<1.e-12) z=0.;
       dnorm = distvertexz[iez]/norm;
       G4cout << std::setw(5) << iez << std::setw(10) << z  <<
                 std::setw(12) << distvertexz[iez] <<
@@ -749,11 +728,6 @@ void Em10RunAction::EndOfRunAction(const G4Run* aRun)
   {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
-  // Write histogram file
-
-#ifndef G4NOHIST
-  hbookManager->write();
-#endif
 
   // save Rndm status
 
@@ -813,9 +787,9 @@ void Em10RunAction::AddTrRef(G4double tr,G4double ref)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillNbOfSteps(G4double ns)
+void Em10RunAction::FillNbOfSteps(G4double)// ns)
 {
-#ifndef G4NOHIST
+  /*
   const G4double eps = 1.e-10 ;
   G4double n,bin ;
   G4int ibin;
@@ -837,14 +811,14 @@ void Em10RunAction::FillNbOfSteps(G4double ns)
     }
    histo1->accumulate(ns) ;
   }
-#endif
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillEn(G4double En)
+void Em10RunAction::FillEn(G4double) // En)
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
 
@@ -862,14 +836,14 @@ void Em10RunAction::FillEn(G4double En)
     }
     histo2->accumulate(En/keV) ; // was /MeV
   }
-#endif
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTt(G4double En)
+void Em10RunAction::FillTt(G4double) // En)
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
 
@@ -891,14 +865,14 @@ void Em10RunAction::FillTt(G4double En)
     }
   histo5->accumulate(En/MeV) ;
   }
-#endif
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTb(G4double En)
+void Em10RunAction::FillTb(G4double) // En)
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
   
@@ -920,14 +894,14 @@ void Em10RunAction::FillTb(G4double En)
     }
   histo7->accumulate(En/MeV) ;
   }
-#endif
+  */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTsec(G4double En)
+void Em10RunAction::FillTsec(G4double) // En)
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
 
@@ -947,14 +921,14 @@ void Em10RunAction::FillTsec(G4double En)
     }
   histo8->accumulate(En/MeV) ;
   }
-#endif
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillGammaSpectrum(G4double En)
+void Em10RunAction::FillGammaSpectrum(G4double) // En)
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
 
@@ -968,23 +942,23 @@ void Em10RunAction::FillGammaSpectrum(G4double En)
       overGamma  += 1. ;
     else
     {
-      bin = log(En/ElowGamma)/dEGamma;
+      bin = std::log(En/ElowGamma)/dEGamma;
       ibin= (G4int)bin ;
       distGamma[ibin] += 1. ;
     }
-  histo10->accumulate(log10(En/MeV)) ;
+  histo10->accumulate(std::log10(En/MeV)) ;
   }
-#endif
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillTh(G4double Th)
+void Em10RunAction::FillTh(G4double) // Th)
 {
-#ifndef G4NOHIST
+  /*
   static const G4double cn=pi/(64800.*dTh) ;
   static const G4double cs=pi/
-        (64800.*(cos(Thlow)-cos(Thlow+dTh)));      
+        (64800.*(std::cos(Thlow)-std::cos(Thlow+dTh)));      
   G4double bin,Thbin ,wg;
   G4int ibin;
 
@@ -1004,7 +978,7 @@ void Em10RunAction::FillTh(G4double Th)
       ibin= (G4int)bin ;
       Thbin = Thlow+ibin*dTh ;
       if(Th > 0.001*dTh)
-        wg=cn/sin(Th) ;
+        wg=cn/std::sin(Th) ;
       else
       {  
         G4double thdeg=Th*180./pi;
@@ -1017,17 +991,17 @@ void Em10RunAction::FillTh(G4double Th)
 
   histo3->accumulate(Th/deg, wg) ;
   }
-#endif
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillThBack(G4double Th)
+void Em10RunAction::FillThBack(G4double) // Th)
 {
-#ifndef G4NOHIST
+  /*
   static const G4double cn=pi/(64800.*dThback) ;
   static const G4double cs=pi/
-        (64800.*(cos(Thlowback)-cos(Thlowback+dThback)));      
+        (64800.*(std::cos(Thlowback)-std::cos(Thlowback+dThback)));      
   G4double bin,Thbin,wg ;
   G4int ibin;
 
@@ -1045,7 +1019,7 @@ void Em10RunAction::FillThBack(G4double Th)
       ibin= (G4int)bin ;
       Thbin = Thlowback+ibin*dThback ;
       if(Th > 0.001*dThback)
-        wg=cn/sin(Th) ;
+        wg=cn/std::sin(Th) ;
       else
       {  
         G4double thdeg=Th*180./pi;
@@ -1057,14 +1031,14 @@ void Em10RunAction::FillThBack(G4double Th)
     }
   histo6->accumulate(Th/deg, wg) ;
   }
-#endif
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillR(G4double R )
+void Em10RunAction::FillR(G4double) // R )
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
 
@@ -1086,14 +1060,14 @@ void Em10RunAction::FillR(G4double R )
     }
   histo4->accumulate(R/mm) ;
   }
-#endif
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::Fillvertexz(G4double z )
+void Em10RunAction::Fillvertexz(G4double) // z )
 {
-#ifndef G4NOHIST
+  /*
   G4double bin ;
   G4int ibin;
   
@@ -1113,7 +1087,7 @@ void Em10RunAction::Fillvertexz(G4double z )
     }
   histo9->accumulate(z/mm) ;
   }
-#endif
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////////

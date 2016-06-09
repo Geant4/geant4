@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.57 2003/12/01 11:12:59 johna Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4VisManager.cc,v 1.58 2004/07/14 15:39:07 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -656,26 +656,6 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
-void G4VisManager::SetCurrentGraphicsSystemAndCreateViewer
-(G4VGraphicsSystem* pSystem) {
-  // This is used only by the deprecated
-  // /vis~/create_view/new_graphics_system command.  Hence the ad hoc
-  // creation of "scene-vis~" below as a working solution while these
-  // old commands exist.
-  fpGraphicsSystem = pSystem;
-  if (!fpScene) {
-    fpScene = new G4Scene ("scene-vis~");
-    fSceneList.push_back (fpScene);
-    if (fVerbosity >= confirmations) {
-      G4cout << "G4VisManager::SetCurrentGraphicsSystemAndCreateViewer:"
-	"\n  Empty scene \"scene-vis~\" created."
-	     << G4endl;
-    }
-  }
-  CreateSceneHandler ();
-  CreateViewer ();
-}
-
 void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   if (fVerbosity >= confirmations) {
@@ -843,8 +823,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandViewerCreate);
   fMessengerList.push_back (new G4VisCommandViewerDolly);
   fMessengerList.push_back (new G4VisCommandViewerFlush);
-  fMessengerList.push_back (new G4VisCommandViewerLights);
-  // DEPRECATED - moved to /vis/viewer/set/.
   fMessengerList.push_back (new G4VisCommandViewerList);
   fMessengerList.push_back (new G4VisCommandViewerPan);
   fMessengerList.push_back (new G4VisCommandViewerRefresh);
@@ -852,8 +830,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandViewerReset);
   fMessengerList.push_back (new G4VisCommandViewerSelect);
   fMessengerList.push_back (new G4VisCommandViewerUpdate);
-  fMessengerList.push_back (new G4VisCommandViewerViewpoint);
-  // DEPRECATED - moved to /vis/viewer/set/.
   fMessengerList.push_back (new G4VisCommandViewerZoom);
 
   directory = new G4UIdirectory ("/vis/viewer/set/");

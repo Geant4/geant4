@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EmAcceptance.hh,v 1.2 2004/06/09 14:18:45 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: EmAcceptance.hh,v 1.3 2004/10/20 14:32:31 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

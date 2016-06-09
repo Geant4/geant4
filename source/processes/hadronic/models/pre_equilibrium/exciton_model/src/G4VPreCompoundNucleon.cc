@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.cc,v 1.1 2003/08/26 18:55:04 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VPreCompoundNucleon.cc,v 1.2 2004/12/07 13:50:45 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by V. Lara
 
@@ -62,8 +62,8 @@ ProbabilityDistributionFunction(const G4double eKin,
 
 
   G4double Probability = 2.0/(hbarc*hbarc*hbarc) * GetReducedMass() * 
-      r0 * r0 * pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
-      P*(N-1.0) * pow(g1*E1/(g0*E0),N-2.0)/E0 *
+      r0 * r0 * std::pow(GetRestA(),2.0/3.0) * GetAlpha() * (eKin + GetBeta()) *
+      P*(N-1.0) * std::pow(g1*E1/(g0*E0),N-2.0)/E0 *
       g1/(g0*g0);
 
   return Probability;

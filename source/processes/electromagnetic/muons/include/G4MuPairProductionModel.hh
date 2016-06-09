@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.12 2004/04/28 14:39:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4MuPairProductionModel.hh,v 1.14 2004/12/02 08:20:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,7 +67,7 @@ public:
 
   G4MuPairProductionModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuPairProd");
 
-  ~G4MuPairProductionModel();
+  virtual ~G4MuPairProductionModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -205,9 +205,9 @@ void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    z13 = pow(Z,0.333333333);
+    z13 = std::pow(Z,0.333333333);
     z23 = z13*z13;
-    lnZ = log(Z);
+    lnZ = std::log(Z);
   }
 }
 

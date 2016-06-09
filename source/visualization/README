@@ -263,7 +263,7 @@ The Visualization Manager has been constructed with verbosity == 1.
 $ test19 tcsh 1
 RunManager is constructing....
 **********************************************
- Geant4 version $Name: geant4-05-02-patch-01 $
+ Geant4 version $Name: geant4-07-00-cand-01 $
                                 (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************

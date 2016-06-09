@@ -12,7 +12,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
       CCFLAGS := -g
     endif
   endif
-  CXXFLAGS += -features=no%anachronisms -mt -lpthread
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
     FCFLAGS  += -KPIC

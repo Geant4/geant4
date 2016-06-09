@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2004/03/18 11:52:59 gcosmo Exp $
+$Id: History,v 1.70 2004/11/15 15:12:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 15, 2004  V.Grichine                 geom-csg-V06-02-06
+- G4Trap: added check for X-centering for constructor by verteces.
+  Fixes problem report #687.
+- New unit test for surface-normal and updated unit tests for sphere
+  and trap.
+
+Oct 10, 2004  J.Allison                  geom-csg-V06-02-05
+- Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+  on request and stores for future access.  A null pointer means "not
+  available".
+
+Sep 22, 2004  V.Grichine                 geom-csg-V06-02-04
+- Added specific implementation of GetCubicVolume() for all CSG solids.
+  The method compute the exact geometrical values and stores it.
+  The value is reset each time a parameter of the solid is modified.
+- Moved inline methods for G4Orb to .icc file.
+- Added unit test testSurfaceInOut.cc.
+
+Sep 16, 2004  V.Grichine                 geom-csg-V06-02-03
+- Bug fix in G4Sphere::SurfaceNormal(p) for theta normals.
+
+Jul 28, 2004  V.Grichine                 geom-csg-V06-02-02
+- Fix in G4Cons::DistanceToIn(p,v) on fRmax surface and move in,
+  the condition became a bit more strict && determinant >=0, i.e.
+  intersections in addition to go in.
+  Fixes a rare problem of dIn=dOut=0 observed in 3 events over a
+  statistics of 10^8..
+- Updated unit test testSurfaceInOut.cc to consider the test-case above.
+
+Jul 16, 2004  V.Grichine                 geom-csg-V06-02-01
+- Fix in G4Sphere::DistanceToOut(p,v,...) on fRmin moving outside.
+  The bug showed 3 events of dIn=dOut=0 for 10^7 statistics in
+  testSurfaceInOut.
+- Added new unit test testSurfaceInOut.cc.
+
+Jul 02, 2004  V.Grichine                 geom-csg-V06-02-00
+- Fixes curing rare conditions of loops at boundaries for G4Orb and G4Sphere:
+  o G4Orb.cc: bug fix in DistanceToIn(p,v) on fRmax surface allowing
+    move near fRmax-fCarTolerance/2.
+  o G4Sphere.cc: bug fix in DistanceToIn(p,v) on Rmax/min surface for
+    condition of intersection with (Rmax/min-kCarTolerance) artificial
+    surface.
+- Updated unit test for G4Orb.
 
 Mar 18, 2004  V.Grichine                 geom-csg-V06-00-01
 - G4Torus.cc: bug fix in Inside(p) fixing warnings reported in

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation52.cc,v 1.1 2003/08/08 11:30:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4hIonisation52.cc,v 1.4 2004/12/01 19:37:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //---------------- G4hIonisation52 physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997
@@ -56,6 +56,7 @@
 // 17-04-03 fix problem of hadron tests (V.Ivanchenko)
 // 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -75,6 +76,8 @@ G4double G4hIonisation52::UpperBoundLambda = 100.*TeV;
 G4int	 G4hIonisation52::NbinLambda = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4hIonisation52::G4hIonisation52(const G4String& processName)
    : G4VhEnergyLoss(processName),
@@ -357,7 +360,7 @@ G4double G4hIonisation52::ComputeRestrictedMeandEdx (
   //
   if (tau > taul)
     {
-     G4double rcut = std::min(DeltaThreshold/Tmax, 1.);
+     G4double rcut = min(DeltaThreshold/Tmax, 1.);
      dEdx = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
             +log(rcut)-(1.+rcut)*beta2;
 
@@ -574,140 +577,24 @@ G4VParticleChange* G4hIonisation52::PostStepDoIt(const G4Track& trackData,
     finalPy /= finalMomentum;
     finalPz /= finalMomentum;
 
-    aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+    aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
    }
   else
    {
      Edep = finalKineticEnergy;
      finalKineticEnergy = 0.;
      if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
-           aParticleChange.SetStatusChange(fStopAndKill);
-     else  aParticleChange.SetStatusChange(fStopButAlive);
+           aParticleChange.ProposeTrackStatus(fStopAndKill);
+     else  aParticleChange.ProposeTrackStatus(fStopButAlive);
    }
 
-  aParticleChange.SetEnergyChange( finalKineticEnergy );
+  aParticleChange.ProposeEnergy( finalKineticEnergy );
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(theDeltaRay);
-  aParticleChange.SetLocalEnergyDeposit (Edep);
+  aParticleChange.ProposeLocalEnergyDeposit (Edep);
 
   //ResetNumberOfInteractionLengthLeft();
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4hIonisation52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory,
-				              G4bool          ascii)
-{
-  G4String particleName = particle->GetParticleName();
-  G4String filename;
-
-  // store stopping power table
-  if ((particleName == "proton")||(particleName == "anti_proton")) {
-    filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-    if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-      G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-             << G4endl;
-      return false;
-    }
-  }
-
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particleName
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4hIonisation52::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory,
-				                 G4bool          ascii)
-{
-
-  G4String particleName = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" &&
-     particleName != "GenericIon" &&
-     particle->GetParticleSubType() == "generic")
-  {
-
-     G4EnergyLossTables::Register(particle,
-              theDEDXpTable,
-              theRangepTable,
-              theInverseRangepTable,
-              theLabTimepTable,
-              theProperTimepTable,
-              LowestKineticEnergy, HighestKineticEnergy,
-              proton_mass_c2/particle->GetPDGMass(),
-              TotBin);
-
-     return true;
-  }
-
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-  // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss();
-  HighestKineticEnergy = GetUpperBoundEloss();
-  TotBin               = GetNbinEloss();
-
-  G4String filename;
-
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
-
-  G4double charge = particle->GetPDGCharge()/eplus;
-  G4ParticleDefinition* basep = G4Proton::Proton();
-  if(charge < 0.0) basep = G4AntiProton::AntiProton();
-  filename = GetPhysicsTableFileName(basep,directory,"StoppingPower",ascii);
-
-  theLossTable = new G4PhysicsTable(numOfCouples);
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-      G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
-             << G4endl;
-      BuildPhysicsTable(*particle);
-      return true;
-  }
-  RecorderOfpProcess[0] = (*this).theLossTable;
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  initialMass = particle->GetPDGMass();
-
-
-  G4cout << GetProcessName() << " for " << particleName
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  BuildDEDXTable(*particle);
-  if (particle == G4Proton::Proton())  PrintInfoDefinition();
-
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.16 2004/03/26 14:59:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: clparse.cc,v 1.17 2004/12/07 08:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol
@@ -259,7 +259,7 @@ void G3fillParams(G4String *tokens, const char *ptypes)
             case 'Q':
                 // special case of reading three successive R arrays 
                 // into one (used in gsmixt)
-                narray = 3 * abs(narray);
+                narray = 3 * std::abs(narray);
                 for (k=0; k < narray; k++) 
                     { 
                         Rpar[nr] = atof(tokens[ipt].data()); 

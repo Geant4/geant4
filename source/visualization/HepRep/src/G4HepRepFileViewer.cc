@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepFileViewer.cc,v 1.12 2004/03/15 08:00:22 perl Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 #include "G4HepRepFileViewer.hh"
 

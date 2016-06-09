@@ -30,7 +30,7 @@
 //    ******************************
 //
 // $Id: PurgMagRunAction.hh,v 1.2 2004/06/18 09:17:49 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifndef PurgMagRunAction_h

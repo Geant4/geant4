@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.8 2003/06/16 17:10:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.9 2004/12/07 13:49:35 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1
@@ -46,7 +46,7 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   public:
   G4NeutronHPMadlandNixSpectrum()
   {
-    expm1 = exp(-1.);
+    expm1 = std::exp(-1.);
   }
   ~G4NeutronHPMadlandNixSpectrum()
   {
@@ -84,26 +84,26 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   inline G4double Gamma05(G4double aValue)
   {
     G4double result;
-    // gamma(1.2,x*X) = sqrt(pi)*Erf(x)
-    G4double x = sqrt(aValue);
+    // gamma(1.2,x*X) = std::sqrt(pi)*Erf(x)
+    G4double x = std::sqrt(aValue);
     G4double t = 1./(1+0.47047*x);
-    result = 1- (0.3480242*t - 0.0958798*t*t + 0.7478556*t*t*t)*exp(-aValue); // @ check
-    result *= sqrt(pi);
+    result = 1- (0.3480242*t - 0.0958798*t*t + 0.7478556*t*t*t)*std::exp(-aValue); // @ check
+    result *= std::sqrt(pi);
     return result;
   }
   
   inline G4double Gamma15(G4double aValue)
   {
     G4double result;
-    // gamma(a+1, x) = a*gamma(a,x)-x**a*exp(-x)
-    result = 0.5*Gamma05(aValue) - sqrt(aValue)*exp(-aValue); // @ check
+    // gamma(a+1, x) = a*gamma(a,x)-x**a*std::exp(-x)
+    result = 0.5*Gamma05(aValue) - std::sqrt(aValue)*std::exp(-aValue); // @ check
     return result;
   }
   
   inline G4double Gamma25(G4double aValue)
   {
     G4double result;
-    result = 1.5*Gamma15(aValue) - pow(aValue,1.5)*exp(aValue); // @ check
+    result = 1.5*Gamma15(aValue) - std::pow(aValue,1.5)*std::exp(aValue); // @ check
     return result;
   }
   
@@ -113,7 +113,7 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   // exponential integral. (<5 seems ok.
     G4double gamma = 0.577216;
     G4double precision = 0.000001;
-    G4double result =-gamma - log(aValue);
+    G4double result =-gamma - std::log(aValue);
     G4double term = -aValue;
     G4double last;
     G4int count = 1;
@@ -124,7 +124,7 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
       last = result;
       term = -term*aValue*(count-1)/(count*count);
       result -=term;
-      if(fabs(term)/fabs(result)<precision) break;
+      if(std::fabs(term)/std::fabs(result)<precision) break;
     }
 //    NagError *fail; @
 //    result = nag_exp_integral(aValue, fail); @

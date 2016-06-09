@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.icc,v 1.1 2003/08/08 11:30:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlung52.icc,v 1.2 2004/12/01 19:37:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //      ------------ G4eBremsstrahlung52 physics process ---------
 //                     by Michel Maire, 27 July 1996
@@ -79,7 +79,7 @@ inline G4double G4eBremsstrahlung52::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
 
@@ -96,7 +96,7 @@ inline G4double G4eBremsstrahlung52::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
 

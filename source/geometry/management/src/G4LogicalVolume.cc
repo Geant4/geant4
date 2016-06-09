@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.18 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalVolume.cc,v 1.22 2004/11/15 14:15:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -37,6 +37,11 @@
 
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4VSolid.hh"
+#include "G4Material.hh"
+#include "G4VPVParameterisation.hh"
+
+#include "G4UnitsTable.hh"
 
 // ********************************************************************
 // Constructor - sets member data and adds to logical Store,
@@ -53,7 +58,7 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
                                   G4bool optimise )
  : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr),
    fVoxel(0), fOptimise(optimise), fRootRegion(false), fSmartless(2.),
-   fVisAttributes(0), fFastSimulationManager(0), fRegion(0),
+   fMass(0.), fVisAttributes(0), fFastSimulationManager(0), fRegion(0),
    fCutsCouple(0), fIsEnvelope(false)
 {
   SetSolid(pSolid);
@@ -226,4 +231,116 @@ G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
     }
   }
   return motherLogVol;
+}
+
+// ********************************************************************
+// TotalVolumeEntities
+//
+// Returns the total number of physical volumes (replicated or placed)
+// in the tree represented by the current logical volume.
+// ********************************************************************
+//
+G4int G4LogicalVolume::TotalVolumeEntities() const
+{
+  static G4int vols = 0;
+
+  vols++;
+  for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
+       itDau != fDaughters.end(); itDau++)
+  {
+    G4VPhysicalVolume* physDaughter = (*itDau);
+    for (G4int i=0; i<physDaughter->GetMultiplicity(); i++)
+    {
+      physDaughter->GetLogicalVolume()->TotalVolumeEntities();
+    }
+  }
+  return vols;
+}
+
+// ********************************************************************
+// GetMass
+//
+// Returns the mass of the logical volume tree computed from the
+// estimated geometrical volume of each solid and material associated
+// to the logical volume and its daughters.
+// NOTE: the computation may require considerable amount of time,
+//       depending from the complexity of the geometry tree.
+//       The returned value is cached and can be used for successive
+//       calls (default), unless recomputation is forced by providing
+//       'true' for the boolean argument in input. Computation should
+//       be forced if the geometry setup has changed after the previous
+//       call. The extra argument 'parMaterial' is internally used to
+//       consider cases of geometrical parameterisations by material.
+// ********************************************************************
+//
+G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
+{
+  // Return the cached non-zero value, if not forced
+  //
+  if ( (fMass) && (!forced) ) return fMass;
+
+  // Global density and computed mass associated to the logical
+  // volume without considering its daughters
+  //
+  G4Material* logMaterial = parMaterial ? parMaterial : fMaterial;
+  if (!logMaterial)
+  {
+    G4cerr << "ERROR - G4LogicalVolume::GetMass()" << G4endl
+           << "        No material is associated to the logical volume: "
+           << fName << " !  Sorry, cannot compute the mass ..." << G4endl;
+    G4Exception("G4LogicalVolume::GetMass()", "InvalidSetup", FatalException,
+		"No material associated to the logical volume !");
+  }
+  if (!fSolid)
+  {
+    G4cerr << "ERROR - G4LogicalVolume::GetMass()" << G4endl
+           << "        No solid is associated to the logical volume: "
+           << fName << " !  Sorry, cannot compute the mass ..." << G4endl;
+    G4Exception("G4LogicalVolume::GetMass()", "InvalidSetup", FatalException,
+		"No solid associated to the logical volume !");
+  }
+  G4double globalDensity = logMaterial->GetDensity();
+  fMass = fSolid->GetCubicVolume() * globalDensity;
+
+  // For each daughter in the tree, subtract the mass occupied
+  // and add the real daughter's one computed recursively
+
+  for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
+       itDau != fDaughters.end(); itDau++)
+  {
+    G4VPhysicalVolume* physDaughter = (*itDau);
+    G4LogicalVolume* logDaughter = physDaughter->GetLogicalVolume();
+    G4double subMass=0.;
+    G4VSolid* daughterSolid = 0;
+    G4Material* daughterMaterial = 0;
+
+    // Compute the mass to subtract and to add for each daughter
+    // considering its multiplicity (i.e. replicated or not) and
+    // eventually its parameterisation (by solid and/or by material)
+    //
+    for (G4int i=0; i<physDaughter->GetMultiplicity(); i++)
+    {
+      G4VPVParameterisation*
+        physParam = physDaughter->GetParameterisation();
+      if (physParam)
+      {
+        daughterSolid = physParam->ComputeSolid(i, physDaughter);
+        daughterSolid->ComputeDimensions(physParam, i, physDaughter);
+        daughterMaterial = physParam->ComputeMaterial(i, physDaughter);
+      }
+      else
+      {
+        daughterSolid = logDaughter->GetSolid();
+        daughterMaterial = logDaughter->GetMaterial();
+      }
+      subMass = daughterSolid->GetCubicVolume() * globalDensity;
+
+      // Subtract the daughter's portion for the mass and add the real
+      // daughter's mass computed recursively
+      //
+      fMass = fMass - subMass + logDaughter->GetMass(true, daughterMaterial);
+    }
+  }
+
+  return fMass;
 }

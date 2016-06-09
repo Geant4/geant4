@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.37 2003/06/16 17:14:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.39 2004/08/03 15:57:56 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -462,87 +462,6 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
-//////// /vis/viewer/lightsThetaPhi and lightsVector /////////////
-
-G4VisCommandViewerLights::G4VisCommandViewerLights ():
-  fLightsVector (G4ThreeVector(0.,0.,1.))
-{
-  G4bool omitable;
-
-  fpCommandLightsThetaPhi = new G4UIcommand
-    ("/vis/viewer/lightsThetaPhi", this);
-  fpCommandLightsThetaPhi -> SetGuidance
-    ("/vis/viewer/lightsThetaPhi  [<theta>] [<phi>] [deg|rad]");
-  fpCommandLightsThetaPhi -> SetGuidance
-    ("Set direction from target to lights.");
-  G4UIparameter* parameter;
-  parameter = new G4UIparameter("theta", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandLightsThetaPhi -> SetParameter (parameter);
-  parameter = new G4UIparameter("phi", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandLightsThetaPhi -> SetParameter (parameter);
-  parameter = new G4UIparameter ("unit", 's', omitable = true);
-  parameter -> SetDefaultValue ("deg");
-  fpCommandLightsThetaPhi -> SetParameter (parameter);
-
-  fpCommandLightsVector = new G4UIcommand
-    ("/vis/viewer/lightsVector", this);
-  fpCommandLightsVector -> SetGuidance
-    ("/vis/viewer/lightsVector  [<x>] [<y>] [<z>]");
-  fpCommandLightsVector -> SetGuidance
-    ("Set direction from target to lights.");
-  parameter = new G4UIparameter("x", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandLightsVector -> SetParameter (parameter);
-  parameter = new G4UIparameter("y", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandLightsVector -> SetParameter (parameter);
-  parameter = new G4UIparameter ("z", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandLightsVector -> SetParameter (parameter);
-}
-
-G4VisCommandViewerLights::~G4VisCommandViewerLights () {
-  delete fpCommandLightsThetaPhi;
-  delete fpCommandLightsVector;
-}
-
-G4String G4VisCommandViewerLights::GetCurrentValue (G4UIcommand* command) {
-  G4String currentValue;
-  if (command == fpCommandLightsThetaPhi) {
-    currentValue = ConvertToString(fLightsVector.theta(),
-			   fLightsVector.phi(), "deg");
-  }
-  else if (command == fpCommandLightsVector) {
-    currentValue = ConvertToString(fLightsVector);
-  }
-  return currentValue;
-}
-
-void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  if (command == fpCommandLightsThetaPhi) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsThetaPhi\"."
-	     << G4endl;
-    }
-    G4UImanager::GetUIpointer()->ApplyCommand(
-      G4String("/vis/viewer/set/LightsThetaPhi " + newValue));
-  }
-  else if (command == fpCommandLightsVector) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsVector\"."
-	     << G4endl;
-    }
-    G4UImanager::GetUIpointer()->ApplyCommand(
-      G4String("/vis/viewer/set/LightsVector " + newValue));
-  }
-}
-
 ////////////// /vis/viewer/list ///////////////////////////////////////
 
 G4VisCommandViewerList::G4VisCommandViewerList () {
@@ -728,11 +647,11 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
   G4ViewParameters vp = currentViewer->GetViewParameters();
 
   if (command == fpCommandPan) {
-    GetNewDoublePairValue(newValue, fPanIncrementRight, fPanIncrementUp);
+    ConvertToDoublePair(newValue, fPanIncrementRight, fPanIncrementUp);
     vp.IncrementPan(fPanIncrementRight, fPanIncrementUp);
   }
   else if (command == fpCommandPanTo) {
-    GetNewDoublePairValue(newValue, fPanToRight, fPanToUp);
+    ConvertToDoublePair(newValue, fPanToRight, fPanToUp);
     vp.SetPan(fPanToRight, fPanToUp);
   }
 
@@ -1021,7 +940,6 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////
-// Synonym (deprecated): /vis/viewer/show ///////////////////////////
 
 G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
   G4bool omitable, currentAsDefault;
@@ -1040,18 +958,10 @@ G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
 				 omitable = true,
 				 currentAsDefault = true);
   viewerNameCommands.push_back (fpCommand);
-  fpCommand1 = new G4UIcmdWithAString ("/vis/viewer/show", this);
-  fpCommand1 -> SetGuidance
-    ("Synonym for \"/vis/viewer/update\" - see that command for guidance.");
-  fpCommand1 -> SetParameterName ("viewer-name",
-				  omitable = true,
-				  currentAsDefault = true);
-  viewerNameCommands.push_back (fpCommand1);
 }
 
 G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
   delete fpCommand;
-  delete fpCommand1;
 }
 
 G4String G4VisCommandViewerUpdate::GetCurrentValue (G4UIcommand*) {
@@ -1084,91 +994,6 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << " not found - \"/vis/viewer/list\""
 	"\n  to see possibilities." << G4endl;
     }
-  }
-}
-
-//////// /vis/viewer/viewpointThetaPhi and viewpointVector /////////////
-
-G4VisCommandViewerViewpoint::G4VisCommandViewerViewpoint ():
-  fViewpointVector (G4ThreeVector(0.,0.,1.))
-{
-  G4bool omitable;
-
-  fpCommandViewpointThetaPhi = new G4UIcommand
-    ("/vis/viewer/viewpointThetaPhi", this);
-  fpCommandViewpointThetaPhi -> SetGuidance
-    ("/vis/viewer/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
-  fpCommandViewpointThetaPhi -> SetGuidance
-    ("Set direction from target to camera.  Also changes lightpoint direction"
-     "\nif lights are set to move with camera.");
-  G4UIparameter* parameter;
-  parameter = new G4UIparameter("theta", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandViewpointThetaPhi -> SetParameter (parameter);
-  parameter = new G4UIparameter("phi", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandViewpointThetaPhi -> SetParameter (parameter);
-  parameter = new G4UIparameter ("unit", 's', omitable = true);
-  parameter -> SetDefaultValue ("deg");
-  fpCommandViewpointThetaPhi -> SetParameter (parameter);
-
-  fpCommandViewpointVector = new G4UIcommand
-    ("/vis/viewer/viewpointVector", this);
-  fpCommandViewpointVector -> SetGuidance
-    ("/vis/viewer/viewpointVector  [<x>] [<y>] [<z>]");
-  fpCommandViewpointVector -> SetGuidance
-    ("Set direction from target to camera.  Also changes lightpoint direction"
-     "\nif lights are set to move with camera.");
-  parameter = new G4UIparameter("x", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandViewpointVector -> SetParameter (parameter);
-  parameter = new G4UIparameter("y", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandViewpointVector -> SetParameter (parameter);
-  parameter = new G4UIparameter ("z", 'd', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
-  fpCommandViewpointVector -> SetParameter (parameter);
-}
-
-G4VisCommandViewerViewpoint::~G4VisCommandViewerViewpoint () {
-  delete fpCommandViewpointThetaPhi;
-  delete fpCommandViewpointVector;
-}
-
-G4String G4VisCommandViewerViewpoint::GetCurrentValue (G4UIcommand* command) {
-  G4String currentValue;
-  if (command == fpCommandViewpointThetaPhi) {
-    currentValue = ConvertToString(fViewpointVector.theta(),
-			   fViewpointVector.phi(), "deg");
-  }
-  else if (command == fpCommandViewpointVector) {
-    currentValue = ConvertToString(fViewpointVector);
-  }
-  return currentValue;
-}
-
-void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
-					       G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  if (command == fpCommandViewpointThetaPhi) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointThetaPhi\"."
-	     << G4endl;
-    }
-    G4UImanager::GetUIpointer()->ApplyCommand(
-      G4String("/vis/viewer/set/viewpointThetaPhi " + newValue));
-  }
-  else if (command == fpCommandViewpointVector) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointVector\"."
-	     << G4endl;
-    }
-    G4UImanager::GetUIpointer()->ApplyCommand(
-      G4String("/vis/viewer/set/viewpointVector " + newValue));
   }
 }
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSim.py,v 1.8 2004/06/09 15:04:35 daquinog Exp $
+# $Id: runSim.py,v 1.10 2004/12/08 17:25:34 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 
 # importing python libraries
@@ -30,11 +30,6 @@ import runSequence
 ##########################################################################
 Tiara.setRandomSeed(891011);
 #Tiara.setRandomStatus("dTest/tiara-2003_5_27_20_5_39_pcgeant2/randomNumberFile_run00003");    
-
-
-
-
-
 
 
 
@@ -69,9 +64,13 @@ timeForOneRun = 2 * myUtils.min
 # Idle> /run/beamOn 10
 
 
-# available physics lists: TiaraPhysicsList, LHEP_LEAD_HP, LHEP_PRECO_HP
-# CASCADE_HP LHEP_BIC  LHEP_BIC_BIC
-physList = Tiara.LHEP_BIC_HP()
+# available physics lists: LHEP_LEAD, LHEP_PRECO_HP
+# LHEP_BIC  LHEP_BIC_HP  LHEP_PRECO  LHEP
+#3physList = Tiara.LHEP()
+##physList = Tiara.LHEP_PRECO()
+##physList = Tiara.LHEP_PRECO_HP()
+physList = Tiara.LHEP_LEAD()
+
 
 # specify the detectors
 scoreDetectorCreator = tiaraDetectors.ThreeZylindricDetectors()
@@ -79,14 +78,6 @@ scoreDetectorCreator = tiaraDetectors.ThreeZylindricDetectors()
 
 
 comment = ""
-
-
-
-
-
-
-
-
 
 
 
@@ -105,11 +96,6 @@ experiment = tiaraSpecifications.Experiment(beamEnergy,
 tiaraSpecs = tiaraSpecifications.Specifications(Tiara.TiaraDimensions(),
                                                 experiment,
                                                 Tiara.TiaraMaterials())
-
-
-
-
-
 
 
 
@@ -148,10 +134,6 @@ impScorer = G4Kernel.G4Scorer()
 
 
 
-
-
-
-
 ##########################################################################
 # Creation of a TiaraApplet to define the run mode, physics list,
 # detector type and the primary generator
@@ -160,6 +142,7 @@ impScorer = G4Kernel.G4Scorer()
 # this and the remaining part should be fine for most settings
 tApp = tiaraApplication.TiaraApplet(tiaraSpecs,
                                     Tiara.TiaraSim_GetTiaraSim())
+
 if totalTime == 0:
     tApp.visMode()
 else:
@@ -178,17 +161,19 @@ primGenBuilder = tiaraGenerators.\
                                          "/data/expDataConverted/dpsSource.xml")
 #primGenBuilder = tiaraGenerators.TiaraPrimaryGenerator(tiaraSpecs)
 #primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
-tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
+tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
 tApp.noComponents = 0
 tApp.config()
 
-
-
-
-
-
+## The following lines should be probably moved here after release Geant4-7.0
+##physList = Tiara.LHEP()
+##physList = Tiara.LHEP_PRECO()
+##physList = Tiara.LHEP_PRECO_HP()
+##physList = Tiara.LHEP_LEAD()
+##tApp.specifyPhysicsList(physList, particleCut)
+##tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
 
 
@@ -197,14 +182,6 @@ tApp.config()
 ##########################################################################
 parallelSampler = myUtils.createParallelSampler(impGeo,
                                                 impScorer)
-
-
-
-
-
-
-
-
 
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.10 2003/11/03 17:54:38 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.11 2004/12/07 13:50:02 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"
@@ -78,7 +78,7 @@ G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4doub
 
 // Get the energy from phase-space distribution
    // in CMS
-   // P = Cn*sqrt(E')*(Emax-E')**(3*n/2-4)
+   // P = Cn*std::sqrt(E')*(Emax-E')**(3*n/2-4)
    G4double maxE = GetEmax(anEnergy, result->GetMass());
    G4double energy;
    G4double max(0);
@@ -114,10 +114,10 @@ G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4doub
 // now do random direction
    G4double cosTh = 2.*G4UniformRand()-1.;
    G4double phi = twopi*G4UniformRand();
-   G4double theta = acos(cosTh);
-   G4double sinth = sin(theta);
+   G4double theta = std::acos(cosTh);
+   G4double sinth = std::sin(theta);
    G4double mtot = result->GetTotalMomentum(); 
-   G4ThreeVector tempVector(mtot*sinth*cos(phi), mtot*sinth*sin(phi), mtot*cos(theta) );
+   G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*std::cos(theta) );
    result->SetMomentum(tempVector);
    G4ReactionProduct aCMS = *GetTarget()+*GetNeutron();
    result->Lorentz(*result, -1.*aCMS);

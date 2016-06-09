@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VElasticCollision.cc,v 1.1 2003/10/07 12:37:40 hpw Exp $ //
+// $Id: G4VElasticCollision.cc,v 1.2 2004/12/07 13:48:52 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4VElasticCollision.hh"
@@ -99,17 +99,17 @@ G4KineticTrackVector* G4VElasticCollision::FinalState(const G4KineticTrack& trk1
    }
 
   G4double phi = angDistribution->Phi();
-  G4double Theta = acos(cosTheta);
+  G4double Theta = std::acos(cosTheta);
 
   // Unit vector of three-momentum
-  G4ThreeVector pFinal1(sin(Theta)*cos(phi), sin(Theta)*sin(phi), cosTheta);
+  G4ThreeVector pFinal1(std::sin(Theta)*std::cos(phi), std::sin(Theta)*std::sin(phi), cosTheta);
   // Three momentum in cm system
-  G4double pInCM = sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
+  G4double pInCM = std::sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
   pFinal1 = pFinal1 * pInCM;
   G4ThreeVector pFinal2 = -pFinal1;
 
-  G4double eFinal1 = sqrt(pFinal1.mag2() + m10*m10);
-  G4double eFinal2 = sqrt(pFinal2.mag2() + m20*m20);
+  G4double eFinal1 = std::sqrt(pFinal1.mag2() + m10*m10);
+  G4double eFinal2 = std::sqrt(pFinal2.mag2() + m20*m20);
 
   G4LorentzVector p4Final1(pFinal1, eFinal1);
   G4LorentzVector p4Final2(pFinal2, eFinal2);

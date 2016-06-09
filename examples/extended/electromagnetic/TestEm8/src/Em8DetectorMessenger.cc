@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8DetectorMessenger.cc,v 1.6 2004/05/27 08:39:06 grichine Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.11 2004/03/18 13:40:36 pandola Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4PenelopeRayleigh.cc,v 1.13 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
@@ -33,7 +33,7 @@
 //                            from SUN
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
 // 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
-// 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
+// 17 Mar 2004 L.Pandola      Removed unnecessary calls to std::pow(a,b)
 // 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
 // --------------------------------------------------------------------
 
@@ -105,10 +105,10 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   G4DataVector energyVector;
-  G4double dBin = log10(highEnergyLimit/lowEnergyLimit)/nBins;
+  G4double dBin = std::log10(highEnergyLimit/lowEnergyLimit)/nBins;
   for (G4int i=0;i<nBins;i++)
     {
-      energyVector.push_back(pow(10.,log10(lowEnergyLimit)+i*dBin));
+      energyVector.push_back(std::pow(10.,std::log10(lowEnergyLimit)+i*dBin));
     }
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -208,9 +208,9 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
   if (photonEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -225,7 +225,7 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
   // Sample the angle of the scattered photon
   const G4double xpar=41.2148;
-  G4double x2max = 2.0*log(xpar*photonEnergy0/electron_mass_c2);
+  G4double x2max = 2.0*std::log(xpar*photonEnergy0/electron_mass_c2);
   G4int jm;
   G4int asize = samplingFunction_x->size();
   if (x2max<(*samplingFunction_x)[1]) 
@@ -246,7 +246,7 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
   G4double ru,denomin,x2rat;
   G4double CDT,G,rand;
   do{
-    ru = rumax + log(G4UniformRand());
+    ru = rumax + std::log(G4UniformRand());
     j=0;
     ju=jm+1;
     do{
@@ -270,29 +270,29 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
      {
        x2rat = (*samplingFunction_x)[j]-x2max;
      }
-    CDT = 1.0-2.0*exp(x2rat);
+    CDT = 1.0-2.0*std::exp(x2rat);
     G = 0.5*(1.0+CDT*CDT);
     rand = G4UniformRand();
    }while (rand>G);
   
   G4double cosTheta = CDT;
-  G4double sinTheta = sqrt(1-cosTheta*cosTheta);
+  G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
  
 
 
 
   // Scattered photon angles. ( Z - axis along the parent photon)
   G4double phi = twopi * G4UniformRand() ;
-  G4double dirX = sinTheta*cos(phi);
-  G4double dirY = sinTheta*sin(phi);
+  G4double dirX = sinTheta*std::cos(phi);
+  G4double dirY = sinTheta*std::sin(phi);
   G4double dirZ = cosTheta;
   
   // Update G4VParticleChange for the scattered photon 
   G4ThreeVector photonDirection1(dirX, dirY, dirZ);
 
   photonDirection1.rotateUz(photonDirection0);
-  aParticleChange.SetEnergyChange(photonEnergy0);
-  aParticleChange.SetMomentumChange(photonDirection1);
+  aParticleChange.ProposeEnergy(photonEnergy0);
+  aParticleChange.ProposeMomentumDirection(photonDirection1);
   
   aParticleChange.SetNumberOfSecondaries(0);
 
@@ -329,8 +329,8 @@ void G4PenelopeRayleigh::InizialiseSampling()
   const G4int points=241;
   G4double Xlow = 0.;
   G4double Xhigh=1e-04;
-  G4double fact = pow((1e06/Xhigh),(1/240.0));
-  samplingConstant=log(fact);
+  G4double fact = std::pow((1e06/Xhigh),(1/240.0));
+  samplingConstant=std::log(fact);
   
   if (theTable==SamplingTables.end()) { //material not inizialized yet
     samplingFunction_x = new G4DataVector();
@@ -352,8 +352,8 @@ void G4PenelopeRayleigh::InizialiseSampling()
       samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
     }
     for (i=0;i<points;i++){
-      (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
-      (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
+      (*samplingFunction_x)[i]=std::log((*samplingFunction_x)[i]);
+      (*samplingFunction_y)[i]=std::log((*samplingFunction_y)[i]);
     }
     SamplingTables[material] = std::pair<G4DataVector*,G4DataVector*> (samplingFunction_x,samplingFunction_y);
   }
@@ -468,7 +468,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 		      1.7166e-2, 1.9954e-2, 2.2497e-2, 2.1942e-2, 2.1965e-2,
 		      2.0005e-2, 1.8927e-2, 1.8167e-2, 1.6314e-2, 1.5522e-2};
 
-  G4double x=sqrt(y);
+  G4double x=std::sqrt(y);
   G4double gradx1=0.0;
   G4double fa=0.0;
 
@@ -489,9 +489,9 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 	G4double k1=0.3125;
 	G4double k2=2.426311e-02;
 	Pa=(Z-k1)*fine_structure_const;
-	Pg=sqrt(1-(Pa*Pa));
+	Pg=std::sqrt(1-(Pa*Pa));
 	Pq=k2*x/Pa;
-	fb=sin(2*Pg*atan(Pq))/(Pg*Pq*pow((1+Pq*Pq),Pg));
+	fb=std::sin(2*Pg*std::atan(Pq))/(Pg*Pq*std::pow((1+Pq*Pq),Pg));
 	fa=std::max(fa,fb);
       }
     if (stechiometric)

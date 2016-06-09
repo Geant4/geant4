@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.1 2004/04/08 09:37:30 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4OpenInventorXtViewer.hh,v 1.12 2004/11/25 13:39:54 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -33,38 +33,47 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include "G4VViewer.hh"
+// Inheritance :
+#include "G4OpenInventorViewer.hh"
 
 #include <X11/Intrinsic.h>
 class SoXtExaminerViewer;
 
-class SoSelection;
-class G4OpenInventorSceneHandler;
-class G4VInteractorManager;
-
-//
-// Base class for various OpenInventorView classes.
-//
-class G4OpenInventorXtViewer: public G4VViewer {
-
+class G4OpenInventorXtViewer: public G4OpenInventorViewer {
+public: //G4VViewer
+  virtual void FinishView();
+protected:
+  virtual void ViewerRender();
+  virtual SoCamera* GetCamera();
 public:
   G4OpenInventorXtViewer(G4OpenInventorSceneHandler& scene,
-		       const G4String& name = "");
+		         const G4String& name = "");
   virtual ~G4OpenInventorXtViewer();
-  void DrawView();
-  void ShowView();
 private:
-  void ClearView();
-  void FinishView();
-  void SetView();
-  void KernelVisitDecision();
-  G4bool CompareForKernelVisit(G4ViewParameters&);
-  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
-  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
+  Widget AddMenu(Widget,const G4String&,const G4String&);
+  void AddButton(Widget,const G4String&,XtCallbackProc);
+private:
+  static void PostScriptCbk(Widget,XtPointer,XtPointer);
+  static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
+  static void WriteInventorCbk(Widget,XtPointer,XtPointer);
+  static void EscapeCbk(Widget,XtPointer,XtPointer);
+  static void SceneGraphStatisticsCbk(Widget,XtPointer,XtPointer);
+  static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
+  static void EraseEventCbk(Widget,XtPointer,XtPointer);
+  static void SetSolidCbk(Widget,XtPointer,XtPointer);
+  static void SetWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetReducedWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetFullWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
+  static void HelpCbk(Widget,XtPointer,XtPointer);
+  static void HelpCancelCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewAndFullCbk(Widget,XtPointer,XtPointer);
+private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;
-  SoSelection* fSelection;
-  G4VInteractorManager* fInteractorManager;
+  Widget fHelpForm;
+  Widget fHelpText;
 };
 
 #endif

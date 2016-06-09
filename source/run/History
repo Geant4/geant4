@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2004/06/11 15:17:17 gcosmo Exp $
+$Id: History,v 1.123 2004/12/07 09:13:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 7th, 2004 G.Cosmo (run-V06-02-08)
+- Changed date in G4RunManagerKernel for release 7.0.
+
+November 27th, 2004 H.Kurashige (run-V06-02-07)
+- Change "ConstructParticle" and "ConstructProcess" methods to 'public'
+
+November 25th, 2004 M.Asai (run-V06-02-06)
+- Fix a wrong behaviour of G4RunManager when the user modifies his/her
+  geometry without replacing the world.
+
+November 1st,  2004 H.Kurashige (run-V06-02-05)
+- Add PreparePhysicsTable for nucleus process initialization
+
+October 25,  2004 H.Kurashige (run-V06-02-04)
+- Modify BuildPhysicsTable for new scheme of Store/RetrievePhysicsTable 
+
+September 24, 2004 M.Asai (run-V06-02-03)
+- Temporarily allow the use of G4ParticleTable before the construction of physics table.
+
+August 30, 2004 M.Asai (run-V06-02-02)
+- G4RunManagerKernel lets G4ParticleTable know once the physics list
+  is instantiated and set to G4RunManagerKernel.
+
+August 10, 2004 M.Asai (run-V06-02-01)
+- G4VUserPhysicsList::GenerateParticles() is now invoked directly from
+ G4RunManagerKernel.
+
+July 21, 2004 G.Cosmo (run-V06-02-00)
+- Changed date for release 6.2-patch01.
 
 June 11, 2004 G.Cosmo (run-V06-01-03)
 - Use global flag G4RUN_ALLOC_EXPORT to export extern symbols for DLLs.

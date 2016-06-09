@@ -127,15 +127,15 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double ran = G4UniformRand();
    G4double aa, bb, cc, dd, rr;
    if (atno2 <= 62.) {
-      aa = pow(atno2, 1.63);
-      bb = 14.5*pow(atno2, 0.66);
-      cc = 1.4*pow(atno2, 0.33);
+      aa = std::pow(atno2, 1.63);
+      bb = 14.5*std::pow(atno2, 0.66);
+      cc = 1.4*std::pow(atno2, 0.33);
       dd = 10.;
    }
    else {
-      aa = pow(atno2, 1.33);
-      bb = 60.*pow(atno2, 0.33);
-      cc = 0.4*pow(atno2, 0.40);
+      aa = std::pow(atno2, 1.33);
+      bb = 60.*std::pow(atno2, 0.33);
+      cc = 0.4*std::pow(atno2, 0.40);
       dd = 10.;
    }
    aa = aa/bb;
@@ -145,10 +145,10 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
       G4cout << "DoIt: aa,bb,cc,dd,rr" << G4endl;
       G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << G4endl;
    }
-   G4double t1 = -log(ran)/bb;
-   G4double t2 = -log(ran)/dd;
+   G4double t1 = -std::log(ran)/bb;
+   G4double t2 = -std::log(ran)/dd;
    if (verboseLevel > 1) {
-      G4cout << "log(FLT_MAX)=" << log(FLT_MAX) << G4endl;
+      G4cout << "log(FLT_MAX)=" << std::log(FLT_MAX) << G4endl;
       G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << 
               G4endl;
       G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << 
@@ -176,10 +176,10 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    if (verboseLevel > 1)
       G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(std::max(rr*(2. - rr), 0.));
+   G4double sint = std::sqrt(std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
    // G4cout << "Entering elastic scattering 3"<<G4endl;
-   if (verboseLevel > 1) G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
+   if (verboseLevel > 1) G4cout << "cos(t)=" << cost << "  std::sin(t)=" << sint << G4endl;
 // Scattered particle referred to axis of incident particle
    G4double m1=aParticle->GetDefinition()->GetPDGMass();
    G4int Z=static_cast<G4int>(zTarget+.5);
@@ -191,23 +191,23 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double a=1+m2/m1;
    G4double b=-2.*p*cost;
    G4double c=p*p*(1-m2/m1);
-   G4double p1 = (-b+sqrt(b*b-4.*a*c))/(2.*a);
-   G4double px = p1*sint*sin(phi);
-   G4double py = p1*sint*cos(phi);
+   G4double p1 = (-b+std::sqrt(b*b-4.*a*c))/(2.*a);
+   G4double px = p1*sint*std::sin(phi);
+   G4double py = p1*sint*std::cos(phi);
    G4double pz = p1*cost;
 
 // relativistic calculation
-   G4double etot = sqrt(m1*m1+p*p)+m2;
+   G4double etot = std::sqrt(m1*m1+p*p)+m2;
    a = etot*etot-p*p*cost*cost;
    b = 2*p*p*(m1*cost*cost-etot);
    c = p*p*p*p*sint*sint;
    
-   G4double de = (-b-sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
-   G4double e1 = sqrt(p*p+m1*m1)-de;
+   G4double de = (-b-std::sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
+   G4double e1 = std::sqrt(p*p+m1*m1)-de;
    G4double p12=e1*e1-m1*m1;
-   p1 = sqrt(std::max(1.*eV*eV,p12));
-   px = p1*sint*sin(phi);
-   py = p1*sint*cos(phi);
+   p1 = std::sqrt(std::max(1.*eV*eV,p12));
+   px = p1*sint*std::sin(phi);
+   py = p1*sint*std::cos(phi);
    pz = p1*cost;
 
    if (verboseLevel > 1) 
@@ -244,8 +244,8 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    {
      //G4double pphi = 2*pi*G4UniformRand();
      //G4double ccth = 2*G4UniformRand()-1;
-     pxnew = 0;//sin(acos(ccth))*sin(pphi);
-     pynew = 0;//sin(acos(ccth))*cos(phi);
+     pxnew = 0;//std::sin(std::acos(ccth))*std::sin(pphi);
+     pynew = 0;//std::sin(std::acos(ccth))*std::cos(phi);
      pznew = 1;//ccth;
    }
    if (verboseLevel > 1) {
@@ -263,7 +263,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
       try
       {
         theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
-        theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
+        theParticleChange.SetEnergyChange(std::sqrt(m1*m1+it0.mag2())-m1);
       }
       catch(G4HadronicException)
       {
@@ -345,9 +345,9 @@ label4:
 
 // Test on satisfactory accuracy in bisection loop
       tol = eps;
-      a = abs(xr);
+      a = std::abs(xr);
       if (a > 1.) tol = tol*a;
-      if (abs(xr - xl) <= tol && abs(fr - fl) <= tolf) goto label14;
+      if (std::abs(xr - xl) <= tol && std::abs(fr - fl) <= tolf) goto label14;
    }
 // End of bisection loop
 
@@ -357,7 +357,7 @@ label4:
    ier = 1;
 
 label14:
-   if (abs(fr) > abs(fl)) {
+   if (std::abs(fr) > std::abs(fl)) {
       *x = xl;
       f = fl;
    }
@@ -376,9 +376,9 @@ label17:
 
 // Test on satisfactory accuracy in iteration loop
    tol = eps;
-   a = abs(*x);
+   a = std::abs(*x);
    if (a > 1) tol = tol*a;
-   if (abs(dx) <= tol && abs(f) <= tolf) return ier;
+   if (std::abs(dx) <= tol && std::abs(f) <= tolf) return ier;
 
 // Preparation of next bisection loop
    if (f*fl < 0.) {
@@ -413,7 +413,7 @@ G4LElastic::Fctcos(G4double t,
    if (test2 > expxu) test2 = expxu;
    if (test2 < expxl) test2 = expxl;
 
-   return aa*exp(test1) + cc*exp(test2) - rr;
+   return aa*std::exp(test1) + cc*std::exp(test2) - rr;
 }
 
 
@@ -426,14 +426,14 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
    G4double pt2 = pxinc*pxinc + pyinc*pyinc;
    if (pt2 > 0.) {
       G4double cost = pzinc/p;
-      G4double sint1 = sqrt(abs((1. - cost )*(1.+cost)));
-      G4double sint2 = sqrt(pt2)/p;
+      G4double sint1 = std::sqrt(std::abs((1. - cost )*(1.+cost)));
+      G4double sint2 = std::sqrt(pt2)/p;
       G4double sint = 0.5*(sint1 + sint2);
       G4double ph = pi*0.5;
       if (pyinc < 0.) ph = pi*1.5;
-      if (abs(pxinc) > 1.e-6) ph = atan2(pyinc, pxinc);
-      G4double cosp = cos(ph);
-      G4double sinp = sin(ph);
+      if (std::abs(pxinc) > 1.e-6) ph = std::atan2(pyinc, pxinc);
+      G4double cosp = std::cos(ph);
+      G4double sinp = std::sin(ph);
       if (verboseLevel > 1) {
          G4cout << "cost sint " << cost << " " << sint << G4endl;
          G4cout << "cosp sinp " << cosp << " " << sinp << G4endl;

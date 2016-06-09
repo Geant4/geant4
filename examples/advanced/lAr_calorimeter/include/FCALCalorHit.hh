@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALCalorHit.hh,v 1.4 2003/12/09 15:30:05 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: FCALCalorHit.hh,v 1.5 2004/11/29 18:03:04 ribon Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 

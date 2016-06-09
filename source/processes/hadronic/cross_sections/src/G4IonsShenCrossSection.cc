@@ -47,8 +47,8 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
  
    G4double one_third = 1.0 / 3.0;
 
-   G4double cubicrAt = pow ( G4double(At) , G4double(one_third) );  
-   G4double cubicrAp = pow ( G4double(Ap) , G4double(one_third) );  
+   G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) );  
+   G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
 
    G4double Rt = 1.12 * cubicrAt - 0.94 * ( 1.0 / cubicrAt );
    G4double Rp = 1.12 * cubicrAp - 0.94 * ( 1.0 / cubicrAp );
@@ -72,7 +72,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
    G4double Ecm = calEcmValue ( proj_mass , targ_mass , proj_momentum ); 
 
-   G4double R3 = 0.176 / pow ( G4double(Ecm) , G4double(one_third) ) * cubicrAt * cubicrAp / ( cubicrAt + cubicrAp );
+   G4double R3 = 0.176 / std::pow ( G4double(Ecm) , G4double(one_third) ) * cubicrAt * cubicrAp / ( cubicrAt + cubicrAp );
 
    G4double R = R1 + R2 + R3;
 
@@ -86,10 +86,10 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
 G4double G4IonsShenCrossSection::calEcmValue( const G4double mp , const G4double mt , const G4double Plab )
 {
-   G4double Elab = sqrt ( mp * mp + Plab * Plab );
-   G4double Ecm = sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
+   G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
+   G4double Ecm = std::sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
    G4double Pcm = Plab * mt / Ecm;
-   G4double KEcm = sqrt ( Pcm * Pcm + mp * mp ) - mp;
+   G4double KEcm = std::sqrt ( Pcm * Pcm + mp * mp ) - mp;
    return KEcm;
 }
 
@@ -103,14 +103,14 @@ G4double G4IonsShenCrossSection::calCeValue( const G4double ke )
    // There are no data below 30 MeV/n in Kox et al., 
 
    G4double Ce; 
-   G4double log10_ke = log10 ( ke );   
+   G4double log10_ke = std::log10 ( ke );   
    if ( log10_ke > 1.5 ) 
    {
-      Ce = - 10.0 / pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
+      Ce = - 10.0 / std::pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
    }
    else
    {
-      Ce = ( - 10.0 / pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / pow ( G4double(1.5) , G4double(3) ) * pow ( G4double(log10_ke) , G4double(3) );
+      Ce = ( - 10.0 / std::pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / std::pow ( G4double(1.5) , G4double(3) ) * std::pow ( G4double(log10_ke) , G4double(3) );
    }
    return Ce;
 }

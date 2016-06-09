@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedSigmaConstructor.cc,v 1.8 2003/06/20 00:40:04 kurasige Exp $
-// GEANT4 tag $Name: particles-V05-02-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------

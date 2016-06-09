@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.3 2004/12/07 13:50:19 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -226,14 +226,14 @@ G4ThreeVector G4SingleDiffractiveExcitation::GaussianPt(G4double widthSquare, G4
 	G4double pt2;
 
 	do {
-	    pt2=widthSquare * log( G4UniformRand() );
+	    pt2=widthSquare * std::log( G4UniformRand() );
 	} while ( pt2 > maxPtSquare);
 	
-	pt2=sqrt(pt2);
+	pt2=std::sqrt(pt2);
 	
 	G4double phi=G4UniformRand() * twopi;
 	
-	return G4ThreeVector (pt2*cos(phi), pt2*sin(phi), 0.);    
+	return G4ThreeVector (pt2*std::cos(phi), pt2*std::sin(phi), 0.);    
 }
 
 G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &)

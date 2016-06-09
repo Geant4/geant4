@@ -27,7 +27,7 @@
 
 
 // Table of Cumulative np Scattering Probabilities
-// To be used for generation as a function of cos(theta cm)
+// To be used for generation as a function of std::cos(theta cm)
 // NOTE: Assumes angle range to be generated is 0-180 degrees
 //       This allows tracking of
 //       well-defined GEANT4 particles and generation of secondary

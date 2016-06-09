@@ -1,0 +1,32 @@
+# $Id: atlashec.mac,v 1.1 2004/12/03 12:27:39 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+#
+# Atlas HEC model;
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setNbOfLayers 25
+/testem/det/setNbOfAbsor  2
+/testem/det/setAbsor 1 liquidArgon 0.85 cm
+/testem/det/setAbsor 2 Copper      2.5 cm
+/testem/det/setSizeYZ             17 cm
+#
+####/testem/phys/addPhysics  g4v52
+/testem/phys/addPhysics  standard
+/testem/phys/setCuts 0.07 mm
+#
+/run/initialize
+#
+/testem/histo/setFileName 10gev.paw
+/testem/histo/setHisto 1 100   0.   1000.  MeV
+/testem/histo/setHisto 2 100   9.   10.  GeV
+#
+/gun/particle e-
+/gun/energy 10 GeV
+/gun/position -40.635 0 0
+#
+/testem/event/printModulo 100
+/run/beamOn 1000
+

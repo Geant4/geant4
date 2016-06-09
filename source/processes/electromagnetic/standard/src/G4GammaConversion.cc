@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.19 2004/03/10 16:48:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4GammaConversion.cc,v 1.23 2004/12/01 19:37:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
-// 
+//
 // 11-06-96 Added SelectRandomAtom() method, M.Maire
 // 21-06-96 SetCuts implementation, M.Maire
 // 24-06-96 simplification in ComputeCrossSectionPerAtom, M.Maire
@@ -54,7 +54,8 @@
 // 20-09-01 DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01 come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit
-// 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma        
+// 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma
+// 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -62,7 +63,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4GammaConversion::G4GammaConversion(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
@@ -89,6 +90,13 @@ G4GammaConversion::~G4GammaConversion()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4GammaConversion::IsApplicable( const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Gamma::Gamma() ); 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,16 +154,16 @@ void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition&)
    G4Material* material;
 
    for ( J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )
-       { 
+       {
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable);
         material = (*theMaterialTable)[J];
- 
-        for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
+
+        for ( G4int i = 0 ; i < NumbBinTable ; i++ )
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
-             Value = ComputeMeanFreePath( LowEdgeEnergy, material);  
+             Value = ComputeMeanFreePath( LowEdgeEnergy, material);
              ptrVector->PutValue( i , Value ) ;
            }
 
@@ -170,7 +178,7 @@ void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition&)
 
 G4double G4GammaConversion::ComputeCrossSectionPerAtom
                               (G4double GammaEnergy, G4double AtomicNumber)
- 
+
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate
 // the total cross section.
@@ -183,7 +191,7 @@ G4double G4GammaConversion::ComputeCrossSectionPerAtom
  G4double CrossSection = 0.0 ;
  if ( AtomicNumber < 1. ) return CrossSection;
  if ( GammaEnergy < 2*electron_mass_c2 ) return CrossSection;
- 
+
  static const G4double
     a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
     a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
@@ -219,6 +227,79 @@ G4double G4GammaConversion::ComputeCrossSectionPerAtom
 
  return CrossSection;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
+                                                G4Material* aMaterial)
+
+// computes and returns the photon mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+      {             
+            SIGMA += NbOfAtomsPerVolume[i] * 
+                     ComputeCrossSectionPerAtom(GammaEnergy,
+                                               (*theElementVector)[i]->GetZ());
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversion::GetCrossSectionPerAtom(
+                                   const G4DynamicParticle* aDynamicGamma,
+                                         G4Element*         anElement)
+ 
+// gives the total cross section per atom in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( GammaEnergy, isOutRange );
+   }
+
+   return crossSection; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversion::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+
+// returns the photon mean free path in GEANT4 internal units
+// (MeanFreePath is a private member of the class)
+
+{
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   G4bool isOutRange;
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else {
+     if (GammaEnergy > HighestEnergyLimit) GammaEnergy=0.99*HighestEnergyLimit;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( GammaEnergy, isOutRange );
+   }
+
+   return MeanFreePath; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -237,7 +318,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 // Note 2 : The differential cross section implicitly takes account of 
 //          pair creation in both nuclear and atomic electron fields.
 //          However triplet prodution is not generated.
- 
+
 {
    aParticleChange.Initialize(aTrack);
    G4Material* aMaterial = aTrack.GetMaterial();
@@ -251,7 +332,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    G4double epsil0 = electron_mass_c2/GammaEnergy ;
 
   // do it fast if GammaEnergy < 2. MeV
-   const G4double Egsmall=2.*MeV; 
+   const G4double Egsmall=2.*MeV;
    if (GammaEnergy<Egsmall) { epsil = epsil0 + (0.5-epsil0)*G4UniformRand(); }
 
    else
@@ -267,11 +348,11 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    // limits of the screening variable
    G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
-   G4double screenmin = std::min(4.*screenfac,screenmax);
+   G4double screenmin = min(4.*screenfac,screenmax);
 
    // limits of the energy sampling
    G4double epsil1 = 0.5 - 0.5*sqrt(1. - screenmin/screenmax) ;
-   G4double epsilmin = std::max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
+   G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
 
    //
    // sample the energy rate of the created electron (or positron) 
@@ -281,8 +362,8 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    G4double F10 = ScreenFunction1(screenmin) - FZ;
    G4double F20 = ScreenFunction2(screenmin) - FZ;
-   G4double NormF1 = std::max(F10*epsilrange*epsilrange,0.); 
-   G4double NormF2 = std::max(1.5*F20,0.);
+   G4double NormF1 = max(F10*epsilrange*epsilrange,0.); 
+   G4double NormF2 = max(1.5*F20,0.);
 
    do {
         if ( NormF1/(NormF1+NormF2) > G4UniformRand() )
@@ -342,14 +423,14 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    aParticleChange.SetNumberOfSecondaries(2); 
 
-   G4double ElectKineEnergy = std::max(0.,ElectTotEnergy - electron_mass_c2);
+   G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2);
    G4double localEnergyDeposit = 0.;
 
    if (ElectKineEnergy > fminimalEnergy)
      {
        G4ThreeVector ElectDirection (dxEl, dyEl, dzEl);
        ElectDirection.rotateUz(GammaDirection);   
- 
+
        // create G4DynamicParticle object for the particle1  
        G4DynamicParticle* aParticle1= new G4DynamicParticle(
                         G4Electron::Electron(),ElectDirection,ElectKineEnergy);
@@ -360,27 +441,26 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    // the e+ is always created (even with Ekine=0) for further annihilation.
 
-   G4double PositKineEnergy = std::max(0.,PositTotEnergy - electron_mass_c2);
+   G4double PositKineEnergy = max(0.,PositTotEnergy - electron_mass_c2);
    if (PositKineEnergy < fminimalEnergy)
      { localEnergyDeposit += PositKineEnergy; PositKineEnergy = 0.;}
 
    G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
    PositDirection.rotateUz(GammaDirection);   
- 
+
    // create G4DynamicParticle object for the particle2 
    G4DynamicParticle* aParticle2= new G4DynamicParticle(
                       G4Positron::Positron(),PositDirection,PositKineEnergy);
    aParticleChange.AddSecondary(aParticle2); 
 
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident photon 
    //
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange( 0. ); 
-   aParticleChange.SetStatusChange( fStopAndKill );
+   aParticleChange.ProposeEnergy( 0. ); 
+   aParticleChange.ProposeTrackStatus( fStopAndKill );
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
@@ -392,7 +472,7 @@ G4Element* G4GammaConversion::SelectRandomAtom(
                                          const G4DynamicParticle* aDynamicGamma,
                                                G4Material* aMaterial)
 {
-  // select randomly 1 element within the material 
+  // select randomly 1 element within the material
 
   const G4int NumberOfElements            = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
@@ -402,7 +482,7 @@ G4Element* G4GammaConversion::SelectRandomAtom(
 
   G4double PartialSumSigma = 0. ;
   G4double rval = G4UniformRand()/MeanFreePath;
- 
+
   for ( G4int i=0 ; i < NumberOfElements ; i++ )
       { PartialSumSigma += NbOfAtomsPerVolume[i] *
                   GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)[i]);
@@ -415,9 +495,9 @@ G4Element* G4GammaConversion::SelectRandomAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4GammaConversion::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
-				              G4bool          ascii)
+G4bool G4GammaConversion::StorePhysicsTable(const G4ParticleDefinition* particle,
+                                            const G4String& directory,
+				                  G4bool          ascii)
 {
   G4String filename;
 
@@ -436,18 +516,18 @@ G4bool G4GammaConversion::StorePhysicsTable(G4ParticleDefinition* particle,
            << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "  
+         << ": Success to store the PhysicsTables in "
          << directory << G4endl;
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4GammaConversion::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory, 
-				                 G4bool          ascii)
+/*
+G4bool G4GammaConversion::RetrievePhysicsTable(const G4ParticleDefinition* particle,
+					       const G4String& directory,
+				                     G4bool          ascii)
 {
   // delete theCrossSectionTable and theMeanFreePathTable
   if (theCrossSectionTable != 0) {
@@ -464,27 +544,27 @@ G4bool G4GammaConversion::RetrievePhysicsTable(G4ParticleDefinition* particle,
   // retreive cross section table
   filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
   theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
-  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+  if ( !G4PhysicsTableHelper::RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
 
   // retreive mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+  if ( !G4PhysicsTableHelper::RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }
- 
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4GammaConversion::PrintInfoDefinition()
@@ -492,11 +572,11 @@ void G4GammaConversion::PrintInfoDefinition()
   G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1.5 MeV to 100 GeV for all Z. \n";
            comments += "        e+e- energies according Bethe-Heitler";
-                     
+
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " 
+         << "\n        PhysicsTables from "
 	           << G4BestUnit(LowestEnergyLimit, "Energy")
-         << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
+         << " to " << G4BestUnit(HighestEnergyLimit,"Energy")
          << " in " << NumbBinTable << " bins. \n";
 }         
 

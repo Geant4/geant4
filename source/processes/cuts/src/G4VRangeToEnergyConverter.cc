@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.2 2003/11/08 06:10:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.3 2004/12/02 06:53:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // --------------------------------------------------------------
@@ -216,7 +216,7 @@ G4double G4VRangeToEnergyConverter::RangeLogSimpson(
   G4double Value = 0.;
   for (size_t i=0; i<=size_t(nbin); i++){
     G4double ui = ltaulow+dltau*i;
-    G4double taui = exp(ui);
+    G4double taui = std::exp(ui);
     G4double ti = aMass*taui;
     G4double lossi = 0.;
     size_t nEl = (size_t)(numberOfElement);
@@ -296,30 +296,30 @@ G4double G4VRangeToEnergyConverter::ComputeLoss(G4double AtomicNumber,
   z2Particle *=  z2Particle;
   if (z2Particle < 0.1) return 0.0;
 
-  if( abs(AtomicNumber-Z)>0.1 ){
+  if( std::abs(AtomicNumber-Z)>0.1 ){
     // recalculate constants
     Z = AtomicNumber;
-    G4double Z13 = exp(log(Z)/3.);
+    G4double Z13 = std::exp(std::log(Z)/3.);
     tau0 = 0.1*Z13*MeV/proton_mass_c2;
     taum = 0.035*Z13*MeV/proton_mass_c2;
     taul = 2.*MeV/proton_mass_c2;
-    ionpot = 1.6e-5*MeV*exp(0.9*log(Z));
-    cc = (taul+1.)*(taul+1.)*log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
-    cc = 2.*twopi_mc2_rcl2*Z*cc*sqrt(taul);
-    ca = cc/((1.-0.5*sqrt(tau0/taum))*tau0);
-    cba = -0.5/sqrt(taum);
+    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z));
+    cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
+    cc = 2.*twopi_mc2_rcl2*Z*cc*std::sqrt(taul);
+    ca = cc/((1.-0.5*std::sqrt(tau0/taum))*tau0);
+    cba = -0.5/std::sqrt(taum);
   }
 
   G4double tau = KineticEnergy/theParticle->GetPDGMass();
   G4double dEdx;
   if ( tau <= tau0 ) {
-    dEdx = ca*(sqrt(tau)+cba*tau);
+    dEdx = ca*(std::sqrt(tau)+cba*tau);
   } else {
     if( tau <= taul ) {
-      dEdx = cc/sqrt(tau);
+      dEdx = cc/std::sqrt(tau);
     } else {
       dEdx = (tau+1.)*(tau+1.)*
-	     log(2.*electron_mass_c2*tau*(tau+2.)/ionpot)/(tau*(tau+2.))-1.;
+	     std::log(2.*electron_mass_c2*tau*(tau+2.)/ionpot)/(tau*(tau+2.))-1.;
       dEdx = 2.*twopi_mc2_rcl2*Z*dEdx;
     }
   }
@@ -357,13 +357,13 @@ void G4VRangeToEnergyConverter::BuildRangeVector(
             (*theLossTable)[IndEl]->GetValue(t2,isOut);
   }
   G4double tau1 = t1/proton_mass_c2;
-  G4double sqtau1 = sqrt(tau1);
+  G4double sqtau1 = std::sqrt(tau1);
   G4double ca = (4.*loss2-loss1)/sqtau1;
   G4double cb = (2.*loss1-4.*loss2)/tau1;
   G4double cba = cb/ca;
   G4double taulim = tlim/proton_mass_c2;
   G4double taumax = maxEnergy/aMass;
-  G4double ltaumax = log(taumax);
+  G4double ltaumax = std::log(taumax);
 
   // now we can fill the range vector....
   G4double  rmax = 0.0;
@@ -373,9 +373,9 @@ void G4VRangeToEnergyConverter::BuildRangeVector(
     G4double  Value;
  
     if ( tau <= tau1 ){
-      Value =2.*aMass*log(1.+cba*sqrt(tau))/cb;
+      Value =2.*aMass*std::log(1.+cba*std::sqrt(tau))/cb;
     } else {
-      Value = 2.*aMass*log(1.+cba*sqtau1)/cb;
+      Value = 2.*aMass*std::log(1.+cba*sqtau1)/cb;
       if ( tau <= taulim ) {
         G4int nbin = (G4int)(maxnbint*(tau-tau1)/(taulim-tau1));
         if ( nbin<1 ) nbin = 1;
@@ -386,8 +386,8 @@ void G4VRangeToEnergyConverter::BuildRangeVector(
         Value += RangeLinSimpson( NumEl, elementVector,
 				  atomicNumDensityVector, aMass,
 				  tau1, taulim, maxnbint);
-        G4double ltaulow  = log(taulim);
-        G4double ltauhigh = log(tau);
+        G4double ltaulow  = std::log(taulim);
+        G4double ltauhigh = std::log(tau);
         G4int nbin = (G4int)(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
         if ( nbin<1 ) nbin = 1;
         Value += RangeLogSimpson(NumEl, elementVector,
@@ -414,7 +414,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   //  find max. range and the corresponding energy (rmax,Tmax)
   G4double rmax= -1.e10*mm;
   G4double Tmax= HighestEnergy;
-  G4double fac = exp( log(HighestEnergy/LowestEnergy)/TotBin );
+  G4double fac = std::exp( std::log(HighestEnergy/LowestEnergy)/TotBin );
   G4double T=LowestEnergy/fac;
   G4bool isOut;
 
@@ -451,15 +451,15 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   }
 
   G4double T2 = Tmax ;
-  G4double T3 = sqrt(T1*T2);
+  G4double T3 = std::sqrt(T1*T2);
   G4double r3 = rangeVector->GetValue(T3,isOut);
-  while ( abs(1.-r3/theCutInLength)>epsilon ) {
+  while ( std::abs(1.-r3/theCutInLength)>epsilon ) {
     if ( theCutInLength <= r3 ) {
       T2 = T3;
     } else {
       T1 = T3;
     }
-    T3 = sqrt(T1*T2);
+    T3 = std::sqrt(T1*T2);
     r3 = rangeVector->GetValue(T3,isOut);
   }
 

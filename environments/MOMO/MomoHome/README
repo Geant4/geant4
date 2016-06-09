@@ -1,3 +1,49 @@
+2004 NOvember 26
+
+A) How to use MOMO.
+
+1) cd here where src/ and include/ are located
+2) "java -version" and check that your java virtual machine is version 1.4
+   (1.5 works with some malfuctionning)
+3) "java -jar ../MOMO.jar" and MOMO starts
+4) check that "set G4WORKDIR" displays this directory. If you change this,
+  you will have faster access to files in that directory.
+
+B) How to use the example of a flattening filter
+
+1) relevant files of this example are
+    ./linac.cc
+    ./Momomake.gmk
+    ./flat.his (a macro file)
+    ./src/flatteningFilter.cc
+    ./include/flatteningFilter.hh
+ All these files are generated automatically by MOMO, including the history macro file.
+
+2) fill the tables from the persistent files
+ a) GPE -> load file ->  MomoN02PhysicsList.g4ph
+        -> make C++ file -> save in src/
+	-> make header file -> save in include/
+ b) GGE -> load file -> flatteningFilter.g4dt
+        -> make C++ file -> save in src/
+	-> make header file -> savle in include/
+ c) type i the name of the main program in the top field of MOMO panel
+
+3) Project menu
+ a) make main program -> save here
+ b) make Makefile -> save here
+ c) compile
+     If some errors are found, correct them
+4) run
+ GAG -> Geant4 -> Start -> file chooser
+ mouse click /control/execute -> file chooser -> flat.his -> OK
+ and you will have OpenGL event display:
+    e- 10MeV, entering the flattenig filter (same as the examples/extended/linac),
+    changing the incident angles
+
+Enjoy!
+
+--------------------------------------------------------------------
+
 2002 March
 
  Momo's default home directory in which the default src and include

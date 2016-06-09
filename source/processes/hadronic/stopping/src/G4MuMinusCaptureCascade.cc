@@ -124,10 +124,10 @@ G4ThreeVector G4MuMinusCaptureCascade::GetRandomVec()
    //
 
    G4double cosTheta = 2.0 * G4UniformRand() - 1.0;
-   G4double sinTheta = sqrt(1.0 - cosTheta*cosTheta);
+   G4double sinTheta = std::sqrt(1.0 - cosTheta*cosTheta);
    G4double Phi  = twopi * G4UniformRand();
-   G4double dirx = sinTheta * cos(Phi); 
-   G4double diry = sinTheta * sin(Phi); 
+   G4double dirx = sinTheta * std::cos(Phi); 
+   G4double diry = sinTheta * std::sin(Phi); 
    G4double dirz = cosTheta; 
 
    return G4ThreeVector(dirx, diry, dirz);
@@ -179,7 +179,7 @@ G4int G4MuMinusCaptureCascade::DoCascade(const G4double Z, const G4double massA,
   G4double pGamma = Z*Z*Z*Z;
 
   // Capture on 14-th level
-  G4double ptot = sqrt(EnergyLevel[13]*(EnergyLevel[13] + 2.0*Emass));
+  G4double ptot = std::sqrt(EnergyLevel[13]*(EnergyLevel[13] + 2.0*Emass));
   G4ThreeVector moment = ptot * GetRandomVec();
 
   AddNewParticle(theElectron,moment,Emass,&nPart,Cascade);
@@ -195,7 +195,7 @@ G4int G4MuMinusCaptureCascade::DoCascade(const G4double Z, const G4double massA,
         DeltaE = EnergyLevel[nLevel-1] - EnergyLevel[nLevel];
         nLevel--;
 
-        ptot = sqrt(DeltaE * (DeltaE + 2.0*Emass));
+        ptot = std::sqrt(DeltaE * (DeltaE + 2.0*Emass));
         moment = ptot * GetRandomVec();
 
         AddNewParticle(theElectron, moment, Emass, &nPart, Cascade);
@@ -243,17 +243,17 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double /* mass
    //
    // generate uniform vector
    //
-  G4double ptot = sqrt(Energy * (Energy + 2.0*Emass));
+  G4double ptot = std::sqrt(Energy * (Energy + 2.0*Emass));
   G4ThreeVector moment = ptot * GetRandomVec();
 
   AddNewParticle(theElectron, moment, Emass, nCascade, Cascade);
   
   // Calculate rest frame parameters of 2 neutrinos
   G4double E = MuMass*( 1.0 - x*0.5 );
-  G4double P = sqrt( MuMass*MuMass*x*x*0.25 - Emass*Emass );
+  G4double P = std::sqrt( MuMass*MuMass*x*x*0.25 - Emass*Emass );
 
   if(P >= E) {P = E;}
-  G4double ecm = 0.5 * sqrt( E*E - P*P );
+  G4double ecm = 0.5 * std::sqrt( E*E - P*P );
 
    //
    // generate uniform vector

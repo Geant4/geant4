@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLaguerreQ.hh,v 1.4 2001/07/11 10:00:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4GaussLaguerreQ.hh,v 1.5 2004/11/12 17:38:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // Class description:
 //
@@ -36,7 +36,7 @@
 // ---------------------------------------------------------------------------
 //
 // Constructor for Gauss-Laguerre quadrature method: integral from zero to
-// infinity of pow(x,alpha)*exp(-x)*f(x). The value of nLaguerre sets the accuracy.
+// infinity of std::pow(x,alpha)*std::exp(-x)*f(x). The value of nLaguerre sets the accuracy.
 // The constructor creates arrays fAbscissa[0,..,nLaguerre-1] and 
 // fWeight[0,..,nLaguerre-1] . The function GaussLaguerre(f) should be called
 // then with any f .
@@ -48,7 +48,7 @@
 //
 // -------------------------------------------------------------------------
 //
-// Gauss-Laguerre method for integration of pow(x,alpha)*exp(-x)*pFunction(x)
+// Gauss-Laguerre method for integration of std::pow(x,alpha)*std::exp(-x)*pFunction(x)
 // from zero up to infinity. pFunction is evaluated in fNumber points for which
 // fAbscissa[i] and fWeight[i] arrays were created in constructor
 //

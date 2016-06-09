@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.32 2004/02/09 10:01:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VisManager.hh,v 1.33 2004/07/14 15:38:52 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -275,8 +275,6 @@ public: // With description
   Verbosity                    GetVerbosity                () const;
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
-  void              SetCurrentGraphicsSystemAndCreateViewer
-                                                (G4VGraphicsSystem* pSystem);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);

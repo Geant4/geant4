@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleGunMessenger.cc,v 1.11 2004/02/22 02:55:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #include "G4ParticleGunMessenger.hh"

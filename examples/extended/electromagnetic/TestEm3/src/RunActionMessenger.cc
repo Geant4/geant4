@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.7 2004/06/15 11:39:59 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunActionMessenger.cc,v 1.8 2004/10/20 14:32:37 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,13 +29,17 @@
 #include "RunActionMessenger.hh"
 
 #include "RunAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWith3Vector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
-{    
+{
+  runDir = new G4UIdirectory("/testem/run/");
+  runDir->SetGuidance("run control");
+    
   accCmd1 = new G4UIcmdWith3Vector("/testem/run/acceptanceL1",this);
   accCmd1->SetGuidance("set Edep and RMS");
   accCmd1->SetGuidance("acceptance values for first layer");
@@ -56,7 +60,8 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 RunActionMessenger::~RunActionMessenger()
 {
   delete accCmd1;
-  delete accCmd2;  
+  delete accCmd2;
+  delete runDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +69,10 @@ RunActionMessenger::~RunActionMessenger()
 void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {      
   if( command == accCmd1 )
-   { Run->SetEdepAndRMS(0,accCmd1->GetNew3VectorValue(newValue));}
+   { Run->SetEdepAndRMS(1,accCmd1->GetNew3VectorValue(newValue));}
 
   if( command == accCmd2 )
-   { Run->SetEdepAndRMS(1,accCmd2->GetNew3VectorValue(newValue));}
+   { Run->SetEdepAndRMS(2,accCmd2->GetNew3VectorValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

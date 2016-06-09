@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.5 2002/10/28 11:47:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4IntersectingCone.cc,v 1.6 2004/12/02 09:31:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,7 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
   //
   // What type of cone are we?
   //
-  type1 = (fabs(z[1]-z[0]) > fabs(r[1]-r[0]));
+  type1 = (std::fabs(z[1]-z[0]) > std::fabs(r[1]-r[0]));
   
   if (type1)
   {
@@ -179,7 +179,7 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
 // a line just grazing the surface of a the cone, which we want to ignore. 
 // However, there are two other, very rare, possibilities:
 // a line intersecting the z axis and either:
-//       1. At the same angle atan(B) to just miss one side of the cone, or
+//       1. At the same angle std::atan(B) to just miss one side of the cone, or
 //       2. Intersecting the cone apex (0,0,-A/B)
 // We *don't* want to miss these! How do we identify them? Well, since
 // this case is rare, we can at least swallow a little more CPU than we would
@@ -208,16 +208,16 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
   
-  if (radical < -1E-6*fabs(b)) return 0;    // No solution
+  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
   
-  if (radical < 1E-6*fabs(b))
+  if (radical < 1E-6*std::fabs(b))
   {
     //
     // The radical is roughly zero: check for special, very rare, cases
     //
-    if (fabs(a) > 1/kInfinity)
+    if (std::fabs(a) > 1/kInfinity)
     {
-      if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B))
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
       {
         *s1 = -0.5*b/a;
         return 1;
@@ -227,7 +227,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   }
   else
   {
-    radical = sqrt(radical);
+    radical = std::sqrt(radical);
   }
   
   if (a > 1/kInfinity)
@@ -247,7 +247,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     *s1 = (B*tz > 0)^(sa > sb) ? sb : sa;
     return 1;
   }
-  else if (fabs(b) < 1/kInfinity)
+  else if (std::fabs(b) < 1/kInfinity)
   {
     return 0;
   }
@@ -296,7 +296,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   //
   if (B==0)
   {
-    if (fabs(tz) < 1/kInfinity) return 0;
+    if (std::fabs(tz) < 1/kInfinity) return 0;
     
     *s1 = (A-z0)/tz;
     return 1;
@@ -310,16 +310,16 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
   
-  if (radical < -1E-6*fabs(b)) return 0;    // No solution
+  if (radical < -1E-6*std::fabs(b)) return 0;    // No solution
   
-  if (radical < 1E-6*fabs(b))
+  if (radical < 1E-6*std::fabs(b))
   {
     //
     // The radical is roughly zero: check for special, very rare, cases
     //
-    if (fabs(a) > 1/kInfinity)
+    if (std::fabs(a) > 1/kInfinity)
     {
-      if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B))
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B))
       {
         *s1 = -0.5*b/a;
         return 1;
@@ -329,7 +329,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   }
   else
   {
-    radical = sqrt(radical);
+    radical = std::sqrt(radical);
   }
   
   if (a < -1/kInfinity)
@@ -349,7 +349,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
     *s1 = (tz*B > 0)^(sa > sb) ? sb : sa;
     return 1;
   }
-  else if (fabs(b) < 1/kInfinity)
+  else if (std::fabs(b) < 1/kInfinity)
   {
     return 0;
   }

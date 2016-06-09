@@ -22,8 +22,8 @@ class DefaultHepRep : public virtual HEPREP::HepRep {
 
     private:
         std::vector<std::string> layers;
-        std::set<HEPREP::HepRepTypeTree*> typeTrees;
-        std::set<HEPREP::HepRepInstanceTree*> instanceTrees;
+        std::vector<HEPREP::HepRepTypeTree*> typeTrees;
+        std::vector<HEPREP::HepRepInstanceTree*> instanceTrees;
 
     public:
         DefaultHepRep();
@@ -35,7 +35,7 @@ class DefaultHepRep : public virtual HEPREP::HepRep {
         void addTypeTree(HEPREP::HepRepTypeTree* typeTree);
         void removeTypeTree(HEPREP::HepRepTypeTree* typeTree);
         HEPREP::HepRepTypeTree* getTypeTree(std::string name, std::string version);
-        std::set<HEPREP::HepRepTypeTree*> getTypeTrees();
+        std::vector<HEPREP::HepRepTypeTree*> getTypeTreeList();
         void addInstanceTree(HEPREP::HepRepInstanceTree* instanceTree);
         void overlayInstanceTree(HEPREP::HepRepInstanceTree * instanceTree);
         void removeInstanceTree(HEPREP::HepRepInstanceTree* instanceTree);
@@ -52,7 +52,7 @@ class DefaultHepRep : public virtual HEPREP::HepRep {
                                             bool getNonDrawAtts,
                                             std::vector<std::string> invertAtts);
         std::string checkForException();
-        std::set<HEPREP::HepRepInstanceTree*> getInstanceTrees();
+        std::vector<HEPREP::HepRepInstanceTree*> getInstanceTreeList();
 };
 
 #endif

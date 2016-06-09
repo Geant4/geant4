@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.51 2004/06/07 08:55:29 gcosmo Exp $
+cvs log $Id: History,v 1.56 2004/12/10 17:48:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th December 2004  G.Cosmo  (greps-V06-02-04)
+- Replaced M_PI with CLHEP's pi.
+
+8th December 2004  G.Cosmo  (greps-V06-02-03)
+- HepPolyhedron, BooleanProcessor: replaced occurences of HepStd::
+  with std::
+- Added inclusion of <cmath> in HepPolyhedron.cc.
+
+7th December 2004  G.Cosmo  (greps-V06-02-02)
+- Implemented migration to <cmath>.
+
+11th November 2004  J.Allison  (greps-V06-02-01 - requires vis-V06-02-05)
+- Removed G4Polymarker::line.  Use G4Polyline instead.
+- Improved commenting of G4AttDef.
+
+28th July 2004  J.Allison  (greps-V06-02-00)
+- Introduced force auxiliary edge visible.
 
 7th June 2004  G.Cosmo  (greps-V06-01-01)
 - Fixed compilation problem on WIN32-VC for G4AttDefStore.

@@ -78,6 +78,9 @@ public:
 					      G4double deltaEnergy) const = 0;
 
 
+  virtual void SetTotalCS(G4double);
+
+
 private:
 
   // Hide copy constructor and assignment operator 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.8 2003/05/21 16:32:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.9 2004/11/25 23:34:13 mverderi Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -261,8 +261,8 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
 
       // If the particle is still alive, suspend it
       // to re-initialise the other process.
-      if (Response->GetStatusChange() != fStopAndKill)
-	Response->SetStatusChange(fSuspend);
+      if (Response->GetTrackStatus() != fStopAndKill)
+	Response->ProposeTrackStatus(fSuspend);
       // Returns the Response
       return Response;
     }
@@ -318,8 +318,8 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
 	    {
 	      // easy case where we have enough room to displace the point where we need:
 	      fUpdateGhostTouchable = true;
-	      xParticleChange.SetPositionChange(fGhostFieldPropagator->EndPosition());
-	      xParticleChange.SetMomentumChange(fGhostFieldPropagator->EndMomentumDir());
+	      xParticleChange.ProposePosition         (fGhostFieldPropagator->EndPosition()   );
+	      xParticleChange.ProposeMomentumDirection(fGhostFieldPropagator->EndMomentumDir());
 	    }
 	  return &xParticleChange;
 	}

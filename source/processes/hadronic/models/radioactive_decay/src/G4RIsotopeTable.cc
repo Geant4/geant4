@@ -54,6 +54,9 @@
 #include "G4ParticleTable.hh"
 #include "G4IsotopeProperty.hh"
 #include "G4RIsotopeTable.hh"
+
+#include "G4HadronicException.hh"
+
 /*
 #include "G4RadioactiveDecayMode.hh"
 #include "G4ITDecayChannel.hh"
@@ -108,14 +111,10 @@ G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
   for (G4int i = 0 ; i< Entries(); i++) {
     if(fIsotopeNameList[i] == fname) j = i;}
   if (j >=0) {
-
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
     G4cout <<"G4RIsotopeTable::GetIsotope No. : ";
     G4cout <<j<<G4endl;   
     }
-#endif
-
     return  GetIsotope(j);}
   // isotope property data has been loaded already and just return the pointer
   else{
@@ -141,12 +140,10 @@ G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
     fIsotopeList.push_back(fProperty);
     fname = GetIsotopeName(Z, A, E);
     fIsotopeNameList.push_back(fname);
-#ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout <<"G4RIsotopeTable::GetIsotope create: ";
       G4cout <<fname <<G4endl;  
     }
-#endif
     return fProperty;
 
   }
@@ -161,12 +158,10 @@ G4String G4RIsotopeTable::GetIsotopeName(G4int Z, G4int A, G4double E)
   os.setf(std::ios::fixed);
   os <<"A"<< A << "Z" << Z <<'[' << std::setprecision(1) << E/keV << ']' << '\0';
   name = val;
-#ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
     G4cerr <<"G4RIsotopeTable::GetIsotope Name: ";
     G4cerr <<name <<G4endl;   
   }
-#endif
   return name;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -175,7 +170,13 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
 {
   G4double lifetime = -1.0;
   //  G4double  levelTolerance = 1.0 * keV ;
+  if ( !getenv("G4RADIOACTIVEDATA")) {
+    G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
+  }
   G4String dirName = getenv("G4RADIOACTIVEDATA");
+
   char val[100];
   std::ostrstream os(val,100);
   os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
@@ -214,12 +215,12 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
         tmpstream >>recordType >>a >>b;
         if (recordType == "P")
         {
-          if (abs(a*keV-aE) < levelTolerance)
+          if (std::abs(a*keV-aE) < levelTolerance)
           {
             found    = true;
             lifetime = b/0.693147*s ;
 	    // in the database was half-life!
-	    aE = a*keV;
+	    //   aE = a*keV;
 	    // pass back the correct energy
           }
         }
@@ -248,11 +249,10 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
       }
     DecaySchemeFile.close();
   }
-#ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
     G4cout <<"G4RIsotopeTable::GetMeanLifeTime: ";
-    G4cout <<lifetime <<G4endl;   }
-#endif
+    G4cout <<lifetime << " for " << GetIsotopeName(Z, A, aE) <<G4endl;   
+  }
   return lifetime;
 }
 ///////////////////////////////////////////////////////////////////////////////

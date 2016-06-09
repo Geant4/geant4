@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.11 2003/06/16 16:52:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4BREPSolid.hh,v 1.14 2004/10/10 10:56:31 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolid
@@ -123,6 +123,9 @@ public: // with description
   G4NURBS*      CreateNURBS      () const;
     // Create a G4Polyhedron/G4NURBS/...  (It is the caller's responsibility
     // to delete it).  A null pointer means "not created".
+  virtual G4Polyhedron* GetPolyhedron () const;
+    // Smart access function - creates on request and stores for future
+    // access.  A null pointer means "not available".
 
   G4int Intersect(register const G4Ray&) const;
     // Gets the roughly calculated closest intersection point for
@@ -140,9 +143,17 @@ public: // with description
   inline G4int GetNumberOfSolids() const;
   inline const G4Axis2Placement3D* GetPlace() const;
   inline const G4BoundingBox3D*    GetBBox()  const;
+  inline G4int GetCubVolStatistics() const;
+  inline G4double GetCubVolEpsilon() const;
+  inline void SetCubVolStatistics(G4int st);
+  inline void SetCubVolEpsilon(G4double ep);
     // Accessors methods.
 
 public:
+
+  inline G4double GetCubicVolume();
+    // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
 
   inline G4double IntersectionDistance() const;
   inline void IntersectionDistance(G4double) const;
@@ -198,6 +209,12 @@ protected:
    
 
 private:
+
+  G4int    fCubVolStatistics;
+  G4double fCubVolEpsilon;
+  G4double fCubicVolume;
+    // Statistics, error accuracy and cached value for volume.
+  mutable G4Polyhedron* fpPolyhedron;
 
   G4BREPSolid(const G4BREPSolid&);
   G4BREPSolid& operator=(const G4BREPSolid&);

@@ -54,10 +54,10 @@ CalculateProbability(const G4Fragment & aFragment)
 
   G4double theMatrixElement(k*N/(A*A*A*E));
   G4double x = E/N;
-  if ( x < 2.0*MeV ) theMatrixElement *= x/sqrt(14.0*MeV*MeV);
-  else if ( x < 7.0*MeV ) x *= sqrt(x/7.0*MeV);
+  if ( x < 2.0*MeV ) theMatrixElement *= x/std::sqrt(14.0*MeV*MeV);
+  else if ( x < 7.0*MeV ) x *= std::sqrt(x/7.0*MeV);
   else if ( x < 15.0*MeV ) ;
-  else x *= sqrt(15.0*MeV/x);
+  else x *= std::sqrt(15.0*MeV/x);
 
   // g = (6.0/pi2)*a*A
   G4double g =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.12 2002/11/20 14:18:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: HepPolyhedron.h,v 1.13 2004/12/08 17:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // Class Description:
@@ -163,7 +163,7 @@
 
 class G4Facet {
   friend class HepPolyhedron;
-  friend HepStd::ostream& operator<<(HepStd::ostream&, const G4Facet &facet);
+  friend std::ostream& operator<<(std::ostream&, const G4Facet &facet);
 
  private:
   struct G4Edge { int v,f; };
@@ -177,7 +177,7 @@ class G4Facet {
 };
 
 class HepPolyhedron {
-  friend HepStd::ostream& operator<<(HepStd::ostream&, const HepPolyhedron &ph);
+  friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
 
  private:
   static int fNumberOfRotationSteps;

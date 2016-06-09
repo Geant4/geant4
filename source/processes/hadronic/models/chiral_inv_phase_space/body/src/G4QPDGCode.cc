@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.43 2004/03/25 10:45:01 gunter Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4QPDGCode.cc,v 1.44 2004/11/09 11:11:17 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -34,6 +34,9 @@
 //#define sdebug
 
 #include "G4QPDGCodeVector.hh"
+#include <cmath>
+#include <cstdlib>
+using namespace std;
 
 G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
 {
@@ -90,7 +93,7 @@ const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
 G4QPDGCode::~G4QPDGCode() {}
 
 // Standard output for QPDGCode
-std::ostream& operator<<(std::ostream& lhs, G4QPDGCode& rhs)
+ostream& operator<<(ostream& lhs, G4QPDGCode& rhs)
 //       =========================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -98,7 +101,7 @@ std::ostream& operator<<(std::ostream& lhs, G4QPDGCode& rhs)
 }
 
 // Standard output for const QPDGCode
-std::ostream& operator<<(std::ostream& lhs, const G4QPDGCode& rhs)
+ostream& operator<<(ostream& lhs, const G4QPDGCode& rhs)
 //       ===============================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";

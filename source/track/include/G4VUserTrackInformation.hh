@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.4 2003/05/09 20:42:27 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VUserTrackInformation.hh,v 1.5 2004/11/26 06:47:00 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //---------------------------------------------------------------
@@ -56,8 +56,8 @@
 class G4VUserTrackInformation
 {
   public:
-    G4VUserTrackInformation() {;}
-    virtual ~G4VUserTrackInformation() {;}
+    G4VUserTrackInformation();
+    virtual ~G4VUserTrackInformation();
 
   public:
     virtual void Print() const = 0;

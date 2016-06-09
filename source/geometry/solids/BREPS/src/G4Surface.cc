@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.13 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Surface.cc,v 1.14 2004/12/02 09:31:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -208,7 +208,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 
   // L. Broglia
   // Be carreful ! pointdistance is the squared distance
-  return sqrt(pointDistance);
+  return std::sqrt(pointDistance);
   
   //  G4double PointDistance=kInfinity;
   //  G4double TmpDistance=0;
@@ -382,19 +382,19 @@ void G4Surface::rotate( G4double alpha, G4double beta,
 //	G4double ay[3][3] = { 0., 0., 0., 0., 0., 0., 0., 0., 0. };
 //	G4double az[3][3] = { 0., 0., 0., 0., 0., 0., 0., 0., 0. };
 	ax[0][0] = 1.;
-	ax[1][1] = cos( alpha );
+	ax[1][1] = std::cos( alpha );
 	ax[2][2] = ax[1][1];
-	ax[2][1] = sin( alpha );
+	ax[2][1] = std::sin( alpha );
 	ax[1][2] = -ax[2][1];
 	ay[1][1] = 1.;
-	ay[0][0] = cos( beta );
+	ay[0][0] = std::cos( beta );
 	ay[2][2] = ay[0][0];
-	ay[0][2] = sin( beta );
+	ay[0][2] = std::sin( beta );
 	ay[2][0] = -ay[0][2];
 	az[2][2] = 1.;
-	az[0][0] = cos( gamma );
+	az[0][0] = std::cos( gamma );
 	az[1][1] = az[0][0];
-	az[1][0] = sin( gamma );
+	az[1][0] = std::sin( gamma );
 	az[0][1] = -az[1][0];
 	G4ThreeMat &Rx = *new G4ThreeMat( ax );  // x-rotation matrix
 	G4ThreeMat &Ry = *new G4ThreeMat( ay );  // y-rotation matrix

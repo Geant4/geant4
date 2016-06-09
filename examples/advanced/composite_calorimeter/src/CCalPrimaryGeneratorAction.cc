@@ -89,10 +89,10 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
     G4double eta = RandFlat::shoot(etaMin,etaMax);
     G4double phi = RandFlat::shoot(phiMin,phiMax);
-    G4double theta = atan(exp(-eta))*2.;
-    G4double randomX = sin(theta)*cos(phi);
-    G4double randomY = sin(theta)*sin(phi);
-    G4double randomZ = cos(theta);
+    G4double theta = std::atan(std::exp(-eta))*2.;
+    G4double randomX = std::sin(theta)*std::cos(phi);
+    G4double randomY = std::sin(theta)*std::sin(phi);
+    G4double randomZ = std::cos(theta);
   
     particleDir = G4ThreeVector(randomX,randomY,randomZ);
     particleGun->SetParticleMomentumDirection(particleDir);
@@ -134,11 +134,11 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     } else {
       phiValue += scanPhiStep;
     }    
-    G4double theta = atan(exp(-etaValue))*2.;
+    G4double theta = std::atan(std::exp(-etaValue))*2.;
 
-    G4double scanX = sin(theta)*cos(phiValue);
-    G4double scanY = sin(theta)*sin(phiValue);
-    G4double scanZ = cos(theta);
+    G4double scanX = std::sin(theta)*std::cos(phiValue);
+    G4double scanY = std::sin(theta)*std::sin(phiValue);
+    G4double scanZ = std::cos(theta);
     if (verboseLevel >= 2 ) {
       G4cout << "Scan eta " << etaValue << " Phi " << phiValue/deg
 	     << " theta " << theta/deg << G4endl;
@@ -226,12 +226,12 @@ void CCalPrimaryGeneratorAction::SetMaximumEnergy(G4double p){
 
 void CCalPrimaryGeneratorAction::SetMinimumPhi(G4double p){
 
-  if (fabs(p)>2.*pi) {
+  if (std::fabs(p)>2.*pi) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMinimumPhi: setting value quite "
 	   << "large" << G4endl;
     G4cerr << " Should be given in radians - Please check" << G4endl;
   } else {
-    phiMin = fabs(p);
+    phiMin = std::fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting min. value of phi to "
@@ -244,12 +244,12 @@ void CCalPrimaryGeneratorAction::SetMinimumPhi(G4double p){
 
 void CCalPrimaryGeneratorAction::SetMaximumPhi(G4double p){
 
-  if (fabs(p)>2.*pi) {
+  if (std::fabs(p)>2.*pi) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMaximumPhi: setting value quite "
 	   << "large" << G4endl;
     G4cerr << " Should be given in radians - Please check" << G4endl;
   } else {
-    phiMax = fabs(p);
+    phiMax = std::fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting max. value of phi to "

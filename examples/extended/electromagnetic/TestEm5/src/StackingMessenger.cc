@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.2 2004/06/21 10:57:15 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: StackingMessenger.cc,v 1.3 2004/09/24 09:58:08 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,13 +29,17 @@
 #include "StackingMessenger.hh"
 
 #include "StackingAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
 :stackAction(stack)
-{   
+{
+  stackDir = new G4UIdirectory("/testem/stack/");
+  stackDir->SetGuidance("stacking control");
+   
   killCmd = new G4UIcmdWithABool("/testem/stack/killSecondaries",this);
   killCmd->SetGuidance("  Choice : true false");
   killCmd->SetParameterName("choice",true);
@@ -47,6 +51,7 @@ StackingMessenger::StackingMessenger(StackingAction* stack)
 StackingMessenger::~StackingMessenger()
 {
   delete killCmd;
+  delete stackDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

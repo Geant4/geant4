@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.16 2003/06/10 17:13:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.17 2004/07/01 15:29:13 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -108,9 +108,6 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = true;
-  }
   ClearStore();  // ...and all that goes with it.
 }
 
@@ -124,7 +121,6 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 	   << G4endl;
   }
   else {
-
     glNewList (fTopPODL, GL_COMPILE); {
       for (size_t i = 0; i < fPODLList.size (); i++) {
 	glPushMatrix();
@@ -135,12 +131,6 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       }
     }
     glEndList ();
-
-    if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-      initialize_hlr = false;
-      //    glDisable (GL_POLYGON_OFFSET_FILL);
-    }
-
   }
 
   G4VSceneHandler::EndModeling ();

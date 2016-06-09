@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.hh,v 1.3 2004/12/02 16:28:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
-// $Id: SteppingAction.hh,v 1.1 2002/05/23 13:30:33 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,6 +30,7 @@
 #define SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class RunAction;
 
@@ -40,14 +38,15 @@ class RunAction;
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction(RunAction*);
-   ~SteppingAction();
+public:
+  SteppingAction(RunAction*);
+  ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*);
     
-  private:
-    RunAction*   runAction;
+private:
+  RunAction* runAction;
+  G4double   muonMass;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

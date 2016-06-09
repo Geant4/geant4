@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.15 2003/06/16 16:50:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G3Division.cc,v 1.16 2004/12/07 08:33:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -800,7 +800,7 @@ G3VolTableEntry* G3Division::Dvn2()
           
   // create envelope (if needed)
   G3VolTableEntry* envVTE = 0;
-  if( abs(c0 - fLowRange) > Rmin) {
+  if( std::abs(c0 - fLowRange) > Rmin) {
     envVTE = CreateEnvelope(shape, fHighRange, c0, Rpar, npar);
     Rpar = envVTE->GetRpar();
     npar = envVTE->GetNpar();
@@ -837,7 +837,7 @@ G3VolTableEntry* G3Division::Dvt()
 
   // create envVTE (if needed)
   G3VolTableEntry* envVTE = 0;
-  G4double delta = abs((fHighRange - fLowRange) - ndiv*step);
+  G4double delta = std::abs((fHighRange - fLowRange) - ndiv*step);
   if (delta > Rmin) {
     envVTE 
        = CreateEnvelope(shape, fHighRange-delta/2., fLowRange+delta/2., 
@@ -885,8 +885,8 @@ G3VolTableEntry* G3Division::Dvt2()
 
   // create envelope (if needed)
   G3VolTableEntry* envVTE = 0;
-  G4double delta = abs((fHighRange - c0) - ndiv*step);
-  if (abs(c0 - fLowRange) > Rmin) {
+  G4double delta = std::abs((fHighRange - c0) - ndiv*step);
+  if (std::abs(c0 - fLowRange) > Rmin) {
     envVTE 
       = CreateEnvelope(shape, fHighRange-delta/2., c0+delta/2., Rpar, npar);
     Rpar = envVTE->GetRpar();

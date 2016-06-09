@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PiModel.cc,v 1.4 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ExN05PiModel.cc,v 1.5 2004/11/25 23:43:02 mverderi Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 #include "ExN05PiModel.hh"
 
@@ -107,7 +107,7 @@ void ExN05PiModel::DoIt(const G4FastTrack& fastTrack,
     distance*fastTrack.GetPrimaryTrackLocalDirection();
 
   // -- set final position:
-  fastStep.SetPrimaryTrackFinalPosition(position);
+  fastStep.ProposePrimaryTrackFinalPosition(position);
 
   //---------------------------
   // Secondary:

@@ -20,17 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorMessenger.cc,v 1.3 2004/09/15 13:17:20 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003/10/06 10:02:33 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorMessenger.hh"
-
+#include "G4UIdirectory.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
@@ -40,12 +37,15 @@
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
 :Action(Gun)
-{ 
+{
+  gunDir = new G4UIdirectory("/testem/gun/");
+  gunDir->SetGuidance("gun control");
+ 
   DefaultCmd = new G4UIcmdWithAnInteger("/testem/gun/setDefault",this);
   DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
   DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
   DefaultCmd->SetParameterName("position",true);
-  DefaultCmd->SetDefaultValue(0);
+  DefaultCmd->SetDefaultValue(1);
   DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
@@ -62,6 +62,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete DefaultCmd;
   delete RndmCmd;
+  delete gunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

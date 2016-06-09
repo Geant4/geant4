@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.7 2003/10/14 18:15:26 perl Exp $
+// $Id: A01DetectorConstruction.cc,v 1.8 2004/12/03 15:30:34 gcosmo Exp $
 // --------------------------------------------------------------
 //
 
@@ -153,8 +153,8 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VSolid* secondArmSolid = new G4Box("secondArmBox",2.*m,2.*m,3.5*m);
   G4LogicalVolume* secondArmLogical
     = new G4LogicalVolume(secondArmSolid,air,"secondArmLogical",0,0,0);
-  G4double x = -5.*m * sin(armAngle);
-  G4double z = 5.*m * cos(armAngle);
+  G4double x = -5.*m * std::sin(armAngle);
+  G4double z = 5.*m * std::cos(armAngle);
   secondArmPhys
     = new G4PVPlacement(armRotation,G4ThreeVector(x,0.,z),secondArmLogical,
                         "secondArmPhys",worldLogical,0,0);
@@ -450,8 +450,8 @@ void A01DetectorConstruction::SetArmAngle(G4double val)
   armAngle = val;
   *armRotation = G4RotationMatrix();  // make it unit vector
   armRotation->rotateY(armAngle);
-  G4double x = -5.*m * sin(armAngle);
-  G4double z = 5.*m * cos(armAngle);
+  G4double x = -5.*m * std::sin(armAngle);
+  G4double z = 5.*m * std::cos(armAngle);
   secondArmPhys->SetTranslation(G4ThreeVector(x,0.,z));
 
   // tell G4RunManager that we change the geometry

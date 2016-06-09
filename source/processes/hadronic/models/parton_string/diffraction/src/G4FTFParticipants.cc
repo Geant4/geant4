@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.3 2003/12/11 11:54:31 hpw Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4FTFParticipants.cc,v 1.4 2004/12/07 13:50:09 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -85,7 +85,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
 //    G4cout << " primary Total E (GeV): " << thePrimary.GetTotalEnergy()/GeV << G4endl;
 //    G4cout << " primary Mass    (GeV): " << thePrimary.GetMass() /GeV << G4endl;
-//    G4cout << "cms sqrt(s) (GeV) = " << sqrt(s) / GeV << G4endl;
+//    G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 
     G4PomeronCrossSection theCrossSection(thePrimary.GetDefinition());
     
@@ -141,7 +141,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
 //	G4cout << "Number of Hit nucleons " << theInteractions.entries() 
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
-//		<< "\t" << sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
+//		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
 	 
     }
    

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.hh,v 1.4 2001/07/11 10:09:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ASCIITreeMessenger.hh,v 1.5 2004/09/13 20:52:52 johna Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // John Allison  5th April 2001
@@ -35,9 +35,10 @@
 
 #include "G4UImessenger.hh"
 
+class G4ASCIITree;
 class G4UIcommand;
 class G4UIcmdWithAnInteger;
-class G4ASCIITree;
+class G4UIcmdWithAString;
 
 class G4ASCIITreeMessenger: public G4UImessenger {
 public:
@@ -48,7 +49,9 @@ public:
 private:
   G4ASCIITree* fpASCIITree;
   G4UIcommand* fpDirectory;
+  G4UIcommand* fpDirectorySet;
   G4UIcmdWithAnInteger* fpCommandVerbose;
+  G4UIcmdWithAString* fpCommandSetOutFile;
 };
 
 #endif

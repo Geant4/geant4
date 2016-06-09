@@ -1,4 +1,4 @@
-# $Id: allproc.mac,v 1.1 2004/06/14 10:09:20 maire Exp $
+# $Id: allproc.mac,v 1.2 2004/07/27 10:13:16 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -10,7 +10,6 @@
 /testem/det/setSize 1 m
 #
 /testem/phys/addPhysics standard
-### /testem/phys/addPhysics g4v52
 #
 /testem/phys/setCuts 1 mm
 #

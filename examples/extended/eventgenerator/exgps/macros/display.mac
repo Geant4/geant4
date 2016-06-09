@@ -1,0 +1,12 @@
+#
+/vis/scene/create
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+/vis/drawVolume
+/vis/viewer/viewpointThetaPhi 30 30
+#/vis/viewer/update
+/vis/scene/endOfEventAction accumulate
+/tracking/storeTrajectory 1
+
+#
+

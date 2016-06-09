@@ -20,35 +20,24 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.cc,v 1.6 2004/07/23 15:39:39 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: SteppingAction.cc,v 1.5 2004/03/31 11:34:59 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct, EventAction* EvAct)
-  :runAction(RuAct),eventAction(EvAct)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
+SteppingAction::SteppingAction(RunAction* run, EventAction* event, HistoManager* histo)
+:runAction(run), eventAction(event), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,12 +51,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process) runAction->CountProcesses(process->GetProcessName());
 
-
-#ifdef USE_AIDA
   G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
   G4double steplen = aStep->GetStepLength();
-  if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
-#endif
+  if (charge != 0.) histoManager->FillHisto(3,steplen);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

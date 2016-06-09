@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.9 2004/03/12 04:46:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4Decay.hh,v 1.13 2004/12/02 07:06:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // ------------------------------------------------------------
@@ -43,7 +43,8 @@
 //   Remove PhysicsTable          12 Feb. 2002 H.Kurashige
 //   Fixed bug in PostStepGPIL 
 //    in case of stopping during AlongStepDoIt 12 Mar. 2004 H.Kurashige
-//
+//   Add GetRemainderLifeTime  10 Aug/2004 H.Kurashige
+
 #ifndef G4Decay_h
 #define G4Decay_h 1
 
@@ -90,7 +91,7 @@ class G4Decay : public G4VRestDiscreteProcess
 
      virtual void BuildPhysicsTable(const G4ParticleDefinition&); 
      // In G4Decay, thePhysicsTable stores values of
-    //    beta * sqrt( 1 - beta*beta) 
+    //    beta * std::sqrt( 1 - beta*beta) 
     //  as a function of normalized kinetic enregy (=Ekin/mass),
     //  becasuse this table is universal for all particle types,
 
@@ -119,7 +120,6 @@ class G4Decay : public G4VRestDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-
   protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
     // GetMeanLifeTime returns ctau for decay at rest
@@ -132,83 +132,43 @@ class G4Decay : public G4VRestDiscreteProcess
                               G4ForceCondition* condition
                             );
 
-  public: //With Description
+   public: //With Description
+     virtual void StartTracking();
+     virtual void EndTracking();
+      // inform Start/End of tracking for each track to the physics process 
+
+   public: //With Description
      void SetExtDecayer(G4VExtDecayer*);
      const G4VExtDecayer* GetExtDecayer() const;
      // Set/Get External Decayer
-    
+   
+    G4double GetRemainderLifeTime() const;  
+    //Get Remainder of life time at rest decay 
+
   public:
      void  SetVerboseLevel(G4int value);
      G4int GetVerboseLevel() const;
 
-  private:
+  protected:
      G4int verboseLevel;
      // controle flag for output message
      //  0: Silent
      //  1: Warning message
      //  2: More
 
-  private:
+  protected:
     // HighestValue.
     const G4double HighestValue;
  
     // Remainder of life time at rest
     G4double                 fRemainderLifeTime;
- 
+  
     // ParticleChange for decay process
     G4ParticleChangeForDecay fParticleChangeForDecay;
     
     // External Decayer
     G4VExtDecayer*    pExtDecayer;
 };
-
-inline 
- G4double G4Decay::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
-{
-  // reset fRemainderLifeTime
-  fRemainderLifeTime = 0.0;
-
-  // pre-assigned Decay time
-  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
-
-  if (pTime < 0.) {
-    // normal case 
-    fRemainderLifeTime = 0.0;
-    return G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
-  }
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  // reminder proper time
-  G4double remainder = pTime - track.GetProperTime();
-  if (remainder <= 0.0) remainder = DBL_MIN;
-  
-  // use pre-assigned Decay time to determine PIL
-  G4double tau = track.GetDefinition()->GetPDGLifeTime();
-  return (remainder/tau)*GetMeanFreePath(track, previousStepSize, condition);
-
-}
-inline
-  G4double G4Decay::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4ForceCondition* condition
-                            )
-{
-  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
-  if (pTime >= 0.) {
-    fRemainderLifeTime = pTime - track.GetProperTime();
-    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
-  } else {
-    fRemainderLifeTime = 
-      G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition );
-  }
-  return fRemainderLifeTime;
-}
 
 inline
  void  G4Decay::SetVerboseLevel(G4int value){ verboseLevel = value; }
@@ -244,6 +204,12 @@ inline
  const G4VExtDecayer* G4Decay::GetExtDecayer() const
 {
   return pExtDecayer;
+}
+
+inline
+ G4double G4Decay::GetRemainderLifeTime() const 
+{
+  return fRemainderLifeTime;
 }
 
 #endif

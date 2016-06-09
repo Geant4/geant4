@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Event.hh,v 1.10 2004/06/11 14:11:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifndef G4Event_h

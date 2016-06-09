@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.cc,v 1.6 2004/01/06 02:53:22 tkoi Exp $
+// $Id: A01MuonPhysics.cc,v 1.7 2004/11/23 04:02:03 tkoi Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 
@@ -49,27 +49,6 @@ A01MuonPhysics::~A01MuonPhysics()
 #include "G4MuonMinus.hh"
 #include "G4TauMinus.hh"
 #include "G4TauPlus.hh"
-#include "G4NeutrinoTau.hh"
-#include "G4AntiNeutrinoTau.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-void A01MuonPhysics::ConstructParticle()
-{
-  // Mu
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-
-  // Tau
-  G4TauMinus::TauMinusDefinition();
-  G4TauPlus::TauPlusDefinition();
-  G4NeutrinoTau::NeutrinoTauDefinition();
-  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();
-
-}
-
 
 #include "G4ProcessManager.hh"
 

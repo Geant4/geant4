@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.7 2004/05/27 10:33:11 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.8 2004/11/22 16:51:38 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
@@ -42,6 +42,7 @@ public:
   virtual void GeneratePrimaries(G4Event* anEvent)=0;
   virtual G4double GetInitialEnergy()=0;
   virtual void SetMoon(G4bool)=0; // Set moon configuration 
+  virtual void SetParticle(G4String)=0;
 };
 #endif
 

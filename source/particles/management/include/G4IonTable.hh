@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.20 2003/06/16 16:58:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4IonTable.hh,v 1.21 2004/12/02 08:08:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
+#include <cmath>
 #include <vector>
 
 class G4ParticleTable;

@@ -122,7 +122,8 @@ G4int G4AugerTransition::AugerOriginatingShellId(G4int index, G4int startShellId
   const std::vector<G4int>* ids = AugerOriginatingShellIds(startShellId);
   // G4int i = 
   std::vector<G4int>::const_iterator pos = ids->begin();
-  G4int n = *(pos+index);
+  G4int n = 0;
+  n = *(pos+index);
   return n;
 }
 
@@ -133,7 +134,8 @@ G4double G4AugerTransition::AugerTransitionEnergy(G4int index, G4int startShellI
 {
   const G4DataVector* energies = AugerTransitionEnergies(startShellId);
   G4DataVector::const_iterator pos = energies->begin();
-  G4double energy =  *(pos+index);
+  G4double energy = 0;
+  energy = *(pos+index);
   return energy; 
 }
 
@@ -145,10 +147,12 @@ G4double G4AugerTransition::AugerTransitionProbability(G4int index, G4int startS
 
   const G4DataVector *probabilities = AugerTransitionProbabilities(startShellId);
   G4DataVector::const_iterator pos = probabilities->begin();
-  G4double probability; // =  new G4double;
+
+  G4double probability = 0; 
   probability = *(pos+index);
+
   return  probability;
-  //delete probability;
+  
 }
 
 G4int G4AugerTransition::TransitionOriginatingShellId(G4int index) const

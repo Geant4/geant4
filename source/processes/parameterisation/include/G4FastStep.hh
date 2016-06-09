@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.hh,v 1.6 2001/07/11 10:08:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4FastStep.hh,v 1.7 2004/11/25 23:34:13 mverderi Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -52,6 +52,8 @@
 //                      Set/GetTotalEnergyDeposited() methods.
 //    Apr 98: MoraDeFreitas - G4FastStep becomes the G4ParticleChange
 //                      for the Fast Simulation Process.
+//    Nov 04: Verderi - Add ProposeXXX methods. SetXXX ones are kept
+//                      for backward compatibility. 
 //
 //---------------------------------------------------------------
 
@@ -75,13 +77,12 @@ class G4DynamicParticle;
 
 // Class Description:
 //  The final state of the particles after parameterisation has to be returned through a G4FastStep 
-//  reference. This final state is described has "requests" the tracking will apply after your 
+//  reference. This final state is described as "requests" the tracking will apply after your 
 //  parameterisation has been invoked.
 //
 //  To facilitate the developers work, changes of position/normalized direction of the 
 //  momentum/polarization can be specified in the local coordinate system of the envelope or in the 
 //  global one.
-//
 //  The default is local system coordinates.
 //
 
@@ -95,41 +96,72 @@ public: // with Description
   // -- Methods used to change the position, normalized direction of 
   // the momentum, time etc... of the primary.
   // .. space and time:
-  void SetPrimaryTrackFinalPosition (const G4ThreeVector &, 
-				     G4bool localCoordinates = true);
-  // Set the primary position.
+  void ProposePrimaryTrackFinalPosition (const G4ThreeVector &, 
+					 G4bool localCoordinates = true);
+  // Set the primary track final position.
+  void     SetPrimaryTrackFinalPosition (const G4ThreeVector &, 
+					 G4bool localCoordinates = true);
+  // Set the primary track final position -- maintained for backward compatibility.
+  
+  
+  void ProposePrimaryTrackFinalTime (G4double);
+  // Set the primary track final time.
+  void    SetPrimaryTrackFinalTime (G4double);
+  // Set the primary track final time -- maintained for backward compatibility.
 
-  void SetPrimaryTrackFinalTime (G4double);
-  // Set the primary final time.
 
-  void SetPrimaryTrackFinalProperTime (G4double);
-  // Set the primary final Proper Time.
+  void ProposePrimaryTrackFinalProperTime (G4double);
+  // Set the primary final track Proper Time.
+  void     SetPrimaryTrackFinalProperTime (G4double);
+  // Set the primary final track Proper Time -- maintained for backward compatibility.
+
 
   // .. dynamics:
+  void ProposePrimaryTrackFinalMomentumDirection (const G4ThreeVector &, 
+						  G4bool localCoordinates = true);
   // Be careful: the Track Final Momentum means the normalized direction 
   // of the momentum!
-  void SetPrimaryTrackFinalMomentum (const G4ThreeVector &, 
-				     G4bool localCoordinates = true);
-  // Set the primary final momentum.
+  void     SetPrimaryTrackFinalMomentum          (const G4ThreeVector &, 
+						  G4bool localCoordinates = true);
+  // Set the primary track final momentum -- maintained for backward compatibility. Same as ProposePrimaryTrackMomentumDirection(...)
 
-  void SetPrimaryTrackFinalKineticEnergy (G4double);
-  // Set the primary final kinetic energy.
 
-  void SetPrimaryTrackFinalKineticEnergyAndDirection(G4double, 
-						     const G4ThreeVector &, 
-						     G4bool localCoordinates 
-						     = true);
-  // Set the primary final kinetic energy and direction.
+  void ProposePrimaryTrackFinalKineticEnergy (G4double);
+  // Set the primary track final kinetic energy.
+  void     SetPrimaryTrackFinalKineticEnergy (G4double);
+  // Set the primary track final kinetic energy-- maintained for backward compatibility.
 
-  void SetPrimaryTrackFinalPolarization(const G4ThreeVector &, 
-					G4bool localCoordinates = true);
-  // Set the primary final polarization.
 
-  void SetPrimaryTrackPathLength (G4double);
-  // Set the true path length of the primary during the step.
+  void ProposePrimaryTrackFinalKineticEnergyAndDirection(G4double, 
+							 const G4ThreeVector &, 
+							 G4bool localCoordinates 
+							 = true);
+  // Set the primary track final kinetic energy and direction.
+  void     SetPrimaryTrackFinalKineticEnergyAndDirection(G4double, 
+							 const G4ThreeVector &, 
+							 G4bool localCoordinates 
+							 = true);
+  // Set the primary track final kinetic energy and direction -- maintained for backward compatibility.
 
-  void SetPrimaryTrackFinalEventBiasingWeight (G4double);
+
+
+  void ProposePrimaryTrackFinalPolarization(const G4ThreeVector &, 
+					    G4bool localCoordinates = true);
+  // Set the primary track final polarization.
+  void     SetPrimaryTrackFinalPolarization(const G4ThreeVector &, 
+					    G4bool localCoordinates = true);
+  // Set the primary track final polarization.
+
+
+  void ProposePrimaryTrackPathLength (G4double);
+  // Set the true path length of the primary track during the step.
+  void     SetPrimaryTrackPathLength (G4double);
+  // Set the true path length of the primary track during the step -- maintained for backward compatibility.
+
+  void ProposePrimaryTrackFinalEventBiasingWeight (G4double);
   // Set the weight applied for event biasing mechanism.
+  void     SetPrimaryTrackFinalEventBiasingWeight (G4double);
+  // Set the weight applied for event biasing mechanism -- kept for backward compatibility.
 
   // ------------------------------
   // -- Management of secondaries:
@@ -215,8 +247,10 @@ public: // with Description
   //   information in the G4Trajectory.
   //
   //------------------------------------------------
-  void SetTotalEnergyDeposited(G4double anEnergyPart);
+   void ProposeTotalEnergyDeposited(G4double anEnergyPart);
   // Set the total energy deposited.
+  void      SetTotalEnergyDeposited(G4double anEnergyPart);
+  // Set the total energy deposited -- kept for backward compatibility.
   // It should be the delta energy of primary less the energy of the secondaries.
 
   G4double GetTotalEnergyDeposited() const;

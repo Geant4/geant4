@@ -25,7 +25,7 @@
 // History:
 // --------
 // 02 Jul 2003   L.Pandola    First implementation
-// 16 Mar 2004   L.Pandola    Removed unnecessary calls to pow(a,b)
+// 16 Mar 2004   L.Pandola    Removed unnecessary calls to std::pow(a,b)
 
 #include "G4PenelopeAnnihilation.hh"
 #include "Randomize.hh"
@@ -129,9 +129,9 @@ G4double G4PenelopeAnnihilation::calculateCrossSectionPerElectron
   G4double gamma = 1.0+std::max(ene,1.0*eV)/electron_mass_c2;
   G4double gamma2 = gamma*gamma;
   G4double f2 = gamma2-1.0;
-  G4double f1 = sqrt(f2);
+  G4double f1 = std::sqrt(f2);
   G4double pielr2 = pi*classic_electr_radius*classic_electr_radius;
-  crossSection = pielr2*((gamma2+4.0*gamma+1.0)*log(gamma+f1)/f2
+  crossSection = pielr2*((gamma2+4.0*gamma+1.0)*std::log(gamma+f1)/f2
 			 - (gamma+3.0)/f1)/(gamma+1.0);
   return crossSection;
 }
@@ -154,14 +154,14 @@ G4VParticleChange* G4PenelopeAnnihilation::PostStepDoIt(const G4Track& aTrack,
 
    //Annihilation in flight
    G4double gamma = 1.0 + std::max(kineticEnergy,1.0*eV)/electron_mass_c2;
-   G4double gamma21 = sqrt(gamma*gamma-1);
+   G4double gamma21 = std::sqrt(gamma*gamma-1);
    G4double ani = 1.0+gamma;
    G4double chimin = 1.0/(ani+gamma21);
    G4double rchi = (1.0-chimin)/chimin;
    G4double gt0 = ani*ani-2.0;
    G4double epsilon=0.0, reject=0.0, test=0.0;
    do{
-     epsilon = chimin*pow(rchi,G4UniformRand());
+     epsilon = chimin*std::pow(rchi,G4UniformRand());
      reject = ani*ani*(1.0-epsilon)+2.0*gamma-(1.0/epsilon);
      test = G4UniformRand()*gt0-reject;
    }while(test>0);
@@ -175,16 +175,16 @@ G4VParticleChange* G4PenelopeAnnihilation::PostStepDoIt(const G4Track& aTrack,
    aParticleChange.SetNumberOfSecondaries(2);
    G4double localEnergyDeposit = 0.; 
 
-   G4double sinTheta1 = sqrt(1.-cosTheta1*cosTheta1);
+   G4double sinTheta1 = std::sqrt(1.-cosTheta1*cosTheta1);
    G4double phi1  = twopi * G4UniformRand();
-   G4double dirx1 = sinTheta1 * cos(phi1);
-   G4double diry1 = sinTheta1 * sin(phi1);
+   G4double dirx1 = sinTheta1 * std::cos(phi1);
+   G4double diry1 = sinTheta1 * std::sin(phi1);
    G4double dirz1 = cosTheta1;
  
-   G4double sinTheta2 = sqrt(1.-cosTheta2*cosTheta2);
+   G4double sinTheta2 = std::sqrt(1.-cosTheta2*cosTheta2);
    G4double phi2  = phi1+pi;
-   G4double dirx2 = sinTheta2 * cos(phi2);
-   G4double diry2 = sinTheta2 * sin(phi2);
+   G4double dirx2 = sinTheta2 * std::cos(phi2);
+   G4double diry2 = sinTheta2 * std::sin(phi2);
    G4double dirz2 = cosTheta2;
 
    if (photon1Energy > cutForLowEnergySecondaryPhotons) {
@@ -209,11 +209,11 @@ G4VParticleChange* G4PenelopeAnnihilation::PostStepDoIt(const G4Track& aTrack,
    }   
    else  localEnergyDeposit += photon2Energy;
      
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange(0.); 
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
+   aParticleChange.ProposeEnergy(0.); 
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
    return &aParticleChange;
 }
@@ -225,21 +225,21 @@ G4VParticleChange* G4PenelopeAnnihilation::AtRestDoIt(const G4Track& aTrack,
    aParticleChange.Initialize(aTrack);
    aParticleChange.SetNumberOfSecondaries(2); 
    G4double cosTheta = -1.0+2.0*G4UniformRand();
-   G4double sinTheta = sqrt(1.0-cosTheta*cosTheta);
+   G4double sinTheta = std::sqrt(1.0-cosTheta*cosTheta);
    G4double phi = twopi*G4UniformRand();
    //G4cout << "cosTheta: " << cosTheta << " sinTheta: " << sinTheta << G4endl;
    //G4cout << "phi: " << phi << G4endl;
-   G4ThreeVector direction (sinTheta*cos(phi),sinTheta*sin(phi),cosTheta);   
+   G4ThreeVector direction (sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);   
    aParticleChange.AddSecondary(new G4DynamicParticle (G4Gamma::Gamma(),
                                             direction, electron_mass_c2) );
    aParticleChange.AddSecondary(new G4DynamicParticle (G4Gamma::Gamma(),
                                            -direction, electron_mass_c2) ); 
 
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   aParticleChange.ProposeLocalEnergyDeposit(0.);
 
    // Kill the incident positron 
    //
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
       
    return &aParticleChange;
 }

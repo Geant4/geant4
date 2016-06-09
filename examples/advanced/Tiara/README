@@ -1,6 +1,6 @@
-# $Id: README,v 1.18 2004/06/13 13:35:12 daquinog Exp $
+# $Id: README,v 1.20 2004/12/08 15:37:13 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-02 $
+# GEANT4 tag $Name: geant4-07-00-cand-03 $
 # -------------------------------------------------------------------
 
 Simulation of the TIARA experiment using importance sampling
@@ -31,7 +31,6 @@ The example has been tested on CERN RH 7.3 with the
 gcc-3.2.3 and gcc-2.95.2 compilers.
 
 Note for system testing without analysis: see points 1.1, 1.3 and 3.2.
-
 
 
 
@@ -75,7 +74,7 @@ in the three cases:
 1.3) No afs, no PI and no SWIG (e.g. for system testing):
 -------------------------------------------------------------
    You don't want to use PI and SWIG and you don't have afs access.
-   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE)
+   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE or setenv G4ANALYSIS_USE 0)
    
    Note 1: python must be built against a "libc". 
          You may do this by creating a shared library by a command
@@ -92,10 +91,10 @@ in the three cases:
    Finally source the script envCommon.csh from the directory where
    you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
    
-   Note 2: Passing from a simulation WITH to another WITHOUT analysis implies 
+   NOTE 2: Passing from a simulation WITH to another WITHOUT analysis implies 
    that the G4ANALYSIS_use should be unset and that the SWIG-wrapper scripts 
    in the directory TiaraWrapper should be deleted. Normally, the whole code 
-   should be compiled again using gmake tiaraClean and, afterwards, gmake.
+   should be compiled again using gmake clean_all and, afterwards, gmake.
    The same procedure should be followed also passing from a simulation WITHOUT
    to another WITH analysis.
 
@@ -122,6 +121,8 @@ To remove the files created by swig ( *_wrap.cc, the corresponding
 .py files) use "gmake swigClean".
 To remove the directories of compiled code related to this example under 
 $G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
+To remove all the files created during the previous compilation, use
+"gmake clean_all". 
 
 
 3) Running the example:
@@ -169,7 +170,7 @@ placed in source/py_modules in files named after the module ending with
 
 Since the simulation time used by "runSim.py" is only 5 minutes the
 calculated results have large errors. If you want to see a better result
-do the following changes in "naSim.py".
+do the following changes in "runSim.py".
 Extend the total run time to e,g, 2 hours by setting:
 "totalTime = 2 * myUtils.hour", 
 set the print out period to 30 minutes by setting:
@@ -211,11 +212,6 @@ data / - directory containing experimental data
 source / - directory containing the source code
 
         tiara - C++ source code 
-
-        tiaraPhysicsLists - C++ source code of physics lists
-
-        tiaraPhysicsPackaging - C++ source cod with common 
-                                classes for the physics lists
 
         CLHEPWrapper - wrapper classes for usage in python
                      \include\CLHEP.i - specification file for swig
@@ -262,3 +258,13 @@ take care of the procedure of setting up the simulation, the run sequence
 and the analysis after the simulation has been ran.
  The script runSim.py is an commented example of using the python modules
 to run a simulation.
+
+
+6) Note about how to call the hadronic physics lists in runSim.py and runSimNoAnalysis.py
+=========================================================================================
+
+It is only necessary to change the physList value in runSim.py or runSimNoAnalysis.py. In the example, there are 4 available physics lists, but of course the user can use whatever physics lists he/she likes and present in the Geant4-7.0 repository. In such a case, the user should also modify the 
+/source/TiaraWrapper/include/Tiara.i file in order to create an instantiation of the
+ physics list class. In particular, just follow the same lines already used for the six 
+available physics lists.
+

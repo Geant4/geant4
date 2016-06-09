@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003/10/03 15:43:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004/10/28 14:26:38 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for optical photons library. G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -22,5 +22,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/materials/include
-           
+
+ifdef G4OPTICAL_DEBUG
+  CPPFLAGS += -DG4OPTICAL_DEBUG
+endif
+
 include $(G4INSTALL)/config/common.gmk

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.8 2004/05/17 07:20:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.10 2004/12/10 16:20:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
@@ -105,10 +105,10 @@ ConvertRadiusFactor(const G4Polyhedra& phedra) const
   G4double phiTotal = phedra.GetEndPhi() - phedra.GetStartPhi();
   G4int nofSides = phedra.GetOriginalParameters()->numSide;
   
-  if ( (phiTotal <=0) || (phiTotal > 2*M_PI+kAngTolerance) )
-    phiTotal = 2*M_PI;
+  if ( (phiTotal <=0) || (phiTotal > 2*pi+kAngTolerance) )
+    phiTotal = 2*pi;
   
-  return cos(0.5*phiTotal/nofSides);
+  return std::cos(0.5*phiTotal/nofSides);
 }  
 
 //--------------------------------------------------------------------------
@@ -461,7 +461,7 @@ G4double G4ParameterisationPolyhedraZ::GetMaxParameter() const
 {
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  return abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
+  return std::abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
              -origparamMother->Z_values[0]);
 }
 

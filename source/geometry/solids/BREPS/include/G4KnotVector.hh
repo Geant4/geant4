@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.hh,v 1.7 2001/07/11 09:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4KnotVector.hh,v 1.8 2004/12/02 09:31:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // ----------------------------------------------------------------------
 // Class G4KnotVector
@@ -37,7 +37,7 @@
 #ifndef __KNOTVECTOR_H
 #define __KNOTVECTOR_H
 
-#include <math.h>
+#include <cmath>
 #include "geomdefs.hh"
 
 class G4KnotVector

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.10 2003/06/16 17:12:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Step.hh,v 1.11 2004/12/02 06:38:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //---------------------------------------------------------------
@@ -56,8 +56,9 @@
 #define G4Step_h 1
 
 #include <stdlib.h>                 // Include from 'system'
-#include "G4ios.hh"               // Include from 'system'
-#include <iomanip>                // Include from 'system'
+#include <cmath>                    // Include from 'system'
+#include "G4ios.hh"                 // Include from 'system'
+#include <iomanip>                  // Include from 'system'
 #include "globals.hh"               // Include from 'global'
 #include "G4ThreeVector.hh"         // Include from 'global'
 #include "G4VPhysicalVolume.hh"     // Include from 'geometry'

@@ -20,16 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.1 2004/06/15 11:39:57 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: HistoMessenger.hh,v 1.2 2004/07/19 16:10:48 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
-
-#ifdef G4ANALYSIS_USE
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -59,6 +57,7 @@ class HistoMessenger: public G4UImessenger
    
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
+   G4UIcmdWithAString*     typeCmd;   
    G4UIcommand*            histoCmd;
    G4UIcmdWithAnInteger*   rmhistoCmd;    
  
@@ -66,5 +65,4 @@ class HistoMessenger: public G4UImessenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
 #endif

@@ -20,19 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.cc,v 1.5 2004/10/25 12:50:59 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.3 2004/04/28 16:58:49 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
+#include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -42,9 +40,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                               DetectorConstruction* DC)
-:Detector(DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
+                               HistoManager* hist)
+:Detector(det),histoManager(hist) 
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
@@ -97,6 +95,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       particleGun->SetParticlePosition(oldPosition);      
     }
   else  particleGun->GeneratePrimaryVertex(anEvent);
+  
+  //fill histo of energy flow
+  histoManager->FillHisto(2*MaxAbsor+1, 1.,particleGun->GetParticleEnergy());  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

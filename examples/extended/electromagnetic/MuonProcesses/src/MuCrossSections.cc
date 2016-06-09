@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MuCrossSections.cc,v 1.2 2004/06/15 16:33:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: MuCrossSections.cc,v 1.6 2004/12/06 12:02:42 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+using namespace std;
+ 
 MuCrossSections::MuCrossSections()
 { }
 
@@ -42,7 +44,7 @@ MuCrossSections::~MuCrossSections()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_Macroscopic(G4String process, G4Material* material,
+G4double MuCrossSections::CR_Macroscopic(const G4String& process, G4Material* material,
                                          G4double tkin, G4double ep)
 					  
 // return the macroscopic cross section (1/L) in GEANT4 internal units
@@ -62,23 +64,23 @@ G4double MuCrossSections::CR_Macroscopic(G4String process, G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_PerAtom(G4String process, G4Element* element,
+G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element,
                                      G4double tkin, G4double ep)
 {
  G4double z = element->GetZ();
  G4double a = element->GetA();
  
  G4double sigma = 0.;
- if (process == "MuBrems")
+ if (process == "muBrems")
    sigma = CRB_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuIoni")
+ else if (process == "muIoni")
    sigma = CRK_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuNucl")
+ else if (process == "muNucl")
    sigma = CRN_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuPairProd")
+ else if (process == "muPairProd")
    sigma = CRP_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  return sigma;        
@@ -366,7 +368,7 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
 	  {
 	    be=(3.-a6+a1*a7)/(2.*xi); // -(6.-5.*a6+3.*bet*a6)/(6.*xi*xi);
 	  }
-	  fe=std::max(0.,(ale-cre)*be);	  
+	  fe=max(0.,(ale-cre)*be);	  
 	  ymu=4.+a6+3.*bet*a7;
 	  ymd=a7*(1.5+a1)*log(3.+xi)+1.-1.5*a6;
 	  ym1=1.+ymu/ymd;
@@ -380,7 +382,7 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
 	  {
 	    bm=(5.-a6+bet*a9)*(xi/2.); // -(11.-5.*a6+.5*bet*(5.+a6))*(xi*xi/6.)
 	  }
-	  fm=std::max(0.,(alm_crm)*bm);	  
+	  fm=max(0.,(alm_crm)*bm);	  
 //***
 	  sum=sum+a4*(fe+fm/(rmass*rmass))*wgi[i];
 	}

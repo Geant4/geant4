@@ -22,7 +22,7 @@
 //
 //
 // $Id: B03PrimaryGeneratorAction.hh,v 1.3 2002/11/08 17:35:18 dressel Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifndef B03PrimaryGeneratorAction_hh

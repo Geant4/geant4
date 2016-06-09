@@ -1,12 +1,12 @@
-# $Id: TestEm4.in,v 1.5 2003/06/16 14:52:05 vnivanch Exp $
+# $Id: TestEm4.in,v 1.6 2004/09/24 14:41:19 maire Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
 # (can be run in batch, without graphic)
 #
 /control/verbose  0
-#
 /run/verbose 1
-#/testem/event/printModulo 10000
+#
+/testem/event/printModulo 10000
 #
 /run/beamOn 50000

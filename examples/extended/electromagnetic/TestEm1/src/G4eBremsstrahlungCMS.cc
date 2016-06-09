@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.cc,v 1.5 2004/04/05 19:04:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4eBremsstrahlungCMS.cc,v 1.6 2004/11/01 09:57:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 //
 // 17-10-03 model variant (V.Ivanchenko)
 // 05-04-03 Migrate to ParticleChangeForLoss (V.Ivanchenko) 
+// 01-11-04 Migrade to new interfaces to ParticleChange (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -73,9 +74,9 @@ void G4eBremsstrahlungCMS::SecondariesPostStep( G4VEmModel* model,
   if(gammaEnergy > gammaThreshold) nSecond = 2;
   fParticleChange.SetNumberOfSecondaries(nSecond);
   fParticleChange.AddSecondary(gamma);
-  fParticleChange.SetLocalEnergyDeposit(0.0);
+  fParticleChange.ProposeLocalEnergyDeposit(0.0);
   if(nSecond == 2) {
-    fParticleChange.SetStatusChange(fStopAndKill);
+    fParticleChange.ProposeTrackStatus(fStopAndKill);
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
                                                   dp->GetMomentumDirection(),
                                                   kinEnergy);

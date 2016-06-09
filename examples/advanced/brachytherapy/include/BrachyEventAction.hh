@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyEventAction.hh,v 1.14 2004/03/11 16:05:02 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // Code developed by:
 //  S.Guatelli

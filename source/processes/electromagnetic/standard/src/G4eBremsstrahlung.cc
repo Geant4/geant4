@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.37 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlung.cc,v 1.40 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,8 @@
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 04-11-04 add gamma threshold (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -77,10 +79,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name) 
-  : G4VEnergyLossProcess(name)
+using namespace std;
+ 
+G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name, G4double thresh):
+  G4VEnergyLossProcess(name), 
+  gammaThreshold(thresh),
+  isInitialised(false)
 {
-  InitialiseProcess();
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -90,27 +100,27 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseProcess()
+void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                                    const G4ParticleDefinition*)
 {
-  SetSecondaryParticle(G4Gamma::Gamma());
+  if(!isInitialised) {
+    isInitialised = true;
+    SetSecondaryParticle(G4Gamma::Gamma());
+    SetIonisation(false);
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
+    //G4VEmFluctuationModel* fm =  0;
+    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
 
-  //G4VEmFluctuationModel* fm =  0;
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-
-  G4VEmModel* em = new G4eBremsstrahlungModel();
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em, fm);
+    G4VEmModel* em = new G4eBremsstrahlungModel();
+    em->SetLowEnergyLimit(0.1*keV);
+    em->SetHighEnergyLimit(100.0*TeV);
+    AddEmModel(1, em, fm);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::PrintInfoDefinition() 
+void G4eBremsstrahlung::PrintInfoDefinition()
 {
   G4VEnergyLossProcess::PrintInfoDefinition();
 

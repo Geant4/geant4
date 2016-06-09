@@ -33,8 +33,7 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::G4ElementaryParticleCollider" << G4endl;
   }
-
-};
+}
 
 G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 							 G4InuclParticle* target) {
@@ -365,7 +364,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   if (l == 7 || l == 14) { // pi0 P or pi0 N
 
     for (G4int j = 0; j < 5; j++) {
-      sigm[j] = fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
+      sigm[j] = std::fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
 			    sk * (asig[2][j][ik] + asig[3][j][ik] - 
 				  asig[2][j][ik - 1] - asig[3][j][ik - 1])));
       stot += sigm[j];
@@ -374,7 +373,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   } else {
 
     for (G4int j = 0; j < 5; j++) {
-      sigm[j] = fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
+      sigm[j] = std::fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
 						    - asig[l - 1][j][ik - 1]));
       stot += sigm[j];
     };
@@ -495,7 +494,7 @@ generateSCMfinalState(G4double ekin,
 	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
 	m2 *= m2;	 
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
-	G4double np = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
+	G4double np = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
 
       } else {
@@ -559,7 +558,7 @@ generateSCMfinalState(G4double ekin,
 				  modules[1] * modules[1]) /
 	      modules[2] / modules[0];   
 
-	    if(fabs(ct) < ang_cut) {
+	    if(std::fabs(ct) < ang_cut) {
 
 	      if(verboseLevel > 2){
 		G4cout << " ok for mult " << multiplicity << G4endl;
@@ -590,21 +589,21 @@ generateSCMfinalState(G4double ekin,
 	    for (G4int i = 0; i < multiplicity - 2; i++) {
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
 	      G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
-					 exp(-modules[i] / p0));
+					 std::exp(-modules[i] / p0));
 	      G4double st = 2.0;
 	      G4int itry1 = 0;
 
-	      while (fabs(st) > ang_cut && itry1 < itry_max) {
+	      while (std::fabs(st) > ang_cut && itry1 < itry_max) {
 		itry1++;
 		G4double s1 = modules[i] * inuclRndm();
 		G4double s2 = alf * difr_const * p0 * inuclRndm();
 
 		if(verboseLevel > 3){
-		  G4cout << " s1 * alf * exp(-s1 / p0) " << s1 * alf * exp(-s1 / p0) 
+		  G4cout << " s1 * alf * std::exp(-s1 / p0) " << s1 * alf * std::exp(-s1 / p0) 
 			 << " s2 " << s2 << G4endl;
 		}
 
-		if(s1 * alf * exp(-s1 / p0) > s2) st = s1 / modules[i];
+		if(s1 * alf * std::exp(-s1 / p0) > s2) st = s1 / modules[i];
 
 	      }; 
 
@@ -621,7 +620,7 @@ generateSCMfinalState(G4double ekin,
 		st = 0.5 * inuclRndm();
 	      };
 
-	      G4double ct = sqrt(1.0 - st * st);
+	      G4double ct = std::sqrt(1.0 - st * st);
 
 	      if(inuclRndm() > 0.5) ct = -ct;
 
@@ -630,8 +629,8 @@ generateSCMfinalState(G4double ekin,
 
 	      std::vector<G4double> mom(4);
 
-	      mom[1] = pt * cos(phi);
-	      mom[2] = pt * sin(phi);
+	      mom[1] = pt * std::cos(phi);
+	      mom[2] = pt * std::sin(phi);
 	      mom[3] = modules[i] * ct;
 
 	      for(G4int i = 1; i < 4; i++) tot_mom[i] += mom[i];		 
@@ -640,7 +639,7 @@ generateSCMfinalState(G4double ekin,
 	    }; 
 
 	    // handle last two
-	    G4double tot_mod = sqrt(tot_mom[1] * tot_mom[1] + 
+	    G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
 				    tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
 	    G4double ct = -0.5 * (tot_mod * tot_mod + 
 				  modules[multiplicity - 2] * modules[multiplicity - 2] -
@@ -651,7 +650,7 @@ generateSCMfinalState(G4double ekin,
 	      G4cout << " ct last " << ct << G4endl;
 	    }            
 
-	    if (fabs(ct) < ang_cut) {
+	    if (std::fabs(ct) < ang_cut) {
 
 	      G4int i(0);
 	      for (i = 0; i < multiplicity - 2; i++) 
@@ -735,7 +734,7 @@ generateMomModules(
     masses2[i] = mass * mass;
   };
 
-  G4double mass_last = sqrt(masses2[mult - 1]);
+  G4double mass_last = std::sqrt(masses2[mult - 1]);
 
   if (verboseLevel > 3){
     G4cout << " knd_last " << kinds[mult - 1] << " mlast " << mass_last << G4endl;
@@ -756,7 +755,7 @@ generateMomModules(
 	getMomModuleFor2toMany(is, mult, kinds[i], ekin);
 
       if (pmod < small) break;
-      eleft -= sqrt(pmod * pmod + masses2[i]);
+      eleft -= std::sqrt(pmod * pmod + masses2[i]);
 
       if (verboseLevel > 3){
 	G4cout << " kp " << kinds[i] << " pmod " << pmod << " mass2 " << masses2[i] << G4endl;
@@ -777,7 +776,7 @@ generateMomModules(
       }
 
       if (plast > small) {
-	plast = sqrt(plast);
+	plast = std::sqrt(plast);
 	modules[mult - 1] = plast;      
 
 	if (mult == 3) { 
@@ -811,11 +810,11 @@ G4bool G4ElementaryParticleCollider::satisfyTriangle(
 
   if(modules.size() == 3) {
 
-    if(fabs(modules[1] - modules[2]) > modules[0] || 
+    if(std::fabs(modules[1] - modules[2]) > modules[0] || 
        modules[0] > modules[1] + modules[2] ||
-       fabs(modules[0] - modules[2]) > modules[1] ||
+       std::fabs(modules[0] - modules[2]) > modules[1] ||
        modules[1] > modules[0] + modules[2] ||
-       fabs(modules[0] - modules[1]) > modules[2] ||
+       std::fabs(modules[0] - modules[1]) > modules[2] ||
        modules[2] > modules[1] + modules[0]) good = false;
 
   };
@@ -1288,19 +1287,19 @@ G4double G4ElementaryParticleCollider::getMomModuleFor2toMany(
   for(G4int i = 0; i < 4; i++) {
     G4double V = 0.0;
 
-    for(G4int k = 0; k < 4; k++) V += rmn[k + JK][i + IL][KM - 1] * pow(ekin, k);
+    for(G4int k = 0; k < 4; k++) V += rmn[k + JK][i + IL][KM - 1] * std::pow(ekin, k);
 
-    PR += V * pow(S, i);
+    PR += V * std::pow(S, i);
     PQ += V;
   };  
 
   if(knd == 1 || knd == 2) JM = 1;
 
-  for(G4int m = 0; m < 3; m++) PS += rmn[8 + IM + m][7 + JM][KM - 1] * pow(ekin, m);
+  for(G4int m = 0; m < 3; m++) PS += rmn[8 + IM + m][7 + JM][KM - 1] * std::pow(ekin, m);
 
-  G4double PRA = PS * sqrt(S) * (PR + (1 - PQ) * pow(S, 4));
+  G4double PRA = PS * std::sqrt(S) * (PR + (1 - PQ) * std::pow(S, 4));
 
-  return fabs(PRA);
+  return std::fabs(PRA);
 }
 
 std::vector<G4double> G4ElementaryParticleCollider::
@@ -1336,7 +1335,7 @@ particleSCMmomentumFor2to3(
 
   G4int itry = 0;
 
-  while(fabs(ct) > 1.0 && itry < itry_max) {
+  while(std::fabs(ct) > 1.0 && itry < itry_max) {
     itry++;
     G4double S = inuclRndm();
     G4double U = 0.0;
@@ -1346,13 +1345,13 @@ particleSCMmomentumFor2to3(
       G4double V = 0.0;
 
       for(G4int m = 0; m < 4; m++) {
-	V += abn[m][l][K + J - 1] * pow(ekin, m);
+	V += abn[m][l][K + J - 1] * std::pow(ekin, m);
       };
 
       U += V;
-      W += V * pow(S, l);
+      W += V * std::pow(S, l);
     };  
-    ct = 2.0 * sqrt(S) * (W + (1.0 - U) * pow(S, 4)) - 1.0;
+    ct = 2.0 * std::sqrt(S) * (W + (1.0 - U) * std::pow(S, 4)) - 1.0;
   };
 
   if(itry == itry_max) {
@@ -1364,13 +1363,13 @@ particleSCMmomentumFor2to3(
     ct = 2.0 * inuclRndm() - 1.0;
   };
 
-  G4double pt = pmod * sqrt(1.0 - ct * ct);
+  G4double pt = pmod * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
 
   std::vector<G4double> mom(4);
 
-  mom[1] = pt * cos(phi);
-  mom[2] = pt * sin(phi);
+  mom[1] = pt * std::cos(phi);
+  mom[2] = pt * std::sin(phi);
   mom[3] = pmod * ct;
   
   return mom;  
@@ -1576,9 +1575,9 @@ adjustIntervalForElastic(
 	s2_new = 0.5 * (s2_old + s1c);
 	su = 0.0;      
 
-	for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(s2_new, i);
+	for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s2_new, i);
 
-	ct = ak * sqrt(s2_new) * (su + (1.0 - st) * pow(s2_new, 4)) + ae;
+	ct = ak * std::sqrt(s2_new) * (su + (1.0 - st) * std::pow(s2_new, 4)) + ae;
 
 	if(ct > 1.0) {
 	  s2_old = s2_new;
@@ -1610,8 +1609,8 @@ adjustIntervalForElastic(
 	s1_new = 0.5 * (s1_old + s2c);
 	su = 0.0;
       
-	for (G4int i = 0; i < 4; i++) su += ssv[i] * pow(s1_new, i);
-	ct = ak * sqrt(s1_new) * (su + (1.0 - st) * pow(s1_new, 4)) + ae;
+	for (G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s1_new, i);
+	ct = ak * std::sqrt(s1_new) * (su + (1.0 - st) * std::pow(s1_new, 4)) + ae;
 
 	if(ct < -1.0) {
 	  s1_old = s1_new;
@@ -1707,16 +1706,16 @@ particleSCMmomentumFor2to2(
     ac = -2.0 * ab * pscm * pscm;
     ad = 2.0 * ac;
     if(ad < -huge_num) {
-      ad = exp(ad);
+      ad = std::exp(ad);
 
     } else {
 
-      ad = exp(-huge_num);
+      ad = std::exp(-huge_num);
     };   
 
-    while(fabs(ct) > ct_cut && itry < itry_max) {
+    while(std::fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
-      ct = 1.0 - log(inuclRndm() * (1.0 - ad) + ad) / ac;
+      ct = 1.0 - std::log(inuclRndm() * (1.0 - ad) + ad) / ac;
     };      
 
   } else if(k == 0) {
@@ -1733,7 +1732,7 @@ particleSCMmomentumFor2to2(
     for(G4int i = 0; i < 4; i++) {
       G4double ss = 0.0;
 
-      for(G4int m = 0; m < 4; m++) ss += ang[m][i][k1] * pow(ekin, m);
+      for(G4int m = 0; m < 4; m++) ss += ang[m][i][k1] * std::pow(ekin, m);
       st += ss;
       ssv[i] = ss;
     };
@@ -1748,15 +1747,15 @@ particleSCMmomentumFor2to2(
       b = ab.second;
     };
 
-    while(fabs(ct) > ct_cut && itry < itry_max) {
+    while(std::fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
       G4double mrand = a * inuclRndm() + b;
 
       G4double su = 0.0;
 
-      for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(mrand, i);
+      for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(mrand, i);
 
-      ct = ak * sqrt(mrand) * (su + (1.0 - st) * pow(mrand, 4)) + ae;
+      ct = ak * std::sqrt(mrand) * (su + (1.0 - st) * std::pow(mrand, 4)) + ae;
     }; 
   };
 
@@ -1769,12 +1768,12 @@ particleSCMmomentumFor2to2(
     ct = 2.0 * inuclRndm() - 1.0;
   };
 
-  G4double pt = pscm * sqrt(1.0 - ct * ct);
+  G4double pt = pscm * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
   std::vector<G4double> mom(4);
 
-  mom[1] = pt * cos(phi);
-  mom[2] = pt * sin(phi);
+  mom[1] = pt * std::cos(phi);
+  mom[2] = pt * std::sin(phi);
   mom[3] = pscm * ct;
   
   return mom;  
@@ -1948,14 +1947,14 @@ generateSCMpionAbsorption(G4double etot_scm,
 
   G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 
-  G4double pmod = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
+  G4double pmod = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
   std::vector<G4double> mom(4);
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
 
-  mom[1] = pt * cos(FI);
-  mom[2] = pt * sin(FI);
+  mom[1] = pt * std::cos(FI);
+  mom[2] = pt * std::sin(FI);
   mom[3] = pmod * COS_SIN.first;
 
   std::vector<G4double> mom1 = mom;

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.4 2004/05/27 15:51:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4QCaptureAtRest.cc,v 1.6.2.1 2004/12/09 10:56:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -432,18 +432,22 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef pdebug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<",PDG="<<PDGCode<<G4endl;
 #endif
-    G4ParticleDefinition * theDefinition;
+    G4ParticleDefinition* theDefinition;
     if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
+    else if(PDGCode==90001000) theDefinition = G4Proton::Proton();//While it can be in ions
     else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
     else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
     else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
-	else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
+	   else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
     {
       G4int aZ = hadr->GetCharge();
       G4int aA = hadr->GetBaryonNumber();
+#ifdef pdebug
+						G4cout<<"G4QCaptureAtRest::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
+#endif
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
     else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
@@ -453,6 +457,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       delete hadr;
       continue;
     }
+#ifdef pdebug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
+#endif
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
 #ifdef debug
@@ -473,9 +480,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
-  if(projPDG==13) aParticleChange.SetLocalEnergyDeposit(0.);   // Fill EnDepMuon(EMCascade)
-  else aParticleChange.SetLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDepos for Tau
-  aParticleChange.SetStatusChange(fStopAndKill);           // Kill the absorbed particle
+  if(projPDG==13) aParticleChange.ProposeLocalEnergyDeposit(0.);   // Fill EnDepMuon(EMCascade)
+  else aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDepos for Tau
+  aParticleChange.ProposeTrackStatus(fStopAndKill);           // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
   return G4VRestProcess::AtRestDoIt(track, step);
 }

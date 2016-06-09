@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.6 2003/11/26 14:51:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4WeightCutOffProcess.cc,v 1.7 2004/10/19 00:59:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -98,11 +98,11 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
     G4double p = w/(ws);
     if (G4UniformRand()<p)
     {
-      fParticleChange->SetStatusChange(fStopAndKill);
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
     }
     else
     {
-      fParticleChange->SetWeightChange(ws);
+      fParticleChange->ProposeWeight(ws);
     }                  
   }
   return fParticleChange;

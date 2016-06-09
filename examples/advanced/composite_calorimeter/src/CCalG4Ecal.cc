@@ -179,7 +179,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   for (i = 0; i < getLayNum(); i++) {
     angle  = 0.5 * getLayAngle() * (2*i + 1 - getLayNum());
     xp     = angle * (getLayPar(4) + getLayRadius()) * mm;
-    zp     = (zshift + getLayPar(0)*abs(sin(angle))) * mm;
+    zp     = (zshift + getLayPar(0)*std::abs(std::sin(angle))) * mm;
     rotstr = idName + "Layer" + i;
     rot    = rotfact->findMatrix(rotstr);
     if (!rot) {
@@ -218,7 +218,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   for (i = 0; i < getCrystNum(); i++) {
     angle  = 0.5 * getLayAngle() * (2*i + 1 - getCrystNum());
     yp     = angle * (getCrystPar(4) + getLayRadius()) * mm;
-    zp     = (getCrystPar(0)*abs(sin(angle)) - getCrystTol()) * mm;
+    zp     = (getCrystPar(0)*std::abs(std::sin(angle)) - getCrystTol()) * mm;
     rotstr = idName + "Crystal" + i;
     rot    = rotfact->findMatrix(rotstr);
     if (!rot) {

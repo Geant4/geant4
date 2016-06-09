@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.5 2004/06/21 10:55:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: EventAction.cc,v 1.6 2004/09/24 14:41:21 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -78,7 +78,7 @@ void EventAction::EndOfEventAction( const G4Event* evt)
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
 	   
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
 #endif
 

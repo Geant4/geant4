@@ -36,14 +36,21 @@
 class G4ParametrizedHadronicVertex
 {
   public:
+   G4ParametrizedHadronicVertex()
+   {
+     theLowEPionPlus = new G4LEPionPlusInelastic;
+     theLowEPionMinus = new G4LEPionMinusInelastic;
+     theHighEPionPlus = new G4HEPionPlusInelastic;
+     theHighEPionMinus = new G4HEPionMinusInelastic;
+   }
    G4VParticleChange * ApplyYourself(G4Nucleus & theTarget, 
                                      const G4Track &thePhoton);
 
   private:
-   G4LEPionPlusInelastic  theLowEPionPlus;
-   G4LEPionMinusInelastic theLowEPionMinus;
-   G4HEPionPlusInelastic  theHighEPionPlus;
-   G4HEPionMinusInelastic theHighEPionMinus;
+   G4LEPionPlusInelastic  *theLowEPionPlus;
+   G4LEPionMinusInelastic *theLowEPionMinus;
+   G4HEPionPlusInelastic  *theHighEPionPlus;
+   G4HEPionMinusInelastic *theHighEPionMinus;
   
 };
 #endif

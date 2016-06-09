@@ -10,7 +10,6 @@
       do k=1,NbAbsor
         EdepAbs(k) = 0.
         TrckAbs(k) = 0.
-	EleaAbs(k) = 0.
       enddo                                                               
 *
       CALL GTREVE                                                               

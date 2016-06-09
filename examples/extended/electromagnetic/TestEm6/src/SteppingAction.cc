@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.cc,v 1.8 2004/12/02 16:28:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
-// $Id: SteppingAction.cc,v 1.5 2004/03/31 16:33:36 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,7 +32,7 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -43,7 +40,9 @@
 
 SteppingAction::SteppingAction(RunAction* RuAct)
 :runAction(RuAct)
-{ }
+{ 
+ muonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +58,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4String processName = process->GetProcessName();
  if (processName != "GammaToMuPair") return;
  
+#ifdef G4ANALYSIS_USE
  G4StepPoint* PrePoint = aStep->GetPreStepPoint();  
  G4double      EGamma  = PrePoint->GetTotalEnergy();
  G4ThreeVector PGamma  = PrePoint->GetMomentum();
@@ -75,19 +75,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      Pminus = (*secondary)[lp]->GetMomentum();      	   
    }
  }
+    	   
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- 
- static const G4double muonMass=G4MuonPlus::MuonPlus()->GetPDGMass();
  G4double GammaPlus=EGamma*xPlus/muonMass;
  G4double GammaMinus=EGamma*xMinus/muonMass;
-   	   
-#ifdef USE_AIDA
- runAction->GetHisto(0)->fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->fill(log10(thetaPlus*GammaPlus));
 
- runAction->GetHisto(2)->fill(log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->fill(log10(fabs(thetaPlus *GammaPlus
+ runAction->GetHisto(0)->fill(1./(1.+std::pow(thetaPlus*GammaPlus,2)));
+ runAction->GetHisto(1)->fill(std::log10(thetaPlus*GammaPlus));
+
+ runAction->GetHisto(2)->fill(std::log10(thetaMinus*GammaMinus));
+ runAction->GetHisto(3)->fill(std::log10(std::fabs(thetaPlus *GammaPlus
                                               -thetaMinus*GammaMinus)));
  
  runAction->GetHisto(4)->fill(xPlus);

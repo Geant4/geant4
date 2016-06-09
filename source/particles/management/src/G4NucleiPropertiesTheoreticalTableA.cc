@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.6 2003/12/12 06:48:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.7 2004/12/02 08:08:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -118,7 +118,7 @@ G4double  G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
 
 G4double G4NucleiPropertiesTheoreticalTable::ElectronicBindingEnergy(G4int Z) {
   const G4double ael = 1.433e-5*MeV; // electronic-binding constant
-  return ael*pow(G4double(Z),2.39);
+  return ael*std::pow(G4double(Z),2.39);
 }
 
 G4bool G4NucleiPropertiesTheoreticalTable::IsInTable(G4int Z, G4int A)

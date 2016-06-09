@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.14 2003/04/01 16:43:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VProcess.hh,v 1.19 2004/12/02 23:30:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//	GEANT 4 class header file
 //
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
@@ -47,11 +47,13 @@
 //   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
 //   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
 //   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
+//   Added PreparePhysicsTable  20 Aug. 2004 H.Kurashige
 
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 
 class G4ParticleDefinition;
@@ -208,30 +210,37 @@ class G4VProcess
       // It is overloaded by individual processes when they need physics
       // tables. 
 
-      // Processes which Build (for example in their
-      // constructors) physics tables independent of cuts
-      // should preferably use a
-      // private void BuildThePhysicsTable()
-      // function. Not another BuildPhysicsTable, please.
+     virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+      // Messaged by the Particle definition (via the Process manager)
+      // whenever cross section tables have to be prepare for rebuilt 
+      // (i.e. if new materials have been defined). 
+      // It is overloaded by individual processes when they need physics
+      // tables. 
+
+      // Processes which Build physics tables independent of cuts
+      // (for example in their constructors)
+      // should preferably use private 
+      // void BuildThePhysicsTable() and void PreparePhysicsTable().
+      // Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
-				       const G4String&, 
+      virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
+				       const G4String&,
 				       G4bool          ascii = false)
                                       {ascii=false; return true;}
-      // Store PhysicsTable in a file. 
-      // (return false in case of failure at I/O ) 
- 
-      virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
-					   const G4String&, 
+      // Store PhysicsTable in a file.
+      // (return false in case of failure at I/O )
+
+      virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
+					   const G4String&,
 				           G4bool          ascii = false)
                                       {ascii=false; return false;}
-      // Retrieve Physics from a file. 
+      // Retrieve Physics from a file.
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
-      // File name should be defined by each process 
-      // and the file should be placed under the directory specifed by the argument. 
-      const G4String& GetPhysicsTableFileName(G4ParticleDefinition* ,
+      // File name should be defined by each process
+      // and the file should be placed under the directory specifed by the argument.
+      const G4String& GetPhysicsTableFileName(const G4ParticleDefinition* ,
 					      const G4String& directory,
 					      const G4String& tableName,
 					      G4bool ascii =false);
@@ -365,7 +374,7 @@ inline  G4int G4VProcess::GetVerboseLevel() const
 
 inline void G4VProcess::ResetNumberOfInteractionLengthLeft()
 {
-  theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
+  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
 }
 
 inline void G4VProcess::ClearNumberOfInteractionLengthLeft()

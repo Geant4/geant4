@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.hh,v 1.1 2004/03/17 13:01:39 mkossov Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4QIsotope.hh,v 1.2 2004/12/01 15:16:28 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 //      ---------------- G4QIsotope header ----------------
@@ -35,6 +35,10 @@
 //  Randomization of isotopes of the user defined Elements is a bit slower
 //  CrossSectionWeighted randomisation of isotopes is slow (same for Nat and New)
 // -------------------------------------------------------------------------------
+// ****************************************************************************************
+// ********* This HEADER is temporary moved from the photolepton_hadron directory *********
+// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
+// ****************************************************************************************
 //
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901

@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07VisManager.cc,v 1.2 2003/11/13 15:11:55 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 #ifdef G4VIS_USE

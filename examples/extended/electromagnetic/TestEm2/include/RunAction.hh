@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2004/06/18 15:43:40 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.hh,v 1.6 2004/09/17 10:51:38 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,12 +47,11 @@ class RunActionMessenger;
 
 class G4Run;
 
-#ifdef USE_AIDA
 namespace AIDA {
+  class IAnalysisFactory;
   class ITree;
   class IHistogram1D;
 }
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,8 +82,8 @@ class RunAction : public G4UserRunAction
      void SetHistoName(G4String& val)   {histoName = val;};
      void SetHistoType(G4String& val)   {histoType = val;};
      
-     const G4String& HistoName() const  {return histoName;};
-     const G4String& HistoType() const  {return histoType;};
+     const G4String& GetHistoName() const  {return histoName;};
+     const G4String& GetHistoType() const  {return histoType;};
      
   private:
 
@@ -123,16 +122,16 @@ class RunAction : public G4UserRunAction
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
 
-    G4double           edeptrue;
-    G4double           rmstrue;
-    G4double           limittrue;
+    G4double edeptrue;
+    G4double rmstrue;
+    G4double limittrue;
     
-    G4String           histoName;
-    G4String           histoType;
-#ifdef USE_AIDA
-    AIDA::ITree* tree;             // the tree should only be deleted at the end
-    AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
-#endif            
+    G4String histoName;
+    G4String histoType;
+    
+    AIDA::IAnalysisFactory* af;
+    AIDA::ITree*            tree;
+    AIDA::IHistogram1D*     histo[12];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -183,5 +182,6 @@ void RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.11 2004/03/08 16:35:16 grichine Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4SandiaTable.hh,v 1.12 2004/12/07 08:50:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 
 // class description
 //
@@ -183,7 +183,7 @@ G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
 {
    G4double     unitCof ;
    if(j == 0)   unitCof = keV ;
-   else         unitCof = (cm2/g)*pow(keV,(G4double)j) ;
+   else         unitCof = (cm2/g)*std::pow(keV,(G4double)j) ;
    
    return  fPhotoAbsorptionCof[i][j]*unitCof ;
 }
@@ -197,7 +197,7 @@ inline G4double  G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
    assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
    G4double     unitCof ;
    if(j == 0)   unitCof = keV ;
-   else         unitCof = (cm2/g)*pow(keV,(G4double)j);                      
+   else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
    return ( (*(*fMatSandiaMatrix)[interval])[j] )*unitCof; 
 }
 

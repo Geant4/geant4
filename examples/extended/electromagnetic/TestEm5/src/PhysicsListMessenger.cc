@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2004/06/21 10:57:14 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysicsListMessenger.cc,v 1.5 2004/09/24 09:58:07 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
@@ -36,7 +37,10 @@
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
-{ 
+{
+  physDir = new G4UIdirectory("/testem/phys/");
+  physDir->SetGuidance("physics list commands");
+
   pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
@@ -80,6 +84,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete electCutCmd;
   delete protoCutCmd;
   delete allCutCmd;
+  delete physDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

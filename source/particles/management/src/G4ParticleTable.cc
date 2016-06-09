@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.19 2003/05/19 17:10:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleTable.cc,v 1.22 2004/12/08 00:07:24 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // class G4ParticleTable
 //
@@ -55,7 +55,8 @@
 
 
 ////////////////////
-G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" ")
+G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" "),
+readyToUse(true)
 {
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
@@ -98,6 +99,8 @@ G4ParticleTable::~G4ParticleTable()
 
   if (fParticleMessenger!=0) delete fParticleMessenger;  
   fParticleMessenger =0;
+
+  fgParticleTable =0;
 }
 
 ////////////////////
@@ -269,6 +272,7 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 {
+   CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
    return fIonTable->GetIon(Z, A);
@@ -277,6 +281,7 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 {
+   CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
    if (E<0.) return 0;
@@ -286,6 +291,7 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 {
+   CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
    if (E<0.) return 0;
@@ -295,6 +301,7 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 {
+   CheckReadiness();
   if ( (index >=0) && (index < entries()) ) {
     G4PTblDicIterator *piter = fIterator; 
     piter -> reset();
@@ -316,6 +323,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
 {
+   CheckReadiness();
   G4String key = GetKey(particle);
   return FindParticle(key);
 }
@@ -323,6 +331,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 {
+   CheckReadiness();
     // check aPDGEncoding is valid
     if (aPDGEncoding == 0){ 
 #ifdef G4VERBOSE
@@ -352,6 +361,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 ////////////////////
 void G4ParticleTable::DumpTable(const G4String &particle_name)  
 {
+   CheckReadiness();
   if (( particle_name == "ALL" ) || (particle_name == "all")){
     // dump all particles 
     G4PTblDicIterator *piter = fIterator; 
@@ -375,7 +385,22 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
   }
 }
 
-
+void G4ParticleTable::CheckReadiness()
+{
+  if(!readyToUse)
+  {
+   G4String msg;
+   msg = " Access to G4ParticleTable for finding a particle or equivalent\n";
+   msg += "operation occurs before G4VUserPhysicsList is instantiated and\n";
+   msg += "assigned to G4RunManager. Such an access will be prohibited by\n";
+   msg += "Geant4 version 7.0. To fix this problem, please make sure that\n";
+   msg += "the main() instantiates G4VUserPhysicsList and set it to\n";
+   msg += "G4RunManager before instantiating other user classes such as\n";
+   msg += "G4VUserPrimaryParticleGeneratorAction.";
+   G4Exception("G4ParticleTable::CheckReadiness()",
+              "PartMan0000",JustWarning,msg);
+  }
+}
 
 
 

@@ -30,8 +30,8 @@
 //    *****************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.5 2004/05/22 12:57:07 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.6 2004/11/22 16:51:39 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 
@@ -54,10 +54,17 @@ RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryG
   fluxCmd -> SetParameterName("choice",true);
   fluxCmd -> SetCandidates("Moon Interplanetary Basic");
   fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+
+  particleCmd = new G4UIcmdWithAString("/gun/particleType",this);
+  particleCmd -> SetGuidance("Primary particle type"); 
+  particleCmd -> SetParameterName("choice",true);
+  particleCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+
  }
 
 RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 {
+  delete particleCmd;
   delete fluxCmd;
   delete gunDir;
 } 
@@ -65,5 +72,6 @@ RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
  if(command == fluxCmd) primary -> SelectPrimaries(newValue);
+ if (command == particleCmd) primary -> SetNewParticle(newValue);
 }
 

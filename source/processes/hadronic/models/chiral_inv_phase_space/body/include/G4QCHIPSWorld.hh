@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.22 2004/03/25 10:44:30 gunter Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4QCHIPSWorld.hh,v 1.23 2004/12/01 15:16:28 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -65,7 +65,7 @@ public:
 // Body
 private:
   //static G4QCHIPSWorld* aWorld;             // Pointer to the CHIPS World
-  static G4QParticleVector & GetQWorld();
+  static G4QParticleVector& GetQWorld();
 };
 
  

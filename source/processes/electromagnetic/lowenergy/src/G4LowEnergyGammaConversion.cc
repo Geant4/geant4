@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.32 2003/06/16 17:00:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.34 2004/12/02 14:01:35 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -170,11 +170,11 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 
       // Limits of the screening variable
       G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
-      G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
+      G4double screenMax = std::exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
-      G4double epsilon1 = 0.5 - 0.5 * sqrt(1. - screenMin / screenMax) ;
+      G4double epsilon1 = 0.5 - 0.5 * std::sqrt(1. - screenMin / screenMax) ;
       G4double epsilonMin = std::max(epsilon0,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
 
@@ -190,7 +190,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       do {
 	if (normF1 / (normF1 + normF2) > G4UniformRand() )
 	  {
-	    epsilon = 0.5 - epsilonRange * pow(G4UniformRand(), 0.3333) ;
+	    epsilon = 0.5 - epsilonRange * std::pow(G4UniformRand(), 0.3333) ;
 	    screen = screenFactor / (epsilon * (1. - epsilon));
 	    gReject = (ScreenFunction1(screen) - fZ) / f10 ;
 	  }
@@ -232,19 +232,19 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   //  if (9. / (9. + d) > G4UniformRand())
   if (0.25 > G4UniformRand())
     {
-      u = - log(G4UniformRand() * G4UniformRand()) / a1 ;
+      u = - std::log(G4UniformRand() * G4UniformRand()) / a1 ;
     }
   else
     {
-      u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
+      u = - std::log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
 
   G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
   G4double thetaPos = u*electron_mass_c2/positronTotEnergy;
   G4double phi  = twopi * G4UniformRand();
 
-  G4double dxEle= sin(thetaEle)*cos(phi),dyEle= sin(thetaEle)*sin(phi),dzEle=cos(thetaEle);
-  G4double dxPos=-sin(thetaPos)*cos(phi),dyPos=-sin(thetaPos)*sin(phi),dzPos=cos(thetaPos);
+  G4double dxEle= std::sin(thetaEle)*std::cos(phi),dyEle= std::sin(thetaEle)*std::sin(phi),dzEle=std::cos(thetaEle);
+  G4double dxPos=-std::sin(thetaPos)*std::cos(phi),dyPos=-std::sin(thetaPos)*std::sin(phi),dzPos=std::cos(thetaPos);
   
   
   // Kinematics of the created pair:
@@ -293,12 +293,12 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 						       positronDirection, positronKineEnergy);
   aParticleChange.AddSecondary(particle2) ; 
 
-  aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit) ;
+  aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit) ;
   
   // Kill the incident photon 
-  aParticleChange.SetMomentumChange(0.,0.,0.) ;
-  aParticleChange.SetEnergyChange(0.) ; 
-  aParticleChange.SetStatusChange(fStopAndKill) ;
+  aParticleChange.ProposeMomentumDirection(0.,0.,0.) ;
+  aParticleChange.ProposeEnergy(0.) ; 
+  aParticleChange.ProposeTrackStatus(fStopAndKill) ;
 
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
@@ -332,7 +332,7 @@ G4double G4LowEnergyGammaConversion::ScreenFunction1(G4double screenVariable)
   G4double value;
   
   if (screenVariable > 1.)
-    value = 42.24 - 8.368 * log(screenVariable + 0.952);
+    value = 42.24 - 8.368 * std::log(screenVariable + 0.952);
   else
     value = 42.392 - screenVariable * (7.796 - 1.961 * screenVariable);
   
@@ -346,7 +346,7 @@ G4double G4LowEnergyGammaConversion::ScreenFunction2(G4double screenVariable)
   G4double value;
   
   if (screenVariable > 1.)
-    value = 42.24 - 8.368 * log(screenVariable + 0.952);
+    value = 42.24 - 8.368 * std::log(screenVariable + 0.952);
   else
     value = 41.405 - screenVariable * (5.828 - 0.8945 * screenVariable);
   

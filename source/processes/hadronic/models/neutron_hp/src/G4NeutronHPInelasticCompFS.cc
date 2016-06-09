@@ -60,7 +60,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
-  if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
+  if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;
@@ -106,7 +106,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     else if(dataType==5)
     {
       theEnergyDistribution[it] = new G4NeutronHPEnergyDistribution;
-      theEnergyDistribution[it]->Init(theData);
+      theEnergyDistribution[it]->Init(theData); 
     }
     else if(dataType==6)
     {
@@ -232,7 +232,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
       aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-                           sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                           std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
                                 aHadron.GetMass()*aHadron.GetMass()));
     }
     else
@@ -284,8 +284,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
           theRestEnergy->SetKineticEnergy(eGamm);
           G4double costh = 2.*G4UniformRand()-1.;
           G4double phi = twopi*G4UniformRand();
-          theRestEnergy->SetMomentum(eGamm*sin(acos(costh))*cos(phi), 
-                                     eGamm*sin(acos(costh))*sin(phi),
+          theRestEnergy->SetMomentum(eGamm*std::sin(std::acos(costh))*std::cos(phi), 
+                                     eGamm*std::sin(std::acos(costh))*std::sin(phi),
                                      eGamm*costh);
           if(thePhotons == NULL) thePhotons = new G4ReactionProductVector;
           thePhotons->push_back(theRestEnergy);
@@ -329,7 +329,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
             {
               testEnergy = 0;
             }
-	    G4double deltaE = abs(testEnergy-aBaseEnergy);
+	    G4double deltaE = std::abs(testEnergy-aBaseEnergy);
             if(deltaE<0.1*keV)
             {
               G4ReactionProductVector * theNext = 
@@ -383,10 +383,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
       G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-      G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+      G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
       G4double Phi = twopi*G4UniformRand();
-      G4ThreeVector Vector(cos(Phi)*SinTheta, sin(Phi)*SinTheta, CosTheta);
-      aHadron.SetMomentum(Vector* sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+      G4ThreeVector Vector(std::cos(Phi)*SinTheta, std::sin(Phi)*SinTheta, CosTheta);
+      aHadron.SetMomentum(Vector* std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
                                        aHadron.GetMass()*aHadron.GetMass()));
     }
 
@@ -477,7 +477,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         G4double resiualKineticEnergy  = theResidual.GetMass()*theResidual.GetMass();
                  resiualKineticEnergy += totalMomentum*totalMomentum;
-  	         resiualKineticEnergy  = sqrt(resiualKineticEnergy) - theResidual.GetMass();
+  	         resiualKineticEnergy  = std::sqrt(resiualKineticEnergy) - theResidual.GetMass();
 //        cout << "Kinetic energy of the residual = "<<resiualKineticEnergy<<endl;
 	theResidual.SetKineticEnergy(resiualKineticEnergy);
         theResidual.SetMomentum(-1.*totalMomentum);

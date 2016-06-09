@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2004/06/23 11:30:39 maire Exp $
+$Id: README,v 1.22 2004/11/23 14:05:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,27 +12,32 @@ $Id: README,v 1.18 2004/06/23 11:30:39 maire Exp $
 	
  1- GEOMETRY DEFINITION
  
- 	The calorimeter is a box made of a given number of layers.
-	A layer consists of a sequence of various absorbers (maximum 10).
-	The layer is replicated.
+  The calorimeter is a box made of a given number of layers.
+  A layer consists of a sequence of various absorbers (maximum MaxAbsor=9).
+  The layer is replicated.
  	
- 	Parameters defining the calorimeter :
- 	- the number of layers,
- 	- the number of absorbers within a layer,		
- 	- the material of the absorbers,
-	- the thickness of the absorbers,
- 	- the transverse size of the calorimeter (the input face is a square). 
+  Parameters defining the calorimeter :
+    - the number of layers,
+    - the number of absorbers within a layer,		
+    - the material of the absorbers,
+    - the thickness of the absorbers,
+    - the transverse size of the calorimeter (the input face is a square). 
  	
- 	In addition a transverse uniform magnetic field can be applied.
+  In addition a transverse uniform magnetic field can be applied.
  	
- 	The default geometry is constructed in DetectorConstruction class,
- 	but all of the above parameters can be modified interactively via
- 	the commands defined in the DetectorMessenger class.
+  The default geometry is constructed in DetectorConstruction class, but all
+  of the above parameters can be modified interactively via the commands 
+  defined in the DetectorMessenger class.
+  
+  NB. Numbering scheme (for histograms):
+  layer     : from 1 to NbOfLayers (inclued)
+  absorbers : from 1 to NbOfAbsor (inclued)
+  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (inclued)      
  	
- 	NB. The number of absorbers and the number of layers can be set to 1.
-	    In this case we have a unique homogeneous block of matter,
-	    which looks like a bubble chamber rather than a calorimeter ...
- 	    (see the macro of commands: newgeom.mac)
+  NB. The number of absorbers and the number of layers can be set to 1.
+  In this case we have a unique homogeneous block of matter, which looks like 
+  a bubble chamber rather than a calorimeter ...
+  (see the macro of commands: newgeom.mac)
 	    
  2- PHYSICS LISTS
 
@@ -40,87 +45,92 @@ $Id: README,v 1.18 2004/06/23 11:30:39 maire Exp $
     1. "particles" - particle definitions  
     2. "general" - decays and transportation  
     3. "standard" (alternative) - standard EM physics
-    4. "model"    (alternative) - standard EM physics using model approach
+    4. "g4v52"    (alternative) - standard EM physics version G4 5.2
     
     Notice that there is an example of definition of a static ion : IonC12
     (see PhysListParticle.cc) and an example of use : ionC12.mac
      	    
  3- AN EVENT : THE PRIMARY GENERATOR
  
- 	The primary kinematic consists of a single particle which hits the
- 	calorimeter perpendicular to the input face. The type of the particle
- 	and its energy are set in the PrimaryGeneratorAction class, and can
- 	be changed via the G4 build-in commands of ParticleGun class (see
- 	the macros provided with this example).
+  The primary kinematic consists of a single particle which hits the calorimeter
+  perpendicular to the input face. The type of the particle and its energy are 
+  set in the PrimaryGeneratorAction class, and can be changed via the 
+  G4 build-in commands of ParticleGun class (see the macros provided with this 
+  example).
  	
- 	In addition one can choose randomly the impact point of the incident
- 	particle. The corresponding interactive command is built in
- 	PrimaryGeneratorMessenger class.
+  In addition one can choose randomly the impact point of the incident particle.
+  The corresponding interactive command is built in PrimaryGeneratorMessenger.
  	
- 	A RUN is a set of events.
+  A RUN is a set of events.
  				
  4- VISUALIZATION
  
- 	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via the commands
- 	/vis/... in the macro vis.mac. In interactive session:
-	PreInit or Idle > /control/execute vis.mac
+  The Visualization Manager is set in the main().
+  The initialisation of the drawing is done via the commands :
+  /vis/... in the macro vis.mac. In interactive session:
+  PreInit or Idle > /control/execute vis.mac
  	
- 	The detector has a default view which is a longitudinal view of the 
- 	calorimeter.
+  The default view is a longitudinal view of the calorimeter.
  	
- 	The tracks are drawn at the end of event, and erased at the end of run.
- 	Optionaly one can choose to draw all particles, only the charged one,
- 	or none. This command is defined in EventActionMessenger class.
+  The tracks are drawn at the end of event, and erased at the end of run.
+  Optionaly one can choose to draw all particles, only the charged one, or none.
+  This command is defined in EventActionMessenger class.
  	
  5- PHYSICS DEMO
  
- 	The particle's type and the physic processes which will be available
- 	in this example are set in PhysicsList class.
+  The particle's type and the physic processes which will be available
+  in this example are set in PhysicsList class.
  	
- 	In addition a build-in interactive command (/process/inactivate proname)
- 	allows to activate/inactivate the processes one by one.
- 	Then one can well visualize the processes one by one, especially 
- 	in the bubble chamber setup with a transverse magnetic field.
+  In addition a build-in interactive command (/process/inactivate processName)
+  allows to activate/inactivate the processes one by one.
+  Then one can well visualize the processes one by one, especially 
+  in the bubble chamber setup with a transverse magnetic field.
  
- 	As a homework try to visualize a gamma conversion alone, 
- 	or the effect of the multiple scattering.
+  As a homework try to visualize a gamma conversion alone, 
+  or the effect of the multiple scattering.
 	
-	Notice that one can control the maximum step size at tracking time,
-	via G4UserLimit class and the command /tracking/stepMax  
-	(see DetectorConstruction and DetectorMessenger classes)
+  Notice that one can control the maximum step size in each absorber, via the
+  StepMax process and the command /testem/stepMax/absorber  
+  (see StepMax and PhysicsList classes)
  	
  6- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd TestEm3
- 		% gmake
+  - compile and link to generate an executable
+ 	% cd TestEm3
+ 	% gmake
  		
- 	- execute TestEm3 in 'batch' mode from macro files
- 		% TestEm3   run01.mac
+  - execute TestEm3 in 'batch' mode from macro files
+ 	% TestEm3   run01.mac
  		
- 	- execute TestEm3 in 'interactive mode' with visualization
- 		% TestEm3
- 		....
- 		Idle> type your commands. For instance:
- 		Idle> /control/execute run01.mac
- 		....
- 		Idle> exit
+  - execute TestEm3 in 'interactive mode' with visualization
+ 	% TestEm3
+ 	....
+ 	Idle> type your commands. For instance:
+ 	Idle> /control/execute run01.mac
+ 	....
+ 	Idle> exit
  	
  7- HISTOGRAMS
  
- Testem3 produces histograms : 
-  histo 1 : energy deposit in absorber 0
-  histo 2 : energy deposit in absorber 1
+ Testem3 can produce histograms : 
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
   ...etc...........
   
  One can control the binning of the histo with the command:
   /testem/histo/setHisto   idAbsor  nbin  Emin  Emax  unit 
   ...etc...........  
   where unit is the desired energy unit for that histo (see TestEm3.in).
+  
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
+  ...etc...........  
+  
+  histo 21 : forward energy flow of primary particle (MeV)
+  histo 22 : forward energy flow of all secondary particles (MeV)  
 
  One can control the name of the histograms file with the command:
- /testem/histo/setFileName  name  (default testem3.paw)
+ /testem/histo/setFileName  name  (default testem3.aida)
  
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.
@@ -129,37 +139,37 @@ $Id: README,v 1.18 2004/06/23 11:30:39 maire Exp $
  8- Using histograms
  ------------------- 
 
-By default the histograms are not activated. To activate histograms
-the environment variable G4ANALYSIS_USE should be defined. For instance
-uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+ By default the histograms are not activated. To activate histograms
+ the environment variable G4ANALYSIS_USE should be defined. For instance
+ uncomment the flag G4ANALYSIS_USE in GNUmakefile.
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+ To use histograms any of implementations of AIDA interfaces should
+ be available (see http://aida.freehep.org).
 
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
+ A package including AIDA and extended interfaces also using Python
+ is PI, available from: http://cern.ch/pi .
 
-Once installed PI or PI-Lite in a specified local area $MYPY, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
+ Once installed PI or PI-Lite in a specified local area $MYPY, it is
+ required to add the installation path to $PATH, i.e. for example,
+ for release 1.2.1 of PI:
 
-setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+ setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
 
-CERN users can use the PATH to the LCG area on AFS.
+ CERN users can use the PATH to the LCG area on AFS.
 
-Before compilation of the example it is optimal to clean up old 
-files:
+ Before compilation of the example it is optimal to clean up old 
+ files:
 
-gmake histclean
-gmake
+ gmake histclean
+ gmake
 
-Before running the example the command should be issued:
+ Before running the example the command should be issued:
 
-eval `aida-config --runtime csh`
+ eval `aida-config --runtime csh`
 
-It is possible to choose the format of the output file with 
-histograms using UI command:
+ It is possible to choose the format of the output file with 
+ histograms using UI command:
 
-/testem/histo/setFileType type
+ /testem/histo/setFileType type
 
-The following types are available: hbook, root, xml.
+ The following types are available: hbook, root, xml.

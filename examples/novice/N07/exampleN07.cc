@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.3 2003/04/25 17:03:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: exampleN07.cc,v 1.4 2004/11/17 03:07:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -69,8 +69,8 @@ int main(int argc,char** argv) {
  runManager->SetUserAction(new ExN07EventAction);
  runManager->SetUserAction(new ExN07StackingAction);
   
- //Initialize G4 kernel
- runManager->Initialize();
+ // Initialize G4 kernel
+ // runManager->Initialize();
     
  // get the pointer to the User Interface manager 
  G4UImanager* UI = G4UImanager::GetUIpointer();  

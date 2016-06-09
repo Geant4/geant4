@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelWorld.cc,v 1.7 2003/10/22 13:52:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

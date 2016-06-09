@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoder.cc,v 1.4 2001/07/11 10:09:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4RTJpegCoder.cc,v 1.5 2004/12/07 23:41:00 perl Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 //
 
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "G4RTJpeg.hh"
 #include "G4RTOutBitStream.hh"
@@ -49,7 +49,7 @@ G4JpegCoder::G4JpegCoder(u_char* colorR,u_char* colorG,u_char* colorB)
 
   for(int n=0; n<8; n++)
                 for(int m=0; m<8; m++)
-                                mCosT[n][m] = cos((2 * m + 1) * n * PaiDiv16);
+                                mCosT[n][m] = std::cos((2 * m + 1) * n * PaiDiv16);
 }
 
 G4JpegCoder::~G4JpegCoder(void)
@@ -194,7 +194,7 @@ G4JpegCoder::CodeHuffman(int cs)
 
   int diff = mDCTData[0] - mPreDC[cs];
   mPreDC[cs] = mDCTData[0];
-  int absDiff = abs(diff);
+  int absDiff = std::abs(diff);
   int dIdx = 0;
 
   while(absDiff > 0){
@@ -213,7 +213,7 @@ G4JpegCoder::CodeHuffman(int cs)
 
   int run = 0;
   for(int n=1; n<64; n++){
-        int absCoefficient = abs( mDCTData[ Zigzag[n] ] );
+        int absCoefficient = std::abs( mDCTData[ Zigzag[n] ] );
         if( absCoefficient ){
                 while( run > 15 ){
                 mOBSP->SetBits((acT.CodeT)[zrlIdx], (acT.SizeT)[zrlIdx]);

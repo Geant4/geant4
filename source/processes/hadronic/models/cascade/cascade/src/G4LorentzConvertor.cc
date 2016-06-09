@@ -29,7 +29,7 @@ G4LorentzConvertor::G4LorentzConvertor()
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
   }
-};
+}
 
 void G4LorentzConvertor::toTheCenterOfMass() {
    
@@ -53,7 +53,7 @@ void G4LorentzConvertor::toTheCenterOfMass() {
     pv += target_mom[i] * velocity[i];
   };
    
-  gamma = 1.0 / sqrt(fabs(1.0 - v2));
+  gamma = 1.0 / std::sqrt(std::fabs(1.0 - v2));
   ecm_tot = e_sum / gamma;
 
   G4double pa = 0.0;
@@ -84,7 +84,7 @@ void G4LorentzConvertor::toTheCenterOfMass() {
     }
 
   } else {
-    ga = sqrt(ga);
+    ga = std::sqrt(ga);
   }; 
 
   if (verboseLevel > 3) {
@@ -92,7 +92,7 @@ void G4LorentzConvertor::toTheCenterOfMass() {
       " pb * pb / pa " << pb * pb / pa << " pv " << pv << G4endl;
   }
 
-  pscm = sqrt(pa);
+  pscm = std::sqrt(pa);
   gb = pb / pscm;
   gbpp = gb / pscm;
   gapp = ga * pscm;
@@ -160,11 +160,11 @@ std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom
   if(ga1 < small) {
     mom_rot = mom;
   } else {  
-    ga1 = sqrt(ga1);
+    ga1 = std::sqrt(ga1);
 
     G4double gb1 = pv / pp;
 
-    pp = sqrt(pp);
+    pp = std::sqrt(pp);
 
     G4double ga1pp = ga1 * pp;
 
@@ -229,9 +229,9 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
     ga = small;
     degenerated = true;
   } else {
-    ga = sqrt(ga);
+    ga = std::sqrt(ga);
   };  
-  pscm = sqrt(pa);
+  pscm = std::sqrt(pa);
   plab = pscm;
   gb = pb / pscm;
   gbpp = gb / pscm;

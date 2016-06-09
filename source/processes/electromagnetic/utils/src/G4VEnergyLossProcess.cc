@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.22 2004/05/17 09:46:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VEnergyLossProcess.cc,v 1.45 2004/12/09 10:38:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +72,12 @@
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
 // 19-03-04 Fix a problem energy below lowestKinEnergy (V.Ivanchenko)
 // 31-03-04 Fix a problem of retrieve tables (V.Ivanchenko)
+// 21-07-04 Check weather AtRest are active or not (V.Ivanchenko)
+// 03-08-04 Add pointer of DEDX table to all processes (V.Ivanchenko)
+// 06-08-04 Clear up names of member functions (V.Ivanchenko)
+// 06-08-04 Clear up names of member functions (V.Ivanchenko)
+// 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -107,6 +113,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4PhysicsTableHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -116,6 +123,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   idxSCoffRegions(0),
   theDEDXTable(0),
   theRangeTableForLoss(0),
+  theDEDXunRestrictedTable(0),
   thePreciseRangeTable(0),
   theSecondaryRangeTable(0),
   theInverseRangeTable(0),
@@ -140,10 +148,11 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
-  hasRestProcess(true),
   tablesAreBuilt(false),
   integral(true),
-  meanFreePath(true)
+  meanFreePath(false),
+  aboveCSmax(true),
+  isIonisation(true)
 {
 
   lowestKinEnergy      = 1.*eV;
@@ -169,6 +178,17 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
   Clear();
 
+  if ( !baseParticle ) {
+    if(theDEDXTable && theRangeTableForLoss) theDEDXTable->clearAndDestroy();
+    if(theDEDXunRestrictedTable && thePreciseRangeTable)
+       theDEDXunRestrictedTable->clearAndDestroy();
+    if(thePreciseRangeTable) thePreciseRangeTable->clearAndDestroy();
+    if(theRangeTableForLoss) theRangeTableForLoss->clearAndDestroy();
+    if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
+    if(theLambdaTable) theLambdaTable->clearAndDestroy();
+    if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
+  }
+
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; i++) {
       if (scoffProcessors[i]) {
@@ -192,26 +212,12 @@ void G4VEnergyLossProcess::Clear()
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() << G4endl;
   }
-  if ( !baseParticle ) {
-    if(theDEDXTable) theDEDXTable->clearAndDestroy();
-    if(thePreciseRangeTable) thePreciseRangeTable->clearAndDestroy();
-    if(theRangeTableForLoss) theRangeTableForLoss->clearAndDestroy();
-    if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
-    if(theLambdaTable) theLambdaTable->clearAndDestroy();
-    if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
-  }
+
   if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
   if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
   if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
   if(theCrossSectionMax) delete [] theCrossSectionMax;
 
-  theDEDXTable = 0;
-  thePreciseRangeTable = 0;
-  theRangeTableForLoss = 0;
-  theInverseRangeTable = 0;
-  theSecondaryRangeTable = 0;
-  theLambdaTable = 0;
-  theSubLambdaTable = 0;
   theDEDXAtMaxEnergy = 0;
   theRangeAtMaxEnergy = 0;
   theEnergyOfCrossSectionMax = 0,
@@ -221,27 +227,67 @@ void G4VEnergyLossProcess::Clear()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::Initialise()
+void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
+
+  // Are particle defined?
+  if( !particle ) {
+    if(part.GetParticleType() == "nucleus" && part.GetParticleSubType() == "generic") 
+         particle = G4GenericIon::GenericIon();
+    else particle = &part;
+  }
+
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossProcess::Initialise() for "
-           << GetProcessName() 
-           << " for " << particle->GetParticleName()
+    G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
+           << GetProcessName()
+           << " for " << part.GetParticleName()
+           << " local: " << particle->GetParticleName()
            << G4endl;
+  }
+
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+
+  if (&part != particle) {
+    if (part.GetParticleType() == "nucleus") lManager->RegisterIon(&part, this);
+    else                                     lManager->RegisterExtraParticle(&part, this);
+    return;
   }
 
   Clear();
 
+  currentCouple = 0;
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
+
+  // Base particle and set of models can be defined here
+  InitialiseEnergyLossProcess(particle, baseParticle);
+
+  // Tables preparation
+  if (!baseParticle) {
+    
+    theDEDXTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXTable);
+    if (lManager->BuildPreciseRange()) {
+      theDEDXunRestrictedTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
+      if (isIonisation)
+        thePreciseRangeTable = G4PhysicsTableHelper::PreparePhysicsTable(thePreciseRangeTable);
+    }
+
+    if (isIonisation) {
+      theRangeTableForLoss = G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
+      theInverseRangeTable = G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);
+    }
+    theLambdaTable       = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+    if (nSCoffRegions)
+      theSubLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theSubLambdaTable);
+  }
+
   G4double initialCharge = particle->GetPDGCharge();
-  G4double initialMass  = particle->GetPDGMass();
+  G4double initialMass   = particle->GetPDGMass();
   chargeSquare = initialCharge*initialCharge/(eplus*eplus);
   chargeSqRatio = 1.0;
   massRatio = 1.0;
   reduceFactor = 1.0;
-
-  if(particle->GetProcessManager()->GetAtRestProcessVector()->size())
-               hasRestProcess = true;
-  else         hasRestProcess = false;
 
   if (baseParticle) {
     massRatio = (baseParticle->GetPDGMass())/initialMass;
@@ -276,6 +322,8 @@ void G4VEnergyLossProcess::Initialise()
     }
   }
 
+  lManager->EnergyLossProcessIsInitialised(particle, this);
+
   if (0 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Initialise() is done "
            << " chargeSqRatio= " << chargeSqRatio
@@ -295,51 +343,26 @@ void G4VEnergyLossProcess::Initialise()
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  currentCouple = 0;
-  preStepLambda = 0.0;
-  preStepMFP = DBL_MAX;
   if(0 < verboseLevel) {
-    G4cout << "========================================================" << G4endl;
+  //    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
+           << "; local: " << particle->GetParticleName();
+    if(baseParticle) G4cout << "; base: " << baseParticle->GetParticleName();
+    G4cout << G4endl;
+  }
+
+  if(!tablesAreBuilt && &part == particle)
+    G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
+
+  if(-1 < verboseLevel && (&part == particle) && !baseParticle) PrintInfoDefinition();
+
+  if(0 < verboseLevel) {
+    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
            << G4endl;
-  }
-
-  if (part.GetParticleName() != "GenericIon" &&
-      part.GetParticleType() == "nucleus" &&
-      part.GetParticleSubType() == "generic")
-  {
-    (G4LossTableManager::Instance())->RegisterIon(&part, this);
-    /*
-    G4cout << part.GetProcessManager() << "  "
-           << (G4GenericIon::GenericIon())->GetProcessManager()
-           << G4endl;
-    */
-    return;
-  }
-
-  // Are particle defined?
-  if( !particle ) {
-    particle = &part;
-    baseParticle = DefineBaseParticle(particle);
-  }
-
-  // Recalculation is needed because cuts were changed or recalculation is forced
-  G4LossTableManager* lManager = G4LossTableManager::Instance();
-  if ( lManager->IsRecalcNeeded(particle) ) {
-
-    // It is responsability of the G4LossTables to build DEDX and range tables
-    lManager->BuildPhysicsTable(particle);
-
-    if(!baseParticle) PrintInfoDefinition();
-
-    if(0 < verboseLevel) {
-      G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
-             << GetProcessName()
-             << " and particle " << part.GetParticleName()
-             << G4endl;
-    }
   }
 }
 
@@ -364,7 +387,7 @@ void G4VEnergyLossProcess::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
                                            const G4Region* r)
 {
   if( !p ) {
-    G4cout << "G4VEnergyLossProcess::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." 
+    G4cout << "G4VEnergyLossProcess::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined."
            << G4endl;
     return;
   }
@@ -396,17 +419,10 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
            << G4endl;
   }
 
-  // vectors to provide continues dE/dx
-  G4DataVector factor;
-  G4DataVector dedxLow;
-  G4DataVector dedxHigh;
-
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
 
   if(0 < verboseLevel) {
     G4cout << numOfCouples << " materials"
@@ -417,25 +433,29 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    // create physics vector and fill it
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    G4PhysicsVector* aVector = DEDXPhysicsVector(couple);
-    modelManager->FillDEDXVector(aVector, couple);
+    if(1 < verboseLevel) 
+      G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " << theDEDXTable->GetFlag(i) << G4endl;
 
-    // Insert vector for this material into the table
-    theTable->insert(aVector) ;
+    if (theDEDXTable->GetFlag(i)) {
+
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      G4PhysicsVector* aVector = DEDXPhysicsVector(couple);
+      modelManager->FillDEDXVector(aVector, couple);
+
+      // Insert vector for this material into the table
+      G4PhysicsTableHelper::SetPhysicsVector(theDEDXTable, i, aVector);
+    }
   }
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
            << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << *theTable << G4endl;
-    }
+    if(2 < verboseLevel) G4cout << (*theDEDXTable) << G4endl;
   }
 
-  return theTable;
+  return theDEDXTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -450,17 +470,10 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
            << G4endl;
   }
 
-  // vectors to provide continues dE/dx
-  G4DataVector factor;
-  G4DataVector dedxLow;
-  G4DataVector dedxHigh;
-
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
 
   if(0 < verboseLevel) {
     G4cout << numOfCouples << " materials"
@@ -471,25 +484,26 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    // create physics vector and fill it
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    G4PhysicsVector* aVector = DEDXPhysicsVectorForPreciseRange(couple);
-    modelManager->FillDEDXVectorForPreciseRange(aVector, couple);
+    if (theDEDXunRestrictedTable->GetFlag(i)) {
 
-    // Insert vector for this material into the table
-    theTable->insert(aVector) ;
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      G4PhysicsVector* aVector = DEDXPhysicsVectorForPreciseRange(couple);
+      modelManager->FillDEDXVectorForPreciseRange(aVector, couple);
+
+      // Insert vector for this material into the table
+      G4PhysicsTableHelper::SetPhysicsVector(theDEDXunRestrictedTable, i, aVector);
+    }
   }
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange(): table is built for "
            << particle->GetParticleName()
            << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << *theTable << G4endl;
-    }
+    if(2 < verboseLevel) G4cout << (*theDEDXunRestrictedTable) << G4endl;
   }
 
-  return theTable;
+  return theDEDXunRestrictedTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -509,29 +523,27 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
-
   for(size_t i=0; i<numOfCouples; i++) {
 
-    // create physics vector and fill it
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
-    modelManager->FillLambdaVector(aVector, couple);
+    if (theLambdaTable->GetFlag(i)) {
 
-    // Insert vector for this material into the table
-    theTable->insert(aVector) ;
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
+      modelManager->FillLambdaVector(aVector, couple);
+
+      // Insert vector for this material into the table
+      G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
+    }
   }
 
   if(0 < verboseLevel) {
     G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << *theTable << G4endl;
-    }
   }
 
-  return theTable;
+  return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -548,17 +560,19 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    // create physics vector and fill it
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    G4PhysicsVector* aVector = SubLambdaPhysicsVector(couple);
-    modelManager->FillSubLambdaVector(aVector, couple);
+    if (theSubLambdaTable->GetFlag(i)) {
 
-    // Insert vector for this material into the table
-    theTable->insert(aVector) ;
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      G4PhysicsVector* aVector = SubLambdaPhysicsVector(couple);
+      modelManager->FillSubLambdaVector(aVector, couple);
+
+      // Insert vector for this material into the table
+      G4PhysicsTableHelper::SetPhysicsVector(theSubLambdaTable, i, aVector);
+    }
   }
 
   if(0 < verboseLevel) {
@@ -567,7 +581,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
            << G4endl;
   }
 
-  return theTable;
+  return theSubLambdaTable;
 }
 
 
@@ -584,7 +598,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
 
-/*
+  /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -597,29 +611,38 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " md= " << d->GetPDGMass()
            << G4endl;
   }
-*/
+  */
+
   // stopping
   if (length >= fRange) {
     eloss = preStepKinEnergy;
 
   // Short step
   } else if( length <= linLossLimit * fRange ) {
-    eloss = GetDEDXForLoss(preStepKinEnergy)*length;
+    eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
 
   // Long step
   } else {
-    G4double r = GetRangeForLoss(preStepKinEnergy)/reduceFactor;
+    G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
     G4double x = r - length/reduceFactor;
-    eloss =  (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
+    if(x < 0.0) {
+      G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
+             << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
+             << " step(mm)= " << length/mm
+             << " for " << track.GetDefinition()->GetParticleName()
+             << G4endl;
+      x = 0.0;
+    }
+    eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
     /*
     if(-1 < verboseLevel) {
-      G4bool b;
-      G4cout << "rPre(mm)= " << r/mm
+      G4cout << "Long STEP: rPre(mm)= " << r/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
-             << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length/MeV
+             << " eloss0(MeV)= " 
+             << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
              << G4endl;
     }
     */
@@ -629,19 +652,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
-
   /*
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
-    G4bool b;
-    //G4cout << *theDEDXTable << G4endl;
-    G4cout << "eloss(MeV)= " << eloss/MeV
-           << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length
-           << " r0(mm)= " << GetRangeForLoss(preStepKinEnergy)
+    G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
-      //   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
-      //   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
            << G4endl;
   }
   */
@@ -653,10 +669,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                                        tmax, length, eloss, preStepScaledEnergy,
 				       currentMaterialIndex);
   }
-
   /*
   if(-1 < verboseLevel) {
-    G4cout << "eloss(MeV)= " << eloss/MeV
+    G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
            << " fluc= " << (eloss-eloss0)/MeV
            << " currentChargeSquare= " << chargeSquare
            << " massRatio= " << massRatio
@@ -664,17 +679,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
-
   G4double finalT = preStepKinEnergy - eloss;
-
-  if (finalT <= lowestKinEnergy) {
-
-    finalT = 0.0;
-
-    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
-    else                fParticleChange.SetStatusChange(fStopAndKill);
-  }
-
+  if (finalT <= lowestKinEnergy) finalT = 0.0;
   eloss = preStepKinEnergy-finalT;
 
   fParticleChange.SetProposedKineticEnergy(finalT);
@@ -703,8 +709,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
     delete newp;
   }
-
-/*
+  /*
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
@@ -712,9 +717,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " lossFlag= " << lossFluctuationFlag
            << G4endl;
   }
-*/
-
-  fParticleChange.SetLocalEnergyDeposit(eloss);
+  */
+  fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
   return &fParticleChange;
 }
@@ -730,7 +734,15 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    if(preStepLambda*G4UniformRand() > GetLambda(postStepScaledEnergy))
+    G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
+    if(preStepLambda<lx && 0 < verboseLevel) {
+      G4cout << "WARING: for " << particle->GetParticleName()
+             << " and " << GetProcessName()
+             << " E(MeV)= " << finalT/MeV
+             << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
+	     << G4endl;
+    }
+    if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
@@ -739,28 +751,27 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = currentModel->MaxSecondaryEnergy(dynParticle);
 
-  /*
-  if(0 < verboseLevel) {
-    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4VEnergyLossProcess::PostStepDoIt: Sample secondary; E= " << finalT/MeV
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
-           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
-           << G4endl;
-  }
-  */
-
   if (tcut < tmax)
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
-  if (finalT <= 0.0) {
+  /*
+  if(-1 < verboseLevel) {
+    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
+    G4cout << GetProcessName()
+           << "::PostStepDoIt: Sample secondary; E= " << finalT/MeV
+           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
+           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+           << "  preStepLambda= " << preStepLambda
+           << G4endl;
+  }
+  */
+  //  if (finalT <= 0.0) finalT = 0.0;
+  
+  if (finalT <= lowestKinEnergy) {
     fParticleChange.SetProposedKineticEnergy(0.0);
-
-    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
-    else                fParticleChange.SetStatusChange(fStopAndKill);
-
     return &fParticleChange;
   }
-
+  
   fParticleChange.SetProposedKineticEnergy(finalT);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
@@ -797,6 +808,8 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
     if(2 < verboseLevel) {
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
       if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
+      G4cout << "non restricted DEDXTable address= " << theDEDXunRestrictedTable << G4endl;
+      if(theDEDXunRestrictedTable) G4cout << (*theDEDXunRestrictedTable) << G4endl;
       G4cout << "PreciseRangeTable address= " << thePreciseRangeTable << G4endl;
       if(thePreciseRangeTable) G4cout << (*thePreciseRangeTable) << G4endl;
       G4cout << "RangeTableForLoss address= " << theRangeTableForLoss << G4endl;
@@ -815,36 +828,48 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 {
-  if(theDEDXTable && !baseParticle) theDEDXTable->clearAndDestroy();
-  theDEDXTable = p;
+  if(theDEDXTable != p) theDEDXTable = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetDEDXunRestrictedTable(G4PhysicsTable* p)
+{
+  if(theDEDXunRestrictedTable != p) theDEDXunRestrictedTable = p;
+  if(p) {
+    size_t n = p->length();
+    G4PhysicsVector* pv = (*p)[0];
+    G4double emax = maxKinEnergyForRange;
+    G4bool b;
+    theDEDXAtMaxEnergy = new G4double [n];
+
+    for (size_t i=0; i<n; i++) {
+      pv = (*p)[i];
+      G4double dedx = pv->GetValue(emax, b);
+      theDEDXAtMaxEnergy[i] = dedx;
+      //G4cout << "i= " << i << " emax(MeV)= " << emax/MeV<< " dedx= " << dedx << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
 {
-  if(thePreciseRangeTable && !baseParticle) thePreciseRangeTable->clearAndDestroy();
-  if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
-  if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
+  if(thePreciseRangeTable != p) thePreciseRangeTable = p;
 
-  thePreciseRangeTable = p;
   if(p) {
     size_t n = p->length();
     G4PhysicsVector* pv = (*p)[0];
-    //    G4double emax = pv->GetLowEdgeEnergy(pv->GetVectorLength());
     G4double emax = maxKinEnergyForRange;
     G4bool b;
-    theDEDXAtMaxEnergy = new G4double [n];
     theRangeAtMaxEnergy = new G4double [n];
 
     for (size_t i=0; i<n; i++) {
       pv = (*p)[i];
       G4double r2 = pv->GetValue(emax, b);
-      G4double dedx = ((*theDEDXTable)[i])->GetValue(emax,b);
-      theDEDXAtMaxEnergy[i] = dedx;
       theRangeAtMaxEnergy[i] = r2;
-      //G4cout << "i= " << i << " e2(MeV)= " << emax/MeV << " r2= " << r2
-      //       << " dedx= " << dedx << G4endl;
+      //G4cout << "i= " << i << " e2(MeV)= " << emax/MeV << " r2= " << r2<< G4endl;
     }
   }
 }
@@ -853,8 +878,13 @@ void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetRangeTableForLoss(G4PhysicsTable* p)
 {
-  if(theRangeTableForLoss && !baseParticle) theRangeTableForLoss->clearAndDestroy();
-  theRangeTableForLoss = p;
+  if(theRangeTableForLoss != p) {
+    theRangeTableForLoss = p;
+    if(0 < verboseLevel) {
+      G4cout << "### Set Range table " << p << " for " << particle->GetParticleName()
+             << " and process " << GetProcessName() << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -868,19 +898,25 @@ void G4VEnergyLossProcess::SetSecondaryRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 {
-  if(theInverseRangeTable && !baseParticle) theInverseRangeTable->clearAndDestroy();
-  theInverseRangeTable = p;
+  if(theInverseRangeTable != p) {
+    theInverseRangeTable = p;
+    if(0 < verboseLevel) {
+      G4cout << "### Set InverseRange table " << p << " for " << particle->GetParticleName()
+             << " and process " << GetProcessName() << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 {
-  if(theLambdaTable && !baseParticle) theLambdaTable->clearAndDestroy();
-  theLambdaTable = p;
+  if(1 < verboseLevel) {
+    G4cout << "### Set Lambda table " << p << " for " << particle->GetParticleName()
+           << " and process " << GetProcessName() << G4endl;
+  }
+  if(theLambdaTable != p) theLambdaTable = p;
   tablesAreBuilt = true;
-  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
-  if(theCrossSectionMax) delete [] theCrossSectionMax;
 
   if(p) {
     size_t n = p->length();
@@ -905,8 +941,11 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
       theEnergyOfCrossSectionMax[i] = emax;
       theCrossSectionMax[i] = smax;
-      // G4cout << "i= " << i << " e2(MeV)= " << emax/MeV
-      //       << " lambda= " << smax << G4endl;
+      if(1 < verboseLevel) {
+        G4cout << "For " << particle->GetParticleName()
+               << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
+               << " lambda= " << smax << G4endl;
+      }
     }
   }
 }
@@ -915,8 +954,8 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
 {
-  if(theSubLambdaTable && !baseParticle) theSubLambdaTable->clearAndDestroy();
-  theSubLambdaTable = p;
+  if(theSubLambdaTable != p) theSubLambdaTable = p;
+
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; i++) {
       scoffProcessors[i]->SetLambdaSubTable(theSubLambdaTable);
@@ -1033,7 +1072,6 @@ void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
 void G4VEnergyLossProcess::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
-  baseParticle = DefineBaseParticle(particle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1052,48 +1090,46 @@ void G4VEnergyLossProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4VEnergyLossProcess::StorePhysicsTable(G4ParticleDefinition* part,
-			 	     const G4String& directory,
-				           G4bool ascii)
+G4bool G4VEnergyLossProcess::StorePhysicsTable(const G4ParticleDefinition* part,
+			 	               const G4String& directory,
+				                     G4bool ascii)
 {
   G4bool res = true;
-  if ( baseParticle ) return res;
-  G4bool yes = true;
+  if ( baseParticle || part != particle ) return res;
 
-  if ( theDEDXTable ) {
+  if ( theDEDXTable && theRangeTableForLoss ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
-    yes = theDEDXTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
+  }
+
+  if ( theDEDXunRestrictedTable && thePreciseRangeTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"DEDXnr",ascii);
+    if( !theDEDXTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( thePreciseRangeTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"PreciseRange",ascii);
-    yes = thePreciseRangeTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !thePreciseRangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( theRangeTableForLoss ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"Range",ascii);
-    yes = theRangeTableForLoss->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !theRangeTableForLoss->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( theInverseRangeTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
-    yes = theInverseRangeTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !theInverseRangeTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( theLambdaTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-    yes = theLambdaTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !theLambdaTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
   if ( theSubLambdaTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
-    yes = theSubLambdaTable->StorePhysicsTable(name,ascii);
-    if( !yes ) res = false;
+    if( !theSubLambdaTable->StorePhysicsTable(name,ascii)) res = false;
   }
   if ( res ) {
     G4cout << "Physics tables are stored for " << particle->GetParticleName()
@@ -1111,198 +1147,164 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
-			  	        const G4String& directory,
-			  	              G4bool ascii)
+G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
+			  	                  const G4String& directory,
+			  	                        G4bool ascii)
 {
   G4bool res = true;
-  currentCouple = 0;
-  preStepLambda = 0.0;
+  const G4String particleName = part->GetParticleName();
+
   if(0 < verboseLevel) {
-    G4cout << "========================================================" << G4endl;
+ //   G4cout << "========================================================" << G4endl;
     G4cout << "G4VEnergyLossProcess::RetrievePhysicsTable() for "
-           << part->GetParticleName() << " and process " << GetProcessName() 
+           << particleName << " and process " << GetProcessName()
            << "; tables_are_built= " << tablesAreBuilt
            << G4endl;
   }
-
-  const G4String particleName = part->GetParticleName();
-  if( !particle ) {
-    particle = part;
-    baseParticle = DefineBaseParticle(particle);
-  }
-
-  if(particleName != "GenericIon"  &&
-     part->GetParticleType() == "nucleus"  &&
-     part->GetParticleSubType() == "generic")
-  {
-    (G4LossTableManager::Instance())->RegisterIon(part, this);
-    return res;
-  }
-
-  if(tablesAreBuilt) return res;
-  Initialise();
-
-  // Recalculation is needed because cuts were changed or recalculation is forced
-  G4LossTableManager* lManager = G4LossTableManager::Instance();
-  if ( lManager->IsRecalcNeeded(particle)) {
+  if(particle == part) {
 
     G4bool yes = true;
     G4bool fpi = true;
     if ( !baseParticle ) {
-      G4PhysicsTable* table;
       G4String filename;
-      const G4ProductionCutsTable* theCoupleTable=
-            G4ProductionCutsTable::GetProductionCutsTable();
-      size_t numOfCouples = theCoupleTable->GetTableSize();
 
       filename = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
-
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      yes = theDEDXTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theDEDXTable,filename,ascii);
       if(yes) {
-        SetDEDXTable(table);
         if (-1 < verboseLevel) {
-          G4cout << "DEDX table for " << particleName << " is retrieved from <"
+          G4cout << "DEDX table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
         fpi = false;
-        table->clearAndDestroy();
         if (0 < verboseLevel) {
           G4cout << "DEDX table for " << particleName << " from file <"
-                 << filename << "> is not retrieved"
+                 << filename << "> is not Retrieved"
                  << G4endl;
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"Range",ascii);
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      yes = theRangeTableForLoss->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theRangeTableForLoss,filename,ascii);
       if(yes) {
-        SetRangeTableForLoss(table);
         if (-1 < verboseLevel) {
-          G4cout << "Range table for loss for " << particleName << " is retrieved from <"
+          G4cout << "Range table for loss for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        table->clearAndDestroy();
         if(fpi) {
           res = false;
 	  G4cout << "Range table for loss for " << particleName << " from file <"
-		 << filename << "> is not retrieved"
+		 << filename << "> is not Retrieved"
 		 << G4endl;
         }
       }
 
-      filename = GetPhysicsTableFileName(part,directory,"PreciseRange",ascii);
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      filename = GetPhysicsTableFileName(part,directory,"DEDXnr",ascii);
+      yes = theDEDXunRestrictedTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theDEDXunRestrictedTable,filename,ascii);
       if(yes) {
-        SetPreciseRangeTable(table);
         if (-1 < verboseLevel) {
-          G4cout << "Precise Range table for " << particleName << " is retrieved from <"
+          G4cout << "Non-restricted DEDX table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        table->clearAndDestroy();
+        if (0 < verboseLevel) {
+          G4cout << "Non-restricted DEDX table for " << particleName << " from file <"
+                 << filename << "> is not Retrieved"
+                 << G4endl;
+        }
+      }
+
+      filename = GetPhysicsTableFileName(part,directory,"PreciseRange",ascii);
+      yes = thePreciseRangeTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(thePreciseRangeTable,filename,ascii);
+      if(yes) {
+        if (-1 < verboseLevel) {
+          G4cout << "Precise Range table for " << particleName << " is Retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+        }
+      } else {
 	G4cout << "Precise Range table for loss for " << particleName << " does not exist"
 	       << G4endl;
       }
 
       filename = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes)  yes = table->RetrievePhysicsTable(filename,ascii);
+      yes = theInverseRangeTable->ExistPhysicsTable(filename);
+      if(yes)  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theInverseRangeTable,filename,ascii);
       if(yes) {
-        SetInverseRangeTable(table);
         if (-1 < verboseLevel) {
-          G4cout << "InverseRange table for " << particleName << " is retrieved from <"
+          G4cout << "InverseRange table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        table->clearAndDestroy();
         if(fpi) {
           res = false;
           G4cout << "InverseRange table for " << particleName << " from file <"
-                 << filename << "> is not retrieved"
+                 << filename << "> is not Retrieved"
                  << G4endl;
 
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      yes = theLambdaTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
       if(yes) {
-        SetLambdaTable(table);
         if (-1 < verboseLevel) {
-          G4cout << "Lambda table for " << particleName << " is retrieved from <"
+          G4cout << "Lambda table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        table->clearAndDestroy();
         if(fpi) {
           res = false;
           G4cout << "Lambda table for " << particleName << " from file <"
-                 << filename << "> is not retrieved"
+                 << filename << "> is not Retrieved"
                  << G4endl;
         }
       }
 
       filename = GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
-      table = new G4PhysicsTable(numOfCouples);
-      yes = table->ExistPhysicsTable(filename);
-      if(yes) yes = table->RetrievePhysicsTable(filename,ascii);
+      yes = theSubLambdaTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theSubLambdaTable,filename,ascii);
       if(yes) {
-        SetSubLambdaTable(table);
         if (-1 < verboseLevel) {
-          G4cout << "SubLambda table for " << particleName << " is retrieved from <"
+          G4cout << "SubLambda table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        table->clearAndDestroy();
         if(nSCoffRegions) {
           res=false;
           G4cout << "SubLambda table for " << particleName << " from file <"
-                 << filename << "> is not retrieved"
+                 << filename << "> is not Retrieved"
                  << G4endl;
 	}
       }
-      if(res) PrintInfoDefinition();
-      else {
-        G4cout << "### BuildPhysicsTable will be requested for " <<  GetProcessName()
-               << " for " << particleName << G4endl;
-      }
     }
-    tablesAreBuilt = true;
   }
-
-  lManager->RetrievePhysicsTables(particle, this);
 
   return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetLinearLossLimit(G4double val) 
+void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
 {
   linLossLimit = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetLossFluctuations(G4bool val) 
+void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
 }
@@ -1314,38 +1316,23 @@ void G4VEnergyLossProcess::SetSubCutoff(G4bool)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetRandomStep(G4bool val) 
-{
-  rndmStepFlag = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::SetMinSubRange(G4double val) 
+void G4VEnergyLossProcess::SetMinSubRange(G4double val)
 {
   minSubRange = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4VEnergyLossProcess::TablesAreBuilt() const 
+G4bool G4VEnergyLossProcess::TablesAreBuilt() const
 {
   return  tablesAreBuilt;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const 
+G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const
 {
   return nSCoffRegions;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-const G4ParticleDefinition* G4VEnergyLossProcess::DefineBaseParticle(
-          const G4ParticleDefinition*) 
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1421,6 +1408,20 @@ void G4VEnergyLossProcess::ActivateAugerElectronProduction(G4bool, const G4Regio
 void G4VEnergyLossProcess::SetLambdaFactor(G4double val)
 {
   if(val > 0.0 && val <= 1.0) lambdaFactor = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetIonisation(G4bool val)
+{
+  isIonisation = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4VEnergyLossProcess::IsIonisationProcess() const
+{
+  return isIonisation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

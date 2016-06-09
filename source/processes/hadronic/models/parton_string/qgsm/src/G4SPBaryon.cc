@@ -35,7 +35,7 @@ G4int G4SPBaryon::FindQuark(G4int diQuark) const
   iter i;
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
   {
-    if (abs((*i)->GetDiQuark()) == abs(diQuark))
+    if (std::abs((*i)->GetDiQuark()) == std::abs(diQuark))
     {
       running += (*i)->GetProbability();
       if (running/sum >= random) 
@@ -55,7 +55,7 @@ G4double G4SPBaryon::GetProbability(G4int diQuark) const
   iter i;
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
   {
-    if (abs((*i)->GetDiQuark()) == abs(diQuark))
+    if (std::abs((*i)->GetDiQuark()) == std::abs(diQuark))
     {
       sum += (*i)->GetProbability();
     }
@@ -121,7 +121,7 @@ FindDiquark(G4int quark, G4int & diQuark) const
   iter i;  
   for(i=thePartonInfo.begin() ; i!=thePartonInfo.end(); i++)
   {
-    if (abs((*i)->GetQuark()) == abs(quark))
+    if (std::abs((*i)->GetQuark()) == std::abs(quark))
     {
       sum += (*i)->GetProbability();
     }
@@ -130,7 +130,7 @@ FindDiquark(G4int quark, G4int & diQuark) const
   G4double running = 0;
   for(i=thePartonInfo.begin() ; i!=thePartonInfo.end(); i++)
   {
-    if (abs((*i)->GetQuark()) == abs(quark))
+    if (std::abs((*i)->GetQuark()) == std::abs(quark))
     {
       running += (*i)->GetProbability();
       if (running/sum >= random) 

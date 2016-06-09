@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.9 2004/02/10 18:07:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.10 2004/10/25 13:32:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +64,7 @@ public:
 
   G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBrem");
 
-  ~G4MuBremsstrahlungModel();
+  virtual ~G4MuBremsstrahlungModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

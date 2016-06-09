@@ -66,7 +66,7 @@ public:
     setNucleiMass();
     std::vector<G4double> mom(4, 0.0);
     mom[0] = ekin + nucleiMass;
-    mom[3] = sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
+    mom[3] = std::sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
     G4InuclParticle::setMomentum(mom);
     exitationEnergy = 0.0;
   };
@@ -88,7 +88,7 @@ public:
 
   void setEnergy() {
 
-    momentum[0] = sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
+    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
 		       momentum[3] * momentum[3] + nucleiMass * nucleiMass);  
   };
 

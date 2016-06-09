@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.8 2004/05/28 18:19:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VSurface.hh,v 1.10 2004/12/08 10:20:35 link Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -204,10 +204,10 @@ class G4VSurface
    static const G4int sInside  ;
    static const G4int sBoundary;
    static const G4int sCorner;
-   static const G4int sCMin1Min;
-   static const G4int sCMax1Min;
-   static const G4int sCMax1Max;
-   static const G4int sCMin1Max;
+   static const G4int sC0Min1Min;
+   static const G4int sC0Max1Min;
+   static const G4int sC0Max1Max;
+   static const G4int sC0Min1Max;
    static const G4int sAxisMin;
    static const G4int sAxisMax;
    static const G4int sAxisX;
@@ -256,10 +256,10 @@ class G4VSurface
 
     private:
 
-      G4double             fDistance[2];
-      G4ThreeVector        fXX[2];
-      G4int                fAreacode[2];
-      G4bool               fIsValid[2];
+      G4double             fDistance[4];
+      G4ThreeVector        fXX[4];
+      G4int                fAreacode[4];
+      G4bool               fIsValid[4];
       G4int                fNXX;
       G4ThreeVector        fLastp;
       G4ThreeVector        fLastv;
@@ -331,6 +331,24 @@ class G4VSurface
 //========================================================
 // inline functions
 //========================================================
+
+struct Intersection {
+    
+  G4double phi ;  // parameter phi
+  G4double u ;    // parameter u
+  G4ThreeVector xx ;   // intersection point in cartesian
+  G4double distance ;  // distance to intersection
+  G4int areacode;      // the areacode of the intersection
+  G4bool isvalid ;     // valid intersection ??
+
+} ;
+  
+
+inline
+G4bool DistanceSort( const Intersection &a, const Intersection &b) 
+{
+  return a.distance < b.distance ;
+}
 
 #include "G4VSurface.icc"
 

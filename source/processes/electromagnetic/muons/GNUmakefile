@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003/10/03 15:30:55 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2004/11/22 03:28:15 vnivanch Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -27,18 +27,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
-
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-ifeq ($(G4SYSTEM),HP-aCC)
-COMPILER := $(shell aCC -V 2>&1)
-ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
-$(G4TMP)/$(G4SYSTEM)/$(name)/G4MuEnergyLoss.o: src/G4MuEnergyLoss.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4MuEnergyLoss.cc
-endif
-endif

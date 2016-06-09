@@ -29,8 +29,8 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.cc,v 1.2 2004/06/18 09:18:01 gunter Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PurgMagSteppingAction.cc,v 1.4 2004/12/07 13:45:02 guatelli Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,57 +62,42 @@ PurgMagSteppingAction::~PurgMagSteppingAction()
 
 void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
   
-{
-  G4double gx, gy, gz, ge, gpx, gpy, gpz, ex, ey, ez, ee, epx, epy, epz, px, py, pz, pe, ppx, ppy, ppz;
-  
+{ 
+#ifdef G4ANALYSIS_USE
   //Collection at SSD in N-tuples. Electrons and photons separated
   //Prestep point in World, next volume MeasureVolume, process transportation
-
+ PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();	
   if ((aStep->GetPreStepPoint()->GetPhysicalVolume() == Detector->GetWorld())&&
       (aStep->GetTrack()->GetNextVolume() == Detector->GetMeasureVolume())&&
       //(aStep->GetTrack()->GetMomentumDirection().z()>0.)&& // only particles with positive momentum
       (aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() == "Transportation"))
     {
-	 
-      // Electrons
-      if (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e-")
-	{
-
-#ifdef G4ANALYSIS_USE			  
-	  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();	
-#endif             
+      G4double gx, gy, gz, ge, gpx, gpy, gpz, ex, ey, ez, ee; 
+      G4double epx, epy, epz, px, py, pz, pe, ppx, ppy, ppz;
+   
+		 
+      // Electrons 
+      if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName()
+      == "e-")
+	{//Position 
+         ex = (aStep->GetTrack()->GetPosition().x())/cm;
+         ey = (aStep->GetTrack()->GetPosition().y())/cm; 
+         ez = (aStep->GetTrack()->GetPosition().z())/cm;
+	 // Energy
+	 ee = (aStep->GetTrack()->GetKineticEnergy())/MeV;
+	 // Momentum
+	 epx = aStep->GetTrack()->GetMomentum().x();
+	 epy = aStep->GetTrack()->GetMomentum().y();
+	 epz = aStep->GetTrack()->GetMomentum().z();
 	  
-#ifdef G4ANALYSIS_USE
-	  
-	  // Position
-          ex = (aStep->GetTrack()->GetPosition().x())/cm;
-	  ey = (aStep->GetTrack()->GetPosition().y())/cm;
-	  ez = (aStep->GetTrack()->GetPosition().z())/cm;
-	  
-	  // Energy
-	  ee = (aStep->GetTrack()->GetKineticEnergy())/MeV;
-	  
-	  // Momentum
-	  epx = aStep->GetTrack()->GetMomentum().x();
-	  epy = aStep->GetTrack()->GetMomentum().y();
-	  epz = aStep->GetTrack()->GetMomentum().z();
-	  
-	  // Fill N-tuple electrons
-	  analysis->fill_Tuple_Electrons(ex, ey, ez, ee, epx, epy, epz);
-
-#endif
-	}
-
+	 // Fill N-tuple electrons
+	 analysis->fill_Tuple_Electrons(ex, ey, ez, ee, epx, epy, epz);
+      }
 
       // Photons
-      if (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "gamma")
+      if (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+          GetParticleName() == "gamma")
 	{
-
-#ifdef G4ANALYSIS_USE			  
-	  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();	
-#endif             
-	
-#ifdef G4ANALYSIS_USE
 	  
 	  // Position
           gx = (aStep->GetTrack()->GetPosition().x())/cm;
@@ -129,7 +114,6 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 	  // Fill N-tuple photons
 	  analysis->fill_Tuple_Gamma(gx, gy, gz, ge, gpx, gpy, gpz);
-#endif
 	}
 
 
@@ -137,12 +121,6 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
       if (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "e+")
 	{
 
-#ifdef G4ANALYSIS_USE			  
-	  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();	
-#endif             
-	  
-#ifdef G4ANALYSIS_USE
-	  
 	  // Position
           px = (aStep->GetTrack()->GetPosition().x())/cm;
 	  py = (aStep->GetTrack()->GetPosition().y())/cm;
@@ -158,9 +136,8 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  
 	  // Fill Ntuple positrons
 	  analysis->fill_Tuple_Positrons(px, py, pz, pe, ppx, ppy, ppz);
-
-#endif
 	}
     }
+#endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

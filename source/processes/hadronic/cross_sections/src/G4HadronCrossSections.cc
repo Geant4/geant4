@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1243,11 +1243,11 @@ G4HadronCrossSections::CalcScatteringCrossSections(
    if (ipart >= 30 && ipart <= 32) {
 
       G4double apart=0;
-      if (ipart == 30) apart = pow(2., 1./3.);
-      else if (ipart == 31) apart = pow(3., 1./3.);
-      else if (ipart == 32) apart = pow(4., 1./3.);
+      if (ipart == 30) apart = std::pow(2., 1./3.);
+      else if (ipart == 31) apart = std::pow(3., 1./3.);
+      else if (ipart == 32) apart = std::pow(4., 1./3.);
 
-      G4double term = apart + pow(a, 1./3.);
+      G4double term = apart + std::pow(a, 1./3.);
       sigin = 49.*term*term;
    // Convert cross section from mb to default units
       siginelastic = sigin*millibarn;
@@ -1424,24 +1424,24 @@ G4HadronCrossSections::CalcScatteringCrossSections(
          // in K.E.  Subject to further improvements.
          if (correctInelasticNearZero && je1 == 0 && i <= 3) {
             G4double m0 = aParticle->GetMass()/GeV;
-            G4double T = sqrt(m0*m0 + p*p) - m0;
-            G4double dx = sqrt(m0*m0 + plab[1]*plab[1]) - m0;
+            G4double T = std::sqrt(m0*m0 + p*p) - m0;
+            G4double dx = std::sqrt(m0*m0 + plab[1]*plab[1]) - m0;
             rc = dy/dx;
             xsecin = rc*T + b;
          }
 
          if (sigel >= 0.001) 
-            crel = xsecel/(0.36*sigel*pow(G4double(csa[i]), 1.17));
+            crel = xsecel/(0.36*sigel*std::pow(G4double(csa[i]), 1.17));
          sigtot = sigel + sigin;
          if (sigtot >= 0.001) 
-            crin = xsecin/(sigtot*pow(G4double(csa[i]), alph));
+            crin = xsecin/(sigtot*std::pow(G4double(csa[i]), alph));
       }
 
       else if (ipart < 15) {
 // Calculate correction factors (crel, crin) from values
 // on Al, Cu, Pb.  Note that data is only available for pions and protons.
          G4double wgch = 0.5;
-         if (a < 20.) wgch = 0.5 + 0.5*exp(-(a - 1.));
+         if (a < 20.) wgch = 0.5 + 0.5*std::exp(-(a - 1.));
          sigel = wgch*sigel + (1. - wgch)*xsecel;
          sigin = wgch*sigin + (1. - wgch)*xsecin;
          
@@ -1460,23 +1460,23 @@ G4HadronCrossSections::CalcScatteringCrossSections(
                G4cout << "xspiin " << xspiin << G4endl;
             }               
             if (sigel >= 0.001) 
-               crel = xspiel/(0.36*sigel*pow(G4double(csa[i]),1.17));
+               crel = xspiel/(0.36*sigel*std::pow(G4double(csa[i]),1.17));
             sigtot = sigel + sigin;
             if (sigtot >= 0.001) 
-               crin = xspiin/(sigtot*pow(G4double(csa[i]), alph));
+               crin = xspiin/(sigtot*std::pow(G4double(csa[i]), alph));
          }
       }
 
 // Apply correction factors
-      sigin = crin*(sigin + sigel)*pow(a, alph);
-      sigel = crel*0.36*sigel*pow(a, 1.17);
+      sigin = crin*(sigin + sigel)*std::pow(a, alph);
+      sigel = crel*0.36*sigel*std::pow(a, 1.17);
       sigel = sigel*partel[ipart1];
       sigin = sigin*partin[ipart1];
    }
 
 // Correction factor for high (p > 100 GeV/c) energies:
    G4double corh = 1.;
-   if (p > 100.) corh = 0.1085736156*log(p) + 0.5;
+   if (p > 100.) corh = 0.1085736156*std::log(p) + 0.5;
 
    sigel = corh*sigel;
    sigin = corh*sigin;
@@ -1503,7 +1503,7 @@ G4HadronCrossSections::GetCaptureCrossSection(
    G4int izno = static_cast<G4int> (z + 0.01);
    if (izno > 100) izno = 100;      // Not in GHESIG
    izno = izno - 1;      // For array indexing
-   G4double sigcap = 11.12*cscap[izno]/pow(ekx*1.e6, 0.577);
+   G4double sigcap = 11.12*cscap[izno]/std::pow(ekx*1.e6, 0.577);
    // Convert cross section from mb to default units
    sigcap = sigcap*millibarn;
    return sigcap;
@@ -1545,13 +1545,13 @@ G4HadronCrossSections::GetFissionCrossSection(
 
    G4int j = 4;
    if (ek <= 0.01) {
-      if (z == 92. && abs(a - 233.) < 0.5) j = 1;
-      else if (z == 92. && abs(a - 235.) < 0.5) j = 2;
-      else if (z == 94. && abs(a - 239.) < 0.5) j = 3;
+      if (z == 92. && std::abs(a - 233.) < 0.5) j = 1;
+      else if (z == 92. && std::abs(a - 235.) < 0.5) j = 2;
+      else if (z == 94. && std::abs(a - 239.) < 0.5) j = 3;
    }
    G4double z43ba;
    if (j == 4) {
-      z43ba = pow(z, 4./3.)/a;
+      z43ba = std::pow(z, 4./3.)/a;
       z43ba = std::max(-67. + 38.7*z43ba, 0.);
    }
    else {

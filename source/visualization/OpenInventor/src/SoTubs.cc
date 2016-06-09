@@ -21,18 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: SoTubs.cc,v 1.2 2004/06/14 09:27:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
 //
-/*-----------------------------Hepvis---------------------------------------*/
+// $Id: SoTubs.cc,v 1.7 2004/12/16 12:33:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-ref-00 $
+//
+/*-----------------------------HEPVis---------------------------------------*/
 /*                                                                          */
 /* Node:             SoTubs                                                 */
 /* Description:      Represents the G4Tubs Geant Geometry entity            */
 /* Author:           Joe Boudreau Nov 11 1996                               */
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
+
+#ifdef G4VIS_BUILD_OI_DRIVER
+
+// this :
+#include "HEPVis/nodes/SoTubs.h"
+
 #include <assert.h>
-#include <math.h>
+#include <cmath>
+
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -46,7 +54,6 @@
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 #include "HEPVis/SbMath.h"
-#include "HEPVis/nodes/SoTubs.h"
 
 // This statement is required
 SO_NODE_SOURCE(SoTubs)
@@ -127,13 +134,13 @@ void SoTubs::generatePrimitives(SoAction *action) {
   //-----------------------------------------------------
   ///////////////////////////////////////////////////////
 
-  int NPHI = (int)(2+22*fabs(pDPhi.getValue()/(2.0*M_PI)));
+  int NPHI = (int)(2+22*std::fabs(pDPhi.getValue()/(2.0*M_PI)));
   double deltaPhi = pDPhi.getValue()/NPHI, phi0 = pSPhi.getValue(),phi1=phi0+pDPhi.getValue();
   double rMax=pRMax.getValue(),rMin=pRMin.getValue();
   double zMax=pDz.getValue(),zMin=-zMax;
-  double cosPhi0=cos(phi0), sinPhi0=sin(phi0);
-  double cosPhi1=cos(phi1), sinPhi1=sin(phi1);
-  double cosDeltaPhi=cos(deltaPhi),sinDeltaPhi=sin(deltaPhi);
+  double cosPhi0=std::cos(phi0), sinPhi0=std::sin(phi0);
+  double cosPhi1=std::cos(phi1), sinPhi1=std::sin(phi1);
+  double cosDeltaPhi=std::cos(deltaPhi),sinDeltaPhi=std::sin(deltaPhi);
   //
   // The outer surface!
   //
@@ -162,7 +169,7 @@ void SoTubs::generatePrimitives(SoAction *action) {
     } 
     endShape();
   }
-  if (fabs(deltaPhi)<2.0*M_PI) { 
+  if (std::fabs(deltaPhi)<2.0*M_PI) { 
     //
     // The end 
     //
@@ -460,3 +467,4 @@ void SoTubs::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
 
+#endif

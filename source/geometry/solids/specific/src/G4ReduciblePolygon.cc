@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.8 2003/11/03 18:39:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ReduciblePolygon.cc,v 1.9 2004/12/02 09:31:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -214,8 +214,8 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
     next = curr->next;
     if (next == 0) next = vertexHead;
     
-    if (fabs(curr->a-next->a) < tolerance &&
-        fabs(curr->b-next->b) < tolerance     )
+    if (std::fabs(curr->a-next->a) < tolerance &&
+        std::fabs(curr->b-next->b) < tolerance     )
     {
       //
       // Duplicate found: do we have > 3 vertices?
@@ -303,7 +303,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       G4double dat = test->a - curr->a,
                dbt = test->b - curr->b;
          
-      if (fabs(dat*db-dbt*da)>tolerance2) break;
+      if (std::fabs(dat*db-dbt*da)>tolerance2) break;
       
       //
       // Redundant vertex found: do we have > 3 vertices?
@@ -441,7 +441,7 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
       // Calculate intersection of the two lines
       //
       G4double deter = da1*db2 - db1*da2;
-      if (fabs(deter) > tolerance2) {
+      if (std::fabs(deter) > tolerance2) {
         G4double s1, s2;
         s1 = (a12*db2-b12*da2)/deter;
         
@@ -471,7 +471,7 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
   G4int nNeg = 0, nPos = 0;
   
   G4double a12 = a2-a1, b12 = b2-b1;
-  G4double len12 = sqrt( a12*a12 + b12*b12 );
+  G4double len12 = std::sqrt( a12*a12 + b12*b12 );
   a12 /= len12; b12 /= len12;
   
   ABVertex *curr = vertexHead;

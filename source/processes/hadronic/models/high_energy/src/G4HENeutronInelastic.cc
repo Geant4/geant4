@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HENeutronInelastic.cc,v 1.10 2003/07/01 15:42:24 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HENeutronInelastic.cc,v 1.12 2004/12/10 22:04:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 
@@ -96,7 +96,7 @@ ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
 
     incidentKineticEnergy -= excitation;
     incidentTotalEnergy    = incidentKineticEnergy + incidentMass;
-    incidentTotalMomentum  = sqrt( (incidentTotalEnergy-incidentMass)                    
+    incidentTotalMomentum  = std::sqrt( (incidentTotalEnergy-incidentMass)                    
                                   *(incidentTotalEnergy+incidentMass));
 
 
@@ -111,7 +111,7 @@ ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
       }
 
     G4double targetMass         = targetParticle.getMass();
-    G4double centerOfMassEnergy = sqrt( incidentMass*incidentMass + targetMass*targetMass
+    G4double centerOfMassEnergy = std::sqrt( incidentMass*incidentMass + targetMass*targetMass
                                        + 2.0*targetMass*incidentTotalEnergy);
     G4double availableEnergy    = centerOfMassEnergy - targetMass - incidentMass;
 
@@ -206,7 +206,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
 // multiplicity per inelastic reaction.
 
  {
-   static const G4double expxu =  log(MAXFLOAT); // upper bound for arg. of exp
+   static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
    static const G4double expxl = -expxu;         // lower bound for arg. of exp
 
    static const G4double protb = 0.35;
@@ -300,7 +300,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
          {
            G4double cech[] = {0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.06, 0.04, 0.005, 0.};
            G4int iplab = G4int( std::min( 9.0, incidentTotalMomentum*2.5) );
-           if( G4UniformRand() < cech[iplab]/pow(atomicWeight,0.42) ) 
+           if( G4UniformRand() < cech[iplab]/std::pow(atomicWeight,0.42) ) 
              {                                            // charge exchange  n p -> p n
                pv[0] = Proton;
                pv[1] = Neutron;
@@ -326,7 +326,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
        if( targetCode == neutronCode )                    // target is a neutron 
          {
            w0 = - sqr(1.+neutb)/(2.*c*c);
-           wm = w0 = exp(w0);
+           wm = w0 = std::exp(w0);
            w0 = w0/2.;
            if( G4UniformRand() < w0/(w0+wm) )  
              { np = 0; nm = 0; nz = 1; }
@@ -336,10 +336,10 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
        else 
          {                                               // target is a proton
            w0 = -sqr(1.+protb)/(2.*c*c);
-           w0 = exp(w0);
+           w0 = std::exp(w0);
            wp = w0/2.;
            wm = -sqr(-1.+protb)/(2.*c*c);
-           wm = exp(wm)/2.;
+           wm = std::exp(wm)/2.;
            wt = w0+wp+wm;
            wp = w0+wp;
            ran = G4UniformRand();
@@ -355,7 +355,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
      {
 //                    number of total particles vs. centre of mass Energy - 2*proton mass
    
-       G4double aleab = log(availableEnergy);
+       G4double aleab = std::log(availableEnergy);
        G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
                     + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
@@ -365,9 +365,9 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
 
        for( nt=1; nt<=numSec; nt++ ) 
          {
-           test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-           dum = M_PI*nt/(2.0*n*n);
-           if( fabs(dum) < 1.0 ) 
+           test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+           dum = pi*nt/(2.0*n*n);
+           if( std::fabs(dum) < 1.0 ) 
              if( test >= 1.0e-10 )anpn += dum*test;
            else 
              anpn += dum*test;
@@ -389,9 +389,9 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>0) && (nt<=numSec) ) 
                                 {
-                                  test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                                  if( fabs(dum) < 1.0 ) 
+                                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                  dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+                                  if( std::fabs(dum) < 1.0 ) 
                                         if( test >= 1.0e-10 )excs += dum*test;
                                    else 
                                         excs += dum*test;
@@ -420,9 +420,9 @@ G4HENeutronInelastic::FirstIntInCasNeutron( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>=1) && (nt<=numSec) ) 
                                 {
-                                  test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
-                                  dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                                  if( fabs(dum) < 1.0 ) 
+                                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                                  dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
+                                  if( std::fabs(dum) < 1.0 ) 
                                       if( test >= 1.0e-10 )excs += dum*test;
                                   else 
                                       excs += dum*test;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.5 2004/04/23 06:52:57 grichine Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4DataInterpolation.cc,v 1.6 2004/11/12 17:38:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #include "G4DataInterpolation.hh"
 
@@ -149,10 +149,10 @@ G4DataInterpolation::PolynomInterpolation(G4double pX,
    G4double mult, diff, difi, deltaLow, deltaUp, cd, y ;
    G4double* c = new G4double[fNumber] ;
    G4double* d = new G4double[fNumber] ;
-   diff = fabs(pX-fArgument[0]) ;
+   diff = std::fabs(pX-fArgument[0]) ;
    for(i=0;i<fNumber;i++)
    {
-      difi = fabs(pX-fArgument[i]) ;
+      difi = std::fabs(pX-fArgument[i]) ;
       if(difi <diff)
       {
 	 k = i ;
@@ -253,10 +253,10 @@ G4DataInterpolation::RationalPolInterpolation(G4double pX,
    G4double mult, difi, diff, cd, y, cof ;
    G4double* c = new G4double[fNumber] ;
    G4double* d = new G4double[fNumber] ;
-   diff = fabs(pX-fArgument[0]) ;
+   diff = std::fabs(pX-fArgument[0]) ;
    for(i=0;i<fNumber;i++)
    {
-      difi = fabs(pX-fArgument[i]) ;
+      difi = std::fabs(pX-fArgument[i]) ;
       if(difi == 0.0)
       {
 	 y = fFunction[i] ;

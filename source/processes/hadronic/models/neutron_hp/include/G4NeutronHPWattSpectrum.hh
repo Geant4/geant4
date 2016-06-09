@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPWattSpectrum.hh,v 1.8 2003/06/16 17:11:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPWattSpectrum.hh,v 1.9 2004/12/07 13:49:39 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 #ifndef G4NeutronHPWattSpectrum_h
 #define G4NeutronHPWattSpectrum_h 1
@@ -41,7 +41,7 @@ class G4NeutronHPWattSpectrum : public G4VNeutronHPEDis
   public:
   G4NeutronHPWattSpectrum()
   {
-    expm1 = exp(-1.);
+    expm1 = std::exp(-1.);
   }
   ~G4NeutronHPWattSpectrum()
   {
@@ -66,7 +66,7 @@ class G4NeutronHPWattSpectrum : public G4VNeutronHPEDis
   inline G4double Watt(G4double anEnergy, G4double a, G4double b)
   {
     G4double energy = anEnergy/eV;
-    G4double result = exp(-energy/a)*sinh(sqrt(b*energy));
+    G4double result = std::exp(-energy/a)*std::sinh(std::sqrt(b*energy));
     return result;
   }
   

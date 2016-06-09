@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.4 2003/11/05 10:56:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Orb.hh,v 1.6 2004/09/22 08:25:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -54,11 +54,12 @@ class G4Orb : public G4CSGSolid
     
     // Accessors
        
-    inline G4double GetRadius() const { return fRmax;};
+    inline G4double GetRadius() const;
 
     // Modifiers
 
-    inline void SetRadius   (G4double newRmax) {fRmax=newRmax;};
+    inline void SetRadius(G4double newRmax);
+    inline G4double GetCubicVolume();
 
     // Methods for solid
 
@@ -114,5 +115,7 @@ class G4Orb : public G4CSGSolid
     G4double fRmax;
     G4double fRmaxTolerance;
 };
+
+#include "G4Orb.icc"
 
 #endif

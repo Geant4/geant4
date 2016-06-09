@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SteppingAction.cc,v 1.1 2004/04/28 11:12:40 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
+// $Id: SteppingAction.cc,v 1.2 2004/06/30 11:13:59 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,10 +31,6 @@
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,24 +56,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   runAction->CountProcesses(procName);
   if (procName != "Transportation") runAction->SumTrack(stepLength);
   
-#ifdef USE_AIDA  
   //plot final state
   //
   //scattered primary particle
   //
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
-    if (histoManager->GetHisto(id)) {
-      G4double energy = endPoint->GetKineticEnergy();      
-      G4double unit = histoManager->GetHistoUnit(id); 
-      histoManager->GetHisto(id)->fill(energy/unit);
-    }
+    G4double energy = endPoint->GetKineticEnergy();      
+    histoManager->FillHisto(id,energy);
+
     id = 2;
-    if (histoManager->GetHisto(id)) {
-      G4ThreeVector direction = endPoint->GetMomentumDirection();
-      G4double costeta = direction.x();
-      histoManager->GetHisto(id)->fill(costeta); 
-    }        
+    G4ThreeVector direction = endPoint->GetMomentumDirection();
+    G4double costeta = direction.x();
+    histoManager->FillHisto(id,costeta);     
   }  
   
   //secondaries
@@ -88,19 +77,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
     if (charge != 0.) id = 3; else id = 5;
-    if (histoManager->GetHisto(id)) {
-      G4double energy = (*secondary)[lp]->GetKineticEnergy();
-      G4double unit = histoManager->GetHistoUnit(id);              
-      histoManager->GetHisto(id)->fill(energy/unit);
-    }
+    G4double energy = (*secondary)[lp]->GetKineticEnergy();
+    histoManager->FillHisto(id,energy);
+
     id++;
-    if (histoManager->GetHisto(id)) {
-      G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
-      G4double costeta = direction.x();
-      histoManager->GetHisto(id)->fill(costeta);    
-    }                       
+    G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
+    G4double costeta = direction.x();
+    histoManager->FillHisto(id,costeta);         
   }
-#endif
          
   // kill event after first interaction
   //

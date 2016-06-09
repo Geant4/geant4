@@ -37,6 +37,7 @@
 // 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 // 03/10/2000  V.Ivanchenko clean up accoding to CodeWizard
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 26/08/2004  V.Ivanchenko Fix a problem of effective charge
 //
 // Class Description: 
 //
@@ -163,18 +164,18 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
   // Free electron gas model
     if ( T < 0.001 ) {
       G4double T0 = 0.001 ;
-      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T0,-2.0+c[iMolecula][5])) ;
-      a2 = (c[iMolecula][0]*log(T0)/T0 + c[iMolecula][2]/T0) *
-            exp(-c[iMolecula][4]*pow(T0,-c[iMolecula][6])) +
+      a1 = 1.0 - std::exp(-c[iMolecula][1]*std::pow(T0,-2.0+c[iMolecula][5])) ;
+      a2 = (c[iMolecula][0]*std::log(T0)/T0 + c[iMolecula][2]/T0) *
+            std::exp(-c[iMolecula][4]*std::pow(T0,-c[iMolecula][6])) +
             c[iMolecula][3]/(T0*T0) ;
 
-      ionloss *= sqrt(T/T0) ; 
+      ionloss *= std::sqrt(T/T0) ; 
   
   // Main parametrisation
     } else {
-      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T,-2.0+c[iMolecula][5])) ;
-      a2 = (c[iMolecula][0]*log(T)/T + c[iMolecula][2]/T) *
-            exp(-c[iMolecula][4]*pow(T,-c[iMolecula][6])) +
+      a1 = 1.0 - std::exp(-c[iMolecula][1]*std::pow(T,-2.0+c[iMolecula][5])) ;
+      a2 = (c[iMolecula][0]*std::log(T)/T + c[iMolecula][2]/T) *
+            std::exp(-c[iMolecula][4]*std::pow(T,-c[iMolecula][6])) +
             c[iMolecula][3]/(T*T) ;
     }
 
@@ -182,7 +183,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     G4double z = (material->GetTotNbOfElectPerVolume()) / 
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, T*keV) ; 
+    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -305,22 +306,22 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   // Free electron gas model
   if ( T < 0.001 ) {
     G4double slow  = a[i][0] ;
-    G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
+    G4double shigh = std::log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
                    * a[i][2]*1000.0 ;
     ionloss  = slow*shigh / (slow + shigh) ; 
-    ionloss *= sqrt(T*1000.0) ; 
+    ionloss *= std::sqrt(T*1000.0) ; 
     
   // Main parametrisation
   } else {
-    G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
-    G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+    G4double slow  = a[i][0] * std::pow((T*1000.0), a[i][1]) ;
+    G4double shigh = std::log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ; 
     
   }
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
   // He effective charge
-  ionloss /= HeEffChargeSquare(z, T*MeV) ; 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
   
   return ionloss;
 }

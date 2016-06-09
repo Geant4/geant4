@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.icc,v 1.9 2003/11/08 03:39:39 japost Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4FieldManager.icc,v 1.10 2004/12/02 09:55:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // G4FieldManager inline implementation 
@@ -103,7 +103,7 @@ G4double  G4FieldManager::GetMinimumEpsilonStep() const
 inline 
 void      G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
 {
-  if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin) > 1.0) )
+  if( (newEpsMin > 0.0) && (std::fabs(1.0+newEpsMin) > 1.0) )
   {
     fEpsilonMin = newEpsMin;
   }
@@ -121,7 +121,7 @@ void      G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
 {
   if(    (newEpsMax > 0.0) 
       && (newEpsMax >= fEpsilonMin ) 
-      && (fabs(1.0+newEpsMax)>1.0) )
+      && (std::fabs(1.0+newEpsMax)>1.0) )
   {
     fEpsilonMax = newEpsMax;
   }

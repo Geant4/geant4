@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2004/06/23 11:31:00 maire Exp $
+$Id: README,v 1.14 2004/09/15 13:17:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,11 +13,12 @@ $Id: README,v 1.12 2004/06/23 11:31:00 maire Exp $
 	
  1- GEOMETRY DEFINITION
  
- 	It is a simple box which represente an 'infinite' homogeneous medium.
+ 	It is a simple box which represente an 'semi infinite' homogeneous 
+	medium.
  	
  	Two parameters define the geometry :
  	- the material of the box,
-	- the (full) size of the box.
+	- the full size of the box.
 	 	
  	In addition a transverse uniform magnetic field can be applied.
  	
@@ -38,7 +39,7 @@ $Id: README,v 1.12 2004/06/23 11:31:00 maire Exp $
  3- AN EVENT : THE PRIMARY GENERATOR
  
  	The primary kinematic consists of a single particle starting at the
- 	middle of the box. The type of the particle and its energy are set 
+ 	left face of the box. The type of the particle and its energy are set 
  	in the PrimaryGeneratorAction class, and can be changed via the G4 
  	build-in commands of ParticleGun class (see the macros provided with 
  	this example).
@@ -94,7 +95,7 @@ $Id: README,v 1.12 2004/06/23 11:31:00 maire Exp $
  	
  7- HISTOGRAMS
  
-   Testem1 produces several histo which are saved as testem1.paw
+   Testem1 produces several histo which are saved as testem1.aida by default.
      
      Content of these histo:
   

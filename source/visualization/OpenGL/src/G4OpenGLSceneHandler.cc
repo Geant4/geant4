@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.18 2003/06/10 17:13:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.29 2004/12/10 18:16:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -53,15 +53,15 @@
 #include "G4VMarker.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisAttributes.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
 			      const G4String& name):
 G4VSceneHandler (system, id, name)
-{
-  initialize_hlr = true;
-  //  glPolygonOffset (1.0, 2);
-}
+{}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
 {
@@ -118,6 +118,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   static G4int callCount (0);
   ++callCount;
 
+  const G4Colour& c = GetColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
   G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
@@ -131,6 +132,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 	   << ", size " << size
 	   << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
 	   << ", type " << G4int(sizeType)
+	   << ", colour " << c
 	   << G4endl;
   }
 }
@@ -228,8 +230,8 @@ void G4OpenGLSceneHandler::AddCircleSquare
     gluProject(p.x(), p.y(), p.z(),
                modelMatrix, projectionMatrix, viewport,
                &winDx, &winDy, &winDz);
-    G4double winWorldRatio = sqrt(pow(winx - winDx, 2) +
-				  pow(winy - winDy, 2));
+    G4double winWorldRatio = std::sqrt(std::pow(winx - winDx, 2) +
+				  std::pow(winy - winDy, 2));
     G4double winSize = scale *
       userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
     worldSize = winSize / winWorldRatio;
@@ -272,9 +274,9 @@ transformations.  Some clever stuff is needed.
     gluProject(centre.x() + size, centre.y() + size, centre.z() + size,
                modelMatrix, projectionMatrix, viewport,
                &winx1, &winy1, &winz1);
-    winSize = sqrt((pow(winx - winx1, 2) +
-                    pow(winy - winy1, 2) +
-                    pow(winz - winz1, 2)) / 3.);
+    winSize = std::sqrt((std::pow(winx - winx1, 2) +
+                    std::pow(winy - winy1, 2) +
+                    std::pow(winz - winz1, 2)) / 3.);
   }
   else {
     winSize = scale *
@@ -302,20 +304,21 @@ transformations.  Some clever stuff is needed.
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
   ...
+}
 
 void G4OpenGLSceneHandler::DrawScreenPolygon
 (G4double size,
  const G4Point3D& centre,
  G4int nSides) {
   glBegin (GL_POLYGON);
-  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double dPhi = twopi / nSides;
   const G4double r = size / 2.;
   G4double phi;
   G4int i;
   for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
     G4double x, y, z;
-    x = centre.x() + r * cos(phi);
-    y = centre.y() + r * sin(phi);
+    x = centre.x() + r * std::cos(phi);
+    y = centre.y() + r * std::sin(phi);
     z = centre.z();
     glVertex3d (x, y, z);
   }
@@ -330,7 +333,7 @@ void G4OpenGLSceneHandler::DrawXYPolygon
   const G4Vector3D& viewpointDirection =
     fpViewer -> GetViewParameters().GetViewpointDirection();
   const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double dPhi = twopi / nSides;
   const G4double radius = size / 2.;
   G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
   G4double phi;
@@ -352,156 +355,183 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   if (polyhedron.GetNoFacets() == 0) return;
 
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
   
   //Get colour, etc..
-  const G4Colour& c = GetColour (polyhedron);
-  
+  const G4Colour& c = pVA -> GetColour ();
+  GLfloat materialColour [4];
+  materialColour [0] = c.GetRed ();
+  materialColour [1] = c.GetGreen ();
+  materialColour [2] = c.GetBlue ();
+  materialColour [3] = 1.0;
+  GLdouble clear_colour[4];
+  glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
+
   switch (drawing_style) {
-    
-    //  case (G4ViewParameters::hlhsr):
-    //    cout << "Hidden edge not implememented in G4OpenGL.\n"
-    // << "Using hidden surface removal." << G4endl;
-    
-  case (G4ViewParameters::hsr):
-    {
-      glPolygonMode (GL_FRONT, GL_FILL);
-      glCullFace (GL_BACK); 
-      //glEnable (GL_CULL_FACE);
-      glEnable (GL_LIGHTING);
-      glEnable (GL_DEPTH_TEST);
-      GLfloat materialColour [4];
-      materialColour [0] = c.GetRed ();
-      materialColour [1] = c.GetGreen ();
-      materialColour [2] = c.GetBlue ();
-      materialColour [3] = 1.0;
-      glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
-      break;
-    }
-    
+  case (G4ViewParameters::hlhsr):
+    // Set up as for hidden line removal but paint polygons...
   case (G4ViewParameters::hlr):
-    if (initialize_hlr) {
-      glEnable (GL_STENCIL_TEST);
-      glClear (GL_STENCIL_BUFFER_BIT);
-      glStencilFunc (GL_ALWAYS, 0, 1);
-      glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
-      glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
-      initialize_hlr = false;
-      //      glEnable (GL_POLYGON_OFFSET_FILL);
-    }
-      glDepthFunc (GL_LESS);    
-    //drop through to wireframe for first pass...
-    
-  case (G4ViewParameters::wireframe):
-    
-  default:
-    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    glDisable (GL_CULL_FACE);
-    glDisable (GL_LIGHTING);
+    glEnable (GL_STENCIL_TEST);
+    // The stencil buffer is cleared in G4OpenGLViewer::ClearView.
+    // The procedure below leaves it clear.
+    glStencilFunc (GL_ALWAYS, 0, 1);
+    glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
     glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_LESS);    
+    glEnable (GL_CULL_FACE);
+    glCullFace (GL_BACK);
+    glPolygonMode (GL_FRONT, GL_LINE);
+    glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
-  }	
-  
-  glBegin (GL_QUADS);
-  
+  case (G4ViewParameters::hsr):
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_LESS);    
+    glEnable (GL_CULL_FACE);
+    glCullFace (GL_BACK); 
+    glEnable (GL_LIGHTING);
+    glPolygonMode (GL_FRONT, GL_FILL);
+    glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+    break;
+  case (G4ViewParameters::wireframe):
+  default:
+    //glDisable (GL_DEPTH_TEST);
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_ALWAYS);    
+    glDisable (GL_CULL_FACE);
+    glDisable (GL_LIGHTING);
+    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    break;
+  }
+
   //Loop through all the facets...
+  glBegin (GL_QUADS);
   G4bool notLastFace;
-  G4Normal3D SurfaceUnitNormal;
   do {
-    
-    //First, find surface normal for the facet...
+
+    //First, find surface normal and note "not last facet"...
+    G4Normal3D SurfaceUnitNormal;
     notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-    glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
-	       SurfaceUnitNormal.z());
-    
+
     //Loop through the four edges of each G4Facet...
     G4bool notLastEdge;
     G4Point3D vertex[4];
-    G4int edgeFlag[4], lastEdgeFlag (true);
-    edgeFlag[0] = G4int (true);
+    G4int edgeFlag[4];
     G4int edgeCount = 0;
-    glEdgeFlag (GL_TRUE);
+    glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
+	       SurfaceUnitNormal.z());
     do {
       notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
 					      edgeFlag[edgeCount]);
       // Check to see if edge is visible or not...
-      if (edgeFlag[edgeCount] != lastEdgeFlag) {
-	lastEdgeFlag = edgeFlag[edgeCount];
-	if (edgeFlag[edgeCount]) {
-	  glEdgeFlag (GL_TRUE);
-	} else {
-	  glEdgeFlag (GL_FALSE);
-	}
+      if (isAuxEdgeVisible) {
+	edgeFlag[edgeCount] = G4int (true);
+      }
+      if (edgeFlag[edgeCount]) {
+	glEdgeFlag (GL_TRUE);
+      } else {
+	glEdgeFlag (GL_FALSE);
       }
       glVertex3d (vertex[edgeCount].x(), 
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
       edgeCount++;
-    } while (notLastEdge);
-    while (edgeCount < 4) {  // duplicate last real vertex.
+    } while (notLastEdge && edgeCount < 4);
+    // HEPPolyhedron produces triangles too; in that case add an extra vertex..
+    while (edgeCount < 4) {
       vertex[edgeCount] = vertex[edgeCount-1];
+      edgeFlag[edgeCount] = G4int (false);
+      glEdgeFlag (GL_FALSE);
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
       edgeCount++;
     }
-    
-    //do it all over again for hlr 2nd pass...
-    if  (drawing_style == G4ViewParameters::hlr) {
-      glEnd();
-      
-      //glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, clear_colour);
+    // Trap situation where number of edges is > 4...
+    while (notLastEdge) {
+      notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
+      edgeCount++;
+    }
+    if (edgeCount > 4) {
+      G4cerr <<
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING"
+	"\n  Volume " << fpCurrentPV->GetName() <<
+	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
+	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
+	"\n   G4Polyhedron facet with " << edgeCount << " edges";	
+    }
+
+    // Do it all over again (twice) for hlr...
+    if  (drawing_style == G4ViewParameters::hlr ||
+	 drawing_style == G4ViewParameters::hlhsr) {
+
+      glEnd ();  // Placed here to balance glBegin above, allowing GL
+		 // state changes below, then glBegin again.  Avoids
+		 // having glBegin/End pairs *inside* loop in the more
+		 // usual case of no hidden line removal.
+
+      // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       glPolygonMode (GL_FRONT, GL_FILL);
-      glColor4dv (clear_colour);
-      edgeCount=0;
-      
+      if (drawing_style == G4ViewParameters::hlhsr) glEnable (GL_LIGHTING);
       glBegin (GL_QUADS);
-      do {
-	if (edgeFlag[edgeCount] != lastEdgeFlag) {
-	  lastEdgeFlag = edgeFlag[edgeCount];
-	  if (edgeFlag[edgeCount]) {
-	    glEdgeFlag (GL_TRUE);
-	  } else {
-	    glEdgeFlag (GL_FALSE);
-	  }
+      if  (drawing_style == G4ViewParameters::hlr) {
+	glColor4dv (clear_colour);
+      } else {  // drawing_style == G4ViewParameters::hlhsr
+	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
+      }
+      glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
+		 SurfaceUnitNormal.z());
+      for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
+	if (edgeFlag[edgeCount]) {
+	  glEdgeFlag (GL_TRUE);
+	} else {
+	  glEdgeFlag (GL_FALSE);
 	}
 	glVertex3d (vertex[edgeCount].x(), 
 		    vertex[edgeCount].y(),
 		    vertex[edgeCount].z());
-      } while (++edgeCount < 4);
-      glEnd();
-      
-      //and once more to reset the stencil bits...
+      }
+      glEnd ();
+      glDisable (GL_LIGHTING);
+
+      // and once more to reset the stencil bits...
       glStencilFunc (GL_ALWAYS, 0, 1);
       glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
-      glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+      glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
+      glPolygonMode (GL_FRONT, GL_LINE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-      edgeCount=0;
-      
-      glBegin(GL_QUADS);
-      do {
-      	if (edgeFlag[edgeCount] != lastEdgeFlag) {
-      	  lastEdgeFlag = edgeFlag[edgeCount];
-      	  if (edgeFlag[edgeCount]) {
-      	    glEdgeFlag (GL_TRUE);
-      	  } else {
-      	    glEdgeFlag (GL_FALSE);
-      	  }
-      	}
-      	glVertex3d (vertex[edgeCount].x(), 
-      		    vertex[edgeCount].y(),
-      		    vertex[edgeCount].z());
-      } while (++edgeCount < 4);
-      
-    }	
-    
+      glBegin (GL_QUADS);
+      for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
+	if (edgeFlag[edgeCount]) {
+	  glEdgeFlag (GL_TRUE);
+	} else {
+	  glEdgeFlag (GL_FALSE);
+	}
+	glVertex3d (vertex[edgeCount].x(), 
+		    vertex[edgeCount].y(),
+		    vertex[edgeCount].z());
+      }
+      glEnd ();
+      glDepthFunc (GL_LESS);   // Revert for next quadrilateral.
+      glBegin (GL_QUADS);      // Ready for next quadrilateral.  GL
+			       // says it ignores incomplete
+			       // quadrilaterals, so final empty
+			       // glBegin/End sequence should be OK.
+    }
   } while (notLastFace);  
   
   glEnd ();
-
+  glDisable (GL_STENCIL_TEST);
 }
 
 //Method for handling G4NURBS objects for drawing solids.
@@ -527,9 +557,19 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
   while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
 
-  const G4Colour& c = GetColour (nurb);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
 
-  switch (GetDrawingStyle(nurb)) {
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  //G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  
+  //Get colour, etc..
+  const G4Colour& c = pVA -> GetColour ();
+
+  switch (drawing_style) {
 
   case (G4ViewParameters::hlhsr):
     //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"

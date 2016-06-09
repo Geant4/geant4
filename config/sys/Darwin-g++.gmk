@@ -41,9 +41,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ECHO    := /bin/echo -n
   SHEXT   := dylib
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   XMFLAGS   := -I/sw/include
+#  XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
   XMLIBS    := -L/sw/lib -lXm -lXpm
+#  XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
@@ -54,14 +56,38 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
+#
+#  There are two ways to build shared libs (.dylib) on MacOSX.
+# Up to now the "flat_namespace" option had been used ; but
+# due to the fact that Apple promotes now the "two_level_namespace"
+# way of doing, we had tried to build the shared libs in this way.
+#  But it appears that for the moment this option induces
+# unresolved early crashes at runtim. These crashes are
+# probably due to a problem in the sequence of execution 
+# of constructor of static objects that are now heavily 
+# used in Geant4.
+#  Waiting a solution to that, we put the "flat_namespace"
+# way of doing as the default to build the .dylib (knowing
+# that it is anyway not a long term solution).
+#   G.Barrand (16/07/2004)
+#
+####  G4_MACOSX_TWO_LEVEL_NAMESPACE = 1
+ifdef G4_MACOSX_TWO_LEVEL_NAMESPACE
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+     g++ -dynamiclib -twolevel_namespace -undefined define_a_way -dynamic \
          -single_module -o $$libdir/$(@F) *.o -L$(G4LIB)/$(G4SYSTEM) \
-         $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
          -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS)
   endef
+else
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) *.o
+  endef
+endif
+ifdef G4_MACOSX_TWO_LEVEL_NAMESPACE
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
@@ -71,5 +97,12 @@ ifeq ($(G4SYSTEM),Darwin-g++)
          $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
          -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS);
   endef
+else
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+endif
 
 endif

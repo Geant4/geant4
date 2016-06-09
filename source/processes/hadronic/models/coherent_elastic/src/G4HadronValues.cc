@@ -32,7 +32,7 @@
 
        G4ParticleDefinition * dHadron = aHadron->GetDefinition();
 
-       G4int iHadron;
+       G4int iHadron=-1;   // dummy value to shut off compiler warning 
 
          if(dHadron == G4Proton::Proton()        ||
             dHadron == G4Neutron::Neutron()      ||
@@ -69,9 +69,9 @@
        G4double mHadr      = aHadron->GetMass()/1000.;         // In GeV
        G4double HadrEnergy = aHadron->GetTotalEnergy()/1000.;  // In GeV
        G4double sHadr      = 2*HadrEnergy*0.938+0.938*0.938+mHadr*mHadr;
-       G4double sqrS       = sqrt(sHadr);
+       G4double sqrS       = std::sqrt(sHadr);
        G4double Ecm        = (sHadr-mHadr*mHadr+0.938*.938)/2/sqrS;
-                MomentumCM = sqrt(Ecm*Ecm-0.938*0.938);
+                MomentumCM = std::sqrt(Ecm*Ecm-0.938*0.938);
 
    if(HadrEnergy<1.0) 
     {
@@ -88,10 +88,10 @@
 
               if(HadrEnergy<40)
                   Delta = 0.916+0.0021*HadrEnergy;
-              HadrTot   = 5.2+5.2*log(HadrEnergy)
-                          +51*pow(HadrEnergy,-0.35);            //  mb
-              HadrSlope = 6.44+0.88*log(sHadr)-1;               //  GeV-2 
-              HadrReIm  = 0.13*log(sHadr/350)*pow(sHadr,-0.18);
+              HadrTot   = 5.2+5.2*std::log(HadrEnergy)
+                          +51*std::pow(HadrEnergy,-0.35);            //  mb
+              HadrSlope = 6.44+0.88*std::log(sHadr)-1;               //  GeV-2 
+              HadrReIm  = 0.13*std::log(sHadr/350)*std::pow(sHadr,-0.18);
               DDSect2   = 11;                                    //mb*GeV-2
               DDSect3   = 3;                                     //mb*GeV-2
 
@@ -123,14 +123,14 @@
 
          case 1:              //   antiproton
 
-              sqrS      = sqrt(sHadr);
-              HadrTot   = 5.2+5.2*log(HadrEnergy)
-                          +123.2*pow(HadrEnergy,-0.5);           //  mb
-              HadrSlope = 8.32+0.57*log(sHadr); //GeV-2 
+              sqrS      = std::sqrt(sHadr);
+              HadrTot   = 5.2+5.2*std::log(HadrEnergy)
+                          +123.2*std::pow(HadrEnergy,-0.5);           //  mb
+              HadrSlope = 8.32+0.57*std::log(sHadr); //GeV-2 
            if(HadrEnergy<1000)
-              HadrReIm  =0.06*(sqrS-2.236)*(sqrS-14.14)*pow(sHadr,-0.8);
+              HadrReIm  =0.06*(sqrS-2.236)*(sqrS-14.14)*std::pow(sHadr,-0.8);
            else
-              HadrReIm  = 0.6*log(sHadr/350)*pow(sHadr,-0.25);
+              HadrReIm  = 0.6*std::log(sHadr/350)*std::pow(sHadr,-0.25);
 
               DDSect2   = 11;                                     //mb*GeV-2
               DDSect3   = 3;                                      //mb*GeV-2
@@ -163,45 +163,45 @@
 
          case 2:             //   pi plus
 
-              HadrTot   = 10.6+2.*log(HadrEnergy)+
-                          25*pow(HadrEnergy,-0.43);               // mb 
-              HadrSlope = 7.28+0.245*log(sHadr);                  //GeV-2 
-              HadrReIm  = 0.2*log(sHadr/100)*pow(sHadr,-0.15);
+              HadrTot   = 10.6+2.*std::log(HadrEnergy)+
+                          25*std::pow(HadrEnergy,-0.43);               // mb 
+              HadrSlope = 7.28+0.245*std::log(sHadr);                  //GeV-2 
+              HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);
               DDSect2   = 4.6;                                    //mb*GeV-2
               DDSect3   = 1.33;                                   //mb*GeV-2
             break;
 
          case 3:             //   pi minus
 
-              HadrTot   = 10.6+2*log(HadrEnergy)+
-                          30*pow(HadrEnergy,-0.43);             // mb 
-              HadrSlope = 7.28+0.245*log(sHadr);               // GeV-2 
-              HadrReIm  = 0.2*log(sHadr/100)*pow(sHadr,-0.15);
+              HadrTot   = 10.6+2*std::log(HadrEnergy)+
+                          30*std::pow(HadrEnergy,-0.43);             // mb 
+              HadrSlope = 7.28+0.245*std::log(sHadr);               // GeV-2 
+              HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);
               DDSect2   = 4.6;                                 //mb*GeV-2
               DDSect3   = 1.33;                                //mb*GeV-2
             break;
 
          case 4:            //  K plus
 
-              HadrTot   = 10.6+1.8*log(HadrEnergy)+        
-                               9.0*pow(HadrEnergy,-0.55);     // mb 
+              HadrTot   = 10.6+1.8*std::log(HadrEnergy)+        
+                               9.0*std::pow(HadrEnergy,-0.55);     // mb 
          if(HadrEnergy>100) HadrSlope = 15.0;
          else
-              HadrSlope = 5.28+1.76*log(sHadr)-
-                              2.84*pow(sHadr,-0.5);           // GeV-2
-              HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*pow(sHadr+50,-2.1);
+              HadrSlope = 5.28+1.76*std::log(sHadr)-
+                              2.84*std::pow(sHadr,-0.5);           // GeV-2
+              HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*std::pow(sHadr+50,-2.1);
               DDSect2   = 3.5;                                //mb*GeV-2
               DDSect3   = 1.03;                               //mb*GeV-2
             break;
 
          case 5:              //   K minus
 
-              HadrTot   = 10+1.8*log(HadrEnergy)
-                               +25*pow(HadrEnergy,-0.5);   // mb 
-              HadrSlope = 6.98+0.127*log(sHadr);           // GeV-2 
+              HadrTot   = 10+1.8*std::log(HadrEnergy)
+                               +25*std::pow(HadrEnergy,-0.5);   // mb 
+              HadrSlope = 6.98+0.127*std::log(sHadr);           // GeV-2 
 //         if(HadrEnergy<8) HadrReIm = 0.7;
 //         else
-              HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*pow(sHadr+50,-2.1);
+              HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*std::pow(sHadr+50,-2.1);
               DDSect2   = 3.5;                             //mb*GeV-2
               DDSect3   = 1.03;                            //mb*GeV-2
             break;

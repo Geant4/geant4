@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UnitsTable.hh,v 1.14 2004/01/21 13:17:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // -----------------------------------------------------------------

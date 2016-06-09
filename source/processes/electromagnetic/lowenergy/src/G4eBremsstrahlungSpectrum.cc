@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.11 2003/06/16 17:00:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.14 2004/12/02 14:01:36 pia Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,7 +81,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
   t0 /= e;
   tm /= e;
 
-  G4double z = lowestE/e;
+  G4double z0 = lowestE/e;
   G4DataVector p;
 
   // Access parameters
@@ -90,7 +90,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
   }
 
   G4double x  = IntSpectrum(t0, tm, p);
-  G4double y  = IntSpectrum(z, 1.0, p);
+  G4double y  = IntSpectrum(z0, 1.0, p);
 
 
   if(1 < verbose) {
@@ -99,7 +99,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
            << "; t0= " << t0
            << "; tm= " << tm
            << "; xp[0]= " << xp[0]
-           << "; z= " << z
+           << "; z= " << z0
            << "; val= " << x
            << "; nor= " << y
            << G4endl;
@@ -141,11 +141,11 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
   G4double y  = IntSpectrum(z0, 1.0, p);
 
   // Add integrant over lowest energies
-
-  G4double c  = sqrt(theBRparam->ParameterC(Z));
-  G4double f  = Function(z0, p);
-  x += 0.5*f*z0*(z0 - c*atan(z0/c));
-
+  G4double zmin = tmin/e;
+  if(zmin < t0) {
+    G4double c  = std::sqrt(theBRparam->ParameterC(Z));
+    x += p[0]*(t0 - zmin - c*(std::atan(t0/c) - std::atan(zmin/c)));
+  }
   x *= e;
 
   if(1 < verbose) {
@@ -189,13 +189,13 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
   }
   G4double amaj = std::max(p[length], 1. - (p[1] - p[0])*xp[0]/(xp[1] - xp[0]) );
 
-  G4double amax = log(tm);
-  G4double amin = log(t0);
+  G4double amax = std::log(tm);
+  G4double amin = std::log(t0);
   G4double tgam, q, fun;
 
   do {
     G4double x = amin + G4UniformRand()*(amax - amin);
-    tgam = exp(x);
+    tgam = std::exp(x);
     fun = Function(tgam, p);
 
     if(fun > amaj) {
@@ -225,7 +225,7 @@ G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
 
   if(x1 < x2) {
     G4double k = (p[1] - p[0])/(xp[1] - xp[0]);
-    sum += (1. - k*xp[0])*log(x2/x1) + k*(x2 - x1);
+    sum += (1. - k*xp[0])*std::log(x2/x1) + k*(x2 - x1);
   }
 
   for (size_t i=0; i<length-1; i++) {
@@ -234,7 +234,7 @@ G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
     if(x1 < x2) {
       G4double z1 = p[i];
       G4double z2 = p[i+1];
-      sum += z2 - z1 + log(x2/x1)*(z1*x2 - z2*x1)/(x2 - x1);
+      sum += z2 - z1 + std::log(x2/x1)*(z1*x2 - z2*x1)/(x2 - x1);
     }
   }
   if(sum < 0.0) sum = 0.0;
@@ -278,7 +278,7 @@ G4double G4eBremsstrahlungSpectrum::Function(G4double x,
   G4double f = 0.0;
 
   if(x <= xp[0]) {
-    f = 1. + (p[1] - p[0])*(x - xp[0])/(xp[1] - xp[0]);
+    f = p[0] + (p[1] - p[0])*(x - xp[0])/(xp[1] - xp[0]);
 
   } else {
 

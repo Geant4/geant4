@@ -41,6 +41,9 @@
 //
 // CHANGE HISTORY
 // --------------
+// 26/10/2004, F Lei
+//    Added the Multiple_vertex capability.
+//    Removed "inline" from all Set/Get methods.
 //
 // Version 2.0, 05/02/2004, Fan Lei, Created.
 //    based on version 1.1 in Geant4 v6.0
@@ -84,6 +87,9 @@
 //  void SetCurrentSourceIntensity(G4double)
 //     change the current particle gun strength
 //  
+//  void SetMultipleVertex(G4bool )  
+//     Set if multiple vertex per event.
+
 //  G4SingleParticleSource* GetCurrentSource()
 //     return the pointer to current particle gun
 // 
@@ -109,21 +115,21 @@
 //  void SetParticleCharge(G4double aCharge) 
 //     set the charge state of the primary track
 //
-//  inline void SetParticlePolarization (G4ThreeVector aVal) 
-//  inline G4ThreeVector GetParticlePolarization ()
+//  void SetParticlePolarization (G4ThreeVector aVal) 
+//  G4ThreeVector GetParticlePolarization ()
 //     Set/Get the polarization state of the primary track
 //
-//  inline void SetParticleTime(G4double aTime)  { particle_time = aTime; };
-//  inline G4double GetParticleTime()  { return particle_time; };
+//  void SetParticleTime(G4double aTime)  { particle_time = aTime; };
+//  G4double GetParticleTime()  { return particle_time; };
 //     Set/Get the Time.
 //
-//  inline void SetNumberOfParticles(G4int i) 
-//  inline G4int GetNumberOfParticles() 
+//  void SetNumberOfParticles(G4int i) 
+//  G4int GetNumberOfParticles() 
 //     set/get the number of particles to be generated in the primary track
 //
-//  inline G4ThreeVector GetParticlePosition()  
-//  inline G4ThreeVector GetParticleMomentumDirection()  
-//  inline G4double GetParticleEnergy()  
+//  G4ThreeVector GetParticlePosition()  
+//  G4ThreeVector GetParticleMomentumDirection()  
+//  G4double GetParticleEnergy()  
 //     get the position, direction, and energy of the current particle 
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,36 +167,40 @@ public:
   void DeleteaSource(G4int);
 
   // Set the verbosity level.
-  inline void SetVerbosity(G4int i) {currentSource->SetVerbosity(i);} ;
+  void SetVerbosity(G4int i) {currentSource->SetVerbosity(i);} ;
+
+  // Set if multiple vertex per event.
+  void SetMultipleVertex(G4bool av) {multiple_vertex = av;} ;
 
   // Set the particle species
-  inline void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
+  void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
     {currentSource->SetParticleDefinition(aParticleDefinition); } ;
 
-  inline G4ParticleDefinition * GetParticleDefinition () { return currentSource->GetParticleDefinition();} ;
+  G4ParticleDefinition * GetParticleDefinition () { return currentSource->GetParticleDefinition();} ;
 
-  inline void SetParticleCharge(G4double aCharge) { currentSource->SetParticleCharge(aCharge); } ;
+  void SetParticleCharge(G4double aCharge) { currentSource->SetParticleCharge(aCharge); } ;
 
   // Set polarization
-  inline void SetParticlePolarization (G4ThreeVector aVal) {currentSource->SetParticlePolarization(aVal);};
-  inline G4ThreeVector GetParticlePolarization ()  {return currentSource->GetParticlePolarization();};
+  void SetParticlePolarization (G4ThreeVector aVal) {currentSource->SetParticlePolarization(aVal);};
+  G4ThreeVector GetParticlePolarization ()  {return currentSource->GetParticlePolarization();};
 
   // Set Time.
-  inline void SetParticleTime(G4double aTime)  { currentSource->SetParticleTime(aTime); };
-  inline G4double GetParticleTime()  { return currentSource->GetParticleTime(); };
+  void SetParticleTime(G4double aTime)  { currentSource->SetParticleTime(aTime); };
+  G4double GetParticleTime()  { return currentSource->GetParticleTime(); };
 
-  inline void SetNumberOfParticles(G4int i)  { currentSource->SetNumberOfParticles(i); };
+  void SetNumberOfParticles(G4int i)  { currentSource->SetNumberOfParticles(i); };
   //
-  inline G4int GetNumberOfParticles() { return currentSource->GetNumberOfParticles(); };
-  inline G4ThreeVector GetParticlePosition()  { return currentSource->GetParticlePosition();};
-  inline G4ThreeVector GetParticleMomentumDirection()  { return currentSource->GetParticleMomentumDirection();};
-  inline G4double GetParticleEnergy()  {return currentSource->GetParticleEnergy();};
+  G4int GetNumberOfParticles() { return currentSource->GetNumberOfParticles(); };
+  G4ThreeVector GetParticlePosition()  { return currentSource->GetParticlePosition();};
+  G4ThreeVector GetParticleMomentumDirection()  { return currentSource->GetParticleMomentumDirection();};
+  G4double GetParticleEnergy()  {return currentSource->GetParticleEnergy();};
 
 private:
 
   void IntensityNormalization();
 
 private:
+  G4bool multiple_vertex;
   G4bool normalised;
   G4int currentSourceIdx;
   G4SingleParticleSource* currentSource;

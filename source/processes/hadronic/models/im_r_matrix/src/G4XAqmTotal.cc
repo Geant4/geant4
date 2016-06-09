@@ -111,7 +111,7 @@ G4double G4XAqmTotal::CrossSection(const G4KineticTrack& trk1, const G4KineticTr
   if (nQ2 == 2) nMesons++;
 
   // Cross-section (units to be checked!)
-  sigma = 40. * pow((2.0/3.0),nMesons) * (1. - 0.4 * sRatio1) * (1. - 0.4 * sRatio2) * millibarn;
+  sigma = 40. * std::pow((2.0/3.0),nMesons) * (1. - 0.4 * sRatio1) * (1. - 0.4 * sRatio2) * millibarn;
 
   return sigma;
 }

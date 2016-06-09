@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.1 2003/11/11 19:08:58 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4MuNuclearInteraction.cc,v 1.4 2004/12/07 13:50:29 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -213,8 +213,8 @@ G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
   epmin = CutFixed ;
   epmax = KineticEnergy + Mass - 0.5*proton_mass_c2 ;
 
-  aaa = log(epmin) ;
-  bbb = log(epmax) ;
+  aaa = std::log(epmin) ;
+  bbb = std::log(epmax) ;
   kkk = G4int((bbb-aaa)/ak1 +ak2) ;
   hhh = (bbb-aaa)/kkk ;
 
@@ -224,7 +224,7 @@ G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
     for (G4int ll=0; ll<8; ll++)
     {
       epln=x+xgi[ll]*hhh ;
-      ep = exp(epln) ;
+      ep = std::exp(epln) ;
       CrossSection += ep*wgi[ll]* ComputeDMicroscopicCrossSection(ParticleType,
                                                 KineticEnergy,  
                                                 AtomicNumber,AtomicWeight,     
@@ -264,8 +264,8 @@ G4double G4MuNuclearInteraction::ComputeDMicroscopicCrossSection(
   ep = epsilon/GeV ;
   a = AtomicWeight/(g/mole) ;
 
-  aeff = 0.22*a+0.78*exp(0.89*log(a)) ;                   //shadowing 
-  sigph = (49.2+11.1*log(ep)+151.8/sqrt(ep))*microbarn ; //!!!!!!!!!!! 
+  aeff = 0.22*a+0.78*std::exp(0.89*std::log(a)) ;                   //shadowing 
+  sigph = (49.2+11.1*std::log(ep)+151.8/std::sqrt(ep))*microbarn ; //!!!!!!!!!!! 
   
   v=epsilon/TotalEnergy ;
   v1 = 1.-v ;
@@ -276,7 +276,7 @@ G4double G4MuNuclearInteraction::ComputeDMicroscopicCrossSection(
   down = 1.+epsilon/alam*(1.+alam/(2.*proton_mass_c2)+epsilon/alam) ;
 
   DCrossSection = coeffn*aeff*sigph/epsilon*
-                  (-v1+(v1+0.5*v2*(1.+2.*mass2/alam2))*log(up/down)) ;
+                  (-v1+(v1+0.5*v2*(1.+2.*mass2/alam2))*std::log(up/down)) ;
 
   if( DCrossSection < 0.) 
       DCrossSection = 0. ; 
@@ -312,7 +312,7 @@ void G4MuNuclearInteraction::MakeSamplingTables(
       // calculate the differential cross section
       // numerical integration in    
       //  log ...............
-      c = log(Maxep/CutFixed) ;
+      c = std::log(Maxep/CutFixed) ;
       ymin = -5. ;
       ymax = 0. ;
       dy = (ymax-ymin)/NBIN ; 
@@ -324,11 +324,11 @@ void G4MuNuclearInteraction::MakeSamplingTables(
       for (G4int i=0 ; i<NBIN; i++)
       {
         y += dy ;
-        x = exp(y) ;
+        x = std::exp(y) ;
         yy += dy ;
-        dx = exp(yy+dy)-exp(yy) ;
+        dx = std::exp(yy+dy)-std::exp(yy) ;
       
-        ep = CutFixed*exp(c*x) ;
+        ep = CutFixed*std::exp(c*x) ;
 
         CrossSection += ep*dx*ComputeDMicroscopicCrossSection(ParticleType,
                                                  KineticEnergy,AtomicNumber,
@@ -376,9 +376,9 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    // check against insufficient energy
    if (epmax <= epmin )   
    {
-     aParticleChange.SetMomentumChange( ParticleDirection );
-     aParticleChange.SetEnergyChange( KineticEnergy );
-     aParticleChange.SetLocalEnergyDeposit (0.); 
+     aParticleChange.ProposeMomentumDirection( ParticleDirection );
+     aParticleChange.ProposeEnergy( KineticEnergy );
+     aParticleChange.ProposeLocalEnergyDeposit (0.); 
      aParticleChange.SetNumberOfSecondaries(0);
      return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
    }
@@ -392,14 +392,14 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    G4int iy ;
 
    // select sampling table ;
-   G4double lnZ = log(anElement->GetZ()) ;
+   G4double lnZ = std::log(anElement->GetZ()) ;
    G4double delmin = 1.e10 ;
    G4double del ;
    G4int izz=0,itt=0,NBINminus1 ;
    NBINminus1 = NBIN-1 ;
    for (G4int iz=0; iz<nzdat; iz++)
    {
-     del = abs(lnZ-log(zdat[iz])) ;
+     del = std::abs(lnZ-std::log(zdat[iz])) ;
      if(del<delmin)
      {
         delmin=del ;
@@ -409,7 +409,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    delmin = 1.e10 ;
    for (G4int it=0; it<ntdat; it++)
    {
-     del = abs(log(KineticEnergy)-log(tdat[it])) ;
+     del = std::abs(std::log(KineticEnergy)-std::log(tdat[it])) ;
      if(del<delmin)
      {
        delmin=del;
@@ -432,8 +432,8 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    else
      y = ya[iy] ;
 
-   x = exp(y) ;
-   ep = epmin*exp(x*log(epmax/epmin)) ;                              
+   x = std::exp(y) ;
+   ep = epmin*std::exp(x*std::log(epmax/epmin)) ;                              
 
    // sample scattering angle of mu, but first t should be sampled.
    G4double yy = ep/TotalEnergy ;
@@ -463,33 +463,33 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    do
    {
      ntry += 1 ;
-     t=w1/(w2*exp(G4UniformRand()*log(w3))-tmax) ;
+     t=w1/(w2*std::exp(G4UniformRand()*std::log(w3))-tmax) ;
      rej = (1.-t/tmax)*(y1*(1.-tmin/t)+y2)/(y3*(1.-t/t2)); 
    } while (G4UniformRand() > rej) ;
 
    // compute angle from t
-   G4double sinth2,theta ; //  sinth2 = sin(theta/2)*sin(theta/2) !
+   G4double sinth2,theta ; //  sinth2 = std::sin(theta/2)*std::sin(theta/2) !
    sinth2 = 0.5*(t-tmin)/(2.*(TotalEnergy*(TotalEnergy-ep)-Mass*Mass)-tmin) ;
-   theta = acos(1.-2.*sinth2) ;
+   theta = std::acos(1.-2.*sinth2) ;
    
    G4double phi=twopi*G4UniformRand() ;
-   G4double sinth=sin(theta) ;
-   G4double dirx=sinth*cos(phi) , diry=sinth*sin(phi) , dirz=cos(theta);
+   G4double sinth=std::sin(theta) ;
+   G4double dirx=sinth*std::cos(phi) , diry=sinth*std::sin(phi) , dirz=std::cos(theta);
 
    G4ThreeVector finalDirection(dirx,diry,dirz) ;
    finalDirection.rotateUz(ParticleDirection) ;
 
    G4double NewKinEnergy = KineticEnergy - ep ;
-   G4double finalMomentum=sqrt(NewKinEnergy*
+   G4double finalMomentum=std::sqrt(NewKinEnergy*
                        (NewKinEnergy+2.*Mass)) ;
 
    G4double Ef=NewKinEnergy+Mass ;
-   G4double initMomentum=sqrt(KineticEnergy*(TotalEnergy+Mass)) ;
+   G4double initMomentum=std::sqrt(KineticEnergy*(TotalEnergy+Mass)) ;
 
-   // G4double Q2=2.*(TotalEnergy*Ef-initMomentum*finalMomentum*cos(theta)-Mass*Mass) ;
+   // G4double Q2=2.*(TotalEnergy*Ef-initMomentum*finalMomentum*std::cos(theta)-Mass*Mass) ;
 
-   aParticleChange.SetMomentumChange( finalDirection );
-   aParticleChange.SetEnergyChange( NewKinEnergy );
+   aParticleChange.ProposeMomentumDirection( finalDirection );
+   aParticleChange.ProposeEnergy( NewKinEnergy );
 
    G4LorentzVector primaryMomentum(initMomentum*ParticleDirection, TotalEnergy);
    G4LorentzVector fsMomentum(finalMomentum*finalDirection, Ef);
@@ -503,7 +503,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
 
    G4VParticleChange* aHadronicFS;
    aHadronicFS = theHadronicVertex.ApplyYourself(theTarget, gammaTrack);
-   delete aGamma;
+   // delete aGamma;
 
    G4int numSecondaries = aHadronicFS->GetNumberOfSecondaries();
    aParticleChange.SetNumberOfSecondaries(numSecondaries);

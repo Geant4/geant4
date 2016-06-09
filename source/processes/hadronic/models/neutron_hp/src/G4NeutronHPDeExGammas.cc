@@ -64,7 +64,7 @@ void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
   for(i=0; i<nGammas; i++)
   {
     nextE = theGammas[i]->GetLevelEnergy();
-    if(abs(currentE-nextE)>epsilon) nLevels++;
+    if(std::abs(currentE-nextE)>epsilon) nLevels++;
     currentE = nextE;
   }
 
@@ -82,7 +82,7 @@ void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
   for(i=0; i<nGammas; i++)
   {
     nextE = theGammas[i]->GetLevelEnergy();
-    if(abs(currentE-nextE)>epsilon) 
+    if(std::abs(currentE-nextE)>epsilon) 
     {
       levelCounter++;
       levelStart[levelCounter] = i;
@@ -113,9 +113,9 @@ void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
     for(G4int ii=0; ii<nLevels; ii++)
     {
       levelE = theLevels[ii].GetLevelEnergy();
-      if(abs(currentLevelE-(levelE+gammaE))<min)
+      if(std::abs(currentLevelE-(levelE+gammaE))<min)
       {
-        min = abs(currentLevelE-(levelE+gammaE));
+        min = std::abs(currentLevelE-(levelE+gammaE));
         it = ii;
       }
     }

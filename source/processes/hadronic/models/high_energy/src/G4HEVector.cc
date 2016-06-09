@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.14 2003/07/01 15:42:25 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HEVector.cc,v 1.17 2004/12/10 22:04:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 //
 
@@ -134,7 +134,7 @@ G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum mom )
      px = mom.x();
      py = mom.y();
      pz = mom.z();
-     energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
+     energy        = std::sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = Amax(0.,energy - mass);
      return;
    }
@@ -145,7 +145,7 @@ G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum * mom )
      px = mom->x();
      py = mom->y();
      pz = mom->z();
-     energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
+     energy        = std::sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = Amax(0.,energy - mass);
      return;
    }
@@ -163,7 +163,7 @@ G4HEVector::getMomentum() const
 G4double 
 G4HEVector::getTotalMomentum()
    {
-     return sqrt(px*px + py*py + pz*pz);
+     return std::sqrt(px*px + py*py + pz*pz);
    }
 
 void
@@ -181,7 +181,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y, G4double z )
      px = x;
      py = y;
      pz = z;
-     energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
+     energy        = std::sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = Amax(0.,energy-mass);
      return;
    }
@@ -199,7 +199,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y )
    {
      px = x;
      py = y;
-     energy = sqrt(mass*mass + px*px + py*py + pz*pz);
+     energy = std::sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = Amax(0.,energy-mass);
      return;
    }
@@ -215,7 +215,7 @@ void
 G4HEVector::setMomentumAndUpdate( G4double z )
    {
      pz = z;
-     energy = sqrt(mass*mass + px*px + py*py + pz*pz);
+     energy = std::sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = Amax(0.,energy-mass);
      return;
    }
@@ -242,15 +242,15 @@ G4HEVector::setEnergyAndUpdate( G4double e )
        {
          energy = e;
          kineticEnergy   = energy - mass;
-         G4double momold = sqrt(px*px + py*py + pz*pz);
-         G4double momnew = sqrt(energy*energy - mass*mass);
+         G4double momold = std::sqrt(px*px + py*py + pz*pz);
+         G4double momnew = std::sqrt(energy*energy - mass*mass);
          if (momold == 0.)
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
-             G4double sint = sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
-             px            = momnew * sint * cos(phi);
-             py            = momnew * sint * sin(phi);
+             G4double sint = std::sqrt(1. - cost*cost);
+             G4double phi  = twopi* G4UniformRand();
+             px            = momnew * sint * std::cos(phi);
+             py            = momnew * sint * std::sin(phi);
              pz            = momnew * cost;
            }
          else
@@ -286,15 +286,15 @@ G4HEVector::setKineticEnergyAndUpdate(G4double ekin)
        {
          energy = ekin + mass;
          kineticEnergy   = ekin;
-         G4double momold = sqrt(px*px + py*py + pz*pz);
-         G4double momnew = sqrt(energy*energy - mass*mass);
+         G4double momold = std::sqrt(px*px + py*py + pz*pz);
+         G4double momnew = std::sqrt(energy*energy - mass*mass);
          if (momold == 0.)
            {
              G4double cost = 1.0-2.0*G4UniformRand();
-             G4double sint = sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
-             px            = momnew * sint * cos(phi);
-             py            = momnew * sint * sin(phi);
+             G4double sint = std::sqrt(1. - cost*cost);
+             G4double phi  = twopi* G4UniformRand();
+             px            = momnew * sint * std::cos(phi);
+             py            = momnew * sint * std::sin(phi);
              pz            = momnew * cost;
            }
          else
@@ -333,7 +333,7 @@ G4HEVector::setMassAndUpdate( G4double m )
      kineticEnergy = Amax(0., energy - mass);
      mass = m;
      energy = kineticEnergy + mass;
-     G4double momnew = sqrt(Amax(0., energy*energy - mass*mass));
+     G4double momnew = std::sqrt(Amax(0., energy*energy - mass*mass));
      if ( momnew == 0.0) 
         {
          px = 0.;
@@ -342,14 +342,14 @@ G4HEVector::setMassAndUpdate( G4double m )
         }
     else
         {
-         G4double momold = sqrt(px*px + py*py + pz*pz);
+         G4double momold = std::sqrt(px*px + py*py + pz*pz);
          if (momold == 0.)
             { 
               G4double cost = 1.-2.*G4UniformRand();
-              G4double sint = sqrt(1.-cost*cost);
-              G4double phi  = M_2PI*G4UniformRand();
-              px            = momnew*sint*cos(phi);
-              py            = momnew*sint*sin(phi);
+              G4double sint = std::sqrt(1.-cost*cost);
+              G4double phi  = twopi*G4UniformRand();
+              px            = momnew*sint*std::cos(phi);
+              py            = momnew*sint*std::sin(phi);
               pz            = momnew*cost;
             }
          else
@@ -531,9 +531,9 @@ G4HEVector::Add( const G4HEVector & p1, const G4HEVector & p2 )
      energy = p1.energy + p2.energy;
      G4double b = energy*energy - px*px - py*py - pz*pz;
      if( b < 0 )
-       mass = -1. * sqrt( -b );
+       mass = -1. * std::sqrt( -b );
      else
-       mass = sqrt( b );
+       mass = std::sqrt( b );
      kineticEnergy = Amax(0.,energy - mass);
      charge        = p1.charge + p2.charge;
      code          = 0;
@@ -552,9 +552,9 @@ G4HEVector::Sub( const G4HEVector & p1, const G4HEVector & p2 )
      energy = p1.energy - p2.energy;
      G4double b = energy*energy - px*px - py*py - pz*pz;
      if( b < 0 )
-       mass = -1. * sqrt( -b );
+       mass = -1. * std::sqrt( -b );
      else
-       mass = sqrt( b );
+       mass = std::sqrt( b );
      kineticEnergy = Amax(0.,energy - mass);
      charge        = p1.charge - p2.charge;
      code          = 0;
@@ -572,7 +572,7 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      px = p1.px + a*p2.px;
      py = p1.py + a*p2.py;
      pz = p1.pz + a*p2.pz; 
-     energy = sqrt( sqr(p1.mass) + px*px + py*py + pz*pz);
+     energy = std::sqrt( sqr(p1.mass) + px*px + py*py + pz*pz);
      mass = p1.mass;
      kineticEnergy = Amax(0.,energy - mass);
      timeOfFlight  = p1.timeOfFlight;
@@ -588,11 +588,11 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
 G4double 
 G4HEVector::CosAng( const G4HEVector & p )
    {
-     G4double a = sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
+     G4double a = std::sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
      if( a != 0.0 ) 
        {
          a = (px*p.px + py*p.py + pz*p.pz)/a;
-         if( fabs(a) > 1.0 ) 
+         if( std::fabs(a) > 1.0 ) 
          {
            if(a<0.0) a=-1.0;
            else a=1.0;
@@ -604,17 +604,17 @@ G4HEVector::CosAng( const G4HEVector & p )
 G4double 
 G4HEVector::Ang(const G4HEVector & p )
    {
-     G4double a = sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
+     G4double a = std::sqrt( (px*px + py*py + pz*pz)*(p.px*p.px + p.py*p.py + p.pz*p.pz) );
      if( a != 0.0 ) 
        {
          a = (px*p.px + py*p.py + pz*p.pz)/a;
-         if( fabs(a) > 1.0 ) 
+         if( std::fabs(a) > 1.0 ) 
          {
            if(a<0.0) a=-1.0;
            else a=1.0;
          } 
        }
-     return acos(a);
+     return std::acos(a);
    }      
 
 G4double 
@@ -684,7 +684,7 @@ G4HEVector::SmulAndUpdate( const G4HEVector & p, G4double h)
      py = h * p.py;
      pz = h * p.pz;
      mass          = p.mass;
-     energy        = sqrt(px*px + py*py + pz*pz + mass*mass);
+     energy        = std::sqrt(px*px + py*py + pz*pz + mass*mass);
      kineticEnergy = energy - mass;
      charge        = p.charge;
      timeOfFlight  = p.timeOfFlight;
@@ -702,12 +702,12 @@ void
 G4HEVector::Norz( const G4HEVector & p )
    {
      G4double a =   p.px*p.px + p.py*p.py + p.pz*p.pz;
-     if (a > 0.0) a = 1./sqrt(a);
+     if (a > 0.0) a = 1./std::sqrt(a);
      px = a * p.px;
      py = a * p.py;
      pz = a * p.pz;
      mass          = p.mass;
-     energy        = sqrt(px*px + py*py + pz*pz + mass*mass);
+     energy        = std::sqrt(px*px + py*py + pz*pz + mass*mass);
      kineticEnergy = energy - mass;
      charge        = p.charge;
      timeOfFlight  = p.timeOfFlight;
@@ -724,7 +724,7 @@ G4HEVector::Norz( const G4HEVector & p )
 G4double 
 G4HEVector::Length()
    {
-     return  sqrt(px*px + py*py + pz*pz);
+     return  std::sqrt(px*px + py*py + pz*pz);
    }
 
 void 
@@ -743,17 +743,17 @@ G4HEVector::Defs1( const G4HEVector & p1, const G4HEVector & p2)
      if (pt2 > 0.0)
         {
           G4double ph, qx, qy, qz;
-          G4double a     = sqrt(p2.px*p2.px + p2.py*p2.py + p2.pz*p2.pz);
+          G4double a     = std::sqrt(p2.px*p2.px + p2.py*p2.py + p2.pz*p2.pz);
           G4double cost  = p2.pz/a; 
-          G4double sint  = 0.5 * (sqrt(fabs((1.-cost)*(1.+cost))) + sqrt(pt2)/a);
-          if(p2.py < 0.) ph = 1.5*M_PI;
-          else ph = 0.5*M_PI;
+          G4double sint  = 0.5 * (std::sqrt(std::fabs((1.-cost)*(1.+cost))) + std::sqrt(pt2)/a);
+          if(p2.py < 0.) ph = 1.5*pi;
+          else ph = halfpi;
           if( p2.px != 0.0) 
-             ph = atan2(p2.py,p2.px);             
-          qx =   cost*cos(ph)*p1.px - sin(ph)*p1.py
-               + sint*cos(ph)*p1.pz;
-          qy =   cost*sin(ph)*p1.px + cos(ph)*p1.py
-               + sint*sin(ph)*p1.pz;
+             ph = std::atan2(p2.py,p2.px);             
+          qx =   cost*std::cos(ph)*p1.px - std::sin(ph)*p1.py
+               + sint*std::cos(ph)*p1.pz;
+          qy =   cost*std::sin(ph)*p1.px + std::cos(ph)*p1.py
+               + sint*std::sin(ph)*p1.pz;
           qz = - sint        *p1.px 
                + cost        *p1.pz;
           px = qx; 
@@ -781,7 +781,7 @@ G4HEVector::Defs( const G4HEVector & p1, const G4HEVector & p2,
      my.py = mz.pz*px - mz.px*pz;
      my.pz = mz.px*py - mz.py*px;
      G4double pp;
-     pp = sqrt(px*px + py*py + pz*pz);
+     pp = std::sqrt(px*px + py*py + pz*pz);
      if (pp > 0.)
         {
           pp = 1./pp; 
@@ -789,7 +789,7 @@ G4HEVector::Defs( const G4HEVector & p1, const G4HEVector & p2,
           py = py*pp ;
           pz = pz*pp ;
         }
-     pp = sqrt(my.px*my.px + my.py*my.py + my.pz*my.pz);
+     pp = std::sqrt(my.px*my.px + my.py*my.py + my.pz*my.pz);
      if (pp > 0.)
         {
           pp = 1./pp;
@@ -797,7 +797,7 @@ G4HEVector::Defs( const G4HEVector & p1, const G4HEVector & p2,
           my.py = my.py*pp ;
           my.pz = my.pz*pp ;
         }
-     pp = sqrt(mz.px*mz.px + mz.py*mz.py + mz.pz*mz.pz);
+     pp = std::sqrt(mz.px*mz.px + mz.py*mz.py + mz.pz*mz.pz);
      if (pp > 0.)
         {
           pp = 1./pp;
@@ -1165,7 +1165,7 @@ G4int G4HEVector::FillQuarkContent()
     theAntiQuarkContent[flavor] =0;
   }
 
-  G4int temp = abs(tempPDGcode);
+  G4int temp = std::abs(tempPDGcode);
   G4int multiplet = temp/10000;
   temp -= G4int(multiplet*10000);
   G4int quark1 = temp/1000;
@@ -1245,7 +1245,7 @@ G4int G4HEVector::FillQuarkContent()
       totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
       totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
     }
-    if (abs(totalCharge-charge)>0.1*eplus) { 
+    if (std::abs(totalCharge-charge)>0.1*eplus) { 
       tempPDGcode = 0;
     }
   } else if (particleType == "baryon"){
@@ -1254,10 +1254,10 @@ G4int G4HEVector::FillQuarkContent()
       tempPDGcode = 0;
     }
     //exceptions
-    if (abs(tempPDGcode) == 3122) { 
+    if (std::abs(tempPDGcode) == 3122) { 
       // Lambda
       quark2=2;  quark3 = 1; spin = 1;
-    } else if (abs(tempPDGcode) == 4122) { 
+    } else if (std::abs(tempPDGcode) == 4122) { 
       // Lambda_c
       quark2=2;  quark3 = 1; spin = 1;
     } 
@@ -1285,7 +1285,7 @@ G4int G4HEVector::FillQuarkContent()
       totalCharge += 2./3.*eplus*theQuarkContent[flavor+1];
       totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
     }
-    if (abs(totalCharge-charge)>0.1*eplus) { 
+    if (std::abs(totalCharge-charge)>0.1*eplus) { 
       tempPDGcode = 0;
     }
   } else {

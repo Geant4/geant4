@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.icc,v 1.8 2001/07/11 10:01:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleTable.icc,v 1.9 2004/08/31 19:10:50 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -143,5 +143,17 @@ inline
  G4int G4ParticleTable::size() const
 {
   return fDictionary->size();
+}
+
+inline
+ void G4ParticleTable::SetReadiness()
+{
+  readyToUse = true;
+}
+
+inline
+ G4bool G4ParticleTable::GetReadiness() const
+{
+  return readyToUse;
 }
 

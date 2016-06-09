@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProcessManager.cc,v 1.24 2004/05/11 15:17:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // --------------------------------------------------------------

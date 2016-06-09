@@ -1,9 +1,35 @@
-4-12-2003 Susanna Guatelli:XrayFluo-V05-02-08 
-Removed the compilation warnings, introduction of VRML viewer.
-This tag referes to the tag  examples-V05-02-07 prepared for Geant4 6.0
-release.
+# $Id: History,v 1.4 2004/12/10 13:08:42 gcosmo Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: geant4-07-00-cand-05 $
+# -------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+               Xray_Fluorescence example History file
+               --------------------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+10-12-2004 Alfonso Mantero: XrayFluo-V06-02-01
+- Can now be used in batch mode without histograms.
+
+8-12-2004 Alfonso Mantero: XrayFluo-V06-02-00 
+- General update, including migration to <cmath>.
+
+4-12-2003 Susanna Guatelli: XrayFluo-V05-02-08 
+- Removed the compilation warnings, introduction of VRML viewer.
+  This tag referes to the tag  examples-V05-02-07 prepared for
+  Geant4 6.0 release.
 
 4-12-2003 Susanna Guatelli: XrayFluo-V05-02-07
-Correspond the head found in CVS. It does not compile.
-
-
+- Correspond the head found in CVS. It does not compile.
+- Created.

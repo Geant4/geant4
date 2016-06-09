@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.15 2004/06/07 13:56:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4RunManagerKernel.cc,v 1.20 2004/12/07 09:12:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00 $
 //
 //
 
@@ -31,13 +31,13 @@
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 #include "G4ExceptionHandler.hh"
-//#include "G4EventManager.hh"
+#include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
-//#include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4ParticleTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
@@ -74,12 +74,14 @@ G4RunManagerKernel::G4RunManagerKernel()
   defaultRegion->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
+  // Following line is tentatively moved from SetPhysics method
+  G4ParticleTable::GetParticleTable()->SetReadiness();
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
   // version banner
   versionString
-    = " Geant4 version $Name: geant4-06-02 $   (25-June-2004)";
+    = " Geant4 version $Name: geant4-07-00 $   (17-December-2004)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
@@ -193,7 +195,16 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   { stateManager->SetNewState(G4State_Idle); }
 } 
   
-void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
+void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
+{
+  physicsList = uPhys;
+  // Following line is tentatively moved to the constructor
+  // G4ParticleTable::GetParticleTable()->SetReadiness();
+  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  physicsList->ConstructParticle();
+}
+  
+void G4RunManagerKernel::InitializePhysics()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
@@ -206,7 +217,6 @@ void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
     return;
   }
 
-  physicsList = uPhys;
   if(!physicsList)
   {
     G4Exception("G4RunManagerKernel::InitializePhysics",
@@ -263,6 +273,8 @@ G4bool G4RunManagerKernel::RunInitialization()
 
   if(geometryNeedsToBeClosed) ResetNavigator();
  
+  GetPrimaryTransformer()->CheckUnknown();
+
   stateManager->SetNewState(G4State_GeomClosed);
   return true;
 }

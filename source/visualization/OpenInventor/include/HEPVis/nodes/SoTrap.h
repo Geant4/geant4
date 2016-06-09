@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrap.h,v 1.2 2004/06/14 09:27:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SoTrap.h,v 1.3 2004/11/23 21:51:05 gbarrand Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 /*-----------------------------Hepvis----------------------------------------*/
 /*                                                                           */
@@ -33,9 +33,13 @@
 /*---------------------------------------------------------------------------*/
 #ifndef HEPVis_SoTrap_h
 #define HEPVis_SoTrap_h
+
+// Inheritance :
+#include <Inventor/nodes/SoShape.h>
+
 #include <Inventor/fields/SoSFNode.h>
 #include <Inventor/fields/SoSFBool.h>
-#include <Inventor/nodes/SoShape.h>
+#include <Inventor/fields/SoSFFloat.h>
 
 //adding fields 
 #ifdef WIN32

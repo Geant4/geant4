@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.5 2001/07/11 10:02:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4KL3DecayChannel.cc,v 1.7 2004/12/10 18:02:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-05 $
 //
 // 
 // ------------------------------------------------------------
@@ -152,10 +152,10 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
  
   // pion
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphi = sin(phi);
-  cosphi = cos(phi);
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+  phi  = twopi*G4UniformRand()*rad;
+  sinphi = std::sin(phi);
+  cosphi = std::cos(phi);
   direction = new G4ThreeVector(sintheta*cosphi,sintheta*sinphi,costheta);
   G4ThreeVector momentum0 =  (*direction)*daughterP[0]; 
   G4DynamicParticle * daughterparticle 
@@ -164,10 +164,10 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 
   // neutrino
   costhetan = (daughterP[1]*daughterP[1]-daughterP[2]*daughterP[2]-daughterP[0]*daughterP[0])/(2.0*daughterP[2]*daughterP[0]);
-  sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
-  phin  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphin = sin(phin);
-  cosphin = cos(phin);
+  sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
+  phin  = twopi*G4UniformRand()*rad;
+  sinphin = std::sin(phin);
+  cosphin = std::cos(phin);
   direction->setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 
   direction->setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction->setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
@@ -226,19 +226,19 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
     momentumsum = 0.0;
     // daughter 0
     energy = rd2*(parentM - sumofdaughtermass);
-    P[0] = sqrt(energy*energy + 2.0*energy*M[0]);
+    P[0] = std::sqrt(energy*energy + 2.0*energy*M[0]);
     E[0] = energy;
     if ( P[0] >momentummax )momentummax =  P[0];
     momentumsum  +=  P[0];
     // daughter 1
     energy = (1.-rd1)*(parentM - sumofdaughtermass);
-    P[1] = sqrt(energy*energy + 2.0*energy*M[1]);
+    P[1] = std::sqrt(energy*energy + 2.0*energy*M[1]);
     E[1] = energy;
     if ( P[1] >momentummax )momentummax =  P[1];
     momentumsum  +=  P[1];
     // daughter 2
     energy = (rd1-rd2)*(parentM - sumofdaughtermass);
-    P[2] = sqrt(energy*energy + 2.0*energy*M[2]);
+    P[2] = std::sqrt(energy*energy + 2.0*energy*M[2]);
     E[2] = energy;
     if ( P[2] >momentummax )momentummax =  P[2];
     momentumsum  +=  P[2];

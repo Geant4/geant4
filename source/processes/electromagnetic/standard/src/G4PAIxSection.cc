@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.19 2004/06/07 07:33:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4PAIxSection.cc,v 1.20 2004/12/01 19:37:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file
@@ -54,6 +54,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4SandiaTable.hh"
 
+using namespace std;
 
 /* ******************************************************************
 

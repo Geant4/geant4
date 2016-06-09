@@ -17,7 +17,7 @@
 #
 /vis/open OGLIX
 #
-#/vis/open DAWNFILE
+####/vis/open DAWNFILE
 #
 # Draw scene
 /vis/viewer/zoom 1.4
@@ -34,4 +34,4 @@
 # the step for a proper visualization of the tracjectories
 #
 /testem/det/setField 100 tesla
-/testem/tracking/stepMax 1 m
+/testem/tracking/stepMax 10 m

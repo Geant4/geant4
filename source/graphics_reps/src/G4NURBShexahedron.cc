@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NURBShexahedron.cc,v 1.5 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // hexahedron implementation
 //  OC 17 9 96

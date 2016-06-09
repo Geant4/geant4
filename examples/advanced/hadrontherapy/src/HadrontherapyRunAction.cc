@@ -39,6 +39,10 @@
 #include <iomanip.h>
 #include "Randomize.hh"
 
+#ifdef G4ANALYSIS_USE
+#include "HadrontherapyAnalysisManager.hh"
+#endif
+
 // ---------------------------------------------------------------
 HadrontherapyRunAction::HadrontherapyRunAction()
 :NbOfLayer(20000)  
@@ -48,6 +52,7 @@ HadrontherapyRunAction::HadrontherapyRunAction()
 // ---------------------------------------------------------------
 HadrontherapyRunAction::~HadrontherapyRunAction()
 {
+  //  delete runMessenger;
 }
 
 // ---------------------------------------------------------------
@@ -58,11 +63,18 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
       energy[i] = 0.0; 
     };
   
+//   ---------- Analysis preliminary implentation ------------------
+// for the registration of the Bragg curve file in a .xml file
+
+#ifdef G4ANALYSIS_USE
+HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+analysis->book();
+#endif   
 
 G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
 // save Rndm status
-G4RunManager::GetRunManager() -> SetRandomNumberStore(true);
+G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 HepRandom::showEngineStatus();
 }
 
@@ -70,7 +82,8 @@ HepRandom::showEngineStatus();
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*) 
 {  
   // WRITE ASCII FILE FOR THE REGISTRATION OF THE BRAGG PEAK
-  // The a two column file (piccoXX.dat) is registered. The first column represents
+  // The a two column file (BraggPeak.out) is registered. 
+  //The first column represents
   // the ionization chamber position (in mm of water); the second
   // is the energy deposited for each position of the chamber
 
@@ -87,7 +100,27 @@ depth = i*0.002; //the number represents the thickness of the ionization chamber
    } 
   }
   
+  
+#ifdef G4ANALYSIS_USE  
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
 
+  //histogram fill
+
+  analysis -> Energy_Event( slice, energy[ slice ]);
+
+  for (slice = 0; slice < 200; slice++)  
+  // It is necessary to set here the Number of slice
+    {
+      //G4cout << "%%%%%%%" << slice << "%%%%%" << 
+      //energy[ slice ] << "%%%%%" << G4endl;
+      
+      //n-tuple fill
+      analysis -> Energy_Dep( slice + 0.2, energy[ slice ]);         
+    }
+  analysis -> finish();
+
+#endif
+  
   // show Rndm status
   HepRandom::showEngineStatus();
 }
@@ -95,5 +128,36 @@ depth = i*0.002; //the number represents the thickness of the ionization chamber
 // -----------------------------------------------------------------------------
 void HadrontherapyRunAction::EnergyTotSlice(G4int slice, G4double energy_dep) 
 {
-  energy[ slice ] = energy [ slice ] + energy_dep;  
+  energy[ slice ] = energy [ slice ] + energy_dep; 
+  
+  //G4cout << "energy dalla funzione EnergyTotSlice" << energy[slice]
+  //<< "slice" << slice << G4endl;
+ 
 }
+/*void HadrontherapyRunAction::EnergyTotMarkus()
+{
+ 
+  for (G4int i = 0; i < 250; i++) {
+      energyMarkus[i] = 0;
+    }
+  
+  for (i = 0; i < 191; i++) {
+      for (G4int j = 0; j < 10; j++) {
+	  energyMarkus[ i ] = energy[ i+j ] + energyMarkus[ i ];
+	}   
+    }
+  
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.11 2003/10/31 18:04:16 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.12 2004/12/07 13:49:11 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
  // Hadronic Process: AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 13-Feb-1997
@@ -66,7 +66,7 @@
     ek += tkin;
     modifiedOriginal.SetKineticEnergy( ek*MeV );
     G4double et = ek + amas;
-    G4double p = sqrt( abs((et-amas)*(et+amas)) );
+    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
     if( pp > 0.0 )
     {
@@ -80,7 +80,7 @@
     ek -= tkin;
     modifiedOriginal.SetKineticEnergy( ek*MeV );
     et = ek + amas;
-    p = sqrt( abs((et-amas)*(et+amas)) );
+    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
     pp = modifiedOriginal.GetMomentum().mag()/MeV;
     if( pp > 0.0 )
     {
@@ -148,7 +148,7 @@
     const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
     const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
     const G4double targetMass = targetParticle.GetMass()/MeV;
-    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
+    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
@@ -302,10 +302,10 @@
         np = nm = nz = 0;
         if( targetParticle.GetDefinition() == aProton )
         {
-          test = exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
+          test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
           w0 = test;
           wp = test;        
-          test = exp( std::min( expxu, std::max( expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
+          test = std::exp( std::min( expxu, std::max( expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
           wm = test;
           wt = w0+wp+wm;
           wp += w0;
@@ -319,9 +319,9 @@
         }
         else  // target is a neutron
         {
-          test = exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+          test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
           w0 = test;
-          test = exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
+          test = std::exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
           wm = test;
           G4double ran = G4UniformRand();
           if( ran < w0/(w0+wm) )
@@ -350,9 +350,9 @@
                   nt = np+nm+nz;
                   if( (nt>0) && (nt<=numSec) )
                   {
-                    test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                    test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                     dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
-                    if( fabs(dum) < 1.0 )
+                    if( std::fabs(dum) < 1.0 )
                     {
                       if( test >= 1.0e-10 )excs += dum*test;
                     }
@@ -383,9 +383,9 @@
                   nt = np+nm+nz;
                   if( (nt>0) && (nt<=numSec) )
                   {
-                    test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                    test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                     dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
-                    if( fabs(dum) < 1.0 )
+                    if( std::fabs(dum) < 1.0 )
                     {
                       if( test >= 1.0e-10 )excs += dum*test;
                     }
@@ -481,9 +481,9 @@
               nt = np+nm+nz;
               if( (nt>1) && (nt<=numSec) )
               {
-                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmulA[counter]*protnormA[nt-1]/(2.0*n*n);
-                if( abs(dum) < 1.0 )
+                if( std::abs(dum) < 1.0 )
                 {
                   if( test >= 1.0e-10 )excs += dum*test;
                 }
@@ -507,9 +507,9 @@
               nt = np+nm+nz;
               if( (nt>1) && (nt<=numSec) )
               {
-                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmulA[counter]*neutnormA[nt-1]/(2.0*n*n);
-                if( fabs(dum) < 1.0 )
+                if( std::fabs(dum) < 1.0 )
                 {
                   if( test >= 1.0e-10 )excs += dum*test;
                 }

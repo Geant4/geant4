@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.9 2003/07/01 15:49:04 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LCapture.cc,v 1.10 2004/12/07 13:49:06 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -92,7 +92,7 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
    }
    E = E + Atomas(N, Z);
    G4double E02 = E*E - P*P;
-   E0 = sqrt(abs(E02));
+   E0 = std::sqrt(std::abs(E02));
    if (E02 < 0) E0 = -E0;
    Q = Q + Z;
    if (verboseLevel > 1) {
@@ -113,11 +113,11 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
    G4double ran1 = G4UniformRand();
    G4double ran2 = G4UniformRand();
    G4double cost = -1. + 2.*ran1;
-   G4double sint = sqrt(abs(1. - cost*cost));
+   G4double sint = std::sqrt(std::abs(1. - cost*cost));
    G4double phi = ran2*twopi;
 
-   G4double px = p*sint*sin(phi);
-   G4double py = p*sint*cos(phi);
+   G4double px = p*sint*std::sin(phi);
+   G4double py = p*sint*std::cos(phi);
    G4double pz = p*cost;
    G4double e = p;
    G4double e0 = 0.;
@@ -142,11 +142,11 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
    ran1 = G4UniformRand();
    ran2 = G4UniformRand();
    cost = -1. + 2.*ran1;
-   sint = sqrt(abs(1. - cost*cost));
+   sint = std::sqrt(std::abs(1. - cost*cost));
    phi = ran2*twopi;
 
-   px = xp*sint*sin(phi);
-   py = xp*sint*cos(phi);
+   px = xp*sint*std::sin(phi);
+   py = xp*sint*std::cos(phi);
    pz = xp*cost;
    e = xp;
    e0 = 0.;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.31 2003/11/24 12:12:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EnergyLossTables.cc,v 1.32 2004/12/01 18:01:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998
@@ -212,7 +212,7 @@ G4double G4EnergyLossTables::GetDEDX(
 
      dEdx =(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut)
-           *sqrt(scaledKineticEnergy/t.theLowestKineticEnergy);
+           *std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy);
 
   } else if (scaledKineticEnergy>t.theHighestKineticEnergy) {
 
@@ -254,7 +254,7 @@ G4double G4EnergyLossTables::GetLabTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     time = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     time = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
             (*labtimeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -302,7 +302,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     timestart = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     timestart = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
                 (*labtimeTable)(materialIndex)->GetValue(
                 t.theLowestKineticEnergy,isOut);
 
@@ -328,7 +328,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     timeend = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     timeend = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
                 (*labtimeTable)(materialIndex)->GetValue(
                 t.theLowestKineticEnergy,isOut);
 
@@ -378,7 +378,7 @@ G4double G4EnergyLossTables::GetProperTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     time = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     time = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
             (*propertimeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -426,7 +426,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     timestart = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     timestart = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
                 (*propertimeTable)(materialIndex)->GetValue(
                 t.theLowestKineticEnergy,isOut);
 
@@ -452,7 +452,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     timeend = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
+     timeend = std::exp(ppar*std::log(scaledKineticEnergy/t.theLowestKineticEnergy))*
                 (*propertimeTable)(materialIndex)->GetValue(
                 t.theLowestKineticEnergy,isOut);
 
@@ -505,7 +505,7 @@ G4double G4EnergyLossTables::GetRange(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
+    Range = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -618,7 +618,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     dEdx = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
+     dEdx = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
             *(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -670,7 +670,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
+    Range = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -725,7 +725,7 @@ G4double G4EnergyLossTables::GetDEDX(
 
      dEdx =(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut)
-           *sqrt(scaledKineticEnergy/t.theLowestKineticEnergy);
+           *std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy);
 
   } else if (scaledKineticEnergy>t.theHighestKineticEnergy) {
 
@@ -774,7 +774,7 @@ G4double G4EnergyLossTables::GetRange(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
+    Range = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -893,7 +893,7 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     dEdx = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
+     dEdx = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
             *(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -945,7 +945,7 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
+    Range = std::sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 

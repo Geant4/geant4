@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.11 2004/03/10 16:48:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4eplusAnnihilation.hh,v 1.15 2004/11/10 08:53:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,11 @@
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)   
-// 
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 05-08-04, suppress .icc file
+// 13-08-04, public ComputeCrossSectionPerAtom() and ComputeMeanFreePath()   
+// 09-11-04, Remove Store/Retrieve tables (V.Ivantchenko)
+//
 
 // class description
 //
@@ -62,7 +65,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4eplusAnnihilation : public G4VRestDiscreteProcess
- 
+
 {    
   public:  // with description
  
@@ -82,15 +85,15 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // It builds the total CrossSectionPerAtom table, for e+,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for e+,
-       // and for every material contained in the materialTable.       
-        
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+       // and for every material contained in the materialTable.
+
+     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 			      const G4String& directory, G4bool);
        // store CrossSection and MeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-				 const G4String& directory, G4bool);
+       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
+       //				 const G4String& directory, G4bool);
        // retrieve CrossSection and MeanFreePath tables from an external file
        // specified by 'directory' 
                    
@@ -135,13 +138,12 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
-  protected:
+     virtual
+     G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
+                                         G4double AtomicNumber);
 
-     virtual G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
-                                                 G4double AtomicNumber);
-
-     virtual G4double ComputeMeanFreePath(G4double PositKinEnergy, 
-                                          G4Material* aMaterial);
+     G4double ComputeMeanFreePath(G4double PositKinEnergy, 
+                                  G4Material* aMaterial);
 
   private:
   
@@ -161,8 +163,6 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4eplusAnnihilation.icc"
   
 #endif
  

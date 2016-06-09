@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBoson.hh,v 1.4 2003/03/11 05:49:38 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VBoson.hh,v 1.5 2004/07/26 08:14:36 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -37,11 +37,8 @@
 #ifndef G4VBoson_h
 #define G4VBoson_h 1
 
-#include "G4ios.hh"
 #include "globals.hh"
-#include "G4Material.hh"
 
-#include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
 
 class G4VBoson : public G4ParticleDefinition

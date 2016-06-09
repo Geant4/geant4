@@ -6,7 +6,7 @@
 # with users selection of G4TARGET, UI and VIS variables
 #  Momo is the name of legendary samurai who conquered bad geants. ----   H. Yoshida.
 
-name := MomoN02Test
+name := linac
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -14,9 +14,8 @@ G4EXLIB := true
 G4VIS_USE_DAWN := 1
 G4VIS_USE_DAWNFILE := 1
 G4VIS_USE_OPENGLX := 1
+G4VIS_USE_VRML := 1
 G4VIS_USE_VRMLFILE := 1
-G4UI_USE_GAG := 1
-G4UI_USE_TERMINAL := 1
 # Vis/GUI built
 G4VIS_BUILD_DAWN_DRIVER := 1
 G4VIS_BUILD_DAWNFILE_DRIVER := 1
@@ -26,11 +25,15 @@ G4VIS_BUILD_VRMLFILE_DRIVER := 1
 
 # General Envs defined
 G4SYSTEM:=Linux-g++
-G4INSTALL:=/home/yoshidah/geant4.4.0-ref02
-G4BINDIR:=/home/yoshidah/geant4.4.0-ref02/bin/Linux-g++
+G4INSTALL:=/home/yoshidah/geant4
+G4WORKDIR:=/home/yoshidah/geant4
+G4BINDIR:=/home/yoshidah/geant4/bin/Linux-g++
 G4USE_STL:=1
-G4LIB_BUILD_SHARED:=1
-G4LEVELGAMMADATA:=/home/yoshidah/geant4.2s/g4.2ref03/data/PhotonEvaporation
+G4LIB_BUILD_STATIC:=1
+NeutronHPCrossSections:=/home/yoshidah/G4data/G4NDL3.7
+G4LEDATA:=/home/yoshidah/G4data/G4EMLOW2.3
+G4LEVELGAMMADATA:=/home/yoshidah/G4data/PhotonEvaporation
+G4RADIOACTIVEDATA:=/home/yoshidah/G4data/RadiativeDecay
 
 ifndef G4INSTALL
    G4INSTALL = ../../..

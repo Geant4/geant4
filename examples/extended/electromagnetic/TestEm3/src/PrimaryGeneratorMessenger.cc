@@ -20,18 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2004/10/20 14:32:36 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003/09/22 14:06:20 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADouble.hh"
 
@@ -40,7 +38,10 @@
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
 :Action(Gun)
-{ 
+{
+  gunDir = new G4UIdirectory("/testem/gun/");
+  gunDir->SetGuidance("gun control");
+   
   DefaultCmd = new G4UIcmdWithoutParameter("/testem/gun/setDefault",this);
   DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
   DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -59,6 +60,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete DefaultCmd;
   delete RndmCmd;
+  delete gunDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

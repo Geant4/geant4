@@ -38,29 +38,55 @@
 #include "globals.hh"
 #include <iostream.h>
 
+// -------------------------------------------------------------
 class G4Run;
+
+#ifndef G4NOHIST
+namespace AIDA {
+ class ITree;
+ class IHistogram1D;
+} 
+#endif
 
 // -------------------------------------------------------------
 class HadrontherapyRunAction : public G4UserRunAction
 {
-public:
-  HadrontherapyRunAction();
-  ~HadrontherapyRunAction();
+  public:
+    HadrontherapyRunAction();
+   ~HadrontherapyRunAction();
   
-  G4double energy[50000];
+G4double energy[50000];
   
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
-  G4int GetProva();
+G4int GetProva();
 
   void  EnergyTotSlice(G4int, G4double); 
   void  EnergyTotMarkus();
+ 
+#ifndef G4NOHIST
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+#endif
 
 private:
-  G4int NbOfLayer; 
-  G4int slice;
-  G4double energy_dep;
+    void bookHisto();
+
+ private:
+G4String histName;
+    
+#ifndef G4NOHIST    
+    AIDA::ITree* tree;
+    AIDA::IHistogram1D* histo[10];    
+#endif
+  
+G4int NbOfLayer; 
+G4int slice;
+
+private:
+G4int prova;
+G4double energy_dep;
 };
+
 #endif
 

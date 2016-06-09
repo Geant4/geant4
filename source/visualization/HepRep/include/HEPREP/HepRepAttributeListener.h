@@ -14,6 +14,8 @@
 
 namespace HEPREP {
 
+class HepRepInstance;
+
 /**
  * HepRepAttributeListener interface. The implementor is called back for changes
  * of attributes while using the HepRepIterator to iterate over all the HepRepInstances.
@@ -31,64 +33,71 @@ public:
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param lowerCaseValue lower case value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, std::string value, std::string lowerCaseValue, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, std::string value, std::string lowerCaseValue, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, std::vector<double> value, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, std::vector<double> value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, long value, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, long value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, int value, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, int value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, double value, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, double value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
      * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, bool value, int showLabel) = 0;
+    virtual void setAttribute(HepRepInstance * instance, std::string key, bool value, int showLabel) = 0;
 
     /**
      * Called if attribute key is removed from the attribute set.
      *
+     * @param instance instance for which this attribute is set.
      * @param key name of the removed attribute.
      */
-    virtual void removeAttribute(std::string key) = 0;
+    virtual void removeAttribute(HepRepInstance * instance, std::string key) = 0;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPATTRIBUTELISTENER_H */

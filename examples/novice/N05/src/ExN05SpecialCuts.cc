@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.cc,v 1.6 2003/05/28 11:20:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ExN05SpecialCuts.cc,v 1.8 2004/12/09 10:59:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,9 +56,9 @@ ExN05SpecialCuts::PostStepDoIt( const G4Track& aTrack, const G4Step& )
   // Stop the current particle, if requested by G4UserLimits 
   // 			    			    			    
   aParticleChange.Initialize(aTrack);
-  aParticleChange.SetEnergyChange(0.) ;
-  aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-  aParticleChange.SetStatusChange(fStopButAlive);
+  aParticleChange.ProposeEnergy(0.) ;
+  aParticleChange.ProposeLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
+  aParticleChange.ProposeTrackStatus(fStopButAlive);
   return &aParticleChange;
 }
 

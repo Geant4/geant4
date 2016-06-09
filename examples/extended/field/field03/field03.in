@@ -26,6 +26,11 @@
 /event/printModulo 50
 /run/beamOn 100
 #
+/field/setFieldZ 1.0 kG
+# /field/update
+
+/run/beamOn 10
+
 #
 
 

@@ -176,7 +176,7 @@ void RichTbSteppingAction::RichTbGenericHisto(const G4Step* aStep)
           // G4double ZatAgelExit=postPos.z();
           const G4ThreeVector PhotCurMom =  
                 aPhotTrack->GetMomentumDirection();
-          // G4double CurExitangle= acos(PhotCurMom.z());
+          // G4double CurExitangle= std::acos(PhotCurMom.z());
  
           // Plot the Angle of emission of the photon.
           // When there is no Raylegh scattering this is the
@@ -191,7 +191,7 @@ void RichTbSteppingAction::RichTbGenericHisto(const G4Step* aStep)
 
           const G4ThreeVector PhotOrgUnitMom =  
             aPhotTrack->GetVertexMomentumDirection();
-          G4double Ckv_angle= acos(PhotOrgUnitMom.z());
+          G4double Ckv_angle= std::acos(PhotOrgUnitMom.z());
 
           analysis->getfhistoCkvProdSmall()->fill(Ckv_angle);
       

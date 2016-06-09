@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.2 2003/11/03 03:27:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4WrapperProcess.hh,v 1.3 2004/11/07 01:41:10 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -138,13 +138,13 @@ class G4WrapperProcess  :public G4VProcess
       // function. Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
+      virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 				       const G4String& directory, 
 				       G4bool          ascii = false); 
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
-      virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
+      virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
 					   const G4String& directory, 
 				           G4bool          ascii = false);
       // Retrieve Physics from a file. 
@@ -262,7 +262,7 @@ inline
 }
 
 inline
- G4bool G4WrapperProcess::StorePhysicsTable(G4ParticleDefinition* particle,
+ G4bool G4WrapperProcess::StorePhysicsTable(const G4ParticleDefinition* particle,
 				       const G4String& directory, 
 				       G4bool          ascii)
 {
@@ -270,7 +270,7 @@ inline
 } 
  
 inline
- G4bool G4WrapperProcess::RetrievePhysicsTable( G4ParticleDefinition* particle,
+ G4bool G4WrapperProcess::RetrievePhysicsTable( const G4ParticleDefinition* particle,
 				       const G4String& directory, 
 				       G4bool          ascii)
 {

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.6 2004/08/03 11:31:43 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
-// $Id: RunAction.hh,v 1.4 2004/03/31 11:34:58 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,51 +36,45 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-
-#ifdef USE_AIDA
-namespace AIDA {
- class ITree;
- class IHistogram1D;
-} 
-#endif
+class DetectorConstruction;
+class PrimaryGeneratorAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
    ~RunAction();
 
   public:
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
     
-    void AddEdep(G4double val) { edep += val;}
     void CountTraks0(G4int nt) { NbOfTraks0 += nt;}
     void CountTraks1(G4int nt) { NbOfTraks1 += nt;}
     void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
-
-#ifdef USE_AIDA   
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-#endif
-            
-  private:  
-    void bookHisto();
-    void cleanHisto();
-          
+    
+    void AddEdep(G4double val)     { edep += val;}
+    void AddCsdaRange (G4double l) { csdaRange += l; csdaRange2 += l*l;};
+    void AddProjRange (G4double x) { projRange += x; projRange2 += x*x;};
+    void AddTransvDev (G4double y) { transvDev += y; transvDev2 += y*y;};    
+                                  
   private:
-    G4int NbOfTraks0, NbOfTraks1;
-    G4int NbOfSteps0, NbOfSteps1;
-    G4double edep;
-    ProcessesCount*   ProcCounter;   
-
-#ifdef USE_AIDA       
-    AIDA::ITree*        tree;
-    AIDA::IHistogram1D* histo[3];
-#endif
+    G4int           NbOfTraks0, NbOfTraks1;
+    G4int           NbOfSteps0, NbOfSteps1;
+    G4double        edep;
+    G4double        csdaRange, csdaRange2;             
+    G4double        projRange, projRange2;
+    G4double        transvDev, transvDev2;
+                     
+    DetectorConstruction*   detector;
+    PrimaryGeneratorAction* primary;
+    ProcessesCount* ProcCounter;   
+    HistoManager*   histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

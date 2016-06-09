@@ -30,18 +30,18 @@ G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4i
 {
   //count the radiuses, densities and fermi momenta with A and Z
   G4double oneThird = 1.0/3.0;
-  G4double r = radius0*pow(G4double(A), G4double(oneThird) );
+  G4double r = radius0*std::pow(G4double(A), G4double(oneThird) );
 
   if(numberOfLayers==1){ 
     radius.push_back(r);
 
-    G4double rho = G4double(A) / (4.0/3.0*pi*pow(r,3));
+    G4double rho = G4double(A) / (4.0/3.0*pi*std::pow(r,3));
     density.push_back(rho);
 
     G4double protonMass = G4Proton::Proton()->GetPDGMass();
     G4double neutronMass = G4Neutron::Neutron()->GetPDGMass();
-    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*pow(r,3));
-    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*pow(r,3));
+    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*std::pow(r,3));
+    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*std::pow(r,3));
 
     protonFermiEnergy.push_back(GetFermiEnergy(protonDensity, protonMass));
     neutronFermiEnergy.push_back(GetFermiEnergy(neutronDensity, neutronMass));
@@ -120,13 +120,13 @@ G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
 G4double G4BertiniRegionModel::GetFermiMomentum(G4double aDensity,
 					 G4double aMass){
   
-  return sqrt(2*aMass*GetFermiEnergy(aDensity, aMass));
+  return std::sqrt(2*aMass*GetFermiEnergy(aDensity, aMass));
 }
 
 G4double G4BertiniRegionModel::GetFermiEnergy(G4double aDensity,
 					 G4double aMass){
 G4double twoThirds = 2.0/3.0;
-    return (pow(hbar_Planck,2)/(2.0*aMass)*pow((3.0*pi2*aDensity), twoThirds)); 
+    return (std::pow(hbar_Planck,2)/(2.0*aMass)*std::pow((3.0*pi2*aDensity), twoThirds)); 
 }
 
 

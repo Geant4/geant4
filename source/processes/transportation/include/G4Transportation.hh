@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.9 2003/11/26 14:51:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Transportation.hh,v 1.10 2004/11/23 17:45:43 japost Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -92,10 +92,28 @@ class G4Transportation : public G4VProcess
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
        // Access/set the assistant class that Propagate in a Field.
 
-     void   SetVerboseLevel( G4int verboseLevel );
-     G4int  GetVerboseLevel() const;
+     inline void   SetVerboseLevel( G4int verboseLevel );
+     inline G4int  GetVerboseLevel() const;
        // Level of warnings regarding eg energy conservation
        // in field integration.
+
+     inline G4double GetThresholdWarningEnergy() const; 
+     inline G4double GetThresholdImportantEnergy() const; 
+     inline G4int GetThresholdTrials() const; 
+
+     inline void SetThresholdWarningEnergy( G4double newEnWarn ); 
+     inline void SetThresholdImportantEnergy( G4double newEnImp ); 
+     inline void SetThresholdTrials(G4int newMaxTrials ); 
+
+     // Get/Set parameters for killing loopers: 
+     //   Above 'important' energy a 'looping' particle in field will 
+     //   *NOT* be abandoned, except after fThresholdTrials attempts.
+     // Below Warning energy, no verbosity for looping particles is issued
+
+     inline G4double GetMaxEnergyKilled() const; 
+     inline G4double GetSumEnergyKilled() const;
+     inline void ResetKilledStatistics( G4int report = 1);      
+     // Statistics for tracks killed (currently due to looping in field)
 
   public:  // without description
 
@@ -156,6 +174,25 @@ class G4Transportation : public G4VProcess
 
      G4double endpointDistance;
 
+  // Thresholds for looping particles: 
+  // 
+     G4double fThreshold_Warning_Energy;     //  Warn above this energy
+     G4double fThreshold_Important_Energy;   //  Hesitate above this
+     G4int    fThresholdTrials;              //    for this no of trials
+       // Above 'important' energy a 'looping' particle in field will 
+       //   *NOT* be abandoned, except after fThresholdTrials attempts.
+     G4double fUnimportant_Energy;
+       //  Below this energy, no verbosity for looping particles is issued
+
+  // Counter for steps in which particle reports 'looping',
+  //   if it is above 'Important' Energy 
+     G4int    fNoLooperTrials; 
+  // Statistics for tracks abandoned
+     G4double fSumEnergyKilled;
+     G4double fMaxEnergyKilled;
+
+
+  // Verbosity 
      G4int    fVerboseLevel;
        // Verbosity level for warnings
        // eg about energy non-conservation in magnetic field.

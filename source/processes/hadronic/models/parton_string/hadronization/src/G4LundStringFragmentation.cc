@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.2 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LundStringFragmentation.cc,v 1.3 2004/12/07 13:50:14 gunter Exp $
+// GEANT4 tag $Name: geant4-07-00-cand-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -85,12 +85,12 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, 
     
     G4double Mt2 = Px*Px + Py*Py + Mass*Mass;
     G4double zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
-    G4double maxYf=(1-zOfMaxyf)/zOfMaxyf * exp(-alund*Mt2/zOfMaxyf);
+    G4double maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
     do
        {
        z = zmin + G4UniformRand()*(zmax-zmin);
-//       yf = pow(1. - z, blund)/z*exp(-alund*Mt2/z);
-	 yf = (1-z)/z * exp(-alund*Mt2/z);
+//       yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
+	 yf = (1-z)/z * std::exp(-alund*Mt2/z);
        } 
     while (G4UniformRand()*maxYf > yf); 
     return z;

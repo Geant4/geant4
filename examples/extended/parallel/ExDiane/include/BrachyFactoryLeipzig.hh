@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyFactoryLeipzig.hh,v 1.1 2004/05/25 07:32:35 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// GEANT4 tag $Name: geant4-07-00-cand-01 $
 //
 //    **********************************
 //    *                                *

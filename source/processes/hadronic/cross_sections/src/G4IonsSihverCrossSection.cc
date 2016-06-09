@@ -40,13 +40,13 @@ GetCrossSection(const G4DynamicParticle* aParticle,
  
    G4double one_third = 1.0 / 3.0;
 
-   G4double cubicrAt = pow ( G4double(At) , G4double(one_third) ); 
-   G4double cubicrAp = pow ( G4double(Ap) , G4double(one_third) );  
+   G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) ); 
+   G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
 
    G4double b0 = 1.581 - 0.876 * ( 1.0 / cubicrAp + 1.0 / cubicrAt );
 
    xsection = pi * square_r0 
-            * pow ( G4double(cubicrAp + cubicrAt - b0 * (  1.0 / cubicrAp + 1.0 / cubicrAt ) ), G4double(2) );
+            * std::pow ( G4double(cubicrAp + cubicrAt - b0 * (  1.0 / cubicrAp + 1.0 / cubicrAt ) ), G4double(2) );
   
    return xsection; 
 }

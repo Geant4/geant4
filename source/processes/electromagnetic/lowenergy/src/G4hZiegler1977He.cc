@@ -35,6 +35,7 @@
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 26/08/2004  V.Ivanchenko Fix a problem of effective charge
 //
 // Class Description: 
 //
@@ -207,25 +208,25 @@ G4double G4hZiegler1977He::ElectronicStoppingPower(G4double z,
 
   if ( energy < 1.0 ) {
     G4double slow  = a[i][0] ;
-    G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
+    G4double shigh = std::log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
       * a[i][2]*1000.0 ;
     ionloss = slow*shigh / (slow + shigh) ; 
-    ionloss *= sqrt(energy) ; 
+    ionloss *= std::sqrt(energy) ; 
     
   } else if ( energy < 10000.0 ) {
-    G4double slow  = a[i][0] * pow(energy, a[i][1]) ;
+    G4double slow  = a[i][0] * std::pow(energy, a[i][1]) ;
     G4double e = energy/1000.0 ;
-    G4double shigh = log( 1.0 + a[i][3]/e + a[i][4]*e ) * a[i][2]/e ;
+    G4double shigh = std::log( 1.0 + a[i][3]/e + a[i][4]*e ) * a[i][2]/e ;
     ionloss = slow*shigh / (slow + shigh) ; 
     
   } else {
-    G4double le = log(1000.0/energy) ;
-    ionloss = exp( a[i][5] + a[i][6]*le + a[i][7]*le*le + a[i][8]*le*le*le) ;
+    G4double le = std::log(1000.0/energy) ;
+    ionloss = std::exp( a[i][5] + a[i][6]*le + a[i][7]*le*le + a[i][8]*le*le*le) ;
   }
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
-  ionloss /= HeEffChargeSquare(z, energy*keV) ; 
+  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass); 
   
   return ionloss;
 }

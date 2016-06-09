@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.8 2004/05/27 10:33:12 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.9 2004/11/22 16:51:39 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
@@ -70,7 +70,7 @@ void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   else if(value == "Interplanetary") 
     { 
       primaryFactory2 ->  SetMoon(false);
-      primaryFactory2 -> GeneratePrimaries(anEvent);    
+      primaryFactory2 -> GeneratePrimaries(anEvent);   
      }
   else if(value == "Moon")        
     {
@@ -103,4 +103,12 @@ void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
     }
 
   else G4cout << "This Generator is not defined!" <<G4endl;  
+}
+void RemSimPrimaryGeneratorAction::SetNewParticle(G4String valueParticle)
+{
+ if(value == "Interplanetary" || "Moon") 
+    primaryFactory2 -> SetParticle(valueParticle); 
+
+ if(value == "Basic") 
+       primaryFactory1 -> SetParticle(valueParticle);
 }

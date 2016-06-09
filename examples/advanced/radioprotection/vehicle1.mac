@@ -4,16 +4,13 @@
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-#
-#Standard process for p, alpha and ions
-#/physics/addPhysics ion-standard
-#
-#LowEnergy process for p, alpha and ions
 /physics/addPhysics ion-ICRU
+#
 #### Add Hadronic Physics, muon physics and decay
-#/physics/addPhysics hadronic
-#/physics/addPhysics muon-standard
-#/physics/addPhysics decay
+/physics/addPhysics hadronic-bertini
+#/physics/addPhysics hadronic-binary
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
 ##############################
 #### Sets some default verbose
 /control/verbose 1
@@ -35,16 +32,18 @@
 ################
 # Generation of primary particles
 /gun/generator Basic
-/gun/particle proton
-/gun/energy 500. MeV
+#/tracking/verbose 1
+/gun/particleType proton
+/gun/energy 600. MeV
 # Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
-/configuration/AddSPE On
-/shielding/thickness 30. cm
+#/configuration/AddSPE On
+/shielding/thickness 10. cm
+#/analysis/formatFile xml
+#/analysis/formatFile hbook
 # Number of events
-/run/beamOn 2000
-
+/run/beamOn 50
 
 
 
