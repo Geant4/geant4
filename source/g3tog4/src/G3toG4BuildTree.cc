@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.cc,v 1.20 2006/06/29 18:13:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4BuildTree.cc,v 1.20 2006-06-29 18:13:24 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
 
@@ -61,7 +61,11 @@ void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
       G3MedTableEntry* mte = G3Med.get(curVTE->GetNmed());
       if (mte) material = mte->GetMaterial();
       if (!material) {
-        G4Exception("VTE " + curVTE->GetName() + " has not defined material!!");
+        G4String err_message = "VTE " + curVTE->GetName()
+                             + " has not defined material!!";
+        G4Exception("G3toG4BuildLVTree()", "G3toG40001",
+                    FatalException, err_message);
+        return;
       } 
 
       // logical volume
@@ -80,7 +84,11 @@ void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
       // ignore dummy vte's 
       // (this should be the only case when the vte is dummy but
       // is present in mother <-> daughters tree
-      G4Exception("VTE " + curVTE->GetName() + " has not defined solid!!");
+      G4String err_message = "VTE " + curVTE->GetName()
+                           + " has not defined solid!!";
+      G4Exception("G3toG4BuildLVTree()", "G3toG40002",
+                  FatalException, err_message);
+      return;
     }
   }  
   
@@ -111,18 +119,17 @@ void G3toG4BuildPVTree(G3VolTableEntry* curVTE)
      
             // get mother logical volume
             G4LogicalVolume* mothLV=0;
-            if (motherVTE) {
-              G4String motherName = motherVTE->GetName();    
-              if (!curVTE->FindMother(motherName)) continue;
-              if (curVTE->FindMother(motherName)->GetName() != motherName) {
-                // check consistency - tbr
-                G4Exception("G3toG4BuildTree: Inconsistent mother <-> daughter !!");
-              }
-              mothLV = motherVTE->GetLV();
-            }  
-            else {  	    
-              mothLV = 0;
-            }  
+            G4String motherName = motherVTE->GetName();    
+            if (!curVTE->FindMother(motherName)) continue;
+            if (curVTE->FindMother(motherName)->GetName() != motherName) {
+              // check consistency - tbr
+              G4String err_message =
+                       "G3toG4BuildTree: Inconsistent mother <-> daughter !!";
+              G4Exception("G3toG4BuildPVTree()", "G3toG40003",
+                          FatalException, err_message);
+              return;
+            }
+            mothLV = motherVTE->GetLV();
     
             // copy number
             // (in G3 numbering starts from 1 but in G4 from 0)

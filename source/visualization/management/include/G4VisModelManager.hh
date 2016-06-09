@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisModelManager.hh,v 1.4 2006/06/29 21:29:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisModelManager.hh,v 1.4 2006-06-29 21:29:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model manager. Manages models, associated
 // factories, messengers, command placement etc
@@ -71,6 +71,11 @@ public: // With description
   const std::vector<Factory*>& FactoryList() const;
 
 private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps Coverity happy.
+  G4VisModelManager (const G4VisModelManager&);
+  G4VisModelManager& operator = (const G4VisModelManager&);
 
   // Data members
   G4String fPlacement;

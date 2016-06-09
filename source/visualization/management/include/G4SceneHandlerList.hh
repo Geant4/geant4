@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SceneHandlerList.hh,v 1.8 2006/06/29 21:28:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SceneHandlerList.hh,v 1.8 2006-06-29 21:28:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  May 1996

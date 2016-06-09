@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSG.cc,v 1.2 2006/06/29 21:27:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4XXXSG.cc,v 1.2 2006-06-29 21:27:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  10th March 2005

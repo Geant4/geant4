@@ -41,6 +41,7 @@
  * ============================================================================
  */
 
+#include <cmath>
 #include <G4ThreeVector.hh>
 #include <G4LorentzVector.hh>
 #include "CexmcChargeExchangeReconstructor.hh"
@@ -51,20 +52,20 @@
 #include "CexmcProductionModel.hh"
 #include "CexmcRunManager.hh"
 #include "CexmcException.hh"
-#include "CexmcCommon.hh"
 
 
 CexmcChargeExchangeReconstructor::CexmcChargeExchangeReconstructor(
                             const CexmcProductionModel *  productionModel ) :
-    outputParticleMass( 0 ),  nucleusOutputParticleMass( 0 ),
+    outputParticleMass( 0 ), nucleusOutputParticleMass( 0 ),
     useTableMass( false ), useMassCut( false ), massCutOPCenter( 0 ),
     massCutNOPCenter( 0 ), massCutOPWidth( 0 ), massCutNOPWidth( 0 ),
     massCutEllipseAngle( 0 ), useAbsorbedEnergyCut( false ),
     absorbedEnergyCutCLCenter( 0 ), absorbedEnergyCutCRCenter( 0 ),
     absorbedEnergyCutCLWidth( 0 ), absorbedEnergyCutCRWidth( 0 ),
-    absorbedEnergyCutEllipseAngle( 0 ), hasMassCutTriggered( false ),
-    hasAbsorbedEnergyCutTriggered( false ), beamParticleIsInitialized( false ),
-    particleGun( NULL ), messenger( NULL )
+    absorbedEnergyCutEllipseAngle( 0 ), expectedMomentumAmp( -1 ),
+    edCollectionAlgorithm( CexmcCollectEDInAllCrystals ),
+    hasMassCutTriggered( false ), hasAbsorbedEnergyCutTriggered( false ),
+    beamParticleIsInitialized( false ), particleGun( NULL ), messenger( NULL )
 {
     if ( ! productionModel )
         throw CexmcException( CexmcWeirdException );
@@ -121,6 +122,9 @@ void  CexmcChargeExchangeReconstructor::Reconstruct(
         beamParticleIsInitialized = true;
     }
 
+    if ( edCollectionAlgorithm == CexmcCollectEDInAdjacentCrystals )
+        collectEDInAdjacentCrystals = true;
+
     ReconstructEntryPoints( edStore );
     if ( hasBasicTrigger )
         ReconstructTargetPoint();
@@ -135,6 +139,12 @@ void  CexmcChargeExchangeReconstructor::Reconstruct(
     G4double  cosTheAngle( std::cos( theAngle ) );
     G4double  calorimeterEDLeft( edStore->calorimeterEDLeft );
     G4double  calorimeterEDRight( edStore->calorimeterEDRight );
+
+    if ( edCollectionAlgorithm == CexmcCollectEDInAdjacentCrystals )
+    {
+        calorimeterEDLeft = calorimeterEDLeftAdjacent;
+        calorimeterEDRight = calorimeterEDRightAdjacent;
+    }
 
     //G4double  cosOutputParticleLAB(
         //( calorimeterEDLeft * cosAngleLeft +
@@ -152,17 +162,21 @@ void  CexmcChargeExchangeReconstructor::Reconstruct(
     opdpRightMomentum.setMag( calorimeterEDRight );
     G4ThreeVector    opMomentum( opdpLeftMomentum + opdpRightMomentum );
 
+    /* opMass will be used only in calculation of output particle's total
+     * energy, in other places outputParticleMass should be used instead */
     G4double         opMass( useTableMass ?
                              productionModelData.outputParticle->GetPDGMass() :
                              outputParticleMass );
-    G4double         opEnergy( std::sqrt(
-                                    opMomentum.mag2() + opMass * opMass ) );
+    /* the formula below is equivalent to
+     * calorimeterEDLeft + calorimeterEDRight if opMass = outputParticleMass */
+    G4double         opEnergy( std::sqrt( opMomentum.mag2() +
+                                          opMass * opMass ) );
     productionModelData.outputParticleLAB = G4LorentzVector( opMomentum,
                                                              opEnergy );
 
     G4ThreeVector  incidentParticleMomentum( particleGun->GetOrigDirection() );
-    G4double       incidentParticleMomentumAmp(
-                                            particleGun->GetOrigMomentumAmp() );
+    G4double       incidentParticleMomentumAmp( expectedMomentumAmp > 0 ?
+                    expectedMomentumAmp : particleGun->GetOrigMomentumAmp() );
     incidentParticleMomentum *= incidentParticleMomentumAmp;
 
     G4double       incidentParticlePDGMass(
@@ -179,6 +193,7 @@ void  CexmcChargeExchangeReconstructor::Reconstruct(
                         productionModelData.nucleusParticle->GetPDGMass() );
     productionModelData.nucleusParticleLAB = G4LorentzVector(
                         G4ThreeVector( 0, 0, 0 ), nucleusParticlePDGMass );
+
     G4LorentzVector  lVecSum( productionModelData.incidentParticleLAB +
                         productionModelData.nucleusParticleLAB );
     G4ThreeVector    boostVec( lVecSum.boostVector() );
@@ -200,19 +215,9 @@ void  CexmcChargeExchangeReconstructor::Reconstruct(
     productionModelData.outputParticleSCM.boost( -boostVec );
     productionModelData.nucleusOutputParticleSCM.boost( -boostVec );
 
-    G4double       edDelta2(
-                        std::pow( ( calorimeterEDLeft - calorimeterEDRight ) /
-                                  ( calorimeterEDLeft + calorimeterEDRight ),
-                                  2 ) );
-    G4double       outputParticleKinEnergy(
-                        std::sqrt( 2 * opMass * opMass / ( 1 - cosTheAngle ) /
-                                   ( 1 - edDelta2 ) ) - opMass );
     G4ThreeVector  nopMomentum( incidentParticleMomentum - opMomentum );
-    G4double       nopEnergy(
-                        std::sqrt( incidentParticleMomentum.mag2() +
-                                   incidentParticlePDGMass2 ) +
-                        nucleusParticlePDGMass -
-                        ( outputParticleKinEnergy + opMass ) );
+    G4double       nopEnergy( incidentParticleEnergy + nucleusParticlePDGMass -
+                              opEnergy );
     nucleusOutputParticleMass = std::sqrt( nopEnergy * nopEnergy -
                                            nopMomentum.mag2() );
 
@@ -290,5 +295,12 @@ G4bool  CexmcChargeExchangeReconstructor::HasFullTrigger( void ) const
         return false;
 
     return true;
+}
+
+
+void  CexmcChargeExchangeReconstructor::SetExpectedMomentumAmpDiff(
+                                                            G4double  value )
+{
+    expectedMomentumAmp = particleGun->GetOrigMomentumAmp() + value;
 }
 

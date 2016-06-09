@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2010/10/06 15:49:24 allison Exp $
+$Id: History,v 1.30 2010-10-06 15:49:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+11th November 2011  John Allison  (visXXX-V09-04-01)
+- G4XXXSGSceneHandler.cc: Fixed compiler warnings.
+
+10th November 2011  John Allison  (visXXX-V08-04-01 - note wrong V08!)
+- G4XXXSGSceneHandler/Viewer: Implemented simple ad hoc tree.
+- Removed include/tree.
+
+2nd June 2011  John Allison  (visXXX-V08-04-00)
+- Tagged
+
+23th January 2011 L.Garnier
+- GNUMakefile : Remove G4VIS_BUILD.gmk use
 
 6th October 2010  John Allison  (visXXX-V08-03-00)
 - G4XXXSGViewer.cc, G4XXXStoredViewer.cc:

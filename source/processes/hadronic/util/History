@@ -14,6 +14,50 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 Nov 2011  Gunter Folger              (hadr-util-V09-04-05)
+-------------------------------------------------------------
+- removed G4lrint(), G4lint(), and G4rint(); these are now in global
+
+15 Sep 2011  Gabriele Cosmo             (hadr-util-V09-04-04)
+-------------------------------------------------------------
+- Changed DLL export flag for symbols to G4HADRONIC_ALLOC_EXPORT.
+
+14 Sep 2011  Gunter Folger              (hadr-util-V09-04-03)
+-------------------------------------------------------------
+-  G4Nucleus.hh: put obsolete interface GetN/GetZ into ifndef block.
+    this allows to try to compile without the obsolete interface.
+	
+09 Sep 2011  Michael Kelsey             (hadr-util-V09-04-02)
+-------------------------------------------------------------
+- G4HadFinalState:  Remove AddSecondary(G4HadSecondary*) interface.  Improve
+  constness and add interfaces to merge two final states together.
+- G4HadSecondary:  Improve constness.
+
+NOTE:  These changes require modifications to a few packages:
+
+	CHIPS:      hadr-chips-inter-V09-04-03
+	Elastic:    hadr-cohe-V09-04-13
+	NeutronHP:  hadr-hpn-V09-04-23
+	Management: hadr-man-V09-04-12
+
+29 Aug 2011  Michael Kelsey             (hadr-util-V09-04-01)
+-------------------------------------------------------------
+- G4ReactionProduct:  Use G4Allocator to reduce memory churn.
+- GNUmakefile:  Add G4REACTIONPRODUCT_ALLOC_EXPORT flag.
+
+10 Aug 2011  Michael Kelsey             (hadr-util-V09-04-00)
+-------------------------------------------------------------
+- G4HadFinalState:  Store vector of values instead of pointers to reduce
+  memory churn.  Improve constness of argument passing and functions, and
+  reduce creation of temporary objects.  Drop unneeded staleness flag.
+
+ 6 Dec 2010  Dennis Wright              (hadr-util-V09-03-02)
+-------------------------------------------------------------
+- G4Nucleus::ChooseParameters : fix fall-through case in which element = 0:
+  make last element in list the default
+- G4HadronicWhiteBoard: fix uninitialized ptrs (theZ, theA, theE, thePx,
+    thePy, thePz)
+ 
 11 Nov 2010  Dennis Wright              (hadr-util-V09-03-01)
 -------------------------------------------------------------
 - G4HadronicWhiteBoard: fix uninitialized ptrs (theProjectile, theDef,

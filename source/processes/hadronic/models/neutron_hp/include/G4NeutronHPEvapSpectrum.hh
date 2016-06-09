@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEvapSpectrum.hh,v 1.10 2006/06/29 20:47:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPEvapSpectrum.hh,v 1.10 2006-06-29 20:47:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPEvapSpectrum_h
 #define G4NeutronHPEvapSpectrum_h 1

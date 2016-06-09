@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.5 2008/12/11 10:23:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceProperty.cc,v 1.5 2008-12-11 10:23:54 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

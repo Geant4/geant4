@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.cc,v 1.11 2006/06/29 19:07:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polymarker.cc,v 1.12 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  November 1996
@@ -34,6 +34,11 @@
 
 G4Polymarker::G4Polymarker ():
 fMarkerType (G4Polymarker::dots)
+{}
+
+G4Polymarker::G4Polymarker (const G4VMarker& marker):
+  G4VMarker (marker),
+  fMarkerType (G4Polymarker::dots)
 {}
 
 G4Polymarker::~G4Polymarker () {}
@@ -50,8 +55,7 @@ std::ostream& operator << (std::ostream& os, const G4Polymarker& marker) {
   default:
     os << "unrecognised"; break;
   }
-  os << "\n  ";
-  os << (G4VMarker) marker;
-  os << (G4Point3DList) marker;
+  os << "\n  " << (G4VMarker) marker;
+  os << "\n  " << (G4Point3DList) marker;
   return os;
 }

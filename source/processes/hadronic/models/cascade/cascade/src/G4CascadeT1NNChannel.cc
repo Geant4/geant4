@@ -23,10 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT1NNChannel.cc,v 1.3 2010/08/04 05:28:24 mkelsey Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeT1NNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110720  M. Kelsey -- Bugs in the very last 9-body final state for pp and nn
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadePPChannel.hh"
 #include "G4CascadeNNChannel.hh"
@@ -88,7 +92,7 @@ namespace {
     {pro,neu,pip,pip,pip,pip,pim,pim,pim},{pro,neu,pip,pip,pip,pim,pim,pi0,pi0},
     {pro,neu,pip,pip,pim,pi0,pi0,pi0,pi0},{pro,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
     {neu,neu,pip,pip,pip,pip,pim,pim,pi0},{neu,neu,pip,pip,pip,pim,pi0,pi0,pi0},
-    {neu,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}};
+    {neu,neu,pip,pip,pi0,pi0,pi0,pi0,pi0}};
 }
 
 namespace {
@@ -146,7 +150,7 @@ namespace {
     {pro,neu,pip,pip,pip,pim,pim,pim,pim},{pro,neu,pip,pip,pim,pim,pim,pi0,pi0},
     {pro,neu,pip,pim,pim,pi0,pi0,pi0,pi0},{pro,neu,pim,pi0,pi0,pi0,pi0,pi0,pi0},
     {pro,pro,pip,pip,pim,pim,pim,pim,pi0},{pro,pro,pip,pim,pim,pim,pi0,pi0,pi0},
-    {pro,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}};
+    {pro,pro,pim,pim,pi0,pi0,pi0,pi0,pi0}};
 }
 
 namespace {
@@ -645,9 +649,9 @@ namespace {
 G4CascadePPChannelData::data_t
 G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
-			     "ProtonProton");
+			     pro*pro, "ProtonProton");
 
 G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 			     nn8bfs, nn9bfs, ppCrossSections, ppTotXSec,
-			     "NeutronNeutron");
+			     neu*neu, "NeutronNeutron");

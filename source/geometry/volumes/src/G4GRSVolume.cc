@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.cc,v 1.10 2010/09/06 10:02:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GRSVolume.cc,v 1.10 2010-09-06 10:02:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4GRSVolume Implementation

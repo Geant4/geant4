@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.cc,v 1.14 2010/04/26 17:40:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PSTARStopping.cc,v 1.14 2010-04-26 17:40:34 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
 //
@@ -75,7 +75,7 @@ G4PSTARStopping::~G4PSTARStopping()
 
 G4int G4PSTARStopping:: GetIndex (const G4Material* mat)
 {  
-  if (mat == currentMaterial) return matIndex;
+  if (mat == currentMaterial) { return matIndex; }
   G4String matName = mat->GetName();
   for (G4int i=0; i<74; ++i){
     if (matName == name[i]){

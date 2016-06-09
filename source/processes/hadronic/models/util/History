@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2010/11/03 17:37:57 gunter Exp $
+$Id: History,v 1.45 2010-11-03 17:37:57 gunter Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,41 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22 Nov 2011 Gunter Folger                  hadr-mod-util-V09-04-04
+- fix leak in G4DecayKineticTracks.cc
+
+21 Nov 2011 Gunter Folger                  hadr-mod-util-V09-04-03
+- fix memory leak in G4DecayStrongResonances.cc.
+
+5 Aug 2011 Michael Kelsey                  hadr-mod-util-V09-04-02
+- G4Fancy3DNucleus:  Reduce memory churn by eliminating duplicate arrays of
+  G4Nucleon (using std::vector<G4Nucleon>, which changes base class), moving
+  the Helper buffer and other buffers into class data members.
+
+- G4Fancy3DNucleusHelper.hh:  Move Helper definition into separate file.
+
+- sources.cmake:  Add G4Fancy3DNucleusHelper.hh to list of HEADERS
+
+  Requires consistent changes in other packages:
+  	hadr-modman-V09-04-01
+  	hadr-mod-util-V09-04-02
+	had-partonstring-mgt-V09-04-01
+  	hadr-qgsm-V09-04-04
+  	had-theo-HE-V09-04-01
+
+27 Jul 2011 Michael Kelsey                  hadr-mod-util-V09-04-01
+- G4DecayKineticTracks, new utility class to be used by models'
+   ::Propagate() member function, scans input list and decays any
+   short-lived resonances in situ.  Parent particles are deleted from the
+   list following decay.
+
+- G4DecayStrongResonances: Replace most code with G4DecayKineticTracks.
+
+23 Feb. 2011 Vladimir Uzhinsky                  hadr-mod-util-V09-04-00
+-  New methods are added in G4Nucleon.hh for a creation of anti-nucleus.
+   They can be used to replace protons and neutrons into anti-protons
+   and anti-neutron, respectively.
 
 3 Nov 2010 Gunter Folger 			hadr-mod-util-V09-03-07
 - G4Nuclear...Density: migrate to integer A&Z

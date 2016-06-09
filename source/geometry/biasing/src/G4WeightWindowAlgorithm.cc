@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.11 2007/11/09 15:43:07 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.11 2007-11-09 15:43:07 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

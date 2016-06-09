@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.29 2010/05/27 14:22:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4WentzelVIModel.hh,v 1.29 2010-05-27 14:22:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +65,7 @@
 
 class G4ParticleDefinition;
 class G4LossTableManager;
+class G4NistManager;
 class G4Pow;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,6 +113,7 @@ private:
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
   G4LossTableManager*       theManager;
+  G4NistManager*            fNistManager;
   G4ParticleChangeForMSC*   fParticleChange;
   G4WentzelOKandVIxSection* wokvi;
   G4Pow*                    fG4pow;
@@ -175,11 +177,9 @@ inline
 G4double G4WentzelVIModel::GetLambda(G4double e)
 {
   G4double x;
-  if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
-  } else {
-    x = CrossSection(currentCouple,particle,e,
-		     (*currentCuts)[currentMaterialIndex]);
+  if(theLambdaTable) { x = ((*theLambdaTable)[currentMaterialIndex])->Value(e); } 
+  else { x = CrossSection(currentCouple,particle,e,
+			  (*currentCuts)[currentMaterialIndex]);
   }
   if(x > DBL_MIN) { x = 1./x; }
   else            { x = DBL_MAX; }

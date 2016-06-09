@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.11 2009/07/31 06:39:22 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParticleMessenger.cc,v 1.11 2009-07-31 06:39:22 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------

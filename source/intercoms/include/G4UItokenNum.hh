@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.9 2010/05/18 07:46:29 kmura Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4UItokenNum.hh,v 1.9 2010-05-18 07:46:29 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UItokenNum.hh
 
@@ -36,6 +36,7 @@
 
 enum  tokenNum
 {
+  NONE       = 0,
   IDENTIFIER = 257,
   CONSTINT   = 258,
   CONSTDOUBLE= 259,
@@ -59,13 +60,13 @@ enum  tokenNum
 
 typedef struct yystype
 {
-    tokenNum      type;
+    tokenNum type;
     G4double D;
     G4int    I;
     char     C;
     G4String S;
 
-    yystype() : D(0.0), I(0), C(' '), S("")
+    yystype() : type(NONE), D(0.0), I(0), C(' '), S("")
     {
     }
     G4int operator==(const yystype& right) const

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EmProcessSubType.hh,v 1.9 2008/12/18 13:01:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmProcessSubType.hh,v 1.9 2008-12-18 13:01:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -52,6 +51,7 @@ enum G4EmProcessSubType
   fAnnihilation = 5, 
   fAnnihilationToMuMu = 6,
   fAnnihilationToHadrons = 7,
+  fNuclearStopping = 8,
 
   fMultipleScattering = 10, 
   

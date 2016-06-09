@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.4 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PrimaryVertex.cc,v 1.4 2007-10-06 06:49:29 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -54,23 +54,92 @@ G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
   Z0=xyz0.z();
 }
 
-G4PrimaryVertex::~G4PrimaryVertex()
+G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex & right)
+:theParticle(0),theTail(0),
+ nextVertex(0),tailVertex(0),userInfo(0)
 {
-  if(theParticle != 0)
-  { delete theParticle; }
-  if(nextVertex != 0)
-  { delete nextVertex; }
-  if(userInfo != 0)
-  { delete userInfo; }
+  numberOfParticle = right.numberOfParticle;
+  *this = right;
 }
 
-const G4PrimaryVertex & 
-G4PrimaryVertex::operator=(const G4PrimaryVertex &)
-{ return *this; }
+G4PrimaryVertex::~G4PrimaryVertex()
+{
+  if(theParticle != 0) {
+    delete theParticle; 
+    theParticle = 0;
+  }
+  if(nextVertex != 0) { 
+    delete nextVertex; 
+    nextVertex =0;
+  }
+  if(userInfo != 0) { 
+    delete userInfo; 
+    userInfo = 0;
+  }
+}
+
+G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
+{ 
+  if (this != &right) {
+    X0       = right.X0;
+    Y0       = right.Y0;
+    Z0       = right.Z0;
+    T0       = right.T0;
+    Weight0  = right.Weight0;
+
+    numberOfParticle = 0;
+    if (theParticle !=0) delete theParticle;
+    theParticle =0;
+    theTail     =0;
+    if (right.theParticle !=0 ) {
+      theParticle = new G4PrimaryParticle(*(right.theParticle));
+      numberOfParticle += 1;
+      theTail = theParticle;
+      G4PrimaryParticle * np = theParticle->GetNext();
+      while (np !=0) {
+	numberOfParticle += 1;
+	theTail = np;
+	np = np->GetNext();
+      }
+    }
+    
+    if (nextVertex !=0 ) delete nextVertex;
+    nextVertex = 0;
+    tailVertex =0;
+    if (right.nextVertex !=0 ) {
+      nextVertex = new G4PrimaryVertex(*(right.nextVertex));
+      tailVertex = nextVertex;
+      G4PrimaryVertex* nv = nextVertex->GetNext();
+      while (nv !=0) {
+	tailVertex = nv;
+	nv = nv->GetNext();
+      }
+    }
+
+    // userInfo can not be copied
+    userInfo = 0;
+  }
+  return *this; 
+}
+
 G4int G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
 { return (this==&right); }
+
 G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 { return (this!=&right); }
+
+G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
+{ 
+  if( i >= 0 && i < numberOfParticle ) {
+    G4PrimaryParticle* particle = theParticle;
+    for( G4int j=0; j<i; j++ ){ 
+      if( particle == 0 ) return 0;
+      particle = particle->GetNext();
+    }
+    return particle;
+  } else { 
+    return 0; }
+}
 
 void G4PrimaryVertex::Print() const
 {
@@ -79,13 +148,13 @@ void G4PrimaryVertex::Print() const
 	 << Y0/mm << "[mm], " 
 	 << Z0/mm << "[mm], " 
 	 << T0/ns  << "[ns] )" 
-       << " Weight " << Weight0 << G4endl;
+	 << " Weight " << Weight0 << G4endl;
   if(userInfo!=0) userInfo->Print();
-  G4cout << "#### Primary particles" << G4endl;
-  G4PrimaryParticle* aPrim = theParticle;
-  if(aPrim != 0)
-  {
-    aPrim->Print();
-    aPrim = aPrim->GetNext();
+  G4cout << "  -- Primary particles :: " 
+	 << "   # of primaries =" << numberOfParticle << G4endl;
+  if( theParticle != 0)  theParticle->Print();
+  if (nextVertex !=0 ) {
+    G4cout << "Next Vertex " << G4endl;
+    nextVertex->Print();
   }
 }

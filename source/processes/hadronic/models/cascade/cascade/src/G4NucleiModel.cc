@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.cc,v 1.96 2010/12/15 07:41:17 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4NucleiModel.cc,v 1.93 2010/10/20 23:51:07 mkelsey Exp $
+// Geant4 tag: $Name:  $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Use G4ThreeVector for position
@@ -75,21 +75,39 @@
 // 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
 // 20101020  M. Kelsey -- Bug fixes to refactoring changes (5 Oct).  Back out
 //		worthToPropagate() changes for better regression testing.
+// 20101020  M. Kelsey -- Re-activate worthToPropagate() changes.
 // 20101119  M. Kelsey -- Hide "negative path" and "no partners" messages in
 //		verbosity.
+// 20110218  M. Kelsey -- Add crossSectionUnits and radiusUnits scale factors,
+//		use "theoretical" numbers for radii etc., multipled by scale
+//		factor; set scale factors using environment variables
+// 20110303  M. Kelsey -- Add comments why using fabs() with B.E. differences?
+// 20110321  M. Kelsey -- Replace strtof() with strtod() for envvar conversion
+// 20110321  M. Kelsey -- Use fm and fm^2 as default units, Per D. Wright
+//		(NOTE: Restored from original 20110318 commit)
+// 20110324  D. Wright -- Implement trailing effect
+// 20110324  M. Kelsey -- Move ::reset() here, as it has more code.
+// 20110519  M. Kelsey -- Used "rho" after assignment, instead of recomputing
+// 20110525  M. Kelsey -- Revert scale factor changes (undo 20110321 changes)
+// 20110617  M. Kelsey -- Apply scale factor to trailing-effect radius, make
+//		latter runtime adjustable (G4NUCMODEL_RAD_TRAILING)
+// 20110720  M. Kelsey -- Follow interface change for cross-section tables,
+//		eliminating switch blocks.
+// 20110806  M. Kelsey -- Reduce memory churn by pre-allocating buffers
+// 20110823  M. Kelsey -- Remove local cross-section tables entirely
+// 20110825  M. Kelsey -- Add comments regarding Fermi momentum scale, set of
+//		"best guess" parameter values
+// 20110831  M. Kelsey -- Make "best guess" parameters the defaults
+// 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
+//		and G4CascadParticle::print(ostream&)
+// 20111018  M. Kelsey -- Correct kaon potential to be positive, not negative
+// 20111107  M. Kelsey -- *** REVERT TO OLD NON-PHYSICAL PARAMETERS FOR 9.5 ***
 
 #include "G4NucleiModel.hh"
+#include "G4CascadeChannel.hh"
+#include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
-#include "G4CascadeNNChannel.hh"
-#include "G4CascadeNPChannel.hh"
-#include "G4CascadePPChannel.hh"
-#include "G4CascadePiMinusNChannel.hh"
-#include "G4CascadePiMinusPChannel.hh"
-#include "G4CascadePiPlusNChannel.hh"
-#include "G4CascadePiPlusPChannel.hh"
-#include "G4CascadePiZeroNChannel.hh"
-#include "G4CascadePiZeroPChannel.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
@@ -98,31 +116,78 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Neutron.hh"
+#include "G4ParticleLargerBeta.hh"
 #include "G4Proton.hh"
+#include <stdlib.h>
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-// Parameters for nuclear structure (actual vs. "should be" in fm and GeV)
-const G4double G4NucleiModel::skinDepth = 1.7234;	// 0.61 fm
-const G4double G4NucleiModel::radiusScale = 3.3836;	// 1.2 fm [*cbrt(A)]
-const G4double G4NucleiModel::radiusForSmall = 8.0;	// R_p = 0.8768 fm
-const G4double G4NucleiModel::fermiMomentum = 1.932;	// 0.61 GeV fm
+// For the best approximation to a physical-units model, set the following:
+//	setenv G4NUCMODEL_XSEC_SCALE   0.1
+//	setenv G4NUCMODEL_RAD_SCALE    1.0
+//	setenv G4NUCMODEL_RAD_2PAR     1
+//	setenv G4NUCMODEL_RAD_SMALL    1.992
+//	setenv G4NUCMODEL_RAD_ALPHA    0.84
+//	setenv G4NUCMODEL_FERMI_SCALE  0.685
+//	setenv G4NUCMODEL_RAD_TRAILING 1.2
+
+// Scaling factors for radii and cross-sections, currently different!
+const G4double G4NucleiModel::crossSectionUnits = 
+  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0)
+  : 1.0;
+
+#define OLD_RADIUS_UNITS (3.3836/1.2)
+const G4double G4NucleiModel::radiusUnits = 
+  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0)
+  : OLD_RADIUS_UNITS;
+
+const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
+
+// One- vs. two-parameter nuclear radius based on envvar
+// ==> radius = radiusScale*cbrt(A) + radiusScale2/cbrt(A)
+
+const G4double G4NucleiModel::radiusScale  = 
+  (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits;
+const G4double G4NucleiModel::radiusScale2 =
+  (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits;
+
+// NOTE:  Old code used R_small = 8.0 (~2.83*units), and R_alpha = 0.7*R_small
+// Published data suggests R_small ~ 1.992 fm, R_alpha = 0.84*R_small
+
+const G4double G4NucleiModel::radiusForSmall =
+  (getenv("G4NUCMODEL_RAD_SMALL") ? strtod(getenv("G4NUCMODEL_RAD_SMALL"),0)
+   : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
+
+const G4double G4NucleiModel::radScaleAlpha =
+  getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0)
+  : 0.70;
+
+// Scale factor relating Fermi momentum to density of states, units GeV.fm
+// NOTE:  Old code has 0.685*units GeV.fm, literature suggests 0.470 GeV.fm,
+//        but this gives too small momentum; old value gives <P_F> ~ 270 MeV
+const G4double G4NucleiModel::fermiMomentum = 
+  (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
+   : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
+
+// Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
+const G4double G4NucleiModel::R_nucleon = 
+  (getenv("G4NUCMODEL_RAD_TRAILING") ? strtod(getenv("G4NUCMODEL_RAD_TRAILING"),0)
+   : 0.0) * radiusUnits;
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
 const G4double G4NucleiModel::alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
 // Flat nuclear potentials for mesons and hyperons (GeV)
-const G4double G4NucleiModel::pion_vp = 0.007;
+const G4double G4NucleiModel::pion_vp       = 0.007;
 const G4double G4NucleiModel::pion_vp_small = 0.007;
-const G4double G4NucleiModel::kaon_vp = -0.015;		// WHY NEGATIVE?
-const G4double G4NucleiModel::hyperon_vp = 0.030;
+const G4double G4NucleiModel::kaon_vp       = 0.015;
+const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
-// FIXME:  We should not be using this!
-const G4double G4NucleiModel::piTimes4thirds = 4.189; // 4.188790204786;
+const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
 
 
 // Constructors
@@ -154,6 +219,21 @@ G4NucleiModel::~G4NucleiModel() {
 }
 
 
+// Initialize model state for new cascade
+
+void G4NucleiModel::reset(G4int nHitNeutrons, G4int nHitProtons,
+			  const std::vector<G4ThreeVector>* hitPoints) {
+  neutronNumberCurrent = neutronNumber - nHitNeutrons;
+  protonNumberCurrent  = protonNumber - nHitProtons;
+  
+  // zero or copy collision point array for trailing effect
+  if (!hitPoints || !hitPoints->empty()) collisionPts.clear();
+  else collisionPts = *hitPoints;
+}
+
+
+// Generate nuclear model parameters for given nucleus
+
 void G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
   generateModel(nuclei->getA(), nuclei->getZ());
 }
@@ -166,10 +246,8 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
 
   // If model already built, just return; otherwise intialize everything
   if (a == A && z == Z) {
-    if (verboseLevel > 1)
-      G4cout << " model already generated for A=" << a << ", Z=" << z << G4endl;
-
-    reset();		// Zeros out neutron/proton evaporates
+    if (verboseLevel > 1) G4cout << " model already generated" << z << G4endl;
+    reset();
     return;
   }
 
@@ -182,7 +260,21 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   protonNumber = Z;
   reset();
 
-  G4double nuclearRadius = radiusScale*G4cbrt(A);	// Nuclear radius
+  if (verboseLevel > 3) {
+    G4cout << "  crossSectionUnits = " << crossSectionUnits << G4endl
+	   << "  radiusUnits = " << radiusUnits << G4endl
+	   << "  skinDepth = " << skinDepth << G4endl
+	   << "  radiusScale = " << radiusScale << G4endl
+	   << "  radiusScale2 = " << radiusScale2 << G4endl
+	   << "  radiusForSmall = " << radiusForSmall << G4endl
+	   << "  radScaleAlpha  = " << radScaleAlpha << G4endl
+	   << "  fermiMomentum = " << fermiMomentum << G4endl
+	   << "  piTimes4thirds = " << piTimes4thirds << G4endl;
+  }
+
+  G4double nuclearRadius;		// Nuclear radius computed from A
+  if (A>4) nuclearRadius = radiusScale*G4cbrt(A) + radiusScale2/G4cbrt(A);
+  else     nuclearRadius = radiusForSmall * (A==4 ? radScaleAlpha : 1.);
 
   // This will be used to pre-allocate lots of arrays below
   number_of_zones = (A < 5) ? 1 : (A < 100) ? 3 : 6;
@@ -211,7 +303,9 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   zone_potentials.push_back(kp);
   zone_potentials.push_back(hp);
 
-  nuclei_radius = zone_radii[number_of_zones-1];
+  nuclei_radius = zone_radii.back();
+
+  if (verboseLevel > 3) printModel();
 }
 
 
@@ -224,6 +318,7 @@ void G4NucleiModel::fillBindingEnergies() {
   G4double dm = bindingEnergy(A,Z);
 
   // Binding energy differences for proton and neutron loss, respectively
+  // FIXME:  Why is fabs() used here instead of the signed difference?
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z-1)-dm)/GeV);
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z)-dm)/GeV);
 }
@@ -238,9 +333,7 @@ G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
   G4double skinDecay = std::exp(-skinRatio);    
 
   if (A < 5) {			// Light ions treated as simple balls
-    G4double smallRad = radiusForSmall;
-    if (A == 4) smallRad *= 0.7;	// Alpha is most tightly bound
-    zone_radii.push_back(smallRad);
+    zone_radii.push_back(nuclearRadius);
     ur[0] = 0.;
     ur[1] = 1.;
   } else if (A < 12) {		// Small nuclei have Gaussian potential
@@ -310,6 +403,8 @@ void G4NucleiModel::fillPotentials(G4int type, G4double tot_vol) {
   if (type != proton && type != neutron) return;
 
   const G4double mass = G4InuclElementaryParticle::getParticleMass(type);
+
+  // FIXME:  This is the fabs() binding energy difference, not signed
   const G4double dm = binding_energies[type-1];
 
   rod.clear(); rod.reserve(number_of_zones);
@@ -381,7 +476,7 @@ G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
   if (verboseLevel > 2 && itry == itry_max)
     G4cout << " zoneIntegralWoodsSaxon-> n iter " << itry_max << G4endl;
 
-  G4double skinDepth3 = 5.11864; //*** skinDepth*skinDepth*skinDepth;
+  G4double skinDepth3 = skinDepth*skinDepth*skinDepth;
 
   return skinDepth3 * (fun + skinRatio*skinRatio*std::log((1.0 + std::exp(-r1)) / (1.0 + std::exp(-r2))));
 }
@@ -568,7 +663,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   if (path < -small) { 			// something wrong
     if (verboseLevel)
       G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
-
     return;
   }
 
@@ -623,8 +717,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 
     if (spath < path) {
       if (verboseLevel > 3) {
-	G4cout << " adding partner[" << thePartners.size() << "]: ";
-	particle.printParticle();
+	G4cout << " adding partner[" << thePartners.size() << "]: "
+	       << particle << G4endl;
       }
       thePartners.push_back(partner(particle, spath));
     }
@@ -636,8 +730,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   
   if (cparticle.getParticle().pion()) { // absorption possible
     if (verboseLevel > 2) {
-      G4cout << " trying quasi-deuterons with bullet: ";
-      cparticle.getParticle().printParticle();
+      G4cout << " trying quasi-deuterons with bullet: "
+	     << cparticle.getParticle() << G4endl;
     }
 
     // Initialize buffers for quasi-deuteron results
@@ -666,10 +760,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " ptype=" << ptype << " using pp target" << G4endl;
-	ppd.printParticle();
-      }
+      if (verboseLevel > 2)
+	G4cout << " ptype=" << ptype << " using pp target\n" << ppd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype);
       abs_sec *= nucleon_densities[0][zone] * nucleon_densities[0][zone]*
@@ -690,10 +782,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " using np target" << G4endl;
-	npd.printParticle();
-      }
+      if (verboseLevel > 2) 
+	G4cout << " ptype=" << ptype << " using np target\n" << npd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype); 
       abs_sec *= pn_spec * nucleon_densities[0][zone] * nucleon_densities[1][zone] *
@@ -714,10 +804,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " ptype=" << ptype << " using nn target" << G4endl;
-	nnd.printParticle();
-      }
+      if (verboseLevel > 2)
+	G4cout << " ptype=" << ptype << " using nn target\n" << nnd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype); 
       abs_sec *= nucleon_densities[1][zone] * nucleon_densities[1][zone] *
@@ -786,16 +874,14 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 }
 
 
-const std::vector<G4CascadParticle>&
-G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
-                                    G4ElementaryParticleCollider* theElementaryParticleCollider) {
+void G4NucleiModel::
+generateParticleFate(G4CascadParticle& cparticle,
+		     G4ElementaryParticleCollider* theEPCollider,
+		     std::vector<G4CascadParticle>& outgoing_cparticles) {
   if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
-  if (verboseLevel > 2) {
-    G4cout << " cparticle: ";
-    cparticle.print();
-  }
+  if (verboseLevel > 2) G4cout << " cparticle: " << cparticle << G4endl;
 
   // Create four-vector checking
 #ifdef G4CASCADE_CHECK_ECONS
@@ -810,8 +896,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     if (verboseLevel)
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
-
-    return outgoing_cparticles;
+    return;
   }
 
   G4int npart = thePartners.size();	// Last item is a total-path placeholder
@@ -822,10 +907,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     boundaryTransition(cparticle);
     outgoing_cparticles.push_back(cparticle);
     
-    if (verboseLevel > 2) {
-      G4cout << " next zone " << G4endl;
-      cparticle.print();
-    }
+    if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
   } else {			// there are possible interactions
     if (verboseLevel > 1)
       G4cout << " processing " << npart-1 << " possible interactions" << G4endl;
@@ -847,7 +929,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       }
 
       EPCoutput.reset();
-      theElementaryParticleCollider->collide(&bullet, &target, EPCoutput);
+      theEPCollider->collide(&bullet, &target, EPCoutput);
       
       if (verboseLevel > 2) {
 	EPCoutput.printCollisionOutput();
@@ -857,23 +939,32 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 #endif
       }
 
-      // Don't need to copy list, as "output" isn't changed again below
-      const std::vector<G4InuclElementaryParticle>& outgoing_particles = 
+      // Get list of outgoing particles for evaluation
+      std::vector<G4InuclElementaryParticle>& outgoing_particles = 
 	EPCoutput.getOutgoingParticles();
       
       if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
 
-      // Successful interaction, add results to output list
+      // Trailing effect: reject interaction at previously hit nucleon
       cparticle.propagateAlongThePath(thePartners[i].second);
       G4ThreeVector new_position = cparticle.getPosition();
+
+      if (!passTrailing(new_position)) continue;
+      collisionPts.push_back(new_position);
+
+      // Sort particles according to beta (fastest first)
+      std::sort(outgoing_particles.begin(), outgoing_particles.end(),
+                G4ParticleLargerBeta() );
 
       if (verboseLevel > 2)
 	G4cout << " adding " << outgoing_particles.size()
 	       << " output particles" << G4endl;
-      
+
+      // NOTE:  Embedded temporary is optimized away (no copying gets done)
       for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-	G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
-	outgoing_cparticles.push_back(temp);
+	outgoing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
+						       new_position, zone,
+						       0.0, 0));
       }
       
       no_interaction = false;
@@ -950,7 +1041,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     }
   }	// if (npart == 1) [else]
 
-  return outgoing_cparticles;
+  return;
 }
 
 G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
@@ -977,6 +1068,27 @@ G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& pa
   }
   return true; 
 }
+
+
+// Test here for trailing effect: loop over all previous collision
+// locations and test for d > R_nucleon
+
+G4bool G4NucleiModel::passTrailing(const G4ThreeVector& hit_position) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4NucleiModel::passTrailing " << hit_position << G4endl;
+
+  G4double dist;
+  for (G4int i = 0; i < G4int(collisionPts.size() ); i++) {
+    dist = (collisionPts[i] - hit_position).mag();
+    if (verboseLevel > 2) G4cout << " dist " << dist << G4endl;
+    if (dist < R_nucleon) {
+      if (verboseLevel > 2) G4cout << " rejected by Trailing" << G4endl;
+      return false;
+    }
+  }
+  return true;		// New point far enough away to be used
+}
+
 
 void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   if (verboseLevel > 1) {
@@ -1049,19 +1161,18 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
 
   G4bool worth = true;
 
-  // NOTE:  Temporarily backing out changes flagged "***" below
-
   if (cparticle.reflectedNow()) {	// Just reflected -- keep going?
     G4int zone = cparticle.getCurrentZone();
     G4int ip = cparticle.getParticle().type();
 
+    // NOTE:  Temporarily backing out use of potential for non-nucleons
     G4double ekin_cut = (cparticle.getParticle().nucleon()) ?
-      getFermiKinetic(ip, zone) : 0.;	//*** getPotential(ip, zone);
+      getFermiKinetic(ip, zone) : 0.; //*** getPotential(ip, zone);
 
     worth = cparticle.getParticle().getKineticEnergy()/ekin_scale > ekin_cut;
 
     if (verboseLevel > 3) {
-      G4cout //*** << " type=" << ip
+      G4cout << " type=" << ip
 	     << " ekin=" << cparticle.getParticle().getKineticEnergy()
 	     << " potential=" << ekin_cut
 	     << " : worth? " << worth << G4endl;
@@ -1112,7 +1223,7 @@ G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
 
   G4CascadParticle cpart(*particle, pos, number_of_zones, large, 0);
 
-  if (verboseLevel > 2) cpart.print();
+  if (verboseLevel > 2) G4cout << cpart << G4endl;
 
   return cpart;
 }
@@ -1227,7 +1338,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		  u = fmax * inuclRndm();
 		  rho = std::sqrt(s) * std::exp(-s);
 
-		  if (std::sqrt(s) * std::exp(-s) > u && s < s3max) {
+		  if (rho > u && s < s3max) {
 		    s = r0forAeq3 * std::sqrt(s);
 		    coord1 = generateWithRandomAngles(s).vect();
 		    coordinates.push_back(coord1);
@@ -1505,11 +1616,12 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
     G4int ip(0);
 
     G4cout << " cascad particles: " << casparticles.size() << G4endl;
-    for(ip = 0; ip < G4int(casparticles.size()); ip++) casparticles[ip].print();
+    for(ip = 0; ip < G4int(casparticles.size()); ip++)
+      G4cout << casparticles[ip] << G4endl;
 
     G4cout << " outgoing particles: " << particles.size() << G4endl;
     for(ip = 0; ip < G4int(particles.size()); ip++)
-      particles[ip].printParticle();
+      G4cout << particles[ip] << G4endl;
   }
 
   return;	// Buffer has been filled
@@ -1522,9 +1634,6 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
     return 0.;
   }
 
-  // was 0.2 since the beginning, then changed to 1.0 
-  // now 0.1 to convert from mb to fm**2
-  const G4double corr_fac = 1.0;
   G4double csec = 0.0;
   
   if (ke < 0.3) {
@@ -1537,12 +1646,10 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
   if (csec < 0.0) csec = 0.0;
 
   if (verboseLevel > 2) {
-    G4cout << " ekin " << ke << " abs. csec " << corr_fac * csec << G4endl;   
+    G4cout << " ekin " << ke << " abs. csec " << csec << " mb" << G4endl;   
   }
 
-  csec *= corr_fac;
-
-  return csec;
+  return crossSectionUnits * csec;
 }
 
 G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
@@ -1555,88 +1662,11 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
 
   static G4CascadeInterpolator<NBINS> interp(keScale);
 
-  // Pion and nucleon scattering cross-sections are available elsewhere
-  switch (rtype) {
-  case pro*pro: return G4CascadePPChannel::getCrossSection(ke); break;
-  case pro*neu: return G4CascadeNPChannel::getCrossSection(ke); break;
-  case pip*pro: return G4CascadePiPlusPChannel::getCrossSection(ke); break;
-  case neu*neu: return G4CascadeNNChannel::getCrossSection(ke); break;
-  case pim*pro: return G4CascadePiMinusPChannel::getCrossSection(ke); break;
-  case pip*neu: return G4CascadePiPlusNChannel::getCrossSection(ke); break;
-  case pi0*pro: return G4CascadePiZeroPChannel::getCrossSection(ke); break;
-  case pim*neu: return G4CascadePiMinusNChannel::getCrossSection(ke); break;
-  case pi0*neu: return G4CascadePiZeroNChannel::getCrossSection(ke); break;
-    // Remaining channels are handled locally until arrays are moved
-  case kpl*pro:			     
-  case k0*neu:  return interp.interpolate(ke, kpPtot); break;
-  case kmi*pro:			     
-  case k0b*neu: return interp.interpolate(ke, kmPtot); break;
-  case kpl*neu:			     
-  case k0*pro:  return interp.interpolate(ke, kpNtot); break;
-  case kmi*neu:			     
-  case k0b*pro: return interp.interpolate(ke, kmNtot); break;
-  case lam*pro:			     
-  case lam*neu:			     
-  case s0*pro:			     
-  case s0*neu:  return interp.interpolate(ke, lPtot); break;
-  case sp*pro:			     
-  case sm*neu:  return interp.interpolate(ke, spPtot); break;
-  case sm*pro:			     
-  case sp*neu:  return interp.interpolate(ke, smPtot); break;
-  case xi0*pro:			     
-  case xim*neu: return interp.interpolate(ke, xi0Ptot); break;
-  case xim*pro:			     
-  case xi0*neu: return interp.interpolate(ke, ximPtot); break;
-  default:
-    G4cout << " unknown collison type = " << rtype << G4endl; 
-  }
+  // Pion and nucleon scattering cross-sections are available from tables
+  G4double xsec = 0.;
+  const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(rtype);
+  if (xsecTable) xsec = xsecTable->getCrossSection(ke);
+  else G4cerr << " unknown collison type = " << rtype << G4endl; 
 
-  return 0.;		// Failure
+  return (crossSectionUnits * xsec);
 }
-
-// Initialize cross-section interpolation tables
-
-const G4double G4NucleiModel::kpPtot[30] = {
-   10.0,  10.34, 10.44, 10.61, 10.82, 11.09, 11.43, 11.71, 11.75, 11.8,
-   11.98, 12.28, 12.56, 12.48, 12.67, 14.48, 15.92, 17.83, 17.93, 17.88,
-   17.46, 17.3,  17.3,  17.4,  17.4,  17.4,  17.4,  17.5,  17.7,  17.8};
-
-const G4double G4NucleiModel::kpNtot[30] = {
-    6.64,  6.99,  7.09,  7.27,  7.48,  7.75,  8.1,  8.49,  8.84, 9.31,
-    9.8,  10.62, 11.64, 13.08, 14.88, 16.60, 17.5, 18.68, 18.68, 18.29,
-   17.81, 17.6,  17.6,  17.6,  17.6,  17.6,  17.7, 17.8,  17.9,  18.0};
-
-const G4double G4NucleiModel::kmPtot[30] = {
- 1997.0, 1681.41, 1586.74, 1428.95, 1239.59, 987.12, 671.54, 377.85, 247.30, 75.54,
-    71.08, 54.74,   44.08,   44.38,   45.45,  45.07,  41.04,  35.75,  33.22, 30.08,
-    27.61, 26.5,    25.2,    24.0,    23.4,   22.8,   22.0,   21.3,   21.0,  20.9};
-
-const G4double G4NucleiModel::kmNtot[30] = {
-    6.15,  6.93,  7.16,  7.55,  8.02,  8.65,  9.43, 10.36, 11.34, 12.64,
-   14.01, 16.45, 19.32, 23.0,  27.6,  30.92, 29.78, 28.28, 25.62, 23.1,
-   22.31, 21.9,  21.73, 21.94, 21.23, 20.5,  20.4,  20.2,  20.1,  20.0};
-
-const G4double G4NucleiModel::lPtot[30] = {
-  300.0, 249.07, 233.8, 208.33, 177.78, 137.04, 86.11, 41.41, 28.86, 12.35,
-   13.82, 16.76, 20.68,  25.9,   30.37,  31.56, 32.83, 34.5,  34.91, 35.11,
-   35.03, 36.06, 35.13,  35.01,  35.0,   35.0,  35.0,  35.0,  35.0,  35.0};
-
-const G4double G4NucleiModel::spPtot[30] = {
-  150.0, 146.0, 144.8, 142.8, 140.4, 137.2, 133.2, 127.6, 120.0, 110.0,
-   98.06, 84.16, 72.28, 56.58, 43.22, 40.44, 36.14, 30.48, 31.53, 31.92,
-   29.25, 28.37, 29.81, 33.15, 33.95, 34.0,  34.0,  34.0,  34.0,  34.0};
-
-const G4double G4NucleiModel::smPtot[30] = {
-  937.0, 788.14, 743.48, 669.05, 579.74, 460.65, 311.79, 183.33, 153.65, 114.6,
-  105.18, 89.54,  70.58,  45.5,   32.17,  32.54,  32.95,  33.49,  33.55,  33.87,
-   34.02, 34.29,  33.93,  33.88,  34.0,   34.0,   34.0,   34.0,   34.0,   34.0};
-
-const G4double G4NucleiModel::xi0Ptot[30] = {
-  16.0,  14.72, 14.34, 13.7,  12.93, 11.9,  10.62, 9.29, 8.3,   7.0,
-   7.96,  9.56, 11.48, 14.04, 19.22, 25.29, 29.4, 34.8, 34.32, 33.33,
-  31.89, 29.55, 27.89, 21.43, 17.0,  16.0,  16.0, 16.0, 16.0,  16.0};
-
-const G4double G4NucleiModel::ximPtot[30] = {
-  33.0,  32.5,  32.35, 32.1,  31.8,  31.4,  30.9, 30.2, 29.25, 28.0,
-  26.5,  24.6,  22.8,  20.78, 18.22, 19.95, 21.7, 24.0, 24.74, 25.95,
-  27.59, 27.54, 23.16, 17.43, 12.94, 12.0,  12.0, 12.0, 12.0,  12.0};

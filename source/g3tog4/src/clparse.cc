@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.19 2008/11/17 08:33:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: clparse.cc,v 1.19 2008-11-17 08:33:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
 // added G3SensVol

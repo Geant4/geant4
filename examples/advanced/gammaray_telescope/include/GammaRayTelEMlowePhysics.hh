@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEMlowePhysics.hh,v 1.1 2009/11/18 15:57:21 flongo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: GammaRayTelEMlowePhysics.hh,v 1.1 2009-11-18 15:57:21 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

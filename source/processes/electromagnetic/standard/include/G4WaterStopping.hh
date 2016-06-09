@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.hh,v 1.8 2010/04/26 17:22:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4WaterStopping.hh,v 1.8 2010-04-26 17:22:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4WaterStopping_h
 #define G4WaterStopping_h 1

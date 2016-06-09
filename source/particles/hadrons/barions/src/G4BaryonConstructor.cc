@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BaryonConstructor.cc,v 1.4 2006/06/29 19:16:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BaryonConstructor.cc,v 1.4 2006-06-29 19:16:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -73,6 +73,23 @@
 #include "G4AntiXicPlus.hh"
 #include "G4AntiXicZero.hh"
 #include "G4AntiOmegacZero.hh"
+
+#include "G4Lambdab.hh"
+#include "G4SigmabPlus.hh"
+#include "G4SigmabZero.hh"
+#include "G4SigmabMinus.hh"
+#include "G4XibZero.hh"
+#include "G4XibMinus.hh"
+#include "G4OmegabMinus.hh"
+
+#include "G4AntiLambdab.hh"
+#include "G4AntiSigmabPlus.hh"
+#include "G4AntiSigmabZero.hh"
+#include "G4AntiSigmabMinus.hh"
+#include "G4AntiXibZero.hh"
+#include "G4AntiXibMinus.hh"
+#include "G4AntiOmegabMinus.hh"
+
 
 G4BaryonConstructor::G4BaryonConstructor()
 {
@@ -135,4 +152,20 @@ void G4BaryonConstructor::ConstructCharmBaryons()
 
 void G4BaryonConstructor::ConstructBottomBaryons()
 {
+  G4Lambdab::LambdabDefinition();
+  G4SigmabPlus::SigmabPlusDefinition();
+  G4SigmabZero::SigmabZeroDefinition();
+  G4SigmabMinus::SigmabMinusDefinition();
+  G4XibZero::XibZeroDefinition();
+  G4XibMinus::XibMinusDefinition();
+  G4OmegabMinus::OmegabMinusDefinition();
+
+  G4AntiLambdab::AntiLambdabDefinition();
+  G4AntiSigmabPlus::AntiSigmabPlusDefinition();
+  G4AntiSigmabZero::AntiSigmabZeroDefinition();
+  G4AntiSigmabMinus::AntiSigmabMinusDefinition();
+  G4AntiXibZero::AntiXibZeroDefinition();
+  G4AntiXibMinus::AntiXibMinusDefinition();
+  G4AntiOmegabMinus::AntiOmegabMinusDefinition();
+
 }

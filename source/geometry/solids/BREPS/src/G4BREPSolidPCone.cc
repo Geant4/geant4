@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.43 2010/10/20 09:14:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BREPSolidPCone.cc,v 1.43 2010-10-20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -211,7 +211,7 @@ void G4BREPSolidPCone::InitializePCone()
   if( opening_angle < 2*pi-perMillion )
   {
     G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-       "NotImplemented", FatalException,
+       "GeomSolids0001", FatalException,
        "Sorry, phi-section not supported yet, try to use G4Polycone instead!");
   }
 
@@ -224,7 +224,7 @@ void G4BREPSolidPCone::InitializePCone()
   if(  ((RMIN[0] == 0)              && (RMAX[0] == 0))             || 
        ((RMIN[num_z_planes-1] == 0) && (RMAX[num_z_planes-1] == 0))   )
       G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                  "InvalidSetup", FatalException,
+                  "GeomSolids0002", FatalException,
                   "RMIN at the extremities cannot be 0 when RMAX=0 !");  
   
   // only RMAX[0] and RMAX[num_z_planes-1] can be = 0
@@ -232,7 +232,7 @@ void G4BREPSolidPCone::InitializePCone()
   for(a = 1; a < num_z_planes-1; a++)
     if (RMAX[a] == 0)
       G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                  "InvalidSetup", FatalException,
+                  "GeomSolids0002", FatalException,
                   "RMAX inside the solid cannot be 0 !");
   
   // RMAX[a] must be greater than RMIN[a]
@@ -240,13 +240,13 @@ void G4BREPSolidPCone::InitializePCone()
   for(a = 1; a < num_z_planes-1; a++)
     if (RMIN[a] >= RMAX[a])
       G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                  "InvalidSetup", FatalException,
+                  "GeomSolids0002", FatalException,
                   "RMAX must be greater than RMIN in the middle Z planes !");
   
   if( (RMIN[num_z_planes-1] > RMAX[num_z_planes-1] )
       || (RMIN[0] > RMAX[0]) ) 
       G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                  "InvalidSetup", FatalException,
+                  "GeomSolids0002", FatalException,
                   "RMAX must be greater or equal than RMIN at the ends !");
 
   // Create surfaces
@@ -299,15 +299,14 @@ void G4BREPSolidPCone::InitializePCone()
         //
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] )
         {
-          std::ostringstream os;
-          os << "The values of RMIN[" << a
-             << "] & RMAX[" << a+1 << "] or RMAX[" << a
-             << "] & RMIN[" << a+1 << "] "
-             << "generate an invalid configuration for solid: "
-             << GetName().c_str() << "!" << G4endl;
-          G4String message = os.str();
+          std::ostringstream message;
+          message << "The values of RMIN[" << a
+                  << "] & RMAX[" << a+1 << "] or RMAX[" << a
+                  << "] & RMIN[" << a+1 << "]" << G4endl
+                  << "generate an invalid configuration for solid: "
+                  << GetName() << "!";
           G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
-                      "InvalidSetup", FatalException, message );
+                      "GeomSolids0002", FatalException, message );
         }
         
         ESurfaceSense UpSurfSense, LowSurfSense;
@@ -414,9 +413,12 @@ void G4BREPSolidPCone::InitializePCone()
         // }
         // else
         // {
-        //   G4cerr << "Error in construction of G4BREPSolidPCone. \n"
-        //          << "Exactly the same z, rmin and rmax given for \n"
-        //          << "consecutive indices, " << a << " and " << a+1 << G4endl;
+        //   std::ostringstream message;
+        //   message << "Error in construction." << G4endl
+        //           << "Exactly the same z, rmin and rmax given for "
+        //           << "consecutive indices, " << a << " and " << a+1;
+        //   G4Exception("G4BREPSolidPCone::InitializePCone()",
+        //               "GeomSolids1002", JustWarning, message);
         //   continue; 
         // }
         if( RMAX[a] != RMAX[a+1] )
@@ -459,9 +461,12 @@ void G4BREPSolidPCone::InitializePCone()
         }
         else
         {
-          G4cerr << "Error in construction of G4BREPSolidPCone. \n"
-                 << "Exactly the same z, rmin and rmax given for \n"
-                 << "consecutive indices, " << a << " and " << a+1 << G4endl;
+          std::ostringstream message;
+          message << "Error in construction." << G4endl
+                  << "Exactly the same z, rmin and rmax given for"
+                  << "consecutive indices, " << a << " and " << a+1;
+          G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
+                      "GeomSolids1001", JustWarning, message);
           continue; 
         }
         

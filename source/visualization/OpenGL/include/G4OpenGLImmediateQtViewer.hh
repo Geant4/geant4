@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.7 2010/03/10 11:03:46 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.7 2010-03-10 11:03:46 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4OpenGLImmediateQtViewer : a class derived from

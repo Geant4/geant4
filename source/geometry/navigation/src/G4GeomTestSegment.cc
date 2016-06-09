@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.13 2010/08/20 09:03:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GeomTestSegment.cc,v 1.13 2010-08-20 09:03:54 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofCollision3D.cc,v 1.3 2007/08/29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofCollision3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofCollision3D
 #include "G4PSNofCollision3D.hh"

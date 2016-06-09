@@ -25,6 +25,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS  += -DG3TOG4_EXPORT
 CPPFLAGS  += \
              -I$(G4BASE)/global/management/include \
              -I$(G4BASE)/global/HEPGeometry/include \
@@ -94,17 +95,16 @@ endif
 ### .PHONY targets are executed regardless of time-stamp of any file of same 
 ###  name
 
-.PHONY: global all lib bin libC libF
+.PHONY: global all lib bin libc libF
 
 ###--------------------- section to define explicit rules --------------------
 
-first: lib
+lib: libc
 
-global: lib bin
+global: cleanf lib bin
 
 all: lib
 
-lib: cleanf libc libF
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 libc : $(G4LIBDIR)/lib$(name).$(SHEXT)
@@ -144,7 +144,9 @@ $(G4BINDIR)/$(G4TARGET) : $(Fbinobjects) $(G4LIBDIR)/lib$(name)F.a
 ###-------------------- locally defined pattern rules ------------------------
 
 ### Make the .o files from src/*.F
-$(G4TMPDIR)/%.o : src/%.F
+#     need to wait until libc is done, before strting to compile fortran
+#         or building libc may pick up fortran compiled objects into libc
+$(G4TMPDIR)/%.o : src/%.F libc
 	$(FC) $(FCFLAGS) -o $(G4TMPDIR)/$(*F).o -c src/$(*F).F
 	@file=$(dotf_prepend)$(*F).f;\
 	if [ -f $$file ]; then echo Moving $$file to $(G4TMPDIR)/$$file; \

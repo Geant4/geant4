@@ -48,8 +48,6 @@
 
 class  G4UIcommand;
 class  G4UIcmdWithAnInteger;
-class  G4UIcmdWithABool;
-class  G4String;
 class  CexmcEventAction;
 
 
@@ -69,8 +67,6 @@ class  CexmcEventActionMessenger : public G4UImessenger
         G4UIcmdWithAnInteger *  setVerboseLevel;
 
         G4UIcmdWithAnInteger *  setVerboseDrawLevel;
-
-        G4UIcmdWithABool *      drawTrajectoryMarkers;
 };
 
 

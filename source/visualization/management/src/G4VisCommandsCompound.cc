@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.40 2010/05/20 07:54:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VisCommandsCompound.cc,v 1.40 2010-05-20 07:54:01 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

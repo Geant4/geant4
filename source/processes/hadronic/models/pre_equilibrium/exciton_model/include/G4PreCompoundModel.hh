@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh,v 1.9 2010/08/20 07:41:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PreCompoundModel.hh,v 1.9 2010-08-20 07:41:48 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
@@ -87,13 +87,6 @@ public:
   void UseSCO();
   void UseCEMtr();
 
-#ifdef PRECOMPOUND_TEST
-  static G4Fragment GetInitialFragmentForTest()
-  { return G4PreCompoundModel::theInitialFragmentForTest; }
-  static std::vector<G4String*> * GetCreatorModels()
-  { return &G4PreCompoundModel::theCreatorModels; }
-#endif
-
 private:  
 
   inline 
@@ -105,12 +98,6 @@ private:
   const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
   G4bool operator==(const G4PreCompoundModel &right) const;
   G4bool operator!=(const G4PreCompoundModel &right) const;
-
-#ifdef debug				  
-  void CheckConservation(const G4Fragment & theInitialState,
-			 const G4Fragment & aFragment,
-			 G4ReactionProductVector * Result) const;
-#endif
 
   //==============
   // Data Members 
@@ -135,12 +122,11 @@ private:
   G4bool useSCO;
   G4bool useCEMtr;
 
+  G4int  maxZ;
+  G4int  maxA;
+
   G4HadFinalState theResult;
 
-#ifdef PRECOMPOUND_TEST
-  static G4Fragment theInitialFragmentForTest;
-  static std::vector<G4String*> theCreatorModels;
-#endif
 };
 
 inline void 

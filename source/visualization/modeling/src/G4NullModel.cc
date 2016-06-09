@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NullModel.cc,v 1.9 2006/06/29 21:32:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NullModel.cc,v 1.9 2006-06-29 21:32:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  4th April 1998.
@@ -40,5 +40,7 @@ G4NullModel::G4NullModel (const G4ModelingParameters* pMP):
 G4NullModel::~G4NullModel () {}
 
 void G4NullModel::DescribeYourselfTo (G4VGraphicsScene&) {
-  G4Exception ("G4NullModel::DescribeYourselfTo called.");
+  G4Exception ("G4NullModel::DescribeYourselfTo",
+	       "modeling0002", FatalException,
+	       "There is a serious mistake if this is called!");
 }

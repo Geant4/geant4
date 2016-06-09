@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.12 2009/09/22 13:58:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AssemblyVolume.cc,v 1.12 2009-09-22 13:58:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -302,7 +302,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
     else
     {
       G4Exception("G4AssemblyVolume::MakeImprint(..)",
-                  "NotApplicable", FatalException,
+                  "GeomVol0003", FatalException,
                   "Triplet has no volume and no assembly");
     }  
   }  

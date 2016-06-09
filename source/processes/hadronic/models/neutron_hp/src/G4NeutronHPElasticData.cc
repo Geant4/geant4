@@ -39,6 +39,59 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 
+G4NeutronHPElasticData::G4NeutronHPElasticData()
+:G4VCrossSectionDataSet("NeutronHPElasticXS")
+{
+   SetMinKinEnergy( 0*MeV );                                   
+   SetMaxKinEnergy( 20*MeV );                                   
+
+   ke_cache = 0.0;
+   xs_cache = 0.0;
+   element_cache = NULL;
+   material_cache = NULL;
+
+   theCrossSections = 0;
+   onFlightDB = true;
+   BuildPhysicsTable( *G4Neutron::Neutron() );
+}
+   
+G4NeutronHPElasticData::~G4NeutronHPElasticData()
+{
+   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
+   delete theCrossSections;
+}
+   
+G4bool G4NeutronHPElasticData::IsIsoApplicable( const G4DynamicParticle* dp , 
+                                                G4int /*Z*/ , G4int /*A*/ ,
+                                                const G4Element* /*elm*/ ,
+                                                const G4Material* /*mat*/ )
+{
+
+   G4double eKin = dp->GetKineticEnergy();
+   if ( eKin > GetMaxKinEnergy() 
+     || eKin < GetMinKinEnergy() 
+     || dp->GetDefinition() != G4Neutron::Neutron() ) return false;                                   
+
+   return true;
+}
+
+G4double G4NeutronHPElasticData::GetIsoCrossSection( const G4DynamicParticle* dp ,
+                                   G4int /*Z*/ , G4int /*A*/ ,
+                                   const G4Isotope* /*iso*/  ,
+                                   const G4Element* element ,
+                                   const G4Material* material )
+{
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
+   G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
+   return xs;
+}
+
+/*
 G4bool G4NeutronHPElasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
 {
   G4bool result = true;
@@ -46,23 +99,8 @@ G4bool G4NeutronHPElasticData::IsApplicable(const G4DynamicParticle*aP, const G4
   if(eKin>20*MeV||aP->GetDefinition()!=G4Neutron::Neutron()) result = false;
   return result;
 }
+*/
 
-G4NeutronHPElasticData::G4NeutronHPElasticData()
-{
-// TKDB
-   theCrossSections = 0;
-   onFlightDB = true;
-  BuildPhysicsTable(*G4Neutron::Neutron());
-}
-   
-G4NeutronHPElasticData::~G4NeutronHPElasticData()
-{
-// TKDB
-   if ( theCrossSections != 0 )
-      theCrossSections->clearAndDestroy();
-  delete theCrossSections;
-}
-   
 void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
 
@@ -70,7 +108,12 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
 //080428
-   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) onFlightDB = false;
+   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   {
+      G4cout << "Find environment variable of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of elastic scattering of neutrons (<20MeV)." << G4endl;
+      onFlightDB = false;
+   }
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB

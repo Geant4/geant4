@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.39 2010/12/01 05:56:17 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: exampleN03.cc,v 1.39 2010-12-01 05:56:17 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,27 +70,19 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization(detector);
+  runManager->SetUserInitialization(new DetectorConstruction);
   //
-  PhysicsList* physics = new PhysicsList;
-  runManager->SetUserInitialization(physics);
+  runManager->SetUserInitialization(new PhysicsList);
     
   // Set user action classes
   //
-  PrimaryGeneratorAction* gen_action = 
-                          new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(gen_action);
+  runManager->SetUserAction(new PrimaryGeneratorAction);
   //
-  RunAction* run_action = new RunAction;  
-  runManager->SetUserAction(run_action);
+  runManager->SetUserAction(new RunAction);
   //
-  EventAction* event_action = new EventAction(run_action);
-  runManager->SetUserAction(event_action);
+  runManager->SetUserAction(new EventAction);
   //
-  SteppingAction* stepping_action =
-                    new SteppingAction(detector, event_action);
-  runManager->SetUserAction(stepping_action);
+  runManager->SetUserAction(new SteppingAction);
   
   // Initialize G4 kernel
   //

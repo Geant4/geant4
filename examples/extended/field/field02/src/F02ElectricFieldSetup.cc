@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectricFieldSetup.cc,v 1.4 2008/05/14 15:27:29 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F02ElectricFieldSetup.cc,v 1.4 2008-05-14 15:27:29 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
 //   User Field class implementation.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.9 2010/09/10 15:42:09 japost Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NystromRK4.cc,v 1.9 2010-09-10 15:42:09 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
 // - Created:      I.Gavrilenko    15.05.2009   (as G4AtlasRK4)

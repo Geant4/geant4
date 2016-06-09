@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.18 2010/10/23 19:27:38 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: ExN06DetectorConstruction.cc,v 1.18 2010-10-23 19:27:38 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,10 +130,15 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
               7.00, 6.00, 5.00, 4.00 };
 
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
-  myMPT1->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries);
-  myMPT1->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries);
-  myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries);
-  myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries);
+
+  myMPT1->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries)
+        ->SetSpline(true);
+  myMPT1->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries)
+        ->SetSpline(true);
+  myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries)
+        ->SetSpline(true);
+  myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries)
+        ->SetSpline(true);
   
   myMPT1->AddConstProperty("SCINTILLATIONYIELD",50./MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
@@ -141,7 +146,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
   myMPT1->AddConstProperty("YIELDRATIO",0.8);
 
-  const G4int NUMENTRIES_water = 90;
+  const G4int NUMENTRIES_water = 60;
 
   G4double ENERGY_water[NUMENTRIES_water] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
@@ -188,7 +193,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   // gforward, gbackward, forward backward ratio
   G4double MIE_water_const[3]={0.99,0.99,0.8};
 
-  myMPT1->AddProperty("MIEHG",ENERGY_water,MIE_water,NUMENTRIES_water);
+  myMPT1->AddProperty("MIEHG",ENERGY_water,MIE_water,NUMENTRIES_water)
+        ->SetSpline(true);
   myMPT1->AddConstProperty("MIEHG_FORWARD",MIE_water_const[0]);
   myMPT1->AddConstProperty("MIEHG_BACKWARD",MIE_water_const[1]);
   myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO",MIE_water_const[2]);

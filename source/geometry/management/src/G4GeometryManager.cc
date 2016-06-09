@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.24 2010/07/16 15:52:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GeometryManager.cc,v 1.24 2010-07-16 15:52:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
 //
@@ -186,11 +186,12 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
        }
        else
        {
-         G4cerr << "ERROR - Allocation of new VoxelHeader" << G4endl
-                << "        for volume " << volume->GetName() << " failed."
-                << G4endl;
-         G4Exception("G4GeometryManager::BuildOptimisations()", "FatalError",
-                     FatalException, "VoxelHeader allocation error.");
+         std::ostringstream message;
+         message << "VoxelHeader allocation error." << G4endl
+                 << "Allocation of new VoxelHeader" << G4endl
+                 << "        for volume " << volume->GetName() << " failed.";
+         G4Exception("G4GeometryManager::BuildOptimisations()", "GeomMgt0003",
+                     FatalException, message);
        }
        if (verbose)
        {
@@ -248,11 +249,12 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
      }
      else
      {
-       G4cerr << "ERROR - Allocation of new VoxelHeader" << G4endl
-              << "        for volume " << tVolume->GetName() << " failed."
-              << G4endl;
-       G4Exception("G4GeometryManager::BuildOptimisations()", "FatalError",
-                   FatalException, "VoxelHeader allocation error.");
+       std::ostringstream message;
+       message << "VoxelHeader allocation error." << G4endl
+               << "Allocation of new VoxelHeader" << G4endl
+               << "        for volume " << tVolume->GetName() << " failed.";
+       G4Exception("G4GeometryManager::BuildOptimisations()", "GeomMgt0003",
+                   FatalException, message);
      }
    }
    else
@@ -330,7 +332,7 @@ void G4GeometryManager::SetWorldMaximumExtent(G4double extent)
      // any geometry object (solids in this case)
      //
      G4Exception("G4GeometryManager::SetMaximumExtent()",
-                 "NotApplicable", FatalException,
+                 "GeomMgt0003", FatalException,
                  "Extent can be set only BEFORE creating any geometry object!");
   }
   G4GeometryTolerance::GetInstance()->SetSurfaceTolerance(extent);

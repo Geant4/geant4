@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MCTruthEventAction.hh,v 1.1 2006/11/22 14:51:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MCTruthEventAction.hh,v 1.1 2006-11-22 14:51:27 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------

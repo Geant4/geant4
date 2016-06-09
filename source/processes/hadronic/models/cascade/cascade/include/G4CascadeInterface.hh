@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.23 2010/09/23 18:13:32 mkelsey Exp $
+// $Id: G4CascadeInterface.hh,v 1.23 2010-09-23 18:13:32 mkelsey Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -35,31 +35,51 @@
 // 20100916  M. Kelsey -- Add functions to encapsulate ApplyYourself() actions,
 //		make colliders pointers (don't expose dependencies)
 // 20100922  M. Kelsey -- Add functions to select de-excitation method
+// 20110224  M. Kelsey -- Add createTarget() for use with Propagate(); split
+//		conservation law messages to separate function.  Move verbose
+//		setting to .cc file, and apply to all member objects.
+// 20110301  M. Kelsey -- Add copyPreviousCascade() for use with Propagate()  
+//		along with new buffers and related particle-conversion  
+//		functions.  Encapulate buffer deletion in clear()
+// 20110303  M. Kelsey -- Change "bulletList" name to "inputFragments"
+// 20110304  M. Kelsey -- Drop conversion of Propagate() arguments; pass
+//		directly to collider for processing.  Rename makeReactionProduct
+//		to makeDynamicParticle.
+// 20110502  M. Kelsey -- Add filename string to capture random seeds.
+// 20110720  M. Kelsey -- Discard elastic-cut array (no longer needed),
+//		discard local "theFinalState" (avail in base class).
+// 20110801  M. Kelsey -- Make bullet and target buffers local objects (with
+//		hadron and nucleus versions) to reduce memory churn
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
 
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4FragmentVector.hh"
-#include "G4KineticTrackVector.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
 #include "G4ParticleChange.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ReactionProductVector.hh"
+#include <vector>
 
+class G4CascadParticle;
+class G4CascadeCheckBalance;
+class G4CollisionOutput;
+class G4DynamicParticle;
+class G4HadFinalState;
 class G4InuclCollider;
 class G4InuclParticle;
-class G4CollisionOutput;
-class G4CascadeCheckBalance;
 class G4V3DNucleus;
 
 
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-  G4CascadeInterface(const G4String& name = "Bertini Cascade");
+  G4CascadeInterface(const G4String& name = "BertiniCascade");
 
   virtual ~G4CascadeInterface();
 
@@ -67,18 +87,24 @@ public:
 				     G4V3DNucleus* theNucleus);
   
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-				 G4Nucleus& theNucleus); 
+				 G4Nucleus& theNucleus);
 
-  void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
+  void setVerboseLevel(G4int verbose);
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
 
+  virtual void ModelDescription(std::ostream& outFile) const;
+
 protected:
+  void clear();			// Delete previously created particles
+
   // Convert input projectile and target to Bertini internal types
-  void createBullet(const G4HadProjectile& aTrack);
-  void createTarget(G4Nucleus& theNucleus);
+  G4bool createBullet(const G4HadProjectile& aTrack);
+  G4bool createTarget(G4Nucleus& theNucleus);
+  G4bool createTarget(G4V3DNucleus* theNucleus);
+  G4bool createTarget(G4int A, G4int Z);
 
   // Evaluate whether any outgoing particles penetrated Coulomb barrier
   G4bool coulombBarrierViolation() const;
@@ -87,14 +113,24 @@ protected:
   G4bool retryInelasticProton() const;
   G4bool retryInelasticNucleus() const;
 
-  // Fill sparse array with minimum momenta for inelastic on hydrogen
-  void initializeElasticCuts();
-
   // Transfer Bertini internal final state to hadronics interface
   void copyOutputToHadronicResult();
+  G4ReactionProductVector* copyOutputToReactionProducts();
+
+  // Replicate input particles onto output
+  G4HadFinalState* NoInteraction(const G4HadProjectile& aTrack,
+				 G4Nucleus& theNucleus);
+
+  // Report violations of conservation laws in original frame
+  void checkFinalResult();
 
   // Terminate job because of energy/momentum/etc. violations
   void throwNonConservationFailure();
+
+  // Convert between Bertini and external particle types
+  G4DynamicParticle* makeDynamicParticle(const G4InuclElementaryParticle& iep) const;
+  G4DynamicParticle* makeDynamicParticle(const G4InuclNuclei& inuc) const;
+
 
 private:
   G4int operator==(const G4CascadeInterface& right) const {
@@ -105,20 +141,26 @@ private:
     return (this != &right);
   }
 
-  static const G4int maximumTries;	// Number of iterations for inelastic
+  static const G4String randomFile;	// Filename to capture random seeds
 
-  G4double cutElastic[32];		// Bullet momenta for hydrogen target
+  static const G4int maximumTries;	// Number of iterations for inelastic
 
   G4int verboseLevel;
   G4int numberOfTries;
 
-  G4HadFinalState theResult;
   G4InuclCollider* collider;
   G4CascadeCheckBalance* balance;
 
-  G4InuclParticle* bullet;
+  G4InuclParticle* bullet;		// Pointers to last filled versions
   G4InuclParticle* target;
+
   G4CollisionOutput* output;
+
+  G4InuclElementaryParticle hadronBullet;	// Buffers for bullet, target
+  G4InuclNuclei             nucleusBullet;
+
+  G4InuclElementaryParticle hadronTarget;
+  G4InuclNuclei             nucleusTarget;
 
   G4LorentzRotation bulletInLabFrame;
 };

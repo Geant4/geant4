@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +48,10 @@
 #include "G4ProcessManager.hh"
 
 G4LEPPiKBuilder::
-G4LEPPiKBuilder()  
+G4LEPPiKBuilder() :
+   theLEPionPlusModel(0),  theLEPionMinusModel(0), 
+   theLEKaonPlusModel(0), theLEKaonMinusModel(0), 
+   theLEKaonZeroLModel(0), theLEKaonZeroSModel(0)  
 {
   theMin = 0;
   theMax = 55*GeV;

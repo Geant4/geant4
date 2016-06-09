@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SliceTimer.cc,v 1.3 2010/10/01 16:36:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SliceTimer.cc,v 1.3 2010-10-01 16:36:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,9 +38,6 @@
 #include "G4ios.hh"
 
 #undef times
-
-// Global error function
-void G4Exception(const char* s=0);
 
 #if defined(IRIX6_2)
 #  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)
@@ -74,7 +71,6 @@ G4double G4SliceTimer::GetRealElapsed() const
 {
     return fRealElapsed/sysconf(_SC_CLK_TCK);
 }
-
 
 G4double G4SliceTimer::GetSystemElapsed() const
 {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VEmAdjointModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -48,6 +48,7 @@ name(nam)
   theDirectEMModel=0;
   mass_ratio_product=1.;
   mass_ratio_projectile=1.;
+  currentCouple=0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -87,6 +88,7 @@ G4double G4VEmAdjointModel::GetAdjointCrossSection(const G4MaterialCutsCouple* a
   return AdjointCrossSection(aCouple, primEnergy,
 				IsScatProjToProjCase);
   
+  /*
   //To continue
   DefineCurrentMaterial(aCouple);
   preStepEnergy=primEnergy;
@@ -102,23 +104,8 @@ G4double G4VEmAdjointModel::GetAdjointCrossSection(const G4MaterialCutsCouple* a
 	lastAdjointCSForProdToProjCase = lastCS;
 	//G4cout<<ekin<<std::endl;
   }
-  
- /* G4double ratio=lastCS;
-  G4cout<<"Model name"<<name;	
-  G4cout<<" LastCS Get "<<lastCS;
-  G4cout<<" Energy "<<primEnergy;*/
-  /*G4double lastCS1 = AdjointCrossSection(aCouple,
-				primEnergy,
-				IsScatProjToProjCase);
-  if (lastCS1 >0) {
-  	G4double ratio=lastCS/lastCS1;
-	G4double diff = std::abs(1-ratio)*100.;
-	if (diff >1)  G4cout<<primEnergy <<" diff"<<diff<<'\t'<<lastCS<<'\t'<<lastCS1<<'\t'<<name<<'\t'<<IsScatProjToProjCase<<std::endl;
-  }
-  //G4cout<<" LastCS Compute "<<lastCS1<<std::endl;
+  return lastCS;
   */
-			
-  return lastCS;	
 }					     				
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -135,9 +122,10 @@ G4double G4VEmAdjointModel::DiffCrossSectionPerAtomPrimToSecond(
  
  
  if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){ //the produced particle should have a kinetic energy smaller than the projectile 
-	G4double Tmax=kinEnergyProj;
-	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;
 	
+	/*G4double Tmax=kinEnergyProj;
+	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;*/
+
 	G4double E1=kinEnergyProd;
  	G4double E2=kinEnergyProd*1.000001;
  	G4double dE=(E2-E1);
@@ -181,8 +169,8 @@ G4double G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(
  
  
  if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){ 
-	G4double Tmax=kinEnergyProj;
-	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;
+	/*G4double Tmax=kinEnergyProj;
+	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;*/
 	G4double E1=kinEnergyProd;
 	G4double E2=kinEnergyProd*1.0001;
  	G4double dE=(E2-E1);

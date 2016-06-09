@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.hh,v 1.10 2010/08/04 05:28:24 mkelsey Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeData.hh,v 1.10 2010-08-04 05:28:24 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
 //		to arrays,for use in passing to functions as dimensioned.
@@ -36,6 +36,11 @@
 //		index[] subscripts out of range.  Dimension to full [9].
 // 20100803  M. Kelsey -- Add printing function for debugging, split
 //		implementation code to .icc file.  Add name argument.
+// 20110718  M. Kelsey -- Add inelastic cross-section sum to deal with
+//		suppressing elastic scattering off free nucleons (hydrogen)
+// 20110719  M. Kelsey -- Add ctor argument for two-body initial state
+// 20110725  M. Kelsey -- Save initial state as data member
+// 20110923  M. Kelsey -- Add optional ostream& argument to print() fns
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
@@ -72,57 +77,70 @@ struct G4CascadeData
   G4double sum[NE];			// Summed cross-sections, computed
   const G4double (&tot)[NE];		// Inclusive cross-sections (from input)
 
+  G4double inelastic[NE];		// Sum of only inelastic channels
+
   static const G4int empty8bfs[1][8];	// For multiplicity==7 case
   static const G4int empty9bfs[1][9];
 
   const G4String name;			// For diagnostic purposes
+  const G4int initialState;		// For registration in lookup table
 
   G4int maxMultiplicity() const { return NM+1; }  // Used by G4CascadeFunctions
 
-  void print(G4int mult=-1) const;	// Dump multiplicty tables (-1 == all)
-  void printXsec(const G4double (&xsec)[NE]) const;
+  // Dump multiplicty tables to specified stream
+  void print(std::ostream& os=G4cout) const;
+  void print(G4int mult, std::ostream& os) const;
+  void printXsec(const G4double (&xsec)[NE], std::ostream& os) const;
 
   // Constructor for kaon/hyperon channels, with multiplicity <= 7
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
-		const G4double (&xsec)[NXS][NE],
+		const G4double (&xsec)[NXS][NE], G4int ini,
 		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(sum), name(aName) { initialize(); }
+      crossSections(xsec), tot(sum), name(aName), initialState(ini) {
+    initialize();
+  }
 
   // Constructor for kaon/hyperon channels, with multiplicity <= 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
-		const G4String& aName="G4CascadeData")
+		G4int ini, const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
+      crossSections(xsec), tot(theTot), name(aName), initialState(ini) {
+    initialize();
+  }
 
-  // Constructor for pion/nuleon channels, with multiplicity > 7
+  // Constructor for pion/nucleon channels, with multiplicity > 7
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
-		const G4double (&xsec)[NXS][NE],
+		const G4double (&xsec)[NXS][NE], G4int ini,
 		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(sum), name(aName) { initialize(); }
+      crossSections(xsec), tot(sum), name(aName), initialState(ini) {
+    initialize();
+  }
 
-  // Constructor for pion/nuleon channels, with multiplicity > 7 and inclusive
+  // Constructor for pion/nucleon channels, with multiplicity > 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
 		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
-		const G4String& aName="G4CascadeData")
+		G4int ini, const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
+      crossSections(xsec), tot(theTot), name(aName), initialState(ini) {
+    initialize();
+  }
 
   void initialize();			// Fill summed arrays from input
 };

@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.1 2009/11/16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QDiffractionRatio.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 25-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP(Moscow) 10-Nov-09
-// 
-//=======================================================================
+//
+// --------------------------------------------------------------------
 // Short description: Difraction excitation is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.
 // --------------------------------------------------------------------
@@ -348,15 +348,15 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mT=mNeut;                       // Prototype of mass of QF nucleon
   G4double mT2=mNeut2;                     // Squared mass of a free nucleon to be excited
   G4double dmT=dmNeut;                     // Doubled mass              
-  G4int Z=0;                               // Prototype of the isotope Z
-  G4int N=1;                               // Prototype of the Isotope N
+  //G4int Z=0;                               // Prototype of the isotope Z
+  //G4int N=1;                               // Prototype of the Isotope N
   if(rPDG==2212)                           // Correct it, if this is a proton
   {
     mT=mProt;                              // Prototype of mass of QF nucleon to be excited
     mT2=mProt2;                            // Squared mass of the free nucleon
     dmT=dmProt;                            // Doubled mass              
-    Z=1;                                   // Z of the isotope
-    N=0;                                   // N of the Isotope
+    //Z=1;                                   // Z of the isotope
+    //N=0;                                   // N of the Isotope
   }
   G4double mP2=pr4M.m2();                  // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                       // Can be a problem for photon (m_min = 2*m_pi0)
@@ -464,7 +464,9 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     //#ifdef pdebug
     G4cerr<<"***G4QDiffractionRatio::TargFrag: G4QException is catched"<<G4endl;//|  |   |
     //#endif
-    G4Exception("G4QDiffractionRatio::TargFragm:","27",FatalException,"*Nucl");// |  |   |
+    //  G4Exception("G4QDiffractionRatio::TargFragm:","27",FatalException,"*Nucl");// |  |   |
+    G4Exception("G4QDiffractionRatio::TargFragment()","HAD_CHPS_0027",
+                FatalException, "Nucl");
   }                                                             //                |  |   |
   delete pan;                              // Delete the Nuclear Environment <-<--*--*   |
   G4int qNH=leadhs->size();                // A#of collected hadrons from diff.frag.     |
@@ -525,15 +527,15 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double mT=mNeut;
   G4double mT2=mNeut2;                 // Squared mass of the free nucleon spectator
   G4double dmT=dmNeut;
-  G4int Z=0;
-  G4int N=1;
+  //G4int Z=0;
+  //G4int N=1;
   if(rPDG==2212)
   {
     mT=mProt;
     mT2=mProt2;
     dmT=dmProt;
-    Z=1;
-    N=0;
+    //Z=1;
+    //N=0;
   }
   G4double mP2=pr4M.m2();               // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                    // A possible problem for photon (m_min = 2*m_pi0)
@@ -634,7 +636,9 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   catch (G4QException& error)                                   //                    | |
   {                                                             //                    | |
     G4cerr<<"***G4QDiffractionRatio::ProjFragment: G4Quasmon Exception"<<G4endl;    //| |
-    G4Exception("G4QDiffractionRatio::ProjFragment","72",FatalException,"*Quasmon");//| |
+    // G4Exception("G4QDiffractionRatio::ProjFragment","72",FatalException,"*Quasmon");//| |
+    G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0072",
+                FatalException, "*Quasmon");
   }                                                             //                    | |
   delete pan;                              // Delete the Nuclear Environment <----<---* |
   G4int qNH=leadhs->size();                // A#of collected hadrons from diff.frag.    |
@@ -661,8 +665,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4double sMass= mPi;
       G4double tMass= mLamb;               // @@ Sigma0 (?)                             |
       G4bool   cont=true;                  // Continue flag                             |
-      // ========= Negative state ======
-      if(nC<0)                             // ====== Only Pi- can help                  |
+      // =--------= Negative state =---------=
+      if(nC<0)                             // =----= Only Pi- can help                  |
       {
         if(nL&&nB==nL)                     // --- n*Lamb + k*(Pi-) State ---            |
         {
@@ -937,7 +941,13 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           G4cout<<"***G4QDR::PrFragm:fPDG="<<fPDG<<"*"<<nB<<"(fM="<<fMass<<")+sPDG="<<sPDG
                 <<"*"<<qPN<<"(sM="<<sMass<<")"<<"="<<sum<<" > TM="<<qM<<q4M<<oPDG<<G4endl;
           //#endif
-          throw G4QException("*G4QDiffractionRatio::ProjFragment: Bad decay in 2"); //  |
+          // throw G4QException("*G4QDiffractionRatio::ProjFragment: Bad decay in 2"); //  |
+          G4ExceptionDescription ed;
+          ed << "***G4QDR::PrFragm:fPDG=" << fPDG << "*" << nB << "(fM="
+             << fMass << ")+sPDG=" << sPDG << "*" << qPN << "(sM=" << sMass
+             << ")" << "=" << sum << " > TM=" << qM << q4M << oPDG << G4endl;
+          G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0002",
+                      FatalException, ed);
         }
         else if(nL && (qM<sum || !G4QHadron(q4M).DecayIn3(f4Mom, s4Mom, t4Mom)))// Error|
         {
@@ -945,7 +955,13 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           G4cout<<"***G4DF::PrFrag: "<<fPDG<<"*"<<nB<<"("<<fMass<<")+"<<sPDG<<"*"<<qPN<<"("
                 <<sMass<<")+Lamb*"<<nL<<"="<<sum<<" > TotM="<<qM<<q4M<<oPDG<<G4endl;
           //#endif
-          throw G4QException("*G4QDiffractionRatio::ProjFragment: Bad decay in 3"); //  |
+          // throw G4QException("*G4QDiffractionRatio::ProjFragment: Bad decay in 3"); //  |
+          G4ExceptionDescription ed;
+          ed << "***G4DF::PrFrag: " << fPDG << "*" << nB << "(" << fMass << ")+"
+             << sPDG << "*" << qPN << "(" << sMass << ")+Lamb*" << nL << "="
+             << sum << " > TotM=" << qM << q4M << oPDG << G4endl;
+          G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0003",
+                      FatalException, ed);
         }
 #ifdef fdebug
         G4cout<<"G4QDF::ProjFragm: *DONE* n="<<nB<<f4Mom<<fPDG<<", m="<<qPN<<s4Mom<<sPDG
@@ -1127,7 +1143,9 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         else if(reM<sum || !G4QHadron(r4M).DecayIn2(n4M,h4M)) // Error in decay         |
         {
           G4cerr<<"***G4QDF::PF:HypN,M="<<reM<<"<A+n*L="<<sum<<",d="<<sum-reM<<G4endl;//|
-          throw G4QException("***G4QDiffractionRatio::ProjFragment:HypernuclusDecay");//|
+          // throw G4QException("***G4QDiffractionRatio::ProjFragment:HypernuclusDecay");//|
+          G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0100",
+                      FatalException, "Error in hypernuclus decay");
         }
 #ifdef fdebug
         G4cout<<"*G4QDR::PF:HypN="<<r4M<<"->A="<<rlPDG<<n4M<<",n*L="<<nL<<h4M<<G4endl;//|
@@ -1194,7 +1212,9 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         else if(reM<sum || !G4QHadron(r4M).DecayIn2(n4M,h4M)) // Error in decay         |
         {
           G4cerr<<"*G4QDR::PF:HypN,M="<<reM<<"<A+n*Pi0="<<sum<<",d="<<sum-reM<<G4endl;//|
-          throw G4QException("***G4QDiffractionRatio::ProjFragment:HypernuclDecay"); // |
+          // throw G4QException("***G4QDiffractionRatio::ProjFragment:HypernuclDecay"); // |
+          G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0101",
+                       FatalException, "Error in HypernuclDecay"); 
         }
         loh->Set4Momentum(n4M);            // ! Update the Hadron !                     |
         if(anti && rnPDG==90000001) rnPDG=-2112; // Convert to anti-neutron             |
@@ -1247,7 +1267,9 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         G4cerr<<"G4QDR::PF:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
         d=rnM+mPi0-reM;                    // Pion Excessive energy                     |
         G4cerr<<"G4QDR::PF:"<<oPDG<<","<<hPDG<<",M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
-        throw G4QException("G4QDiffractionRatio::ProjFragment: Hypernuclear conver");// |
+        // throw G4QException("G4QDiffractionRatio::ProjFragment: Hypernuclear conver");// |
+        G4Exception("G4QDiffractionRatio::ProjFragment()", "HAD_CHPS_0102",
+                    FatalException, "Excessive hypernuclear energy");
       }
     }                                      // => End of G4 Hypernuclear decay           |
     ResHV->push_back(loh);                 // Fill in the result                        |

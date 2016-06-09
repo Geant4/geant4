@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.18 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.18 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -47,6 +47,7 @@
 #include "G4Step.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4VelocityTable.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss()
   : G4VParticleChange(), currentTrack(0), proposedKinEnergy(0.),
@@ -88,10 +89,26 @@ G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right)
 G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
                                    const G4ParticleChangeForLoss &right)
 {
+#ifdef G4VERBOSE
   if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << G4endl;
   }
+#endif
+
   if (this != &right) {
+    if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+      if (verboseLevel>0) {
+	G4cout << "G4ParticleChangeForLoss: assignment operator Warning  ";
+	G4cout << "theListOfSecondaries is not empty ";
+      }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+    }
+    delete theListOfSecondaries; 
+
     theListOfSecondaries = right.theListOfSecondaries;
     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
     theNumberOfSecondaries = right.theNumberOfSecondaries;
@@ -99,6 +116,9 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;
     theParentWeight = right.theParentWeight;
+    isParentWeightProposed = right.isParentWeightProposed;
+    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
+    fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
 
     currentTrack = right.currentTrack;
     proposedKinEnergy = right.proposedKinEnergy;
@@ -166,8 +186,7 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   // Exit with error
   if (exitWithError) {
     G4Exception("G4ParticleChangeForLoss::CheckIt",
-		"400",
-		EventMustBeAborted,
+		"TRACK004", EventMustBeAborted,
 		"energy was  illegal");
   }
 
@@ -179,3 +198,77 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
+
+//----------------------------------------------------------------
+// methods for updating G4Step
+//
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // accumulate change of the kinetic energy
+  G4double kinEnergy = pPostStepPoint->GetKineticEnergy() +
+    (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+
+  // update kinetic energy and charge
+  if (kinEnergy < lowEnergyLimit) {
+    theLocalEnergyDeposit += kinEnergy;
+    kinEnergy = 0.0;
+  } else {
+    pPostStepPoint->SetCharge( currentCharge );
+  }
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
+  // calculate velocity
+  pStep->GetTrack()->SetKineticEnergy(kinEnergy); 
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+  pStep->GetTrack()->SetKineticEnergy(pStep->GetPreStepPoint()->GetKineticEnergy()); 
+
+  if (isParentWeightProposed) {
+    // update weight 
+    G4StepPoint* pPreStepPoint = pStep->GetPreStepPoint();
+    G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
+      * (pPostStepPoint->GetWeight());
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      //Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+	}
+      }
+    }
+  }
+
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  pStep->GetTrack()->SetKineticEnergy( proposedKinEnergy );
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+  pPostStepPoint->SetPolarization( proposedPolarization );
+
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight( theParentWeight );
+	}
+      }
+    }
+  }
+
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+

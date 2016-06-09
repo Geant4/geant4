@@ -260,7 +260,7 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.push_back("P");     fractionMass.push_back(0.0006);
 
 
-  G4Material* dolorite = nistMan->ConstructNewMaterial("Dolorite", elements, fractionMass, density);
+  G4Material* doloriteMain = nistMan->ConstructNewMaterial("Dolorite", elements, fractionMass, density);
 
   elements.clear();
   natoms.clear();
@@ -296,7 +296,7 @@ void XrayFluoNistMaterials::CreateMaterials()
   density = 3*g/cm3;
   dolorite = new G4Material("Dolorite", density, 2);
   dolorite->AddMaterial(tracesOfDolorite, 0.0027842352);
-  dolorite->AddMaterial(dolorite, 0.9972157648);
+  dolorite->AddMaterial(doloriteMain, 0.9972157648);
 
   ///////////////////////
   //       Mars1       //

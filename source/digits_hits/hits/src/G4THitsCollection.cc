@@ -24,19 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.cc,v 1.4 2006/06/29 18:06:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4THitsCollection.cc,v 1.4 2006-06-29 18:06:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4THitsCollection.hh"
 
 G4Allocator<G4HitsCollection> anHCAllocator;
 
-G4HitsCollection::G4HitsCollection()
+G4HitsCollection::G4HitsCollection() : theCollection((void*)0)
 {;}
 
 G4HitsCollection::G4HitsCollection(G4String detName,G4String colNam)
-: G4VHitsCollection(detName,colNam)
+: G4VHitsCollection(detName,colNam), theCollection((void*)0)
 {;}
 
 G4HitsCollection::~G4HitsCollection()

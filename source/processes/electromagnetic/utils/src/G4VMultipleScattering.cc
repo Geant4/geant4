@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.86 2010/10/26 11:30:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VMultipleScattering.cc,v 1.86 2010-10-26 11:30:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -69,6 +69,7 @@
 
 #include "G4VMultipleScattering.hh"
 #include "G4LossTableManager.hh"
+#include "G4LossTableBuilder.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmFluctuationModel.hh"
@@ -93,6 +94,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   buildLambdaTable(true),
   theLambdaTable(0),
   firstParticle(0),
+  theDensityFactor(0),
+  theDensityIdx(0),
   stepLimit(fUseSafety),
   skin(1.0),
   facrange(0.04),
@@ -195,7 +198,8 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     currentParticle = &part;
   }
 
-  (G4LossTableManager::Instance())->PreparePhysicsTable(&part, this);
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  man->PreparePhysicsTable(&part, this);
 
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
@@ -208,6 +212,7 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
   if(firstParticle == &part) {
 
     InitialiseProcess(firstParticle);
+
 
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
@@ -234,9 +239,13 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 			     10.0, verboseLevel);
 
     // prepare tables
+    G4LossTableBuilder* bld = man->GetTableBuilder();
     if(buildLambdaTable) {
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+      bld->InitialiseBaseMaterials(theLambdaTable);
     }
+    theDensityFactor = bld->GetDensityFactors();
+    theDensityIdx = bld->GetCoupleIndexes();
   }
 }
 
@@ -260,6 +269,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
           G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
 
+    //G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
     G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
     G4PhysicsLogVector* aVector = 0;
@@ -267,7 +277,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
     for (size_t i=0; i<numOfCouples; ++i) {
 
-      if (theLambdaTable->GetFlag(i)) {
+      if (theLambdaTable->GetFlag(i)/*bld->GetFlag(i)*/) {
         // create physics vector and fill it
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
@@ -277,10 +287,9 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 	} else {
 	  aVector = new G4PhysicsLogVector(*bVector);
 	}       
-	//G4PhysicsVector* aVector = PhysicsVector(couple);
 	aVector->SetSpline(splineFlag);
         modelManager->FillLambdaVector(aVector, couple, false);
-	if(splineFlag) aVector->FillSecondDerivatives();
+	if(splineFlag) { aVector->FillSecondDerivatives(); }
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
       }
     }
@@ -295,7 +304,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
                          num == "proton" || num == "pi-" || 
 			 num == "kaon+" || num == "GenericIon")) {
     PrintInfoDefinition();
-    if(2 < verboseLevel && theLambdaTable) G4cout << *theLambdaTable << G4endl;
+    if(2 < verboseLevel && theLambdaTable) 
+      { G4cout << *theLambdaTable << G4endl; }
   }
 
   if(1 < verboseLevel) {
@@ -328,7 +338,7 @@ void G4VMultipleScattering::PrintInfoDefinition()
     modelManager->DumpModelList(verboseLevel);
     if (2 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-      if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+      if(theLambdaTable) { G4cout << (*theLambdaTable) << G4endl; }
     }
   }
 }
@@ -349,6 +359,13 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   G4double ekin = track.GetKineticEnergy();
   if(isIon) { ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); }
   currentModel = static_cast<G4VMscModel*>(SelectModel(ekin));
+
+  // define ionisation process
+  if(!currentModel->GetIonisation()) {
+    currentModel->SetIonisation(G4LossTableManager::Instance()
+				->GetEnergyLossProcess(track.GetParticleDefinition()));
+  }  
+
   if(x > 0.0 && ekin > 0.0 && currentModel->IsActive(ekin)) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
@@ -378,6 +395,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
   if(currentModel->IsActive(track.GetKineticEnergy())) {
     fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  } else {
+    fParticleChange.ProposeTrueStepLength(step.GetStepLength());
   }
   return &fParticleChange;
 }
@@ -433,10 +452,11 @@ G4double G4VMultipleScattering::GetMeanFreePath(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple* couple)
+G4PhysicsVector* 
+G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4int nbins = 3;
-  if( couple->IsUsed() ) nbins = nBins;
+  if( couple->IsUsed() ) { nbins = nBins; }
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;

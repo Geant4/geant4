@@ -23,32 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEKaonPlusInelastic.cc,v 1.13 2006-06-29 20:45:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEKaonPlusInelastic.cc,v 1.13 2006/06/29 20:45:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy KaonPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 05-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: Low Energy KaonPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 05-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEKaonPlusInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LEKaonPlusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                        G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
+#include <iostream>
+
+
+G4LEKaonPlusInelastic::G4LEKaonPlusInelastic(const G4String& name)
+ :G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(25.*GeV);
+}
+
+
+void G4LEKaonPlusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEKaonPlusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic K+ scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to kaons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEKaonPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                     G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
     
-    // create the target particle
+  // create the target particle
     
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
@@ -124,12 +145,11 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    
-    return &theParticleChange;    
-  }
+  delete originalTarget;  
+  return &theParticleChange;    
+}
  
- void
+void
   G4LEKaonPlusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,

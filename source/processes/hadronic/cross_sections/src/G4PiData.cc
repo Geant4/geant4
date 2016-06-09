@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // by J.P Wellisch, Sun Sep 15 2002.
 
 #include "G4PiData.hh"
+#include "G4HadronicException.hh"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -67,8 +68,8 @@ G4double G4PiData::ReactionXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    G4Exception("G4PiData", "007", FatalException,
-                "ReactionXSection used outside validity range");
+    throw G4HadronicException(__FILE__, __LINE__,
+        "G4PiData::ReactionXSection: used outside validity range");
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
@@ -89,8 +90,8 @@ G4double G4PiData::ElasticXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    G4Exception("G4PiData", "007", FatalException,
-                "ElasticXSection used outside validity range");
+    throw G4HadronicException(__FILE__, __LINE__,
+        "G4PiData::ElasticXSection: used outside validity range");
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
@@ -111,8 +112,8 @@ G4double G4PiData::TotalXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    G4Exception("G4PiData", "007", FatalException,
-                "ElasticXSection used outside validity range");
+    throw G4HadronicException(__FILE__, __LINE__,
+        "G4PiData::TotalXSection: used outside validity range");
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;

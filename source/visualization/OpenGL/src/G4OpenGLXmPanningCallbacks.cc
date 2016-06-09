@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.12 2009/11/03 10:21:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.12 2009-11-03 10:21:49 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -137,9 +137,9 @@ void G4OpenGLXmViewer::left_right_pan_callback (XtPointer clientData,
   G4double delta;
   
   if (pView->pan_right) {
-    delta = (G4double)pView->pan_sens;
+    delta = pView->fPan_sens;
   } else {
-    delta = -((G4double)pView->pan_sens);
+    delta = -pView->fPan_sens;
   }
   
   G4Point3D stp
@@ -190,9 +190,9 @@ void G4OpenGLXmViewer::up_down_pan_callback (XtPointer clientData,
   G4double delta;
   
   if (pView->pan_up) {
-    delta = (G4double)pView->pan_sens;
+    delta = pView->fPan_sens;
   } else {
-    delta = -((G4double)pView->pan_sens);
+    delta = -(pView->fPan_sens);
   }
   
   G4Point3D stp
@@ -241,7 +241,7 @@ void G4OpenGLXmViewer::set_pan_sens_callback (Widget w,
     return;
   }
   
-  pView->pan_sens = (G4double)((cbs->value) / ten_to_the_dp);
+  pView->fPan_sens = (G4double)((cbs->value) / ten_to_the_dp);
 }  
 
 #endif

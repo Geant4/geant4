@@ -1,4 +1,4 @@
-# $Id: ionis.mac,v 1.3 2009/09/15 12:51:49 maire Exp $
+# $Id: ionis.mac,v 1.3 2009-09-15 12:51:49 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -34,6 +34,10 @@
 /testem/histo/setHisto 2 100 0  100 none	#nb steps of primary
 /testem/histo/setHisto 3 200 0   50 mm		#step size of primary
 #
-/testem/event/printModulo 2000
+/testem/histo/printHisto 1
+/testem/histo/printHisto 2
+/testem/histo/printHisto 3
 #
-/run/beamOn 10000
+/testem/event/printModulo 100
+#
+/run/beamOn 1000

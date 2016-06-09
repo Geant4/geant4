@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.16 2010/06/08 04:39:22 kmura Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VBasicShell.cc,v 1.16 2010-06-08 04:39:22 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VBasicShell.hh"
@@ -234,7 +234,7 @@ void G4VBasicShell::ApplyShellCommand (
 
     G4cout << command << G4endl; 
 
-  } else if( command == "ls" || command(0,3) == "ls " ) {
+  } else if( command == "ls" || (G4String)command(0,3) == "ls " ) {
 
     ListDirectory( command );
 
@@ -243,11 +243,11 @@ void G4VBasicShell::ApplyShellCommand (
     G4cout << "Current Working Directory : " 
        << GetCurrentWorkingDirectory() << G4endl; 
 
-  } else if( command == "cd" || command(0,3) == "cd ") {
+  } else if( command == "cd" || (G4String)command(0,3) == "cd ") {
 
     ChangeDirectoryCommand ( command );
 
-  } else if( command == "help" || command(0,5) == "help ") {
+  } else if( command == "help" || (G4String)command(0,5) == "help ") {
 
     TerminalHelp( command ); 
 
@@ -365,7 +365,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
 
   G4UIcommandTree * floor[10];
   floor[0] = treeTop;
-  G4int iFloor = 0;
+  size_t iFloor = 0;
   size_t prefixIndex = 1;
   G4String prefix = GetCurrentWorkingDirectory();
   while( prefixIndex < prefix.length()-1 )
@@ -386,8 +386,10 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
       G4cout << G4endl << "Not a number, once more" << G4endl; 
       continue;
     } else if( i < 0 ){
-      iFloor += i;
-      if( iFloor < 0 ) iFloor = 0;
+      if( iFloor < (size_t)-i ) iFloor = 0;
+      else iFloor += i;
+      //iFloor += i;
+      //if( iFloor < 0 ) iFloor = 0;
       floor[iFloor]->ListCurrentWithNum(); 
       continue;
     } else if(i == 0) { 
@@ -413,15 +415,3 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   //G4cout << G4endl;
   ExitHelp();
 }
-
-
-
-
-
-
-
-
-
-
-
-

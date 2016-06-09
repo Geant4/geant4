@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TritonGEMChannel.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TritonGEMChannel.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
@@ -46,28 +45,22 @@ public:
   G4TritonGEMChannel() : G4GEMChannel(3,1,"triton",
                                       &theEvaporationProbability,
                                       &theCoulombBarrier)
-        {
-            theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-        }
+  {
+    theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
+  }
     
   // destructor
   ~G4TritonGEMChannel() {};
 
 private:
-    const G4TritonGEMChannel & operator=(const G4TritonGEMChannel & right);  
+  const G4TritonGEMChannel & operator=(const G4TritonGEMChannel & right);    
+  G4TritonGEMChannel(const G4TritonGEMChannel & right);
+  G4bool operator==(const G4TritonGEMChannel & right) const;
+  G4bool operator!=(const G4TritonGEMChannel & right) const;
     
-    G4TritonGEMChannel(const G4TritonGEMChannel & right);
-    
-public:
-    G4bool operator==(const G4TritonGEMChannel & right) const;
-    G4bool operator!=(const G4TritonGEMChannel & right) const;
-    
-private:
- // JMQ 190709
-//     G4TritonCoulombBarrier theCoulombBarrier;    
-    G4TritonGEMCoulombBarrier theCoulombBarrier;
-	
-    G4TritonGEMProbability theEvaporationProbability;
+  // JMQ 190709
+  G4TritonGEMCoulombBarrier theCoulombBarrier;
+  G4TritonGEMProbability theEvaporationProbability;
     
 };
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2010/11/04 21:47:43 allison Exp $
+$Id: History,v 1.11 2010-11-04 21:47:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 23rd, 2011 G.Cosmo (g3tog4Tests-V09-04-01)
+---------------------------
+- Merged changes from previous tag never considered for testing...
+
+July 6th, 2011 G.Cosmo (g3tog4Tests-V09-04-00)
+----------------------
+- Fixed vis.mac macros: removed spurious text...
+- Fixed README.
 
 November 4th, 2010 J.Allison (g3tog4Tests-V09-03-04)
 -----------------------------

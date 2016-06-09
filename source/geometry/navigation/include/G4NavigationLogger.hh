@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLogger.hh,v 1.1 2010/11/04 08:57:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NavigationLogger.hh,v 1.1 2010-11-04 08:57:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4NavigationLogger

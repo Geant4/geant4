@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ThreeMat.hh,v 1.10 2006/06/29 18:40:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ThreeMat.hh,v 1.10 2006-06-29 18:40:58 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4ThreeMat

@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.5 2009/09/22 14:20:31 maire Exp $
+# $Id: range.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -8,8 +8,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
-/testem/det/setSizeX  5 mm
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Water  5 mm
 /testem/det/setSizeYZ 5 mm
 #
 /testem/phys/addPhysics  local

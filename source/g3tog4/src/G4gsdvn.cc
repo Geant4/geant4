@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvn.cc,v 1.10 2006/06/29 18:13:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdvn.cc,v 1.10 2006-06-29 18:13:57 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 
@@ -36,7 +36,7 @@
 #include "globals.hh"
 #include "G3toG4.hh"
 
-void PG4gsdvn(G4String tokens[])
+void PG4gsdvn(G4String *tokens)
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsdvn);
@@ -107,7 +107,9 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
  
   if (mvte == 0) {
-    G4Exception("G4gsdvn:'" + vmoth + "' has no VolTableEntry");
+    G4String text = "G4gsdvn:'" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4gsdvn()", "G3toG40013", FatalException, text);
+    return;
   }  
   else {
     // a new vte clone copy with division is created

@@ -25,7 +25,7 @@
 //
 //
 // $ Id: G4CachedMagneticField.hh,v 1.0 2009/07/20 18:53:00 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4CachedMagneticField

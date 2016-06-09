@@ -23,39 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VLevelDensityParameter.hh,v 1.6 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VLevelDensityParameter.hh,v 1.6 2009-03-04 11:05:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
 
-
-
 #ifndef G4VLevelDensityParameter_h
 #define G4VLevelDensityParameter_h 1
 
-
 #include "globals.hh"
-#include "G4HadronicException.hh"
 
 class G4VLevelDensityParameter 
 {
 public:
+
   G4VLevelDensityParameter();
   virtual ~G4VLevelDensityParameter();
 
+  virtual G4double 
+  LevelDensityParameter(G4int A, G4int Z, G4double U) const = 0;
+
 private:  
   G4VLevelDensityParameter(const G4VLevelDensityParameter &right);
-
   const G4VLevelDensityParameter & operator=(const G4VLevelDensityParameter &right);
   G4bool operator==(const G4VLevelDensityParameter &right) const;
   G4bool operator!=(const G4VLevelDensityParameter &right) const;
   
-public:
-  virtual G4double LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const = 0;
-
 };
 
 

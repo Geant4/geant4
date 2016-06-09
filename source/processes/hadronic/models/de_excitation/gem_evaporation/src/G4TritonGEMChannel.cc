@@ -23,37 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TritonGEMChannel.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TritonGEMChannel.cc,v 1.5 2009-09-15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
 
 #include "G4TritonGEMChannel.hh"
-
-
-const G4TritonGEMChannel & G4TritonGEMChannel::operator=(const G4TritonGEMChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonGEMChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4TritonGEMChannel::G4TritonGEMChannel(const G4TritonGEMChannel & ) : G4GEMChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonGEMChannel::CopyConstructor meant to not be accessable");
-}
-
-G4bool G4TritonGEMChannel::operator==(const G4TritonGEMChannel & right) const 
-{
-    return (this == (G4TritonGEMChannel *) &right);
-    //  return false;
-}
-
-G4bool G4TritonGEMChannel::operator!=(const G4TritonGEMChannel & right) const 
-{
-    return (this != (G4TritonGEMChannel *) &right);
-    //  return true;
-}
 

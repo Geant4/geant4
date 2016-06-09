@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PositronNuclearProcess.cc,v 1.1 2009/03/31 19:16:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PositronNuclearProcess.cc,v 1.1 2009-03-31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4PositronNuclearProcess.hh" 
 #include "G4Positron.hh"
 #include "G4ElectroNuclearCrossSection.hh"
+#include <iostream>
+
 
 G4PositronNuclearProcess::
 G4PositronNuclearProcess(const G4String& processName)
@@ -38,9 +40,16 @@ G4PositronNuclearProcess(const G4String& processName)
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
   theStore->AddDataSet(new G4ElectroNuclearCrossSection);
-} 
-    
-G4PositronNuclearProcess::~G4PositronNuclearProcess()
-{
 }
 
+
+G4PositronNuclearProcess::~G4PositronNuclearProcess()
+{}
+
+
+void G4PositronNuclearProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process handles inelastic positron scattering from\n" 
+          << "nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
+}

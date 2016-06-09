@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyExN03pl.cc,v 1.3 2006/06/29 15:30:07 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyExN03pl.cc,v 1.3 2006-06-29 15:30:07 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyExN03pl.cc
 //
@@ -37,7 +37,7 @@
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4RunManager.hh"
-#include "ExN03PhysicsList.hh"
+#include "PhysicsList.hh"
 
 using namespace boost::python;
 
@@ -46,9 +46,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyExN03pl {
 
-ExN03PhysicsList* Construct()
+PhysicsList* Construct()
 {
-  ExN03PhysicsList* pl= new ExN03PhysicsList;
+  PhysicsList* pl= new PhysicsList;
 
   G4RunManager* runMgr= G4RunManager::GetRunManager();
   runMgr-> SetUserInitialization(pl);
@@ -66,8 +66,8 @@ using namespace pyExN03pl;
 
 BOOST_PYTHON_MODULE(ExN03pl) {
 
-  class_<ExN03PhysicsList, ExN03PhysicsList*, bases<G4VUserPhysicsList> >
-    ("ExN03PhysicsList", "ExN03 physics list")
+  class_<PhysicsList, PhysicsList*, bases<G4VUserPhysicsList> >
+    ("PhysicsList", "ExN03 physics list")
     ;
 
   // ---

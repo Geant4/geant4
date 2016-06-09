@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorGeomVolumeTarget.hh,v 1.3 2007/05/31 15:28:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorGeomVolumeTarget.hh,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //

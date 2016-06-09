@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.44 2010/05/27 10:25:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4hIonisation.hh,v 1.44 2010-05-27 10:25:23 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -99,9 +99,6 @@ public:
 
   // Print out of the class parameters
   virtual void PrintInfo();
-
-  // obsolete method
-  void ActivateNuclearStopping(G4bool);
 
 protected:
 

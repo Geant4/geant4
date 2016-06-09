@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2010/10/27 07:34:32 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2010-10-27 07:34:32 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/biasing library.  Gabriele Cosmo, 25/03/02.
 # --------------------------------------------------------------------

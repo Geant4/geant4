@@ -23,55 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4StableFermiFragment.cc,v 1.5 2006/06/29 20:13:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StableFermiFragment.cc,v 1.5 2006-06-29 20:13:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko
 
 #include "G4StableFermiFragment.hh"
-#include "G4HadronicException.hh"
 
-G4StableFermiFragment::G4StableFermiFragment()
-{
-}
-
-G4StableFermiFragment::G4StableFermiFragment(const G4StableFermiFragment &) : G4VFermiFragment()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StableFermiFragment::copy_constructor meant to not be accessable");
-}
-
+G4StableFermiFragment::G4StableFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE)
+  : G4VFermiFragment(anA,aZ,Pol,ExE) 
+{}
 
 G4StableFermiFragment::~G4StableFermiFragment()
+{}
+
+G4FragmentVector * 
+G4StableFermiFragment::GetFragment(const G4LorentzVector & aMomentum) const
 {
-}
+  G4FragmentVector * theResult = new G4FragmentVector;
 
-
-const G4StableFermiFragment & G4StableFermiFragment::operator=(const G4StableFermiFragment &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StableFermiFragment::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4StableFermiFragment::operator==(const G4StableFermiFragment &) const
-{
-    return false;
-}
-
-G4bool G4StableFermiFragment::operator!=(const G4StableFermiFragment &) const
-{
-    return true;
-}
-
-
-
-G4FragmentVector * G4StableFermiFragment::GetFragment(const G4LorentzVector & aMomentum) const
-{
-    G4FragmentVector * theResult = new G4FragmentVector;
-
-    theResult->push_back(new G4Fragment(A,Z,aMomentum));
+  theResult->push_back(new G4Fragment(A,Z,aMomentum));
   
-    return theResult;
+  return theResult;
 }

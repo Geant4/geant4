@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01LeptonPhysics.cc,v 1.3 2010/04/07 01:27:53 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: RE01LeptonPhysics.cc,v 1.3 2010-04-07 01:27:53 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "RE01LeptonPhysics.hh"

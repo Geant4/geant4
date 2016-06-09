@@ -24,20 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StringModel.cc,v 1.4 2006/06/29 20:55:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StringModel.cc,v 1.4 2006-06-29 20:55:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4StringModel
 #include "G4StringModel.hh"
 
-G4StringModel::G4StringModel()
-{
-	the3DNucleus=NULL;
-	theStringFragmentationModel=NULL;
-	theGenerator=NULL;
-}
-
-G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator()
+G4StringModel::G4StringModel() :  G4VHighEnergyGenerator(),
+the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
 {
 }
 
@@ -46,6 +40,11 @@ G4StringModel::~G4StringModel()
 {
 }
 
+  // private:
+G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator(),
+the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
+{
+}
 
 const G4StringModel & G4StringModel::operator=(const G4StringModel &)
 {

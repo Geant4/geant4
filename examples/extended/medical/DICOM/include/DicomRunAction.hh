@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DicomRunAction.hh,v 1.1 2008/11/27 21:55:27 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DicomRunAction.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
 #ifndef DicomRunAction_h

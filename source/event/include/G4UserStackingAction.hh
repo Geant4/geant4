@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStackingAction.hh,v 1.6 2006/06/29 18:09:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserStackingAction.hh,v 1.6 2006-06-29 18:09:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4UserStackingAction_h

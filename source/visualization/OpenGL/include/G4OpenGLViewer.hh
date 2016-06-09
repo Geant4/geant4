@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.33 2010/10/05 15:45:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLViewer.hh,v 1.33 2010-10-05 15:45:19 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -53,11 +53,18 @@ class G4OpenGLViewer: virtual public G4VViewer {
 
 public:
   void ClearView  ();
+//////////////////////////////Vectored PostScript production functions///
+  void printEPS();
 
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
   void SetView    ();
+  void ResetView ();
+
+  virtual void DrawText(const char * ,double x,double y,double z, double size);
+  void ChangePointSize(G4double size);
+  void ChangeLineWidth(G4double width);
   void HaloingFirstPass ();
   void HaloingSecondPass ();
   void HLRFirstPass ();
@@ -68,10 +75,9 @@ protected:
   void ResizeWindow(unsigned int, unsigned int);
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  void rotateScene (G4double dx, G4double dy,G4double delta);
-  void rotateSceneInViewDirection (G4double dx, G4double dy,G4double delta);
+  void rotateScene (G4double dx, G4double dy);
+  void rotateSceneToggle (G4double dx, G4double dy);
 //////////////////////////////Vectored PostScript production functions///
-  void printEPS();
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
   void setPrintSize(G4int,G4int);
   // set the new print size. 
@@ -89,6 +95,7 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
+  G4bool isGl2psWriting();
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
 
@@ -110,6 +117,9 @@ protected:
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4OpenGL2PSAction* fGL2PSAction;
 
+  G4double     fRot_sens;        // Rotation sensibility in degrees
+  G4double     fPan_sens;        // Translation sensibility
+
 private :
   G4int                             fPrintSizeX;
   G4int                             fPrintSizeY;
@@ -118,7 +128,12 @@ private :
   unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;
+  int fGl2psDefaultLineWith;
+  int fGl2psDefaultPointSize;
+
   // size of the OpenGL frame
+  void rotateSceneThetaPhi(G4double dx, G4double dy);
+  void rotateSceneInViewDirection (G4double dx, G4double dy);
   bool printGl2PS();
   G4int getRealPrintSizeX();
   G4int getRealPrintSizeY();
@@ -131,16 +146,6 @@ private :
   bool printVectoredEPS();
   // print vectored EPS files
 };
-
-typedef struct G4OpenGLViewerFeedback3Dcolor {
-  GLfloat x;
-  GLfloat y;
-  GLfloat z;
-  GLfloat red;
-  GLfloat green;
-  GLfloat blue;
-  GLfloat alpha;
-} Feedback3Dcolor;
 
 #endif
 

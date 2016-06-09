@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.cc,v 1.11 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SphericalSurface.cc,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -69,10 +69,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface--"
-           <<"x_axis has zero length\n"
-           << "\tDefault x_axis of (1, 0, 0) is used.\n";
-  
+    std::ostringstream message;
+    message << "x_axis has zero length." << G4endl
+	    << "Default x_axis of (1, 0, 0) is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     x_axis = G4Vector3D( 1.0, 0.0, 0.0 );
   }
 
@@ -84,10 +86,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface--"
-           <<"z_axis has zero length\n"
-           << "\tDefault z_axis of (0, 0, 1) is used. \n";
-    
+    std::ostringstream message;
+    message << "z_axis has zero length." << G4endl
+	    << "Default z_axis of (0, 0, 1) is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     z_axis = G4Vector3D( 0.0, 0.0, 1.0 );
   }
   
@@ -99,10 +103,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface"
-           << "--radius cannot be less than zero.\n"
-           << "\tDefault radius of 1.0 is used.\n";
-    
+    std::ostringstream message;
+    message << "Radius cannot be less than zero." << G4endl
+	    << "Default radius of 1.0 is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     radius = 1.0;
   }
 
@@ -115,10 +121,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface"
-           << "--lower azimuthal limit is out of range\n"
-           << "\tDefault angle of 0 is used.\n";
-    
+    std::ostringstream message;
+    message << "Lower azimuthal limit is out of range." << G4endl
+	    << "Default angle of 0 is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     phi_1 = 0.0;
   }
 
@@ -128,10 +136,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface"
-           << "--upper azimuthal limit is out of range\n"
-           << "\tDefault angle of 2*PI is used.\n";
-    
+    std::ostringstream message;
+    message << "Upper azimuthal limit is out of range." << G4endl
+	    << "Default angle of 2*PI is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     phi_2 = twopi;
   }
  
@@ -144,10 +154,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface"
-           << "--lower polar limit is out of range\n"
-           << "\tDefault angle of 0 is used.\n";
-    
+    std::ostringstream message;
+    message << "Lower polar limit is out of range." << G4endl
+	    << "Default angle of 0 is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     theta_1 = 0.0;
   }  
   
@@ -157,10 +169,12 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
   }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::G4SphericalSurface"
-           << "--upper polar limit is out of range\n"
-           << "\tDefault angle of PI is used.\n";
-    
+    std::ostringstream message;
+    message << "Upper polar limit is out of range." << G4endl
+	    << "Default angle of PI is used.";    
+    G4Exception("G4SphericalSurface::G4SphericalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     theta_2 = pi;
   } 
 }
@@ -835,9 +849,11 @@ void G4SphericalSurface::resize( G4double r,
   if ( r >= 0.0 )  { radius = r; }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::resize"
-           << "--radius cannot be less than zero.\n"
-           << "\tOriginal value of " << radius << " is retained.\n";
+    std::ostringstream message;
+    message << "Radius cannot be less than zero." << G4endl
+	    << "Original value of " << radius << " is retained.";    
+    G4Exception("G4SphericalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   //  Require azimuthal angles to be within bounds
@@ -845,9 +861,11 @@ void G4SphericalSurface::resize( G4double r,
   if ( ( ph1 >= 0.0 ) && ( ph1 < twopi ) )  { phi_1 = ph1; }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::resize"
-           << "--lower azimuthal limit out of range\n"
-           << "\tOriginal value of " << phi_1 << " is retained.\n";
+    std::ostringstream message;
+    message << "Lower azimuthal limit out of range." << G4endl
+	    << "Original value of " << phi_1 << " is retained.";    
+    G4Exception("G4SphericalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
   
   if ( ( ph2 > phi_1 ) && ( ph2 <= ( phi_1 + twopi ) ) )  { phi_2 = ph2; }
@@ -855,9 +873,11 @@ void G4SphericalSurface::resize( G4double r,
   {
     ph2 = ( phi_2 <= phi_1 ) ? ( phi_1 + kAngTolerance ) : phi_2;
     phi_2 = ph2;
-    G4cerr << "Error in G4SphericalSurface::resize"
-           << "--upper azimuthal limit out of range\n"
-           << "\tValue of " << phi_2 << " is used.\n";
+    std::ostringstream message;
+    message << "Upper azimuthal limit out of range." << G4endl
+	    << "Value of " << phi_2 << " is used.";    
+    G4Exception("G4SphericalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   // Require polar angles to be within bounds
@@ -865,9 +885,11 @@ void G4SphericalSurface::resize( G4double r,
   if ( ( th1 >= 0.0 ) && ( th1 < pi ) )  { theta_1 = th1; }
   else 
   {
-    G4cerr << "Error in G4SphericalSurface::resize"
-           << "--lower polar limit out of range\n"
-           << "\tOriginal value of " << theta_1 << " is retained.\n";
+    std::ostringstream message;
+    message << "Lower polar limit out of range." << G4endl
+	    << "Original value of " << theta_1 << " is retained.";    
+    G4Exception("G4SphericalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
   
   if ( ( th2 > theta_1 ) && ( th2 <= ( theta_1 + pi ) ) )  { theta_2 = th2; }
@@ -875,9 +897,11 @@ void G4SphericalSurface::resize( G4double r,
   {
     th2 = ( theta_2 <= theta_1 ) ? ( theta_1 + kAngTolerance ) : theta_2;
     theta_2 = th2;
-    G4cerr << "Error in G4SphericalSurface::resize"
-           << "--upper polar limit out of range\n"
-           << "\tValue of " << theta_2 << " is used.\n";
+    std::ostringstream message;
+    message << "Upper polar limit out of range." << G4endl
+	    << "Value of " << theta_2 << " is used.";    
+    G4Exception("G4SphericalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 }
 

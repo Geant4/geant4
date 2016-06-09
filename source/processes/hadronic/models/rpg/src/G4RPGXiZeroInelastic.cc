@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGXiZeroInelastic.cc,v 1.1 2007/07/18 21:04:21 dennis Exp $
+// $Id: G4RPGXiZeroInelastic.cc,v 1.1 2007-07-18 21:04:21 dennis Exp $
 //
  
 #include "G4RPGXiZeroInelastic.hh"

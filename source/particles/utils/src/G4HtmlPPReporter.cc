@@ -29,15 +29,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.7 2010/08/10 15:47:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HtmlPPReporter.cc,v 1.7 2010-08-10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4HtmlPPReporter.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"  
+#include "G4ParticleTable.hh"  
 #include "G4DecayTable.hh"  
+#include "G4VDecayChannel.hh"  
 #include "G4Tokenizer.hh"
 #include <iomanip>
 
@@ -88,7 +91,7 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   PrintHeader(outFile);
   
   // comment
-  outFile << "<! -- " << comment << " --!> " << G4endl;
+  outFile << "<! -- " << comment << " -- !> " << G4endl;
   outFile << G4endl;
   
   
@@ -337,11 +340,13 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << "<HTML>" << G4endl;
   outFile << "<HEAD>" << G4endl;
   outFile << " <META HTTP-EQUIV=" << "\"" << " Content-Type" << "\"";
-  outFile << " CONTENT=" << "\"" << "text/html; charset=iso-8859-1" << "\"" << ">" << G4endl;
+  outFile << " CONTENT=" 
+	  << "\"" << "text/html; charset=iso-8859-1" 
+	  << "\"" << ">" << G4endl;
   outFile << " <TITLE>Geant4 Particle List </TITLE>" << G4endl;
   outFile << "</HEAD>" << G4endl;
-  outFile << "<!-- Generated automatically by Geant4, ";
-  outFile << " -- >" << G4endl;
+  outFile << "<! -- Generated automatically by Geant4, "
+	  << " -- !>" << G4endl;
   outFile << "<BODY>" << G4endl;
 }
 

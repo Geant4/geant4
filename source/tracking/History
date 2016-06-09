@@ -1,5 +1,5 @@
-$Id: History,v 1.147 2010/11/18 17:24:22 allison Exp $
-$Name: geant4-09-04 $ 
+$Id: History,v 1.147 2010-11-18 17:24:22 allison Exp $
+$Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 September 2011 J.Allison (tracking-V09-04-06)
+- G4RichTrajectoryPoint: Added Pre and PostStepPointWeight.
+- Fixed bug in copy constructor (volume touchable handle was not copied).
+
+15 September 2011 J.Allison (tracking-V09-04-05)
+- G4RichTrajectoryPoint: Added Pre and PostStepPointStatus.
+
+16 June 2011 T.Sasaki (tracking-V09-04-04)
+- "Conditonally" in G4ForceCondition nore suppoted
+
+16 June 2011 G.Folger (tracking-V09-04-03)
+- stepStatus is not used, but fpSteppingManager->Stepping() improves 
+    performance ;-)
+
+9 June 2011 T Sasaki(tracking-V09-04-02)
+- stepStaus is no more used in G4TrackingManager.cc
+
+20 May 2011 Ben Morgan (tracking-V09-04-01)
+- CMakeLists.txt : Added G4TRACKING_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+
+5 May 2011 Makoto Asai (tracking-V09-04-00)
+- Fixed setting of 'fWorldBoundary' step status in G4SteppingManager
+  InvokePostStepDoItProcs() and DefinePhysicalStepLength().
 
 18 November 2010 John Allison (tracking-V09-03-09)
 - G4Trajectory, G4SmoothTrajectory:

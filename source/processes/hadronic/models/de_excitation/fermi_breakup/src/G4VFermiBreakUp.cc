@@ -23,47 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VFermiBreakUp.cc,v 1.5 2006/06/29 20:13:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VFermiBreakUp.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko
 
 #include "G4VFermiBreakUp.hh"
-#include "G4HadronicException.hh"
 
 G4VFermiBreakUp::G4VFermiBreakUp()
-{
-}
-
-G4VFermiBreakUp::G4VFermiBreakUp(const G4VFermiBreakUp &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VFermiBreakUp::copy_constructor meant to not be accessable");
-}
-
+{}
 
 G4VFermiBreakUp::~G4VFermiBreakUp()
-{
-}
-
-
-const G4VFermiBreakUp & G4VFermiBreakUp::operator=(const G4VFermiBreakUp &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VFermiBreakUp::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4VFermiBreakUp::operator==(const G4VFermiBreakUp &) const
-{
-    return false;
-}
-
-G4bool G4VFermiBreakUp::operator!=(const G4VFermiBreakUp &) const
-{
-    return true;
-}
+{}
 
 
 

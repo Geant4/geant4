@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.cc,v 1.14 2010/09/06 16:02:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BSplineCurve.cc,v 1.14 2010-09-06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -151,7 +151,8 @@ void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
 G4int G4BSplineCurve::IntersectRay2D(const G4Ray&)
 {
   // L. Broglia
-  G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
+  G4Exception("G4BSplineCurve::IntersectRay2D()", "GeomSolids0001",
+              FatalException, "Sorry, not yet implemented.");
   return 0;
 }
 
@@ -334,7 +335,7 @@ G4Point3d G4BSplineCurve::GetBoundMax()
 
 G4bool G4BSplineCurve::Tangent(G4CurvePoint&, G4Vector3D&)
 {
-  G4Exception("G4BSplineCurve::Tangent()", "NotImplemented",
+  G4Exception("G4BSplineCurve::Tangent()", "GeomSolids0001",
               FatalException, "Sorry, not implemented !");
   return false;
 }

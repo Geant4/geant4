@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.24 2010/10/06 10:15:38 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VisCommandsViewerSet.hh,v 1.24 2010-10-06 10:15:38 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -73,6 +73,7 @@ private:
   G4ThreeVector         fLightsVector;
   G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
+  G4UIcmdWithAString*   fpCommandRotationStyle;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithAString*   fpCommandStyle;
   G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;

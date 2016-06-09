@@ -1,4 +1,4 @@
-# $Id: tramu.mac,v 1.14 2010/05/19 09:35:37 maire Exp $
+# $Id: tramu.mac,v 1.14 2010-05-19 09:35:37 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,7 +13,8 @@
 /testem/det/setAbsThick 3 m  
 /testem/det/setAbsYZ    3 m
 #
-/testem/phys/addPhysics emstandard_opt2
+###/testem/phys/addPhysics emstandard_opt0
+/testem/phys/addPhysics local
 #
 /testem/phys/setCuts 1 mm
 #    
@@ -23,7 +24,7 @@
 /gun/particle mu+ 
 /gun/energy 1 TeV
 #
-/testem/histo/setFileName tramu/ref10.opt2
+/testem/histo/setFileName tramu/local
 /testem/histo/setFileType root
 /testem/histo/setHisto 10  100  950 1000 GeV	#energy at exit  
 #

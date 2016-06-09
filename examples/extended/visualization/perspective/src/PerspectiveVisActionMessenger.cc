@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PerspectiveVisActionMessenger.cc,v 1.3 2006/11/06 20:07:36 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PerspectiveVisActionMessenger.cc,v 1.3 2006-11-06 20:07:36 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "PerspectiveVisActionMessenger.hh"
 

@@ -3,9 +3,9 @@
    gROOT->Reset();
 
    // Draw histogram fill by Geant4 TestBruce simulation
-   TFile f("./nofoil.13MeV.root");
+   TFile f("./Au3.local.root");
    TH1D* h1d = (TH1D*) f.Get("4");
-   h1d->SetTitle("Fluence distribution of 13 MeV e- in nofoil");
+   h1d->SetTitle("Fluence distribution of 13 MeV e- in Au (93.7 mg/cm2)");
    h1d->GetXaxis()->SetTitle("r (mm)");
    h1d->GetYaxis()->SetTitle("Fluence");
    h1d->SetStats(kFALSE);  // Eliminate statistics box
@@ -16,7 +16,7 @@
 */
 
    ifstream in;
-   in.open("../data/nofoil.13MeV.ascii");
+   in.open("../data/Au3.13MeV.ascii");
 
    TMarker *pt;
    Double_t x, y;
@@ -34,7 +34,7 @@
 
    // Print the histograms legend
    TLegend* legend = new TLegend(0.6,0.55,0.8,0.68);
-   legend->AddEntry(h1d,"G4-9.2-cand-01 ","l");
-   legend->AddEntry(pt,"NRCC data","P");
+   legend->AddEntry(h1d,"msc95","l");
+   legend->AddEntry(pt,"Faddegon data","P");
    legend->Draw();
 }

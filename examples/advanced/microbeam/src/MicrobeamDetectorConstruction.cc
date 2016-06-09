@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.cc,v 1.7 2007/08/27 15:51:54 gcosmo Exp $
+// $Id: MicrobeamDetectorConstruction.cc,v 1.7 2007-08-27 15:51:54 gcosmo Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamDetectorConstruction.hh"

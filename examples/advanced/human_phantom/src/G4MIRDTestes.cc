@@ -46,39 +46,11 @@ G4MIRDTestes::~G4MIRDTestes()
 {
 }
 
-G4VPhysicalVolume* G4MIRDTestes::ConstructTestes(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDTestes::ConstructTestes(G4VPhysicalVolume*, G4String, G4bool)
 {
-  // Initialize GDML Processor
-  parser.Read( "gdmlData/"+sex+"/MIRDTestes.gdml" ); 
+ 
 
-  G4LogicalVolume* logicTestes = parser.GetVolume("TestesVolume");
-
-  G4ThreeVector position = parser.GetPosition("TestesPos");
-  G4ThreeVector rot = parser.GetRotation("TestesRot");
-  G4RotationMatrix* rm = new G4RotationMatrix();
-  rm->rotateX(rot.x()); rm->rotateY(rot.y()); rm->rotateZ(rot.z()); 
+  G4cout << "MIRD Testes still to be created !!!!!!" << G4endl;
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physTestes = new G4PVPlacement(rm,position,
-      			       "physicalTestes",
-  			       logicTestes,
-			       mother,
-			       false,
-			       0);
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicTestes->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
-  // Visualization Attributes
-  G4VisAttributes* TestesVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  TestesVisAtt->SetForceSolid(true);
-  logicTestes->SetVisAttributes(TestesVisAtt);
-
-  G4cout << "Testes created !!!!!!" << G4endl;
-  
-  return physTestes;
+  return 0;
 }

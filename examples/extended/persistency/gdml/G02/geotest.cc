@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: geotest.cc,v 1.5 2010/11/30 10:53:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: geotest.cc,v 1.5 2010-11-30 10:53:38 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@
 
 // A pre-built physics list
 //
-#include "QGSP_BERT_EMV.hh"
+#include "QGSP_BERT.hh"
 
 // Example includes
 //
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new QGSP_BERT_EMV);
+  runManager->SetUserInitialization(new QGSP_BERT);
   runManager->SetUserAction(new PrimaryGeneratorAction);
   RunAction* runAction = new RunAction;
   runManager->SetUserAction(runAction);

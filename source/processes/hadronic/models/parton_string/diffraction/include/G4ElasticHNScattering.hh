@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.hh,v 1.2 2009/08/03 13:14:19 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.hh,v 1.2 2009-08-03 13:14:19 vuzhinsk Exp $
 
 #ifndef G4ElasticHNScattering_h
 #define G4ElasticHNScattering_h 1

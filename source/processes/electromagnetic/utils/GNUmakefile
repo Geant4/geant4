@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2003/10/20 10:27:50 grichine Exp $
+# $Id: GNUmakefile,v 1.7 2003-10-20 10:27:50 grichine Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------

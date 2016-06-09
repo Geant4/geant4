@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.56 2010/11/10 17:57:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLXViewer.cc,v 1.57 2010-12-11 17:04:07 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,7 +37,6 @@
 #include "G4OpenGLXViewer.hh"
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include <GL/glu.h>
 
 #include "G4OpenGLFontBaseStore.hh"
 
@@ -77,7 +76,7 @@ int G4OpenGLXViewer::dblBuf_RGBA[13] =
   None };
 
 #define NewString(str) \
- ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)
+  ((str) != 0 ? (strncpy((char*)malloc((unsigned)strlen(str) + 1), str, (unsigned)strlen(str) + 1)) : (char*)0)
 
 #define USE_DEFAULT_COLORMAP 1
 #define USE_STANDARD_COLORMAP 0
@@ -256,7 +255,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   }
   if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "Window name: " << fName << G4endl;
-  strncpy (charViewName, fName, 100);
+  strncpy (charViewName, fName, 99); charViewName[99] = '\0';
   char *window_name = charViewName;
   char *icon_name = charViewName;
   //char tmpatom[] = "XA_WM_NORMAL_HINTS"; 
@@ -342,6 +341,43 @@ void G4OpenGLXViewer::CreateFontLists () {
   }
 }
 
+
+void G4OpenGLXViewer::DrawText(const char * textString,double,double,double, double size) {
+  
+  // gl2ps or GL window ?
+  if (isGl2psWriting()) {
+    // Don't car about position
+    G4OpenGLViewer::DrawText(textString,0.,0.,0.,size);
+  } else {
+    G4int font_base = G4OpenGLFontBaseStore::GetFontBase(this,(int)size);
+    if (font_base < 0) {
+      static G4int callCount = 0;
+      ++callCount;
+      if (callCount <= 10 || callCount%100 == 0) {
+        G4cout <<
+          "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
+               << callCount <<
+          "\n  No fonts available."
+          "\n  Called with text \""
+               << textString
+               << ", size " << size
+          //               << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+               << G4endl;
+      }
+      return;
+    }
+    glDisable (GL_DEPTH_TEST);
+    glDisable (GL_LIGHTING);
+    
+    // No action on offset or layout at present.
+    glPushAttrib(GL_LIST_BIT);
+    glListBase(font_base);
+    glCallLists(strlen(textString), GL_UNSIGNED_BYTE, (GLubyte *)textString);
+    glPopAttrib();
+  }
+}
+
+
 G4OpenGLXViewer::G4OpenGLXViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
@@ -350,6 +386,12 @@ vi_stored (0),
 vi (0),
 cmap (0)
 {
+  // To satisfy Coverity
+  xwa.visual = 0;
+  iconName.value = 0;
+  xwa.screen = 0;
+  windowName.value = 0;
+
   GetXConnection ();
   if (fViewId < 0) return;
   

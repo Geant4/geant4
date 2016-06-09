@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.30 2010/11/24 11:55:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PreCompoundModel.cc,v 1.30 2010-11-24 11:55:40 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
@@ -62,7 +62,9 @@
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
   : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
-    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true) 
+    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true),
+    maxZ(3), maxA(5) 
+				      //maxZ(9), maxA(17)
 {
   theParameters = G4PreCompoundParameters::GetAddress();
 
@@ -156,13 +158,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 {
   G4ReactionProductVector * Result = new G4ReactionProductVector;
   G4double Eex = aFragment.GetExcitationEnergy();
+  G4int Z = aFragment.GetZ_asInt(); 
   G4int A = aFragment.GetA_asInt(); 
 
   //G4cout << "### G4PreCompoundModel::DeExcite" << G4endl;
   //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
-  if (A < 5 || Eex < keV /*|| Eex > 3.*MeV*A*/) {
+  if ((Z < maxZ && A < maxA) || Eex < MeV /*|| Eex > 3.*MeV*A*/) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }
@@ -206,24 +209,15 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
       G4bool go_ahead = false;
       // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
-      //       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
       G4int test = aFragment.GetNumberOfExcitons();
-      if (test < EquilibriumExcitonNumber) { go_ahead=true; }
+      if (test <= EquilibriumExcitonNumber) { go_ahead=true; }
 
       //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
-      if (useSCO) {
-	if (test < EquilibriumExcitonNumber)
-	  {
-	    G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1; 
-            if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
-	    /*
-              test = test*test;
-              test /= 0.32;
-              test = 1.0 - std::exp(-test);
-              go_ahead = (G4UniformRand() < test);
-	    */
-	  }
-      } 
+      if (useSCO && !go_ahead)
+	{
+	  G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
+	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
+	} 
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
       // (O values would be returned otherwise)
@@ -234,13 +228,19 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       G4double P3 = theTransition->GetTransitionProb3();
       //G4cout<<"#0 P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
       
-      //J.M. Quesada (May. 08). Physical criterium (lamdas)  PREVAILS over 
+      //J.M. Quesada (May 2008) Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)
-      if(P1 <= P2+P3) { go_ahead = false; }
-        
-      if (go_ahead &&  aFragment.GetA_asInt() > 4) 
+      //V.Ivanchenko (May 2011) added check on number of nucleons
+      //                        to send a fragment to FermiBreakUp
+      if(!go_ahead || P1 <= P2+P3 || 
+	 (aFragment.GetZ_asInt() < maxZ && aFragment.GetA_asInt() < maxA) )        
 	{
-				
+	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
+	  PerformEquilibriumEmission(aFragment,Result);
+	  return Result;
+	}
+      else 
+	{
 	  G4double TotalEmissionProbability = 
 	    theEmission->GetTotalProbability(aFragment);
 	  //
@@ -277,12 +277,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	      ThereIsTransition = false;
 	      Result->push_back(theEmission->PerformEmission(aFragment));
 	    }
-	} 
-      else 
-	{
-	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
-	  PerformEquilibriumEmission(aFragment,Result);
-	  return Result;
 	}
     } while (ThereIsTransition);   // end of do loop
   } // end of for (;;) loop
@@ -350,62 +344,6 @@ void G4PreCompoundModel::UseCEMtr()
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef debug
-void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
-					   const G4Fragment & aFragment,
-					   G4ReactionProductVector * Result) const
-{
-  G4double ProductsEnergy = aFragment.GetMomentum().e();
-  G4ThreeVector ProductsMomentum = aFragment.GetMomentum();
-  G4int ProductsA = static_cast<G4int>(aFragment.GetA());
-  G4int ProductsZ = static_cast<G4int>(aFragment.GetZ());
-  for (G4ReactionProductVector::iterator h = Result->begin(); 
-       h != Result->end(); ++h) 
-    {
-      ProductsEnergy += (*h)->GetTotalEnergy();
-      ProductsMomentum += (*h)->GetMomentum();
-      ProductsA += static_cast<G4int>((*h)->GetDefinition()->GetBaryonNumber());
-      ProductsZ += static_cast<G4int>((*h)->GetDefinition()->GetPDGCharge());
-    }
-
-  if (ProductsA != theInitialState.GetA()) 
-    {
-      G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!\n"
-	     << "G4PreCompoundModel.cc: Barionic Number Conservation test for just preequilibrium fragments\n" 
-	     << "Initial A = " << theInitialState.GetA() 
-	     << "   Fragments A = " << ProductsA << "   Diference --> " 
-	     << theInitialState.GetA() - ProductsA << '\n';
-    }
-  if (ProductsZ != theInitialState.GetZ()) 
-    {
-      G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!\n"
-	     << "G4PreCompoundModel.cc: Charge Conservation test for just preequilibrium fragments\n" 
-	     << "Initial Z = " << theInitialState.GetZ() 
-	     << "   Fragments Z = " << ProductsZ << "   Diference --> " 
-	     << theInitialState.GetZ() - ProductsZ << '\n';
-    }
-  if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) 
-    {
-      G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!\n" 
-	     << "G4PreCompoundModel.cc: Energy Conservation test for just preequilibrium fragments\n"  
-	     << "Initial E = " << theInitialState.GetMomentum().e()/MeV << " MeV"
-	     << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
-	     << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV\n";
-    } 
-  if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-      std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-      std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) 
-    {
-      G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!\n"
-	     << "G4PreCompoundModel.cc: Momentum Conservation test for just preequilibrium fragments\n" 
-	     << "Initial P = " << theInitialState.GetMomentum().vect() << " MeV"
-	     << "   Fragments P = " << ProductsMomentum  << " MeV   Diference --> " 
-	     << theInitialState.GetMomentum().vect() - ProductsMomentum << " MeV\n";
-    }
-  return;
-}
-
-#endif
 
 
 

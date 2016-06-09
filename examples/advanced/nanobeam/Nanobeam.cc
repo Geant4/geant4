@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.8 2010/10/09 16:30:27 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.8 2010-10-09 16:30:27 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
   //
-  system ("rm -rf nanobeam.root");
+  remove ("nanobeam.root");
   
   if (argc==1)   // Define UI session for interactive mode.
   { 
@@ -96,34 +96,6 @@ int main(int argc,char** argv) {
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
   }
-
-
-// test
-/*
-  if (argc!=1) 
-  {
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
-  }
-  
-  else 
-  {      
-    G4UIsession* session = 0;
-    
-    #ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-    #else
-      session = new G4UIterminal();
-    #endif
-    
-    UI->ApplyCommand( "/control/execute default.mac");                      
-    session->SessionStart();
-    delete session;
-  }
-
-*/
-// end test
 
   delete runManager;
 

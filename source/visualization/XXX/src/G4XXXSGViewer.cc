@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.cc,v 1.5 2010/10/06 10:12:03 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4XXXSGViewer.cc,v 1.5 2010-10-06 10:12:03 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  10th March 2006
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines beginning like this require specialisation for your driver.
-
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
 
 #include "G4XXXSGViewer.hh"
 
@@ -105,11 +103,10 @@ void G4XXXSGViewer::KernelVisitDecision () {
   // If there's a significant difference with the last view parameters
   // of either the scene handler or this viewer, trigger a rebuild.
 
-  typedef taj::tree<G4String> SceneGraph;
-  typedef taj::tree<G4String>::iterator SceneGraphIterator;
   SceneGraph& sceneGraph =
     static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
-  if (sceneGraph.size() == 3  // I.e., only the root nodes.
+  if (sceneGraph.daughters.size() == 3  // I.e., only the root nodes.
+      // (The above needs re-thinking.)
       || CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();  // Sets fNeedKernelVisit.
   }      
@@ -153,8 +150,6 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 }
 
 void G4XXXSGViewer::DrawFromStore(const G4String& source) {
-  typedef taj::tree<G4String> SceneGraph;
-  typedef taj::tree<G4String>::preorder_iterator SceneGraphPreIterator;
   SceneGraph& sceneGraph =
     static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
   // Write to a file for testing...
@@ -163,15 +158,6 @@ void G4XXXSGViewer::DrawFromStore(const G4String& source) {
   oss << source << '.' << fName << '.' << iCount++ << ".out";
   G4cout << "Writing " << oss.str() << G4endl;
   std::ofstream ofs(oss.str().c_str());
-  for (SceneGraphPreIterator i = sceneGraph.beginPre();
-       i != sceneGraph.endPre(); ++i) {
-    G4int depth = 0;
-    SceneGraphPreIterator j = i;
-    while (j != sceneGraph.getRoot()) {j = j.parent(); ++depth;}
-    ofs << "\nDepth: " << depth;
-    ofs << *i;
-  }
+  JA::PrintTree(ofs,&sceneGraph);
   ofs.close();
 }
-
-#endif

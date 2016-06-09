@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestContinuousDiscreteProcess.cc,v 1.7 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VRestContinuousDiscreteProcess.cc,v 1.8 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -43,7 +43,7 @@ G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess()
    valueGPILSelection(CandidateForSelection) 
 {
   G4Exception("G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess()",
-	      "Illegal operation",JustWarning,"default constructor is called");
+	      "ProcMan102",JustWarning,"Default constructor is called");
 }
 
 G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)

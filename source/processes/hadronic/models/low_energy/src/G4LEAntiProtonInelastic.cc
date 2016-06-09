@@ -23,54 +23,75 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEAntiProtonInelastic.cc,v 1.15 2007-02-24 05:11:27 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.15 2007/02/24 05:11:27 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// Hadronic Process: AntiProton Inelastic Process
+// J.L. Chuma, TRIUMF, 13-Feb-1997
+// J.P. Wellisch: 23-Apr-97: Bug hunting
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
 //
- // Hadronic Process: AntiProton Inelastic Process
- // J.L. Chuma, TRIUMF, 13-Feb-1997
- // Last modified: 27-Mar-1997
- // J.P. Wellisch: 23-Apr-97: Bug hunting
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEAntiProtonInelastic.hh"
 #include "Randomize.hh"
+#include <iostream>
 
- G4HadFinalState *
-  G4LEAntiProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                          G4Nucleus &targetNucleus )
-  { 
-    const G4HadProjectile* originalIncident = &aTrack;
 
-    if (originalIncident->GetKineticEnergy() <= 0.1*MeV) {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
-      return &theParticleChange;
-    }
+G4LEAntiProtonInelastic::G4LEAntiProtonInelastic(const G4String& name)
+ :G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(25.*GeV);
+}
 
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+
+void G4LEAntiProtonInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEAntiProtonInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic anti-proton scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to anti-protons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEAntiProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                       G4Nucleus& targetNucleus)
+{ 
+  const G4HadProjectile* originalIncident = &aTrack;
+
+  if (originalIncident->GetKineticEnergy() <= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
+
+  // create the target particle
+
+  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAntiProtonInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEAntiProtonInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -129,12 +150,12 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
- 
- void
-  G4LEAntiProtonInelastic::Cascade(
+  delete originalTarget;
+  return &theParticleChange;
+}
+
+
+void G4LEAntiProtonInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -143,25 +164,26 @@
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
-  {
-    // derived from original FORTRAN code CASPB by H. Fesefeldt (13-Sep-1987)
-    //
-    // AntiProton undergoes interaction with nucleon within a nucleus.  Check if it is
-    // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
-    // occurs and input particle is degraded in energy. No other particles are produced.
-    // If reaction is possible, find the correct number of pions/protons/neutrons
-    // produced using an interpolation to multiplicity data.  Replace some pions or
-    // protons/neutrons by kaons or strange baryons according to the average
-    // multiplicity per Inelastic reaction.
-    //
-    const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
-    const G4double targetMass = targetParticle.GetMass()/MeV;
-    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
+{
+  // derived from original FORTRAN code CASPB by H. Fesefeldt (13-Sep-1987)
+  //
+  // AntiProton undergoes interaction with nucleon within a nucleus.  Check if
+  // it is energetically possible to produce pions/kaons.  In not, assume
+  // nuclear excitation occurs and input particle is degraded in energy. No
+  // other particles are produced.  If reaction is possible, find the correct
+  // number of pions/protons/neutrons produced using an interpolation to
+  // multiplicity data.  Replace some pions or protons/neutrons by kaons or
+  // strange baryons according to the average  multiplicity per inelastic
+  // reaction.
+
+  const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
+  const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
+  const G4double targetMass = targetParticle.GetMass()/MeV;
+  G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
-    G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
+  G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
     
     static G4bool first = true;
     const G4int numMul = 1200;
@@ -540,9 +562,7 @@
       targetParticle.SetMass( 0.0 );
     }
     while(np+nm+nz<3) nz++;
-    SetUpPions( np, nm, nz, vec, vecLen );
-    return;
-  }
 
- /* end of file */
- 
+  SetUpPions( np, nm, nz, vec, vecLen );
+  return;
+}

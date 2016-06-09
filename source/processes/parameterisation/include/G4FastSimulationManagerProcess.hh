@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.16 2007/11/30 18:05:14 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.16 2007-11-30 18:05:14 mverderi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "globals.hh"
 #include "G4VProcess.hh"
 #include "G4FastSimulationManager.hh"
+#include "G4FastSimulationProcessType.hh"
 #include "G4Step.hh"
 #include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"

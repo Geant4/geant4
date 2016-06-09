@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.17 2010/07/23 14:13:49 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RKG3_Stepper.cc,v 1.17 2010-07-23 14:13:49 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ void G4RKG3_Stepper::StepWithEst( const G4double*,
                                         G4double* )
    
 {
-  G4Exception("G4RKG3_Stepper::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4RKG3_Stepper::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
 }
 

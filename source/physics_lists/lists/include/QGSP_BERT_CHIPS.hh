@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_CHIPS.hh,v 1.1 2010/05/26 15:06:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: QGSP_BERT_CHIPS.hh,v 1.1 2010-05-26 15:06:49 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

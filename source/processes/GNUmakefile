@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.48 2010/11/19 08:43:44 gcosmo Exp $
+# $Id: GNUmakefile,v 1.49 2010-11-23 13:29:25 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -19,8 +19,14 @@ SUBDIRS += electromagnetic/standard
 SUBDIRS += electromagnetic/utils 
 SUBDIRS += electromagnetic/xrays
 SUBDIRS += electromagnetic/lowenergy
-SUBDIRS += electromagnetic/highenergy
+SUBDIRS += electromagnetic/dna/processes
+SUBDIRS += electromagnetic/dna/models
+SUBDIRS += electromagnetic/dna/utils
+SUBDIRS += electromagnetic/dna/management
+SUBDIRS += electromagnetic/dna/molecules/management
+SUBDIRS += electromagnetic/dna/molecules/types
 SUBDIRS += electromagnetic/pii
+SUBDIRS += electromagnetic/highenergy
 SUBDIRS += electromagnetic/polarisation
 
 SUBLIBS  = G4procman 
@@ -38,12 +44,21 @@ SUBLIBS += G4xrays
 SUBLIBS += G4emlowenergy
 SUBLIBS += G4emhighenergy
 SUBLIBS += G4emadjoint
+SUBLIBS += G4emdna-processes
+SUBLIBS += G4emdna-models
+SUBLIBS += G4emdna-utils
+SUBLIBS += G4emdna-man
+SUBLIBS += G4emdna-molman
+SUBLIBS += G4emdna-moltypes
 SUBLIBS += G4empii
 SUBLIBS += G4empolar
 
 GLOBLIBS  = libG4digits_hits.lib libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
+ifeq ($(G4SYSTEM), WIN32-VC)
+  GLOBLIBS += libG4expat.lib
+endif
 
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/management 
@@ -72,7 +87,11 @@ SUBDIRS += hadronic/models/em_dissociation
 SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
 SUBDIRS += hadronic/models/incl
+SUBDIRS += hadronic/models/inclxx/utils
+SUBDIRS += hadronic/models/inclxx/incl_physics
+SUBDIRS += hadronic/models/inclxx/interface
 SUBDIRS += hadronic/models/isotope_production
+SUBDIRS += hadronic/models/lend
 SUBDIRS += hadronic/models/lll_fission
 SUBDIRS += hadronic/models/low_energy
 SUBDIRS += hadronic/models/management
@@ -86,6 +105,7 @@ SUBDIRS += hadronic/models/pre_equilibrium/exciton_model
 SUBDIRS += hadronic/models/qmd
 SUBDIRS += hadronic/models/radioactive_decay
 SUBDIRS += hadronic/models/rpg
+SUBDIRS += hadronic/models/quasi_elastic
 SUBDIRS += hadronic/models/theo_high_energy
 SUBDIRS += hadronic/models/util
 SUBDIRS += hadronic/processes
@@ -106,6 +126,7 @@ SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_LE
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
+SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
@@ -116,6 +137,9 @@ SUBLIBS +=  G4hadronic_bert_cascade
 SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_incl_cascade
+SUBLIBS +=  G4hadronic_inclxx_utils
+SUBLIBS +=  G4hadronic_inclxx_physics
+SUBLIBS +=  G4hadronic_inclxx_interface
 SUBLIBS +=  G4hadronic_body_ci
 SUBLIBS +=  G4hadronic_crosec_ci
 SUBLIBS +=  G4hadronic_fragm_ci
@@ -137,6 +161,7 @@ SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff
 SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
+SUBLIBS +=  G4hadronic_quasi_elastic
 SUBLIBS +=  G4hadronic_qgstring
 
 ifndef G4INSTALL

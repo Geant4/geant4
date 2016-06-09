@@ -1,0 +1,59 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h1d
+#define tools_histo_h1d
+
+#include "h1"
+
+namespace tools {
+namespace histo {
+
+// d in h1d is for double (and not dimension).
+
+class h1d : public h1<double,unsigned int,double,double> {
+  typedef h1<double,unsigned int,double,double> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::h1d");
+    return s_v;
+  }
+public:
+  h1d(const std::string& a_title,
+             bn_t aXnumber,double aXmin,double aXmax)
+  : parent(a_title,aXnumber,aXmin,aXmax){}
+
+  h1d(const std::string& a_title,
+                     const std::vector<double>& aEdges)
+  : parent(a_title,aEdges){}
+
+  virtual ~h1d(){}
+public:
+  h1d(const h1d& a_from): parent(a_from){}
+  h1d& operator=(const h1d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+#if defined(__CINT__)
+  bool fill(double aX,double aW = 1) {
+    h1<double,unsigned int,double,double>::fill(aX,aW);    
+  }
+  void hprint(std::ostream& a_out) {
+    h1<double,unsigned int,double,double>::hprint(a_out);
+  }
+#endif
+};
+
+inline void h1d_check_instantiation() {
+  h1d dummy("",10,0,1);
+  dummy.gather_bins(5);
+}
+
+}}
+
+#endif
+
+
+
+

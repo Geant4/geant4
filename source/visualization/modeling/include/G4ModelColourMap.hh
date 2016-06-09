@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelColourMap.hh,v 1.2 2006/06/29 21:30:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelColourMap.hh,v 1.2 2006-06-29 21:30:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic variable->G4Colour map, where "variable" is the template
 // parameter.
@@ -81,11 +81,11 @@ G4ModelColourMap<T>::Set(const T& quantity, const G4String& colour)
   
   // Will not setup the map if colour key does not exist
   if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4ExceptionDescription ed;
+    ed << "G4Colour with key "<<colour<<" does not exist ";
     G4Exception
       ("G4ColourMap::Set(Charge charge, const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
+       "modeling0108", JustWarning, ed);
     return;
   }
   

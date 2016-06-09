@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.15 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FieldTrack.cc,v 1.15 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 
@@ -63,8 +63,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    // fMomentumDir(pMomentumDirection),
    fChargeState(  charge, magnetic_dipole_moment ) 
 {
-  G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
-                            +2.0*restMass_c2*kineticEnergy);
+  G4double momentum  = std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2));
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
   SetCurvePnt( pPosition, pMomentum, curve_length );
     // Sets momentum direction as well.
@@ -91,8 +90,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    // fMomentumDir(pMomentumDirection), 
    fChargeState( DBL_MAX ) //  charge not set 
 {
-  G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
-                            +2.0*restMass_c2*kineticEnergy);
+  G4double momentum  = std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2));
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
 
   SetCurvePnt( pPosition, pMomentum, curve_length );

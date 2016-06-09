@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.19 2010/10/19 19:48:32 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeCheckBalance.cc,v 1.19 2010-10-19 19:48:32 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
@@ -44,6 +44,8 @@
 // 20100719  M. Kelsey -- Change zero tolerance to 10 keV instead of 1 keV.
 // 20100909  M. Kelsey -- Add interface for both kinds of particle lists
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor
+// 20110328  M. Kelsey -- Add default ctor and explicit limit setting
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -59,6 +61,12 @@
 // Constructor sets acceptance limits
 
 const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
+
+G4CascadeCheckBalance::G4CascadeCheckBalance(const char* owner)
+  : G4VCascadeCollider(owner),
+    relativeLimit(G4CascadeCheckBalance::tolerance),
+    absoluteLimit(G4CascadeCheckBalance::tolerance), initialBaryon(0),
+    finalBaryon(0), initialCharge(0), finalCharge(0) {}
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,
@@ -163,14 +171,14 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				   G4InuclParticle* target,
-	     const std::vector<G4InuclElementaryParticle>& particles,
+				    G4CollisionOutput& output,
 	     const std::vector<G4CascadParticle>& cparticles) {
   if (verboseLevel > 1)
     G4cout << " >>> G4CascadeCheckBalance(" << theName
 	   << ")::collide(<EP>,<CP>)" << G4endl;
 
   tempOutput.reset();			// Buffer for processing
-  tempOutput.addOutgoingParticles(particles);
+  tempOutput.add(output);
   tempOutput.addOutgoingParticles(cparticles);
   collide(bullet, target, tempOutput);
 }

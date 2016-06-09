@@ -1,0 +1,79 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+7 November 2011 - G.Cosmo
+- Updated to CLHEP-2.1.1.0:
+  Utility (W.E.Brown  <wb@fnal.gov>):
+  o removing C++0X-like keywords constexpr, noexcept, and nullptr
+    to avoid collision with similar symbols in other packages.
+
+20 September 2011 - G.Cosmo
+- Added missing export statements for static symbols required for DLL build.
+
+22 June 2011 - B.Morgan
+- CMakeLists.txt : Added the CLHEP include directory to
+  GEANT4_BUILDTREE_INCLUDE_DIRS so that its visible from the build tree if
+  we use the internal CLHEP.
+
+20 June 2011 - B.Morgan
+- CMakeLists.txt : Install CLHEP headers to
+  CMAKE_INSTALL_INCLUDEDIR/PROJECT_NAME in line with new standard install
+  directory structure.
+
+14 June 2011 - B.Morgan
+- CMakeLists.txt : Build G4clhep through standard GEANT4_LIBRARY_TARGET
+  macro. Keep installation of headers as is.
+
+13 June 2011 - B.Morgan
+- CMakeLists.txt : Added use of new CMAKE_INSTALL_XXX variables to control
+  installation of libraries and headers, and add exported libraries to a
+  global property as per other Geant4 targets. Header paths are not added to
+  a global property though because these can be internal or external, so
+  we handle them higher up when generating the configuration files.
+
+2 June 2011 - B.Morgan
+- CMakeLists.txt : NEW file adding CMake build of 'G4clhep'
+  Implemented as a single CMakeLists.txt because special handling of
+  the nested header structure of CLHEP is needed at install time.
+
+1 June 2011 - G.Cosmo
+- Fixed trivial compilation warnings on gcc-4.6.0 in NonRandomEngine.h
+  and Ranlux64Engine.cc for parameters defined but not used.
+
+24 May 2011 - G.Cosmo
+- Added missing files in CLHEP built-in module.
+  Allow for generation of DLL library on Windows for it.
+
+11 May 2011 - G.Cosmo
+- Including a subset of CLHEP classes imported from version CLHEP-2.1.0.1.
+- Modifications applied vs. original CLHEP classes:
+  * Removed dependency on internal CLHEP "defs.h" configuration header;
+    the Geant4 built-in module for CLHEP follows the Geant4 build scheme.
+  * Adopt "std" namespace for standard mathematical functions, where needed.
+  * Removed dependency on ZM exceptions and replaced with "cerr" printouts
+    where necessary.
+  * Renamed following files for coherency and standard:
+    o Inlined code *.src to *.icc and moved to includes set;
+    o DualConv.hh to DualConv.h.
+  * Use coherent inclusion scheme also for internal headers/data/inline-code,
+    where applicable.
+  * Use of standard WIN32 compiler flag where applicable.
+  * Cleared source code of de-activated debug blocks and minor cleanup,
+    where applicable.
+  * Rename of final CLHEP library produced, from 'CLHEP' to 'g4clhep'.

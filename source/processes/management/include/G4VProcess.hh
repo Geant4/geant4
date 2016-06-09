@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.25 2007/11/15 04:09:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VProcess.hh,v 1.25 2007-11-15 04:09:58 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -203,19 +203,19 @@ class G4VProcess
                              G4ForceCondition* condition );
 
   ////////////////////// 
-      virtual G4bool IsApplicable(const G4ParticleDefinition&){return true;};
+      virtual G4bool IsApplicable(const G4ParticleDefinition&){return true;}
       // Returns true if this process object is applicable to
       // the particle type
       // Process will not be registered to a particle if IsApplicable is false   
 
-      virtual void BuildPhysicsTable(const G4ParticleDefinition&){};
+      virtual void BuildPhysicsTable(const G4ParticleDefinition&){}
       // Messaged by the Particle definition (via the Process manager)
       // whenever cross section tables have to be rebuilt (i.e. if new
       // materials have been defined). 
       // It is overloaded by individual processes when they need physics
       // tables. 
 
-     virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+     virtual void PreparePhysicsTable(const G4ParticleDefinition&){}
       // Messaged by the Particle definition (via the Process manager)
       // whenever cross section tables have to be prepare for rebuilt 
       // (i.e. if new materials have been defined). 
@@ -230,16 +230,12 @@ class G4VProcess
 
 
       virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-				       const G4String&,
-				       G4bool          ascii = false)
-                                      {ascii=false; return true;}
+				       const G4String&, G4bool){return true;}
       // Store PhysicsTable in a file.
       // (return false in case of failure at I/O )
 
       virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
-					   const G4String&,
-				           G4bool          ascii = false)
-                                      {ascii=false; return false;}
+					   const G4String&, G4bool){return false;}
       // Retrieve Physics from a file.
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
@@ -496,23 +492,3 @@ inline
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

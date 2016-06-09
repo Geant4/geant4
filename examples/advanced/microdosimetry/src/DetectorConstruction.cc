@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.5 2010/10/06 14:39:41 sincerti Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2010-10-06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
@@ -93,7 +93,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                  false,			//no boolean operation
                                  0);			//copy number
 
-  G4double TargetSizeZ =  WorldSizeZ*0.1; 
+  G4double TargetSizeZ =  WorldSizeZ*0.05; 
 
   G4Box* targetSolid = new G4Box("Target",				     //its name
 				 WorldSizeX/2,WorldSizeY/2,TargetSizeZ/2);   //its size

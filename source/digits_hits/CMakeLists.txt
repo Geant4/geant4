@@ -8,9 +8,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 18:37:44 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:37:44 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
+
+# Add allocation export symbol for the digits_hits category
+add_definitions(-DG4DIGI_ALLOC_EXPORT)
+
 
 add_subdirectory(detector)
 add_subdirectory(digits)

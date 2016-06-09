@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QPionMinusNuclearCrossSection for gamma+A cross sections
@@ -247,13 +247,13 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
 #endif
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
-  G4double A=targN+targZ;              // A of the target
+  //G4double A=targN+targZ;              // A of the target
 #ifdef debug
   G4cout<<"G4QPimNucCS::CalcCS: A="<<A<<",F="<<F<<",I="<<I<<",nL="<<nL<<",nH="<<nH<<G4endl;
 #endif
   if(F<=0)                             // This isotope was not the last used isotop
   {
-    if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
+    if(F<0)                            // This isotope was found in DAMDB =-----=> RETRIEVE
     {
       G4int sync=LEN->size();
       if(sync<=I) G4cerr<<"*!*G4QPiMinusNuclCS::CalcCrosSect:Sync="<<sync<<"<="<<I<<G4endl;
@@ -266,7 +266,7 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+     for(G4int m=0; m<nL; m++)
       {
         lastLEN[m] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
@@ -293,7 +293,7 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
       HEN->push_back(lastHEN);         // remember the High Energy Table
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW the Magic Formula =================================
+  // =---------------------= NOW the Magic Formula =---------------------------=
 #ifdef debug
   G4cout<<"G4QPimNCS::CalcCS:lTH="<<lastTH<<",Pi="<<Pmin<<",dP="<<dP<<",dlP="<<dlP<<G4endl;
 #endif
@@ -301,13 +301,12 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
   else if (Momentum<Pmin)              // High Energy region
   {
 #ifdef debug
-    G4cout<<"G4QPimNCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
+    G4cout<<"G4QPimNCS::CalcCS:bLEN nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
 #endif
-    if(A<=1.) sigma=0.;
-    else      sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
+    sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
 #ifdef debugn
     if(sigma<0.)
-      G4cout<<"G4QPimNCS::CalcCS:A="<<A<<",E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
+      G4cout<<"G4QPimNCS::CalcCS: E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
 #endif
   }
   else if (Momentum<Pmax)              // High Energy region
@@ -350,6 +349,8 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
   G4double sigma=0.;
   if(tZ==1 && !tN)                        // PiMin-Proton interaction from G4QuasiElRatios
   {
+    G4double lr=lP+1.27;                    // From G4QuasiFreeRatios.cc Uzhi
+    G4double LE=1.53/(lr*lr+.0676);         // From G4QuasiFreeRatios.cc Uzhi
     G4double ld=lP-3.5;
     G4double ld2=ld*ld;
     G4double p2=P*P;
@@ -362,6 +363,7 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
     G4double El=(.0557*ld2+2.4+7./sp)/(1.+.7/p4);
     G4double To=(.3*ld2+22.3+12./sp)/(1.+.4/p4);
     sigma=(To-El)+.4/md+.01/hd;
+    sigma+=LE*2;                            //  Uzhi       
   }
   else if(tZ==1 && tN==1)                   // pimp_tot
   {

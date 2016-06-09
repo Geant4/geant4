@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlongStepWeightCorrection.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointAlongStepWeightCorrection.hh,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointAlongStepWeightCorrection
@@ -118,7 +118,6 @@ private:
   const G4Material*  currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t   currentMaterialIndex; 
-  G4double currentTcut;
   G4double preStepKinEnergy;
   
 };

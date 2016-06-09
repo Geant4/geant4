@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2010/01/05 15:35:32 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: RunAction.cc,v 1.2 2010-01-05 15:35:32 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   InitFluence();  
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 }
 

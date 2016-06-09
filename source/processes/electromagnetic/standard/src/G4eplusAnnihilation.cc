@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.30 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eplusAnnihilation.cc,v 1.30 2009-02-20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,11 @@ using namespace std;
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false)
 {
+  theGamma = G4Gamma::Gamma();
+  SetIntegral(true);
+  SetBuildTableFlag(false);
+  SetStartFromNullFlag(false);
+  SetSecondaryParticle(theGamma);
   SetProcessSubType(fAnnihilation);
   enableAtRestDoIt = true;
 }
@@ -98,9 +103,6 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(true);
-    SetStartFromNullFlag(false);
-    SetSecondaryParticle(G4Gamma::Gamma());
     if(!Model()) SetModel(new G4eeToTwoGammaModel());
     Model()->SetLowEnergyLimit(MinKinEnergy());
     Model()->SetHighEnergyLimit(MaxKinEnergy());
@@ -127,15 +129,24 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
 {
   fParticleChange.InitializeForPostStep(aTrack);
 
-  fParticleChange.SetNumberOfSecondaries(2);
-
-  G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
+  G4double cosTeta = 2.*G4UniformRand()-1.; 
+  G4double sinTeta = sqrt((1.-cosTeta)*(1.0 + cosTeta));
   G4double phi     = twopi * G4UniformRand();
-  G4ThreeVector direction (sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
-  fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
-                                            direction, electron_mass_c2) );
-  fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
-                                           -direction, electron_mass_c2) );
+  G4ThreeVector dir(sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
+  phi = twopi * G4UniformRand();
+  G4ThreeVector pol(cos(phi), sin(phi), 0.0);
+  pol.rotateUz(dir);
+
+  // add gammas
+  fParticleChange.SetNumberOfSecondaries(2);
+  G4DynamicParticle* dp = 
+    new G4DynamicParticle(theGamma, dir, electron_mass_c2);
+  dp->SetPolarization(pol.x(),pol.y(),pol.z()); 
+  fParticleChange.AddSecondary(dp);
+  dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
+  dp->SetPolarization(-pol.x(),-pol.y(),-pol.z()); 
+  fParticleChange.AddSecondary(dp);
+
   // Kill the incident positron
   //
   fParticleChange.ProposeTrackStatus(fStopAndKill);

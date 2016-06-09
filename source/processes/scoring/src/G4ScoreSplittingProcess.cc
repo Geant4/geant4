@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.9 2010/12/15 13:55:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreSplittingProcess.cc,v 1.9 2010-12-15 13:55:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ios.hh"
@@ -138,7 +138,8 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
   G4VSensitiveDetector* ptrSD = pLogicalVolume->GetSensitiveDetector();
 
   pParticleChange->Initialize(track); 
-  if(  ( ! pCurrentVolume->IsRegularStructure() ) || ( !ptrSD ) )  {
+  if(  ( ! pCurrentVolume->IsRegularStructure() ) || ( !ptrSD ) 
+    || G4RegularNavigationHelper::theStepLengths.size() <= 1) {
      // Set the flag to make sure that Stepping Manager does the scoring
      pParticleChange->ProposeSteppingControl( NormalCondition );     
   } else { 

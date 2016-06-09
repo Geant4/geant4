@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2002/12/06 19:52:06 gcosmo Exp $
+$Id: History,v 1.7 2007-10-10 14:39:00 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 13, 2011 G.Cosmo (processes-V09-04-01)
+- Added "hadronic/models/lend" module.
+- Includes following tags on top of "geant4-09-04-ref-04":
+  had-binary-V09-04-01, procuts-V09-04-03, procman-V09-04-03,
+  hadr-deex-V09-04-12, emlowen-V09-04-32, hadr-cohe-V09-04-02,
+  hadr-cross-V09-04-06, xrays-V09-04-00, hadr-lend-V09-04-05,
+  emutils-V09-04-21, emdna-V09-04-02, hadr-munuclear-V09-04-01,
+  procscore-V09-04-00, emstand-V09-04-21, hadr-chips-pro-V09-04-03.
+- Requires tags: externals-V09-04-01, config-V09-04-06, source-gmk-V09-04-01.
+
+March 17, 2011 G.Cosmo (processes-V09-04-00)
+- Added "electromagnetic/dna" module.
+- Includes following tags on top of "geant4-09-04-ref-02":
+  em-V09-04-00 (emlowen-V09-04-17, emdna-V09-04-02, emutils-V09-04-05),
+  hadr-modman-V09-04-00, hadr-man-V09-04-03, hadr-cross-V09-04-05,
+  hadr-proc-V09-04-03, had-theo-HE-V09-04-00, had-binary-V09-04-00,
+  hadr-qgsm-V09-04-00.
+
+November 19, 2010 G.Cosmo
+- Added "electromagnetic/pii" module.
+
+October 10, 2007: Gunter Folger   (processes-gmk-V09-00-01)
+- Added hadronic/models/incl (Liege cascade) to GNUmakefile
 
 Dec 06, 2002: Gabriele Cosmo (process-V04-01-01)
 - Merged development with latest migration to G4ApplicationState.

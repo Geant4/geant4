@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.7 2010/10/13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.7 2010-10-13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgbMaterialMixtureByNoAtoms
@@ -68,14 +68,20 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
   G4Material* mate = new G4Material( theTgrMate->GetName(),
                                      theTgrMate->GetDensity(),
                                      theTgrMate->GetNumberOfComponents(),
-                                     kStateUndefined, STP_Temperature );
+                                     theTgrMate->GetState(),
+                                     theTgrMate->GetTemperature(),
+                                     theTgrMate->GetPressure() );
  #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbMaterialMixtureByNoAtoms::BuildG4Material() -"
            << " Constructing new G4Material:"
            << " " << theTgrMate->GetName()
-           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
+           << " " << theTgrMate->GetDensity()/g*cm3
+           << " " << theTgrMate->GetNumberOfComponents()
+           << " " << theTgrMate->GetState()
+           << " " << theTgrMate->GetTemperature()
+           << " " << theTgrMate->GetPressure() << G4endl;
   }
 #endif
 

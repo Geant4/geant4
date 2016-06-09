@@ -1,4 +1,4 @@
-# $Id: tallies.mac,v 1.2 2009/11/21 22:02:51 maire Exp $
+# $Id: tallies.mac,v 1.2 2009-11-21 22:02:51 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -12,12 +12,15 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
+/testem/det/tallyNumber 4
+/testem/det/tallyDefinition 1 Water 2. 2. 2. mm
+/testem/det/tallyDefinition 2 Water 2. 2. 2. mm
+/testem/det/tallyDefinition 3 Water 2. 2. 2. mm
+/testem/det/tallyDefinition 4 Water 2. 2. 2. mm
+/testem/det/tallyPosition 1 -9.9 0. 0. cm
+/testem/det/tallyPosition 2 -5.  0. 0. cm
+/testem/det/tallyPosition 3  0.  0. 0. cm
+/testem/det/tallyPosition 4  5.  0. 0. cm
 #
 /testem/phys/addPhysics  local	# em physics  
 #
@@ -34,4 +37,4 @@
 #
 /testem/event/printModulo 1000
 #
-/run/beamOn 10000
+##/run/beamOn 10000

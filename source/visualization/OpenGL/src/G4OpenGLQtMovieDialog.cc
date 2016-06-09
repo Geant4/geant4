@@ -24,15 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.8 2008/10/24 13:49:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.8 2008-10-24 13:49:19 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
+#include "G4OpenGLQtViewer.hh" // should be first in case we include
+                               // some boost SIGNAL/SLOT library
 #include "G4OpenGLQtMovieDialog.hh"
-#include "G4OpenGLQtViewer.hh"
 
 #include <qpushbutton.h>
 #include <qpalette.h>
@@ -68,14 +69,8 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   : QDialog( parentWidget ),
     fParentViewer(parentViewer)
 {
-#if QT_VERSION > 0x030200
   setModal(false);
-#endif
-#if QT_VERSION < 0x040000
-  setCaption( tr( " Movie parameters" ));
-#else
   setWindowTitle( tr( " Movie parameters" ));
-#endif
 
 
   // global layout
@@ -97,24 +92,11 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   fEncoderStatus = new QLabel(encoderGroupBox);
 
-#if QT_VERSION > 0x040000
   fEncoderStatus->setWordWrap(true);
   encoderVGroupBoxLayout->setMargin(15);
-#else
-  fEncoderStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-  encoderGroupBox->setInsideMargin(15);
-#endif
 
   fEncoderStatus->setText("");
 
-#if QT_VERSION < 0x040000
-  encoderHBoxLayout->add(fEncoderPath);
-  encoderHBoxLayout->add(encoderButton);
-  encoderVGroupBoxLayout->add(encoderHBox);
-  encoderVGroupBoxLayout->add(fEncoderStatus);
-
-  globalVLayout->add(encoderGroupBox);
-#else
   encoderHBoxLayout->addWidget(fEncoderPath);
   encoderHBoxLayout->addWidget(encoderButton);
   encoderVGroupBoxLayout->addWidget(encoderHBox);
@@ -122,7 +104,6 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   encoderGroupBox->setLayout(encoderVGroupBoxLayout);
   globalVLayout->addWidget(encoderGroupBox);
-#endif
 
   connect( encoderButton, SIGNAL( clicked( ) ), this, SLOT(selectEncoderPathAction() ) );
 
@@ -141,23 +122,10 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   tempButton->setMaximumWidth (30);
 
   fTempFolderStatus = new QLabel(tempFolderGroupBox);
-#if QT_VERSION > 0x040000
   fTempFolderStatus->setWordWrap(true);
   tempFolderVGroupBoxLayout->setMargin(15);
-#else
-  fTempFolderStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-  tempFolderGroupBox->setInsideMargin(15);
-#endif
   fTempFolderStatus->setText("");
 
-#if QT_VERSION < 0x040000
-  tempFolderHBoxLayout->add(fTempFolderPath);
-  tempFolderHBoxLayout->add(tempButton);
-  tempFolderVGroupBoxLayout->add(tempFolderHBox);
-  tempFolderVGroupBoxLayout->add(fTempFolderStatus);
-
-  globalVLayout->add(tempFolderGroupBox);
-#else
   tempFolderHBoxLayout->addWidget(fTempFolderPath);
   tempFolderHBoxLayout->addWidget(tempButton);
   tempFolderVGroupBoxLayout->addWidget(tempFolderHBox);
@@ -165,7 +133,6 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   tempFolderGroupBox->setLayout(tempFolderVGroupBoxLayout);
   globalVLayout->addWidget(tempFolderGroupBox);
-#endif
 
   connect( tempButton, SIGNAL( clicked( ) ), this, SLOT(selectTempPathAction() ) );
 
@@ -186,23 +153,10 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   saveButton->setMaximumWidth (30);
 
   fSaveFileStatus = new QLabel(saveFileGroupBox);
-#if QT_VERSION > 0x040000
   fSaveFileStatus->setWordWrap(true);
   saveFileVGroupBoxLayout->setMargin(15);
-#else
-  fSaveFileStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-  saveFileGroupBox->setInsideMargin(15);
-#endif
   fSaveFileStatus->setText("");
 
-#if QT_VERSION < 0x040000
-  saveFileHBoxLayout->add(fSaveFileName);
-  saveFileHBoxLayout->add(saveButton);
-  saveFileVGroupBoxLayout->add(saveFileHBox);
-  saveFileVGroupBoxLayout->add(fSaveFileStatus);
-
-  globalVLayout->add(saveFileGroupBox);
-#else
   saveFileHBoxLayout->addWidget(fSaveFileName);
   saveFileHBoxLayout->addWidget(saveButton);
   saveFileVGroupBoxLayout->addWidget(saveFileHBox);
@@ -210,7 +164,6 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   saveFileGroupBox->setLayout(saveFileVGroupBoxLayout);
   globalVLayout->addWidget(saveFileGroupBox);
-#endif
 
   connect( saveButton, SIGNAL( clicked( ) ), this, SLOT(selectSaveFileNameAction() ) );
 
@@ -225,43 +178,22 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   QVBoxLayout *statusVGroupBoxLayout = new QVBoxLayout(statusGroupBox);
 
   fRecordingStatus = new QLabel(statusGroupBox);
-#if QT_VERSION > 0x040000
   statusVGroupBoxLayout->setMargin(15);
   fRecordingStatus->setWordWrap(true);
-#else
-  statusGroupBox->setInsideMargin(15);
-  fRecordingStatus->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-#endif
   QPalette palette( fRecordingStatus->palette() );
-#if QT_VERSION > 0x040000
   palette.setColor( QPalette::Text, Qt::green);
-#else
-  palette.setColor( QColorGroup::Text, Qt::green);
-#endif
   fRecordingStatus->setPalette(palette);
 
   fRecordingInfos = new QLabel(statusGroupBox);
-#if QT_VERSION > 0x040000
   fRecordingInfos->setWordWrap(true);
-#else
-  fRecordingInfos->setAlignment ( Qt::AlignAuto |Qt::WordBreak );
-#endif
   setRecordingInfos("");
 
-#if QT_VERSION < 0x040000
-  statusVGroupBoxLayout->add(fRecordingStatus);
-  statusVGroupBoxLayout->add(fRecordingInfos);
-
-  globalVLayout->add(infoLabel);
-  globalVLayout->add(statusGroupBox);
-#else
   statusVGroupBoxLayout->addWidget(fRecordingStatus);
   statusVGroupBoxLayout->addWidget(fRecordingInfos);
 
   statusGroupBox->setLayout(statusVGroupBoxLayout);
   globalVLayout->addWidget(infoLabel);
   globalVLayout->addWidget(statusGroupBox);
-#endif
 
   // buttons
   QWidget *buttonBox = new QWidget(this);
@@ -291,16 +223,12 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   buttonCancel->setAutoDefault( TRUE );
   buttonBoxLayout->addWidget(buttonCancel);
 
-#if QT_VERSION >= 0x040000
   buttonBox->setLayout(buttonBoxLayout);
-#endif
   globalVLayout->addWidget(buttonBox);
 
 
 
-#if QT_VERSION >= 0x040000
   setLayout(globalVLayout);
-#endif
 
   // signals and slots connections
   connect( fButtonStartPause, SIGNAL( clicked() ), fParentViewer, SLOT(    startPauseVideo() ) );
@@ -319,15 +247,9 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   connect (fTempFolderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(checkTempFolderParameters()));
   connect (fSaveFileName,SIGNAL(textChanged ( const QString&)),this,SLOT(checkSaveFileNameParameters()));
 
-#if QT_VERSION >= 0x040000
   connect (fEncoderPath,SIGNAL(editingFinished ()),this,SLOT(checkEncoderSwParameters()));
   connect (fTempFolderPath,SIGNAL(editingFinished ()),this,SLOT(checkTempFolderParameters()));
   connect (fSaveFileName,SIGNAL(editingFinished ()),this,SLOT(checkSaveFileNameParameters()));
-#else
-  connect (fEncoderPath,SIGNAL(lostFocus ()),this,SLOT(checkEncoderSwParameters()));
-  connect (fTempFolderPath,SIGNAL(lostFocus ()),this,SLOT(checkTempFolderParameters()));
-  connect (fSaveFileName,SIGNAL(lostFocus ()),this,SLOT(checkSaveFileNameParameters()));
-#endif
 
 }
 
@@ -339,18 +261,10 @@ G4OpenGLQtMovieDialog::~G4OpenGLQtMovieDialog()
 
 void G4OpenGLQtMovieDialog::selectEncoderPathAction()
 {
-#if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getOpenFileName ( ".",
-                                                    NULL,
-                                                    this,
-                                                    "Select your encoder",
-                                                    tr("Select your encoder ..."));
-#else
   QString nomFich =  QFileDialog::getOpenFileName ( this,
                                                     "Select your encoder",
                                                     tr("Select your encoder ...")); 
 
-#endif
 
   if (nomFich == "") {
     return;
@@ -362,17 +276,10 @@ void G4OpenGLQtMovieDialog::selectEncoderPathAction()
 
 void G4OpenGLQtMovieDialog::selectTempPathAction()
 {
-#if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getExistingDirectory (NULL,
-                                                    this,
-                                                    "Select temporary folder",
-                                                    tr("Select temporary folder ..."));
-#else
   QString nomFich =  QFileDialog::getExistingDirectory ( this,
                                                     "Select temporary folder",
                                                     tr("Select temporary folder ...")); 
 
-#endif
   if (nomFich == "") {
     return;
   }
@@ -383,18 +290,10 @@ void G4OpenGLQtMovieDialog::selectTempPathAction()
 
 void G4OpenGLQtMovieDialog::selectSaveFileNameAction()
 {
-#if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getSaveFileName ( ".",
-                                                    NULL,
-                                                    this,
-                                                    "Select saved file",
-                                                    tr("Select saved file ..."));
-#else
   QString nomFich =  QFileDialog::getSaveFileName ( this,
                                                     "Select saved file",
                                                     tr("Select saved file ...")); 
 
-#endif
   if (nomFich == "") {
     return;
   }
@@ -426,21 +325,13 @@ bool G4OpenGLQtMovieDialog::checkEncoderSwParameters() {
   setRecordingInfos("");
   fEncoderStatus->setText(temp);
   if (temp != "") {
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::red);
-#else
-    palette.setColor( QColorGroup::Base, Qt::red);
-#endif
     if (fParentViewer->isReadyToEncode()) {
       setRecordingInfos("No valid encode defined, screen capture had been saved in the temp folder in ppm format.\nPlease define a encoder and clic on Apply button");
 	}
     status = false;
   } else {
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::white);
-#else
-    palette.setColor( QColorGroup::Base, Qt::white);
-#endif
     fEncoderPath->setText(fParentViewer->getEncoderPath());
   }
   fEncoderPath->setPalette(palette);
@@ -460,18 +351,10 @@ bool G4OpenGLQtMovieDialog::checkTempFolderParameters() {
   QString temp = fParentViewer->setTempFolderPath(fTempFolderPath->text());
   fTempFolderStatus->setText(temp);
   if (temp != "") {
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::red);
-#else
-    palette.setColor( QColorGroup::Base, Qt::red);
-#endif
     status = false;
   } else {
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::white);
-#else
-    palette.setColor( QColorGroup::Base, Qt::white);
-#endif
     fTempFolderPath->setText(fParentViewer->getTempFolderPath());
   }
   fTempFolderPath->setPalette(palette);
@@ -491,18 +374,10 @@ bool G4OpenGLQtMovieDialog::checkSaveFileNameParameters() {
   QString temp = fParentViewer->setSaveFileName(fSaveFileName->text());
   fSaveFileStatus->setText(temp);
   if (temp != "") { 
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::red);
-#else
-    palette.setColor( QColorGroup::Base, Qt::red);
-#endif
     status = false;
   } else {
-#if QT_VERSION > 0x040000
     palette.setColor( QPalette::Base, Qt::white);
-#else
-    palette.setColor( QColorGroup::Base, Qt::white);
-#endif
     fSaveFileName->setText(fParentViewer->getSaveFileName());
   }
   fSaveFileName->setPalette(palette);

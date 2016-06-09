@@ -32,13 +32,12 @@
 #define G4PEVENT_HH 1
 
 #include "G4Event.hh"
-// not yet // #include "G4MCTEvent.hh"
-#include "CLHEP/HepMC/GenEvent.h"
+#include "G4MCTEvent.hh"
 
 // Class Description:
 //   Geant4 event object for store.
 // 
-//   This class has pointers to HepMC::GenEvent, MCTruth and G4Event.
+//   This class has pointers to MCTruth and G4Event.
 // 
 //   In the event store operation, this object will be created in the concrete
 //   class of G4VPEventIO::Store() method, and will be deleted immediately after
@@ -51,8 +50,7 @@
 class G4Pevent
 {
     public: // With description
-      // G4Pevent( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, G4Event* g4evt );
-      G4Pevent( HepMC::GenEvent* hepevt, G4Event* g4evt );
+      G4Pevent( G4MCTEvent* mctevt, G4Event* g4evt );
       // Constructor
 
       ~G4Pevent();
@@ -65,10 +63,7 @@ class G4Pevent
       G4Event* GetEvent() { return f_g4evt; };
       // returns the G4Event.
 
-      HepMC::GenEvent* GetHepMCGenEvent() { return f_hepevt; };
-      // returns the HepMC GenEvent.
-
-      // G4MCTEvent* GetMCTEvent() { return f_mctevt; };
+      G4MCTEvent* GetMCTEvent() { return f_mctevt; };
       // returns the MCTruth event.
 
       int GetGenEventID() const { return genEventID; };
@@ -78,9 +73,8 @@ class G4Pevent
       // set the GenEvent ID.
 
     private:
-      HepMC::GenEvent* f_hepevt;
       int       genEventID;
-      // G4MCTEvent* f_mctevt;
+      G4MCTEvent* f_mctevt;
       G4Event*  f_g4evt;
       int       m_id;
 

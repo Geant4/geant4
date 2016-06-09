@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2008/03/26 14:54:40 gcosmo Exp $
+$Id: History,v 1.39 2008-03-26 14:54:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep. 30, 2011, M. Verderi (param-V09-04-03)
+- Added missing new header file (G4FastSimulationProcessType.hh) in
+  sources.cmake.
+
+Sep. 30, 2011, M. Verderi (param-V09-04-02)
+- Migration to new G4Exception scheme.
+- what is V09-04-01 tag ?
+
+Feb. 11, 2011, M. Verderi (param-V09-04-00)
+- Implementation of method
+  void ProposePrimaryTrackFinalKineticEnergy (G4double);
+  was missing : modified file  G4FastStep.icc
 
 March 13 2008, G. Cosmo (param-V09-01-00)
 - Cleared compilation warnings in G4FastSimulationManagerProcess and

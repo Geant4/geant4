@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.cc,v 1.5 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ContinuousGainOfEnergy.cc,v 1.5 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ContinuousGainOfEnergy.hh"
 #include "G4Step.hh"
@@ -35,7 +35,6 @@
 #include "G4UnitsTable.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4LossTableManager.hh"
-
 
 ///////////////////////////////////////////////////////
 //
@@ -54,11 +53,17 @@ G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name,
   massRatio =1.;
   chargeSqRatio=1.;
   preStepChargeSqRatio=1.;
-
   
-
+  //Some initialization
+  currentCoupleIndex=9999999;
+  currentCutInRange=0.;
+  currentMaterialIndex=9999999;
+  currentTcut=0.;
+  preStepKinEnergy=0.;
+  preStepRange=0.;
+  preStepScaledKinEnergy=0.;
   
-  
+  currentCouple=0;  
 }
 
 ///////////////////////////////////////////////////////

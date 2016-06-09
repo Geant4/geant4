@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh,v 1.12 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CashKarpRKF45.hh,v 1.12 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4CashKarpRKF45

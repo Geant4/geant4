@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010/11/10 16:38:39 gcosmo Exp $
+$Id: History,v 1.50 2010-11-10 16:38:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,45 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31, 2011, M.Asai (digits_hits-V09-04-08)
+- G4THitsMap.hh : removed the print-out of total value, avoiding the problem
+  caused by a class <T> which does not have += or cannot be initilized by = 0.
+- Addressing to the problem report #1258.
+
+Oct 20, 2011, M.Asai (digits_hits-V09-04-07)
+- Eliminating obsolete G4Exception
+- Re-ordering exception error IDs and improving error messages.
+
+Jul 07, 2011, G.Cosmo (digits_hits-V09-04-06)
+- Fixed Coverity defects: mainly uninitialised static data.
+- Moved copy-ctor and operator=() for G4VReadOutGeometry to protected, as
+  not meant to be directly used.
+
+May 20, 2011, B.Morgan (digits_hits-V09-04-05)
+- CMakeLists.txt : Added G4DIGI_ALLOC_EXPORT compiler definition via 
+  add_definitions so all submodules pick it up.
+
+Mar 31, 2011, G.Cosmo (digits_hits-V09-04-04)
+- Replace use of M_PI with pi/twopi, fixing compilation errors on Windows...
+
+Mar 31, 2011, G.Cosmo (digits_hits-V09-04-03)
+- Added missing source files in scorer/sources.cmake.
+- Fixed compilation warning for unused parameter in function
+  G4PSStepChecker::Initialize().
+
+Mar 30, 2011, M.Asai (digits_hits-V09-04-02)
+- Fixed scoring meshes for visualizing scores of very few entry.
+  - Changed G4ScoringBox, G4ScoringCylinder
+
+Mar 22, 2011, M.Asai (digits_hits-V09-04-01)
+- Fixed scorers used for cylindrical mesh that require cubic volume or surface area.
+  - Changed  G4PSCellFlux3D, G4PSDoseDeposit3D, G4PSPassageCellFlux3D
+  - Added G4PSCellFluxForCylinder3D, G4PSDoseDepositForCylinder3D, G4PSPassageCellFluxForCylinder3D
+
+Feb 21, 2011, M.Asai (digits_hits-V09-04-00)
+- Fixed G4PSCylinderSurfaceFlux.cc and G4PSSPhareSurfaceFlux.cc for
+  the way how "flux_out" is scored.
 
 Nov 10, 2010, G.Cosmo (digits_hits-V09-03-07)
 - Fixed signature in G4VPrimitiveScorer for Set/GetUnit() methods.

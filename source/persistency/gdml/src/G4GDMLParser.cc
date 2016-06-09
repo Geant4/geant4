@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.18 2010/11/17 11:36:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLParser.cc,v 1.18 2010-11-17 11:36:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLParser Implementation

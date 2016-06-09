@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.15 2010/10/30 07:49:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4StepPoint.cc,v 1.15 2010-10-30 07:49:09 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -58,7 +58,7 @@ G4StepPoint::G4StepPoint()
 }
 
 //////////////////////////
-G4StepPoint::G4StepPoint(const G4StepPoint &right):
+G4StepPoint::G4StepPoint(const G4StepPoint &right) :
 //////////////////////////
   fPosition(right.fPosition),
   fGlobalTime(right.fGlobalTime),
@@ -79,4 +79,32 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fCharge(right.fCharge),
   fMagneticMoment(right.fMagneticMoment),
   fWeight(right.fWeight)
-{}
+{
+}
+
+//////////////////////////
+G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
+{
+  if (this != &right) {
+    fPosition     = right.fPosition;
+    fGlobalTime   = right.fGlobalTime;
+    fLocalTime    = right.fLocalTime;
+    fProperTime   = right.fProperTime;
+    fMomentumDirection = right.fMomentumDirection;
+    fKineticEnergy = right.fKineticEnergy;
+    fVelocity     = right.fVelocity;
+    fpTouchable   = right.fpTouchable;
+    fpMaterial    = right.fpMaterial;
+    fpMaterialCutsCouple = right.fpMaterialCutsCouple;
+    fpSensitiveDetector  = right.fpSensitiveDetector;
+    fSafety       = right.fSafety;
+    fPolarization = right.fPolarization;
+    fStepStatus   = right.fStepStatus;
+    fpProcessDefinedStep = right.fpProcessDefinedStep;
+    fMass         = right.fMass;
+    fCharge       = right.fCharge;
+    fMagneticMoment = right.fMagneticMoment;
+    fWeight       = right.fWeight;
+  }
+  return *this;
+}

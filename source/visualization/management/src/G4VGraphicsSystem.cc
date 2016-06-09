@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc,v 1.11 2006/06/29 21:29:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VGraphicsSystem.cc,v 1.11 2006-06-29 21:29:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  27th March 1996

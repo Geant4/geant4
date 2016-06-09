@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.cc,v 1.16 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AntiKaonZero.cc,v 1.16 2008-09-18 08:37:27 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------

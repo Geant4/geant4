@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.18 2010/11/04 17:30:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.18 2010-11-04 17:30:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -76,24 +76,23 @@ const G4double G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813
 const G4double G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
 const G4double G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
 
-
 using namespace std;
 
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
 						     const G4String& name)
   : G4VEmModel(name),
     particle(0),
-    fXiLPM(0), fPhiLPM(0), fGLPM(0),
+    bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
-    bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
+    fXiLPM(0), fPhiLPM(0), fGLPM(0),
     use_completescreening(true),isInitialised(false)
 {
+  fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
 
-  minThreshold = 0.1*keV;
-  lowKinEnergy = GeV;
+  lowKinEnergy = 0.1*GeV;
   SetLowEnergyLimit(lowKinEnergy);  
 
   nist = G4NistManager::Instance();  
@@ -136,14 +135,6 @@ void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
   particleMass = p->GetPDGMass();
   if(p == G4Electron::Electron()) { isElectron = true; }
   else                            { isElectron = false;}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungRelModel::MinEnergyCut(const G4ParticleDefinition*,
-						 const G4MaterialCutsCouple*)
-{
-  return minThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -479,7 +470,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   G4double emax = std::min(maxEnergy, kineticEnergy);
   if(cut >= emax) { return; }
 
-  SetupForMaterial(particle, couple->GetMaterial(),kineticEnergy);
+  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
 
   const G4Element* elm = 
     SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
@@ -490,7 +481,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   densityCorr = densityFactor*totalEnergy*totalEnergy;
   G4ThreeVector direction = dp->GetMomentumDirection();
 
-  //  G4double fmax= fMax;
+  //G4double fmax= fMax;
   G4bool highe = true;
   if(totalEnergy < energyThresholdLPM) { highe = false; }
  
@@ -500,16 +491,17 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   do {
     x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
-    if(x < 0.0) x = 0.0;
+    if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
-    if(highe) f = ComputeRelDXSectionPerAtom(gammaEnergy);
-    else      f = ComputeDXSectionPerAtom(gammaEnergy);
+    if(highe) { f = ComputeRelDXSectionPerAtom(gammaEnergy); }
+    else      { f = ComputeDXSectionPerAtom(gammaEnergy); }
 
     if ( f > fMax ) {
       G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
 	     << f << " > " << fMax
 	     << " Egamma(MeV)= " << gammaEnergy
-	     << " E(mEV)= " << kineticEnergy
+	     << " Ee(MeV)= " << kineticEnergy
+	     << "  " << GetName()
 	     << G4endl;
     }
 

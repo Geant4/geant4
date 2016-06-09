@@ -89,7 +89,7 @@ void NestedParamDicomDetectorConstruction::ConstructPhantom()
   new G4PVParameterised("phantom",    // their name
 			logicVoxel, // their logical volume
 			logXRep,      // Mother logical volume
-			kXAxis,       // Are placed along this axis 
+			kZAxis,       // Are placed along this axis 
 			//			  kUndefined,        // Are placed along this axis 
 			nVoxelZ,      // Number of cells
 			param);       // Parameterisation.

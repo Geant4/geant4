@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPrimaryGeneratorAction.hh,v 1.5 2006/06/29 16:05:11 gunter Exp $
+// $Id: MicrobeamPrimaryGeneratorAction.hh,v 1.5 2006-06-29 16:05:11 gunter Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamPrimaryGeneratorAction_h

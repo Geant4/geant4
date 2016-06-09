@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ColorWriter.hh,v 1.2 2009/04/24 15:54:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: ColorWriter.hh,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class ColorWriter

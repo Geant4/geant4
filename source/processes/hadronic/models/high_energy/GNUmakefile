@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/10/08 16:42:20 hpw Exp $
+# $Id: GNUmakefile,v 1.3 2003-10-08 16:42:20 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -30,16 +31,3 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include
            
 include $(G4INSTALL)/config/common.gmk
-
-# Temporary fix for HP-CC compiler. It cannot handle full optimisation for
-# the specified files ...
-
-ifneq (,$(findstring HP,$(G4SYSTEM)))
-    CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS))
-
-$(G4TMPDIR)/G4GHEInelastic.o: src/G4GHEInelastic.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4GHEInelastic.cc
-
-$(G4TMPDIR)/G4GHEInelasticModel.o: src/G4GHEInelasticModel.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4GHEInelasticModel.cc
-endif

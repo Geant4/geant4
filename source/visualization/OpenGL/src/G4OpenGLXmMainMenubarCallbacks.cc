@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.18 2009/10/20 12:47:45 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.18 2009-10-20 12:47:45 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -39,9 +39,10 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
+#include "G4OpenGLXmViewer.hh"
+
 #include "G4Xt.hh"
 
-#include "G4OpenGLXmViewer.hh"
 #include "G4VSceneHandler.hh"
 
 #include "G4Scene.hh"
@@ -119,7 +120,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							    rot_slider_list,
 							    True,
 							    2,
-							    pView->rot_sens,
+							    pView->fRot_sens,
 							    pView->rot_sens_limit,
 							    0);
 	pView->fprotation_slider_box->AddChild (pView->fprotation_slider);
@@ -208,7 +209,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							   pan_slider_list,
 							   True,
 							   2,
-							   pView->pan_sens = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
+							   pView->fPan_sens = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
 							   pView->pan_sens_limit = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius(),
 							   0);
 	pView->fppanning_box->AddChild (pView->fppanning_slider);
@@ -252,6 +253,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fpdolly_box->AddChild (pView->fpdolly_slider);
 	
 	pView->fppanning_top->Realize ();
+        pView->UpdateControlPanel ();
       }
 
       break;
@@ -314,7 +316,10 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
     }
   
   default:
-    G4Exception("Unrecognised widget child of control_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::actions_callback",
+       "opengl0001", FatalException,
+       "Unrecognised widget child of control_callback");
   }
   
   return;
@@ -366,9 +371,9 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 							  wobble_slider_list,
 							  True,
 							  0,
-							  20,
-							  50,
-							  0);
+							  pView->wob_sens,
+							  pView->wob_high,
+							  pView->wob_low);
 	pView->fpwobble_box->AddChild (pView->fpwobble_button);
 	pView->fpwobble_box->AddChild (pView->fpwobble_slider);
 	
@@ -512,7 +517,10 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
     }
   
   default:
-    G4Exception("Unrecognised widget child of misc_callback.");
+    G4Exception
+      ("G4OpenGLXmViewer::misc_callback",
+       "opengl0002", FatalException,
+       "Unrecognised widget child of misc_callback.");
   }
   
   return;
@@ -539,7 +547,10 @@ void G4OpenGLXmViewer::set_wob_sens_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4Exception("Bad value returned for dp in set_rot_sens_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::set_wob_sens_callback",
+       "opengl0003", FatalException,
+       "Bad value returned for dp in set_rot_sens_callback");
   }
   
   pView->wob_sens = (G4float)(cbs->value) / ten_to_the_dp;

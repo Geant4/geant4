@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.hh,v 1.3 2006/06/29 20:24:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFChannel.hh,v 1.3 2006-06-29 20:24:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,19 +43,10 @@ class G4StatMFChannel {
 
 public:
     // Default Constructor
-    G4StatMFChannel() : 
-	_NumOfNeutralFragments(0), 
-	_NumOfChargedFragments(0)
-	{}
-
+    G4StatMFChannel();
 
     // Destructor
-    ~G4StatMFChannel() { 
-	if (!_theFragments.empty()) {
-	  std::for_each(_theFragments.begin(),_theFragments.end(),
-			  DeleteFragment());
-	}
-    }
+    ~G4StatMFChannel();
 
 private:
 
@@ -65,49 +56,42 @@ private:
     // operators
     G4StatMFChannel & operator=(const G4StatMFChannel & right);
 
-public:
     G4bool operator==(const G4StatMFChannel & right) const;
     G4bool operator!=(const G4StatMFChannel & right) const;
 	
 public:
 
-    void CreateFragment(const G4double A, const G4double Z);
+    void CreateFragment(G4int A, G4int Z);
 	
-    G4int GetMultiplicity(void) { return _theFragments.size();}
+    inline size_t GetMultiplicity(void) { return _theFragments.size();}
 	
     // Return false if there is some unphysical fragment
     G4bool CheckFragments(void);
 
-
     G4double GetFragmentsCoulombEnergy(void);
 
-
-    G4double GetFragmentsEnergy(const G4double T) const;
+    G4double GetFragmentsEnergy(G4double T) const;
 	
+    G4FragmentVector * GetFragments(G4int anA, G4int anZ, G4double T);
 	
-    G4FragmentVector * GetFragments(const G4double anA, const G4double anZ, const G4double T);
-	
-
 private:
 
-
     // This method calculates asymptotic fragments momenta.
-    void CoulombImpulse(const G4double anA, const G4double anZ, const G4double T);
+    void CoulombImpulse(G4int anA, G4int anZ, G4double T);
 	
-    void PlaceFragments(const G4double anA);
+    void PlaceFragments(G4int anA);
 
-    void SolveEqOfMotion(const G4double anA, const G4double anZ, const G4double T);
-
+    void SolveEqOfMotion(G4int anA, G4int anZ, G4double T);
 
     // Calculates fragments momentum components at the breakup instant.
     // Fragment kinetic energies will be calculated according to the
     // Boltzamann distribution at given temperature.
-    void FragmentsMomenta(const G4int NF, const G4int idx, const G4double T);	
+    void FragmentsMomenta(G4int NF, G4int idx, G4double T);	
 
 
     // Samples a isotropic random vectorwith a magnitud given by Magnitude.
     // By default Magnitude = 1
-    G4ThreeVector IsotropicVector(const G4double Magnitude = 1.0);
+    G4ThreeVector IsotropicVector(G4double Magnitude = 1.0);
 
 
     // Rotates a 3-vector P to close momentum triangle Pa + V + P = 0

@@ -23,57 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4He6GEMProbability.cc,v 1.6 2009/09/15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4He6GEMProbability.cc,v 1.6 2009-09-15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
 
 #include "G4He6GEMProbability.hh"
 
 G4He6GEMProbability::G4He6GEMProbability() :
   G4GEMProbability(6,2,0.0) // A,Z,Spin
 {
-  
-
   ExcitEnergies.push_back(1797.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(113.0*keV));
-  
-  SetExcitationEnergiesPtr(&ExcitEnergies);
-  SetExcitationSpinsPtr(&ExcitSpins);
-  SetExcitationLifetimesPtr(&ExcitLifetimes);
+  ExcitLifetimes.push_back(fPlanck/(113.0*keV));
 }
 
-
-G4He6GEMProbability::G4He6GEMProbability(const G4He6GEMProbability &) : G4GEMProbability()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4He6GEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4He6GEMProbability & G4He6GEMProbability::
-operator=(const G4He6GEMProbability &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4He6GEMProbability::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4He6GEMProbability::operator==(const G4He6GEMProbability &) const
-{
-  return false;
-}
-
-G4bool G4He6GEMProbability::operator!=(const G4He6GEMProbability &) const
-{
-  return true;
-}
-
-
-
+G4He6GEMProbability::~G4He6GEMProbability()
+{}

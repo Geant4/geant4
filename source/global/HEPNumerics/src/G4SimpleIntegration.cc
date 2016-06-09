@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.cc,v 1.7 2006/06/29 19:00:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SimpleIntegration.cc,v 1.7 2006-06-29 19:00:21 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation file for simple integration methods
 //

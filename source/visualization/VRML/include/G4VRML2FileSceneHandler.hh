@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.18 2010/05/30 10:14:39 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.18 2010-05-30 10:14:39 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada

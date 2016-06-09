@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExP01DetectorConstruction.hh,v 1.2 2006/06/29 17:38:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExP01DetectorConstruction.hh,v 1.2 2006-06-29 17:38:46 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

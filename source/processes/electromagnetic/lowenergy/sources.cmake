@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010/11/15 08:24:43 gcosmo Exp $
+# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -44,8 +44,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emlowenergy
     HEADERS
-        G4AnalyticalEcpssrKCrossSection.hh
-        G4AnalyticalEcpssrLiCrossSection.hh
         G4AtomicDeexcitation.hh
         G4AtomicTransitionManager.hh
         G4AugerData.hh
@@ -54,82 +52,20 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.hh
         G4BremsstrahlungParameters.hh
         G4CompositeEMDataSet.hh
-        G4CrossSectionChargeDecrease.hh
-        G4CrossSectionChargeDecreasePartial.hh
-        G4CrossSectionChargeIncrease.hh
-        G4CrossSectionChargeIncreasePartial.hh
-        G4CrossSectionChargeTransferCH.hh
-        G4CrossSectionChargeTransferExp.hh
-        G4CrossSectionElasticChampion.hh
-        G4CrossSectionElasticScreenedRutherfordHE.hh
-        G4CrossSectionElasticScreenedRutherford.hh
-        G4CrossSectionElasticScreenedRutherfordLE.hh
-        G4CrossSectionExcitationBorn.hh
-        G4CrossSectionExcitationBornPartial.hh
-        G4CrossSectionExcitationEmfietzoglou.hh
-        G4CrossSectionExcitationEmfietzoglouPartial.hh
-        G4CrossSectionExcitationMillerGreen.hh
-        G4CrossSectionExcitationMillerGreenPartial.hh
+	G4CrossSectionDataSet.hh
         G4CrossSectionHandler.hh
-        G4CrossSectionIonisationBornElectron.hh
-        G4CrossSectionIonisationBorn.hh
-        G4CrossSectionIonisationBornPartialElectron.hh
-        G4CrossSectionIonisationBornPartial.hh
-        G4CrossSectionIonisationRudd.hh
-        G4CrossSectionIonisationRuddPartial.hh
-        G4CrossSectionKill.hh
-        G4CrossSectionPsCreationChampion.hh
-        G4CrossSectionPsCreationChampionPartial.hh
-        G4DNAAttachment.hh
-        G4DNABornExcitationModel.hh
-        G4DNABornIonisationModel.hh
-        G4DNAChampionElasticModel.hh
-        G4DNAChargeDecrease.hh
-        G4DNAChargeIncrease.hh
-        G4DNACrossSectionDataSet.hh
-        G4DNADingfelderChargeDecreaseModel.hh
-        G4DNADingfelderChargeIncreaseModel.hh
-        G4DNAElastic.hh
-        G4DNAEmfietzoglouExcitationModel.hh
-        G4DNAExcitation.hh
-        G4DNAGenericIonsManager.hh
-        G4DNAIonisation.hh
-        G4DNAMeltonAttachmentModel.hh
-        G4DNAMillerGreenExcitationModel.hh
-        G4DNAMoleculeManager.hh
-        G4DNAProcess.hh
-        G4DNAProcess.icc
-        G4DNARuddIonisationExtendedModel.hh
-        G4DNARuddIonisationModel.hh
-        G4DNASancheExcitationModel.hh
-        G4DNAScreenedRutherfordElasticModel.hh
-        G4DNAVibExcitation.hh
         G4DopplerProfile.hh
-        G4DummyFinalState.hh
         G4eBremsstrahlungSpectrum.hh
-        G4eCrossSectionExcitationEmfietzoglou.hh
-        G4eCrossSectionScreenedRutherford.hh
+        G4ecpssrBaseKxsModel.hh
+        G4ecpssrBaseLixsModel.hh
+	G4ecpssrFormFactorKxsModel.hh
+	G4ecpssrFormFactorLixsModel.hh
+        G4eCrossSectionHandler.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
         G4eIonisationSpectrum.hh
-        G4eLowEnergyLoss.hh
-        G4eLowEnergyLoss.icc
         G4EMDataSet.hh
         G4empCrossSection.hh
-        G4FinalStateChargeDecrease.hh
-        G4FinalStateChargeIncrease.hh
-        G4FinalStateChargeTransferProton.hh
-        G4FinalStateElasticBrennerZaider.hh
-        G4FinalStateElasticChampion.hh
-        G4FinalStateElasticScreenedRutherford.hh
-        G4FinalStateExcitationBorn.hh
-        G4FinalStateExcitationEmfietzoglou.hh
-        G4FinalStateExcitationMillerGreen.hh
-        G4FinalStateIonisationBorn.hh
-        G4FinalStateIonisationRudd.hh
-        G4FinalStateKill.hh
-        G4FinalStateProduct.hh
-        G4FinalStatePsCreationChampion.hh
         G4FluoData.hh
         G4FluoTransition.hh
         G4Generator2BN.hh
@@ -139,17 +75,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hICRU49Nuclear.hh
         G4hICRU49p.hh
         G4hIonEffChargeSquare.hh
-        G4hLowEnergyIonisation.hh
-        G4hLowEnergyLoss.hh
-        G4hLowEnergyLoss.icc
         G4hNuclearStoppingModel.hh
         G4hParametrisedLossModel.hh
         G4hQAOModel.hh
-        G4hShellCrossSectionDoubleExpData.hh
-        G4hShellCrossSectionDoubleExp.hh
-        G4hShellCrossSectionExpData.hh
-        G4hShellCrossSectionExp.hh
-        G4hShellCrossSection.hh
         G4hSRIM2000p.hh
         G4hZiegler1977He.hh
         G4hZiegler1977Nuclear.hh
@@ -159,7 +87,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonChuFluctuationModel.hh
         G4IonDEDXHandler.hh
         G4IonDEDXScalingICRU73.hh
-        G4ionLowEnergyIonisation.hh
         G4IonParametrisedLossModel.hh
         G4IonParametrisedLossModel.icc
         G4IonYangFluctuationModel.hh
@@ -170,6 +97,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreComptonModel.hh
         G4LivermoreGammaConversionModel.hh
         G4LivermoreGammaConversionModelRC.hh
+        G4LivermoreIonisationCrossSection.hh
         G4LivermoreIonisationModel.hh
         G4LivermoreNuclearGammaConversionModel.hh
         G4LivermorePhotoElectricModel.hh
@@ -179,45 +107,32 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
-        G4LowEnergyBremsstrahlung.hh
-        G4LowEnergyCompton.hh
-        G4LowEnergyGammaConversion.hh
-        G4LowEnergyIonisation.hh
-        G4LowEnergyPhotoElectric.hh
-        G4LowEnergyPolarizedCompton.hh
-        G4LowEnergyPolarizedRayleigh.hh
-        G4LowEnergyRayleigh.hh
-        G4OrlicLiCrossSection.hh
-        G4PaulKCrossSection.hh
-        G4Penelope08ComptonModel.hh
-        G4Penelope08GammaConversionModel.hh
-        G4Penelope08IonisationModel.hh
-        G4Penelope08PhotoElectricModel.hh
-        G4Penelope08RayleighModel.hh
-        G4PenelopeAnnihilation.hh
-        G4PenelopeAnnihilationModel.hh
-        G4PenelopeBremsstrahlungAngular.hh
-        G4PenelopeBremsstrahlungContinuous.hh
-        G4PenelopeBremsstrahlung.hh
-        G4PenelopeBremsstrahlungModel.hh
-        G4PenelopeCompton.hh
-        G4PenelopeComptonModel.hh
-        G4PenelopeCrossSectionHandler.hh
-        G4PenelopeCrossSection.hh
-        G4PenelopeGammaConversion.hh
-        G4PenelopeGammaConversionModel.hh
-        G4PenelopeIntegrator.hh
-        G4PenelopeIntegrator.icc
-        G4PenelopeInterpolator.hh
-        G4PenelopeIonisation.hh
-        G4PenelopeIonisationModel.hh
-        G4PenelopeOscillator.hh
-        G4PenelopeOscillatorManager.hh
-        G4PenelopePhotoElectric.hh
-        G4PenelopePhotoElectricModel.hh
-        G4PenelopeRayleigh.hh
-        G4PenelopeRayleighModel.hh
-        G4PenelopeSamplingData.hh
+        G4OrlicLiXsModel.hh
+        G4PaulKxsModel.hh
+        G4Penelope01BremsstrahlungAngular.hh
+	G4Penelope01BremsstrahlungContinuous.hh
+	G4Penelope01BremsstrahlungModel.hh
+	G4Penelope01ComptonModel.hh
+	G4Penelope01GammaConversionModel.hh
+	G4Penelope01IonisationModel.hh
+	G4Penelope01PhotoElectricModel.hh
+	G4Penelope01RayleighModel.hh
+	G4PenelopeAnnihilationModel.hh
+	G4PenelopeBremsstrahlungAngular.hh
+	G4PenelopeBremsstrahlungFS.hh
+	G4PenelopeBremsstrahlungModel.hh
+	G4PenelopeComptonModel.hh
+	G4PenelopeCrossSection.hh
+	G4PenelopeGammaConversionModel.hh
+	G4PenelopeIntegrator.hh
+	G4PenelopeIntegrator.icc
+	G4PenelopeInterpolator.hh
+	G4PenelopeIonisationModel.hh
+	G4PenelopeOscillator.hh
+	G4PenelopeOscillatorManager.hh
+	G4PenelopePhotoElectricModel.hh
+	G4PenelopeRayleighModel.hh
+	G4PenelopeSamplingData.hh
         G4PhotoElectricAngularGeneratorPolarized.hh
         G4PhotoElectricAngularGeneratorSauterGavrila.hh
         G4PhotoElectricAngularGeneratorSimple.hh
@@ -248,11 +163,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VLowEnergyTestableDiscreteProcess.hh
         G4VPhotoElectricAngularDistribution.hh
         G4VRangeTest.hh
-        G4WaterExcitationStructure.hh
-        G4WaterIonisationStructure.hh
     SOURCES
-        G4AnalyticalEcpssrKCrossSection.cc
-        G4AnalyticalEcpssrLiCrossSection.cc
         G4AtomicDeexcitation.cc
         G4AtomicTransitionManager.cc
         G4AugerData.cc
@@ -261,78 +172,20 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.cc
         G4BremsstrahlungParameters.cc
         G4CompositeEMDataSet.cc
-        G4CrossSectionChargeDecrease.cc
-        G4CrossSectionChargeDecreasePartial.cc
-        G4CrossSectionChargeIncrease.cc
-        G4CrossSectionChargeIncreasePartial.cc
-        G4CrossSectionChargeTransferCH.cc
-        G4CrossSectionChargeTransferExp.cc
-        G4CrossSectionElasticChampion.cc
-        G4CrossSectionElasticScreenedRutherford.cc
-        G4CrossSectionElasticScreenedRutherfordHE.cc
-        G4CrossSectionElasticScreenedRutherfordLE.cc
-        G4CrossSectionExcitationBorn.cc
-        G4CrossSectionExcitationBornPartial.cc
-        G4CrossSectionExcitationEmfietzoglou.cc
-        G4CrossSectionExcitationEmfietzoglouPartial.cc
-        G4CrossSectionExcitationMillerGreen.cc
-        G4CrossSectionExcitationMillerGreenPartial.cc
+	G4CrossSectionDataSet.cc
         G4CrossSectionHandler.cc
-        G4CrossSectionIonisationBorn.cc
-        G4CrossSectionIonisationBornElectron.cc
-        G4CrossSectionIonisationBornPartial.cc
-        G4CrossSectionIonisationBornPartialElectron.cc
-        G4CrossSectionIonisationRudd.cc
-        G4CrossSectionIonisationRuddPartial.cc
-        G4CrossSectionKill.cc
-        G4CrossSectionPsCreationChampion.cc
-        G4CrossSectionPsCreationChampionPartial.cc
-        G4DNAAttachment.cc
-        G4DNABornExcitationModel.cc
-        G4DNABornIonisationModel.cc
-        G4DNAChampionElasticModel.cc
-        G4DNAChargeDecrease.cc
-        G4DNAChargeIncrease.cc
-        G4DNACrossSectionDataSet.cc
-        G4DNADingfelderChargeDecreaseModel.cc
-        G4DNADingfelderChargeIncreaseModel.cc
-        G4DNAElastic.cc
-        G4DNAEmfietzoglouExcitationModel.cc
-        G4DNAExcitation.cc
-        G4DNAGenericIonsManager.cc
-        G4DNAIonisation.cc
-        G4DNAMeltonAttachmentModel.cc
-        G4DNAMillerGreenExcitationModel.cc
-        G4DNARuddIonisationExtendedModel.cc
-        G4DNARuddIonisationModel.cc
-        G4DNASancheExcitationModel.cc
-        G4DNAScreenedRutherfordElasticModel.cc
-        G4DNAVibExcitation.cc
         G4DopplerProfile.cc
-        G4DummyFinalState.cc
         G4eBremsstrahlungSpectrum.cc
-        G4eCrossSectionExcitationEmfietzoglou.cc
-        G4eCrossSectionScreenedRutherford.cc
+        G4ecpssrBaseKxsModel.cc
+        G4ecpssrBaseLixsModel.cc
+	G4ecpssrFormFactorKxsModel.cc
+	G4ecpssrFormFactorLixsModel.cc
+        G4eCrossSectionHandler.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
         G4eIonisationSpectrum.cc
-        G4eLowEnergyLoss.cc
         G4EMDataSet.cc
         G4empCrossSection.cc
-        G4FinalStateChargeDecrease.cc
-        G4FinalStateChargeIncrease.cc
-        G4FinalStateChargeTransferProton.cc
-        G4FinalStateElasticBrennerZaider.cc
-        G4FinalStateElasticChampion.cc
-        G4FinalStateElasticScreenedRutherford.cc
-        G4FinalStateExcitationBorn.cc
-        G4FinalStateExcitationEmfietzoglou.cc
-        G4FinalStateExcitationMillerGreen.cc
-        G4FinalStateIonisationBorn.cc
-        G4FinalStateIonisationRudd.cc
-        G4FinalStateKill.cc
-        G4FinalStateProduct.cc
-        G4FinalStatePsCreationChampion.cc
         G4FluoData.cc
         G4FluoTransition.cc
         G4Generator2BN.cc
@@ -342,16 +195,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hICRU49Nuclear.cc
         G4hICRU49p.cc
         G4hIonEffChargeSquare.cc
-        G4hLowEnergyIonisation.cc
-        G4hLowEnergyLoss.cc
         G4hNuclearStoppingModel.cc
         G4hParametrisedLossModel.cc
         G4hQAOModel.cc
-        G4hShellCrossSection.cc
-        G4hShellCrossSectionDoubleExp.cc
-        G4hShellCrossSectionDoubleExpData.cc
-        G4hShellCrossSectionExp.cc
-        G4hShellCrossSectionExpData.cc
         G4hSRIM2000p.cc
         G4hZiegler1977He.cc
         G4hZiegler1977Nuclear.cc
@@ -370,6 +216,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreComptonModel.cc
         G4LivermoreGammaConversionModel.cc
         G4LivermoreGammaConversionModelRC.cc
+        G4LivermoreIonisationCrossSection.cc
         G4LivermoreIonisationModel.cc
         G4LivermoreNuclearGammaConversionModel.cc
         G4LivermorePhotoElectricModel.cc
@@ -379,43 +226,30 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4LowEnergyBremsstrahlung.cc
-        G4LowEnergyCompton.cc
-        G4LowEnergyGammaConversion.cc
-        G4LowEnergyIonisation.cc
-        G4LowEnergyPhotoElectric.cc
-        G4LowEnergyPolarizedCompton.cc
-        G4LowEnergyPolarizedRayleigh.cc
-        G4LowEnergyRayleigh.cc
-        G4OrlicLiCrossSection.cc
-        G4PaulKCrossSection.cc
-        G4Penelope08ComptonModel.cc
-        G4Penelope08GammaConversionModel.cc
-        G4Penelope08IonisationModel.cc
-        G4Penelope08PhotoElectricModel.cc
-        G4Penelope08RayleighModel.cc
-        G4PenelopeAnnihilation.cc
-        G4PenelopeAnnihilationModel.cc
-        G4PenelopeBremsstrahlungAngular.cc
-        G4PenelopeBremsstrahlung.cc
-        G4PenelopeBremsstrahlungContinuous.cc
-        G4PenelopeBremsstrahlungModel.cc
-        G4PenelopeCompton.cc
-        G4PenelopeComptonModel.cc
-        G4PenelopeCrossSection.cc
-        G4PenelopeCrossSectionHandler.cc
-        G4PenelopeGammaConversion.cc
-        G4PenelopeGammaConversionModel.cc
-        G4PenelopeInterpolator.cc
-        G4PenelopeIonisation.cc
-        G4PenelopeIonisationModel.cc
-        G4PenelopeOscillator.cc
-        G4PenelopeOscillatorManager.cc
-        G4PenelopePhotoElectric.cc
-        G4PenelopePhotoElectricModel.cc
-        G4PenelopeRayleigh.cc
-        G4PenelopeRayleighModel.cc
-        G4PenelopeSamplingData.cc
+        G4OrlicLiXsModel.cc
+        G4PaulKxsModel.cc
+      	G4Penelope01BremsstrahlungAngular.cc
+	G4Penelope01BremsstrahlungContinuous.cc
+	G4Penelope01BremsstrahlungModel.cc
+	G4Penelope01ComptonModel.cc
+	G4Penelope01GammaConversionModel.cc
+	G4Penelope01IonisationModel.cc
+	G4Penelope01PhotoElectricModel.cc
+	G4Penelope01RayleighModel.cc
+	G4PenelopeAnnihilationModel.cc
+	G4PenelopeBremsstrahlungAngular.cc
+	G4PenelopeBremsstrahlungFS.cc
+	G4PenelopeBremsstrahlungModel.cc
+	G4PenelopeComptonModel.cc
+	G4PenelopeCrossSection.cc
+	G4PenelopeGammaConversionModel.cc
+	G4PenelopeInterpolator.cc
+	G4PenelopeIonisationModel.cc
+	G4PenelopeOscillator.cc
+	G4PenelopeOscillatorManager.cc
+	G4PenelopePhotoElectricModel.cc
+	G4PenelopeRayleighModel.cc
+	G4PenelopeSamplingData.cc
         G4PhotoElectricAngularGeneratorPolarized.cc
         G4PhotoElectricAngularGeneratorSauterGavrila.cc
         G4PhotoElectricAngularGeneratorSimple.cc
@@ -432,6 +266,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
         G4VeLowEnergyLoss.cc
+        G4VEMDataSet.cc
         G4VhElectronicStoppingPower.cc
         G4VhNuclearStoppingPower.cc
         G4VhShellCrossSection.cc
@@ -439,8 +274,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VLowEnergyDiscretePhotonProcess.cc
         G4VLowEnergyModel.cc
         G4VPhotoElectricAngularDistribution.cc
-        G4WaterExcitationStructure.cc
-        G4WaterIonisationStructure.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.17 2010/10/26 16:25:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NistMaterialBuilder.hh,v 1.17 2010-10-26 16:25:24 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -76,15 +76,15 @@ public:
   //
   G4Material* FindOrBuildMaterial (const G4String& name, 
 				   G4bool isotopes=true,
-				   G4bool warning=true);
+				   G4bool warning =true);
 					    
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4int>& nbAtoms,
-				    G4double dens, 
-				    G4bool isotopes=true,
+				    G4double  dens, 
+				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
 				    G4double  temp     = STP_Temperature,  
 				    G4double  pressure = STP_Pressure); 
@@ -94,8 +94,8 @@ public:
   G4Material* ConstructNewMaterial (const G4String& name,
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4double>& weight,
-				    G4double dens, 
-				    G4bool isotopes=true,
+				    G4double  dens, 
+				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
 				    G4double  temp     = STP_Temperature,  
 				    G4double  pressure = STP_Pressure); 
@@ -104,9 +104,9 @@ public:
   // construct a gas G4Material from scratch by atome count
   // 
   G4Material* ConstructNewGasMaterial(const G4String& name, 
-				      const G4String& nameNist,
+				      const G4String& nameDB,
 				      G4double temp, G4double pres, 
-				      G4bool isotopes=true);
+				      G4bool isotopes = true);
 
   // verbosity level defined by G4NistManager
   //
@@ -149,12 +149,9 @@ private:
   // density in g/cm3, mean ionisation potential in eV
   // 
   void AddMaterial(const G4String& nameMat, G4double dens, G4int Z=0,
-                         G4double pot=0.0, G4int ncomp=1,
-                         G4State=kStateSolid,
-                         G4double temp=STP_Temperature,
-                         G4double pres=STP_Pressure);
+		   G4double pot=0.0, G4int ncomp=1,
+		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddChemicalFormula(const G4String& nameMat, const G4String& ch);
   void AddGas(const G4String& nameMat, G4double t=STP_Temperature,
               G4double p=STP_Pressure);
 
@@ -165,7 +162,6 @@ private:
   void AddElementByAtomCount     (const G4String& name, G4int);
 
   // build a G4Material from dataBase
-  G4Material* BuildMaterial(const G4String& name, G4bool isotopes);
   G4Material* BuildMaterial(G4int idx, G4bool isotopes);
 
   void DumpElm(G4int);
@@ -194,11 +190,12 @@ private:
   std::vector<G4int>     components;
   std::vector<G4int>     indexes;
   std::vector<G4int>     elements;
-
   std::vector<G4int>     matIndex;
+  std::vector<G4bool>    STP;
 
-  std::vector<G4double>  temperatures;
-  std::vector<G4double>  presures;
+  std::vector<G4int>     idxGas;
+  std::vector<G4double>  gasTemperature;
+  std::vector<G4double>  gasPressure;
 
   G4bool                 first;
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,27 +51,27 @@ pol-phot:   for  gamma    SubType= 12
  Total cross sections from Sandia parametrisation. 
       Sampling according Polarized-PhotoElectric model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+Polarized-PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 pol-compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 1
  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   Polarized-Compton :   Emin=        0 eV       Emax=        100 GeV
+   Polarized-Compton :  Emin=        0 eV    Emax=      100 GeV
 
 pol-conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 1
  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the polarized compton cross section
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             polConv :   Emin=        0 eV       Emax=        100 GeV
+             polConv :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -79,13 +79,13 @@ pol-eIoni:   for  e-    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+PolarizedMollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 pol-eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem :   Emin=        0 eV       Emax=         10 TeV  AngularGenUrban
+             PolBrem :  Emin=        0 eV    Emax=       10 TeV   AngularGenUrban
 
 pol-eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -93,19 +93,19 @@ pol-eIoni:   for  e+    SubType= 2
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+PolarizedMollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 pol-eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem :   Emin=        0 eV       Emax=         10 TeV  AngularGenUrban
+             PolBrem :  Emin=        0 eV    Emax=       10 TeV   AngularGenUrban
 
 pol-annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
       Polarized model for annihilation into 2 photons
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-Annihilation :   Emin=        0 eV       Emax=        100 TeV
+Polarized-Annihilation :  Emin=        0 eV    Emax=      100 TeV
  annih-numOfCouples=2
 annih- 0/2
 annih- 1
@@ -114,24 +114,31 @@ annih- 1/2
 annih- 1
  building pol-annih ... 
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_Galactic G4_Fe 
- Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Fe
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
  Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -152,39 +159,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.19s Real=0.2s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.667644 0.15336 0.223815 0.775985 0.300207 0.497873 0.734488 0.237053 0.897878 0.998879 0.961285 0.236212 0.955737 0.147895 0.0947751 0.468668 0.582416 0.169396 0.914981 0.347548 0.982821 0.155053 0.392512 0.00176686 
- i_lag = 15, j_lag = 1
- carry = 5.96046e-08, count24 = 4
+ float_seed_table[] = 0.554569 0.566814 0.173094 0.978615 0.333585 0.579897 0.900865 0.340484 0.141516 0.189891 0.724955 0.127771 0.981695 0.937988 0.0554529 0.338877 0.489345 0.888252 0.297619 0.985434 0.511122 0.299544 0.074185 0.930824 
+ i_lag = 20, j_lag = 6
+ carry = 0, count24 = 11
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31180
-	pol-compt = 266
-	pol-eBrem = 369
-	msc = 3088
-	pol-conv = 222
+	Transportation = 31246
+	pol-compt = 270
+	pol-eBrem = 383
+	msc = 2747
+	pol-conv = 207
 	pol-eIoni = 601
-	pol-annihil = 71
-	pol-phot = 183
+	pol-phot = 163
+	pol-annihil = 74
  Gamma: 
-Mean Number per Event :1.0099
-Mean Energy :9.5624 MeV +- 1.9402 MeV
-Mean Polarization :-0.96262 +- 0.18572
+Mean Number per Event :1.0151
+Mean Energy :9.5349 MeV +- 1.9987 MeV
+Mean Polarization :-0.95885 +- 0.19772
  Electron: 
-Mean Number per Event :0.0338
-Mean Energy :5.2631 MeV +- 2.4883 MeV
-Mean Polarization :-0.71982 +- 0.29902
+Mean Number per Event :0.0335
+Mean Energy :5.0762 MeV +- 2.5366 MeV
+Mean Polarization :-0.71008 +- 0.2969
  Positron: 
-Mean Number per Event :0.0153
-Mean Energy :4.4374 MeV +- 1.9898 MeV
-Mean Polarization :-0.63198 +- 0.30184
+Mean Number per Event :0.0137
+Mean Energy :4.1277 MeV +- 2.1434 MeV
+Mean Polarization :-0.61323 +- 0.28337
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

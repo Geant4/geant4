@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.22 2010/11/29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEVector.cc,v 1.22 2010-11-29 05:44:44 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -1164,7 +1164,8 @@ G4int G4HEVector::FillQuarkContent()
   temp -= G4int(quark2*100);
   G4int quark3 = temp/10;
   temp -= G4int(quark3*10);
-  G4int spin= (temp-1);
+
+  // G4int spin= (temp-1);  DHW 19 May 2011: variable set but not used
 
   if (particleType =="quark") {
     if (tempPDGcode>0){
@@ -1186,9 +1187,11 @@ G4int G4HEVector::FillQuarkContent()
 
   } else if (particleType == "Meson") {
     //   -- exceptions --
-    if (tempPDGcode == 310) spin = 0;        //K0s
+    // if (tempPDGcode == 310) spin = 0;        //K0s
+    // DHW 19 May 2011: variable set but not used
+
     if (tempPDGcode == 130) {     //K0l
-      spin = 0;        
+      // spin = 0;   DHW 19 May 2011: variable set but not used        
       quark2 = 3;
       quark3 = 1;
     }
@@ -1246,10 +1249,14 @@ G4int G4HEVector::FillQuarkContent()
     //exceptions
     if (std::abs(tempPDGcode) == 3122) { 
       // Lambda
-      quark2=2;  quark3 = 1; spin = 1;
+      quark2 = 2;
+      quark3 = 1;
+      // spin = 1;  DHW 19 May 2011: variable set but not used
     } else if (std::abs(tempPDGcode) == 4122) { 
       // Lambda_c
-      quark2=2;  quark3 = 1; spin = 1;
+      quark2 = 2;
+      quark3 = 1;
+      // spin = 1;  DHW 19 May 2011: variable set but not used
     } 
     // check quark flavor
     if ((quark1<quark2)||(quark2<quark3)||(quark1<quark3)) { 

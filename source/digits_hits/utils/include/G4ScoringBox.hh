@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.21 2010/07/22 02:04:39 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoringBox.hh,v 1.21 2010-07-22 02:04:39 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4ScoringBox_h

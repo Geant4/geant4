@@ -1,0 +1,162 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                            HEP Random
+//                         --- RandFlat ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+
+// =======================================================================
+// Gabriele Cosmo - Created: 5th September 1995
+// Peter Urban    - ShootBit() and related stuff added: 5th Sep 1996
+// Gabriele Cosmo - Additional methods to fill arrays specifying
+//                  boundaries: 24th Jul 1997 
+//                - Fixed bug in shootInt(m,n): 25th Sep 1997
+// J.Marraffino   - Added default arguments as attributes: 16th Feb 1998
+// M.Fischler     - Corrected initialization of deleteEngine which should 
+//		    be true for all constructors taking HepRandomEngine*.
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandFlat::RandFlat(HepRandomEngine & anEngine)
+: HepRandom(), firstUnusedBit(0), localEngine(&anEngine, do_nothing_deleter()),
+  defaultWidth(1.0), defaultA(0.0), defaultB(1.0) {}
+
+inline RandFlat::RandFlat(HepRandomEngine & anEngine, double width )
+: HepRandom(), firstUnusedBit(0), localEngine(&anEngine, do_nothing_deleter()),
+  defaultWidth(width), defaultA(0.0), defaultB(width) {}
+
+inline RandFlat::RandFlat(HepRandomEngine & anEngine, double a,
+                                                      double b )
+: HepRandom(), firstUnusedBit(0), localEngine(&anEngine, do_nothing_deleter()),
+  defaultWidth(b-a), defaultA(a), defaultB(b) {}
+
+inline RandFlat::RandFlat(HepRandomEngine * anEngine)
+: HepRandom(), firstUnusedBit(0), localEngine(anEngine),
+  defaultWidth(1.0), defaultA(0.0), defaultB(1.0) {}
+
+inline RandFlat::RandFlat(HepRandomEngine * anEngine, double width )
+: HepRandom(), firstUnusedBit(0), localEngine(anEngine),
+  defaultWidth(width), defaultA(0.0), defaultB(width) {}
+
+inline RandFlat::RandFlat(HepRandomEngine * anEngine, double a,
+                                                      double b )
+: HepRandom(), firstUnusedBit(0), localEngine(anEngine),
+  defaultWidth(b-a), defaultA(a), defaultB(b) {}
+
+inline double RandFlat::shoot(double a, double b) {
+  return (b-a)* shoot() + a;
+}
+
+inline double RandFlat::shoot(double width) {
+  return width * shoot();
+}
+
+inline long RandFlat::shootInt(long n) {
+  return long(shoot()*double(n));
+}
+
+inline long RandFlat::shootInt(long m, long n) {
+  return long(shoot()*double(n-m)) + m;
+}
+
+inline void RandFlat::shootBits() {
+  const double factor= 2.0*MSB; // this should fit into a double! 
+  staticFirstUnusedBit= MSB;
+  staticRandomInt= (unsigned long)(factor*shoot());  
+}
+
+inline int RandFlat::shootBit() {
+  if (staticFirstUnusedBit==0)
+    shootBits();
+  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
+  staticFirstUnusedBit>>= 1;
+  return temp!=0;   
+}
+
+//---------------------
+
+inline double RandFlat::shoot(HepRandomEngine* anEngine) {
+  return anEngine->flat();
+}
+
+
+inline double RandFlat::shoot(HepRandomEngine* anEngine,
+                                 double a, double b) {
+  return (b-a)* anEngine->flat() + a;
+}
+
+inline double RandFlat::shoot(HepRandomEngine* anEngine,
+                                 double width) {
+  return width * anEngine->flat();
+}
+
+inline long RandFlat::shootInt(HepRandomEngine* anEngine,
+                                  long n) {
+  return long(anEngine->flat()*double(n));
+}
+
+inline long RandFlat::shootInt(HepRandomEngine* anEngine,
+                                  long m, long n) {
+  return long(double(n-m)*anEngine->flat()) + m;
+}
+
+inline void RandFlat::shootArray(HepRandomEngine* anEngine,
+                                 const int size, double* vect) {
+  anEngine->flatArray(size,vect);
+}
+
+inline void RandFlat::shootBits(HepRandomEngine* engine) {
+  const double factor= 2.0*MSB; // this should fit into a double! 
+  staticFirstUnusedBit= MSB;
+  staticRandomInt= (unsigned long)(factor*shoot(engine));  
+}
+
+inline int RandFlat::shootBit(HepRandomEngine* engine) {
+  if (staticFirstUnusedBit==0)
+    shootBits(engine);
+  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
+  staticFirstUnusedBit>>= 1;
+  return temp!=0;   
+}
+
+//---------------------
+
+inline double RandFlat::fire() {
+  return (defaultB-defaultA)*localEngine->flat()+defaultA;
+}
+
+inline double RandFlat::fire(double a, double b) {
+  return (b-a)* localEngine->flat() + a;
+}
+
+inline double RandFlat::fire(double width) {
+  return width * localEngine->flat();
+}
+
+inline long RandFlat::fireInt(long n) {
+  return long(localEngine->flat()*double(n));
+}
+
+inline long RandFlat::fireInt(long m, long n) {
+  return long(localEngine->flat()*double(n-m)) + m;
+}
+
+inline void RandFlat::fireBits() {
+  const double factor= 2.0*MSB; // this should fit into a double! 
+  firstUnusedBit= MSB;
+  randomInt= (unsigned long)(factor*localEngine->flat());  
+}
+
+inline int RandFlat::fireBit() {
+  if (firstUnusedBit==0)
+    fireBits();
+  unsigned long temp= firstUnusedBit&randomInt;
+  firstUnusedBit>>= 1;
+  return temp!=0;   
+}
+
+}  // namespace CLHEP

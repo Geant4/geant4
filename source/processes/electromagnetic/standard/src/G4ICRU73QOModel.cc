@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc,v 1.5 2010/11/17 10:47:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ICRU73QOModel.cc,v 1.5 2010-11-17 10:47:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -65,7 +65,7 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
     particle(0),
     isInitialised(false)
 {
-  if(p) SetParticle(p);
+  if(p) { SetParticle(p); }
   SetHighEnergyLimit(10.0*MeV);
 
   lowestKinEnergy  = 5.0*keV;
@@ -86,21 +86,14 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
 	indexZ[ZElementAvailable[i]] = i;
       }
     }
+  fParticleChange = 0;
+  denEffData = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ICRU73QOModel::~G4ICRU73QOModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4ICRU73QOModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple* )
-{
-  //  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-  return 100*keV;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -236,7 +229,7 @@ G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
   G4int Z = AtomicNumber;
   if(Z > 97) { Z = 97; }
   G4int nbOfShells = GetNumberOfShells(Z);
-  if(nbOfShells < 1) nbOfShells = 1;
+  if(nbOfShells < 1) { nbOfShells = 1; }
 
   G4double v = CLHEP::c_light * std::sqrt( 2.0*kineticEnergy/proton_mass_c2 );
 
@@ -304,8 +297,8 @@ G4double G4ICRU73QOModel::GetL0(G4double normEnergy) const
   for(n = 0; n < sizeL0; n++) {
     if( normEnergy < L0[n][0] ) break;
   }
-  if(0 == n) n = 1 ;
-  if(n >= sizeL0) n = sizeL0 - 1 ;
+  if(0 == n) { n = 1; }
+  if(n >= sizeL0) { n = sizeL0 - 1; }
 
   G4double l0    = L0[n][1];
   G4double l0p   = L0[n-1][1];
@@ -373,7 +366,7 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
-  if(xmin >= xmax) return;
+  if(xmin >= xmax) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -405,7 +398,7 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double totMomentum = energy*sqrt(beta2);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  if(cost > 1.0) cost = 1.0;
+  if(cost > 1.0) { cost = 1.0; }
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi = twopi * G4UniformRand() ;
@@ -433,7 +426,7 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 G4double G4ICRU73QOModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 					     G4double kinEnergy)
 {
-  if(pd != particle) SetParticle(pd);
+  if(pd != particle) { SetParticle(pd); }
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);

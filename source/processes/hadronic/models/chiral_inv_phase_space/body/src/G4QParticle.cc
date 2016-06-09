@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.36 2010/06/25 14:03:44 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QParticle.cc,v 1.36 2010-06-25 14:03:44 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -128,7 +128,6 @@ const G4QParticle& G4QParticle::operator=(const G4QParticle &right)
 
 // Standard output for QParticle
 std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
-//       =========================================
 {
   G4QPDGCode rhsQPDG = rhs.GetQPDG();
   lhs << G4endl << "Particle with PDG=" << rhsQPDG << ", Spin=" << rhs.GetSpin()
@@ -153,7 +152,6 @@ std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
 
 // Initialize the PDG-Particle by QCode @@ Can be improved, using PDG.DATA file
 G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
-//    ===================================================
 {
   //static G4int nP = 486;                  // Up to A=80
   //static const G4int nP = 494;              // Up to A=80(?) "Isonuclear revision"
@@ -249,7 +247,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
     }
     //if(limit<= 20 && nQ>= 20)DecayDB[ 20] = 0;    // n
     //if(limit<= 21 && nQ>= 21)DecayDB[ 21] = 0;    // p
-    //if(limit<= 22 && nQ>= 22)    // Lambda ===>>> all week decays are closed at this time
+    //if(limit<= 22 && nQ>= 22)    // Lambda =--=>> all week decays are closed at this time
     //{
     //  DecayDB[ 22].push_back(new G4QDecayChan(.640,2212,-211));
     //  DecayDB[ 22].push_back(new G4QDecayChan(1.00,2112, 111));
@@ -781,7 +779,6 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 
 // Initialize the Particle by a Q Code
 void G4QParticle::InitQParticle(G4int theQCode)
-//    =============================================
 {
   aQPDG.InitByQCode(theQCode);
   aQuarkCont = aQPDG.GetQuarkContent();
@@ -791,7 +788,6 @@ void G4QParticle::InitQParticle(G4int theQCode)
 
 // Initialize the Particle by a PDG Code
 void G4QParticle::InitPDGParticle(G4int thePDGCode)
-//    =============================================
 {
   aQPDG      = G4QPDGCode(thePDGCode);
   aQuarkCont = aQPDG.GetQuarkContent();

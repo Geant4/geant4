@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.cc,v 1.7 2006/06/29 18:10:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserEventAction.cc,v 1.7 2006-06-29 18:10:31 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UserEventAction.hh"
@@ -47,7 +47,7 @@ void G4UserEventAction::BeginOfEventAction(const G4Event*)
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserEventAction.";
    G4Exception("G4UserEventAction::G4UserEventAction()",
-              "Event0001",FatalException,msg);
+              "Event0032",FatalException,msg);
  }
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonPhysics.hh,v 1.2 2010/06/04 10:22:14 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QIonPhysics.hh,v 1.2 2010-06-04 10:22:14 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

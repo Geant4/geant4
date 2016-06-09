@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.125 2010/11/24 10:54:13 gcosmo Exp $
+# $Id: architecture.gmk,v 1.125 2010-11-24 10:54:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -112,6 +112,13 @@ ifneq ($(G4LIB_BUILD_ZLIB),)
   G4LIB_USE_ZLIB = 1
 endif
 
+# Specify if to build the EXPAT module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_EXPAT),)
+  G4LIB_BUILD_EXPAT = 1
+  G4LIB_USE_EXPAT = 1
+endif
+
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
 #
@@ -136,24 +143,28 @@ endif
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := $(shell ls CLHEP_BASE_DIR--UNDEFINED)
+  CLHEP_BASE_DIR  := $(G4BASE)/externals/clhep
+  G4LIB_BUILD_CLHEP := 1
+  G4LIB_USE_CLHEP := 1
+endif
+ifndef G4LIB_USE_CLHEP
+  ifndef CLHEP_LIB
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      CLHEP_LIB := CLHEP.lib
+    else
+      CLHEP_LIB := CLHEP
+#
+# If using the "granular" libraries of CLHEP, uncomment below
+#
+#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
+    endif
+  endif
 endif
 ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
 endif
 ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
-endif
-ifndef CLHEP_LIB
-  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    CLHEP_LIB := CLHEP.lib
-  else
-    CLHEP_LIB := CLHEP
-#
-# If using the "granular" libraries of CLHEP, uncomment below
-#
-#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
-  endif
 endif
 
 # Paths for G4 data
@@ -208,15 +219,28 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 ifndef LDFLAGS
   LDFLAGS :=
 endif
-ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-  LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
-  LOADLIBS  := $(CLHEP_LIB)
+ifndef G4LIB_USE_CLHEP
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
+    LOADLIBS  := $(CLHEP_LIB)
+  else
+    LDFLAGS   += -L$(CLHEP_LIB_DIR)
+    LOADLIBS  := -l$(CLHEP_LIB)
+  endif
 else
-  LDFLAGS   += -L$(CLHEP_LIB_DIR)
-  LOADLIBS  := -l$(CLHEP_LIB) -lm
+  LOADLIBS :=
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
+  endif
+endif
+ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  ifndef G4LIB_USE_EXPAT
+    LOADLIBS += -lexpat
+  endif
   ifndef G4LIB_USE_ZLIB
     LOADLIBS += -lz
   endif
+  LOADLIBS += -lm
 endif
 
 # Graphic variables...
@@ -258,6 +282,8 @@ endif
 #
 ifneq ($(G4LIB_BUILD_GDML),)
   G4LIB_USE_GDML = 1
+endif
+ifdef G4LIB_USE_GDML
   ifndef XERCESCROOT
     XERCESCROOT := /usr/local/xercesc
   endif

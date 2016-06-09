@@ -55,6 +55,8 @@
 #include "G4BCLateParticle.hh"
 #include "G4BCAction.hh"
 
+#include "G4DecayKineticTracks.hh"
+
 class G4CollisionManager;
 
 class G4Track;
@@ -79,6 +81,8 @@ public:
                                               G4Nucleus& theNucleus);
   virtual G4ReactionProductVector * Propagate(G4KineticTrackVector *,
 					      G4V3DNucleus *);
+
+  virtual void ModelDescription(std::ostream&) const;
 
 private:
 
@@ -116,6 +120,10 @@ private:
   G4double GetExcitationEnergy();
   G4bool CheckDecay(G4KineticTrackVector *);
   void CorrectFinalPandE();
+  G4double CorrectShortlivedPrimaryForFermi(
+  		G4KineticTrack* primary,G4KineticTrackVector target_collection);
+  G4bool CorrectShortlivedFinalsForFermi(
+		  G4KineticTrackVector * products, G4double initial_Efermi);
   void UpdateTracksAndCollisions(G4KineticTrackVector * oldSecondaries,
 				 G4KineticTrackVector * oldTarget,
 				 G4KineticTrackVector * newSecondaries);
@@ -130,6 +138,9 @@ private:
 					 G4V3DNucleus *);
   G4double GetIonMass(G4int Z, G4int A);
   
+  G4ReactionProductVector * HighEnergyModelFSProducts(G4ReactionProductVector *,
+		  	  	  	 G4KineticTrackVector * secondaries);
+  G4ReactionProductVector * FillVoidNucleusProducts(G4ReactionProductVector * );
 // utility methods
   G4ThreeVector GetSpherePoint(G4double r, const G4LorentzVector & momentumdirection);
   void ClearAndDestroy(G4KineticTrackVector * ktv);
@@ -138,33 +149,40 @@ private:
 // for debugging purpose
   void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
   void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
+  void DebugApplyCollisionFail(G4CollisionInitialState * collision,
+		  	  	  	  	   G4KineticTrackVector * products);
   void DebugApplyCollision(G4CollisionInitialState * collision, 
                            G4KineticTrackVector *products);
   void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
 			   
 private:
-  G4KineticTrackVector theProjectileList;
-  G4KineticTrackVector theTargetList;
-  G4KineticTrackVector theSecondaryList;
-  G4KineticTrackVector theCapturedList;
-  G4KineticTrackVector theFinalState;
+  G4KineticTrackVector theProjectileList;	// replaced by theProjectile4Momentum
+  G4KineticTrackVector theTargetList;		// list of nucleons in Nucleus
+  G4KineticTrackVector theSecondaryList;	// particles being followed
+  G4KineticTrackVector theCapturedList;		// captured particles
+  G4KineticTrackVector theFinalState;		// particles for final state
+
 
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
-  
-  G4Scatterer * theH1Scatterer;
 
+  G4Scatterer * theH1Scatterer;
+  
   std::vector<G4BCAction *> theImR;
   G4BCDecay * theDecay;
   G4BCLateParticle * theLateParticle;
   G4VFieldPropagation * thePropagator;
+  G4DecayKineticTracks decayKTV;
+
   G4double theCurrentTime;
   G4double theBCminP;
   G4double theCutOnP;
   G4double theCutOnPAbsorb;
-  G4LorentzVector theInitial4Mom;
+  G4LorentzVector theInitial4Mom;   // suppress?
+  G4LorentzVector theProjectile4Momentum;
   G4int currentA, currentZ;
-  G4double massInNucleus;
+  G4int initialZ, initialA;
+  G4double massInNucleus, initial_nuclear_mass;
   G4double currentInitialEnergy;   // for debugging
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;

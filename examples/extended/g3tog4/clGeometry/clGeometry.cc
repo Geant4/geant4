@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.9 2010/11/04 21:47:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: clGeometry.cc,v 1.9 2010-11-04 21:47:43 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

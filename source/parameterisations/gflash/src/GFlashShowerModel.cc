@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashShowerModel.cc,v 1.13 2006/06/29 19:14:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashShowerModel.cc,v 1.13 2006-06-29 19:14:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -102,7 +102,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
     G4double  ParticleEnergy = fastTrack.GetPrimaryTrack()->GetKineticEnergy(); 
     G4ParticleDefinition &ParticleType =
       *(fastTrack.GetPrimaryTrack()->GetDefinition()); 
-    if(ParticleEnergy > PBound->GetMinEneToParametrise(ParticleType) ||
+    if(ParticleEnergy > PBound->GetMinEneToParametrise(ParticleType) &&
        ParticleEnergy < PBound->GetMaxEneToParametrise(ParticleType) )
     {
       // check conditions depending on particle flavour
@@ -112,6 +112,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
       if (select) EnergyStop= PBound->GetEneToKill(ParticleType);
     }
   }
+
   return select; 
 }
 

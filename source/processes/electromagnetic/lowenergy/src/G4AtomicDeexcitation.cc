@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-04 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -49,7 +47,21 @@ G4AtomicDeexcitation::G4AtomicDeexcitation():
   minGammaEnergy(100.*eV),
   minElectronEnergy(100.*eV),
   fAuger(false)
-{}
+{
+
+  G4cout << " ********************************************************** " << G4endl; 
+  G4cout << " *                  W A R N I N G ! ! !                   * " << G4endl;
+  G4cout << " ********************************************************** " << G4endl;
+  G4cout << " *                                                        * " << G4endl; 
+  G4cout << " *  Class G4AtomicDeexcitation is obsolete. It has been   * " << G4endl;
+  G4cout << " * discontinued and is going to be removed by next Geant4 * " << G4endl; 
+  G4cout << " *     release please migrate to G4UAtomDeexcitation.     * " << G4endl;
+  G4cout << " *                                                        * " << G4endl;
+  G4cout << " ********************************************************** " << G4endl; 
+
+  augerVacancyId=0;
+  newShellId=0;
+}
 
 G4AtomicDeexcitation::~G4AtomicDeexcitation()
 {}
@@ -84,7 +96,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	  else
 	    {
-	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4AtomicDeexcitation::Constructor", "de0002", JustWarning, "Transition selection invalid, energy local deposited");
 	    }
 	}
       else 
@@ -102,7 +114,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	  else
 	    {
-	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4AtomicDeexcitation::constructor", "de0002", JustWarning, "Transition selection invalid, energy local deposited" );
 	    }
 	}
       counter++;
@@ -124,9 +136,9 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) 
-    {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
+    {G4Exception("G4AtomicDeexcitation::SelectTypeOfTransition()","de0002", JustWarning ,"zero or negative shellId");}
 
-  G4bool fluoTransitionFoundFlag = false;
+  //G4bool fluoTransitionFoundFlag = false;
   
   const G4AtomicTransitionManager*  transitionManager = 
         G4AtomicTransitionManager::Instance();
@@ -171,7 +183,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
-	     fluoTransitionFoundFlag = true;
+	     //fluoTransitionFoundFlag = true;
 
 	     break;
 	   }
@@ -270,7 +282,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
 
   if (shellId <=0 ) 
-    {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
+    {G4Exception("G4AtomicDeexcitation::GenerateAuger()","de0002", JustWarning ,"zero or negative shellId");}
   
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  

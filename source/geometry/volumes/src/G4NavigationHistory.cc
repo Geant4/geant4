@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.17 2010/12/15 17:05:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NavigationHistory.cc,v 1.17 2010-12-15 17:05:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4NavigationHistory Implementation
@@ -37,7 +37,7 @@
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
 
-#ifndef G4LIB_BUILD_DLL
+#ifndef WIN32
   // Initialise static data for the specialized memory pool
   // for the internal STL vector of histories  ...
   //

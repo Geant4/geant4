@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QDiffraction.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction class -----------------
 //                 by Mikhail Kossov, Aug 2007.
@@ -50,7 +50,9 @@
 #include "G4QDiffraction.hh"
 
 // Initialization of static vectors
-G4int    G4QDiffraction::nPartCWorld=152;  // #of particles initialized in CHIPS
+//G4int    G4QDiffraction::nPartCWorld=152;  // #of particles initialized in CHIPS
+//G4int    G4QDiffraction::nPartCWorld=122;  // #of particles initialized in CHIPS
+G4int    G4QDiffraction::nPartCWorld=85;  // #of particles initialized in CHIPS Reduced
 std::vector<G4int> G4QDiffraction::ElementZ; // Z of element(i) in theLastCalc
 std::vector<G4double> G4QDiffraction::ElProbInMat; // SumProbOfElem in Material
 std::vector<std::vector<G4int>*> G4QDiffraction::ElIsoN;// N of isotope(j), E(i)
@@ -78,7 +80,7 @@ G4int G4QDiffraction::GetNumberOfNeutronsInTarget() {return nOfNeutrons;}
 // output of the function must be in units of length! L=1/sig_V,sig_V=SUM(n(j,i)*sig(j,i)),
 // where n(i,j) is a number of nuclei of the isotop j of the element i in V=1(lengtUnit^3)
 // ********** All CHIPS cross sections are calculated in the surface units ************
-G4double G4QDiffraction::GetMeanFreePath(const G4Track&Track,G4double Q,G4ForceCondition*F)
+G4double G4QDiffraction::GetMeanFreePath(const G4Track& Track,G4double,G4ForceCondition *F)
 {
   *F = NotForced;
   const G4DynamicParticle* incidentParticle = Track.GetDynamicParticle();
@@ -179,12 +181,7 @@ G4double G4QDiffraction::GetMeanFreePath(const G4Track&Track,G4double Q,G4ForceC
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-      G4cout<<"G4QDiff::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
-#endif
-      G4bool ccsf=true;
-      if(Q==-27.) ccsf=false;
-#ifdef debug
-      G4cout<<"G4QDiffraction::GMFP: GetCS #1 j="<<j<<G4endl;
+      G4cout<<"G4Q::GMFP:j="<<j<<",P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PD="<<pPDG<<G4endl;
 #endif
       G4double CSI=CalculateXS(Momentum, Z, N, pPDG); // XS(j,i) for theIsotope
 
@@ -338,12 +335,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   //G4double pM2=proj4M.m2();        // in MeV^2
   //G4double pM=std::sqrt(pM2);      // in MeV
   G4double pM=mNeut;
-  G4int    fPDG=2112;
-  if(projPDG==2112)
-  {
-    pM=mProt;
-    fPDG=2212;
-  }
+  if(projPDG==2112) pM=mProt;
   // Element treatment
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
@@ -480,7 +472,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   G4int difPDG=0;                     // PDG code of the secondary
   G4QHadron* difQH=0;                 // Prototype for a Q-secondary
 #ifdef pdebug
-  G4cout<<"G4QDiffraction::PostStepDoIt: =====found===== nSecondaries="<<nSec<<G4endl;
+  G4cout<<"G4QDiffraction::PostStepDoIt: =---=found=---= nSecondaries="<<nSec<<G4endl;
 #endif
   for(G4int i=0; i<nSec; i++)
   {
@@ -559,11 +551,11 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
 G4double G4QDiffraction::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG) 
 {
   static G4bool first=true;
-  static G4VQCrossSection* CSmanager;
+  //static G4VQCrossSection* CSmanager;
   static G4QDiffractionRatio* diffRatio;
   if(first)                              // Connection with a singletone
   {
-    CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+    //CSmanager=G4QProtonNuclearCrossSection::GetPointer();
     diffRatio=G4QDiffractionRatio::GetPointer();
     first=false;
   }

@@ -151,8 +151,10 @@ void XrayFluoMercuryDetectorConstruction::SetDetectorType(G4String type)
     }
   else 
     {
-      G4String excep = type + "detector type unknown";
-      G4Exception(excep);
+      G4ExceptionDescription execp;
+      execp <<  type + "detector type unknown";
+      G4Exception("XrayFluoMercuryDetectorConstruction::SetDetectorType()","example-xray_fluorescence05",
+	  FatalException, execp);
     }
 }
 

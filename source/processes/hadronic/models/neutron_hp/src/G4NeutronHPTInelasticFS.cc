@@ -30,9 +30,9 @@
 #include "G4Nucleus.hh"
 #include "G4Triton.hh"
 
-void G4NeutronHPTInelasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+void G4NeutronHPTInelasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
 {
-   G4NeutronHPInelasticCompFS::Init(A, Z, dirName, aFSType);
+   G4NeutronHPInelasticCompFS::Init(A, Z, M, dirName, aFSType);
    G4double ResidualA = A-2;
    G4double ResidualZ = Z-1;
    G4NeutronHPInelasticCompFS::InitGammas(ResidualA, ResidualZ);

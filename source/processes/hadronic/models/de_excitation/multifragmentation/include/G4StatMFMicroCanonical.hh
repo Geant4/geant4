@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.hh,v 1.3 2006/06/29 20:24:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFMicroCanonical.hh,v 1.3 2006-06-29 20:24:27 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -85,11 +85,9 @@ private:
     // Calculate Entropy of Compound Nucleus
     G4double CalcEntropyOfCompoundNucleus(const G4Fragment & theFragment, G4double & TConf);
 
+    G4double CalcFreeInternalEnergy(const G4Fragment & theFragment, G4double T);
 
-    G4double CalcFreeInternalEnergy(const G4Fragment & theFragment, const G4double T);
-
-
-    G4double CalcInvLevelDensity(const G4int anA);
+    G4double CalcInvLevelDensity(G4int anA);
 	
 	
 // Data members
@@ -100,8 +98,6 @@ private:
     
     std::vector<G4StatMFMicroManager*> _ThePartitionManagerVector;
 	
-
-
     // Statistical weight of compound nucleus
     G4double _WCompoundNucleus;
 

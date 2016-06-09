@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008/11/21 16:50:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,13 +60,21 @@ public:
   // check if the name is in the list of PhysLists names
 
   const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable Phys Lists
+  // list of avalable base Phys Lists
+
+  const std::vector<G4String>& AvailablePhysListsEM() const;
+  // list of avalable EM options
+
+  inline void SetVerbose(G4int val) { verbose = val; }
 
 private:
 
   G4String defName;  
-  std::vector<G4String> listnames;
-  size_t nlists;
+  std::vector<G4String> listnames_hadr;
+  std::vector<G4String> listnames_em;
+  size_t nlists_hadr;
+  size_t nlists_em;
+  G4int verbose;
 };
 
 #endif

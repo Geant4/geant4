@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.22 2010/11/02 17:55:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Fragment.cc,v 1.22 2010-11-02 17:55:43 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
 //

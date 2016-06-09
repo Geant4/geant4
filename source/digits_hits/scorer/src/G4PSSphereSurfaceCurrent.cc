@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.6 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.6 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
@@ -207,8 +207,8 @@ void G4PSSphereSurfaceCurrent::SetUnit(const G4String& unit)
 	    unitName = unit;
 	    unitValue = 1.0;
 	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+	    G4Exception("G4PSSphereSurfaceCurrent::SetUnit","DetPS0015",JustWarning,msg);
 	}
     }
 }

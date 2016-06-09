@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010/11/29 17:15:46 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.3 2010-11-29 17:15:46 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -31,53 +31,51 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4materials
     HEADERS
-        G4Isotope.hh                   
-        G4NistManager.hh
-        G4AtomicShells.hh       
-        G4IsotopeVector.hh             
-        G4NistMaterialBuilder.hh
-        G4DensityEffectData.hh  
-        G4Material.hh                  
-        G4NistMessenger.hh
-        G4Element.hh            
-        G4MaterialPropertiesTable.hh   
-        G4OpticalSurface.hh
-        G4ElementTable.hh       
-        G4MaterialPropertiesTable.icc  
-        G4SandiaTable.hh
-        G4ElementVector.hh      
-        G4MaterialPropertyVector.hh    
-        G4StaticSandiaData.hh
-        G4ExtDEDXTable.hh       
-        G4MaterialPropertyVector.icc   
-        G4SurfaceProperty.hh
-        G4IonisParamElm.hh      
-        G4MaterialTable.hh             
-        G4VIonDEDXTable.hh
-        G4IonisParamMat.hh      
-        G4MPVEntry.hh
-        G4IonStoppingData.hh    
+        G4AtomicShells.hh
+        G4DensityEffectData.hh
+        G4ElementData.hh
+        G4Element.hh
+        G4ElementTable.hh
+        G4ElementVector.hh
+        G4ExtDEDXTable.hh
+        G4IonisParamElm.hh
+        G4IonisParamMat.hh
+        G4IonStoppingData.hh
+        G4Isotope.hh
+        G4IsotopeVector.hh
+        G4Material.hh
+        G4MaterialPropertiesTable.hh
+        G4MaterialPropertiesTable.icc
+        G4MaterialPropertyVector.hh
+        G4MaterialTable.hh
         G4NistElementBuilder.hh
+        G4NistManager.hh
+        G4NistMaterialBuilder.hh
+        G4NistMessenger.hh
+        G4OpticalSurface.hh
+        G4SandiaTable.hh
+        G4StaticSandiaData.hh
+        G4SurfaceProperty.hh
+        G4VIonDEDXTable.hh
     SOURCES
+        G4AtomicShells.cc
+        G4DensityEffectData.cc
+        G4Element.cc
+        G4ElementData.cc
+        G4ExtDEDXTable.cc
+        G4IonisParamElm.cc
+        G4IonisParamMat.cc
         G4IonStoppingData.cc
-        G4NistManager.cc
-        G4AtomicShells.cc       
         G4Isotope.cc
+        G4Material.cc
+        G4MaterialPropertiesTable.cc
+        G4NistElementBuilder.cc
+        G4NistManager.cc
         G4NistMaterialBuilder.cc
-        G4DensityEffectData.cc  
-        G4Material.cc              
         G4NistMessenger.cc
-        G4Element.cc          
-        G4MaterialPropertiesTable.cc  
         G4OpticalSurface.cc
-        G4ExtDEDXTable.cc       
-        G4MaterialPropertyVector.cc   
         G4SandiaTable.cc
-        G4IonisParamElm.cc      
-        G4MPVEntry.cc                 
         G4SurfaceProperty.cc
-        G4IonisParamMat.cc      
-        G4NistElementBuilder.cc       
         G4VIonDEDXTable.cc
     GRANULAR_DEPENDENCIES
         G4globman

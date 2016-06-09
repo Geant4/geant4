@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCascadeCollider.cc,v 1.5 2010/12/15 07:41:21 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4VCascadeCollider.cc,v 1.5 2010-12-15 07:41:21 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100623  M. Kelsey -- Use old bindingEnergy() wrapper (now returns

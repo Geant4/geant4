@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006/05/08 12:28:20 gcosmo Exp $
+$Id: History,v 1.9 2006-05-08 12:28:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 3rd, 2011 M. Verderi (gflash-V09-04-02)
+------------------------
+- fix compilation warnings in
+  GFlashHomoShowerParameterisation.cc:152
+  GFlashSamplingShowerParameterisation.cc:144
+  due to respectiveley deletion of
+      GVFlashHomoShowerTuning
+      GFlashSamplingShowerTuning
+  which have no virtual destructor.
+
+  Empty constructor and destructor added to these (utility) classes.
+
+Sep 20th, 2011 M. Verderi (gflash-V09-04-01)
+-------------------------
+- Fixed bug in G4FlashShowerModel::ModelTrigger :
+  was  " (Ekin > Emin) || (Ekin < Emax) " instead of
+       " (Ekin > Emin) && (Ekin < Emax) "
+
+Jul 5th, 2011 G.Cosmo (gflash-V09-04-00)
+---------------------
+- Fixed Coverity defects, mainly related to uninitialised static data.
 
 May 8th, 2005 G.Cosmo (gflash-V08-00-00)
 ---------------------

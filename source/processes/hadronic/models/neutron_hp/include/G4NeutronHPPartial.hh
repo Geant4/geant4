@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.13 2007/06/18 20:56:05 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPPartial.hh,v 1.13 2007-06-18 20:56:05 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070618 Comment out unused private member leaking by T. Koi
 //

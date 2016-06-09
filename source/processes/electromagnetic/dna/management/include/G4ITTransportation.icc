@@ -1,0 +1,122 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// This class is a slightly modified version of G4Transportation
+// But it should use the exact same algorithm
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+inline void
+G4ITTransportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
+{
+   fFieldPropagator= pFieldPropagator;
+}
+
+inline G4PropagatorInField* G4ITTransportation::GetPropagatorInField()
+{
+   return fFieldPropagator;
+}
+
+inline void G4ITTransportation::SetVerboseLevel( G4int verboseLev )
+{
+  fVerboseLevel= verboseLev;
+}
+
+inline G4int G4ITTransportation::GetVerboseLevel( ) const
+{
+  return fVerboseLevel;
+}
+
+inline G4double G4ITTransportation::GetThresholdWarningEnergy() const
+{
+  return fThreshold_Warning_Energy;
+}
+
+inline G4double G4ITTransportation::GetThresholdImportantEnergy() const
+{
+  return fThreshold_Important_Energy;
+}
+
+inline G4int G4ITTransportation::GetThresholdTrials() const
+{
+  return fThresholdTrials;
+}
+
+inline void G4ITTransportation::SetThresholdWarningEnergy( G4double newEnWarn )
+{
+  fThreshold_Warning_Energy= newEnWarn;
+}
+
+inline void G4ITTransportation::SetThresholdImportantEnergy( G4double newEnImp )
+{
+  fThreshold_Important_Energy = newEnImp;
+}
+
+inline void G4ITTransportation::SetThresholdTrials(G4int newMaxTrials )
+{
+  fThresholdTrials = newMaxTrials;
+}
+
+     // Get/Set parameters for killing loopers:
+     //   Above 'important' energy a 'looping' particle in field will
+     //   *NOT* be abandoned, except after fThresholdTrials attempts.
+     // Below Warning energy, no verbosity for looping particles is issued
+
+inline G4double G4ITTransportation::GetMaxEnergyKilled() const
+{
+  return fMaxEnergyKilled;
+}
+
+inline G4double G4ITTransportation::GetSumEnergyKilled() const
+{
+  return fSumEnergyKilled;
+}
+
+inline void G4ITTransportation::ResetKilledStatistics(G4int report)
+{
+  if( report ) {
+    G4cout << " G4ITTransportation: Statistics for looping particles " << G4endl;
+    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
+    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
+  }
+
+  fSumEnergyKilled= 0;
+  fMaxEnergyKilled= -1.0*GeV;
+}
+     // Statistics for tracks killed (currently due to looping in field)
+
+inline void G4ITTransportation::EnableShortStepOptimisation(G4bool optimiseShortStep)
+{
+  fShortStepOptimisation=optimiseShortStep;
+}

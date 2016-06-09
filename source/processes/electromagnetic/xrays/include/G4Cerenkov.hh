@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.11 2009/07/29 23:45:02 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Cerenkov.hh,v 1.11 2009-07-29 23:45:02 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -64,6 +64,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
 #include "G4PhysicsTable.hh"
+#include "G4MaterialPropertyVector.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
@@ -185,7 +186,7 @@ private:
 	G4double GetAverageNumberOfPhotons(const G4double charge,
                                 const G4double beta,
 		    		const G4Material *aMaterial,
-				const G4MaterialPropertyVector* Rindex) const;
+				G4MaterialPropertyVector* Rindex) const;
 
         ///////////////////////
         // Class Data Members

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.15 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForMSC.cc,v 1.15 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

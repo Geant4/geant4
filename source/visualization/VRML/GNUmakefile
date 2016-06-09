@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2009/10/21 15:27:21 allison Exp $
+# $Id: GNUmakefile,v 1.9 2010-12-23 14:18:05 lgarnier Exp $
 
 # lib name
 name := G4VRML
@@ -17,6 +17,14 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
+
+# NO need OGL, then reset OGLGLAGS
+OGLFLAGS =
+OGLLIBS  =
+# NO need QT, then reset QTGLAGS
+QTFLAGS =
+QTLIBS  =
+GLQTLIBS =
 
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include

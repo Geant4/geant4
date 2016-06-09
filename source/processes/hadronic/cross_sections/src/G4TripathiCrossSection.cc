@@ -27,32 +27,48 @@
 // Tripathi, et al.
 // 
 // 26-Dec-2006 Isotope dependence added by D. Wright
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 //
 
 #include "G4TripathiCrossSection.hh"
+#include "G4DynamicParticle.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Proton.hh"
+#include "G4NistManager.hh"
 
-G4TripathiCrossSection::G4TripathiCrossSection() 
-{
-  //  G4cout <<"New G4TripathiCrossSection " << this << G4endl;
-}
+G4TripathiCrossSection::G4TripathiCrossSection()
+ : G4VCrossSectionDataSet("Tripathi")
+{}
+
 G4TripathiCrossSection::~G4TripathiCrossSection() 
 {}
 
+G4bool 
+G4TripathiCrossSection::IsElementApplicable(const G4DynamicParticle* aPart, 
+					    G4int, const G4Material*)
+{
+  G4bool result = false;
+  if ( (aPart->GetDefinition()->GetBaryonNumber()>2.5) &&
+       ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<1*GeV) ) {
+    result = true;
+  }
+  return result;
+}
+
 G4double G4TripathiCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aPart, G4int ZZ, G4int AA, 
-                     G4double /*temperature*/) 
+GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,  
+		       const G4Material*) 
 {
   G4double result = 0.;
-  const G4double targetAtomicNumber = AA;
-  const G4double nTargetProtons = ZZ;
+  G4double targetAtomicNumber = G4NistManager::Instance()->GetAtomicMassAmu(ZZ);
+  G4double nTargetProtons = ZZ;
   
-  const G4double kineticEnergy = aPart->GetKineticEnergy()/MeV;
-  const G4double nProjProtons = aPart->GetDefinition()->GetPDGCharge();
-  const G4double projectileAtomicNumber = 
-                             aPart->GetDefinition()->GetBaryonNumber();
+  G4double kineticEnergy = aPart->GetKineticEnergy()/MeV;
+  G4double nProjProtons = aPart->GetDefinition()->GetPDGCharge();
+  G4double projectileAtomicNumber = 
+    aPart->GetDefinition()->GetBaryonNumber();
 
   const G4double nuleonRadius=1.1E-15;
   const G4double myNuleonRadius=1.36E-15;
@@ -65,7 +81,7 @@ GetZandACrossSection(const G4DynamicParticle* aPart, G4int ZZ, G4int AA,
   G4LorentzVector pProjectile(aPart->Get4Momentum());
   pTarget = pTarget+pProjectile;
   G4double E_cm = (pTarget.mag()-targetMass-pProjectile.m())/MeV;
-  if(E_cm <= DBL_MIN) return result;  
+  if(E_cm <= DBL_MIN) { return result; }
   // done
   G4double r_rms_p = 0.6 * myNuleonRadius * 
                                    std::pow(projectileAtomicNumber, 1./3.);
@@ -138,38 +154,8 @@ GetZandACrossSection(const G4DynamicParticle* aPart, G4int ZZ, G4int AA,
 	         std::pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * 
                  (1-B/E_cm);
   
-  if(result < 0.) result = 0.;
+  if(result < 0.) { result = 0.; }
   return result*m2;
 
 }
 
-
-G4double G4TripathiCrossSection::
-GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle, 
-    G4double temperature)
-{
-  G4int nIso = anEle->GetNumberOfIsotopes();
-  G4double xsection = 0;
-     
-  if (nIso) {
-    G4double sig;
-    G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
-    G4double* abundVector = anEle->GetRelativeAbundanceVector();
-    G4int ZZ;
-    G4int AA;
-     
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ = (*isoVector)[i]->GetZ();
-      AA = (*isoVector)[i]->GetN();
-      sig = GetZandACrossSection(aPart, ZZ, AA, temperature);
-      xsection += sig*abundVector[i];
-    }
-   
-  } else {
-    G4int ZZ = G4lrint(anEle->GetZ());
-    G4int AA = G4lrint(anEle->GetN());
-    xsection = GetZandACrossSection(aPart, ZZ, AA, temperature);
-  }
-
-  return xsection;
-}

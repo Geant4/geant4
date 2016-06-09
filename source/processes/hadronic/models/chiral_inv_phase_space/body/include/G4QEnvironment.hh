@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.38 2010/11/22 07:07:27 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QEnvironment.hh,v 1.38 2010-11-22 07:07:27 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -71,6 +71,12 @@ public:
   void AddQuasmon(G4Quasmon* Q);            // Add aQuasmon to theEnvironment
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
 
+  // External managment
+  void DecayBaryon(G4QHadron* dB, G4QHadronVector* HV);     // Decay baryon
+  void DecayMeson(G4QHadron* dB, G4QHadronVector* HV);      // Decay meson
+  void DecayAntistrange(G4QHadron* aS, G4QHadronVector* HV);// Decay AntiStrNuc
+  void CheckMassShell(G4QHadronVector* HV);                 // All hadrons on mass shell
+
   // Static functions
   static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
@@ -90,8 +96,6 @@ private:
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
   void             EvaporateResidual(G4QHadron* h, G4bool f=true);// Evaporate NuclearFragm
-  void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
-  void             DecayAntistrange(G4QHadron* aS);// Decay Antistrange nucleus
   G4bool           CheckGroundState(G4Quasmon* quasm,G4bool corFlag=false);//as G4Q for QHV
   G4bool           DecayInEnvQ(G4Quasmon* quasm);  // Use befor evaporation in PANIC case
 

@@ -1,0 +1,236 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+25.11.2011  M.K                 tag emdna-V09-04-51
+            Correct a typo in previous tag
+
+25.11.2011  M.K                 tag emdna-V09-04-51
+            Place the reaction products at the reaction site
+            rather than center of mass in DNAMolecularReaction
+
+21.11.2011  M.K                 tag emdna-V09-04-50
+            Change the name of macros in AddClone_def.hh to
+            avoid conflicts with ROOT.
+            Add short class description (comments added in the new files)
+            in JavaDoc style for doxygen use.
+
+21.11.2011  M.K                 tag emdna-V09-04-49
+            Correct a wrong condition in the step manager
+            Avoid the call of Green brownian bridge when
+            the time step is equal to zero (bug)
+            Give priority to G4Processes over reaction processes
+            when the time steps returned by the time stepper
+            and the processes are equal
+            Improve verbose
+
+21.11.2011  M.K                 tag emdna-V09-04-48
+            Fix incoherent management of time and secondaries in management/
+            Avoid memory leak related to the management of ITs
+            Correct verbose in new models & process
+
+18.11.2011  M.K                 tag emdna-V09-04-47
+            Fix uninitialized boolean variable (fWriteFile) 
+	    in G4DNAChemistryManager
+
+18.11.2011  M.K                 tag emdna-V09-04-46
+            Fix compilation error in G4TrackList on macOs
+            Clean G4DNAMolecularDecayDisplacer from comments
+            Correct a typo in G4DNAChemistryManager (H20 -> H2O)
+
+15.11.2011  G.Cosmo             tag emdna-V09-04-45
+            Fixes to initialisation of static data in G4VMolecularDecayDisplacer
+            and G4DNAMolecularDecayDisplacer, to allow generation of DLLs on
+            Windows.
+            Fixed compilation warning on icc compiler in
+            G4MolecularDecayTable.cc
+
+10.11.2011  M.K.                tag emdna-V09-04-44
+            Fix a bug in G4DNATransformElectronModel
+
+10.11.2011  M.K.                tag emdna-V09-04-43
+            Clean classes for release
+            Add comment into source
+            Change name of some methods
+            Transform two independent singleton pointers to auto_ptr
+            in order to prevent the user from deleting those classes
+            (ITStepMan + DNAChemMan)
+
+10.11.2011  M.K.                tag emdna-V09-04-42
+            For safety (at the time of static members destruction)
+            change fgManager in MolConf into a pointer delete by
+            the chemistryManager.
+
+09.11.2011  M.K.                tag emdna-V09-04-41
+            Add friend class G4TrackList_Boundary;
+            in G4TrackListNode.
+            Simplify and improve the use of dnaChemMan
+            Add more convenient methods in userReactionAction
+
+08.11.2011  M.K.                tag emdna-V09-04-40
+            Fix coverity warnings
+
+07.11.2011  M.K.                tag emdna-V09-04-39
+            Add correct types/sub-types for DNAElectronSolvatation
+            DNAMolecularDecay, DNABrownianTransportation, ITTransp
+            Add the possibility to link a decay time to a given
+            electronic configuration while declaring the decay
+            scheme through : G4MoleculeDef::AddeConfToExcitedState
+            Clean classes for release
+
+03.11.2011  M.K.                tag emdna-V09-04-38
+            Add dna libs in sources.cmake
+
+03.11.2011  M.K.                tag emdna-V09-04-37
+            Add G4ITStepManager fVerbose
+	    Add dna includes in sources.cmake
+     
+01.11.2011  M.K.                tag emdna-V09-04-36
+            Remove warnings on G4ITModelProcessor,
+            G4ITTransportation, G4TrackList on Windows
+
+01.11.2011  G.Cosmo
+            Renamed export flags for DLL builds to G4EM_ALLOC_EXPORT and
+            updated GNUMakefiles to have it properly defined.
+
+31.10.2011  M.K			tag emdna-V09-04-35
+            Remove obsolete G4Exception
+	    Remove "friend class G4KDTree" in G4KDNode
+	    Remove G4VITProcessor and all relatives 
+	    Fix windows compilation errors & warnings
+
+28.10.2011  M.K			tag emdna-V09-04-34
+            Remove __PRETTY_FUNCTION__ introduce __Exception_Origin__
+            Plus remove obsolete G4Exception
+
+28.10.2011  M.K			tag emdna-V09-04-33
+            Displace G4DNAChemistryManager, G4DNAMolecularReactionTable,
+            G4VDNAReactionModel to utils
+            Displace G4DNAMoleculeEncouterStepper, G4DNAMoleculeReaction
+            to models
+
+27.10.2011  M.K			tag emdna-V09-04-32
+	    Fix BornIonisation + the two RuddIoni
+	    coverity errors.
+
+26.10.2011  M.K			tag emdna-V09-04-31
+	    change std::shared_ptr to CLHEP::shared_ptr	    
+
+26.10.2011  M.K.		tag emdna-V09-04-30
+	    Memory leak fixes
+	    G4MolecularConfiguration::fManager added
+
+26.10.2011  M.K.		tag emdna-V09-04-29
+	    G4DNAIonisation : add models for C/N/O/Fe
+	    Add electron solvatation process & models
+	    Add chemical processes
+
+21.10.2011  M.K.		tag emdna-V09-04-28
+	    Same as emdna-V09-04-27 including models/ & processes/ from 
+	    emdna-V09-04-24
+	    
+21.10.2011  M.K.		tag emdna-V09-04-27
+	    CMake fixes from emdna-V09-04-24
+	    
+21.10.2011  M.K.		tag emdna-V09-04-26
+	    Bug fixes and new dev from the previous tag	    
+
+21.10.2011  S. Incerti		tag emdna-V09-04-25
+	    Extension of ionisation by HZE proposed by Z. Francis
+
+20.10.2011  M.K.		tag emdna-V09-04-24
+	    Bug fixes and new dev from the previous tag
+     
+07.10.2011  M.K.		tag emdna-V09-04-23
+	    First tag with "molecules" files     
+     
+07.10.2011  M.K.		tag emdna-V09-04-22
+	    Add molecules+management directory
+	    First tag with "management" files
+
+09.09.2011  G.Folger            tag emdna-V09-04-21
+            utils/sources.cmake: remove reference to non-existant 
+	     G4DNAMoleculeManager.cc 
+
+05.09.2011  A. M. M. K., S. I., tag emdna-V09-04-20
+            Updated sources.make and CMakeLists.txt
+
+30.08.2011  A. M. M. K., S. I., tag emdna-V09-04-19
+            Reorganized whole architecture.
+
+24.08.2011  A. Mantero, tag emdna-V09-04-18
+            Fixed a bug regarding energy deposition (bindingEnergy=0
+            if no deexcitation)
+
+22.08.2011  S. Incerti, tag emdna-V09-04-17
+            Changed code (em0006) numbering for G4Exception
+
+19.08.2011  S. Incerti, tag emdna-V09-04-16
+            Switched to new G4Exception syntax
+
+04.08.2011  A. Mantero, tag emdna-V09-04-15
+            Added enhanced debug information in ionisation models
+
+02.08.2011  S. Incerti,  tag emdna-V09-04-14
+	    Removed wrong pointer delete in G4DNARuddIonisation*
+
+28.07.2011  S. Incerti,  tag emdna-V09-04-13
+	    Removed obsolete information.
+
+28.07.2011  S. Incerti,  tag emdna-V09-04-12
+	    Updated deexcitation initialization in ionization models.
+
+21.07.2011  A. Mantero,  tag emdna-V09-04-11
+	    Coverity warnings removal
+
+11.07.2011  S.Incerti,  tag emdna-V09-04-10
+	    - Increased energy limits for
+	    G4DNAChargeIncrease
+	    G4DNAChargeDecrease
+	    G4DNADingfelderChargeIncreaseModel
+	    G4DNADingflederChargeDecreaseModel
+	    in collaboration with Ziad F.
+	    - This tag includes Alfonso's upgrade 
+	    of ionisation classes for Auger e-
+
+16.05.2011  A.Mantero,  tag emdna-V09-04-09
+	    Further compilation warnings removal
+
+16.05.2011  A.Mantero,  tag emdna-V09-04-08
+	    Compilation warnings removal
+
+12.05.2011  A.Mantero,  tag emdna-V09-04-07
+	    added Atomic Deexcitation to Ionisation Models
+
+04.05.2011  S. Incerti, tag emdna-V09-04-06
+            Fixed compilation error on icc in
+	    G4DNADingfelderChargeIncreaseModel.cc.
+
+03.05.2011  S. Incerti, tag emdna-V09-04-05
+            Changed process sub-type numbering.
+
+30.04.2011  S. Incerti, tag emdna-V09-04-04
+            Fixed coverity warnings.
+
+05.04.2011  S. Incerti, tag emdna-V09-04-03
+            Updated all models for handling of variable density.
+
+17.03.2011  S. Incerti, tag emdna-V09-04-02
+            Addition of dependencies to configuration files.
+
+17.03.2011  S. Incerti, tag emdna-V09-04-01
+            Addition of all files.
+
+13.02.2011  S. Incerti, tag emdna-V09-04-00
+            Creation of dna sub-package in electromagnetic category.

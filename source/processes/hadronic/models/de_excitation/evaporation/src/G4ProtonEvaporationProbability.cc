@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonEvaporationProbability.cc,v 1.17 2010/11/17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ProtonEvaporationProbability.cc,v 1.17 2010-11-17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -39,7 +39,10 @@
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = U = 0.0;
+}
 
 G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 
 {}
@@ -218,12 +221,13 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
   nu2 = -1.872;
   
   // parameters for  proton cross section refinement 
+  /*
   G4double afit,bfit,a2,b2;
   afit=-0.0785656;
   bfit=5.10789;
   a2= -0.00089076;
   b2= 0.0231597;  
-  
+  */
   G4double ec,ecsq,xnulam,etest(0.),ra(0.),a,w,c,signor(1.),signor2,sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
     

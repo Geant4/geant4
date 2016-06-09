@@ -1,0 +1,23 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    extended/commmon History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+23/11/2011 I. Hrivnacova (excommon-V09-04-01)
+- Addded physicsList directory with a physics list with genatino
+  and charged geantino
+
+15/11/2011 I. Hrivnacova (excommon-V09-04-00)
+- First version of the common classes for the extended examples.

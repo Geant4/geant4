@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.11 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmViewer.hh,v 1.11 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -60,6 +60,7 @@ public:
   
 protected:
   virtual void ShowView ();
+  void ResetView ();
   void GetXmConnection ();
   virtual void CreateMainWindow ();
 
@@ -120,8 +121,8 @@ protected:
                                     fov,
                                     rot_sens_limit,
                                     pan_sens_limit,
-                                    rot_sens,
-                                    pan_sens,
+                                    wob_high,
+                                    wob_low,
                                     wob_sens;
 
   Pixel                             bgnd, 
@@ -372,7 +373,8 @@ public:
 private:
   G4OpenGLXmViewer (const G4OpenGLXmViewer&);
   G4OpenGLXmViewer& operator = (const G4OpenGLXmViewer&);
-  
+  void UpdateControlPanel();
+  // Update the content of the control panel
 };
 
 #endif

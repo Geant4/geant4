@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.hh,v 1.14 2010/07/05 13:39:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -39,21 +39,34 @@
 // 23.01.2009 V.Ivanchenko move constructor and destructor to source
 // 05.07.2010 V.Ivanchenko added name, min and max energy limit and
 //            corresponding access methods
-//
- 
+// 12.08.2011 G.Folger, V.Ivanchenko, T.Koi, D.Wright redesign the class
+// 
 //
 // Class Description
 // This is a base class for hadronic cross section data sets.  Users may 
 // derive specialized cross section classes and register them with the
 // appropriate process, or use provided data sets.
+//
+// Each cross section should have unique name
+// Minimal and maximal energy for the cross section will be used in run
+// time before IsApplicable method is called
+// 
+// Both the name and the energy interval will be used for documentation 
+//
 // Class Description - End
 
 #ifndef G4VCrossSectionDataSet_h
 #define G4VCrossSectionDataSet_h 1
 
-#include "G4DynamicParticle.hh"
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
 
+class G4DynamicParticle;
+class G4Isotope;
+class G4Material;
 
 class G4VCrossSectionDataSet
 {
@@ -63,38 +76,68 @@ public: //with description
 
   virtual ~G4VCrossSectionDataSet();
 
-  // The following methods need to be implemented for each new data set.
+  //============== Is Applicable methods ===============================
+  // The following three methods have default implementations returning
+  // "false".  Derived classes should implement only needed methods.
+ 
+  // Element-wise cross section
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*) = 0;
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z, 
+			     const G4Material* mat = 0);
 
+  // Derived classes should implement this method if they provide isotope-wise 
+  // cross sections.  Default arguments G4Element and G4Material are needed to 
+  // access low-energy neutron cross sections, but are not required for others.
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*Z*/, G4double /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,    
+			 const G4Element* elm = 0,
+			 const G4Material* mat = 0);
 
-  virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*N*/);
+  //============== GetCrossSection methods ===============================
 
-  virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
-			   G4double aTemperature = 0.) = 0;
+  // This is a generic method to access cross section per element
+  // This method should not be overwritten in a derived class
+  inline G4double GetCrossSection(const G4DynamicParticle*, const G4Element*,
+				  const G4Material* mat = 0);
 
-  virtual
-  G4double GetIsoCrossSection(const G4DynamicParticle*, const G4Isotope*, 
-			      G4double aTemperature = 0.);
+  // This is a generic method to compute cross section per element
+  // If the DataSet is not applicable the method returns zero
+  // This method should not be overwritten in a derived class
+  G4double ComputeCrossSection(const G4DynamicParticle*, 
+			       const G4Element*,
+			       const G4Material* mat = 0);
 
-  virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
-				G4double /*A*/, G4double aTemperature = 0.);
+  // The following two methods have default implementations which throw
+  // G4HadronicException.  Derived classes should implement only needed
+  // methods, which are assumed to be called at run time.
 
+  // Implement this method for element-wise cross section 
   virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
-				G4int /*A*/, G4double aTemperature = 0.);
+  G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+				  const G4Material* mat = 0);
 
+  // Derived classes should implement this method if they provide isotope-wise
+  // cross sections.  Default arguments G4Element and G4Material are needed to
+  // access low-energy neutron cross sections, but are not required for others. 
   virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&) = 0;
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
+			      const G4Isotope* iso = 0,
+			      const G4Element* elm = 0,
+			      const G4Material* mat = 0);
 
+  //=====================================================================
+
+  // Implement this method if needed
   virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&) = 0;
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
+  // Implement this method if needed
+  // Default implementation will provide a dump of the cross section 
+  // in logarithmic scale in the interval of applicability 
+  virtual
+  void DumpPhysicsTable(const G4ParticleDefinition&);
+
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 public: // Without Description
 
@@ -112,6 +155,8 @@ public: // Without Description
 
 protected:
 
+  inline void SetName(const G4String&);
+
   G4int verboseLevel;
 
 private:
@@ -122,8 +167,16 @@ private:
   G4double minKinEnergy;
   G4double maxKinEnergy;
 
-  const G4String name;
+  G4String name;
 };
+
+inline G4double 
+G4VCrossSectionDataSet::GetCrossSection(const G4DynamicParticle* dp, 
+					const G4Element* elm,
+					const G4Material* mat)
+{
+  return ComputeCrossSection(dp, elm, mat);
+}
 
 inline void G4VCrossSectionDataSet::SetVerboseLevel(G4int value)
 {
@@ -153,6 +206,11 @@ inline G4double G4VCrossSectionDataSet::GetMaxKinEnergy() const
 inline const G4String& G4VCrossSectionDataSet::GetName() const
 {
   return name;
+}
+
+inline void G4VCrossSectionDataSet::SetName(const G4String& s)
+{
+  name = s;
 }
 
 #endif

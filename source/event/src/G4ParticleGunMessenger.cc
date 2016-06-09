@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.16 2007/10/02 00:45:17 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleGunMessenger.cc,v 1.16 2007-10-02 00:45:17 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ParticleGunMessenger.hh"

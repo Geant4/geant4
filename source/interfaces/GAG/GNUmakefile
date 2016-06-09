@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2007/11/30 14:28:50 lgarnier Exp $
+# $Id: GNUmakefile,v 1.3 2007-11-30 14:28:50 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/GAG library.  John Allison, 6/7/98.
 

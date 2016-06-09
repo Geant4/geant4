@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.14 2010/10/26 10:35:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.14 2010-10-26 10:35:22 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -70,9 +70,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
-				const G4MaterialCutsCouple*);
-
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
@@ -96,6 +93,13 @@ public:
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
 
+protected:
+
+  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
+
+  // * fast inline functions *
+  inline void SetCurrentElement(const G4double);
+
 private:
 
   void InitialiseConstants();
@@ -106,14 +110,9 @@ private:
 
   G4double ComputeXSectionPerAtom(G4double cutEnergy);
 
-  G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
-
   G4double ComputeRelDXSectionPerAtom(G4double gammaEnergy);
 
   void SetParticle(const G4ParticleDefinition* p);
-
-  // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
 
   inline G4double Phi1(G4double,G4double);
   inline G4double Phi1M2(G4double,G4double);
@@ -131,21 +130,43 @@ protected:
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
 
-  static const G4double xgi[8], wgi[8];
-  static const G4double Fel_light[5];
-  static const G4double Finel_light[5];
-
-  G4double minThreshold;
+  G4double bremFactor;
 
   // cash
   G4double particleMass;
   G4double kinEnergy;
   G4double totalEnergy;
   G4double currentZ;
-  G4double z13, z23, lnZ;
-  G4double Fel, Finel, fCoulomb, fMax; 
+  //G4double z13, z23, lnZ;
+  //G4double Fel, Finel, fCoulomb, fMax; 
   G4double densityFactor;
   G4double densityCorr;
+
+  G4bool   isElectron;
+
+private:
+
+  static const G4double xgi[8], wgi[8];
+  static const G4double Fel_light[5];
+  static const G4double Finel_light[5];
+
+  // consts
+  G4double lowKinEnergy;
+  G4double fMigdalConstant;
+  G4double fLPMconstant;
+  G4double energyThresholdLPM;
+  G4double facFel, facFinel;
+  G4double preS1,logTwo;
+
+  // cash
+  //G4double particleMass;
+  //G4double kinEnergy;
+  //G4double totalEnergy;
+  //G4double currentZ;
+  G4double z13, z23, lnZ;
+  G4double Fel, Finel, fCoulomb, fMax; 
+  //G4double densityFactor;
+  //G4double densityCorr;
 
   // LPM effect
   G4double lpmEnergy;
@@ -155,21 +176,8 @@ protected:
   // critical gamma energies
   G4double klpm, kp;
 
-  G4bool   isElectron;
-
-private:
-
-  // consts
-  G4double lowKinEnergy;
-  G4double fMigdalConstant;
-  G4double fLPMconstant;
-  G4double bremFactor;
-  G4double energyThresholdLPM;
-  G4double facFel, facFinel;
-  G4double preS1,logTwo;
-
+  // flags
   G4bool   use_completescreening;
-
   G4bool   isInitialised;
 };
 

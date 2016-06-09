@@ -30,6 +30,7 @@
 #include "LXeMuonPhysics.hh"
 
 #include "G4OpticalPhysics.hh"
+#include "G4OpticalProcessIndex.hh"
 
 LXePhysicsList::LXePhysicsList():  G4VModularPhysicsList()
 {
@@ -57,7 +58,8 @@ LXePhysicsList::LXePhysicsList():  G4VModularPhysicsList()
   opticalPhysics->SetMaxNumPhotonsPerStep(100);
   opticalPhysics->SetMaxBetaChangePerStep(10.0);
 
-  opticalPhysics->SetTrackSecondariesFirst(true);
+  opticalPhysics->SetTrackSecondariesFirst(kCerenkov,true);
+  opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
 
 }
 

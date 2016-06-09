@@ -9,7 +9,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAction.cc,v 1.8 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepAction.cc,v 1.8 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

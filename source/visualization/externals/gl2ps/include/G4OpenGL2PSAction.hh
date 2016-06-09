@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh,v 1.4 2010/04/26 16:28:18 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGL2PSAction.hh,v 1.4 2010-04-26 16:28:18 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4OpenGL2PSAction_h
@@ -43,18 +43,23 @@ public:
  bool enableFileWriting();
   // return true if ok, false is an error occured
 
- void disableFileWriting();
+ bool disableFileWriting();
+  // return true when OK, false if errror
 
  bool fileWritingEnabled() const;
  void setLineWidth(int);
  void setPointSize(int);
  void setViewport(int,int,int,int);
+ bool extendBufferSize();
+ void resetBufferSizeParameters();
 
 protected:
- void G4gl2psBegin();
+ bool G4gl2psBegin();
  const char * fFileName;
  FILE* fFile;
  GLint fViewport[4];
+ int fBufferSize;
+ int fBufferSizeLimit;
 };
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.19 2010/11/11 01:13:42 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.19 2010-11-11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.

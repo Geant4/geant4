@@ -23,16 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HESigmaPlusInelastic.hh,v 1.16 2010/11/29 05:45:06 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
-//
+// $Id: G4HESigmaPlusInelastic.hh,v 1.16 2010-11-29 05:45:06 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
-
 // A prototype of the Gheisha High Energy collision model.
+//
 
 #ifndef G4HESigmaPlusInelastic_h
 #define G4HESigmaPlusInelastic_h 1
@@ -51,34 +48,29 @@
 
 #include "G4HEInelastic.hh"
 
+
 class G4HESigmaPlusInelastic : public G4HEInelastic  
 {
- public:  // with description 
-   G4HESigmaPlusInelastic() : G4HEInelastic("G4HESigmaPlusInelastic")
-   {
-     vecLength = 0;
-     theMinEnergy = 20*GeV;
-     theMaxEnergy = 10*TeV;
-     MAXPART      = 2048;
-     verboseLevel = 0; 
-   }
+  public:  // with description 
+    G4HESigmaPlusInelastic(const G4String& name = "G4HESigmaPlusInelastic");
 
-   ~G4HESigmaPlusInelastic(){ };
-         
-   G4int vecLength;
-        
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+    ~G4HESigmaPlusInelastic() {};
+    
+    virtual void ModelDescription(std::ostream&) const;
+     
+    G4int vecLength;
+  
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries() {return vecLength;}
+    G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasSigmaPlus(G4bool& inElastic,
-                               const G4double availableEnergy,
-                               G4HEVector pv[],
-                               G4int& vecLen, 
-                               const G4HEVector& incidentParticle,
-                               const G4HEVector& targetParticle,
-                               const G4double atomicWeight);
+    void FirstIntInCasSigmaPlus(G4bool& inElastic,
+                                const G4double availableEnergy,
+                                G4HEVector pv[],
+                                G4int& vecLen, 
+                                const G4HEVector& incidentParticle,
+                                const G4HEVector& targetParticle,
+                                const G4double atomicWeight);
 };
 #endif
-

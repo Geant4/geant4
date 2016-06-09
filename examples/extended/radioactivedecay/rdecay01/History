@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010/10/11 14:31:39 maire Exp $
+$Id: History,v 1.3 2010-10-11 14:31:39 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08-11-11 mma (rdecay01-V09-04-06)
+- modify SteppingVerbose for OutOfWorld
+          
+16-05-11 mma (rdecay01-V09-04-05)
+- histo 6 : total kinetic energy (Q) 
+   
+14-04-11 mma (rdecay01-V09-04-04)
+- RunAction : compute activity from primary ion
+- suppress histo 9
+    
+13-02-11 mma (rdecay01-V09-04-03)
+- RunAction : fixe a bug in time counting
+     
+11-02-11 mma (rdecay01-V09-04-02)
+- update SteppingVerbose
+      
+31-01-11 mma (rdecay01-V09-04-01)
+- PhysicsList : SetARM false
+- SteppingVerbose : print global time 
+    
+28-01-11 mma (rdecay01-V09-04-00)
+- add Co60.mac
+- HistoManager : fix aida fileOptions
      
 11-10-10 mma (rdecay01-V09-03-02)
 - TrackingAction and RunAction : modify calculation of Activity

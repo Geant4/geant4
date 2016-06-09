@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonVector.hh,v 1.22 2009/11/16 18:15:01 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QuasmonVector.hh,v 1.22 2009-11-16 18:15:01 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonVector ----------------
 //             by Mikhail Kossov, Sept 1999.

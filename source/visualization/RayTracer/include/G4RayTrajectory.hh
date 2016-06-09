@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.16 2010/05/29 21:09:40 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4RayTrajectory.hh,v 1.16 2010-05-29 21:09:40 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

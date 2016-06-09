@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayShooter.cc,v 1.2 2006/06/29 18:10:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayShooter.cc,v 1.2 2006-06-29 18:10:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RayShooter.hh"
@@ -76,18 +76,15 @@ void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc)
   G4PrimaryVertex* vertex = new G4PrimaryVertex(vtx,particle_time);
 
   // create new primaries and set them to the vertex
-  G4double mass =  particle_definition->GetPDGMass();
-  G4double energy = particle_energy + mass;
-  G4double pmom = std::sqrt(energy*energy-mass*mass);
-  G4double px = pmom*direc.x();
-  G4double py = pmom*direc.y();
-  G4double pz = pmom*direc.z();
+  G4double mass = particle_definition->GetPDGMass();
   G4PrimaryParticle* particle =
-      new G4PrimaryParticle(particle_definition,px,py,pz);
+    new G4PrimaryParticle(particle_definition);
+  particle->SetKineticEnergy( particle_energy );
   particle->SetMass( mass );
+  particle->SetMomentumDirection( direc );
   particle->SetPolarization(particle_polarization.x(),
-                               particle_polarization.y(),
-                               particle_polarization.z());
+			    particle_polarization.y(),
+			    particle_polarization.z());
   vertex->SetPrimary( particle );
 
   evt->AddPrimaryVertex( vertex );

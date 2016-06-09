@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.16 2010/11/10 09:16:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VDivisionParameterisation.cc,v 1.16 2010-11-10 09:16:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
 //
@@ -140,13 +140,13 @@ void G4VDivisionParameterisation::CheckOffset( G4double maxPar )
 {
   if( foffset >= maxPar )
   {
-    G4cerr << "ERROR - G4VDivisionParameterisation::CheckOffset()" << G4endl
-           << "        Division of solid " << fmotherSolid->GetName()
-           << " has too big offset = " << G4endl
-           << "        " << foffset << " > " << maxPar << " !" << G4endl;
+    std::ostringstream message;
+    message << "Configuration not supported." << G4endl
+            << "Division of solid " << fmotherSolid->GetName()
+            << " has too big offset = " << G4endl
+            << "        " << foffset << " > " << maxPar << " !";
     G4Exception("G4VDivisionParameterisation::CheckOffset()",
-                "IllegalConstruct", FatalException,
-                "Not supported configuration.");
+                "GeomDiv0001", FatalException, message);
   }
 }
 
@@ -156,18 +156,16 @@ void G4VDivisionParameterisation::CheckNDivAndWidth( G4double maxPar )
   if( (fDivisionType == DivNDIVandWIDTH)
       && (foffset + fwidth*fnDiv - maxPar > kCarTolerance ) )
   {
-    G4cerr << "ERROR - G4VDivisionParameterisation::CheckNDivAndWidth()"
-           << G4endl
-           << "        Division of solid " << fmotherSolid->GetName()
+    std::ostringstream message;
+    message << "Configuration not supported." << G4endl
+            << "Division of solid " << fmotherSolid->GetName()
            << " has too big offset + width*nDiv = " << G4endl
            << "        " << foffset + fwidth*fnDiv << " > "
            << foffset << ". Width = "
            << G4endl
-           << "        " << fwidth << ". nDiv = " << fnDiv << " !"
-           << G4endl;
+           << "        " << fwidth << ". nDiv = " << fnDiv << " !";
     G4Exception("G4VDivisionParameterisation::CheckNDivAndWidth()",
-                "IllegalConstruct", FatalException,
-                "Not supported configuration.");
+                "GeomDiv0001", FatalException, message);
   }
 }
 

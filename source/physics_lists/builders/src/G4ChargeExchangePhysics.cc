@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.cc,v 1.2 2010/06/03 14:37:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ChargeExchangePhysics.cc,v 1.2 2010-06-03 14:37:24 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,7 +41,6 @@
 
 #include "G4ChargeExchangeProcess.hh"
 #include "G4ChargeExchange.hh"
-#include "G4UElasticCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -106,7 +105,6 @@ void G4ChargeExchangePhysics::ConstructProcess()
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4ChargeExchangeProcess* p = new G4ChargeExchangeProcess();
-      if(glFlag) p->AddDataSet(new G4UElasticCrossSection(particle));
       p->RegisterMe(model);
       pmanager->AddDiscreteProcess(p);
 

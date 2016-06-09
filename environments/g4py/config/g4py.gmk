@@ -1,4 +1,4 @@
-# $Id: g4py.gmk,v 1.7 2009/11/27 07:47:17 kmura Exp $
+# $Id: g4py.gmk,v 1.7 2009-11-27 07:47:17 kmura Exp $
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      
@@ -33,7 +33,7 @@ G4PY_LOPT += $(G4PY_VISLIBS)
 
 G4PY_INCFLAGS += -I$(Q_CLHEP_INCDIR)
 G4PY_LOPT += -L$(Q_CLHEP_LIBDIR) -l$(Q_CLHEP_LIB)
-G4PY_LOPT += -lm -lz
+G4PY_LOPT += -lm -lz -lexpat
 
 # geant4 version
 G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/version

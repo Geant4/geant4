@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2010/09/06 09:13:46 gcosmo Exp $
+$Id: History,v 1.47 2010-09-06 09:13:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 11th, 2011 G.Cosmo (geombias-V09-04-01)
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported features;
+  + 0002: invalid setup/construct;
+  + 1001: incorrect setup; automatically adapted.
+
+August 10th, 2011 G.Cosmo geombias-V09-04-00
+     - Migrated to new G4Exception scheme for warnings and errors.
 
 September 6th, 2010 G.Cosmo geombias-V09-03-01
      - Fixed false-positive cases of invalid iterator in G4IStore and

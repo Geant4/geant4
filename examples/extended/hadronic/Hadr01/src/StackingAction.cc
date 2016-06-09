@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.5 2006/10/04 09:56:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: StackingAction.cc,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //

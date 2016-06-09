@@ -16,7 +16,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAttribute.h,v 1.3 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepAttribute.h,v 1.3 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.7 2008/04/07 13:09:43 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.7 2008-04-07 13:09:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,6 +90,8 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4PhysicsListHelper.hh"
+
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
@@ -104,33 +106,31 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::ConstructEM()
 {
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-    // gamma
           
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      ph->RegisterProcess(new G4PhotoElectricEffect, particle);
+      ph->RegisterProcess(new G4ComptonScattering,   particle);
+      ph->RegisterProcess(new G4GammaConversion,     particle);
       
     } else if (particleName == "e-") {
-    //electron
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);      
+      ph->RegisterProcess(new G4eMultipleScattering, particle);
+      ph->RegisterProcess(new G4eIonisation,         particle);
+      ph->RegisterProcess(new G4eBremsstrahlung,     particle);      
 
     } else if (particleName == "e+") {
-    //positron
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
+      ph->RegisterProcess(new G4eMultipleScattering, particle);
+      ph->RegisterProcess(new G4eIonisation,         particle);
+      ph->RegisterProcess(new G4eBremsstrahlung,     particle);
+      ph->RegisterProcess(new G4eplusAnnihilation,   particle);      
     }
   }
 }

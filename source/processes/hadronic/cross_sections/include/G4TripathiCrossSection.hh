@@ -27,6 +27,9 @@
 
 #ifndef G4TripathiCrossSection_h
 #define G4TripathiCrossSection_h
+
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
+
 // Class Description
 // Implementation of formulas in analogy to NASA technical paper 3621 by 
 // Tripathi, et al.; Cross-sections for ion ion scattering.
@@ -34,49 +37,22 @@
 // Class Description - End
 
 #include "globals.hh"
-#include "G4Proton.hh"
-
 #include "G4VCrossSectionDataSet.hh"
 
 class G4TripathiCrossSection : public G4VCrossSectionDataSet
 {
-   public:
+public:
    
   G4TripathiCrossSection();
   ~G4TripathiCrossSection();
 
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*)
-   {
-     return IsIsoApplicable(aPart, 0, 0);
-   }
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle* aPart, 
+			     G4int Z, const G4Material*);
 
-   virtual
-   G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
-                          G4int /*ZZ*/, G4int /*AA*/)
-   {
-     G4bool result = false;
-     if ( (aPart->GetDefinition()->GetBaryonNumber()>2.5) &&
-        ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<1*GeV) ) result = true;
-     return result;
-   }
-
-
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
-
-   virtual
-   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ,
-                                 G4int AA, G4double aTemperature);
-
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
-
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4TripathiCrossSection: uses formula"<<G4endl;}
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
 };
 

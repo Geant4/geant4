@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh,v 1.8 2010/11/17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VEvaporation.hh,v 1.8 2010-11-17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) written from G4Evaporation.hh (May 1998)

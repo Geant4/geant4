@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGReaction.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RPGReaction.hh"
@@ -78,8 +78,8 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
   G4ParticleDefinition* anAlpha = G4Alpha::Alpha();
     
   const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/MeV;
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
     
   const G4double ika1 = 3.6;
   const G4double ika2 = 35.56;
@@ -759,7 +759,7 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
     //   Rotate in direction of z-axis, this does disturb in some way our
     //    inclusive distributions, but it is necessary for momentum conservation
     //
-    const G4double atomicWeight = targetNucleus.GetN();
+    const G4double atomicWeight = targetNucleus.GetA_asInt();
     const G4double logWeight = std::log(atomicWeight);
     
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
@@ -1152,7 +1152,7 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
     
     if( currentParticle.GetDefinition() == aNeutron )
     {
-      const G4double A = targetNucleus.GetN();    // atomic weight
+      const G4double A = targetNucleus.GetA_asInt();    // atomic weight
       if( G4UniformRand() > ((A-1.0)/230.0)*((A-1.0)/230.0) )
         qval[0] = 0.0;
       if( G4UniformRand() >= currentKinetic/7.9254*A )

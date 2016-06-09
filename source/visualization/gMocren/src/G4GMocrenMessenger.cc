@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenMessenger.cc,v 1.2 2009/10/12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenMessenger.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -186,7 +186,7 @@ G4String G4GMocrenMessenger::GetCurrentValue(G4UIcommand * command) {
   } else if (command == kAddgMocrenHitScorerNameCommand) {
     G4String strval;
     std::vector<G4String>::iterator itr = kgMocrenHitScorerNames.begin();
-    for(; itr != kgMocrenHitNames.end(); itr++) {
+    for(; itr != kgMocrenHitScorerNames.end(); itr++) {
       strval += *itr;
       strval += " ";
     }

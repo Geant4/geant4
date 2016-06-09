@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.76 2010/11/13 10:54:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VisManager.hh,v 1.76 2010-11-13 10:54:55 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -362,10 +362,11 @@ public: // With description
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
   static Verbosity             GetVerbosity                ();
-  G4bool                       GetTransientsDrawnThisRun       () const;
-  G4bool                       GetTransientsDrawnThisEvent     () const;
-  const G4Event*               GetRequestedEvent               () const;
-  G4bool                       GetAbortReviewKeptEvents        () const;
+  G4bool                       GetTransientsDrawnThisRun   () const;
+  G4bool                       GetTransientsDrawnThisEvent () const;
+  const G4Event*               GetRequestedEvent           () const;
+  G4bool                       GetAbortReviewKeptEvents    () const;
+  const G4ViewParameters&      GetDefaultViewParameters    () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -384,6 +385,7 @@ public: // With description
   // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
   void              SetRequestedEvent           (const G4Event*);
   void              SetAbortReviewKeptEvents    (G4bool);
+  void              SetDefaultViewParameters    (const G4ViewParameters&);
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -431,6 +433,7 @@ protected:
 private:
 
   void PrintAvailableModels            (Verbosity) const;
+  void PrintAvailableColours           (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
@@ -461,6 +464,7 @@ private:
   G4bool                fKeptLastEvent;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fAbortReviewKeptEvents;
+  G4ViewParameters      fDefaultViewParameters;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

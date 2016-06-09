@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UserStackingAction.cc,v 1.7 2006/06/29 15:31:44 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4UserStackingAction.cc,v 1.7 2006-06-29 15:31:44 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserStackingAction.cc
 //

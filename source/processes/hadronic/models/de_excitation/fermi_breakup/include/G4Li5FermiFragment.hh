@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Li5FermiFragment.hh,v 1.3 2006/06/29 20:12:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Li5FermiFragment.hh,v 1.3 2006-06-29 20:12:29 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko
 
 #ifndef G4Li5FermiFragment_h
 #define G4Li5FermiFragment_h 1
@@ -38,15 +40,14 @@
 class G4Li5FermiFragment : public G4UnstableFermiFragment
 {
 public:
-  G4Li5FermiFragment(const G4int anA, const G4int aZ, const G4int Pol, const G4double ExE);
 
-  ~G4Li5FermiFragment();
+  G4Li5FermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
+
+  virtual ~G4Li5FermiFragment();
   
 private:
-  G4Li5FermiFragment();
 
   G4Li5FermiFragment(const G4Li5FermiFragment &right);
-  
   const G4Li5FermiFragment & operator=(const G4Li5FermiFragment &right);
   G4bool operator==(const G4Li5FermiFragment &right) const;
   G4bool operator!=(const G4Li5FermiFragment &right) const;

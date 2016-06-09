@@ -49,6 +49,7 @@
 #include "G4SPSAngDistribution.hh"
 
 G4SPSAngDistribution::G4SPSAngDistribution()
+  : Theta(0.), Phi(0.)
 {
   // Angular distribution Variables
   G4ThreeVector zero;

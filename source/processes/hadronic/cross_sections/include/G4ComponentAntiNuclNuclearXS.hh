@@ -62,34 +62,34 @@ public:
   virtual ~G4ComponentAntiNuclNuclearXS ();
    
 virtual
-  G4double GetTotalZandACrossSection(const G4ParticleDefinition* aParticle,
-				     G4double kinEnergy,
-				     G4int Z, G4int A);
+  G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+				       G4double kinEnergy,
+				       G4int Z, G4int A);
 
 virtual
-  G4double ComputeTotalCrossSection(const G4ParticleDefinition* aParticle,
-				    G4double kinEnergy, 
-				    G4int Z, G4double A);
+  G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
+				       G4double kinEnergy, 
+				       G4int Z, G4double A);
 
 virtual
-  G4double GetInelasticZandACrossSection(const G4ParticleDefinition* aParticle,
+  G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4int A);
+
+virtual
+  G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4double A);
+
+virtual
+  G4double GetElasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					 G4double kinEnergy, 
+					 G4int Z, G4double A);
+
+virtual
+  G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
 					 G4int Z, G4int A);
-
-virtual
-  G4double ComputeInelasticCrossSection(const G4ParticleDefinition* aParticle,
-				      G4double kinEnergy, 
-				      G4int Z, G4double A);
-
-virtual
-  G4double ComputeElasticCrossSection(const G4ParticleDefinition* aParticle,
-				      G4double kinEnergy, 
-				      G4int Z, G4double A);
-
-virtual
-  G4double GetElasticZandACrossSection(const G4ParticleDefinition* aParticle,
-				       G4double kinEnergy, 
-				       G4int Z, G4int A);
  
 virtual
  void BuildPhysicsTable(const G4ParticleDefinition&)
@@ -98,6 +98,8 @@ virtual
 virtual
  void DumpPhysicsTable(const G4ParticleDefinition&) 
  {}
+
+virtual void CrossSectionDescription(std::ostream&) const;
 
 // Method for calculation of Anti-Hadron Nucleon Total Cross-section
 G4double GetAntiHadronNucleonTotCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);

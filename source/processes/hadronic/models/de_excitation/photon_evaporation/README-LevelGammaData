@@ -12,8 +12,9 @@ G4LEVELGAMMADATA must then be set to point to this directory.
  
 **************************************************
 
-Each line contains a de-excitation *step* from a given energy level to a lower 
-one (which might be the ground state). Notice that if multiple de-excitation 
+Each line describes a de-excitation *step* from a given energy level to a lower 
+one (which might be the ground state). It contains data for gamma de-excitation
+and internal conversion. Notice that if multiple de-excitation 
 channels are allowed for the starting energy level, these channels will be 
 described in more lines (all having the same starting level).
 
@@ -28,11 +29,10 @@ Each line contains 17 columns:
 2) Energy of the transition (keV)
    This is the energy difference between the initial and the final level.
 
-3) Transition probability (%)
+3) Gamma transition probability (Ig in %)
    Note1: if the probability is less than  minProbability = 1e-8%, it is forced
           to be 1e-8%.
-   Note2: transition probabilities from a given level do not always sum up to 
-	  100% exactly. They are re-normalized internally.
+   Note2: see column 7 how total branching ratio is computed.	  
 
 4) Polarity 
    Spin-parity variation in the transition
@@ -44,10 +44,14 @@ Each line contains 17 columns:
    Spin of the initial level
    [never used in real simulation]
 
-7) Total internal conversion probability 
-   Note: the value in item (3) is the *transition* probability, so the 
-         actual *gamma* probability is calculated taking into account the 
-         probability of internal conversion.
+7) Total internal conversion coefficient : alpha = Ic/Ig
+   Note1: total transition is the sum of gamma de-excitation and internal
+          conversion. Therefore total branching ratio is proportional to 
+	  (1+alpha)*Ig
+   Note2: total branching ratios from a given level do not always sum up to 
+	  100%. They are re-normalized internally.    
+   Note3: relative probabilities for gamma de-excitation and internal conversion
+          are 1/(1+alpha) and alpha/(1+alpha) respectively
 
 8-17) Partial conversion probabilities for
 	K-shell
@@ -66,11 +70,12 @@ Note: if the nuclear excitation energy does not match any of the known levels,
 
       Deexcitation from the 2505.7480-keV level is described in lines 
       6-8 of $G4LEVELGAMMADATA/z28.a60 (Ni-60)
-      The nucleus will release
+      Here, internal conversion coefficients are negligeable (column 7)
+      Therefore the nucleus will release
       1) 347 keV with 7.6e-3% probability, ending up in the 2158-keV level 
       (following de-excitation hence takes place, lines 2-4 of the file)
       2) 1173 keV with 100% probability, ending up in the 1332-keV 
       excited state (following de-excitation hence takes place, line 1)
-      2) 2505 keV with 2e-6% probability ending up in the ground state.
+      3) 2505 keV with 2e-6% probability ending up in the ground state.
 
 

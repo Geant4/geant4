@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006/09/21 21:35:10 vnivanch Exp $
+# $Id: GNUmakefile,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # Modified:

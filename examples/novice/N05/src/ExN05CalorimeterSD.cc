@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterSD.cc,v 1.8 2006/11/20 18:39:37 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN05CalorimeterSD.cc,v 1.8 2006-11-20 18:39:37 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN05CalorimeterSD.hh"

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisCommandsListManager.hh,v 1.3 2006/06/29 21:28:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsListManager.hh,v 1.3 2006-06-29 21:28:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //

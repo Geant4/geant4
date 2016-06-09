@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.12 2010/10/07 14:03:11 sincerti Exp $
+$Id: README,v 1.12 2010-10-07 14:03:11 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,9 +25,6 @@ installed on the AIFIRA electrostatic accelerator facility located at
 CENBG, Bordeaux-Gradignan, France. For more information on this facility, 
 please visit :
 http://www.cenbg.in2p3.fr/
-
-An overall description of this example is also available in this directory:
-to access it, simply open the microbeam.htm file with your internet browser.
 
 ---->1. GEOMETRY SET-UP.
  

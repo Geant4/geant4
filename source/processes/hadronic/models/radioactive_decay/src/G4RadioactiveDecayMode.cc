@@ -44,6 +44,8 @@ std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q)
     {q = MshellEC;}
   else if (a == "Alpha")
     {q = Alpha;}
+  else if (a == "SpFission")
+    {q = SpFission;}
   else
     {q = ERROR;}
   return s;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4teoCrossSection.cc,v 1.8 2010/11/22 22:48:30 mantero Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4teoCrossSection.cc,v 1.9 2011-01-03 19:35:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         
 //
@@ -32,84 +32,89 @@
 // -----------
 //  21 Apr 2009   ALF   1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
+//  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
+//  20 Oct 2011   ALF updated to take into account ECPSSR Form Factor
 //
-// -------------------------------------------------------------------
-// Class description:
-// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-// -------------------------------------------------------------------
 
 
 #include "globals.hh"
 #include "G4teoCrossSection.hh"
-//#include "G4AtomicTransitionManager.hh"
-//#include "G4NistManager.hh"
 #include "G4Proton.hh"
 //#include "G4Alpha.hh"
-//#include <math.h>
+#include "G4ecpssrBaseKxsModel.hh"
+#include "G4ecpssrBaseLixsModel.hh"
 
-G4teoCrossSection::G4teoCrossSection(G4String shellModel)
-  :totalCS(0)
+#include "G4ecpssrFormFactorKxsModel.hh"
+#include "G4ecpssrFormFactorLixsModel.hh"
+
+G4teoCrossSection::G4teoCrossSection(const G4String& nam)
+  :G4VhShellCrossSection(nam),totalCS(0.0),ecpssrShellK(0),ecpssrShellLi(0)
 { 
 
-  if (shellModel == "analytical") {
-   
-        
-    ecpssrShellK  = new G4AnalyticalEcpssrKCrossSection();  
-    ecpssrShellLi = new G4AnalyticalEcpssrLiCrossSection();
-    
-  }
+  if (nam == "Analytical") 
+    {
+      ecpssrShellK  = new G4ecpssrBaseKxsModel();  
+      ecpssrShellLi = new G4ecpssrBaseLixsModel();      
+    }
+  else if (nam == "ECPSSR_FormFactor")
+    {
+      ecpssrShellK  = new G4ecpssrFormFactorKxsModel();  
+      ecpssrShellLi = new G4ecpssrFormFactorLixsModel(); 
+    }
+  else { G4cout << "ERROR" << G4endl;}
+
+
 }
 
 G4teoCrossSection::~G4teoCrossSection()
 { 
-
   delete ecpssrShellK;
   delete ecpssrShellLi;
-
 }
 
 std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
-							     G4double incidentEnergy,
-							     G4double mass,
-							     G4double deltaEnergy,
-							     G4bool testFlag) const
+							 G4double incidentEnergy,
+							 G4double mass,
+							 G4double,
+							 G4bool) const
 {
-
-  deltaEnergy = 0;
-  testFlag = 0;
-
-
   std::vector<G4double> crossSections;
 
   crossSections.push_back( ecpssrShellK->CalculateCrossSection(Z, mass, incidentEnergy) );
   
-  //  G4Proton* aProtone = G4Proton::Proton();
-  
-  //  if (mass == aProtone->GetPDGMass() ) {
-    
-
-  //  }
-  
-    crossSections.push_back( ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy) );
-    crossSections.push_back( ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy) );
-    crossSections.push_back( ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy) );
-
+  crossSections.push_back( ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy) );
+  crossSections.push_back( ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy) );
+  crossSections.push_back( ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy) );
 
   return crossSections;
-
 }
 
-
-
+G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
+					 G4double incidentEnergy,
+					 G4double mass) const
+{
+  G4double res = 0.0;
+  if(3 < shell) {
+    return res; 
+  } else if(fKShell  == shell) { 
+    res = ecpssrShellK->CalculateCrossSection(Z, mass, incidentEnergy);
+  } else if(fL1Shell == shell) { 
+    res = ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy);
+  } else if(fL2Shell == shell) { 
+    res = ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy);
+  } else if(fL3Shell == shell) { 
+    res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+  }
+  return res;
+}
 
 std::vector<G4double> G4teoCrossSection::Probabilities(G4int Z,
-							   G4double incidentEnergy,
-							   G4double mass,
-							   G4double deltaEnergy) const
+						       G4double incidentEnergy,
+						       G4double mass,
+						       G4double deltaEnergy) const
 {
-  
-std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
+  std::vector<G4double> crossSections = 
+    GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
 
   for (size_t i=0; i<crossSections.size(); i++ ) {
     
@@ -118,11 +123,8 @@ std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, d
     }
     
   }
-
   return crossSections;
-
 }
-
 
 void G4teoCrossSection::SetTotalCS(G4double val){
 

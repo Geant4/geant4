@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLogger.cc,v 1.1 2010/11/04 08:57:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NavigationLogger.cc,v 1.1 2010-11-04 08:57:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4NavigationLogger Implementation
@@ -71,32 +71,32 @@ G4NavigationLogger::PreComputeStepLog(const G4VPhysicalVolume* motherPhysical,
     }
     if ( motherSafety < 0.0 )
     {
-      G4cerr << "ERROR - " << fType << G4endl
+      std::ostringstream message;
+      message << "Negative Safety In Voxel Navigation !" << G4endl
              << "        Current solid " << motherSolid->GetName()
              << " gave negative safety: " << motherSafety << G4endl
-             << "        for the current (local) point " << localPoint
-             << G4endl;
+             << "        for the current (local) point " << localPoint;
       motherSolid->DumpInfo();
-      G4Exception(fType, "NegativeSafetyMotherVol", FatalException,
-                  "Negative Safety In Voxel Navigation !" );
+      G4Exception(fType, "GeomNav0003", FatalException, message);
     }
     if( motherSolid->Inside(localPoint)==kOutside )
     {
-      G4cout << "WARNING - " << fType << G4endl
-             << "          Point " << localPoint
-             << " is outside current volume " << motherPhysical->GetName()
-             << G4endl;
+      std::ostringstream message;
+      message << "Point is outside Current Volume - " << G4endl
+              << "          Point " << localPoint
+              << " is outside current volume " << motherPhysical->GetName()
+              << G4endl;
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
-      G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
-             << estDistToSolid << G4endl;
+      message << "          Estimated isotropic distance to solid (distToIn)= " 
+              << estDistToSolid;
       if( estDistToSolid > 100.0 * motherSolid->GetTolerance() )
       {
         motherSolid->DumpInfo();
-        G4Exception(fType, "FarOutsideCurrentVolume", FatalException,
+        G4Exception(fType, "GeomNav0003", FatalException, message,
                     "Point is far outside Current Volume !" ); 
       }
       else
-        G4Exception(fType, "OutsideCurrentVolume", JustWarning,
+        G4Exception(fType, "GeomNav1001", JustWarning, message,
                     "Point is a little outside Current Volume."); 
     }
 
@@ -172,24 +172,24 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
     if( insideIntPt != kSurface )
     {
       G4int oldcoutPrec = G4cout.precision(16); 
-      G4cout << "WARNING - " << fType << G4endl
-             << "          Inaccurate solid DistanceToIn"
-             << " for solid " << sampleSolid->GetName() << G4endl;
-      G4cout << "          Solid gave DistanceToIn = "
-             << sampleStep << " yet returns " << solidResponse
-             << " for this point !" << G4endl; 
-      G4cout << "          Point = " << intersectionPoint << G4endl;
-      G4cout << "          Safety values: " << G4endl;
+      std::ostringstream message;
+      message << "Conflicting response from Solid." << G4endl
+              << "          Inaccurate solid DistanceToIn"
+              << " for solid " << sampleSolid->GetName() << G4endl
+              << "          Solid gave DistanceToIn = "
+              << sampleStep << " yet returns " << solidResponse
+              << " for this point !" << G4endl
+              << "          Point = " << intersectionPoint << G4endl
+              << "          Safety values: " << G4endl;
       if ( insideIntPt != kInside )
       {
-        G4cout << "          DistanceToIn(p)  = " << safetyIn << G4endl;
+        message << "          DistanceToIn(p)  = " << safetyIn;
       }
       if ( insideIntPt != kOutside )
       {
-        G4cout << "          DistanceToOut(p) = " << safetyOut << G4endl;
+        message << "          DistanceToOut(p) = " << safetyOut;
       }
-      G4Exception(fType, "InaccurateDistanceToIn", JustWarning,
-                  "Conflicting response from Solid.");
+      G4Exception(fType, "GeomNav1001", JustWarning, message);
       G4cout.precision(oldcoutPrec);
     }
     else
@@ -200,23 +200,23 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
       if( std::max( newDistIn, newDistOut ) <=
           G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() )
       { 
-        G4cout << "ERROR - " << fType << G4endl
-               << "  Identified point for which the solid " 
-               << sampleSolid->GetName() << G4endl
-               << "  has MAJOR problem:  " << G4endl
-               << "  --> Both DistanceToIn(p,v) and DistanceToOut(p,v) "
-               << "return Zero, an equivalent value or negative value."
-               << G4endl; 
-        G4cout << "    Solid: " << sampleSolid << G4endl;
-        G4cout << "    Point p= " << intersectionPoint << G4endl;
-        G4cout << "    Direction v= " << sampleDirection << G4endl;
-        G4cout << "    DistanceToIn(p,v)     = " << newDistIn << G4endl;
-        G4cout << "    DistanceToOut(p,v,..) = " << newDistOut << G4endl;
-        G4cout << "    Safety values: " << G4endl;
-        G4cout << "      DistanceToIn(p)  = " << safetyIn << G4endl;
-        G4cout << "      DistanceToOut(p) = " << safetyOut << G4endl;
-        G4Exception(fType, "DistanceToInAndOutAreZero", FatalException,
-                    "Zero from both Solid DistanceIn and Out(p,v).");
+        std::ostringstream message;
+        message << "Zero from both Solid DistanceIn and Out(p,v)." << G4endl
+                << "  Identified point for which the solid " 
+                << sampleSolid->GetName() << G4endl
+                << "  has MAJOR problem:  " << G4endl
+                << "  --> Both DistanceToIn(p,v) and DistanceToOut(p,v) "
+                << "return Zero, an equivalent value or negative value."
+                << G4endl 
+                << "    Solid: " << sampleSolid << G4endl
+                << "    Point p= " << intersectionPoint << G4endl
+                << "    Direction v= " << sampleDirection << G4endl
+                << "    DistanceToIn(p,v)     = " << newDistIn << G4endl
+                << "    DistanceToOut(p,v,..) = " << newDistOut << G4endl
+                << "    Safety values: " << G4endl
+                << "      DistanceToIn(p)  = " << safetyIn << G4endl
+                << "      DistanceToOut(p) = " << safetyOut;
+        G4Exception(fType, "GeomNav0003", FatalException, message);
       }
     }
 
@@ -259,15 +259,15 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
     G4String fType = fId + "::ComputeStep()";
     G4int oldPrOut= G4cout.precision(16); 
     G4int oldPrErr= G4cerr.precision(16);
-    G4cerr << "ERROR - " << fType << G4endl
-           << "        Problem in Navigation"  << G4endl
-           << "        Point (local coordinates): "
-           << localPoint << G4endl
-           << "        Local Direction: " << localDirection << G4endl
-           << "        Solid: " << motherSolid->GetName() << G4endl; 
+    std::ostringstream message;
+    message << "Current point is outside the current solid !" << G4endl
+            << "        Problem in Navigation"  << G4endl
+            << "        Point (local coordinates): "
+            << localPoint << G4endl
+            << "        Local Direction: " << localDirection << G4endl
+            << "        Solid: " << motherSolid->GetName(); 
     motherSolid->DumpInfo();
-    G4Exception(fType, "PointDistOutInvalid", FatalException,
-                "Current point is outside the current solid !");
+    G4Exception(fType, "GeomNav0003", FatalException, message);
     G4cout.precision(oldPrOut);
     G4cerr.precision(oldPrErr);
   }

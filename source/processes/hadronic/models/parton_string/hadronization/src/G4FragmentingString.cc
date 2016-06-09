@@ -51,6 +51,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old)
 	Ptright=old.Ptright;
 	Pplus=old.Pplus;
 	Pminus=old.Pminus;
+	theStableParton=old.theStableParton;
+	theDecayParton=old.theDecayParton;
 	decaying=old.decaying;
 }
 
@@ -67,6 +69,8 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
 	G4LorentzVector P=excited.Get4Momentum();
 	Pplus =P.e() + P.pz();
 	Pminus=P.e() - P.pz();
+	theStableParton=0;
+	theDecayParton=0;
 	decaying=None;
 }
 
@@ -84,6 +88,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		LeftParton = newdecay;
 		Ptleft     = old.Ptleft - momentum->vect();
 		Ptleft.setZ(0.);
+		theDecayParton=GetLeftParton();
+		theStableParton=GetRightParton();
 	} else if ( old.decaying == Right )
 	{
 		RightParton = newdecay;
@@ -91,6 +97,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptright.setZ(0.);
 		LeftParton  = old.LeftParton;
 		Ptleft      = old.Ptleft;
+		theDecayParton=GetRightParton();
+		theStableParton=GetLeftParton();
 	} else
 	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
@@ -109,6 +117,12 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 					 G4ParticleDefinition * newdecay) 
 {                                                                         
 	decaying=None;                                                    
+
+        Ptleft.setX(0.);  Ptleft.setY(0.);  Ptleft.setZ(0.);  // Uzhi 25.02.2011
+        Ptright.setX(0.); Ptright.setY(0.); Ptright.setZ(0.); // Uzhi 25.02.2011
+        Pplus=0.; Pminus=0.;                                  // Uzhi 25.02.2011
+        theStableParton=0; theDecayParton=0;                  // Uzhi 25.02.2011
+
 	if ( old.decaying == Left )                                       
 	{                                                                 
 		RightParton= old.RightParton;                             

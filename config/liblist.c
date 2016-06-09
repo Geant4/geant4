@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.22 2010/11/02 09:20:42 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.22 2010-11-02 09:20:42 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -129,7 +129,7 @@ int main (int argc, char** argv) {
   char static buffer[BUFSIZE],*bufferPtr,workbuf[256];
   char *ptr,*p,**pp,**pp1,**pp2,*directory=0,*libpath=0;
   char **rargv;
-  char libname[128];
+  char *libname=0;
   int i,optl=0,optm=0,swapping,c,rargc;
   FILE *fp;
 
@@ -576,10 +576,21 @@ int main (int argc, char** argv) {
     }
   else if (optm)
     {
-      /* Write out full library list... */
+      /* create tmp. string libname */ 
+      int libname_usable_size=24;
+      if ( ! libname ) libname=malloc(libname_usable_size+16);
+
+      /* Write out full library list... */      
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
       {
+	if ( strlen(libpath)+strlen(libmapPtr->lib) > libname_usable_size ) {
+	  libname_usable_size=(strlen(libpath)+strlen(libmapPtr->lib))*2;
+	  free(libname);
+	  libname=malloc(libname_usable_size+16);
+	}
         /* Check existance of libraries and print out only installed ones */
+	  
+	
 	sprintf(libname, "%s/lib%s.a", libpath, libmapPtr->lib);
         if (access(libname,R_OK))
 	{

@@ -55,17 +55,10 @@
 #include "G4HumanPhantomSteppingAction.hh"
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
-#ifdef G4ANALYSIS_USE 
-#include  "G4HumanPhantomAnalysisManager.hh"
-#endif
 
 int main(int argc,char** argv)
 {
   G4RunManager* runManager = new G4RunManager;
-
-  // G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose; 
-  //  G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
- 
  // Set mandatory initialization classes
   G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
@@ -74,10 +67,6 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
 
-#ifdef G4ANALYSIS_USE
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-  analysis->book();
-#endif
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
@@ -87,7 +76,6 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new G4HumanPhantomRunAction);
 
   
-
   G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
   runManager->SetUserAction(eventAction);
 
@@ -111,10 +99,6 @@ int main(int argc,char** argv)
       G4String fileName = argv[1];
       UImanager -> ApplyCommand(command+fileName);
     }     
-
-#ifdef G4ANALYSIS_USE
-  if (analysis)analysis->finish();
-#endif
 
   // job termination
 #ifdef G4VIS_USE

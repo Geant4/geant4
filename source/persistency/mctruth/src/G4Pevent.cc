@@ -28,25 +28,16 @@
 // History:
 //   '01.11.18  Youhei Morita  Initial creation
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
 #include "G4Pevent.hh"
 
-//G4Pevent::G4Pevent( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, G4Event* g4evt )
-// : f_hepevt(hepevt), genEventID(-1), f_mctevt(mctevt), f_g4evt(g4evt)
-
-G4Pevent::G4Pevent( HepMC::GenEvent* hepevt, G4Event* g4evt )
- : f_hepevt(hepevt), genEventID(-1), f_g4evt(g4evt)
+G4Pevent::G4Pevent( G4MCTEvent* mctevt, G4Event* g4evt )
+ : genEventID(-1), f_mctevt(mctevt), f_g4evt(g4evt)
 {
   m_id = g4evt->GetEventID();
-  if (hepevt) genEventID= hepevt->event_number();
+  if (mctevt) genEventID= mctevt->GetEventNumber();
 }
 
 G4Pevent::~G4Pevent()
 {
   delete f_g4evt;
 }
-
-#endif
-#endif

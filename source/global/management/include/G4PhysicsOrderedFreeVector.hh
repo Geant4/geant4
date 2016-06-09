@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.14 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.14 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
@@ -68,46 +68,46 @@
 class G4PhysicsOrderedFreeVector : public G4PhysicsVector 
 {
 
-  public: // with description
+ public: // with description
 	
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
+  ////////////////////////////////
+  // Constructors and Destructor
+  ////////////////////////////////
+  
+  G4PhysicsOrderedFreeVector();
+  G4PhysicsOrderedFreeVector(G4double* Energies,
+			     G4double* Values,
+			     size_t VectorLength);
+  
+  virtual ~G4PhysicsOrderedFreeVector();
+  
+  ////////////
+  // Methods
+  ////////////
+  
+  void InsertValues(G4double energy, G4double value); 
 
-	G4PhysicsOrderedFreeVector();
-	G4PhysicsOrderedFreeVector(G4double* Energies,
-				   G4double* Values,
-				   size_t VectorLength);
+  G4double GetLowEdgeEnergy(size_t binNumber) const;
+  
+  G4double GetMaxValue();
+  
+  G4double GetMinValue();
+  
+  G4double GetEnergy(G4double aValue);
+  
+  G4double GetMaxLowEdgeEnergy();
+  
+  G4double GetMinLowEdgeEnergy();
+  
+  void DumpValues();
 
-	~G4PhysicsOrderedFreeVector();
+ private:
 
-        ////////////
-        // Methods
-        ////////////
-
-  	void InsertValues(G4double energy, G4double value); 
-
-	G4double GetLowEdgeEnergy(size_t binNumber) const;
-
-	G4double GetMaxValue();
-
-	G4double GetMinValue();
-
-	G4double GetEnergy(G4double aValue);
-
-	G4double GetMaxLowEdgeEnergy();
-
-	G4double GetMinLowEdgeEnergy();
-
-	void DumpValues();
-
-  private:
-
-	size_t FindBinLocation(G4double theEnergy) const;
-
-	size_t FindValueBinLocation(G4double aValue);
-
-        G4double LinearInterpolationOfEnergy(G4double aValue, size_t theLocBin);
+  virtual size_t FindBinLocation(G4double theEnergy) const;
+  
+  size_t FindValueBinLocation(G4double aValue);
+  
+  G4double LinearInterpolationOfEnergy(G4double aValue, size_t theLocBin);
 };
 
 #include "G4PhysicsOrderedFreeVector.icc"

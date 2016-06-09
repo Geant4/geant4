@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.21 2008/04/14 08:50:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polyhedron.hh,v 1.21 2008-04-14 08:50:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH

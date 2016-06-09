@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.52 2010/07/13 15:59:42 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.52 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -58,20 +58,21 @@
 G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator, 
                                           G4FieldManager *detectorFieldMgr,
                                           G4VIntersectionLocator *vLocator  )
-  : fDetectorFieldMgr(detectorFieldMgr), 
-    fCurrentFieldMgr(detectorFieldMgr), 
+  : 
+    fMax_loop_count(1000),
+    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
+    fZeroStepThreshold( 0.0 ),         // length of what is recognised as 'zero' step
+    fDetectorFieldMgr(detectorFieldMgr), 
+    fpTrajectoryFilter( 0 ),
     fNavigator(theNavigator),
+    fCurrentFieldMgr(detectorFieldMgr),
+    fSetFieldMgr(false),
+    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
                         G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fParticleIsLooping(false),
-    fVerboseLevel(0),
-    fMax_loop_count(1000),
     fNoZeroStep(0), 
-    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
-    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
-    fSetFieldMgr(false),
-    fZeroStepThreshold( 0.0 ), 
-    fpTrajectoryFilter( 0 )
+    fVerboseLevel(0)
 {
   if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
   else                  { fEpsilonStep= 1.0e-5; } 
@@ -245,17 +246,17 @@ G4PropagatorInField::ComputeStep(
 #endif
      if( stepTrial == 0.0 )  //  Change to make it < 0.1 * kCarTolerance ??
      {
-       G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
-              << "  Particle abandoned due to lack of progress in field."
-              << G4endl
-              << "  Properties : " << pFieldTrack << " "
-              << G4endl;
-       G4cerr << " G4PropagatorInField::ComputeStep() - ERROR " << G4endl
-              << "  Attempting a zero step = " << stepTrial << G4endl
-              << "  while attempting to progress after " << fNoZeroStep
-              << " trial steps. Will abandon step." << G4endl;
-         fParticleIsLooping= true;
-         return 0;  // = stepTrial;
+       std::ostringstream message;
+       message << "Particle abandoned due to lack of progress in field."
+               << G4endl
+               << "  Properties : " << pFieldTrack << G4endl
+               << "  Attempting a zero step = " << stepTrial << G4endl
+               << "  while attempting to progress after " << fNoZeroStep
+               << " trial steps. Will abandon step.";
+       G4Exception("G4PropagatorInField::ComputeStep()", "GeomNav1002",
+                   JustWarning, message);
+       fParticleIsLooping= true;
+       return 0;  // = stepTrial;
      }
      if( stepTrial < CurrentProposedStepLength )
        CurrentProposedStepLength = stepTrial;
@@ -344,8 +345,6 @@ G4PropagatorInField::ComputeStep(
                    CurrentState,  CurrentProposedStepLength, 
                    NewSafety,     do_loop_count,  pPhysVol );
     }
-#endif
-#ifdef G4VERBOSE
     if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 )) {
       if( do_loop_count == fMax_loop_count-9 ){
         G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
@@ -400,20 +399,20 @@ G4PropagatorInField::ComputeStep(
   if( std::fabs(OriginalState.GetCurveLength() + TruePathLength 
       - End_PointAndTangent.GetCurveLength()) > 3.e-4 * TruePathLength )
   {
-    G4cerr << " G4PropagatorInField::ComputeStep() - ERROR" << G4endl
-           << "  Curve length mis-match, is advancement wrong ? " << G4endl;
-    G4cerr << "  The curve length of the endpoint should be: " 
-           << OriginalState.GetCurveLength() + TruePathLength << G4endl
-           << "  and it is instead: "
-           << End_PointAndTangent.GetCurveLength() << "." << G4endl
-           << "  A difference of: "
-           << OriginalState.GetCurveLength() + TruePathLength 
-              - End_PointAndTangent.GetCurveLength() << G4endl;
-    G4cerr << "  Original state = " << OriginalState   << G4endl
-           << "  Proposed state = " << End_PointAndTangent << G4endl;
+    std::ostringstream message;
+    message << "Curve length mis-match between original state "
+            << "and proposed endpoint of propagation." << G4endl
+            << "  The curve length of the endpoint should be: " 
+            << OriginalState.GetCurveLength() + TruePathLength << G4endl
+            << "  and it is instead: "
+            << End_PointAndTangent.GetCurveLength() << "." << G4endl
+            << "  A difference of: "
+            << OriginalState.GetCurveLength() + TruePathLength 
+               - End_PointAndTangent.GetCurveLength() << G4endl
+            << "  Original state = " << OriginalState   << G4endl
+            << "  Proposed state = " << End_PointAndTangent;
     G4Exception("G4PropagatorInField::ComputeStep()",
-                "IncorrectProposedEndPoint", FatalException, 
-                "Curve length mis-match between original state and proposed endpoint of propagation.");
+                "GeomNav0003", FatalException, message);
   }
 #endif
 
@@ -436,21 +435,21 @@ G4PropagatorInField::ComputeStep(
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps )
   { 
      fParticleIsLooping = true;
-     G4cout << " G4PropagatorInField::ComputeStep() - WARNING" << G4endl
-            << "  Zero progress for "  << fNoZeroStep << " attempted steps." 
-            << G4endl;
-     G4cout << "  Proposed Step is " << CurrentProposedStepLength
-            << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl;
-     G4cout << "  For Particle with Charge = " << fCharge
-            << " Momentum = "<< fInitialMomentumModulus
-            << " Mass = " << fMass << G4endl;
-       if( pPhysVol )
-         G4cout << " in volume " << pPhysVol->GetName() ; 
-       else
-         G4cout << " in unknown or null volume. " ; 
-       G4cout << G4endl;
-     if ( fVerboseLevel > 2 )
-       G4cout << " Particle is stuck; it will be killed." << G4endl;
+     std::ostringstream message;
+     message << "Particle is stuck; it will be killed." << G4endl
+             << "  Zero progress for "  << fNoZeroStep << " attempted steps." 
+             << G4endl
+             << "  Proposed Step is " << CurrentProposedStepLength
+             << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl
+             << "  For Particle with Charge = " << fCharge
+             << " Momentum = "<< fInitialMomentumModulus
+             << " Mass = " << fMass << G4endl;
+     if( pPhysVol )
+       message << " in volume " << pPhysVol->GetName() ; 
+     else
+       message << " in unknown or null volume. " ; 
+     G4Exception("G4PropagatorInField::ComputeStep()",
+                 "GeomNav1002", JustWarning, message);
      fNoZeroStep = 0; 
   }
  
@@ -562,16 +561,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double stepTrial,
                     const G4FieldTrack& )
 {
-#if 0
-  G4cout << " PiF: NoZeroStep = " << fNoZeroStep
-         << " CurrentProposedStepLength = " << CurrentProposedStepLength
-         << " Full_curvelen_last =" << fFull_CurveLen_of_LastAttempt
-         << " last proposed step-length = " << fLast_ProposedStepLength 
-         << " decrease factor = " << decreaseFactor
-         << " step trial = " << stepTrial
-         << G4endl;
-#endif
-  int  iprec= G4cout.precision(8); 
+  G4int  iprec= G4cout.precision(8); 
   G4cout << " " << std::setw(12) << " PiF: NoZeroStep " 
          << " " << std::setw(20) << " CurrentProposed len " 
          << " " << std::setw(18) << " Full_curvelen_last" 

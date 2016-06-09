@@ -23,53 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.13 2010/11/26 11:51:11 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.6 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
-// 08 Oct 2008   L Pandola  Migration from process to model 
-// 08 Jan 2009   L Pandola  Check shell index to avoid mismatch between 
-//                          the Penelope cross section database and the 
-//                          G4AtomicTransitionManager database. It suppresses 
-//                          a warning from G4AtomicTransitionManager only. 
-//                          Results are unchanged.
-// 25 Mar 2009   L Pandola  Small fix to avoid wrong energy-violation warnings
-// 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
-//                  - apply internal high-energy limit only in constructor 
-//                  - do not apply low-energy limit (default is 0)
-//                  - do not apply production threshold on secondaries
-// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
-//                            Initialise(), since they might be checked later on
-// 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
-//                            G4VEmModel::DeexcitationFlag()
-// 15 Mar 2010   L Pandola    Explicitely initialize Auger to false
+// 08 Jan 2010   L Pandola  First implementation
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
+// 25 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
+// 07 Oct 2011   L Pandola  Bug fix (potential violation of energy conservation)
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4PhysicsTable.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4Element.hh"
-#include "G4CrossSectionHandler.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4VEMDataSet.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),
-   shellCrossSectionHandler(0)
+							   const G4String& nam)
+  :G4VEmModel(nam),isInitialised(false),logAtomicShellXS(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -84,113 +73,115 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  //by default the model will inkove the atomic deexcitation
-  SetDeexcitationFlag(true);  
-  ActivateAuger(false);
+  //Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
+
+  fTransitionManager = G4AtomicTransitionManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (shellCrossSectionHandler) delete shellCrossSectionHandler;
+  std::map <const G4int,G4PhysicsTable*>::iterator i;
+  if (logAtomicShellXS)
+    {
+      for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
+	{
+	  G4PhysicsTable* tab = i->second;
+	  tab->clearAndDestroy();
+	  delete tab;
+	}
+    }
+  delete logAtomicShellXS;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
-                                       const G4DataVector& )
+void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* particle,
+					      const G4DataVector& cuts)
 {
   if (verboseLevel > 3)
     G4cout << "Calling  G4PenelopePhotoElectricModel::Initialise()" << G4endl;
-  if (crossSectionHandler)
-    {
-      crossSectionHandler->Clear();
-      delete crossSectionHandler;
-      crossSectionHandler = 0;
-    }
-  if (shellCrossSectionHandler)
-    {
-      shellCrossSectionHandler->Clear();
-      delete shellCrossSectionHandler;
-      shellCrossSectionHandler =0;
-    }
 
-  //Re-initialize cross section handlers
-  crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Clear();
-  G4String crossSectionFile = "penelope/ph-cs-pen-";
-  crossSectionHandler->LoadData(crossSectionFile);
-  shellCrossSectionHandler = new G4CrossSectionHandler();
-  shellCrossSectionHandler->Clear();
-  crossSectionFile = "penelope/ph-ss-cs-pen-";
-  shellCrossSectionHandler->LoadShellData(crossSectionFile);
-  //This is used to retrieve cross section values later on
-  G4VEMDataSet* emdata = 
-    crossSectionHandler->BuildMeanFreePathForMaterials();
-  //The method BuildMeanFreePathForMaterials() is required here only to force 
-  //the building of an internal table: the output pointer can be deleted
-  delete emdata;
+  // logAtomicShellXS is created only once, since it is  never cleared
+  if (!logAtomicShellXS)
+    logAtomicShellXS = new std::map<const G4int,G4PhysicsTable*>;
 
-  if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for PenelopePhotoElectric" << G4endl;
+  InitialiseElementSelectors(particle,cuts);
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if (verboseLevel > 0) { 
-    G4cout << "Penelope Photo-Electric model is initialized " << G4endl
+    G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
+	   << HighEnergyLimit() / GeV << " GeV";
   }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
-                                             G4double energy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
+								  const G4ParticleDefinition*,
+								  G4double energy,
+								  G4double Z, G4double,
+								  G4double, G4double)
 {
   //
-  // Penelope model. Use data-driven approach for cross section estimate (and 
-  // also shell sampling from a given atom). Data are from the Livermore database
-  //  D.E. Cullen et al., Report UCRL-50400 (1989)
+  // Penelope model v2008
   //
 
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopePhotoElectricModel" << G4endl;
 
   G4int iZ = (G4int) Z;
-  //  if (!crossSectionHandler) // VI: should not be 
-  //  {
-  //    G4cout << "G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom" << G4endl;
-  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
-  //    G4Exception();
-  //  }
-  G4double cs = crossSectionHandler->FindValue(iZ,energy);
+
+  //read data files
+  if (!logAtomicShellXS->count(iZ))
+    ReadDataFile(iZ);
+  //now it should be ok
+  if (!logAtomicShellXS->count(iZ))     
+    G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		"em2038",FatalException,
+		"Unable to retrieve the shell cross section table");     
+  
+  G4double cross = 0;
+
+  G4PhysicsTable* theTable =  logAtomicShellXS->find(iZ)->second;
+  G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[0];
+
+   if (!totalXSLog)
+     {
+       G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		   "em2039",FatalException,
+		   "Unable to retrieve the total cross section table");       
+       return 0;
+     }
+   G4double logene = std::log(energy);
+   G4double logXS = totalXSLog->Value(logene);
+   cross = std::exp(logXS);
  
   if (verboseLevel > 2)
     G4cout << "Photoelectric cross section at " << energy/MeV << " MeV for Z=" << Z <<
-      " = " << cs/barn << " barn" << G4endl;
-  return cs;
+      " = " << cross/barn << " barn" << G4endl;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+						     const G4MaterialCutsCouple* couple,
+						     const G4DynamicParticle* aDynamicGamma,
+						     G4double,
+						     G4double)
 {
   //
-  // Photoelectric effect, Penelope model
+  // Photoelectric effect, Penelope model v2008
   //
   // The target atom and the target shell are sampled according to the Livermore 
   // database 
@@ -223,15 +214,24 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // Select randomly one element in the current material
   if (verboseLevel > 2)
     G4cout << "Going to select element in " << couple->GetMaterial()->GetName() << G4endl;
-  //use crossSectionHandler instead of G4EmElementSelector because in this case 
-  //the dimension of the table is equal to the dimension of the database 
-  //(less interpolation errors)
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
-  if (verboseLevel > 2)
-    G4cout << "Selected Z = " << Z << G4endl;
 
+  // atom can be selected efficiently if element selectors are initialised
+  const G4Element* anElement =
+    SelectRandomAtom(couple,G4Gamma::GammaDefinition(),photonEnergy);
+  G4int Z = (G4int) anElement->GetZ();
+  if (verboseLevel > 2)
+    G4cout << "Selected " << anElement->GetName() << G4endl;
+  
   // Select the ionised shell in the current atom according to shell cross sections
-  size_t shellIndex = shellCrossSectionHandler->SelectRandomShell(Z,photonEnergy);
+  //shellIndex = 0 --> K shell
+  //             1-3 --> L shells
+  //             4-8 --> M shells
+  //             9 --> outer shells cumulatively
+  //
+  size_t shellIndex = SelectRandomShell(Z,photonEnergy);
+
+  if (verboseLevel > 2)
+    G4cout << "Selected shell " << shellIndex << " of element " << anElement->GetName() << G4endl;
 
   // Retrieve the corresponding identifier and binding energy of the selected shell
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
@@ -246,11 +246,21 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   if (shellIndex >= numberOfShells)
     shellIndex = numberOfShells-1;
 
-  const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
+  const G4AtomicShell* shell = fTransitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
-  G4int shellId = shell->ShellId();
+  //G4int shellId = shell->ShellId();
+
+  //Penelope considers only K, L and M shells. Cross sections of outer shells are 
+  //not included in the Penelope database. If SelectRandomShell() returns 
+  //shellIndex = 9, it means that an outer shell was ionized. In this case the 
+  //Penelope recipe is to set bindingEnergy = 0 (the energy is entirely assigned 
+  //to the electron) and to disregard fluorescence.
+  if (shellIndex == 9)
+    bindingEnergy = 0.*eV;
+
 
   G4double localEnergyDeposit = 0.0;
+  G4double cosTheta = 1.0;
 
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
@@ -258,10 +268,10 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // There may be cases where the binding energy of the selected shell is > photon energy
   // In such cases do not generate secondaries
   if (eKineticEnergy > 0.)
-    {    
+    {
       // The electron is created
       // Direction sampled from the Sauter distribution
-      G4double cosTheta = SampleElectronDirection(eKineticEnergy);
+      cosTheta = SampleElectronDirection(eKineticEnergy);
       G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
       G4double phi = twopi * G4UniformRand() ;
       G4double dirx = sinTheta * std::cos(phi);
@@ -274,63 +284,49 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 							   eKineticEnergy);
       fvect->push_back(electron);
     } 
-  else
-    {
-      bindingEnergy = photonEnergy;
-    }
-  G4double energyInFluorescence = 0; //testing purposes
+  else    
+    bindingEnergy = photonEnergy;
 
-  //Now, take care of fluorescence, if required
-  if(DeexcitationFlag() && Z > 5) 
-    {
-      const G4ProductionCutsTable* theCoupleTable=
-	G4ProductionCutsTable::GetProductionCutsTable();
-      size_t indx = couple->GetIndex();
-      G4double cutG = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-      
-      // Protection to avoid generating photons in the unphysical case of 
-      // shell binding energy > photon energy
-      if (bindingEnergy > cutG || bindingEnergy > cutE)
-	{
-	  deexcitationManager.SetCutForSecondaryPhotons(cutG);
-	  deexcitationManager.SetCutForAugerElectrons(cutE);
-	  std::vector<G4DynamicParticle*>* photonVector = 
-	    deexcitationManager.GenerateParticles(Z,shellId); 
-	  //Check for secondaries
-          if(photonVector) 
+
+  G4double energyInFluorescence = 0; //testing purposes
+  G4double energyInAuger = 0; //testing purposes
+ 
+  //Now, take care of fluorescence, if required. According to the Penelope
+  //recipe, I have to skip fluoresence completely if shellIndex == 9 
+  //(= sampling of a shell outer than K,L,M)
+  if (fAtomDeexcitation && shellIndex<9)
+    {      
+      G4int index = couple->GetIndex();
+      if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
+	{	
+	  size_t nBefore = fvect->size();
+	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
+	  size_t nAfter = fvect->size();
+
+	  if (nAfter > nBefore) //actual production of fluorescence
 	    {
-	      for (size_t k=0; k< photonVector->size(); k++)
+	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
-		  G4DynamicParticle* aPhoton = (*photonVector)[k];
-		  if (aPhoton)
-		    {
-		      G4double itsEnergy = aPhoton->GetKineticEnergy();
-		      if (itsEnergy <= bindingEnergy)
-			{
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
-			    energyInFluorescence += itsEnergy;
-			  bindingEnergy -= itsEnergy;
-			  fvect->push_back(aPhoton);
-			}
-		      else
-			{
-			  delete aPhoton;
-			  (*photonVector)[k] = 0;
-			}
-		    }
+		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
+		  bindingEnergy -= itsEnergy;
+		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+		    energyInFluorescence += itsEnergy;
+		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+		    energyInAuger += itsEnergy;
+		  
 		}
-	      delete photonVector;
 	    }
+
 	}
     }
+
   //Residual energy is deposited locally
   localEnergyDeposit += bindingEnergy;
       
   if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING - "
-	     << "G4PenelopePhotoElectric::PostStepDoIt - Negative energy deposit"
+	     << "G4PenelopePhotoElectricModel::SampleSecondaries() - Negative energy deposit"
 	     << G4endl;
       localEnergyDeposit = 0;
     }
@@ -341,41 +337,51 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Energy balance from G4PenelopePhotoElectric" << G4endl;
+      G4cout << "Selected shell: " << WriteTargetShell(shellIndex) << " of element " << 
+	anElement->GetName() << G4endl;
       G4cout << "Incoming photon energy: " << photonEnergy/keV << " keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
       if (eKineticEnergy)
 	G4cout << "Outgoing electron " << eKineticEnergy/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
-      G4cout << "Total final state: " << (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
+      G4cout << "Total final state: " << 
+	(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV << 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
   if (verboseLevel > 0)
     {
       G4double energyDiff = 
-	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit-photonEnergy);
+	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger-photonEnergy);
       if (energyDiff > 0.05*keV)
-	G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV 
-	       << " keV (final) vs. " << 
-	  photonEnergy/keV << " keV (initial)" << G4endl;
+	{
+	  G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
+	    (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV 
+		 << " keV (final) vs. " << 
+	    photonEnergy/keV << " keV (initial)" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	  G4cout << "Energy balance from G4PenelopePhotoElectric" << G4endl;
+	  G4cout << "Selected shell: " << WriteTargetShell(shellIndex) << " of element " << 
+	    anElement->GetName() << G4endl;
+	  G4cout << "Incoming photon energy: " << photonEnergy/keV << " keV" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	  if (eKineticEnergy)
+	    G4cout << "Outgoing electron " << eKineticEnergy/keV << " keV" << G4endl;
+	  if (energyInFluorescence)
+	    G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+	  if (energyInAuger)
+	    G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
+	  G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
+	  G4cout << "Total final state: " << 
+	    (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV << 
+	    " keV" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	}
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopePhotoElectricModel::ActivateAuger(G4bool augerbool)
-{
-  if (!DeexcitationFlag() && augerbool)
-    {
-      G4cout << "WARNING - G4PenelopePhotoElectricModel" << G4endl;
-      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
-      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
-    }
-  deexcitationManager.ActivateAugerElectronProduction(augerbool);
-  if (verboseLevel > 1)
-    G4cout << "Auger production set to " << augerbool << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -411,6 +417,267 @@ G4double G4PenelopePhotoElectricModel::SampleElectronDirection(G4double energy)
     gtr = (2.0 - tsam) * (a1 + 1.0/(ac+tsam));
   }while(G4UniformRand()*gtmax > gtr);
   costheta = 1.0-tsam;
+  
+
   return costheta;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
+{
+  if (verboseLevel > 2)
+    {
+      G4cout << "G4PenelopePhotoElectricModel::ReadDataFile()" << G4endl;
+      G4cout << "Going to read PhotoElectric data files for Z=" << Z << G4endl;
+    }
+ 
+  char* path = getenv("G4LEDATA");
+  if (!path)
+    {
+      G4String excep = "G4PenelopePhotoElectricModel - G4LEDATA environment variable not set!";
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0006",FatalException,excep);
+      return;
+    }
+ 
+  /*
+    Read the cross section file
+  */
+  std::ostringstream ost;
+  if (Z>9)
+    ost << path << "/penelope/photoelectric/pdgph" << Z << ".p08";
+  else
+    ost << path << "/penelope/photoelectric/pdgph0" << Z << ".p08";
+  std::ifstream file(ost.str().c_str());
+  if (!file.is_open())
+    {
+      G4String excep = "G4PenelopePhotoElectricModel - data file " + G4String(ost.str()) + " not found!";
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
+    }
+  //I have to know in advance how many points are in the data list
+  //to initialize the G4PhysicsFreeVector()
+  size_t ndata=0;
+  G4String line;
+  while( getline(file, line) )
+    ndata++;
+  ndata -= 1;
+  //G4cout << "Found: " << ndata << " lines" << G4endl;
+
+  file.clear();
+  file.close();
+  file.open(ost.str().c_str());
+
+  G4int readZ =0;
+  size_t nShells= 0;
+  file >> readZ >> nShells;
+
+  if (verboseLevel > 3)
+    G4cout << "Element Z=" << Z << " , nShells = " << nShells << G4endl;
+
+  //check the right file is opened.
+  if (readZ != Z || nShells <= 0 || nShells > 50) //protect nShell against large values
+    {
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
+      return;
+    }
+  G4PhysicsTable* thePhysicsTable = new G4PhysicsTable();
+
+  //the table has to contain nShell+1 G4PhysicsFreeVectors, 
+  //(theTable)[0] --> total cross section
+  //(theTable)[ishell] --> cross section for shell (ishell-1)
+
+  //reserve space for the vectors
+  //everything is log-log
+  for (size_t i=0;i<nShells+1;i++)
+    thePhysicsTable->push_back(new G4PhysicsFreeVector(ndata));
+
+  size_t k =0;
+  for (k=0;k<ndata && !file.eof();k++)
+    {
+      G4double energy = 0;
+      G4double aValue = 0;
+      file >> energy ;
+      energy *= eV;
+      G4double logene = std::log(energy);
+      //loop on the columns
+      for (size_t i=0;i<nShells+1;i++)
+	{
+	  file >> aValue;
+	  aValue *= barn;
+	  G4PhysicsFreeVector* theVec = (G4PhysicsFreeVector*) ((*thePhysicsTable)[i]);	 
+	  if (aValue < 1e-40*cm2) //protection against log(0)
+	    aValue = 1e-40*cm2;
+	  theVec->PutValue(k,logene,std::log(aValue));
+	}
+    }
+
+  if (verboseLevel > 2)
+    {
+      G4cout << "G4PenelopePhotoElectricModel: read " << k << " points for element Z = " 
+	     << Z << G4endl;
+    }
+
+  logAtomicShellXS->insert(std::make_pair(Z,thePhysicsTable));
+ 
+  file.close();
+  return;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
+{
+  G4double logEnergy = std::log(energy);
+
+  //Check if data have been read (it should be!)
+  if (!logAtomicShellXS->count(Z))
+     {
+       G4ExceptionDescription ed;
+       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
+       G4Exception("G4PenelopePhotoElectricModel::SelectRandomShell()",
+		   "em2038",FatalException,ed);
+     }
+
+  size_t shellIndex = 0;
+ 
+  G4PhysicsTable* theTable =  logAtomicShellXS->find(Z)->second;
+
+  G4DataVector* tempVector = new G4DataVector();
+
+  G4double sum = 0;
+  //loop on shell partial XS, retrieve the value for the given energy and store on 
+  //a temporary vector
+  tempVector->push_back(sum); //first element is zero
+
+  G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[0];
+  G4double logXS = totalXSLog->Value(logEnergy);
+  G4double totalXS = std::exp(logXS);
+					   
+  //Notice: totalXS is the total cross section and it does *not* correspond to 
+  //the sum of partialXS's, since these include only K, L and M shells.
+  //
+  // Therefore, here one have to consider the possibility of ionisation of 
+  // an outer shell. Conventionally, it is indicated with id=10 in Penelope
+  //
+  
+  for (size_t k=1;k<theTable->entries();k++)
+    {
+      G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
+      G4double logXS = partialXSLog->Value(logEnergy);
+      G4double partialXS = std::exp(logXS);
+      sum += partialXS;
+      tempVector->push_back(sum);     
+    }
+
+  tempVector->push_back(totalXS); //last element
+
+  G4double random = G4UniformRand()*totalXS; 
+
+  /*
+  for (size_t i=0;i<tempVector->size(); i++)
+    G4cout << i << " " << (*tempVector)[i]/totalXS << G4endl;
+  */
+  
+  //locate bin of tempVector
+  //Now one has to sample according to the elements in tempVector
+  //This gives the left edge of the interval...
+  size_t lowerBound = 0;
+  size_t upperBound = tempVector->size()-1; 
+  while (lowerBound <= upperBound)
+   {
+     size_t midBin = (lowerBound + upperBound)/2;
+     if( random < (*tempVector)[midBin])
+       upperBound = midBin-1; 
+     else
+       lowerBound = midBin+1; 
+   }
+ 
+  shellIndex = upperBound;
+
+  delete tempVector;
+  return shellIndex;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
+{
+  //read data files
+  if (!logAtomicShellXS->count(Z))
+    ReadDataFile(Z);
+  //now it should be ok
+  if (!logAtomicShellXS->count(Z))
+     {
+       G4ExceptionDescription ed;
+       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
+       G4Exception("G4PenelopePhotoElectricModel::GetNumberOfShellXS()",
+		   "em2038",FatalException,ed);
+     }
+  //one vector is allocated for the _total_ cross section
+  size_t nEntries = logAtomicShellXS->find(Z)->second->entries();
+  return  (nEntries-1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,size_t shellID,G4double energy)
+{
+  //this forces also the loading of the data
+  size_t entries = GetNumberOfShellXS(Z);
+
+  if (shellID >= entries)
+    {
+      G4cout << "Element Z=" << Z << " has data for " << entries << " shells only" << G4endl;
+      G4cout << "so shellID should be from 0 to " << entries-1 << G4endl;
+      return 0;
+    }
+  
+  G4PhysicsTable* theTable =  logAtomicShellXS->find(Z)->second;
+  //[0] is the total XS, shellID is in the element [shellID+1]
+  G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[shellID+1];
+ 
+  if (!totalXSLog)
+     {
+       G4Exception("G4PenelopePhotoElectricModel::GetShellCrossSection()",
+		   "em2039",FatalException,
+		   "Unable to retrieve the total cross section table");
+       return 0;
+     }
+   G4double logene = std::log(energy);
+   G4double logXS = totalXSLog->Value(logene);
+   G4double cross = std::exp(logXS);
+   if (cross < 2e-40*cm2) cross = 0;
+   return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4String G4PenelopePhotoElectricModel::WriteTargetShell(size_t shellID)
+{
+  G4String theShell = "outer shell";
+  if (shellID == 0)
+    theShell = "K";
+  else if (shellID == 1)
+    theShell = "L1";
+  else if (shellID == 2)
+    theShell = "L2";
+  else if (shellID == 3)
+    theShell = "L3";
+  else if (shellID == 4)
+    theShell = "M1";
+  else if (shellID == 5)
+    theShell = "M2";
+  else if (shellID == 6)
+    theShell = "M3";
+  else if (shellID == 7)
+    theShell = "M4";
+  else if (shellID == 8)
+    theShell = "M5";
+      
+  return theShell;
+}

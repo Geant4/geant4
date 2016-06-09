@@ -50,9 +50,7 @@
 #include <G4ParticleDefinition.hh>
 #include "CexmcAngularRange.hh"
 #include "CexmcProductionModelData.hh"
-#ifdef CEXMC_USE_ROOT
 #include "CexmcHistoManager.hh"
-#endif
 #include "CexmcException.hh"
 #include "CexmcCommon.hh"
 

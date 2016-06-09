@@ -29,11 +29,11 @@
 //    *                                  *
 //    ************************************
 //
-// Code developed by: S.Guatelli, guatelli@ge.infn.it
+// Code developed by: S.Guatelli, susanna@uow.edu.au
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.7 2006/06/29 16:24:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimRoofDecorator.cc,v 1.7 2006-06-29 16:24:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
@@ -46,11 +46,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
-#include "RemSimSensitiveDetector.hh"
-#include "RemSimROGeometry.hh"
-#include "G4SDManager.hh"
 #include "G4RunManager.hh"
-#include "G4VisAttributes.hh"
+
 
 RemSimRoofDecorator::RemSimRoofDecorator(RemSimVGeometryComponent* comp)
   : RemSimDecorator(comp)

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DeuteronGEMProbability.cc,v 1.5 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DeuteronGEMProbability.cc,v 1.5 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -36,77 +35,9 @@
 #include "G4DeuteronGEMProbability.hh"
 
 G4DeuteronGEMProbability::G4DeuteronGEMProbability() :
-    G4GEMProbability(2,1,1.0) // A,Z,Gamma
-{
-    SetExcitationEnergiesPtr(&ExcitEnergies);
-    SetExcitationSpinsPtr(&ExcitSpins);
-    SetExcitationLifetimesPtr(&ExcitLifetimes);
-}
+  G4GEMProbability(2,1,1.0) // A,Z,Gamma
+{}
 
+G4DeuteronGEMProbability::~G4DeuteronGEMProbability()
+{}
 
-G4DeuteronGEMProbability::G4DeuteronGEMProbability(const G4DeuteronGEMProbability &) : G4GEMProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronGEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4DeuteronGEMProbability & G4DeuteronGEMProbability::
-operator=(const G4DeuteronGEMProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronGEMProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4DeuteronGEMProbability::operator==(const G4DeuteronGEMProbability &) const
-{
-    return false;
-}
-
-G4bool G4DeuteronGEMProbability::operator!=(const G4DeuteronGEMProbability &) const
-{
-    return true;
-}
-
-
-//JMQ 190709 C's values from Furihata's paper 
-//(notes added on proof in Dostrovskii's paper) 
-//data = {{20, 0.}, {30, -0.06}, {40, -0.10}, {50, -0.10}};
-G4double G4DeuteronGEMProbability::CCoeficient(const G4double aZ) const
-{
-   G4double C = 0.0;
-	
-    if (aZ >= 50){
-      C=-0.10;     
-    } else if (aZ <= 20) {
-        C = 0.0;
-    } else C=0.123482-0.00534691*aZ-0.0000610624*aZ*aZ+5.93719*1e-7*aZ*aZ*aZ+1.95687*1e-8*aZ*aZ*aZ*aZ;	
-    return C/2.;
-	
-}
-
-
-
-//G4double G4DeuteronGEMProbability::CCoeficient(const G4double aZ) const
-//{
-    // Data comes from 
-    // Dostrovsky, Fraenkel and Friedlander
-    // Physical Review, vol 116, num. 3 1959
-    // 
-    // const G4int size = 5;
-    // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
-    // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
-    // C for deuteron is equal to C for protons divided by 2
-//    G4double C = 0.0;
-//	
-//    if (aZ >= 70) {
-//        C = 0.10;
-//    } else {
-//        C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-//    }
-	
-//    return C/2.0;
-	
-//}

@@ -8,9 +8,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 18:47:08 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:47:08 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
+
+# Add allocation export symbol for the particles category
+add_definitions(-DG4PARTICLES_ALLOC_EXPORT)
+
 
 add_subdirectory(adjoint)
 add_subdirectory(bosons)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02FieldMessenger.cc,v 1.8 2008/05/14 15:27:13 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F02FieldMessenger.cc,v 1.8 2008-05-14 15:27:13 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

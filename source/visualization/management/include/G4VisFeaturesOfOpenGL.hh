@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfOpenGL.hh,v 1.6 2007/10/03 14:20:23 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisFeaturesOfOpenGL.hh,v 1.6 2007-10-03 14:20:23 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -42,5 +42,7 @@ G4String G4VisFeaturesOfOpenGLIWin32 ();
 G4String G4VisFeaturesOfOpenGLSWin32 ();
 G4String G4VisFeaturesOfOpenGLIQt ();
 G4String G4VisFeaturesOfOpenGLSQt ();
+G4String G4VisFeaturesOfOpenGLIWt ();
+//G4String G4VisFeaturesOfOpenGLSWt ();
 
 #endif

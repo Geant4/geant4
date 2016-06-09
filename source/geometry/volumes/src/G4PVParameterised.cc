@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.11 2009/09/21 10:27:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PVParameterised.cc,v 1.11 2009-09-21 10:27:05 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVParameterised
@@ -57,15 +57,17 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
 #ifdef G4VERBOSE  
   if ((pMother) && (pMother->IsParameterised()))
   {
-    G4cout << "WARNING - G4PVParameterised::G4PVParameterised()" << G4endl
-           << "          A parameterised volume is being placed" << G4endl
-           << "          inside another parameterised volume !" << G4endl
-           << "          To make sure that no overlaps are generated," << G4endl
-           << "          you should verify the mother replicated shapes" << G4endl
-           << "          are of the same type and dimensions." << G4endl
-           << "             Mother physical volume: " << pMother->GetName() << G4endl
-           << "             Parameterised volume: " << pName << G4endl
-           << "  (To switch this warning off, compile with G4_NO_VERBOSE)" << G4endl;
+    std::ostringstream message, hint;
+    message << "A parameterised volume is being placed" << G4endl
+            << "inside another parameterised volume !";
+    hint << "To make sure that no overlaps are generated," << G4endl
+         << "you should verify the mother replicated shapes" << G4endl
+         << "are of the same type and dimensions." << G4endl
+         << "   Mother physical volume: " << pMother->GetName() << G4endl
+         << "   Parameterised volume: " << pName << G4endl
+         << "  (To switch this warning off, compile with G4_NO_VERBOSE)";
+    G4Exception("G4PVParameterised::G4PVParameterised()", "GeomVol1002",
+                JustWarning, message, G4String(hint.str()));
   }
 #endif
   if (pSurfChk) { CheckOverlaps(); }
@@ -191,17 +193,17 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
         G4double distin = motherSolid->DistanceToIn(mp);
         if (distin > tol)
         {
-          G4cout << G4endl;
-          G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
-                 << "          Overlap is detected for volume "
-                 << GetName() << ", parameterised instance: " << i << G4endl
-                 << "          with its mother volume "
-                 << motherLog->GetName() << G4endl
-                 << "          at mother local point " << mp << ", "
-                 << "overlapping by at least: " << G4BestUnit(distin, "Length")
-                 << G4endl;
-          G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
-                      JustWarning, "Overlap with mother volume !");
+          std::ostringstream message;
+          message << "Overlap with mother volume !" << G4endl
+                  << "         Overlap is detected for volume "
+                  << GetName() << ", parameterised instance: " << i << G4endl
+                  << "          with its mother volume "
+                  << motherLog->GetName() << G4endl
+                  << "          at mother local point " << mp << ", "
+                  << "overlapping by at least: "
+                  << G4BestUnit(distin, "Length");
+          G4Exception("G4PVParameterised::CheckOverlaps()",
+                      "GeomVol1002", JustWarning, message);
           return true;
         }
       }
@@ -232,18 +234,18 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
           G4double distout = solidB->DistanceToOut(md);
           if (distout > tol)
           {
-            G4cout << G4endl;
-            G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
-                   << "          Overlap is detected for volume "
-                   << GetName() << ", parameterised instance: " << i << G4endl
-                   << "          with parameterised volume instance: " << j
-                   << G4endl
-                   << "          at local point " << md << ", "
-                   << "overlapping by at least: "
-                   << G4BestUnit(distout, "Length")
-                   << ", related to volume instance: " << j << "." << G4endl;
-            G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
-                        JustWarning, "Overlap within parameterised volumes !");
+            std::ostringstream message;
+            message << "Overlap within parameterised volumes !" << G4endl
+                    << "          Overlap is detected for volume "
+                    << GetName() << ", parameterised instance: " << i << G4endl
+                    << "          with parameterised volume instance: " << j
+                    << G4endl
+                    << "          at local point " << md << ", "
+                    << "overlapping by at least: "
+                    << G4BestUnit(distout, "Length")
+                    << ", related to volume instance: " << j << ".";
+            G4Exception("G4PVParameterised::CheckOverlaps()",
+                        "GeomVol1002", JustWarning, message);
             return true;
           }
         }

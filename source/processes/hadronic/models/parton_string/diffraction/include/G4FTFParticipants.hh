@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.7 2010/09/20 15:50:46 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FTFParticipants.hh,v 1.7 2010-09-20 15:50:46 vuzhinsk Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4FTFParticipants_h
@@ -59,15 +59,21 @@ class G4FTFParticipants : public G4VParticipants
 
       int operator==(const G4FTFParticipants &right) const;
       int operator!=(const G4FTFParticipants &right) const;
-
+//---------------------------------------------------
+      void InitProjectileNucleus(G4int theZ, G4int theA);
+      void SetProjectileNucleus(G4V3DNucleus * aNucleus);
+      G4V3DNucleus * GetProjectileNucleus();
+//---------------------------------------------------
       void GetList(const G4ReactionProduct  &thePrimary, 
                          G4FTFParameters    *theParameters);
 
       void StartLoop();
       G4bool Next();
-      const G4InteractionContent & GetInteraction() const;
+//Vova      const G4InteractionContent & GetInteraction() const;
+      G4InteractionContent & GetInteraction();
       
       std::vector<G4InteractionContent *> theInteractions;
+      G4V3DNucleus *theProjectileNucleus;
   private:
 
 //      std::vector<G4InteractionContent *> theInteractions;
@@ -90,10 +96,11 @@ G4bool G4FTFParticipants::Next()
 }
 
 
+//inline
+//const G4InteractionContent & G4FTFParticipants::GetInteraction() const
 inline
-const G4InteractionContent & G4FTFParticipants::GetInteraction() const
+G4InteractionContent & G4FTFParticipants::GetInteraction()
 {
 	return *theInteractions[currentInteraction];
 }
-
 #endif

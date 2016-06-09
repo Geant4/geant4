@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.14 2010/11/17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CompetitiveFission.cc,v 1.14 2010-11-17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -485,27 +485,27 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
 	G4LorentzVector tmp = (*h)->GetMomentum();
 	ProductsEnergy += tmp.e();
 	ProductsMomentum += tmp.vect();
-	ProductsA += static_cast<G4int>((*h)->GetA());
-	ProductsZ += static_cast<G4int>((*h)->GetZ());
+	ProductsA += (*h)->GetA_asInt();
+	ProductsZ += (*h)->GetZ_asInt();
     }
 
-    if (ProductsA != theInitialState.GetA()) {
+    if (ProductsA != theInitialState.GetA_asInt()) {
 	G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Barionic Number Conservation test for fission fragments" 
 	       << G4endl; 
-	G4cout << "Initial A = " << theInitialState.GetA() 
+	G4cout << "Initial A = " << theInitialState.GetA_asInt() 
 	       << "   Fragments A = " << ProductsA << "   Diference --> " 
-	       << theInitialState.GetA() - ProductsA << G4endl;
+	       << theInitialState.GetA_asInt() - ProductsA << G4endl;
     }
-    if (ProductsZ != theInitialState.GetZ()) {
+    if (ProductsZ != theInitialState.GetZ_asInt()) {
 	G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Charge Conservation test for fission fragments" 
 	       << G4endl; 
-	G4cout << "Initial Z = " << theInitialState.GetZ() 
+	G4cout << "Initial Z = " << theInitialState.GetZ_asInt() 
 	       << "   Fragments Z = " << ProductsZ << "   Diference --> " 
 	       << theInitialState.GetZ() - ProductsZ << G4endl;
     }
-    if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+    if (std::fabs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Energy Conservation test for fission fragments" 
 	       << G4endl; 
@@ -513,9 +513,9 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
 	       << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
 	       << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
     } 
-    if (std::abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
-	std::abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-	std::abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+    if (std::fabs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+	std::fabs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+	std::fabs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
 	G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
 	G4cout << "G4CompetitiveFission.cc: Momentum Conservation test for fission fragments" 
 	       << G4endl; 

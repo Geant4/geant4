@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2010/03/08 16:34:17 lgarnier Exp $
+# $Id: GNUmakefile,v 1.17 2010-03-08 16:34:17 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 

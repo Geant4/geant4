@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.64 2010/07/13 15:59:42 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.64 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -174,12 +174,12 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 #ifdef G4VERBOSE
   if( navigatorNo >= fNoActiveNavigators )
   {
-    G4cerr << "ERROR - G4PathFinder::ComputeStep()" << G4endl
-           << "        Requested Navigator ID = " << navigatorNo << G4endl
-           << "        Number of active navigators = " << fNoActiveNavigators
-           << G4endl;
-    G4Exception("G4PathFinder::ComputeStep()", "InvalidSetup",
-                FatalException, "Bad Navigator ID !"); 
+    std::ostringstream message;
+    message << "Bad Navigator ID !" << G4endl
+            << "        Requested Navigator ID = " << navigatorNo << G4endl
+            << "        Number of active navigators = " << fNoActiveNavigators;
+    G4Exception("G4PathFinder::ComputeStep()", "GeomNav0002",
+                FatalException, message); 
   }
 #endif
 
@@ -249,12 +249,12 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     if ( (fNoGeometriesLimiting < 0)
       || (fNoGeometriesLimiting > fNoActiveNavigators) )
     {
-      G4cout << "ERROR - G4PathFinder::ComputeStep()" << G4endl
-             << "        Number of geometries limiting step = "
-             << fNoGeometriesLimiting << G4endl;
+      std::ostringstream message;
+      message << "Number of geometries limiting the step not set." << G4endl
+              << "        Number of geometries limiting step = "
+              << fNoGeometriesLimiting;
       G4Exception("G4PathFinder::ComputeStep()", 
-                  "NumGeometriesOutOfRange", FatalException, 
-                  "Number of geometries limiting the step not set."); 
+                  "GeomNav0002", FatalException, message); 
     }
   }
 #ifdef G4DEBUG_PATHFINDER      
@@ -262,23 +262,24 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   {
      if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
      { 
-        G4cout << "ERROR - G4PathFinder::ComputeStep()" << G4endl
-               << "        Problem in step size request." << G4endl
+       std::ostringstream message;
+       message << "Problem in step size request." << G4endl
+               << "        Error can be caused by incorrect process ordering."
                << "        Being requested to make a step which is shorter"
                << " than the minimum Step " << G4endl
                << "        already computed for any Navigator/geometry during"
-               << " this tracking-step: " << G4endl; 
-        G4cout << "        This can happen due to an error in process ordering."
-               << G4endl;
-        G4cout << "        Check that all physics processes are registered"
+               << " this tracking-step: " << G4endl
+               << "        This can happen due to an error in process ordering."
+               << G4endl
+               << "        Check that all physics processes are registered"
                << G4endl
                << "        before all processes with a navigator/geometry."
-               << G4endl;
-        G4cout << "        If using pre-packaged physics list and/or"
+               << G4endl
+               << "        If using pre-packaged physics list and/or"
                << G4endl
                << "        functionality, please report this error."
-               << G4endl << G4endl;
-        G4cout << "        Additional information for problem: "  << G4endl
+               << G4endl << G4endl
+               << "        Additional information for problem: "  << G4endl
                << "        Steps request/proposed = " << proposedStepLength
                << G4endl
                << "        MinimumStep (true) = " << fTrueMinStep
@@ -289,20 +290,12 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                << "        Requested step now = " << proposedStepLength
                << G4endl
                << "        Difference min-req = "
-               << fTrueMinStep-proposedStepLength << G4endl; 
-        G4cout << "     -- Step info> stepNo= " << stepNo
+               << fTrueMinStep-proposedStepLength << G4endl
+               << "     -- Step info> stepNo= " << stepNo
                << " last= " << fLastStepNo 
-               << " newTr= " << fNewTrack << G4endl; 
-        G4cerr << "ERROR - G4PathFinder::ComputeStep()" << G4endl
-               << "        Problem in step size request. " << G4endl
-               << "        Error can be caused by incorrect process ordering."
-               << G4endl
-               << "        Please see more information in standard output."
-               << G4endl;
+               << " newTr= " << fNewTrack << G4endl;
         G4Exception("G4PathFinder::ComputeStep()", 
-                    "ReductionOfRequestedStepSizeBelowMinimum",
-                    FatalException, 
-                    "Not part of specification - not implemented.");
+                    "GeomNav0003", FatalException, message);
      }
      else
      { 
@@ -376,15 +369,14 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fNoActiveNavigators=  fpTransportManager-> GetNoActiveNavigators();
   if( fNoActiveNavigators > fMaxNav )
   {
-    G4cerr << "ERROR - G4PathFinder::PrepareNewTrack()" << G4endl
-           << "        Too many active Navigators. G4PathFinder fails."
-           << G4endl
-           << "        Transportation Manager has "
-           << fNoActiveNavigators << " active navigators." << G4endl
-           << "        This is more than the number allowed = "
-           << fMaxNav << " !" << G4endl;
-    G4Exception("G4PathFinder::PrepareNewTrack()", "TooManyNavigators",  
-                FatalException, "Too many active Navigators / worlds"); 
+    std::ostringstream message;
+    message << "Too many active Navigators / worlds." << G4endl
+            << "        Transportation Manager has "
+            << fNoActiveNavigators << " active navigators." << G4endl
+            << "        This is more than the number allowed = "
+            << fMaxNav << " !";
+    G4Exception("G4PathFinder::PrepareNewTrack()", "GeomNav0002",  
+                FatalException, message); 
   }
 
   fpMultiNavigator->PrepareNavigators(); 
@@ -445,17 +437,17 @@ void G4PathFinder::ReportMove( const G4ThreeVector& OldVector,
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
     G4int prc= G4cerr.precision(12); 
-    G4cerr << G4endl
-           << "WARNING - G4PathFinder::ReportMove()" << G4endl
-           << "          Endpoint moved between value returned by ComputeStep()"
-           << " and call to Locate(). " << G4endl
-           << "          Change of " << Quantity << " is "
-           << moveVec.mag() / mm << " mm long" << G4endl
-           << "          and its vector is "
-           << (1.0/mm) * moveVec << " mm " << G4endl
-           << "          Endpoint of ComputeStep() was " << OldVector << G4endl
-           << "          and current position to locate is " << NewVector
-           << G4endl;
+    std::ostringstream message;
+    message << "Endpoint moved between value returned by ComputeStep()"
+            << " and call to Locate(). " << G4endl
+            << "          Change of " << Quantity << " is "
+            << moveVec.mag() / mm << " mm long" << G4endl
+            << "          and its vector is "
+            << (1.0/mm) * moveVec << " mm " << G4endl
+            << "          Endpoint of ComputeStep() was " << OldVector << G4endl
+            << "          and current position to locate is " << NewVector;
+    G4Exception("G4PathFinder::ReportMove()", "GeomNav1002",  
+                JustWarning, message); 
     G4cerr.precision(prc); 
 }
 
@@ -476,9 +468,6 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
    && ( moveLenSq> kCarTolerance*kCarTolerance ) )
   {
      ReportMove( position, lastEndPosition, "Position" ); 
-     G4Exception("G4PathFinder::Locate", "201-LocateUnexpectedPoint", 
-                 JustWarning,
-                 "Location is not where last ComputeStep() ended."); 
   }
   fLastLocatedPosition= position; 
 
@@ -548,6 +537,8 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   std::vector<G4Navigator*>::iterator pNavIter=
     fpTransportManager->GetActiveNavigatorsIterator(); 
 
+#ifdef G4DEBUG_PATHFINDER
+
   // Check that this relocation does not violate safety
   //   - at endpoint (computed from start point) AND
   //   - at last safety location  (likely just called)
@@ -586,8 +577,6 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
      // Recompute ComputeSafety for end position
      //
      revisedSafety= ComputeSafety(lastEndPosition); 
-
-#ifdef G4DEBUG_PATHFINDER
 
      const G4double kRadTolerance =
        G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -656,48 +645,42 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
        && longMoveRevisedEnd && (moveMinusSafety>0.0) )
      { 
         G4int oldPrec= G4cout.precision(9); 
-        G4cout << " Problem in G4PathFinder::Relocate() " << G4endl;
-        G4cout << " Moved from last endpoint by " << moveLenEndPosition 
-               << " compared to end safety (from preStep point) = " 
-               << endPointSafety_Est1 << G4endl; 
-
-        G4cout << "  --> last PreSafety Location was " << fPreSafetyLocation
-               << G4endl;
-        G4cout << "       safety value =  " << fPreSafetyMinValue << G4endl;
-        G4cout << "  --> last PreStep Location was " << fPreStepLocation
-               << G4endl;
-        G4cout << "       safety value =  " << fMinSafety_PreStepPt << G4endl;
-        G4cout << "  --> last EndStep Location was " << lastEndPosition
-               << G4endl;
-        G4cout << "       safety value =  " << endPointSafety_Est1 
-               << " raw-value = " << endPointSafety_raw << G4endl;
-        G4cout << "  --> Calling again at this endpoint, we get "
-               <<  revisedSafety << " as safety value."  << G4endl;
-        G4cout << "  --> last position for safety " << fSafetyLocation
-               << G4endl;
-        G4cout << "       its safety value =  " << fMinSafety_atSafLocation
-               << G4endl;
-        G4cout << "       move from safety location = "
-               << std::sqrt(moveLenSafSq) << G4endl
-               << "         again= " << moveVecSafety.mag() << G4endl;
-        G4cout << "       safety - Move-from-end= " 
-               << revisedSafety - moveLenEndPosition
-               << " (negative is Bad.)" << G4endl;
-
-        G4cout << " Debug:  distCheckRevisedEnd = "
-               << distCheckRevisedEnd << G4endl;
-
+        std::ostringstream message;
+        message << "ReLocation is further than end-safety value." << G4endl
+                << " Moved from last endpoint by " << moveLenEndPosition 
+                << " compared to end safety (from preStep point) = " 
+                << endPointSafety_Est1 << G4endl
+                << "  --> last PreSafety Location was " << fPreSafetyLocation
+                << G4endl
+                << "       safety value =  " << fPreSafetyMinValue << G4endl
+                << "  --> last PreStep Location was " << fPreStepLocation
+                << G4endl
+                << "       safety value =  " << fMinSafety_PreStepPt << G4endl
+                << "  --> last EndStep Location was " << lastEndPosition
+                << G4endl
+                << "       safety value =  " << endPointSafety_Est1 
+                << " raw-value = " << endPointSafety_raw << G4endl
+                << "  --> Calling again at this endpoint, we get "
+                <<  revisedSafety << " as safety value."  << G4endl
+                << "  --> last position for safety " << fSafetyLocation
+                << G4endl
+                << "       its safety value =  " << fMinSafety_atSafLocation
+                << G4endl
+                << "       move from safety location = "
+                << std::sqrt(moveLenSafSq) << G4endl
+                << "         again= " << moveVecSafety.mag() << G4endl
+                << "       safety - Move-from-end= " 
+                << revisedSafety - moveLenEndPosition
+                << " (negative is Bad.)" << G4endl
+                << " Debug:  distCheckRevisedEnd = "
+                << distCheckRevisedEnd;
         ReportMove( lastEndPosition, position, "Position" ); 
-        G4Exception( "G4PathFinder::ReLocate", "205-RelocatePointTooFar", 
-                    FatalException,  
-                   "ReLocation is further than end-safety value."); 
+        G4Exception("G4PathFinder::ReLocate", "GeomNav0003", 
+                    FatalException, message); 
         G4cout.precision(oldPrec); 
     }
-
-#endif
   }
 
-#ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
     G4cout << G4endl; 
@@ -714,7 +697,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
               << "  relocated = " << fRelocatedPoint << G4endl;
     }
   }
-#endif
+#endif // G4DEBUG_PATHFINDER
 
   for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
@@ -838,8 +821,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4double      MagSqShift  = OriginShift.mag2() ;
   G4double      MagShift;  // Only given value if it larger than minimum safety
 
-  G4double fullSafety;  // For all geometries, for prestep point
-
   // Potential optimisation using Maximum Value of safety!
   // if( MagSqShift >= sqr(fPreSafetyMaxValue ) ){ 
   //   MagShift= kInfinity;   // Not a useful value -- all will not use/ignore
@@ -847,6 +828,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   //  MagShift= std::sqrt(MagSqShift) ;
 
   MagShift= std::sqrt(MagSqShift) ;
+
+#ifdef G4PATHFINDER_OPTIMISATION
+
+  G4double fullSafety;  // For all geometries, for prestep point
+
   if( MagSqShift >= sqr(fPreSafetyMinValue ) )
   {
      fullSafety = 0.0 ;     
@@ -855,9 +841,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   {
      fullSafety = fPreSafetyMinValue - MagShift;
   }
-
-#ifdef G4PATHFINDER_OPTIMISATION
-
   if( proposedStepLength < fullSafety ) 
   {
      // Move is smaller than all safeties
@@ -1298,13 +1281,14 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
         
         if( StepError )
         { 
-           G4cerr << " currentStepSize = " << currentStepSize 
-                 << " diffStep= " << diffStep << G4endl;
-           G4cerr << "ERROR in computing step size for this navigator."
-                  << G4endl;
-           G4Exception("G4PathFinder::DoNextCurvedStep",
-                       "207-StepGoingBackwards", FatalException,  
-                       "Incorrect calculation of step size for one navigator");
+          std::ostringstream message;
+          message << "Incorrect calculation of step size for one navigator"
+                  << G4endl
+                  << "        currentStepSize = " << currentStepSize 
+                  << ", diffStep= " << diffStep << G4endl
+                  << "ERROR in computing step size for this navigator.";
+          G4Exception("G4PathFinder::DoNextCurvedStep",
+                      "GeomNav0003", FatalException, message);
         }
       }
 #endif
@@ -1336,13 +1320,12 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   } 
   else    //  (minStep > proposedStepLength) and not (minStep == kInfinity)
   {
-    G4cerr << G4endl;
-    G4cerr << "ERROR - G4PathFinder::DoNextCurvedStep()" << G4endl
-           << "        currentStepSize = " << minStep << " is larger than "
-           << " proposed StepSize = " << proposedStepLength << "." << G4endl;
+    std::ostringstream message;
+    message << "Incorrect calculation of step size for one navigator." << G4endl
+            << "        currentStepSize = " << minStep << " is larger than "
+            << " proposed StepSize = " << proposedStepLength << ".";
     G4Exception("G4PathFinder::DoNextCurvedStep()",
-                "208-StepLongerThanRequested", FatalException,  
-                "Incorrect calculation of step size for one navigator."); 
+                "GeomNav0003", FatalException, message); 
   }
 
 #ifdef G4DEBUG_PATHFINDER

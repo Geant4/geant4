@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.8 2006/06/29 18:09:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEPEvtParticle.cc,v 1.8 2006-06-29 18:09:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -34,18 +34,18 @@
 G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
 
 G4HEPEvtParticle::G4HEPEvtParticle()
+  : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)
 {;}
 
 G4HEPEvtParticle::G4HEPEvtParticle(G4PrimaryParticle* pp,
         G4int isthep, G4int jdahep1, G4int jdahep2)
-:theParticle(pp),ISTHEP(isthep),JDAHEP1(jdahep1),JDAHEP2(jdahep2)
+  : theParticle(pp),ISTHEP(isthep),JDAHEP1(jdahep1),JDAHEP2(jdahep2)
 {;}
 
 G4HEPEvtParticle::~G4HEPEvtParticle()
 {;}
 
-const G4HEPEvtParticle & 
-G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
+G4HEPEvtParticle& G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
 { return *this; }
 
 G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const

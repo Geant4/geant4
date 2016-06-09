@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.9 2006/06/29 19:06:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NURBS.cc,v 1.10 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -391,17 +391,21 @@ void G4NURBS::Conscheck() const
   { 
     if (m[dir].order<=0)
     { 
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The order in the "
-             << G4NURBS::Tochar(dir) 
-             << " direction must be >= 1" << G4endl;
-      G4Exception("ERROR - G4NURBS::Conscheck()");
+      G4ExceptionDescription ed;
+      ed << "The order in the "
+	 << G4NURBS::Tochar(dir) 
+	 << " direction must be >= 1" << G4endl;
+      G4Exception("G4NURBS::Conscheck()",
+		  "greps1001", FatalException, ed);
     }
     if (m[dir].nbrCtrlPts<=0)
     {
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The number of control points "
+      G4ExceptionDescription ed;
+      ed << "The number of control points "
              << G4NURBS::Tochar(dir) 
              << " direction must be >= 1" << G4endl;
-      G4Exception("ERROR - G4NURBS::Conscheck()");
+      G4Exception("G4NURBS::Conscheck()",
+		  "greps1002", FatalException, ed);
     }
   }  // end of dummy
 }
@@ -425,11 +429,12 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
   // CtrlPts
   if (! (mpCtrlPts = in_pCtrlPts) )
   {
-    G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-           << "A NURBS MUST HAVE CONTROL POINTS!\n"
-           << "\teven if they are defined later, the array must be allocated."
-           << G4endl;
-    G4Exception("ERROR - G4NURBS::G4NURBS()");
+    G4ExceptionDescription ed;
+    ed << "A NURBS MUST HAVE CONTROL POINTS!\n"
+       << "\teven if they are defined later, the array must be allocated."
+       << G4endl;
+    G4Exception("G4NURBS::G4NURBS()",
+		"greps1003", FatalException, ed);
   }
   //mnbralias = 0;
 
@@ -442,12 +447,13 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
     {  // make some regular knots between 0 & 1
       if(!MakeKnotVector(m[dir], Regular))
       {
-        G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-               << "Unable to make a Regular knot vector along "
-               << G4NURBS::Tochar(dir)
-               << " direction."
-               << G4endl;
-        G4Exception("ERROR - G4NURBS::G4NURBS()");
+	G4ExceptionDescription ed;
+        ed << "Unable to make a Regular knot vector along "
+	   << G4NURBS::Tochar(dir)
+	   << " direction."
+	   << G4endl;
+        G4Exception("G4NURBS::G4NURBS()",
+		    "greps1004", FatalException, ed);
       }
       //m[dir].nbralias = 0;
     }  // end of knots-making
@@ -483,17 +489,18 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
   {
     t_KnotVectorGenFlag flag = (dummy?in_VKVGFlag:in_UKVGFlag);
     m[dir].pKnots = 0;  // (allocation under our control)
-    if (  flag && !MakeKnotVector(m[dir], flag) )
+    if ( flag != UserDefined && !MakeKnotVector(m[dir], flag) )
     {
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-             << "Unable to make knot vector along "
-             << G4NURBS::Tochar(dir)
-             << " direction. (" << m[dir].nbrKnots 
-             << " knots requested for a " 
-             << flag 
-             << " knots vector)"
-             << G4endl;
-      G4Exception("ERROR - G4NURBS::G4NURBS()");
+      G4ExceptionDescription ed;
+      ed << "Unable to make knot vector along "
+	 << G4NURBS::Tochar(dir)
+	 << " direction. (" << m[dir].nbrKnots 
+	 << " knots requested for a " 
+	 << flag 
+	 << " knots vector)"
+	 << G4endl;
+      G4Exception("G4NURBS::G4NURBS()",
+		  "greps1005", FatalException, ed);
     }
     //m[dir].nbralias = 0;
   }
@@ -700,11 +707,14 @@ void G4NURBS::CalcPoint(G4double u, G4double v, G4Point3D &p,
       rj = orderU - 1 - j;
 
       tmp = bu[rj] * bv[ri];
+
       cpoint = GetdoubleCtrlPt(j+ufirst, i+vfirst);
       cp.x = *cpoint[G4NURBS::X];
       cp.y = *cpoint[G4NURBS::Y];
       cp.z = *cpoint[G4NURBS::Z];
       cp.w = *cpoint[G4NURBS::W];
+      delete [] cpoint;
+
       r.x += cp.x * tmp;
       r.y += cp.y * tmp;
       r.z += cp.z * tmp;

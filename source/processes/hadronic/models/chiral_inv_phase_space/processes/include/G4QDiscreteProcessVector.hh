@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiscreteProcessVector.hh,v 1.1 2009/11/17 10:36:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QDiscreteProcessVector.hh,v 1.1 2009-11-17 10:36:54 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscreteProcessVector ----------------
 //             by Mikhail Kossov, Aug 2007.

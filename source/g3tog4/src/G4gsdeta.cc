@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdeta.cc,v 1.6 2006/06/29 18:13:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdeta.cc,v 1.6 2006-06-29 18:13:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // modified by I.Hrivnacova, 6 Oct 99
@@ -36,7 +36,7 @@
 void G4gsdeta(G4String chset, G4String chdet, G4String,
               G4int nwhi, G4int nwdi);
 
-void PG4gsdeta(G4String tokens[])
+void PG4gsdeta(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdeta);

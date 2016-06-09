@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.19 2010/11/22 07:56:43 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicProcessStore.cc,v 1.20 2011-01-08 02:23:20 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -145,7 +145,7 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetElasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetElasticCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -155,15 +155,13 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetElasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fHadronElastic);
   G4double cross = 0.0;
   localDP.SetKineticEnergy(kineticEnergy);
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -192,7 +190,7 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -202,15 +200,13 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetInelasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fHadronInelastic);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) { 
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -239,7 +235,7 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetCaptureCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetCaptureCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -249,15 +245,13 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetCaptureCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fCapture);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -286,7 +280,7 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetFissionCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetFissionCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -296,15 +290,13 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetFissionCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fFission);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -333,7 +325,7 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -343,15 +335,13 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fChargeExchange);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -505,17 +495,119 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part) 
 {
+  // Trigger particle/process/model printout only when last particle is 
+  // registered
   if(buildTableStart && part == particle[n_part - 1]) {
     buildTableStart = false;
     Dump(verbose);
+    if (getenv("G4PhysListDocDir") ) DumpHtml();
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::DumpHtml()
+{
+  // Automatic generation of html documentation page for physics lists
+  // List processes, models and cross sections for the most important
+  // particles in descending order of importance
+
+  char* dirName = getenv("G4PhysListDocDir");
+  char* physListName = getenv("G4PhysListName");
+  if (dirName && physListName) {
+
+    // Open output file with path name
+    G4String pathName = G4String(dirName) + "/" + G4String(physListName) + ".html";
+    std::ofstream outFile;
+    outFile.open(pathName);
+
+    // Write physics list summary file
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+    outFile << "<title>Physics List Summary</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+    outFile << "<h2> Summary of Hadronic Processes, Models and Cross Sections for Physics List "
+            << G4String(physListName) << "</h2>\n";
+    outFile << "<ul>\n";
+
+    PrintHtml(G4Proton::Proton(), outFile);
+    PrintHtml(G4Neutron::Neutron(), outFile);
+    PrintHtml(G4PionPlus::PionPlus(), outFile); 
+    PrintHtml(G4PionMinus::PionMinus(), outFile);
+    PrintHtml(G4Gamma::Gamma(), outFile);
+    PrintHtml(G4Electron::Electron(), outFile);
+//    PrintHtml(G4MuonMinus::MuonMinus(), outFile);
+    PrintHtml(G4Positron::Positron(), outFile);
+    PrintHtml(G4KaonPlus::KaonPlus(), outFile);
+    PrintHtml(G4KaonMinus::KaonMinus(), outFile);
+    PrintHtml(G4Lambda::Lambda(), outFile);
+    PrintHtml(G4Alpha::Alpha(), outFile);
+
+    outFile << "</ul>\n";
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+
+void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
+                                       std::ofstream& outFile)
+{
+  // Automatic generation of html documentation page for physics lists
+  // List processes for the most important particles in descending order
+  // of importance
+ 
+  outFile << "<br> <li><h2><font color=\" ff0000 \">" 
+          << theParticle->GetParticleName() << "</font></h2></li>\n";
+
+  typedef std::multimap<PD,HP,std::less<PD> > PDHPmap;
+  typedef std::multimap<HP,HI,std::less<HP> > HPHImap;
+
+  std::pair<PDHPmap::iterator, PDHPmap::iterator> itpart =
+                        p_map.equal_range(theParticle);
+
+  // Loop over processes assigned to particle
+
+  G4HadronicProcess* theProcess;
+  for (PDHPmap::iterator it = itpart.first; it != itpart.second; ++it) {
+    theProcess = (*it).second;
+    outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : <a href=\"" 
+            << theProcess->GetProcessName() << ".html\"> "
+            << theProcess->GetProcessName() << "</a></font></b>\n";
+    outFile << "<ul>\n";
+    outFile << "  <li><b><font color=\" 00AA00 \">models : </font></b>\n";
+
+    // Loop over models assigned to process
+    std::pair<HPHImap::iterator, HPHImap::iterator> itmod =
+                        m_map.equal_range(theProcess);
+
+    outFile << "    <ul>\n"; 
+    for (HPHImap::iterator jt = itmod.first; jt != itmod.second; ++jt) {
+      outFile << "    <li><b><a href=\"" << (*jt).second->GetModelName() << ".html\"> "
+              << (*jt).second->GetModelName() << "</a>" 
+              << " from " << (*jt).second->GetMinEnergy()/GeV
+              << " GeV to " << (*jt).second->GetMaxEnergy()/GeV
+              << " GeV </b></li>\n";
+    }
+    outFile << "    </ul>\n";
+    outFile << "  </li>\n";
+
+    // List cross sections assigned to process
+    outFile << "  <li><b><font color=\" 00AA00 \">cross sections : </font></b>\n";
+    outFile << "    <ul>\n";
+    theProcess->GetCrossSectionDataStore()->DumpHtml(*theParticle, outFile);
+    //        << " \n";
+    outFile << "    </ul>\n";
+
+    outFile << "  </li>\n";
+    outFile << "</ul>\n";
+  }
+}
+
 
 void G4HadronicProcessStore::Dump(G4int level)
 {
@@ -531,6 +623,7 @@ void G4HadronicProcessStore::Dump(G4int level)
     G4String pname = part->GetParticleName();
     G4bool yes = false;
     if(level >= 2) yes = true;
+
     else if(level == 1 && (pname == "proton" || 
 			   pname == "neutron" ||
 			   pname == "pi+" ||
@@ -547,6 +640,7 @@ void G4HadronicProcessStore::Dump(G4int level)
     if(yes) {
       // main processes
       std::multimap<PD,HP,std::less<PD> >::iterator it;
+
       for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
 	if(it->first == part) {
 	  HP proc = (it->second);
@@ -581,7 +675,6 @@ void G4HadronicProcessStore::Dump(G4int level)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 {
@@ -590,8 +683,10 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
   if(wasPrinted[idxPart] == 0) {
     wasPrinted[idxPart] = 1;
     G4cout<<G4endl;
-    G4cout << "                     Hadronic Processes for <" 
-	   <<part->GetParticleName() << ">" << G4endl; 
+    G4cout << "                                  Hadronic Processes for <" 
+	   << part->GetParticleName() << ">" << G4endl;
+    G4cout << "                                  ------------------------"
+           << "-----------" << G4endl;
   }
   HI hi = 0;
   G4bool first;
@@ -608,14 +703,21 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
       }
       if(!first) G4cout << "                              ";
       first = false;
-      G4cout << std::setw(25) << modelName[i] 
+      G4cout << std::setw(28) << modelName[i] 
 	     << ": Emin(GeV)= "  
-	     << std::setw(5) << hi->GetMinEnergy()/GeV
+	     << std::setw(4) << hi->GetMinEnergy()/GeV
 	     << "  Emax(GeV)= " 
 	     << hi->GetMaxEnergy()/GeV
 	     << G4endl;
     }
   }
+
+  G4cout << G4endl;
+  G4cout << std::setw(20) << proc->GetProcessName()
+         << "  Crs sctns: ";
+  G4CrossSectionDataStore* csds = proc->GetCrossSectionDataStore();
+  csds->DumpPhysicsTable(*part);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

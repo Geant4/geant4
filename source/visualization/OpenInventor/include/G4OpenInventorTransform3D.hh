@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.7 2006/06/29 21:20:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorTransform3D.hh,v 1.7 2006-06-29 21:20:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // jck  17 Dec 1996

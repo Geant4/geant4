@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity2.cc,v 1.3 2010/11/02 15:56:47 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: fanoCavity2.cc,v 1.3 2010-11-02 15:56:47 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

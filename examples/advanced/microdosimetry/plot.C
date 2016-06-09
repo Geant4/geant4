@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.6 2010/10/08 10:01:35 sincerti Exp $
+// $Id: plot.C,v 1.6 2010-10-08 10:01:35 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -31,7 +31,7 @@ c1.cd(1);
   
   // Excitation
  
-ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30","same");
+  ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30","same");
   ntuple0->SetFillColor(3);
   
   // Elastic
@@ -50,39 +50,21 @@ ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||
   ntuple0->Draw("flagProcess","flagProcess==22||flagProcess==29||flagProcess==32","same");
   
   gPad->SetLogy();
-/*
-  htemp->GetXaxis()->SetLabelSize(0.025);
-  htemp->GetYaxis()->SetLabelSize(0.025);
-  htemp->GetZaxis()->SetLabelSize(0.025);
-  htemp->GetXaxis()->SetTitleSize(0.035);
-  htemp->GetYaxis()->SetTitleSize(0.035);
-  htemp->GetXaxis()->SetTitleOffset(1.4);
-  htemp->GetYaxis()->SetTitleOffset(1.4);
-  htemp->GetXaxis()->SetTitle("flagProcess");
-  htemp->GetYaxis()->SetTitle("");
-  htemp->SetTitle("flagProcesses");
-*/
 
 c1.cd(2);
+
+  // Electrons
   ntuple0->SetMarkerColor(2);
   ntuple0->Draw("x:y:z/1000","flagParticle==1");
 
+  // Protons
   ntuple0->SetMarkerColor(4);
   ntuple0->SetMarkerSize(4);
-  ntuple0->Draw("x:y:z/1000","flagParticle==4 || flagParticle==5 || flagParticle==6","same");
-/*
-  htemp->GetXaxis()->SetLabelSize(0.025);
-  htemp->GetYaxis()->SetLabelSize(0.025);
-  htemp->GetZaxis()->SetLabelSize(0.025);
-  htemp->GetXaxis()->SetTitleSize(0.035);
-  htemp->GetYaxis()->SetTitleSize(0.035);
-  htemp->GetZaxis()->SetTitleSize(0.035);
-  htemp->GetXaxis()->SetTitleOffset(1.6);
-  htemp->GetYaxis()->SetTitleOffset(1.6);
-  htemp->GetZaxis()->SetTitleOffset(1.6);
-  htemp->GetXaxis()->SetTitle("z (micrometer)");
-  htemp->GetYaxis()->SetTitle("x (nanometer)");
-  htemp->GetZaxis()->SetTitle("y (nanometer)");
-  htemp->SetTitle("Track Structure in liquid water");
-*/  
+  ntuple0->Draw("x:y:z/1000","flagParticle==2","same");
+
+  //Hydrogen
+  ntuple0->SetMarkerColor(3);
+  ntuple0->SetMarkerSize(3);
+  ntuple0->Draw("x:y:z/1000","flagParticle==3","same");
+  
 }

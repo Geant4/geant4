@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.11 2010/11/20 04:01:33 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEAntiSigmaZeroInelastic.cc,v 1.11 2010-11-20 04:01:33 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
@@ -37,10 +37,24 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-// Last modified: 29-July-1998 
  
 #include "G4HEAntiSigmaZeroInelastic.hh"
 #include "G4Gamma.hh"
+
+
+void G4HEAntiSigmaZeroInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4HEAntiSigmaZeroInelastic is one of the High Energy\n"
+          << "Parameterized (HEP) models used to implement inelastic\n"
+          << "anti-Sigma0 scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to anti-Sigma0 with initial\n"
+          << "energies above 20 GeV.\n";
+}
+
 
 G4HadFinalState*
 G4HEAntiSigmaZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,

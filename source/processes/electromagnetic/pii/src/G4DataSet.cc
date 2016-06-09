@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.cc,v 1.4 2010/11/25 19:49:43 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DataSet.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -59,7 +59,10 @@ G4DataSet::G4DataSet(G4int Z,
   pdf(0),
   randomSet(random)
 {
-  if (algorithm == 0) G4Exception("G4DataSet::G4DataSet - interpolation == 0");
+  if (algorithm == 0) G4Exception("G4DataSet::G4DataSet",
+				  "pii00000101",
+				  FatalException,
+				  "Interpolation == 0");
   if (randomSet) BuildPdf();
 }
 
@@ -79,15 +82,24 @@ G4DataSet::G4DataSet(G4int argZ,
   pdf(0),
   randomSet(random)
 {
-  if (algorithm == 0) G4Exception("G4DataSet::G4DataSet - interpolation == 0");
+  if (algorithm == 0) G4Exception("G4DataSet::G4DataSet",
+				  "pii00000110",
+				  FatalException,
+				  "Interpolation == 0");
 
   if ((energies == 0) ^ (data == 0))
-    G4Exception("G4DataSet::G4DataSet - different size for energies and data (zero case)");
+    G4Exception("G4DataSet::G4DataSet",
+		"pii00000111-",
+		FatalException,  
+		"different size for energies and data (zero case)");
 
   if (energies == 0) return;
   
   if (energies->size() != data->size()) 
-    G4Exception("G4DataSet::G4DataSet - different size for energies and data");
+    G4Exception("G4DataSet::G4DataSet",
+		"pii00000112",
+		FatalException, 
+		"different size for energies and data");
 
   if (randomSet) BuildPdf();
 }
@@ -102,7 +114,10 @@ G4DataSet::~G4DataSet()
 
 G4double G4DataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
-  if (!energies) G4Exception("G4DataSet::FindValue - energies == 0");
+  if (!energies) G4Exception("G4DataSet::FindValue",
+			     "pii00000120",
+			     FatalException,  
+			     "energies == 0");
   if (energies->empty()) return 0;
   if (energy <= (*energies)[0]) return (*data)[0];
 
@@ -145,12 +160,18 @@ void G4DataSet::SetEnergiesData(G4DataVector* dataX,
   data = dataY;
  
   if ((energies == 0) ^ (data==0)) 
-    G4Exception("G4DataSet::SetEnergiesData - different size for energies and data (zero case)");
+    G4Exception("G4DataSet::SetEnergiesData",
+		"pii00000130",
+		FatalException, 
+		"different size for energies and data (zero case)");
 
   if (energies == 0) return;
   
   if (energies->size() != data->size()) 
-    G4Exception("G4DataSet::SetEnergiesData - different size for energies and data");
+    G4Exception("G4DataSet::SetEnergiesData",
+		"pii00000131",
+		FatalException, 
+		"different size for energies and data");
 }
 
 G4bool G4DataSet::LoadData(const G4String& fileName)
@@ -166,10 +187,14 @@ G4bool G4DataSet::LoadData(const G4String& fileName)
 
   if (!in.is_open())
     {
-      G4String message("G4DataSet::LoadData - data file \"");
-      message += fullFileName;
-      message += "\" not found";
-      G4Exception(message);
+
+      std::ostringstream message;
+      message << "G4DataSet::LoadData - data file " << fullFileName << " not found";
+
+      G4Exception("G4CompositeDataSet::LoadData",
+		  "pii00000140",
+		  FatalException,
+		  message.str().c_str());
     }
 
   G4DataVector* argEnergies=new G4DataVector;
@@ -215,10 +240,15 @@ G4bool G4DataSet::SaveData(const G4String& name) const
 
   if (!out.is_open())
     {
-      G4String message("G4DataSet::SaveData - cannot open \"");
-      message+=fullFileName;
-      message+="\"";
-      G4Exception(message);
+ 
+      std::ostringstream message;
+      message << "G4DataSet:: SaveData - cannot open " << fullFileName;
+
+      G4Exception("G4CompositeDataSet::SaveData",
+		  "pii00000150",
+		  FatalException,
+		  message.str().c_str());
+
     }
  
   out.precision(10);
@@ -309,7 +339,10 @@ G4String G4DataSet::FullFileName(const G4String& name) const
 {
   char* path = getenv("G4PIIDATA");
   if (!path)
-    G4Exception("G4DataSet::FullFileName - G4PIIDATA environment variable not set");
+    G4Exception("G4DataSet::FullFileName",
+		"pii00000160",
+		  FatalException,
+		"G4PIIDATA environment variable not set");
   
   std::ostringstream fullFileName;
   fullFileName << path << '/' << name << z << ".dat";
@@ -353,7 +386,10 @@ G4double G4DataSet::RandomSelect(G4int /* componentId */) const
   // Random select a X value according to the cumulative probability distribution
   // derived from the data
 
-  if (!pdf) G4Exception("G4DataSet::RandomSelect - PDF has not been created for this data set");
+  if (!pdf) G4Exception("G4DataSet::RandomSelect",
+			"pii00000170",
+			FatalException, 
+			"PDF has not been created for this data set");
 
   G4double value = 0.;
   G4double x = G4UniformRand();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.71 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Torus.cc,v 1.71 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Torus
@@ -103,24 +103,26 @@ G4Torus::SetAllParameters( G4double pRmin,
                            G4double pSPhi,
                            G4double pDPhi )
 {
+  const G4double fEpsilon = 4.e-11;  // relative tolerance of radii
+
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fpPolyhedron = 0;
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
-
+  
   if ( pRtor >= pRmax+1.e3*kCarTolerance )  // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;
   }
   else
   {
-    G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid swept radius !" << G4endl
-           << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
+    std::ostringstream message;
+    message << "Invalid swept radius for Solid: " << GetName() << G4endl
+            << "        pRtor = " << pRtor << ", pRmax = " << pRmax;
     G4Exception("G4Torus::SetAllParameters()",
-                "InvalidSetup", FatalException, "Invalid swept radius.");
+                "GeomSolids0002", FatalException, message);
   }
 
   // Check radii, as in G4Cons
@@ -133,12 +135,18 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
+    std::ostringstream message;
+    message << "Invalid values of radii for Solid: " << GetName() << G4endl
+            << "        pRmin = " << pRmin << ", pRmax = " << pRmax;
     G4Exception("G4Torus::SetAllParameters()",
-                "InvalidSetup", FatalException, "Invalid radii.");
+                "GeomSolids0002", FatalException, message);
   }
+
+  // Relative tolerances
+  //
+  fRminTolerance = (fRmin)
+                 ? 0.5*std::max( kRadTolerance, fEpsilon*(fRtor-fRmin )) : 0;
+  fRmaxTolerance = 0.5*std::max( kRadTolerance, fEpsilon*(fRtor+fRmax) );
 
   // Check angles
   //
@@ -148,11 +156,11 @@ G4Torus::SetAllParameters( G4double pRmin,
     if (pDPhi > 0)       { fDPhi = pDPhi ; }
     else
     {
-      G4cerr << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
-             << "        Negative Z delta-Phi ! - "
-             << pDPhi << G4endl;
+      std::ostringstream message;
+      message << "Invalid Z delta-Phi for Solid: " << GetName() << G4endl
+              << "        pDPhi = " << pDPhi;
       G4Exception("G4Torus::SetAllParameters()",
-                  "InvalidSetup", FatalException, "Invalid dphi.");
+                  "GeomSolids0002", FatalException, message);
     }
   }
   
@@ -173,7 +181,8 @@ G4Torus::SetAllParameters( G4double pRmin,
 //
 G4Torus::G4Torus( __void__& a )
   : G4CSGSolid(a), fRmin(0.), fRmax(0.), fRtor(0.), fSPhi(0.),
-    fDPhi(0.), kRadTolerance(0.), kAngTolerance(0.)
+    fDPhi(0.), fRminTolerance(0.), fRmaxTolerance(0. ),
+    kRadTolerance(0.), kAngTolerance(0.)
 {
 }
 
@@ -191,6 +200,7 @@ G4Torus::~G4Torus()
 G4Torus::G4Torus(const G4Torus& rhs)
   : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
     fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
+    fRminTolerance(rhs.fRminTolerance), fRmaxTolerance(rhs.fRmaxTolerance),
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance)
 {
 }
@@ -213,6 +223,7 @@ G4Torus& G4Torus::operator = (const G4Torus& rhs)
    //
    fRmin = rhs.fRmin; fRmax = rhs.fRmax;
    fRtor = rhs.fRtor; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
    kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
 
    return *this;
@@ -623,17 +634,16 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   G4double r2, pt2, pPhi, tolRMin, tolRMax ;
 
   EInside in = kOutside ;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
   static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
-                                              // General precals
+                                               // General precals
   r2  = p.x()*p.x() + p.y()*p.y() ;
   pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
 
-  if (fRmin) tolRMin = fRmin + halfRadTolerance ;
+  if (fRmin) tolRMin = fRmin + fRminTolerance ;
   else       tolRMin = 0 ;
 
-  tolRMax = fRmax - halfRadTolerance;
+  tolRMax = fRmax - fRmaxTolerance;
       
   if (pt2 >= tolRMin*tolRMin && pt2 <= tolRMax*tolRMax )
   {
@@ -680,8 +690,8 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   }
   else   // Try generous boundaries
   {
-    tolRMin = fRmin - halfRadTolerance ;
-    tolRMax = fRmax + halfRadTolerance ;
+    tolRMin = fRmin - fRminTolerance ;
+    tolRMax = fRmax + fRmaxTolerance ;
 
     if (tolRMin < 0 )  { tolRMin = 0 ; }
 
@@ -799,8 +809,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Torus::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -890,7 +900,7 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     default:          // Should never reach this case ...
       DumpInfo();
       G4Exception("G4Torus::ApproxSurfaceNormal()",
-                  "Notification", JustWarning,
+                  "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
   } 
@@ -931,17 +941,14 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   //                                            check validity
 
   G4bool seg;        // true if segmented
-  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT=0.,cosHDPhiIT=0.;
-                     // half dphi + outer tolerance
+  G4double hDPhi;    // half dphi
   G4double cPhi,sinCPhi=0.,cosCPhi=0.;  // central phi
 
-  G4double tolORMin2,tolIRMin2;  // `generous' radii squared
-  G4double tolORMax2,tolIRMax2 ;
+  G4double tolORMin2;  // `generous' radii squared
+  G4double tolORMax2;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
-
+ 
   G4double Dist,xi,yi,zi,rhoi2,it2; // Intersection point variables
 
   G4double Comp;
@@ -955,30 +962,23 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
     cPhi       = fSPhi + hDPhi ;
-    hDPhiOT    = hDPhi + halfAngTolerance ;  // outers tol' half delta phi 
-    hDPhiIT    = hDPhi - halfAngTolerance ;
     sinCPhi    = std::sin(cPhi) ;
     cosCPhi    = std::cos(cPhi) ;
-    cosHDPhiOT = std::cos(hDPhiOT) ;
-    cosHDPhiIT = std::cos(hDPhiIT) ;
   }
   else
   {
     seg = false ;
   }
 
-  if (fRmin > kRadTolerance) // Calculate tolerant rmin and rmax
+  if (fRmin > fRminTolerance) // Calculate tolerant rmin and rmax
   {
-    tolORMin2 = (fRmin - halfRadTolerance)*(fRmin - halfRadTolerance) ;
-    tolIRMin2 = (fRmin + halfRadTolerance)*(fRmin + halfRadTolerance) ;
+    tolORMin2 = (fRmin - fRminTolerance)*(fRmin - fRminTolerance) ;
   }
   else
   {
     tolORMin2 = 0 ;
-    tolIRMin2 = 0 ;
   }
-  tolORMax2 = (fRmax + halfRadTolerance)*(fRmax + halfRadTolerance) ;
-  tolIRMax2 = (fRmax - halfRadTolerance)*(fRmax - halfRadTolerance) ;
+  tolORMax2 = (fRmax + fRmaxTolerance)*(fRmax + fRmaxTolerance) ;
 
   // Intersection with Rmax (possible return) and Rmin (must also check phi)
 
@@ -1137,7 +1137,6 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   G4double snxt = kInfinity, sphi, s[4] ;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
   static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   // Vars for phi intersection
@@ -1166,7 +1165,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
 
-  G4double tolRMax = fRmax - halfRadTolerance ;
+  G4double tolRMax = fRmax - fRmaxTolerance ;
    
   G4double vDotNmax   = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
   G4double pDotxyNmax = (1 - fRtor/rho) ;
@@ -1177,7 +1176,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     // radial surface -> leaving immediately with *n for really convex part
     // only
       
-    if ( calcNorm && (pDotxyNmax >= -kRadTolerance) ) 
+    if ( calcNorm && (pDotxyNmax >= -2.*fRmaxTolerance) ) 
     {
       *n = G4ThreeVector( p.x()*(1 - fRtor/rho)/pt,
                           p.y()*(1 - fRtor/rho)/pt,
@@ -1194,7 +1193,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   if ( fRmin )
   {
-    G4double tolRMin = fRmin + halfRadTolerance ;
+    G4double tolRMin = fRmin + fRminTolerance ;
 
     if ( (pt2 < tolRMin*tolRMin) && (vDotNmax < 0) )
     {
@@ -1401,7 +1400,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         it2   = std::fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
         it    = std::sqrt(it2) ;
         iDotxyNmax = (1-fRtor/rhoi) ;
-        if(iDotxyNmax >= -kRadTolerance) // really convex part of Rmax
+        if(iDotxyNmax >= -2.*fRmaxTolerance) // really convex part of Rmax
         {                       
           *n = G4ThreeVector( xi*(1-fRtor/rhoi)/it,
                               yi*(1-fRtor/rhoi)/it,
@@ -1446,23 +1445,25 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
         // It seems we go here from time to time ...
 
-        G4int oldprc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(oldprc);
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = " << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
         G4Exception("G4Torus::DistanceToOut(p,v,..)",
-                    "Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+                    "GeomSolids1002",JustWarning, message);
         break;
     }
   }
@@ -1496,7 +1497,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc);
-     G4Exception("G4Torus::DistanceToOut(p)", "Notification",
+     G4Exception("G4Torus::DistanceToOut(p)", "GeomSolids1002",
                  JustWarning, "Point p is outside !?" );
   }
 #endif
@@ -1617,7 +1618,7 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   {
     DumpInfo();
     G4Exception("G4Torus::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -1647,6 +1648,7 @@ G4VSolid* G4Torus::Clone() const
 
 std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1658,6 +1660,7 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
      << "    starting phi: " << fSPhi/degree << " degrees \n"
      << "    delta phi   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

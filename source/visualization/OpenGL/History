@@ -1,4 +1,4 @@
-$Id: History,v 1.193 2010/11/13 10:28:40 allison Exp $
+$Id: History,v 1.196 2011-01-07 09:47:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,351 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th november Laurent Garnier  (opengl-V09-04-28)
+- Fix pop up warning box at beggining
+- Fix unitialize value before Gl init
+
+30th November 2011 Ben Morgan (opengl-V09-04-27)
+- sources.cmake : Ensure that Motif libraries appear before X11 libraries in
+  link line. Prevents item 321 in the Motif FAQ regarding "non-widget child 
+  "dsm"' errors. 
+
+29th November 2011 Ben Morgan (opengl-V09-04-26)
+- sources.cmake : Ensure that G4OpenGLXViewer is built when
+  only Xm driver is enabled.
+
+15th November 2011  John Allison  (opengl-V09-04-25)
+- (opengl-V09-04-24 was a mis-tag.)
+- G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: Fixed compiler warning.
+- G4OpenGLSceneHandler::AddPrimitivesCircle, AddPrimitivesSquare and
+  AddCircleSquareVector:
+  o Changed pass-by-value to pass-by-reference to avoid copying.
+
+14th November 2011  Laurent Garnier  (opengl-V09-04-23)
+- G4OpenGLQtViewer.cc : Fix a Q_EMIT macro if Qt version < 4.4
+
+13th November 2011  John Allison
+- G4OpenGLStoredQtViewer::DrawText: Limited warnings.
+
+12th November 2011  John Allison  (opengl-V09-04-22)
+- G4OpenGLQtViewer.cc: Fixed default auxiliary edge tick-mark.
+- G4OpenGLStoredQtSceneHandler::ExtraTOProcessing:
+  o Suppressed debug printing.
+
+11th November 2011  John Allison  (opengl-V09-04-21)
+- G4OpenGLViewer.cc: Coverity fix.
+
+11th November 2011  John Allison  (opengl-V09-04-20)
+- G4OpenGLStoredQtSceneHandler.hh/cc: Protected with
+  #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+- G4OpenGLQtViewer::viewComponentItemChanged:
+  o Commented out unused lines to prevent compiler warnings.
+- G4OpenGLViewer::DrawText, ChangePointSize and ChangeLineWidth:
+  o Converted doubles to prevent compiler warnings.
+
+10th November 2011  John Allison
+- G4OpenGLStoredQtViewer.cc: Fixed compiler warning and tidied.
+- G4OpenGLStoredQtSceneHandler.cc: Tidied.
+
+9th November 2011  Laurent Garnier
+- G4OpenGLViewer : Fix bug on printEPS vectored blank scene
+
+7th November 2011  John Allison
+- G4OpenGLViewerMessenger.cc:
+  o ApplyCommand("/vis/viewer/refresh") after /vis/ogl/printEPS.
+
+6th November 2011  Joseph Perl (opengl-V09-04-19)
+- Retagged. previous tag was misapplied.
+
+6th November 2011  John Allison (opengl-V09-04-18)
+- Transparency still an issue:
+  o Revert to "always select" (G4OpenGLStoredQtViewer::POSelected:
+    return true;).
+  o No tag of interefaces, therefore no "Viewer components" window.
+
+6st November 2011  Laurent Garnier
+- G4OpenGLQtViewer : Fix transparency problem
+
+5st November 2011  Laurent Garnier
+- G4OpenGLStoredQtViewer : Fiw a redraw problem for Qt (John)
+- G4OpenGLQtViewer : Add label on tree
+
+5st November 2011  Laurent Garnier
+- Fix compiler warnings in 
+ o src/G4OpenGLStoredQtViewer.cc
+ o include/G4OpenGLStoredSceneHandler.hh
+ o include/G4OpenGLStoredViewer.hh
+
+5st November 2011  Joseph Perl (opengl-V09-04-17)
+- sources.cmake needs G4OpenGLStoredQtSceneHandler
+
+5st November 2011  Laurent Garnier 
+- G4OpenGLQtViewer/ G4StoredQtViewer : Begin work for changing tree when changing tab
+
+4st November 2011  Laurent Garnier 
+- G4OpenGLQtViewer : Improvments on touchable tree viewer
+- Add files : 
+  o G4OpenGLStoredQtSceneHandler.hh
+  o G4OpenGLStoredQtSceneHandler.cc
+
+4st November 2011  Laurent Garnier 
+- G4OpenGLStoreViewer/ G4OpenGLStoreQtViewer : Add methods POSelected/TOSelected (John)
+- G4OpenGLQtViewer :
+  o Add method to manipulate tree volume
+  o Add variables to check performance
+  o Remove old tree volume methods (here for testing)
+- G4OpenGLStoreSceneHandler : Add methods ExtraPOProcessing/ExtraTOProcessing (John)
+- G4OpenGLStoredQt.cc : Implementation of StoreQtViewer (John)
+
+
+4st November 2011  Laurent Garnier  (opengl-V09-04-15)
+- Display message when using Text on Stored mode in Qt (problem not fixed)
+
+27th October 2011  John Allison
+- G4OpenGLStoredViewer.cc:
+  o Unwrap PODLs (permanent object display lists, geometry volumes
+    mainly).  Previously, the PODLs were called from a "top PODL".
+    Instead, so that we can have control over which are drawn, they
+    are called in a loop, like the TODLs (transient ODLs).  The is no
+    measureable performance penalty, even on complex geometies.  (The
+    top PODL still exists, but is not used; the corresponding code to
+    call the top PODL is commented out.)
+- G4OpenGLViewer.cc: Fix compilation warning.
+
+27st October 2011  Laurent Garnier
+- fix compilation warning on XCode
+
+26st October 2011  Laurent Garnier
+- Change minor things for ppmtompeg tool
+- speed improvements in G4StoreViewer (+10%)
+
+24st October 2011  Laurent Garnier
+- G4OpenGLXViewer, G4OpenGLQtViewer, G4OpenGLViewer :
+  o Change name of drawGl2psText in DrawText in order to be able to
+    Draw gl2ps text even on viewers where no 2D text is implemented
+- Fix problem with marker size on gl2ps
+  o G4OpenGLViewer : Add two methods ChangePointSize and ChangeLineWidth 
+
+21st October 2011  Laurent Garnier
+- G4OpenGLXViewer : move text positioning in SceneHandler (factorising)
+- G4OpenGLSceneHandler : set text position
+-> Fix bad positionning text in gl2ps
+-> Fix text color in gl2ps
+
+21st October 2011  John Allison  (opengl-V09-04-14)
+- Tagged.
+
+21st October 2011  Laurent Garnier
+- G4OpenGLViewer : Fix missing text after printEPS in Immediate mode (need visexternal-V09-04-02 )
+
+20th October 2011  Laurent Garnier
+- G4OpenGLViewer 
+  o automaticaly extend gl2ps buffer size if needed
+  o Add some error messages
+
+19th October 2011  Laurent Garnier
+- G4OpenGLSceneHandler :
+  Fix a bug with marker, circle markers now appear with a circle marker
+  For this, copy AddPrimitives in 2 methods
+    AddPrimitivesCircle and AddPrimitivesSquare
+-G4OpenGLViewer : add default parameter for gl2ps line width and point
+  size in variable
+
+18th October 2011  John Allison  (opengl-V09-04-13)
+- Tagged.
+
+17th October 2011  Laurent Garnier
+- G4OpenGLXmViewer :
+  o Fix null pointer when open Panning panel.
+  o Add a UpdateControlPanel method
+
+16th October 2011  John Allison
+- G4OpenGLStoredSceneHandler.cc:
+  o Moved
+      if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+    from AddPrimitivePreamble to BeginPrimitives and
+      ScaledFlush();
+      glDrawBuffer (GL_BACK);
+    from AddPrimitivePostamble to EndPrimitives.  The number of calls
+    to glDrawBuffer and number of (scaled) flushes is reduced, i.e.,
+    once per bunch of primitives instead of every primitive.
+
+15th October 2011  John Allison (opengl-V09-04-12)
+- G4OpenGLStoredXViewer, G4OpenGLStoredXmViewer:
+  o Added ClearView (see note on 13th October re non-appearence of
+    trajectories).
+- G4OpenGLStoredSceneHandler.cc:
+  o Move ScaledFlush back to AddPrimitivePostamble (see note of 13th Oct).
+    This addresses the problem of seeing trajectories in real time
+    as generated.  I was wrong to move it to EndPrimitives.  It has
+    to be done on the front buffer, before switching back to the
+    back buffer, so it has to be done for each primitive.  But now it's
+    scaled, that's not a problem.
+
+14th October 2011  Laurent Garnier
+- G4OpenGLXmViewer : Implement ResetView method, move some parameters
+  into .hh files. Call ResetView at beggining to set parameters
+
+13th October 2011  John Allison
+- G4OpenGLSceneHandler: 
+  o Introduced ScaledFlush to flush after every 100 primitives.
+- G4OpenGLStoredSceneHandler:
+  o Re-engineered to use ScaledFlush in EndPrimitives.  It was in
+    AddPrimitivePostamble, i.e, it was getting a flush after each
+    primitive, which is more often than necessary.  The flush should
+    have been after each bunch of primitives, i.e., in EndPrimitives.
+    (I think this is why drawing slowed down a couple of years ago.)
+    Even so, a flush would happen too often, so it is scaled.
+- G4OpenGLImmediateSceneHandler:
+  o Use ScaledFlush in EndPrimitives.
+- G4OpenGLStoredXViewer, G4OpenGLStoredXmViewer:
+  o Implement ShowView, which calls DrawView, to handle non appearence
+    of trajectories on some X servers, particularly Mac XQuartz.
+    Re-visit this at some future date.
+
+11th October 2011  John Allison
+- G4OpenGLViewer::ResetView: Invoke G4VViewer::ResetView.
+- Fix G4OpenGLXmViewer::get_boolean_userData (mask lower 16 bits).
+
+11th Octobre 2011 Laurent Garnier
+- move pan and rotation sensibility management in G4OpenGLViewer claa
+- Integrate free rotation in all GL viewers
+- G4OpenGLQtViewer : Remove emit of non-used move/rotate signals, remove unused methods
+- OpenGL viewer : Implement ResetView (useful for Xm and Qt for the moment)
+
+7th October 2011 Laurent Garnier (opengl-V09-04-11)
+- Fixed compilation warning on X Viewer.
+
+6th October 2011 Laurent Garnier (opengl-V09-04-10)
+- Fixed one more compilation error on Windows in G4OpenGLWin32Viewer.
+
+3rd October 2011 Laurent Garnier (opengl-V09-04-09)
+- Fix Warning with DrawText and compilation error on Windows.
+
+26th September 2011  John Allison  (opengl-V09-04-08)
+- Re-instated QWidget* fUIViewComponentsTBWidget.
+
+23th September 2011  Laurent Garnier
+- G4OpenGLViewers : uncomment the glDrawBuffer (GL_FRONT) at initialisation
+- Add a flush in ShowView in Qt GL Viewers
+- Some improvments about DrawText in OpenGL (Still some problems on Store Qt)
+
+22th September 2011  Laurent Garnier
+ -add DrawText() method for X and Qt viewers :
+
+22th September 2011  Laurent Garnier
+- G4OpenGLStoredSceneHandler : Add a parameter to wait until 100 lists generate until do a
+  glFlush.  glFlush take about 90% time in store mode, divide glFluch  number by 100 will
+  change the first vis time from 100% to 10+90/100 = 10,9%
+
+20th September 2011  John Allison
+- Fix transparency problem:
+  G4OpenGLImmediateXViewer.cc, G4OpenGLStoredXViewer.cc,
+  G4OpenGLImmediateXmViewer.cc, G4OpenGLStoredXmViewer.cc,
+  G4OpenGLImmediateQtViewer.cc, G4OpenGLStoredQtViewer.cc,
+  G4OpenGLViewer.cc:
+  Move initial gl commands to G4OpenGLViewer::InitializeGLView,
+  which is called from each particular viewer's Initialise or, in
+  the case of G4OpenGLImmediate/StoredQtViewer::initializeGL, from Qt
+  at initialisation.  This includes the following commands relevant to
+  transparency, so they are now uniformly invoked for all viewers.
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+17th September 2011  John Allison
+- G4OpenGLQtViewer:
+  o Removed SetView (it did nothing).
+  o Removed unnecessary #include's.
+- G4OpenGLViewer.cc: Fixed printf statement.
+- Migrated to new G4Exception.
+
+10th August 2011 Laurent Garnier
+- Add flag to not include vis into tab widget if qApp is external
+- Remove static-cast on int values
+
+5th August 2011 Gabriele Cosmo (opengl-V09-04-07)
+- Added protection to restrict inclusion of headers in the previous tag
+  only for MacOS systems, where the problem is observed.
+
+5th August 2011 Gabriele Cosmo (opengl-V09-04-06)
+- Fix in G4OpenGL.hh for proper inclusion of <OpenGL/gl.h> and <OpenGL/glu.h>
+  for Qt build, when GL/X11 is not selected.
+  Fixes compilation problem happening in either GNUMake and CMake builds, when
+  selection Qt/GL driver.
+
+21st June 2011  John Allison
+- Removed struct G4OpenGLViewerFeedback3Dcolor.  Not needed since G4 v.6.
+
+17th June 2011 Ben Morgan (opengl-V09-04-05)
+- sources.cmake : Added support for building Xm and Win32 components.
+
+17th June 2011  John Allison  (opengl-V09-04-04)
+- G4OpenGLViewer.cc: Re-instated cutaways in intersection mode.  (Seems
+  they got accidentally commented out.)
+
+16th June 2011  John Allison  (opengl-V09-04-03)
+- Tagged.
+
+16th June 2011 L. Garnier
+- Fix conflict with qgl.h and GL/gh.h in include files
+
+2nd June 2011  John Allison  (opengl-V09-04-02)
+- Tagged.
+
+27th May 2011 L. Garnier
+- Fix bug G4OpenGLViewer.cc
+
+26th May 2011 L. Garnier
+- Fix compilation bug in G4OpenGLViewer.cc
+
+25th May 2011 Ben Morgan
+- sources.cmake : Added section to enable building of X11 component if user has
+  requested this.
+  Simplified addition of compile definitions so that all files in the category
+  pick them up. This replicates the behaviour of the current Makefiles.
+
+20th May 2011 L.Garnier
+- G4OpenGLViewer.cc : Add methods for viewerComponent tree
+
+17th May 2011  John Allison  (opengl-V09-04-01)
+- G4OpenGLSceneHandler.cc,G4OpenGLXmConvenienceRoutines.cc:
+  o Fixed gcc-4.6.0 warnings about unused variables.
+- G4OpenGLViewer.cc: Fixed Coverity warning
+
+13th April, 2011 L. Garnier
+- G4OpenGLQtViewer, G4OpenGLStoreQtViewer, G4OpenGLQtMovieDialog: Fix some potentiel problems 
+  with other Signal/Slot systems (boost)
+
+11th April, 2011 L. Garnier
+- Coverity warning fix
+
+6th April 2011 Laurent Garnier
+- G4OpenGLQtViewer add flag for batch mode. It works !
+
+2nd March 2011  John Allison
+- G4OpenGLViewer.cc: Fix Coverity warnings.
+
+2nd March 2011 Laurent Garnier
+- Get rid of old Qt3 code
+
+1st March 2011  Laurent Garnier
+- Fix Xm OpenGL inclusion problem by invert moving GL include at the beginning 
+
+23st February 2011  Laurent Garnier
+- Replace mpeg_encoder by ppmtompeg 
+
+10th January 2011  Laurent Garnier
+- Try to fix mix between GL include from X11 and GL include from Qt (APPLE stuff)
+
+7th January 2011  John Allison
+- G4OpenGLViewerMessenger.cc: Fixed problem of missing return statements.
+
+27th December 2010  John Allison  (opengl-V09-04-00)
+- Tagged.
+
+11th December 2010  John Allison
+- Fixed some Coverity warnings.
 
 13th November 2010  John Allison  (opengl-V09-03-10)
 - Tagged.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.10 2010/04/13 07:19:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ReflectionFactory.cc,v 1.10 2010-04-13 07:19:01 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -411,13 +411,12 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
   //
   if (fReflectedLVMap.find(LV) != fReflectedLVMap.end())
   {
-    G4cerr << "ERROR - G4ReflectionFactory::CreateReflectedLV(..): "
+    std::ostringstream message;
+    message << "Invalid reflection for volume: "
            << LV->GetName() << G4endl
-           << "        Cannot be applied to an already reflected volume !"
-           << G4endl;
-    G4Exception("G4ReflectionFactory::CreateReflectedLV(..)",
-                "NotApplicable", FatalException,
-                "Cannot be applied to a volume already reflected.");
+           << "Cannot be applied to a volume already reflected !";
+    G4Exception("G4ReflectionFactory::CreateReflectedLV()",
+                "GeomVol0002", FatalException, message);
   }        
               
   G4VSolid* refSolid 
@@ -674,13 +673,11 @@ void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV,
   // a constituent volume into a reflected volume. 
   // ---
 
-  G4cerr << "ERROR - G4ReflectionFactory::ReflectPVParameterised(...): "
-         << dPV->GetName() << G4endl
-         << "        Reflection of parameterised volumes "
-         << "is not yet implemented." << G4endl;
-  G4Exception("G4ReflectionFactory::ReflectPVParameterised(...)",
-              "NotImplemented", FatalException,
-              "Sorry, not yet implemented.");
+  std::ostringstream message;
+  message << "Not yet implemented. Volume: " << dPV->GetName() << G4endl
+          << "Reflection of parameterised volumes is not yet implemented.";
+  G4Exception("G4ReflectionFactory::ReflectPVParameterised()",
+              "GeomVol0001", FatalException, message);
 }
 
 //_____________________________________________________________________________
@@ -799,11 +796,11 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
 
   if (diff > fScalePrecision)
   {
-    G4cerr << "ERROR - G4ReflectionFactory::CheckScale(..)" << G4endl
-           << "        Unexpected scale. Difference: " << diff << G4endl;
-    G4Exception("G4ReflectionFactory::CheckScale(..)",
-                "WrongArgumentValue", FatalException,
-                "Unexpected scale in input !");
+    std::ostringstream message;
+    message << "Unexpected scale in input !" << G4endl
+            << "        Difference: " << diff;
+    G4Exception("G4ReflectionFactory::CheckScale()",
+                "GeomVol0002", FatalException, message);
   }
 }    
 
@@ -818,17 +815,18 @@ G4VPVDivisionFactory* G4ReflectionFactory::GetPVDivisionFactory() const
   G4VPVDivisionFactory* divisionFactory = G4VPVDivisionFactory::Instance();
   if (!divisionFactory)
   {
-     G4cerr << "ERROR - G4ReflectionFactory::GetPVDivisionFactory()" << G4endl
+    std::ostringstream message;
+    message << "A concrete G4PVDivisionFactory instantiated is required !"
+            << G4endl
             << "        It has been requested to reflect divided volumes."
             << G4endl
             << "        In this case, it is required to instantiate a concrete"
             << G4endl
             << "        factory G4PVDivisionFactory in your program -before-"
             << G4endl
-            << "        executing the reflection !" << G4endl;
+            << "        executing the reflection !";
      G4Exception("G4ReflectionFactory::GetPVDivisionFactory()",
-                 "WrongSetup", FatalException,
-                 "A concrete G4PVDivisionFactory instantiated is required !");
+                 "GeomVol0002", FatalException, message);
   }
   
   return divisionFactory;

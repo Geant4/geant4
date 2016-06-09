@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.18 2006/06/29 21:29:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VVisCommand.cc,v 1.18 2006-06-29 21:29:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.

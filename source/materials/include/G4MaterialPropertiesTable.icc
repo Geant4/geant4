@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc,v 1.1 2009/04/21 15:35:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MaterialPropertiesTable.icc,v 1.1 2009-04-21 15:35:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -51,7 +51,8 @@ void G4MaterialPropertiesTable::AddConstProperty(const char *key,
 }
 
 inline
-void G4MaterialPropertiesTable::AddProperty(const char *key,
+G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
+                                            const char *key,
                                             G4double   *PhotonEnergies,
                                             G4double   *PropertyValues,
                                             G4int      NumEntries)
@@ -62,6 +63,8 @@ void G4MaterialPropertiesTable::AddProperty(const char *key,
   G4MaterialPropertyVector *mpv = new G4MaterialPropertyVector(PhotonEnergies, 
                                                    PropertyValues, NumEntries);
   MPT [G4String(key)] = mpv;
+
+  return mpv;
 }
 
 inline
@@ -100,7 +103,7 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
   } 
   else
   {
-    G4Exception("G4MaterialPropertiesTable::GetConstProperty()", "NotFound",
+    G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
                 FatalException, "Constant Material Property not found.");
   }
   return val;
@@ -145,30 +148,11 @@ void G4MaterialPropertiesTable::AddEntry(const char *key,
   G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
   if (targetVector != 0)
   {
-    targetVector->AddElement(aPhotonEnergy, aPropertyValue);
+    targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
   }
   else
   {
-    G4Exception("G4MaterialPropertiesTable::AddEntry()", "NotFound",
-                FatalException, "Material Property Vector not found.");
-  }
-}
-
-inline
-void G4MaterialPropertiesTable::RemoveEntry(const char *key,  
-                                            G4double    aPhotonEnergy)
-{
-  // Allows to remove an entry pair directly from the Material Property Vector
-  // given a key
-
-  G4MaterialPropertyVector* targetVector = MPT [G4String(key)];
-  if (targetVector)
-  {
-    targetVector->RemoveElement(aPhotonEnergy);
-  }
-  else
-  {
-    G4Exception("G4MaterialPropertiesTable::RemoveEntry()", "NotFound",
+    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat203",
                 FatalException, "Material Property Vector not found.");
   }
 }

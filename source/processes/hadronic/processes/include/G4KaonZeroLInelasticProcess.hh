@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // G4 Process: KaonZeroL Inelastic Process
- // J.L. Chuma, TRIUMF, 11-Feb-1997
- // Last modified: 03-Apr-1997
+// G4 Process: KaonZeroL Inelastic Process
+// J.L. Chuma, TRIUMF, 11-Feb-1997
+//
 
 #ifndef G4KaonZeroLInelasticProcess_h
 #define G4KaonZeroLInelasticProcess_h 1
@@ -38,18 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4KaonZeroLInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4KaonZeroLInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4KaonZeroLInelasticProcess(
-     const G4String& processName = "KaonZeroLInelastic" ) :
-      G4HadronInelasticProcess( processName, G4KaonZeroLong::KaonZeroLong() )
-    { }
+    G4KaonZeroLInelasticProcess(const G4String& processName = "KaonZeroLInelastic");
     
-    ~G4KaonZeroLInelasticProcess()
-    { }
-    
- };
- 
+    ~G4KaonZeroLInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
 #endif

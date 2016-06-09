@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.22 2010/09/20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.23 2010-12-07 10:42:40 vuzhinsk Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -70,7 +70,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    ClusterLoopInterrupt   =  500;
 
 // Changable Parameters below.
-   SigmaQT = 0.5 * GeV;  // 0.5
+   SigmaQT = 0.5 * GeV;  // 0.5 0.1
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
    DiquarkSuppress  = 0.07;
@@ -247,6 +247,7 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
         {
            // spin 0 meson or spin 1/2 barion will be built
 
+//G4cout<<"String Left Right "<<string->GetLeftParton()<<" "<<string->GetRightParton()<<G4endl;
            Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),
 			                         string->GetRightParton());
 //G4cout<<"Hadron1 "<<Hadron1->GetParticleName()<<G4endl;
@@ -325,7 +326,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
 {
 //G4cout<<"Start SplitUP"<<G4endl;
        //... random choice of string end to use for creating the hadron (decay)   
-       SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
+       G4int SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
        if (SideOfDecay < 0)
        {
 	  string->SetLeftPartonStable();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.30 2010/09/20 16:22:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicsVector.icc,v 1.30 2010-09-20 16:22:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -41,6 +41,24 @@
 //    energy scale, for example like 'log', 'linear', 'free', etc.
 //
 //---------------------------------------------------------------
+
+#if defined G4GLOB_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4PhysicsVector> aPVAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4PhysicsVector> aPVAllocator;
+#endif
+
+inline void* G4PhysicsVector::operator new(size_t)
+{
+  void* aVector;
+  aVector = (void*)aPVAllocator.MallocSingle();
+  return aVector;
+}
+
+inline void G4PhysicsVector::operator delete(void* aVector)
+{
+  aPVAllocator.FreeSingle((G4PhysicsVector*)aVector);
+}
 
 inline
  G4double G4PhysicsVector::GetLastEnergy() const
@@ -207,3 +225,20 @@ inline
 {
   useSpline = val;
 }
+
+//---------------------------------------------------------------
+
+inline
+void G4PhysicsVector::SetVerboseLevel(G4int value)
+{
+   verboseLevel = value;
+}
+
+//---------------------------------------------------------------
+
+inline
+G4int G4PhysicsVector::GetVerboseLevel(G4int)
+{
+   return verboseLevel;
+}
+

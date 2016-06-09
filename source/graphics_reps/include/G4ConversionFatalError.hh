@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ConversionFatalError.hh,v 1.2 2006/12/13 15:44:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConversionFatalError.hh,v 1.2 2006-12-13 15:44:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Fatal G4Exception error
 //
@@ -35,15 +35,14 @@
 
 #include "globals.hh"
 #include "G4String.hh"
-#include <sstream>
 
 struct G4ConversionFatalError {
   
   void ReportError(const G4String& input, const G4String& message) const {
-    std::ostringstream o;
-    o <<input<<": "<<message;
-    G4Exception
-      ("G4ConversionAbort", "InvalidInput", FatalErrorInArgument, o.str().c_str());
+    G4ExceptionDescription ed; 
+    ed <<input<<": "<<message<<G4endl;
+    G4Exception("G4ConversionFatalError::ReportError",
+		"greps0101", FatalErrorInArgument, ed);
   }
   
 };

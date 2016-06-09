@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2010/11/19 12:17:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PhysicsList.hh,v 1.6 2011-01-06 18:34:38 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,38 +42,30 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+   ~PhysicsList();
 
-  void ConstructParticle();
-        
-  void AddPhysicsList(const G4String& name);
+    void ConstructParticle();
+    void ConstructProcess(); 
+               
+    void AddPhysicsList(const G4String& name);
+    void AddStepMax();       
     
-  void ConstructProcess();    
-  void AddDecay();
-  void AddStepMax();       
-    
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-  void SetCutForProton(G4double);
-  void SetFluorescence(G4bool);
-  void SetPIXE(G4bool);
-    
-private:
+    void SetCuts();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+      
+  private:
+  
+    PhysicsListMessenger* pMessenger; 
 
-  PhysicsListMessenger* pMessenger; 
-
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+    G4String emName;
+    G4VPhysicsConstructor*  emPhysicsList;
     
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;    
-  G4double cutForProton;    
-
+    G4double cutForGamma;
+    G4double cutForElectron;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

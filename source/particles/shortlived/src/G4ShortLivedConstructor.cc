@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.21 2010/10/09 10:02:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ShortLivedConstructor.cc,v 1.21 2010-10-09 10:02:41 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -90,84 +90,84 @@ void G4ShortLivedConstructor::ConstructQuarks()
   particle->SetAntiPDGEncoding(21);
   // u-quark
   particle = new G4Quarks(            
-	    "u_quark",         2.5*MeV,       0.0*MeV,   2./3.*eplus, 
+	    "u_quark",         2.4*MeV,       0.0*MeV,   2./3.*eplus, 
                     1,              +1,             0,          
                     1,              +1,             0,             
              "quarks",               0,             0,           2,
 		 true,            -1.0,          NULL);
   // d-quark
   particle = new G4Quarks(            
-	    "d_quark",         5.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+	    "d_quark",         4.9*MeV,       0.0*MeV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     1,              -1,             0,             
              "quarks",               0,             0,           1,
 		 true,            -1.0,          NULL);
   // s-quark
   particle = new G4Quarks(            
-	    "s_quark",       101.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+	    "s_quark",       100.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           3,
 		 true,            -1.0,          NULL);
   // c-quark
   particle = new G4Quarks(            
-	    "c_quark",        1.27*GeV,       0.0*MeV,  +2./3.*eplus, 
+	    "c_quark",        1.29*GeV,       0.0*MeV,  +2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           4,
 		 true,            -1.0,          NULL);
   // b-quark
   particle = new G4Quarks(            
-	    "b_quark",        4.67*GeV,       0.0*MeV,  -1./3.*eplus, 
+	    "b_quark",        4.19*GeV,       0.0*MeV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           5,
 		 true,            -1.0,          NULL);
   // t-quark
   particle = new G4Quarks(            
-	    "t_quark",       172.0*GeV,       0.0*MeV,  +2./3.*eplus, 
+	    "t_quark",       172.9*GeV,       2.0*GeV,  +2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           6,
 		 true,            -1.0,          NULL);
   // anti u-quark
   particle = new G4Quarks(            
-       "anti_u_quark",         2.5*MeV,       0.0*MeV,   -2./3.*eplus, 
+       "anti_u_quark",         2.4*MeV,       0.0*MeV,   -2./3.*eplus, 
                     1,              +1,             0,          
                     1,              -1,             0,             
              "quarks",               0,             0,          -2,
 		 true,            -1.0,          NULL);
   // anti d-quark
   particle = new G4Quarks(            
-       "anti_d_quark",         5.0*MeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_d_quark",         4.9*MeV,       0.0*MeV,   1./3.*eplus, 
                     1,              +1,             0,          
                     1,              +1,             0,             
              "quarks",               0,             0,          -1,
 		 true,            -1.0,          NULL);
   // s-quark
   particle = new G4Quarks(            
-       "anti_s_quark",       101.0*MeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_s_quark",       100.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -3,
 		 true,            -1.0,          NULL);
   // c-quark
   particle = new G4Quarks(            
-       "anti_c_quark",        1.27*GeV,       0.0*MeV,  -2./3.*eplus, 
+       "anti_c_quark",        1.29*GeV,       0.0*MeV,  -2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -4,
 		 true,            -1.0,          NULL);
   // b-quark
   particle = new G4Quarks(            
-       "anti_b_quark",        4.67*GeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_b_quark",        4.19*GeV,       0.0*MeV,   1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -5,
 		 true,            -1.0,          NULL);
   // t-quark
   particle = new G4Quarks(            
-       "anti_t_quark",       172.0*GeV,       0.0*MeV,  -2./3.*eplus, 
+       "anti_t_quark",       172.9*GeV,       2.0*GeV,  -2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -6,

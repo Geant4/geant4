@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetd.cc,v 1.8 2006/06/29 18:13:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdetd.cc,v 1.8 2006-06-29 18:13:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
 
 class G4VSensitiveDetector;
 
-void PG4gsdetd(G4String tokens[])
+void PG4gsdetd(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetd);

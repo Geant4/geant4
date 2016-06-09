@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.hh,v 1.2 2010/06/02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EmPenelopePhysics.hh,v 1.2 2010-06-02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4EmPenelopePhysics_h
 #define G4EmPenelopePhysics_h 1

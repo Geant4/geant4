@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.9 2008/10/24 14:17:10 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.9 2008-10-24 14:17:10 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -55,11 +55,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   : QDialog( parent ),
     isChangingSize(false)
 {
-#if QT_VERSION < 0x040000
-  setCaption( tr( " Export options" ));
-#else
   setWindowTitle( tr( " Export options" ));
-#endif
   originalWidth = aWidth;
   originalHeight = aHeight;
 
@@ -94,9 +90,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 //     boxTransparency->setChecked( false );
 
 //     transparencyGroupBoxLayout->addWidget(boxTransparency);    
-// #if QT_VERSION >= 0x040000
-//     transparencyGroupBox->setLayout(transparencyGroupBoxLayout);
-// #endif
 //     globalVLayout->addWidget(transparencyGroupBox);
 
 //   }
@@ -114,20 +107,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   sizeWidgetLayout->setMargin (10); 
 
   // original and modify radiobuttons
-#if QT_VERSION < 0x040000
-  QButtonGroup * sizeButtonGroupBox = new QButtonGroup ( 2,Qt::Vertical, tr("Size"),this);
-  sizeButtonGroupBox->setInsideMargin (15); 
-
-  original = new QRadioButton("Original",sizeButtonGroupBox);
-  modify = new QRadioButton("Modify",sizeButtonGroupBox);
-
-  sizeButtonGroupBox->insert(original);
-  sizeButtonGroupBox->insert(modify);
-  sizeButtonGroupBox->setExclusive(true);
-  sizeWidgetLayout->add(sizeButtonGroupBox);
-
-  connect( sizeButtonGroupBox, SIGNAL( clicked(int) ), this, SLOT( changeSizeBox()) );
-#else
   
   sizeGroupBox = new QGroupBox(tr("Size"));
   QVBoxLayout *sizeGroupBoxLayout = new QVBoxLayout(sizeGroupBox);
@@ -148,7 +127,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   sizeWidgetLayout->addWidget(sizeGroupBox);
   
   connect( sizeButtonGroupBox, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeSizeBox()) );
-#endif
   original->setChecked( true );
 
 
@@ -162,21 +140,11 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   heightLineLayout->addWidget(new QLabel("Height",heightWidget));
   height = new QLineEdit(tmp.setNum(originalHeight),heightWidget);
   height->setMaxLength(5);
-#if QT_VERSION < 0x040000
-  heightLineLayout->add(height);
-#else
   heightLineLayout->addWidget(height);
-#endif
 
-#if QT_VERSION >= 0x040000
   heightWidget->setLayout(heightLineLayout);
-#endif
 
-#if QT_VERSION < 0x040000
-  sizeWidgetLayout->add(heightWidget);
-#else
   sizeWidgetLayout->addWidget(heightWidget);
-#endif
   connect( height, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textHeightChanged(const QString &) ) );
 
 
@@ -185,26 +153,12 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
   QHBoxLayout *widthLineLayout = new QHBoxLayout(widthWidget);
 
-#if QT_VERSION < 0x040000
-  widthLineLayout->add(new QLabel("Width ",widthWidget));
-#else
   widthLineLayout->addWidget(new QLabel("Width ",widthWidget));
-#endif
   width = new QLineEdit(tmp.setNum(originalWidth),widthWidget);
   width->setMaxLength(5);
-#if QT_VERSION < 0x040000
-  widthLineLayout->add(width);
-#else
   widthLineLayout->addWidget(width);
-#endif
-#if QT_VERSION >= 0x040000
   widthWidget->setLayout(widthLineLayout);
-#endif
-#if QT_VERSION < 0x040000
-  sizeWidgetLayout->add(widthWidget);
-#else
   sizeWidgetLayout->addWidget(widthWidget);
-#endif
   connect( width, SIGNAL( textChanged ( const QString& ) ), this, SLOT( textWidthChanged(const QString &) ) );
 
 
@@ -214,25 +168,13 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   ratioCheckBox = new QCheckBox( "Keep ratio",sizeWidget);
   ratioCheckBox->setChecked( true );
 
-#if QT_VERSION < 0x040000
-  sizeWidgetLayout->add(ratioCheckBox);
-#else
   sizeWidgetLayout->addWidget(ratioCheckBox);
-#endif
 
-#if QT_VERSION < 0x040000
-  ratioCheckBox->setEnabled ( false );
-  heightWidget->setEnabled ( false );
-  widthWidget->setEnabled ( false );
-#else
   ratioCheckBox->hide();
   heightWidget->hide();
   widthWidget->hide();
-#endif
 
-#if QT_VERSION >= 0x040000
   sizeWidget->setLayout(sizeWidgetLayout);
-#endif
   globalVLayout->addWidget(sizeWidget);
 
  if (format == "eps") {
@@ -240,23 +182,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
    QGroupBox *EPSWidgetGroupBox = new QGroupBox(tr("EPS options"),this); // widget containing group button
 
 
-#if QT_VERSION < 0x040000
-
-    EPSWidgetGroupBox->setInsideMargin (15); 
-
-    //    QButtonGroup * EPSColorButtonGroupBox = new QButtonGroup( 2,Qt::Vertical, tr("EPS options"),this);
-    //    EPSGroupBoxLayout = new QVBoxLayout(EPSColorButtonGroupBox);
-    //     colorButton = new QRadioButton("Color",EPSColorButtonGroupBox);
-    //     BWButton = new QRadioButton("Grayscale",EPSColorButtonGroupBox);
-    //     EPSColorButtonGroupBox->setInsideMargin (15); 
-    //     EPSColorButtonGroupBox->insert(colorButton);
-    //     EPSColorButtonGroupBox->insert(BWButton);
-    //     EPSColorButtonGroupBox->setExclusive(true);
-    //     EPSWidgetGroupBox->add(EPSColorButtonGroupBox);
-
-    vectorEPSCheckBox = new QCheckBox( "Vector EPS File",EPSWidgetGroupBox);
-
-#else
     QVBoxLayout * EPSGroupBoxLayout = new QVBoxLayout(EPSWidgetGroupBox);
      EPSGroupBoxLayout->setMargin (15); 
 
@@ -275,7 +200,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
     EPSGroupBoxLayout->addWidget(vectorEPSCheckBox);
 
     EPSWidgetGroupBox->setLayout(EPSGroupBoxLayout);
-#endif
     //    colorButton->setChecked( true );
     vectorEPSCheckBox->setChecked( true );
     
@@ -292,23 +216,15 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
     hSliderLayout->setMargin (15); 
 
     qualitySlider= new QSlider(Qt::Horizontal,imageGroupBox);
-#if QT_VERSION < 0x040000
-    qualitySlider->setMinValue(0);
-    qualitySlider->setMaxValue(100);
-    qualitySlider->setTickmarks(QSlider::Below); 
-#else
     qualitySlider->setMinimum(0);
     qualitySlider->setMaximum(100);
     qualitySlider->setTickPosition(QSlider::TicksBelow);
-#endif
     qualitySlider->setValue(60);
     hSliderLayout->addWidget(new QLabel("Low ",imageGroupBox));
     hSliderLayout->addWidget(qualitySlider);
     hSliderLayout->addWidget(new QLabel(" Maximum",imageGroupBox));
     
-#if QT_VERSION >= 0x040000
     imageGroupBox->setLayout(hSliderLayout);
-#endif
 
     globalVLayout->addWidget(imageGroupBox);
   }
@@ -329,16 +245,12 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   buttonCancel->setAutoDefault( TRUE );
   buttonBoxLayout->addWidget(buttonCancel);
 
-#if QT_VERSION >= 0x040000
   buttonBox->setLayout(buttonBoxLayout);
-#endif
   globalVLayout->addWidget(buttonBox);
 
 
 
-#if QT_VERSION >= 0x040000
   setLayout(globalVLayout);
-#endif
 
   // signals and slots connections
   connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
@@ -392,30 +304,17 @@ void G4OpenGLQtExportDialog::changeVectorEPS()
 {
   if (!vectorEPSCheckBox) return;
   if (vectorEPSCheckBox->isChecked()) {
-#if QT_VERSION < 0x040000
-    original->setEnabled ( true );
-    modify->setEnabled ( true );
-#else
     sizeGroupBox->show();
     original->show();
     modify->show();
-#endif
     changeSizeBox();
   } else {
-#if QT_VERSION < 0x040000
-    original->setEnabled ( false );
-    modify->setEnabled ( false );
-    ratioCheckBox->setEnabled ( false );
-    heightWidget->setEnabled ( false );
-    widthWidget->setEnabled ( false );
-#else
     sizeGroupBox->hide();
     original->hide();
     modify->hide();
     ratioCheckBox->hide();
     heightWidget->hide();
     widthWidget->hide();
-#endif
   }
 }
 
@@ -428,25 +327,13 @@ void G4OpenGLQtExportDialog::changeSizeBox()
   if (!ratioCheckBox) return;
 
   if ( original->isChecked()) {
-#if QT_VERSION < 0x040000
-    ratioCheckBox->setEnabled ( false );
-    heightWidget->setEnabled ( false );
-    widthWidget->setEnabled ( false );
-#else
     ratioCheckBox->hide();
     heightWidget->hide();
     widthWidget->hide();
-#endif
   } else {
-#if QT_VERSION < 0x040000
-    ratioCheckBox->setEnabled ( true );
-    heightWidget->setEnabled ( true );
-    widthWidget->setEnabled ( true );
-#else
     heightWidget->show();
     widthWidget->show();
     ratioCheckBox->show();
-#endif
   }
 }
 

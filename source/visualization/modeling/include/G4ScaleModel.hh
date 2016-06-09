@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.hh,v 1.4 2006/11/01 10:28:42 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScaleModel.hh,v 1.4 2006-11-01 10:28:42 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  21st July 2001.

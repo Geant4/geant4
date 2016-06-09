@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationWithDeltaModel.cc,v 1.1 2010/10/26 15:40:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4mplIonisationWithDeltaModel.cc,v 1.1 2010-10-26 15:40:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -85,6 +85,7 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge, c
   G4cout << "### Monopole ionisation model with d-electron production, Gmag= " 
 	 << magCharge/eplus << G4endl;
   mass = 0.0;
+  monopole = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -54,11 +54,11 @@
 
 #include "G4HadronCrossSections.hh"
 #include "G4ios.hh"
- 
+#include "G4HadronicException.hh"
 
+ 
 // Initialize static pointer for singleton instance
-G4HadronCrossSections* 
-G4HadronCrossSections::theInstance = 0;
+G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
 
 
 // Cross section tables from G3.21/GHEISHA routine GHESIG
@@ -1214,85 +1214,37 @@ G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12};
 
 G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
 
+G4HadronCrossSections::G4HadronCrossSections()
+  : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
+    prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
+{}
 
-G4double G4HadronCrossSections::GetInelasticCrossSection(
-                          const G4DynamicParticle* particle,
-                          const G4Element* element)
+G4HadronCrossSections::~G4HadronCrossSections() 
+{}
+
+G4HadronCrossSections* G4HadronCrossSections::Instance()
 {
-  if (particle->GetDefinition() != prevParticleDefinition ||
-      element != prevElement ||
-      particle->GetKineticEnergy() != prevKineticEnergy) {
-
-    G4int nIso = element->GetNumberOfIsotopes();
-
-    if (nIso) {
-      G4double cross_section = 0;
-      G4IsotopeVector* isoVector = element->GetIsotopeVector();
-      G4double* abundVector = element->GetRelativeAbundanceVector();
-      G4int ZZ;
-      G4int AA;
-
-      for (G4int i = 0; i < nIso; i++) {
-        ZZ = (*isoVector)[i]->GetZ();
-        AA = (*isoVector)[i]->GetN();
-        CalcScatteringCrossSections(particle, ZZ, AA);
-        cross_section += siginelastic*abundVector[i];
-      }
-      siginelastic = cross_section;
-
-    } else {
-      G4int ZZ = G4lrint(element->GetZ());
-      G4int AA = G4lrint(element->GetN());
-      CalcScatteringCrossSections(particle, ZZ, AA);
-    }
+  if (!theInstance) {
+    static G4HadronCrossSections xsection;
+    theInstance = &xsection;
   }
-  return siginelastic;
+  return theInstance;
 }
 
+G4bool G4HadronCrossSections::IsApplicable(const G4DynamicParticle* aParticle)
+{
+  return (GetParticleCode(aParticle) > 0);
+}
 
 G4double
 G4HadronCrossSections::GetInelasticCrossSection(const G4DynamicParticle* particle,
                                                 G4int ZZ, G4int AA)
 {
-  prevElement = 0; // force new cross section calculation for next call of
-                   // GetInelasticCrossSection(particle, element, temp)
-  CalcScatteringCrossSections(particle, ZZ, AA);
-  return siginelastic;
-}
-
-
-G4double G4HadronCrossSections::GetElasticCrossSection(
-                          const G4DynamicParticle* particle,
-                          const G4Element* element)
-{
   if (particle->GetDefinition() != prevParticleDefinition ||
-      element != prevElement ||
-      particle->GetKineticEnergy() != prevKineticEnergy) {
-
-    G4int nIso = element->GetNumberOfIsotopes();
-
-    if (nIso) {
-      G4double cross_section = 0;
-      G4IsotopeVector* isoVector = element->GetIsotopeVector();
-      G4double* abundVector = element->GetRelativeAbundanceVector();
-      G4int ZZ;
-      G4int AA;
-
-      for (G4int i = 0; i < nIso; i++) {
-        ZZ = (*isoVector)[i]->GetZ();
-        AA = (*isoVector)[i]->GetN();
-        CalcScatteringCrossSections(particle, ZZ, AA);
-        cross_section += sigelastic*abundVector[i];
-      }
-      sigelastic = cross_section;
-
-    } else {
-      G4int ZZ = G4lrint(element->GetZ());
-      G4int AA = G4lrint(element->GetN());
-      CalcScatteringCrossSections(particle, ZZ, AA);
-    }
-  }
-  return sigelastic;
+      particle->GetKineticEnergy() != prevKineticEnergy ||
+      ZZ != prevZZ || AA != prevAA)
+    CalcScatteringCrossSections(particle, ZZ, AA);
+  return siginelastic;
 }
 
 
@@ -1300,9 +1252,11 @@ G4double
 G4HadronCrossSections::GetElasticCrossSection(const G4DynamicParticle* particle,
                                               G4int ZZ, G4int AA)
 {
-  prevElement = 0; // force new cross section calculation for next call of
-                   // GetElasticCrossSection(particle, element, temp)
-  CalcScatteringCrossSections(particle, ZZ, AA);
+  if (particle->GetDefinition() != prevParticleDefinition ||
+      particle->GetKineticEnergy() != prevKineticEnergy ||
+      ZZ != prevZZ || AA != prevAA)
+    CalcScatteringCrossSections(particle, ZZ, AA);
+
   return sigelastic;
 }
 
@@ -1584,73 +1538,69 @@ G4HadronCrossSections::CalcScatteringCrossSections(
    
 
 G4double
-G4HadronCrossSections::GetCaptureCrossSection(
-                          const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int /*AA*/)
+G4HadronCrossSections::GetCaptureCrossSection(const G4DynamicParticle* aParticle,
+                                              G4int ZZ)
 {
-   if (GetParticleCode(aParticle) != 16)  { return 0.; }
-   G4double ek = aParticle->GetKineticEnergy()/GeV;
-   if (ek > 0.0327)  { return 0.; }
+  if (GetParticleCode(aParticle) != 16) return 0.;
+  G4double ek = aParticle->GetKineticEnergy()/GeV;
+  if (ek > 0.0327)  { return 0.; }
 
-   G4double ekx = std::max(ek, 1.e-9);
-   if( ekx != lastEkx )
-   {
-     lastEkx = ekx;
-     lastEkxPower = std::pow(ekx*1.e6, 0.577);
-   }
+  G4double ekx = std::max(ek, 1.e-9);
+  if (ekx != lastEkx) {
+    lastEkx = ekx;
+    lastEkxPower = std::pow(ekx*1.e6, 0.577);
+  }
 
-   G4int izno = ZZ;
-   if (izno > 100) izno = 100;      // Not in GHESIG
-   izno = izno - 1;      // For array indexing
-   G4double sigcap = 11.12*cscap[izno]/lastEkxPower;
-   // Convert cross section from mb to default units
-   sigcap = sigcap*millibarn;
-   return sigcap;
+  G4int izno = ZZ;
+  if (izno > 100) izno = 100;      // Not in GHESIG
+  izno = izno - 1;      // For array indexing
+  G4double sigcap = 11.12*cscap[izno]/lastEkxPower;
+
+  // Convert cross section from mb to default units
+  sigcap = sigcap*millibarn;
+  return sigcap;
 }
 
 
 G4double
-G4HadronCrossSections::GetFissionCrossSection(
-                          const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int AA)
+G4HadronCrossSections::GetFissionCrossSection(const G4DynamicParticle* aParticle,
+                                              G4int ZZ, G4int AA)
 {
-   if (AA < 230) return 0;
+  if (AA < 230) return 0;
 
-   G4double ek = aParticle->GetKineticEnergy()/GeV;      
+  G4double ek = aParticle->GetKineticEnergy()/GeV;      
 
-   G4int ie1 = 0;
-   G4int ie2 = NFISS - 1;
-   do {
-      G4int midBin = (ie1 + ie2)/2;
-      if (ek < ekfiss[midBin])
-        ie2 = midBin;
-      else
-        ie1 = midBin;
-   } while (ie2 - ie1 > 1); 
-   G4int i = ie2;
-   if (ek < ekfiss[0]) i = 0;
+  G4int ie1 = 0;
+  G4int ie2 = NFISS - 1;
+  do {
+    G4int midBin = (ie1 + ie2)/2;
+    if (ek < ekfiss[midBin])
+      ie2 = midBin;
+    else
+      ie1 = midBin;
+  } while (ie2 - ie1 > 1); 
+  G4int i = ie2;
+  if (ek < ekfiss[0]) i = 0;
 
-   G4int j = 4;
-   if (ek <= 0.01) {
-      if (ZZ == 92 && AA == 233) j = 1;
-      else if (ZZ == 92 && AA == 235) j = 2;
-      else if (ZZ == 94 && AA == 239) j = 3;
-   }
-   G4double z43ba;
-   if (j == 4) {
-      z43ba = std::pow(G4double(ZZ), 4./3.)/G4double(AA);
-      z43ba = std::max(-67. + 38.7*z43ba, 0.);
-   }
-   else {
-      z43ba = 1.;
-   }
-   j = j - 1;      // For array indexing
-   G4double sigfiss = csfiss[j][i]*z43ba;
-// Convert from mb to cm^2
-   //         sigfiss = sigfiss*1.e-27;
-   // Convert cross section from mb to default units
-   sigfiss = sigfiss*millibarn;
-   return sigfiss;
+  G4int j = 4;
+  if (ek <= 0.01) {
+    if (ZZ == 92 && AA == 233) j = 1;
+    else if (ZZ == 92 && AA == 235) j = 2;
+    else if (ZZ == 94 && AA == 239) j = 3;
+  }
+
+  G4double z43ba;
+  if (j == 4) {
+    z43ba = std::pow(G4double(ZZ), 4./3.)/G4double(AA);
+    z43ba = std::max(-67. + 38.7*z43ba, 0.);
+  } else {
+    z43ba = 1.;
+  }
+  j = j - 1;      // For array indexing
+
+  G4double sigfiss = csfiss[j][i]*z43ba;
+  sigfiss = sigfiss*millibarn;
+  return sigfiss;
 }
 
 
@@ -1747,9 +1697,9 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
     case -3334:
       ipart = 34;  // anti-omega-
       break;
-    default:
-      G4Exception("G4HadronCrossSections", "007", FatalException,
-                  "GetParticleCode: unsupported particle");
+    default:      
+      throw G4HadronicException(__FILE__, __LINE__,
+        "G4HadronCrossSections::GetParticleCode: unsupported particle");
       return 0;
   }
 

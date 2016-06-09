@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: perspective.cc,v 1.3 2010/11/09 09:49:57 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: perspective.cc,v 1.3 2010-11-09 09:49:57 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"

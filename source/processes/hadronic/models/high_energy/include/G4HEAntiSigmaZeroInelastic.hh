@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HEAntiSigmaZeroInelastic.hh,v 1.14 2007/04/11 18:11:30 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEAntiSigmaZeroInelastic.hh,v 1.14 2007-04-11 18:11:30 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
 
 // A prototype of the Gheisha High Energy collision model.
 
@@ -53,30 +51,32 @@
 
 class G4HEAntiSigmaZeroInelastic : public G4HEInelastic  
 {
- public:  // with description
-   G4HEAntiSigmaZeroInelastic() : G4HEInelastic("G4HEAntiSigmaZeroInelastic")
-   {
-     theMinEnergy =  20*GeV;
-     theMaxEnergy = 10*TeV;
-     MAXPART      = 2048;
-     verboseLevel = 0; 
-   }
+  public:  // with description
+    G4HEAntiSigmaZeroInelastic() : G4HEInelastic("G4HEAntiSigmaZeroInelastic")
+    {
+      theMinEnergy =  20*GeV;
+      theMaxEnergy = 10*TeV;
+      MAXPART      = 2048;
+      verboseLevel = 0; 
+    }
 
-   ~G4HEAntiSigmaZeroInelastic(){ };
+    ~G4HEAntiSigmaZeroInelastic() {};
+
+    virtual void ModelDescription(std::ostream&) const;
          
-   G4int verboseLevel;
-   G4int MAXPART;
-   G4int vecLength;
+    G4int verboseLevel;
+    G4int MAXPART;
+    G4int vecLength;
 
-   void SetMaxNumberOfSecondaries(G4int maxnumber)
-       { MAXPART = maxnumber; };
-   void SetVerboseLevel(G4int verbose)
-       { verboseLevel = verbose;};
+    void SetMaxNumberOfSecondaries(G4int maxnumber)
+        { MAXPART = maxnumber; };
+    void SetVerboseLevel(G4int verbose)
+        { verboseLevel = verbose;};
 
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
 
-   G4int GetNumberOfSecondaries()
-        { return vecLength; }         
+    G4int GetNumberOfSecondaries()
+         { return vecLength; }         
 };
 #endif                     
                                          

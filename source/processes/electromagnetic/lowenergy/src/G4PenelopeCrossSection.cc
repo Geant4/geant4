@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCrossSection.cc,v 1.2 2010/12/15 07:39:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PenelopeCrossSection.cc,v 1.2 2010-12-15 07:39:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
@@ -45,8 +45,10 @@ G4PenelopeCrossSection::G4PenelopeCrossSection(size_t nPointsE,size_t nShells) :
   //check the number of points is not zero
   if (!numberOfEnergyPoints)
     {
-      G4cout << "G4PenelopeCrossSection: invalid number of energy points " << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "G4PenelopeCrossSection: invalid number of energy points " << G4endl;
+      G4Exception("G4PenelopeCrossSection::G4PenelopeCrossSection()",
+		  "em2017",FatalException,ed);
     }
 
   isNormalized = false;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.hh,v 1.2 2008/01/25 20:49:24 sincerti Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2008-01-25 20:49:24 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef DetectorConstruction_h
@@ -104,7 +104,6 @@ private:
   G4Box*             solidControlVol_GridShadow;
 
   G4Material*        defaultMaterial;
-  G4Material*        waterMaterial;
   G4Material*        gridMaterial;
 
   G4bool gradientsInitialized;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh,v 1.5 2010/10/25 17:23:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ElectronIonPair.hh,v 1.5 2010-10-25 17:23:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 #ifndef G4ElectronIonPair_h
@@ -50,7 +50,10 @@
 //   in space
 //
 // Based on ICRU Report 31, 1979
-// "Average Energy Required to Produce an Ion Pair"  
+// "Average Energy Required to Produce an Ion Pair" 
+//
+// 06.04.2010 V. Grichine, substitute Gauss by Gamma for ionisation 
+//                         distribution at fixed energy deposition
 // 
 // -------------------------------------------------------------
 
@@ -145,8 +148,14 @@ inline
 G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
 {
   G4double meanion = MeanNumberOfIonsAlongStep(step);
-  G4double sig = FanoFactor*std::sqrt(meanion);
-  G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
+  G4double lambda  = 1./FanoFactor;
+  G4double a       = meanion*lambda;
+
+  // old Gauss implementation
+  // G4double sig = FanoFactor*std::sqrt(meanion);
+  // G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
+
+  G4int nion = G4int(CLHEP::RandGamma::shoot(a,lambda) + 0.5);
   return nion;
 } 
 

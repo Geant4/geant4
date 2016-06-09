@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.17 2010/11/17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.17 2010-11-17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -49,6 +49,9 @@
 //                     return new G4DiscreteGammaTransition(*level,Z);
 //         Added in CanDoTransition
 //                if (level->HalfLife() > _max_hl && !_rdm ) canDo = false;
+//
+//		3 November 2011 L. Desorgher
+//       		remove the   Z<= 98  limit
 //      
 // -------------------------------------------------------------------
 
@@ -138,7 +141,9 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
 	<< G4endl;
   } 
   if (canDo)  {
-    if (_nucleusZ<2 || _nucleusA<3 || _nucleusZ>98)
+	//remove the   _nucleusZ>98 limit L. Desorgher Sept. 2011
+    //if (_nucleusZ<2 || _nucleusA<3 || _nucleusZ>98)
+	 if (_nucleusZ<2 || _nucleusA<3 )
       {
 	canDo = false;
 	if (_verbose > 0) 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.8 2010/10/26 15:40:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4mplIonisationModel.cc,v 1.8 2010-10-26 15:40:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -80,6 +80,7 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
   fParticleChange = 0;
   mass = 0.0;
+  monopole = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

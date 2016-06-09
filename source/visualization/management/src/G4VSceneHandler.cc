@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.96 2010/11/05 16:00:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VSceneHandler.cc,v 1.96 2010-11-05 16:00:11 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996
@@ -148,14 +148,17 @@ void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
   fNestingDepth++;
   if (fNestingDepth > 1)
-    G4Exception("G4VSceneHandler::BeginPrimitives: Nesting detected."
-		"\n  It is illegal to nest Begin/EndPrimitives.");
+    G4Exception
+      ("G4VSceneHandler::BeginPrimitives",
+       "visman0003", FatalException,
+       "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
   fpObjectTransformation = &objectTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives () {
   if (fNestingDepth <= 0)
-    G4Exception("G4VSceneHandler::EndPrimitives: Nesting error");
+    G4Exception("G4VSceneHandler::EndPrimitives",
+		"visman0004", FatalException, "Nesting error.");
   fNestingDepth--;
   fpObjectTransformation = 0;
   if (fReadyForTransients) {
@@ -168,14 +171,17 @@ void G4VSceneHandler::BeginPrimitives2D
 (const G4Transform3D& objectTransformation) {
   fNestingDepth++;
   if (fNestingDepth > 1)
-    G4Exception("G4VSceneHandler::BeginPrimitives2D: Nesting detected."
-		"\n  It is illegal to nest Begin/EndPrimitives.");
+    G4Exception
+      ("G4VSceneHandler::BeginPrimitives2D",
+       "visman0005", FatalException,
+       "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
   fpObjectTransformation = &objectTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives2D () {
   if (fNestingDepth <= 0)
-    G4Exception("G4VSceneHandler::EndPrimitives2D: Nesting error");
+    G4Exception("G4VSceneHandler::EndPrimitives2D",
+		"visman0006", FatalException, "Nesting error.");
   fNestingDepth--;
   fpObjectTransformation = 0;
   if (fReadyForTransients) {
@@ -262,7 +268,8 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
   G4TrajectoriesModel* trajectoriesModel =
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (!trajectoriesModel) G4Exception
-    ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+    ("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
+     "visman0007", FatalException, "Not a G4TrajectoriesModel.");
   else {
     if (trajectoriesModel->IsDrawingModeSet()) {
       traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());

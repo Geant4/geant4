@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.7 2008/11/21 18:27:42 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CoupledTransportation.hh,v 1.8 2011-01-05 00:59:03 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -125,9 +125,13 @@ class G4CoupledTransportation : public G4VProcess
      inline void ResetKilledStatistics( G4int report = 1);      
      // Statistics for tracks killed (currently due to looping in field)
 
+     inline G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
+     // Whether to deflect particles with force due to magnetic moment
+
   public:  // without description
 
      void StartTracking(G4Track* aTrack); 
+     void EndTracking();
 
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
@@ -217,6 +221,9 @@ class G4CoupledTransportation : public G4VProcess
      G4double fMaxEnergyKilled;
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
+
+  // Whether to track state change from magnetic moment in a B-field
+     G4bool   fUseMagneticMoment; 
 
   // Verbosity 
      G4int    fVerboseLevel;

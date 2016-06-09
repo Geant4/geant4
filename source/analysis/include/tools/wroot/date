@@ -1,0 +1,49 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_date
+#define tools_wroot_date
+
+//NOTE : no need to have to include windows.h here, time.h does the job.
+
+//#ifdef WIN32
+//#include <windows.h>
+//#else
+#include <time.h>
+//#endif
+
+namespace tools {
+namespace wroot {
+
+typedef unsigned int date;
+
+inline date get_date(){
+  // Set Date/Time to current time as reported by the system.
+  // Date and Time are encoded into one single unsigned 32 bit word.
+  // Date is stored with the origin being the 1st january 1995.
+  // Time has 1 second precision.
+//#ifdef WIN32
+//  SYSTEMTIME tp;
+//  ::GetLocalTime(&tp);
+//  unsigned int year   = tp.wYear-1900;
+//  unsigned int month  = tp.wMonth;
+//  unsigned int day    = tp.wDay;
+//  unsigned int hour   = tp.wHour;
+//  unsigned int min    = tp.wMinute;
+//  unsigned int sec    = tp.wSecond;
+//#else
+  time_t tloc = ::time(0);
+  struct tm *tp = (tm*)::localtime(&tloc);
+  unsigned int year   = tp->tm_year;
+  unsigned int month  = tp->tm_mon + 1;
+  unsigned int day    = tp->tm_mday;
+  unsigned int hour   = tp->tm_hour;
+  unsigned int min    = tp->tm_min;
+  unsigned int sec    = tp->tm_sec;
+//#endif
+  return ((year-95)<<26 | month<<22 | day<<17 | hour<<12 | min<<6 | sec);
+}
+
+}}
+
+#endif

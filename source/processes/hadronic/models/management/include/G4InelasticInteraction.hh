@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.7 2009/08/30 16:12:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4InelasticInteraction.hh,v 1.7 2009-08-30 16:12:13 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Inelastic Interaction 
 // This class is an abstract base class, since the pure virtual

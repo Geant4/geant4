@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeCrossSectionHandler.cc,v 1.2 2010/11/19 17:16:21 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PixeCrossSectionHandler.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -353,8 +353,11 @@ G4double G4PixeCrossSectionHandler::ValueForMaterial(const G4Material* material,
   crossSections = BuildCrossSectionsForMaterials(energyVector);
 
   if (crossSections == 0)
-  G4Exception("G4PixeCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
-
+  G4Exception("G4PixeCrossSectionHandler::BuildMeanFreePathForMaterials", 
+  "pii00000201",
+  FatalException,
+  "crossSections = 0");
+  
   G4IInterpolator* algo = CreateInterpolation();
   G4IDataSet* materialSet = new G4CompositeDataSet(algo);
 
@@ -433,7 +436,10 @@ void G4PixeCrossSectionHandler::BuildForMaterials()
   crossSections = BuildCrossSectionsForMaterials(energyVector);
 
   if (crossSections == 0)
-    G4Exception("G4PixeCrossSectionHandler::BuildForMaterials, crossSections = 0");
+    G4Exception("G4PixeCrossSectionHandler::BuildForMaterials",
+		"pii00000210",
+		FatalException,
+		", crossSections = 0");
 
   return;
 }
@@ -571,7 +577,10 @@ void G4PixeCrossSectionHandler::ActiveElements()
 {
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-    G4Exception("G4PixeCrossSectionHandler::ActiveElements - no MaterialTable found)");
+    G4Exception("G4PixeCrossSectionHandler::ActiveElements",
+				  "pii00000220",
+				  FatalException,
+				  "no MaterialTable found");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -636,7 +645,10 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-    G4Exception("G4PixeCrossSectionHandler - no MaterialTable found)");
+    G4Exception("G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials",
+		"pii00000230",
+		FatalException,
+		"no MaterialTable found");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 

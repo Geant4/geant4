@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.7 2010/03/25 15:28:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.7 2010-03-25 15:28:22 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

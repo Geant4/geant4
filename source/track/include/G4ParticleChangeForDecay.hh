@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.10 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForDecay.hh,v 1.10 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //
 // 
@@ -87,12 +87,16 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     virtual void Initialize(const G4Track&);
     // Initialize all propoerties by using G4Track information
 
-    G4double GetGlobalTime() const;
     void     ProposeGlobalTime(G4double t);
-    //  Get/Propose the final GlobalTime
+    void     ProposeLocalTime(G4double t);
+    //  Get/Propose the final global/local Time
+    // NOTE: DO NOT INVOKE both methods in a step
+    //       Each method affects both local and global time 
 
-    G4double GetGlobalTime(G4double timeDelay) const;
-    //  Convert the time delay to the global time.
+    G4double GetGlobalTime(G4double timeDelay=0.0) const;
+    G4double GetLocalTime(G4double timeDelay=0.0) const;
+    //  Convert the time delay to the glocbal/local time.
+    //  Can get  the final global/local  Time without argument
 
     const G4ThreeVector* GetPolarization() const;
     void  ProposePolarization(G4double Px, G4double Py, G4double Pz);
@@ -103,8 +107,13 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     virtual void DumpInfo() const;
 
   protected:
+    G4double theGlobalTime0;
+    //  The global time at Initial.
+    G4double theLocalTime0;
+    //  The local time at Initial.
+
     G4double theTimeChange;
-    //  The change of global time of a given particle.
+    //  The change of local time of a given particle.
 
     G4ThreeVector thePolarizationChange;
     //  The changed (final) polarization of a given track
@@ -115,21 +124,28 @@ class G4ParticleChangeForDecay: public G4VParticleChange
 };
 
 inline 
-  G4double G4ParticleChangeForDecay::GetGlobalTime() const
-{
-  return  theTimeChange;
-}
-
-inline 
   void G4ParticleChangeForDecay::ProposeGlobalTime(G4double t)
 {
-  theTimeChange = t;
+  theTimeChange = (t-theGlobalTime0) + theLocalTime0;
 }
    
 inline
  G4double  G4ParticleChangeForDecay::GetGlobalTime(G4double timeDelay) const
 {
   //  Convert the time delay to the global time.
+  return theGlobalTime0 + (theTimeChange-theLocalTime0) + timeDelay;
+}
+
+inline 
+  void G4ParticleChangeForDecay::ProposeLocalTime(G4double t)
+{
+  theTimeChange = t;
+}
+   
+inline
+ G4double  G4ParticleChangeForDecay::GetLocalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the local time.
   return theTimeChange + timeDelay;
 }
 

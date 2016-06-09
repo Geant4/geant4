@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/09/19 14:49:21 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2003-09-19 14:49:21 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for  processes/decay library.  G.Folger 9/12/97
 # --------------------------------------------------------------

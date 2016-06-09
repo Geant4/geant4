@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Be7GEMProbability.cc,v 1.6 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Be7GEMProbability.cc,v 1.6 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
 
 #include "G4Be7GEMProbability.hh"
 
@@ -43,59 +41,28 @@ G4Be7GEMProbability::G4Be7GEMProbability() :
 
   ExcitEnergies.push_back(4570.0*keV);
   ExcitSpins.push_back(7.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(175.0*keV));
+  ExcitLifetimes.push_back(fPlanck/(175.0*keV));
 
   ExcitEnergies.push_back(6.73e3*keV);
   ExcitSpins.push_back(5.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(1.2*MeV));
+  ExcitLifetimes.push_back(fPlanck/(1.2*MeV));
 
   ExcitEnergies.push_back(7210.0*keV);
   ExcitSpins.push_back(5.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(0.5*MeV));
+  ExcitLifetimes.push_back(fPlanck/(0.5*MeV));
 
   ExcitEnergies.push_back(9900.0*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(1.8*MeV));
+  ExcitLifetimes.push_back(fPlanck/(1.8*MeV));
 
   ExcitEnergies.push_back(11010.0*keV);
   ExcitSpins.push_back(3.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(320.0*keV));
+  ExcitLifetimes.push_back(fPlanck/(320.0*keV));
 
   ExcitEnergies.push_back(17000.0*keV);
   ExcitSpins.push_back(1.0/2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(6.5*MeV));
-
-  SetExcitationEnergiesPtr(&ExcitEnergies);
-  SetExcitationSpinsPtr(&ExcitSpins);
-  SetExcitationLifetimesPtr(&ExcitLifetimes);
+  ExcitLifetimes.push_back(fPlanck/(6.5*MeV));
 }
 
-
-G4Be7GEMProbability::G4Be7GEMProbability(const G4Be7GEMProbability &) : G4GEMProbability()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4Be7GEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4Be7GEMProbability & G4Be7GEMProbability::
-operator=(const G4Be7GEMProbability &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4Be7GEMProbability::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4Be7GEMProbability::operator==(const G4Be7GEMProbability &) const
-{
-  return false;
-}
-
-G4bool G4Be7GEMProbability::operator!=(const G4Be7GEMProbability &) const
-{
-  return true;
-}
-
-
-
+G4Be7GEMProbability::~G4Be7GEMProbability() 
+{}

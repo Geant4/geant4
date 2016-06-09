@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsSide.cc,v 1.7 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTubsSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -64,8 +64,8 @@ G4TwistTubsSide::G4TwistTubsSide(const G4String         &name,
      fKappa(kappa)
 {
    if (axis0 == kZAxis && axis1 == kXAxis) {
-      G4Exception("G4TwistTubsSide::G4TwistTubsSide()", "InvalidSetup",
-                  FatalException, "Should swap axis0 and axis1!");
+      G4Exception("G4TwistTubsSide::G4TwistTubsSide()", "GeomSolids0002",
+                  FatalErrorInArgument, "Should swap axis0 and axis1!");
    }
    fIsValidNorm = false;
    SetCorners();
@@ -428,12 +428,11 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
                                xx[k].z());
             }
             if (l == maxcount) {
-               G4cerr << "ERROR - G4TwistTubsSide::DistanceToSurface(p,v)"
-                      << G4endl
-                      << "        maxloop count " << maxcount << G4endl;
+               std::ostringstream message;
+               message << "Exceeded maxloop count!" << G4endl
+                      << "        maxloop count " << maxcount;
                G4Exception("G4TwistTubsFlatSide::DistanceToSurface(p,v)",
-                           "InvalidSetup",  FatalException,
-                           "Exceeded maxloop count!");
+                           "GeomSolids0003",  FatalException, message);
             }
          }
 
@@ -490,10 +489,8 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    //
    
    G4ThreeVector  lastgxx[2];
-   G4double       distfromlast[2];
    for (i=0; i<2; i++) {
       lastgxx[i] = fCurStatWithV.GetXX(i);
-      distfromlast[i] = (gp - lastgxx[i]).mag();
    } 
 
    if  ((gp - lastgxx[0]).mag() < halftol
@@ -538,11 +535,11 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector C;  // foot of normal from p to boundary of sAxis0 & sAxisMax
    G4ThreeVector B;       // point on boundary sAxis0 & sAxisMax at z = A.z()
    G4ThreeVector D;       // point on boundary sAxis0 & sAxisMin at z = C.z()
-   G4double      distToA; // distance from p to A
-   G4double      distToC; // distance from p to C 
 
-   distToA = DistanceToBoundary(sAxis0 & sAxisMin, A, p);
-   distToC = DistanceToBoundary(sAxis0 & sAxisMax, C, p);
+   // G4double      distToA; // distance from p to A
+   DistanceToBoundary(sAxis0 & sAxisMin, A, p);
+   // G4double      distToC; // distance from p to C 
+   DistanceToBoundary(sAxis0 & sAxisMax, C, p);
    
    // is p.z between a.z and c.z?
    // p.z must be bracketed a.z and c.z.
@@ -712,7 +709,7 @@ G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
    // if p is behind of both surfaces, abort.
    if (distToanm * distTocmn > 0 && distToanm < 0) {
      G4Exception("G4TwistTubsSide::DistanceToPlane()",
-                 "InvalidCondition", FatalException,
+                 "GeomSolids0003", FatalException,
                  "Point p is behind the surfaces.");
    }
 
@@ -838,7 +835,7 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx,
       return areacode;
    } else {
       G4Exception("G4TwistTubsSide::GetAreaCode()",
-                  "NotImplemented", FatalException,
+                  "GeomSolids0001", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -887,12 +884,12 @@ void G4TwistTubsSide::SetCorners(
       SetCorner(sC0Min1Max, x, y, z);
 
    } else {
-      G4cerr << "ERROR - G4TwistTubsFlatSide::SetCorners()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      std::ostringstream message;
+      message << "Feature NOT implemented !" << G4endl
+              << "        fAxis[0] = " << fAxis[0] << G4endl
+              << "        fAxis[1] = " << fAxis[1];
       G4Exception("G4TwistTubsSide::SetCorners()",
-                  "NotImplemented", FatalException,
-                  "Feature NOT implemented !");
+                  "GeomSolids0001", FatalException, message);
    }
 }
 
@@ -902,7 +899,7 @@ void G4TwistTubsSide::SetCorners(
 void G4TwistTubsSide::SetCorners()
 {
    G4Exception("G4TwistTubsSide::SetCorners()",
-               "NotImplemented", FatalException,
+               "GeomSolids0001", FatalException,
                "Method NOT implemented !");
 }
 
@@ -942,12 +939,12 @@ void G4TwistTubsSide::SetBoundaries()
                   GetCorner(sC0Min1Max), sAxisX);
                   
    } else {
-      G4cerr << "ERROR - G4TwistTubsFlatSide::SetBoundaries()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
+      std::ostringstream message;
+      message << "Feature NOT implemented !" << G4endl
+              << "        fAxis[0] = " << fAxis[0] << G4endl
+              << "        fAxis[1] = " << fAxis[1];
       G4Exception("G4TwistTubsSide::SetCorners()",
-                  "NotImplemented", FatalException,
-                  "Feature NOT implemented !");
+                  "GeomSolids0001", FatalException, message);
    }
 }
 

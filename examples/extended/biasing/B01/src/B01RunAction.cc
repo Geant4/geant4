@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01RunAction.cc,v 1.4 2007/06/22 13:29:45 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: B01RunAction.cc,v 1.4 2007-06-22 13:29:45 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 #include "B01RunAction.hh"
 #include "B01Run.hh"

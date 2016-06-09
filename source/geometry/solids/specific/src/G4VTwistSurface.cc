@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.10 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistSurface.cc,v 1.10 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -255,13 +255,14 @@ G4double G4VTwistSurface::DistanceToBoundary(G4int areacode,
    G4int         boundarytype;
 
    if (IsAxis0(areacode) && IsAxis1(areacode)) {
-      G4cerr << "ERROR - G4VTwistSurface::DistanceToBoundary()" << G4endl
-             << "        Point is in the corner area. This function returns"
-             << G4endl
-             << "        a direction vector of a boundary line." << G4endl
-             << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VTwistSurface::DistanceToBoundary()", "InvalidSetup",
-                  FatalException, "Point is in the corner area.");
+      std::ostringstream message;
+      message << "Point is in the corner area." << G4endl
+              << "        Point is in the corner area. This function returns"
+              << G4endl
+              << "        a direction vector of a boundary line." << G4endl
+              << "        areacode = " << areacode;
+      G4Exception("G4VTwistSurface::DistanceToBoundary()", "GeomSolids0003",
+                  FatalException, message);
    } else if (IsAxis0(areacode) || IsAxis1(areacode)) {
       GetBoundaryParameters(areacode, d, x0, boundarytype);
       if (boundarytype == sAxisPhi) {
@@ -274,10 +275,11 @@ G4double G4VTwistSurface::DistanceToBoundary(G4int areacode,
          dist = DistanceToLine(p, x0, d, xx);
       }
    } else {
-      G4cerr << "ERROR - G4VTwistSurface::DistanceToBoundary()" << G4endl
-             << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VTwistSurface::DistanceToBoundary()", "InvalidSetup",
-                  FatalException, "Bad areacode of boundary.");
+      std::ostringstream message;
+      message << "Bad areacode of boundary." << G4endl
+              << "        areacode = " << areacode;
+      G4Exception("G4VTwistSurface::DistanceToBoundary()", "GeomSolids0003",
+                  FatalException, message);
    }
    return dist;
 }
@@ -309,7 +311,9 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
    }
 
    G4double      bestdistance   = kInfinity;
+#ifdef G4TWISTDEBUG
    G4int         besti          = -1;  
+#endif
    G4ThreeVector bestgxx(kInfinity, kInfinity, kInfinity);
 
    G4int         nxx = DistanceToSurface(gp, gv, gxx, distance, areacode, 
@@ -345,9 +349,8 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
          if (distance[i] < bestdistance) {
             bestdistance = distance[i];
             bestgxx = gxx[i];
-            besti   = i;
-
 #ifdef G4TWISTDEBUG
+            besti   = i;
             G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                    << " areacode sInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
@@ -435,10 +438,10 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
 
          if (isaccepted[0] == true && isaccepted[1] == true) {
             if (distance[i] < bestdistance) {
-                bestdistance = distance[i];
-                gxxbest = gxx[i];
-                besti   = i;
+               bestdistance = distance[i];
+               gxxbest = gxx[i];
 #ifdef G4TWISTDEBUG
+               besti   = i;
                G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                       << " areacode sBoundary & sBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
@@ -500,7 +503,6 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
 
    G4int         nxx;
    G4double      bestdistance   = kInfinity;
-   G4int         besti          = -1;
 
    nxx = DistanceToSurface(gp, gv, gxx, distance, areacode,
                            isvalid, kValidateWithTol);
@@ -523,7 +525,6 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
          if (distance[i] < bestdistance) {
             bestdistance = distance[i];
             gxxbest = gxx[i];
-            besti   = i;
          }
       } 
    }
@@ -570,9 +571,8 @@ G4double G4VTwistSurface::DistanceTo(const G4ThreeVector &gp,
      areacode[i] = sOutside ;
    }
 
-   G4int nxx;
 
-   nxx = DistanceToSurface(gp, gxx, distance, areacode);
+   DistanceToSurface(gp, gxx, distance, areacode);
    gxxbest = gxx[0];
 
 #ifdef G4TWISTDEBUG
@@ -661,12 +661,13 @@ void G4VTwistSurface::GetBoundaryParameters(const G4int         &areacode,
       }
    }
 
-   G4cerr << "ERROR - G4VTwistSurface::GetBoundaryParameters()" << G4endl
-          << "        Boundary at areacode " << std::hex << areacode
-          << std::dec << G4endl
-          << "        is not be registered." << G4endl;
-   G4Exception("G4VTwistSurface::GetBoundaryParameters()", "InvalidSetup",
-               FatalException, "Not registered boundary.");
+   std::ostringstream message;
+   message << "Not registered boundary." << G4endl
+           << "        Boundary at areacode " << std::hex << areacode
+           << std::dec << G4endl
+           << "        is not registered.";
+   G4Exception("G4VTwistSurface::GetBoundaryParameters()", "GeomSolids0002",
+               FatalException, message);
 }
 
 //=====================================================================
@@ -680,13 +681,13 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
    // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
 
    if (areacode & sAxis0 && areacode & sAxis1) {
-     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
-            << "        Point is in the corner area. This function returns"
-            << G4endl
-            << "        a direction vector of a boundary line." << G4endl
-            << "        areacode = " << areacode << G4endl;
-     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidCondition",
-                 FatalException, "Point is in the corner area.");
+     std::ostringstream message;
+     message << "Point is in the corner area." << G4endl
+             << "        This function returns "
+             << "a direction vector of a boundary line." << G4endl
+             << "        areacode = " << areacode;
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "GeomSolids0003",
+                 FatalException, message);
    }
 
    G4ThreeVector d;
@@ -703,20 +704,22 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
    }
 
    if (!found) {
-     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
-            << "        Boundary at areacode " << areacode << G4endl
-            << "        is not be registered." << G4endl;
-     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidSetup",
-                 FatalException, "Not registered boundary.");
+     std::ostringstream message;
+     message << "Not registered boundary." << G4endl
+             << "        Boundary at areacode " << areacode << G4endl
+             << "        is not registered.";
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "GeomSolids0002",
+                 FatalException, message);
    }
 
    if (((boundarytype & sAxisPhi) == sAxisPhi) ||
        ((boundarytype & sAxisRho) == sAxisRho)) {
-     G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAtPZ()" << G4endl
-            << "        Boundary at areacode " << areacode << G4endl
-            << "        is not a z-depended line." << G4endl;
-     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "InvalidSetup",
-                 FatalException, "Not a z-depended line boundary.");
+     std::ostringstream message;
+     message << "Not a z-depended line boundary." << G4endl
+             << "        Boundary at areacode " << areacode << G4endl
+             << "        is not a z-depended line.";
+     G4Exception("G4VTwistSurface::GetBoundaryAtPZ()", "GeomSolids0002",
+                 FatalException, message);
    }
    return ((p.z() - x0.z()) / d.z()) * d + x0;
 }
@@ -727,10 +730,11 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
 void G4VTwistSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
 {
    if ((areacode & sCorner) != sCorner){
-     G4cerr << "ERROR - G4VTwistSurface::SetCorner()" << G4endl
-            << "        areacode " << areacode << G4endl;
-     G4Exception("G4VTwistSurface::SetCorner()", "InvalidSetup",
-                 FatalException, "Area code must represents corner.");
+     std::ostringstream message;
+     message << "Area code must represents corner." << G4endl
+             << "        areacode " << areacode;
+     G4Exception("G4VTwistSurface::SetCorner()", "GeomSolids0002",
+                 FatalException, message);
    }
 
    if ((areacode & sC0Min1Min) == sC0Min1Min) {
@@ -750,7 +754,7 @@ void G4VTwistSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double
 void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 {
    if ((areacode & sBoundary) != sBoundary) {
-     G4Exception("G4VTwistSurface::GetBoundaryAxis()", "InvalidCondition",
+     G4Exception("G4VTwistSurface::GetBoundaryAxis()", "GeomSolids0003",
                  FatalException, "Not located on a boundary!");
    }
    G4int i;
@@ -777,10 +781,11 @@ void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
          } else if (axiscode == (whichaxis & sAxisPhi)) {
             axis[i] = kPhi;
          } else {
-           G4cerr << "ERROR - G4VTwistSurface::GetBoundaryAxis()" << G4endl
-                  << "        areacode " << areacode << G4endl;
-           G4Exception("G4VTwistSurface::GetBoundaryAxis()", "InvalidSetup",
-                       FatalException, "Not supported areacode.");
+           std::ostringstream message;
+           message << "Not supported areacode." << G4endl
+                   << "        areacode " << areacode;
+           G4Exception("G4VTwistSurface::GetBoundaryAxis()", "GeomSolids0001",
+                       FatalException, message);
          }
       }
    }
@@ -816,10 +821,11 @@ void G4VTwistSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
          limit[0] = fAxisMax[1];
       }
    } else {
-     G4cerr << "WARNING - G4VTwistSurface::GetBoundaryAxis()" << G4endl
-            << "          areacode " << areacode << G4endl;
-     G4Exception("G4VTwistSurface::GetBoundaryLimit()", "InvalidCondition",
-                 JustWarning, "Not located on a boundary!");
+     std::ostringstream message;
+     message << "Not located on a boundary!" << G4endl
+             << "          areacode " << areacode;
+     G4Exception("G4VTwistSurface::GetBoundaryLimit()", "GeomSolids1002",
+                 JustWarning, message);
    }
 }
 
@@ -849,15 +855,16 @@ void G4VTwistSurface::SetBoundary(const G4int         &axiscode,
       }
 
       if (!done) {
-         G4Exception("G4VTwistSurface::SetBoundary()", "InvalidCondition",
+         G4Exception("G4VTwistSurface::SetBoundary()", "GeomSolids0003",
                       FatalException, "Number of boundary exceeding 4!");
       }
    } else {
-      G4cerr << "ERROR - G4VTwistSurface::SetBoundary()" << G4endl
-             << "        invalid axiscode. axiscode = "
-             << std::hex << axiscode << std::dec << G4endl;
-      G4Exception("G4VTwistSurface::SetBoundary()", "InvalidCondition",
-                  FatalException, "Invalid axis-code.");
+      std::ostringstream message;
+      message << "Invalid axis-code." << G4endl
+              << "        axiscode = "
+              << std::hex << axiscode << std::dec;
+      G4Exception("G4VTwistSurface::SetBoundary()", "GeomSolids0003",
+                  FatalException, message);
    }
 }
 
@@ -896,13 +903,13 @@ G4int G4VTwistSurface::GetFace( G4int i, G4int j, G4int m,
 
   else {
 
-   G4cerr << "ERROR - G4VTwistSurface::GetFace(): "
-           << GetName() << G4endl
-           << "        Not correct side number! - " << G4endl 
-           << "iside is " << iside << " but should be "
-           << "0,1,2,3,4 or 5" << "." << G4endl ;
-    G4Exception("G4TwistSurface::G4GetFace()", "InvalidSetup",
-                FatalException, "Not correct side number.");
+    std::ostringstream message;
+    message << "Not correct side number: "
+            << GetName() << G4endl
+            << "iside is " << iside << " but should be "
+            << "0,1,2,3,4 or 5" << ".";
+    G4Exception("G4TwistSurface::G4GetFace()", "GeomSolids0002",
+                FatalException, message);
 
 
   }
@@ -964,13 +971,13 @@ G4int G4VTwistSurface::GetNode( G4int i, G4int j, G4int m,
 
   else {
 
-    G4cerr << "ERROR - G4VTwistSurface::GetNode(): "
-           << GetName() << G4endl
-           << "        Not correct side number! - " << G4endl 
-           << "iside is " << iside << " but should be "
-           << "0,1,2,3,4 or 5" << "." << G4endl ;
-    G4Exception("G4TwistSurface::G4GetNode()", "InvalidSetup",
-                FatalException, "Not correct side number.");
+    std::ostringstream message;
+    message << "Not correct side number: "
+            << GetName() << G4endl
+            << "iside is " << iside << " but should be "
+            << "0,1,2,3,4 or 5" << ".";
+    G4Exception("G4TwistSurface::G4GetNode()", "GeomSolids0002",
+                FatalException, message);
   } 
   return -1 ;  // wrong node 
 } 
@@ -1025,11 +1032,10 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
     }
     
     else {
-      G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
-	     << GetName() << G4endl
-	     << "        Not correct face number! - " << G4endl ;
-	G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
-		    FatalException, "Not correct face number.");
+      std::ostringstream message;
+      message << "Not correct face number: " << GetName() << " !";
+      G4Exception("G4TwistSurface::G4GetEdgeVisibility()",
+                  "GeomSolids0003", FatalException, message);
     }
   }
   
@@ -1044,11 +1050,10 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
     }
 
     else {
-      G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
-	     << GetName() << G4endl
-	     << "        Not correct face number! - " << G4endl ;
-	G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
-		    FatalException, "Not correct face number.");
+      std::ostringstream message;
+      message << "Not correct face number: " << GetName() << " !";
+      G4Exception("G4TwistSurface::G4GetEdgeVisibility()",
+                  "GeomSolids0003", FatalException, message);
     }
   }
   
@@ -1062,25 +1067,22 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
   else if ( i == n-2 && j == m-2 ) { // signs (c) : -++-
     return ( number == 1 || number == 2 ) ? 1 : -1 ;
   }
-  else if ( i == n-2 && j == j ) {   // signs (d) : ++--
+  else if ( i == n-2 && j == 0 ) {   // signs (d) : ++--
     return ( number == 0 || number == 1 ) ? 1 : -1 ;
   }
   else {
-    G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
-           << GetName() << G4endl
-           << "        Not correct face number! - " << G4endl ;
-      G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
-		  FatalException, "Not correct face number.");
+    std::ostringstream message;
+    message << "Not correct face number: " << GetName() << " !";
+    G4Exception("G4TwistSurface::G4GetEdgeVisibility()",
+                "GeomSolids0003", FatalException, message);
   }
 
-  G4cerr << "ERROR - G4VTwistSurface::GetEdgeVisibliity(): "
-	 << GetName() << G4endl
-	 << "        Not correct face number! - " << G4endl ;
-    G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "InvalidSetup",
-		FatalException, "Not correct face number.");
-  
-  return 0 ;
+  std::ostringstream message;
+  message << "Not correct face number: " << GetName() << " !";
+  G4Exception("G4TwistSurface::G4GetEdgeVisibility()", "GeomSolids0003",
+              FatalException, message);
 
+  return 0 ;
 }
 
 
@@ -1169,9 +1171,8 @@ G4VTwistSurface::CurrentStatus::SetCurrentStatus(G4int                i,
   }
   else
   {
-    G4Exception("G4VTwistSurface::CurrentStatus::CurrentStatus()",
-                "InvalidCondition", FatalException,
-                "SetCurrentStatus: p = 0!");
+    G4Exception("G4VTwistSurface::CurrentStatus::SetCurrentStatus()",
+                "GeomSolids0003", FatalException, "SetCurrentStatus: p = 0!");
   }
   if (v) 
   {
@@ -1280,14 +1281,13 @@ G4VTwistSurface::Boundary::GetBoundaryParameters(const G4int         &areacode,
   // sAxis1 & sAxisMin, sAxis1 & sAxisMax
   if ((areacode & sAxis0) && (areacode & sAxis1))
   {
-    G4cerr << "ERROR - G4VTwistSurface::Boundary::GetBoundaryParameters()"
-           << G4endl
-           << "        Located in the corner area. This function"
-           << "        returns a direction vector of a boundary line."
-           << "        areacode = " << areacode << G4endl;
+    std::ostringstream message;
+    message << "Located in the corner area." << G4endl
+            << "        This function returns a direction vector of "
+            << "a boundary line." << G4endl
+            << "        areacode = " << areacode;
     G4Exception("G4VTwistSurface::Boundary::GetBoundaryParameters()",
-                "InvalidCondition", FatalException,
-                "Located in the corner area.");
+                "GeomSolids0003", FatalException, message);
   } 
   if ((areacode & sSizeMask) != (fBoundaryAcode & sSizeMask))
   {

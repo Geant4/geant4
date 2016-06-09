@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.97 2010/09/30 09:05:24 gcosmo Exp $
+# $Id: GNUmakefile,v 1.97 2010-09-30 09:05:24 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -19,7 +19,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIR1 =  global intercoms graphics_reps materials
+SUBDIR1 =  externals global analysis intercoms graphics_reps materials
 SUBDIR2 =  geometry particles track digits_hits processes parameterisations
 SUBDIR2 += tracking event run error_propagation readout physics_lists
 SUBDIR3 =  persistency interfaces visualization
@@ -127,11 +127,13 @@ dll_build: banner win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@$(ECHO) "Verifying existence of global libraries for DLLs ..."
 	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1
+ifdef G4LIB_USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) G4LIB_BUILD_DLL=1); done;:
+endif
 	@$(ECHO) "Building Windows DLL libraries ..."
 	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1 G4LIB_BUILD_SHARED=1
 ifdef G4LIB_USE_G3TOG4
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
-	@mv $(G4LIBDIR)/libG3toG4.a $(G4LIBDIR)/libG3toG4.lib
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) G4LIB_BUILD_DLL=1 G4LIB_BUILD_SHARED=1); done;:
 endif
 	@$(ECHO) "Done !"
 endif
@@ -166,8 +168,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-04 $ "
-	@$(ECHO) " Copyright (C) 1994-2010 Geant4 Collaboration                            "
+	@$(ECHO) " Installation Geant4 version geant4-09-05                    "
+	@$(ECHO) " Copyright (C) 1994-2011 Geant4 Collaboration                "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::

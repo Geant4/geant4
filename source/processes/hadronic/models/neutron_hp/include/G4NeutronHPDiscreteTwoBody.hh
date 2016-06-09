@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
 #define G4NeutronHPDiscreteTwoBody_h 1
+
+//101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
 
 #include "G4ios.hh"
 #include <fstream>
@@ -64,7 +66,9 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
       energy*=eV;
       G4int nPoints=nCoeff;
       if(aRep>0) nPoints*=2;
-      theCoeff[i].Init(energy, nPoints);
+      //theCoeff[i].Init(energy, nPoints);
+
+      theCoeff[i].Init(energy, nPoints-1);
       theCoeff[i].SetRepresentation(aRep);
       for(G4int ii=0; ii<nPoints; ii++)
       {

@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.21 2008/11/14 15:14:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Isotope.hh,v 1.21 2008-11-14 15:14:24 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 // class description
 //
 // An isotope is a chemical isotope defined by its name,
-//                                                 Z: atomic number,
-//                                                 N: number of nucleons, 
-//                                                 A: mass of a mole (optional).
+//                                                 Z: atomic number
+//                                                 N: number of nucleons 
+//                                                 A: mass of a mole (optional)
+//                                                 m: isomer state (optional)
 // If A is not defined it is taken from Geant4 database
 //
 // The class contains as a private static member the table of defined
@@ -43,8 +44,9 @@
 // Isotopes can be assembled into elements via the G4Element class.
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+// 20.08.11: Add flag fm for isomer level (mma)
 // 15.11.05: GetIsotope(isotopeName, G4bool warning=false)
 // 31.03.05: A becomes optional. Taken from Nist data base by default (mma)  
 // 26.02.02: fIndexInTable renewed 
@@ -54,7 +56,7 @@
 // 04.08.98: new method GetIsotope(isotopeName) (mma)
 // 17.01.97: aesthetic rearrangement (mma)
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #ifndef G4ISOTOPE_HH
 #define G4ISOTOPE_HH
@@ -66,7 +68,7 @@
 class G4Isotope;
 typedef std::vector<G4Isotope*> G4IsotopeTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class G4Isotope
 {
@@ -77,7 +79,8 @@ class G4Isotope
     G4Isotope(const G4String& name,		//its name
                     G4int     z,		//atomic number
                     G4int     n,		//number of nucleons
-                    G4double  a = 0.);		//mass of mole
+                    G4double  a = 0.,		//mass of mole
+                    G4int     m = 0);		//isomer level		    
                     
     virtual ~G4Isotope();
 
@@ -87,7 +90,8 @@ class G4Isotope
     G4int    GetZ()     const {return fZ;}
     G4int    GetN()     const {return fN;}
     G4double GetA()     const {return fA;}
-    
+    G4int    Getm()     const {return fm;}
+        
     G4int GetCountUse() const {return fCountUse;}
     
     static  
@@ -135,7 +139,8 @@ class G4Isotope
     G4int    fZ;                 // atomic number
     G4int    fN;                 // number of nucleons
     G4double fA;                 // mass of a mole
-    
+    G4int    fm;                 // isomer level
+        
     G4int    fCountUse;          // nb of elements which use this isotope
 
     static 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.26 2010/11/09 21:25:15 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RunAction.cc,v 1.26 2010-11-09 21:25:15 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -370,8 +370,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   if (verbose) {
 
-    G4cout << "                 LATERAL PROFILE                   "
-           << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;
+    G4cout << "                 LOGITUDINAL PROFILE                   "
+           << "      CUMULATIVE LOGITUDINAL PROFILE" << G4endl << G4endl;
 
     G4cout << "        bin   " << "           Mean         rms         "
            << "        bin "   << "           Mean      rms \n" << G4endl;

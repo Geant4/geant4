@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.13 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsLinearVector.hh,v 1.13 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //--------------------------------------------------------------------
@@ -47,6 +47,7 @@
 //                            user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
 //
 //--------------------------------------------------------------------
 
@@ -69,41 +70,21 @@ class G4PhysicsLinearVector : public G4PhysicsVector
     G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
       // Constructor
 
-    ~G4PhysicsLinearVector();
+    virtual ~G4PhysicsLinearVector();
       // Destructor
-
-    G4PhysicsLinearVector(const G4PhysicsLinearVector&);
-    G4PhysicsLinearVector& operator=(const G4PhysicsLinearVector&);
-      // Copy constructor and assignment operator.
 
     G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
 
+    virtual void ScaleVector(G4double factorE, G4double factorV);
+      // Scale all values of the vector and second derivatives
+      // by factorV, energies by vectorE. 
+
   protected:
 
-    size_t FindBinLocation(G4double theEnergy) const;
+    virtual size_t FindBinLocation(G4double theEnergy) const;
       // Find bin# in which theEnergy belongs - pure virtual function
 
-  private:
-
-    G4double dBin;          // Bin width - useful only for fixed binning
-    G4double baseBin;       // Set this in constructor to gain performance
 };
 
-
-inline 
- size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsLinearVector, FindBinLocation is implemented using
-  // a simple arithmetic calculation.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhyiscsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsLinearVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-
-  return size_t( theEnergy/dBin - baseBin ); 
-}
 
 #endif

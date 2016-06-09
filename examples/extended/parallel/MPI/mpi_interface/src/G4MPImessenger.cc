@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImessenger.cc,v 1.3 2010/12/03 08:21:29 kmura Exp $
-// $Name: geant4-09-04 $
+// $Id: G4MPImessenger.cc,v 1.3 2010-12-03 08:21:29 kmura Exp $
+// $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   G4MPImessenger.cc

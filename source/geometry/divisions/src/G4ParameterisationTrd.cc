@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.19 2010/11/10 09:16:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParameterisationTrd.cc,v 1.19 2010-11-10 09:16:08 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
 //
@@ -97,7 +97,8 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
-    fwidth = CalculateWidth( msol->GetXHalfLength1()+msol->GetXHalfLength2(), nDiv, offset );
+    fwidth = CalculateWidth( msol->GetXHalfLength1()+msol->GetXHalfLength2(),
+                             nDiv, offset );
   }
 
 #ifdef G4DIVDEBUG
@@ -158,14 +159,15 @@ ComputeTransformation( const G4int copyNo,
   else
   { 
     G4Exception("G4ParameterisationTrdX::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along X are allowed, and axis is: "+faxis);
   }
 
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationTrdX::ComputeTransformation "
+    G4cout << std::setprecision(8)
+           << " G4ParameterisationTrdX::ComputeTransformation() "
            << copyNo << G4endl
            << " Position: " << origin << " - Axis: " << faxis << G4endl;
   }
@@ -192,8 +194,9 @@ ComputeDimensions( G4Trd& trd, const G4int, const G4VPhysicalVolume* ) const
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationTrdX::ComputeDimensions():" << copyNo << G4endl;
-     trd.DumpInfo();
+    G4cout << " G4ParameterisationTrdX::ComputeDimensions():"
+           << copyNo << G4endl;
+    trd.DumpInfo();
   }
 #endif
 }
@@ -214,8 +217,8 @@ ComputeSolid(const G4int i, G4VPhysicalVolume * pv)
 
 //--------------------------------------------------------------------------
 void
-G4ParameterisationTrdX::
-ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) const
+G4ParameterisationTrdX::ComputeDimensions( G4Trap& trap, const G4int copyNo,
+                                           const G4VPhysicalVolume* ) const
 {
   G4Trd* msol = (G4Trd*)(fmotherSolid);
   G4double pDy1 = msol->GetYHalfLength1();
@@ -224,8 +227,10 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
   G4double pDx1 = msol->GetXHalfLength1()/fnDiv; 
   G4double pDx2 = msol->GetXHalfLength2()/fnDiv; 
 
-  G4double cxy1 = -msol->GetXHalfLength1() + foffset + (copyNo+0.5)*pDx1*2;// centre of the side at y=-pDy1
-  G4double cxy2 = -msol->GetXHalfLength2() + foffset + (copyNo+0.5)*pDx2*2;// centre of the side at y=+pDy1
+  G4double cxy1 = -msol->GetXHalfLength1() + foffset
+                + (copyNo+0.5)*pDx1*2;// centre of the side at y=-pDy1
+  G4double cxy2 = -msol->GetXHalfLength2() + foffset
+                + (copyNo+0.5)*pDx2*2;// centre of the side at y=+pDy1
   G4double alp = std::atan( (cxy2-cxy1)/pDz );
   
   trap.SetAllParameters ( pDz,
@@ -243,8 +248,9 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationTrdX::ComputeDimensions():" << copyNo << G4endl;
-     trap.DumpInfo();
+    G4cout << " G4ParameterisationTrdX::ComputeDimensions():"
+           << copyNo << G4endl;
+    trap.DumpInfo();
   }
 #endif
 }
@@ -262,15 +268,14 @@ void G4ParameterisationTrdX::CheckParametersValidity()
 
   if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
-    G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()"
-           << G4endl
-           << "        Making a division of a TRD along axis X," << G4endl
-           << "        while the X half lengths are not equal," << G4endl
-           << "        is not (yet) supported. It will result" << G4endl
-           << "        in non-equal division solids." << G4endl;
+    std::ostringstream message;
+    message << "Invalid solid specification. NOT supported." << G4endl
+            << "Making a division of a TRD along axis X," << G4endl
+            << "while the X half lengths are not equal," << G4endl
+            << "is not (yet) supported. It will result" << G4endl
+            << "in non-equal division solids.";
     G4Exception("G4ParameterisationTrdX::CheckParametersValidity()",
-                "IllegalConstruct", FatalException,
-                "Invalid solid specification. NOT supported.");
+                "GeomDiv0001", FatalException, message);
   }
 */
 }
@@ -345,14 +350,15 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   else
   { 
     G4Exception("G4ParameterisationTrdY::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along Y are allowed !");
   }
 
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << std::setprecision(8) << " G4ParameterisationTrdY::ComputeTransformation " << copyNo
+    G4cout << std::setprecision(8)
+           << " G4ParameterisationTrdY::ComputeTransformation " << copyNo
            << " pos " << origin << " rot mat " << " axis " << faxis << G4endl;
   }
 #endif
@@ -398,15 +404,14 @@ void G4ParameterisationTrdY::CheckParametersValidity()
 
   if( std::fabs(mpDy1 - mpDy2) > kCarTolerance )
   {
-    G4cerr << "ERROR - G4ParameterisationTrdY::CheckParametersValidity()"
-           << G4endl
-           << "        Making a division of a TRD along axis Y while" << G4endl
-           << "        the Y half lengths are not equal is not (yet)" << G4endl
-           << "        supported. It will result in non-equal" << G4endl
-           << "        division solids." << G4endl;
+    std::ostringstream message;
+    message << "Invalid solid specification. NOT supported." << G4endl
+            << "Making a division of a TRD along axis Y while" << G4endl
+            << "the Y half lengths are not equal is not (yet)" << G4endl
+            << "supported. It will result in non-equal" << G4endl
+            << "division solids.";
     G4Exception("G4ParameterisationTrdY::CheckParametersValidity()",
-                "IllegalConstruct", FatalException,
-                "Invalid solid specification. NOT supported.");
+                "GeomDiv0001", FatalException, message);
   }
 }
 
@@ -473,7 +478,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   else
   { 
     G4Exception("G4ParameterisationTrdZ::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along Z are allowed !");
   }
 
@@ -510,7 +515,8 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
                         pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, 
                         pDy1+DDy*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
-                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, pDz );
+                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength,
+                        pDz );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )

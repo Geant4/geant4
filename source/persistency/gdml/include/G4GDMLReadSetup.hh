@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSetup.hh,v 1.6 2009/03/24 15:47:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadSetup.hh,v 1.6 2009-03-24 15:47:33 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLReadSetup

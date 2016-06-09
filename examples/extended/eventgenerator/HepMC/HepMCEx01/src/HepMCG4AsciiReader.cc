@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReader.cc
-//   $Id: HepMCG4AsciiReader.cc,v 1.6 2010/12/10 06:21:34 kmura Exp $
+//   $Id: HepMCG4AsciiReader.cc,v 1.6 2010-12-10 06:21:34 kmura Exp $
 //
 // ====================================================================
 #include "HepMCG4AsciiReader.hh"

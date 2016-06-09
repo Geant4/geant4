@@ -173,6 +173,9 @@ void  CexmcRunAction::PrintResults(
         auxStrings.push_back( auxString );
     }
 
+    G4cout << " --- Setup acceptances (range | real (trg / mon) | "
+              "rec (trg / mon / all)):" << G4endl;
+
     G4int  i( 0 );
     for ( CexmcAngularRangeList::const_iterator  k( angularRanges.begin() );
                                                 k != angularRanges.end(); ++k )
@@ -218,8 +221,9 @@ void  CexmcRunAction::PrintResults(
     }
 
     G4cout << "       ---" << G4endl;
-    G4cout << "       False hits (edt, rec):  " << nmbOfFalseHitsTriggeredEDT <<
-              " | " << nmbOfFalseHitsTriggeredRec << G4endl;
+    G4cout << "       False hits (edt | rec):  " <<
+        nmbOfFalseHitsTriggeredEDT << " | " << nmbOfFalseHitsTriggeredRec <<
+        G4endl;
 }
 
 
@@ -246,11 +250,12 @@ void  CexmcRunAction::EndOfRunAction( const G4Run *  run )
     const CexmcAngularRangeList &  angularRanges(
                                         productionModel->GetAngularRanges() );
 
-    G4cout << " --- Setup acceptances (real, rec):" << G4endl;
+    G4cout << G4endl;
     PrintResults( nmbOfHitsSampled, nmbOfHitsSampledFull,
                   nmbOfHitsTriggeredRealRange, nmbOfHitsTriggeredRecRange,
                   nmbOfOrphanHits, angularRanges,
                   theRun->GetNmbOfFalseHitsTriggeredEDT(),
                   theRun->GetNmbOfFalseHitsTriggeredRec() );
+    G4cout << G4endl;
 }
 

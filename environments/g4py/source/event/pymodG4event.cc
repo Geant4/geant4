@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4event.cc,v 1.4 2006/06/29 15:31:47 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pymodG4event.cc,v 1.4 2006-06-29 15:31:47 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4event.cc [Geant4Py module]
 //

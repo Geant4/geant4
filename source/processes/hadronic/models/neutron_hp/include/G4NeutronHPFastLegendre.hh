@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.11 2006/06/29 20:47:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.11 2006-06-29 20:47:39 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFastLegendre_h
 #define G4NeutronHPFastLegendre_h 1
@@ -115,6 +115,7 @@ class G4NeutronHPFastLegendre
   
   G4double Integrate(G4int l, G4double costh)
   {
+    if(l>30) return regularIntegrate(l,costh);
     G4int bin = GetBin(l, costh);
     G4double y1, y2;
 //    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate "<<l<<" "<<bin<<G4endl;
@@ -126,6 +127,7 @@ class G4NeutronHPFastLegendre
   
   inline G4double Evaluate(G4int l, G4double costh)
   {
+    if(l>30) return regularEvaluate(l,costh);
     G4double result;
     G4int bin = GetBin(l, costh);
     if(bin != theNbin[l]-1)
@@ -141,7 +143,12 @@ class G4NeutronHPFastLegendre
     }
     return result;
   }
+
   private:
+
+      G4double regularEvaluate( int l , double x );
+      G4double regularIntegrate( int l , double x );
+
   
   inline G4int GetBin(G4int l, G4double costh)
   {

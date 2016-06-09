@@ -246,8 +246,14 @@ G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fr
   //JMQ 14/02/09 BUG fixed: hbarc should be in the denominator instead of hbar_Planck 
   //Without 1/hbar_Panck remains as a width
 
-  G4double Prob=Gamma*ParticleMass/((pi*hbarc)*(pi*hbarc)*std::exp(2*std::sqrt(a0*E0)))
-    *K*CrossSection(fragment,K)*std::exp(2*std::sqrt(a1*E1))*millibarn;
+  //G4double Prob=Gamma*ParticleMass/((pi*hbarc)*(pi*hbarc)*std::exp(2*std::sqrt(a0*E0)))
+  //  *K*CrossSection(fragment,K)*std::exp(2*std::sqrt(a1*E1))*millibarn;
+
+  static const G4double pcoeff = millibarn/((pi*hbarc)*(pi*hbarc)); 
+
+  // Fixed numerical problem
+  G4double Prob = pcoeff*Gamma*ParticleMass*std::exp(2*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))
+    *K*CrossSection(fragment,K);
 
   return Prob;
 }

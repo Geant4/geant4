@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.39 2010/06/02 13:53:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GDMLWriteSolids.hh,v 1.39 2010-06-02 13:53:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLWriteSolids
@@ -66,6 +66,7 @@ class G4GenericTrap;
 class G4Trap;
 class G4Trd;
 class G4Tubs;
+class G4CutTubs;
 class G4TwistedBox;
 class G4TwistedTrap;
 class G4TwistedTrd;
@@ -106,6 +107,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TrapWrite(xercesc::DOMElement*, const G4Trap* const);
    void TrdWrite(xercesc::DOMElement*, const G4Trd* const);
    void TubeWrite(xercesc::DOMElement*, const G4Tubs* const);
+   void CutTubeWrite(xercesc::DOMElement*, const G4CutTubs* const);
    void TwistedboxWrite(xercesc::DOMElement*, const G4TwistedBox* const);
    void TwistedtrapWrite(xercesc::DOMElement*, const G4TwistedTrap* const);
    void TwistedtrdWrite(xercesc::DOMElement*, const G4TwistedTrd* const);

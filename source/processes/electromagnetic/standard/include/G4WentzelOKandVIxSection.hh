@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.6 2010/06/25 09:41:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.6 2010-06-25 09:41:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -102,6 +102,7 @@ public:
   
   inline void SetTargetMass(G4double value);
 
+  //obsolete method
   inline void SetRelativisticMass(G4double value);
 
   inline G4double GetMomentumSquare() const;
@@ -150,6 +151,7 @@ private:
   G4double mass;
   G4double tkin;
   G4double mom2;
+  G4double momCM2;
   G4double invbeta2;
   G4double kinFactor;
   G4double etag;
@@ -163,7 +165,10 @@ private:
   G4double formfactA;
   G4double factorA2;
   G4double factB;
+  G4double factB1;
   G4double factD;
+  G4double gam0pcmp;
+  G4double pcmp2;
 
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];

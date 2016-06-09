@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.16 2009/10/30 14:59:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: exampleN02.cc,v 1.16 2009-10-30 14:59:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

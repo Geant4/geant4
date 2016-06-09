@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPlaneSurfaceTarget.cc,v 1.2 2007/06/19 11:28:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorPlaneSurfaceTarget.cc,v 1.2 2007-06-19 11:28:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -108,7 +108,7 @@ Intersect( const G4ThreeVector& pt, const G4ThreeVector& dir ) const
 #ifdef G4VERBOSE
   if(G4ErrorPropagatorData::verbose() >= 4 )
   { 
-    G4cerr << " $$$ creating G4ErrorPlaneSurfaceTarget::Intersect "
+    G4cout << " $$$ creating G4ErrorPlaneSurfaceTarget::Intersect "
            << inters << G4endl;
   }
 #endif
@@ -123,10 +123,10 @@ GetDistanceFromPoint( const G4ThreeVector& pt, const G4ThreeVector& dir ) const
 {
   if( std::fabs( dir.mag() -1. ) > 1.E-6 )
   {
-    G4cerr << "WARNING - G4ErrorPlaneSurfaceTarget::GetDistanceFromPoint()"
-           << G4endl
-           << "          Direction is not a unit vector: " << dir << " !"
-           << G4endl;
+    std::ostringstream message;
+    message << "Direction is not a unit vector: " << dir << " !";
+    G4Exception("G4ErrorPlaneSurfaceTarget::GetDistanceFromPoint()",
+                "GeomMgt1002", JustWarning, message);
   }
   G4double dist = -(a_ * pt.x() + b_ * pt.y() + c_ * pt.z() + d_)
                  / (a_ * dir.x() + b_ * dir.y() + c_ * dir.z() );

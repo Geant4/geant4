@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.15 2010/05/27 10:08:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4BraggModel.hh,v 1.15 2010-05-27 10:08:58 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -79,9 +79,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
@@ -141,8 +138,6 @@ private:
 
   G4double ElectronicStoppingPower(G4double z,
                                    G4double kineticEnergy) const;
- 
-  void SetMoleculaNumber(G4int number) {iMolecula = number;};
 
   G4double DEDX(const G4Material* material, G4double kineticEnergy);
 
@@ -164,6 +159,8 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
   G4PSTARStopping             pstar;
 
+  const G4Material*           currentMaterial;
+
   G4double mass;
   G4double spin;
   G4double chargeSquare;
@@ -172,9 +169,10 @@ private:
   G4double lowestKinEnergy;
   G4double protonMassAMU;
   G4double theZieglerFactor;
-  G4double expStopPower125;        // Experimental Stopping power at 125keV
+  G4double expStopPower125;    // Experimental Stopping power at 125keV
 
   G4int    iMolecula;          // index in the molecula's table
+  G4int    iPSTAR;             // index in PSTAR
   G4bool   isIon;
   G4bool   isInitialised;
 };

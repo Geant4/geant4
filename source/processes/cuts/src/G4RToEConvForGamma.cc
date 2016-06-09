@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.6 2009/09/12 12:09:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RToEConvForGamma.cc,v 1.6 2009-09-12 12:09:42 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -78,7 +78,6 @@ void G4RToEConvForGamma::BuildAbsorptionLengthVector(
   //  fill absorption length vector
   G4int NumEl = aMaterial->GetNumberOfElements();
   G4double absorptionLengthMax = 0.0;
-  G4double previous = 0.;
   for (size_t ibin=0; ibin<size_t(TotBin); ibin++) {
     G4double SIGMA = 0. ;
     for (size_t iel=0; iel<size_t(NumEl); iel++) {
@@ -89,15 +88,6 @@ void G4RToEConvForGamma::BuildAbsorptionLengthVector(
     //  absorption length=5./SIGMA
     absorptionLengthVector->PutValue(ibin, 5./SIGMA);
     if (absorptionLengthMax < 5./SIGMA ) absorptionLengthMax = 5./SIGMA;
- 
-    //if (previous > 5./SIGMA) {
-    //  G4cout << "G4RToEConvForGamma::BuildAbsorptionLengthVector"
-    //     << ": WARNING absorptionVector "
-    //     << ibin << ":" <<  5./SIGMA  << " <-- " 
-    //     << ibin -1 <<  ":" << previous <<G4endl;
-    //}
-
-    previous = 5./SIGMA;
   }
 }
 

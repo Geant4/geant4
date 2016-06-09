@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4IntersctionSolid.cc,v 1.1 2007/08/07 03:35:53 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4IntersctionSolid.cc,v 1.1 2007-08-07 03:35:53 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4IntersectionSolid.cc
 //

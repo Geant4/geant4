@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.16 2010/11/23 18:03:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhotonEvaporation.cc,v 1.16 2010-11-23 18:03:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -317,17 +317,17 @@ void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)
 
 void G4PhotonEvaporation::SetICM(G4bool ic)
 {
- (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(ic);
+ (static_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(ic);
 }
 
 void G4PhotonEvaporation::SetMaxHalfLife(G4double hl)
 {
- (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
+ (static_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
 }
 
 void G4PhotonEvaporation::RDMForced(G4bool fromRDM)
 {
- (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetRDM(fromRDM);
+ (static_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetRDM(fromRDM);
 }
 
 void G4PhotonEvaporation::SetEOccupancy(G4ElectronOccupancy eo)
@@ -348,25 +348,25 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
     G4LorentzVector tmp = (*h)->GetMomentum();
     ProductsEnergy += tmp.e();
     ProductsMomentum += tmp.vect();
-    ProductsA += static_cast<G4int>((*h)->GetA());
-    ProductsZ += static_cast<G4int>((*h)->GetZ());
+    ProductsA += (*h)->GetA_asInt();
+    ProductsZ += (*h)->GetZ_asInt();
   }
 
-  if (ProductsA != theInitialState.GetA()) {
+  if (ProductsA != theInitialState.GetA_asInt()) {
     G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Barionic Number Conservation test for evaporation fragments" 
 	   << G4endl; 
-    G4cout << "Initial A = " << theInitialState.GetA() 
+    G4cout << "Initial A = " << theInitialState.GetA_asInt() 
 	   << "   Fragments A = " << ProductsA << "   Diference --> " 
-	   << theInitialState.GetA() - ProductsA << G4endl;
+	   << theInitialState.GetA_asInt() - ProductsA << G4endl;
   }
-  if (ProductsZ != theInitialState.GetZ()) {
+  if (ProductsZ != theInitialState.GetZ_asInt()) {
     G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Charge Conservation test for evaporation fragments" 
 	   << G4endl; 
-    G4cout << "Initial Z = " << theInitialState.GetZ() 
+    G4cout << "Initial Z = " << theInitialState.GetZ_asInt() 
 	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
-	   << theInitialState.GetZ() - ProductsZ << G4endl;
+	   << theInitialState.GetZ_asInt() - ProductsZ << G4endl;
   }
   if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;

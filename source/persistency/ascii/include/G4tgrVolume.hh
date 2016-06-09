@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.11 2010/10/13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgrVolume.hh,v 1.11 2010-10-13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgrVolume
@@ -88,8 +88,9 @@ class G4tgrVolume
     // Accessors
 
     const G4String& GetName() const {return theName;}
+    void SetName(const G4String& name) {theName = name;}
     const G4String& GetType() const {return theType;}
-    const G4tgrSolid* GetSolid() const {return theSolid;}
+    G4tgrSolid* GetSolid() const {return theSolid;}
     const G4String& GetMaterialName() const {return theMaterialName;}
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}

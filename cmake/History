@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.3 2010/12/03 17:58:51 gcosmo Exp $
+cvs log $Id: History,v 1.3 2010-12-03 17:58:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,13 +8,653 @@ cvs log $Id: History,v 1.3 2010/12/03 17:58:51 gcosmo Exp $
                       Category History file
                       ---------------------
 
-History file for Geant4 configuration scripts.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+History file for Geant4 CMake build scripts.
+It DOES NOT substitute the SVN log-message one should put at every
+committal in the SVN repository !
+
+Entries MUST use the following format:
+
+
+MONTH DAY YEAR - INITIAL.SURNAME (TAG)
+- FILECHANGED : Document changes made.
+
+- OTHERFILECHANGED : Document changes made.
+
+
+You should keep two lines between each date.
+TAG is optional. If your changes fix a bug listed in the Geant4 Bugzilla,
+add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
+
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 30th 2011 - B.Morgan (cmake-V09-04-41)
+- Modules/Geant4LibraryBuildOptions.cmake : Commented out
+  GEANT4_BUILD_GRANULAR_LIBS option to restrict these builds for 9.5. Current
+  granular build is not tested and broken in several places, so we want to
+  prevent its use for now.
+
+November 29th 2011 - B.Morgan (cmake-V09-04-40)
+- Modules/Geant4InterfaceOptions.cmake : Added ability for Mac to concurrently 
+  build mixed Qt and X11 OpenGL driver. Xt library adde to X11 libraries, but
+  only on Mac when Xm is built. Linking Xt on Linux causes runtime errors.
+- Templates Geant4Config.cmake.in : Fixed bug that prevented OpenInventor
+  library being appended to output when vis_all was set.
+
+
+November 24th 2011 - B.Morgan (cmake-V09-04-39)
+- Modules/Geant4InstallData.cmake : Updated data library versions
+  G4NDL -> 4.0
+  RadioactiveDecay - > 3.4
+  Added GEANT4_ADD_FEATURE reporting for data and example code install.
+
+
+November 23rd 2011 - B.Morgan (cmake-V09-04-38)
+- Modules/Geant4LibraryBuildOptions.cmake : Marked GEANT4_ENABLE_TESTING and
+  GEANT4_BUILD_EXAMPLES options as advanced because these are for developers and
+  system testing only.
+- Templates/geant4-env-skeleton.in (NEWFILE) : New shell skeleton file for core
+  environment setup of geant4, just PATH, (DY)LD_LIBRARY_PATH and data libraries
+  if installed.
+- Templates/geant4-environment-skeleton.in : RENAMED -> geant4make-skeleton.in
+- Templates/geant4-environment-skeleton.in : Added expansion variable to handle
+  G4WORKDIR setup. Added expansion variables for data library setup.
+  Added expansion variable to provide a self location block.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added a function to
+  conditional set environment variables. Added setup of G4WORKDIR.
+  Added setup of data library variables if they've been installed.
+  Added self location capability so that scripts can find themselves and
+  consequently locate library and include directories relative to the determined
+  location.
+  Moved installation of of backwared compatible toolchain files to a directory
+  named 'geant4make' under the main data directory. This helps to partition the
+  setup script and gmk files into their own, isolated location.
+  Configure new 'geant4.(c)sh' setup script from geant4-env-skeleton.in file.
+- Modules/Geant4InstallData.cmake : Set name of list holding dataset information
+  to GEANT4_DATASETS just to mark it as usable elsewhere. Added environment
+  variable name to end of dataset information strings to help in setting them up
+  in configuration of shell scripts.
+  Marked GEANT4_INSTALL_EXAMPLES option as advanced.
+
+
+November 22nd 2011 - B.Morgan (cmake-V09-04-37)
+- Templates/Geant4Config.cmake : Added 'ui_all' and 'vis_all' components to
+  allow simple selection of all available UI and Vis components.
+
+
+November 18th 2011 - P.Mato (cmake-V09-04-36)
+- Modules/Geant4CTest.cmake : Added some protection if GEANT4_DATA_DIR not defined
+
+November 16th 2011 - B.Morgan (cmake-V09-04-35)
+- Templates/geant4_validate_sources.cmake.in : Added two VRML icc files
+  to false positive list. These are in VRML's src/ directory for internal
+  use only.
+
+November 16th 2011 - G.Folger (cmake-V09-04-34)
+- Modules/Geant4InstallData.cmake: correct data file name 
+
+November 15th 2011 - G.Folger (cmake-V09-04-33)
+- Modules/Geant4InstallData.cmake: update data libraries version for 9.5
+
+November 8th 2011 - B.Morgan (cmake-V09-04-32)
+- Templates/Geant4Config.cmake.in [BUGFIX #1196, #1261]: Added support for 
+  G4OpenInventor as a component, named 'vis_openinventor'. Prtected inclusion of
+  Geant4LibraryDepends file by test on a variable Geant4_LIBDEPS_LOADED so that
+  multiple calls to the config file from find_package are possible. This allows
+  option selecting of the components. NB Full Inventor build requires tag
+  openinventor-V09-04-02).
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added support for 
+  configuration of OpenInventor environment variables in
+  geant4-environment-setup scripts.
+- Templates/geant4-environment-skeleton.in : Added support for OpenInventor
+  environment variables needed by old Makefile toolchain. At present, OIVHOME is
+  not set, as the Geant4 public interface should not need this.
+- Modules/Geant4ConfigureConfigScript.cmake : Added support for configuration 
+  of OpenInventor feature.
+- Templates/geant4-config.in : Added support for OpenInventor feature.
+- Modules/Geant4InterfaceOptions.cmake : Added support for OpenInventor, with
+  new CMake option GEANT4_USE_INVENTOR to enable build. On Unix platforms, X11
+  and Xm are also searched for as these are used in Geant4's Inventor module.
+- Modules/FindInventor.cmake (NEWFILE) : Find module for Inventor, adapted from
+  post on CMake mailing list by Jan Peciva. Tested against Coin3d
+  implementation.
+
+
+November 4th 2011 - B.Morgan
+- Modules/Geant4ConfigureConfigScript.cmake : Added setup of installed script 
+  to use self location functionality in geant4-config when installation is
+  relocatable.
+- Templates/geant4-config.in : Added capability for script to self locate
+  itself. The technique is to fully resolve any softlinks to the script file
+  itself using readlink, but with workarounds because the '-f' option to
+  readlink is not available on all platforms. No attempt is made to resolve
+  any softlinks in the path elements or to replace occurrence of '.' or '..'.
+  However, the algorithm has been tested in several softlinking situations
+  and should cover everything but real corner cases... The result of the
+  resolution is the diectory in which the script resides. This can be used
+  later in the script as necessary.
+
+
+November 2nd 2011 - B.Morgan (cmake-V09-04-31)
+- Modules/Geant4InstallData.cmake : Bumped version of G4EMLOW library to be
+  installed from 6.22 -> 6.23.
+
+
+November 2nd 2011 - B.Morgan (cmake-V09-04-30)
+- Modules/Geant4BuildModes.cmake : Reverted file to revision 51604
+  (cmake-V04-04-28 tag) which removes the TestReleaseDebug mode.
+- Modules/Geant4MakeRules_cxx.cmake : Reverted file to revision 52696
+  (cmake-V09-04-28 tag) which removes the TestReleaseDebug mode. This reverts 
+  TestRelease to having platform dependent flags, specifically there is no 
+  optimization on Apple.
+- Modules/geant4-config.in : Fixed typo error that used incorrect name for
+  CMake supplied variable Geant4_VERSION, preventing correct expansion.
+- Modules/Geant4ConfigureConfigScript.cmake : Tidied up indenting to standard
+  two space format. Added skeleton setup for making script relocatable in 
+  the Install Tree.
+
+
+October 11th 2011 - B.Morgan
+- Templates/Geant4Config.cmake.in [BUGFIX #1253] : Jean Jacquemier reported
+  a problem when building applications using a pure static build of Geant4.
+  This was traced to incorrect list syntax in Geant4Config.cmake, as detailed
+  in the above Bug Report #1253. The fix is to remove the quotes around the
+  list as these cause it to be represented as one single string.
+
+
+October 10th 2011 - B.Morgan (cmake-V09-04-29)
+- Modules/Geant4ValidateSources.cmake (NEWFILE) : Module to configure the
+  geant4_validate_sources.cmake.in and create a custom 'validate_sources'
+  target which runs the resulting configured script.
+- Templates/geant4_validate_sources.cmake.in (NEWFILE) : CMake script that
+  locates all sources.cmake files in the Geant4 source tree, parses them to
+  extract all listed sources/headers and compares that list with sources and
+  headers on disk. Any mismatches whether files listed in sources.cmake and no
+  longer on disk, or files on disk but not listed in sources.cmake, are
+  reported. If any mismatches are found, the script will fail with FATAL_ERROR,
+  though it will not do so until the whole tree has been scanned to ensure all
+  mismatches are located. It ignores certain files that are known to cause
+  mismatch detection but which are no longer part of the Geant4 CMake build. 
+
+
+October 6th 2011 - B.Morgan (cmake-V09-04-28)
+- Modules/Geant4BuildModes.cmake : Added TestReleaseDebug mode to 
+  CMAKE_BUILD_TYPES and CMAKE_CONFIGURATION_TYPES.
+  NB: Diaganosed problem reported by Pere, whereby added modes were not
+  appearing in VS. This is likely because CMAKE_CONFIGURATION_TYPES is set
+  *after* the project(...) call: http://www.itk.org/Bug/view.php?id=6788
+  Will fix after new modes are confirmed.
+- Modules/Geant4MakeRules_cxx.cmake : Split TestRelease mode into two, 
+  TestRelease, which is optimized and has debugging symbols, and
+  TestReleaseDebug, which has debug symbols only. Both still use
+  G4DEBUG_VERBOSE and G4FPE_DEBUG definitions.
+
+
+October 4th 2011 - P. Mato (cmake-V09-04-27)
+- Modules/Geant4TestDriver.cmake: Fix to allow an empty command
+
+October 4th 2011 - P. Mato (cmake-V09-04-26)
+- Modules/FindXercesC.cmake: Added xerces-c_3 as a possible name for libraries (for windows)
+
+September 30th 2011 - P. Mato (cmake-V09-04-25)
+- Modules/Geant4MakeRules_cxx.cmake: Fixed debug flag to -Zi for Visual C++
+
+- Modules/Geant4CTest.cmake: Moved from tests/CMakeLists.txt the logic to 
+  construct the GEANT_TEST_ENVIRONMENT with data file locations to be useful
+  for benchmarks tests.
+
+September 29th 2011 - B. Morgan (cmake-V09-04-24)
+- Modules/Geant4OptionalComponents.cmake : Removed enabling of Fortran language
+  when G3toG4 is enabled. Gunter Folger reported problems with obtaining correct
+  Fortran setup, so we disable this since we don't actually compile the rztog4
+  app at present. A change has also been made in the top level CMakeLists.txt
+  so that the Make rules initialization for Fortran is no longer set up.
+
+
+September 16th 2011 - B. Morgan (cmake-V09-04-23)
+- Templates/Geant4Config.cmake.in : Addition of G4VIS_USE and G4UI_USE to list
+  of definitions has been made conditional on the existence of the variables
+  G4VIS_NONE and G4UI_NONE. If those variables are set, e.g. via -DG4UI_NONE,
+  the corresponding compile definition will not be set. This gives
+  requested behaviour, but as before this is a temporary hack.
+
+
+September 16th 2011 - B. Morgan (cmake-V09-04-22)
+- Templates/Geant4Config.cmake.in : Added G4VIS_USE and G4UI_USE to list
+  of core compile definitions. This is seemingly needed to support test
+  building, but should only be seen as a temporary fix. These variables
+  should be set at the application level.
+
+
+September 15th 2011 - P. Mato (cmake-V09-04-21)
+- Templates/UseGeant4_internal.cmake: Fixed a bug affecting tests on Windows.
+
+August 16th 2011 - P. Mato (cmake-V09-04-20)
+- Templates/UseGeant4_internal.cmake: Added support for tests on Windows with 
+  NMake and Visual Studio.
+
+- Modules/Geant4TestDriver.cmake: Avoid the use of ':' as separator since is used
+  already in the drive letters on Windows.
+
+August 16th 2011 - P. Mato (cmake-V09-04-19)
+- Modules/FindROOT.cmake : Added function ROOT_GENERATE_DICTIONARY() to facilitate
+  the generation of ROOT dictionaries
+
+- Modules/Geant4CTest.cmake (NEWFILE): Place for the configutation of CTest.
+
+- Modules/Geant4TestDriver.cmake: Added the pre- and post-commands for tests. This
+  was neeed to preform some initial cleanup of post processing on some tests.
+
+- Templates/UseGeant4_internal.cmake: Changed the function GEANT4_ADD_TEST() to
+  make use of the pre- and post-commands.
+
+August 16th 2011 - B.Morgan (cmake-V09-04-18)
+- Templates/UseGeant4.cmake : Fixed error is use of get_filename_component
+  to locate internal use file.
+
+
+August 10th 2011 - B.Morgan (cmake-V09-04-17)
+- Modules/Geant4BuildProjectConfig.cmake : Added copy of UseGeant4_internal 
+  file to build tree, but do not install it.
+
+- UseGeant4.cmake : Factored out internal only macros into UseGeant4_internal
+  module. Added optional inclusion of that module, which will only happen in the
+  build tree.
+
+- UseGeant4_internal.cmake (NEWFILE) : Added to hold CMake code only needed
+  by 'use' of Geant4 inside Geant4 itself, e.g. unit and validation tests.
+  This is done to fix a bug reported offline by Alberto Ribon, where including
+  UseGeant4.cmake fails due to an unfound custom CMake module. The functions
+  like GEANT4_ADD_TEST use extra functionality which is located in custom CMake
+  modules. Whilst these modules could be installed, this adds unneeded 
+  complexity to the use of Geant4 and may also clash with CMake itself. Also, 
+  the functions needing the modules are not intended for use by users, so are
+  factored out into this build tree only module.
+
+
+August 3rd 2011 - B.Morgan (cmake-V09-04-16)
+- Modules/Geant4MakeRules_cxx.cmake, Modules/Geant4BuildModes.cmake :
+  Moved setting of initial values for TestRelease and Maintainer mode compiler 
+  flags to make rules override file. Values are now set based on compiler and
+  platform, as G4FPE_DEBUG option should only be used for GNU compiler, and
+  with non-optimized code on Mac OS X (information from Gunter Folger).
+  Geant4BuildModes uses initial values as input to cache value, so variables
+  can be reset from the command line and within the cache interfaces if
+  needed.
+
+- Modules/Geant4BuildProjectConfig.cmake : Re-added WIN32 guard on export of 
+  the G4LIB_BUILD_DLL definition.
+
+
+July 29th 2011 - B.Morgan (cmake-V09-04-15)
+- Modules/Geant4InstallData.cmake : Corrected URL for use in downloading data
+  to use direct URL. Original URL redirects, which early 2.8 iterations of
+  CMake appear not to like.
+  Use .tar.gz of RadioactiveDecay as this is available and cheaper to download.
+  Added use of PREFIX in ExternalProject so that all EP directories are 
+  created under a single 'Externals' directory. This is simply to keep the 
+  build tree nicely organized. The data still appear in the data/ subdirectory 
+  of the build directory, so this should not affect usage by tests.
+
+
+July 29th 2011 - P. Mato
+- Modules/CMakeMacroParseArguments.cmake : updated to the version exiting in CMake 2.8.5
+
+- Modules/Geant4MacroLibraryTargets.cmake, Modules/Geant4MacroDefineModule.cmake,
+  Modules/Geant4MacroDefineModule.cmake : Adjusted to the new CMakeMacroParseArguments.cmake
+
+- Templates/UseGeant4.cmake : Removed installs included in GEANT4_LIBRARY and
+  GEANT4_EXECUTABLE macros and fixed comments.
+
+
+July 28th 2011 - B. Morgan (cmake-V09-04-14)
+- History : Added note on preferred format of entries.
+
+- Modules/Geant4InstallData.cmake : Added guard on option and install of data so
+  that this is only available on CMake >= 2.8 due to use of ExternalProject.
+  (NB: Usage still broken, probably due to tar formats (CMake 2.8.1).
+
+- Modules/UseGeant4.cmake : Forced all CXX flags to use those used to build
+  Geant4 [BUGFIX #1227]. Neatified and commented internal functions for
+  library/exe/test builds. Added WARNING message if GEANT4_ADD_TEST is used
+  outside of the Geant4 project. Corrected(?) include of
+  CMakeMacroParseArguments (MIGHT BREAK GEANT4_XXX FUNCTIONS IN UseGeant4).
+
+- Modules/Geant4CPackBase.cmake : Added TBZ2 and ZIP types back into list of
+  source package generators. Neatified the generation of the README file.
+  Neatified and commented new component build commands.
+
+- Modules/Geant4MacroLibraryTargets.cmake : Corrected setting of
+  INSTALL_NAME_DIR for library targets [BUGFIX #1231].
+
+- Templates/geant4-config.in : Added G4analysis library to default list of
+  libraries.
+
+- Templates/Geant4Config.cmake.in : Added G4analysis library to Geant4_LIBRARIES
+  variable. Always added for now rather than as an optional component.
+
+
+July 27th 2011 - P. Mato 
+- Added the downloading and installation of Geant4 Data files if the option
+  GEANT4_INSTALL_DATA is set. Modified Modules/Geant4InstallData.cmake
+- Initial version of CPack configuration for binaries.
+  Modified Modules/Geant4CPackBase.cmake and added Templates/CMakeCPackOptions.cmake.in,
+    Templates/g4_small.gif 
+- Initial set of files needed for testing with CTest.
+  Added Modules/FindROOT.cmake, Modules/Geant, Geant4TestDriver.cmake
+  Added options GEANT4_ENABLE_TESTING, GEANT4_BUILD_EXAMPLES in 
+    Modules/Geant4LibraryBuildOptions.cmake
+  Inherit CMAKE_MODULE_PATH in tests. Modified Modules/Geant4BuildProjectConfig.cmake,
+    Templates/Geant4Config.cmake.in
+  Added convenient macros to Templates/UseGeant4.cmake
+
+
+July 5th 2011 - G.Folger  (cmake-V09-04-13)
+- Modules/{Geant4LibraryBuildOptions,Geant4BuildProjectConfig}.cmake:
+   protect setting of G4LIB_BUILD_DLL to happen on WIN32 only.
+    (Affected examples/.../olap, which was built without this flag, 
+     and failed to link)
+     
+July 5th 2011 - B. Morgan (cmake-V09-04-12)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added support for
+  setting GDML/Xerces variables as needed.
+- Templates/geant4-environment-skeleton.in : Added unsetting/setting of
+  G4LIB_USE_GDML and XERCESCROOT. These are needed to help the automated builds
+  of examples in the old toolchain. XERCESCROOT uses the value of
+  XERCESC_INCLUDE_DIR with one directory level stripped off the end. This
+  is not 100% foolproof if an odd XercesC install is used, but should cover
+  the vast majority of cases.
+
+June 29th 2011 - B.Morgan (cmake-V09-04-11) (In geant4-09-04-ref-06)
+- INSTALL.g4cmake : Added warning about ensuring consistent compiler flag
+  sets between build of Geant4 and build of user application.
+- Templates/UseGeant4.cmake : Added setting of all CMAKE_CXX_FLAGS_XXXX
+  variables with appending of Geant4 recommended flags, and filter out
+  any duplicate flags. Adding warning in documentation about this.
+
+June 23rd 2011 - B.Morgan (cmake-V09-04-10)
+- INSTALL.g4cmake : Added note on possible issues when building Windows
+  applications using Windows 7 + VS2010 Express.
+- Templates/UseGeant4.cmake : Fixed idiotic typo error in globbing expressions
+  inside file(GLOB_RECURSE).
+
+June 23rd 2011 - B.Morgan (cmake-V09-04-09)
+- INSTALL.g4cmake : Added in missing data library package names. Added
+  note in Known Issues on Mac warnings from ld due to duplicate dylibs
+  (the overlinking issue as it appears on Mac).
+- Modules/Geant4MacroLibraryTargets.cmake : Added setting of INSTALL_NAME_DIR
+  target property to shared libraries (only affects Mac OS X) to final
+  install location of libraries. This prevents "image not found" errors when
+  building an app against Geant4 (you don't need DYLD_LIBRARY_PATH set).
+  CMake *should* build the dylibs with the headerpad_max_install_names flag
+  so that bundling the Geant4 libraries into an app should work (you can
+  repoint the app to use the bundled libraries).
+  N.B. THIS IS LIKELY TO AFFECT USAGE OF CPACK LATER ON!
+- Templates/UseGeant4.cmake : Fixed error in use of file(GLOB_RECURSE) so
+  that globas are done only under the current source directory.
+
+June 22nd 2011 - B.Morgan (cmake-V09-04-08)
+- INSTALL.g4cmake : Finalized with description of using the three toolchains
+  to build Geant4 applications. 
+- Modules/Geant4ConfigureConfigScript.cmake : Updated with patch from Pere
+  Mato Vila to export use of internal CLHEP to script when used. Also upgraded
+  to export details on Motif. Script is now generated for both the build and
+  install trees. On CMake >= 2.8, the build tree script is made executable.
+- Templates/geant4-config : Updated with patch from Pere Mato Vila to use
+  internal CLHEP, plus upgrades to provide easier setting of third party paths,
+  compile defintions and libraries. Added motif feature, and changed main
+  prefix, lib and include directory variable replacement to that the script
+  can be used form the build directory as well.
+- INSTALL.g4cmake : Updated with new guides on building user applications
+  using CMake and GNU make.
+- Templates/Geant4Config.cmake.in : First full implementation with most
+  features in place. Provides version and component checking. Setting of
+  components features quite a bit of boilerplate code and a reasonable degree
+  of in module processing. TODO : Investigate clean up and better
+  modularization.
+- Templates/UseGeant4.cmake : NEW FILE : Provides a simple CMake module which
+  users can include to setup the build of a basic Geant4 application without
+  needing to know too many details. Sets definitions, include directories and
+  compiler flags. Provides a simple macro to collate sources in an old style
+  Geant4 Example, with documetation on usage in the file.
+- Modules/Geant4BuildProjectConfig.cmake : Set needed variables for export to
+  Geant4Config.cmake script.
+- Modules/Geant4MakeRules_cxx.cmake : Added -DXPNET and
+  -D_CRT_SECURE_NO_DEPRECATE to MSVC flags to make these exactly the same as
+  used on old makefile system.
+- Modules/Geant4LibraryBuildOptions.cmake : Added definition G4LIB_BUILD_DLL
+  needed to define import/export correctly. Done globally.
+- INSTALL.g4cmake : Fleshed out further.
+- Templates/Geant4Config.cmake.in : Fleshed out documentation with extra notes
+  to help development.
+- Modules/Geant4BuildProjectConfig.cmake : Added extra comments
+
+June 21st 2011 - B.Morgan (cmake-V09-04-07)
+- Modules/Geant4BuildProjectConfig.cmake : Added section for collecting
+  variables to be exported to the configuration files. Rationalized config of
+  Build and Install Trees so that these sections have the same structure.
+- Templates/Geant4Config.cmake.in : Updates with documentation, debugging
+  option and some improved setting of definitions. Still a skeleton though.
+- Modules/Geant4InterfaceOptions.cmake : Removed reset of OpenGL variables on
+  Win32 because this seems to prevent proper refind of the variables. Since we
+  expect to be able to use Qt and OpenGL concurrently on Win32. This *should*
+  be o.k.
+- INSTALL.g4cmake : Added extra information on using Visual Studio.
+- Modules/Geant4ToolChainBackwardCompatibility.cmake : Removed setting of
+  G4ORDPARAMTABLE as this is no longer needed.
+- Templates/geant4-environment-skeleton.in : Removed setting of G4ORDPARAMTABLE.
+
+
+June 20th 2011 - B.Morgan (cmake-V09-04-06)
+- Modules/Geant4InterfaceOptions.cmake : Corrected typographic error in option
+  test for enabling Qt on Non-Apple platforms.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added Geant4 to
+  end of G4INCLUDE path for install tree in line with changes to
+  Geant4InstallDirs.
+- Modules/Geant4MacroLibraryTargets.cmake : Added Geant4 to end of installation
+  destination for headers in line with changes to Geant4InstalDirs.
+- Modules/Geant4InstallDirs.cmake : Removed Geant4 from INCLUDEDIR to better
+  reflect standard practice. The Geant4 tag is now added to the destination in
+  the install commands for headers.
+- Modules/Geant4OptionalComponents.cmake : Automatically use GDML if user
+  supplies XERCESC_ROOT_DIR argument.
+- Modules/Geant4InstallData.cmake : NEW FILE : Refactored installation of
+  examples from top level CMakeLists.txt into this file. Also provided stub
+  option for installation of data libraries. We don't implement this yet
+  because it appears to require some CMake 2.8 specific functionality and
+  I haven't yet worked out how to reproduce this in 2.6.4.
+- INSTALL.g4cmake : Rewritten for updated CMake system with full documentation
+  of variables. Provided sections for describing use of the three toolchains
+  for building user applications, but not fully covered yet.
+
+June 20th 2011 - B.Morgan (cmake-V09-04-05)
+- Modules/Geant4LibraryOptions.cmake : On Unix platforms, set output directory
+  for libraries to end in the 'SYSTEM-COMPILER' tag expected by the old
+  toolchain. This allows the build tree to be used with the old toolchain.
+  #BUGFIX - 1200 (PARTIAL)
+- Modules/Geant4OptionalComponents.cmake : Now ensures that the static versions
+  of the internal G4clhep and G4expat libraries are used if geant4 is built
+  completely static, otherwise dynamic libs will be used. This is not perfect
+  but ensures builds will not fail.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Completely rewritten
+  to use new geant4-environment-skeleton.in template. Provides full setup
+  of environment from build and install trees, permitting developers to
+  build applications directly using the build tree. Also adds all currently
+  supported visualization/ui modules. Adds setting of the G4ORDPARAMTABLE
+  variable to support this new resource file.
+- Templates/geant4-environment-skeleton.in : NEW FILE : Universal shell script
+  skeleton for generating backward compatible environment variable setup.
+  # BUGFIX - 1202
+
+June 17th 2011 - B.Morgan (cmake-V09-04-04)
+- Modules/Geant4ConfigureConfigScript.cmake
+  Modules/Geant4ToolchainBackwardCompatibility.cmake : Updated to use new
+  GEANT4_USE_RAYTRACER_X11 variable.
+- Modules/Geant4InterfaceOptions.cmake : Corrected type in resetting of OpenGL
+  variables.
+  Changed GEANT4_USE_RAYTRACERX -> GEANT4_USE_RAYTRACER_X11 to be in line with
+  what's done for other drivers.
+
+June 17th 2011 - B.Morgan (cmake-V09-04-03)
+- Tagging : internal because this requires testing.
+  Full support also requires tags:
+   interfaces-V09-04-03
+   opengl-V09-04-05
+    
+- Modules/Geant4InterfaceOptions.cmake : Rewritten to enable correct switch
+  between Qt and X11 based GUIs on Mac, with consistent changes in OpenGL
+  location. Added in find_package for Motif. Added full option and find_package
+  for locating OpenGL on Win32.
+- Modules/Geant4OptionalComponents.cmake : Imporved documentation of external
+  CLHEP option. GEANT4_USE_SYSTEM_CLHEP made a standard option as it will
+  likely be used a lot to begin with.
+
+June 16th 2011 - B.Morgan (cmake-V09-04-02)
+- Modules/Geant4LibraryBuildOptions.cmake : Default to building shared libraries
+  on all platforms, but warn about possible link errors on MSVC when building
+  both shared and static libs. Mark both library build options as advanced.
+  Add warning about building granular libs as only for developers.
+- Modules/Geant4InterfaceOptions.cmake : Reverted to version from
+  cmake-V09-04-01 because of poor logic.
+- Modules/FindCLHEP.cmake : UPGRADE WITH INTERFACE BREAK : Much simplified
+  search structure which no longer relies on clhep-config. The user can supply
+  a CLHEP_ROOT_DIR argument to point CMake to a specific installation. On UNIX
+  clhep-config will be searched for under this root dir. CLHEP library and
+  include path will be found under this root dir, or in the system paths.
+  Version checking is also provided which follows the standard logic of
+  CMake modules.
+- Modules/Geant4OptionalComponents.cmake : Option to use system CLHEP is
+  now automatically set to ON if the user has supplied a CLHEP_ROOT_DIR
+  argument. This simplifies the interface.
+
+June 15th 2011 - B.Morgan
+- Modules/Geant4InterfaceOptions.cmake : Added in option for enabling Xm (Motif)
+  support with find_package for Motif headers/libraries.
+  Use of Qt and X11 OpenGL have been made mutually exclusive on Mac OS X to
+  prevent clashes between Framework OpenGL and X11 OpenGL. 
+  Added new stub option to build OpenInventor driver
+  TODO: Add FindInventor module, check build of OpenInventor category.
+  Added new stub option to build Win32 OpenGL driver.
+  TODO: Add Win32 build to OpenGL category.
+- Templates/geant4-env.sh.in
+  Templates/geant4-env.csh.in : Removed unsetting of data library environment
+  variables.
+  TODO : Add setting of these as an optional codeblock if data was installed
+  as part of the Geant4 build.
+
+June 15th 2011 - B.Morgan (cmake-V09-04-01)
+- Modules/Geant4InterfaceOptions.cmake : Set QT_USE_IMPORTED_TARGETS on WIN32
+  to stop errors when setting LINK_INTERFACE_LIBRARIES to a value containing
+  the 'optimized' etc library link keywords. By default, FindQt4 will use
+  these keywords...
+  KNOWNISSUE: Using imported targets means that the Geant4Config.cmake file
+  must regenerate these targets otherwise the link will fail. 
+
+June 14th 2011 - B.Morgan
+- Modules/Geant4MacroLibraryTargets.cmake : Added build of DLL targets on
+  WIN32 platforms. Export definition files are generated by genwindef from
+  an archive library. If Geant4 is not built with archive libraries, a
+  dummy, non-installed archive will be built an used.
+  The structure largely follows that of GaudiPolicy.cmake from Pere Mato Vila.
+- Modules/Geant4LibraryBuildOptions.cmake : Added build of genwindef app
+  on WIN32 platforms as an internal app, as per guidelines from
+  GaudiPolicy.cmake from Pere Mato Vila.
+- Modules/genwindef/genwindef.cpp
+  Modules/genwindef/LibSymbolInfo.hpp
+  Modules/genwindef/LibSymbolInfo.cpp:
+  NEW FILES to support generation of DLL .def files on WIN32 platform.
+  Courtesy of Pere Mato Vila.
+- Modules/Geant4Wrapping.cmake : NEW FILE : Refactoring of options for
+  Python wrapping to help in modularization. Python wrapping is not yet
+  implemented in the CMake build, but this is where we'll set it up.
+- Modules/Geant4OptionalComponents.cmake : NEW FILE : Refactoring of options
+  for CLHEP, Expat, ZLIB, GDML, G3TOG4 from top level CMakeLists.txt to
+  help with modularization.
+- Modules/Geant4LibraryBuildOptions.cmake : NEW FILE : Refactoring of library
+  build options from top level CMakeLists.txt, including global define flags, 
+  global vs granular library format and static vs shared builds.
+- Modules/Geant4MacroLibraryTargets.cmake : Ensure that when static targets
+  are built, they are linked to Geant4 static targets.
+  TODO: Do we want to make this the case also for external libraries (very
+  difficult?)?
+  KNOWNISSUE: G4global will always be linked to shared G4clhep if latter is
+  built as will G4processes to shared G4expat. Not critical (well, shouldn't 
+  affect running or applications).
+
+June 13th 2011 - B.Morgan
+- Modules/Geant4CPackBase.cmake : Added to list of files to be excluded for
+  source package so that .svn and top level tests directories are not added.
+  Fixed source package generator so that .tar.gz, .tar.bz2 and .zip packages
+  are created.
+  Tidied up structure so that future changes are easier to add in a clear
+  way.
+- Modules/Geant4InterfaceOptions.cmake : Removed accidently commited change
+ of finding VTK as a test of find_package.
+
+June 10th 2011 - B.Morgan
+- Templates/geant4-config.in : Adapted to use new install directories as
+  provided by Geant4InstallDirs as template parameters.
+- Modules/Geant4ConfigureConfigScript.cmake : Added support for new
+  install directories defined in Geant4InstallDirs
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added support for
+  new install directories defined in Geant4InstallDirs.
+- Modules/Geant4MacroLibraryTargets.cmake : Added support for install of
+  libraries and headers to new install paths defined by Geant4InstallDirs.
+  Added EXPORT to library targets so that they can be used by Geant4Config
+  scripts. 
+  Added proper COMPONENT argument to install commands to correctly partition
+  targets needed for Development and for Runtime.
+  Appended each library target and include paths to global
+  properties so these can be exported to Geant4Config file easily for use
+  from the build tree. 
+- Templates/Geant4Config.cmake.in : NEW FILE : Template versioning file
+  for use by Geant4Config.cmake.
+- Templates/Geant4Config.cmake.in : NEW FILE : Template files for CMake
+  config script for Geant4. VERY PRELIMINARY.
+- Modules/Geant4BuildProjectConfig.in : NEW FILE : Builds CMake Config scripts
+  to allow external projects to use Geant4 from a build or install tree.
+- Modules/Geant4InstallDirs.cmake : NEW FILE : Adds a standard set of 
+  installation location based on the GNU set. Adapted from GNUInstallDirs
+  provided with CMake 2.8, but cut down to only use directories needed by 
+  Geant4.
+- Modules/CMakeUninstallTarget.cmake : NEW FILE : Adds an 'uninstall' target
+  to remove all items installed via the install command.
+- History: Corrected a couple of entries with incorrect year in the date.
+- Modules/Geant4InterfaceOptions.cmake: Set GEANT4_ADD_FEATURE for all
+  UI/Vis options so that enabled options are reported at the end of
+  configuration.
+
+
+May 25th 2011 - B.Morgan
+- Modules/Geant4InterfaceOptions.cmake : Added new GEANT4_USE_OPENGL_X11
+  option to enable build of OpenGL library X11 component. If enabled, will
+  search for X11 libraries (plus Xmu, which FindX11 doesn't do) and OpenGL.
+  Also performed some cleanup of the Qt section.
+- Templates/geant4-env.sh.in : Added variable setting for OpenGL X11
+- Templates/geant4-env.csh.in : Added variable setting for OpenGL X11
+- Templates/geant4-config.in : Added needed reporting and flags setting for
+  OpenGL X11 support.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added setting of 
+  variable needed to export the existence of OpenGL X11 in the geant4-env
+  scripts.
+- Modules/Geant4ConfigureConfigScript.cmake : Added setting of variables
+  needed to export OpenGL X11 existence and X11 flags to geant4-config script.
+
+
+May 24th 2011 - B.Morgan (cmake-V09-04-00)
+- *** All History for the CMake category will now be in this file ***
+- Templates/geant4-env.sh.in : Added variable setting for RayTracerX
+- Templates/geant4-env.csh.in : Added variable setting for RayTracerX
+- Templates/geant4-config.in : Added needed reporting and flags setting for
+  RayTracerX support.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added setting of 
+  variable needed to export the existence of RayTracerX in the geant4-env
+  scripts.
+- Modules/Geant4ConfigureConfigScript.cmake : Added setting of variables
+  needed to export RayTracerX existence and X11 flags to geant4-config script.
+
 
 December 3rd 2010 - B. Morgan (cmake-V09-03-01)
 - Added generation of geant4-config script.

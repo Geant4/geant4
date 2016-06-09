@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.35 2010/10/20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SubtractionSolid.cc,v 1.35 2010-10-20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -36,6 +36,7 @@
 // 02.08.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
 //                      while -> do-while & surfaceA limitations
 // 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
+// 22.07.11 T.Nikitina: add detection of Infinite Loop in DistanceToIn(p,v)
 //
 // --------------------------------------------------------------------
 
@@ -280,6 +281,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       
       if( fPtrSolidA->Inside(p+dist*v) != kInside )
       {
+        G4int count1=0;
         do
         {
           disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
@@ -294,7 +296,28 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
           {
             disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
             dist += disTmp ;
-          }         
+            count1++;
+            if( count1 > 1000 )  // Infinite loop detected
+            {
+              G4String nameB = fPtrSolidB->GetName();
+              if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid")
+              {
+                nameB = (dynamic_cast<G4DisplacedSolid*>(fPtrSolidB))
+                        ->GetConstituentMovedSolid()->GetName();
+              }
+              std::ostringstream message;
+              message << "Illegal condition caused by solids: "
+                      << fPtrSolidA->GetName() << " and " << nameB << G4endl;
+              message.precision(16);
+              message << "Looping detected in point " << p
+                      << " and direction " << v << G4endl
+                      << "Returning zero distance.";
+              message.precision(6);
+              G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
+                          "GeomSolids1001", JustWarning, message);
+              return 0.0;
+            }
+          }    
         }
         while( Inside(p+dist*v) == kOutside ) ;
       }
@@ -309,6 +332,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       }
       else
       {
+        G4int count2=0;
         while( Inside(p+dist*v) == kOutside )  // pushing loop
         {
           disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
@@ -323,6 +347,28 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               return kInfinity ;
             }                 
             dist += disTmp ;
+            count2++;
+            if( count2 > 1000 )  // Infinite loop detected
+            {
+              G4String nameB = fPtrSolidB->GetName();
+              if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid")
+              {
+                nameB = (dynamic_cast<G4DisplacedSolid*>(fPtrSolidB))
+                        ->GetConstituentMovedSolid()->GetName();
+              }
+              std::ostringstream message;
+              message << "Illegal condition caused by solids: "
+                      << fPtrSolidA->GetName() << " and " << nameB << G4endl;
+              message.precision(16);
+              message << "Looping detected in point " << p
+                      << " and direction " << v << G4endl
+                      << "Returning zero distance.";
+              message.precision(6);
+              G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
+                          "GeomSolids1001", JustWarning, message);
+              return 0.0;         
+
+            }
           }
         }
       }

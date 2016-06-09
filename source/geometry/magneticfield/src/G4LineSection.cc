@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.10 2006/06/29 18:24:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LineSection.cc,v 1.10 2006-06-29 18:24:16 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   G4double distABsquared = VecAtoB.mag2() ;  
   if ( distABsquared == 0.0)
   {
-    G4Exception("G4LineSection::G4LineSection()", "WrongArgumentValue",
+    G4Exception("G4LineSection::G4LineSection()", "GeomField0002",
                 FatalException, "Equal points in input (line->point) ?") ;
   }
   else

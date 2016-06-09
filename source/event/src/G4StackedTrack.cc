@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.9 2006/06/29 18:10:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StackedTrack.cc,v 1.9 2006-06-29 18:10:21 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -48,7 +48,7 @@ G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory)
 G4StackedTrack::~G4StackedTrack()
 { }
 
-const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &)
+G4StackedTrack& G4StackedTrack::operator=(const G4StackedTrack &)
 { return *this; }
 G4int G4StackedTrack::operator==(const G4StackedTrack &right) const 
 { return (this==&right); }

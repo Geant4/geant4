@@ -1,4 +1,4 @@
-$Id: History,v 1.160.2.1 2010/12/14 15:55:56 gcosmo Exp $
+$Id: History,v 1.163 2010-12-27 12:41:19 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -26,9 +26,106 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+12th November 2011  John Allison  (visman-V09-04-12)
+- G4VisListManager<T>::SetCurrent:
+  o Changed "Fatal" to "JustWarning" for non-existent model.
+
+11th November 2011  John Allison  (visman-V09-04-11)
+- G4VisModelManager.hh: Coverity fix.
+
+11th November 2011  John Allison  (visman-V09-04-10)
+- Tagged.
+
+10th November 2011  John Allison
+- G4VisManager.cc: Fixed compiler warning.
+
+5th November 2011  Joseph Perl  (visman-V09-04-09)
+- source.cmake needs G4VisCommandsDefault
+
+4th November 2011  John Allison  (visman-V09-04-08 - needs greps-V09-04-09)
+- G4VisManager:
+  o Added PrintAvailableColours.
+  o Prints available colours  on initialisation.
+- G4VisCommands.cc:
+  o /vis/list prints available colours.
+
+30th October 2011  John Allison  (visman-V09-04-07)
+- G4VisManager:
+  o Added Get/SetDefaultViewParameters.
+  o These are used by viewers during instantiation.
+  o This allows you to set defaults for future operations.
+  o You can do this in code or by commands.  In code, e.g., where you
+    instantiate the vis manager:
+      G4VisManager* visManager = new G4VisExecutive;
+      // You can change the default view parameters, i.e., those used on
+      // instantiation of a viewer.  First instantiate a view parameters
+      // object with default values (e.g., it would draw in wireframe mode).
+      G4ViewParameters vp;
+      // Change drawing style to "Draw surfaces - hidden surfaces removed".
+      vp.SetDrawingStyle(G4ViewParameters::hsr);
+      // Make this default for all new viewers.
+      visManager->SetDefaultViewParameters(vp);
+      visManager->Initialize();
+- G4VisCommandsDefault:
+  o Added /vis/default/hiddenEdge and /vis/default/style.
+  o Sets defaults for future viewers.
+- G4VViewer.cc:
+  o Pick up default view parameters from vis manager.
+
+11th October 2011  John Allison  (visman-V09-04-06)
+- G4VisCommandsViewer: Introduce RefreshIfRequired.
+
+10th October 2011  John Allison  (visman-V09-04-05)
+- G4VViewer: Added virtual function ResetView.
+
+27th September 2011  John Allison
+- G4VisCommandsViewerSet.cc: Avoid setting auto-refresh for viewers
+  that are not auto-refresh by default.
+
+25th September 2011  John Allison  (visman-V09-04-04)
+- G4VisCommandsSceneAdd.cc: Tidied.
+
+16th September 2011  John Allison
+- G4VisCommandsSceneAdd.cc: When adding trajectories
+  (/vis/scene/add/trajectories) print attributes even if warnings
+  are suppressed.
+- Migrated to new G4Exception.
+
+21st and 30th June 2011  John Allison
+- Added /vis/viewer/set/rotationStyle
+  Guidance :
+  Set style of rotation - constrainUpDirection or freeRotation.
+  constrainUpDirection: conventional HEP view.
+  freeRotation: Google-like rotation, using mouse-grab.
+
+27th May 2011  Joseph Perl  (visman-V09-04-03)
+- Tagged.
+
+18th May 2011  Laurent Garnier
+- G4VisCommandGeometrySetVisibility : Add method to set value on a logical volume
+
+17th May 2011  John Allison  (visman-V09-04-02)
+- (Note: visman-V09-04-01 skipped.)
+- G4Scene: Added SetName.
+- G4VisCommandsViewerSet.cc: Fixed Coverity warning.
+- G4VisCommandsSceneAdd.cc: Fixed gcc 4.6.0 warning.
+
+27th December 2010  John Allison  (visman-V09-04-00)
+- Tagged.  This tag DOES include changes below of December 11th.
+
 14th December 2010  Gabriele Cosmo  (visman-V09-03-16)
 - G4VisManager: moved GetVerbosity() static method to non-inline to allow for
   Windows DLL exporting.
+- Tag does NOT include changes below of December 11th.
+
+11th December 2010  John Allison
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/trajectories:
+  o If >= warnings, print available attributes in all cases.
+- G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
+  o Flag kernel visit in all cases.
+- G4VisListManager.hh:
+  o In case of model with existing name, instead of G4Exception, simply
+    replace.
 
 13th November 2010  John Allison  (visman-V09-03-15)
 - G4VisCommandScene.cc:

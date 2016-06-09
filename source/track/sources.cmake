@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:10:58 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:10:58 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4TrackVector.hh
         G4VParticleChange.hh
         G4VParticleChange.icc
+        G4VelocityTable.hh
         G4VUserTrackInformation.hh
     SOURCES
         G4FieldTrackUpdator.cc
@@ -73,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4StepPoint.cc
         G4Track.cc
         G4VParticleChange.cc
+        G4VelocityTable.cc
         G4VUserTrackInformation.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng

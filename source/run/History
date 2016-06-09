@@ -1,4 +1,4 @@
-$Id: History,v 1.203 2010/12/05 12:13:04 allison Exp $
+$Id: History,v 1.203 2010-12-05 12:13:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,115 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 15th, 2011, M.Asai (run-V09-04-27)
+- Added new line to G4ExceptionHandler notification to properly flush buffer.
+
+Nov. 10th, 2011, G.Cosmo (run-V09-04-26)
+- Updated G4ExceptionHandler banner.
+
+Nov. 9th, 2011, H.Kurashige (run-V09-04-25)
+- Fix Coverity defects in PhysicsList classes
+
+Nov. 8th, 2011, H.Kurashige (run-V09-04-24)
+- Update PhysicsListHelper for new DNA processes (Mathieu) 
+
+Oct. 20th, 2011, M.Asai (run-V09-04-23)
+- Improve G4Exception error messages
+
+Oct. 20th, 2011, M.Asai (run-V09-04-22)
+- Remove obsolete G4Exception
+- Re-number G4Exception error numbers.
+
+Sep. 23rd, 2011,  H.Kurashige (run-V09-04-21)
+- Change G4VModularPhysicsList to issue messages 
+  always if physics is added and/or removed.
+  Cleared compilation warning on gcc-4.6.
+
+Sep. 6th, 2011,  H.Kurashige (run-V09-04-20)
+- Fix typo in Process type name in G4PhysicsListHelper
+
+Sep. 5th, 2011,  H.Kurashige (run-V09-04-19)
+- Remove pure virtual declaration for G4VModularPhysicsList::SetCuts()
+  (G4VModularPhysicsList is not an abstract class any more)
+
+Aug. 25th, 2011, G.Cosmo (run-V09-04-18)
+- Added banner for errors and warnings in G4ExceptionHandler.
+  Redirect warnings to cout instead of cerr.
+
+Aug. 10th, 2011, M.Asai (run-V09-04-17)
+- Introducing parallel layered mass geometry.
+  Co-working with geommng-V09-04-03, procuts-V09-04-05, procscore-V09-04-02
+
+Aug. 3rd, 2011, H.Kurashige (run-V09-04-16)
+- Fix errors of INVALID_ITERATOR in  G4VModularPhysicsList::RemovePhysics
+ ()reported by Coverity)
+
+July 24th, 2011, H.Kurashige (run-V09-04-15)
+- Fix a bug in constructor of G4VUserPhysicsList
+  (add isSetDefaultCutValue flag)
+
+July 2nd, 2011, H.Kurashige (run-V09-04-14)
+- Fix a bug of "explicit null deferenced" in G4VModularPhysicsList::RemovePhysics
+
+June 29th, 2011, G.Cosmo (run-V09-04-13)
+- Fix in G4UserPhysicsListMessenger constructor for proper initialisation of UI command.
+
+June 21th, 2011, H.Kurashige (run-V09-04-12)
+- Fix  G4VUserPhysicsList::SetCutsWithDefault()
+  (defaultCutValues was ignored in -08~11 tag)
+
+June 21th, 2011, H.Kurashige (run-V09-04-11)
+- Fix typo in method name
+
+June 21th, 2011, H.Kurashige (run-V09-04-10)
+- Fix bug of lack of Rayleigh process in G4PhysicsListHelper
+
+June 20th, 2011, H.Kurashige (run-V09-04-09)
+- Add ReadInDefaultrderingParameter() in G4PhysicsListHelper
+ to set default values without using any file.
+
+June 18th, 2011, H.Kurashige (run-V09-04-08)
+- Modify to allow zero cut length
+
+June 11th, 2011, H.Kurashige (run-V09-04-07)
+- Added default implemenation of SetCuts
+- Added commanf of /run/getCutForAGivenParticle
+- Removed obsolete method of SetCutValueForOthers
+
+May 31st, 2011,  J.Apostolakis
+- Ensure that a ScoreSplittingProcess is added only once in 
+  G4RunManagerKernel::SetScoreSplitter.
+   Fixes PR 1218
+
+May 20th, 2011, B.Morgan (run-V09-04-06)
+- CMakeLists.txt : Added G4RUN_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+- sources.cmake : Fixed typo in source files listing.
+
+May 10th, 2011, H.Kurashige (run-V09-04-05)
+- Fix bug in G4VUserPhysicsList::CheckParticleList()
+   (fDisableCheckParticleList was ignored in previous tag) 
+
+May 4th, 2011, H.Kurashige (run-V09-04-04)
+- Add NULL check for theTable in G4PhysicsListHelper
+
+May 3rd, 2011, H.Kurashige (run-V09-04-03)
+- Add G4PhysicsListHelper and related classes
+- Add RegisterProcess to G4VUserPhysicsList and G4VPhysicsConstructor
+- Add ReplacePhysics in G4VModulerPhysicsList
+- Add typePhysics in G4VPhysicsConstructor
+
+May 1st, 2011, M.Asai (run-V09-04-02)
+- Remove unnecessary AtRest GPIL of G4ParallelWorldScoringProcess.
+
+February 11th, 2011, M.Asai (run-V09-04-01)
+- G4RunManager.hh : Additional protection against the failure in
+  creating a new directory -- Problem #1157
+
+January 22nd, 2011, M.Asai (run-V09-04-00)
+- G4RunManager.hh : protection for WIN32 against already-existing
+  directory -- Problem #1157
 
 December 5th, 2010, J.Allison (run-V09-03-09)
 - G4RunManagerKernel::RunInitialization: Notify Vis Manager when

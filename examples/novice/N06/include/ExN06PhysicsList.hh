@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.hh,v 1.8 2010/10/23 19:13:23 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: ExN06PhysicsList.hh,v 1.8 2010-10-23 19:13:23 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

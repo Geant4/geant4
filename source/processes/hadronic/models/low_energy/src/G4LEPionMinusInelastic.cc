@@ -24,55 +24,72 @@
 // ********************************************************************
 //
 //
-//
- // Hadronic Process: PionMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: PionMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Nov-1996
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEPionMinusInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LEPionMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                         G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
+#include <iostream>
 
-    // create the target particle
+
+G4LEPionMinusInelastic::G4LEPionMinusInelastic(const G4String& name)
+ : G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(55.*GeV);
+}
+ 
+
+void G4LEPionMinusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEPionMinusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic pi- scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to pions with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+ 
+G4HadFinalState*
+G4LEPionMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                      G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle  
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
+  G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-//    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
-    G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
-    
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4PionMinusInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material* targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4PionMinusInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    G4ReactionProduct currentParticle( 
-    const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
-    currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
-    currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
+  }
+  G4ReactionProduct currentParticle( 
+  const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
+  currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
+  currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done  
+  G4double ek = originalIncident->GetKineticEnergy();
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass();
     
-    G4double ek = originalIncident->GetKineticEnergy();
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass();
-    
-    G4double tkin = targetNucleus.Cinema( ek );
+  G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
     currentParticle.SetKineticEnergy( ek );
     G4double et = ek + amas;
@@ -124,12 +141,13 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
+  delete originalTarget;
+  return &theParticleChange;
+}
+
  
- void
-  G4LEPionMinusInelastic::Cascade(
+void
+G4LEPionMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.6 2006/06/29 15:57:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelTrackerROGeometry.cc,v 1.6 2006-06-29 15:57:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -289,14 +289,11 @@ G4VPhysicalVolume* GammaRayTelTrackerROGeometry::Build()
     new G4LogicalVolume(solidTKRStripY,dummyMat,"Strip Y",0,0,0);	 
 							
 						      
-  G4VPhysicalVolume* physiTKRStripX = 0;
-  G4VPhysicalVolume* physiTKRStripY = 0;
   G4double TKRSiliconPitch = GammaRayTelDetector->GetTKRSiliconPitch();
 
   for (i=0;i< NbOfTKRStrips; i++)
     {  
-      physiTKRStripX = new 
-	G4PVPlacement(0,G4ThreeVector(-TKRActiveTileXY/2 +TKRSiliconPitch/2 +
+      new G4PVPlacement(0,G4ThreeVector(-TKRActiveTileXY/2 +TKRSiliconPitch/2 +
 				      (i)*TKRSiliconPitch, 0., 0.),
 		      "Strip X",		
 		      logicTKRStripX,
@@ -305,8 +302,7 @@ G4VPhysicalVolume* GammaRayTelTrackerROGeometry::Build()
 		      i);	
 
 	
-      physiTKRStripY = new 
-	G4PVPlacement(0,G4ThreeVector(0.,-TKRActiveTileXY/2 
+      new G4PVPlacement(0,G4ThreeVector(0.,-TKRActiveTileXY/2 
 				      +TKRSiliconPitch/2 +
 				      (i)*TKRSiliconPitch, 0.),
 		      "Strip Y",		

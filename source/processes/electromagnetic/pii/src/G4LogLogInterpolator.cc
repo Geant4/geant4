@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolator.cc,v 1.2 2010/11/19 17:16:21 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LogLogInterpolator.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -57,19 +57,28 @@ G4double G4LogLogInterpolator::Calculate(G4double x, G4int bin,
 					 const G4DataVector& data) const
 {
   G4int nBins = data.size() - 1;
+  // ---- MGP ---- To be verified; value = 0. is redundant here
   G4double value = 0.;
-  if (x < points[0])
+  if (x < points[0] || x == 0.)
     {
-      value = 0.;
+      value = 0;
     }
   else if (bin < nBins)
     {
       G4double e1 = points[bin];
       G4double e2 = points[bin+1];
-      G4double d1 = data[bin];
+      G4double d1 = data[bin];     
       G4double d2 = data[bin+1];
-      value = (std::log10(d1)*std::log10(e2/x) + std::log10(d2)*std::log10(x/e1)) / std::log10(e2/e1);
-      value = std::pow(10.,value);
+      
+      if (d1 != 0. && d2 != 0.)
+	{
+	  value = (std::log10(d1)*std::log10(e2/x) + std::log10(d2)*std::log10(x/e1)) / std::log10(e2/e1);
+	  value = std::pow(10.,value);
+	}
+      else
+	{
+	  value = 0.;
+	}
     }
   else
     {

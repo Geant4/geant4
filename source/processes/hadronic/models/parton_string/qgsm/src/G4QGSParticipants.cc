@@ -35,6 +35,7 @@
 G4int G4QGSParticipants_NPart = 0;
 
 G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV, 250*MeV),
+					 ModelMode(SOFT),
                                          //nCutMax(7),ThresholdParameter(0.45*GeV),
                                          nCutMax(7),ThresholdParameter(0.000*GeV),
                                          QGSMThreshold(3*GeV),theNucleonRadius(1.5*fermi)
@@ -43,8 +44,9 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV,
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
-: G4VParticipants(), nCutMax(right.nCutMax),ThresholdParameter(right.ThresholdParameter),
-  QGSMThreshold(right.QGSMThreshold),theNucleonRadius(right.theNucleonRadius)
+: G4VParticipants(),ModelMode(right.ModelMode), nCutMax(right.nCutMax),
+  ThresholdParameter(right.ThresholdParameter), QGSMThreshold(right.QGSMThreshold),
+  theNucleonRadius(right.theNucleonRadius)
 {
 }
 
@@ -86,8 +88,8 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   theNucleus->StartLoop();
   G4Nucleon * pNucleon = theNucleus->GetNextNucleon();
   G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
-//--DEBUG--G4cout << " qgspart- " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
-//--DEBUG--      << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
+      //--DEBUG--G4cout << " qgspart- " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
+      //--DEBUG--      << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
   G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + pNucleon->GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;
@@ -105,14 +107,15 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
   G4int totalCuts = 0;
-  G4double impactUsed = 0;
 
   #ifdef debug_QGS
   G4double eK = thePrimary.GetKineticEnergy()/GeV;
   #endif
-#ifdef debug_G4QGSParticipants
+  #ifdef debug_G4QGSParticipants
+  G4double impactUsed = 0;
   G4LorentzVector intNuclMom;
-#endif
+  #endif
+
   while(theInteractions.size() == 0)
   {
     // choose random impact parameter HPW
@@ -121,13 +124,13 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
     G4double impactX = theImpactParameter.first; 
     G4double impactY = theImpactParameter.second;
     
-    // loop over nuclei to find collissions HPW
+    // loop over nucleons to find collisions
     theNucleus->StartLoop();
     G4int nucleonCount = 0; // debug
     G4QGSParticipants_NPart = 0;
-#ifdef debug_G4QGSParticipants
-    intNuclMom=aPrimaryMomentum;
-#endif
+    #ifdef debug_G4QGSParticipants
+      intNuclMom=aPrimaryMomentum;
+    #endif
     while( (pNucleon = theNucleus->GetNextNucleon()) )
     {
       if(totalCuts>1.5*thePrimary.GetKineticEnergy()/GeV) 
@@ -136,7 +139,9 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
       }
        nucleonCount++; // debug
       // Needs to be moved to Probability class @@@
-      G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
+      G4LorentzVector nucleonMomentum=pNucleon->Get4Momentum();
+      nucleonMomentum.setE(nucleonMomentum.e()-pNucleon->GetBindingEnergy());
+      G4double s = (aPrimaryMomentum + nucleonMomentum).mag2();
       G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x()) +
                            sqr(impactY - pNucleon->GetPosition().y());
       G4double Probability = theProbability.GetInelasticProbability(s, Distance2);  
@@ -145,13 +150,13 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
 //      ModelMode = DIFFRACTIVE;
       if (Probability > rndNumber)
       {
-//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<std::sqrt(Distance2)<<G4endl;
-//--DEBUG--         G4cout << " qgspart+  " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
-//--DEBUG--              << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
-
-#ifdef debug_G4QGSParticipants
-       intNuclMom += pNucleon->Get4Momentum();
-#endif
+       #ifdef debug_G4QGSParticipants
+	 G4cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<std::sqrt(Distance2)<<G4endl;
+	 G4cout << " qgspart+  " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
+	      << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
+         intNuclMom += nucleonMomentum;
+       #endif
+       pNucleon->SetMomentum(nucleonMomentum);
        G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
         G4QGSParticipants_NPart ++;
 	theTargets.push_back(aTarget);
@@ -200,15 +205,21 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
           aInteraction->SetNumberOfSoftCollisions(nCut+1);
           theInteractions.push_back(aInteraction);
           totalCuts += nCut+1;
-          impactUsed=Distance2;
+          #ifdef debug_G4QGSParticipants
+             impactUsed=Distance2;
+          #endif
        }
       }
     }
-//--DEBUG--  g4cout << G4endl<<"NUCLEONCOUNT "<<nucleonCount<<G4endl;
-//--DEBUG--  G4cout << " Interact 4-Vect " << intNuclMom << G4endl; 
+    #ifdef debug_G4QGSParticipants
+       G4cout << G4endl<<"NUCLEONCOUNT "<<nucleonCount<<G4endl;
+       G4cout << " Interact 4-Vect " << intNuclMom << G4endl; 
+    #endif
   }
-//--DEBUG--  cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
-//--DEBUG--  cout << "Impact Parameter used = "<<impactUsed<<G4endl;
+    #ifdef debug_G4QGSParticipants
+       G4cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
+       G4cout << "Impact Parameter used = "<<impactUsed<<G4endl;
+    #endif
   return aProjectile;
 }
 

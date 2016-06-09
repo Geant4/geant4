@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.11 2006/11/14 07:11:19 perl Exp $
+// $Id: A01HadCalorimeterHit.cc,v 1.11 2006-11-14 07:11:19 perl Exp $
 // --------------------------------------------------------------
 //
 

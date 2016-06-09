@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.23 2010/06/12 04:07:45 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EventManager.hh,v 1.23 2010-06-12 04:07:45 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

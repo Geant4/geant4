@@ -70,7 +70,7 @@
 
   G4ReactionProduct * 
   G4NeutronHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
-                                    G4int angularRep, G4int interpolE )
+                                    G4int angularRep, G4int /*interpolE*/ )
   {
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);
@@ -111,203 +111,279 @@
     G4int it(0);
     G4double fsEnergy(0);
     G4double cosTh(0);
-    if(angularRep==1)
-    {
+
+   if( angularRep == 1 )
+   {
 // 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
-	if (interpolE == 2)
-	{
+       //if (interpolE == 2)
+//110609 above was wrong interupition, pointed out by E.Mendoza and D.Cano (CIMAT)
+//Following are reviesd version written by T.Koi (SLAC)
+      if ( nDiscreteEnergies != 0 )
+      {
 
-            //TK080711
-           if ( fresh == true ) 
-           { 
-              remaining_energy = theAngular[0].GetLabel();
-              fresh = false; 
-           }
-           //TK080711
+//1st check remaining_energy 
+//	if this is the first set it. (How?)
+         if ( fresh == true ) 
+         { 
+            //Discrete Lines, larger energies come first 
+            //Continues Emssions, low to high                                      LAST  
+            remaining_energy = std::max ( theAngular[0].GetLabel() , theAngular[nEnergies-1].GetLabel() );
+            fresh = false; 
+         }
 
-	   G4double random = G4UniformRand();
-	   G4double * running = new G4double[nEnergies+1];
-	   running[0]=0;
+         //Cheating for small remaining_energy 
+         //TEMPORAL SOLUTION
+         if ( nDiscreteEnergies == nEnergies )
+            remaining_energy = std::max ( remaining_energy , theAngular[nDiscreteEnergies-1].GetLabel() ); //Minimum Line
+         else
+         {
+            G4double cont_min = theAngular[nDiscreteEnergies].GetLabel();   
+            if ( theAngular[nDiscreteEnergies].GetLabel() == 0.0 ) cont_min = theAngular[nDiscreteEnergies+1].GetLabel();   
+            
+            remaining_energy = std::max ( remaining_energy , std::min ( theAngular[nDiscreteEnergies-1].GetLabel() , cont_min ) );   //Minimum Line or grid 
+         }
+//
+	 G4double random = G4UniformRand();
 
-	    for(i=1; i<nEnergies+1; i++)
+	 G4double * running = new G4double[nEnergies+1];
+	 running[0] = 0.0;
+
+         for ( G4int i = 0 ; i < nDiscreteEnergies ; i++ ) 
+         {
+            G4double delta = 0.0;
+            if ( theAngular[i].GetLabel() <= remaining_energy ) delta = theAngular[i].GetValue(0);
+            running[i+1] = running[i] + delta;
+         }
+         G4double tot_prob_DIS = running[ nDiscreteEnergies ];
+ 
+         for ( G4int i = nDiscreteEnergies ; i < nEnergies ; i++ ) 
+         {
+            G4double delta = 0.0;
+            if ( theAngular[i].GetLabel() <= remaining_energy ) delta = theAngular[i].GetValue(0);
+
+            //To calculate Prob. e_low and e_high should be in eV 
+            G4double e_low = theAngular[i-1].GetLabel()/eV;
+            if ( i == nDiscreteEnergies ) e_low = 0.0/eV;
+            G4double e_high = theAngular[i].GetLabel()/eV;
+
+            running[i+1] = running[i] + ( ( e_high - e_low ) * delta );
+         }
+         G4double tot_prob_CON = running[ nEnergies ] - running[ nDiscreteEnergies ];
+
+         // Normalize random 
+         random *= (tot_prob_DIS + tot_prob_CON);
+//2nd Judge Discrete or not             This shoudl be relatively close to 1  For safty 
+         if ( random <= ( tot_prob_DIS / ( tot_prob_DIS + tot_prob_CON ) ) || nDiscreteEnergies == nEnergies )      
+         {
+//          Discrete Emission 
+            for ( G4int i = 0 ; i < nDiscreteEnergies ; i++ )
 	    {
-               //TK080711
-               if ( remaining_energy >= theAngular[ i-1 ].GetLabel() ) 
-                  running[i] = running[i-1] + theAngular[i-1].GetValue(0);
-               else
-                  running[i] = running[i-1];
-               //TK080711
-	    }
-
-            //080730
-            if ( running[ nEnergies ] != 0 ) 
-            {
-
-	       for ( i = 1 ; i < nEnergies+1 ; i++ )
-	       {
-	 	it = i-1;
-		if ( random > running[ i-1 ]/running[ nEnergies ] && random <= running[ i ] / running[ nEnergies ] ) break;
+               //Here we should use i+1
+	       if ( random < running[ i+1 ] ) 
+               {
+                  it = i; 
+                  break;
                }
-	       fsEnergy = theAngular[ it ].GetLabel();
-
             }
+            fsEnergy = theAngular[ it ].GetLabel();
 
-            //TK080711 
-            if ( i == nEnergies+1 || running[ nEnergies ] == 0 ) fsEnergy = remaining_energy;
-            //TK080711 //080730
-
-	    G4NeutronHPLegendreStore theStore(1);
+ 	    G4NeutronHPLegendreStore theStore(1);
 	    theStore.Init(0,fsEnergy,nAngularParameters);
-	    for(i=0;i<nAngularParameters;i++)
+	    for (G4int i=0;i<nAngularParameters;i++)
 	    {
-		theStore.SetCoeff(0,i,theAngular[it].GetValue(i));
+	       theStore.SetCoeff(0,i,theAngular[it].GetValue(i));
 	    }
 	    // use it to sample.
 	    cosTh = theStore.SampleMax(fsEnergy);
+         //Done 
+         }
+         else
+         {
+//          Continuous Emission
+            for ( G4int i = nDiscreteEnergies ; i < nEnergies ; i++ )
+	    {
+               //Here we should use i
+	       if ( random < running[ i ] ) 
+               {
+                  it = i; 
+                  break;
+               }
+            }
 
-            //TK080711
-            remaining_energy -= fsEnergy;
-            //TK080711
+            G4double x1 = running[it-1];
+            G4double x2 = running[it];
 
-           //080801b
-	   delete[] running;
-           //080801b
+            G4double y1 = 0.0;
+            if ( it != nDiscreteEnergies ) 
+                y1 = theAngular[it-1].GetLabel();
+            G4double y2 = theAngular[it].GetLabel();
+
+            fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
+                                         random,x1,x2,y1,y2);
+
+            G4NeutronHPLegendreStore theStore(2);
+            theStore.Init(0,y1,nAngularParameters);
+            theStore.Init(1,y2,nAngularParameters);
+            theStore.SetManager(theManager);
+            for (G4int i=0;i<nAngularParameters;i++)
+            {
+               G4int itt = it;
+               if ( it == nDiscreteEnergies ) itt = it+1; //"This case "it-1" has data for Discrete, so we will use an extrpolate values it and it+1
+               if ( it == 0 ) 
+               {
+                  //Safty for unexpected it = 0;
+                  //G4cout << "110611 G4NeutronHPContAngularPar::Sample it = 0; invetigation required " << G4endl;
+                  itt = it+1; 
+               }
+               theStore.SetCoeff(0,i,theAngular[itt-1].GetValue(i));
+               theStore.SetCoeff(1,i,theAngular[itt].GetValue(i));
+            }
+            // use it to sample.
+            cosTh = theStore.SampleMax(fsEnergy);
+
+        //Done 
         }
+
+         //TK080711
+         remaining_energy -= fsEnergy;
+         //TK080711
+
+         //080801b
+	 delete[] running;
+         //080801b
+      } 
       else 
       {
+         // Only continue, TK will clean up 
 
-            //080714 
-            if ( fresh == true )
-            {
-               remaining_energy = theAngular[ nEnergies-1 ].GetLabel();
-               fresh = false;
-            }
-            //080714 
-
-     
-      G4double random = G4UniformRand();
-      G4double * running = new G4double[nEnergies];
-      running[0]=0;
-      G4double weighted = 0;
-      for(i=1; i<nEnergies; i++)
-      {
+         //080714 
+         if ( fresh == true )
+         {
+            remaining_energy = theAngular[ nEnergies-1 ].GetLabel();
+            fresh = false;
+         }
+         //080714 
+         G4double random = G4UniformRand();
+         G4double * running = new G4double[nEnergies];
+         running[0]=0;
+         G4double weighted = 0;
+         for(i=1; i<nEnergies; i++)
+         {
 /*
-        if(i!=0) 
-        {
-          running[i]=running[i-1];
-        }
-        running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
-                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
-                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
-        weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
-                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
-                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+           if(i!=0) 
+           {
+             running[i]=running[i-1];
+           }
+           running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
+                                theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                                theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+           weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
+                                theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                                theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
 */
 
-        running[i]=running[i-1];
-        if ( remaining_energy >= theAngular[i].GetLabel() )
-        {
-           running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
-                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
-                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
-           weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
-                             theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
-                             theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
-        }
-      }
-      // cash the mean energy in this distribution
-      //080409 TKDB
-      if ( nEnergies == 1 || running[nEnergies-1] == 0 )  
-         currentMeanEnergy = 0.0;
-      else
-      { 
-         currentMeanEnergy = weighted/running[nEnergies-1];
-      }
-      
-      //080409 TKDB
-      if ( nEnergies == 1 ) it = 0; 
+             running[i]=running[i-1];
+             if ( remaining_energy >= theAngular[i].GetLabel() )
+             {
+                running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
+                                 theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                                 theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+                weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(i-1),
+                                 theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
+                                 theAngular[i-1].GetValue(0), theAngular[i].GetValue(0));
+             }
+         }
+         // cash the mean energy in this distribution
+         //080409 TKDB
+         if ( nEnergies == 1 || running[nEnergies-1] == 0 )  
+            currentMeanEnergy = 0.0;
+         else
+         { 
+            currentMeanEnergy = weighted/running[nEnergies-1];
+         }
+         
+         //080409 TKDB
+         if ( nEnergies == 1 ) it = 0; 
 
-      //080729
-      if ( running[nEnergies-1] != 0 )  
-      {
-         for ( i = 1 ; i < nEnergies ; i++ )
+         //080729
+         if ( running[nEnergies-1] != 0 )  
          {
-            it = i;
-            if ( random < running [ i ] / running [ nEnergies-1 ] ) break;
-         } 
+            for ( i = 1 ; i < nEnergies ; i++ )
+            {
+               it = i;
+               if ( random < running [ i ] / running [ nEnergies-1 ] ) break;
+            } 
+         }
+
+         //080714
+         if ( running [ nEnergies-1 ] == 0 ) it = 0;
+         //080714
+
+         if (it<nDiscreteEnergies||it==0) 
+         {
+           if(it == 0)
+           {
+             fsEnergy = theAngular[it].GetLabel();
+             G4NeutronHPLegendreStore theStore(1);
+             theStore.Init(0,fsEnergy,nAngularParameters);
+             for(i=0;i<nAngularParameters;i++)
+             {
+               theStore.SetCoeff(0,i,theAngular[it].GetValue(i));
+             }
+             // use it to sample.
+             cosTh = theStore.SampleMax(fsEnergy);
+           }
+           else
+           {
+             G4double e1, e2;
+             e1 = theAngular[it-1].GetLabel();
+             e2 = theAngular[it].GetLabel();
+             fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
+                                           random,
+                                           running[it-1]/running[nEnergies-1], 
+                                           running[it]/running[nEnergies-1],
+                                           e1, e2);
+             // fill a Legendrestore
+             G4NeutronHPLegendreStore theStore(2);
+             theStore.Init(0,e1,nAngularParameters);
+             theStore.Init(1,e2,nAngularParameters);
+             for(i=0;i<nAngularParameters;i++)
+             {
+               theStore.SetCoeff(0,i,theAngular[it-1].GetValue(i));
+               theStore.SetCoeff(1,i,theAngular[it].GetValue(i));
+             }
+             // use it to sample.
+             theStore.SetManager(theManager);
+             cosTh = theStore.SampleMax(fsEnergy);
+           }
+         }
+         else // continuum contribution
+         {
+           G4double x1 = running[it-1]/running[nEnergies-1];
+           G4double x2 = running[it]/running[nEnergies-1];
+           G4double y1 = theAngular[it-1].GetLabel();
+           G4double y2 = theAngular[it].GetLabel();
+           fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
+                                         random,x1,x2,y1,y2);
+           G4NeutronHPLegendreStore theStore(2);
+           theStore.Init(0,y1,nAngularParameters);
+           theStore.Init(1,y2,nAngularParameters);
+           theStore.SetManager(theManager);
+           for(i=0;i<nAngularParameters;i++)
+           {
+             theStore.SetCoeff(0,i,theAngular[it-1].GetValue(i));
+             theStore.SetCoeff(1,i,theAngular[it].GetValue(i));
+           }
+           // use it to sample.
+           cosTh = theStore.SampleMax(fsEnergy);
+         }
+         delete [] running;
+
+         //080714
+         remaining_energy -= fsEnergy;
+         //080714
       }
-
-      //080714
-      if ( running [ nEnergies-1 ] == 0 ) it = 0;
-      //080714
-
-      if(it<nDiscreteEnergies||it==0) 
-      {
-        if(it == 0)
-        {
-          fsEnergy = theAngular[it].GetLabel();
-          G4NeutronHPLegendreStore theStore(1);
-          theStore.Init(0,fsEnergy,nAngularParameters);
-          for(i=0;i<nAngularParameters;i++)
-          {
-            theStore.SetCoeff(0,i,theAngular[it].GetValue(i));
-          }
-          // use it to sample.
-          cosTh = theStore.SampleMax(fsEnergy);
-        }
-        else
-        {
-          G4double e1, e2;
-          e1 = theAngular[it-1].GetLabel();
-          e2 = theAngular[it].GetLabel();
-          fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
-                                        random,
-                                        running[it-1]/running[nEnergies-1], 
-                                        running[it]/running[nEnergies-1],
-                                        e1, e2);
-          // fill a Legendrestore
-          G4NeutronHPLegendreStore theStore(2);
-          theStore.Init(0,e1,nAngularParameters);
-          theStore.Init(1,e2,nAngularParameters);
-          for(i=0;i<nAngularParameters;i++)
-          {
-            theStore.SetCoeff(0,i,theAngular[it-1].GetValue(i));
-            theStore.SetCoeff(1,i,theAngular[it].GetValue(i));
-          }
-          // use it to sample.
-          theStore.SetManager(theManager);
-          cosTh = theStore.SampleMax(fsEnergy);
-        }
-      }
-      else // continuum contribution
-      {
-        G4double x1 = running[it-1]/running[nEnergies-1];
-        G4double x2 = running[it]/running[nEnergies-1];
-        G4double y1 = theAngular[it-1].GetLabel();
-        G4double y2 = theAngular[it].GetLabel();
-        fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
-                                      random,x1,x2,y1,y2);
-        G4NeutronHPLegendreStore theStore(2);
-        theStore.Init(0,y1,nAngularParameters);
-        theStore.Init(1,y2,nAngularParameters);
-        theStore.SetManager(theManager);
-        for(i=0;i<nAngularParameters;i++)
-        {
-          theStore.SetCoeff(0,i,theAngular[it-1].GetValue(i));
-          theStore.SetCoeff(1,i,theAngular[it].GetValue(i));
-        }
-        // use it to sample.
-        cosTh = theStore.SampleMax(fsEnergy);
-      }
-      delete [] running;
-
-      //080714
-      remaining_energy -= fsEnergy;
-      //080714
-
-      }
-
-    }
+   }
     else if(angularRep==2)
     {
       // first get the energy (already the right for this incoming energy)

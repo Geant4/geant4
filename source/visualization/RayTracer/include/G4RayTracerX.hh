@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.hh,v 1.4 2006/06/29 21:23:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayTracerX.hh,v 1.4 2006-06-29 21:23:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // John Allison  11th September 2003

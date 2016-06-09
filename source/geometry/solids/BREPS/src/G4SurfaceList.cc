@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceList.cc,v 1.8 2008/03/13 14:18:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceList.cc,v 1.8 2008-03-13 14:18:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

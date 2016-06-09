@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNNToDeltaDelta.cc,v 1.2 2006/06/29 20:39:48 gunter Exp $ //
+// $Id: G4ConcreteNNToDeltaDelta.cc,v 1.2 2006-06-29 20:39:48 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4KineticTrack.hh"

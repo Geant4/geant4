@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.68 2010/11/05 15:19:29 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.68 2010-11-05 15:19:29 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  31st December 1997.
@@ -133,7 +133,8 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler)
 {
   if (!fpMP) G4Exception
-    ("G4PhysicalVolumeModel::DescribeYourselfTo: No modeling parameters.");
+    ("G4PhysicalVolumeModel::DescribeYourselfTo",
+     "modeling0003", FatalException, "No modeling parameters.");
 
   // For safety...
   fCurrentDepth = 0;
@@ -385,7 +386,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   G4int copyNo = fpCurrentPV->GetCopyNo();
   fFullPVPath.push_back
     (G4PhysicalVolumeNodeID
-     (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
+     (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
 
   if (thisToBeDrawn) {
 
@@ -393,7 +394,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     G4int copyNo = fpCurrentPV->GetCopyNo();
     fDrawnPVPath.push_back
       (G4PhysicalVolumeNodeID
-       (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
+       (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
 
     if (fpMP->IsExplode() && fDrawnPVPath.size() == 1) {
       // For top-level drawn volumes, explode along radius...
@@ -594,9 +595,6 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  if (warn) {
-    G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
-  }
   G4PhysicalVolumeModel searchModel (world);
   G4PhysicalVolumeSearchScene searchScene
     (&searchModel, fTopPVName, fTopPVCopyNo);
@@ -606,12 +604,14 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
   if (foundVolume) {
-    if (warn) {
-      G4cout << "  Volume of the same name and copy number (\""
+    if (foundVolume != fpTopPV && warn) {
+      G4cout <<
+  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+  "\n  copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
 	     << ") still exists and is being used."
-	"\n  WARNING: This does not necessarily guarantee it's the same"
-	"\n  volume you originally specified in /vis/scene/add/."
+  "\n  But it is not the same volume you originally specified"
+  "\n  in /vis/scene/add/."
 	     << G4endl;
     }
     fpTopPV = foundVolume;
@@ -620,7 +620,9 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   }
   else {
     if (warn) {
-      G4cout << "  A volume of the same name and copy number (\""
+      G4cout <<
+	"G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+	"\n  copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
 	     << ") no longer exists."
 	     << G4endl;
@@ -717,7 +719,7 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   if (!fpCurrentLV) {
      G4Exception
         ("G4PhysicalVolumeModel::CreateCurrentAttValues",
-         "",
+         "modeling0004",
          JustWarning,
          "Current logical volume not defined.");
      return values;
@@ -770,6 +772,7 @@ std::ostream& operator<<
        << ':' << node.GetCopyNo()
        << '[' << node.GetNonCulledDepth() << ']'
        << ':' << node.GetTransform();
+    if (!node.GetDrawn()) os << "  Not "; os << "drawn";
   } else {
     os << "Null node";
   }
@@ -785,9 +788,9 @@ const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetT
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetTranslation",
-		"Index out of range",
+		"modeling0005",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   static G4ThreeVector tempTranslation;
   tempTranslation = fFullPVPath[i].GetTransform().getTranslation();
@@ -799,9 +802,9 @@ const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetRotation",
-		"Index out of range",
+		"modeling0006",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   static G4RotationMatrix tempRotation;
   tempRotation = fFullPVPath[i].GetTransform().getRotation();
@@ -813,9 +816,9 @@ G4VPhysicalVolume* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetVol
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetVolume",
-		"Index out of range",
+		"modeling0007",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetPhysicalVolume();
 }
@@ -825,9 +828,9 @@ G4VSolid* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetSolid(G4int 
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetSolid",
-		"Index out of range",
+		"modeling0008",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
 }
@@ -837,9 +840,9 @@ G4int G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetReplicaNumber(G4
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetReplicaNumber",
-		"Index out of range",
+		"modeling0009",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetCopyNo();
 }

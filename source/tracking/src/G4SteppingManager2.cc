@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.38 2010/07/19 13:41:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SteppingManager2.cc,v 1.38 2010-07-19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -175,7 +175,7 @@ void G4SteppingManager::GetProcessNumber()
                                                       &fCondition );
 #ifdef G4VERBOSE
                          // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->DPSLPostStep();
+     if(verboseLevel>0) fVerbose->DPSLPostStep();
 #endif
 
      switch (fCondition) {
@@ -186,7 +186,9 @@ void G4SteppingManager::GetProcessNumber()
 		 ->SetProcessDefinedStep(fCurrentProcess);
 	     break;
 	 case Conditionally:
-	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	   //	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	     G4Exception("G4SteppingManager::DefinePhysicalStepLength()", "Tracking1001", FatalException, "This feature no more supported");
+
 	     break;
 	 case Forced:
 	     (*fSelectedPostStepDoItVector)[np] = Forced;
@@ -244,7 +246,7 @@ void G4SteppingManager::GetProcessNumber()
                                     &fGPILSelection );
 #ifdef G4VERBOSE
                          // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->DPSLAlongStep();
+     if(verboseLevel>0) fVerbose->DPSLAlongStep();
 #endif
      if(physIntLength < PhysicalStep){
        PhysicalStep = physIntLength;
@@ -258,12 +260,8 @@ void G4SteppingManager::GetProcessNumber()
        }
 
     	  // Transportation is assumed to be the last process in the vector
-       if(kp == MAXofAlongStepLoops-1) {
-	   if (fTrack->GetNextVolume() != 0)
-	       fStepStatus = fGeomBoundary;
-	   else
-	       fStepStatus = fWorldBoundary;	
-       }
+       if(kp == MAXofAlongStepLoops-1)
+	  fStepStatus = fGeomBoundary;
      }
 
      // Make sure to check the safety, even if Step is not limited 
@@ -491,12 +489,16 @@ void G4SteppingManager::InvokePostStepDoItProcs()
      if(Cond != InActivated){
        if( ((Cond == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
 	   ((Cond == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
-	   ((Cond == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
+	   //	   ((Cond == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
 	   ((Cond == ExclusivelyForced) && (fStepStatus == fExclusivelyForcedProc)) || 
 	   ((Cond == StronglyForced) ) 
 	  ) {
 
 	 InvokePSDIP(np);
+         if ((np==0) && (fTrack->GetNextVolume() == 0)){
+           fStepStatus = fWorldBoundary;
+           fStep->GetPostStepPoint()->SetStepStatus( fStepStatus );
+         }
        }
      } //if(*fSelectedPostStepDoItVector(np)........
 

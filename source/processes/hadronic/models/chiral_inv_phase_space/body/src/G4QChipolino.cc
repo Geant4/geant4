@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.36 2009/08/10 16:36:53 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QChipolino.cc,v 1.36 2009-08-10 16:36:53 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -519,7 +519,7 @@ G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
 ostream& operator<<(ostream& lhs, G4QChipolino& rhs)
-{//      ===========================================
+{
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;
 }

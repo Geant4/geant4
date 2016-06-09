@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.8 2010/11/03 08:29:02 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.8 2010-11-03 08:29:02 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
 // Modifications
@@ -434,5 +434,14 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qMinKinEAtGeneCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qMinKinEAtGeneCmd->SetParameter(param);
+  //
+  qStepCheckerCmd = new G4UIcommand("/score/quantity/stepChecker",this);
+  qStepCheckerCmd->SetGuidance("Display a comment when this PS is invoked");
+  qStepCheckerCmd->
+  SetGuidance("[usage] /score/quantiy/stepChecker qname");
+  qStepCheckerCmd->SetGuidance("  qname  :(String) scorer name");
+  param = new G4UIparameter("qname",'s',false);
+  qStepCheckerCmd->SetParameter(param);
+
 }
 

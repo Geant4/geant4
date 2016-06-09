@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSigmaMinusNChannel.hh,v 1.7 2010/06/25 09:42:46 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+// $Id: G4CascadeSigmaMinusNChannel.hh,v 1.7 2010-06-25 09:42:46 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler

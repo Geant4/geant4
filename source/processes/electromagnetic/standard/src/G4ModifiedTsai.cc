@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.cc,v 1.1 2010/10/14 15:17:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ModifiedTsai.cc,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +44,7 @@
 // 24 Mar 2003 A.Trindade Fix in Tsai generator in order to prevent theta 
 //                        generation above pi
 // 13 Oct 2010  V.Ivanchenko  Moved to standard and improved comment
+// 26.04.2011   V.Grichine    Clean-up of PolarAngle method 
 //
 // Class Description: 
 //
@@ -74,19 +75,24 @@ G4double G4ModifiedTsai::PolarAngle(const G4double initial_energy,
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
   // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  G4double totalEnergy = initial_energy + electron_mass_c2;   
+  G4double gamma = 1. + initial_energy/electron_mass_c2;   
+  G4double uMax  = gamma*pi;
 
-  const G4double a1 = 0.625, a2 = 3.*a1, d = 27.;
-  G4double u, theta = 0;
+  const G4double a1     = 0.625;
+  const G4double a2     = 1.875;
+  const G4double border = 0.25;
+  G4double u, theta;
 
-  do{
+  do
+  {
     u = - std::log(G4UniformRand()*G4UniformRand());
 
-    if (9./(9.+d) > G4UniformRand()) { u /= a1; }
-    else                             { u /= a2; }
+    if ( border > G4UniformRand() ) u /= a1; 
+    else                            u /= a2; 
     
-    theta = u*electron_mass_c2/totalEnergy;
-  } while(u*electron_mass_c2 > totalEnergy*pi);
+  } while( u > uMax );
+
+  theta = u/gamma;
 
   return theta;
 }

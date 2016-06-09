@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc,v 1.7 2010/06/16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4StrawTubeXTRadiator.cc,v 1.7 2010-06-16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4StrawTubeXTRadiator.hh"

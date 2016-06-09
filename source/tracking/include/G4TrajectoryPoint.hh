@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh,v 1.19 2010/10/27 07:57:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TrajectoryPoint.hh,v 1.19 2010-10-27 07:57:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //

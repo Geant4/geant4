@@ -32,8 +32,8 @@
 //    *                                   *
 //    *************************************
 //
-// $Id: PurgMagTabulatedField3D.cc,v 1.4 2006/06/29 16:06:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMagTabulatedField3D.cc,v 1.4 2006-06-29 16:06:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "PurgMagTabulatedField3D.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExP01MagneticField.cc,v 1.2 2006/06/29 17:39:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExP01MagneticField.cc,v 1.2 2006-06-29 17:39:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //  
 //   User Field class implementation.
 //

@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Physics model class G4LElastic
-//
-//
 // G4 Model: Low-energy Elastic scattering
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
@@ -37,80 +33,100 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 // 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
 // 23-JAN-07 V.Ivanchenko: add protection inside sqrt
-//
 
 #include "globals.hh"
 #include "G4LElastic.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include <iostream>
+
+
+G4LElastic::G4LElastic(const G4String& name)
+ :G4HadronicInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(DBL_MAX);
+}
+
+
+void G4LElastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LElastic is one of the Low Energy Parameterized (LEP)\n"
+          << "models used to implement elastic hadron scattering from nuclei.\n"
+          << "It is a re-engineered version of the GHEISHA code of\n"
+          << "H. Fesefeldt.  It performs simplified two-body elastic\n"
+          << "scattering for all long-lived hadronic projectiles by using\n"
+          << "a two-exponential parameterization in momentum transfer.\n"
+          << "It is valid for incident hadrons of all energies.\n";
+}
 
 
 G4HadFinalState*
 G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-   if(getenv("debug_LElastic")) verboseLevel = 5;
-   theParticleChange.Clear();
-   const G4HadProjectile* aParticle = &aTrack;
-   G4double atno2 = targetNucleus.GetN();
-   G4double zTarget = targetNucleus.GetZ();
-   theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-   theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+  if(getenv("debug_LElastic")) verboseLevel = 5;
+  theParticleChange.Clear();
+  const G4HadProjectile* aParticle = &aTrack;
+  G4double atno2 = targetNucleus.GetA_asInt();
+  G4double zTarget = targetNucleus.GetZ_asInt();
+  theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+  theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
 
-// Elastic scattering off Hydrogen
+  // Elastic scattering off Hydrogen
 
-   G4DynamicParticle* aSecondary = 0;
-   if (atno2 < 1.5) {
-      const G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
-      if (aParticleType == G4PionPlus::PionPlus())
-         aSecondary = LightMedia.PionPlusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4PionMinus::PionMinus())
-         aSecondary = LightMedia.PionMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4KaonPlus::KaonPlus())
-         aSecondary = LightMedia.KaonPlusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4KaonZeroShort::KaonZeroShort())
-         aSecondary = LightMedia.KaonZeroShortExchange(aParticle,targetNucleus);
-      else if (aParticleType == G4KaonZeroLong::KaonZeroLong())
-         aSecondary = LightMedia.KaonZeroLongExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4KaonMinus::KaonMinus())
-         aSecondary = LightMedia.KaonMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4Proton::Proton())
-         aSecondary = LightMedia.ProtonExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiProton::AntiProton())
-         aSecondary = LightMedia.AntiProtonExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4Neutron::Neutron())
-         aSecondary = LightMedia.NeutronExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiNeutron::AntiNeutron())
-         aSecondary = LightMedia.AntiNeutronExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4Lambda::Lambda())
-         aSecondary = LightMedia.LambdaExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiLambda::AntiLambda())
-         aSecondary = LightMedia.AntiLambdaExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4SigmaPlus::SigmaPlus())
-         aSecondary = LightMedia.SigmaPlusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4SigmaMinus::SigmaMinus())
-         aSecondary = LightMedia.SigmaMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiSigmaPlus::AntiSigmaPlus())
-         aSecondary = LightMedia.AntiSigmaPlusExchange(aParticle,targetNucleus);
-      else if (aParticleType == G4AntiSigmaMinus::AntiSigmaMinus())
-         aSecondary= LightMedia.AntiSigmaMinusExchange(aParticle,targetNucleus);
-      else if (aParticleType == G4XiZero::XiZero())
-         aSecondary = LightMedia.XiZeroExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4XiMinus::XiMinus())
-         aSecondary = LightMedia.XiMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiXiZero::AntiXiZero())
-         aSecondary = LightMedia.AntiXiZeroExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiXiMinus::AntiXiMinus())
-         aSecondary = LightMedia.AntiXiMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4OmegaMinus::OmegaMinus())
-         aSecondary = LightMedia.OmegaMinusExchange(aParticle, targetNucleus);
-      else if (aParticleType == G4AntiOmegaMinus::AntiOmegaMinus())
-         aSecondary= LightMedia.AntiOmegaMinusExchange(aParticle,targetNucleus);
-      else if (aParticleType == G4KaonPlus::KaonPlus())
-         aSecondary = LightMedia.KaonPlusExchange(aParticle, targetNucleus);
-   }
+  G4DynamicParticle* aSecondary = 0;
+  if (atno2 < 1.5) {
+    const G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
+    if (aParticleType == G4PionPlus::PionPlus())
+       aSecondary = LightMedia.PionPlusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4PionMinus::PionMinus())
+       aSecondary = LightMedia.PionMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4KaonPlus::KaonPlus())
+       aSecondary = LightMedia.KaonPlusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4KaonZeroShort::KaonZeroShort())
+       aSecondary = LightMedia.KaonZeroShortExchange(aParticle,targetNucleus);
+    else if (aParticleType == G4KaonZeroLong::KaonZeroLong())
+       aSecondary = LightMedia.KaonZeroLongExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4KaonMinus::KaonMinus())
+       aSecondary = LightMedia.KaonMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4Proton::Proton())
+       aSecondary = LightMedia.ProtonExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiProton::AntiProton())
+       aSecondary = LightMedia.AntiProtonExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4Neutron::Neutron())
+       aSecondary = LightMedia.NeutronExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiNeutron::AntiNeutron())
+       aSecondary = LightMedia.AntiNeutronExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4Lambda::Lambda())
+       aSecondary = LightMedia.LambdaExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiLambda::AntiLambda())
+       aSecondary = LightMedia.AntiLambdaExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4SigmaPlus::SigmaPlus())
+       aSecondary = LightMedia.SigmaPlusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4SigmaMinus::SigmaMinus())
+       aSecondary = LightMedia.SigmaMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiSigmaPlus::AntiSigmaPlus())
+       aSecondary = LightMedia.AntiSigmaPlusExchange(aParticle,targetNucleus);
+    else if (aParticleType == G4AntiSigmaMinus::AntiSigmaMinus())
+       aSecondary= LightMedia.AntiSigmaMinusExchange(aParticle,targetNucleus);
+    else if (aParticleType == G4XiZero::XiZero())
+       aSecondary = LightMedia.XiZeroExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4XiMinus::XiMinus())
+       aSecondary = LightMedia.XiMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiXiZero::AntiXiZero())
+       aSecondary = LightMedia.AntiXiZeroExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiXiMinus::AntiXiMinus())
+       aSecondary = LightMedia.AntiXiMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4OmegaMinus::OmegaMinus())
+       aSecondary = LightMedia.OmegaMinusExchange(aParticle, targetNucleus);
+    else if (aParticleType == G4AntiOmegaMinus::AntiOmegaMinus())
+       aSecondary= LightMedia.AntiOmegaMinusExchange(aParticle,targetNucleus);
+    else if (aParticleType == G4KaonPlus::KaonPlus())
+       aSecondary = LightMedia.KaonPlusExchange(aParticle, targetNucleus);
+  }
 
-// Has a charge or strangeness exchange occurred?
+  // Has a charge or strangeness exchange occurred?
    if (aSecondary) {
       aSecondary->SetMomentum(aParticle->Get4Momentum().vect());
       theParticleChange.SetStatusChange(stopAndKill);

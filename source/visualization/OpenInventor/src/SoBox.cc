@@ -25,8 +25,8 @@
 //
 //
 //
-// $Id: SoBox.cc,v 1.8 2006/06/29 21:22:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SoBox.cc,v 1.8 2006-06-29 21:22:36 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */

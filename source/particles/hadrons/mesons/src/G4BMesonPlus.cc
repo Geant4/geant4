@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonPlus.cc,v 1.17 2010/10/01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BMesonPlus.cc,v 1.17 2010-10-01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -34,8 +34,7 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  New impelemenataion as an utility class  M.Asai, 26 July 2004
-// ----------------------------------------------------------------------
+// 
 
 #include "G4BMesonPlus.hh"
 #include "G4ParticleTable.hh"
@@ -66,11 +65,11 @@ G4BMesonPlus* G4BMesonPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     5.27917*GeV, 4.018e-10*MeV,   +1.*eplus,
+                 name,     5.27917*GeV, 4.011e-10*MeV,   +1.*eplus,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         521,
-                false,     1.638e-3*ns,          NULL,
+                false,     1.641e-3*ns,          NULL,
                 false,       "B");
   }
   theInstance = reinterpret_cast<G4BMesonPlus*>(anInstance);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.16 2009/11/27 16:34:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Region.icc,v 1.16 2009-11-27 16:34:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Region Inline Implementation file
@@ -300,7 +300,9 @@ void G4Region::AddMaterial(G4Material* aMaterial)
 //
 inline
 void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
-{ fRegionalSteppingAction = rusa; }
+{
+  fRegionalSteppingAction = rusa;
+}
 
 // ********************************************************************
 // GetRegionalSteppingAction
@@ -308,6 +310,46 @@ void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
 //
 inline
 G4UserSteppingAction* G4Region::GetRegionalSteppingAction() const
-{ return fRegionalSteppingAction; }
+{
+  return fRegionalSteppingAction;
+}
 
+// ********************************************************************
+// UsedInMassGeometry
+// ********************************************************************
+//
+inline 
+void G4Region::UsedInMassGeometry(G4bool val)
+{
+  fInMassGeometry = val;
+}
 
+// ********************************************************************
+// UsedInParallelGeometry
+// ********************************************************************
+//
+inline 
+void G4Region::UsedInParallelGeometry(G4bool val)
+{
+  fInParallelGeometry = val;
+}
+
+// ********************************************************************
+// IsInMassGeometry
+// ********************************************************************
+//
+inline 
+G4bool G4Region::IsInMassGeometry() const
+{
+  return fInMassGeometry;
+}
+
+// ********************************************************************
+// IsInParallelGeometry
+// ********************************************************************
+//
+inline 
+G4bool G4Region::IsInParallelGeometry() const
+{
+  return fInParallelGeometry;
+}

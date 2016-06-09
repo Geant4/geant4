@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.15 2006/06/29 20:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPNames.hh,v 1.15 2006-06-29 20:49:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNames_h
 #define G4NeutronHPNames_h 1
@@ -45,13 +45,15 @@ class G4NeutronHPNames
   G4NeutronHPNames(G4int maxOffSet){theMaxOffSet = maxOffSet;}
   ~G4NeutronHPNames(){}
   
-  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
+  //G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
+  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active) { G4int M = 0; return GetName( A, Z, M, base, rest, active); };
+  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & active);
   G4String GetName(G4int i);
   void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
   
   public:
   
-  static const G4String theString[99];
+  static const G4String theString[100];
   G4int theMaxOffSet;
   G4String itoa(int current)
   {

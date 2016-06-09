@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.63 2010/03/10 18:29:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VMultipleScattering.hh,v 1.63 2010-03-10 18:29:51 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -285,6 +285,9 @@ private:
   G4PhysicsTable*             theLambdaTable;
   const G4ParticleDefinition* firstParticle;
 
+  const std::vector<G4double>* theDensityFactor;
+  const std::vector<G4int>*    theDensityIdx;
+
   G4MscStepLimitType          stepLimit;
 
   G4double                    minKinEnergy;
@@ -313,7 +316,8 @@ private:
   // cache
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentMaterialIndex;
+  size_t                      currentCoupleIndex;
+  size_t                      basedCoupleIndex;
 
 };
 
@@ -332,7 +336,8 @@ void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
-    currentMaterialIndex = couple->GetIndex();
+    currentCoupleIndex = couple->GetIndex();
+    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
   }
 }
 
@@ -344,12 +349,13 @@ G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p,
 {
   G4double x;
   if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
+    x = (*theDensityFactor)[currentCoupleIndex]*
+      ((*theLambdaTable)[basedCoupleIndex])->Value(e);
   } else {
     x = currentModel->CrossSection(currentCouple,p,e);
   }
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; } 
+  if(x > 0.0) { x = 1./x; }
+  else        { x = DBL_MAX; } 
   return x;
 }
 
@@ -357,7 +363,7 @@ G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p,
 
 inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 {
-  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  return modelManager->SelectModel(kinEnergy, currentCoupleIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

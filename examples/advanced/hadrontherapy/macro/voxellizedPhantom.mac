@@ -14,15 +14,7 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
-/Physics/addPhysics Em_extra_physics			
-/Physics/addPhysics Elastic                             # Hadronic elastic model
-/Physics/addPhysics decay
-/Physics/addPhysics radioactive_decay
-/Physics/addPhysics Stopping_physics
-/Physics/addPhysics Neutron_tracking_cut
-/Physics/addPhysics binary                              # Hadronic inelastic model
-
+/Physics/addPhysics QGSP_BIC_EMY
 
 # Initialize geometry and physic 
 /run/initialize

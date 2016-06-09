@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.9 2010/10/27 07:57:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RichTrajectoryPoint.hh,v 1.9 2010-10-27 07:57:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -62,6 +62,7 @@
 
 #include "G4TouchableHandle.hh"
 #include "G4ThreeVector.hh"
+#include "G4StepStatus.hh"
 #include <vector>
 
 class G4Track;
@@ -101,10 +102,14 @@ private:
   G4double fTotEDep;
   G4double fRemainingEnergy;
   const G4VProcess* fpProcess;
+  G4StepStatus fPreStepPointStatus;
+  G4StepStatus fPostStepPointStatus;
   G4double fPreStepPointGlobalTime;
   G4double fPostStepPointGlobalTime;
   G4TouchableHandle fpPreStepPointVolume;
   G4TouchableHandle fpPostStepPointVolume;
+  G4double fPreStepPointWeight;
+  G4double fPostStepPointWeight;
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT

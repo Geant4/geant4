@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh,v 1.7 2009/02/04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.hh,v 1.7 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -45,9 +45,7 @@ class QComboBox;
 class QLabel;
 class QLineEdit;
 
-#if QT_VERSION >= 0x040000
 class QGroupBox;
-#endif
 
 /** The G4OpenGLQtExportDialog class provide a Dialog displaying differents options
     for each file format
@@ -88,12 +86,12 @@ class G4OpenGLQtExportDialog : public QDialog
   /** return if vector EPS is checked, if button does'nt exist, return 0 */
   bool getVectorEPS();
 
-	    public slots:
+  public Q_SLOTS:
 
-	    /** Called by a clic on modify/original size button.This will 
-		invert buttons and hide/unhide size
-	    */
-	    void changeSizeBox();  
+   /** Called by a clic on modify/original size button.This will 
+	invert buttons and hide/unhide size
+    */
+  void changeSizeBox();  
 
   /** Called by a clic on vectorEPS check box.If vectorEPS checkBox is checked,
       it will enable change size buttons. Else it will disable them.
@@ -115,9 +113,7 @@ class G4OpenGLQtExportDialog : public QDialog
   QPushButton* buttonOk;
   QPushButton* buttonCancel;
 
-#if QT_VERSION >= 0x040000
   QGroupBox * sizeGroupBox;
-#endif
 
   QCheckBox* transparencyEPS,*boxTransparency,*vectorEPSCheckBox;
   QCheckBox* ratioCheckBox;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.28 2008/05/29 16:59:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.cc,v 1.28 2008-05-29 16:59:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,8 +74,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int absorNum  = prePoint->GetTouchableHandle()->GetCopyNumber(0);
   G4int layerNum  = prePoint->GetTouchableHandle()->GetCopyNumber(1);
          
-  // collect energy deposit
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  // collect energy deposit taking into account track weight
+  G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
   
   // collect step length of charged particles
   G4double stepl = 0.;

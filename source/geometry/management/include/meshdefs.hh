@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: meshdefs.hh,v 1.7 2006/06/29 18:33:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: meshdefs.hh,v 1.7 2006-06-29 18:33:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Tube/Cone Meshing constants for extent calculations
@@ -37,7 +37,7 @@
 #define MESHDEFS_HH
 
 #include "G4Types.hh"
-#include <CLHEP/Units/PhysicalConstants.h>
+#include "G4PhysicalConstants.hh"
 
 const G4double kMeshAngleDefault=(pi/4); // Angle for mesh `wedges' in rads
                                  // Works best when simple fraction of pi/2

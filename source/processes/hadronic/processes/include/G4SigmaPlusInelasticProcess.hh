@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // G4 Process: SigmaPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 05-Nov-1996
- // Last modified: 03-Apr-1997
+// G4 Process: SigmaPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 05-Nov-1996
+//
 
 // Class Description
 // Process for SigmaPlus Inelastic scattering; 
@@ -38,17 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4SigmaPlusInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4SigmaPlusInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4SigmaPlusInelasticProcess(
-     const G4String& processName = "SigmaPlusInelastic" ) :
-      G4HadronInelasticProcess( processName, G4SigmaPlus::SigmaPlus() )
-    { }
+    G4SigmaPlusInelasticProcess(const G4String& processName = "SigmaPlusInelastic");
     
-    ~G4SigmaPlusInelasticProcess()
-    { }
- };
- 
+    ~G4SigmaPlusInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
 #endif

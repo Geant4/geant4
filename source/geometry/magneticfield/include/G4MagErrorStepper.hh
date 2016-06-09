@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.hh,v 1.12 2010/09/10 15:52:53 japost Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MagErrorStepper.hh,v 1.12 2010-09-10 15:52:53 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4MagErrorStepper
@@ -80,11 +80,11 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 
   private:
 
+    // STATE
     G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
       // Data stored in order to find the chord
  
-    // G4int theNumberOfVariables ; 
-
+    // Dependent Objects, owned --- part of the STATE 
     G4double *yInitial, *yMiddle, *dydxMid, *yOneStep;
       // The following arrays are used only for temporary storage
       // they are allocated at the class level only for efficiency -

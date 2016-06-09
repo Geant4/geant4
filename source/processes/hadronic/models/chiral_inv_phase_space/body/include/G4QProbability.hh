@@ -26,8 +26,8 @@
 #ifndef G4QProbability_h
 #define G4QProbability_h 1
 //
-// $Id: G4QProbability.hh,v 1.4 2009/09/04 16:13:19 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QProbability.hh,v 1.4 2009-09-04 16:13:19 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IntraNucleiCascader.hh,v 1.22 2010/12/15 07:39:54 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4IntraNucleiCascader.hh,v 1.22 2010-12-15 07:39:54 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -46,21 +46,41 @@
 //		Move goodCase() to RecoilMaker.
 // 20100916  M. Kelsey -- Add functions to handle trapped particles, and to
 //		decay hyperons.
+// 20110224  M. Kelsey -- Add ::rescatter() function which takes a list of
+//		pre-existing secondaries as input.  Split ::collide() into
+//		separate utility functions.  Move cascade parameters to static
+//		data members.  Add setVerboseLevel().
+// 20110303  M. Kelsey -- Add more cascade functions to support rescattering
+// 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
+// 20110316  M. Kelsey -- Add function to do G4KineticTrack conversion, decay
+//		rescattering resonances in situ.
+// 20110324  M. Kelsey -- Add list of nucleon hit locations for rescatter().
+// 20110721  M. Kelsey -- Drop decayTrappedParticle(G4KineticTrack*).
+// 20110722  M. Kelsey -- Deprecate "output_particles" list in favor of using
+//		output directly (will help with pre-cascade issues).
+// 20110729  M. Kelsey -- Replace convertKineticToCascade() to reduce churn.
+// 20110801  M. Kelsey -- Add local target buffers for rescattering, to avoid
+//		memory leak.
+// 20110919  M. Kelsey -- Add optional final-state clustering
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CollisionOutput.hh"
+#include "G4ThreeVector.hh"
 #include <vector>
 
 class G4CascadParticle;
+class G4CascadeCoalescence;
 class G4CascadeRecoilMaker;
-class G4CollisionOutput;
 class G4ElementaryParticleCollider;
 class G4InuclElementaryParticle;
 class G4InuclParticle;
+class G4KineticTrack;
+class G4KineticTrackVector;
 class G4NucleiModel;
+class G4V3DNucleus;
 
 
 class G4IntraNucleiCascader : public G4CascadeColliderBase {
@@ -69,9 +89,43 @@ public:
   virtual ~G4IntraNucleiCascader();
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+	       G4CollisionOutput& globalOutput);
+
+  // For use with Propagate to preload a set of secondaries
+  void rescatter(G4InuclParticle* bullet, G4KineticTrackVector* theSecondaries,
+		 G4V3DNucleus* theNucleus, G4CollisionOutput& globalOutput);
+
+  void setVerboseLevel(G4int verbose=0);
+
+private:
+  static const G4int itry_max;		// Maximum number of attempts
+  static const G4int reflection_cut;	// Maximum number of reflections
+  static const G4double small_ekin;	// Tolerance for round-off zero
+  static const G4double quasielast_cut;	// To recover elastic scatters
 
 protected:
+  G4bool initialize(G4InuclParticle* bullet, G4InuclParticle* target);
+
+  void newCascade(G4int itry);		// Clear buffers for next attempt
+  void setupCascade();			// Fill cascade using nuclear model
+  void generateCascade();		// Track secondaries through nucleus
+  G4bool finishCascade();		// Clean up output, check consistency
+
+  void finalize(G4int itry, 		// Transfer final state for return
+		G4InuclParticle* bullet, G4InuclParticle* target,
+		G4CollisionOutput& globalOutput);
+
+  G4InuclParticle* createTarget(G4V3DNucleus* theNucleus);
+
+  // Functions to transfer input high-energy cascade for propagation
+  void preloadCascade(G4V3DNucleus* theNucleus,
+		      G4KineticTrackVector* theSecondaries);
+  void copyWoundedNucleus(G4V3DNucleus* theNucleus);
+  void copySecondaries(G4KineticTrackVector* theSecondaries);
+  void processSecondary(const G4KineticTrack* aSecondary);
+  void releaseSecondary(const G4KineticTrack* aSecondary);
+
+  // Functions to handle, e.g., low-energy hyperons stuck inside potential
   void processTrappedParticle(const G4CascadParticle& trapped);
   void decayTrappedParticle(const G4CascadParticle& trapped);
 
@@ -79,13 +133,27 @@ private:
   G4NucleiModel* model;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4CascadeRecoilMaker* theRecoilMaker;
+  G4CascadeCoalescence* theClusterMaker;
+
+  // Buffers and parameters for cascade attempts
+  G4InuclNuclei* tnuclei;		// Target nucleus (must be non-zero)
+  G4InuclNuclei* bnuclei;		// Non-zero if ion-ion collision
+  G4InuclElementaryParticle* bparticle;	// Non-zero if hadron-ion collision
+
+  G4double minimum_recoil_A;		// Require fragment with this mass
+  G4double coulombBarrier;
+
+  // Buffers for creation (and reuse) of rescattering targets
+  G4InuclNuclei* nucleusTarget;
+  G4InuclElementaryParticle* protonTarget;
 
   // Buffers for collecting result of cascade (reset on each iteration)
   G4CollisionOutput output;
   std::vector<G4CascadParticle> cascad_particles;
   std::vector<G4CascadParticle> new_cascad_particles;
-  std::vector<G4InuclElementaryParticle> output_particles;
   G4ExitonConfiguration theExitonConfiguration;
+
+  std::vector<G4ThreeVector> hitNucleons;	// Nucleons hit before rescatter
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

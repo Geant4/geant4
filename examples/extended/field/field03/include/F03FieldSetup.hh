@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldSetup.hh,v 1.2 2006/06/29 17:18:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F03FieldSetup.hh,v 1.2 2006-06-29 17:18:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  A class for setting up the Magnetic Field of the setup, and 
 //   creating the necessary classes to control accuracy of propagation.

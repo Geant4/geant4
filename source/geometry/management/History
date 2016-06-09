@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010/10/19 15:20:33 gcosmo Exp $
+$Id: History,v 1.145 2010-10-19 15:20:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 24, 2011  G.Cosmo                   geommng-V09-04-04
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+- Made default argument for G4RegionStore::UpdateMaterialList().
+
+August 10, 2011  M.Asai                    geommng-V09-04-03
+- Introducing parallel layered mass geometry. Material is now scanned for
+  all the regions in all defined worlds. Modified G4Region and G4RegionStore.
+
+May 12, 2011  G.Cosmo                      geommng-V09-04-02
+- Fixed trivial compilation warnings detected with gcc-4.6.0.
+
+March 31, 2011  G.Cosmo                    geommng-V09-04-01
+- Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
+  of local field manager. Avoid forcing propagation to all daughters when
+  a local field manager is set already for the new daughter.
+  Addressing problem report #1183.
+
+March 21, 2011  G.Cosmo                    geommng-V09-04-00
+- Use internal G4 header for physical constants in meshdefs.h.
 
 October 19, 2010  G.Cosmo                  geommng-V09-03-05
 - Added Clone() virtual method to G4VSolid, to return a pointer to a

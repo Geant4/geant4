@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.12 2008/01/24 15:47:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SmartVoxelNode.hh,v 1.12 2008-01-24 15:47:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelNode
 //

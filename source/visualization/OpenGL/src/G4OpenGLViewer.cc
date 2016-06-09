@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.63 2010/10/05 15:45:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLViewer.cc,v 1.64 2010-12-11 17:04:07 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -81,13 +81,22 @@ fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
+fRot_sens(1.),
+fPan_sens(0.01),
 fPrintSizeX(-1),
 fPrintSizeY(-1),
 fPrintFilename ("G4OpenGL"),
 fPrintFilenameIndex(0),
+fWinSize_x(0),
+fWinSize_y(0),
 fPointSize (0),
-fSizeHasChanged(0)
+fSizeHasChanged(0),
+fGl2psDefaultLineWith(1),
+fGl2psDefaultPointSize(2)
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer:: Creation\n");
+#endif
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
@@ -102,18 +111,38 @@ fSizeHasChanged(0)
 
 }
 
-G4OpenGLViewer::~G4OpenGLViewer () {}
+G4OpenGLViewer::~G4OpenGLViewer ()
+{
+  delete fGL2PSAction;
+}
 
 void G4OpenGLViewer::InitializeGLView () 
 {
-  glClearColor (0.0, 0.0, 0.0, 0.0);
-  glClearDepth (1.0);
-  glDisable (GL_BLEND);
-  glDisable (GL_LINE_SMOOTH);
-  glDisable (GL_POLYGON_SMOOTH);
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::InitializeGLView\n");
+#endif
 
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
+
+  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearDepth (1.0);
+  glDisable (GL_LINE_SMOOTH);
+  glDisable (GL_POLYGON_SMOOTH);
+
+// clear the buffers and window?
+  ClearView ();
+  FinishView ();
+  
+  glDepthFunc (GL_LEQUAL);
+  glDepthMask (GL_TRUE);
+  
+  glEnable (GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::InitializeGLView END\n");
+#endif
 }  
 
 void G4OpenGLViewer::ClearView () {
@@ -156,10 +185,13 @@ void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
 void G4OpenGLViewer::ResizeGLView()
 {
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView %d %d &:%d\n",fWinSize_x,fWinSize_y,this);
+  printf("G4OpenGLViewer::ResizeGLView %d %d %#lx\n",fWinSize_x,fWinSize_y,(unsigned long)this);
 #endif
   // Check size
   GLint dims[2];
+  dims[0] = 0;
+  dims[1] = 0;
+
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
 
   if ((dims[0] !=0 ) && (dims[1] !=0)) {
@@ -291,10 +323,13 @@ void G4OpenGLViewer::SetView () {
     glDisable (GL_CLIP_PLANE1);
   }
 
+  // What we call intersection of cutaways is easy in OpenGL.  You
+  // just keep cutting.  Unions are more tricky - you have to have
+  // multiple passes and this is handled in
+  // G4OpenGLImmediate/StoredViewer::ProcessView.
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
-  //if (fVP.IsCutaway() &&
-  if (false &&
+  if (fVP.IsCutaway() &&
       fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
       nPlanes > 0) {
     double a[4];
@@ -331,6 +366,15 @@ void G4OpenGLViewer::SetView () {
 
 }
 
+
+
+void G4OpenGLViewer::ResetView () {
+  G4VViewer::ResetView();
+  fRot_sens = 1;
+  fPan_sens = 0.01;
+}
+
+
 void G4OpenGLViewer::HaloingFirstPass () {
   
   //To perform haloing, first Draw all information to the depth buffer
@@ -349,7 +393,7 @@ void G4OpenGLViewer::HaloingFirstPass () {
   glClearDepth (1.0);
 
   //Finally, set the line width to something wide...
-  glLineWidth (3.0);
+  ChangeLineWidth(3.0);
 
 }
 
@@ -358,7 +402,7 @@ void G4OpenGLViewer::HaloingSecondPass () {
   //And finally, turn the colour buffer back on with a sesible line width...
   glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthFunc (GL_LEQUAL);
-  glLineWidth (1.0);
+  ChangeLineWidth(1.0);
 
 }
 
@@ -479,8 +523,9 @@ void G4OpenGLViewer::printEPS() {
 
   // Change the LC_NUMERIC value in order to have "." separtor and not ","
   // This case is only useful for French, Canadien...
-  char* oldLocale = (char*)(malloc(strlen(setlocale(LC_NUMERIC,NULL))+1));
-  if(oldLocale!=NULL) strcpy(oldLocale,setlocale(LC_NUMERIC,NULL));
+  size_t len = strlen(setlocale(LC_NUMERIC,NULL));
+  char* oldLocale = (char*)(malloc(len+1));
+  if(oldLocale!=NULL) strncpy(oldLocale,setlocale(LC_NUMERIC,NULL),len);
   setlocale(LC_NUMERIC,"C");
 
   if (fVectoredPs) {
@@ -582,7 +627,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   curpix = (GLubyte*) pixels;
   pos = 0;
   for (i = width*height*components; i>0; i--) {
-    fprintf (fp, "%02hx ", *(curpix++));
+    fprintf (fp, "%02hx ", (unsigned short)(*(curpix++)));
     if (++pos >= 32) {
       fprintf (fp, "\n");
       pos = 0; 
@@ -593,7 +638,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
 
   fprintf (fp, "grestore\n");
   fprintf (fp, "showpage\n");
-  delete pixels;
+  delete [] pixels;
   fclose (fp);
 
   // Reset for next time (useful is size change)
@@ -601,6 +646,50 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   //  fPrintSizeY = -1;
 
   return true;
+}
+
+/** Return if gl2ps is currently writing
+ */
+bool G4OpenGLViewer::isGl2psWriting() {
+
+  if (!fGL2PSAction) return false;
+  if (fGL2PSAction->fileWritingEnabled()) {
+    return true;
+  }
+  return false;
+}
+
+
+/* Draw Gl2Ps text if needed
+ */
+void G4OpenGLViewer::DrawText(const char * textString,double,double,double, double size) {
+
+  if (isGl2psWriting()) {
+    gl2psText(textString,"Times-Roman",GLshort(size));
+  }
+}
+
+/** Change PointSize on gl2ps if needed
+ */
+void G4OpenGLViewer::ChangePointSize(G4double size) {
+
+  if (isGl2psWriting()) {
+    fGL2PSAction->setPointSize(int(size));
+  } else {
+    glPointSize (size);
+  }
+}
+
+
+/** Change LineSize on gl2ps if needed
+ */
+void G4OpenGLViewer::ChangeLineWidth(G4double width) {
+
+  if (isGl2psWriting()) {
+    fGL2PSAction->setLineWidth(int(width));
+  } else {
+    glLineWidth (width);
+  }
 }
 
 
@@ -627,24 +716,42 @@ bool G4OpenGLViewer::printGl2PS() {
   // http://developer.apple.com/Mac/library/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_offscreen/opengl_offscreen.html
   // http://www.songho.ca/opengl/gl_fbo.html
 
-  ResizeGLView();
-  if (fGL2PSAction->enableFileWriting()) {
+   ResizeGLView();
+   bool extendBuffer = true;
+   bool endWriteAction = false;
+   bool beginWriteAction = true;
+   while ((extendBuffer) && (! endWriteAction)) {
+     
+     beginWriteAction = fGL2PSAction->enableFileWriting();
+     if (beginWriteAction) {
+       
+       // Set the viewport
+       //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
+       // By default, we choose the line width (trajectories...)
+       fGL2PSAction->setLineWidth(fGl2psDefaultLineWith);
+       // By default, we choose the point size (markers...)
+       fGL2PSAction->setPointSize(fGl2psDefaultPointSize);
+       
+       DrawView ();
+       endWriteAction = fGL2PSAction->disableFileWriting();
+     }
+     if ((! endWriteAction) || (! beginWriteAction)) {
+       extendBuffer = fGL2PSAction->extendBufferSize();
+     }
+   }
+   fGL2PSAction->resetBufferSizeParameters();
 
-    // Set the viewport
-    //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
-    // By default, we choose the line width (trajectories...)
-    fGL2PSAction->setLineWidth(1);
-    // By default, we choose the point size (markers...)
-    fGL2PSAction->setPointSize(2);
-
-    DrawView ();
-    fGL2PSAction->disableFileWriting();
-  }
-
+   if (!extendBuffer ) {
+     G4cerr << "gl2ps buffer size is not big enough to print this geometry. Thy to extend it. No output produced"<< G4endl;
+   }
+   if (!beginWriteAction ) {
+     G4cerr << "Error while writing in the file "<<getRealPrintFilename().c_str()<<". Check read/write access No output produced" << G4endl;
+   }
+   if (!endWriteAction ) {
+     G4cerr << "gl2ps error. No output produced" << G4endl;
+   }
   fWinSize_x = X;
   fWinSize_y = Y;
-  ResizeGLView();
-  DrawView ();
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;
@@ -783,7 +890,36 @@ GLdouble G4OpenGLViewer::getSceneDepth()
 
 
 
-void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
+void G4OpenGLViewer::rotateScene(G4double dx, G4double dy)
+{
+  if (fVP.GetRotationStyle() == G4ViewParameters::freeRotation) {
+    rotateSceneInViewDirection(dx,dy);
+  } else {
+    if( dx != 0) {
+      rotateSceneThetaPhi(dx,0);
+    }
+    if( dy != 0) {
+      rotateSceneThetaPhi(0,dy);
+    }
+  }
+}
+
+
+void G4OpenGLViewer::rotateSceneToggle(G4double dx, G4double dy)
+{
+  if (fVP.GetRotationStyle() != G4ViewParameters::freeRotation) {
+    rotateSceneInViewDirection(dx,dy);
+  } else {
+    if( dx != 0) {
+      rotateSceneThetaPhi(dx,0);
+    }
+    if( dy != 0) {
+      rotateSceneThetaPhi(0,dy);
+    }
+  }
+}
+
+void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
 {
   if (!fSceneHandler.GetScene()) {
     return;
@@ -820,11 +956,11 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   zprime = (vp.cross(yprime)).unit();
   
   if (fVP.GetLightsMoveWithCamera()) {
-    delta_alpha = dy * deltaRotation;
-    delta_theta = -dx * deltaRotation;
+    delta_alpha = dy * fRot_sens;
+    delta_theta = -dx * fRot_sens;
   } else {
-    delta_alpha = -dy * deltaRotation;
-    delta_theta = dx * deltaRotation;
+    delta_alpha = -dy * fRot_sens;
+    delta_theta = dx * fRot_sens;
   }    
   
   delta_alpha *= deg;
@@ -867,7 +1003,7 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
 }
 
 
-void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4double deltaRotation)
+void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
 {
   if (!fSceneHandler.GetScene()) {
     return;
@@ -888,11 +1024,13 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4doubl
   G4Vector3D delta;
   G4Vector3D viewPoint;
 
-    
+  dx = dx/100;
+  dy = dy/100;
+
   //phi spin stuff here
   
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, deltaRotation);
+  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, fRot_sens);
 #endif
 
   vp = fVP.GetViewpointDirection ().unit();
@@ -902,7 +1040,7 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4doubl
                              up.z()*vp.x()-up.x()*vp.z(),
                              up.x()*vp.y()-up.y()*vp.x());
 
-  viewPoint = vp/deltaRotation + (zPrimeVector*dx - up*dy) ;
+  viewPoint = vp/fRot_sens + (zPrimeVector*dx - up*dy) ;
   new_up = G4Vector3D(viewPoint.y()*zPrimeVector.z()-viewPoint.z()*zPrimeVector.y(),
                        viewPoint.z()*zPrimeVector.x()-viewPoint.x()*zPrimeVector.z(),
                        viewPoint.x()*zPrimeVector.y()-viewPoint.y()*zPrimeVector.x());

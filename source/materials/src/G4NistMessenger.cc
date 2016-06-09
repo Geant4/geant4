@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMessenger.cc,v 1.10 2010/10/25 13:22:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NistMessenger.cc,v 1.10 2010-10-25 13:22:51 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // File name:     G4NistMessenger
@@ -78,6 +78,7 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   przElmCmd->SetGuidance("0 = all elements.");
   przElmCmd->SetParameterName("Z", true);
   przElmCmd->SetDefaultValue(0);
+  przElmCmd->SetRange("0<=Z && Z<108");
    
   lisMatCmd = new G4UIcmdWithAString("/material/nist/listMaterials",this);
   lisMatCmd->SetGuidance("list materials in Geant4 dataBase.");
@@ -135,22 +136,25 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if (command == verCmd) 
    { manager->SetVerbose(verCmd->GetNewIntValue(newValue));}
     
-  if (command == prtElmCmd)
+  else if (command == prtElmCmd)
    { manager->PrintElement(newValue);}
     
-  if (command == przElmCmd)
-   { manager->PrintElement(przElmCmd->GetNewIntValue(newValue));}
+  else if (command == przElmCmd) {
+    G4int Z = przElmCmd->GetNewIntValue(newValue);
+    if(Z >= 0 && Z < 108) { manager->PrintElement(Z); }
+  }
    
-  if (command == lisMatCmd) 
+  else if (command == lisMatCmd) 
    { manager->ListMaterials(newValue);}
 
-  if (command == g4ElmCmd)
+  else if (command == g4ElmCmd)
    { manager->PrintG4Element(newValue);}
    
-  if (command == g4MatCmd)
+  else if (command == g4MatCmd)
    { manager->PrintG4Material(newValue);}
 
-  if (command == g4DensCmd)
+  else if (command == g4DensCmd)
     { G4IonisParamMat::GetDensityEffectData()->PrintData(newValue); }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

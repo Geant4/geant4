@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.114 2010/11/24 19:39:15 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RunManager.cc,v 1.114 2010-11-24 19:39:15 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -77,7 +77,7 @@ G4RunManager::G4RunManager()
 {
   if(fRunManager)
   {
-    G4Exception("G4RunManager::G4RunManager()", "Run0001",
+    G4Exception("G4RunManager::G4RunManager()", "Run0031",
                 FatalException, "G4RunManager constructed twice.");
   }
   fRunManager = this;
@@ -261,7 +261,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
   if(!userPrimaryGeneratorAction)
   {
-    G4Exception("G4RunManager::GenerateEvent()", "Run0002", FatalException,
+    G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
                 "G4VUserPrimaryGeneratorAction is not defined!");
     return 0;
   }
@@ -347,7 +347,7 @@ void G4RunManager::InitializeGeometry()
 {
   if(!userDetector)
   {
-    G4Exception("G4RunManager::InitializeGeometry", "Run0003",
+    G4Exception("G4RunManager::InitializeGeometry", "Run0033",
                 FatalException, "G4VUserDetectorConstruction is not defined!");
     return;
   }
@@ -368,7 +368,7 @@ void G4RunManager::InitializePhysics()
   }
   else
   {
-    G4Exception("G4RunManager::InitializePhysics()", "Run0004",
+    G4Exception("G4RunManager::InitializePhysics()", "Run0034",
                 FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
@@ -475,13 +475,13 @@ void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 
 void G4RunManager::DumpRegion(const G4String& rname) const
 {
-  kernel->UpdateRegion();
+//  kernel->UpdateRegion();
   kernel->DumpRegion(rname);
 }
 
 void G4RunManager::DumpRegion(G4Region* region) const
 {
-  kernel->UpdateRegion();
+//  kernel->UpdateRegion();
   kernel->DumpRegion(region);
 }
 
@@ -527,9 +527,10 @@ void G4RunManager::ConstructScoringWorlds()
         if(pmanager)
         {
           pmanager->AddProcess(theParallelWorldScoringProcess);
-          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+          if(theParallelWorldScoringProcess->IsAtRestRequired(particle))
+          { pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAtRest, 9999); }
           pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+          pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxPostStep, 9999);
         }
       }
     }

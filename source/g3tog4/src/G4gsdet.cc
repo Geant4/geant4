@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdet.cc,v 1.5 2006/06/29 18:13:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdet.cc,v 1.5 2006-06-29 18:13:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G3toG4.hh"
 
-void PG4gsdet(G4String tokens[])
+void PG4gsdet(G4String* tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdet);

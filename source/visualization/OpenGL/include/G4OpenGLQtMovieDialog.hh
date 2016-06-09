@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh,v 1.4 2008/10/07 05:36:11 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.hh,v 1.4 2008-10-07 05:36:11 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -41,9 +41,7 @@ class QLabel;
 class QLineEdit;
 class G4OpenGLQtViewer;
 
-#if QT_VERSION >= 0x040000
 class QGroupBox;
-#endif
 
 /** The G4OpenGLQtMovieDialog class provide a Dialog displaying differents options
     for each file format
@@ -77,14 +75,14 @@ private :
   QPushButton *fButtonSave;
   QPushButton *fButtonStartPause;
 
-public slots :
+public Q_SLOTS :
   void stopFinishClose();
   void save();
   bool checkEncoderSwParameters();
   bool checkSaveFileNameParameters();
   bool checkTempFolderParameters();
 
-private slots :
+private Q_SLOTS :
   void selectEncoderPathAction();
   void selectTempPathAction();
   void selectSaveFileNameAction();

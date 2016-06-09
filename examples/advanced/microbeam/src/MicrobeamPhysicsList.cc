@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MicrobeamPhysicsList.cc,v 1.10 2010/06/10 09:54:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: MicrobeamPhysicsList.cc,v 1.10 2010-06-10 09:54:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +44,6 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4HadronElasticPhysics.hh"
-#include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
@@ -186,14 +184,6 @@ void MicrobeamPhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "elastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "DElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronDElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "QElastic" && !helIsRegisted) {

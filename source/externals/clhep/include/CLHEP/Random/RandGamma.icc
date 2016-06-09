@@ -1,0 +1,46 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                            HEP Random
+//                         --- RandGamma ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandGamma::RandGamma(HepRandomEngine & anEngine, double k,
+                                                        double lambda )
+: HepRandom(), localEngine(&anEngine, do_nothing_deleter()),
+  defaultK(k), defaultLambda(lambda) {}
+
+inline RandGamma::RandGamma(HepRandomEngine * anEngine, double k,
+                                                        double lambda )
+: HepRandom(), localEngine(anEngine),
+  defaultK(k), defaultLambda(lambda) {}
+
+inline double RandGamma::shoot() {
+  return shoot( 1.0, 1.0 );
+}
+
+inline double RandGamma::shoot( HepRandomEngine* anEngine ) {
+  return shoot( anEngine, 1.0, 1.0 );
+}
+
+inline double RandGamma::operator()() {
+  return fire( defaultK, defaultLambda );
+}
+
+inline double RandGamma::operator()( double k, double lambda ) {
+  return fire( k, lambda );
+}
+
+inline double RandGamma::fire() {
+  return fire( defaultK, defaultLambda );
+}
+
+}  // namespace CLHEP

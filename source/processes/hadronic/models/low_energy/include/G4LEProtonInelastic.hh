@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEProtonInelastic.hh,v 1.12 2007-02-26 18:31:19 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEProtonInelastic.hh,v 1.12 2007/02/26 18:31:19 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy Proton Inelastic Process
- // original by H.P. Wellisch
- // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 8-Jul-97 to implement Nucleus changes
+// Hadronic Process: Low Energy Proton Inelastic Process
+// original by H.P. Wellisch
+// modified by J.L. Chuma, TRIUMF, 19-Nov-1996
+// Modified by J.L.Chuma 8-Jul-97 to implement Nucleus changes
  
 #ifndef G4LEProtonInelastic_h
 #define G4LEProtonInelastic_h 1
@@ -44,38 +42,36 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
+
  
- class G4LEProtonInelastic : public G4InelasticInteraction
- {
- public:
+class G4LEProtonInelastic : public G4InelasticInteraction
+{
+  public:
+
+    G4LEProtonInelastic(const G4String& name = "G4LEProtonInelastic");
+
+    ~G4LEProtonInelastic() {}
     
-    G4LEProtonInelastic() : G4InelasticInteraction("G4LEProtonInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
-    }
-    
-    ~G4LEProtonInelastic()
-    { }
-    
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
- private:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
+
+  private:
     
     void Cascade(                               // derived from CASP
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
 
-    void SlowProton(
-      const G4HadProjectile *originalIncident,
-      G4Nucleus &targetNucleus );
- };
+    void SlowProton(const G4HadProjectile* originalIncident,
+                    G4Nucleus& targetNucleus);
+};
  
 #endif
  

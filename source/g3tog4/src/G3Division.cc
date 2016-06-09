@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.17 2006/06/29 18:12:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3Division.cc,v 1.17 2006-06-29 18:12:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -176,8 +176,13 @@ void G3Division::CreatePVReplica()
 
 // private methods
 
-void G3Division::Exception(G4String where, G4String what) {
-  G4Exception("G3Division::" + where + " for " + what + " is not implemented");
+void G3Division::Exception(G4String where, G4String what)
+{
+  G4String err_message = "G3Division::" + where + " for "
+                       + what + " is not implemented";
+  G4Exception("G3Division::Exception()", "G3toG40004",
+              FatalException, err_message);
+  return;
 }  
 
 void G3Division::SetRangeAndAxis()
@@ -193,7 +198,8 @@ void G3Division::SetRangeAndAxis()
               break;
       case 3: fAxis = kZAxis;
               break;
-      default: G4Exception("G3Division: wrong iaxis defenition");
+      default: G4Exception("G3Division::SetRangeAndAxis()", "G3toG40005",
+                            FatalException, "Wrong iaxis defenition!");
     }
 
     if ( shape == "BOX" ) {
@@ -754,8 +760,11 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
     = G3toG4MakeSolid(fVTE->GetName(), shape, Rpar, npar, hasNegPars, deferred, okAxis);  
 
     if (hasNegPars) {
-       G4String name = fVTE->GetName();
-       G4Exception("CreateSolid VTE " + name + " has negative parameters.");
+       G4String err_message = "CreateSolid VTE " + fVTE->GetName()
+                            + " has negative parameters.";
+       G4Exception("G3Division::CreateSolid()", "G3toG40006",
+                   FatalException, err_message);
+       return;
     }   
     
     // update vte
@@ -769,6 +778,7 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
     // G4cout << " npar,Rpar: " << npar;
     // for (G4int iii = 0; iii < npar; ++iii) G4cout << " " << Rpar[iii];
     // G4cout << G4endl;
+    delete [] Rpar;
 }
 
 

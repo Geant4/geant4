@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.31 2010/11/17 20:42:36 allison Exp $
+$Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,23 @@ $Id: History,v 1.31 2010/11/17 20:42:36 allison Exp $
 
                        Package History file
                        --------------------
+
+04 October 2011 - S.Incerti - tag microbeam-V09-04-04
+- more clean-up after Gunter's improvements
+
+03 October 2011 - G.Folger  - tag microbeam-V09-04-03
+- fix missed compilation warnings from gcc46 in MicrobeamEMField.cc 
+
+03 October 2011 - G.Folger  - tag microbeam-V09-04-02
+- fix compilation warnings from gcc46 in MicrobeamEMField.cc 
+     and MicrobeamPhantomConfiguration.cc
+
+11 August 2011 - S. Incerti - tag microbeam-V09-04-01
+- Removed system command
+- Removed web page
+
+06 June 2011 - V.Ivanchenko - tag microbeam-V09-04-00
+- Removed obsolete hadron elastic builders
 
 16 November 2010 - J. Allison - tag microbeam-V09-03-09
 - Microbeam.cc: Introduced G4UIExecutive.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.24 2009/11/04 12:49:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Scene.cc,v 1.24 2009-11-04 12:49:16 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Scene data  John Allison  19th July 1996.

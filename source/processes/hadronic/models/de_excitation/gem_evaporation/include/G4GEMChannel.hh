@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.7 2010/11/18 16:21:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GEMChannel.hh,v 1.7 2010-11-18 16:21:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -44,8 +44,6 @@
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-//#define debug
 
 class G4Pow;
 
@@ -91,18 +89,14 @@ private:
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
 
+private:
+
   G4GEMChannel(const G4GEMChannel & right);  
   const G4GEMChannel & operator=(const G4GEMChannel & right);
   G4bool operator==(const G4GEMChannel & right) const;
   G4bool operator!=(const G4GEMChannel & right) const;
   
-protected:
-  G4GEMChannel();
-
   // Data Members ************
-
-private:
-
   // This data member define the channel. 
   // They are intializated at object creation (constructor) time.
     

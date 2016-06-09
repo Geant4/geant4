@@ -1,0 +1,90 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+$Id: History,v 1.36 2010/11/16 16:30:55 gcosmo Exp $
+---------------------------------------------------------------------
+
+           History file for the Liege cascade INCL Model
+           ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+21 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-11)
+-----------------------------------------------------------
+- Fixed local energy logic
+- Fixed separation energy in cluster emission
+
+14 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-10)
+-----------------------------------------------------------
+- Corrected the order in which the INCL++ model and projectile are created in
+	the interface. This actually is a better fix to the FPE problem than tag
+	hadr-inclxx-V09-04-09.
+
+10 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-09)
+-----------------------------------------------------------
+- Added safeguard against FPE in G4INCLCrossSections.cc
+
+07 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-08)
+-----------------------------------------------------------
+- Don't apply nucleon-nucleon collision energy cut to the first collision
+- Bugfixes:
+  o Check that the nucleus pointer isn't NULL
+  o G4INCLFinalState memory leaks
+  o Proper use of ion definitions in the INCL++ G4 interface
+
+04 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-07)
+-----------------------------------------------------------
+- Set the maximum coalescence cluster mass to 8
+
+03 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-06)
+-----------------------------------------------------------
+- Declared G4INCLIFunction, G4INCLIParticleDataSource and
+  G4INCLIClusteringModel destructors as virtual
+
+01 November 2011 - Gabriele Cosmo (hadr-inclxx-V09-04-05)
+---------------------------------------------------------
+- Correction to GNUmakefiles to allow for DLL build on Windows.
+
+31 October 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-04)
+----------------------------------------------------------
+- Fixed Windows/VC++ compiler warning
+
+24 October 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-03)
+----------------------------------------------------------
+- Fixed Mac/Windows compilation problem (incl_physics/include/G4INCL.hh clashed
+	with the G4Incl.hh from INCL4.2 on case-insensitive filesystems)
+	o Solution: Renamed G4INCL.[hh|cc] to G4INCLCascade.[hh|cc]
+- Fixed icc macro expansion related compilation problems
+- Renamed Particle.[hh|cc] to G4INCLParticle.[hh|cc]
+- Renamed IAvatar.[hh|cc] to G4INCLIAvatar.[hh|cc]
+
+19 October 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-02)
+----------------------------------------------------------
+- Fixed type mismatches that caused warnings when compiling with GCC 4.1
+
+26 September 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-01)
+------------------------------------------------------------
+- Added some debugging environment variables to the INCL++ interface:
+	o Goal: Allow the developer to inspect cascade specific quantities (such as
+	mass, charge and excitation energy of the cascade remnant nucleus) before
+	de-excitation to disable de-excitation entirely (useful when we'd like to
+	separate the contributions of cascade and de-excitation)
+  o G4INCLXX_NO_DE_EXCITATION disables de-excitation
+	o G4INCLXX_STORE_RAW_DEBUG_OUTPUT stores the cascade output into file
+	inclDebug.out
+
+01 September 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-00)
+------------------------------------------------------------
+- Imported the first version of INCL++ intra-nuclear cascade model into Geant4
+- INCL++ version: v5.0 alpha1
+  o Based on INCL4.6 cascade model
+	o Supported projectiles: protons, neutrons, pions up to 3 GeV
+	o Uses G4ExcitationHandler for de-excitation
+

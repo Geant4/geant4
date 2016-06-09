@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.8 2010/06/25 09:41:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.9 2010-12-23 16:57:28 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -258,14 +258,16 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
   G4String filename;
 
   for(G4int level = 0; level < 2; level++){
-    if(level == 0) filename = "PDF.dat";
-    if(level == 1) filename = "CPDF.dat";
-
+    if(level == 0) { filename = "PDF.dat"; }
+    if(level == 1) { filename = "CPDF.dat"; }
+ 
     char* path = getenv("G4LEDATA");
     if (!path)
       {
-        G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
-        G4Exception(excep);
+	G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()","em0006",
+		    FatalException,
+		    "Environment variable G4LEDATA not defined");
+        return;
       }
 
     G4String pathString(path);
@@ -273,8 +275,11 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
     FILE *infile = fopen(dirFile,"r"); 
     if (infile == 0)
       {
-	G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
-	G4Exception(excep);
+	G4ExceptionDescription ed;
+	ed << "Data file <" + dirFile + "> is not opened!" << G4endl;
+	G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
+		    "em0003",FatalException,ed);
+        return;
       }
 
     // Read parameters into tables. 
@@ -284,8 +289,8 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
         for(G4int i=0 ; i<320 ;i++){
 	  fscanf(infile,"%f\t",&aRead);
 	  G4int idx = 320*(11*k+j)+i;
-	  if(level == 0)       PDF[idx]  = aRead;
-	  else if (level == 1) CPDF[idx] = aRead;
+	  if(level == 0)       { PDF[idx]  = aRead; }
+	  else if (level == 1) { CPDF[idx] = aRead; }
         }
       }
     }

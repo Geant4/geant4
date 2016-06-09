@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertShellCorrections.hh,v 1.5 2009/03/04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CameronGilbertShellCorrections.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

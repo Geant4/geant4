@@ -13,6 +13,62 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-08)
+   Bugs fixed Annihilation (px, py of strings were not set).
+
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-07)
+   Bug in dtor fixed; possible double deletion.
+
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-06)
+   Bug was found and fixed in FTF. The pionter on a projectile
+   nucleus was not set to 0 at the end of FTF run.
+--------------------------------------------------
+
+28 February 2011, V. Uzhinsky (hadr-prtn-V09-04-05)
+   Bug was found and fixed in annihilation.
+ 
+--------------------------------------------------
+28 February 2011, V. Uzhinsky (hadr-prtn-V09-04-04)
+   Bug was found and fixed in G4FTFParameters.cc. Small improvements 
+   were introduced in FTF annihilation.
+
+-------------------------------------------------------
+25 February 2011, V. Uzhinsky (hadr-prtn-V09-04-03)
+   Bug was found and fixed in G4FragmentingString.cc thank to Gunter.
+   A small improvement was introduced in G4FTFParameters.cc in order
+   to treat LabmdaBar, SigmaBar and so on.
+
+-------------------------------------------------------
+24 February 2011, V. Uzhinsky  (hadr-prtn-V09-04-02)
+   First variant of FTF code for a sumulation of anti-nucleus-nucleus
+   and nucleus-nucleus interactions is implemented. The anti-nucleus
+   nucleus part is working starting from 150*A MeV/c. The nucleus-
+   nucleus part is applicable at Plab > 2 * A GeV/c.
+
+---------------------------------------------------------
+14 February 2011, V. Uzhinsky  (hadr-prtn-V09-04-01)
+   Simulation of Anti-baryon - nucleus interactions from the rest 
+   to 1000 GeV is implemented.
+   The reggeon cascading is switched off. 
+   Good results are obtained in combination with the binary model.
+   
+----------------------------------------------------------
+7 Dec. 2010, V. Uzhinsky        (hadr-prtn-V09-04-00)
+  First implementation of baryon - anti-baryon annihilation.
+  New G4FTFAnnihilation class is added in FTF model, and
+  corresponding changes have dane in FTF connected classes.
+
+  Changes have done in G4VSplitableHadron (management),
+  2 new methods have been addded:
+              virtual void SetFirstParton(G4int PDGcode)
+              virtual void SetSecondParton(G4int PDGcode)
+  to set quark (anti-quark) determination at the annihilation.
+
+  Corresponding classes in FTF and QGSM have changed:
+              G4DiffractiveSplitableHadron (FTF)
+              G4QGSMSplitableHadron        (QGSM)
+
+-----------------------------------------------------------
 9  Dec. 2009, V. Uzhinsky         (hadr-prtn-V09-03-00)
    Crush found by Alberto with AveragePt2=0 is erased in FTF.
 --------------------------------------------------------

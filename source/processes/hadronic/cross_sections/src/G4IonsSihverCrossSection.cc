@@ -25,62 +25,61 @@
 //
 // 18-Sep-2003 First version is written by T. Koi
 // 23-Dec-2006 Isotope dependence added by D. Wright
+// 14-Mar-2011 Moved constructor, destructor and virtual methods to source by V.Ivanchenko
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 //
 
 #include "G4IonsSihverCrossSection.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
+#include "G4DynamicParticle.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NistManager.hh"
+#include "G4Pow.hh"
 
-G4double G4IonsSihverCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle,
-                     G4int /*ZZ*/, G4int AA, G4double /*aTemperature*/)
+G4IonsSihverCrossSection::G4IonsSihverCrossSection()
+  : G4VCrossSectionDataSet("IonsSihver"), square_r0 ( (1.36*fermi) * (1.36*fermi) )
+{}
+
+G4IonsSihverCrossSection::~G4IonsSihverCrossSection()
+{}
+
+void
+G4IonsSihverCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
-   G4double xsection = 0.0;
-   G4int At = AA;
-
-   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
- 
-   G4double one_third = 1.0 / 3.0;
-
-   G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) ); 
-   G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
-
-   G4double b0 = 1.581 - 0.876 * (1.0/cubicrAp + 1.0/cubicrAt);
-
-   xsection = pi * square_r0 
-            * std::pow(G4double(cubicrAp + cubicrAt - b0 * (1.0/cubicrAp + 1.0/cubicrAt)), G4double(2));
-  
-   return xsection; 
+  outFile << "G4IonsSihverCrossSection calculates the total reaction cross\n"
+          << "section for nucleus-nucleus scattering using the Sihver\n"
+          << "parameterization.  It is valid for projectiles and targets of\n"
+          << "all Z, and for all projectile energies above 100 MeV/n.\n"; 
 }
-
-
-G4double G4IonsSihverCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double temperature)
-{
-  G4int nIso = anElement->GetNumberOfIsotopes();
-  G4double xsection = 0;
-    
-  if (nIso) {
-    G4double sig;
-    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-    G4double* abundVector = anElement->GetRelativeAbundanceVector();
-    G4int ZZ;
-    G4int AA;
-    
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ = (*isoVector)[i]->GetZ();
-      AA = (*isoVector)[i]->GetN();
-      sig = GetZandACrossSection(aParticle, ZZ, AA, temperature);
-      xsection += sig*abundVector[i];
-    }
-  
-  } else {
-    G4int ZZ = G4lrint(anElement->GetZ());
-    G4int AA = G4lrint(anElement->GetN());
-    xsection = GetZandACrossSection(aParticle, ZZ, AA, temperature);
-  }
    
-  return xsection;
+G4bool 
+G4IonsSihverCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
+					      G4int, const G4Material*)
+{
+  G4int BaryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+  G4double KineticEnergy = aDP->GetKineticEnergy(); 
+  if ( KineticEnergy / BaryonNumber >= 100*MeV && BaryonNumber > 1 ) { return true; }
+  return false;
 }
+
+G4double 
+G4IonsSihverCrossSection::GetElementCrossSection(
+      const G4DynamicParticle* aParticle, G4int Z, const G4Material*)
+{
+  G4double xsection = 0.0;
+  G4int At = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+
+  G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
+ 
+  G4Pow* g4pow = G4Pow::GetInstance();
+  
+  G4double cubicrAt = g4pow->Z13(At);
+  G4double cubicrAp = g4pow->Z13(Ap);
+ 
+  G4double b0 = 1.581 - 0.876 * (1.0/cubicrAp + 1.0/cubicrAt);
+
+  G4double xr = cubicrAp + cubicrAt - b0 * (1.0/cubicrAp + 1.0/cubicrAt);
+  xsection = pi * square_r0 * xr * xr;
+  
+  return xsection; 
+}
+

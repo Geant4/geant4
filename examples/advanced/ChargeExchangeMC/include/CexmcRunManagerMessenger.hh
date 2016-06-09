@@ -51,6 +51,7 @@ class  G4UIcommand;
 class  G4UIcmdWithAString;
 class  G4UIcmdWithAnInteger;
 class  G4UIcmdWithABool;
+class  G4UIcmdWithoutParameter;
 
 
 class  CexmcRunManagerMessenger : public G4UImessenger
@@ -64,27 +65,29 @@ class  CexmcRunManagerMessenger : public G4UImessenger
         void  SetNewValue( G4UIcommand *  cmd, G4String  value );
 
     private:
-        CexmcRunManager *       runManager;
+        CexmcRunManager *          runManager;
 
-        G4UIcmdWithAString *    setProductionModel;
+        G4UIcmdWithAString *       setProductionModel;
 
-        G4UIcmdWithAString *    setGdmlFile;
+        G4UIcmdWithAString *       setGdmlFile;
 
-        G4UIcmdWithAString *    setGuiMacro;
+        G4UIcmdWithAString *       setGuiMacro;
 
-        G4UIcmdWithAString *    setEventCountPolicy;
+        G4UIcmdWithAString *       setEventCountPolicy;
 
-        G4UIcmdWithAString *    setEventDataVerboseLevel;
+        G4UIcmdWithAString *       setEventDataVerboseLevel;
 
 #ifdef CEXMC_USE_PERSISTENCY
-        G4UIcmdWithAnInteger *  replayEvents;
+        G4UIcmdWithAnInteger *     replayEvents;
 
-        G4UIcmdWithAnInteger *  seekTo;
+        G4UIcmdWithAnInteger *     seekTo;
 
-        G4UIcmdWithABool *      skipInteractionsWithoutEDT;
+        G4UIcmdWithABool *         skipInteractionsWithoutEDT;
 #endif
 
-        G4UIcmdWithABool *      validateGdmlFile;
+        G4UIcmdWithoutParameter *  registerScenePrimitives;
+
+        G4UIcmdWithABool *         validateGdmlFile;
 };
 
 

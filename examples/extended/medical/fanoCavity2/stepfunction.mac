@@ -1,4 +1,4 @@
-# $Id: stepfunction.mac,v 1.2 2009/10/31 18:05:56 maire Exp $
+# $Id: stepfunction.mac,v 1.2 2009-10-31 18:05:56 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2

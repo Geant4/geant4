@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronKiller.cc,v 1.2 2007/06/01 07:53:27 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronKiller.cc,v 1.2 2007-06-01 07:53:27 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,12 +41,16 @@
 
 #include "G4NeutronKiller.hh"
 #include "G4NeutronKillerMessenger.hh"
+#include "G4TransportationProcessType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NeutronKiller::G4NeutronKiller(const G4String& processName, G4ProcessType aType)
  : G4VDiscreteProcess(processName, aType)
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(NEUTRON_KILLER));
+
   kinEnergyThreshold = 0.0;
   timeThreshold = DBL_MAX;
   pMess = new G4NeutronKillerMessenger(this);

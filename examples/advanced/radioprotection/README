@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.24 2007/06/06 19:15:06 pia Exp $
+$Id: README,v 1.24 2007-06-06 19:15:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,13 +9,15 @@ $Id: README,v 1.24 2007/06/06 19:15:06 pia Exp $
                              README
                       ---------------------
 
+
+
+Author: S. Guatelli, susanna@uow.edu.au
+
 0. INTRODUCTION
 
-The Radioprotection example derives from a Geant4 application
-( look www.ge.infn.it/geant4/space/remsim for more details ) whose scope 
-is to evaluate the dose in astronauts, in vehicle concepts and 
-Moon surface habitat configurations, in a defined interplanetary space
-radiation environment. 
+The Radioprotection example scope is to evaluate the dose in astronauts, 
+in vehicle concepts and  Moon surface habitat configurations, in a 
+defined interplanetary space radiation environment. 
 
 1. GEOMETRY
 
@@ -69,17 +71,16 @@ beam |   || |thom | |                   |
 ------------------------------------------->
                                          Z axis
                      
-- The astronaut/phantom is set in the astronaut habitat (shelter).
+- The astronaut/phantom is set in the astronaut habitat (shelter). 
 
 - The pyramid log is made of moon soil and protects the astronaut from 
   GCR and SPE. The user can add, delete this element in the geometrical 
   configuration, change its thickness (x) through UI comands. 
 
-- The phantom is the astronaut model; the energy deposit is collected in this
-  geometrical component. The phantom is a box of water,
-  it is 30. cm wide along Z axis, it is voxelised in 30 slices along Z axis. 
-  The energy deposit of primary and secondary particles is collected in 
-  each voxel.
+- The astronaut is the phantom. A scoring mesh has been set on top of the astronaut, 
+  to calculate the energy deposition.
+  The astronaut is sliced along the Z axis in  30 slices. The energy deposition is integrated
+  over the run and is saved in a output ASCII file. 
 
 1.1 UI
 
@@ -102,19 +103,11 @@ The user can not switch between these two configurations interactively.
 
 2. PHYSICS LIST
 
-The user can select the physics processes to activate interactively as 
-shown in the macro vis.mac.
-The example is provided of:
-- Low Energy electromagnetic processes for photons, e- 
-- Standard electromagnetic processes for e+
-- Low Energy electromagnetic processes with ICRU parameterisation 
-  for p, alpha and ions
-- Muon electromagnetic processes
-- Decay
-- Hadronic processes for p and alpha particles as primary particles.
-
-The user can choose the Bertini cascade approach or the
-binary cascade approach for the modeling of proton hadronic physics.
+The electromagnetic physics and decay are activated by default in the physics 
+list class. The user can activate the hadronic physics component interactively.
+The macro to define the hadronic physics is physics.mac and it is executed by default, in the macros
+vehicle1.mac, vehicle2.mac, moon.mac and interactive.mac
+The threshold of production of secondary particles is fixed equal to 0.1 mm.
 
 3. PRIMARY PARTICLES
 
@@ -129,6 +122,7 @@ Primary particles are generated from a point set in
 the position (0., 0., -25. m), with a direction (0., 0., 1.) by default.
 The user can change these parameters interactively.
 
+
 4. STEPPING
 
 Available UI command:
@@ -140,115 +134,18 @@ Available UI command:
 
 5. ANALYSIS
 
-if ANALYSIS_USE = 1 in the variable environment, the output of
-the simulation is remsim.hbk or remsim.xml.
-The default output file is remsim.hbk. 
-The user can change the format of the output file interactively as shown
-in section 5.1
-                                 
-The file contains histograms:                                              
-    - 10 (1)   Energy Deposit (MeV)in the phantom (astronaut) versus 
-               the depth along Z axis 
-    
-    - 20 (1)   Initial energy per nucleon (MeV) of primary particles               
-    
-    - 30 (1)   Energy Deposit (MeV) in the phantom given by secondaries  
-               versus the depth along Z axis 
-    
-    - 40 (1)   Initial energy (MeV) of primaries reaching the phantom  
-    
-    - 50 (1)   Initial energy (MeV) of primaries ougoing the phantom 
-     
-    - 60 (1)   Energy (MeV) of primaries reaching the phantom          
-     
-    - 70 (1)   Energy (MeV) of primaries outgoing the phantom
-
-    - 80 (2)   Project the coordinate of the hits on the plane xy
-  
-    - 90 (2)   Project the  energy  deposit of the hits on the plane xy
-
-    - 100 (1)  Secondary particles produced in the phantom
-
-    - 110 (1)  Energy of secondary p produced in the phantom
-
-    - 120 (1)  Energy of secondary n produced in the phantom
-
-    - 130 (1)  Energy of secondary pions produced in the phantom
-
-    - 140 (1)  Energy of secondary alpha produced in the phantom
-
-    - 150 (1)  Energy of secondary e+ produced in the phantom
-
-    - 160 (1)  Energy of secondary e- produced in the phantom
-
-    - 170 (1)  Energy of secondary gamma produced in the phantom
-
-    - 180 (1)  Energy of secondary mu produced in the phantom
-
-    - 190 (1)  Energy of secondary other particles produced in the phantom
-
-    - 200 (1)  Phantom Slice where secondary protons are produced
-
-    - 210 (1)  Phantom Slice where secondary neutrons are produced
-
-    - 220 (1)   Phantom Slice where secondary pions are produced
-
-    - 230 (1)   Phantom Slice where secondary alpha are produced
-
-    - 240 (1)   Phantom Slice where secondary positrons are produced
-
-    - 250 (1)   Phantom Slice where secondary electrons are produced
-
-    - 260 (1)   Phantom Slice where secondary gamma are produced
-
-    - 270 (1)   Phantom Slice where secondary muons are produced
-
-    - 280 (1)   Phantom Slice where secondary other particles are produced
-
-    - 300 (1)   secondary particles reaching the phantom
-
-    - 310 (1)   Energy of secondary p reaching the phantom
-
-    - 320 (1)   Energy of secondary n reaching the phantom
-
-    - 330 (1)   Energy of secondary pions reaching in the phantom
-
-    - 340 (1)   Energy of secondary alpha reaching the phantom
-
-    - 350 (1)   Energy of secondary e+ reaching the phantom
-
-    - 360 (1)   Energy of secondary e- reaching the phantom
-
-    - 370 (1)   Energy of secondary gamma reaching  the phantom
-
-    - 380 (1)   Energy of secondary mu reaching the phantom
-
-    - 390 (1)   Energy of secondary other particles reaching the phantom
-
-    - 400 (1)   Energy of secondary neutrinos produced in the phantom
-
-    - 500 (1)   secondary particles in the vehicle
+The output file is remsim.root. It contains 1D histograms with the energy spectra of
+- secondary particles of interest generated in the vehicle/planetary shelter and  
+reaching the astronaut, 
+- secondary particles of interest generated in the astronaut. 
+The ROOT file is created at the beginning of the run and is closed at the end of the run.
+The histograms are instantiated in the RemSimRunAction class and are filled in the RemSimSteppingAction
+class. The macro macro.C is provided as example to open the remsim.root file and to plot an histogram, 
+generated in the simulation.
 
 6.SET-UP 
                                                                         
-- a standard Geant4 example GNUmakefile is provided                     
-
-setup with:                                                             
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++                                                    
-
-The following environment variables need to be set for the physics packages:                     
-G4LEDATA points to low energy data base -               
-G4LEVELGAMMADATA points to  PhotoEvaporation data
-G4RADIOACTIVEDATA points to Radioactive Decay data
-NeutronHPCrossSections points to  neutron data - 
-
-Setup for analysis: AIDA 3.2.1, PI 1.3.8                
-
-Users can download the analysis tools from:  
-                                                                        
-http://aida.freehep.org/
-http://www.cern.ch/PI                   
+- a standard Geant4 example GNUmakefile is provided                               
                                                                                                                 
 7. HOW TO RUN THE EXAMPLE
 
@@ -258,15 +155,24 @@ example macros are provided:
   vehicle configuration 
 - moon.mac is an example of simulation in the Moon habitat configuration
                                                                         
-- batch mode:
-  $G4WORDIR/bin/Linux-g++/remsim vehicle1.mac
-  $G4WORDIR/bin/Linux-g++/remsim vehicle2.mac                          
-  $G4WORDIR/bin/Linux-g++/Brachy moon.mac       
+- Batch mode:
+  1) $G4WORDIR/bin/Linux-g++/remsim vehicle1.mac
+  ---> output files: remsim.root (analysis of secondary particles) and 
+       EnergyDeposition_vehicle1.out (energy deposition in the phantom modelling the astronaut) 
+  
+  2) $G4WORDIR/bin/Linux-g++/remsim vehicle2.mac, 
+  ---> output files: remsim.root (analysis of secondary particles) and 
+       EnergyDeposition_vehicle2.out (energy deposition in the phantom modelling the astronaut)                         
+
+  3) $G4WORDIR/bin/Linux-g++/remsim moon.mac, 
+  ---> output files: remsim.root (analysis of secondary particles) and 
+       EnergyDeposition_moon.out (energy deposition in the phantom modelling the astronaut)      
                                                                         
 - Interative mode:                                                      
   $G4WORDIR/bin/Linux-g++/remsim
-  -> the vis.mac is loaded automatically                                
-
+  ---> the interactive.mac is executed automatically                                
+  ---> outputfile: remsim.root (analysis of secondary particles) and 
+       EnergyDeposition.out (energy deposition in the phantom modelling the astronaut)  
 ------------------------------------------------------------------------
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.hh,v 1.2 2008/12/18 12:56:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Pythia6Decayer.hh,v 1.2 2008-12-18 12:56:36 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implements the G4VExtDecayer abstract class using the Pythia6 interface.
 //

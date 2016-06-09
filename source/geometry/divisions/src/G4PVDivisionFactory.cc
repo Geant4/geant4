@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivisionFactory.cc,v 1.3 2010/07/02 10:46:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PVDivisionFactory.cc,v 1.3 2010-07-02 10:46:27 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivisionFactory Implementation file
 //
@@ -134,8 +134,8 @@ G4PVDivisionFactory::CreatePVDivision(const G4String& pName,
   if (!divParam)
   {
     G4Exception("G4PVDivisionFactory::CreatePVDivision()",
-                "WrongType", FatalException,
-                "Unexpected parameterisation type !");
+                "GeomDiv0001", FatalException,
+                "Unexpected parameterisation type!");
     return 0;
   }
   else

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.16 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BSplineSurface.cc,v 1.16 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.3 2010/06/10 10:16:10 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QIonIonElastic.cc,v 1.3 2010-06-10 10:16:10 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
 //                 by Mikhail Kossov, December 2006.
@@ -46,7 +46,9 @@
 #include "G4QIonIonElastic.hh"
 
 // Initialization of static vectors
-G4int G4QIonIonElastic::nPartCWorld=152;     // The#of particles initialized in CHIPS World
+//G4int G4QIonIonElastic::nPartCWorld=152;   // The#of particles initialized in CHIPS World
+//G4int G4QIonIonElastic::nPartCWorld=122;   // The#of particles initialized in CHIPS World
+G4int G4QIonIonElastic::nPartCWorld=85; // The#of particles initialized in CHIPS World Red.
 std::vector<G4int> G4QIonIonElastic::ElementZ;        // Z of the element(i) in theLastCalc
 std::vector<G4double> G4QIonIonElastic::ElProbInMat;  // SumProbabilityElements in Material
 std::vector<std::vector<G4int>*> G4QIonIonElastic::ElIsoN; // N of isotope(j) of Element(i)

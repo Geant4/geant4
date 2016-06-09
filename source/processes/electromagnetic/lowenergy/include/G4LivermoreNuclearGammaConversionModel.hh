@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreNuclearGammaConversionModel.hh,v 1.1 2010/11/10 17:09:16 flongo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermoreNuclearGammaConversionModel.hh,v 1.1 2010-11-10 17:09:16 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Authors: G.Depaola & F.Longo
 //
 
 #ifndef G4LivermoreNuclearGammaConversionModel_h

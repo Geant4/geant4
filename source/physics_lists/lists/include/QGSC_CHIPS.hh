@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_CHIPS.hh,v 1.3 2009/04/17 15:29:19 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: QGSC_CHIPS.hh,v 1.3 2009-04-17 15:29:19 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

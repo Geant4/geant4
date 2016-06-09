@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.12 2010/05/11 11:34:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4Evaporation.hh,v 1.12 2010-05-11 11:34:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,6 +35,7 @@
 // 27/07/2009 V.Ivanchenko - added Combined decay channels (default + GEM) 
 // 11/05/2010 V.Ivanchenko - rewrited technical part do not "new" and "delete" 
 //                           of small objects
+// 22/04/2011 V.Ivanchenko - added maxZ and maxA for FermiBreakUp model
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -49,11 +50,10 @@
 class G4VEvaporationFactory;
 class G4NistManager;
 
-//#define debug
-
 class G4Evaporation : public G4VEvaporation
 {
 public:
+
   G4Evaporation();
   G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector);
 	 
@@ -79,15 +79,12 @@ public:
   void SetGEMChannel();
   void SetCombinedChannel();
 
-#ifdef debug
-  void CheckConservation(const G4Fragment & theInitialState,
-			 G4FragmentVector * Result) const;
-#endif
-
   std::vector<G4VEvaporationChannel*> * theChannels;
   std::vector<G4double>   probabilities;
-  G4VEvaporationFactory * theChannelFactory;
+  G4VEvaporationFactory* theChannelFactory;
   G4int nChannels;
+  G4int maxZforFBU;
+  G4int maxAforFBU;
   G4double minExcitation;
   G4NistManager* nist;
   G4UnstableFragmentBreakUp unstableBreakUp;

@@ -23,61 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TritonGEMProbability.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TritonGEMProbability.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
 
-
-
 #ifndef G4TritonGEMProbability_h
 #define G4TritonGEMProbability_h 1
 
-
 #include "G4GEMProbability.hh"
-
 
 class G4TritonGEMProbability : public G4GEMProbability
 {
 public:
-    // Only available constructor
-    G4TritonGEMProbability();
+  // Only available constructor
+  G4TritonGEMProbability();
     
-    ~G4TritonGEMProbability() {}
+  ~G4TritonGEMProbability();
+
 private:  
-    // Copy constructor
-    G4TritonGEMProbability(const G4TritonGEMProbability &right);
-    
-    const G4TritonGEMProbability & operator=(const G4TritonGEMProbability &right);
-    G4bool operator==(const G4TritonGEMProbability &right) const;
-    G4bool operator!=(const G4TritonGEMProbability &right) const;
   
-
-private:
-    
-    virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-        {
-            return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));
-        }
-	
-    virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
-        {
-            return -GetCoulombBarrier(fragment);
-        }
-
-    G4double CCoeficient(const G4double aZ) const;
-
-    
-    // Excitation energy levels 
-    std::vector<G4double> ExcitEnergies;
-    // Spin of excitation energy levels 
-    std::vector<G4double> ExcitSpins;
-
-    std::vector<G4double> ExcitLifetimes;
-    
+  // Copy constructor
+  G4TritonGEMProbability(const G4TritonGEMProbability &right);    
+  const G4TritonGEMProbability & operator=(const G4TritonGEMProbability &right);
+  G4bool operator==(const G4TritonGEMProbability &right) const;
+  G4bool operator!=(const G4TritonGEMProbability &right) const;
+  
 };
 
 

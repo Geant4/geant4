@@ -4,7 +4,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DeflateOutputStreamBuffer.cc,v 1.6 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DeflateOutputStreamBuffer.cc,v 1.6 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 
@@ -95,10 +95,9 @@ namespace cheprep {
 #endif // CHEPREP_NO_ZLIB
     }
         
-
+#ifndef CHEPREP_NO_ZLIB        
     void DeflateOutputStreamBuffer::init(bool compress) {
 
-#ifndef CHEPREP_NO_ZLIB        
         if (compress) {
             if (zStreamOpen) return;
             
@@ -116,8 +115,7 @@ namespace cheprep {
             }
         }
 #else
-        // suppress warning about unused var
-        compress = false;
+    void DeflateOutputStreamBuffer::init(bool /*compress*/) {
 #endif // CHEPREP_NO_ZLIB
 
         crc = 0;

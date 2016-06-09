@@ -35,6 +35,7 @@
 // Class Description - End
 //
 // 23-Dec-2006 Isotope dependence added by D. Wright
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 //
 
 #include "globals.hh"
@@ -44,47 +45,24 @@
 
 class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-      G4IonsSihverCrossSection ():
-         square_r0 ( ( 1.36 * fermi ) * ( 1.36 * fermi ) )
-      {
-      }
+public:
+
+  G4IonsSihverCrossSection();
+
+  virtual ~G4IonsSihverCrossSection();
    
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
-   {
-     return IsIsoApplicable(aDP, 0, 0);
-   }
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle* aDP, G4int Z,
+			     const G4Material*);
 
-   virtual 
-   G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int /*ZZ*/, 
-                          G4int /*AA*/)
-   {
-      G4int BaryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-      G4double KineticEnergy = aDP->GetKineticEnergy(); 
-      if ( KineticEnergy / BaryonNumber >= 100*MeV && BaryonNumber > 1 ) 
-         return true;
-      return false;
-   }
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-   virtual
-   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
-                                 G4int AA, G4double aTemperature);
-
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
-
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "tG4GIonCrossSection: uses formula"<<G4endl;}
-
-   private:
-      const G4double square_r0;
+private:
+  const G4double square_r0;
 
 };
 

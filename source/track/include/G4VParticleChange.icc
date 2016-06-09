@@ -24,58 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.16 2007/03/25 22:54:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VParticleChange.icc,v 1.16 2007-03-25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------
-// Virtual methods for updating G4Step 
-//
-
-inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
-{
-  // Update the G4Step specific attributes
-  pStep->SetStepLength( theTrueStepLength );
-  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
-  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
-  pStep->SetControlFlag( theSteppingControlFlag );
-
-  if (theFirstStepInVolume) {pStep->SetFirstStepFlag();}
-  else                      {pStep->ClearFirstStepFlag();} 
-  if (theLastStepInVolume)  {pStep->SetLastStepFlag();}
-  else                      {pStep->ClearLastStepFlag();} 
-
-  return pStep;
-}
- 
-inline
- G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
-{ 
-  if (!fSetParentWeightByProcess){
-    Step->GetPostStepPoint()->SetWeight( theParentWeight );
-  }
-  return UpdateStepInfo(Step);
-}
-
-inline
- G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
-{
-  if (!fSetParentWeightByProcess){
-    G4double newWeight= theParentWeight/(Step->GetPreStepPoint()->GetWeight())*(Step->GetPostStepPoint()->GetWeight());
-    Step->GetPostStepPoint()->SetWeight( newWeight );
-  }
-  return UpdateStepInfo(Step);
-}
-
-inline
- G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
-{
-  if (!fSetParentWeightByProcess){
-    Step->GetPostStepPoint()->SetWeight( theParentWeight );
-  }
-  return UpdateStepInfo(Step);
-}
-
 //----------------------------------------------------------------
 // Set/Get inline functions
 //
@@ -198,6 +151,13 @@ inline
    return theParentWeight;
 }
 
+inline 
+ G4double G4VParticleChange::GetWeight() const
+{
+   return theParentWeight;
+}
+
+
 //----------------------------------------------------------------
 // inline functions for Initialization
 //
@@ -239,6 +199,7 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
 {
   // set the parent track's weight
   theParentWeight = track.GetWeight();
+  isParentWeightProposed = false;
 }
 
 inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
@@ -349,20 +310,15 @@ inline
 }
 
 inline
- void     G4VParticleChange::ProposeParentWeight(G4double w)
+ void     G4VParticleChange::ProposeWeight(G4double w)
 {
   theParentWeight = w;
+  isParentWeightProposed = true;
 }
 
 inline
- void     G4VParticleChange::SetParentWeightByProcess(G4bool flag)
+ void     G4VParticleChange::ProposeParentWeight(G4double w)
 {
-  fSetParentWeightByProcess = flag;
-}
-
-inline 
- G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
-{
-  return fSetParentWeightByProcess;
+  ProposeWeight(w);
 }
 

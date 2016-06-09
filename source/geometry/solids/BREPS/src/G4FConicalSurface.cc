@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.cc,v 1.19 2006/06/29 18:42:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FConicalSurface.cc,v 1.19 2006-06-29 18:42:12 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -74,10 +74,12 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
     length = l;
   else 
   {
-    G4cerr << "Error in G4FConicalSurface::G4FConicalSurface"
-	   << "--asked for negative length\n"
-	   << "\tDefault length of 0.0 is used.\n";
-   
+    std::ostringstream message;
+    message << "Negative length." << G4endl
+	    << "Default length of 0.0 is used.";    
+    G4Exception("G4FConicalSurface::G4FConicalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     length = 0.0;
   }
   
@@ -86,9 +88,11 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
     small_radius = sr;
   else 
   {
-    G4cerr << "Error in G4FConicalSurface::G4FConicalSurface"
-	   << "--asked for negative small radius\n"
-	   << "\tDefault value of 0.0 is used.\n";
+    std::ostringstream message;
+    message << "Negative small radius." << G4endl
+	    << "Default value of 0.0 is used.";    
+    G4Exception("G4FConicalSurface::G4FConicalSurface()",
+                "GeomSolids1001", JustWarning, message);
    
     small_radius = 0.0;
   }
@@ -98,10 +102,12 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
     large_radius = lr;
   else 
   {
-    G4cerr << "Error in G4FConicalSurface::G4FConicalSurface"
-	   << "--large radius must exceed small radius\n"
-	   << "\tDefault value of small radius +1 is used.\n";
-   
+    std::ostringstream message;
+    message << "Large radius must exceed small radius" << G4endl
+	    << "Default value of small radius +1 is used.";    
+    G4Exception("G4FConicalSurface::G4FConicalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     large_radius = small_radius + 1.0;
   }
 
@@ -224,9 +230,11 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
     length = l;
   else 
   {
-    G4cerr << "Error in G4FConicalSurface::resize"
-	   << "--asked for negative length\n"
-	   << "\tOriginal value of " << length << " is retained.\n";
+    std::ostringstream message;
+    message << "Negative length." << G4endl
+	    << "Original value of " << length << " is retained.";    
+    G4Exception("G4FConicalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   //  Require small radius to be non-negative (i.e., allow zero)
@@ -234,10 +242,11 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
     small_radius = sr;
   else 
   {
-    G4cerr << "Error in G4FConicalSurface::resize"
-	   << "--asked for negative small radius\n"
-	   << "\tOriginal value of " << small_radius
-	   << " is retained.\n";
+    std::ostringstream message;
+    message << "Negative small radius." << G4endl
+	    << "Original value of " << small_radius << " is retained.";    
+    G4Exception("G4FConicalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   //  Require large radius to exceed small radius
@@ -249,9 +258,11 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
     lr = ( large_radius <= small_radius ) ? r : large_radius;
     large_radius = lr;
     
-    G4cerr << "Error in G4FConicalSurface::G4FConicalSurface"
-	   << "--large radius must exceed small radius\n"
-	   << "\tDefault value of " << large_radius << " is used.\n";
+    std::ostringstream message;
+    message << "Large radius must exceed small radius." << G4endl
+	    << "Default value of " << large_radius << " is used.";    
+    G4Exception("G4FConicalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   //  Calculate the angle of the G4ConicalSurface from the length and radii

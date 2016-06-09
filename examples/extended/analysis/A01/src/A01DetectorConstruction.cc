@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.10 2009/11/21 00:22:55 perl Exp $
+// $Id: A01DetectorConstruction.cc,v 1.10 2009-11-21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //
 

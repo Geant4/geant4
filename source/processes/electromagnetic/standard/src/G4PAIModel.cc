@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.55 2010/11/21 10:55:44 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PAIModel.cc,v 1.55 2010-11-21 10:55:44 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -95,6 +95,9 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
   fDeltaCutInKinEnergy = 0.0;
+  fParticleChange = 0;
+  fMaterial = 0;
+  fCutCouple = 0;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
@@ -277,7 +280,7 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
 void G4PAIModel::BuildPAIonisationTable()
 {
   G4double LowEdgeEnergy , ionloss ;
-  G4double tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
+  G4double tau, Tmax, Tmin, Tkin, deltaLow, /*gamma,*/ bg2 ;
 
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy,
 					fHighestKineticEnergy,
@@ -291,7 +294,7 @@ void G4PAIModel::BuildPAIonisationTable()
   {
     LowEdgeEnergy = fParticleEnergyVector->GetLowEdgeEnergy(i) ;
     tau = LowEdgeEnergy/fMass ;
-    gamma = tau +1. ;
+    //gamma = tau +1. ;
     // G4cout<<"gamma = "<<gamma<<endl ;
     bg2 = tau*( tau + 2. );
     Tmax = MaxSecondaryEnergy(fParticle, LowEdgeEnergy); 

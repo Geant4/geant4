@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.10 2009/09/18 12:48:43 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenInventorWinViewer.hh,v 1.10 2009-09-18 12:48:43 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

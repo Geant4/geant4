@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_FTFP_BERT.icc,v 1.6 2010/08/16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: QGSP_FTFP_BERT.icc,v 1.6 2010-08-16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -67,7 +67,7 @@ template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
 {
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_FTFP_BERT 3.5"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_FTFP_BERT 3.6"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
@@ -92,7 +92,7 @@ template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
   this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT_TRV.cc,v 1.2 2010/06/03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsFTFP_BERT_TRV.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,6 +49,8 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4PhysListUtil.hh"
+
 HadronPhysicsFTFP_BERT_TRV::HadronPhysicsFTFP_BERT_TRV(G4int)
                     :  G4VPhysicsConstructor("hInelastic FTFP_BERT_TRV")
 		     , QuasiElastic(false)
@@ -60,8 +62,8 @@ HadronPhysicsFTFP_BERT_TRV::HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4b
 
 void HadronPhysicsFTFP_BERT_TRV::CreateModels()
 {
-  G4double minFTFP= 6.0 * GeV;
-  G4double maxBERT= 8.0 * GeV;
+  G4double minFTFP= 3.0 * GeV;
+  G4double maxBERT= 12.0 * GeV;
   // G4double minFTFP= 5.0 * GeV; G4double maxBERT= 7.0 * GeV;
   G4cout << " Revised FTFTP_BERT_TRV - new threshold between BERT and FTFP " 
 	 << " is over the interval " << minFTFP/GeV << " to " << maxBERT/GeV 
@@ -96,7 +98,10 @@ void HadronPhysicsFTFP_BERT_TRV::CreateModels()
   theFTFPPiK->SetMinEnergy(minFTFP);
   theBertiniPiK->SetMaxEnergy(maxBERT);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theHyperon=new G4HyperonFTFPBuilder;
+    
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 HadronPhysicsFTFP_BERT_TRV::~HadronPhysicsFTFP_BERT_TRV()
@@ -113,7 +118,11 @@ HadronPhysicsFTFP_BERT_TRV::~HadronPhysicsFTFP_BERT_TRV()
   delete theBertiniPro;
   delete theFTFPPro;    
     
-  delete theMiscLHEP;
+  delete theHyperon;
+  delete theAntiBaryon;
+  delete theFTFPAntiBaryon;
+  
+  delete theCHIPSInelastic;
 }
 
 void HadronPhysicsFTFP_BERT_TRV::ConstructParticle()
@@ -135,6 +144,15 @@ void HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  // use CHIPS cross sections also for Kaons
+  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+
+  theHyperon->Build();
+  theAntiBaryon->Build();
 }
 

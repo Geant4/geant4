@@ -54,7 +54,7 @@ G4PhantomHeadBuilder::~G4PhantomHeadBuilder()
 void G4PhantomHeadBuilder::BuildHead(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (motherVolume == 0)
-    G4Exception("The moder Volume volume is missing !!!!!");
+    G4Exception("G4PhantomHeadBuilder::BuildHead()", "human_phantom0011", FatalException, "The moder Volume volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
@@ -64,7 +64,7 @@ void G4PhantomHeadBuilder::BuildHead(const G4String& colourName, G4bool solidVis
 void G4PhantomHeadBuilder::BuildSkull(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (headVolume == 0)
-    G4Exception("The head volume is missing !!!!!");
+    G4Exception("G4PhantomHeadBuilder::BuildSkull()", "human_phantom0012", FatalException, "The head volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  headVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
@@ -74,7 +74,7 @@ void G4PhantomHeadBuilder::BuildSkull(const G4String& colourName, G4bool solidVi
 void G4PhantomHeadBuilder::BuildBrain(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
  if (headVolume == 0)
-   G4Exception("The head volume is missing !!!!!");
+   G4Exception("G4PhantomHeadBuilder::BuildBrain()", "human_phantom0013", FatalException, "The head volume is missing !!!!!");
 
     body -> CreateOrgan("Brain",headVolume, colourName, solidVis, sensitivity);
 }
@@ -95,7 +95,23 @@ void G4PhantomHeadBuilder::SetModel(G4String modelFlag)
   model = modelFlag;
 
   if(model=="MIRD" || model =="MIX") body = new G4MIRDBodyFactory();
-  if(model=="ORNLFemale") body = new G4ORNLFemaleBodyFactory();
-  if(model=="ORNLMale") body = new G4ORNLMaleBodyFactory();
+  if(model=="ORNLFemale") 
+{
+#ifdef G4LIB_USE_GDML
+body = new G4ORNLFemaleBodyFactory();
+#else
+G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
+#endif
+} 
+
+ if(model=="ORNLMale") 
+{
+#ifdef G4LIB_USE_GDML
+body = new G4ORNLMaleBodyFactory();
+#else
+G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
+#endif
+}
+
 }
 

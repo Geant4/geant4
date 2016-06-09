@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F04DetectorMessenger.hh,v 1.1 2007/10/30 02:01:47 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F04DetectorMessenger.hh,v 1.1 2007-10-30 02:01:47 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

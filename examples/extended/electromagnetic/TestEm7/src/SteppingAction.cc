@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.15 2010/09/17 18:45:43 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: SteppingAction.cc,v 1.15 2010-09-17 18:45:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,8 +59,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   runAction->FillEdep(edep, niel);
 
-  if (step->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
- 
+  if (step->GetTrack()->GetTrackID() == 1) {
+    runAction->AddPrimaryStep();
+    /*
+    G4cout << step->GetTrack()->GetMaterial()->GetName()
+	   << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
+	   << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
+	   << " Edep= " << edep << G4endl;
+    */
+  } 
+
   //Bragg curve
   //	
   G4StepPoint* prePoint  = step->GetPreStepPoint();
@@ -74,10 +82,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   //fill tallies
   //
-  G4TouchableHandle touchable = prePoint->GetTouchableHandle();
-  G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
-  if (lVolume == detector->GetLogicalTally())
-    runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
+  G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
+  if (copyNb > 0) runAction->FillTallyEdep(copyNb, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

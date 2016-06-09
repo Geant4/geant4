@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.4 2010/06/02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EmExtraPhysics.cc,v 1.4 2010-06-02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,23 +51,26 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4ProcessManager.hh"
+#include "G4BuilderType.hh"
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
   munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
   verbose(ver)
 {
   theMessenger = new G4EmMessenger(this);
+  SetPhysicsType(bEmExtra);
 }
 
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String&): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
   munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
   verbose(1)
 {
   theMessenger = new G4EmMessenger(this);
+  SetPhysicsType(bEmExtra);
 }
 
 G4EmExtraPhysics::~G4EmExtraPhysics()
@@ -76,8 +79,8 @@ G4EmExtraPhysics::~G4EmExtraPhysics()
   delete theElectronSynch;
   delete thePositronSynch;
   delete theGNPhysics;
-  delete theMuNuc1;
-  delete theMuNuc2;
+  delete muNucProcess;
+  delete muNucModel;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -129,13 +132,15 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   munActivated = true;
   G4ProcessManager * pManager = 0;
 
-  pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
-  theMuNuc1 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc1);
+  muNucProcess = new G4MuonNuclearProcess();
+  muNucModel = new G4VDMuonNuclearModel();
+  muNucProcess->RegisterMe(muNucModel);
 
-  pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
-  theMuNuc2 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc2);
+  pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
+
+  pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
 }
 
 void G4EmExtraPhysics::BuildGammaNuclear()

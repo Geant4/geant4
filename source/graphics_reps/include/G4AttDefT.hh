@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttDefT.hh,v 1.2 2006/12/13 15:43:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AttDefT.hh,v 1.2 2006-12-13 15:43:57 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Templated G4AttDef. Generates type key for given template parameter.
 //

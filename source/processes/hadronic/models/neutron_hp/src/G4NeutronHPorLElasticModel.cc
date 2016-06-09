@@ -56,7 +56,9 @@ G4HadFinalState* G4NeutronHPorLElasticModel::ApplyYourself(const G4HadProjectile
       return theLElastic->ApplyYourself( aTrack , aTargetNucleus );
    }
 
-   G4int Z =  (G4int)(aTargetNucleus.GetZ()+0.5);  
+   //G4int Z =  (G4int)(aTargetNucleus.GetZ()+0.5);  
+   //migrate to integer A and Z
+   G4int Z =  aTargetNucleus.GetZ_asInt();  
    G4String theNameOfElement = theHPNames->GetName( Z-1 ); // GetName(0) reply "Hydrogen" 
 
    if ( theHPElastic->IsThisElementOK( theNameOfElement ) )

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.hh,v 1.8 2006/06/29 18:11:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3EleTable.hh,v 1.8 2006-06-29 18:11:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -42,6 +42,7 @@
 #ifndef G4ELETABLE_HH
 #define G4ELETABLE_HH 1
 
+#include "G3toG4Defs.hh"
 #include "globals.hh"
 #include "G4Element.hh"
 
@@ -67,5 +68,5 @@ private:
 
 };
 
-extern G3EleTable G3Ele;
+extern G3G4DLL_API G3EleTable G3Ele;
 #endif

@@ -38,18 +38,15 @@
 // Class Description - End
 
 
- class G4AlphaInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4AlphaInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AlphaInelasticProcess(
-     const G4String& processName = "AlphaInelastic" ) :
-      G4HadronInelasticProcess( processName, G4Alpha::Alpha() )
-    { }
+    G4AlphaInelasticProcess(const G4String& processName = "AlphaInelastic");
         
-    ~G4AlphaInelasticProcess()
-    { }
+    ~G4AlphaInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
  };
  
 #endif
- 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.12 2006/06/29 16:30:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: XrayTelAnalysis.cc,v 1.12 2006-06-29 16:30:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)

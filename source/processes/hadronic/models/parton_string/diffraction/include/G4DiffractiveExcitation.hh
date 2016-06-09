@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.4 2009/09/17 18:24:30 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.4 2009-09-17 18:24:30 vuzhinsk Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1

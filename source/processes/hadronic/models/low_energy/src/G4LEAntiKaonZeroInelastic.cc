@@ -23,112 +23,115 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.10 2006-06-29 20:44:39 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.10 2006/06/29 20:44:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
- // J.L. Chuma, TRIUMF, 11-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: Low Energy KaonZeroLong Inelastic Process
+// J.L. Chuma, TRIUMF, 11-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEAntiKaonZeroInelastic.hh"
 #include "Randomize.hh"
 #include "G4HadReentrentException.hh"
 
- G4HadFinalState *
-  G4LEAntiKaonZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                         G4Nucleus &targetNucleus )
-  {    
-    const G4HadProjectile *originalIncident = &aTrack;
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+void G4LEAntiKaonZeroInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEAntiKaonZeroInelastic is one of the Low Energy\n"
+          << "Parameterized (LEP) models used to implement anti-K0 scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA code\n"
+          << "of H. Fesefeldt.  It divides the initial collision products\n"
+          << "into backward- and forward-going clusters which are then\n"
+          << "decayed into final state hadrons.  The model does not conserve\n"
+          << "energy on an event-by-event basis.  It may be applied to\n"
+          << "anti-K0s with initial energies between 0 and 25 GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEAntiKaonZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                         G4Nucleus& targetNucleus)
+{    
+  const G4HadProjectile *originalIncident = &aTrack;
+
+  // create the target particle
+  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAntiKaonZeroInelastic::ApplyYourself called" << G4endl;    
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEAntiKaonZeroInelastic::ApplyYourself called" << G4endl;    
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
-    
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
-    
-    const G4double cutOff = 0.1;
-    if( currentParticle.GetKineticEnergy()/MeV > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    try
-    {
-        CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
-    }
-    catch(G4HadReentrentException aR)
-    {
-      aR.Report(G4cout);
-      throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");
-    }
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
-    delete originalTarget;
-    return &theParticleChange;
   }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
+    
+  G4double tkin = targetNucleus.Cinema( ek );
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects( ek );
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
+  targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize( 0 );
+    
+  const G4double cutOff = 0.1;
+  if (currentParticle.GetKineticEnergy()/MeV > cutOff)
+    Cascade(vec, vecLen,
+            originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
+    
+  try {
+    CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                     modifiedOriginal, targetNucleus, currentParticle,
+                     targetParticle, incidentHasChanged, targetHasChanged,
+                     quasiElastic);
+  }
+  catch(G4HadReentrentException aR)
+  {
+    aR.Report(G4cout);
+    throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");
+  }
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+    
+  delete originalTarget;
+  return &theParticleChange;
+}
+
  
- void
-  G4LEAntiKaonZeroInelastic::Cascade(
+void G4LEAntiKaonZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -137,7 +140,7 @@
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
-  {
+{
     // derived from original FORTRAN code CASK0B by H. Fesefeldt (13-Sep-1987)
     //
     // K0Long undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -504,7 +507,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

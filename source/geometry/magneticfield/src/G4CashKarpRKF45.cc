@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.16 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CashKarpRKF45.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 // order method (giving fifth-order accuracy) for the solution of an ODE.
@@ -221,7 +221,7 @@ G4CashKarpRKF45::StepWithEst( const G4double*,
                               const G4double*,
                                     G4double*  )    
 {
-  G4Exception("G4CashKarpRKF45::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4CashKarpRKF45::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
   return ;
 }

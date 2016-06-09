@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.1 2010/05/26 21:20:01 dennis Exp $
+$Id: History,v 1.1 2010-05-26 21:20:01 dennis Exp $
 ---------------------------------------------------------------------
 
            History file for the Isotope Production model
@@ -15,6 +15,15 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+21 November 2011 - V.Ivanchenko (hadr-isopro-V09-04-01)
+-------------------------------------------------------
+- G4NeutronIsoIsoCrossSections, G4ElementIsoCrossSections - fixed
+    destruction of C-arrays
+
+13 September 2011 - V.Ivanchenko (hadr-isopro-V09-04-00)
+-------------------------------------------------------
+- G4NeutronIsoIsoCrossSections - migration to the new x-section design
 
 26 May 2010 - Dennis Wright (hadr-isopro-V09-03-00)
 ---------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010/10/14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010-10-14 18:38:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -133,7 +133,9 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
   SetProcessSubType(fSynchrotronRadiation);
-
+  CutInRange = GammaCutInKineticEnergyNow = ElectronCutInKineticEnergyNow = 
+    PositronCutInKineticEnergyNow =  ParticleCutInKineticEnergyNow = fKsi = 
+    fPsiGamma = fEta = fOrderAngleK = 0.0;
 }
  
 /////////////////////////////////////////////////////////////////////////
@@ -144,6 +146,15 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
 {}
  
+
+G4bool
+G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
+{
+
+  return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
+	   ( &particle == (const G4ParticleDefinition *)thePositron )    );
+
+}
  
 /////////////////////////////// METHODS /////////////////////////////////
 //
@@ -201,11 +212,12 @@ G4SynchrotronRadiationInMat::GetMeanFreePath( const G4Track& trackData,
       pField = fieldMgr->GetDetectorField() ;
       G4ThreeVector  globPosition = trackData.GetPosition();
 
-      G4double  globPosVec[3], FieldValueVec[3];
+      G4double  globPosVec[4], FieldValueVec[6];
 
       globPosVec[0] = globPosition.x();
       globPosVec[1] = globPosition.y();
       globPosVec[2] = globPosition.z();
+      globPosVec[3] = trackData.GetGlobalTime();
 
       pField->GetFieldValue( globPosVec, FieldValueVec );
 
@@ -275,10 +287,11 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
   {
     pField = fieldMgr->GetDetectorField() ;
     G4ThreeVector  globPosition = trackData.GetPosition() ;
-    G4double  globPosVec[3], FieldValueVec[3] ;
+    G4double  globPosVec[4], FieldValueVec[6] ;
     globPosVec[0] = globPosition.x() ;
     globPosVec[1] = globPosition.y() ;
     globPosVec[2] = globPosition.z() ;
+    globPosVec[3] = trackData.GetGlobalTime();
 
     pField->GetFieldValue( globPosVec, FieldValueVec ) ;
     FieldValue = G4ThreeVector( FieldValueVec[0], 

@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2010/10/27 08:00:36 gcosmo Exp $
+$Id: History,v 1.67 2011-01-03 14:53:34 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,35 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+17th June 2011 Ben Morgan (raytracer-V09-04-04)
+- sources.cmake : Changed to use GEANT4_USE_RAYTRACER_X11 variable.
+
+24th May 2011 Ben Morgan (raytracer-V09-04-03)
+- sources.cmake : Added additional includes, definitions and link libraries
+  to build X11 component of RayTracer, if it's enabled by the user.
+  CMake functionality added to trunk at revision 49996.
+
+20th May 2011  Ben Morgan (raytracer-V09-04-02)
+- CMakeLists.txt : Added G4VIS_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module. We
+  don't add this definition at the visualization category level because
+  only raytracer uses it. It can be moved higher later.
+
+2nd March 2011  John Allison (raytracer-V09-04-01)
+- Fix bug introduced by fix to Coverity warnings.
+
+1st March 2011  John Allison (raytracer-V09-04-00)
+- G4RayTracerViewer::DrawView: Trap recursive calls, thus avoiding
+  warning messages for each pixel when endOfEventAction is "refresh".
+  EndOfEventAction is not relevant for Ray Tracer.  At the present
+  time, Ray Tracer takes no notice of the scene.  Perhaps in future,
+  it will, but G4RayTracerViewer should still ignore those recursive
+  calls.
+- Fix Coverity warnings.
+
+23, December L. Garnier 
+- GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 27th October 2010  Gabriele Cosmo (raytracer-V09-03-04)
 - Restored DLL setup as originally. Withdrawn changes in last tag.

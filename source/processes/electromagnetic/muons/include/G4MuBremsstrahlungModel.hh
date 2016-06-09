@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.23 2010/10/26 13:52:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.23 2010-10-26 13:52:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

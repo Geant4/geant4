@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.29 2010/11/05 19:27:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BraggModel.cc,v 1.29 2010-11-05 19:27:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -78,11 +78,14 @@ using namespace std;
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
+    currentMaterial(0),
     protonMassAMU(1.007276),
-    iMolecula(0),
+    iMolecula(-1),
+    iPSTAR(-1),
     isIon(false),
     isInitialised(false)
 {
+  fParticleChange = 0;
   SetHighEnergyLimit(2.0*MeV);
 
   lowestKinEnergy  = 1.0*keV;
@@ -99,15 +102,6 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
 
 G4BraggModel::~G4BraggModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple*)
-{
-  return 0.1*keV;
-  // return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -217,8 +211,12 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tkin  = kineticEnergy/massRate;
   G4double dedx  = 0.0;
-  if(tkin > lowestKinEnergy) { dedx = DEDX(material, tkin); }
-  else { dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy); }
+
+  if(tkin < lowestKinEnergy) {
+    dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy);
+  } else {
+    dedx = DEDX(material, tkin); 
+  }
 
   if (cutEnergy < tmax) {
 
@@ -234,9 +232,12 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // now compute the total ionization loss
 
-  if (dedx < 0.0) dedx = 0.0 ;
+  if (dedx < 0.0) { dedx = 0.0; }
 
   dedx *= chargeSquare;
+
+  //G4cout << "E(MeV)= " << tkin/MeV << " dedx= " << dedx 
+  //	 << "  " << material->GetName() << G4endl;
 
   return dedx;
 }
@@ -322,16 +323,21 @@ G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 G4bool G4BraggModel::HasMaterial(const G4Material* material)
 {
-  const size_t numberOfMolecula = 11 ;
-  SetMoleculaNumber(numberOfMolecula) ;
-  G4String chFormula = material->GetChemicalFormula() ;
+  G4String chFormula = material->GetChemicalFormula();
+  if("" == chFormula) { return false; }
 
   // ICRU Report N49, 1993. Power's model for He.
-  static G4String molName[numberOfMolecula] = {
+  const size_t numberOfMolecula = 11;
+  const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
     "H_2O-Gas",                "Graphite" } ;
+  const G4int idxPSTAR[numberOfMolecula] = {
+    6,  16,  36,
+    52, 55,  56,
+    59, 62,  71,
+    72, 13};
 
   // Special treatment for water in gas state
   const G4State theState = material->GetState() ;
@@ -341,13 +347,14 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   }
 
   // Search for the material in the table
-  for (size_t i=0; i<numberOfMolecula; i++) {
-      if (chFormula == molName[i]) {
-        SetMoleculaNumber(i) ;
-	return true ;
-      }
+  for (size_t i=0; i<numberOfMolecula; ++i) {
+    if (chFormula == molName[i]) {
+      iMolecula = -1;
+      iPSTAR = idxPSTAR[i];  
+      return true;
+    }
   }
-  return false ;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -357,7 +364,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 {
   G4double ionloss = 0.0 ;
 
-  if (iMolecula < 11) {
+  if (iMolecula >= 0) {
   
     // The data and the fit from: 
     // ICRU Report N49, 1993. Ziegler's model for protons.
@@ -565,17 +572,27 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
+
+  // check DB
+  if(material != currentMaterial) {
+    currentMaterial = material;
+    iPSTAR    = -1;
+    iMolecula = -1;
+    if( !HasMaterial(material) ) { iPSTAR = pstar.GetIndex(material); }
+
+    //G4cout << "%%% " <<material->GetName() << "  iMolecula= " 
+    //	   << iMolecula << "  iPSTAR= " << iPSTAR << G4endl; 
+
+  }
+
   const G4int numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
   
-  // compaund material with parametrisation
-  G4int iNist = pstar.GetIndex(material);
+  if( iPSTAR >= 0 ) {
+    return pstar.GetElectronicDEDX(iPSTAR, kineticEnergy)*material->GetDensity();
 
-  if( iNist >= 0 && kineticEnergy <= 2.01*MeV) {
-    return pstar.GetElectronicDEDX(iNist, kineticEnergy)*material->GetDensity();
-
-  } else if( HasMaterial(material) ) {
+  } else if(iMolecula >= 0) {
 
     eloss = StoppingPower(material, kineticEnergy)*
                           material->GetDensity()/amu;

@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2010/11/19 16:01:37 vnivanch Exp $
+$Id: History,v 1.101 2011-01-05 19:08:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,57 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-11-11 V.Ivant (testem7-V09-04-14)
+- G4ScreenedNuclearRecoil - commented out G4Exceptions
+     
+08-11-11 mma (testem7-V09-04-13)
+- modify SteppingVerbose for OutOfWorld
+     
+01-11-11 V.Ivant (testem7-V09-04-12)
+- c2_function.hh - removed compiler depended selection of the math library 
+     
+31-10-11 mma (testem7-V09-04-11)
+- PhysListEmStandard : msc95 by default
+
+31-10-11 V.Ivant (testem7-V09-04-10)
+- TestEm7.in, DetectorConstruction - added Water_1.05 material and 
+    test of variable density option
+
+07-06-11 V.Ivant (testem7-V09-04-09)
+- c2_function.hh - added compiler depended selection of the math library 
+     
+03-06-11 mma (testem7-V09-04-08)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
+30-05-11 mma (testem7-V09-04-07)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+    
+08-04-11 mma (testem7-V09-04-06)
+- PhysicsList : set back default lowest production cut (990 eV)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
+
+23-03-11 V.Ivant (testem7-V09-04-05)
+- PhysListEmStandardNR - remove calls to obsolete methods,
+     cleaned up options
+- PhysListEmStandardSS - cleaned up options
+     
+20-02-11 mma (testem7-V09-04-04)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+     
+14-02-11 mma (testem7-V09-04-03)
+- update HistoManager
+     
+11-02-11 mma (testem7-V09-04-02)
+- update SteppingVerbose
+     
+08-02-11 mma (testem7-V09-04-01)
+- allow tallies of different materials and sizes.
+  affected : DetectorConstruction, DetectorMessenger, RunAction, SteppingAction
+
+05-01-11 V.Ivant (testem7-V09-04-00)
+- Minor cleanup of SS physics constructor
 
 19-11-10 V.Ivant (testem7-V09-03-08)
 - Added ion scattering model into SS physics constructor

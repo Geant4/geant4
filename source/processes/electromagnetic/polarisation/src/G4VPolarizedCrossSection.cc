@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc,v 1.5 2010/09/03 16:34:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VPolarizedCrossSection.cc,v 1.5 2010-09-03 16:34:46 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // File name:     G4VPolarizedCrossSection
 //
 // Author:        Andreas Schaelicke

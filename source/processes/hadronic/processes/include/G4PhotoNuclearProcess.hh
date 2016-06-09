@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoNuclearProcess.hh,v 1.9 2009/03/31 19:16:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhotoNuclearProcess.hh,v 1.9 2009-03-31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
 // Process for photon nuclear inelastic scattering; 
@@ -39,14 +39,23 @@
 #define G4PhotoNuclearProcess_h 1
  
 #include "G4HadronInelasticProcess.hh"
- 
+#include "G4PhotoNuclearCrossSection.hh"
+
+
 class G4PhotoNuclearProcess : public G4HadronInelasticProcess
 {
-public:
+  public:
     
-  G4PhotoNuclearProcess( const G4String& processName = "PhotonInelastic" );
-  virtual ~G4PhotoNuclearProcess();
+    G4PhotoNuclearProcess(const G4String& processName = "PhotonInelastic")
+      : G4HadronInelasticProcess(processName, G4Gamma::Gamma() )
+    {
+      G4CrossSectionDataStore* theStore = GetCrossSectionDataStore();
+      theStore->AddDataSet(new G4PhotoNuclearCrossSection);
+    }
 
+  ~G4PhotoNuclearProcess() {}
+
+  virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

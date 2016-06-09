@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.18 2008/03/13 16:03:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.18 2008-03-13 16:03:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -65,6 +65,10 @@ G4FastSimulationManagerProcess(const G4String& processName,
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
+  // -- set Process Sub Type
+  SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
+
+
   fPathFinder            = G4PathFinder::GetInstance();
   fTransportationManager = G4TransportationManager::GetTransportationManager();
   
@@ -91,6 +95,10 @@ G4FastSimulationManagerProcess(const G4String&     processName,
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
+  // -- set Process Sub Type
+  SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
+
+
   fPathFinder            = G4PathFinder::GetInstance();
   fTransportationManager = G4TransportationManager::GetTransportationManager();
 
@@ -117,6 +125,10 @@ G4FastSimulationManagerProcess(const G4String&    processName,
   fFastSimulationManager(0),
   fFastSimulationTrigger(false)
 {
+  // -- set Process Sub Type
+  SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
+  
+
   fPathFinder            = G4PathFinder::GetInstance();
   fTransportationManager = G4TransportationManager::GetTransportationManager();
 
@@ -137,22 +149,32 @@ G4FastSimulationManagerProcess::~G4FastSimulationManagerProcess()
 // -----------------------
 //   User access methods:
 // -----------------------
-void
-G4FastSimulationManagerProcess::
-SetWorldVolume(G4String newWorldName)
+void G4FastSimulationManagerProcess::SetWorldVolume(G4String newWorldName)
 {
   if (fIsTrackingTime)
-    G4cout << "!!! G4FastSimulationManagerProcess `" << GetProcessName() 
-	   << "': changing world volume at tracking time is not allowed for now. Call ignored !!!" << G4endl;
+    {
+      G4ExceptionDescription ed;
+      ed << "G4FastSimulationManagerProcess `" << GetProcessName()
+	 << "': changing of world volume at tracking time is not allowed." << G4endl;
+      G4Exception("G4FastSimulationManagerProcess::SetWorldVolume(const G4String)",
+		  "FastSim002",
+		  JustWarning, ed,
+		  "Call ignored.");
+    }
   else
     {
       G4VPhysicalVolume* newWorld = fTransportationManager->IsWorldExisting(newWorldName);
-      G4String tellWhatIsWrong;
-      tellWhatIsWrong = "Volume newWorldName = `"; tellWhatIsWrong +=  newWorldName; tellWhatIsWrong += "' is not a parallel world nor the mass world volume.";
-      if (newWorld == 0) G4Exception("G4FastSimulationManagerProcess::SetWorldVolume(const G4String&, G4bool verbose)",
-				     "InvalidWorld",
-				     FatalException,
-				     tellWhatIsWrong);
+      if (newWorld == 0)
+	{
+	  G4ExceptionDescription  tellWhatIsWrong;
+	  tellWhatIsWrong << "Volume newWorldName = `" <<  newWorldName
+			  << "' is not a parallel world nor the mass world volume."
+			  << G4endl;
+	  G4Exception("G4FastSimulationManagerProcess::SetWorldVolume(const G4String)",
+		      "FastSim003",
+		      FatalException,
+		      tellWhatIsWrong);
+	}
       if (verboseLevel>0)
       {
 	if (fWorldVolume) G4cout << "G4FastSimulationManagerProcess `" << GetProcessName()
@@ -166,12 +188,18 @@ SetWorldVolume(G4String newWorldName)
 }
 
 
-void
-G4FastSimulationManagerProcess::
-SetWorldVolume(G4VPhysicalVolume* newWorld)
+void G4FastSimulationManagerProcess::SetWorldVolume(G4VPhysicalVolume* newWorld)
 {
   if (newWorld) SetWorldVolume(newWorld->GetName());
-  else G4Exception("!!! G4FastSimulationManagerProcess::SetWorldVolume(const G4VPhysicalVolume* newWorld) : null pointer passed. !!!");
+  else
+    {
+      G4ExceptionDescription  tellWhatIsWrong;
+      tellWhatIsWrong << "Null pointer passed for world volume." << G4endl;
+      G4Exception("G4FastSimulationManagerProcess::SetWorldVolume(const G4VPhysicalVolume* newWorld)",
+		  "FastSim004",
+		  FatalException,
+		  tellWhatIsWrong); 
+    }
 }
 
 
@@ -214,9 +242,6 @@ PostStepGetPhysicalInteractionLength(const G4Track&               track,
 				     G4double,
 				     G4ForceCondition*        condition)
 {
-#ifdef PARANOIA
-  if ( fGhostNavigator->GetWorldVolume() != fWorldVolume ) G4Exception("!!! ??? INCONSISTENT NAVIGATORS/WORLD VOLUMES ??? !!!");
-#endif
   // -- Get current volume, and check for presence of fast simulation manager.
   // -- For the case of the navigator for tracking (fGhostNavigatorIndex == 0)
   // -- we use the track volume. This allows the code to be valid for both

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronKiller.hh,v 1.2 2007/06/01 07:53:26 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronKiller.hh,v 1.2 2007-06-01 07:53:26 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -72,7 +72,7 @@ class G4NeutronKiller : public G4VDiscreteProcess
 public:
 
   G4NeutronKiller(const G4String& processName = "nKiller",
-		  G4ProcessType   aType = fNotDefined);
+		  G4ProcessType   aType =  fGeneral );
 
   virtual ~G4NeutronKiller();
 

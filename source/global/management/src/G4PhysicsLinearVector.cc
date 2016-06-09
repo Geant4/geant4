@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.18 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsLinearVector.cc,v 1.18 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //--------------------------------------------------------------------
@@ -41,13 +41,13 @@
 #include "G4PhysicsLinearVector.hh"
 
 G4PhysicsLinearVector::G4PhysicsLinearVector()
-  : G4PhysicsVector(), dBin(0.), baseBin(0.)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsLinearVector;
 }
 
 G4PhysicsLinearVector::G4PhysicsLinearVector(size_t theNbin)
-  : G4PhysicsVector(), dBin(0.), baseBin(0.)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsLinearVector;
 
@@ -64,11 +64,12 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(size_t theNbin)
 
 G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, 
                                              G4double theEmax, size_t theNbin)
-  : G4PhysicsVector(),
-    dBin((theEmax-theEmin)/theNbin),
-    baseBin(theEmin/dBin)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsLinearVector;
+
+  dBin    = (theEmax-theEmin)/theNbin;
+  baseBin = theEmin/dBin;
 
   numberOfNodes = theNbin + 1;
   dataVector.reserve(numberOfNodes);
@@ -104,24 +105,26 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   return success;
 }
 
-G4PhysicsLinearVector::G4PhysicsLinearVector(const G4PhysicsLinearVector& right)
-  : G4PhysicsVector(right)
+void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
 {
-  dBin = right.dBin;
-  baseBin = right.baseBin;
+  G4PhysicsVector::ScaleVector(factorE, factorV);
+  G4double theEmin = binVector[0];
+  dBin = binVector[1]-theEmin;
+  baseBin = theEmin/dBin;
 }
 
-G4PhysicsLinearVector& 
-G4PhysicsLinearVector::operator=(const G4PhysicsLinearVector& right)
+
+size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
 {
-  // Check assignment to self
+  // For G4PhysicsLinearVector, FindBinLocation is implemented using
+  // a simple arithmetic calculation.
   //
-  if(this == &right) { return *this; }
+  // Because this is a virtual function, it is accessed through a
+  // pointer to the G4PhyiscsVector object for most usages. In this
+  // case, 'inline' will not be invoked. However, there is a possibility 
+  // that the user access to the G4PhysicsLinearVector object directly and 
+  // not through pointers or references. In this case, the 'inline' will
+  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  DeleteData();
-  CopyData(right);
-
-  dBin    = right.dBin;
-  baseBin = right.baseBin;
-  return *this;
+  return size_t( theEnergy/dBin - baseBin ); 
 }

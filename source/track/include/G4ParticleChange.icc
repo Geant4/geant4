@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.icc,v 1.14 2007/03/11 07:19:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChange.icc,v 1.14 2007-03-11 07:19:06 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 inline
@@ -44,6 +44,19 @@ inline
  void G4ParticleChange::ProposeEnergy(G4double finalEnergy)
 {
   theEnergyChange = finalEnergy;
+}
+
+inline
+ G4double G4ParticleChange::GetVelocity() const
+{
+   return theVelocityChange;
+}
+
+inline
+  void G4ParticleChange::ProposeVelocity(G4double finalVelocity)
+{
+   theVelocityChange = finalVelocity;
+   isVelocityChanged = true;
 }
 
 inline 
@@ -131,24 +144,30 @@ inline
   return thePositionChange + displacement;
 }
 
-
-inline
- G4double  G4ParticleChange::GetGlobalTime(G4double timeDelay) const
-{
-      //  Convert the time delay to the global time.
-  return theTimeChange + timeDelay;
-}
-
-inline 
-  G4double  G4ParticleChange::GetGlobalTime() const
-{
-  return  theTimeChange;
-}
-
 inline 
   void G4ParticleChange::ProposeGlobalTime(G4double t)
 {
+  theTimeChange = (t-theGlobalTime0) + theLocalTime0;
+}
+   
+inline
+ G4double  G4ParticleChange::GetGlobalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the global time.
+  return theGlobalTime0 + (theTimeChange-theLocalTime0) + timeDelay;
+}
+
+inline 
+  void G4ParticleChange::ProposeLocalTime(G4double t)
+{
   theTimeChange = t;
+}
+   
+inline
+ G4double  G4ParticleChange::GetLocalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the local time.
+  return theTimeChange + timeDelay;
 }
 
 inline 
@@ -188,18 +207,6 @@ inline
   theMagneticMomentChange = finalMagneticMoment;
 }
   
-inline 
-  G4double  G4ParticleChange::GetWeight() const
-{
-  return  G4VParticleChange::GetParentWeight();
-}
-
-inline 
-  void G4ParticleChange::ProposeWeight(G4double w)
-{
-  G4VParticleChange::ProposeParentWeight(w);
-}
-
 inline  
   G4ThreeVector G4ParticleChange::CalcMomentum(G4double          energy,
 			    	              G4ThreeVector   direction,

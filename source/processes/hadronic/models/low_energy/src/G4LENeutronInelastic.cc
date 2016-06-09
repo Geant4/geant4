@@ -23,36 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Low Energy Neutron Inelastic Process
 // J.L. Chuma, TRIUMF, 04-Feb-1997
  
 #include "G4LENeutronInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
-// #include "DumpFrame.hh"
+#include <iostream>
 
- G4HadFinalState *
-  G4LENeutronInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                       G4Nucleus &targetNucleus )
-  {
-    theParticleChange.Clear();
-    const G4HadProjectile *originalIncident = &aTrack;
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+
+void G4LENeutronInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LENeutronInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic neutron scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to neutrons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LENeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                    G4Nucleus& targetNucleus)
+{
+  theParticleChange.Clear();
+  const G4HadProjectile *originalIncident = &aTrack;
+
+  // Create the target particle
+
+  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LENeutronInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LENeutronInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
+  }
 /* not true, for example for Fe56, etc..
     if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
       throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
@@ -60,22 +72,21 @@
       throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
 */
     
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    if( originalIncident->GetKineticEnergy()/GeV < 0.01 + 2.*G4UniformRand()/9. )
-    {
-      SlowNeutron( originalIncident, modifiedOriginal, targetParticle, targetNucleus );
-      delete originalTarget;
-      return &theParticleChange;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  if (originalIncident->GetKineticEnergy()/GeV < 0.01 + 2.*G4UniformRand()/9.) {
+    SlowNeutron( originalIncident, modifiedOriginal, targetParticle, targetNucleus );
+    delete originalTarget;
+    return &theParticleChange;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been done
+
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -132,23 +143,22 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
+  delete originalTarget;
+  return &theParticleChange;
+}
+
  
- void
-  G4LENeutronInelastic::SlowNeutron(
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &modifiedOriginal,
-   G4ReactionProduct &targetParticle,
-   G4Nucleus &targetNucleus )
-  {        
-    const G4double A = targetNucleus.GetN();    // atomic weight
-    const G4double Z = targetNucleus.GetZ();    // atomic number
+void G4LENeutronInelastic::SlowNeutron(const G4HadProjectile* originalIncident,
+                                       G4ReactionProduct& modifiedOriginal,
+                                       G4ReactionProduct& targetParticle,
+                                       G4Nucleus& targetNucleus)
+{        
+  const G4double A = targetNucleus.GetA_asInt();    // atomic weight
+  const G4double Z = targetNucleus.GetZ_asInt();    // atomic number
     
-    G4double currentKinetic = modifiedOriginal.GetKineticEnergy()/MeV;
-    G4double currentMass = modifiedOriginal.GetMass()/MeV;
-    if( A < 1.5 )   // Hydrogen
+  G4double currentKinetic = modifiedOriginal.GetKineticEnergy()/MeV;
+  G4double currentMass = modifiedOriginal.GetMass()/MeV;
+  if( A < 1.5 )   // Hydrogen
     {
       //
       // very simple simulation of scattering angle and energy
@@ -256,10 +266,10 @@
       theParticleChange.AddSecondary( pd );
       delete vec[i];
     }
-  }
- 
- void
-  G4LENeutronInelastic::Cascade(
+}
+
+
+void G4LENeutronInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,

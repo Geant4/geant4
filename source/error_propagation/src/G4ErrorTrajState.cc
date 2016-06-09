@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorTrajState.cc,v 1.2 2007/05/29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorTrajState.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -43,7 +43,8 @@ G4ErrorTrajState::G4ErrorTrajState( const G4String& partType,
                                     const G4Point3D& pos,
                                     const G4Vector3D& mom,
                                     const G4ErrorTrajErr& errmat)
-  : fParticleType(partType), fPosition(pos), fMomentum(mom), fError(errmat)
+  : fParticleType(partType), fPosition(pos), fMomentum(mom), fCharge(0.),
+    fError(errmat), theG4Track(0)
 {
   iverbose = G4ErrorPropagatorData::verbose();
 }

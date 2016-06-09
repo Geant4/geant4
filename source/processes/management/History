@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2010/10/30 07:51:23 kurasige Exp $
+$Id: History,v 1.61 2010-12-22 09:14:54 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Nov. 9th, 2011     H.Kurashige (procman-V09-04-07)
+- Fix Coverity defects
+- Fix bugs in copy constructor and assignment operator of G4ProcessVector
+
+- Oct. 17th, 2011   H.Kurashige  (procman-V09-04-06)
+- Fix obsolete G4Exception
+- Add b-flavor baryons in G4ParticleTypes.hh
+
+- Aug. 3, 2011   H.Kurashige (procman-V09-04-05)
+- Fix errors in CTOR of G4ProcessManager (reported by Coverity)
+
+- May 31, 2011   H.Kurashige (procman-V09-04-04)
+- Fix a bug in copy constructor of G4ProcessAttribute
+- Suppress warning message of G4ProcessTable::Insert in case of
+  copying process manager with inactivate processes
+
+- May 05, 2011   H.Kurashige (procman-V09-04-03)
+- Add fParallel process type
+- Fix compiler warning in G4ProcessTableMessenger.cc
+- Change ordLast to 9999 (was 99999 )
+- Add check for calling SetOrderingToFirst(Last)
+
+- Apr. 29, 2011   H.Kurashige (procman-V09-04-02)
+- Fix errors reported by Coverity 
+
+- Mar. 29, 2011   G.Cosmo (procman-V09-04-01)
+- Cleared compilation warnings from G4VProcess.hh for parameter set
+  but not used. Removed extra semi-colons...
+
+- Dec. 22, 2010   H.Kurashige (procman-V09-04-00)
+- Clean up  code (define error code for G4Exception)
 
 - Oct. 30, 2010   H.Kurashige (procman-V09-03-01)
 - Fix bugs of uninitialized variables (reported by Coverity)

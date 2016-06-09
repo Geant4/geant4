@@ -1,4 +1,4 @@
-$Id: History,v 1.202 2010/10/30 07:55:00 kurasige Exp $
+$Id: History,v 1.203 2010-12-22 07:09:20 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,89 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 23 Nov. 2011 P.Gumplinger (particles-V09-04-22)
+- this is a correction of a comment only; credit should go to
+  D. Mingming in G4MuonRadiativeDecayChannelWithSpin.hh
+
+- 12 Nov. 2011 H.Kurashige (particles-V09-04-21)
+- Fix obsolete G4Exception in G4DynamicParticle
+
+- 12 Nov. 2011 H.Kurashige (particles-V09-04-20)
+- Fixed bug in G4IsotopeMagneticMoment constructors
+
+- 8 Nov. 2011 H.Kurashige (particles-V09-04-19)
+- Fixed bugs reported by Coverity
+  (Most of them are 'Missing assignement operator')
+
+- 17 Oct. 2011 H.Kurashige (particles-V09-04-18)
+- fix minor bugs reported by Coverity 
+
+- 22 Aug. 2011 P.Gumplinger (particles-V09-04-17)
+- fix the scale of som0 in G4MuonRadiativeDecayChannelWithSpin.cc
+
+- 22 Aug. 2011 P.Gumplinger (particles-V09-04-16)
+- fix coding errors in G4MuonRadiativeDecayChannelWithSpin.cc
+- should be 12.0*(x*y*(1.0-y)......); 2.0*ns+nv-nt and
+- som0 = (som00+som01)/y
+- then sample according to: } while (G4UniformRand()*177.0 > som0);
+- Thanks to M. Ding, Tsinghua Univ.
+
+- 22 Aug. 2011  H.Kurashige (particles-V09-04-15)
+- Adding B-baryons, Bc mesons, Upsiron and Etac
+- Update particle life time  according to PDG2011
+- Fix a bug of making comment lines in G4HtmlPPReporter 
+
+- 3 Aug. 2011  H.Kurashige (particles-V09-04-12)
+- Update particle mass/width according to PDG2011
+-Fix UNINIT_CTOR in G4PrimaryParticle
+
+- 2 July 2011  H.Kurashige (particles-V09-04-11)
+- Fixed bugs of uninitialized values in CTOR of G4PrimaryParticle and G4PrimaryVertex
+
+- 27 June 2011 G.Cosmo (particles-V09-04-10)
+- Moved GetParticleName() and FindParticle() methods in G4ParticleTable
+  to be non-inline (defining multiple return statements).
+
+- 18 June 2011 H.Kurashige (particles-V09-04-09)
+- Fix bug of setting momentum direction in G4PrimaryParticle
+- Add copy constructor of G4PrimaryParticle and G4PrimaryVertex
+- Fix Print method of G4PrimaryVertex
+- Clean up codes of G4PrimaryParticle and G4PrimaryVertex
+
+- 16 June 2011 H.Kurashige (particles-V09-04-08)
+- Fix bug in G4PrimaryParticle by adding pointer check before using 
+  GetPDGMass and GetPDGCode.
+- Add BetaDecay for anti_neutron. (Revert to particles-V09-04-06)
+ 
+- 14 June 2011 M.Asai (particles-V09-04-07)
+- Temporaly remove BetaDecay for anti_neutron for the patch release.
+  
+- 13 June  2011 H.Kurashige (particles-V09-04-06)
+- Modify G4PrimaryParticle to have kinetic energy and momentum direction 
+  instead of momentum only.
+
+- 20 May 2011 Ben Morgan (particles-V09-04-05)
+- CMakeLists.txt : Added G4PARTICLE_ALLOC_EXPORT compiler definition via 
+  add_definitions so all submodules pick it up.
+
+- 14 May 2011  Hisaya Kurashige  (particles-V09-04-04)
+- Fix energy of proton and neutrino in G4NeutronBetaDecayChannel
+
+- 13 May 2011  Hisaya Kurashige  (particles-V09-04-03)
+-  Fix compiler warning in G4TauLeptonicDecayChannel.cc 
+
+- 22 Mar. 2011  Hisaya Kurashige  (particles-V09-04-02)
+- Fix  G4ParticleDefinition::SetApplyCutsFlag() to remove warning messages for proton 
+
+- 16 Mar. 2011  Hisaya Kurashige  (particles-V09-04-01)
+- Modify PDGCodeChecker to allow PDG codei for neutron balls
+- Fix problems reported by Coverity
+  
+- 26 jan. 2011  Hisaya Kurashige  (particles-V09-04-00)
+- Register BetaDecay for anti_neutron 
+  though anti_neutron keeps as "stable" with finite life time
+- Clean up G4Exception (Define error_code)
 
 - October 30  2010  Hisaya Kurashige (particles-V09-03-15)
 - Fix bugs of uninitialized variables (reported by Coverity)

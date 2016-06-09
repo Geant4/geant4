@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.19 2009/11/04 12:49:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Scene.hh,v 1.19 2009-11-04 12:49:16 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -133,6 +133,9 @@ public: // With description
   // the scene is current.
   // Returns false if model is already in the list.
   // Prints warnings if warn is true.
+
+  void SetName (const G4String&);
+  // Use with care.  User normally sets scene name by vis commands.
 
   std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!

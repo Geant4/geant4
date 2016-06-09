@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.46 2009/09/08 14:04:14 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QHadron.hh,v 1.46 2009-09-08 14:04:14 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.

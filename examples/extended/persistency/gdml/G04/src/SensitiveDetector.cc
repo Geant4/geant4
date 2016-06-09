@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: SensitiveDetector.cc,v 1.2 2010/10/21 13:13:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: SensitiveDetector.cc,v 1.2 2010-10-21 13:13:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "SensitiveDetector.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10SteppingMessenger.hh,v 1.3 2006/06/29 16:38:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Em10SteppingMessenger.hh,v 1.3 2006-06-29 16:38:16 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

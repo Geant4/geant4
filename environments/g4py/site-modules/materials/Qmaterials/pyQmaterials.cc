@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyQmaterials.cc,v 1.4 2006/06/29 15:29:40 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyQmaterials.cc,v 1.4 2006-06-29 15:29:40 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyQmaterials.cc
 //

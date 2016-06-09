@@ -1,4 +1,4 @@
-#$Id: env+.sh,v 1.2 2006/08/08 09:32:52 kmura Exp $
+#$Id: env+.sh,v 1.2 2006-08-08 09:32:52 kmura Exp $
 # ======================================================================
 #  [sh version]
 #  Additonal setup script for co-building global shared libraries

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronElasticDataSet.cc,v 1.3 2010/05/26 12:19:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QHadronElasticDataSet.cc,v 1.3 2010-05-26 12:19:06 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4QHadronElasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 21.01.10
@@ -37,14 +37,50 @@
 #include "G4QHadronElasticDataSet.hh"
 
 // Initialization of static vectors
-std::vector<G4int> G4QHadronElasticDataSet::ElementZ; // Z of the element(i) in LastCalc
-std::vector<std::vector<G4int>*> G4QHadronElasticDataSet::ElIsoN; // N of iso(j) of El(i)
-std::vector<std::vector<G4double>*> G4QHadronElasticDataSet::IsoProbInEl;//SumProbIsoInEl
+std::vector<G4int> G4QHadronElasticDataSet::ElementZ;
+// Z of the element(i) in LastCalc
 
-G4QHadronElasticDataSet::G4QHadronElasticDataSet()
+std::vector<std::vector<G4int>*> G4QHadronElasticDataSet::ElIsoN;
+// N of iso(j) of El(i)
+
+std::vector<std::vector<G4double>*> G4QHadronElasticDataSet::IsoProbInEl;
+//SumProbIsoInEl
+
+
+G4QHadronElasticDataSet::G4QHadronElasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
+  Description();
 }
+
+
+void G4QHadronElasticDataSet::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of CHIPSElasticXS</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "CHIPSElasticXS provides hadron-nuclear elastic cross\n"
+            << "sections for all hadrons at all energies.  These cross\n"
+            << "sections represent parameterizations developed by M. Kossov.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4bool G4QHadronElasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4Element*)
 {
@@ -174,13 +210,13 @@ G4double G4QHadronElasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
 }
 
 G4double G4QHadronElasticDataSet::GetIsoZACrossSection(const G4DynamicParticle* Pt,
-                                                         G4double Z, G4double A, G4double)
+                                                       G4double Z, G4double A, G4double)
 {
   G4ParticleDefinition* particle = Pt->GetDefinition();
   G4double Momentum=Pt->GetTotalMomentum();
   G4VQCrossSection* CSmanager=0;
   G4VQCrossSection* CSmanager2=0;
-  //G4VQCrossSection* CSmanager2=0;
+
   G4int pPDG=0;
   if(particle == G4Neutron::Neutron())
   {
@@ -302,11 +338,17 @@ G4double G4QHadronElasticDataSet::GetIsoZACrossSection(const G4DynamicParticle* 
     CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
     pPDG=-3334;
   }
-  else G4cout<<"-Warning-G4QHadronElasticDataSet::GetIsoZACrossSection: PDG="
-             <<particle->GetPDGEncoding()<<" isn't supported by CHIPS"<<G4endl;
+  else
+  {
+    G4cerr << "-ERROR-G4QHadronElasticDataSet::GetIsoZACrossSection: PDG="
+           << particle->GetPDGEncoding() << " isn't supported by CHIPS" << G4endl;
+    //throw G4HadronicException(__FILE__, __LINE__,
+    // "G4QHadronElasticDataSet::GetIsoZACrossSection: Particle isn't supported by CHIPS");
+    return 0; 
+  }
   G4int tZ=(G4int)(Z);
   G4int tN=(G4int)(A-Z);
   G4double CSI=CSmanager->GetCrossSection(true, Momentum, tZ, tN, pPDG); // CS(j,i) basic
-  if(CSmanager2) CSI= (CSI  +CSmanager2->GetCrossSection(true, Momentum, tZ, tN, pPDG))/2.;
+  if(CSmanager2) CSI = (CSI + CSmanager2->GetCrossSection(true, Momentum, tZ, tN, pPDG))/2;
   return CSI;
 }

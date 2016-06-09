@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.cc,v 1.1 2007/05/25 07:30:47 gunter Exp $
+// $Id: G4QGSDiffractiveExcitation.cc,v 1.1 2007-05-25 07:30:47 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //

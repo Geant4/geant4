@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.7 2010/11/30 16:07:35 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VSplitableHadron.hh,v 1.8 2010-12-07 10:42:40 vuzhinsk Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -84,6 +84,8 @@ class G4VSplitableHadron
       G4int GetStatus();                              // Uzhi 17.07.09
 
       virtual void SplitUp() = 0;
+      virtual void SetFirstParton(G4int PDGcode) = 0;  // Uzhi 24.11.10
+      virtual void SetSecondParton(G4int PDGcode)= 0; // Uzhi 24.11.10
       virtual G4Parton * GetNextParton() = 0 ;
       virtual G4Parton * GetNextAntiParton() = 0 ;
       G4bool IsSplit() { return isSplit;}

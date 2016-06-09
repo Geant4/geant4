@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SDParticleWithEnergyFilter.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleWithEnergyFilter.hh"

@@ -25,8 +25,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.6 2008/12/18 12:57:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.6 2008-12-18 12:57:36 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

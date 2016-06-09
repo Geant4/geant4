@@ -88,7 +88,7 @@ void WLSMaterials::CreateMaterials()
   // Vacuum
   //--------------------------------------------------
 
-  G4Material* mat = nistMan->FindOrBuildMaterial("G4_Galactic");
+  nistMan->FindOrBuildMaterial("G4_Galactic");
 
   //--------------------------------------------------
   // Air
@@ -176,7 +176,7 @@ void WLSMaterials::CreateMaterials()
   // Aluminium
   //--------------------------------------------------
 
-  mat = nistMan->FindOrBuildMaterial("G4_Al");
+  nistMan->FindOrBuildMaterial("G4_Al");
 
   //--------------------------------------------------
   // TiO2

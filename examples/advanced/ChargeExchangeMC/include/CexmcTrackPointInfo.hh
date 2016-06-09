@@ -110,7 +110,7 @@ extern G4Allocator< CexmcTrackPointInfo >  trackPointInfoAllocator;
 
 inline void *  CexmcTrackPointInfo::operator new( size_t )
 {
-  return trackPointInfoAllocator.MallocSingle();
+    return trackPointInfoAllocator.MallocSingle();
 }
 
 
@@ -123,6 +123,7 @@ inline void  CexmcTrackPointInfo::operator delete( void *  obj )
 
 std::ostream &  operator<<( std::ostream &  out,
                             const CexmcTrackPointInfo &  trackPointInfo );
+
 
 #endif
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.6 2010/10/27 07:47:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PrimaryVertex.hh,v 1.6 2010-10-27 07:47:05 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -48,95 +48,56 @@ class G4VUserPrimaryVertexInformation;
 
 class G4PrimaryVertex 
 {
-  public:
-      inline void *operator new(size_t);
-      inline void operator delete(void *aStackedTrack);
+ public:
+  inline void *operator new(size_t);
+  inline void operator delete(void *aStackedTrack);
 
-      G4PrimaryVertex();
-      G4PrimaryVertex(G4double x0,G4double y0,G4double z0,G4double t0);
-      G4PrimaryVertex(G4ThreeVector xyz0,G4double t0);
-      ~G4PrimaryVertex();
+ public:  // with description
+  G4PrimaryVertex();
+  G4PrimaryVertex(G4double x0,G4double y0,G4double z0,G4double t0);
+  G4PrimaryVertex(G4ThreeVector xyz0,G4double t0);
+  virtual ~G4PrimaryVertex();
 
-      const G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
-      G4int operator==(const G4PrimaryVertex &right) const;
-      G4int operator!=(const G4PrimaryVertex &right) const;
+ public:
+  G4PrimaryVertex(const G4PrimaryVertex &right);
+  G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
 
-      void Print() const;
+  G4int operator==(const G4PrimaryVertex &right) const;
+  G4int operator!=(const G4PrimaryVertex &right) const;
 
-  private:
-      G4double X0;
-      G4double Y0;
-      G4double Z0;
-      G4double T0;
-      G4PrimaryParticle * theParticle;
-      G4PrimaryParticle * theTail;
-      G4PrimaryVertex* nextVertex;
-      G4PrimaryVertex* tailVertex;
-      G4int numberOfParticle;
-      G4double Weight0;
-      G4VUserPrimaryVertexInformation* userInfo;
+ public: // with description
+  G4ThreeVector GetPosition() const;
+  void SetPosition(G4double x0,G4double y0,G4double z0);
+  G4double GetX0() const;
+  G4double GetY0() const;
+  G4double GetZ0() const;
+  G4double GetT0() const;
+  void SetT0(G4double t0);
+  G4int GetNumberOfParticle() const;
+  void SetPrimary(G4PrimaryParticle * pp);
+  G4PrimaryParticle* GetPrimary(G4int i=0) const;
+  void SetNext(G4PrimaryVertex* nv);
+  G4PrimaryVertex* GetNext() const;
+  G4double GetWeight() const;
+  void SetWeight(G4double w);
+  void SetUserInformation(G4VUserPrimaryVertexInformation* anInfo);
+  G4VUserPrimaryVertexInformation* GetUserInformation() const;
 
-  public:
-      inline G4ThreeVector GetPosition() const
-      { return G4ThreeVector(X0,Y0,Z0); }
-      inline void SetPosition(G4double x0,G4double y0,G4double z0)
-      { X0 = x0; Y0 = y0; Z0 = z0; }
-      inline G4double GetX0() const
-      { return X0; }
-      inline G4double GetY0() const
-      { return Y0; }
-      inline G4double GetZ0() const
-      { return Z0; }
-      inline G4double GetT0() const
-      { return T0; }
-      inline void SetT0(G4double t0)
-      { T0 = t0; }
-      inline G4int GetNumberOfParticle() const
-      { return numberOfParticle; }
-      inline void SetPrimary(G4PrimaryParticle * pp)
-      { 
-        if(theParticle == 0)
-        { theParticle = pp; }
-        else
-        { theTail->SetNext(pp); }
-        theTail = pp;
-        numberOfParticle++;
-      }
-      inline G4PrimaryParticle* GetPrimary(G4int i=0) const
-      { 
-        if( i == 0 )
-        { return theParticle; }
-        else if( i > 0 && i < numberOfParticle )
-        {
-          G4PrimaryParticle* particle = theParticle;
-          for( G4int j=0; j<i; j++ )
-          { 
-            if( particle == 0 ) return 0;
-            particle = particle->GetNext();
-          }
-          return particle;
-        }
-        else
-        { return 0; }
-      }
-      inline void SetNext(G4PrimaryVertex* nv)
-      { 
-        if(nextVertex == 0)
-        { nextVertex = nv; }
-        else
-        { tailVertex->SetNext(nv); }
-        tailVertex = nv;
-      }
-      inline G4PrimaryVertex* GetNext() const
-      { return nextVertex; }
-      inline G4double GetWeight() const
-      { return Weight0; }
-      inline void SetWeight(G4double w)
-      { Weight0 = w; }
-      inline void SetUserInformation(G4VUserPrimaryVertexInformation* anInfo)
-      { userInfo = anInfo; }
-      inline G4VUserPrimaryVertexInformation* GetUserInformation() const
-      { return userInfo; }
+  void Print() const;
+  
+ private:
+  G4double X0;
+  G4double Y0;
+  G4double Z0;
+  G4double T0;
+  G4PrimaryParticle * theParticle;
+  G4PrimaryParticle * theTail;
+  G4PrimaryVertex* nextVertex;
+  G4PrimaryVertex* tailVertex;
+  G4int numberOfParticle;
+  G4double Weight0;
+  G4VUserPrimaryVertexInformation* userInfo;
+
 };
 
 #if defined G4PARTICLES_ALLOC_EXPORT
@@ -157,6 +118,59 @@ inline void G4PrimaryVertex::operator delete(void * aPrimaryVertex)
   aPrimaryVertexAllocator.FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
 }
 
+inline G4ThreeVector  G4PrimaryVertex::GetPosition() const
+{ return G4ThreeVector(X0,Y0,Z0); }
+
+inline void G4PrimaryVertex::SetPosition(G4double x0,G4double y0,G4double z0)
+{ X0 = x0; Y0 = y0; Z0 = z0; }
+
+inline G4double G4PrimaryVertex::GetX0() const
+{ return X0; }
+
+inline G4double G4PrimaryVertex::GetY0() const
+{ return Y0; }
+
+inline G4double G4PrimaryVertex::GetZ0() const
+{ return Z0; }
+
+inline G4double G4PrimaryVertex::GetT0() const
+{ return T0; }
+
+inline void G4PrimaryVertex::SetT0(G4double t0)
+{ T0 = t0; }
+
+inline G4int G4PrimaryVertex::GetNumberOfParticle() const
+{ return numberOfParticle; }
+
+inline void G4PrimaryVertex::SetPrimary(G4PrimaryParticle * pp)
+{ 
+  if(theParticle == 0) { theParticle = pp;     }
+  else                 { theTail->SetNext(pp); }
+  theTail = pp;
+  numberOfParticle++;
+}
+
+
+inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv){ 
+  if(nextVertex == 0) { nextVertex = nv; }
+  else                { tailVertex->SetNext(nv); }
+  tailVertex = nv;
+}
+
+inline G4PrimaryVertex* G4PrimaryVertex::GetNext() const
+{ return nextVertex; }
+
+inline G4double G4PrimaryVertex::GetWeight() const
+{ return Weight0; }
+
+inline void G4PrimaryVertex::SetWeight(G4double w)
+{ Weight0 = w; }
+
+inline void G4PrimaryVertex::SetUserInformation(G4VUserPrimaryVertexInformation* anInfo)
+{ userInfo = anInfo; }
+
+inline G4VUserPrimaryVertexInformation* G4PrimaryVertex::GetUserInformation() const
+{ return userInfo; }
 
 #endif
 

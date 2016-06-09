@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh,v 1.7 2010/08/24 08:12:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Pow.hh,v 1.7 2010-08-24 08:12:08 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // -------------------------------------------------------------------
@@ -34,8 +34,9 @@
 // Class description:
 //
 // Utility singleton class for the fast computation of log and pow
-// functions. Integer argument should in the interval 0-255, no
+// functions. Integer argument should in the interval 0-512, no
 // check is performed inside these methods for performance reasons.
+// For factorial integer argument should be in the interval 0-170
 // Computations with double arguments are fast for the interval
 // 0.5-255.5, standard library is used in the opposite case
 

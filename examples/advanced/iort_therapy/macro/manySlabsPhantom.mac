@@ -1,0 +1,86 @@
+# S.E. Mazzaglia May 4 2010
+
+# Example macro file to show how to change geometric properties and voxelization of the phantom/detector
+
+#######################
+# Set of the verboses # 
+#######################
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Set of the Physic models
+#
+#/Physics/addPhysics standard_opt3                       # Electromagnetic model
+#/Physics/addPhysics elastic                             # Hadronic elastic model
+#/Physics/addPhysics binary                              # Hadronic inelastic model
+#/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local Physic list)
+#/Physics/addPhysics radioactive_decay
+
+#
+# Or alternatively:
+#
+/Physics/addPhysics QGSP_BIC_EMY
+
+# Initialize geometry and Physics 
+/run/initialize
+
+#############################
+# Initialize graphic system #     
+#############################
+# 
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate -1 # this accumulate infinite tracks 
+# zoom to phantom...
+/vis/viewer/panTo 1.5 0.5
+/vis/viewer/zoomTo 3
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+# Set cuts outside detector 
+/Physics/setCuts 0.01 mm
+# Set cuts ONLY inside detector
+/Physics/setDetectorCuts 0.01 mm
+
+/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2700 mm
+
+# Copy & Paste in a new macro the previous and ONE of the following groups of commands
+# in order to change the Phantom & Detector geometry!
+
+######################################
+# Change Phantom & Detector geometry #              
+######################################
+
+##########################################################################################
+# Cut & paste the following commands in order to create, 
+# a Phantom with a detector divided by 40 slabs
+# Each slab is 0.1 mm along the X direction, 40 mm along the Y and Z.
+
+#/changePhantom/material G4_PLEXIGLASS # in case you do not want the default phantom made of liquid water
+/changePhantom/size 40 40 40 cm
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize 0.1 40 40 mm  
+/changePhantom/update # update geometry!
+
+/run/beamOn 1000
+

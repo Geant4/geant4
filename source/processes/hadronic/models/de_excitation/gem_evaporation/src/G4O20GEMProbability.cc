@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4O20GEMProbability.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4O20GEMProbability.cc,v 1.5 2009-09-15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
 
 #include "G4O20GEMProbability.hh"
 
@@ -38,32 +36,5 @@ G4O20GEMProbability::G4O20GEMProbability() :
   G4GEMProbability(20,8,0.0) // A,Z,Spin
 {}
 
-
-G4O20GEMProbability::G4O20GEMProbability(const G4O20GEMProbability &) : G4GEMProbability()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4O20GEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4O20GEMProbability & G4O20GEMProbability::
-operator=(const G4O20GEMProbability &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4O20GEMProbability::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4O20GEMProbability::operator==(const G4O20GEMProbability &) const
-{
-  return false;
-}
-
-G4bool G4O20GEMProbability::operator!=(const G4O20GEMProbability &) const
-{
-  return true;
-}
-
-
-
+G4O20GEMProbability::~G4O20GEMProbability()
+{}

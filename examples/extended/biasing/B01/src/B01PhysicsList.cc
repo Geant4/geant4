@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.9 2010/03/24 21:04:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: B01PhysicsList.cc,v 1.9 2010-03-24 21:04:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"

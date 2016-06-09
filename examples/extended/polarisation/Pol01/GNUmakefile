@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2008/06/11 17:17:54 schaelic Exp $
+# $Id: GNUmakefile,v 1.4 2008-06-11 17:17:54 schaelic Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------

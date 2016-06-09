@@ -1,0 +1,262 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_axis
+#define tools_histo_axis
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace histo {
+
+//TC is for a coordinate.
+
+template <class TC>
+class axis {
+public:
+  typedef unsigned int bn_t;
+public:
+  enum { UNDERFLOW_BIN = -2, OVERFLOW_BIN = -1 }; //AIDA casing.
+public:
+  bool is_fixed_binning() const {return m_fixed;}
+  TC lower_edge() const {return m_minimum_value;}
+  TC upper_edge() const {return m_maximum_value;}
+  bn_t bins() const {return m_number_of_bins;}
+  const std::vector<TC>& edges() const {return m_edges;}
+
+  TC bin_width(int aBin) const {
+    if(aBin==UNDERFLOW_BIN) {
+      return 0; //FIXME return DBL_MAX;
+    } else if(aBin==OVERFLOW_BIN) {
+      return 0; //FIXME return DBL_MAX;
+    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+      return 0;
+    } else {
+      if(m_fixed) {
+        return m_bin_width;
+      } else {
+        return (m_edges[aBin+1]-m_edges[aBin]);
+      }
+    }
+  }
+
+  TC bin_lower_edge(int aBin) const {
+    if(aBin==UNDERFLOW_BIN) {
+      return 0; //FIXME return -DBL_MAX;
+    } else if(aBin==OVERFLOW_BIN) {
+      return 0; //FIXME return bin_upper_edge(m_number_of_bins-1);
+    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+      return 0;
+    } else {
+      if(m_fixed) {
+        return (m_minimum_value + aBin * m_bin_width);
+      } else {
+        return m_edges[aBin];
+      }
+    }
+  }
+
+  TC bin_upper_edge(int aBin) const {
+    if(aBin==UNDERFLOW_BIN) {
+      return 0; //FIXME bin_lower_edge(0)
+    } else if(aBin==OVERFLOW_BIN) {
+      return 0; //FIXME return DBL_MAX;
+    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+      return 0;
+    } else {
+      if(m_fixed) {
+        return (m_minimum_value + (aBin + 1) * m_bin_width);
+      } else {
+        return m_edges[aBin+1];
+      }
+    }
+  }
+
+  TC bin_center(int aBin) const {
+    if(aBin==UNDERFLOW_BIN) {
+      return 0; //FIXME : -INF
+    } else if(aBin==OVERFLOW_BIN) {
+      return 0; //FIXME : +INF
+    } else if(aBin<0) {
+      return 0; //FIXME : -INF
+    } else if(aBin>=(int)m_number_of_bins) {
+      return 0; //FIXME : +INF
+    } else {
+      if(m_fixed) {
+        return (m_minimum_value + (aBin + 0.5) * m_bin_width);
+      } else {
+        return (m_edges[aBin] + m_edges[aBin+1])/2.;
+      }
+    }
+  }
+
+  int coord_to_index(TC aValue) const {
+    if( aValue <  m_minimum_value) {
+      return UNDERFLOW_BIN;
+    } else if( aValue >= m_maximum_value) {
+      return OVERFLOW_BIN;
+    } else {
+      if(m_fixed) {
+        return (int)((aValue - m_minimum_value)/m_bin_width);
+      } else {
+        for(bn_t index=0;index<m_number_of_bins;index++) {
+          if((m_edges[index]<=aValue)&&(aValue<m_edges[index+1])) {
+            return index;
+          }
+        }
+        // Should never pass here...
+        return UNDERFLOW_BIN;
+      }
+    }
+  }
+
+  bool coord_to_absolute_index(TC aValue,bn_t& a_index) const {
+    if( aValue <  m_minimum_value) {
+      a_index = 0;
+      return true;
+    } else if( aValue >= m_maximum_value) {
+      a_index = m_number_of_bins+1;
+      return true; 
+    } else {
+      if(m_fixed) {
+        a_index = (bn_t)((aValue - m_minimum_value)/m_bin_width)+1;
+        return true;
+      } else {
+        for(bn_t index=0;index<m_number_of_bins;index++) {
+          if((m_edges[index]<=aValue)&&(aValue<m_edges[index+1])) {
+            a_index = index+1;
+            return true;
+          }
+        }
+        // Should never pass here...
+        a_index = 0;
+        return false;
+      }
+    }
+  }
+
+  bool in_range_to_absolute_index(int a_in,bn_t& a_out) const {
+    // a_in is given in in-range indexing :
+    //  - [0,n-1] for in-range bins
+    //  - UNDERFLOW_BIN for the iaxis underflow bin
+    //  - OVERFLOW_BIN for the iaxis overflow bin
+    // Return the absolute indexing in [0,n+1].
+    if(a_in==UNDERFLOW_BIN) {
+      a_out = 0;
+      return true;
+    } else if(a_in==OVERFLOW_BIN) {
+      a_out = m_number_of_bins+1;
+      return true;
+    } else if((a_in>=0)&&(a_in<(int)m_number_of_bins)){
+      a_out = a_in + 1;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+public:
+  // Partition :
+  bool configure(const std::vector<TC>& aEdges) {
+    // init :
+    m_number_of_bins = 0;
+    m_minimum_value = 0;
+    m_maximum_value = 0;
+    m_fixed = true;
+    m_bin_width = 0;
+    m_edges.clear();
+    // setup :
+    if(aEdges.size()<=1) return false;
+    bn_t number = aEdges.size()-1;
+    for(bn_t index=0;index<number;index++) {
+      if((aEdges[index]>=aEdges[index+1])) {
+        return false;
+      }
+    }
+    m_edges = aEdges;
+    m_number_of_bins = number;
+    m_minimum_value = aEdges[0];
+    m_maximum_value = aEdges[m_number_of_bins];
+    m_fixed = false;
+    return true;
+  }
+
+  bool configure(bn_t aNumber,TC aMin,TC aMax) {
+    // init :
+    m_number_of_bins = 0;
+    m_minimum_value = 0;
+    m_maximum_value = 0;
+    m_fixed = true;
+    m_bin_width = 0;
+    m_edges.clear();
+    // setup :
+    if(aNumber<=0) return false;
+    if(aMax<=aMin) return false;
+    m_number_of_bins = aNumber;
+    m_minimum_value = aMin;
+    m_maximum_value = aMax;
+    m_bin_width = (aMax - aMin)/ aNumber;
+    m_fixed = true;
+    return true;
+  }
+  
+  bool is_compatible(const axis& a_axis) const {
+    if(m_number_of_bins!=a_axis.m_number_of_bins) return false;
+    if(m_minimum_value!=a_axis.m_minimum_value) return false;
+    if(m_maximum_value!=a_axis.m_maximum_value) return false;
+    return true;
+  }
+  
+public:
+  axis()
+  :m_offset(0)
+  ,m_number_of_bins(0)
+  ,m_minimum_value(0)
+  ,m_maximum_value(0)
+  ,m_fixed(true)
+  ,m_bin_width(0)
+  {}
+
+  virtual ~axis(){}
+public:
+  axis(const axis& a_axis)
+  :m_offset(a_axis.m_offset)
+  ,m_number_of_bins(a_axis.m_number_of_bins)
+  ,m_minimum_value(a_axis.m_minimum_value)
+  ,m_maximum_value(a_axis.m_maximum_value)
+  ,m_fixed(a_axis.m_fixed)
+  ,m_bin_width(a_axis.m_bin_width)
+  ,m_edges(a_axis.m_edges)
+  {}
+
+  axis& operator=(const axis& a_axis) {
+    m_offset = a_axis.m_offset;
+    m_number_of_bins = a_axis.m_number_of_bins;
+    m_minimum_value = a_axis.m_minimum_value;
+    m_maximum_value = a_axis.m_maximum_value;
+    m_fixed = a_axis.m_fixed;
+    m_bin_width = a_axis.m_bin_width;
+    m_edges = a_axis.m_edges;
+    return *this;
+  }
+
+public:
+  bn_t m_offset;
+  bn_t m_number_of_bins;
+  TC m_minimum_value;
+  TC m_maximum_value;
+  bool m_fixed;
+  // Fixed size bins :
+  TC m_bin_width;
+  // Variable size bins :
+  std::vector<TC> m_edges;
+};
+
+}}
+
+#endif
+
+
+
+

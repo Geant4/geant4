@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.icc,v 1.5 2010/07/16 15:58:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistSurface.icc,v 1.5 2010-07-16 15:58:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -255,10 +255,11 @@ G4int G4VTwistSurface::GetAxisType(G4int areacode, G4int whichaxis) const
               axiscode == (sAxisPhi & sAxis1)) {
       return sAxisPhi;
    } else {
-      G4cerr << "ERROR - G4VTwistSurface::GetAxisType()" << G4endl
-             << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VTwistSurface::GetAxisType()","NotSupported",
-                  FatalException, "Configuration not supported.");
+      std::ostringstream message;
+      message << "Configuration not supported." << G4endl
+              << "        areacode = " << areacode;
+      G4Exception("G4VTwistSurface::GetAxisType()","GeomSolids0001",
+                  FatalException, message);
    }
    return 1;
 }
@@ -359,10 +360,11 @@ inline
 G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
 {
    if (!(areacode & sCorner)){
-      G4cerr << "ERROR - G4VTwistSurface::GetCorner()" << G4endl
-             << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VTwistSurface::GetCorner()","InvalidSetup",
-                  FatalException, "Area code must represent corner.");
+      std::ostringstream message;
+      message << "Area code must represent corner." << G4endl
+              << "        areacode = " << areacode;
+      G4Exception("G4VTwistSurface::GetCorner()","GeomSolids0002",
+                  FatalException, message);
    }
    
    if ((areacode & sC0Min1Min) == sC0Min1Min) { 
@@ -374,10 +376,11 @@ G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
    } else if ((areacode & sC0Min1Max) == sC0Min1Max) { 
       return fCorners[3];
    } else {
-      G4cerr << "ERROR - G4VTwistSurface::GetCorner()" << G4endl
-             << "        areacode = " << areacode << G4endl;
-      G4Exception("G4VTwistSurface::GetCorner()", "NotSupported",
-                  FatalException, "Configuration not supported.");
+      std::ostringstream message;
+      message << "Configuration not supported." << G4endl
+              << "        areacode = " << areacode;
+      G4Exception("G4VTwistSurface::GetCorner()", "GeomSolids0001",
+                  FatalException, message);
    }
    return fCorners[0];
 }

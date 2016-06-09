@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2007/08/19 20:52:53 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.cc,v 1.5 2007-08-19 20:52:53 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,9 +52,9 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+void SteppingAction::UserSteppingAction(const G4Step* step)
 {
- G4double edep = aStep->GetTotalEnergyDeposit();
+ G4double edep = step->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  
  //total energy deposit in absorber
@@ -62,20 +62,33 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  eventAction->AddEdep(edep);     
  
  //longitudinal profile of deposited energy
+ //randomize point of energy deposotion
  //
- G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
- G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
- G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
- G4double x = point.x() + 0.5*detector->GetAbsorSizeX();  
- histoManager->FillHisto(1, x, edep);
- 
- G4double r0 = histoManager->GetcsdaRange();
- if (r0 > 0.) histoManager->FillHisto(8, x/r0, edep);
-  
+ G4StepPoint* prePoint  = step->GetPreStepPoint();
+ G4StepPoint* postPoint = step->GetPostStepPoint(); 
+ G4ThreeVector P1 = prePoint ->GetPosition();
+ G4ThreeVector P2 = postPoint->GetPosition();
+ G4ThreeVector point = P1 + G4UniformRand()*(P2 - P1);
+ G4double x = point.x();
+ G4double xshifted = x + 0.5*detector->GetAbsorSizeX();  
+ histoManager->FillHisto(1, xshifted, edep);
+
+ //"normalized" histogram
+ // 
+ G4int iabs = prePoint->GetTouchableHandle()->GetCopyNumber(1);
+ G4double csdaRange  = runAction->GetCsdaRange(iabs);
+ if (csdaRange > 0.) { 
+   G4double density = detector->GetAbsorMaterial(iabs)->GetDensity();
+   G4double xfront  = detector->GetXfront(iabs);
+   G4double xfrontNorm = runAction->GetXfrontNorm(iabs);
+   G4double xnorm = xfrontNorm + (x - xfront)/csdaRange;
+   histoManager->FillHisto(8, xnorm, edep/(csdaRange*density));
+ }
+   
  //step size of primary particle or charged secondaries
  //
- G4double steplen = aStep->GetStepLength();
- const G4Track* track = aStep->GetTrack();
+ G4double steplen = step->GetStepLength();
+ const G4Track* track = step->GetTrack();
  if      (track->GetTrackID() == 1) histoManager->FillHisto(4, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
                                     histoManager->FillHisto(7, steplen); 

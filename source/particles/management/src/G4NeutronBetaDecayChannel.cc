@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronBetaDecayChannel.cc,v 1.7 2006/06/29 19:25:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,8 @@
 //
 //      History: first implementation, based on object model of
 //      18 Sep  2001 H.Kurashige
-//
+//---
+//      Fix energy of proton and neutrino May  2011 H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -45,6 +46,11 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
+G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel()
+                   :G4VDecayChannel(),
+		    aENuCorr(-0.102)
+{
+}
 
 G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
 				       const G4String& theParentName, 
@@ -60,11 +66,18 @@ G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
     SetDaughter(0, "e-");
     SetDaughter(1, "anti_nu_e");
     SetDaughter(2, "proton");
+  } else if (theParentName == "anti_neutron") {
+    SetBR(theBR);
+    SetParent("anti_neutron");
+    SetNumberOfDaughters(3);
+    SetDaughter(0, "e+");
+    SetDaughter(1, "nu_e");
+    SetDaughter(2, "anti_proton");
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4NeutronBetaDecayChannel:: constructor :";
-      G4cout << " parent particle is not muon but ";
+      G4cout << " parent particle is not neutron but ";
       G4cout << theParentName << G4endl;
     }
 #endif
@@ -73,6 +86,40 @@ G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
 
 G4NeutronBetaDecayChannel::~G4NeutronBetaDecayChannel()
 {
+}
+
+G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &right)
+    : G4VDecayChannel(right),
+      aENuCorr(-0.102)
+{
+}
+
+
+G4NeutronBetaDecayChannel & G4NeutronBetaDecayChannel::operator=(const G4NeutronBetaDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+  }
+  return *this;
 }
 
 G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double) 
@@ -126,6 +173,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
       r0 = G4UniformRand()*(xmax+m)*(xmax+m)*xmax*xmax*(1.0+aENuCorr);
   } while (r < r0);    
 
+
   //create daughter G4DynamicParticle 
   // rotation materix to lab frame
   G4double costheta = 2.*G4UniformRand()-1.0;
@@ -144,7 +192,9 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   products->PushProducts(daughterparticle0);
 
   // daughter 1 (nutrino) in XZ plane
-  G4double eNu = xmax-x; 
+  G4double eNu;    // Enu
+  eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(m*m)-2.*parentmass*(x+m);
+  eNu /= 2.*(parentmass+p*w-(x+m));
   G4double cosn = w;
   G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
@@ -155,8 +205,13 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   products->PushProducts(daughterparticle1);
 
   // daughter 2 (proton) at REST
-  G4ThreeVector direction2(0.0, 0.0, 0.0);
-  G4DynamicParticle * daughterparticle2 
+  G4double eP;     // Eproton
+  eP = parentmass-eNu-(x+m)-daughtermass[2];
+  G4double pPx = -eNu*sinn;
+  G4double pPz = -p-eNu*cosn;
+  G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
+  G4ThreeVector direction2(pPx/pP, 0.0, pPz/pP);
+    G4DynamicParticle * daughterparticle2 
          = new G4DynamicParticle( daughters[2], direction2);
   products->PushProducts(daughterparticle2);
  

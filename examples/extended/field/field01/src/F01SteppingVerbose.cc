@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01SteppingVerbose.cc,v 1.7 2006/06/29 17:17:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F01SteppingVerbose.cc,v 1.7 2006-06-29 17:17:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

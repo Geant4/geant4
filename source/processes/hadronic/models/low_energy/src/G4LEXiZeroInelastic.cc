@@ -23,34 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEXiZeroInelastic.cc,v 1.11 2006-06-29 20:45:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEXiZeroInelastic.cc,v 1.11 2006/06/29 20:45:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: XiZero Inelastic Process
- // J.L. Chuma, TRIUMF, 20-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: XiZero Inelastic Process
+// J.L. Chuma, TRIUMF, 20-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEXiZeroInelastic.hh"
 #include "Randomize.hh"
+
+void G4LEXiZeroInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEXiZeroInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic X0 scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to X0 with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
  
- G4HadFinalState *
-  G4LEXiZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {    
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+G4HadFinalState*
+G4LEXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
     if( verboseLevel > 1 )
     {
@@ -124,10 +134,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LEXiZeroInelastic::Cascade(
+void G4LEXiZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -135,8 +144,8 @@
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
-   G4bool &quasiElastic )
-  {
+   G4bool &quasiElastic)
+{
     // derived from original FORTRAN code CASX0 by H. Fesefeldt (20-Jan-1989)
     //
     // XiZero undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -388,7 +397,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

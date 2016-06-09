@@ -500,7 +500,16 @@ G4int maxEnergyIndex = 0;
           }
           G4NeutronHPLegendreStore aStore(2);
           aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
-          aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+          //aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+          //TKDB 110512
+          if ( it > 0 ) 
+          {
+             aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+          }
+          else
+          {
+             aStore.SetCoeff(0, &(theLegendre[ii-nIso][it])); 
+          }
           G4double cosTh = aStore.SampleMax(anEnergy);
           G4double theta = std::acos(cosTh);
           G4double phi = twopi*G4UniformRand();
@@ -608,7 +617,16 @@ G4int maxEnergyIndex = 0;
         }
         G4NeutronHPLegendreStore aStore(2);
         aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
-        aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+        //aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+        //TKDB 110512
+        if ( it > 0 ) 
+        {
+           aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+        }
+        else
+        {
+           aStore.SetCoeff(0, &(theLegendre[ii-nIso][it])); 
+        }
         G4double cosTh = aStore.SampleMax(anEnergy);
         G4double theta = std::acos(cosTh);
         G4double phi = twopi*G4UniformRand();

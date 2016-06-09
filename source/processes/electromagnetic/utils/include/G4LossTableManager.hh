@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.61 2010/09/03 10:09:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LossTableManager.hh,v 1.61 2010-09-03 10:09:45 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // -------------------------------------------------------------------
@@ -273,6 +273,8 @@ public:
 
   G4VAtomDeexcitation* AtomDeexcitation();
 
+  G4LossTableBuilder* GetTableBuilder();
+
   void SetAtomDeexcitation(G4VAtomDeexcitation*);
 
 private:
@@ -294,6 +296,9 @@ private:
 		     G4VEnergyLossProcess*);
 
   void CopyDEDXTables();
+
+  G4LossTableManager(G4LossTableManager &);
+  G4LossTableManager & operator=(const G4LossTableManager &right);
 
   static G4LossTableManager* theInstance;
 
@@ -375,7 +380,7 @@ inline G4VEnergyLossProcess* G4LossTableManager::GetEnergyLossProcess(
       currentLoss = (*pos).second;
     } else {
       currentLoss = 0;
-     // ParticleHaveNoLoss(aParticle);
+      //ParticleHaveNoLoss(aParticle);
     }
   }
   return currentLoss;
@@ -389,7 +394,7 @@ inline G4double G4LossTableManager::GetDEDX(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = 0.0;
   if(currentLoss) { x = currentLoss->GetDEDX(kineticEnergy, couple); }
   else            { x = G4EnergyLossTables::GetDEDX(currentParticle,
 						    kineticEnergy,couple,false); }
@@ -475,16 +480,10 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
           G4double& length)
 {
   const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
-  if(aParticle != currentParticle) {
-    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
-    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
-      currentParticle = aParticle;
-      currentLoss = (*pos).second;
-    } else {
-      ParticleHaveNoLoss(aParticle);
-    }
-  }
-  return currentLoss->GetDEDXDispersion(couple, dp, length);
+  if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
+  G4double x = 0.0;
+  if(currentLoss) { currentLoss->GetDEDXDispersion(couple, dp, length); }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

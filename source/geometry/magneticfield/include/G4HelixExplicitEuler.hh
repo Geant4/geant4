@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixExplicitEuler.hh,v 1.9 2007/08/21 08:52:00 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HelixExplicitEuler.hh,v 1.9 2007-08-21 08:52:00 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4HelixExplicitEuler

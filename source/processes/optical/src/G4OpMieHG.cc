@@ -175,7 +175,7 @@ G4double G4OpMieHG::GetMeanFreePath(const G4Track& aTrack,
                                  aMaterialPropertyTable->GetProperty("MIEHG");
            if (AttenuationLengthVector) {
               AttenuationLength = AttenuationLengthVector ->
-                                    GetProperty(thePhotonEnergy);
+                                    Value(thePhotonEnergy);
            } else {
 //              G4cout << "No Mie scattering length specified" << G4endl;
            }

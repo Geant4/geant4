@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PartialPhantomParameterisation.cc,v 1.3 2010/12/15 07:39:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PartialPhantomParameterisation.cc,v 1.3 2010-12-15 07:39:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4PartialPhantomParameterisation implementation
@@ -280,19 +280,19 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   if( !isOK )
   {
-    G4cerr << "WARNING - G4PartialPhantomParameterisation::GetReplicaNo()"
-           << G4endl
-           << "          LocalPoint: " << localPoint << G4endl
-           << "          LocalDir: " << localDir << G4endl
-           << "          Voxel container size: " << fContainerWallX
-           << " " << fContainerWallY << " " << fContainerWallZ << G4endl
-           << "          LocalPoint - wall: "
-           << localPoint.x()-fContainerWallX << " "
-           << localPoint.y()-fContainerWallY << " "
-           << localPoint.z()-fContainerWallZ << G4endl;
+    std::ostringstream message;
+    message << "Corrected the copy number! It was negative or too big."
+            << G4endl
+            << "          LocalPoint: " << localPoint << G4endl
+            << "          LocalDir: " << localDir << G4endl
+            << "          Voxel container size: " << fContainerWallX
+            << " " << fContainerWallY << " " << fContainerWallZ << G4endl
+            << "          LocalPoint - wall: "
+            << localPoint.x()-fContainerWallX << " "
+            << localPoint.y()-fContainerWallY << " "
+            << localPoint.z()-fContainerWallZ;
     G4Exception("G4PartialPhantomParameterisation::GetReplicaNo()",
-                "Wrong-copy-number", JustWarning,
-                "Corrected the copy number! It was negative or too big");
+                "GeomNav1002", JustWarning, message);
   }
 
   G4int nyz = nz*fNoVoxelY+ny;
@@ -327,13 +327,12 @@ void G4PartialPhantomParameterisation::CheckCopyNo( const G4int copyNo ) const
 { 
   if( copyNo < 0 || copyNo >= G4int(fNoVoxel) )
   {
-    G4cerr << "ERROR - G4PartialPhantomParameterisation::CheckCopyNo()"
-           << G4endl
-           << "        Copy number: " << copyNo << G4endl
-           << "        Total number of voxels: " << fNoVoxel << G4endl;
+    std::ostringstream message;
+    message << "Copy number is negative or too big!" << G4endl
+            << "        Copy number: " << copyNo << G4endl
+            << "        Total number of voxels: " << fNoVoxel;
     G4Exception("G4PartialPhantomParameterisation::CheckCopyNo()",
-                "Wrong-copy-number", FatalErrorInArgument,
-                "Copy number is negative or too big!");
+                "GeomNav0002", FatalErrorInArgument, message);
   }
 }
 

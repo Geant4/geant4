@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.8 2006/06/29 19:50:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4InitXscPAI.hh,v 1.8 2006-06-29 19:50:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4InitXscPAI.hh -- header file
@@ -51,8 +51,6 @@ class G4InitXscPAI
 public:
 	  // Constructors
   G4InitXscPAI( const G4MaterialCutsCouple* matCC);
-
-
 
   virtual ~G4InitXscPAI() ;
 
@@ -123,6 +121,9 @@ public:
 protected :
 
 private :
+
+  G4InitXscPAI & operator=(const G4InitXscPAI &right);
+  G4InitXscPAI(const G4InitXscPAI&);
 
   // Local class constants
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2010/09/28 19:07:32 vnivanch Exp $
+# $Id: GNUmakefile,v 1.9 2010-09-28 19:07:32 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------

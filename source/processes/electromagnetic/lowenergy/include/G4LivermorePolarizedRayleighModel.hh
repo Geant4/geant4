@@ -23,8 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.3 2009/05/02 15:20:52 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.3 2009-05-02 15:20:52 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Sebastien Incerti
+//         30 October 2008
+//         on base of G4LowEnergyPolarizedRayleigh developed by R. Capra
 //
 
 #ifndef G4LivermorePolarizedRayleighModel_h

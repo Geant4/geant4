@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.4 2006/06/29 17:34:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02PhysicsList.cc,v 1.27 2009-11-15 14:27:30 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,14 +33,8 @@
 #include "globals.hh"
 #include "ExN02PhysicsList.hh"
 
-#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
-#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,7 +62,6 @@ void ExN02PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,6 +133,7 @@ void ExN02PhysicsList::ConstructProcess()
   AddTransportation();
   ConstructEM();
   ConstructGeneral();
+  AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,19 +142,22 @@ void ExN02PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
-
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 
-#include "G4UserSpecialCuts.hh"
+#include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -180,32 +177,51 @@ void ExN02PhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);      
 
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
 
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
+      pmanager->AddProcess(new G4MuMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,     -1, 4, 4);       
+             
+    } else if( particleName == "proton" ||
+               particleName == "pi-" ||
+               particleName == "pi+"    ) {
+      //proton  
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
+    } else if( particleName == "alpha" || 
+	       particleName == "He3" )     {
+      //alpha 
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+     
+    } else if( particleName == "GenericIon" ) { 
+      //Ions 
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+                 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
-      ///pmanager->AddProcess(new G4hUserSpecialCuts,  -1,-1,3);      
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
 }
@@ -213,6 +229,7 @@ void ExN02PhysicsList::ConstructEM()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
+
 void ExN02PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
@@ -227,6 +244,30 @@ void ExN02PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+  }
+}
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4StepLimiter.hh"
+#include "G4UserSpecialCuts.hh"
+
+void ExN02PhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  G4StepLimiter* stepLimiter = new G4StepLimiter();
+  ////G4UserSpecialCuts* userCuts = new G4UserSpecialCuts();
+  
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+
+      if (particle->GetPDGCharge() != 0.0)
+        {
+	  pmanager ->AddDiscreteProcess(stepLimiter);
+	  ////pmanager ->AddDiscreteProcess(userCuts);
+        }
   }
 }
 

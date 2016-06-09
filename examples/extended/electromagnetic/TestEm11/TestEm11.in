@@ -1,12 +1,12 @@
-# $Id: TestEm11.in,v 1.8 2009/09/22 14:20:31 maire Exp $
+# $Id: TestEm11.in,v 1.8 2009-09-22 14:20:31 maire Exp $
 #
 # limit the step size from histo 1
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_Si
-/testem/det/setSizeX  1 mm
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 G4_Si  1 mm
 /testem/det/setSizeYZ 1 mm
 #
 /testem/phys/addPhysics  local	# em physics

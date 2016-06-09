@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc,v 1.8 2007/05/03 17:59:18 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VUserDetectorConstruction.cc,v 1.8 2007-05-03 17:59:18 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VUserDetectorConstruction.hh"
@@ -49,7 +49,7 @@ void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aP
       eM += aPW->GetName();
       eM += "> is already registered to the user detector construction.";
       G4Exception("G4VUserDetectorConstruction::RegisterParallelWorld",
-                  "RunUDet000",FatalErrorInArgument,eM);
+                  "Run0051",FatalErrorInArgument,eM);
     }
   }
   parallelWorld.push_back(aPW);

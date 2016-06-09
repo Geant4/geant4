@@ -8,11 +8,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 18:40:22 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.2 2011-01-05 13:01:52 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(benchmarks)
+# Add allocation export symbol for the geometry category
+add_definitions(-DG4GEOM_ALLOC_EXPORT)
+
 add_subdirectory(biasing)
 add_subdirectory(divisions)
 add_subdirectory(magneticfield)

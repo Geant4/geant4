@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeFunctions.hh,v 1.8 2010/12/15 07:39:38 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeFunctions.hh,v 1.8 2010-12-15 07:39:38 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
 //		using a static variable in the function as a buffer.
@@ -38,36 +38,40 @@
 //		which Sampler is used.  Move implementations to .icc file.
 // 20100511  M. Kelsey -- Pass "kinds" buffer as input to getOutputPartTypes
 // 20100803  M. Kelsey -- Add printing function for debugging
+// 20110719  M. Kelsey -- Add inheritance from non-template base for factory,
+//		change static's to virtual (no more direct access)
+// 20110725  M. Kelsey -- Move ctor to .icc file for registration in lookup
+// 20110923  M. Kelsey -- Add optional ostream& argument to printTable()
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
+#include "G4CascadeChannel.hh"
 #include "globals.hh"
 #include "Randomize.hh"
 #include <vector>
 
 
 template <class DATA, class SAMP>
-class G4CascadeFunctions : public SAMP {
+class G4CascadeFunctions : public G4CascadeChannel, public SAMP {
 public:
-  static G4double getCrossSection(double ke) {
-    return instance.findCrossSection(ke, DATA::data.tot);
+  G4CascadeFunctions();
+  virtual ~G4CascadeFunctions() {}
+
+  virtual G4double getCrossSection(double ke) const {
+    return this->findCrossSection(ke, DATA::data.tot);
   }
 
-  static G4double getCrossSectionSum(double ke) {
-    return instance.findCrossSection(ke, DATA::data.sum);
+  virtual G4double getCrossSectionSum(double ke) const {
+    return this->findCrossSection(ke, DATA::data.sum);
   }
 
-  static G4int getMultiplicity(G4double ke);
+  virtual G4int getMultiplicity(G4double ke) const;
 
-  static void
-  getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke);
+  virtual void getOutgoingParticleTypes(std::vector<G4int>& kinds,
+				       G4int mult, G4double ke) const;
 
-  static void printTable();
-
-private:
-  G4CascadeFunctions() : SAMP() {}
-  static const G4CascadeFunctions<DATA,SAMP> instance;
+  virtual void printTable(std::ostream& os=G4cout) const;
 };
 
 #include "G4CascadeFunctions.icc"

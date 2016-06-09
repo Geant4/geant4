@@ -1,4 +1,4 @@
-# $Id: scatter.mac,v 1.3 2010/05/22 21:21:52 maire Exp $
+# $Id: scatter.mac,v 1.3 2010-05-22 21:21:52 maire Exp $
 #
 # macro file for electronScattering
 #
@@ -7,10 +7,10 @@
 #
 # define here the Scattering foil
 #
-##/testem/det/setMaterial Beryllium
-##/testem/det/setThickness 5.005 mm	#Be
-/testem/det/setMaterial Graphite
-/testem/det/setThickness 2.505 mm	#C
+/testem/det/setMaterial Beryllium
+/testem/det/setThickness 5.005 mm	#Be
+##/testem/det/setMaterial Graphite
+##/testem/det/setThickness 2.505 mm	#C
 ##/testem/det/setMaterial Aluminium
 ##/testem/det/setThickness 518.5 um	#Al2
 ##/testem/det/setMaterial Titanium
@@ -19,20 +19,22 @@
 ##/testem/det/setThickness 16.2 um	#Au1
 ##/testem/det/setThickness 48.5 um	#Au3
 #
-##/testem/phys/addPhysics  emstandard_opt3
-/testem/phys/addPhysics  standardWVI
+###/testem/phys/addPhysics  emstandard_opt3
+/testem/phys/addPhysics  local
 #
 /run/initialize
 #
-/run/setCut 10 um	#including proton cut
+##/testem/phys/setCut 10 um
+/testem/phys/setCut 1 mm
 #
 /gun/particle e- 
 /gun/energy 13 MeV
 #
-/testem/histo/setFileName ref4++/graphite/wvi
+/testem/histo/setFileName results/Be1.local
 /testem/histo/setFileType root
 /testem/histo/setHisto 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
 /testem/histo/setHisto 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
+###/testem/histo/printHisto 3
 #
 /testem/event/printModulo 100000
 #

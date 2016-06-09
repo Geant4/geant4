@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.12 2010/09/20 15:03:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistedFaceted.hh,v 1.12 2010-09-20 15:03:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -213,6 +213,7 @@ class G4VTwistedFaceted: public G4VSolid
       LastState(const LastState& r) : p(r.p), inside(r.inside){}
       LastState& operator=(const LastState& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; inside = r.inside;
         return *this;
       }

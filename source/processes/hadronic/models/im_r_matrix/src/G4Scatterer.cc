@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.16 2010/03/12 15:45:18 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.16 2010-03-12 15:45:18 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -355,9 +355,10 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
          G4cout << "track 2"<<trk2.GetDefinition()->GetParticleName()<<G4endl;
          for(size_t hpw=0; hpw<products->size(); hpw++)
          {
-	   G4cout << products->operator[](hpw)->GetDefinition()->GetParticleName()<<G4endl;
+            G4cout << products->operator[](hpw)->GetDefinition()->GetParticleName()<<G4endl;
          }
-	 G4Exception("We have the problem");
+         G4Exception("G4Scatterer", "im_r_matrix001", FatalException,
+             "Problem in ChargeBalance");
        }
        return products;
      } 

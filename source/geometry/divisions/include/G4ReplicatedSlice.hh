@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicatedSlice.hh,v 1.2 2010/11/10 09:15:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ReplicatedSlice.hh,v 1.2 2010-11-10 09:15:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4ReplicatedSlice
 //

@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT33piNChannel.cc,v 1.4 2010/12/15 07:40:49 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeT33piNChannel.cc,v 1.4 2010-12-15 07:40:49 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadePiPlusPChannel.hh"
 #include "G4CascadePiMinusNChannel.hh"
@@ -538,10 +541,10 @@ G4CascadePiPlusPChannelData::data_t
 G4CascadePiPlusPChannelData::data(pipP2bfs, pipP3bfs, pipP4bfs,
 				  pipP5bfs, pipP6bfs, pipP7bfs,
 				  pipP8bfs, pipP9bfs, pipPCrossSections,
-				  pipPtotXSec, "PiPlusP");
+				  pipPtotXSec, pip*pro, "PiPlusP");
 
 G4CascadePiMinusNChannelData::data_t
 G4CascadePiMinusNChannelData::data(pimN2bfs, pimN3bfs, pimN4bfs,
 				   pimN5bfs, pimN6bfs, pimN7bfs,
 				   pimN8bfs, pimN9bfs, pipPCrossSections,
-				   pipPtotXSec, "PiMinusN");
+				   pipPtotXSec, pim*neu, "PiMinusN");

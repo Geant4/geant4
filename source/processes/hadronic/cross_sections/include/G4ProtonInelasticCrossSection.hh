@@ -27,6 +27,7 @@
 // G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
 // D. Wright, 23-Dec-2006: added isotope dependence
 // G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
+// V.Ivanchenko, 18-Aug-2011: migration to new design
 //
 
 #ifndef G4ProtonInelasticCrossSection_h
@@ -43,60 +44,34 @@
 
 
 #include "globals.hh"
-#include "G4Proton.hh"
-
 #include "G4VCrossSectionDataSet.hh"
+
+class G4NistManager;
+class G4Proton;
 
 class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-   
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
-   {
-     G4bool result = false;
-     if ( (aPart->GetDefinition()==G4Proton::Proton()) &&
-        ( aPart->GetKineticEnergy()<100*TeV) ) result = true;
-     if(aEle->GetZ()<3) result = false;
-     return result;
-   }
+public:
 
+  G4ProtonInelasticCrossSection();
 
-   G4bool
-   IsIsoApplicable(const G4DynamicParticle* aParticle, G4int ZZ, G4int /*AA*/)
-   {
-     G4bool result = false;
-     if (( aParticle->GetDefinition() == G4Proton::Proton()) &&
-         ( aParticle->GetKineticEnergy() < 100*TeV) ) result = true;
-     if (ZZ < 3) result = false;
-     return result;
-   }
+  ~G4ProtonInelasticCrossSection();
 
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle* aPart, 
+			     G4int Z, const G4Material*);
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
-   
-   G4double
-   GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                        G4int ZZ, G4int AA, G4double /*aTemperature*/)
-   {
-     return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
-   }
- 
+  G4double GetProtonCrossSection(G4double kineticEnergy, G4int Z);
 
-   G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
+private:
 
-
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
-
-
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4ProtonInelasticCrossSection: uses formula"<<G4endl;}
+  G4NistManager* nist;
+  G4Proton* theProton;
+  G4double thEnergy;
 
 };
 

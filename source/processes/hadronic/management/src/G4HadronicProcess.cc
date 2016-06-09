@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.93 2010/12/01 02:04:39 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicProcess.cc,v 1.93 2010-12-01 02:04:39 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -37,7 +37,10 @@
 //
 // Modifications:
 // 05-Jul-2010 V.Ivanchenko cleanup commented lines 
-//
+// 20-Jul-2011 M.Kelsey -- null-pointer checks in DumpState()
+// 24-Sep-2011 M.Kelsey -- Use envvar G4HADRONIC_RANDOM_FILE to save random
+//		engine state before each model call
+// 18-Oct-2011 M.Kelsey -- Handle final-state cases in conservation checks.
 
 #include "G4Types.hh"
 #include "G4HadronicProcess.hh"
@@ -60,6 +63,14 @@
 #include "G4HadronicProcessStore.hh"
 
 #include <typeinfo>
+#include <sstream>
+//#include <stdlib.h>
+
+// File-scope variable to capture environment variable at startup
+
+static const char* G4Hadronic_Random_File = getenv("G4HADRONIC_RANDOM_FILE");
+
+// Initialize static variables for isotope production
 
 G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
 G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
@@ -80,6 +91,7 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   ModelingState = 0;
   isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();
+  theTotalResult->SetSecondaryWeightByProcess(true);
   theInteraction = 0;
   theCrossSectionDataStore = new G4CrossSectionDataStore();
   G4HadronicProcessStore::Instance()->Register(this);
@@ -90,6 +102,23 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   epCheckLevels.first = DBL_MAX;
   epCheckLevels.second = DBL_MAX;
   levelsSetByProcess = false;
+
+  // Make ep checking possible via environment variables
+  if ( char * ReportLevel = getenv("G4Hadronic_epReportLevel")) {
+     std::stringstream sRL (ReportLevel);
+     sRL >> epReportLevel;
+     //-GF we now take min of process and model   levelsSetByProcess = true;
+     if ( char * RelativeLevel = getenv("G4Hadronic_epCheckRelativeLevel")) {
+     	std::stringstream level(RelativeLevel);
+	level >> epCheckLevels.first;
+     }
+     if ( char * AbsoluteLevel = getenv("G4Hadronic_epCheckAbsoluteLevel")) {
+     	std::stringstream level(AbsoluteLevel);
+	level >> epCheckLevels.second;
+     }
+     //G4cout << " Checking E/p with level " << epReportLevel 
+     //       << ", relative/absolute level = " << epCheckLevels.first << " / "<< epCheckLevels.second << G4endl;      
+  }  
 }
 
 G4HadronicProcess::~G4HadronicProcess()
@@ -111,10 +140,11 @@ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
   try{GetManagerPointer()->RegisterMe( a );}   
   catch(G4HadronicException & aE)
   {
-    G4cout << "Unrecoverable error in " << GetProcessName() 
-	   << " to register " << a->GetModelName() << G4endl;
-    G4Exception("G4HadronicProcess", "007", FatalException,
-    "Could not register G4HadronicInteraction");
+    G4ExceptionDescription ed;
+    ed << "Unrecoverable error in " << GetProcessName() 
+       << " to register " << a->GetModelName() << G4endl;
+    G4Exception("G4HadronicProcess::RegisterMe", "had001", FatalException,
+		ed);
   }
   G4HadronicProcessStore::Instance()->RegisterInteraction(this, a);  
 }
@@ -144,54 +174,48 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   }
   catch(G4HadronicException aR)
   { 
-    DumpState(aTrack,"GetMeanFreePath");
-    G4Exception("G4HadronicProcess", "007", FatalException,
-    "G4HadronicProcess::GetMeanFreePath failed");
+    G4ExceptionDescription ed;
+    DumpState(aTrack,"GetMeanFreePath",ed);
+    ed << " Cross section is not available" << G4endl;
+    G4Exception("G4HadronicProcess::GetMeanFreePath", "had002", FatalException,
+		ed);
   } 
   G4double res = DBL_MAX;
   if( theLastCrossSection > 0.0 ) { res = 1.0/theLastCrossSection; }
   return res;
 }
 
-G4double G4HadronicProcess::
-GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
-			   const G4Element *anElement, 
-			   G4double aTemp )
-{
-  G4double x =
-    theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
-  if(x < 0.0) { x = 0.0; }
-  return x;
-}
-
-
 G4VParticleChange*
 G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
+  // if primary is not Alive then do nothing
+  theTotalResult->Initialize(aTrack);
+  if(aTrack.GetTrackStatus() != fAlive) { return theTotalResult; }
+
   // Find cross section at end of step and check if <= 0
   //
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
   G4Material* aMaterial = aTrack.GetMaterial();
-  G4double aTemp = aMaterial->GetTemperature();
    
   G4Element* anElement = 0;
   try
   {
      anElement = theCrossSectionDataStore->SampleZandA(aParticle, 
-						      aMaterial, 
-						      targetNucleus);
+						       aMaterial, 
+						       targetNucleus);
   }
   catch(G4HadronicException & aR)
   {
-    DumpState(aTrack,"SampleZandA");
-    G4Exception("G4HadronicProcess", "007", FatalException,
-    "PostStepDoIt failed on element selection.");
+    G4ExceptionDescription ed;
+    DumpState(aTrack,"SampleZandA",ed); 
+    ed << " PostStepDoIt failed on element selection" << G4endl;
+    G4Exception("G4HadronicProcess::PostStepDoIt", "had003", FatalException,
+		ed);
   }
 
-  if (GetMicroscopicCrossSection(aParticle, anElement, aTemp) <= 0.0) {
+  if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
     // No interaction
-    theTotalResult->Clear();
-    theTotalResult->Initialize(aTrack);
+    //theTotalResult->Clear();
     return theTotalResult;
   }    
 
@@ -201,15 +225,15 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     if (aTrack.GetTrackStatus() == fStopAndKill ||
         aTrack.GetTrackStatus() == fKillTrackAndSecondaries ||
         aTrack.GetTrackStatus() == fPostponeToNextEvent) {
-      G4cout << "G4HadronicProcess: track in unusable state - "
-             << aTrack.GetTrackStatus() << G4endl;
-      G4cout << "G4HadronicProcess: returning unchanged track " << G4endl;
-      DumpState(aTrack,"PostStepDoIt");
-      G4Exception("G4HadronicProcess", "001", JustWarning, "bailing out");
+      G4ExceptionDescription ed;
+      ed << "G4HadronicProcess: track in unusable state - "
+	 << aTrack.GetTrackStatus() << G4endl;
+      ed << "G4HadronicProcess: returning unchanged track " << G4endl;
+      DumpState(aTrack,"PostStepDoIt",ed);
+      G4Exception("G4HadronicProcess::PostStepDoIt", "had004", JustWarning, ed);
     }
     // No warning for fStopButAlive which is a legal status here
-    theTotalResult->Clear();
-    theTotalResult->Initialize(aTrack);
+    // theTotalResult->Clear();
     return theTotalResult;
   }
 
@@ -219,7 +243,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   G4double kineticEnergy = originalEnergy;
 
   // Get kinetic energy per nucleon for ions
-  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5)
+  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5) 
           kineticEnergy/=aParticle->GetParticleDefinition()->GetBaryonNumber();
 
   try
@@ -229,11 +253,14 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   }
   catch(G4HadronicException & aE)
   {
-    G4cout << "Target element "<<anElement->GetName()<<"  Z= " 
-	   << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
-    DumpState(aTrack,"ChooseHadronicInteraction");
-    G4Exception("G4HadronicProcess", "007", FatalException,
-    "ChooseHadronicInteraction failed.");
+    G4ExceptionDescription ed;
+    ed << "Target element "<<anElement->GetName()<<"  Z= " 
+       << targetNucleus.GetZ_asInt() << "  A= " 
+       << targetNucleus.GetA_asInt() << G4endl;
+    DumpState(aTrack,"ChooseHadronicInteraction",ed);
+    ed << " No HadronicInteraction found out" << G4endl;
+    G4Exception("G4HadronicProcess::PostStepDoIt", "had005", FatalException,
+		ed);
   }
 
   // Initialize the hadronic projectile from the track
@@ -247,26 +274,36 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   {
     try
     {
+      // Save random engine if requested for debugging
+      if (G4Hadronic_Random_File) {
+	CLHEP::HepRandom::saveEngineStatus(G4Hadronic_Random_File);
+      }
       // Call the interaction
       result = theInteraction->ApplyYourself( thePro, targetNucleus);
       ++reentryCount;
     }
     catch(G4HadronicException aR)
     {
-      G4cout << "Call for " << theInteraction->GetModelName() << G4endl;
-      G4cout << "Target element "<<anElement->GetName()<<"  Z= " 
-	     << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
-      DumpState(aTrack,"ApplyYourself");
-      G4Exception("G4HadronicProcess", "007", FatalException,
-      "PostStepDoIt failed.");
+      G4ExceptionDescription ed;
+      ed << "Call for " << theInteraction->GetModelName() << G4endl;
+      ed << "Target element "<<anElement->GetName()<<"  Z= " 
+	 << targetNucleus.GetZ_asInt() 
+	 << "  A= " << targetNucleus.GetA_asInt() << G4endl;
+      DumpState(aTrack,"ApplyYourself",ed);
+      ed << " ApplyYourself failed" << G4endl;
+      G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
+		  ed);
     }
     if(reentryCount>100) {
-      G4cout << "Call for " << theInteraction->GetModelName() << G4endl;
-      G4cout << "Target element "<<anElement->GetName()<<"  Z= " 
-	     << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
-      DumpState(aTrack,"ApplyYourself");
-      G4Exception("G4HadronicProcess", "007", FatalException,
-		  "Reentering ApplyYourself too often - PostStepDoIt failed.");  
+      G4ExceptionDescription ed;
+      ed << "Call for " << theInteraction->GetModelName() << G4endl;
+      ed << "Target element "<<anElement->GetName()<<"  Z= " 
+	 << targetNucleus.GetZ_asInt() 
+	 << "  A= " << targetNucleus.GetA_asInt() << G4endl;
+      DumpState(aTrack,"ApplyYourself",ed);
+      ed << " ApplyYourself does not completed after 100 attempts" << G4endl;
+      G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
+		  ed);  
     }
   }
   while(!result);
@@ -274,6 +311,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   result->SetTrafoToLab(thePro.GetTrafoToLab());
 
   ClearNumberOfInteractionLengthLeft();
+  /*
   if(isoIsOnAnyway!=-1)
   {
     if(isoIsEnabled||isoIsOnAnyway)
@@ -281,16 +319,26 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       result = DoIsotopeCounting(result, aTrack, targetNucleus);
     }
   }
-  
   // Put hadronic final state particles into G4ParticleChange
 
   FillTotalResult(result, aTrack);
+  */
 
-  if (epReportLevel > 0) { 
+  // VI: new method   
+  FillResult(result, aTrack);
+
+  if (epReportLevel != 0) { 
     CheckEnergyMomentumConservation(aTrack, targetNucleus);
   }
   return theTotalResult;
 }
+
+
+void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this process has not been written yet.\n"; 
+}
+
 
 G4HadFinalState* 
 G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
@@ -346,8 +394,8 @@ G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
                                           const G4Nucleus& aNucleus,
                                           G4HadFinalState* aResult)
 {
-  G4double A = aNucleus.GetN();
-  G4double Z = aNucleus.GetZ();
+  G4double A = aNucleus.GetA_asInt();
+  G4double Z = aNucleus.GetZ_asInt();
   G4double bufferA = 0;
   G4double bufferZ = 0;
   
@@ -406,9 +454,104 @@ G4double G4HadronicProcess::XBiasSecondaryWeight()
 }
 
 void 
+G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
+{
+  theTotalResult->Clear();
+  theTotalResult->Initialize(aT);
+  theTotalResult->ProposeLocalEnergyDeposit(aR->GetLocalEnergyDeposit());  
+
+  G4double rotation = CLHEP::twopi*G4UniformRand();
+  G4ThreeVector it(0., 0., 1.);
+
+  G4double efinal = aR->GetEnergyChange();
+  if(efinal < 0.0) { efinal = 0.0; }
+
+  // check status of primary
+  if(aR->GetStatusChange() == stopAndKill) {
+    theTotalResult->ProposeTrackStatus(fStopAndKill);
+    theTotalResult->ProposeEnergy( 0.0 );
+
+    // check its final energy
+  } else if(0.0 == efinal) {
+    theTotalResult->ProposeEnergy( 0.0 );
+    if(aT.GetParticleDefinition()->GetProcessManager()
+       ->GetAtRestProcessVector()->size() > 0)
+         { aParticleChange.ProposeTrackStatus(fStopButAlive); }
+    else { aParticleChange.ProposeTrackStatus(fStopAndKill); }
+
+    // primary is not killed apply rotation and Lorentz transformation
+  } else  {
+    theTotalResult->ProposeTrackStatus(fAlive);
+    G4double mass = aT.GetParticleDefinition()->GetPDGMass();
+    G4double newE = efinal + mass;
+    G4double newP = std::sqrt(efinal*(efinal + 2*mass));
+    G4ThreeVector newPV = newP*aR->GetMomentumChange();
+    G4LorentzVector newP4(newE, newPV);
+    newP4.rotate(rotation, it);
+    newP4 *= aR->GetTrafoToLab();
+    theTotalResult->ProposeMomentumDirection(newP4.vect().unit());
+    newE = newP4.e() - mass;
+    if(G4HadronicProcess_debug_flag && newE <= 0.0) {
+      G4ExceptionDescription ed;
+      DumpState(aT,"Primary has zero energy after interaction",ed);
+      G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning, ed);
+    }
+    if(newE < 0.0) { newE = 0.0; }
+    theTotalResult->ProposeEnergy( newE );
+  }
+
+  // check secondaries: apply rotation and Lorentz transformation
+  G4int nSec = aR->GetNumberOfSecondaries();
+  theTotalResult->SetNumberOfSecondaries(nSec);
+ 
+  if(nSec > 0) {
+    G4double time0 = aT.GetGlobalTime();
+    for(G4int i=0; i<nSec; ++i)
+      {
+	G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
+	theM.rotate(rotation, it);
+	theM *= aR->GetTrafoToLab();
+	aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
+	G4double time = aR->GetSecondary(i)->GetTime();
+	if(time<time0) { time = time0; }
+
+	G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
+				     time,
+				     aT.GetPosition());
+	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
+	// G4cout << "#### ParticleDebug "
+	// <<GetProcessName()<<" "
+	// <<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
+	// <<aScaleFactor<<" "
+	// <<XBiasSurvivalProbability()<<" "
+	// <<XBiasSecondaryWeight()<<" "
+	// <<aT.GetWeight()<<" "
+	// <<aR->GetSecondary(i)->GetWeight()<<" "
+	// <<aR->GetSecondary(i)->GetParticle()->Get4Momentum()<<" "
+	// <<G4endl;
+	track->SetWeight(newWeight);
+	track->SetTouchableHandle(aT.GetTouchableHandle());
+	theTotalResult->AddSecondary(track);
+	if(G4HadronicProcess_debug_flag) {
+	  G4double e = track->GetKineticEnergy();
+          if(e <= 0.0) {
+	    G4ExceptionDescription ed;
+	    DumpState(aT,"Secondary has zero energy",ed);
+            ed << "Secondary " << track->GetDefinition()->GetParticleName() 
+	       << G4endl;
+	    G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning,ed);
+	  }
+	}
+      }
+  }
+
+  aR->Clear();
+  return;
+}
+
+void 
 G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
-  //  G4Nancheck go_wild;
   theTotalResult->Clear();
   theTotalResult->ProposeLocalEnergyDeposit(0.);
   theTotalResult->Initialize(aT);
@@ -436,9 +579,10 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
       theTotalResult->ProposeTrackStatus(fSuspend);
       if(xBiasOn)
       {
-        DumpState(aT,"FillTotalResult");
-        G4Exception("G4HadronicProcess", "007", FatalException,
-        "Cannot cross-section bias a process that suspends tracks.");
+	G4ExceptionDescription ed;
+        DumpState(aT,"FillTotalResult",ed);
+        G4Exception("G4HadronicProcess::FillTotalResult", "had007", FatalException,
+		    ed,"Cannot cross-section bias a process that suspends tracks.");
       }
     } else if (aT.GetKineticEnergy() == 0) {
       theTotalResult->ProposeTrackStatus(fStopButAlive);
@@ -453,8 +597,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
       G4double newP=std::sqrt(newE*newE - newM*newM);
       G4DynamicParticle * aNew = 
       new G4DynamicParticle(aT.GetParticleDefinition(), newE, newP*aR->GetMomentumChange());
-      G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
-      aR->AddSecondary(theSec);
+      aR->AddSecondary(G4HadSecondary(aNew, newWeight));
     }
     else
     {
@@ -471,11 +614,13 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
   }
   else
   {
+    G4ExceptionDescription ed;
     G4cout << "Call for " << theInteraction->GetModelName() << G4endl;
     G4cout << "Target Z= " 
-	   << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
-    DumpState(aT,"FillTotalResult");
-    G4Exception("G4HadronicProcess", "007", FatalException,
+	   << targetNucleus.GetZ_asInt() 
+	   << "  A= " << targetNucleus.GetA_asInt() << G4endl;
+    DumpState(aT,"FillTotalResult",ed);
+    G4Exception("G4HadronicProcess", "had008", FatalException,
     "use of unsupported track-status.");
   }
 
@@ -489,8 +634,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4DynamicParticle* aNew = new G4DynamicParticle(aT.GetParticleDefinition(), 
                                                     aR->GetMomentumChange(), 
                                                     newKE);
-    G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
-    aR->AddSecondary(theSec);
+    aR->AddSecondary(aNew);
     aR->SetStatusChange(stopAndKill);
 
     theTotalResult->ProposeTrackStatus(fStopAndKill);
@@ -526,7 +670,6 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 				 aT.GetPosition());
 
     G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
-    //static G4double pinelcount=0;
     if(xBiasOn) { newWeight *= XBiasSecondaryWeight(); }
     // G4cout << "#### ParticleDebug "
     // <<GetProcessName()<<" "
@@ -555,6 +698,7 @@ G4IsoParticleChange* G4HadronicProcess::GetIsotopeProductionInfo()
   return anIsoResult;
 }
 
+
 void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale) 
 {
   xBiasOn = true;
@@ -564,12 +708,14 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
       (it != "ElectroNuclear") && 
       (it != "PositronNuclear") )
     {
-      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "007", FatalException,
+      G4ExceptionDescription ed;
+      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", FatalException, ed,
 		  "Cross-section biasing available only for gamma and electro nuclear reactions.");
     }
   if(aScale<100)
     {
-      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "001", JustWarning,
+      G4ExceptionDescription ed;
+      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", JustWarning,ed,
 		  "Cross-section bias readjusted to be above safe limit. New value is 100");
       aScaleFactor = 100.;
     }
@@ -579,38 +725,53 @@ void
 G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
                                                    const G4Nucleus& aNucleus)
 {
-  G4double targetMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetN(), aNucleus.GetZ());
+  G4double targetMass = 
+    G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
   G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
   G4LorentzVector target4mom(0, 0, 0, targetMass);
   G4LorentzVector initial4mom = projectile4mom + target4mom;
 
-  G4Track* sec;
+  // Compute final-state momentum for scattering and "do nothing" results
   G4LorentzVector final4mom;
-  G4int nSec = theTotalResult->GetNumberOfSecondaries();
-  for (G4int i = 0; i < nSec; i++) {
-    sec = theTotalResult->GetSecondary(i);
-    final4mom += sec->GetDynamicParticle()->Get4Momentum();
+  if (theTotalResult->GetTrackStatus() == fStopAndKill) {
+    G4Track* sec;
+    G4int nSec = theTotalResult->GetNumberOfSecondaries();
+    for (G4int i = 0; i < nSec; i++) {
+      sec = theTotalResult->GetSecondary(i);
+      final4mom += sec->GetDynamicParticle()->Get4Momentum();
+    }
+  } else {	// Interaction didn't complete, returned "do nothing" state
+    G4Track temp(aTrack);
+    temp.SetMomentumDirection(*theTotalResult->GetMomentumDirection());
+    temp.SetKineticEnergy(theTotalResult->GetEnergy());
+    final4mom = temp.GetDynamicParticle()->Get4Momentum() + target4mom;
   }
 
-  G4LorentzVector diff = initial4mom - final4mom;
-  G4double absolute = diff.e();
-  G4double relative = absolute/aTrack.GetKineticEnergy();
-
+  // Get level-checking information (used to cut-off relative checks)
   G4String processName = GetProcessName();
   G4HadronicInteraction* theModel = GetHadronicInteraction();
   G4String modelName("none");
   if (theModel) modelName = theModel->GetModelName();
-
-  std::pair<G4double, G4double> checkLevels = epCheckLevels;;
+  std::pair<G4double, G4double> checkLevels = epCheckLevels;
   if (!levelsSetByProcess) {
     if (theModel) checkLevels = theModel->GetEnergyMomentumCheckLevels();
+    checkLevels.first= std::min(checkLevels.first,  epCheckLevels.first);
+    checkLevels.second=std::min(checkLevels.second, epCheckLevels.second);
   }
 
+  // Compute absolute total-energy difference, and relative kinetic-energy
+  G4bool checkRelative = (aTrack.GetKineticEnergy() > checkLevels.second);
+
+  G4LorentzVector diff = initial4mom - final4mom;
+  G4double absolute = diff.e();
+  G4double relative = checkRelative ? absolute/aTrack.GetKineticEnergy() : 0.;
+
+  // Evaluate relative and absolute conservation
   G4bool relPass = false;
   G4String relResult = "fail";
   if (std::abs(relative) < checkLevels.first) {
     relPass = true;
-    relResult = "pass";
+    relResult = checkRelative ? "pass" : "N/A";
   }
 
   G4bool absPass = false;
@@ -620,53 +781,75 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
     absResult = "pass";
   }
 
+  std::stringstream Myout;
   // Options for level of reporting detail:
   //  0. off
   //  1. report only when E/p not conserved
   //  2. report regardless of E/p conservation
   //  3. report only when E/p not conserved, with model names, process names, and limits 
   //  4. report regardless of E/p conservation, with model names, process names, and limits
+  //  negative -1.., as above, but send output to stderr
 
-  if(epReportLevel == 4) {
-    G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
-    G4cout << " relative limit " << checkLevels.first << " relative value = "
+  if(std::abs(epReportLevel) == 4) {
+    Myout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
+    Myout << " relative limit " << checkLevels.first << " relative value = "
            << relative << " " << relResult << G4endl;
-    G4cout << " absolute limit " << checkLevels.second << " absolute value = "
-           << absolute << " " << absResult << G4endl;
+    Myout << " absolute limit (MeV) " << checkLevels.second/MeV << " absolute value (MeV) = "
+           << absolute/MeV << " " << absResult << G4endl;
 
-  } else if(epReportLevel == 3) {
+  } else if(std::abs(epReportLevel) == 3) {
     if (!absPass || !relPass) {
-      G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
-      G4cout << " relative limit " << checkLevels.first << " relative value = "
+      Myout << " Process: " << processName << " , Model: " <<  modelName << G4endl;
+      Myout << " Primary: " << aTrack.GetParticleDefinition()->GetParticleName()
+            << " (" << aTrack.GetParticleDefinition()->GetPDGEncoding() << "),"
+            << " E= " <<  aTrack.GetDynamicParticle()->Get4Momentum().e()
+	    << ", target nucleus (" << aNucleus.GetZ_asInt() << "," 
+	    << aNucleus.GetA_asInt() << ")" << G4endl;
+      Myout << " relative limit " << checkLevels.first << " relative value = "
              << relative << " " << relResult << G4endl;  
-      G4cout << " absolute limit " << checkLevels.second << " absolute value = "
-             << absolute << " " << absResult << G4endl;
+      Myout << " absolute limit (MeV) " << checkLevels.second/MeV << " absolute value (MeV) = "
+             << absolute/MeV << " " << absResult << G4endl;
     }
 
-  } else if(epReportLevel == 2) {
-    G4cout << " relative value = " << relative << " " << relPass
-           << " absolute value = " << absolute << " " << absPass << G4endl;
+  } else if(std::abs(epReportLevel) == 2) {
+    Myout << " relative value = " << relative << " " << relPass
+             << " absolute value (MeV) = " << absolute/MeV << " " << absPass << G4endl;
 
-  } else if(epReportLevel == 1) {
+  } else if(std::abs(epReportLevel) == 1) {
     if (!absPass || !relPass) {
-      G4cout << " relative value = " << relative << " " << relPass
-             << " absolute value = " << absolute << " " << absPass << G4endl;
+      Myout << " relative value = " << relative << " " << relPass
+             << " absolute value (MeV) = " << absolute/MeV << " " << absPass << G4endl;
     }
   }
+  
+  if (epReportLevel > 0)      G4cout << Myout.str();
+  else if (epReportLevel < 0) G4cerr << Myout.str();
 }
 
 
-void G4HadronicProcess::DumpState(const G4Track& aTrack, const G4String& method)
+void G4HadronicProcess::DumpState(const G4Track& aTrack, 
+				  const G4String& method,
+				  G4ExceptionDescription& ed)
 {
-  G4cout << "Unrecoverable error in the method " << method << " of " 
-	 << GetProcessName() << G4endl;
-  G4cout << "TrackID= "<< aTrack.GetTrackID() << "  ParentID= " << aTrack.GetParentID()
-	 << "  " << aTrack.GetParticleDefinition()->GetParticleName() << G4endl;
-  G4cout << "Ekin(GeV)= " << aTrack.GetKineticEnergy()/CLHEP::GeV 
-	 << ";  direction= " << aTrack.GetMomentumDirection() << G4endl; 
-  G4cout << "Position(mm)= " << aTrack.GetPosition()/CLHEP::mm 
-	 << ";  material " << aTrack.GetMaterial()->GetName() << G4endl; 
-  G4cout << "PhysicalVolume  <" << aTrack.GetVolume()->GetName() << ">" << G4endl;
+  ed << "Unrecoverable error in the method " << method << " of " 
+     << GetProcessName() << G4endl;
+  ed << "TrackID= "<< aTrack.GetTrackID() << "  ParentID= " 
+     << aTrack.GetParentID()
+     << "  " << aTrack.GetParticleDefinition()->GetParticleName() 
+     << G4endl;
+  ed << "Ekin(GeV)= " << aTrack.GetKineticEnergy()/CLHEP::GeV 
+     << ";  direction= " << aTrack.GetMomentumDirection() << G4endl; 
+  ed << "Position(mm)= " << aTrack.GetPosition()/CLHEP::mm << ";";
+
+  if (aTrack.GetMaterial()) { 
+    ed << "  material " << aTrack.GetMaterial()->GetName();
+  }
+  ed << G4endl;
+
+  if (aTrack.GetVolume()) {
+    ed << "PhysicalVolume  <" << aTrack.GetVolume()->GetName() 
+       << ">" << G4endl;
+  }
 } 
 
 /* end of file */

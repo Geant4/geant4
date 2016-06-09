@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.hh,v 1.4 2010/11/22 14:30:49 japost Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreSplittingProcess.hh,v 1.4 2010-11-22 14:30:49 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------

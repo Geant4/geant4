@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh,v 1.5 2010/09/20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FragmentingString.hh,v 1.5 2010-09-20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4FragmentingString_h
@@ -57,8 +57,8 @@ class G4FragmentingString
       G4FragmentingString(const G4FragmentingString &old,
 			  G4ParticleDefinition * newdecay,
 			  const G4LorentzVector *momentum);
-      G4FragmentingString(const G4FragmentingString &old,      // Uzhi
-			  G4ParticleDefinition * newdecay);    // Uzhi
+      G4FragmentingString(const G4FragmentingString &old,
+			  G4ParticleDefinition * newdecay);
 			  
       ~G4FragmentingString();
 

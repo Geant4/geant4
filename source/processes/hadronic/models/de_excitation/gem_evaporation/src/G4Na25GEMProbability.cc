@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Na25GEMProbability.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Na25GEMProbability.cc,v 1.5 2009-09-15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
 
 #include "G4Na25GEMProbability.hh"
 
@@ -72,32 +70,5 @@ G4Na25GEMProbability::G4Na25GEMProbability() :
 
 }
 
-
-G4Na25GEMProbability::G4Na25GEMProbability(const G4Na25GEMProbability &) : G4GEMProbability()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4Na25GEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4Na25GEMProbability & G4Na25GEMProbability::
-operator=(const G4Na25GEMProbability &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4Na25GEMProbability::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4Na25GEMProbability::operator==(const G4Na25GEMProbability &) const
-{
-  return false;
-}
-
-G4bool G4Na25GEMProbability::operator!=(const G4Na25GEMProbability &) const
-{
-  return true;
-}
-
-
-
+G4Na25GEMProbability::~G4Na25GEMProbability() 
+{}

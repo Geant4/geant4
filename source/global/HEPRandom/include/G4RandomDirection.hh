@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirection.hh,v 1.5 2008/03/19 17:00:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RandomDirection.hh,v 1.5 2008-03-19 17:00:20 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

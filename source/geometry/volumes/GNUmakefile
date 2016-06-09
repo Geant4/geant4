@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2010/12/15 17:05:05 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2010-12-15 17:05:05 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/volumes library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------

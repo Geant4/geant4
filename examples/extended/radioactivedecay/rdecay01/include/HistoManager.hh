@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh,v 1.1 2010/09/16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoManager.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -45,7 +45,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 10;
+const G4int MaxHisto = 9;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

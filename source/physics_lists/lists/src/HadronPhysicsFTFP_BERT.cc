@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.cc,v 1.4 2010/06/15 11:03:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsFTFP_BERT.cc,v 1.4 2010-06-15 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -85,7 +85,10 @@ void HadronPhysicsFTFP_BERT::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(5*GeV);
   
-  theMiscCHIPS=new G4MiscCHIPSBuilder;
+  theHyperon=new G4HyperonFTFPBuilder;
+    
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 HadronPhysicsFTFP_BERT::~HadronPhysicsFTFP_BERT()
@@ -103,7 +106,10 @@ HadronPhysicsFTFP_BERT::~HadronPhysicsFTFP_BERT()
   delete theBertiniPro;
   delete theFTFPPro;    
     
-  delete theMiscCHIPS;
+  delete theHyperon;
+  delete theAntiBaryon;
+  delete theFTFPAntiBaryon;
+  
   delete theCHIPSInelastic;
 }
 
@@ -134,7 +140,8 @@ void HadronPhysicsFTFP_BERT::ConstructProcess()
   FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
   FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
 
-  theMiscCHIPS->Build();
+  theHyperon->Build();
+  theAntiBaryon->Build();
 }
 G4HadronicProcess* 
 HadronPhysicsFTFP_BERT::FindInelasticProcess(const G4ParticleDefinition* p)

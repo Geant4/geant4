@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.cc,v 1.3 2009/12/29 17:54:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4FTFBuilder.cc,v 1.3 2009-12-29 17:54:25 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,8 @@
 
 
 G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p) 
-  : G4VHadronModelBuilder(aName), thePreCompound(p)
+  : G4VHadronModelBuilder(aName), 
+    theStringModel(0), theStringDecay(0), thePreCompound(p)
 {}
 
 G4FTFBuilder::~G4FTFBuilder() 

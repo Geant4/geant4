@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02EventAction.cc,v 1.3 2010/06/06 05:08:01 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: ExN02EventAction.cc,v 1.11 2006-06-29 17:48:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

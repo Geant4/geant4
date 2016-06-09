@@ -1,0 +1,63 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21-November-2011: G.Cosmo (externals-V09-04-11)
+- Use USE flags in main GNUmakefile for selection of packages,
+  for backwards compatibility.
+
+07-November-2011: G.Cosmo (externals-V09-04-10)
+- Updated CLHEP module to version 2.1.1.0.
+- Abilited possibility to force building of internal 'expat' module also
+  for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
+
+27-September-2011: G.Cosmo (externals-V09-04-09)
+- More static symbols for DLL build of CLHEP module.
+
+20-September-2011: G.Cosmo (externals-V09-04-08)
+- Added missing export statements for static symbols required for DLL build
+  to CLHEP module.
+
+22-June-2011: B.Morgan (externals-V09-04-07)
+- Added CLHEp include dirs to GEANT4_BUILDTREE_INCLUDE_DIRS so that its
+  picked up from the buld tree when used.
+
+20-June-2011: B.Morgan (externals-V09-04-06)
+- Modified install of CLHEP headers to use Geant4 name on end of DESTINATION
+  as per changes in cmake-V09-04-06 (REQUIRES cmake-V09-04-06).
+
+14-June-2011: B.Morgan (externals-V09-04-05)
+- Tidied up CMakeLists.txt for G4clhep to use standard library target macro.
+
+2-June-2011: B.Morgan (externals-V09-04-04)
+- CMakeLists.txt : NEW file adding CMake build support to externals module.
+  CMake support added for clhep and expat modules.
+
+1-June-2011: G.Cosmo (externals-V09-04-03)
+- ixed trivial compilation warnings on gcc-4.6.0 in clhep module files
+  NonRandomEngine.h and Ranlux64Engine.cc for parameters defined but not used.
+
+24-May-2011: Gabriele Cosmo (externals-V09-04-02)
+- Added missing files in CLHEP built-in module.
+  Allow for generation of DLL library on Windows for it.
+
+11-May-2011: Gabriele Cosmo (externals-V09-04-01)
+- Added "clhep" module.
+
+20-April-2011: Gunter Folger (externals-V09-04-00)
+- Added "expat" module.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.9 2008/10/30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedCompton.cc,v 1.9 2008-10-30 22:34:23 schaelic Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -81,6 +81,7 @@ G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
   SetProcessSubType(fComptonScattering);
+  emModel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

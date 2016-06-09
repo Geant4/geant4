@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01Hodoscope.cc,v 1.7 2006/06/29 16:32:50 gunter Exp $
+// $Id: A01Hodoscope.cc,v 1.7 2006-06-29 16:32:50 gunter Exp $
 // --------------------------------------------------------------
 //
 #include "A01Hodoscope.hh"

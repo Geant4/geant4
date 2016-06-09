@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th Oct 2011 P.Gumplinger (op-V09-04-03)
+              add logic for ProposeVelocity to G4OpBoundaryProcess::PostStepDoIt
+
+13th Oct 2011 P.Gumplinger (op-V09-04-02)
+              modify to work with materials-V09-04-14
+
+6th  Oct 2011 P.Gumplinger (op-V09-04-01)
+              update G4Exception syntax in G4OpWLS.cc and
+              G4OpBoundaryProcess.cc
+
+14th Jun 2011 Peter Gumplinger (op-V09-04-00)
+              A dielectric_dielectric surface may now have a wavelength
+              dependent property "TRANSMITTANCE". If this is specified
+              for a surface it overwrites the Snell's law's probability.
+              This allows the simulation of anti-reflective coatings.
+              Thanks to Evgueni Goudzovski (CERN) for the idea.
+
 29th Oct 2010 Peter Gumplinger (op-V09-03-06)
               Fix minor Coverty Errors
 

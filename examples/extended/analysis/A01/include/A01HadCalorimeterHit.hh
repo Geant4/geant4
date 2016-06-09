@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.hh,v 1.5 2006/06/29 16:31:12 gunter Exp $
+// $Id: A01HadCalorimeterHit.hh,v 1.5 2006-06-29 16:31:12 gunter Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01HadCalorimeterHit_h

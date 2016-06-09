@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.17 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FCylindricalSurface.cc,v 1.17 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -68,9 +68,11 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
     length = l;
   else 
   {
-    G4cerr << "Error in G4FCylindricalSurface::G4FCylindricalSurface"
-	   << "--asked for negative length\n"
-	   << "\tDefault length of 0.0 is used.\n";
+    std::ostringstream message;
+    message << "Negative length." << G4endl
+	    << "Default length of 0.0 is used.";    
+    G4Exception("G4FCylindricalSurface::G4FCylindricalSurface()",
+                "GeomSolids1001", JustWarning, message);
 
     length = 0.0;
   }
@@ -80,10 +82,12 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
     radius = r;
   else 
   {
-    G4cerr << "Error in G4FCylindricalSurface::G4FCylindricalSurface"
-	   << "--asked for negative radius\n"
-	   << "\tDefault value of 0.0 is used.\n";
-    
+    std::ostringstream message;
+    message << "Negative radius." << G4endl
+	    << "Default value of 0.0 is used.";    
+    G4Exception("G4FCylindricalSurface::G4FCylindricalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     radius = 0.0;
   }
 }
@@ -323,9 +327,11 @@ void G4FCylindricalSurface::resize( G4double r, G4double l )
     radius = r;
   else 
   {
-    G4cerr << "Error in G4FCylindricalSurface::resize"
-	   << "--asked for negative radius\n"
-	   << "\tOriginal value of " << radius << " is retained.\n";
+    std::ostringstream message;
+    message << "Negative radius." << G4endl
+	    << "Original value of " << radius << " is retained.";    
+    G4Exception("G4FCylindricalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 
   //  Require length to be positive
@@ -333,8 +339,10 @@ void G4FCylindricalSurface::resize( G4double r, G4double l )
     length = l;
   else 
   {
-    G4cerr << "Error in G4FCylindricalSurface::resize"
-	   << "--asked for negative or zero length\n"
-	   << "\tOriginal value of " << length << " is retained.\n";
+    std::ostringstream message;
+    message << "Negative or zero length." << G4endl
+	    << "Original value of " << length << " is retained.";    
+    G4Exception("G4FCylindricalSurface::resize()",
+                "GeomSolids1001", JustWarning, message);
   }
 }

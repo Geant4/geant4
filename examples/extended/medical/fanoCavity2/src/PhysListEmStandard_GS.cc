@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_GS.cc,v 1.1 2009/10/31 18:05:01 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysListEmStandard_GS.cc,v 1.1 2009-10-31 18:05:01 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -132,29 +132,20 @@ void PhysListEmStandard_GS::ConstructProcess()
   emOptions.SetMaxEnergy(10*GeV);	//default  
   emOptions.SetDEDXBinning(8*20);	//default=8*7
   emOptions.SetLambdaBinning(8*20);	//default=8*7
-  emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
-  emOptions.SetMscRangeFactor(0.02);	//default 0.04
-  emOptions.SetMscGeomFactor (2.5);	//default       
-  emOptions.SetSkin(3.);		//default
       
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
            
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);		//default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
   emOptions.SetDEDXBinningForCSDARange(8*20);	//default=8*7
-          
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);	//default
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

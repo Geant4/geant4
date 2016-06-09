@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.5 2008/04/21 09:10:29 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessPlacer.cc,v 1.5 2008-04-21 09:10:29 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -101,30 +101,32 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 
     if (!transportation)
     {
-      G4Exception(" G4ProcessPlacer:: could not get process id=0");
+      G4Exception("G4ProcessPlacer::AddProcessAs","Bias0001",RunMustBeAborted," could not get process id=0");
     }
     if (transportation->GetProcessName() != "Transportation" && transportation->GetProcessName() != "Transportation8" && transportation->GetProcessName() != "CoupledTransportation")
     {
       //      G4cout << " GOT HERE CoupledTransportation" << G4endl;
       G4cout << transportation->GetProcessName() << G4endl;
-      G4Exception(" G4ProcessPlacer:: process id=0 is not Transportation");
+      G4Exception("G4ProcessPlacer::AddProcessAs","Bias0002",RunMustBeAborted," process id=0 is not Transportation");
     }
 
     // place the given proces as first for the moment
+    // 31/5/11 previously set to first, then transportation set ahead of it, 
+    // which is more conveniently correctly set with placing it second!
     GetProcessManager()->AddProcess(process);
-    GetProcessManager()->SetProcessOrderingToFirst(process, 
+    GetProcessManager()->SetProcessOrderingToSecond(process, 
                                                   idxAlongStep);
-    GetProcessManager()->SetProcessOrderingToFirst(process, 
+    GetProcessManager()->SetProcessOrderingToSecond(process, 
                                                   idxPostStep);
     // xx test
     //     if(process->GetProcessName() == "ImportanceProcess") 
     //bug31/10/07    GetProcessManager()->SetProcessOrdering(process, 
     //bug31/10/07					    idxAlongStep, 1);
     // place transportation first again
-    GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-                                                  idxAlongStep);
-    GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-                                                  idxPostStep);
+//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
+//                                                   idxAlongStep);
+//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
+//                                                   idxPostStep);
   }
   
   // for verification inly

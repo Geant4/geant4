@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellCharge3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSCellCharge3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCellCharge3D
 #include "G4PSCellCharge3D.hh"

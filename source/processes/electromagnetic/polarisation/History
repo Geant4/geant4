@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2010/11/12 10:38:56 schaelic Exp $
+$Id: History,v 1.22 2010-11-12 10:38:56 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 November 11: V.Ivanchenko (empolar-V09-04-04)
+- G4ePolarizedBremsstrahlung - fixed problem provoked by the tag 
+    of standard
+
+10 November 11: V.Ivanchenko (empolar-V09-04-03)
+- G4PolarizedCompton, G4ePolarizedIonisation, 
+  G4PolarizedMollerBhabhaModel, G4eplusPolarizedAnnihilation - fixed
+    initialisation problems reported by the Coverity tool
+
+16 May 11: V.Ivanchenko (empolar-V09-04-02)
+- G4PolarizedAnnihilationModel - fixed gcc-4.6.0 warnings
+
+26 April 11: V.Ivanchenko (empolar-V09-04-01)
+- G4PolarizationHelper - safe computation of a normal
+
+17 March 11: V.Ivanchenko (empolar-V09-04-00)
+- G4ePolarizedIonisation - do not use obsolete MinCutEnergy
 
 12 November 10: A.Schaelicke (empolar-V09-03-02)
 - Resolved: Warning messages of Coverity 

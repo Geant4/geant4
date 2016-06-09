@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.31 2009/07/24 16:37:03 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QContent.hh,v 1.31 2009-07-24 16:37:03 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -261,7 +261,6 @@ inline void G4QContent::Anti()
 
 // Add Quark Content
 inline G4QContent G4QContent::operator+=(const G4QContent& rhs)
-//     =======================================================
 {
   nD += rhs.nD;
   nU += rhs.nU;
@@ -274,7 +273,6 @@ inline G4QContent G4QContent::operator+=(const G4QContent& rhs)
 
 // Add Quark Content
 inline G4QContent G4QContent::operator+=(G4QContent& rhs)
-//     =======================================================
 {
   nD += rhs.nD;
   nU += rhs.nU;
@@ -287,7 +285,6 @@ inline G4QContent G4QContent::operator+=(G4QContent& rhs)
 
 // Multiply Quark Content by integer number
 inline G4QContent G4QContent::operator*=(const G4int& rhs)
-//     ===================================================
 {
   nU *= rhs;
   nD *= rhs;
@@ -300,7 +297,6 @@ inline G4QContent G4QContent::operator*=(const G4int& rhs)
 
 // Multiply Quark Content by integer number
 inline G4QContent G4QContent::operator*=(G4int& rhs)
-//     ===================================================
 {
   nU *= rhs;
   nD *= rhs;

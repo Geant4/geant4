@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh,v 1.3 2010/06/02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EmExtraPhysics.hh,v 1.3 2010-06-02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,8 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4ElectroNuclearBuilder.hh"
-#include "G4MuNuclearInteraction.hh"
+#include "G4MuonNuclearProcess.hh"
+#include "G4VDMuonNuclearModel.hh"
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -87,8 +88,8 @@ private:
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
   G4ElectroNuclearBuilder* theGNPhysics;
-  G4MuNuclearInteraction*  theMuNuc1;
-  G4MuNuclearInteraction*  theMuNuc2;
+  G4MuonNuclearProcess* muNucProcess;
+  G4VDMuonNuclearModel* muNucModel;
 
   G4int verbose;
 };

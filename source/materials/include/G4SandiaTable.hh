@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.23 2010/11/22 08:21:04 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SandiaTable.hh,v 1.23 2010-11-22 08:21:04 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
 //
@@ -156,6 +156,10 @@ public:  // without description
 private:
 
   void ComputeMatTable();
+
+  // copy constructor and hide assignment operator
+  G4SandiaTable(G4SandiaTable &);
+  G4SandiaTable & operator=(const G4SandiaTable &right);
 
 //////////////////////////////////////////////////////////////////////////
 //

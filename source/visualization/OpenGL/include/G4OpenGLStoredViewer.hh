@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh,v 1.10 2009/02/04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredViewer.hh,v 1.10 2009-02-04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -59,6 +59,10 @@ protected:
   void DrawDisplayLists ();
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
+
+  // Two virtual functions to return sub-class selection.
+  virtual G4bool POSelected(size_t) {return true;}
+  virtual G4bool TOSelected(size_t) {return true;}
 };
 
 #endif

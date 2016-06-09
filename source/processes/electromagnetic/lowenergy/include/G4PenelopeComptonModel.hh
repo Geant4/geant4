@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.hh,v 1.3 2009/10/21 14:56:47 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopeComptonModel.hh,v 1.2 2010-03-19 11:33:24 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
-// 02 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
-//                            to EM model
-// 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle
-//                            AtomicDeexcitationFlag - now demanded to G4VEmModel
-//			      Add ActivateAuger() method and deexcitationManager
+// 15 Feb 2010   L. Pandola   1st implementation. 
+// 18 Mar 2010   L. Pandola   Removed GetAtomsPerMolecule(), now demanded 
+//                            to G4PenelopeOscillatorManager
+// 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
 //
 // -------------------------------------------------------------------
-//
+//*
 // Class description:
 // Low Energy Electromagnetic Physics, Compton Scattering
-// with Penelope Model
+// with Penelope Model, version 2008
 // -------------------------------------------------------------------
 
 #ifndef G4PENELOPECOMPTONMODEL_HH
@@ -50,12 +50,15 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
+class G4PenelopeOscillatorManager;
+class G4PenelopeOscillator;
 
 class G4PenelopeComptonModel : public G4VEmModel 
 {
@@ -69,13 +72,21 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom(
-					      const G4ParticleDefinition*,
-					      G4double kinEnergy,
-					      G4double Z,
-					      G4double A=0,
-					      G4double cut=0,
-					      G4double emax=DBL_MAX);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+                                         const G4ParticleDefinition*,
+                                         G4double kineticEnergy,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
+  
+  //This is a dummy method. Never inkoved by the tracking, it just issues 
+  //a warning if one tries to get Cross Sections per Atom via the 
+  //G4EmCalculator.
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -86,31 +97,25 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
-  //Reads data of atomic shells from database file
-  void ReadData();
-
   //Differential cross section which is numerically integrated
-  G4double DifferentialCrossSection (G4double cdt);
+  G4double DifferentialCrossSection (G4double cdt,G4double energy,
+				     G4PenelopeOscillator* osc);
+
+  G4double OscillatorTotalCrossSection(G4double energy,
+				       G4PenelopeOscillator* osc);
+
+  G4double KleinNishinaCrossSection(G4double energy,const G4Material*);
 
   G4PenelopeComptonModel & operator=(const G4PenelopeComptonModel &right);
   G4PenelopeComptonModel(const G4PenelopeComptonModel&);
 
-  //Parameter for the numerical integration of analytical cross section
-  G4double energyForIntegration; 
-  G4int ZForIntegration;
-
-  //Parameters of atomic shells
-  std::map<G4int,G4DataVector*> *ionizationEnergy;
-  std::map<G4int,G4DataVector*> *hartreeFunction;
-  std::map<G4int,G4DataVector*> *occupationNumber;
-
-  //Intrinsic energy limits of the model: cannot be extended by the parent process
+  //Intrinsic energy limits of the model: 
+  //cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
 
@@ -118,7 +123,11 @@ private:
 
   G4bool isInitialised;
 
-  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
+  
+  G4PenelopeOscillatorManager* oscManager;
+
 
 };
 

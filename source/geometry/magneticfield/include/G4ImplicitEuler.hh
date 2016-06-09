@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.hh,v 1.8 2006/06/29 18:22:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ImplicitEuler.hh,v 1.8 2006-06-29 18:22:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4ImplicitEuler

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VProcess.cc,v 1.4 2006/06/29 15:35:03 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4VProcess.cc,v 1.4 2006-06-29 15:35:03 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VProcess.cc
 //
@@ -40,10 +40,6 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4VProcess {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_StorePhysicsTable, 
-				       StorePhysicsTable, 2, 3);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_RetrievePhysicsTable, 
-				       RetrievePhysicsTable, 2, 3);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPhysicsTableFileName, 
 				       GetPhysicsTableFileName, 3, 4);
 };
@@ -64,15 +60,13 @@ void export_G4VProcess()
     .def("IsApplicable",         &G4VProcess::IsApplicable)
     .def("BuildPhysicsTable",    &G4VProcess::BuildPhysicsTable)
     .def("PreparePhysicsTable",  &G4VProcess::PreparePhysicsTable)
-    .def("StorePhysicsTable",    &G4VProcess::StorePhysicsTable,
-	 f_StorePhysicsTable())
-    .def("RetrievePhysicsTable", &G4VProcess::RetrievePhysicsTable,
-	 f_RetrievePhysicsTable())
+    .def("StorePhysicsTable",    &G4VProcess::StorePhysicsTable)
+    .def("RetrievePhysicsTable", &G4VProcess::RetrievePhysicsTable)
     .def("GetPhysicsTableFileName", &G4VProcess::GetPhysicsTableFileName,
-	 f_GetPhysicsTableFileName()
-	 [return_value_policy<return_by_value>()])
+         f_GetPhysicsTableFileName()
+         [return_value_policy<return_by_value>()])
     .def("GetProcessName",       &G4VProcess::GetProcessName,
-	 return_value_policy<return_by_value>())  
+         return_value_policy<return_by_value>())  
     .def("GetProcessType",       &G4VProcess::GetProcessType)    
     .def("DumpInfo",             &G4VProcess::DumpInfo)
     .def("SetVerboseLevel",      &G4VProcess::SetVerboseLevel)

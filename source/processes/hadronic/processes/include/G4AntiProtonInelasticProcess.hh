@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: AntiProton Inelastic Process
- // J.L. Chuma, TRIUMF, 18-Feb-1997
- // Last modified: 03-Apr-1997
- 
- // Note:  there is no .cc file
+// Hadronic Process: AntiProton Inelastic Process
+// J.L. Chuma, TRIUMF, 18-Feb-1997
+//
  
 #ifndef G4AntiProtonInelasticProcess_h
 #define G4AntiProtonInelasticProcess_h 1
@@ -40,19 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4AntiProtonInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4AntiProtonInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AntiProtonInelasticProcess(
-     const G4String& processName = "AntiProtonInelastic" ) :
-      G4HadronInelasticProcess( processName, G4AntiProton::AntiProton() )
-    { }
+    G4AntiProtonInelasticProcess(const G4String& processName = "AntiProtonInelastic");
     
-    ~G4AntiProtonInelasticProcess()
-    { }
- };
- 
-#endif
- 
+    ~G4AntiProtonInelasticProcess() {}
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
+#endif

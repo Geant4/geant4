@@ -44,19 +44,11 @@
 #include <G4UnitsTable.hh>
 #include <G4HCofThisEvent.hh>
 #include "CexmcSimpleEnergyDeposit.hh"
-#include "CexmcSensitiveDetectorMessenger.hh"
 
 
 CexmcSimpleEnergyDeposit::CexmcSimpleEnergyDeposit( const G4String &  name ) :
-    G4VPrimitiveScorer( name ), messenger( NULL ), hcId( -1 )
+    CexmcPrimitiveScorer( name ), hcId( -1 )
 {
-    messenger = new CexmcSensitiveDetectorMessenger( this, name );
-}
-
-
-CexmcSimpleEnergyDeposit::~CexmcSimpleEnergyDeposit()
-{
-    delete messenger;
 }
 
 
@@ -82,12 +74,12 @@ G4bool  CexmcSimpleEnergyDeposit::ProcessHits( G4Step *  step,
 
 void  CexmcSimpleEnergyDeposit::Initialize( G4HCofThisEvent *  hcOfEvent )
 {
-    eventMap = new CexmcEnergyDepositCollection(
-                          GetMultiFunctionalDetector()->GetName(), GetName() );
-    if( hcId < 0 )
-    {
+    eventMap = new CexmcEnergyDepositCollection( detector->GetName(),
+                                                 primitiveName );
+
+    if ( hcId < 0 )
         hcId = GetCollectionID( 0 );
-    }
+
     hcOfEvent->AddHitsCollection( hcId, eventMap );
 }
 
@@ -117,14 +109,12 @@ void  CexmcSimpleEnergyDeposit::PrintAll( void )
     if ( nmbOfEntries == 0 )
         return;
 
-    G4cout << " --- MultiFunctionalDet " << detector->GetName() << G4endl;
-    G4cout << "     PrimitiveScorer " << GetName() << G4endl;
-    G4cout << "     Number of entries " << nmbOfEntries << G4endl;
+    PrintHeader( nmbOfEntries );
 
-    /* index is ever 0 */
-    for( std::map< G4int, G4double* >::iterator
-                                     itr( eventMap->GetMap()->begin() );
-         itr != eventMap->GetMap()->end(); ++itr )
+    /* index is always 0 */
+    for ( CexmcEnergyDepositCollectionData::iterator
+                         itr( eventMap->GetMap()->begin() );
+                                     itr != eventMap->GetMap()->end(); ++itr )
     {
         G4cout << "       energy deposit: " <<
                 G4BestUnit( *( itr->second ), "Energy" ) << G4endl;

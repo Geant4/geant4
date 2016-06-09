@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.hh,v 1.2 2008/10/24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorPropagationNavigator.hh,v 1.2 2008-10-24 14:00:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------

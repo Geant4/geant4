@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpProcessSubType.hh,v 1.4 2010/10/22 01:01:37 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpProcessSubType.hh,v 1.4 2010-10-22 01:01:37 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.5 2010/10/13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.5 2010-10-13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgbMaterialMixtureByWeight
@@ -65,14 +65,20 @@ G4Material* G4tgbMaterialMixtureByWeight::BuildG4Material()
   G4Material* mate = new G4Material( theTgrMate->GetName(),
                                      theTgrMate->GetDensity(),
                                      theTgrMate->GetNumberOfComponents(),
-                                     kStateUndefined, STP_Temperature );
+                                     theTgrMate->GetState(),
+                                     theTgrMate->GetTemperature(),
+                                     theTgrMate->GetPressure() );
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbMaterialMixtureByWeight::BuildG4Material() -"
            << " Constructing new G4Material:"
            << " " << theTgrMate->GetName()
-           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
+           << " " << theTgrMate->GetDensity()/g*cm3
+           << " " << theTgrMate->GetNumberOfComponents()
+           << " " << theTgrMate->GetState()
+           << " " << theTgrMate->GetTemperature()
+           << " " << theTgrMate->GetPressure() << G4endl;
   }
 #endif
   
@@ -112,6 +118,8 @@ G4Material* G4tgbMaterialMixtureByWeight::BuildG4Material()
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
     G4cout << " Constructing new G4Material by weight: " << *mate << G4endl; 
+    G4cout << " TEMPERATURE " << mate->GetTemperature()/kelvin
+           << " kelvin " << G4endl;
   }
 #endif      
 

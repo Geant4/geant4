@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc,v 1.12 2006/06/29 18:13:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3VolTableEntry.cc,v 1.12 2006-06-29 18:13:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -109,9 +109,11 @@ G3VolTableEntry::ReplaceDaughter(G3VolTableEntry* vteOld,
     if (fDaughters[i]->GetName() == vteOld->GetName()) index = i;
   }
   if (index<0) {
-    G4Exception(
-      "G3VolTableEntry::ReplaceDaughter: old daughter " +
-       vteOld->GetName() + " does not exist.");
+    G4String err_message = "Old daughter " + vteOld->GetName()
+                         + " does not exist.";
+    G4Exception("G3VolTableEntry::ReplaceDaughter()", "G3toG40007",
+                FatalException, err_message);
+    return;
   }      
   fDaughters[index] = vteNew;
 }
@@ -125,9 +127,11 @@ G3VolTableEntry::ReplaceMother(G3VolTableEntry* vteOld,
     if (fMothers[i]->GetName() == vteOld->GetName()) index = i;
   }
   if (index<0) {
-    G4Exception(
-      "G3VolTableEntry::ReplaceMother: old mother " +
-       vteOld->GetName() + " does not exist.");
+    G4String err_message = "Old mother " + vteOld->GetName()
+                         + " does not exist.";
+    G4Exception("G3VolTableEntry::ReplaceMother()", "G3toG40008",
+                FatalException, err_message);
+    return;
   }      
   fMothers[index] = vteNew;
 }
@@ -209,11 +213,9 @@ void G3VolTableEntry::SetHasMANY(G4bool hasMANY) {
 
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
   if (fG3Pos.size()>0 && copy>=0 && copy<G4int(fG3Pos.size())) {
-    G3Pos* tmp=0;
      std::vector<G3Pos*>::iterator it=fG3Pos.begin();
      for(G4int j=0;j<copy;j++) it++;
      if(it!=fG3Pos.end()) {
-         tmp = fG3Pos[copy];
          fG3Pos.erase(it);
      }
   }

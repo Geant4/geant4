@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.29 2010/08/09 14:38:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PrimaryTransformer.cc,v 1.29 2010-08-09 14:38:18 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -85,8 +85,9 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4double WV = primaryVertex->GetWeight();
 
 #ifdef G4VERBOSE
-  if(verboseLevel>1)
-  { 
+  if(verboseLevel>2) { 
+    primaryVertex->Print();
+  } else if (verboseLevel==1) {
     G4cout << "G4PrimaryTransformer::PrimaryVertex ("
            << X0 / mm << "(mm),"
            << Y0 / mm << "(mm),"
@@ -143,7 +144,9 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
 #endif
     G4DynamicParticle* DP = 
-      new G4DynamicParticle(partDef,primaryParticle->GetMomentum());
+      new G4DynamicParticle(partDef,
+			    primaryParticle->GetMomentumDirection(),
+			    primaryParticle->GetKineticEnergy());
     if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
     {
       if(nWarn<10)

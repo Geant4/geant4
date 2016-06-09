@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.11 2006/06/29 15:57:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelRunAction.cc,v 1.11 2006-06-29 15:57:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

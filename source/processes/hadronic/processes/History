@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2009/03/31 19:16:38 vnivanch Exp $
+$Id: History,v 1.6 2009-03-31 19:16:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,62 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+6 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-11)
+--------------------------------------------------------
+- G4WHadronElasticProcess - more accurate handl of low-energy particles
+
+4 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-10)
+--------------------------------------------------------
+- G4WHadronElasticProcess - cleanup 
+
+3 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-09)
+--------------------------------------------------------
+- G4WHadronElasticProcess - added change status if final energy
+    of primary particle is zero
+
+1 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-08)
+21 October 2011 Vladimir Ivantchenko (hadr-proc-V09-04-07)
+--------------------------------------------------------
+- G4WHadronElasticProcess - moved from coherent_elastic;
+    used G4HadronicException and try/catch mechanism; 
+    implemented random rotation of final state. 
+
+06 October 2011 Dennis Wright      (hadr-proc-V09-04-06)
+--------------------------------------------------------
+- replace Description() with ProcessDescription(std::ostream& outFile)
+  in all process classes.
+ 
+08 August 2011 Dennis Wright       (hadr-proc-V09-04-05)
+--------------------------------------------------------
+- add names of new .src files to sources.cmake
+
+02 August 2011 Dennis Wright       (hadr-proc-V09-04-04)
+--------------------------------------------------------
+- add Description() method to each process for documentation
+
+10 March 2011 G.Folger             (hadr-proc-V09-04-03)
+--------------------------------------------------------
+-  add Process fro anti-triton G4AntiTritonInelasticProcess.h
+
+25 February 2011 G.Folger          (hadr-proc-V09-04-02)
+--------------------------------------------------------
+-  fix compilation warnings in two new processes.
+
+23 February 2011  John Apostolakis (hadr-proc-V09-04-01)
+-----------------------------------------------------
+Added processes for light anti-ions: 
+  G4AntiAlphaInelasticProcess
+  G4AntiDeuteronInelasticProcess
+  G4AntiHe3InelasticProcess
+  G4AntiTritonInelasticProcess
+
+
+10 February 2011  Dennis Wright (hadr-proc-V09-04-00)
+-----------------------------------------------------
+- add G4MuonNuclearProcess which is meant to replace the old directly
+  implemented process G4MuNuclearInteraction with a process
+  implemented by separate model and cross section classes.
 
 31 Mar 2009 Vladimir Ivanchenko (hadr-proc-V09-02-00)
 ----------------------------------------------------

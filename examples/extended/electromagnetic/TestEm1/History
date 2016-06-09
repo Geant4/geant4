@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2010/11/09 21:00:43 asaim Exp $
+$Id: History,v 1.97 2010-11-09 21:00:43 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08-11-11 mma (testem1-V09-04-05)
+- modify SteppingVerbose for OutOfWorld
+     
+31-10-11 mma (testem1-V09-04-04)
+- PhysListEmStandard : msc95 by default
+     
+02-06-11 mma (testem1-V09-04-03)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+       
+30-05-11 mma (testem1-V09-04-02)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+07-04-11 mma (testem1-V09-04-01)
+- PhysicsList : set back default lowest production cut (990 eV)
+     
+05-04-11 mma (testem1-V09-04-00)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
+- PhysicsList : set lowest production cut to 100 eV
+- update SteppingVerbose
  
 09-11-10 M.Asai (testem1-V09-03-03)
 - Fix AIDA file option.

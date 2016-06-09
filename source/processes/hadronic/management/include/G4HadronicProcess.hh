@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh,v 1.42 2010/07/05 14:50:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicProcess.hh,v 1.43 2011-01-08 02:22:15 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -79,10 +79,22 @@ public:
   void RegisterMe(G4HadronicInteraction* a);
 
   // get cross section per element
-  virtual 
-  G4double GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
-				      const G4Element *anElement, 
-				      G4double aTemp );
+  inline
+  G4double GetElementCrossSection(const G4DynamicParticle * part, 
+				  const G4Element * elm, 
+				  const G4Material* mat = 0)
+  {
+    G4double x = theCrossSectionDataStore->GetCrossSection(part, elm, mat);
+    if(x < 0.0) { x = 0.0; }
+    return x;
+  }
+
+  // obsolete method to get cross section per element
+  inline
+  G4double GetMicroscopicCrossSection(const G4DynamicParticle * part, 
+				      const G4Element * elm, 
+				      const G4Material* mat = 0)
+  { return GetElementCrossSection(part, elm, mat); }
 
   // generic PostStepDoIt recommended for all derived classes
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
@@ -110,6 +122,12 @@ public:
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
 			   G4ForceCondition *);
 
+  // access to the target nucleus
+  inline const G4Nucleus* GetTargetNucleus() const
+  { return &targetNucleus; }
+  
+  virtual void ProcessDescription(std::ostream& outFile) const;
+ 
 protected:    
 
   // reset number of interaction length and save  
@@ -126,6 +144,11 @@ protected:
   { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
 							aMaterial,anElement);
   }
+
+  // access to the target nucleus
+  inline G4Nucleus* GetTargetNucleusPointer() 
+  { return &targetNucleus; }
+  
 
 public:
 
@@ -156,7 +179,16 @@ public:
   inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
   { return epCheckLevels; }
 
+  // access to the cross section data store
+  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
+    {return theCrossSectionDataStore;}
+
+  inline void MultiplyCrossSectionBy(G4double factor)
+  { aScaleFactor = factor; }
+
 protected:
+
+  void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
   // obsolete method will be removed
   inline const G4EnergyRangeManager &GetEnergyRangeManager() const
@@ -170,19 +202,15 @@ protected:
   inline G4HadronicInteraction *GetHadronicInteraction()
   { return theInteraction; }
     
-  // access to the cross section data store
-  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
-  { return theCrossSectionDataStore; }
-   
   // access to the cross section data set
   inline G4double GetLastCrossSection() 
   { return theLastCrossSection; }
 
 private:
-
-  void DumpState(const G4Track&, const G4String&);
     
   void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
+
+  void FillResult(G4HadFinalState * aR, const G4Track & aT);
 
   G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
 				      const G4Track & aTrack,

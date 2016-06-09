@@ -1,0 +1,70 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                       --- HepRandomEngine ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+
+// =======================================================================
+// Gabriele Cosmo - Created: 5th September 1995
+//                - Added == and != operators: 19th November 1996
+//                - Moved seeds table to HepRandom: 19th March 1998
+// =======================================================================
+
+#include <cmath>
+
+namespace CLHEP {
+
+inline bool HepRandomEngine::operator==(const HepRandomEngine& engine) {
+  return (this==&engine);
+}
+
+inline bool HepRandomEngine::operator!=(const HepRandomEngine& engine) {
+  return (this!=&engine);
+}
+
+inline double HepRandomEngine::exponent_bit_32()  {
+  static double exponent_bit_32 = std::pow(2.0, 32.0);
+  return exponent_bit_32;
+}
+
+inline double HepRandomEngine::mantissa_bit_12()  {
+  static double mantissa_bit_12 = std::pow(0.5, 12.0);
+  return mantissa_bit_12;
+}
+
+inline double HepRandomEngine::mantissa_bit_24()  {
+  static double mantissa_bit_24 = std::pow(0.5, 24.0);
+  return mantissa_bit_24;
+}
+
+inline double HepRandomEngine::twoToMinus_32()  {
+  static double twoToMinus_32 = std::ldexp(1.0, -32);
+  return twoToMinus_32;
+}
+
+inline double HepRandomEngine::twoToMinus_48()  {
+  static double twoToMinus_48 = std::ldexp(1.0, -48);
+  return twoToMinus_48;
+}
+
+inline double HepRandomEngine::twoToMinus_49()  {
+  static double twoToMinus_49 = std::ldexp(1.0, -49);
+  return twoToMinus_49;
+}
+
+inline double HepRandomEngine::twoToMinus_53()  {
+  static double twoToMinus_53 = std::ldexp(1.0, -53);
+  return twoToMinus_53;
+}
+
+inline double HepRandomEngine::nearlyTwoToMinus_54()  {
+  static double nearlyTwoToMinus_54 = std::ldexp(1.0,  -54)
+                                          - std::ldexp(1.0, -100);
+  return nearlyTwoToMinus_54;
+}
+
+}  // namespace CLHEP

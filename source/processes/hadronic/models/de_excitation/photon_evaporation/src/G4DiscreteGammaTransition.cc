@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.cc,v 1.12 2010/11/17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DiscreteGammaTransition.cc,v 1.12 2010-11-17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -58,6 +58,10 @@
 //              Removed unphysical corretions of gamma energy; fixed default particle 
 //              as gamma; do not subtract bounding energy in case of electron emmision
 //
+//		  03 November 2011, L. Desorgher
+//				Extend the use of the code for Z>100 by not calling G4AtomicShells::GetBindingEnergy for Z>100
+//				For Z>100 the binding energy is set to 0, the atomic relaxation is not simulated in G4RadDecay
+//
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
@@ -69,14 +73,6 @@
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"
 
-G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level): 
-  _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
-{ 
-  _levelManager = 0;
-}
-
-//JMQ: now A is also needed in the constructor
-//G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A): 
   _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
   _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
@@ -87,10 +83,8 @@ G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level
   _tolerance = CLHEP::keV;
 }
 
-
 G4DiscreteGammaTransition::~G4DiscreteGammaTransition() 
-{ }
-
+{}
 
 void G4DiscreteGammaTransition::SelectGamma()
 {
@@ -185,6 +179,12 @@ void G4DiscreteGammaTransition::SelectGamma()
 		iShell = iShell -2;
 	      }
 	    }
+	    //L.Desorgher 02/11/2011
+	    //Atomic shell information is available in Geant4 only up top Z=100
+	    //To extend the photo evaporation code to Z>100  the call to G4AtomicShells::GetBindingEnergy should
+	    // be forbidden for Z>100
+	    _bondE = 0.;
+	    if (_nucleusZ <=100)
 	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
 	    if (_verbose > 0) {
 	      G4cout << "G4DiscreteGammaTransition: _nucleusZ = " <<_nucleusZ 

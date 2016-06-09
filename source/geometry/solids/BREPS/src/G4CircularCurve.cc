@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.cc,v 1.11 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CircularCurve.cc,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -159,8 +159,7 @@ void G4CircularCurve::IntersectRay2D(const G4Ray&,
 
 G4int G4CircularCurve::IntersectRay2D(const G4Ray&)
 {
-  G4Exception("G4CircularCurve::IntersectRay2D()",
-              "NotApplicable", FatalException,
-              "G4CircularCurve is always 3D!");
+  G4Exception("G4CircularCurve::IntersectRay2D()", "GeomSolids0002",
+              FatalException,"G4CircularCurve is always 3D!");
   return 0;
 }

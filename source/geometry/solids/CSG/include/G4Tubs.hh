@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.24 2010/10/19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Tubs.hh,v 1.24 2010-10-19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,7 +85,7 @@ class G4Tubs : public G4CSGSolid
       //
       // Constructs a tubs with the given name and dimensions
 
-   ~G4Tubs();
+    virtual ~G4Tubs();
       //
       // Destructor
 
@@ -164,7 +164,7 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
 
-  private:
+  protected:
 
     G4ThreeVectorList*
     CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
@@ -186,12 +186,12 @@ class G4Tubs : public G4CSGSolid
       //
       // Recompute relevant trigonometric values and cache them
 
-    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+    virtual G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       //
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
-  private:
+  protected:
 
     // Used by distanceToOut
     //
@@ -208,7 +208,7 @@ class G4Tubs : public G4CSGSolid
     G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
       //
       // Radial and angular dimensions
-   
+
     G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi;
       //

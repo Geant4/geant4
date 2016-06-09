@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.cc,v 1.3 2010/04/12 18:57:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4AdjointhMultipleScattering.cc,v 1.3 2010-04-12 18:57:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //
@@ -55,6 +55,10 @@ G4AdjointhMultipleScattering::G4AdjointhMultipleScattering(const G4String& proce
   isInitialized = false;  
   isIon         = false;
   SetStepLimitType(fMinimal);
+
+  dtrl=0.;
+  lambdalimit=0.;
+  samplez=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,4 +149,3 @@ void G4AdjointhMultipleScattering::PrintInfo()
 }
 */
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -26,71 +26,44 @@
 // by JPW, working, but to be cleaned up. @@@@
 // D. Wright, 23-Dec-2006 Added isotope dependence
 // G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
 //
 
 #ifndef G4NeutronInelasticCrossSection_h
 #define G4NeutronInelasticCrossSection_h
 
-#include "globals.hh"
-#include "G4Neutron.hh"
-
 // Class Description
-// Cross-sections for neutron nuclear scattering from 14 MeV up to 20 GeV, getting the
-// low energy threshold behaviour right.
+// Cross sections for neutron-nucleus scattering from 14 MeV up to 20 GeV,
+// getting the low energy threshold behavior right.
 // H.P. Wellisch (TRIUMF), M. Laidlaw (British Columbia U.). 1996. 
 // Class Description - End
 
 #include "G4VCrossSectionDataSet.hh"
+#include "globals.hh"
 
 class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-   
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
-   {
-     G4bool result = false;
-     if(( aPart->GetDefinition()==G4Neutron::Neutron()) &&
-        ( aPart->GetKineticEnergy()<100*TeV) &&
-          aPart->GetKineticEnergy()>19.9*MeV) result = true;
-     if(aEle->GetZ()<2) result = false;
-     return result;
-   }
+public:
 
-   G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
-                          G4int ZZ, G4int /*AA*/)
-   {
-     G4bool result = false;
-     if(( aPart->GetDefinition() == G4Neutron::Neutron()) &&
-        ( aPart->GetKineticEnergy() < 100*TeV) &&
-          aPart->GetKineticEnergy() > 19.9*MeV) result = true;
-     if(ZZ < 2) result = false;
-     return result;
-   }
- 
+  G4NeutronInelasticCrossSection();
+  ~G4NeutronInelasticCrossSection();
+    
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle* aPart, 
+			     G4int Z, const G4Material*);
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
-   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                 G4int ZZ, G4int AA,
-                                 G4double /*aTemperature*/)
-   {
-     return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
-   }
-  
+  G4double GetCrossSection(G4double kineticEnergy, G4int Z, G4int A);
 
-   G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
+private:
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
-
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4NeutronInelasticCrossSection: uses formula"<<G4endl;}
+G4double minEnergy;
+G4double maxEnergy;
 
 };
 

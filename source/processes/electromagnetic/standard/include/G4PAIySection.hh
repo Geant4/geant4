@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.hh,v 1.3 2010/11/21 10:55:44 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PAIySection.hh,v 1.3 2010-11-21 10:55:44 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIySection.hh -- header file
@@ -38,7 +38,8 @@
 // History:
 //
 // 01.10.07, V.Ivanchenko create using V.Grichine G4PAIxSection class
-// 21.11.10, V.Grichine, fVerbose and SetVerbose added
+// 21.11.10, V.Grichine   fVerbose and SetVerbose added
+// 28.10.11, V.Ivanchenko Migration of exceptions to the new design 
 
 #ifndef G4PAIYSECTION_HH
 #define G4PAIYSECTION_HH
@@ -61,6 +62,8 @@ public:
 		  G4double maxEnergyTransfer, 
 		  G4double betaGammaSq);
 	            
+  void     ComputeLowEnergyCof(const G4Material* material);
+
   void InitPAI();
 
   void NormShift( G4double betaGammaSq );
@@ -139,11 +142,13 @@ public:
   inline G4double GetIntegralCerenkov(G4int i) const;
   inline G4double GetIntegralPlasmon(G4int i) const;
 
-  void SetVerbose(G4int v){fVerbose = v;};
+  inline void SetVerbose(G4int v) { fVerbose = v; };
 
 private :
 
-// Local class constants
+  void CallError(G4int i, const G4String& methodName) const;
+
+  // Local class constants
  
   static const G4double fDelta; // energy shift from interval border = 0.001
   static const G4double fError; // error in lin-log approximation = 0.005
@@ -159,6 +164,7 @@ private :
 
   G4double fDensity;            // Current density
   G4double fElectronDensity;    // Current electron (number) density
+  G4double fLowEnergyCof;    // Correction cof for low energy region
   G4int    fSplineNumber;       // Current size of spline
   G4int    fVerbose;       // verbose flag
 
@@ -206,47 +212,32 @@ inline G4double G4PAIySection::GetLorentzFactor(G4int j) const
 
 inline G4double G4PAIySection::GetSplineEnergy(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-      G4Exception("Invalid argument in G4PAIySection::GetSplineEnergy");
-   }
-   return fSplineEnergy[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetSplineEnergy"); }
+  return fSplineEnergy[i];
 }
 	  
 inline G4double G4PAIySection::GetIntegralPAIySection(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIySection::GetIntegralPAIySection");
-   }
-   return fIntegralPAIySection[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPAIySection"); }
+  return fIntegralPAIySection[i];
 }
 
 inline G4double G4PAIySection::GetIntegralPAIdEdx(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIySection::GetIntegralPAIySection");
-   }
-   return fIntegralPAIdEdx[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPAIdEdx"); }
+  return fIntegralPAIdEdx[i];
 }
 
 inline G4double G4PAIySection::GetIntegralCerenkov(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIySection::GetIntegralCerenkov");
-   }
-   return fIntegralCerenkov[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralCerenkov"); }
+  return fIntegralCerenkov[i];
 }
 
 inline G4double G4PAIySection::GetIntegralPlasmon(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIySection::GetIntegralPlasmon");
-   }
-   return fIntegralPlasmon[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPlasmon"); }
+  return fIntegralPlasmon[i];
 }
 
 #endif   

@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2010/11/09 21:51:07 gum Exp $
+$Id: History,v 1.78 2010-11-09 21:51:07 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 November 11: G.Folger     (xrays-V09-04-10)
+- G4VXTRenergyLoss.cc: migrate to new g4Exception, fix compilation warning
+
+16 November 11: P.Gumplinger (xrays-V09-04-09)
+- remove reminder message from G4Cerenkov constructor
+- G4VXTRenergyLoss.cc - changed:
+    result=x1+(position-y1)*(x2-x1)/(y2-y1)->result=x1+(x2-x1)*G4UniformRand();
+  and added:
+    if(fAngleRadDistr) {  angleSum  += ......
+
+13 October 11: P.Gumplinger (xrays-V09-04-08)
+- modify to work with materials-V09-04-14
+
+06 October 11: P.Gumplinger (xrays-V09-04-07)
+- update G4Exception syntax in G4Scintillation.cc, G4ForwardXrayTR.cc and
+  G4VXTRenergyLoss.cc
+
+19 August 11: G.Cosmo (xrays-V09-04-06)
+- G4ForwardXrayTR: made 'fProtonEnergyVector' non static pointer; allocate
+  and deallocate it directly inside class constructors/destructor.
+
+30 July 11: V.Ivant (xrays-V09-04-05)
+- G4SynchrotronRadiation, G4SynchrotronRadiationInMat - fixed 
+  length of C-arrays for the interface with EM field (addressed 
+  bug report #1236)
+
+12 July 11: V.Ivant (xrays-V09-04-04)
+- G4VXTRenergyLoss, G4TransitionRadiation, G4SynchrotronRadiation,
+  G4ForwardXrayTR - fixed the Coverity tool warnings
+
+08 May 11: V.Ivant (xrays-V09-04-03)
+08 May 11: V.Ivant (xrays-V09-04-02)
+- G4TransparentRegXTRadiator - fixed new gcc-4.6.0 warnings
+
+16 May 11: V.Ivant (xrays-V09-04-01)
+- G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator, 
+  G4VXTRenergyLoss - fixed gcc-4.6.0 warnings
+
+05 May 11: V.Ivanchenko (xrays-V09-04-00)
+- fixed Coverity warnings
 
 09 November 10: P. Gumplinger (xrays-V09-03-06)
 - fix coding error in G4Scintillation.cc

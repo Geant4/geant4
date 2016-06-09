@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.19 2010/11/11 17:42:50 stesting Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: GammaRayTel.cc,v 1.19 2010-11-11 17:42:50 stesting Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -113,10 +113,9 @@ int main(int argc, char** argv)
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  G4UIExecutive* ui = 0;
 #ifdef G4UI_USE
+  G4UIExecutive* ui = 0;
   ui = new G4UIExecutive(argc, argv);
-#endif
 
   if (ui)
     {
@@ -126,12 +125,14 @@ int main(int argc, char** argv)
 
       if(argc>1)
 	{
+#endif
 	  G4String command = "/control/execute ";
 	  for (int i=2; i<=argc; i++) 
 	    {
 	      G4String macroFileName = argv[i-1];
 	      UImanager->ApplyCommand(command+macroFileName);
 	    }
+#ifdef G4UI_USE
 	}
       else  
 	{
@@ -140,6 +141,7 @@ int main(int argc, char** argv)
 	}
       delete ui;
     }
+#endif  
 
   // Job termination
 #ifdef G4VIS_USE

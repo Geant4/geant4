@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.14 2010/04/03 00:40:45 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronicInteraction.hh,v 1.14 2010-04-03 00:40:45 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -108,7 +108,7 @@ public: // With description
     
   void SetMaxEnergy( G4double anEnergy, const G4Material *aMaterial );
   
-  inline const G4HadronicInteraction *GetMyPointer() const
+  inline const G4HadronicInteraction* GetMyPointer() const
   { return this; }
 
   inline G4int GetVerboseLevel() const
@@ -119,9 +119,9 @@ public: // With description
 
   inline const G4String& GetModelName() const
   { return theModelName; }
-    
-  void DeActivateFor( const G4Material *aMaterial );
-    
+
+  void DeActivateFor(const G4Material* aMaterial);
+ 
   inline void ActivateFor( const G4Material *aMaterial ) 
   { 
     Block(); 
@@ -153,13 +153,14 @@ public: // With description
   { return ( this != (G4HadronicInteraction *) &right ); }
 
 
-  inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
-  { return epCheckLevels; }
+  virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
     
   inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;
     epCheckLevels.second = absoluteLevel; }
-    
+
+  virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
     
   G4HadronicInteraction(const G4HadronicInteraction &right );

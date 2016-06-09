@@ -23,11 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeKzeroNChannel.cc,v 1.6 2010/12/15 07:40:27 gunter Exp $
+// $Id: G4CascadeKzeroNChannel.cc,v 1.6 2010-12-15 07:40:27 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadeKzeroNChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -607,4 +612,4 @@ namespace {
 G4CascadeKzeroNChannelData::data_t
 G4CascadeKzeroNChannelData::data(k0n2bfs, k0n3bfs, k0n4bfs,
 				 k0n5bfs, k0n6bfs, k0n7bfs,
-				 k0nCrossSections, "KzeroN");
+				 k0nCrossSections, k0*neu, "KzeroN");

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.1 2010/09/16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -55,7 +55,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "rdecay1";
   fileType    = "root";
-  fileOption  = "export=root";
+  fileOption  = "";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -165,7 +165,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" , "9" };
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
   const G4String title[] = 
           { "dummy",				//0
             "energy spectrum: e+ e-",		//1
@@ -173,10 +173,9 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: gamma",		//3		  
             "energy spectrum: alpha",		//4
             "energy spectrum: ions",		//5
-            "energy balance",			//6	    	    
+            "total kinetic energy (Q)",		//6	    	    
             "momentum balance",			//7
-            "total time of life of decay chain",//8
-            "activity in Bq/g"			//9	    	    
+            "total time of life of decay chain"	//8
           };
 
 

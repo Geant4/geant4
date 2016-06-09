@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.21 2010/11/26 13:30:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GenericTrap.cc,v 1.21 2010-11-26 13:30:26 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -36,6 +36,10 @@
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
 //   Adapted from Root Arb8 implementation by Andrei Gheata, CERN 
+//
+// History :
+// 04 August 2011 T.Nikitina Add SetReferences() and InvertFacets()
+//                to CreatePolyhedron() for Visualisation of Boolean       
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -85,16 +89,16 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
 
   if ( G4int(vertices.size()) != fgkNofVertices )
   {
-    G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
-                FatalException, "Number of vertices != 8");
+    G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
+                FatalErrorInArgument, "Number of vertices != 8");
   }            
   
   // Check dZ
   // 
   if (hz < kCarTolerance)
   {
-     G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
-                FatalException, "dZ is too small or negative");
+     G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
+                FatalErrorInArgument, "dZ is too small or negative");
   }           
  
   // Check Ordering and Copy vertices 
@@ -119,11 +123,12 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
       length = (fVertices[k]-fVertices[k-1]).mag();
       if ( ( length < min_length) && ( length > kCarTolerance ) )
       {
-        G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
-                    JustWarning,
-                    "Length segment is too small, vertices will be collapsed");
-        G4cerr << "Distance between " << fVertices[k-1] << " and "
-               << fVertices[k] << " is only " << length << " mm !" << G4endl; 
+        std::ostringstream message;
+        message << "Length segment is too small." << G4endl
+                << "Distance between " << fVertices[k-1] << " and "
+                << fVertices[k] << " is only " << length << " mm !"; 
+        G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids1001",
+                    JustWarning, message, "Vertices will be collapsed.");
         fVertices[k]=fVertices[k-1];
       }
     }
@@ -452,7 +457,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
   //
   if ( noSurfaces == 0 )
   {
-    G4Exception("G4GenericTrap::SurfaceNormal(p)", "Notification",
+    G4Exception("G4GenericTrap::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
     sumnorm=apprnorm;
     // Add Approximative Surface Normal Calculation?
@@ -1103,23 +1108,23 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
         *n=G4ThreeVector(0,0,-1);
         break;
       default:
-        G4int oldprc = G4cout.precision(16);
-        G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "distmin = "    << distmin/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(oldprc);
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid." << G4endl
+                << "Position:" << G4endl
+                << "  p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "  p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "  p.z() = "   << p.z()/mm << " mm" << G4endl
+                << "Direction:" << G4endl
+                << "  v.x() = "   << v.x() << G4endl
+                << "  v.y() = "   << v.y() << G4endl
+                << "  v.z() = "   << v.z() << G4endl
+                << "Proposed distance :" << G4endl
+                << "  distmin = " << distmin/mm << " mm";
+        message.precision(oldprc);
         G4Exception("G4GenericTrap::DistanceToOut(p,v,..)",
-                    "Notification", JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+                    "GeomSolids1002", JustWarning, message);
         break;
      }
   }
@@ -1394,6 +1399,7 @@ G4VSolid* G4GenericTrap::Clone() const
 
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " *** \n"
      << "    =================================================== \n"
@@ -1407,7 +1413,8 @@ std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
        << "   vx = " << fVertices[i].x()/mm << " mm" 
        << "   vy = " << fVertices[i].y()/mm << " mm" << G4endl;
   }
-  
+  os.precision(oldprc);
+
   return os;
 } 
 
@@ -1615,15 +1622,14 @@ G4bool G4GenericTrap::ComputeIsTwisted()
    
     if ( std::fabs(twist_angle) > 0.5*pi+kCarTolerance )
     {
-      G4String errorDescription = "WarningSetup in \"";
-      errorDescription += GetName();
-      errorDescription += "\"";
-      G4String errorMessage = "Twisted Angle is bigger than 90 degrees.\n";
-      errorMessage += " Potential problem of malformed Solid !";
-      G4cerr << "TwistANGLE= " << twist_angle
-             << "*rad  for lateral plane N= " << i << G4endl;
-      G4Exception("G4GenericTrap::ComputeIsTwisted()", errorDescription,
-                  JustWarning, errorMessage);
+      std::ostringstream message;
+      message << "Twisted Angle is bigger than 90 degrees - " << GetName()
+              << G4endl
+              << "     Potential problem of malformed Solid !" << G4endl
+              << "     TwistANGLE = " << twist_angle
+              << "*rad  for lateral plane N= " << i;
+      G4Exception("G4GenericTrap::ComputeIsTwisted()", "GeomSolids1002",
+                  JustWarning, message);
     }
   }
 
@@ -1651,21 +1657,20 @@ G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
   }
   if (sum1*sum2 < -fgkTolerance)
   {
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-
-    G4Exception("G4GenericTrap::CheckOrder()", errorDescription, FatalException,
-                "Lower/upper faces defined with opposite clockwise.");
+     std::ostringstream message;
+     message << "Lower/upper faces defined with opposite clockwise - "
+             << GetName();
+     G4Exception("G4GenericTrap::CheckOrder()", "GeomSolids0002",
+                FatalException, message);
    }
    
    if ((sum1 > 0.)||(sum2 > 0.))
    {
-     G4String errorDescription = "WarningSetup in \"";
-     errorDescription += GetName();
-     errorDescription += "\"";
-     G4Exception("G4GenericTrap::CheckOrder()", errorDescription, JustWarning,
-       "Vertices must be defined in clockwise in XY planes! Re-ordering.. ");
+     std::ostringstream message;
+     message << "Vertices must be defined in clockwise XY planes - "
+             << GetName();
+     G4Exception("G4GenericTrap::CheckOrder()", "GeomSolids1001",
+                 JustWarning,message, "Re-ordering...");
      clockwise_order = false;
    }
 
@@ -1704,12 +1709,10 @@ G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
 
    if (illegal_cross)
    {
-      G4String errorDescription = "InvalidSetup in \"";
-      errorDescription += GetName();
-      errorDescription += "\"";
+      std::ostringstream message;
+      message << "Malformed polygone with opposite sides - " << GetName();
       G4Exception("G4GenericTrap::CheckOrderAndSetup()",
-                  errorDescription, FatalException,
-                  "Malformed polygone with opposite sides.");
+                  "GeomSolids0002", FatalException, message);
    }
    return clockwise_order;
 }
@@ -1895,11 +1898,10 @@ G4GenericTrap::MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices,
   {
     // Should not happen, as vertices should have been reordered at this stage
 
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-    G4Exception("G4GenericTrap::MakeDownFacet", errorDescription,
-                FatalException, "Vertices in wrong order.");
+    std::ostringstream message;
+    message << "Vertices in wrong order - " << GetName();
+    G4Exception("G4GenericTrap::MakeDownFacet", "GeomSolids0002",
+                FatalException, message);
   }
   
   return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
@@ -1933,11 +1935,10 @@ G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices,
   {
     // Should not happen, as vertices should have been reordered at this stage
 
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-    G4Exception("G4GenericTrap::MakeUpFacet", errorDescription,
-                FatalException, "Vertices in wrong order.");
+    std::ostringstream message;
+    message << "Vertices in wrong order - " << GetName();
+    G4Exception("G4GenericTrap::MakeUpFacet", "GeomSolids0002",
+                FatalException, message);
   }
   
   return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
@@ -2203,6 +2204,9 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
     polyhedron->AddFacet(6+is,5+is,1+is,2+is); 
   }
   polyhedron->AddFacet(5+sub4,6+sub4,7+sub4,8+sub4);  //Z-plane
+
+  polyhedron->SetReferences();
+  polyhedron->InvertFacets();
 
   return (G4Polyhedron*) polyhedron;
 }

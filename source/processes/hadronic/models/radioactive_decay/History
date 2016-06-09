@@ -13,14 +13,133 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 November 2011  L.Desorgher(radioactive_decay-V09-04-14)
+---------------------------------
+-- G4NuclearDecayChannel.cc: add initialisation of dynamicDaughter  in line 455 to avoid
+   segmentation fault for some decays. 
+
+20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-13)
+---------------------------------
+-- G4NuclearDecayChannel.cc: add check if deexcitation is enabled
+
+20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-12)
+---------------------------------
+-- G4NuclearDecayChannel.cc:
+        - migration to the new design of atomic deexcitation,
+          activation of deexcitation via EM UI commands or
+          G4EmProcessOptions as it is shown in EM examples
+-- GNUmakefile and source.cmake - dependence on processes/cuts is added
+
+03 November 2011  Laurent Desorgher(radioactive_decay-V09-04-11)
+---------------------------------
+--G4NucleusLimits.cc:
+	-Suppress the Z<100 limit
+--G4RadioactiveDecay:
+	-Add the reading of Spontaneous Fission mode from data files
+--G4RadioactiveDecayMode:
+	-Add SpFission mode 
+
+18 October 2011 Laurent Desorgher(radioactive_decay-V09-04-10)
+---------------------------------
+--G4RadioactiveDecay:
+		-Add possibility for the user to load its own decay file.
+		-Set halflifethreshold negative by default to allow the tracking of all
+	   								excited nuclei resulting from a radioactive decay
+--G4RadioactiveDecayChannel:
+		-Correction to allow the atomic relaxation of de-excited nuclei produce also during beta and alpha decay.
+		 Problem ersaed and solution proposed by Ko Abe 
+--G4RadioactiveDecayMessenger:
+		-Add macro commands  /grdm/setRadioactiveDecayFile and  /grdm/setPhotoEvaporationFile
+
+26 September 2011  Dennis Wright  (radioactive_decay-V09-04-09)
+---------------------------------------------------------------
+- fix compiler bug in G4BetaDecayCorrections switch/case
+- change exception codes to HAD_RDM_00n
+
+15 September 2011  Dennis Wright  (radioactive_decay-V09-04-08)
+---------------------------------------------------------------
+- replace G4HadronicException with G4Exception.  Files affected:
+  G4RadioactiveDecay.cc, G4RIsotopeTable.cc
+
+15 September 2011  Dennis Wright  (radioactive_decay-V09-04-07)
+---------------------------------------------------------------
+- add G4BetaDecayType.hh, .cc and G4BetaDecayCorrections.hh, .cc names
+  to sources.cmake
+
+- upgrade to new G4Exception.  Files affected: G4RadioactiveDecay.cc,
+  G4NuclearDecayChannel.cc
+ 
+9 September 2011  Dennis Wright  (radioactive_decay-V09-04-06)
+--------------------------------------------------------------
+- G4RadioactiveDecay.cc: mistakenly removed H. Kurasige's local time fix
+  from tag -04.  Re-instate it here.
+   
+9 September 2011  Dennis Wright  (radioactive_decay-V09-04-05)
+--------------------------------------------------------------
+- G4RadioactiveDecay.hh, .cc: add new Fermi function and forbidden beta
+    decay spectral shapes
+- create G4BetaDecayType, an enum of beta transition types
+- create G4BetaDecayCorrections, a class containing new Fermi function and
+    forbidden transition calculations
+
+9 July 2011  Dennis Wright  (radioactive_decay-V09-04-04)
+---------------------------------------------------------
+- G4RadioactiveDecay.cc : add H. Kurasige's fix of local decay time
+  (bug report 1224)
+       
+5 June 2011  Dennis Wright  (radioactive_decay-V09-04-03)
+----------------------------------------------------------------
+- G4RadioactiveDecay.cc: set process subtype (fRadioactiveDecay = 211)
+
+1 June 2011  Michael Kelsey (SLAC) (radioactive_decay-V09-04-02)
+----------------------------------------------------------------
+- G4RadiactiveDecay:  Add data members and Set/Get functions to support
+  directional biasing ("collimation") of visible decay daughters (e+, e-,
+  gamma, neutron, and alphas, but not neutrinos or the residual nucleus).
+
+- G4RadiactiveDecaymessenger:  Add commands to interface with directional
+  biasing.
+
+31 May 2011  L.Desorgher (radioactive_decay-V09-04-01)
+------------------------------------------------------
+- Fixing to bug 1662 (remove of a warning).
+  Adding of a check for maximum shell number, in line 438-440 
+  of G4NuclearDecayChannel. 
+
+19 May 2011  Dennis Wright (SLAC) (radioactive_decay-V09-04-00)
+---------------------------------------------------------------
+- G4RadioactiveDecay.cc: fix gcc 4.6 warning: variable j set but not
+  used
+ 
+ 3 December 2010  Dennis Wright (SLAC) (radioactive_decay-V09-03-05)
+--------------------------------------------------------------------
+- G4NuclearDecayChannel: remove unused variables BetaSimple, FermiFN
+- G4RadioactiveDecay::LoadDecayTable(): initialize ModeTotalBR[] to 0.0
+- G4RadioactiveDecay::AddDecayRateTable(): delete theDecayTable to fix
+    memory leak
+- G4RadioactiveDecay::SetSourceTimeProfile(): fix array overrun, change
+    SBin[99], SProfile[99] to SBIN[100], SProfile[100]
+- G4RadioactiveDecay::SetDecayBias(): fix array overrun, change
+    DBin[99], DProfile[99] to DBIN[100], DProfile[100]
+- G4RadioactiveDecay::DecayIt(): to avoid possible dereferencing of 
+    zero ptr when in branching ratio bias mode, fill tempprods as if no 
+    biasing active
+
+- G4RadioactiveDecayRate ctor: initialize Z, A, E, generation and
+    verboseLevel to 0
+
 18 November 2010  F.Lei (radioactive_decay-V09-03-04)
-- src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with gcc4.5.1
+-----------------------------------------------------
+- src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with 
+  gcc4.5.1
 
 17 November 2010  F.Lei (radioactive_decay-V09-03-03)
 - Completed the implementation of generating the activity table in VR mode
 - Set the default h-l threshold to 1 micros in VR mode.
 - General improvement in VR mode implementation.  
-- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available at all states. 
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available
+  at all states. 
 
 11 November 2010  F.Lei
 - further updates to G4RadioactivityTable.hh .cc and G4RadioactiveDecay.hh .cc

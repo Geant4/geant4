@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.14 2007/11/07 17:13:19 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleGun.cc,v 1.14 2007-11-07 17:13:19 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // G4ParticleGun
@@ -76,32 +76,46 @@ G4ParticleGun::~G4ParticleGun()
 
 G4ParticleGun::G4ParticleGun(const G4ParticleGun& /*right*/)
 :G4VPrimaryGenerator()
-{ G4Exception("G4ParticleGun : Copy constructor should not be used."); }
+{ G4Exception(
+  "G4ParticleGun::G4ParticleGun","Event0191",FatalException,
+  "G4ParticleGun : Copy constructor should not be used."); }
 
 const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun& right)
-{ G4Exception("G4ParticleGun : Equal operator should not be used."); return right; }
+{ G4Exception(
+  "G4ParticleGun::operator=","Event0192",FatalException,
+  "G4ParticleGun : Equal operator should not be used.");
+  return right; }
 
 G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
-{ G4Exception("G4ParticleGun : == operator should not be used."); return true; }
+{ G4Exception(
+  "G4ParticleGun::operator==","Event0193",FatalException,
+  "G4ParticleGun : == operator should not be used.");
+  return true; }
 
 G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
-{ G4Exception("G4ParticleGun : == operator should not be used."); return false; }
+{ G4Exception(
+  "G4ParticleGun::operator!=","Event0193",FatalException,
+  "G4ParticleGun : != operator should not be used.");
+  return false; }
 
 void G4ParticleGun::SetParticleDefinition
                  (G4ParticleDefinition * aParticleDefinition)
 { 
   if(!aParticleDefinition)
   {
-    G4Exception("G4ParticleGun::SetParticleDefinition()","Event00003",FatalException,
-     "Null pointer is given.");
+    G4Exception("G4ParticleGun::SetParticleDefinition()","Event0101",
+     FatalException,"Null pointer is given.");
   }
   if(aParticleDefinition->IsShortLived())
   {
     if(!(aParticleDefinition->GetDecayTable()))
     {
-      G4cerr << "G4ParticleGun does not support shooting a short-lived particle without a valid decay table." << G4endl;
-      G4cerr << "G4ParticleGun::SetParticleDefinition for "
-             << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
+      G4ExceptionDescription ED;
+      ED << "G4ParticleGun does not support shooting a short-lived particle without a valid decay table." << G4endl;
+      ED << "G4ParticleGun::SetParticleDefinition for "
+         << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
+      G4Exception("G4ParticleGun::SetParticleDefinition()","Event0102",
+      JustWarning,ED);
       return;
     }
   }
@@ -205,20 +219,16 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
 
   // create new primaries and set them to the vertex
   G4double mass =  particle_definition->GetPDGMass();
-  G4double energy = particle_energy + mass;
-  G4double pmom = std::sqrt(energy*energy-mass*mass);
-  G4double px = pmom*particle_momentum_direction.x();
-  G4double py = pmom*particle_momentum_direction.y();
-  G4double pz = pmom*particle_momentum_direction.z();
-  for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ )
-  {
+  for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ ){
     G4PrimaryParticle* particle =
-      new G4PrimaryParticle(particle_definition,px,py,pz);
+      new G4PrimaryParticle(particle_definition);
+    particle->SetKineticEnergy( particle_energy );
     particle->SetMass( mass );
+    particle->SetMomentumDirection( particle_momentum_direction );
     particle->SetCharge( particle_charge );
     particle->SetPolarization(particle_polarization.x(),
-                               particle_polarization.y(),
-                               particle_polarization.z());
+			      particle_polarization.y(),
+			      particle_polarization.z());
     vertex->SetPrimary( particle );
   }
 

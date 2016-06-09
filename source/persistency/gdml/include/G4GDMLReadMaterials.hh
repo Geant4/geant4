@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.11 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadMaterials.hh,v 1.11 2009-04-24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLReadMaterials
@@ -70,6 +70,7 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine
    G4double DRead(const xercesc::DOMElement* const);
    G4double PRead(const xercesc::DOMElement* const);
    G4double TRead(const xercesc::DOMElement* const);
+   G4double MEERead(const xercesc::DOMElement* const);
    void ElementRead(const xercesc::DOMElement* const);
    G4double FractionRead(const xercesc::DOMElement* const,G4String&);
    void IsotopeRead(const xercesc::DOMElement* const);

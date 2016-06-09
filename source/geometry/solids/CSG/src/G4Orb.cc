@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.35 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Orb.cc,v 1.35 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
 //
@@ -67,8 +67,6 @@ enum ESide {kNull,kRMax};
 enum ENorm {kNRMax};
 
 
-const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check positive radius
@@ -78,6 +76,8 @@ G4Orb::G4Orb( const G4String& pName, G4double pRmax )
 : G4CSGSolid(pName), fRmax(pRmax)
 {
 
+  const G4double fEpsilon = 2.e-11;  // relative tolerance of fRmax
+
   G4double kRadTolerance
     = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
@@ -85,7 +85,7 @@ G4Orb::G4Orb( const G4String& pName, G4double pRmax )
   //
   if ( pRmax < 10*kCarTolerance )
   {
-    G4Exception("G4Orb::G4Orb()", "InvalidSetup", FatalException,
+    G4Exception("G4Orb::G4Orb()", "GeomSolids0002", FatalException,
                 "Invalid radius > 10*kCarTolerance.");
   }
   fRmaxTolerance =  std::max( kRadTolerance, fEpsilon*fRmax);
@@ -170,7 +170,7 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
     G4double yoffset,yMin,yMax;
     G4double zoffset,zMin,zMax;
 
-    G4double diff1,diff2,maxDiff,newMin,newMax;
+    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
     G4double xoff1,xoff2,yoff1,yoff2;
 
     xoffset=pTransform.NetTranslation().x();
@@ -263,8 +263,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-yoff1*yoff1);
-          diff2=std::sqrt(fRmax*fRmax-yoff2*yoff2);
+          delta=fRmax*fRmax-yoff1*yoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-yoff2*yoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=xoffset-maxDiff;
           newMax=xoffset+maxDiff;
@@ -287,8 +289,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-xoff1*xoff1);
-          diff2=std::sqrt(fRmax*fRmax-xoff2*xoff2);
+          delta=fRmax*fRmax-xoff1*xoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-xoff2*xoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=yoffset-maxDiff;
           newMax=yoffset+maxDiff;
@@ -361,7 +365,7 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
       break;
    default:        // Should never reach this case ...
       DumpInfo();
-      G4Exception("G4Orb::SurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Orb::SurfaceNormal()", "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break;    
   } 
@@ -460,7 +464,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 #ifdef G4CSGDEBUG
   else // inside ???
   {
-      G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
+      G4Exception("G4Orb::DistanceToIn(p,v)", "GeomSolids1002",
                   JustWarning, "Point p is inside !?");
   }
 #endif
@@ -560,24 +564,26 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   }
   else // p is outside ???
   {
-    G4cout.precision(16);
     G4cout << G4endl;
     DumpInfo();
-    G4cout << "Position:"  << G4endl << G4endl;
-    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Rp = "<< std::sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
-           << G4endl << G4endl;
-    G4cout << "Direction:" << G4endl << G4endl;
-    G4cout << "v.x() = "   << v.x() << G4endl;
-    G4cout << "v.y() = "   << v.y() << G4endl;
-    G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4cout << "Proposed distance :" << G4endl << G4endl;
-    G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-    G4cout.precision(6);
-    G4Exception("G4Orb::DistanceToOut(p,v,..)", "Notification",
-                JustWarning, "Logic error: snxt = kInfinity ???");
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Logic error: snxt = kInfinity ???" << G4endl
+            << "Position:"  << G4endl << G4endl
+            << "p.x() = "   << p.x()/mm << " mm" << G4endl
+            << "p.y() = "   << p.y()/mm << " mm" << G4endl
+            << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+            << "Rp = "<< std::sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm
+            << " mm" << G4endl << G4endl
+            << "Direction:" << G4endl << G4endl
+            << "v.x() = "   << v.x() << G4endl
+            << "v.y() = "   << v.y() << G4endl
+            << "v.z() = "   << v.z() << G4endl << G4endl
+            << "Proposed distance :" << G4endl << G4endl
+            << "snxt = "    << snxt/mm << " mm" << G4endl;
+    message.precision(oldprc);
+    G4Exception("G4Orb::DistanceToOut(p,v,..)", "GeomSolids1002",
+                JustWarning, message);
   }
   if (calcNorm)    // Output switch operator
   {
@@ -591,22 +597,25 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
         *validNorm=true;
         break;
       default:
-        G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(6);
-        G4Exception("G4Orb::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
+        G4Exception("G4Orb::DistanceToOut(p,v,..)","GeomSolids1002",
+                    JustWarning, message);
         break;
     }
   }
@@ -632,8 +641,8 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
      G4cout.precision(oldprc);
-     G4Exception("G4Orb::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?" );
+     G4Exception("G4Orb::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -666,6 +675,7 @@ G4VSolid* G4Orb::Clone() const
 
 std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -674,6 +684,7 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
 
      << "    outer radius: " << fRmax/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

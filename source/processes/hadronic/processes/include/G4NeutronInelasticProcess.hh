@@ -41,18 +41,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4NeutronInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4NeutronInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4NeutronInelasticProcess(
-     const G4String& processName = "NeutronInelastic" ) :
-      G4HadronInelasticProcess( processName, G4Neutron::Neutron() )
-    { }
+    G4NeutronInelasticProcess(const G4String& processName = "NeutronInelastic");
     
-    ~G4NeutronInelasticProcess()
-    { }
- };
- 
+    ~G4NeutronInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
 #endif
- 

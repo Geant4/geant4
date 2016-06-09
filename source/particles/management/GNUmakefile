@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2010/10/27 07:47:04 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2010-10-27 07:47:04 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for particle management library.  G.Cosmo, 4/4/97.
 # ----------------------------------------------------------------

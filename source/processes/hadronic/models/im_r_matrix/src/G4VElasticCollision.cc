@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VElasticCollision.cc,v 1.3 2006/06/29 20:41:53 gunter Exp $ //
+// $Id: G4VElasticCollision.cc,v 1.3 2006-06-29 20:41:53 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4VElasticCollision.hh"

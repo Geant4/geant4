@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.20 2009/10/20 07:07:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.20 2009-10-20 07:07:51 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -55,7 +55,9 @@
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
-//        add applyCuts command         2 Aug. 2001 by H.Kurashige
+//        add applyCuts command            2 Aug. 2001 by H.Kurashige
+//        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
+//        add getCutForAGivenParticle     11 June 2011 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -93,10 +95,10 @@ public: // with description
     
   private: //commands
     G4UIdirectory *             theDirectory;
-    G4UIcmdWithADoubleAndUnit * setPCutCmd; 
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
     G4UIcommand *               setCutRCmd;
-    G4UIcommand *               setCutForAGivenParticleCmd; 
+    G4UIcommand *               setCutForAGivenParticleCmd;
+    G4UIcmdWithAString *        getCutForAGivenParticleCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        addProcManCmd;
@@ -106,6 +108,7 @@ public: // with description
     G4UIcmdWithAnInteger *      asciiCmd;
     G4UIcommand *               applyCutsCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;
+    G4UIcmdWithAnInteger*       dumpOrdParamCmd;
 };
 
 #endif

@@ -36,6 +36,7 @@
 // 12-Nov-2003 Set upper limit at 10 GeV/n
 // 12-Nov-2003 Insted of the lower limit, 
 //             0 is returned to a partilce with energy lowae than 10 MeV/n 
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -44,59 +45,31 @@
 
 class G4IonsKoxCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-      G4IonsKoxCrossSection():
-         upperLimit ( 10 * GeV ), 
-         lowerLimit ( 10 * MeV ), 
-         r0 ( 1.1 * fermi ),
-         rc ( 1.3 * fermi )
-      {
-      }
+public:
 
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
-   {
-     return IsIsoApplicable(aDP, 0, 0);
-   }
+  G4IonsKoxCrossSection();
 
+  ~G4IonsKoxCrossSection();
 
-   virtual
-   G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
-                          G4int /*ZZ*/, G4int /*AA*/) 
-   {
-      G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-      G4double kineticEnergy = aDP->GetKineticEnergy(); 
-      if ( kineticEnergy / baryonNumber <= upperLimit ) 
-         return true;
-      return false;
-   }
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle* aDP, 
+			     G4int Z, const G4Material*);
 
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
+private:
 
-   virtual
-   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ,
-                                 G4int AA, G4double aTemperature);
+  G4double calEcm ( G4double , G4double , G4double ); 
+  G4double calCeValue ( G4double ); 
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
+  G4double lowerLimit; 
+  G4double r0;
+  G4double rc;
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4IonsKoxCrossSection: uses Kox formula"<<G4endl;}
-
-   private:
-      const G4double upperLimit; 
-      const G4double lowerLimit; 
-      const G4double r0;
-      const G4double rc;
-
-      G4double calEcm ( G4double , G4double , G4double ); 
-      G4double calCeValue ( G4double ); 
 };
 
 #endif

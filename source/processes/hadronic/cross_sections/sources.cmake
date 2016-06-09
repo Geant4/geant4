@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010/11/29 17:44:25 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:44:25 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4IonsKoxCrossSection.hh
         G4IonsShenCrossSection.hh
         G4IonsSihverCrossSection.hh
+        G4KokoulinMuonNuclearXS.hh
         G4NeutronCaptureXS.hh
         G4NeutronElasticXS.hh
         G4NeutronInelasticCrossSection.hh
@@ -82,8 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ProtonInelasticCrossSection.hh
         G4TripathiCrossSection.hh
         G4TripathiLightCrossSection.hh
-        G4UElasticCrossSection.hh
-        G4UInelasticCrossSection.hh
         G4UPiNuclearCrossSection.hh
         G4VComponentCrossSection.hh
         G4VCrossSectionDataSet.hh
@@ -114,6 +113,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4IonsKoxCrossSection.cc
         G4IonsShenCrossSection.cc
         G4IonsSihverCrossSection.cc
+        G4KokoulinMuonNuclearXS.cc
         G4NeutronCaptureXS.cc
         G4NeutronElasticXS.cc
         G4NeutronInelasticCrossSection.cc
@@ -125,8 +125,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ProtonInelasticCrossSection.cc
         G4TripathiCrossSection.cc
         G4TripathiLightCrossSection.cc
-        G4UElasticCrossSection.cc
-        G4UInelasticCrossSection.cc
         G4UPiNuclearCrossSection.cc
         G4VComponentCrossSection.cc
         G4VCrossSectionDataSet.cc

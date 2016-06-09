@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.8 2008/10/22 12:35:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.8 2008-10-22 12:35:46 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

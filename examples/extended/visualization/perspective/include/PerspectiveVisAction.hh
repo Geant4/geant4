@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PerspectiveVisAction.hh,v 1.2 2006/06/29 17:45:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PerspectiveVisAction.hh,v 1.2 2006-06-29 17:45:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef PERSPECTIVEVISACTION_HH
 #define PERSPECTIVEVISACTION_HH

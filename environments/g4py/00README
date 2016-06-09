@@ -1,4 +1,4 @@
-$Id: 00README,v 1.13 2010/12/02 08:34:42 kmura Exp $
+$Id: 00README,v 1.13 2010-12-02 08:34:42 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -144,22 +144,8 @@ You can import Geant4Py modules in Python just like
 
 Notes:
 -----
-1) >> IMPORTANT <<
+>> IMPORTANT <<
 All users' libraries should be build in SHARED libaries.
-
-2) Development Environment:
-OS:             SuSE Linux 11.3 (x86-64)
-g++ :           4.5.0
-Python:         2.6
-CLHEP:          2.1.0.1
-ROOT:           5.26/00
-
-3) Tested environment:
-  Linux 32/64-bit
-  SuSE 11.2 11.3 SLED11SP1
-  SL4.8 SL5.4
-  Ubuntu 8.0.4
-  MacOSX 10.6 (Snow Leopard)
 
 Have A Fun!!
 

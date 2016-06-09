@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.24 2010/09/22 14:57:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BooleanSolid.cc,v 1.24 2010-09-22 14:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -171,8 +171,7 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   {
     DumpInfo();
     G4Exception("G4BooleanSolid::GetConstituentSolid()",
-                "WrongArgumentValue", FatalException,
-                "Invalid solid index.");
+                "GeomSolids0002", FatalException, "Invalid solid index.");
   }
 
   return subSolid;
@@ -195,8 +194,7 @@ G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
   {
     DumpInfo();
     G4Exception("G4BooleanSolid::GetConstituentSolid()",
-                "WrongArgumentValue", FatalException,
-                "Invalid solid index.");
+                "GeomSolids0002", FatalException, "Invalid solid index.");
   }
 
   return subSolid;
@@ -288,12 +286,11 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
     { operation = HepPolyhedronProcessor::SUBTRACTION; }
   else
   {
-    std::ostringstream oss;
-    oss << "Solid - " << solid->GetName()
-        << " - Unrecognised composite solid"
-        << "\n  Returning NULL !";
-    G4Exception("StackPolyhedron()", "InvalidSetup",
-                JustWarning, oss.str().c_str());
+    std::ostringstream message;
+    message << "Solid - " << solid->GetName()
+            << " - Unrecognised composite solid" << G4endl
+            << " Returning NULL !";
+    G4Exception("StackPolyhedron()", "GeomSolids1001", JustWarning, message);
     return 0;
   }
 

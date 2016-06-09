@@ -23,29 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermoreComptonModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// Author: Sebastien Inserti
+// Author: Sebastien Incerti
 //         30 October 2008
+//         on base of G4LowEnergyCompton developed by A.Forti and M.G.Pia
 //
-// History:
+// Modified:
 // --------
+// 30 May 2011   V Ivanchenko Migration to model design for deexcitation
 
 #ifndef G4LivermoreComptonModel_h
 #define G4LivermoreComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4CompositeEMDataSet.hh"
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
-#include "G4ForceCondition.hh"
-#include "G4Gamma.hh"
+
+class G4ParticleChangeForGamma;
+class G4VCrossSectionHandler;
+class G4VAtomDeexcitation;
+class G4VEMDataSet;
 
 class G4LivermoreComptonModel : public G4VEmModel
 {
@@ -76,9 +75,6 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-  //G4double GetMeanFreePath(const G4Track& track, 
-  //			   G4double previousStepSize, 
-  //			   G4ForceCondition* condition);
 private:
 
   G4double lowEnergyLimit;  
@@ -86,9 +82,10 @@ private:
   G4bool isInitialised;
   G4int verboseLevel;
   
-  G4VEMDataSet* meanFreePathTable;
   G4VEMDataSet* scatterFunctionData;
   G4VCrossSectionHandler* crossSectionHandler;
+
+  G4VAtomDeexcitation*    fAtomDeexcitation;
 
   G4ShellData shellData;
   G4DopplerProfile profileData;

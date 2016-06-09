@@ -25,8 +25,8 @@
 //
 // -------------------------------------------------------------------
 //
-// $Id: G4PolarizationMessenger.hh,v 1.2 2006/12/13 15:44:33 gunter Exp $
-// tag $Name: geant4-09-02 $
+// $Id: G4PolarizationMessenger.hh,v 1.2 2006-12-13 15:44:33 gunter Exp $
+// tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class header file
 //

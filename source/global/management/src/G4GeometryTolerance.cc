@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc,v 1.3 2008/02/15 07:29:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryTolerance.cc,v 1.3 2008-02-15 07:29:51 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryTolerance
 //

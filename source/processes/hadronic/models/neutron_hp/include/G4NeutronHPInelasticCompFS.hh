@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.14 2010/04/06 19:06:11 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.14 2010-04-06 19:06:11 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1
@@ -46,6 +46,9 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   
   G4NeutronHPInelasticCompFS()
   {
+
+    QI.resize(51);
+    LR.resize(51);
     for(G4int i=0; i<51; i++)
     {
       hasXsec = true; 
@@ -54,7 +57,10 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
       theAngularDistribution[i] = 0;
       theEnergyAngData[i] = 0;
       theFinalStatePhotons[i] = 0;
+      QI[i]=0.0;
+      LR[i]=0;
     }
+
   }
   virtual ~G4NeutronHPInelasticCompFS()
   {
@@ -67,7 +73,7 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
       if(theFinalStatePhotons[i] != 0) delete theFinalStatePhotons[i];
     }
   }
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aSFType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aSFType);
   void InitGammas(G4double AR, G4double ZR);
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;
   virtual G4NeutronHPFinalState * New() = 0;
@@ -108,6 +114,10 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   
   G4double theCurrentA;
   G4double theCurrentZ;
+
+   protected:
+      std::vector < G4double >  QI;
+      std::vector <G4int > LR;
 
    private:
       //                       proj                 targ                 had                  mu of had   

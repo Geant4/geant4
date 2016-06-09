@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.14 2009/03/25 15:29:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ClassicalRK4.cc,v 1.14 2009-03-25 15:29:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ G4ClassicalRK4::StepWithEst( const G4double*,
                              const G4double*,
                                    G4double*  ) 
 {
-  G4Exception("G4ClassicalRK4::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4ClassicalRK4::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
 
 }  // end of StepWithEst ......................................................

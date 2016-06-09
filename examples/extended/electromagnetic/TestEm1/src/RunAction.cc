@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2010/04/06 11:11:24 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: RunAction.cc,v 1.20 2010-04-06 11:11:24 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

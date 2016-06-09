@@ -24,12 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.17 2006/06/29 16:24:09 gunter Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.17 2006-06-29 16:24:09 gunter Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
-#ifdef G4ANALYSIS_USE  
-#include "RemSimAnalysisManager.hh"
-#endif
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -127,14 +124,7 @@ void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun -> SetParticleEnergy(energy_gun * baryon); 
   }
 
-#ifdef G4ANALYSIS_USE   
- G4double energy_plot = (particleGun -> GetParticleEnergy())/baryon; 
- // plot of MeV/nucl
-  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  // Plot the energy spectrum of primary particles 
- analysis -> primaryParticleEnergyDistribution(energy_plot/MeV);
-#endif 
- 
+
 particleGun -> GeneratePrimaryVertex(anEvent);
 }
 
@@ -151,7 +141,8 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
     {
 	  G4String excep = "RemSimPrimaryGenerator - data file: " 
                             + fileName + " not found";
-	  G4Exception(excep);
+	  G4Exception("RemSimPrimaryGeneratorAction::ReadProbability()",
+		      "RadioP001",FatalException,excep);
     }
 
   G4double a = 0;

@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleLargerBeta.hh,v 1.7 2010/06/25 09:43:44 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04-beta-01 $
+// $Id: G4ParticleLargerBeta.hh,v 1.7 2010-06-25 09:43:44 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result
+// 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
 
 #ifndef G4ParticleLargerBeta_h
 #define G4ParticleLargerBeta_h
 
+#include "G4CascadParticle.hh"
 #include "G4InuclElementaryParticle.hh"
 
 class G4ParticleLargerBeta {
@@ -45,6 +47,16 @@ public:
  
   G4bool operator() (const G4InuclElementaryParticle* part1,
 		     const G4InuclElementaryParticle* part2) {
+    return (part1 && part2 && operator()(*part1, *part2));
+  }
+
+  G4bool operator() (const G4CascadParticle& part1,
+		     const G4CascadParticle& part2) {
+    return (operator()(part1.getParticle(), part2.getParticle()));
+  }
+
+  G4bool operator() (const G4CascadParticle* part1,
+		     const G4CascadParticle* part2) {
     return (part1 && part2 && operator()(*part1, *part2));
   }
 };

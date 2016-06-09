@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.23 2010/11/16 11:46:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EllipticalCone.cc,v 1.23 2010-11-16 11:46:11 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -81,19 +81,17 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
   //
   if ( (pxSemiAxis <= 0.) || (pySemiAxis <= 0.) || (pzMax <= 0.) )
   {
-     G4cerr << "ERROR - G4EllipticalCone::G4EllipticalCone(): "
-            << GetName() << G4endl
-            << "        Invalid semi-axis or height!" << G4endl;
-     G4Exception("G4EllipticalCone::G4EllipticalCone()", "InvalidSetup",
-                 FatalException, "Invalid semi-axis or height.");
+     std::ostringstream message;
+     message << "Invalid semi-axis or height - " << GetName();
+     G4Exception("G4EllipticalCone::G4EllipticalCone()", "GeomSolids0002",
+                 FatalErrorInArgument, message);
   }
   if ( pzTopCut <= 0 )
   {
-     G4cerr << "ERROR - G4EllipticalCone::G4EllipticalCone(): "
-            << GetName() << G4endl
-            << "        Invalid z-coordinate for cutting plane !" << G4endl;
+     std::ostringstream message;
+     message << "Invalid z-coordinate for cutting plane - " << GetName();
      G4Exception("G4EllipticalCone::G4EllipticalCone()", "InvalidSetup",
-                 FatalException, "Invalid z-coordinate for cutting plane.");
+                 FatalErrorInArgument, message);
   }
 
   SetSemiAxis( pxSemiAxis, pySemiAxis, pzMax );
@@ -869,23 +867,24 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         break;
 
         default:            // Should never reach this case ...
-          G4int oldprc = G4cout.precision(16);
-          G4cout << G4endl;
           DumpInfo();
-          G4cout << "Position:"  << G4endl << G4endl;
-          G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-          G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-          G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-          G4cout << "Direction:" << G4endl << G4endl;
-          G4cout << "v.x() = "   << v.x() << G4endl;
-          G4cout << "v.y() = "   << v.y() << G4endl;
-          G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-          G4cout << "Proposed distance :" << G4endl << G4endl;
-          G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
-          G4cout.precision(oldprc);
+          std::ostringstream message;
+          G4int oldprc = message.precision(16);
+          message << "Undefined side for valid surface normal to solid."
+                  << G4endl
+                  << "Position:"  << G4endl
+                  << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+                  << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+                  << "   p.z() = "   << p.z()/mm << " mm" << G4endl
+                  << "Direction:" << G4endl
+                  << "   v.x() = "   << v.x() << G4endl
+                  << "   v.y() = "   << v.y() << G4endl
+                  << "   v.z() = "   << v.z() << G4endl
+                  << "Proposed distance :" << G4endl
+                  << "   distMin = "    << distMin/mm << " mm";
+          message.precision(oldprc);
           G4Exception("G4EllipticalCone::DistanceToOut(p,v,..)",
-                      "Notification", JustWarning,
-                      "Undefined side for valid surface normal to solid.");
+                      "GeomSolids1002", JustWarning, message);
           break;
       }
     }
@@ -908,16 +907,17 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
-     G4cout << G4endl ;
      DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout.precision(6) ;
-     G4Exception("G4Ellipsoid::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16);
+     message << "Point p is outside !?" << G4endl
+             << "Position:"  << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm";
+     message.precision(oldprc) ;
+     G4Exception("G4Ellipsoid::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
     
@@ -969,6 +969,7 @@ G4VSolid* G4EllipticalCone::Clone() const
 //
 std::ostream& G4EllipticalCone::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -980,6 +981,7 @@ std::ostream& G4EllipticalCone::StreamInfo( std::ostream& os ) const
      << "    height    z: " << zheight/mm << " mm \n"
      << "    half length in  z: " << zTopCut/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

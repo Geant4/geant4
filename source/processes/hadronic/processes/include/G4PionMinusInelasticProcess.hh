@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // PionMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 05-Nov-1996
- // Last modified: 03-Apr-1997
+// PionMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 05-Nov-1996
+//
 
 #ifndef G4PionMinusInelasticProcess_h
 #define G4PionMinusInelasticProcess_h 1
@@ -38,19 +38,16 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4PionMinusInelasticProcess : public G4HadronInelasticProcess
- {
+class G4PionMinusInelasticProcess : public G4HadronInelasticProcess
+{
     
- public:
+  public:
     
-    G4PionMinusInelasticProcess(
-     const G4String& processName = "PionMinusInelastic" ) :
-      G4HadronInelasticProcess( processName, G4PionMinus::PionMinus() )
-    { }
+    G4PionMinusInelasticProcess(const G4String& processName = "PionMinusInelastic");
     
-    ~G4PionMinusInelasticProcess()
-    { }
-    
- };
+    ~G4PionMinusInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const; 
+};
  
 #endif

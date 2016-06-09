@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction2.cc,v 1.3 2010/07/16 07:37:48 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PrimaryGeneratorAction2.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

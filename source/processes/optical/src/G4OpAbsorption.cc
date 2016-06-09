@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.9 2008/10/24 19:52:28 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpAbsorption.cc,v 1.9 2008-10-24 19:52:28 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -136,7 +136,7 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
                                                 GetProperty("ABSLENGTH");
            if ( AttenuationLengthVector ){
              AttenuationLength = AttenuationLengthVector->
-                                         GetProperty (thePhotonMomentum);
+                                         Value(thePhotonMomentum);
            }
            else {
 //             G4cout << "No Absorption length specified" << G4endl;

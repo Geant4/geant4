@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorMessenger.hh,v 1.4 2006/06/29 16:31:37 gunter Exp $
+// $Id: A01PrimaryGeneratorMessenger.hh,v 1.4 2006-06-29 16:31:37 gunter Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01PrimaryGeneratorMessenger_h

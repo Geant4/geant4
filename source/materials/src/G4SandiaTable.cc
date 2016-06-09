@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 
-// $Id: G4SandiaTable.cc,v 1.42 2010/11/23 15:23:27 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SandiaTable.cc,v 1.43 2010-12-23 16:12:55 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -39,6 +39,7 @@
 // 10.07.01 Migration to STL. M. Verderi.
 // 03.02.04 Update distructor V.Ivanchenko
 // 05.03.04 New methods for old sorting algorithm for PAI model. V.Grichine
+// 26.10.11 new scheme for G4Exception  (mma) 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -100,6 +101,7 @@ G4SandiaTable::G4SandiaTable(__void__&)
   fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;
   fMaxInterval = 0;
   fMatNbOfIntervals = 0;
+  fVerbose          = 0;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -526,19 +528,22 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
   fMaxInterval        = 0;
   fVerbose            = 0;  
 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  size_t numberOfMat = G4Material::GetNumberOfMaterials();
+  //initialisation of fnulcof
+  fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;
 
-  if ( matIndex >= 0 && matIndex < G4int(numberOfMat) )
-  {
-    fMaterial = (*theMaterialTable)[matIndex];
-  }
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numberOfMat = G4Material::GetNumberOfMaterials();
+
+  if ( matIndex >= 0 && matIndex < numberOfMat)
+    {
+      fMaterial = (*theMaterialTable)[matIndex];
+      ComputeMatTable();
+    }
   else
-  {
-    G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex): wrong matIndex ");
-    return;
-  }
-  ComputeMatTable();
+    {
+      G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex)", "mat401",
+       FatalException, "wrong matIndex");
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -550,7 +555,7 @@ void
 G4SandiaTable::SandiaSort(G4double** da ,
  			  G4int sz )
 {
-   for(G4int i = 1;i < sz; i++ ) 
+  for(G4int i = 1;i < sz; i++ ) 
    {
      for(G4int j = i + 1;j < sz; j++ )
      {

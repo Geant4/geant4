@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.34 2007/01/05 17:00:27 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.34 2007-01-05 17:00:27 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
@@ -264,7 +264,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     // Check...
     if (pCurrentPV->IsReplicated()) {
       G4Exception("G4ASCIITreeSceneHandler::RequestPrimitives",
-		  "",
+		  "vistree0001",
 		  JustWarning,
 		  "Replica unexpected");
     }

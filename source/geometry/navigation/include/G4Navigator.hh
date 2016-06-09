@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.34 2010/12/15 13:46:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Navigator.hh,v 1.34 2010-12-15 13:46:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4Navigator
@@ -206,13 +206,20 @@ class G4Navigator
     // Returns a reference counted handle to a touchable history.
 
   virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
-    // Returns Exit Surface Normal and validity too.
-    // It can only be called if the Navigator's last Step has crossed a
+  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector& point,
+                                                         G4bool* valid);
+  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector& point,
+                                                  G4bool* valid);
+    // Return Exit Surface Normal and validity too.
+    // Can only be called if the Navigator's last Step has crossed a
     // volume geometrical boundary.
     // It returns the Normal to the surface pointing out of the volume that
     // was left behind and/or into the volume that was entered.
-    // (The normal is in the coordinate system of the final volume.)
-    // This function takes full care about how to calculate this normal,
+    // Convention:
+    //   The *local* normal is in the coordinate system of the *final* volume.
+    // Restriction:
+    //   Normals are not available for replica volumes (returns valid= false)
+    // These methods takes full care about how to calculate this normal,
     // but if the surfaces are not convex it will return valid=false.
 
   inline G4int GetVerboseLevel() const;
@@ -253,6 +260,11 @@ class G4Navigator
   inline const G4AffineTransform  GetLocalToGlobalTransform() const;
     // Obtain the transformations Global/Local (and inverse).
     // Clients of these methods must copy the data if they need to keep it.
+
+  G4AffineTransform GetMotherToDaughterTransform(G4VPhysicalVolume* dVolume, 
+                                                 G4int dReplicaNo,
+                                                 EVolume dVolumeType );
+    // Obtain mother to daughter transformation
 
   inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
@@ -346,8 +358,11 @@ class G4Navigator
     // Set true if last Step was limited by geometry.
 
   G4ThreeVector fStepEndPoint;
-    //  Endpoint of last ComputeStep 
-    //  - can be used for optimisation (eg when computing safety)
+    // Endpoint of last ComputeStep 
+    // can be used for optimisation (e.g. when computing safety).
+  G4ThreeVector fLastStepEndPointLocal; 
+    // Position of the end-point of the last call to ComputeStep 
+    // in last Local coordinates.
 
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
@@ -356,6 +371,12 @@ class G4Navigator
 
   G4bool fActive;
     // States if the navigator is activated or not.
+
+  G4bool fLastTriedStepComputation; 
+    // Whether ComputeStep was called since the last call to a Locate method
+    // Uses: - distinguish parts of state which differ before/after calls
+    //         to ComputeStep or one of the Locate methods;
+    //       - avoid two consecutive calls to compute-step (illegal).
 
   G4bool fEntering,fExiting;
     // Entering/Exiting volumes blocking/setup
@@ -369,14 +390,10 @@ class G4Navigator
   G4VPhysicalVolume *fBlockedPhysicalVolume;
   G4int fBlockedReplicaNo;
 
-  // G4VPhysicalVolume *fCandidatePhysicalVolume;   // Unused 
-  // G4int fCandidateReplicaNo;   
-
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
   G4bool fLocatedOutsideWorld;
     // Whether the last call to Locate methods left the world
-  // G4PhysicalVolume* fLastVolumeLocated; 
 
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
   G4ThreeVector fExitNormal;  // Leaving volume normal, in the

@@ -1,0 +1,109 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_info
+#define tools_wroot_info
+
+#include "buffer"
+#include "element"
+#include "named"
+
+namespace tools {
+namespace wroot {
+
+// sizeof(vtbl)         = 4
+// sizeof(unsigned int) = 4
+// sizeof(TObject)   = 12  = 2 * (unsigned int) + vtbl.
+// sizeof(TString)   = 8   = char* + vtbl.
+// sizeof(TNamed)    = 28  = TObject + 2 * TString.
+// sizeof(TObjArray) = 40
+
+class StreamerInfo : public virtual ibo {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::StreamerInfo");
+    return s_v;
+  }
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerInfo");
+    return s_v;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(2,c)) return false;
+
+    if(!Named_stream(a_buffer,fName,fTitle)) return false;
+    if(!a_buffer.write(fCheckSum)) return false;
+    if(!a_buffer.write(fStreamedClassVersion)) return false;
+
+    //ObjArray
+    if(!a_buffer.write_object(fElements)) return false;
+
+    if(!a_buffer.set_byte_count(c)) return false;
+
+    return true;
+  }
+public:
+  virtual void out(std::ostream& a_out) const {
+    a_out << "StreamerInfo for class :" 
+          << " " << fName << ", version=" << fStreamedClassVersion
+          << std::endl;
+    std::vector<streamer_element*>::const_iterator it;
+    for(it=fElements.begin();it!=fElements.end();++it) { 
+      (*it)->out(a_out);
+    }
+  }
+public:
+  StreamerInfo(const std::string& a_cls_store_name,
+               int a_cls_vers,
+               unsigned int a_cls_check_sum)
+  :fName(a_cls_store_name)
+  ,fTitle("")
+  ,fCheckSum(a_cls_check_sum)
+  ,fStreamedClassVersion(a_cls_vers)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~StreamerInfo(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  StreamerInfo(const StreamerInfo& a_from)
+  : ibo(a_from)
+  ,fName(a_from.fName)
+  ,fTitle(a_from.fName)
+  ,fCheckSum(a_from.fCheckSum)
+  ,fStreamedClassVersion(a_from.fStreamedClassVersion)
+  ,fElements(a_from.fElements)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  StreamerInfo& operator=(const StreamerInfo& a_from){
+    fName = a_from.fName;
+    fTitle = a_from.fName;
+    fCheckSum = a_from.fCheckSum;
+    fStreamedClassVersion = a_from.fStreamedClassVersion;
+    fElements = a_from.fElements;
+    return *this;
+  }  
+public:
+  void add(streamer_element* a_elem){fElements.push_back(a_elem);}
+protected: //Named
+  std::string fName;
+  std::string fTitle;
+protected:
+  unsigned int fCheckSum;    //checksum of original class
+  int fStreamedClassVersion; //Class version identifier
+  //int fNumber;               //!Unique identifier
+  ObjArray<streamer_element> fElements; //Array of TStreamerElements
+};
+
+}}
+
+#endif

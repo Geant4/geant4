@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.42 2010/07/26 03:52:33 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoringMessenger.cc,v 1.42 2010-07-26 03:52:33 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
 
@@ -557,6 +557,7 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
       nSegment[2] = Ni;
     } else {
       G4Exception("G4ScoringMessenger::MeshBinCommand()", "001", FatalException, "invalid mesh type");
+      return;
     }
     //
     mesh->SetNumberOfSegments(nSegment);

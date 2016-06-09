@@ -23,21 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.hh,v 1.15 2010/04/29 14:46:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
-//
-// GEANT4 Class header file
-//
-//
 // File name:     G4CrossSectionDataStore
-//
 //
 // Modifications:
 // 23.01.2009 V.Ivanchenko move constructor and destructor to source,
 //                         use STL vector instead of C-array
 //
+// August 2011  Re-designed
+//              by G. Folger, V. Ivantchenko, T. Koi and D.H. Wright
 
 // Class Description
 // This is the class to which cross section data sets may be registered. 
@@ -49,15 +46,17 @@
 #ifndef G4CrossSectionDataStore_h
 #define G4CrossSectionDataStore_h 1
 
-#include "G4ParticleDefinition.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Isotope.hh"
-#include "G4Element.hh"
-#include "G4Material.hh"
+#include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include <vector>
 
 class G4Nucleus;
+class G4DynamicParticle;
+class G4ParticleDefinition;
+class G4Isotope;
+class G4Element;
+class G4Material;
+class G4NistManager;
 
 class G4CrossSectionDataStore
 {
@@ -67,51 +66,63 @@ public:
 
   ~G4CrossSectionDataStore();
 
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature);
-
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Isotope*, G4double aTemperature);
-
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   G4double Z, G4double A, G4double aTemperature);
-
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   G4int Z, G4int A, G4double aTemperature);
-
-  // to replace GetMicroscopicCrossSection
+  // Cross section per unit volume is computed (inverse mean free path)
   G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
 
-  //std::pair<G4double/*Z*/, G4double/*A*/> 
-  // SelectRandomIsotope(const G4DynamicParticle*, const G4Material*);
+  // Cross section per element is computed
+  G4double GetCrossSection(const G4DynamicParticle*, 
+			   const G4Element*, const G4Material*);
 
+  // Cross section per isotope is computed
+  G4double GetCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                           const G4Isotope*,
+			   const G4Element*, const G4Material*);
+
+  // Sample Z and A of a target nucleus and upload into G4Nucleus
   G4Element* SampleZandA(const G4DynamicParticle*, const G4Material*,
 			 G4Nucleus& target);
 
-  void AddDataSet(G4VCrossSectionDataSet*);
-
+  // Initialisation before run
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
+  // Dump store to G4cout
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-  inline void SetVerboseLevel(G4int value)
-  {
-    verboseLevel = value;
-  }
+  // Dump store as html
+  void DumpHtml(const G4ParticleDefinition&, std::ofstream&);
 
-  inline G4int GetVerboseLevel()
-  {
-    return verboseLevel;
-  }
+  inline void AddDataSet(G4VCrossSectionDataSet*);
+
+  inline void SetVerboseLevel(G4int value);
 
 private:
 
-  G4VCrossSectionDataSet* whichDataSetInCharge(const G4DynamicParticle*, 
-					       const G4Element*);
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+			      const G4Isotope*,
+			      const G4Element*, const G4Material* aMaterial,
+			      G4int index);
 
-  std::vector<G4VCrossSectionDataSet*> DataSetList;
-  G4int NDataSetList;
+  G4CrossSectionDataStore & operator=(const G4CrossSectionDataStore &right);
+  G4CrossSectionDataStore(const G4CrossSectionDataStore&);
+
+  G4NistManager* nist;
+
+  std::vector<G4VCrossSectionDataSet*> dataSetList;
+  std::vector<G4double> xsecelm;
+  std::vector<G4double> xseciso;
+  G4int nDataSetList;
   G4int verboseLevel;
 };
+
+inline void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p)
+{
+  dataSetList.push_back(p);
+  ++nDataSetList;
+}
+
+inline void G4CrossSectionDataStore::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
 
 #endif

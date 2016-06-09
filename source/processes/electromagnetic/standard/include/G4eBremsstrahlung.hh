@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.37 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eBremsstrahlung.hh,v 1.37 2009-02-20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -98,7 +98,6 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
-  const G4ParticleDefinition* particle;
   G4bool   isInitialised;
 
 private:

@@ -1,0 +1,97 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_base_leaf
+#define tools_wroot_base_leaf
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include "named"
+
+namespace tools {
+namespace wroot {
+class branch;
+}}
+
+namespace tools {
+namespace wroot {
+
+class base_leaf : public virtual ibo {
+  static unsigned int kNullTag() {return 0;}
+#ifdef TOOLS_MEM
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::base_leaf");
+    return s_v;
+  }
+#endif
+public: //ibo
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(2,c)) return false;
+    if(!Named_stream(a_buffer,m_name,m_title)) return false;
+    if(!a_buffer.write(m_length)) return false;
+    if(!a_buffer.write(m_length_type)) return false;
+    uint32 fOffset = 0;
+    if(!a_buffer.write(fOffset)) return false;
+    bool fIsRange = false;
+    if(!a_buffer.write(fIsRange)) return false;
+    bool fIsUnsigned = false;
+    if(!a_buffer.write(fIsUnsigned)) return false;
+
+  //if(!a_buffer.write_object(m_leaf_count)) return false;
+    if(!a_buffer.write(kNullTag())) return false;
+
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public:
+  virtual bool fill_basket(buffer&) const = 0;
+public:
+  base_leaf(std::ostream& a_out,
+                   wroot::branch& a_branch,
+                   const std::string& a_name,
+                   const std::string& a_title)
+  :m_out(a_out)
+  ,m_branch(a_branch)
+  ,m_name(a_name)
+  ,m_title(a_title)
+
+  ,m_length(0)
+  ,m_length_type(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_leaf(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_leaf(const base_leaf& a_from)
+  : ibo(a_from)
+  ,m_out(a_from.m_out)
+  ,m_branch(a_from.m_branch)
+  {}
+  base_leaf& operator=(const base_leaf&){return *this;}
+public:
+  wroot::branch& branch() {return m_branch;}
+  const std::string& name() const {return m_name;}
+  //const std::string& title() const {return m_title;}
+protected:
+  std::ostream& m_out;
+  wroot::branch& m_branch;
+protected: //Named
+  std::string m_name;
+  std::string m_title;
+  uint32 m_length;          //  Number of fixed length elements
+  uint32 m_length_type;     //  Number of bytes for this data type
+};
+
+}}
+
+#endif

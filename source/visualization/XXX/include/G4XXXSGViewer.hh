@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.hh,v 1.2 2006/06/29 21:26:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4XXXSGViewer.hh,v 1.2 2006-06-29 21:26:58 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  10th March 2006
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines beginning like this require specialisation for your driver.
-
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
 
 #ifndef G4XXXSGVIEWER_HH
 #define G4XXXSGVIEWER_HH
@@ -53,7 +51,5 @@ protected:
   void DrawFromStore(const G4String& source);
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 };
-
-#endif
 
 #endif

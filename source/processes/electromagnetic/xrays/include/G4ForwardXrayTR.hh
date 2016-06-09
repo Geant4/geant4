@@ -24,20 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.14 2006/06/29 19:55:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ForwardXrayTR.hh,v 1.14 2006-06-29 19:55:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4ForwardXrayTR -- header file
+// G4ForwardXrayTR
 //
-// Class for description of forward X-ray transition radiation generated
+// Class for description
+//
+// Class for forward X-ray transition radiation generated
 // by relativistic charged particle crossed interface between material 1
 // and material 2 (1 -> 2)
-//
-// GEANT 4 class header file --- Copyright CERN 1995
-// CERB Geneva Switzerland
-//
-// for information related to this code, please, contact
-// CERN, CN Division, ASD Group
+
 // History:
 // 22.09.97, V. Grichine (Vladimir.Grichine@cern.ch)
 // 26.01.00, V.Grichine, new constructor and protected DM for fast sim. models
@@ -71,10 +68,7 @@ class G4ForwardXrayTR : public G4TransitionRadiation
 {
 public:
 
-// Constructors
-
-  //     G4ForwardXrayTR() ;
-
+  // Constructors
 
   G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
 		    const G4String& matName2,    //  G4Material* pMat2,     
@@ -82,35 +76,28 @@ public:
   
   G4ForwardXrayTR(  const G4String& processName="XrayTR"     ) ;
 
-//  G4ForwardXrayTR(const G4ForwardXrayTR& right) ;
+  // Destructor //  virtual
 
-// Destructor //  virtual
+  virtual ~G4ForwardXrayTR() ;
 
- ~G4ForwardXrayTR() ;
-
-// Operators
-// G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) ;
-// G4int operator==(const G4ForwardXrayTR& right)const ;
-// G4int operator!=(const G4ForwardXrayTR& right)const ;
+  // Operators
+  // G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) ;
+  // G4int operator==(const G4ForwardXrayTR& right)const ;
+  // G4int operator!=(const G4ForwardXrayTR& right)const ;
 
 ///////////////////////    Methods    /////////////////////////////////
 
-        void BuildXrayTRtables();
+  void BuildXrayTRtables();
 
-	G4double GetMeanFreePath(const G4Track&,
-				 G4double,
-				 G4ForceCondition* condition)
-        {
-          *condition = Forced;
-	  return DBL_MAX;      // so TR doesn't limit mean free path
-        }
+  G4double GetMeanFreePath(const G4Track&, G4double,
+			   G4ForceCondition* condition);
 
-	G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
-				         const G4Step&  aStep    )   ;
+    G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
+				     const G4Step&  aStep    )   ;
 
-        G4double GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const ;
-       
-        G4double GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const ;     
+  G4double GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const ;
+  
+  G4double GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const ;     
 
 
 ///////////////////// Angle distribution  /////////////////////////////
@@ -118,7 +105,6 @@ public:
 
 G4double SpectralAngleTRdensity( G4double energy,
                                  G4double varAngle ) const;
-
 
 G4double AngleDensity( G4double energy,
                        G4double varAngle ) const  ;
@@ -169,7 +155,7 @@ G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
 G4PhysicsTable* fAngleDistrTable ;
 G4PhysicsTable* fEnergyDistrTable ;
 
-static G4PhysicsLogVector* fProtonEnergyVector ;
+G4PhysicsLogVector* fProtonEnergyVector ;
 
 static G4int fSympsonNumber ;                // Accuracy of Sympson integration 
 
@@ -195,9 +181,6 @@ G4double fSigma2 ;                       // plasma energy Sq of matter2
 
 
 } ;    // end of G4ForwardXrayTR class ---------------------------
-
-
-
 
 #endif   // G4FORWARDXRAYTR_H
 

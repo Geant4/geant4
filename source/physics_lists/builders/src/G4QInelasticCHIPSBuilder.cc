@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,7 @@
 #include "G4QInelasticCHIPSBuilder.hh"
 
 G4QInelasticCHIPSBuilder::G4QInelasticCHIPSBuilder(G4int ver):
- verbose(ver), wasActivated(false)
+ verbose(ver), wasActivated(false), inelastic(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

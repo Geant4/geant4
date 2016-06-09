@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.6 2006/11/05 20:41:36 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4XXXSGSceneHandler.cc,v 1.6 2006-11-05 20:41:36 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  10th March 2006
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines beginning like this require specialisation for your driver.
-
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
 
 #include "G4XXXSGSceneHandler.hh"
 
@@ -56,11 +54,7 @@ G4int G4XXXSGSceneHandler::fSceneIdCount = 0;
 G4XXXSGSceneHandler::G4XXXSGSceneHandler(G4VGraphicsSystem& system,
 					     const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
-{
-  fRoot = fSceneGraph.setRoot("\nroot\n");
-  fPermanentsRoot = fRoot.push_back("\npermanentsRoot\n");
-  fTransientsRoot = fRoot.push_back("\ntransientsRoot\n");
-}
+{}
 
 G4XXXSGSceneHandler::~G4XXXSGSceneHandler() {}
 
@@ -92,7 +86,7 @@ void G4XXXSGSceneHandler::PrintThings() {
 }
 #endif
 
-void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
+void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
   // Utility for PreAddSolid and BeginPrimitives.
   
   G4PhysicalVolumeModel* pPVModel =
@@ -111,7 +105,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
     const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
     //G4int currentDepth = pPVModel->GetCurrentDepth();
     //G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    //G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
     // Note: pCurrentMaterial may be zero (parallel world).
 
@@ -124,6 +118,25 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
     // volume as the key.  (An alternative would be to keep the PVNodeID
     // in the tree and match the PVPath from the root down.)
 
+    // BUT IN OPENGL, IF THERE ARE TRANSPARENT OBJECTS, VOLUMES DO NOT
+    // ARRIVE IN THE ABOVE ORDER.  (TRANSPARENT OBJECTS ARE DRWAN
+    // LAST.)  SO WE MUST BE MORE SOPHISTICATED IN CONSTRUCTING A
+    // TREE.
+
+    /* Debug
+    for (size_t i = 0; i < drawnPVPath.size(); ++i) {
+      std::cout << drawnPVPath[i].GetPhysicalVolume()->GetName() << ":"
+	    << drawnPVPath[i].GetCopyNo() << " ("
+	    << currentPOListIndex << "), ";
+    }
+    std::cout << std::endl;
+    */
+
+    static G4int index = 0;  // Some index for future reference
+    JA::Insert(&drawnPVPath[0],drawnPVPath.size(),index++,&fSceneGraph);
+    //JA::PrintTree(std::cout,&root);
+
+    /***  Old algorithm, left here for historical interest!!
     // Find mother.  ri points to drawn mother, if any.
     PVPath::const_reverse_iterator ri = ++drawnPVPath.rbegin();
     if (ri != drawnPVPath.rend()) {
@@ -167,15 +180,18 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
     // Store for future searches.  Overwrites previous entries for this
     // LV, so entry is always the *last* LV.
     fLVMap[pCurrentLV] = fCurrentItem;
+    ***/
 
   } else {  // Not from a G4PhysicalVolumeModel.
 
+    /***
     // Create a place for current solid in root...
     if (fReadyForTransients) {
       fCurrentItem = fTransientsRoot.push_back(header);
     } else {
       fCurrentItem = fPermanentsRoot.push_back(header);
     }
+    ***/
   }
 }
 
@@ -189,7 +205,6 @@ void G4XXXSGSceneHandler::PreAddSolid
 
 void G4XXXSGSceneHandler::PostAddSolid()
 {
-  *fCurrentItem += "EndSolid\n";
   G4VSceneHandler::PostAddSolid();
 }
 
@@ -197,19 +212,10 @@ void G4XXXSGSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation)
 {
   G4VSceneHandler::BeginPrimitives(objectTransformation);
-
-  // If thread of control has already passed through PreAddSolid,
-  // avoid opening a graphical data base component again.
-  if (!fProcessingSolid) {
-    CreateCurrentItem(G4String("\nBeginPrimitives:\n"));
-  }
 }
 
 void G4XXXSGSceneHandler::EndPrimitives ()
 {
-  if (!fProcessingSolid) {  // Already done if so.
-    *fCurrentItem += "EndPrimitives\n";
-  }
   G4VSceneHandler::EndPrimitives ();
 }
 
@@ -237,7 +243,7 @@ void G4XXXSGSceneHandler::AddSolid(const G4Box& box) {
      (G4ThreeVector
       (box.GetXHalfLength(), box.GetYHalfLength(), box.GetZHalfLength()),
       "Length")).strip() << ')' << std::endl;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 }
 
 void G4XXXSGSceneHandler::AddPrimitive(const G4Polyline& polyline) {
@@ -253,7 +259,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Polyline& polyline) {
   //?? Process polyline.
   std::ostringstream oss;
   oss << polyline << std::endl;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 }
 
 void G4XXXSGSceneHandler::AddPrimitive(const G4Text& text) {
@@ -271,7 +277,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Text& text) {
   //?? Process text.
   std::ostringstream oss;
   oss << text << std::endl;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 }
 
 void G4XXXSGSceneHandler::AddPrimitive(const G4Circle& circle) {
@@ -301,7 +307,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Circle& circle) {
   //?? Process circle.
   std::ostringstream oss;
   oss << circle << std::endl;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 }
 
 void G4XXXSGSceneHandler::AddPrimitive(const G4Square& square) {
@@ -331,7 +337,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Square& square) {
   //?? Process square.
   std::ostringstream oss;
   oss << square << std::endl;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 }
 
 void G4XXXSGSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
@@ -344,7 +350,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   //?? Process polyhedron.
   std::ostringstream oss;
   oss << polyhedron;
-  *fCurrentItem += oss.str();
+  //*fCurrentItem += oss.str();
 
   //?? Or... here are some ideas for decomposing into polygons...
   //Assume all facets are convex quadrilaterals.
@@ -392,7 +398,7 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // including how to cope with triangles if that's a problem.
 }
 
-void G4XXXSGSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4XXXSGSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXSGDEBUG
   G4cout <<
     "G4XXXSGSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
@@ -405,16 +411,95 @@ void G4XXXSGSceneHandler::ClearStore () {
 
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
-  fPermanentsRoot.clear();
-  fTransientsRoot.clear();
-  fLVMap.clear();
+  JA::Clear(&fSceneGraph);
 }
 
 void G4XXXSGSceneHandler::ClearTransientStore () {
 
   G4VSceneHandler::ClearTransientStore ();
 
-  fTransientsRoot.clear();
+  JA::Clear(&fSceneGraph);
 }
 
-#endif
+namespace JA {
+// Ad hoc tree class and utilities.
+
+#include "G4VPhysicalVolume.hh"
+
+void Insert(const PVNodeID* pvPath, size_t pathLength,
+		G4int index, Node* node) {
+  // Path passed as a PVNodeID* to avoid copying.
+
+  /* Debug
+  for (size_t i = 0; i < pathLength; ++i) {
+    std::cout << pvPath[i].GetPhysicalVolume()->GetName() << ":"
+              << pvPath[i].GetCopyNo() << " ("
+              << index << "), ";
+  }
+  */
+
+  // See if node has been encountered before
+  G4bool found = false; size_t foundPosition = 0;
+  for (size_t i = 0; i < node->daughters.size(); ++i) {
+    PVNodeID& daughterPVNodeID = node->daughters[i]->pvNodeID;
+    // It is enough to compare volume and copy number at a given position in the tree
+    if (daughterPVNodeID.GetPhysicalVolume() == pvPath[0].GetPhysicalVolume() &&
+	daughterPVNodeID.GetCopyNo() == pvPath[0].GetCopyNo()) {
+      found = true;
+      foundPosition = i;
+      break;
+    }
+  }
+
+  if (pathLength == 1) {  // This is a leaf
+    if (found) {  // Update index
+      node->daughters[foundPosition]->index = index;
+    } else {      // Make a new full entry
+      node->daughters.push_back(new Node(pvPath[0],index));
+    }
+    /* Debug
+    std::cout << std::endl;
+    */
+  } else {  // Not a leaf - carry on with rest of path
+    if (found) {  // Just carry on
+      Insert(pvPath+1,--pathLength,index,
+	     node->daughters[foundPosition]);
+    } else {      // Insert place holder, then carry on
+      node->daughters.push_back(new Node(pvPath[0]));
+      Insert(pvPath+1,--pathLength,index,
+	     node->daughters[node->daughters.size()-1]);
+    }
+  }
+}
+
+void PrintTree(std::ostream& os, Node* node)
+{
+  static G4int depth = -1;
+  depth++;
+  PVNodeID& thisPVNodeID = node->pvNodeID;
+  G4int& thisIndex = node->index;
+  const size_t& nDaughters = node->daughters.size();
+  G4VPhysicalVolume* thisPhysicalVolume= thisPVNodeID.GetPhysicalVolume();
+  if (!thisPhysicalVolume) os << "Root" << std::endl;
+  else {
+    for (G4int i = 0; i < depth; ++i) os << "__";
+    os << thisPVNodeID.GetPhysicalVolume()->GetName() << ":"
+       << thisPVNodeID.GetCopyNo() << " ("
+       << thisIndex << ")" << std::endl;;
+  }
+  for (size_t i = 0; i < nDaughters; ++i) {
+    PrintTree(os, node->daughters[i]);
+  }
+  depth--;
+}
+
+void Clear(Node* node)
+{
+  const size_t& nDaughters = node->daughters.size();
+  for (size_t i = 0; i < nDaughters; ++i) {
+    Clear(node->daughters[i]);
+    delete node->daughters[i];
+  }
+}
+
+} // End namespace JA

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.9 2010/09/20 15:50:46 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.10 2010/12/07 10:42:40 vuzhinsk Exp $
+// GEANT4 tag $Name:  $
 //
 
 // ------------------------------------------------------------
@@ -44,6 +44,9 @@
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron()
 
 {
+	PartonIndex=-1;
+	Parton[0] = new G4Parton(1);
+	Parton[1] = new G4Parton(-1);
 }
 
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron(const G4ReactionProduct & aPrimary)
@@ -68,7 +71,10 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron(const G4VKineticNucle
 }
 
 G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron()
-{}
+{
+//G4cout<<"Destruct G4DiffractiveSplitableHadron"<<Parton[0]<<" "<<Parton[1]<<G4endl;
+//        if(Parton[0] != NULL){delete Parton[0]; delete Parton[1];}
+}
 
 const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &)
 {
@@ -78,6 +84,7 @@ const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(con
 
 void G4DiffractiveSplitableHadron::SplitUp()
 {
+//G4cout<<"SplitUp() IsSplit() Parton[0] "<<IsSplit()<<" "<<Parton[0]<<G4endl;
   if (IsSplit()) return;
   Splitting();
 // Split once only...
@@ -99,19 +106,36 @@ G4Parton * G4DiffractiveSplitableHadron::GetNextParton()
 {
 	++PartonIndex;
 	if ( PartonIndex > 1 || PartonIndex < 0 ) return NULL;
-	
-	return Parton[PartonIndex];
+        G4int PartonInd(PartonIndex);        // Vova
+        if(PartonIndex == 1) PartonIndex=-1; // Vova	
+	return Parton[PartonInd];
+//	return Parton[PartonIndex];
 }
 
 G4Parton * G4DiffractiveSplitableHadron::GetNextAntiParton()
 {
-  return NULL; // to be looked at @@
+	++PartonIndex;   // Uzhi 22.11.10
+	if ( PartonIndex > 1 || PartonIndex < 0 ) return NULL;
+        G4int PartonInd(PartonIndex);
+        if(PartonIndex == 1) PartonIndex=-1;	
+	return Parton[PartonInd];
+//  return NULL; // to be looked at @@
 }
 
+void G4DiffractiveSplitableHadron::SetFirstParton(G4int PDGcode)// Uzhi 24.11.10
+{
+         delete Parton[0];
+         Parton[0]=new G4Parton(PDGcode);
+}
+
+void G4DiffractiveSplitableHadron::SetSecondParton(G4int PDGcode)// Uzhi 24.11.10
+{
+         delete Parton[1];
+         Parton[1]=new G4Parton(PDGcode);
+}
 //
 //----------------------- Implementation--------------------------
 //
-
 void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, G4int * bEnd) const
 {
 	const G4double udspin1= 1./6.;

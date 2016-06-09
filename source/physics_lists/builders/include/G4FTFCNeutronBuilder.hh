@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFCNeutronBuilder.hh,v 1.3 2009/03/31 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFCNeutronBuilder.hh,v 1.3 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

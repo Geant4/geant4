@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2009/11/20 23:33:38 tkoi Exp $
+# $Id: GNUmakefile,v 1.3 2009-11-20 23:33:38 tkoi Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \

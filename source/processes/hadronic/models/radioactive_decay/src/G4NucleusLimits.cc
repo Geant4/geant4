@@ -44,7 +44,9 @@
 //
 // 14 April 2000, F Lei, DERA UK
 // 0.b.4 release. No change in this class
-
+//
+//	02 November 2011, L Desorgher
+//	Remove the maximum limits of A<250 and Z<100
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -68,7 +70,7 @@ G4NucleusLimits::G4NucleusLimits
   // check that aMin1 is within [1, 250].
   //
   if (aMin1 < 1) {aMin = 1;}
-  else if (aMin1 > 250) {aMin = 240;}
+  //else if (aMin1 > 250) {aMin = 240;}
   else {aMin = aMin1;}
 
   //
@@ -76,7 +78,7 @@ G4NucleusLimits::G4NucleusLimits
   // check that aMax1 is within [1, 250].
   //
   if (aMax1 < 1) {aMax = 1;}
-  else if (aMax1 > 250) {aMax = 250;}
+  //else if (aMax1 > 250) {aMax = 250;}
   else {aMax = aMax1;}
 
   //
@@ -93,7 +95,7 @@ G4NucleusLimits::G4NucleusLimits
   // check that zMin1 is within [0, 100].
   //
   if (zMin1 < 0) {zMin = 0;}
-  else if (zMin1 > 100) {zMin = 100;}
+  //else if (zMin1 > 100) {zMin = 100;}
   else {zMin = zMin1;}
 
   //
@@ -101,7 +103,7 @@ G4NucleusLimits::G4NucleusLimits
   // check that zMax1 is within [0, 100].
   //
   if (zMax1 < 0) {zMax = 0;}
-  else if (zMax1 > 100) {zMax = 100;}
+  //else if (zMax1 > 100) {zMax = 100;}
   else {zMax = zMax1;}
 
   //

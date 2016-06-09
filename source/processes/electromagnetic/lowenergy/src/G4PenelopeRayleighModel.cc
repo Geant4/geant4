@@ -23,25 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.8 2010/11/26 11:51:11 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PenelopeRayleighModel.cc,v 1.4 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
-// 14 Oct 2008   L Pandola    Migration from process to model 
-// 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
-//                  - apply internal high-energy limit only in constructor 
-//                  - do not apply low-energy limit (default is 0)
-// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
-//                            PrepareConstants(), since they might be checked later on
-// 18 Dec 2009   L Pandola    Added a dummy ComputeCrossSectionPerAtom() method issueing a 
-//                            warning if users try to access atomic cross sections via 
-//                            G4EmCalculator
+// 03 Dec 2009   L Pandola    First implementation
+// 25 May 2011   L.Pandola    Renamed (make v2008 as default Penelope)
 //
 
 #include "G4PenelopeRayleighModel.hh"
+#include "G4PenelopeSamplingData.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
@@ -49,17 +43,16 @@
 #include "G4PhysicsTable.hh"
 #include "G4ElementTable.hh"
 #include "G4Element.hh"
-#include "G4PenelopeIntegrator.hh"
+#include "G4PhysicsFreeVector.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-  :G4VEmModel(nam),samplingFunction_x(0),samplingFunction_xNoLog(0),
-   theMaterial(0),
-   isInitialised(false)
+						 const G4String& nam)
+  :G4VEmModel(nam),isInitialised(false),logAtomicCrossSection(0),   
+   atomicFormFactor(0),logFormFactorTable(0),pMaxTable(0),samplingTable(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -72,21 +65,78 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
   // 1 = warning for energy non-conservation 
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
-  // 4 = entering in methods
+  // 4 = entering in methods 
 
-  PrepareConstants();
+  //build the energy grid. It is the same for all materials
+  G4double logenergy = std::log(fIntrinsicLowEnergyLimit/2.);
+  G4double logmaxenergy = std::log(1.5*fIntrinsicHighEnergyLimit);
+  //finer grid below 160 keV
+  G4double logtransitionenergy = std::log(160*keV); 
+  G4double logfactor1 = std::log(10.)/250.;
+  G4double logfactor2 = logfactor1*10;
+  logEnergyGridPMax.push_back(logenergy);
+  do{
+    if (logenergy < logtransitionenergy)
+      logenergy += logfactor1;
+    else
+      logenergy += logfactor2;
+    logEnergyGridPMax.push_back(logenergy);      
+  }while (logenergy < logmaxenergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
-  std::map <const G4Material*,G4DataVector*>::iterator i;
-  for(i=SamplingTable.begin(); i != SamplingTable.end(); i++) {
-    delete (*i).second;
-  }
-  if (samplingFunction_x) delete samplingFunction_x;
-  if (samplingFunction_xNoLog) delete samplingFunction_xNoLog;
+  std::map <const G4int,G4PhysicsFreeVector*>::iterator i;
+  if (logAtomicCrossSection)
+    {
+      for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	if (i->second) delete i->second;
+      delete logAtomicCrossSection;
+     }
+
+   if (atomicFormFactor)
+     {
+       for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
+	 if (i->second) delete i->second;
+       delete atomicFormFactor;
+     }
+
+  ClearTables();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4PenelopeRayleighModel::ClearTables()
+{
+   std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;
+ 
+   if (logFormFactorTable)
+     {
+       for (i=logFormFactorTable->begin(); i != logFormFactorTable->end(); i++)
+	 if (i->second) delete i->second;
+       delete logFormFactorTable;
+       logFormFactorTable = 0; //zero explicitely
+     }
+
+   if (pMaxTable)
+     {
+       for (i=pMaxTable->begin(); i != pMaxTable->end(); i++)
+	 if (i->second) delete i->second;
+       delete pMaxTable;
+       pMaxTable = 0; //zero explicitely
+     }
+
+   std::map<const G4Material*,G4PenelopeSamplingData*>::iterator ii;
+   if (samplingTable)
+     {
+       for (ii=samplingTable->begin(); ii != samplingTable->end(); ii++)
+	 if (ii->second) delete ii->second;
+       delete samplingTable;
+       samplingTable = 0; //zero explicitely
+     }     
+
+   return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -97,9 +147,28 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeRayleighModel::Initialise()" << G4endl;
 
+  //clear tables depending on materials, not the atomic ones
+  ClearTables();
+  
+  //create new tables
+  //
+  // logAtomicCrossSection and atomicFormFactor are created only once,
+  // since they are never cleared
+  if (!logAtomicCrossSection)
+    logAtomicCrossSection = new std::map<const G4int,G4PhysicsFreeVector*>;
+  if (!atomicFormFactor)
+    atomicFormFactor = new std::map<const G4int,G4PhysicsFreeVector*>;
+
+  if (!logFormFactorTable)
+    logFormFactorTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+  if (!pMaxTable)
+    pMaxTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+  if (!samplingTable)
+    samplingTable = new std::map<const G4Material*,G4PenelopeSamplingData*>;
+
 
   if (verboseLevel > 0) {
-    G4cout << "Penelope Rayleigh model is initialized " << G4endl
+    G4cout << "Penelope Rayleigh model v2008 is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / keV << " keV - "
 	   << HighEnergyLimit() / GeV << " GeV"
@@ -113,140 +182,121 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double 
-G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
-					       const G4ParticleDefinition* p,
-					       G4double ekin,
-					       G4double,
-					       G4double)
-{
-  // Penelope model to calculate the Rayleigh scattering inverse mean 
-  // free path. 
-  //
-  // The basic method is from
-  //  M. Born, Atomic physics, Ed. Blackie and Sons (1969)
-  // using numerical approximations developed in
-  //  J. Baro' et al., Radiat. Phys. Chem. 44 (1994) 531
-  // Data used for the form factor used in the calculation (numerical integral of 
-  // dSigma/dOmega) are been derived by fitting the atomic forn factor tables 
-  // tabulated in 
-  //  J.H. Hubbel et al., J. Phys. Chem. Ref. Data 4 (1975) 471; erratum ibid. 
-  //   6 (1977) 615.
-  // The numerical integration of the differential cross section dSigma/dOmega, 
-  // which is implemented in the DifferentialCrossSection() method, is performed 
-  // by 20-point Gaussian method (managed by G4PenelopeIntegrator). 
-  //
-
-  if (verboseLevel > 3)
-    G4cout << "Calling CrossSectionPerVolume() of G4PenelopeRayleighModel" << G4endl;
-  SetupForMaterial(p, material, ekin);
-  
-  //Assign local variable "material" to private member "theMaterial", because 
-  //this information is necessary to calculate the cross section
-  theMaterial = material;
-
-  G4int nElements = material->GetNumberOfElements();
-  const G4ElementVector* elementVector = material->GetElementVector();
-
-  G4int maxZ=0;
-  for (G4int i=0; i<nElements; i++) 
-    {
-      G4int Z = (G4int) (*elementVector)[i]->GetZ();
-      if (Z>maxZ)
-	maxZ = Z;
-    }
-      
-  G4double ec=std::min(ekin,0.5*maxZ);
-  factorE = 849.3315*(ec/electron_mass_c2)*(ec/electron_mass_c2);
-  G4double cs=0;
-  //
-  //Integrate the Differential Cross Section dSigma/dCosTheta between -1 and 1.
-  //
-  G4PenelopeIntegrator<G4PenelopeRayleighModel,G4double(G4PenelopeRayleighModel::*)(G4double)> 
-    theIntegrator;
-  cs =
-    theIntegrator.Calculate(this,&G4PenelopeRayleighModel::DifferentialCrossSection,
-			    -1.0,0.90,1e-06);
-  cs += theIntegrator.Calculate(this,&G4PenelopeRayleighModel::DifferentialCrossSection,
-				0.90,0.9999999,1e-06);
-  cs = cs*(ec/ekin)*(ec/ekin)*pi*classic_electr_radius*classic_electr_radius;
-  //
-  // Here cs represents the cross section per molecule for materials defined with chemical 
-  // formulas and the average cross section per atom in compounds (defined with the mass 
-  // fraction)
-  //
-  const G4int* stechiometric = material->GetAtomsVector();
-  //This is the total density of atoms in the material
-  G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
-  G4double moleculeDensity = 0;
-
-  //Default case: the material is a compound. In this case, cs is the average cross section 
-  // _per_atom_ and one has to multiply for the atom density.
-  G4double cross = atomDensity*cs;
-  G4bool isAMolecule = false;
-  
-  //Alternative case: the material is a molecule. In this case cs is the cross section 
-  // _per_molecule_ and one has to multiply for the molecule density
-  if (stechiometric)
-    {
-      //Calculate the total number of atoms per molecule
-      G4int atomsPerMolecule = 0;
-      for (G4int k=0;k<nElements;k++)
-       {
-	atomsPerMolecule += stechiometric[k];
-        if (verboseLevel > 2)
-	   {
-	     G4cout << "Element: " << (G4int) (*elementVector)[k]->GetZ() << " has " << 
-	        stechiometric[k] << " atoms/molecule" << G4endl;	
-           }
-       }
-      if (atomsPerMolecule)
-	{
-	  isAMolecule = true;
-	  if (verboseLevel > 3)
-	    {
-	      G4cout << "Material " << material->GetName() << " is a molecule composed by " << 
-		atomsPerMolecule << " atoms" << G4endl;
-	    }
-	  moleculeDensity = atomDensity/((G4double) atomsPerMolecule);
-	  cross = cs*moleculeDensity;
-	}
-    }
-  
-  if (verboseLevel > 2)
-    {
-      if (isAMolecule)
-	{
-	  G4cout << "Rayleigh cross section at " << ekin/keV << " keV for material " << 
-	    material->GetName() << " (molecule) = " << cs/barn << " barn/molecule." << G4endl;
-	  G4cout << "Mean free path: " << (1./cross)/mm << " mm" << G4endl;
-	}
-      else
-	{
-	  G4cout << "Rayleigh cross section at " << ekin/keV << " keV for material " << 
-	    material->GetName() << " (compound) = " << cs/barn << " barn/atom." << G4endl;
-	  G4cout << "Mean free path: " << (1./cross)/mm << " mm" << G4endl;
-	}
-    }
-  return cross;
-}
-
-
-//This is a dummy method. Never inkoved by the tracking, it just issues
-//a warning if one tries to get Cross Sections per Atom via the
-//G4EmCalculator.
 G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-							     G4double,
-							     G4double,
+							     G4double energy,
+							     G4double Z,
 							     G4double,
 							     G4double,
 							     G4double)
 {
-  G4cout << "*** G4PenelopeRayleighModel -- WARNING ***" << G4endl;
-  G4cout << "Penelope Rayleigh model does not calculate cross section _per atom_ " << G4endl;
-  G4cout << "so the result is always zero. For physics values, please invoke " << G4endl;
-  G4cout << "GetCrossSectionPerVolume() or GetMeanFreePath() via the G4EmCalculator" << G4endl;
-  return 0;
+  // Cross section of Rayleigh scattering in Penelope v2008 is calculated by the EPDL97 
+  // tabulation, Cuellen et al. (1997), with non-relativistic form factors from Hubbel 
+  // et al. J. Phys. Chem. Ref. Data 4 (1975) 471; Erratum ibid. 6 (1977) 615.
+
+   if (verboseLevel > 3)
+    G4cout << "Calling CrossSectionPerAtom() of G4PenelopeRayleighModel" << G4endl;
+ 
+   G4int iZ = (G4int) Z;
+
+   //read data files
+   if (!logAtomicCrossSection->count(iZ))
+     ReadDataFile(iZ);
+   //now it should be ok
+   if (!logAtomicCrossSection->count(iZ))
+     {
+       G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
+		   "em2040",FatalException,"Unable to load the cross section table");
+     }
+
+   G4double cross = 0;
+
+   G4PhysicsFreeVector* atom = logAtomicCrossSection->find(iZ)->second;
+   if (!atom)
+     {
+       G4ExceptionDescription ed;
+       ed << "Unable to find Z=" << iZ << " in the atomic cross section table" << G4endl;
+       G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
+		   "em2041",FatalException,ed);
+       return 0;
+     }
+   G4double logene = std::log(energy);
+   G4double logXS = atom->Value(logene);
+   cross = std::exp(logXS);
+
+   if (verboseLevel > 2)
+    G4cout << "Rayleigh cross section at " << energy/keV << " keV for Z=" << Z << 
+      " = " << cross/barn << " barn" << G4endl;
+    return cross;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4PenelopeRayleighModel::BuildFormFactorTable(const G4Material* material)
+{
+ 
+  /*
+    1) get composition and equivalent molecular density
+  */
+  
+  G4int nElements = material->GetNumberOfElements();
+  const G4ElementVector* elementVector = material->GetElementVector();
+  const G4double* fractionVector = material->GetFractionVector();
+
+  std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
+  for (G4int i=0;i<nElements;i++)
+    {
+      G4double fraction = fractionVector[i];
+      G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
+      StechiometricFactors->push_back(fraction/atomicWeigth);
+    }
+  //Find max
+  G4double MaxStechiometricFactor = 0.;
+  for (G4int i=0;i<nElements;i++)
+    {
+      if ((*StechiometricFactors)[i] > MaxStechiometricFactor)
+        MaxStechiometricFactor = (*StechiometricFactors)[i];
+    }
+  if (MaxStechiometricFactor<1e-16)
+    {
+      G4ExceptionDescription ed;
+      ed << "Inconsistent data of atomic composition for " << 
+	material->GetName() << G4endl;
+      G4Exception("G4PenelopeRayleighModel::BuildFormFactorTable()",
+		  "em2042",FatalException,ed);
+    }
+  //Normalize
+  for (G4int i=0;i<nElements;i++)
+    (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
+ 
+  // Equivalent atoms per molecule
+  G4double atomsPerMolecule = 0;
+  for (G4int i=0;i<nElements;i++)
+    atomsPerMolecule += (*StechiometricFactors)[i]; 
+ 
+  /*
+    CREATE THE FORM FACTOR TABLE
+  */
+  G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector(logQSquareGrid.size());
+  theFFVec->SetSpline(true);
+
+  for (size_t k=0;k<logQSquareGrid.size();k++)
+    {
+      G4double ff2 = 0; //squared form factor
+      for (G4int i=0;i<nElements;i++)
+	{
+	  G4int iZ = (G4int) (*elementVector)[i]->GetZ();
+	  G4PhysicsFreeVector* theAtomVec = atomicFormFactor->find(iZ)->second;
+	  G4double f = (*theAtomVec)[k]; //the q-grid is always the same	    
+	  ff2 += f*f*(*StechiometricFactors)[i];
+	}
+      if (ff2)
+	theFFVec->PutValue(k,logQSquareGrid[k],std::log(ff2)); //NOTICE: THIS IS log(Q^2) vs. log(F^2)
+    }
+  logFormFactorTable->insert(std::make_pair(material,theFFVec));
+
+  delete StechiometricFactors;
+  
+  return;
 }
 
 
@@ -258,14 +308,18 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 						G4double,
 						G4double)
 {
-  // Penelope model to sample the Rayleigh scattering final state.
-  //
-  // The angular deflection of the scattered photon is sampled according to the 
-  // differential cross section dSigma/dOmega used for the numerical integration, 
-  // and implemented in the DifferentialCrossSection() method. See comments in 
-  // method CrossSectionPerVolume() for more details on the original references 
-  // of the model.
-  //
+  // Sampling of the Rayleigh final state (namely, scattering angle of the photon) 
+  // from the Penelope2008 model. The scattering angle is sampled from the atomic 
+  // cross section dOmega/d(cosTheta) from Born ("Atomic Phyisics", 1969), disregarding 
+  // anomalous scattering effects. The Form Factor F(Q) function which appears in the 
+  // analytical cross section is retrieved via the method GetFSquared(); atomic data 
+  // are tabulated for F(Q). Form factor for compounds is calculated according to 
+  // the additivity rule. The sampling from the F(Q) is made via a Rational Inverse 
+  // Transform with Aliasing (RITA) algorithm; RITA parameters are calculated once 
+  // for each material and managed by G4PenelopeSamplingData objects.
+  // The sampling algorithm (rejection method) has efficiency 67% at low energy, and 
+  // increases with energy. For E=100 keV the efficiency is 100% and 86% for 
+  // hydrogen and uranium, respectively.
 
   if (verboseLevel > 3)
     G4cout << "Calling SamplingSecondaries() of G4PenelopeRayleighModel" << G4endl;
@@ -281,58 +335,72 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     }
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
-   
-  // Sampling inizialitation (build internal table)
-  theMaterial = couple->GetMaterial();
-  InitialiseSampling();
-
-  G4DataVector* samplingFunction_y = SamplingTable.find(theMaterial)->second;
-
-   // Sample the angle of the scattered photon
-  G4double x2max = 2.0*std::log(41.2148*photonEnergy0/electron_mass_c2);
-  G4int jm=0;
-  G4int asize = samplingFunction_x->size();
-  if (x2max < (*samplingFunction_x)[1]) 
-    jm=0;
-  else if(x2max>(*samplingFunction_x)[asize-2])
-    jm=asize-2;
-  else 
+  
+  const G4Material* theMat = couple->GetMaterial();
+  
+  //1) Verify if tables are ready
+  if (!pMaxTable || !samplingTable)
     {
-      //spacing in the logTable
-      G4double logScalingFactor = (*samplingFunction_x)[1]-(*samplingFunction_x)[0];
-      jm=(G4int) ((x2max-(*samplingFunction_x)[0])/logScalingFactor);
+      G4Exception("G4PenelopeRayleighModel::SampleSecondaries()",
+		  "em2043",FatalException,"Invalid model initialization");    
+      return;
     }
+  
+  //2) retrieve or build the sampling table
+  if (!(samplingTable->count(theMat)))
+    InitializeSamplingAlgorithm(theMat);
+  G4PenelopeSamplingData* theDataTable = samplingTable->find(theMat)->second;
+  
+  //3) retrieve or build the pMax data
+  if (!pMaxTable->count(theMat))
+    GetPMaxTable(theMat);
+  G4PhysicsFreeVector* thePMax = pMaxTable->find(theMat)->second;
 
-  G4double rumax = (*samplingFunction_y)[jm]+((*samplingFunction_y)[jm+1]-(*samplingFunction_y)[jm])*
-    (x2max-(*samplingFunction_x)[jm])/((*samplingFunction_x)[jm+1]-(*samplingFunction_x)[jm]); 
-  G4double cosTheta=0;
-  G4double rejectionValue = 0;
-  do{
-    G4double ru = rumax + std::log(G4UniformRand());
-    G4int j=0;
-    G4int ju=jm+1;
-    do{
-      G4int jt=(j+ju)/2; //bipartition
-      if (ru > (*samplingFunction_y)[jt])
-	j=jt;
-      else
-	ju=jt;
-    }while ((ju-j)>1);
-    G4double x2rat = 0;
-    G4double denomin = (*samplingFunction_y)[j+1]-(*samplingFunction_y)[j];
-    if (denomin > 1e-12) 
-     {
-       x2rat = (*samplingFunction_x)[j]+(((*samplingFunction_x)[j+1]-(*samplingFunction_x)[j])*
-					 (ru-(*samplingFunction_y)[j])/denomin)-x2max;
-     }
-    else
-     {
-       x2rat = (*samplingFunction_x)[j]-x2max;
-     }
-    cosTheta = 1.0-2.0*std::exp(x2rat);
-    rejectionValue = 0.5*(1.0+cosTheta*cosTheta);
-   }while (G4UniformRand() > rejectionValue);
+  G4double cosTheta = 1.0;
+  
+  //OK, ready to go!
+  G4double qmax = 2.0*photonEnergy0/electron_mass_c2; //this is non-dimensional now
 
+  if (qmax < 1e-10) //very low momentum transfer
+    {
+      G4bool loopAgain=false;
+      do
+	{
+	  loopAgain = false;
+	  cosTheta = 1.0-2.0*G4UniformRand();
+	  G4double G = 0.5*(1+cosTheta*cosTheta);
+	  if (G4UniformRand()>G)
+	    loopAgain = true;
+	}while(loopAgain);
+    }
+  else //larger momentum transfer
+    {
+      size_t nData = theDataTable->GetNumberOfStoredPoints();
+      G4double LastQ2inTheTable = theDataTable->GetX(nData-1);
+      G4double q2max = std::min(qmax*qmax,LastQ2inTheTable);
+
+      G4bool loopAgain = false;
+      G4double MaxPValue = thePMax->Value(photonEnergy0);
+      G4double xx=0;
+      
+      //Sampling by rejection method. The rejection function is 
+      //G = 0.5*(1+cos^2(theta))
+      //
+      do{
+	loopAgain = false;
+	G4double RandomMax = G4UniformRand()*MaxPValue;
+	xx = theDataTable->SampleValue(RandomMax);
+	//xx is a random value of q^2 in (0,q2max),sampled according to 
+	//F(Q^2) via the RITA algorithm
+	if (xx > q2max)
+	  loopAgain = true;
+	cosTheta = 1.0-2.0*xx/q2max;
+	G4double G = 0.5*(1+cosTheta*cosTheta);
+	if (G4UniformRand()>G)
+	  loopAgain = true;
+      }while(loopAgain);
+    }
+  
   G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
  
   // Scattered photon angles. ( Z - axis along the parent photon)
@@ -347,240 +415,766 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   photonDirection1.rotateUz(photonDirection0);
   fParticleChange->ProposeMomentumDirection(photonDirection1) ;
   fParticleChange->SetProposedKineticEnergy(photonEnergy0) ;
-   
+ 
+  return;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
+{
+  if (verboseLevel > 2)
+    {
+      G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
+      G4cout << "Going to read Rayleigh data files for Z=" << Z << G4endl;
+    }
+
+  char* path = getenv("G4LEDATA");
+  if (!path)
+    {
+      G4String excep = "G4LEDATA environment variable not set!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0006",FatalException,excep);
+      return;
+    }
+
+  /*
+    Read first the cross section file
+  */
+  std::ostringstream ost;
+  if (Z>9)
+    ost << path << "/penelope/rayleigh/pdgra" << Z << ".p08";
+  else
+    ost << path << "/penelope/rayleigh/pdgra0" << Z << ".p08";
+  std::ifstream file(ost.str().c_str());
+  if (!file.is_open())
+    {
+      G4String excep = "Data file " + G4String(ost.str()) + " not found!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
+    }
+  G4int readZ =0;
+  size_t nPoints= 0;
+  file >> readZ >> nPoints;
+  //check the right file is opened.
+  if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
+    {
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
+      return;
+    }  
+  G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector((size_t)nPoints);
+  G4double ene=0,f1=0,f2=0,xs=0;
+  for (size_t i=0;i<nPoints;i++)
+    {
+      file >> ene >> f1 >> f2 >> xs;
+      //dimensional quantities
+      ene *= eV;
+      xs *= cm2;
+      theVec->PutValue(i,std::log(ene),std::log(xs));
+      if (file.eof() && i != (nPoints-1)) //file ended too early
+	{
+	  G4ExceptionDescription ed ;	  
+	  ed << "Corrupted data file for Z=" << Z << G4endl;
+	  ed << "Found less than " << nPoints << "entries " <<G4endl;
+	  G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		      "em0005",FatalException,ed);
+	}
+    }
+  if (!logAtomicCrossSection)
+    {
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em2044",FatalException,"Unable to allocate the atomic cross section table");
+      delete theVec;
+      return;
+    }
+  logAtomicCrossSection->insert(std::make_pair(Z,theVec));
+  file.close();
+
+  /*
+    Then read the form factor file
+  */
+  std::ostringstream ost2;
+  if (Z>9)
+    ost2 << path << "/penelope/rayleigh/pdaff" << Z << ".p08";
+  else
+    ost2 << path << "/penelope/rayleigh/pdaff0" << Z << ".p08";
+  file.open(ost2.str().c_str());
+  if (!file.is_open())
+    {
+      G4String excep = "Data file " + G4String(ost2.str()) + " not found!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
+    }
+  file >> readZ >> nPoints;
+  //check the right file is opened.
+  if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
+    {
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
+      return;
+    }  
+  G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector((size_t)nPoints);
+  G4double q=0,ff=0,incoh=0;
+  G4bool fillQGrid = false;
+  //fill this vector only the first time.
+  if (!logQSquareGrid.size())
+    fillQGrid = true;
+  for (size_t i=0;i<nPoints;i++)
+    {
+      file >> q >> ff >> incoh;
+      //q and ff are dimensionless (q is in units of (m_e*c)
+      theFFVec->PutValue(i,q,ff);
+      if (fillQGrid)
+	{
+	  logQSquareGrid.push_back(2.0*std::log(q));
+	}
+      if (file.eof() && i != (nPoints-1)) //file ended too early
+	{
+	  G4ExceptionDescription ed;	  
+	  ed << "Corrupted data file for Z=" << Z << G4endl;
+	  ed << "Found less than " << nPoints << "entries " <<G4endl;
+	  G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		      "em0005",FatalException,ed);
+	}
+    }
+  if (!atomicFormFactor)
+    {
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em2045",FatalException,
+		  "Unable to allocate the atomicFormFactor data table");
+      delete theFFVec;
+      return;
+    }
+  atomicFormFactor->insert(std::make_pair(Z,theFFVec));
+  file.close();
   return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeRayleighModel::DifferentialCrossSection(G4double cosTheta)
+G4double G4PenelopeRayleighModel::GetFSquared(const G4Material* mat, const G4double QSquared)
 {
-  //Differential cross section for Rayleigh scattering
-  G4double x2 = factorE*(1-cosTheta);
-  G4double gradx = (1+cosTheta*cosTheta)*MolecularFormFactor(x2);
-  return gradx;
-}
+  G4double f2 = 0;
+  //Input value QSquared could be zero: protect the log() below against 
+  //the FPE exception
+  //If Q<1e-10, set Q to 1e-10
+  G4double logQSquared = (QSquared>1e-10) ? std::log(QSquared) : -23.;
+  //last value of the table
+  G4double maxlogQ2 = logQSquareGrid[logQSquareGrid.size()-1];
+  //If the table has not been built for the material, do it!
+  if (!logFormFactorTable->count(mat))
+    BuildFormFactorTable(mat);
+  
+  //now it should  be all right
+  G4PhysicsFreeVector* theVec = logFormFactorTable->find(mat)->second;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4PenelopeRayleighModel::MolecularFormFactor(G4double x2)
-{
-  //Squared molecular form factor (additivity rule)
-  const G4int ntot=95;
-  G4double RA1[ntot] = {0.0e0, 3.9265e+0, 4.3100e+1, 5.2757e+1, 2.5021e+1,
-		      1.2211e+1, 9.3229e+0, 3.2455e+0, 2.4197e+0, 1.5985e+0,
-		      3.0926e+1, 1.5315e+1, 7.7061e+0, 3.9493e+0, 2.2042e+0,
-		      1.9453e+1, 1.9354e+1, 8.0374e+0, 8.3779e+1, 5.7370e+1,
-		      5.2310e+1, 4.7514e+1, 4.3785e+1, 4.2048e+1, 3.6972e+1,
-		      3.3849e+1, 3.1609e+1, 2.8763e+1, 2.7217e+1, 2.4263e+1,
-		      2.2403e+1, 1.8606e+1, 1.5143e+1, 1.4226e+1, 1.1792e+1,
-		      9.7574e+0, 1.2796e+1, 1.2854e+1, 1.2368e+1, 1.0208e+1,
-		      8.2823e+0, 7.4677e+0, 7.6028e+0, 6.1090e+0, 5.5346e+0,
-		      4.2340e+0, 4.0444e+0, 4.2905e+0, 4.7950e+0, 5.1112e+0,
-		      5.2407e+0, 5.2153e+0, 5.1639e+0, 4.8814e+0, 5.8054e+0,
-		      6.6724e+0, 6.5104e+0, 6.3364e+0, 6.2889e+0, 6.3028e+0,
-		      6.3853e+0, 6.3475e+0, 6.5779e+0, 6.8486e+0, 7.0993e+0,
-		      7.6122e+0, 7.9681e+0, 8.3481e+0, 6.3875e+0, 8.0042e+0,
-		      8.0820e+0, 7.6940e+0, 7.1927e+0, 6.6751e+0, 6.1623e+0,
-		      5.8335e+0, 5.5599e+0, 4.6551e+0, 4.4327e+0, 4.7601e+0,
-		      5.2872e+0, 5.6084e+0, 5.7680e+0, 5.8041e+0, 5.7566e+0,
-		      5.6541e+0, 6.3932e+0, 6.9313e+0, 7.0027e+0, 6.8796e+0,
-		      6.4739e+0, 6.2405e+0, 6.0081e+0, 5.5708e+0, 5.3680e+0};
-
-
-  G4double  RA2[ntot] = {0.0e0, 1.3426e-1, 9.4875e+1,-1.0896e+2,-4.5494e+1,
-		       -1.9572e+1,-1.2382e+1,-3.6827e+0,-2.4542e+0,-1.4453e+0,
-		       1.3401e+2, 7.9717e+1, 6.2164e+1, 4.0300e+1, 3.1682e+1,
-		       -1.3639e+1,-1.5950e+1,-5.1523e+0, 1.8351e+2, 1.2205e+2,
-		       1.0007e+2, 8.5632e+1, 7.9145e+1, 6.3675e+1, 6.2954e+1,
-		       5.6601e+1, 5.4171e+1, 4.8752e+1, 3.8062e+1, 3.9933e+1,
-		       4.8343e+1, 4.2137e+1, 3.4617e+1, 2.9430e+1, 2.4010e+1,
-		       1.9744e+1, 4.0009e+1, 5.1614e+1, 5.0456e+1, 3.9088e+1,
-		       2.6824e+1, 2.2953e+1, 2.4773e+1, 1.6893e+1, 1.4548e+1,
-		       9.7226e+0, 1.0192e+1, 1.1153e+1, 1.3188e+1, 1.4733e+1,
-		       1.5644e+1, 1.5939e+1, 1.5923e+1, 1.5254e+1, 2.0748e+1,
-		       2.6901e+1, 2.7032e+1, 2.4938e+1, 2.1528e+1, 2.0362e+1,
-		       1.9474e+1, 1.8238e+1, 1.7898e+1, 1.9174e+1, 1.9023e+1,
-		       1.8194e+1, 1.8504e+1, 1.8955e+1, 1.4276e+1, 1.7558e+1,
-		       1.8651e+1, 1.7984e+1, 1.6793e+1, 1.5469e+1, 1.4143e+1,
-		       1.3149e+1, 1.2255e+1, 9.2352e+0, 8.6067e+0, 9.7460e+0,
-		       1.1749e+1, 1.3281e+1, 1.4326e+1, 1.4920e+1, 1.5157e+1,
-		       1.5131e+1, 1.9489e+1, 2.3649e+1, 2.4686e+1, 2.4760e+1,
-		       2.1519e+1, 2.0099e+1, 1.8746e+1, 1.5943e+1, 1.4880e+1};
-
-  G4double RA3[ntot] =  {0.0e0, 2.2648e+0, 1.0579e+3, 8.6177e+2, 2.4422e+2,
-		       7.8788e+1, 3.8293e+1, 1.2564e+1, 6.9091e+0, 3.7926e+0,
-		       0.0000e+0, 0.0000e+0, 1.6759e-9, 1.3026e+1, 3.0569e+0,
-		       1.5521e+2, 1.2815e+2, 4.7378e+1, 9.2802e+2, 4.7508e+2,
-		       3.6612e+2, 2.7582e+2, 2.1008e+2, 1.5903e+2, 1.2322e+2,
-		       9.2898e+1, 7.1345e+1, 5.1651e+1, 3.8474e+1, 2.7410e+1,
-		       1.9126e+1, 1.0889e+1, 5.3479e+0, 8.2223e+0, 5.0837e+0,
-		       2.8905e+0, 2.7457e+0, 6.7082e-1, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 1.7264e-1, 2.7322e-1,
-		       3.9444e-1, 4.5648e-1, 6.2286e-1, 7.2468e-1, 8.4296e-1,
-		       1.1698e+0, 1.2994e+0, 1.4295e+0, 0.0000e+0, 8.1570e-1,
-		       6.9349e-1, 4.9536e-1, 3.1211e-1, 1.5931e-1, 2.9512e-2,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0,
-		       0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0, 0.0000e+0};
-
- G4double RA4[ntot] =  {1.1055e1,6.3519e0,4.7367e+1, 3.9402e+1, 2.2896e+1,
-		      1.3979e+1, 1.0766e+1, 6.5252e+0, 5.1631e+0, 4.0524e+0,
-		      2.7145e+1, 1.8724e+1, 1.4782e+1, 1.1608e+1, 9.7750e+0,
-		      1.6170e+1, 1.5249e+1, 9.1916e+0, 5.4499e+1, 4.1381e+1,
-		      3.7395e+1, 3.3815e+1, 3.1135e+1, 2.8273e+1, 2.6140e+1,
-		      2.3948e+1, 2.2406e+1, 2.0484e+1, 1.8453e+1, 1.7386e+1,
-		      1.7301e+1, 1.5388e+1, 1.3411e+1, 1.2668e+1, 1.1133e+1,
-		      9.8081e+0, 1.3031e+1, 1.4143e+1, 1.3815e+1, 1.2077e+1,
-		      1.0033e+1, 9.2549e+0, 9.5338e+0, 7.9076e+0, 7.3263e+0,
-		      5.9996e+0, 6.0087e+0, 6.2660e+0, 6.7914e+0, 7.1501e+0,
-		      7.3367e+0, 7.3729e+0, 7.3508e+0, 7.1465e+0, 8.2731e+0,
-		      9.3745e+0, 9.3508e+0, 8.9897e+0, 8.4566e+0, 8.2690e+0,
-		      8.1398e+0, 7.9183e+0, 7.9123e+0, 8.1677e+0, 8.1871e+0,
-		      8.1766e+0, 8.2881e+0, 8.4227e+0, 7.0273e+0, 8.0002e+0,
-		      8.1440e+0, 7.9104e+0, 7.5685e+0, 7.1970e+0, 6.8184e+0,
-		      6.5469e+0, 6.3056e+0, 5.4844e+0, 5.2832e+0, 5.5889e+0,
-		      6.0919e+0, 6.4340e+0, 6.6426e+0, 6.7428e+0, 6.7636e+0,
-		      6.7281e+0, 7.5729e+0, 8.2808e+0, 8.4400e+0, 8.4220e+0,
-		      7.8662e+0, 7.5993e+0, 7.3353e+0, 6.7829e+0, 6.5520e+0};
-
-  G4double RA5[ntot] = {0.0e0, 4.9828e+0, 5.5674e+1, 3.0902e+1, 1.1496e+1,
-		      4.8936e+0, 2.5506e+0, 1.2236e+0, 7.4698e-1, 4.7042e-1,
-		      4.7809e+0, 4.6315e+0, 4.3677e+0, 4.9269e+0, 2.6033e+0,
-		      9.6229e+0, 7.2592e+0, 4.1634e+0, 1.3999e+1, 8.6975e+0,
-		      6.9630e+0, 5.4681e+0, 4.2653e+0, 3.2848e+0, 2.7354e+0,
-		      2.1617e+0, 1.7030e+0, 1.2826e+0, 9.7080e-1, 7.2227e-1,
-		      5.0874e-1, 3.1402e-1, 1.6360e-1, 3.2918e-1, 2.3570e-1,
-		      1.5868e-1, 1.5146e-1, 9.7662e-2, 7.3151e-2, 6.4206e-2,
-		      4.8945e-2, 4.3189e-2, 4.4368e-2, 3.3976e-2, 3.0466e-2,
-		      2.4477e-2, 3.7202e-2, 3.7093e-2, 3.8161e-2, 3.8576e-2,
-		      3.8403e-2, 3.7806e-2, 3.4958e-2, 3.6029e-2, 4.3087e-2,
-		      4.7069e-2, 4.6452e-2, 4.2486e-2, 4.1517e-2, 4.1691e-2,
-		      4.2813e-2, 4.2294e-2, 4.5287e-2, 4.8462e-2, 4.9726e-2,
-		      5.5097e-2, 5.6568e-2, 5.8069e-2, 1.2270e-2, 3.8006e-2,
-		      3.5048e-2, 3.0050e-2, 2.5069e-2, 2.0485e-2, 1.6151e-2,
-		      1.4631e-2, 1.4034e-2, 1.1978e-2, 1.1522e-2, 1.2375e-2,
-		      1.3805e-2, 1.4954e-2, 1.5832e-2, 1.6467e-2, 1.6896e-2,
-		      1.7166e-2, 1.9954e-2, 2.2497e-2, 2.1942e-2, 2.1965e-2,
-		      2.0005e-2, 1.8927e-2, 1.8167e-2, 1.6314e-2, 1.5522e-2};
-
-  G4double x=std::sqrt(x2);
-  G4double gradx1=0.0;
-
-  G4int nElements = theMaterial->GetNumberOfElements();
-  const G4ElementVector* elementVector = theMaterial->GetElementVector();
-  const G4int* stechiometric = theMaterial->GetAtomsVector();
-  const G4double* vector_of_atoms = theMaterial->GetVecNbOfAtomsPerVolume();
-  const G4double tot_atoms = theMaterial->GetTotNbOfAtomsPerVolume();
-  for (G4int i=0;i<nElements;i++)
+  if (!theVec)
     {
-      G4int Z = (G4int) (*elementVector)[i]->GetZ();
-      if (Z>ntot) Z=95;
-      G4double denomin = 1.+x2*(RA4[Z-1]+x2*RA5[Z-1]);
-      G4double fa=Z*(1+x2*(RA1[Z-1]+x*(RA2[Z-1]+x*RA3[Z-1])))/(denomin*denomin);
-      if (Z>10 && fa>2.0)
-	{
-	  G4double k1=0.3125;
-	  G4double k2=2.426311e-02;
-	  G4double Pa=(Z-k1)*fine_structure_const;
-	  G4double Pg=std::sqrt(1-(Pa*Pa));
-	  G4double Pq=k2*x/Pa;
-	  G4double fb=std::sin(2.0*Pg*std::atan(Pq))/(Pg*Pq*std::pow((1+Pq*Pq),Pg));
-	  fa=std::max(fa,fb);
-	}
-      if (stechiometric && stechiometric[i]!=0)
-	gradx1 += stechiometric[i]*(fa*fa); //sum on the molecule
-      else
-	gradx1 += (vector_of_atoms[i]/tot_atoms)*(fa*fa); //weighted mean
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve F squared table for " << mat->GetName() << G4endl;
+      G4Exception("G4PenelopeRayleighModel::GetFSquared()",
+		  "em2046",FatalException,ed);
+      return 0;
     }
-  return gradx1;
+  if (logQSquared < -20) // Q < 1e-9
+    {
+      G4double logf2 = (*theVec)[0]; //first value of the table
+      f2 = std::exp(logf2);
+    }
+  else if (logQSquared > maxlogQ2)
+    f2 =0;
+  else
+    {
+      //log(Q^2) vs. log(F^2)
+      G4double logf2 = theVec->Value(logQSquared);
+      f2 = std::exp(logf2);
+
+    }
+  if (verboseLevel > 3)
+    {
+      G4cout << "G4PenelopeRayleighModel::GetFSquared() in " << mat->GetName() << G4endl;  
+      G4cout << "Q^2 = " <<  QSquared << " (units of 1/(m_e*c); F^2 = " << f2 << G4endl;
+    }
+  return f2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeRayleighModel::InitialiseSampling()
+void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 {
-  if (!samplingFunction_x || !samplingFunction_xNoLog)
+  G4double q2min = 0;
+  G4double q2max = 0;
+  const size_t np = 150; //hard-coded in Penelope
+  for (size_t i=1;i<logQSquareGrid.size();i++)
     {
-      G4cout << "G4PenelopeRayleighModel::InitialiseSampling(), something wrong" << G4endl;
-      G4cout << "It looks like G4PenelopeRayleighModel::PrepareConstants() has not been called" 
-	     << G4endl;
-      G4Exception();
+      G4double Q2 = std::exp(logQSquareGrid[i]);
+      if (GetFSquared(mat,Q2) >  1e-35)
+	{
+	  q2max = std::exp(logQSquareGrid[i-1]);
+	}
+    }
+  
+  size_t nReducedPoints = np/4;
+
+  //check for errors
+  if (np < 16)
+    {
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2047",FatalException,
+		  "Too few points to initialize the sampling algorithm");
+    }
+  if (q2min > (q2max-1e-10))
+    {
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2048",FatalException,
+		  "Too narrow grid to initialize the sampling algorithm");
+    }
+
+  //This is subroutine RITAI0 of Penelope
+  //Create an object of type G4PenelopeRayleighSamplingData --> store in a map::Material*
+
+  //temporary vectors --> Then everything is stored in G4PenelopeSamplingData
+  G4DataVector* x = new G4DataVector();
+  
+  /*******************************************************************************
+    Start with a grid of NUNIF points uniformly spaced in the interval q2min,q2max
+  ********************************************************************************/
+  size_t NUNIF = std::min(std::max(((size_t)8),nReducedPoints),np/2);
+  const G4int nip = 51; //hard-coded in Penelope
+
+  G4double dx = (q2max-q2min)/((G4double) NUNIF-1);  
+  x->push_back(q2min); 
+  for (size_t i=1;i<NUNIF-1;i++)
+    {
+      G4double app = q2min + i*dx;
+      x->push_back(app); //increase 
+    }
+  x->push_back(q2max);
+  
+  if (verboseLevel> 3)
+    G4cout << "Vector x has " << x->size() << " points, while NUNIF = " << NUNIF << G4endl;
+
+  //Allocate temporary storage vectors
+  G4DataVector* area = new G4DataVector();
+  G4DataVector* a = new G4DataVector();
+  G4DataVector* b = new G4DataVector();
+  G4DataVector* c = new G4DataVector();
+  G4DataVector* err = new G4DataVector();
+
+  for (size_t i=0;i<NUNIF-1;i++) //build all points but the last
+    {      
+      //Temporary vectors for this loop
+      G4DataVector* pdfi = new G4DataVector();
+      G4DataVector* pdfih = new G4DataVector();
+      G4DataVector* sumi = new G4DataVector();
+
+      G4double dxi = ((*x)[i+1]-(*x)[i])/(G4double (nip-1));
+      G4double pdfmax = 0;
+      for (G4int k=0;k<nip;k++)
+	{
+	  G4double xik = (*x)[i]+k*dxi;	
+	  G4double pdfk = std::max(GetFSquared(mat,xik),0.);
+	  pdfi->push_back(pdfk);
+	  pdfmax = std::max(pdfmax,pdfk);	
+	  if (k < (nip-1))
+	    {
+	      G4double xih = xik + 0.5*dxi;
+	      G4double pdfIK = std::max(GetFSquared(mat,xih),0.);
+	      pdfih->push_back(pdfIK);
+	      pdfmax = std::max(pdfmax,pdfIK);
+	    }
+	}
+    
+      //Simpson's integration
+      G4double cons = dxi*0.5*(1./3.);
+      sumi->push_back(0.);
+      for (G4int k=1;k<nip;k++)
+	{
+	  G4double previous = (*sumi)[k-1];
+	  G4double next = previous + cons*((*pdfi)[k-1]+4.0*(*pdfih)[k-1]+(*pdfi)[k]);
+	  sumi->push_back(next);
+	}
+    
+      G4double lastIntegral = (*sumi)[sumi->size()-1];
+      area->push_back(lastIntegral);
+      //Normalize cumulative function
+      G4double factor = 1.0/lastIntegral;
+      for (size_t k=0;k<sumi->size();k++)
+	(*sumi)[k] *= factor;
+      
+      //When the PDF vanishes at one of the interval end points, its value is modified
+      if ((*pdfi)[0] < 1e-35) 
+	(*pdfi)[0] = 1e-5*pdfmax;
+      if ((*pdfi)[pdfi->size()-1] < 1e-35)
+	(*pdfi)[pdfi->size()-1] = 1e-5*pdfmax;
+
+      G4double pli = (*pdfi)[0]*factor;
+      G4double pui = (*pdfi)[pdfi->size()-1]*factor;
+      G4double B_temp = 1.0-1.0/(pli*pui*dx*dx);
+      G4double A_temp = (1.0/(pli*dx))-1.0-B_temp;
+      G4double C_temp = 1.0+A_temp+B_temp;
+      if (C_temp < 1e-35)
+	{
+	  a->push_back(0.);
+	  b->push_back(0.);
+	  c->push_back(1.);	  
+	}
+      else
+	{
+	  a->push_back(A_temp);
+	  b->push_back(B_temp);
+	  c->push_back(C_temp);
+	}
+
+      //OK, now get ERR(I), the integral of the absolute difference between the rational interpolation 
+      //and the true pdf, extended over the interval (X(I),X(I+1))
+      G4int icase = 1; //loop code
+      G4bool reLoop = false;
+      err->push_back(0.);
+      do
+	{
+	  reLoop = false;
+	  (*err)[i] = 0.; //zero variable
+	  for (G4int k=0;k<nip;k++)
+	    {
+	      G4double rr = (*sumi)[k];
+	      G4double pap = (*area)[i]*(1.0+((*a)[i]+(*b)[i]*rr)*rr)*(1.0+((*a)[i]+(*b)[i]*rr)*rr)/
+		((1.0-(*b)[i]*rr*rr)*(*c)[i]*((*x)[i+1]-(*x)[i]));
+	      if (k == 0 || k == nip-1)
+		(*err)[i] += 0.5*std::fabs(pap-(*pdfi)[k]);
+	      else
+		(*err)[i] += std::fabs(pap-(*pdfi)[k]);
+	    }
+	  (*err)[i] *= dxi;
+      
+	  //If err(I) is too large, the pdf is approximated by a uniform distribution
+	  if ((*err)[i] > 0.1*(*area)[i] && icase == 1) 
+	    {
+	      (*b)[i] = 0;
+	      (*a)[i] = 0;
+	      (*c)[i] = 1.;
+	      icase = 2;
+	      reLoop = true;
+	    }
+	}while(reLoop);
+
+      delete pdfi;
+      delete pdfih;
+      delete sumi;
+    } //end of first loop over i
+
+  //Now assign last point
+  (*x)[x->size()-1] = q2max;
+  a->push_back(0.);
+  b->push_back(0.);
+  c->push_back(0.);
+  err->push_back(0.);
+  area->push_back(0.);
+
+  if (x->size() != NUNIF || a->size() != NUNIF || 
+      err->size() != NUNIF || area->size() != NUNIF)
+    {
+      G4ExceptionDescription ed;
+      ed << "Problem in building the Table for Sampling: array dimensions do not match" << G4endl;
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2049",FatalException,ed);
+    }
+  
+  /*******************************************************************************
+   New grid points are added by halving the sub-intervals with the largest absolute error
+  This is done up to np=150 points in the grid
+  ********************************************************************************/
+  do
+    {
+      G4double maxError = 0.0;
+      size_t iErrMax = 0;
+      for (size_t i=0;i<err->size()-2;i++) 
+	{
+	  //maxError is the lagest of the interval errors err[i]
+	  if ((*err)[i] > maxError)
+	    {
+	      maxError = (*err)[i];
+	      iErrMax = i;
+	    }
+	}
+      
+      //OK, now I have to insert one new point in the position iErrMax
+      G4double newx = 0.5*((*x)[iErrMax]+(*x)[iErrMax+1]);
+      
+      x->insert(x->begin()+iErrMax+1,newx);
+      //Add place-holders in the other vectors
+      area->insert(area->begin()+iErrMax+1,0.);
+      a->insert(a->begin()+iErrMax+1,0.);
+      b->insert(b->begin()+iErrMax+1,0.);
+      c->insert(c->begin()+iErrMax+1,0.);
+      err->insert(err->begin()+iErrMax+1,0.);
+        
+      //Now calculate the other parameters
+      for (size_t i=iErrMax;i<=iErrMax+1;i++)
+	{
+	  //Temporary vectors for this loop
+	  G4DataVector* pdfi = new G4DataVector();
+	  G4DataVector* pdfih = new G4DataVector();
+	  G4DataVector* sumi = new G4DataVector();
+	  
+	  G4double dx = (*x)[i+1]-(*x)[i];
+	  G4double dxi = ((*x)[i+1]-(*x)[i])/(G4double (nip-1));
+	  G4double pdfmax = 0;
+	  for (G4int k=0;k<nip;k++)
+	    {
+	      G4double xik = (*x)[i]+k*dxi;
+	      G4double pdfk = std::max(GetFSquared(mat,xik),0.);
+	      pdfi->push_back(pdfk);
+	      pdfmax = std::max(pdfmax,pdfk);	
+	      if (k < (nip-1))
+		{
+		  G4double xih = xik + 0.5*dxi;
+		  G4double pdfIK = std::max(GetFSquared(mat,xih),0.);
+		  pdfih->push_back(pdfIK);
+		  pdfmax = std::max(pdfmax,pdfIK);
+		}
+	    }
+	  
+	  //Simpson's integration
+	  G4double cons = dxi*0.5*(1./3.);
+	  sumi->push_back(0.);
+	  for (G4int k=1;k<nip;k++)
+	    {
+	      G4double previous = (*sumi)[k-1];
+	      G4double next = previous + cons*((*pdfi)[k-1]+4.0*(*pdfih)[k-1]+(*pdfi)[k]);
+	      sumi->push_back(next);
+	    }
+	  G4double lastIntegral = (*sumi)[sumi->size()-1];
+	  (*area)[i] = lastIntegral;
+	  
+	  //Normalize cumulative function
+	  G4double factor = 1.0/lastIntegral;
+	  for (size_t k=0;k<sumi->size();k++)
+	    (*sumi)[k] *= factor;
+	  
+	  //When the PDF vanishes at one of the interval end points, its value is modified
+	  if ((*pdfi)[0] < 1e-35) 
+	    (*pdfi)[0] = 1e-5*pdfmax;
+	  if ((*pdfi)[pdfi->size()-1] < 1e-35)
+	    (*pdfi)[pdfi->size()-1] = 1e-5*pdfmax;
+	  
+	  G4double pli = (*pdfi)[0]*factor;
+	  G4double pui = (*pdfi)[pdfi->size()-1]*factor;
+	  G4double B_temp = 1.0-1.0/(pli*pui*dx*dx);
+	  G4double A_temp = (1.0/(pli*dx))-1.0-B_temp;
+	  G4double C_temp = 1.0+A_temp+B_temp;
+	  if (C_temp < 1e-35)
+	    {
+	      (*a)[i]= 0.;
+	      (*b)[i] = 0.;
+	      (*c)[i] = 1;
+	    }
+	  else
+	    {
+	      (*a)[i]= A_temp;
+	      (*b)[i] = B_temp;
+	      (*c)[i] = C_temp;
+	    }
+	  //OK, now get ERR(I), the integral of the absolute difference between the rational interpolation 
+	  //and the true pdf, extended over the interval (X(I),X(I+1))
+	  G4int icase = 1; //loop code
+	  G4bool reLoop = false;
+	  do
+	    {
+	      reLoop = false;
+	      (*err)[i] = 0.; //zero variable
+	      for (G4int k=0;k<nip;k++)
+		{
+		  G4double rr = (*sumi)[k];       
+		  G4double pap = (*area)[i]*(1.0+((*a)[i]+(*b)[i]*rr)*rr)*(1.0+((*a)[i]+(*b)[i]*rr)*rr)/
+		    ((1.0-(*b)[i]*rr*rr)*(*c)[i]*((*x)[i+1]-(*x)[i]));
+		  if (k == 0 || k == nip-1)
+		    (*err)[i] += 0.5*std::fabs(pap-(*pdfi)[k]);
+		  else
+		    (*err)[i] += std::fabs(pap-(*pdfi)[k]);
+		}
+	      (*err)[i] *= dxi;
+	      
+	      //If err(I) is too large, the pdf is approximated by a uniform distribution
+	      if ((*err)[i] > 0.1*(*area)[i] && icase == 1) 
+		{
+		  (*b)[i] = 0;
+		  (*a)[i] = 0;
+		  (*c)[i] = 1.;
+		  icase = 2;
+		  reLoop = true;
+		}
+	    }while(reLoop);
+	  delete pdfi;
+	  delete pdfih;
+	  delete sumi;
+	}
+    }while(x->size() < np);
+
+  if (x->size() != np || a->size() != np || 
+      err->size() != np || area->size() != np)
+    {
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2050",FatalException,
+		  "Problem in building the extended Table for Sampling: array dimensions do not match ");
+    }
+
+  /*******************************************************************************
+   Renormalization
+  ********************************************************************************/
+  G4double ws = 0;
+  for (size_t i=0;i<np-1;i++)
+    ws += (*area)[i];
+  ws = 1.0/ws;
+  G4double errMax = 0;
+  for (size_t i=0;i<np-1;i++)
+    {
+      (*area)[i] *= ws;
+      (*err)[i] *= ws;
+      errMax = std::max(errMax,(*err)[i]);
+    }
+
+  //Vector with the normalized cumulative distribution
+  G4DataVector* PAC = new G4DataVector();
+  PAC->push_back(0.);
+  for (size_t i=0;i<np-1;i++)
+    {
+      G4double previous = (*PAC)[i];
+      PAC->push_back(previous+(*area)[i]);
+    }
+  (*PAC)[PAC->size()-1] = 1.;
+		     
+  /*******************************************************************************
+  Pre-calculated limits for the initial binary search for subsequent sampling
+  ********************************************************************************/
+
+  //G4DataVector* ITTL = new G4DataVector();
+  std::vector<size_t> *ITTL = new std::vector<size_t>;
+  std::vector<size_t> *ITTU = new std::vector<size_t>;
+
+  //Just create place-holders
+  for (size_t i=0;i<np;i++)
+    {
+      ITTL->push_back(0);
+      ITTU->push_back(0);
+    }
+
+  G4double bin = 1.0/(np-1);
+  (*ITTL)[0]=0;
+  for (size_t i=1;i<(np-1);i++)
+    {
+      G4double ptst = i*bin; 
+      G4bool found = false;
+      for (size_t j=(*ITTL)[i-1];j<np && !found;j++)
+	{
+	  if ((*PAC)[j] > ptst)
+	    {
+	      (*ITTL)[i] = j-1;
+	      (*ITTU)[i-1] = j;
+	      found = true;
+	    }
+	}
+    }
+  (*ITTU)[ITTU->size()-2] = ITTU->size()-1;
+  (*ITTU)[ITTU->size()-1] = ITTU->size()-1;
+  (*ITTL)[ITTL->size()-1] = ITTU->size()-2;
+
+  if (ITTU->size() != np || ITTU->size() != np)
+    {
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2051",FatalException,
+		  "Problem in building the Limit Tables for Sampling: array dimensions do not match");
+    }
+
+
+  /********************************************************************************
+    Copy tables
+  ********************************************************************************/
+  G4PenelopeSamplingData* theTable = new G4PenelopeSamplingData(np);
+  for (size_t i=0;i<np;i++)
+    {
+      theTable->AddPoint((*x)[i],(*PAC)[i],(*a)[i],(*b)[i],(*ITTL)[i],(*ITTU)[i]);
+    }
+
+  if (verboseLevel > 2)
+    {
+      G4cout << "*************************************************************************" << 
+	G4endl;
+      G4cout << "Sampling table for Penelope Rayleigh scattering in " << mat->GetName() << G4endl;
+      theTable->DumpTable();
+    } 
+  samplingTable->insert(std::make_pair(mat,theTable));
+
+ 
+  //Clean up temporary vectors
+  delete x;
+  delete a;
+  delete b;
+  delete c;
+  delete err;
+  delete area;
+  delete PAC;
+  delete ITTL;
+  delete ITTU;
+
+  //DONE!
+  return;
+  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeRayleighModel::GetPMaxTable(const G4Material* mat)
+{
+  if (!pMaxTable)
+    {
+      G4cout << "G4PenelopeRayleighModel::BuildPMaxTable" << G4endl;
+      G4cout << "Going to instanziate the pMaxTable !" << G4endl;
+      G4cout << "That should _not_ be here! " << G4endl;
+      pMaxTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+    }
+  //check if the table is already there
+  if (pMaxTable->count(mat))
+    return;
+
+  //otherwise build it
+  if (!samplingTable)
+    {
+      G4Exception("G4PenelopeRayleighModel::GetPMaxTable()",
+		  "em2052",FatalException,
+		  "SamplingTable is not properly instantiated");
       return;
     }
-  if (!SamplingTable.count(theMaterial)) //material not defined yet
-    { 
-      G4double XlowInte = 0.;
-      G4double XhighInte=(*samplingFunction_xNoLog)[0];
-      //material not inizialized yet: initialize it now
-      G4DataVector* samplingFunction_y = new G4DataVector();
-      G4PenelopeIntegrator<G4PenelopeRayleighModel,G4double(G4PenelopeRayleighModel::*)(G4double)> 
-	theIntegrator;
-      G4double sum = theIntegrator.Calculate(this,&G4PenelopeRayleighModel::MolecularFormFactor,
-				    XlowInte,XhighInte,1e-10); 
-      samplingFunction_y->push_back(sum);
-      for (G4int i=1;i<nPoints;i++)
+
+  if (!samplingTable->count(mat))
+    InitializeSamplingAlgorithm(mat);      
+  
+  G4PenelopeSamplingData *theTable = samplingTable->find(mat)->second;
+  size_t tablePoints = theTable->GetNumberOfStoredPoints();
+
+  size_t nOfEnergyPoints = logEnergyGridPMax.size();
+  G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector(nOfEnergyPoints);
+
+  const size_t nip = 51; //hard-coded in Penelope
+
+  for (size_t ie=0;ie<logEnergyGridPMax.size();ie++)
+    {
+      G4double energy = std::exp(logEnergyGridPMax[ie]);
+      G4double Qm = 2.0*energy/electron_mass_c2; //this is non-dimensional now
+      G4double Qm2 = Qm*Qm;
+      G4double firstQ2 = theTable->GetX(0);
+      G4double lastQ2 = theTable->GetX(tablePoints-1);
+      G4double thePMax = 0;
+      
+      if (Qm2 > firstQ2)
 	{
-	  XlowInte=(*samplingFunction_xNoLog)[i-1];
-	  XhighInte=(*samplingFunction_xNoLog)[i];
-	  sum += theIntegrator.Calculate(this,
-					&G4PenelopeRayleighModel::MolecularFormFactor,
-					XlowInte,XhighInte,1e-10);
-	  samplingFunction_y->push_back(sum);
+	  if (Qm2 < lastQ2)
+	    {
+	      //bisection to look for the index of Qm
+	      size_t lowerBound = 0;
+	      size_t upperBound = tablePoints-1;
+	      while (lowerBound <= upperBound)
+		{
+		  size_t midBin = (lowerBound + upperBound)/2;
+		  if( Qm2 < theTable->GetX(midBin))
+		    { upperBound = midBin-1; }
+		  else
+		    { lowerBound = midBin+1; }
+		}
+	      //upperBound is the output (but also lowerBounf --> should be the same!)
+	      G4double Q1 = theTable->GetX(upperBound);
+ 	      G4double Q2 = Qm2;
+	      G4double DQ = (Q2-Q1)/((G4double)(nip-1));
+	      G4double theA = theTable->GetA(upperBound);
+	      G4double theB = theTable->GetB(upperBound);
+	      G4double thePAC = theTable->GetPAC(upperBound);
+	      G4DataVector* fun = new G4DataVector();
+	      for (size_t k=0;k<nip;k++)
+		{
+		  G4double qi = Q1 + k*DQ;
+		  G4double tau = (qi-Q1)/
+		    (theTable->GetX(upperBound+1)-Q1);
+		  G4double con1 = 2.0*theB*tau; 
+		  G4double ci = 1.0+theA+theB;
+		  G4double con2 = ci-theA*tau;
+		  G4double etap = 0;
+		  if (std::fabs(con1) > 1.0e-16*std::fabs(con2))
+		    etap = con2*(1.0-std::sqrt(1.0-2.0*tau*con1/(con2*con2)))/con1;
+		  else
+		    etap = tau/con2;
+		  G4double theFun = (theTable->GetPAC(upperBound+1)-thePAC)*
+		    (1.0+(theA+theB*etap)*etap)*(1.0+(theA+theB*etap)*etap)/
+		    ((1.0-theB*etap*etap)*ci*(theTable->GetX(upperBound+1)-Q1));
+		  fun->push_back(theFun);
+		}
+	      //Now intergrate numerically the fun Cavalieri-Simpson's method
+	      G4DataVector* sum = new G4DataVector;
+	      G4double CONS = DQ*(1./12.);
+	      G4double HCONS = 0.5*CONS;
+	      sum->push_back(0.);
+	      G4double secondPoint = (*sum)[0] + 
+		(5.0*(*fun)[0]+8.0*(*fun)[1]-(*fun)[2])*CONS;
+	      sum->push_back(secondPoint);
+	      for (size_t hh=2;hh<nip-1;hh++)
+		{
+		  G4double previous = (*sum)[hh-1];
+		  G4double next = previous+(13.0*((*fun)[hh-1]+(*fun)[hh])-
+					    (*fun)[hh+1]-(*fun)[hh-2])*HCONS;
+		  sum->push_back(next);
+		}
+	      G4double last = (*sum)[nip-2]+(5.0*(*fun)[nip-1]+8.0*(*fun)[nip-2]-
+					     (*fun)[nip-3])*CONS;
+	      sum->push_back(last);	 
+	      thePMax = thePAC + (*sum)[sum->size()-1]; //last point
+	      delete fun;
+	      delete sum;
+	    }
+	  else
+	    {
+	      thePMax = 1.0;
+	    }	 
 	}
-      for (G4int i=0;i<nPoints;i++)	
-	(*samplingFunction_y)[i]=std::log((*samplingFunction_y)[i]);
-	
-      //
-      /*
-      G4String nnn = theMaterial->GetName()+".ntab";
-      std::ofstream file(nnn);
-      for (size_t k=0;k<samplingFunction_x->size();k++)
-	file << (*samplingFunction_x)[k] << " " << (*samplingFunction_y)[k] << G4endl;
-      file.close();
-      */
-      //
-      SamplingTable[theMaterial] = samplingFunction_y;
+      else
+	{
+	  thePMax = theTable->GetPAC(0);
+	}
+
+      //Write number in the table
+      theVec->PutValue(ie,energy,thePMax);
   }
+  
+  pMaxTable->insert(std::make_pair(mat,theVec));
+  return;
+
 }
 
-void G4PenelopeRayleighModel::PrepareConstants()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeRayleighModel::DumpFormFactorTable(const G4Material* mat)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling G4PenelopeRayleighModel::PrepareConstants()" << G4endl;
-  nPoints=241;
-  Xlow=1e-04;
-  Xhigh=1e06;
-  if (samplingFunction_x)
+  G4cout << "*****************************************************************" << G4endl;
+  G4cout << "G4PenelopeRayleighModel: Form Factor Table for " << mat->GetName() << G4endl;
+  //try to use the same format as Penelope-Fortran, namely Q (/m_e*c) and F
+  G4cout <<  "Q/(m_e*c)                 F(Q)     " << G4endl;
+  G4cout << "*****************************************************************" << G4endl;
+  if (!logFormFactorTable->count(mat))
+    BuildFormFactorTable(mat);
+  
+  G4PhysicsFreeVector* theVec = logFormFactorTable->find(mat)->second;
+  for (size_t i=0;i<theVec->GetVectorLength();i++)
     {
-      delete samplingFunction_x;
-      samplingFunction_x = 0;
+      G4double logQ2 = theVec->GetLowEdgeEnergy(i);
+      G4double Q = std::exp(0.5*logQ2);
+      G4double logF2 = (*theVec)[i];
+      G4double F = std::exp(0.5*logF2);
+      G4cout << Q << "              " << F << G4endl;
     }
-  if (samplingFunction_xNoLog)
-    {
-      delete samplingFunction_xNoLog;
-      samplingFunction_xNoLog = 0;
-    }
-
-  samplingFunction_x = new G4DataVector();
-  samplingFunction_xNoLog = new G4DataVector();
- 
-  G4double scalingFactor = std::pow((Xhigh/Xlow),((1/((G4double)(nPoints-1)))));
-  G4double logScalingFactor=(1/((G4double)(nPoints-1)))*std::log(Xhigh/Xlow);
-  //Logarithmic table between log(Xlow) and log(Xhigh)
-  samplingFunction_x->push_back(std::log(Xlow));
-  //Table between Xlow and Xhigh with log spacement: needed for InitialiseSampling()
-  samplingFunction_xNoLog->push_back(Xlow);
-
-  for (G4int i=1;i<nPoints;i++)
-    {
-      G4double nextx = (*samplingFunction_x)[i-1]+logScalingFactor;
-      samplingFunction_x->push_back(nextx);
-      nextx = (*samplingFunction_xNoLog)[i-1]*scalingFactor;
-      samplingFunction_xNoLog->push_back(nextx);
-    }
+  //DONE
+  return;
 }

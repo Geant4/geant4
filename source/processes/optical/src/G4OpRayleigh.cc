@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.19 2010/10/29 23:18:35 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpRayleigh.cc,v 1.19 2010-10-29 23:18:35 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -287,7 +287,7 @@ G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack,
                    aMaterialPropertyTable->GetProperty("RAYLEIGH");
              if(AttenuationLengthVector){
                AttenuationLength = AttenuationLengthVector ->
-                                    GetProperty(thePhotonEnergy);
+                                    Value(thePhotonEnergy);
              }
              else{
 //               G4cout << "No Rayleigh scattering length specified" << G4endl;
@@ -338,18 +338,17 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 
         if (Rindex ) {
 
-           Rindex->ResetIterator();
+           for (size_t i = 0; i < Rindex->GetVectorLength(); i++) {
 
-           while (++(*Rindex)) {
+                e = Rindex->Energy(i);
 
-                e = (Rindex->GetPhotonEnergy());
+                refraction_index = (*Rindex)[i];
 
-                refraction_index = Rindex->GetProperty();
                 refsq = refraction_index*refraction_index;
                 xlambda = h_Planck*c_light/e;
 
 	        if (verboseLevel>0) {
-        	        G4cout << Rindex->GetPhotonEnergy() << " MeV\t";
+        	        G4cout << Rindex->Energy(i) << " MeV\t";
                 	G4cout << xlambda << " mm\t";
 		}
 
@@ -364,7 +363,7 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 	                G4cout << Dist << " mm" << G4endl;
 		}
                 RayleighScatteringLengths->
-			InsertValues(Rindex->GetPhotonEnergy(), Dist);
+			InsertValues(Rindex->Energy(i), Dist);
            }
 
         }

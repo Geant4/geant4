@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.93 2010/10/14 16:27:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.93 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -114,6 +114,7 @@ class G4DataVector;
 class G4Region;
 class G4SafetyHelper;
 class G4VAtomDeexcitation;
+class G4EmBiasingManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -173,12 +174,6 @@ public:
   // summary printout after initialisation
   void PrintInfoDefinition();
 
-  // Add subcutoff option for the region
-  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
-
-  // Activate deexcitation code for region
-  void ActivateDeexcitation(G4bool, const G4Region* region = 0);
-
   // Step limit from AlongStep 
   G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
 						 G4double  previousStepSize,
@@ -195,8 +190,9 @@ public:
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   // Sampling of secondaries in vicinity of geometrical boundary
-  void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4VEmModel* model, G4int matIdx); 
+  // Return sum of secodaries energy 
+  G4double SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
+				   G4VEmModel* model, G4int matIdx); 
 
   // PostStep sampling of secondaries
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
@@ -334,6 +330,19 @@ public:
   // Get/set parameters to configure the process at initialisation time
   //------------------------------------------------------------------------
 
+  // Add subcutoff option for the region
+  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
+
+  // Activate biasing
+  void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
+
+  void ActivateForcedInteraction(G4double length = 0.0, 
+				 const G4String& region = "",
+				 G4bool flag = true);
+
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor,
+				G4double energyLimit);
+
   // Add subcutoff process (bremsstrahlung) to sample secondary 
   // particle production in vicinity of the geometry boundary
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
@@ -349,7 +358,6 @@ public:
   inline G4bool IsIonisationProcess() const;
 
   // Redefine parameteters for stepping control
-  //
   inline void SetLinearLossLimit(G4double val);
   inline void SetMinSubRange(G4double val);
   inline void SetLambdaFactor(G4double val);
@@ -357,7 +365,6 @@ public:
   inline void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
-  inline G4int NumberOfDERegions() const;
 
   //------------------------------------------------------------------------
   // Specific methods to path Physics Tables to the process
@@ -389,6 +396,9 @@ public:
 
   // Max kinetic energy for tables
   inline void SetMaxKinEnergyForCSDARange(G4double e);
+
+  // Biasing parameters
+  inline G4double CrossSectionBiasingFactor() const;
 
   // Return values for given G4MaterialCutsCouple
   inline G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple*);
@@ -422,12 +432,14 @@ public:
   const G4Element* GetCurrentElement() const;
 
   // sample range at the end of a step
-  inline G4double SampleRange();
+  //  inline G4double SampleRange();
 
   // Set scaling parameters for ions is needed to G4EmCalculator
   inline void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
 
 private:
+
+  void FillSecondariesAlongStep(G4double& eloss, G4double& weight);
 
   // define material and indexes
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
@@ -453,14 +465,16 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*           modelManager;
+  G4EmBiasingManager*         biasManager;
   G4SafetyHelper*             safetyHelper;
 
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
+  const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theGenericIon;
 
-  G4PhysicsVector*            vstrag;
+  //  G4PhysicsVector*            vstrag;
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -468,11 +482,8 @@ private:
   G4VEmFluctuationModel*                fluctModel;
   G4VAtomDeexcitation*                  atomDeexcitation;
   std::vector<const G4Region*>          scoffRegions;
-  std::vector<const G4Region*>          deRegions;
   G4int                                 nSCoffRegions;
-  G4int                                 nDERegions;
   G4bool*                               idxSCoffRegions;
-  G4bool*                               idxDERegions;
 
   std::vector<G4VEnergyLossProcess*>    scProcesses;
   G4int                                 nProcesses;
@@ -489,10 +500,14 @@ private:
   G4PhysicsTable*             theInverseRangeTable;
   G4PhysicsTable*             theLambdaTable;
   G4PhysicsTable*             theSubLambdaTable;
-  G4double*                   theDEDXAtMaxEnergy;
-  G4double*                   theRangeAtMaxEnergy;
-  G4double*                   theEnergyOfCrossSectionMax;
-  G4double*                   theCrossSectionMax;
+
+  std::vector<G4double>       theDEDXAtMaxEnergy;
+  std::vector<G4double>       theRangeAtMaxEnergy;
+  std::vector<G4double>       theEnergyOfCrossSectionMax;
+  std::vector<G4double>       theCrossSectionMax;
+
+  const std::vector<G4double>* theDensityFactor;
+  const std::vector<G4int>*    theDensityIdx;
 
   const G4DataVector*         theCuts;
   const G4DataVector*         theSubCuts;
@@ -512,6 +527,7 @@ private:
   G4double dRoverRange;
   G4double finalRange;
   G4double lambdaFactor;
+  G4double biasFactor;
 
   G4bool   lossFluctuationFlag;
   G4bool   rndmStepFlag;
@@ -521,6 +537,8 @@ private:
   G4bool   isIonisation;
   G4bool   useSubCutoff;
   G4bool   useDeexcitation;
+  G4bool   biasFlag;
+  G4bool   weightFlag;
 
 protected:
 
@@ -538,11 +556,13 @@ private:
   G4VEmModel*                 currentModel;
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentMaterialIndex;
+  size_t                      currentCoupleIndex;
+  size_t                      basedCoupleIndex;
 
   G4int    nWarnings;
 
   G4double massRatio;
+  G4double fFactor;
   G4double reduceFactor;
   G4double chargeSqRatio;
 
@@ -560,7 +580,7 @@ private:
 
 inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
-  return currentMaterialIndex;
+  return currentCoupleIndex;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -574,7 +594,7 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 
 inline void G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  currentModel = modelManager->SelectModel(kinEnergy, currentCoupleIndex);
   currentModel->SetCurrentCouple(currentCouple);
 }
 
@@ -594,7 +614,10 @@ G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
-    currentMaterialIndex = couple->GetIndex();
+    currentCoupleIndex = couple->GetIndex();
+    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
+    fFactor = chargeSqRatio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
+    reduceFactor = 1.0/(fFactor*massRatio);
     mfpKinEnergy = DBL_MAX;
   }
 }
@@ -605,15 +628,16 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
                                                        G4double charge2ratio)
 {
   massRatio     = massratio;
+  fFactor      *= charge2ratio/chargeSqRatio;
   chargeSqRatio = charge2ratio;
-  reduceFactor  = 1.0/(chargeSqRatio*massRatio);
+  reduceFactor  = 1.0/(fFactor*massRatio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
-  G4double x = ((*theDEDXTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -622,7 +646,7 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 {
-  G4double x = ((*theDEDXSubTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theDEDXSubTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -631,11 +655,8 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 {
-  //G4double x = 0.0;
-  //  if(theIonisationTable) {
-  G4double x = ((*theIonisationTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theIonisationTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
-  //}
   return x;
 }
 
@@ -644,11 +665,8 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 inline 
 G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 {
-  //  G4double x = 0.0;
-  //if(theIonisationSubTable) {
-  G4double x = ((*theIonisationSubTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theIonisationSubTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
-  //}
   return x;
 }
 
@@ -656,7 +674,7 @@ G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
-  G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->Value(e);
+  G4double x = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -667,13 +685,12 @@ inline G4double
 G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
   G4double x;
-
   if (e < maxKinEnergyCSDA) {
-    x = ((*theCSDARangeTable)[currentMaterialIndex])->Value(e);
-    if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
+    x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e);
+    if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   } else {
-    x = theRangeAtMaxEnergy[currentMaterialIndex] +
-         (e - maxKinEnergyCSDA)/theDEDXAtMaxEnergy[currentMaterialIndex];
+    x = theRangeAtMaxEnergy[basedCoupleIndex] +
+      (e - maxKinEnergyCSDA)/theDEDXAtMaxEnergy[basedCoupleIndex];
   }
   return x;
 }
@@ -682,7 +699,7 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 {
-  G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
+  G4PhysicsVector* v = (*theInverseRangeTable)[basedCoupleIndex];
   G4double rmin = v->Energy(0);
   G4double e = 0.0; 
   if(r >= rmin) { e = v->Value(r); }
@@ -697,7 +714,7 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 
 inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 {
-  return chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->Value(e));
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -729,11 +746,12 @@ G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
   G4double x = fRange;
   if(kineticEnergy != preStepKinEnergy || couple != currentCouple) { 
     DefineMaterial(couple);
-    if(theCSDARangeTable)
+    if(theCSDARangeTable) {
       x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
 	* reduceFactor;
-    else if(theRangeTableForLoss)
+    } else if(theRangeTableForLoss) {
       x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+    }
   }
   return x;
 }
@@ -746,9 +764,9 @@ G4VEnergyLossProcess::GetCSDARange(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(theCSDARangeTable)
-    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
-      * reduceFactor;
+  if(theCSDARangeTable) {
+    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  }
   return x;
 }
 
@@ -760,8 +778,9 @@ G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(theRangeTableForLoss) 
+  if(theRangeTableForLoss) {
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  }
   //  G4cout << "Range from " << GetProcessName() 
   //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
   return x;
@@ -795,7 +814,7 @@ G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
 
 inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
 {
-  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaForScaledEnergy(e);
 
@@ -809,20 +828,9 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
         preStepLambda = preStepLambda1;
       }
     } else {
-      preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
+      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
     }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::SampleRange()
-{
-  G4double e = amu_c2*preStepKinEnergy/particle->GetPDGMass();
-  G4double s = fRange*std::pow(10.,vstrag->Value(e));
-  G4double x = fRange + G4RandGauss::shoot(0.0,s);
-  if(x > 0.0) { fRange = x; }
-  return fRange;
 }
 
 // ======== Get/Set inline methods used at initialisation ================
@@ -973,13 +981,6 @@ inline G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4int G4VEnergyLossProcess::NumberOfDERegions() const
-{
-  return nDERegions;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4VEnergyLossProcess::SetDEDXBinning(G4int nbins)
 {
   nBins = nbins;
@@ -1035,6 +1036,12 @@ inline void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
   maxKinEnergyCSDA = e;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::CrossSectionBiasingFactor() const
+{
+  return biasFactor;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.5 2010/09/03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.5 2010-09-03 15:19:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QNeutronCaptureRatio for N+A Diffraction Interactions
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-06
-// 
-//=======================================================================
+//
+// ----------------------------------------------------------------------
 // Short description: (n,gamma) capture is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.
 // ----------------------------------------------------------------------
@@ -90,6 +90,10 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
   static G4double* lastL=0;              // theLast of pointer to LogTable in the C++ heap
   // LogTable is created only if necessary. R(p>2981GeV) calcul by formula for any nuclei
   G4int A=tgN+tgZ;
+  if(pIU > 50) return 0.;
+  if(pIU > 30 && ((tgN==1 && tgZ==1) || (tgN==8 && tgZ==7))) return 0.;
+  if(pIU > 20 && tgN==2 && tgZ==1) return 0.;
+  if(pIU > 15 && ((tgN==1 && tgZ==2) || (tgN==8 && tgZ==8))) return 0.;
   if(pIU<toler || A<1) return 1.;        // Fake use of toler as non zero number
   if(A>247)
   {

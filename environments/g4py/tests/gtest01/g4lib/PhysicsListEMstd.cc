@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.cc,v 1.4 2009/11/20 03:36:51 kmura Exp $
-// $Name: geant4-09-03 $
+// $Id: PhysicsListEMstd.cc,v 1.4 2009-11-20 03:36:51 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   PhysicsListEMstd.cc
 //

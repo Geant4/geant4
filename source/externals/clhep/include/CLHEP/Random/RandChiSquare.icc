@@ -1,0 +1,44 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                        --- RandChiSquare ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandChiSquare::RandChiSquare(HepRandomEngine & anEngine, double a)
+: HepRandom( ), localEngine(&anEngine, do_nothing_deleter()), defaultA(a)
+  {}
+
+inline RandChiSquare::RandChiSquare(HepRandomEngine * anEngine, double a)
+: HepRandom( ), localEngine(anEngine), defaultA(a)
+  {}
+
+inline double RandChiSquare::fire() {
+  return fire( defaultA );
+}
+
+inline double RandChiSquare::shoot() {
+  return shoot( 1.0 );
+}
+
+inline double RandChiSquare::operator()() {
+  return fire( defaultA );
+}
+
+inline double RandChiSquare::operator()( double a ) {
+  return fire( a );
+}
+
+inline double RandChiSquare::shoot( HepRandomEngine* anEngine ) {
+  return shoot( anEngine, 1.0 );
+}
+
+}  // namespace CLHEP

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.hh,v 1.5 2010/05/03 16:49:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4StatMFFragment.hh,v 1.5 2010-05-03 16:49:19 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,7 +43,7 @@ class G4StatMFFragment {
 
 public:
     // Constructor
-    G4StatMFFragment(const G4int anA, const G4int aZ) :
+    G4StatMFFragment(G4int anA, G4int aZ) :
 	theA(anA),theZ(aZ),
 	_position(0.0,0.0,0.0),
 	_momentum(0.0,0.0,0.0)
@@ -75,9 +75,9 @@ public:
 	
     G4double GetInvLevelDensity(void) const;
 
-    G4double GetA(void) const {return theA;}
+    G4int GetA(void) const {return theA;}
 	
-    G4double GetZ(void) const {return theZ;}
+    G4int GetZ(void) const {return theZ;}
 	
     void SetPosition(const G4ThreeVector aPosition) {_position = aPosition;}
 	
@@ -91,7 +91,7 @@ public:
 	
     G4double GetNuclearMass(void)
 	{return G4ParticleTable::GetParticleTable()->GetIonTable()
-	                       ->GetIonMass(static_cast<G4int>(theZ), static_cast<G4int>(theA));}
+	                       ->GetIonMass(theZ, theA);}
 	
 
 private:
@@ -100,9 +100,9 @@ private:
 
 private:
 
-    G4double theA;
+    G4int theA;
 	
-    G4double theZ;
+    G4int theZ;
 	
     G4ThreeVector _position;
 	

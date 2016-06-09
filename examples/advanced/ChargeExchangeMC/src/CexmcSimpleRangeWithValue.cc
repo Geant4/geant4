@@ -41,6 +41,7 @@
  * =============================================================================
  */
 
+#include <iostream>
 #include <iomanip>
 #include <G4UnitsTable.hh>
 #include "CexmcSimpleRangeWithValue.hh"

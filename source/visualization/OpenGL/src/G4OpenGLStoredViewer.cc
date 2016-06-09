@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.29 2010/10/06 10:05:52 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.29 2010-10-06 10:05:52 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -154,32 +154,63 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       glEnable (GL_CLIP_PLANE2);
     }
 
-    if (fG4OpenGLStoredSceneHandler.fTopPODL) 
-      glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
+    G4bool isPicking = fVP.IsPicking();
+
+    for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fPOList.size(); ++i) {
+      if (POSelected(i)) {
+	G4OpenGLStoredSceneHandler::PO& po =
+	  fG4OpenGLStoredSceneHandler.fPOList[i];
+	glPushMatrix();
+	G4OpenGLTransform3D oglt (po.fTransform);
+	glMultMatrixd (oglt.GetGLMatrix ());
+	if (isPicking) glLoadName(po.fPickName);
+	glCallList (po.fDisplayListId);
+	glPopMatrix();
+      }
+    }
+
+    //if (fG4OpenGLStoredSceneHandler.fTopPODL) 
+    //  glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
+
+    const G4Colour& bg = fVP.GetBackgroundColour();
+    G4double bsf = 1.;  // Brightness scaling factor.
+    G4double bsf_temp = 1.; // Local brightness scaling factor
+    G4double aRed = (1. - bsf) * bg.GetRed();
+    G4double aGreen = (1. - bsf) * bg.GetGreen();
+    G4double aBlue = (1. - bsf) * bg.GetBlue();
+    G4double bgRed = bg.GetRed();
+    G4double bgGreen = bg.GetGreen();
+    G4double bgBlue = bg.GetBlue();
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
 #ifdef G4DEBUG_VIS_OGL
       //      printf("-");
 #endif
-      G4OpenGLStoredSceneHandler::TO& to =
-	fG4OpenGLStoredSceneHandler.fTOList[i];
-      if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
-	glPushMatrix();
-	G4OpenGLTransform3D oglt (to.fTransform);
-	glMultMatrixd (oglt.GetGLMatrix ());
-	if (fVP.IsPicking()) glLoadName(to.fPickName);
-	const G4Colour& c = to.fColour;
-	const G4Colour& bg = fVP.GetBackgroundColour();
-	G4double bsf = 1.;  // Brightness scaling factor.
-	if (fFadeFactor > 0. && to.fEndTime < fEndTime)
-	  bsf = 1. - fFadeFactor *
-	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-	glColor3d
-	  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
-	   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
-	   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
-	glCallList (to.fDisplayListId);
-	glPopMatrix();
+      if (TOSelected(i)) {
+	G4OpenGLStoredSceneHandler::TO& to =
+	  fG4OpenGLStoredSceneHandler.fTOList[i];
+	if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
+	  glPushMatrix();
+	  G4OpenGLTransform3D oglt (to.fTransform);
+	  glMultMatrixd (oglt.GetGLMatrix ());
+	  if (isPicking) glLoadName(to.fPickName);
+	  const G4Colour& c = to.fColour;
+	  if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
+	    bsf_temp = 1. - fFadeFactor *
+	      ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
+	    glColor3d
+	      (bsf_temp * c.GetRed() + (1. - bsf_temp) * bgRed,
+	       bsf_temp * c.GetGreen() + (1. - bsf_temp) * bgGreen,
+	       bsf_temp * c.GetBlue() + (1. - bsf_temp) * bgBlue);
+	  } else {
+	    glColor3d
+	      (bsf * c.GetRed() + aRed,
+	       bsf * c.GetGreen() + aGreen,
+	       bsf * c.GetBlue() + aBlue);
+	  }
+	  glCallList (to.fDisplayListId);
+	  glPopMatrix();
+	}
       }
     }
 

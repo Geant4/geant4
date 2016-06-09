@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.9 2009/02/19 19:17:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4IonFluctuations.hh,v 1.9 2009-02-19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

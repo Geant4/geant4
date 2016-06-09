@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.5 2010/11/10 14:06:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GeometryMessenger.hh,v 1.5 2010-11-10 14:06:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

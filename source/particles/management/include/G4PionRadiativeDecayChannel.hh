@@ -65,6 +65,14 @@ class G4PionRadiativeDecayChannel : public G4VDecayChannel
     //  Destructor
     virtual ~G4PionRadiativeDecayChannel();
 
+  protected:
+    // Copy constructor and assignment operator
+    G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel &);
+    G4PionRadiativeDecayChannel & operator=(const G4PionRadiativeDecayChannel &);
+
+  protected:
+      G4PionRadiativeDecayChannel();
+
   public:  // With Description
 
     virtual G4DecayProducts *DecayIt(G4double);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.17 2009/01/19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.17 2009-01-19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -65,24 +65,24 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
   if (pView->rotate_right) {
-    pView->rotateScene((G4double)pView->rot_sens,0,1);
+    pView->rotateScene(1,0);
   } else {
-    pView->rotateScene(-(G4double)pView->rot_sens,0,1);
+    pView->rotateScene(-1,0);
   }
   /*
   G4double delta_theta;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView->rotate_right) {
-      delta_theta = -((G4double)pView->rot_sens);
+      delta_theta = -(pView->fRot_sens);
     } else {
-      delta_theta = (G4double)pView->rot_sens;
+      delta_theta = pView->fRot_sens;
     }
   } else {
     if (pView->rotate_right) {
-      delta_theta = (G4double)pView->rot_sens;
+      delta_theta = pView->fRot_sens;
     } else {
-      delta_theta = -((G4double)pView->rot_sens);
+      delta_theta = -(pView->fRot_sens);
     }
   }    
   delta_theta *= deg;
@@ -143,22 +143,22 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
   if (pView -> rotate_up) {
-    pView->rotateScene(0,-(G4double)pView->rot_sens,1);
+    pView->rotateScene(0,-1);
   } else {
-    pView->rotateScene(0,(G4double)pView->rot_sens,1);
+    pView->rotateScene(0,1);
   }
   /*
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {
-      delta_alpha = -((G4double)pView->rot_sens);
+      delta_alpha = -(pView->fRot_sens);
     } else {
-      delta_alpha = (G4double)pView->rot_sens;
+      delta_alpha = pView->fRot_sens;
     }
   } else {
     if (pView -> rotate_up) {
-      delta_alpha = (G4double)pView->rot_sens;
+      delta_alpha = pView->fRot_sens;
     } else {
-      delta_alpha = -((G4double)pView->rot_sens);
+      delta_alpha = -(pView->fRot_sens);
     }
   }    
 
@@ -212,10 +212,13 @@ void G4OpenGLXmViewer::set_rot_sens_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4Exception("Bad value returned for dp in set_rot_sens_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::set_rot_sens_callback",
+       "opengl0004", FatalException,
+       "Bad value returned for dp in set_rot_sens_callback");
   }
 
-  pView->rot_sens = (G4float)(cbs->value) / ten_to_the_dp;
+  pView->fRot_sens = (G4float)(cbs->value) / ten_to_the_dp;
 }  
 
 void G4OpenGLXmViewer::set_rot_subject_callback (Widget w, 
@@ -239,7 +242,10 @@ void G4OpenGLXmViewer::set_rot_subject_callback (Widget w,
     }
   default:
     {
-      G4Exception("Unrecognised choice made in set_rot_subject_callback"); 
+      G4Exception
+	("G4OpenGLXmViewer::set_rot_subject_callback",
+	 "opengl0005", FatalException,
+	 "Unrecognised choice made in set_rot_subject_callback"); 
     }
   }
 }  

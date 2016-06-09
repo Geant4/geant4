@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fissioner.hh,v 1.16 2010/09/14 17:51:36 mkelsey Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4Fissioner.hh,v 1.16 2010-09-14 17:51:36 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -32,6 +32,7 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100728  M. Kelsey -- Move G4FissionStore to data member and reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20110801  M. Kelsey -- Pass C arrays to ::potentialMinimization()
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
@@ -69,14 +70,14 @@ private:
 		   G4double R12) const;
 		    
   void potentialMinimization(G4double& VP, 
-			     std::vector<G4double>& ED, 
+			     G4double (&ED)[2], 
 			     G4double& VC,
 			     G4int AF, 
 			     G4int AS, 
 			     G4int ZF, 
 			     G4int ZS,
-			     std::vector<G4double>& AL1, 
-			     std::vector<G4double>& BET1, 
+			     G4double AL1[2], 
+			     G4double BET1[2], 
 			     G4double& R12) const; 
 };        
 

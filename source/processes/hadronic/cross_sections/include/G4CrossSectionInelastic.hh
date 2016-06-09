@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionInelastic.hh,v 1.2 2010/11/19 11:12:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CrossSectionInelastic.hh,v 1.2 2010-11-19 11:12:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -50,42 +50,48 @@
 
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include <iostream>
 
 class G4ParticleDefinition;
 class G4VComponentCrossSection;
+class G4DynamicParticle;
+class G4Element;
+class G4Material;
+class G4NistManager;
 
 class G4CrossSectionInelastic : public G4VCrossSectionDataSet
 {
 public:
 
-  G4CrossSectionInelastic(const G4ParticleDefinition*, G4VComponentCrossSection*,
+  G4CrossSectionInelastic(G4VComponentCrossSection*,
 			  G4int zmin = 0, G4int zmax = 256, 
 			  G4double Emin = 0.0, G4double Emax = DBL_MAX);
 
   virtual ~G4CrossSectionInelastic();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+			     const G4Material* mat = 0);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, 
+				  const G4Material* mat = 0);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature = 0.);
+  void BuildPhysicsTable(const G4ParticleDefinition&);
 
   virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
-                                G4int /*A*/, G4double aTemperature = 0.);
+  void DumpPhysicsTable(const G4ParticleDefinition&);
 
-  inline const G4ParticleDefinition* GetParticle() const { return particle; }
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 private:
 
   G4CrossSectionInelastic & operator=(const G4CrossSectionInelastic &right);
   G4CrossSectionInelastic(const G4CrossSectionInelastic&);
 
-  const G4ParticleDefinition* particle;
+  G4NistManager* nist;
   G4VComponentCrossSection* component;
   G4int Zmin;
   G4int Zmax;

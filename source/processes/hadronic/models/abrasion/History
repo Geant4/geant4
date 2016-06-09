@@ -13,8 +13,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-12-Nov-2010, Dennis Wright                  (had-abrasion-V09-03-01)
---------------------------------------------------------------------
+27-Sep-2011  Dennis Wright  (had-abrasion-V09-04-00)
+-----------------------------------------------------
+- Migrate to integer Z and A.  File affected: 
+    G4WilsonAbrasionModel.cc
+
+12-Nov-2010  Dennis Wright  (had-abrasion-V09-03-01)
+----------------------------------------------------
 - G4WilsonAbrasionModel.cc : initialize r0sq in ctor (CoVerity)
 - G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget :
    fix memory leak by deleting revAbrasionGeometry  (CoVerity)

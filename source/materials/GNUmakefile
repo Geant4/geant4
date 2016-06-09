@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2005/06/28 08:37:43 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2005-06-28 08:37:43 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for materials library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------

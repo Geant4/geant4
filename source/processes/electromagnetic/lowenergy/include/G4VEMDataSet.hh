@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.13 2009/09/25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEMDataSet.hh,v 1.14 2010-12-27 17:44:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -35,6 +35,8 @@
 //
 // 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
 //                                   to enhance computing performance of interpolation
+//
+// 24 Dec 2010   V.Ivanchenko moved constructor and destructor to the source
 //
 // -------------------------------------------------------------------
 
@@ -55,8 +57,9 @@
 class G4VEMDataSet 
 { 
 public:
-  G4VEMDataSet() { }
-  virtual ~G4VEMDataSet() { }
+
+  G4VEMDataSet();
+  virtual ~G4VEMDataSet();
   
   virtual G4double FindValue(G4double x, G4int componentId = 0) const = 0;
  

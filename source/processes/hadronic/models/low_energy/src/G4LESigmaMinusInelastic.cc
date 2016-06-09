@@ -23,50 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LESigmaMinusInelastic.cc,v 1.11 2006-06-29 20:45:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LESigmaMinusInelastic.cc,v 1.11 2006/06/29 20:45:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: SigmaMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: SigmaMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LESigmaMinusInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LESigmaMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                          G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+
+void G4LESigmaMinusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LESigmaMinusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic Sigma- scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to Sigma- with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+G4HadFinalState*
+G4LESigmaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                       G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LESigmaMinusInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LESigmaMinusInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     G4ReactionProduct modifiedOriginal;
     modifiedOriginal = *originalIncident;
     
@@ -124,10 +131,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LESigmaMinusInelastic::Cascade(
+void G4LESigmaMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -136,7 +142,7 @@
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
-  {
+{
     // derived from original FORTRAN code CASSM by H. Fesefeldt (13-Sep-1987)
     //
     // SigmaMinus undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -362,7 +368,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

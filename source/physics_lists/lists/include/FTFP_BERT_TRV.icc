@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_TRV.icc,v 1.5 2010/08/16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: FTFP_BERT_TRV.icc,v 1.5 2010-08-16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,8 +33,11 @@
 // Author: 2009 John Apostolakis
 //
 //   created from FTFP_BERT - simple variant changing inelastic thresholds
-// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
+// Modified:
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 18.10.2011 A.Ribon: Replace CHIPS with FTF/Preco for nuclear capture
+//                     at rest of anti-protons.
 //
 //----------------------------------------------------------------------------
 //
@@ -54,7 +57,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4QandFTFStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -92,7 +95,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsFTFP_BERT_TRV(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4QandFTFStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

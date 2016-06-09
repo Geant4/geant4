@@ -29,7 +29,8 @@
 #include "G4CompetitiveFission.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4HadronicInteraction.hh"
-#include "G4ParticleTable.hh"
+#include "G4NucleiProperties.hh"
+//#include "G4ParticleTable.hh"
 
 // Class Description
 // Final state production model for (based on evaluated data
@@ -43,13 +44,14 @@
 class G4ParaFissionModel : public G4HadronicInteraction
 {
 public:
-  G4ParaFissionModel()
+
+  G4ParaFissionModel() 
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 60.*MeV );
   }
 
-  ~G4ParaFissionModel() {};
+  virtual ~G4ParaFissionModel() {};
   
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
 					 G4Nucleus& theNucleus)
@@ -62,8 +64,7 @@ public:
 
     G4int A = theNucleus.GetA_asInt();
     G4int Z = theNucleus.GetZ_asInt();
-    G4double nucMass = 
-      G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
+    G4double nucMass = G4NucleiProperties::GetNuclearMass(A, Z);
      
     G4int numberOfEx = aTrack.GetDefinition()->GetBaryonNumber();
     G4int numberOfCh = G4int(aTrack.GetDefinition()->GetPDGCharge() + 0.5);
@@ -73,7 +74,7 @@ public:
     Z += numberOfCh;
      
     G4LorentzVector v = aTrack.Get4Momentum() + G4LorentzVector(0.0,0.0,0.0,nucMass);
-    G4Fragment anInitialState(Z,A,v);
+    G4Fragment anInitialState(A,Z,v);
     anInitialState.SetNumberOfExcitedParticle(numberOfEx,numberOfCh); 
     anInitialState.SetNumberOfHoles(0,0);
 
@@ -87,28 +88,28 @@ public:
     {
       G4ReactionProductVector* theExcitationResult = 0; 
       G4Fragment* aFragment = (*theFissionResult)[i];
-      if(aFragment->GetExcitationEnergy()>1.*eV)
+      if(aFragment->GetExcitationEnergy() > keV)
       {
 	theExcitationResult = theHandler.BreakItUp(*aFragment);
 
 	// add secondaries
 	for(G4int j = 0; j < G4int(theExcitationResult->size()); j++)
 	{
-          G4ReactionProduct* rp0 = (*theExcitationResult)[j];
-          G4DynamicParticle* p0 = 
+	  G4ReactionProduct* rp0 = (*theExcitationResult)[j];
+	  G4DynamicParticle* p0 = 
 	    new G4DynamicParticle(rp0->GetDefinition(),rp0->GetMomentum());
-          theParticleChange.AddSecondary(p0);
-          delete rp0;
+	  theParticleChange.AddSecondary(p0);
+	  delete rp0;
 	}
-        delete theExcitationResult;
+	delete theExcitationResult;
       }
       else
       {
-        // add secondary
+	// add secondary
 	G4DynamicParticle* p0 = 
 	  new G4DynamicParticle(aFragment->GetParticleDefinition(),
 				aFragment->GetMomentum());
-        theParticleChange.AddSecondary(p0);
+	theParticleChange.AddSecondary(p0);
       }
       delete aFragment;
     }

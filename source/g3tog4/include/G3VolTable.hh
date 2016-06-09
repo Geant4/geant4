@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTable.hh,v 1.18 2006/06/29 18:12:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3VolTable.hh,v 1.18 2006-06-29 18:12:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -52,6 +52,7 @@
 
 #include <map>
 #include "G3VolTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -82,6 +83,6 @@ private:
   G4int _NG3Pos;
 };
 
-extern G3VolTable G3Vol;
+extern G3G4DLL_API G3VolTable G3Vol;
 
 #endif

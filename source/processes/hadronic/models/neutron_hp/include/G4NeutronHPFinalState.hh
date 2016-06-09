@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.15 2008/08/05 22:43:26 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPFinalState.hh,v 1.15 2008-08-05 22:43:26 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 080721 Create adjust_final_state method by T. Koi  
 // 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
@@ -62,7 +62,9 @@ public:
   
   virtual ~G4NeutronHPFinalState(){};
 
-  virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
+  //virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
+  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) { G4int M = 0; Init ( A, Z, M, dirName, aFSType); };
+  virtual void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType) =0;
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
     throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");

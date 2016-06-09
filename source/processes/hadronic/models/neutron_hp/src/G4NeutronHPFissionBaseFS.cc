@@ -38,11 +38,11 @@
 #include "G4LorentzVector.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPFissionBaseFS::Init (G4double A, G4double Z, G4String & dirName, G4String & bit)
+  void G4NeutronHPFissionBaseFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit)
   {
     G4String tString = dirName;
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, bit, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, tString, bit, dbool);
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();

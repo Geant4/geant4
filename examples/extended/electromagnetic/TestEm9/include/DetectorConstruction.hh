@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.7 2008/04/07 18:09:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.hh,v 1.7 2008-04-07 18:09:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////

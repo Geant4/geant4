@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.12 2009/02/24 10:58:04 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VMarker.cc,v 1.12 2009-02-24 10:58:04 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -37,8 +37,18 @@ G4VMarker::G4VMarker ():
   fPosition   (G4Point3D ()),
   fWorldSize  (0.),
   fScreenSize (0.),
-  fFillStyle  (noFill),
-  fInfo       (G4String())
+  fFillStyle  (noFill)
+{
+  // fInfo: default initialisation.
+}
+
+G4VMarker::G4VMarker (const G4VMarker& m):
+  G4Visible   (m),
+  fPosition   (m.fPosition),
+  fWorldSize  (m.fWorldSize),
+  fScreenSize (m.fScreenSize),
+  fFillStyle  (m.fFillStyle),
+  fInfo       (m.fInfo)
 {}
 
 G4VMarker::G4VMarker (const G4Point3D& pos):
@@ -47,9 +57,22 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
   fScreenSize (0.),
   fFillStyle  (noFill),
   fInfo       (G4String())
-{}
+{
+  // fInfo: default initialisation.
+}
 
 G4VMarker::~G4VMarker () {}
+
+G4VMarker& G4VMarker::operator = (const G4VMarker& m) {
+  if (&m == this) return *this;
+  G4Visible::operator = (m);
+  fPosition   = m.fPosition;
+  fWorldSize  = m.fWorldSize;
+  fScreenSize = m.fScreenSize;
+  fFillStyle  = m.fFillStyle;
+  fInfo       = m.fInfo;
+  return *this;
+}
 
 G4bool G4VMarker::operator != (const G4VMarker& m) const {
   if (
@@ -57,7 +80,8 @@ G4bool G4VMarker::operator != (const G4VMarker& m) const {
       (fWorldSize  != m.fWorldSize)   ||
       (fScreenSize != m.fScreenSize)  ||
       (fFillStyle  != m.fFillStyle)   ||
-      !(fPosition  == m.fPosition)
+      !(fPosition  == m.fPosition)    ||
+      (fInfo       != m.fInfo)
       )
     return true;
   return false;
@@ -81,6 +105,7 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   default:
     os << "unrecognised"; break;
   }
+  if (!marker.fInfo.empty()) os << "\n  User information: " << marker.fInfo;
   os << "\n           " << (const G4Visible&) marker;
   return os;
 }

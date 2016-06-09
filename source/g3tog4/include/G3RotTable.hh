@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3RotTable.hh,v 1.15 2006/06/29 18:12:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3RotTable.hh,v 1.15 2006-06-29 18:12:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -41,6 +41,7 @@
 #define G3ROTTABLEH_HH 1
 
 #include "G3RotTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -68,6 +69,6 @@ class G3RotTable
     G3RotMatrixVector*  fRotVector;
 };
 
-extern G3RotTable G3Rot;
+extern G3G4DLL_API G3RotTable G3Rot;
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.13 2008/10/24 19:50:50 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpWLS.cc,v 1.13 2008-10-24 19:50:50 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -291,18 +291,13 @@ void G4OpWLS::BuildThePhysicsTable()
 	  // Retrieve the first intensity point in vector
 	  // of (photon energy, intensity) pairs
 	  
-	  theWLSVector->ResetIterator();
-	  ++(*theWLSVector);	// advance to 1st entry 
-	  
-	  G4double currentIN = theWLSVector->
-	    GetProperty();
+	  G4double currentIN = (*theWLSVector)[0];
 	  
 	  if (currentIN >= 0.0) {
 
 	    // Create first (photon energy) 
 	   
-	    G4double currentPM = theWLSVector->
-	      GetPhotonEnergy();
+	    G4double currentPM = theWLSVector->Energy(0);
 	    
 	    G4double currentCII = 0.0;
 	    
@@ -317,14 +312,13 @@ void G4OpWLS::BuildThePhysicsTable()
 	    
 	    // loop over all (photon energy, intensity)
 	    // pairs stored for this material
-	    
-	    while(++(*theWLSVector))
+
+            for (size_t i = 1;
+                 i < theWLSVector->GetVectorLength();
+                 i++)	    
 	      {
-		currentPM = theWLSVector->
-		  GetPhotonEnergy();
-		
-		currentIN=theWLSVector->
-		  GetProperty();
+		currentPM = theWLSVector->Energy(i);
+		currentIN = (*theWLSVector)[i];
 		
 		currentCII = 0.5 * (prevIN + currentIN);
 		
@@ -373,7 +367,7 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
       GetProperty("WLSABSLENGTH");
     if ( AttenuationLengthVector ){
       AttenuationLength = AttenuationLengthVector->
-	GetProperty (thePhotonEnergy);
+	Value(thePhotonEnergy);
     }
     else {
       //             G4cout << "No WLS absorption length specified" << G4endl;
@@ -402,6 +396,8 @@ void G4OpWLS::UseTimeProfile(const G4String name)
     }
   else
     {
-      G4Exception("G4OpWLS::UseTimeProfile - generator does not exist");
+      G4Exception("G4OpWLS::UseTimeProfile", "em0202",
+                  FatalException,
+                  "generator does not exist");
     }
 }

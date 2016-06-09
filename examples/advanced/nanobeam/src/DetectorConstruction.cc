@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.3 2008/12/18 12:56:24 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2008-12-18 12:56:24 gunter Exp $
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
@@ -60,18 +60,7 @@ void DetectorConstruction::DefineMaterials()
   G4String name, symbol;             
   G4double density;            
   
-  G4int ncomponents, natoms;
   G4double z, a;
-  
-  // Define Elements  
-  G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
-  G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
-
-  // Water 
-  density = 1.000*g/cm3;
-  G4Material* H2O = new G4Material(name="H2O"  , density, ncomponents=2);
-  H2O->AddElement(H, natoms=2);
-  H2O->AddElement(O, natoms=1);
 
   // Vacuum standard definition...
   density = universe_mean_density;
@@ -86,7 +75,6 @@ void DetectorConstruction::DefineMaterials()
 
   // Default materials in setup.
   defaultMaterial = vacuum;
-  waterMaterial = H2O;
   gridMaterial = man->FindOrBuildMaterial("G4_Ni"); 
 }
 
@@ -179,8 +167,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double x_grid=5.0*mm;    
   G4double y_grid=5.0*mm;
   G4double grid_Zpos=(250+200)*mm;      // 250+10 mm for object size of 50µm diam
+
   //G4double thickness_grid=10*micrometer;
   G4double thickness_grid=100*micrometer;
+
   G4double z_grid=thickness_grid/2.0; 
 
   solidGridVol= new G4Box("GridVolume",x_grid,y_grid,z_grid);   //its size
@@ -248,9 +238,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     (solidControlVol_GridShadow, defaultMaterial, "ControlVol_GridShadow");
   
   physiControlVol_GridShadow = 
-    new G4PVPlacement
-    //( 0, G4ThreeVector(0,0,(250+250)*mm), logicControlVol_GridShadow, "ControlVol_GridShadow",logicWorld, false, 0);
- 
+    new G4PVPlacement 
     ( 0, G4ThreeVector(0,0,(250+300)*mm), logicControlVol_GridShadow, "ControlVol_GridShadow",logicWorld, false, 0);
      
  

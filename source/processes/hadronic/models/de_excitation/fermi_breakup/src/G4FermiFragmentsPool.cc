@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VFermiBreakUp.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
+// Modifications:
 // J.M.Quesada,  July 2009, bug fixed in excitation energies: 
 // ALL of them are in MeV instead of keV (as they were expressed previously)
 // source:  http://www.nndc.bnl.gov/chart
@@ -35,267 +38,691 @@
 //
 // J. M. Quesada,  April 2010: excitation energies according to tabulated values 
 // in PhotonEvaporatoion2.0. Fake photons eliminated. 
+//
+// 01.04.2011 General cleanup by V.Ivanchenko - more clean usage of static
+//
+// 04.05.2011 J. M. Quesada: added detailed printout for testing
 
 #include "G4FermiFragmentsPool.hh"
+#include "G4StableFermiFragment.hh"
+#include "G4B9FermiFragment.hh"
+#include "G4Be8FermiFragment.hh"
+#include "G4He5FermiFragment.hh"
+#include "G4Li5FermiFragment.hh"
 
-G4bool G4FermiFragmentsPool::MapIsEmpty(true);
-
-
-std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment* , std::less<const std::pair<G4int,G4int> > >  &
-G4FermiFragmentsPool::GetMap()
+G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
+ 
+G4FermiFragmentsPool* G4FermiFragmentsPool::Instance()
 {
-  static std::vector<const G4VFermiFragment * > fragment_pool;
-  //                                                             A  Z  Pol  ExcitE
-  static const G4StableFermiFragment Fragment00(  1, 0,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment00);
-  static const G4StableFermiFragment Fragment01(  1, 1,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment01);
-  static const G4StableFermiFragment Fragment02(  2, 1,  3,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment02);
-  static const G4StableFermiFragment Fragment03(  3, 1,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment03);
-  static const G4StableFermiFragment Fragment04(  3, 2,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment04);
-  static const G4StableFermiFragment Fragment05(  4, 2,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment05);
-  //JMQ 30/06/09 unknown levels have been supressed
-  static const G4He5FermiFragment    Fragment06(  5, 2,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment06);// He5
-  static const G4Li5FermiFragment    Fragment07(  5, 3,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment07);// Li5 
-  static const G4StableFermiFragment Fragment08(  6, 2,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment08);
-  static const G4StableFermiFragment Fragment09(  6, 3,  3,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment09);
-  //  static const G4StableFermiFragment Fragment10(  6, 3,  1,  3.56*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment10);
-  static const G4StableFermiFragment Fragment10(  6, 3,  1,  3.562880*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment10);
-  static const G4StableFermiFragment Fragment11(  7, 3,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment11);
-  //  static const G4StableFermiFragment Fragment12(  7, 3,  2,  0.48*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment12);
-  static const G4StableFermiFragment Fragment12(  7, 3,  2,  0.4776120*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment12);
-  static const G4StableFermiFragment Fragment13(  7, 4,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment13);
-  //  static const G4StableFermiFragment Fragment14(  7, 4,  2,  0.43*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment14);
-  static const G4StableFermiFragment Fragment14(  7, 4,  2,  0.4290800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment14);
-  static const G4StableFermiFragment Fragment15(  8, 3,  5,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment15);
-  //  static const G4StableFermiFragment Fragment16(  8, 3,  3,  0.98*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment16);
-  static const G4StableFermiFragment Fragment16(  8, 3,  3,  0.9808000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment16);
-  static const G4Be8FermiFragment    Fragment17(  8, 4,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment17); // Be8
-  static const G4StableFermiFragment Fragment18(  9, 4,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment18);
-  static const G4B9FermiFragment     Fragment19(  9, 5,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment19); // B9  
-  static const G4StableFermiFragment Fragment20( 10, 4,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment20);
-  //  static const G4StableFermiFragment Fragment21( 10, 4,  5,  3.37*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment21);
-  static const G4StableFermiFragment Fragment21( 10, 4,  5,  3.368030*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment21);
-//  static const G4StableFermiFragment Fragment22( 10, 4,  8,  5.96*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment22);
-  static const G4StableFermiFragment Fragment22( 10, 4,  8,  5.958390*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment22);
-  //  static const G4StableFermiFragment Fragment23( 10, 4,  1,  6.18*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment23);
-  static const G4StableFermiFragment Fragment23( 10, 4,  1,  6.179300*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment23);
-  //  static const G4StableFermiFragment Fragment24( 10, 4,  5,  6.26*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment24);
-  static const G4StableFermiFragment Fragment24( 10, 4,  5,  6.263300*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment24);
-  static const G4StableFermiFragment Fragment25( 10, 5,  7,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment25);
-  //  static const G4StableFermiFragment Fragment26( 10, 5,  3,  0.72*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment26);
-  static const G4StableFermiFragment Fragment26( 10, 5,  3,  0.7183500*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment26);
-  //  static const G4StableFermiFragment Fragment27( 10, 5,  1,  1.74*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment27);
-  static const G4StableFermiFragment Fragment27( 10, 5,  1,  1.740150*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment27);
-  //  static const G4StableFermiFragment Fragment28( 10, 5,  3,  2.15*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment28);
-  static const G4StableFermiFragment Fragment28( 10, 5,  3,  2.154300*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment28);
-  //  static const G4StableFermiFragment Fragment29( 10, 5,  5,  3.59*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment29);
-  static const G4StableFermiFragment Fragment29( 10, 5,  5,  3.587100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment29);  
-  static const G4StableFermiFragment Fragment30( 10, 6,  3,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment30);
-  //  static const G4StableFermiFragment Fragment31( 10, 6,  5,  3.35*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment31);
-  static const G4StableFermiFragment Fragment31( 10, 6,  5,  3.353600*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment31);
-  static const G4StableFermiFragment Fragment32( 11, 5,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment32);
-//  static const G4StableFermiFragment Fragment33( 11, 5,  2,  2.13*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment33);
-  static const G4StableFermiFragment Fragment33( 11, 5,  2,  2.124693*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment33);
-  //  static const G4StableFermiFragment Fragment34( 11, 5,  6,  4.44*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment34);
-  static const G4StableFermiFragment Fragment34( 11, 5,  6,  4.444890*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment34);
-  //  static const G4StableFermiFragment Fragment35( 11, 5,  4,  5.02*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment35);
-  static const G4StableFermiFragment Fragment35( 11, 5,  4,  5.020310*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment35);
-//  static const G4StableFermiFragment Fragment36( 11, 5, 10,  6.76*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment36);
-  static const G4StableFermiFragment Fragment36( 11, 5, 8,  6.742900*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment36);
-  //JMQ 190410 new level, fragment numbering shifted accordingly from here onwards
-  static const G4StableFermiFragment Fragment37( 11, 5, 2,  6.791800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment37);
-  //  static const G4StableFermiFragment Fragment37( 11, 5,  6,  7.29*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment37);
-  static const G4StableFermiFragment Fragment38( 11, 5,  6,  7.285510*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment38);
-  //  static const G4StableFermiFragment Fragment38( 11, 5,  4,  7.98*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment38);
-  static const G4StableFermiFragment Fragment39( 11, 5,  4,  7.977840*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment39);
-  //  static const G4StableFermiFragment Fragment39( 11, 5,  6,  8.56*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment39); 
-  static const G4StableFermiFragment Fragment40( 11, 5,  6,  8.560300*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment40);   
-  static const G4StableFermiFragment Fragment41( 11, 6,  4,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment41);
-  static const G4StableFermiFragment Fragment42( 11, 6,  2,  2.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment42);
-  //  static const G4StableFermiFragment Fragment42( 11, 6,  6,  4.32*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment42);
-  static const G4StableFermiFragment Fragment43( 11, 6,  6,  4.318800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment43);
-  //  static const G4StableFermiFragment Fragment43( 11, 6,  4,  4.80*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment43);
-  static const G4StableFermiFragment Fragment44( 11, 6,  4,  4.804200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment44);
-  //  static const G4StableFermiFragment Fragment44( 11, 6,  2,  6.34*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment44);
-  static const G4StableFermiFragment Fragment45( 11, 6,  2,  6.339200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment45);
-  //  static const G4StableFermiFragment Fragment45( 11, 6,  8,  6.48*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment45);
-  static const G4StableFermiFragment Fragment46( 11, 6,  8,  6.478200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment46);
-  //  static const G4StableFermiFragment Fragment46( 11, 6,  6,  6.90*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment46);
-  static const G4StableFermiFragment Fragment47( 11, 6,  6,  6.904800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment47);
-  //  static const G4StableFermiFragment Fragment47( 11, 6,  4,  7.50*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment47);
-  static const G4StableFermiFragment Fragment48( 11, 6,  4,  7.499700*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment48);
-  //  static const G4StableFermiFragment Fragment48( 11, 6,  4,  8.10*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment48);
-  static const G4StableFermiFragment Fragment49( 11, 6,  4,  8.104500*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment49);
-  //  static const G4StableFermiFragment Fragment49( 11, 6,  6,  8.42*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment49);
-  static const G4StableFermiFragment Fragment50( 11, 6,  6,  8.420000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment50);
-  static const G4StableFermiFragment Fragment51( 12, 5,  3,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment51);
-  //  static const G4StableFermiFragment Fragment51( 12, 5,  5,  0.95*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment51);
-  static const G4StableFermiFragment Fragment52( 12, 5,  5,  0.9531400*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment52);
-  //  static const G4StableFermiFragment Fragment52( 12, 5,  5,  1.67*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment52);
-  static const G4StableFermiFragment Fragment53( 12, 5,  5,  1.673650*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment53);
-  //  static const G4StableFermiFragment Fragment53( 12, 5,  4,  2.65*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment53);
-  static const G4StableFermiFragment Fragment54( 12, 5,  3,  2.620800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment54);
-  static const G4StableFermiFragment Fragment55( 12, 6,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment55);
-  //  static const G4StableFermiFragment Fragment55( 12, 6,  5,  4.44*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment55);
-  static const G4StableFermiFragment Fragment56( 12, 6,  5,  4.438910*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment56);
-  static const G4StableFermiFragment Fragment57( 13, 6,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment57);
-  //  static const G4StableFermiFragment Fragment57( 13, 6,  2,  3.09*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment57);
-  static const G4StableFermiFragment Fragment58( 13, 6,  2,  3.089443*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment58);
-  //  static const G4StableFermiFragment Fragment58( 13, 6,  4,  3.68*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment58);
-  static const G4StableFermiFragment Fragment59( 13, 6,  4,  3.684507*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment59);  
-  //  static const G4StableFermiFragment Fragment59( 13, 6,  6,  3.85*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment59);
-  static const G4StableFermiFragment Fragment60( 13, 6,  6,  3.853807*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment60);
-  static const G4StableFermiFragment Fragment61( 13, 7,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment61);
-  static const G4StableFermiFragment Fragment62( 14, 6,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment62);
-  //  static const G4StableFermiFragment Fragment62( 14, 6,  3,  6.09*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment62);
-  static const G4StableFermiFragment Fragment63( 14, 6,  3,  6.093800*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment63);
-  // JMQ 010709 corrected excitation energies for 64-66, according to http://www.nndc.bnl.gov/chart
-  //  static const G4StableFermiFragment Fragment63( 14, 6,  1,  6.59*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment63);
-  static const G4StableFermiFragment Fragment64( 14, 6,  1,  6.589400*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment64);
-  //  static const G4StableFermiFragment Fragment64( 14, 6,  7,  6.73*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment64);
-  static const G4StableFermiFragment Fragment65( 14, 6,  7,  6.728200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment65);
-  //  static const G4StableFermiFragment Fragment65( 14, 6,  1,  6.90*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment65);
-  static const G4StableFermiFragment Fragment66( 14, 6,  1,  6.902600*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment66);
-  //  static const G4StableFermiFragment Fragment66( 14, 6,  5,  7.01*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment66);
-  static const G4StableFermiFragment Fragment67( 14, 6,  5,  7.012000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment67);
-  //  static const G4StableFermiFragment Fragment67( 14, 6,  5,  7.34*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment67);
-  static const G4StableFermiFragment Fragment68( 14, 6,  5,  7.341000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment68);
-  
-  static const G4StableFermiFragment Fragment69( 14, 7,  3,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment69);
-  //  static const G4StableFermiFragment Fragment69( 14, 7,  1,  2.31*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment69);
-  static const G4StableFermiFragment Fragment70( 14, 7,  1,  2.312798*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment70);
-  //  static const G4StableFermiFragment Fragment70( 14, 7,  3,  3.95*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment70);
-  static const G4StableFermiFragment Fragment71( 14, 7,  3,  3.948100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment71);  
-  //  static const G4StableFermiFragment Fragment71( 14, 7,  1,  4.92*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment71);
-  static const G4StableFermiFragment Fragment72( 14, 7,  1,  4.915100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment72);
-  //  static const G4StableFermiFragment Fragment72( 14, 7,  5,  5.11*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment72);
-  static const G4StableFermiFragment Fragment73( 14, 7,  5,  5.105890*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment73);
-  //  static const G4StableFermiFragment Fragment73( 14, 7,  3,  5.69*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment73);
-  static const G4StableFermiFragment Fragment74( 14, 7,  3,  5.691440*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment74);
-  //  static const G4StableFermiFragment Fragment74( 14, 7,  7,  5.83*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment74);
-  static const G4StableFermiFragment Fragment75( 14, 7,  7,  5.834250*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment75);
-  //  static const G4StableFermiFragment Fragment75( 14, 7,  3,  6.20*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment75);
-  static const G4StableFermiFragment Fragment76( 14, 7,  3,  6.203500*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment76);
-  //  static const G4StableFermiFragment Fragment76( 14, 7,  7,  6.44*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment76);
-  static const G4StableFermiFragment Fragment77( 14, 7,  7,  6.446170*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment77);
-  //  static const G4StableFermiFragment Fragment77( 14, 7,  5,  7.03*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment77);
-  static const G4StableFermiFragment Fragment78( 14, 7,  5,  7.029120*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment78);
-  static const G4StableFermiFragment Fragment79( 15, 7,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment79);
-  // JMQ 010709 two very close levels instead of only one, with their own spins
-  //  static const G4StableFermiFragment Fragment79( 15, 7,  6,  5.27*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment79);
-  static const G4StableFermiFragment Fragment80( 15, 7,  6,  5.270155*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment80);
-  //  static const G4StableFermiFragment Fragment80( 15, 7,  2,  5.30*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment80);
-  static const G4StableFermiFragment Fragment81( 15, 7,  2,  5.298822*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment81);
-  //  static const G4StableFermiFragment Fragment81( 15, 7,  4,  6.32*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment81);
-  static const G4StableFermiFragment Fragment82( 15, 7,  4,  6.323780*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment82);
-  //JMQ 010709 new level and corrected energy and spins
-  //  static const G4StableFermiFragment Fragment82( 15, 7,  6,  7.15*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment82);
-  static const G4StableFermiFragment Fragment83( 15, 7,  6,  7.155050*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment83);
-  //  static const G4StableFermiFragment Fragment83( 15, 7,  4,  7.30*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment83);
-  static const G4StableFermiFragment Fragment84( 15, 7,  4,  7.300830*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment84);
-  //  static const G4StableFermiFragment Fragment84( 15, 7,  8,  7.57*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment84);
-  static const G4StableFermiFragment Fragment85( 15, 7,  8,  7.567100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment85);
-  //  static const G4StableFermiFragment Fragment85( 15, 7,  2,  8.31*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment85);
-  static const G4StableFermiFragment Fragment86( 15, 7,  2,  8.312620*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment86);
-  //  static const G4StableFermiFragment Fragment86( 15, 7,  4,  8.57*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment86);
-  static const G4StableFermiFragment Fragment87( 15, 7,  4,  8.571400*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment87);
-  //  static const G4StableFermiFragment Fragment87( 15, 7,  2,  9.05*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment87);
-  static const G4StableFermiFragment Fragment88( 15, 7,  2,  9.049710*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment88);
-  //JMQ 010709 new levels for N15
-  //  static const G4StableFermiFragment Fragment88( 15, 7,  4,  9.151*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment88);
-  static const G4StableFermiFragment Fragment89( 15, 7,  4,  9.151900*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment89);
-  //  static const G4StableFermiFragment Fragment89( 15, 7,  6,  9.154*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment89);
-  static const G4StableFermiFragment Fragment90( 15, 7,  6,  9.154900*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment90);
-  //  static const G4StableFermiFragment Fragment90( 15, 7,  2,  9.22*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment90);
-  static const G4StableFermiFragment Fragment91( 15, 7,  2,  9.222100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment91);
-  //  static const G4StableFermiFragment Fragment91( 15, 7,  6,  9.76*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment91);
-  static const G4StableFermiFragment Fragment92( 15, 7,  6,  9.760000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment92);
-  //  static const G4StableFermiFragment Fragment92( 15, 7,  8,  9.83*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment92);
-  static const G4StableFermiFragment Fragment93( 15, 7,  8,  9.829000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment93);
-  //  static const G4StableFermiFragment Fragment93( 15, 7,  4,  9.93*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment93);
-  static const G4StableFermiFragment Fragment94( 15, 7,  4,  9.925000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment94);
-  //  static const G4StableFermiFragment Fragment94( 15, 7,  4, 10.07*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment94);
-  static const G4StableFermiFragment Fragment95( 15, 7,  4, 10.06600*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment95);
-  
-  static const G4StableFermiFragment Fragment96( 15, 8,  2,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment96);
-  //JMQ 010709 new level and spins
-  //  static const G4StableFermiFragment Fragment96( 15, 8,  2,  5.18*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment96);
-  static const G4StableFermiFragment Fragment97( 15, 8,  2,  5.183000*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment97);
-  //  static const G4StableFermiFragment Fragment97( 15, 8,  6,  5.24*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment97);
-  static const G4StableFermiFragment Fragment98( 15, 8,  6,  5.240900*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment98);
-  //  static const G4StableFermiFragment Fragment98( 15, 8,  4,  6.18*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment98);  
-  static const G4StableFermiFragment Fragment99( 15, 8,  4,  6.176300*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment99);  
-  //  static const G4StableFermiFragment Fragment99( 15, 8,  4,  6.79*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment99);
-  static const G4StableFermiFragment Fragment100( 15, 8,  4,  6.793100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment100);
-  //  static const G4StableFermiFragment Fragment100( 15, 8,  6,  6.86*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment100);
-  static const G4StableFermiFragment Fragment101( 15, 8,  6,  6.859400*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment101);
-  //  static const G4StableFermiFragment Fragment101( 15, 8,  8,  7.28*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment101);
-  static const G4StableFermiFragment Fragment102( 15, 8,  8,  7.275900*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment102);
-  
-  
-  static const G4StableFermiFragment Fragment103( 16, 7,  5,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment103);
-  //  static const G4StableFermiFragment Fragment103( 16, 7,  1,  0.12*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment103);
-  static const G4StableFermiFragment Fragment104( 16, 7,  1,  0.1204200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment104);
-  //  static const G4StableFermiFragment Fragment104( 16, 7,  7,  0.30*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment104);
-  static const G4StableFermiFragment Fragment105( 16, 7,  7,  0.2982200*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment105);
-  //  static const G4StableFermiFragment Fragment105( 16, 7,  3,  0.40*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment105);
-  static const G4StableFermiFragment Fragment106( 16, 7,  3,  0.3972700*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment106);
-  
-  //JMQ 010709   some energies and spins have been changed 
-  static const G4StableFermiFragment Fragment107( 16, 8,  1,  0.00*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment107);
-  //  static const G4StableFermiFragment Fragment107( 16, 8,  1,  6.05*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment107);
-  static const G4StableFermiFragment Fragment108( 16, 8,  1,  6.049400*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment108);
-  //  static const G4StableFermiFragment Fragment108( 16, 8,  7,  6.13*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment108);
-  static const G4StableFermiFragment Fragment109( 16, 8,  7,  6.129890*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment109);
-  //  static const G4StableFermiFragment Fragment109( 16, 8,  5,  6.92*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment109);
-  static const G4StableFermiFragment Fragment110( 16, 8,  5,  6.917100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment110);
-  //  static const G4StableFermiFragment Fragment110( 16, 8,  3,  7.12*MeV ); if(MapIsEmpty) fragment_pool.push_back
-  //JMQ 180510 fixed fragment 111
-  static const G4StableFermiFragment Fragment111( 16, 8,  3,  7.116850*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment111);
-
-  static std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment* , std::less<const std::pair<G4int,G4int> > >  
-    theMapOfFragments;
-  
-  if (MapIsEmpty) 
-    {
-      for(size_t i=0; i<fragment_pool.size(); i++)
-	{
-	  theMapOfFragments.insert(std::pair<const std::pair<G4int,G4int>, 
-				   const G4VFermiFragment* >(std::pair<G4int,G4int>(fragment_pool[i]->GetA(),
-										  fragment_pool[i]->GetZ()),fragment_pool[i]));
-	}
-      MapIsEmpty = false;
-    }
-
-  return theMapOfFragments;
+  if(0 == theInstance) {
+    static G4FermiFragmentsPool pool;
+    theInstance = &pool;
+  }
+  return theInstance;
 }
 
 G4FermiFragmentsPool::G4FermiFragmentsPool()
 {
+  maxZ = 9;
+  maxA = 17;
+  verbose = 0;
+  Initialise();
 }
 
 G4FermiFragmentsPool::~G4FermiFragmentsPool()
 {
+  for(size_t i=0; i<17; ++i) {
+    size_t nn = list1[i].size();
+    if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete (list1[i])[j]; }}
+    nn = list2[i].size();
+    if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete (list2[i])[j]; }}
+    nn = list3[i].size();
+    if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete (list3[i])[j]; }}
+    nn = list4[i].size();
+    if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete (list4[i])[j]; }}
+  }
+  size_t nn = listextra.size();
+  if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete listextra[j]; }}
+  nn = fragment_pool.size();
+  if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete fragment_pool[j]; }}
 }
 
-G4FermiFragmentsPool::G4FermiFragmentsPool(const G4FermiFragmentsPool&)
+void G4FermiFragmentsPool::Initialise()
 {
-  // It is meant to not be accesable
+  // JMQ 30/06/09 unknown levels have been supressed
+  // JMQ 01/07/09 corrected excitation energies for 64-66, according to 
+  // http://www.nndc.bnl.gov/chart
+  // JMQ 19/04/10 new level, fragment numbering shifted accordingly from here onwards
+  //                                                 A  Z  Pol  ExcitE
+  fragment_pool.push_back(new G4StableFermiFragment(  1, 0,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  1, 1,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  2, 1,  3,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  3, 1,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  3, 2,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  4, 2,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4He5FermiFragment   (  5, 2,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4Li5FermiFragment   (  5, 3,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  6, 2,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  6, 3,  3,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  6, 3,  1,  3.562880*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  7, 3,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  7, 3,  2,  0.4776120*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  7, 4,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  7, 4,  2,  0.4290800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  8, 3,  5,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  8, 3,  3,  0.9808000*MeV )); 
+  fragment_pool.push_back(new G4Be8FermiFragment   (  8, 4,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment(  9, 4,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4B9FermiFragment    (  9, 5,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  5,  3.368030*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  8,  5.958390*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  1,  6.179300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  5,  6.263300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  7,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  0.7183500*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  1,  1.740150*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  2.154300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  5,  3.587100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  3,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  5,  3.353600*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  2,  2.124693*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  4.444890*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  5.020310*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5, 8,  6.742900*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5, 2,  6.791800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  7.285510*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  7.977840*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  8.560300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  4,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  2,  2.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  6,  4.318800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  4,  4.804200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  2,  6.339200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  8,  6.478200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  6,  6.904800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  4,  7.499700*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  4,  8.104500*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  6,  8.420000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 5,  3,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 5,  5,  0.9531400*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 5,  5,  1.673650*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 5,  3,  2.620800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 6,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 12, 6,  5,  4.438910*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 13, 6,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 13, 6,  2,  3.089443*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 13, 6,  4,  3.684507*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 13, 6,  6,  3.853807*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 13, 7,  2,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  3,  6.093800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  1,  6.589400*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  7,  6.728200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  1,  6.902600*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  5,  7.012000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 6,  5,  7.341000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  3,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  1,  2.312798*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  3,  3.948100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  1,  4.915100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  5,  5.105890*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  3,  5.691440*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  7,  5.834250*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  3,  6.203500*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  7,  6.446170*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 14, 7,  5,  7.029120*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  2,  0.00*MeV )); 
+  // JMQ 010709 two very close levels instead of only one, with their own spins
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  6,  5.270155*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  2,  5.298822*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4,  6.323780*MeV )); 
+  //JMQ 010709 new level and corrected energy and spins
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  6,  7.155050*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4,  7.300830*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  8,  7.567100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  2,  8.312620*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4,  8.571400*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  2,  9.049710*MeV )); 
+  //JMQ 010709 new levels for N15
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4,  9.151900*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  6,  9.154900*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  2,  9.222100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  6,  9.760000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  8,  9.829000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4,  9.925000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 7,  4, 10.06600*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  2,  0.00*MeV )); 
+  //JMQ 010709 new level and spins
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  2,  5.183000*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  6,  5.240900*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  4,  6.176300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  4,  6.793100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  6,  6.859400*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 15, 8,  8,  7.275900*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 7,  5,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 7,  1,  0.1204200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 7,  7,  0.2982200*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 7,  3,  0.3972700*MeV )); 
+  //JMQ 010709   some energies and spins have been changed 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  1,  0.00*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  1,  6.049400*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  7,  6.129890*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  5,  6.917100*MeV )); 
+  //JMQ 180510 fixed fragment 111
+  fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  3,  7.116850*MeV )); 
+
+  G4int nfrag = fragment_pool.size();
+
+  // list of fragments ordered by A
+  for(G4int i=0; i<nfrag; ++i) {
+    std::vector<const G4VFermiFragment*> newvec;
+    newvec.push_back(fragment_pool[i]);
+    G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
+    G4int A = fragment_pool[i]->GetA();
+    list1[A].push_back(conf);
+  }
+  if(verbose > 0) { 
+    G4cout << "### G4FermiFragmentPool: " << nfrag 
+	   << " fragments" << G4endl;
+    for(G4int A=1; A<maxA; ++A) {
+      G4cout << "  A= " << A << " : Z= ";
+      for(size_t j=0; j<list1[A].size(); ++j) { 
+	G4cout << (list1[A])[j]->GetZ() << "  "; 
+      }
+      G4cout << G4endl;
+    }
+  }
+
+  // list of fragment pairs ordered by A
+  G4int counter = 0;
+  G4int tot = 0;
+  for(G4int i=0; i<nfrag; ++i) {
+    G4int Z1 = fragment_pool[i]->GetZ();
+    G4int A1 = fragment_pool[i]->GetA();
+    for(G4int j=0; j<nfrag; ++j) {
+      G4int Z2 = fragment_pool[j]->GetZ();
+      G4int A2 = fragment_pool[j]->GetA();
+      G4int Z = Z1 + Z2;
+      G4int A = A1 + A2;
+      if(Z < maxZ && A < maxA) {
+        if(IsAvailable(Z, A)){
+	  std::vector<const G4VFermiFragment*> newvec;
+          newvec.push_back(fragment_pool[i]);
+          newvec.push_back(fragment_pool[j]);
+	  if(!IsExist(Z, A, newvec)) { 
+	    G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
+	    list2[A].push_back(conf); 
+            ++counter;
+	  }
+	}
+      }
+    }
+  }
+  if(verbose > 0) { 
+    G4cout << G4endl;
+    G4cout << "### Pairs of fragments: " << counter << G4endl;
+    for(G4int A=2; A<maxA; ++A) {
+      G4cout << "  A= " << A<<G4endl; 
+      for(size_t j=0; j<list2[A].size(); ++j) {
+	std::vector<const G4VFermiFragment*> vector = (list2[A])[j]->GetFragmentList(); 
+	G4int a1=vector[0]->GetA();
+	G4int z1=vector[0]->GetZ();
+	G4int a2=vector[1]->GetA();
+	G4int z2=vector[1]->GetZ();
+ 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<") % "; 
+      }
+      G4cout<<G4endl;
+      G4cout<<"---------------------------------------------------------------------------------"
+	    << G4endl;
+    }
+  }
+
+  // list of fragment triples ordered by A
+  tot += counter;
+  counter = 0;
+  for(G4int A1=2; A1<maxA; ++A1) {
+    size_t nz = list2[A1].size();
+    for(size_t idx=0; idx<nz; ++idx) {
+      G4FermiConfiguration* conf2 = (list2[A1])[idx];
+      G4int Z1 = conf2->GetZ();
+      std::vector<const G4VFermiFragment*> vec2 = conf2->GetFragmentList(); 
+      //G4int a1 = vec2[0]->GetA();
+      // G4int z1 = vec2[0]->GetZ();
+      //G4int a2 = vec2[1]->GetA();
+      //G4int z2 = vec2[1]->GetZ();
+      for(G4int j=0; j<nfrag; ++j) {
+	G4int Z2 = fragment_pool[j]->GetZ();
+	G4int A2 = fragment_pool[j]->GetA();
+	G4int Z = Z1 + Z2;
+	G4int A = A1 + A2;
+	if(Z < maxZ && A < maxA) {
+	  //if(IsAvailable(Z, A) && IsAvailable(z1+Z2, a1+A2)
+	  //   && IsAvailable(z2+Z2, a2+A2)) {
+	  std::vector<const G4VFermiFragment*>  newvec;
+	  newvec.push_back(vec2[0]);
+	  newvec.push_back(vec2[1]);
+	  newvec.push_back(fragment_pool[j]);
+	  if(!IsExist(Z, A, newvec)) { 
+	    G4FermiConfiguration* conf3 = new G4FermiConfiguration(newvec);
+	    list3[A].push_back(conf3);
+	    ++counter;
+	    //}
+	  }
+	}
+      }
+    }
+  }
+  if(verbose > 0) { 
+    G4cout << G4endl;
+    G4cout << "### Triples of fragments: " << counter << G4endl;
+    for(G4int A=3; A<maxA; ++A) {
+      G4cout << "  A= " << A<<G4endl;
+      for(size_t j=0; j<list3[A].size(); ++j) { 
+	std::vector<const G4VFermiFragment*> vector = (list3[A])[j]->GetFragmentList(); 
+	G4int a1=vector[0]->GetA();
+	G4int z1=vector[0]->GetZ();
+	G4int a2=vector[1]->GetA();
+	G4int z2=vector[1]->GetZ();
+	G4int a3=vector[2]->GetA();
+	G4int z3=vector[2]->GetZ();
+ 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<") % "; 
+      }
+      G4cout<<G4endl;
+      G4cout<<"---------------------------------------------------------------------------------"
+	    << G4endl;
+    }
+  }
+
+  // list of fragment quartets (3 + 1) ordered by A
+  tot += counter;
+  counter = 0;
+  for(G4int A1=3; A1<maxA; ++A1) {
+    size_t nz = list3[A1].size();
+    for(size_t idx=0; idx<nz; ++idx) {
+      G4FermiConfiguration* conf3 = (list3[A1])[idx];
+      G4int Z1 = conf3->GetZ();
+      std::vector<const G4VFermiFragment*> vec3 = conf3->GetFragmentList(); 
+      //G4int a1 = vec3[0]->GetA();
+      //G4int z1 = vec3[0]->GetZ();
+      //G4int a2 = vec3[1]->GetA();
+      //G4int z2 = vec3[1]->GetZ();
+      //G4int a3 = vec3[2]->GetA();
+      //G4int z3 = vec3[2]->GetZ();
+      for(G4int j=0; j<nfrag; ++j) {
+	G4int Z2 = fragment_pool[j]->GetZ();
+	G4int A2 = fragment_pool[j]->GetA();
+	G4int Z = Z1 + Z2;
+	G4int A = A1 + A2;
+	if(Z < maxZ && A < maxA) {
+	  //if(IsAvailable(Z, A) && IsAvailable(z1+Z2, a1+A2)
+	  //   && IsAvailable(z2+Z2, a2+A2) && IsAvailable(z3+Z2, a3+A2)) {
+	  std::vector<const G4VFermiFragment*>  newvec;
+	  newvec.push_back(vec3[0]);
+	  newvec.push_back(vec3[1]);
+	  newvec.push_back(vec3[2]);
+	  newvec.push_back(fragment_pool[j]);
+	  if(!IsExist(Z, A, newvec)) { 
+	    G4FermiConfiguration* conf4 = new G4FermiConfiguration(newvec);
+	    list4[A].push_back(conf4);
+	    ++counter;
+	  }
+	  //}
+	}
+      }
+    }
+  }
+  // list of fragment quartets (2 + 2) ordered by A
+  for(G4int A1=2; A1<maxA; ++A1) {
+    size_t nz1 = list2[A1].size();
+    for(size_t id1=0; id1<nz1; ++id1) {
+      G4FermiConfiguration* conf1 = (list2[A1])[id1];
+      G4int Z1 = conf1->GetZ();
+      std::vector<const G4VFermiFragment*> vec1 = conf1->GetFragmentList(); 
+      //G4int a1 = vec1[0]->GetA();
+      //G4int z1 = vec1[0]->GetZ();
+      //G4int a2 = vec1[1]->GetA();
+      //G4int z2 = vec1[1]->GetZ();
+      for(G4int A2=2; A2<maxA; ++A2) {
+	size_t nz2 = list2[A2].size();
+	for(size_t id2=0; id2<nz2; ++id2) {
+	  G4FermiConfiguration* conf2 = (list2[A2])[id2];
+	  G4int Z2 = conf2->GetZ();
+	  std::vector<const G4VFermiFragment*> vec2 = conf2->GetFragmentList(); 
+	  //G4int a3 = vec2[0]->GetA();
+	  //G4int z3 = vec2[0]->GetZ();
+	  //G4int a4 = vec2[1]->GetA();
+	  //G4int z4 = vec2[1]->GetZ();
+	  G4int Z = Z1 + Z2;
+	  G4int A = A1 + A2;
+	  if(Z < maxZ && A < maxA) {
+	    //if(IsAvailable(Z, A) && IsAvailable(z1+z3, a1+a3)
+	    //   && IsAvailable(z1+z4, a1+a4) && IsAvailable(z2+z3, a2+a3) 
+	    //   && IsAvailable(z2+z4, a2+a4) && IsAvailable(Z-z1, A-a1)
+	    //   && IsAvailable(Z-z2, A-a2) && IsAvailable(Z-z3, A-a3)) {
+	    std::vector<const G4VFermiFragment*>  newvec;
+	    newvec.push_back(vec1[0]);
+	    newvec.push_back(vec1[1]);
+	    newvec.push_back(vec2[0]);
+	    newvec.push_back(vec2[1]);
+	    if(!IsExist(Z, A, newvec)) { 
+	      G4FermiConfiguration* conf4 = new G4FermiConfiguration(newvec);
+	      list4[A].push_back(conf4);
+	      ++counter;
+	    }
+	    //}
+	  }
+	}
+      }
+    }
+  }
+  if(verbose > 0) { 
+    tot += counter;
+    G4cout << G4endl;
+    G4cout << "### Quartets of fragments: " << counter << G4endl;
+    for(G4int A=4; A<maxA; ++A) {
+      G4cout << "  A= " << A<<G4endl;
+      for(size_t j=0; j<list4[A].size(); ++j) { 
+	std::vector<const G4VFermiFragment*> vector = (list4[A])[j]->GetFragmentList(); 
+	G4int a1=vector[0]->GetA();
+	G4int z1=vector[0]->GetZ();
+	G4int a2=vector[1]->GetA();
+	G4int z2=vector[1]->GetZ();
+	G4int a3=vector[2]->GetA();
+	G4int z3=vector[2]->GetZ();
+	G4int a4=vector[3]->GetA();
+	G4int z4=vector[3]->GetZ();
+
+ 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<")("<<a4<<","<<z4<<") % "; 
+      }
+      G4cout<<G4endl;
+      G4cout<<"---------------------------------------------------------------------------------"
+	    << G4endl;
+    }
+    G4cout << "Total number: " << tot << G4endl;
+  }
 }
 
-const G4FermiFragmentsPool & G4FermiFragmentsPool::operator=(const G4FermiFragmentsPool& )
+const std::vector<G4FermiConfiguration*>* 
+G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass)
 {
-  // It is meant to not be accesable
-  return *this;
+  //JMQ 040511 for printing the total number of configurations for a given A
+  G4int nconf=0;
+
+  std::vector<G4FermiConfiguration*>* v = new std::vector<G4FermiConfiguration*>;
+  if(Z >= maxZ || A >= maxA) { return v; }
+
+  //G4cout << "G4FermiFragmentsPool::GetConfigurationList:"
+  // << " Z= " << Z << " A= " << A << " Mass(GeV)= " << mass/GeV<< G4endl;
+
+  // look into pair list
+  size_t nz = list2[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = (list2[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { 
+	v->push_back(conf); 
+ 	 ++nconf;
+      }
+      //if(Z == conf->GetZ()) { 
+      //G4cout << "Pair dM(MeV)= " << mass - conf->GetMass() << G4endl; }
+    }
+  }
+  // look into triple list
+  nz = list3[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = (list3[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { 
+	v->push_back(conf); 
+	++nconf;
+      }
+      //if(Z == conf->GetZ()) { 
+      //G4cout << "Triple dM(MeV)= " << mass - conf->GetMass() << G4endl; }
+    }
+  }
+  // look into quartet list
+  nz = list4[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = (list4[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { 
+	v->push_back(conf);
+	++nconf; 
+      }
+      //if(Z == conf->GetZ()) { 
+      //  G4cout << "Quartet dM(MeV)= " << mass - conf->GetMass() << G4endl; }
+    }
+  }
+  // return if vector not empty
+  if(0 < v->size()) { 
+    if(verbose > 0) { 
+      G4double ExEn= mass - G4NucleiProperties::GetNuclearMass(A,Z);
+      G4cout<<"Total number of configurations = "<<nconf<<" for A= "
+	    <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
+      size_t size_vector_conf = v->size();
+      for(size_t jc=0; jc<size_vector_conf; ++jc) {     
+	std::vector<const G4VFermiFragment*> v_frag = (*v)[jc]->GetFragmentList();
+	size_t size_vector_fragments = v_frag.size();
+	G4cout<<size_vector_fragments<<"-body configuration "<<jc+1<<": ";
+	for(size_t jf=0;jf<size_vector_fragments;++jf){
+	  G4int af= v_frag[jf]->GetA();
+	  G4int zf= v_frag[jf]->GetZ();
+	  G4double ex=v_frag[jf]->GetExcitationEnergy();
+	  G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
+	}
+	G4cout<<G4endl;
+	G4cout<<"-----------------------------------------------------"<<G4endl;    
+      }
+    }
+    return v; 
+  }
+
+  // search in the pool and if found then return vector with one element
+  nz = list1[A].size();
+  G4FermiConfiguration* conf1 = 0; 
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = (list1[A])[j];
+      //if(Z == conf->GetZ()) { 
+      //  G4cout << "Single dM(MeV)= " << mass - conf->GetMass() << G4endl; }
+
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) {
+	if(!(conf->GetFragmentList())[0]->IsStable()) {
+	  ++nconf;
+	  v->push_back(conf);
+	  if(verbose > 0) { 
+	    G4double ExEn= mass -G4NucleiProperties::GetNuclearMass(A,Z);
+	    G4cout<<"Total number of configurations = "<<nconf<<" for A= "
+		  <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
+	    size_t size_vector_conf=v->size();
+	    for(size_t jc=0; jc<size_vector_conf; ++jc) {     
+	      std::vector<const G4VFermiFragment*> v_frag = (*v)[jc]->GetFragmentList();
+	      size_t size_vector_fragments=v_frag.size();
+	      G4cout<<"1 Fragment configuration "<<jc+1<<": ";
+	      for(size_t jf=0;jf<size_vector_fragments;++jf){
+		G4int af= v_frag[jf]->GetA();
+		G4int zf= v_frag[jf]->GetZ();
+		G4double ex=v_frag[jf]->GetExcitationEnergy();
+		G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
+	      }
+	      G4cout<<G4endl;
+	      G4cout<<"-----------------------------------------------------"<<G4endl;    
+	    }
+	  }
+	  return v;
+	} else {
+	  conf1 = conf;
+	  break;
+	}
+      }
+    }
+  }
+    
+  // search in the list of exotic configurations
+  nz = listextra.size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = listextra[j];
+      if(Z == conf->GetZ() && A == conf->GetA() && 
+	 mass >= conf->GetMass()) { 
+	++nconf;
+	v->push_back(conf); 
+	if(verbose > 0) { 
+	  G4double ExEn= mass -G4NucleiProperties::GetNuclearMass(A,Z);
+	  G4cout<<"Total number of configurations = "<<nconf<<" for A= "
+		<<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
+	  size_t size_vector_conf=v->size();
+	  for(size_t jc=0; jc<size_vector_conf; ++jc) {     
+	    std::vector<const G4VFermiFragment*> v_frag = (*v)[jc]->GetFragmentList();
+	    size_t size_vector_fragments=v_frag.size();
+	    G4cout<<"Found exotic configuration -> configuration "<<jc+1<<": ";
+	    for(size_t jf=0;jf<size_vector_fragments;++jf){
+	      G4int af= v_frag[jf]->GetA();
+	      G4int zf= v_frag[jf]->GetZ();
+	      G4double ex=v_frag[jf]->GetExcitationEnergy();
+	      G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
+	    }
+	    G4cout<<G4endl;
+	    G4cout<<"-----------------------------------------------------"<<G4endl;    
+	  }
+	}
+	return v;
+      }
+    }
+  }
+  //G4cout << "Explore dM(MeV)= " 
+  //	 << mass - Z*proton_mass_c2 - (A-Z)*neutron_mass_c2 << G4endl; 
+
+  // add new exotic configuration
+  if(mass > Z*proton_mass_c2 + (A-Z)*neutron_mass_c2) {
+    std::vector<const G4VFermiFragment*>  newvec;
+    G4int idx = 1;
+    for(G4int i=0; i<A; ++i) {
+      if(i == Z) { idx = 0; }
+      newvec.push_back(fragment_pool[idx]);
+    }
+    G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
+    listextra.push_back(conf);
+    v->push_back(conf);
+    ++nconf;
+    if(verbose > 0) { 
+      G4cout<<"Total number of configurations = "<<nconf<<G4cout;
+      G4double ExEn= mass -G4NucleiProperties::GetNuclearMass(A,Z);
+      G4cout<<"Total number of configurations = "<<nconf<<" for A= "
+	    <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
+      size_t size_vector_conf=v->size();
+      for(size_t jc=0; jc<size_vector_conf; ++jc) {     
+	std::vector<const G4VFermiFragment*> v_frag = (*v)[jc]->GetFragmentList();
+	size_t size_vector_fragments=v_frag.size();
+	G4cout<<"New exotic configuration -> configuration "<<jc+1<<": ";
+	for(size_t jf=0;jf<size_vector_fragments;++jf){
+	  G4int af= v_frag[jf]->GetA();
+	  G4int zf= v_frag[jf]->GetZ();
+	  G4double ex=v_frag[jf]->GetExcitationEnergy();
+	  G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
+	}
+	G4cout<<G4endl;
+	G4cout<<"-----------------------------------------------------"<<G4endl;    
+      }
+    }
+    return v;
+  }
+
+  // only photon evaporation is possible
+  if(conf1) {
+    v->push_back(conf1); 
+    ++nconf;
+    if(verbose > 0) { 
+      G4cout<<"Total number of configurations = "<<nconf<<G4endl;
+      G4double ExEn= mass -G4NucleiProperties::GetNuclearMass(A,Z);
+      G4cout<<"Total number of configurations = "<<nconf<<" for A= "
+	    <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
+      size_t size_vector_conf=v->size();
+      for(size_t jc=0; jc<size_vector_conf; ++jc) {     
+	std::vector<const G4VFermiFragment*> v_frag = (*v)[jc]->GetFragmentList();
+	size_t size_vector_fragments=v_frag.size();
+	G4cout<<"Only evaporation is possible -> configuration  "<<jc+1<<": ";
+	for(size_t jf=0;jf<size_vector_fragments;++jf){
+	  G4int af= v_frag[jf]->GetA();
+	  G4int zf= v_frag[jf]->GetZ();
+	  G4double ex=v_frag[jf]->GetExcitationEnergy();
+	  G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
+	}
+	G4cout<<G4endl;
+	G4cout<<"-----------------------------------------------------"<<G4endl;    
+      }
+    }
+    return v;   
+  }
+
+  //failer
+  if(verbose > 0) { 
+    G4cout << "G4FermiFragmentsPool::GetConfigurationList: WARNING: not "
+	   << "able decay fragment Z= " << Z << " A= " << A
+	   << " Mass(GeV)= " << mass/GeV<< G4endl;
+  }
+  return v;
 }
 
-G4bool G4FermiFragmentsPool::operator==(const G4FermiFragmentsPool&) const
+G4bool 
+G4FermiFragmentsPool::IsExist(G4int Z, G4int A, 
+			      std::vector<const G4VFermiFragment*>& newconf)
 {
-  // It is meant to not be accesable
+  size_t nn = newconf.size();
+  G4double mass = 0.0;
+  for(size_t i=0; i<nn; ++i) { mass +=  newconf[i]->GetTotalEnergy(); }
+  // look into pair list
+  if(2 == nn) {
+    size_t nz = list2[A].size();
+    if(0 < nz) {
+      for(size_t j=0; j<nz; ++j) {
+	G4FermiConfiguration* conf = (list2[A])[j];
+	if(Z == conf->GetZ() && A == conf->GetA() && 
+	   std::fabs(mass - conf->GetMass()) < keV) {return true; }
+      }
+    }
+    return false;
+  }
+  // look into triple list
+  if(3 == nn) {
+    size_t nz = list3[A].size();
+    if(0 < nz) {
+      for(size_t j=0; j<nz; ++j) {
+	G4FermiConfiguration* conf = (list3[A])[j];
+	if(Z == conf->GetZ() && A == conf->GetA() && 
+	   std::fabs(mass - conf->GetMass()) < keV) { return true; }
+      }
+    }
+    return false;
+  }
+  // look into quartet list
+  if(4 == nn) {
+    size_t nz = list4[A].size();
+    if(0 < nz) {
+      for(size_t j=0; j<nz; ++j) {
+	G4FermiConfiguration* conf = (list4[A])[j];
+	if(Z == conf->GetZ() && A == conf->GetA() && 
+	   std::fabs(mass - conf->GetMass()) < keV) { return true; }
+      }
+    }
+    return false;
+  }
   return false;
 }
 
-G4bool G4FermiFragmentsPool::operator!=(const G4FermiFragmentsPool&) const
+const G4VFermiFragment* 
+G4FermiFragmentsPool::GetFragment(G4int Z, G4int A)
 {
-  // It is meant to not be accesable
-  return true;
+  const G4VFermiFragment* f = 0;
+  if(Z >= maxZ || A >= maxA) { return f; }
+  size_t nz = list1[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      G4FermiConfiguration* conf = (list1[A])[j];
+      if(Z == conf->GetZ()) { return (conf->GetFragmentList())[0]; }
+    }
+  }
+  return f;
 }

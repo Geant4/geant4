@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.13 2006/06/29 21:14:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForTransport.icc,v 1.13 2006-06-29 21:14:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 inline 
@@ -107,12 +107,18 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
 //  theEnergyChange          = pParticle->GetKineticEnergy();
 //  theMomentumChange        = pParticle->GetMomentumDirection();
+    theVelocityChange          = track.GetVelocity();
+    isVelocityChanged          = false;
     thePolarizationChange    = pParticle->GetPolarization();
 //  theProperTimeChange      = pParticle->GetProperTime();
 
   // set Position/Time etc. equal to those of the parent track
-//  thePositionChange      = track.GetPosition();
-//  theTimeChange          = track.GetGlobalTime();
+  //  thePositionChange      = track.GetPosition();
+  // set TimeChange equal to local time of the parent track
+  theTimeChange                = track.GetLocalTime();
+  // set initial Local/Global time of the parent track
+  theLocalTime0           = track.GetLocalTime();
+  theGlobalTime0          = track.GetGlobalTime();
 
   // set touchable equal to the next touchable of the parent track
   // not set as for now

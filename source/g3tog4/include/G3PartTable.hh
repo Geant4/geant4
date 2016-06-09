@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.hh,v 1.10 2006/06/29 18:12:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3PartTable.hh,v 1.10 2006-06-29 18:12:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -38,6 +38,7 @@
 #ifndef G3PARTTABLE_HH
 #define G3PARTTABLE_HH 1
 #include <map>
+#include "G3toG4Defs.hh"
 #include "G4ParticleDefinition.hh"
 
 class G3PartTable
@@ -58,6 +59,6 @@ private:
   void HashID(G4int partid, G4String& _HID);
 };
 
-extern G3PartTable G3Part;
+extern G3G4DLL_API G3PartTable G3Part;
 
 #endif

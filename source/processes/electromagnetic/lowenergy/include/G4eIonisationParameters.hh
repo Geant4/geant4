@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.8 2006/06/29 19:37:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eIonisationParameters.hh,v 1.8 2006-06-29 19:37:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V. Ivanchenko 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010/03/10 11:03:46 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010-03-10 11:03:46 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4OpenGLStoredQtViewer : a class derived from
@@ -38,7 +38,6 @@
 
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLQtViewer.hh"
-
 #include <qgl.h>  // include qglwidget
 
 class QMouseEvent;
@@ -61,8 +60,14 @@ public:
   void paintGL();
   void updateQWidget();
   void ShowView ();
+  void DrawText(const char * ,double x,double y,double z, double size);
 
 protected:
+
+  // Two virtual functions to return sub-class selection.
+  G4bool POSelected(size_t POListIndex);
+  G4bool TOSelected(size_t TOListIndex);
+
   void showEvent(QShowEvent * event );
   void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);

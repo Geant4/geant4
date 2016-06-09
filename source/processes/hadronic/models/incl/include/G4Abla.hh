@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.14 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4Abla.hh,v 1.13 2010/10/26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -143,7 +143,7 @@ public:
   /**
    * Main evaporation routine.
    */
-  void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
+  void evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
 	       G4int *ff_par, G4int *inttype_par, G4int *inum_par);

@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4B12GEMProbability.cc,v 1.6 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4B12GEMProbability.cc,v 1.6 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
 
 #include "G4B12GEMProbability.hh"
 
@@ -51,102 +49,73 @@ G4B12GEMProbability::G4B12GEMProbability() :
 
     ExcitEnergies.push_back(3388.3*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(3.1*eV));
+    ExcitLifetimes.push_back(fPlanck/(3.1*eV));
 
     ExcitEnergies.push_back(3759.0*keV);
     ExcitSpins.push_back(2.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(40*keV));
+    ExcitLifetimes.push_back(fPlanck/(40*keV));
 
     ExcitEnergies.push_back(4301*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(9*keV));
+    ExcitLifetimes.push_back(fPlanck/(9*keV));
 
     ExcitEnergies.push_back(4518*keV);
     ExcitSpins.push_back(4.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(110*keV));
+    ExcitLifetimes.push_back(fPlanck/(110*keV));
 
     ExcitEnergies.push_back(5.00E+3*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(50*keV));
+    ExcitLifetimes.push_back(fPlanck/(50*keV));
 
     ExcitEnergies.push_back(5612*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(110*keV));
+    ExcitLifetimes.push_back(fPlanck/(110*keV));
 
     ExcitEnergies.push_back(5726*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(50*keV));
+    ExcitLifetimes.push_back(fPlanck/(50*keV));
 
     ExcitEnergies.push_back(6.6E+3*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(140*keV));
+    ExcitLifetimes.push_back(fPlanck/(140*keV));
 
     ExcitEnergies.push_back(7.67E+3*keV);
     ExcitSpins.push_back(2.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(45*keV));
+    ExcitLifetimes.push_back(fPlanck/(45*keV));
 
     ExcitEnergies.push_back(7836*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(60*keV));
+    ExcitLifetimes.push_back(fPlanck/(60*keV));
 
     ExcitEnergies.push_back(7937*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(27*keV));
+    ExcitLifetimes.push_back(fPlanck/(27*keV));
 
     ExcitEnergies.push_back(8.24E+3*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(65*keV));
+    ExcitLifetimes.push_back(fPlanck/(65*keV));
 
     ExcitEnergies.push_back(8.58E+3*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(75*keV));
+    ExcitLifetimes.push_back(fPlanck/(75*keV));
 
     ExcitEnergies.push_back(9040*keV);
     ExcitSpins.push_back(1.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(95*keV));
+    ExcitLifetimes.push_back(fPlanck/(95*keV));
 
     ExcitEnergies.push_back(9585*keV);
     ExcitSpins.push_back(3.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(34*keV));
+    ExcitLifetimes.push_back(fPlanck/(34*keV));
 
     ExcitEnergies.push_back(1.275E+4*keV);
     ExcitSpins.push_back(0.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(85*keV));
+    ExcitLifetimes.push_back(fPlanck/(85*keV));
 
     ExcitEnergies.push_back(1.482E+4*keV);
     ExcitSpins.push_back(2.0);
-    ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(200*keV));
-
-    SetExcitationEnergiesPtr(&ExcitEnergies);
-    SetExcitationSpinsPtr(&ExcitSpins);
-    SetExcitationLifetimesPtr(&ExcitLifetimes);
+    ExcitLifetimes.push_back(fPlanck/(200*keV));
 }
 
-
-G4B12GEMProbability::G4B12GEMProbability(const G4B12GEMProbability &) : G4GEMProbability()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4B12GEMProbability::copy_constructor meant to not be accessable");}
-
-
-
-
-const G4B12GEMProbability & G4B12GEMProbability::
-operator=(const G4B12GEMProbability &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4B12GEMProbability::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4B12GEMProbability::operator==(const G4B12GEMProbability &) const
-{
-  return false;
-}
-
-G4bool G4B12GEMProbability::operator!=(const G4B12GEMProbability &) const
-{
-  return true;
-}
-
-
+G4B12GEMProbability::~G4B12GEMProbability()
+{}
 

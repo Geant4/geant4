@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorMessenger.cc
-//   $Id: H02PrimaryGeneratorMessenger.cc,v 1.3 2006/06/29 17:11:51 gunter Exp $
+//   $Id: H02PrimaryGeneratorMessenger.cc,v 1.3 2006-06-29 17:11:51 gunter Exp $
 //
 // ====================================================================
 #include "G4UIcommand.hh"

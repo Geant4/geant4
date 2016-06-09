@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2010/11/12 14:50:02 cirrone Exp $
+# $Id: GNUmakefile,v 1.18 2010-11-12 14:50:02 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------

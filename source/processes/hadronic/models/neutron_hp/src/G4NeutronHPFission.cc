@@ -40,14 +40,15 @@
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     dirName = getenv("G4NEUTRONHPDATA");
-    G4String tString = "/Fission/";
+    G4String tString = "/Fission";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
     theFission = new G4NeutronHPChannel[numEle];
 
     for (G4int i=0; i<numEle; i++)
     { 
-      if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
+      //if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
+      if((*(G4Element::GetElementTable()))[i]->GetZ()>87) //TK modified for ENDF-VII
       {
         theFission[i].Init((*(G4Element::GetElementTable()))[i], dirName);
         theFission[i].Register(&theFS);

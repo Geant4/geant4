@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.11 2010/11/09 20:23:47 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoManager.cc,v 1.11 2010-11-09 20:23:47 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,9 +65,6 @@ HistoManager::HistoManager()
   }
 
   histoMessenger = new HistoMessenger(this);
-
-  rangeFlag = false;  
-  csdaRange = DBL_MAX;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -271,32 +268,6 @@ void HistoManager::saveAscii()
     }
  }
 #endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double HistoManager::ComputeStepMax(G4double range)
-{
-  // compute constraint on stepMax from histos 1 and 8
-  //
-  G4double stepMax = DBL_MAX;
-  G4double frac = 1.;
-  
-  G4int ih = 1;
-  if (exist[ih]) {
-    stepMax = frac*Width[ih];    
-  }
-  
-  ih = 8;   	 
-  if (exist[ih]) {
-    if (!rangeFlag) csdaRange = range;
-    if (csdaRange > 0.) stepMax = std::min(stepMax,frac*Width[ih]*csdaRange);
-  }
-  
-  G4cout << "\n---> stepMax from HistoManager = " 
-         << G4BestUnit(stepMax,"Length") << G4endl;
-	 
-  return stepMax;     	   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

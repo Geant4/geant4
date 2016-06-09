@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2010/10/18 15:56:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: EventAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -37,6 +37,7 @@
 #include "RunAction.hh"
 #include "EventActionMessenger.hh"
 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 
@@ -45,10 +46,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:runAct(run),printModulo(1),eventMessenger(0)
+EventAction::EventAction()
 {
+  runAct = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
   eventMessenger = new EventActionMessenger(this);
+  printModulo = 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

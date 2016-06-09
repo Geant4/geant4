@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.50 2010/11/17 10:47:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLRead.cc,v 1.50 2010-11-17 10:47:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
 //

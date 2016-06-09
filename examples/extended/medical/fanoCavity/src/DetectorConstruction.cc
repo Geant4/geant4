@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2007/10/08 12:05:02 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.3 2007-10-08 12:05:02 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,13 +97,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", 1.0*g/cm3, 2);
   H2O->AddElement(H, 2);
   H2O->AddElement(O, 1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   G4Material* vapor = 
   new G4Material("Water_vapor", 1.0*mg/cm3, 2);
   vapor->AddElement(H, 2);
   vapor->AddElement(O, 1);
-  vapor->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  vapor->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   G4Material* Air = 
   new G4Material("Air", 1.290*mg/cm3, 2);

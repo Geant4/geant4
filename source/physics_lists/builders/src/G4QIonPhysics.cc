@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonPhysics.cc,v 1.1 2010/06/03 09:31:41 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QIonPhysics.cc,v 1.1 2010-06-03 09:31:41 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -38,9 +38,13 @@
 //
 
 #include "G4QIonPhysics.hh"
+#include "G4BuilderType.hh"
 
 G4QIonPhysics::G4QIonPhysics(const G4String& name)
- : G4VPhysicsConstructor(name), wasActivated(false){}
+ : G4VPhysicsConstructor(name), wasActivated(false)
+{
+  SetPhysicsType(bIons);
+}
 
 void G4QIonPhysics::ConstructProcess()
 {

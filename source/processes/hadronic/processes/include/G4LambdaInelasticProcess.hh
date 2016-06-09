@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process : Lambda Inelastic Process
- // J.L. Chuma, TRIUMF, 18-Feb-1997
- // Last modified: 03-Apr-1997
+// Hadronic Process : Lambda Inelastic Process
+// J.L. Chuma, TRIUMF, 18-Feb-1997
+//
 
- // Note:  there is no .cc file
- 
 #ifndef G4LambdaInelasticProcess_h
 #define G4LambdaInelasticProcess_h 1
  
@@ -40,19 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4LambdaInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4LambdaInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4LambdaInelasticProcess(
-     const G4String& processName = "LambdaInelastic" ) :
-      G4HadronInelasticProcess( processName, G4Lambda::Lambda() )
-    { }
+    G4LambdaInelasticProcess(const G4String& processName = "LambdaInelastic");
     
-    ~G4LambdaInelasticProcess()
-    { }
- };
- 
-#endif
- 
+    ~G4LambdaInelasticProcess() {}
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
+#endif

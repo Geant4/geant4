@@ -1,0 +1,36 @@
+ -------------------------------------------------------------------------------
+History File, 2011/09/08 C. Casarino, Created
+carlo.casarino@polooncologicocefalu.it
+-------------------------------------------------------------------------------
+
+         ====================================================
+             History file of the IORT application
+         ====================================================
+
+24.11.2011 - G.Folger;      Tag: iort_therapy-V09-04-08
+	        Use G4lrint() in place of lrint()
+17.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-07
+	        Warnings removed
+07.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-06
+	        Macro file corrected
+07.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-05
+	        Code revision and visualisation improved
+03.11.2011 - F. Romano; Tag: iort_therapy-V09-04-04
+	        Migration to new G4Exception scheme
+02.11.2011 - C. Casarino; Tag: iort_therapy-V09-04-03
+	        Main file improved
+02.11.2011 - C. Casarino; Tag: iort_therapy-V09-04-02
+	        Warings removed.
+30.10.2011 - G.A.P. Cirrone; Tag: iort_therapy-V09-04-01
+	        Main name changed.
+30.10.2011 - G.A.P. Cirrone; Tag: iort_therapy-V09-04-00
+	     	First tag proposed to the Geant4 repository
+08.09.2011 - G.Russo, C.Casarino, G.C. Candiano, G.A.P. Cirrone, F.Romano
+             	Created, first version.
+
+
+
+
+
+
+

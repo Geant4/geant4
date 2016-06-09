@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ComptonScattering.hh,v 1.21 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ComptonScattering.hh,v 1.21 2009-02-20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996

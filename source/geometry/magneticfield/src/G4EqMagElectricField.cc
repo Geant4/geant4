@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.cc,v 1.14 2008/04/24 12:33:35 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EqMagElectricField.cc,v 1.14 2008-04-24 12:33:35 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  This is the standard right-hand side for equation of motion.

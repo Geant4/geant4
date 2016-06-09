@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.7 2009/03/04 19:09:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuNuclearInteraction.hh,v 1.7 2009-03-04 19:09:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
 // ------------------------------------------------------------

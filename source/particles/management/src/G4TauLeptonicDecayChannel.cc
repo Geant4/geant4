@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc,v 1.5 2006/06/29 19:26:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TauLeptonicDecayChannel.cc,v 1.5 2006-06-29 19:26:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -44,6 +44,12 @@
 #include "Randomize.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
+
+
+G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel()
+  :G4VDecayChannel()
+{
+}
 
 
 G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(
@@ -94,6 +100,38 @@ G4TauLeptonicDecayChannel::~G4TauLeptonicDecayChannel()
 {
 }
 
+G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel &right):
+  G4VDecayChannel(right)
+{
+}
+
+G4TauLeptonicDecayChannel & G4TauLeptonicDecayChannel::operator=(const G4TauLeptonicDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+  }
+  return *this;
+}
+
 G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double) 
 {
   // this version neglects muon polarization 
@@ -124,7 +162,6 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
 
   // calculate daughter momentum
   G4double daughtermomentum[3];
-  G4double energy;
 
   // calcurate lepton momentum
   G4double pmax = (parentmass*parentmass-daughtermass[0]*daughtermass[0])/2./parentmass;
@@ -136,7 +173,6 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
     p = pmax*G4UniformRand();
     e = std::sqrt(p*p + daughtermass[0]*daughtermass[0]);
   } while (r > spectrum(p,e,parentmass,daughtermass[0]) );
-  energy = e- daughtermass[0];
 
   //create daughter G4DynamicParticle 
   // daughter 0 (lepton)

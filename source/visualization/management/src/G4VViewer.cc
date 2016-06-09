@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.26 2009/11/17 14:37:06 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VViewer.cc,v 1.26 2009-11-17 14:37:06 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  27th March 1996
@@ -60,6 +60,9 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
+
+  fVP = G4VisManager::GetInstance()->GetDefaultViewParameters();
+  fDefaultVP = fVP;
 }
 
 G4VViewer::~G4VViewer () {

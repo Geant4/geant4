@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.47 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Polycone.cc,v 1.47 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,15 +85,16 @@ G4Polycone::G4Polycone( const G4String& name,
         ||(rInner[i+1] > rOuter[i])   )
       {
         DumpInfo();
-        G4cerr << "ERROR - G4Polycone::G4Polycone()"
-               << G4endl
-               << "        Segments are not contiguous !" << G4endl
-               << "        rMin[" << i << "] = " << rInner[i]
-               << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
-               << "        rMin[" << i+1 << "] = " << rInner[i+1]
-               << " -- rMax[" << i << "] = " << rOuter[i] << G4endl;
-        G4Exception("G4Polycone::G4Polycone()", "InvalidSetup", FatalException, 
-                    "Cannot create a Polycone with no contiguous segments.");
+        std::ostringstream message;
+        message << "Cannot create a Polycone with no contiguous segments."
+                << G4endl
+                << "        Segments are not contiguous !" << G4endl
+                << "        rMin[" << i << "] = " << rInner[i]
+                << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
+                << "        rMin[" << i+1 << "] = " << rInner[i+1]
+                << " -- rMax[" << i << "] = " << rOuter[i];
+        G4Exception("G4Polycone::G4Polycone()", "GeomSolids0002",
+                    FatalErrorInArgument, message);
       }
     } 
     original_parameters->Z_values[i] = zPlane[i];
@@ -154,11 +155,11 @@ void G4Polycone::Create( G4double phiStart,
   //
   if (rz->Amin() < 0.0)
   {
-    G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        All R values must be >= 0 !"
-           << G4endl;
-    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
-                "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        All R values must be >= 0 !";
+    G4Exception("G4Polycone::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
     
   G4double rzArea = rz->Area();
@@ -167,30 +168,30 @@ void G4Polycone::Create( G4double phiStart,
 
   else if (rzArea < -kCarTolerance)
   {
-    G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        R/Z cross section is zero or near zero: "
-           << rzArea << G4endl;
-    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
-                "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        R/Z cross section is zero or near zero: " << rzArea;
+    G4Exception("G4Polycone::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
     
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
     || (!rz->RemoveRedundantVertices( kCarTolerance ))     ) 
   {
-    G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        Too few unique R/Z values !"
-           << G4endl;
-    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
-                "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        Too few unique R/Z values !";
+    G4Exception("G4Polycone::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   if (rz->CrossesItself(1/kInfinity)) 
   {
-    G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        R/Z segments cross !"
-           << G4endl;
-    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
-                "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        R/Z segments cross !";
+    G4Exception("G4Polycone::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   numCorner = rz->NumVertices();
@@ -410,10 +411,11 @@ G4bool G4Polycone::Reset()
 {
   if (genericPcon)
   {
-    G4cerr << "Solid " << GetName() << " built using generic construct."
-           << G4endl << "Not applicable to the generic construct !" << G4endl;
-    G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
-                JustWarning, "Parameters NOT resetted.");
+    std::ostringstream message;
+    message << "Solid " << GetName() << " built using generic construct."
+            << G4endl << "Not applicable to the generic construct !";
+    G4Exception("G4Polycone::Reset()", "GeomSolids1001",
+                JustWarning, message, "Parameters NOT resetted.");
     return 1;
   }
 
@@ -522,6 +524,7 @@ G4VSolid* G4Polycone::Clone() const
 //
 std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -561,6 +564,7 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
           << corners[i].r << ", " << corners[i].z << "\n";
      }
   os << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }
@@ -578,12 +582,12 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
 { 
   // declare working variables
   //
-  G4double Aone, Atwo, Afive, phi, zRand, fDPhi, fSPhi, cosu, sinu;
+  G4double Aone, Atwo, Afive, phi, zRand, fDPhi, cosu, sinu;
   G4double rRand1, chose, rone, rtwo, qone, qtwo,
            fDz = std::fabs((zTwo-zOne)/2.);
   G4ThreeVector point, offset;
   offset = G4ThreeVector(0.,0.,0.5*(zTwo+zOne));
-  fSPhi = startPhi; fDPhi = endPhi - startPhi;
+  fDPhi = endPhi - startPhi;
   rone = (fRmax1-fRmax2)/(2.*fDz); 
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
   if(fRmax1==fRmax2){qone=0.;}
@@ -1162,10 +1166,10 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
     delete [] xyz;
     if (problem)
     {
-      std::ostringstream oss;
-      oss << "Problem creating G4Polyhedron for: " << GetName();
-      G4Exception("G4Polycone::CreatePolyhedron()", "BadPolyhedron",
-                  JustWarning, oss.str().c_str());
+      std::ostringstream message;
+      message << "Problem creating G4Polyhedron for: " << GetName();
+      G4Exception("G4Polycone::CreatePolyhedron()", "GeomSolids1002",
+                  JustWarning, message);
       delete polyhedron;
       return 0;
     }

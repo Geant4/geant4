@@ -88,7 +88,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 {
   // Create target
   G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
-  G4Nucleus aTargetNucleus(theTarget->GetN() ,theTarget->GetZ());
+  G4Nucleus aTargetNucleus(theTarget->GetA_asInt(), theTarget->GetZ_asInt());
 
   // Check model validity - note this will be a sub-branch in the ordinary stopping @@@@@@
   // in the long haul. @@@@@@
@@ -97,7 +97,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
     throw G4HadronicException(__FILE__, __LINE__,
                 "Calling G4ProtonAntiProtonAtRestChips with particle other than p-bar!!!");
   }
-  if(aTargetNucleus.GetZ() != 1)
+  if(aTargetNucleus.GetZ_asInt() != 1)
   {
     throw G4HadronicException(__FILE__, __LINE__,
                 "Calling G4ProtonAntiProtonAtRestChips for target other than Hydrogen!!!");

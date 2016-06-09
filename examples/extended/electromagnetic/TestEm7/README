@@ -1,4 +1,4 @@
-$Id: README,v 1.23 2010/09/17 18:45:43 maire Exp $
+$Id: README,v 1.23 2010-09-17 18:45:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,7 @@ $Id: README,v 1.23 2010/09/17 18:45:43 maire Exp $
                             -------
 
      How to produce a Bragg curve in a water phantom.
-     How to compute the dose in small 'test volumes' called tallies.
+     How to compute the dose in 'test volumes' called tallies.
      How to define a maximum step size.
 	
  1- GEOMETRY DEFINITION

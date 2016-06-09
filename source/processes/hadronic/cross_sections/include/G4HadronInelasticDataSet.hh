@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // GEANT4 physics class: G4HadronInelasticDataSet -- header file
 // F.W. Jones, TRIUMF, 19-MAY-98
 //
@@ -45,55 +44,22 @@ class G4HadronInelasticDataSet : public G4VCrossSectionDataSet
 {
 public:
 
-   G4HadronInelasticDataSet()
-   {
-      theHadronCrossSections = G4HadronCrossSections::Instance();
-   }
+  G4HadronInelasticDataSet(const G4String& name = "GheishaInelastic"); 
 
-   ~G4HadronInelasticDataSet()
-   {
-   }
+  virtual ~G4HadronInelasticDataSet();
 
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-   G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
-   {
-     return theHadronCrossSections->IsApplicable(aParticle, anElement);
-   }
+  virtual G4bool
+  IsElementApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,
+                      const G4Material*);
 
-
-   G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int AA)
-   {
-     return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
-   }
-
-   G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement, 
-                            G4double /*aTemperature*/)
-   {
-     return theHadronCrossSections->GetInelasticCrossSection(aParticle,
-                                                             anElement);
-   }
-
-   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                 G4int ZZ, G4int AA,
-                                 G4double /*aTemperature*/)
-   {
-     return theHadronCrossSections->GetInelasticCrossSection(aParticle, ZZ, AA);
-   }
-
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
-
-   void DumpPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
-
+  virtual G4double
+  GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z, 
+			 const G4Material*);
 private:
 
-   G4HadronCrossSections* theHadronCrossSections;
+  G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

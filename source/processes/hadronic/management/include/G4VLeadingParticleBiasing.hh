@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VLeadingParticleBiasing.hh,v 1.6 2006/06/29 19:58:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VLeadingParticleBiasing.hh,v 1.6 2006-06-29 19:58:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 #ifndef G4VLeadingParticleBiasing_h

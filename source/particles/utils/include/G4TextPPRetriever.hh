@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPRetriever.hh,v 1.3 2010/08/10 15:47:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TextPPRetriever.hh,v 1.3 2010-08-10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc,v 1.7 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointComptonModel.cc,v 1.7 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -53,7 +53,7 @@ G4AdjointComptonModel::G4AdjointComptonModel():
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
   theDirectEMModel=new G4KleinNishinaCompton(G4Gamma::Gamma(),"ComptonDirectModel");
- 
+  G4direct_CS = 0.;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

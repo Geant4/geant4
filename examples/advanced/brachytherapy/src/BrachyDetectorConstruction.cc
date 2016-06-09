@@ -55,13 +55,11 @@
 #include "BrachyFactoryLeipzig.hh"
 #include "BrachyFactoryIr.hh"
 #include "BrachyFactoryI.hh"
-#include "BrachyPhantomROGeometry.hh"
-#include "BrachyPhantomSD.hh"
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 
-BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
-: detectorChoice(0), phantomSD(0), phantomROGeometry(0), factory(0),
+BrachyDetectorConstruction::BrachyDetectorConstruction()
+: detectorChoice(0), factory(0),
   World(0), WorldLog(0), WorldPhys(0),
   Phantom(0), PhantomLog(0), PhantomPhys(0),
   phantomAbsorberMaterial(0)
@@ -70,22 +68,11 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
   phantomSizeX = 15.*cm ;
   phantomSizeY = 15.*cm;
   phantomSizeZ = 15.*cm;
-
-  // Define the number of voxels the phantom is subdivided along the
-  // three axis 
-  // Each voxel is 1 mm wide
-  numberOfVoxelsAlongX = 300;
-  numberOfVoxelsAlongY = 300;
-  numberOfVoxelsAlongZ = 300;
-
-  ComputeDimVoxel();
   
-  // Define the sizes of the World volume contaning the phantom
+  // Define the sizes of the World volume containing the phantom
   worldSizeX = 4.0*m;
   worldSizeY = 4.0*m;
   worldSizeZ = 4.0*m;
-
-  sensitiveDetectorName = SDName;
 
   // Define the messenger of the Detector component
   // It is possible to modify geometrical parameters through UI
@@ -104,7 +91,6 @@ BrachyDetectorConstruction::~BrachyDetectorConstruction()
   delete pMaterial;
   delete factory;
   delete detectorMessenger;
-  if (phantomROGeometry) delete phantomROGeometry;
 }
 
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
@@ -115,10 +101,7 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
   ConstructPhantom();
 
   // Model the source in the phantom
-  factory -> CreateSource(PhantomPhys); //Build the source inside the phantom
- 
-  // Define the sensitive volume: phantom
-  ConstructSensitiveDetector();
+  factory -> CreateSource(PhantomPhys); 
 
   return WorldPhys;
 }
@@ -185,8 +168,6 @@ void BrachyDetectorConstruction::ConstructPhantom()
   G4Material* air = pMaterial -> GetMat("Air") ;
   G4Material* water = pMaterial -> GetMat("Water");
 
-  ComputeDimVoxel();
-
   // World volume
   World = new G4Box("World",worldSizeX,worldSizeY,worldSizeZ);
   WorldLog = new G4LogicalVolume(World,air,"WorldLog",0,0,0);
@@ -216,29 +197,6 @@ void BrachyDetectorConstruction::ConstructPhantom()
   PhantomLog -> SetVisAttributes(simpleBoxVisAtt);
 }
 
-void  BrachyDetectorConstruction::ConstructSensitiveDetector()
-// Sensitive Detector and ReadOut geometry definition
-{ 
-  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
-
-  if(!phantomSD)
-  {
-    phantomSD = new BrachyPhantomSD(sensitiveDetectorName);
-    G4String ROGeometryName = "PhantomROGeometry";
-    phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,
-                                phantomSizeX,  
-				phantomSizeY, 
-				phantomSizeZ,
-                                numberOfVoxelsAlongX,
-				numberOfVoxelsAlongY,		    
-				numberOfVoxelsAlongZ);
-    phantomROGeometry -> BuildROGeometry();
-    phantomSD -> SetROgeometry(phantomROGeometry);
-    pSDManager -> AddNewDetector(phantomSD);
-   
-    PhantomLog -> SetSensitiveDetector(phantomSD);
-  }
-}
 
 void BrachyDetectorConstruction::PrintDetectorParameters()
 {
@@ -251,11 +209,6 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
          << " cm * "
          << phantomSizeZ *2./cm
          << " cm" << G4endl
-         << "number of Voxel: "
-         << numberOfVoxelsAlongX <<G4endl
-         << "Voxel size: "
-         << dimVoxel * 2/mm
-         << "mm" << G4endl 
          << "The phantom is made of "
          << phantomAbsorberMaterial -> GetName() <<G4endl
          << "the source is at the center of the phantom" << G4endl

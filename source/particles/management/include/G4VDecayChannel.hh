@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh,v 1.13 2010/08/10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VDecayChannel.hh,v 1.13 2010-08-10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -68,7 +68,9 @@ class G4VDecayChannel
     //  Destructor
       virtual ~G4VDecayChannel();
 
-  private:
+  protected:
+    //  default constructor
+     G4VDecayChannel();
     //  copy constructor and assignment operatotr
      G4VDecayChannel(const G4VDecayChannel &);
      G4VDecayChannel & operator=(const G4VDecayChannel &);
@@ -163,7 +165,7 @@ class G4VDecayChannel
   private:
     const G4String& GetNoName() const;
 
-  private:  
+  protected:  
     // controle flag for output message
     G4int verboseLevel;
     //  0: Silent

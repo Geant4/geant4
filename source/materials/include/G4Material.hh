@@ -24,29 +24,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.28 2010/05/14 14:34:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4Material.hh,v 1.28 2010-05-14 14:34:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-// class description
+//---------------------------------------------------------------------------
 //
-// Materials defined via the G4Material class are used to define the
-// composition of Geant volumes.
-// a Material is always made of Elements. It can be defined directly
-// from scratch (defined by an implicit, single element), specifying :
-//                                             its name,
-//                                             density,
-//                                             state informations,
-//                                            and Z,A of the underlying Element.
+// ClassName:   G4Material
 //
-// or in terms of a collection of constituent Elements with specified weights
-// (composition specified either by fractional mass or atom counts).
+// Description: Contains material properties
+//
+// Class description:
+//
+// Is used to define the material composition of Geant4 volumes.
+// A G4Material is always made of G4Elements. It should has the name, 
+// the list of G4Elements, material density, material state, temperature, 
+// pressure. Other parameters are optional and may be set by the user code 
+// or computed at initialisation. 
+// 
+// There is several ways to construct G4Material:
+//   - from single element;
+//   - from a list of components (elements or other materials);
+//   - from internal Geant4 database of materials
+//
+// A collection of constituent Elements/Materials should be defined 
+// with specified weights by fractional mass or atom counts (only for Elements).
 //
 // Quantities, with physical meaning or not, which are constant in a given 
 // material are computed and stored here as Derived data members.
 //
 // The class contains as a private static member the Table of defined
 // materials (an ordered vector of materials).
+//
+// It is strongly not recommended to delete materials in user code.
+// All materials will be deleted automatically at the end of Geant4 session.
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,7 +95,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4MATERIAL_HH
-#define G4MATERIAL_HH
+#define G4MATERIAL_HH 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -102,10 +113,10 @@ enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
 class G4Material
 {
- public:  // with description
+public:  // with description
 
   //
-  // Constructor to create a material from scratch.
+  // Constructor to create a material from single element
   //
   G4Material(const G4String& name,				//its name
                    G4double  z, 				//atomic number
@@ -122,6 +133,16 @@ class G4Material
   G4Material(const G4String& name,				//its name
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
+                   G4State   state    = kStateUndefined,	//solid,gas
+                   G4double  temp     = STP_Temperature,	//temperature
+                   G4double  pressure = STP_Pressure);		//pressure
+
+  //
+  // Constructor to create a material from the base material
+  //
+  G4Material(const G4String& name,				//its name
+                   G4double  density, 				//density
+             const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
                    G4double  temp     = STP_Temperature,	//temperature
                    G4double  pressure = STP_Pressure);		//pressure
@@ -144,84 +165,90 @@ class G4Material
                      
   virtual ~G4Material();
   
-  void SetChemicalFormula (const G4String& chF) {fChemicalFormula=chF;}
+  inline void SetChemicalFormula (const G4String& chF) {fChemicalFormula=chF;}
 
   //
   // retrieval methods
   // 
-  const G4String& GetName()            const {return fName;}
-  const G4String& GetChemicalFormula() const {return fChemicalFormula;}
-  G4double GetDensity()     const {return fDensity;}
-  G4State  GetState()       const {return fState;}
-  G4double GetTemperature() const {return fTemp;}
-  G4double GetPressure()    const {return fPressure;}
+  inline const G4String& GetName()            const {return fName;}
+  inline const G4String& GetChemicalFormula() const {return fChemicalFormula;}
+  inline G4double GetDensity()     const {return fDensity;}
+  inline G4State  GetState()       const {return fState;}
+  inline G4double GetTemperature() const {return fTemp;}
+  inline G4double GetPressure()    const {return fPressure;}
     
   //number of elements constituing this material:    
-  size_t GetNumberOfElements()         const {return fNumberOfElements;}
+  inline size_t GetNumberOfElements()  const {return fNumberOfElements;}
     
   //vector of pointers to elements constituing this material:          
-  const
+  inline const
   G4ElementVector* GetElementVector()  const {return theElementVector;}
   
   //vector of fractional mass of each element:
-  const  G4double* GetFractionVector() const {return fMassFractionVector;}
+  inline const  
+  G4double* GetFractionVector() const {return fMassFractionVector;}
     
   //vector of atom count of each element:
-  const  G4int*    GetAtomsVector()    const {return fAtomsVector;}
+  inline const  
+  G4int*    GetAtomsVector()    const {return fAtomsVector;}
 
   //return a pointer to an element, given its index in the material:
-  const 
+  inline const 
   G4Element* GetElement(G4int iel) const {return (*theElementVector)[iel];}
   
   //vector of nb of atoms per volume of each element in this material:
-  const
+  inline const
   G4double* GetVecNbOfAtomsPerVolume() const {return VecNbOfAtomsPerVolume;}
   //total number of atoms per volume:
+  inline
   G4double  GetTotNbOfAtomsPerVolume() const {return TotNbOfAtomsPerVolume;}
   //total number of electrons per volume:
+  inline
   G4double  GetTotNbOfElectPerVolume() const {return TotNbOfElectPerVolume;}
 
   //obsolete names (5-10-98) see the 2 functions above
-  const
+  inline const
   G4double* GetAtomicNumDensityVector() const {return VecNbOfAtomsPerVolume;}
-  G4double  GetElectronDensity()        const {return TotNbOfElectPerVolume;}
+  inline G4double  GetElectronDensity() const {return TotNbOfElectPerVolume;}
     
   // Radiation length:     
-  G4double         GetRadlen()          const {return fRadlen;}
+  inline G4double  GetRadlen()          const {return fRadlen;}
     
   // Nuclear interaction length:     
-  G4double GetNuclearInterLength()      const {return fNuclInterLen;}
+  inline G4double GetNuclearInterLength() const {return fNuclInterLen;}
         
   // ionisation parameters:
-  G4IonisParamMat* GetIonisation()      const {return fIonisation;}
+  inline G4IonisParamMat* GetIonisation() const {return fIonisation;}
   
   // Sandia table:
-  G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;}
+  inline G4SandiaTable*  GetSandiaTable() const {return fSandiaTable;}
+
+  // Base material:
+  inline 
+  const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
   
   //meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
   
   //the MaterialPropertiesTable (if any) attached to this material:
-  void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
-                                     {fMaterialPropertiesTable = anMPT;}
+  inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
+  {fMaterialPropertiesTable = anMPT;}
   				       
-  G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-                                     {return fMaterialPropertiesTable;}
+  inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
+  {return fMaterialPropertiesTable;}
 
   //the (static) Table of Materials:
   //
-  static
-  const G4MaterialTable* GetMaterialTable();
+  static const G4MaterialTable* GetMaterialTable();
       
-  static
-  size_t GetNumberOfMaterials();
+  static size_t GetNumberOfMaterials();
   
   //the index of this material in the Table:    
-  size_t GetIndex() const {return fIndexInTable;}
+  inline size_t GetIndex() const {return fIndexInTable;}
     
   //return  pointer to a material, given its name:    
-  static  G4Material* GetMaterial(G4String name, G4bool warning=true);
+  static G4Material* GetMaterial(const G4String& name, G4bool warning=true);
   
   //
   //printing methods
@@ -230,7 +257,7 @@ class G4Material
   friend std::ostream& operator<<(std::ostream&, G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
- public:  // without description 
+public:  // without description 
        
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
@@ -239,9 +266,9 @@ class G4Material
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-  void SetName (const G4String& name) {fName=name;}
+  inline void SetName (const G4String& name) {fName=name;}
 
- private:
+private:
 
   G4Material(const G4Material&);
   const G4Material& operator=(const G4Material&);
@@ -256,13 +283,15 @@ class G4Material
   
   // Compute Nuclear interaction length
   void ComputeNuclearInterLength();
+
+  // Copy pointers of base material
+  void CopyPointersOfBaseMaterial();
     
 private:
 
   //
   // Basic data members ( To define a material)
   //
-
   G4String         fName;                 // Material name
   G4String         fChemicalFormula;      // Material chemical formula
   G4double         fDensity;              // Material density
@@ -301,33 +330,8 @@ private:
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
   G4SandiaTable*   fSandiaTable;          // Sandia table         
+  const G4Material* fBaseMaterial;        // Pointer to the base material
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4Material::GetZ() const
-{ 
-  if (fNumberOfElements > 1) {
-     G4cerr << "WARNING in GetZ. The material: " << fName << " is a mixture."
-            << G4endl;
-     G4Exception ( " the Atomic number is not well defined." );
-  } 
-  return (*theElementVector)[0]->GetZ();      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4Material::GetA() const
-{ 
-  if (fNumberOfElements > 1) { 
-     G4cerr << "WARNING in GetA. The material: " << fName << " is a mixture."
-            << G4endl;
-     G4Exception ( " the Atomic mass is not well defined." );
-  } 
-  return  (*theElementVector)[0]->GetA();      
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

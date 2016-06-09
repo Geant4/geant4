@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCuts.hh,v 1.5 2009/08/01 07:57:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -169,14 +169,6 @@ G4double  G4ProductionCuts::GetProductionCut(const G4String& name) const
   return GetProductionCut(GetIndex(name)); 
 }
 
-inline
-void  G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
-{
-  for(G4int i = 0; (i<NumberOfG4CutIndex); i++) {
-    fRangeCuts[i] = cut[i];
-  }
-  isModified = true;
-}
 
 inline
 const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const

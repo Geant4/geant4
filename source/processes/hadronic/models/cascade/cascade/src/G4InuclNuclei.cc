@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.cc,v 1.23 2010/12/15 07:41:11 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4InuclNuclei.cc,v 1.23 2010-12-15 07:41:11 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.
@@ -42,6 +42,13 @@
 //		migrate to integer A and Z
 // 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
 //		functions to create G4Fragment
+// 20110214  M. Kelsey -- Replace integer "model" with enum
+// 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
+// 20110427  M. Kelsey -- Remove PDG-code warning
+// 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
+// 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
+// 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -50,8 +57,10 @@
 #include "G4Ions.hh"
 #include "G4IonTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4Nucleon.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4V3DNucleus.hh"
 #include <assert.h>
 #include <sstream>
 #include <map>
@@ -61,25 +70,28 @@ using namespace G4InuclSpecialFunctions;
 
 // Convert contents from (via constructor) and to G4Fragment
 
-G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
-  : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
-				   aFragment.GetZ_asInt()),
-		    aFragment.GetMomentum()/GeV) {	// Bertini units
-  setExitationEnergy(aFragment.GetExcitationEnergy());
-  setModel(model);
+G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment,
+			     G4InuclParticle::Model model)
+  : G4InuclParticle() {
+  copy(aFragment, model);
+}
+
+void G4InuclNuclei::copy(const G4Fragment& aFragment, Model model) {
+  fill(aFragment.GetMomentum()/GeV, aFragment.GetA_asInt(),
+       aFragment.GetZ_asInt(), aFragment.GetExcitationEnergy(), model);
 
   // Exciton configuration must be set by hand
   theExitonConfiguration.protonQuasiParticles = aFragment.GetNumberOfCharged();
 
   theExitonConfiguration.neutronQuasiParticles =
-    aFragment.GetNumberOfCharged() - aFragment.GetNumberOfCharged();
+    aFragment.GetNumberOfParticles() - aFragment.GetNumberOfCharged();
 
-  // Split hole count evenly between protons and neutrons (arbitrary!)
-  theExitonConfiguration.protonHoles = aFragment.GetNumberOfHoles()/2;
+  theExitonConfiguration.protonHoles = aFragment.GetNumberOfChargedHoles();
 
   theExitonConfiguration.neutronHoles =
     aFragment.GetNumberOfHoles() - theExitonConfiguration.protonHoles;
 }
+
 
 // FIXME:  Should we have a local buffer and return by const-reference instead?
 G4Fragment G4InuclNuclei::makeG4Fragment() const {
@@ -87,12 +99,12 @@ G4Fragment G4InuclNuclei::makeG4Fragment() const {
 
   // Note:  exciton configuration has to be set piece by piece
   frag.SetNumberOfHoles(theExitonConfiguration.protonHoles
-			+ theExitonConfiguration.neutronHoles);
+			+ theExitonConfiguration.neutronHoles,
+			theExitonConfiguration.protonHoles);
 
-  frag.SetNumberOfParticles(theExitonConfiguration.protonQuasiParticles 
-			    + theExitonConfiguration.neutronQuasiParticles);
-
-  frag.SetNumberOfCharged(theExitonConfiguration.protonQuasiParticles);
+  frag.SetNumberOfExcitedParticle(theExitonConfiguration.protonQuasiParticles 
+		  + theExitonConfiguration.neutronQuasiParticles,
+		  theExitonConfiguration.protonQuasiParticles);
 
   return frag;
 }
@@ -102,10 +114,39 @@ G4InuclNuclei::operator G4Fragment() const {
 }
 
 
+// Convert contents from (via constructor) G4V3DNucleus
+
+G4InuclNuclei::G4InuclNuclei(G4V3DNucleus* a3DNucleus,
+			     G4InuclParticle::Model model)
+  : G4InuclParticle() {
+  copy(a3DNucleus, model);
+}
+
+void G4InuclNuclei::copy(G4V3DNucleus* a3DNucleus, Model model) {
+  if (!a3DNucleus) return;		// Null pointer means no action
+
+  fill(0., a3DNucleus->GetMassNumber(), a3DNucleus->GetCharge(), 0., model);
+
+  // Convert every hit nucleon into an exciton hole
+  if (a3DNucleus->StartLoop()) {
+    G4Nucleon* nucl = 0;
+    while ((nucl = a3DNucleus->GetNextNucleon())) {
+      if (nucl->AreYouHit()) {	// Found previously interacted nucleon
+	if (nucl->GetParticleType() == G4Proton::Definition())
+	  theExitonConfiguration.protonHoles++;
+
+	if (nucl->GetParticleType() == G4Neutron::Definition())
+	  theExitonConfiguration.neutronHoles++;
+      }
+    }
+  }
+}
+
+
 // Overwrite data structure (avoids creating/copying temporaries)
 
 void G4InuclNuclei::fill(const G4LorentzVector& mom, G4int a, G4int z,
-			 G4double exc, G4int model) {
+			 G4double exc, G4InuclParticle::Model model) {
   setDefinition(makeDefinition(a,z));
   setMomentum(mom);
   setExitationEnergy(exc);
@@ -114,12 +155,18 @@ void G4InuclNuclei::fill(const G4LorentzVector& mom, G4int a, G4int z,
 }
 
 void G4InuclNuclei::fill(G4double ekin, G4int a, G4int z, G4double exc,
-			 G4int model) {
+			 G4InuclParticle::Model model) {
   setDefinition(makeDefinition(a,z));
   setKineticEnergy(ekin);
   setExitationEnergy(exc);
   clearExitonConfiguration();
   setModel(model);
+}
+
+void G4InuclNuclei::clear() {
+  setDefinition(0);
+  clearExitonConfiguration();
+  setModel(G4InuclParticle::DefaultModel);
 }
 
 
@@ -144,6 +191,9 @@ void G4InuclNuclei::setExitationEnergy(G4double e) {
 //	  G4ParticleTable::GetIon() uses (Z,A)!
 
 G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4int a, G4int z) {
+  // SPECIAL CASE:  (0,0) means create dummy without definition
+  if (0 == a && 0 == z) return 0;
+
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition *pd = pTable->GetIon(z, a, 0.);
 
@@ -194,9 +244,6 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding Excitation-energy
   
-  G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
-	 << "with non-standard PDGencoding." << G4endl;
-  
   G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
   			      0,          +1,   0,
 			      0,          0,    0,
@@ -224,9 +271,9 @@ G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
 
 // Dump particle properties for diagnostics
 
-void G4InuclNuclei::printParticle() const {
-  G4InuclParticle::printParticle();
-  G4cout << " Nucleus: " << getDefinition()->GetParticleName() 
-	 << " A " << getA() << " Z " << getZ() << " mass " << getMass()
-	 << " Eex (MeV) " << getExitationEnergy() << G4endl;
+void G4InuclNuclei::print(std::ostream& os) const {
+  G4InuclParticle::print(os);
+  os << G4endl << " Nucleus: " << getDefinition()->GetParticleName() 
+     << " A " << getA() << " Z " << getZ() << " mass " << getMass()
+     << " Eex (MeV) " << getExitationEnergy();
 }

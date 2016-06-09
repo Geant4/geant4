@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.399 2010/12/08 13:46:18 gunter Exp $
+cvs log $Id: History,v 1.400 2010-12-22 16:28:40 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,102 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8th December 2010  Gunter Folger   (config-V09-03-19)
+22nd November 2011 Gabriele Cosmo (config-V09-04-19)
+- Corrected path in Darwin-g++ setup introduced in previous tag.
+
+22nd November 2011 Gabriele Cosmo (config-V09-04-18)
+- Archived Configure scripts.
+
+10th November 2011 Gunter Folger
+- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.
+
+7th November 2011 Gabriele Cosmo (config-V09-04-17)
+- Abilited possibility to force building of internal 'expat' module also
+  for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
+
+18th October 2011 Gunter Folger  (config-V09-04-16)
+- binmake.gmk: add new directories in electromagnetic/dna and 
+    new hadronic/models/quasi_elastic
+	 
+21st september 2011 John Allison (config-V09-04-15)
+- G4UI_BUILD.gmk: Added G4INTY_BUILD_XT = 1 for G4VIS_BUILD_OPENGLXM_DRIVER
+  and G4VIS_BUILD_OIX_DRIVER.  The vis drivers need Xt, so this covers
+  the case when the user does not build Xt from G4UI_BUILD flags.
+
+31st August 2011 AM, MK, SI (config-V09-04-14)
+- Modified binmake.gmk to add new DNA architecture.
+
+3rd August 2011 Gabriele Cosmo (config-V09-04-13)
+- Darwin-g++.gmk: modified OGLLIBS settings to support MacOSX 10.7 Lion
+  for proper configuration of OpenGL libraries in combination with Qt.
+
+14th July 2011 Gabriele Cosmo (config-V09-04-12)
+- Added "analysis" module to binmake.gmk.
+
+5th July 2011 Gabriele Cosmo (config-V09-04-11)
+- architecture.gmk: corrected definition of G4LIB_USE_GDML, to properly
+  activate GDML settings.
+
+17th June 2011 Ben Morgan (config-V09-04-10)
+- scripts/env.(c)sh : Added support for internal CLHEP. LD_LIBRARY_PATH is
+  correctly set when an external CLHEP is used, but not modified with any
+  CLHEP related variable if the internal CLHEP is used.
+  Should be used with current trunk of Configure (rev 50915), though this
+  is not absolutely required.
+
+6th June 2011 Gabriele Cosmo (config-V09-04-09)
+- Correction to binmake.gmk to restore setting of G4LIBDIR for the case of
+  generation of user's application library.
+
+24th May 2011 Gabriele Cosmo (config-V09-04-08)
+- Fixed configuration for CLHEP built-in module, to allow for build of DLLs.
+
+16th May 2011 Gabriele Cosmo (config-V09-04-07)
+- Corrected include path definition for built-in CLHEP module.
+
+13th May 2011 Gabriele Cosmo (config-V09-04-06)
+- Added "expat" to link list, and differentiate built-in module for WIN32
+  target.
+
+10th May 2011 Gabriele Cosmo (config-V09-04-05)
+- Integrated flags in architecture.gmk and binmake.gmk for use of CLHEP
+  built-in package in externals.
+  Note: the built-in package can only be used in conjunction with the
+  "externals" module...
+
+10th May 2011 Gabriele Cosmo (config-V09-04-04)
+- Added default for CLHEP_BASE_DIR to built-in package in externals.
+  Note: the default can only be used in conjunction with the "externals"
+  module.
+
+9th May 2011 Gabriele Cosmo (config-V09-04-03)
+- Changed common.gmk to take into account sub-directories for headers
+  installation.
+- Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
+  user's environment beforehand.
+
+8th May 2011 Ben Morgan
+- Updated configure scripts to correct settings of G4LIB_USE_DLL for the
+  case of DLLs build on Windows. Partially addressing problem report #1189.
+
+4th April 2011 Laurent Garnier
+- Added flags to handle future driver OpenGLWt.
+
+18th March 2011  Gunter Folger (config-V09-04-02)
+- Address old bug report 1033 in liblist.c
+
+17th March 2011  Gabriele Cosmo (config-V09-04-01)
+- Added electromagnetic/dna module.
+
+10th February 2011  Ben Morgan (config-V09-04-00)
+- Fixed restoring of default settings for XercesC in Configure script and
+  internal scripts. Corrected duplication of text in setup dump.
+  Addessing problem reports #1159 and #1160.
+
+22th December 2010  Laurent Garnier
+- Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
+
+8th December 2010  Gunter Folger (config-V09-03-19)
 - Updated linux-icc to suppress warning when linking to shared libs
 
 25th November 2010  Gabriele Cosmo (config-V09-03-18)

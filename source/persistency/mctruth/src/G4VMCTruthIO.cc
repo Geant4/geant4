@@ -28,15 +28,7 @@
 // History:
 //   '01.11.18  Youhei Morita  Initial creation
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
 #include "G4VMCTruthIO.hh"
 
-// Implementation of Constructor #1
-G4VMCTruthIO::G4VMCTruthIO()
- : m_verbose(0)
-{}
-
-#endif
-#endif
+G4VMCTruthIO::G4VMCTruthIO() : m_verbose(0) {}
+G4VMCTruthIO::~G4VMCTruthIO()               {}

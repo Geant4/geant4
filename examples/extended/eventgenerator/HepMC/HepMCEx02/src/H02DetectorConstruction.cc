@@ -25,7 +25,7 @@
 //
 // ====================================================================
 //    H02DetectorConstruction.cc
-//    $Id: H02DetectorConstruction.cc,v 1.5 2006/06/29 17:10:18 gunter Exp $
+//    $Id: H02DetectorConstruction.cc,v 1.5 2006-06-29 17:10:18 gunter Exp $
 //
 // ====================================================================
 #include "H02DetectorConstruction.hh"

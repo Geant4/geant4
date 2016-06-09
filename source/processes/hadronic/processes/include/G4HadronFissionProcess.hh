@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include "G4HadronicProcess.hh"
 
+
 class G4HadronFissionProcess : public G4HadronicProcess
 {
 public:
@@ -59,6 +60,7 @@ public:
  
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
+  virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

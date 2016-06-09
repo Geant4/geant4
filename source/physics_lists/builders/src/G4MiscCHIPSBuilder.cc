@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,7 +36,7 @@
 #include "G4MiscCHIPSBuilder.hh"
 
 G4MiscCHIPSBuilder::G4MiscCHIPSBuilder(G4int ver):
- verbose(ver), wasActivated(false)
+ verbose(ver), wasActivated(false), inelastic(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

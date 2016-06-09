@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.hh,v 1.5 2010/04/27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VEvaporationFactory.hh,v 1.5 2010-04-27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,7 +33,6 @@
 
 #ifndef G4VEvaporationFactory_hh
 #define G4VEvaporationFactory_hh
-
 
 #include "G4VEvaporationChannel.hh"
 #include <vector>
@@ -44,32 +43,27 @@ public:
   G4VEvaporationFactory();
   virtual ~G4VEvaporationFactory();
 
+  inline std::vector<G4VEvaporationChannel*> * GetChannel();
+
 private:
-  G4VEvaporationFactory(const G4VEvaporationFactory & ) {};
+  G4VEvaporationFactory(const G4VEvaporationFactory & );
   const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
   G4bool operator==(const G4VEvaporationFactory & val) const;
   G4bool operator!=(const G4VEvaporationFactory & val) const;
 
-public:
-  
-  std::vector<G4VEvaporationChannel*> * GetChannel();
-
 protected:
   virtual std::vector<G4VEvaporationChannel*> * CreateChannel() = 0;
 
-
-
 private:
-  std::vector<G4VEvaporationChannel*> * _channel;
+  std::vector<G4VEvaporationChannel*>* channel;
 
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
-  
 };
+
+inline std::vector<G4VEvaporationChannel*> * 
+G4VEvaporationFactory::GetChannel()
+{
+  if (channel == 0) { channel = CreateChannel(); }
+  return channel;
+}
+
 #endif

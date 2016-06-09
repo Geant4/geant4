@@ -1,0 +1,34 @@
+------------------
+EGSnrc Simulations
+------------------
+
+These results were computed with EGSnrc using tutorial codes.
+For each geometry, 20E6 primaries were simulated and a phase 
+space was scored after the exit window.
+Data analysis was performed using the beamdp program 
+by Ma and Rogers included in BEAMnrc distribution.
+
+
+  Yann Perrot (perrot@clermont.in2p3.fr)  May 2011
+
+Simulation parameters:
+----------------------
+
+Electron Stepping Algorithm : PRESTA-II
+Boundary Crossing Algoritm : EXACT with skin parameter=3
+Electron tracking cut : 10keV
+Photon tracking cut : 10keV
+					
+
+References:
+----------
+
+Rogers et al 2003
+NRC User Codes for EGSnrc
+Technical Report PIRS-702(RevB)
+National Research Council of Canada
+
+Ma and Rogers 2004
+BEAMDP as a General-Purpose Utility
+Technical Report PIRS-509e(RevA)
+National Research Council of Canada

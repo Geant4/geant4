@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.10 2006/06/29 21:09:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastTrack.cc,v 1.10 2006-06-29 21:09:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -81,8 +81,7 @@ void G4FastTrack::SetCurrentTrack(const G4Track& track,
   // When the particle is inside or on the boundary, the 
   // NavigationHistory IS UP TO DATE.
   //------------------------------------------------------
-  if (!fAffineTransformationDefined || !fIsUnique) 
-    FRecordsAffineTransformation(theNavigator);
+  if (!fAffineTransformationDefined || !fIsUnique) FRecordsAffineTransformation(theNavigator);
   
   //-------------------------------------------
   // Records local position/momentum/direction
@@ -92,16 +91,13 @@ void G4FastTrack::SetCurrentTrack(const G4Track& track,
   // to decide to trigger or not.
   //-------------------------------------------
   // -- local position:
-  fLocalTrackPosition = fAffineTransformation.
-    TransformPoint(fTrack->GetPosition());
+  fLocalTrackPosition = fAffineTransformation.TransformPoint(fTrack->GetPosition());
   // -- local momentum:
-  fLocalTrackMomentum = fAffineTransformation.
-    TransformAxis(fTrack->GetMomentum());
+  fLocalTrackMomentum = fAffineTransformation.TransformAxis(fTrack->GetMomentum());
   // -- local direction:
   fLocalTrackDirection = fLocalTrackMomentum.unit();
   // -- local polarization:
-  fLocalTrackPolarization = fAffineTransformation.
-    TransformAxis(fTrack->GetPolarization());
+  fLocalTrackPolarization = fAffineTransformation.TransformAxis(fTrack->GetPolarization());
 }
 
 //------------------------------------
@@ -121,14 +117,10 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // must be deleted by G4FastTrack.
   //--------------------------------------------------------
   const G4Navigator* NavigatorToUse;
-  if(theNavigator != 0 ) NavigatorToUse=theNavigator;
-  else
-    NavigatorToUse=
-      G4TransportationManager::GetTransportationManager()->
-      GetNavigatorForTracking();
+  if(theNavigator != 0 ) NavigatorToUse = theNavigator;
+  else                   NavigatorToUse = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   
-  G4TouchableHistoryHandle history =  
-    NavigatorToUse->CreateTouchableHistoryHandle();
+  G4TouchableHistoryHandle history = NavigatorToUse->CreateTouchableHistoryHandle();
   
   //-----------------------------------------------------
   // Run accross the hierarchy to find the physical volume
@@ -154,13 +146,11 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   //---------------------------------------------
   if ( !Done )
     {
-      G4cout << "WARNING - G4FastTrack::FRecordsAffineTransformation()"
-             << G4endl
-             << "          Can't find transformation for "
-             << fEnvelopePhysicalVolume->GetName() << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Can't find transformation for `" << fEnvelopePhysicalVolume->GetName() << "'" << G4endl;
       G4Exception("G4FastTrack::FRecordsAffineTransformation()",
-                  "InvalidSetup", JustWarning,
-                  "Transformation for envelope volume not found!");
+		  "FastSim011",
+		  JustWarning, ed);
     }
   else
     {

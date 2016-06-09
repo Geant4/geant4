@@ -23,13 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HadronInelasticDataSet.cc,v 1.8 2006/06/29 19:57:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
+// $Id: G4HadronInelasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
-// 
 
 #include "G4HadronInelasticDataSet.hh"
+#include "G4DynamicParticle.hh"
+#include "G4NistManager.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
+
+
+G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
+{
+  theHadronCrossSections = G4HadronCrossSections::Instance(); 
+}
+
+
+G4HadronInelasticDataSet::~G4HadronInelasticDataSet() {}
+
+
+void G4HadronInelasticDataSet::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4HadronInelasticDataSet contains inelastic cross sections\n"
+          << "for all long-lived hadrons at all incident energies.  It was\n"
+          << "developed as part of the Gheisha hadronic package\n"
+          << "by H. Fesefeldt, and consists of a set of parameterizations\n"
+          << "of inelastic scattering data.\n";
+}
+
+
+G4bool
+G4HadronInelasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
+					      G4int /*Z*/,
+					      const G4Material*)
+{
+  return theHadronCrossSections->IsApplicable(aParticle);
+}
+
+G4double
+G4HadronInelasticDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+						 G4int Z, 
+						 const G4Material*)
+{
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return theHadronCrossSections->GetInelasticCrossSection(aParticle, Z, A);
+}

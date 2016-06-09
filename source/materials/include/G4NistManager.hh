@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.25 2010/11/01 18:43:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
-//
+// $Id: G4NistManager.hh,v 1.25 2010-11-01 18:43:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -166,6 +165,15 @@ public:
 					 G4bool isotopes=true,
 					 G4bool warning=false);
   
+  // Build G4Material with user defined name and density on base
+  // of a material from Geant4 dataBase
+  //
+  G4Material* BuildMaterialWithNewDensity(const G4String& name,
+                                          const G4String& basename, 
+					  G4double density = 0.0,
+					  G4double temp = STP_Temperature,  
+					  G4double pres = STP_Pressure);  
+
   // Construct a G4Material from scratch by atome count
   // 
   inline G4Material* ConstructNewMaterial(

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.cc,v 1.7 2010/09/06 09:13:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4WeightWindowStore.cc,v 1.7 2010-09-06 09:13:29 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -59,7 +59,7 @@ G4double G4WeightWindowStore::GetLowerWeight(const G4GeometryCell &gCell,
   SetInternalIterator(gCell);
   G4GeometryCellWeight::const_iterator gCellIterator = fCurrentIterator;
   if (gCellIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
-    Error("GetLowerWitgh: Cell does not exist");
+    Error("GetLowerWitgh() - Cell does not exist!");
     return 0.;
   }
   G4UpperEnergyToLowerWeightMap upEnLoWeiPairs =
@@ -75,8 +75,10 @@ G4double G4WeightWindowStore::GetLowerWeight(const G4GeometryCell &gCell,
     }
   }
   if (!found) {
-    G4cout << "energy: " << partEnergy << G4endl;
-    Error("GetLowerWitgh: couldn't find lower weight bound");
+    std::ostringstream err_mess;
+    err_mess << "GetLowerWitgh() - Couldn't find lower weight bound." << G4endl
+             << "Energy: " << partEnergy << ".";
+    Error(err_mess.str());
   }
   return lowerWeight;
 
@@ -123,13 +125,18 @@ AddLowerWeights(const G4GeometryCell & gCell,
                 const std::vector<G4double> &lowerWeights)
 {
   if (fGeneralUpperEnergyBounds.empty()) {
-    Error("AddLowerWeights: no general upper energy limits set");
+    Error("AddLowerWeights() - No general upper energy limits set!");
   }
   if (IsKnown(gCell)) {
-    Error("AddLowerWeights: the cell is already in the store");
+    Error("AddLowerWeights() - Cell already in the store.");
   }
   if (lowerWeights.size() != fGeneralUpperEnergyBounds.size()) {
-    Error("missmatch between number of lower weights and energy bounds");
+    std::ostringstream err_mess;
+    err_mess << "AddLowerWeights() - Mismatch between "
+             << "number of lower weights (" << lowerWeights.size()
+             << ") and energy bounds (" << fGeneralUpperEnergyBounds.size()
+             << ")!";
+    Error(err_mess.str());
   }
   G4UpperEnergyToLowerWeightMap m;
   G4int i = 0;
@@ -149,10 +156,10 @@ AddUpperEboundLowerWeightPairs(const G4GeometryCell &gCell,
                                const G4UpperEnergyToLowerWeightMap& enWeMap)
 {
   if (IsKnown(gCell)) {
-    Error("AddUpperEboundLowerWeightPairs: the cell is already in the store");
+    Error("AddUpperEboundLowerWeightPairs() - Cell already in the store.");
   }
   if (IsKnown(gCell)) {
-    Error("AddUpperEboundLowerWeightPairs: the cell is already in the store");
+    Error("AddUpperEboundLowerWeightPairs() - Cell already in the store.");
   }
   fCellToUpEnBoundLoWePairsMap[gCell] = enWeMap;
 
@@ -164,7 +171,7 @@ SetGeneralUpperEnergyBounds(const std::set<G4double,
                             std::less<G4double> > &enBounds)
 {
   if (!fGeneralUpperEnergyBounds.empty()) {
-    Error("SetGeneralUpperEnergyBounds: energy bounds already set");
+    Error("SetGeneralUpperEnergyBounds() - Energy bounds already set.");
   }
   fGeneralUpperEnergyBounds = enBounds;
 }
@@ -172,7 +179,6 @@ SetGeneralUpperEnergyBounds(const std::set<G4double,
   
 void G4WeightWindowStore::Error(const G4String &m) const
 {
-  G4cerr << "ERROR - G4WeightWindowStore: " << m << G4endl;
   G4Exception("G4WeightWindowStore::Error()",
-              "FatalException", FatalException, m);
+              "GeomBias0002", FatalException, m);
 }

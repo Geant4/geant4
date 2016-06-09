@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.hh,v 1.35 2010/08/04 05:28:24 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4ElementaryParticleCollider.hh,v 1.35 2010-08-04 05:28:24 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -43,6 +43,7 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100726  M. Kelsey -- Move remaining std::vector<> buffers here
 // 20100804  M. Kelsey -- Add printFinalStateTables() function.
+// 20110923  M. Kelsey -- Add optional stream& to printFinalStateTables().
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -50,6 +51,7 @@
 #include "G4CascadeColliderBase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
+#include <iosfwd>
 #include <vector>
 
 class G4LorentzConvertor;
@@ -106,7 +108,7 @@ private:
   particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
 			     G4double pmod) const; 
 
-  void printFinalStateTables() const;
+  void printFinalStateTables(std::ostream& os=G4cout) const;
 
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;

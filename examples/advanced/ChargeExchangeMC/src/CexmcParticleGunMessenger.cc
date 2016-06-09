@@ -62,9 +62,9 @@ CexmcParticleGunMessenger::CexmcParticleGunMessenger(
     setParticle = new G4UIcmdWithAString(
         ( CexmcMessenger::gunDirName + "particle" ).c_str(), this );
     setParticle->SetGuidance( "Incident beam particle" );
-    setParticle->SetDefaultValue( "pi-" );
     setParticle->SetParameterName( "BeamParticle", false );
     setParticle->SetCandidates( "pi-" );
+    setParticle->SetDefaultValue( "pi-" );
     setParticle->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     setOrigPosition = new G4UIcmdWith3VectorAndUnit( 
@@ -72,8 +72,8 @@ CexmcParticleGunMessenger::CexmcParticleGunMessenger(
     setOrigPosition->SetGuidance( "Original position of the beam" );
     setOrigPosition->SetParameterName( "PositionX", "PositionY", "PositionZ",
                                        false );
-    setOrigPosition->SetDefaultUnit( "cm" );
     setOrigPosition->SetUnitCandidates( "mm cm m" );
+    setOrigPosition->SetDefaultUnit( "cm" );
     setOrigPosition->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     setOrigDirection = new G4UIcmdWith3Vector(
@@ -92,8 +92,8 @@ CexmcParticleGunMessenger::CexmcParticleGunMessenger(
     setOrigMomentumAmp->SetGuidance( "Original momentum of the beam" );
     setOrigMomentumAmp->SetParameterName( "MomentumAmp", false );
     setOrigMomentumAmp->SetRange( "MomentumAmp > 0" );
-    setOrigMomentumAmp->SetDefaultUnit( "MeV" );
     setOrigMomentumAmp->SetUnitCandidates( "eV keV MeV GeV" );
+    setOrigMomentumAmp->SetDefaultUnit( "MeV" );
     setOrigMomentumAmp->AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
@@ -107,8 +107,8 @@ CexmcParticleGunMessenger::~CexmcParticleGunMessenger()
 }
 
 
-void CexmcParticleGunMessenger::SetNewValue( G4UIcommand *  cmd,
-                                             G4String  value )
+void  CexmcParticleGunMessenger::SetNewValue( G4UIcommand *  cmd,
+                                              G4String  value )
 {
     do
     {

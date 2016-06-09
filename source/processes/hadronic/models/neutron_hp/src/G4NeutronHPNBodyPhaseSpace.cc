@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.13 2006/06/29 20:53:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.13 2006-06-29 20:53:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"

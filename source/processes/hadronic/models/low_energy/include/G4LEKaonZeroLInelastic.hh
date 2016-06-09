@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LEKaonZeroLInelastic.hh,v 1.12 2007/02/26 18:24:54 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
+// $Id: G4LEKaonZeroLInelastic.hh,v 1.12 2007-02-26 18:24:54 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
-
 // A prototype of the Gheisha High Energy collision model.
 
 #ifndef G4LEKaonZeroLInelastic_h
@@ -46,13 +42,13 @@ class G4LEKaonZeroLInelastic : public G4InelasticInteraction
   public: 
     G4LEKaonZeroLInelastic() : G4InelasticInteraction("G4LEKaonZeroLInelastic")  
     {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMinEnergy(0.0);
+      SetMaxEnergy(25.*GeV);
     }
 
     virtual ~G4LEKaonZeroLInelastic(){ }
 
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     {
       if(G4UniformRand() < 0.50)
       {
@@ -67,6 +63,21 @@ class G4LEKaonZeroLInelastic : public G4InelasticInteraction
     G4LEKaonZeroInelastic theKaonZeroInelastic;
     G4LEAntiKaonZeroInelastic theAntiKaonZeroInelastic;
 	
+    virtual void ModelDescription(std::ostream& outFile) const
+    {
+      outFile << "G4LEKaonZeroLInelastic is one of the Low Energy\n"
+              << "Parameterized (LEP) models used to implement K0L\n"
+              << "scattering from nuclei.  Upon interaction with a nucleus\n"
+              << "the K0L is treated as a K0 50% of the time and an antiK0\n"
+              << "50% of the time.  Then the K0 or antiK0 interacts with the\n"
+              << "nucleus using the re-engineered GHEISHA code of\n"
+              << "H. Fesefeldt, which divides the initial collision products\n"
+              << "into backward- and forward-going clusters which are then\n"
+              << "decayed into final state hadrons.  The model does not\n"
+              << "conserve energy or charge on an event-by-event basis.  It\n"
+              << "may be applied to K0Ls with initial energies between 0 and\n"
+              << "25 GeV.\n";
+    }
 
 };
 #endif                     

@@ -1,4 +1,4 @@
-# $Id: photoelec.mac,v 1.3 2006/10/24 16:54:16 maire Exp $
+# $Id: photoelec.mac,v 1.4 2011-01-07 14:19:59 maire Exp $
 #
 # Macro file for "TestEm14.cc"
 # (can be run in batch, without graphic)
@@ -13,6 +13,8 @@
 #
 /run/initialize
 #
+/testem/phys/setCuts 1 nm
+#
 /process/inactivate compt
 /process/inactivate conv
 /process/inactivate GammaToMuPair
@@ -21,9 +23,11 @@
 /gun/energy 100 keV
 #
 /testem/histo/setFileName photoelec
-/testem/histo/setFileType hbook
+/testem/histo/setFileType root
 /testem/histo/setHisto 3  100 0. 100. keV	#energy  of ch. secondaries  
 /testem/histo/setHisto 4  200 -1. +1. none	#costeta of ch. secondaries
+/testem/histo/setHisto 5  100 0. 100. keV	#energy  of gamma  
+/testem/histo/setHisto 6  200 -1. +1. none	#costeta of gamma
 #
 ##/tracking/verbose 2
 ##/run/beamOn 1

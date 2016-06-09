@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPionSuppression.cc,v 1.1 2007/07/18 21:04:20 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGPionSuppression.cc,v 1.1 2007-07-18 21:04:20 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "G4RPGPionSuppression.hh"
@@ -64,8 +64,8 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   G4double eAvailable = cmEnergy - mOriginal - targetMass;
   for (G4int i = 0; i < vecLen; i++) eAvailable -= vec[i]->GetMass()/GeV;
 
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
   const G4double pOriginal = modifiedOriginal.GetTotalMomentum()/GeV;
     
   G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();

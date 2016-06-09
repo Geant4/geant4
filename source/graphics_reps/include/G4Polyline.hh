@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.hh,v 1.13 2006/06/29 19:05:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polyline.hh,v 1.13 2006-06-29 19:05:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  July 1995

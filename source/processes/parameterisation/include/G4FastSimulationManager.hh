@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.13 2007/05/11 13:50:20 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastSimulationManager.hh,v 1.13 2007-05-11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------

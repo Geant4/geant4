@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvn2.cc,v 1.8 2006/06/29 18:14:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdvn2.cc,v 1.8 2006-06-29 18:14:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 
@@ -39,7 +39,7 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
                G3DivType divType, G4int nofDivisions, G4int iaxis, G4int nmed, 
      	       G4double c0, G4double step);
 
-void PG4gsdvn2(G4String tokens[]) {
+void PG4gsdvn2(G4String *tokens) {
   // fill the parameter containers
   G3fillParams(tokens, PTgsdvn2);
   
@@ -60,7 +60,9 @@ void G4gsdvn2(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis,
   // find mother VTE
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
   if (mvte == 0) {
-    G4Exception("G4gsdvn2:'" + vmoth + "' has no VolTableEntry");
+    G4String text = "G4gsdvn2:'" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4gsdvn2()", "G3toG40025", FatalException, text);
+    return;
   }    
   else {
     // a new vte clone copy with division is created

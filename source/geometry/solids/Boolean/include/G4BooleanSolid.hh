@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.18 2010/09/22 14:57:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BooleanSolid.hh,v 1.18 2010-09-22 14:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BooleanSolid

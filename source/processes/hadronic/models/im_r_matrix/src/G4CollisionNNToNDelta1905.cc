@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDelta1905.cc,v 1.3 2010/03/12 15:45:18 gunter Exp $ //
+// $Id: G4CollisionNNToNDelta1905.cc,v 1.3 2010-03-12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNDelta1905.hh"

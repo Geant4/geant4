@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.29 2010/11/19 19:50:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronInelasticQBBC.cc,v 1.29 2010-11-19 19:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,14 +54,17 @@
 #include "G4QInelastic.hh"
 #include "G4HadronicProcessStore.hh"
 
+#include "G4CrossSectionInelastic.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4PiNuclearCrossSection.hh"
+#include "G4ComponentAntiNuclNuclearXS.hh"
 
 #include "G4QGSBuilder.hh"
 #include "G4FTFBuilder.hh"
 
-#include "G4QStringChipsParticleLevelInterface.hh"
+#include "G4QHadronInelasticDataSet.hh"
+
 #include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
 #include "G4LCapture.hh"
@@ -71,19 +74,13 @@
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
 
-enum QBBCType
-{
-  fQBBC = 0,     // default QBBC
-  fQBBC_XGG,     // neutron x-sections from BGG
-  fQBBC_XGGSN    // n, p, pi+- x-sections from QGSP_BERT
-};
-
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
   htype = "QBBC";
   theHandler = 0;
   theEvaporation = 0;
+  theAntiNuclXS = 0;
 }
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
@@ -99,6 +96,7 @@ G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
   delete theHandler;
   delete theEvaporation;
+  delete theAntiNuclXS;
 }
 
 void G4HadronInelasticQBBC::ConstructProcess()
@@ -111,27 +109,26 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	   << htype << ">" << G4endl;
   }
 
+  G4double emax = 100.*TeV;
+
   // PreCompound and Evaporation models are instantiated here
-  //theEvaporation = new G4Evaporation();
-  //theEvaporation->SetCombinedChannel();
   theHandler = new G4ExcitationHandler();
-  //theHandler->SetEvaporation(theEvaporation);
-  //theHandler->SetMinEForMultiFrag(3.0*GeV);
-  //theHandler->SetMaxAandZForFermiBreakUp(17,9);
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
 
   // configure models
-  G4HadronicInteraction* theQGSP = 
-    BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,100.*TeV);
+  //G4HadronicInteraction* theQGSP = 
+  //  BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
   G4HadronicInteraction* theFTFP = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,25.*GeV);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
   G4HadronicInteraction* theFTFP1 = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,100.*TeV);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
+  G4HadronicInteraction* theFTFP2 = 
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),0.0,emax);
 
   G4HadronicInteraction* theBERT = 
-    NewModel(new G4CascadeInterface(),1.0*GeV,5.0*GeV);
+    NewModel(new G4CascadeInterface(),1.0*GeV,12.0*GeV);
   G4HadronicInteraction* theBERT1 = 
-    NewModel(new G4CascadeInterface(),0.0*GeV,5.0*GeV);
+    NewModel(new G4CascadeInterface(),0.0*GeV,12.0*GeV);
 
   G4BinaryCascade* bic = new G4BinaryCascade();
   bic->SetDeExcitation(thePreCompound);
@@ -141,12 +138,20 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();
   store->RegisterExtraProcess(theCHIPS);
 
+  // cross sections
+  theAntiNuclXS = new G4ComponentAntiNuclNuclearXS();
+  G4CrossSectionInelastic* anucxs = 
+    new G4CrossSectionInelastic(theAntiNuclXS);
+
+  // use CHIPS cross sections also for Kaons
+  G4QHadronInelasticDataSet* theCHIPSInelastic = new G4QHadronInelasticDataSet();
+
   // loop over particles
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4String pname = particle->GetParticleName();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+    //G4ProcessManager* pmanager = particle->GetProcessManager();
     if(verbose > 1) { 
       G4cout << "### HadronInelasticQBBC:  " << pname << G4endl; 
     }
@@ -158,7 +163,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
       
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
@@ -166,7 +171,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "neutron") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4NeutronInelasticXS());
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
        
       G4HadronicProcess* capture = FindCaptureProcess();
@@ -178,15 +183,21 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4BGGPionInelasticXS(particle));
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);
 
     } else if(pname == "kaon-"     || 
 	      pname == "kaon+"     || 
 	      pname == "kaon0S"    || 
-	      pname == "kaon0L"    ||
-	      pname == "lambda"    || 
+	      pname == "kaon0L") {
+      G4HadronicProcess* hp = FindInelasticProcess(particle);
+      hp->RegisterMe(theFTFP1);
+      hp->RegisterMe(theBERT1);
+      hp->AddDataSet(theCHIPSInelastic);
+
+    } else if(pname == "lambda"    || 
+              pname == "omega-"    ||
 	      pname == "sigma-"    || 
 	      pname == "sigma+"    || 
 	      pname == "sigma0"    || 
@@ -196,20 +207,26 @@ void G4HadronInelasticQBBC::ConstructProcess()
       hp->RegisterMe(theFTFP1);
       hp->RegisterMe(theBERT1);
 
-    } else if(pname == "anti_lambda"  ||
+    } else if(pname == "anti_alpha"   ||
+	      pname == "anti_deuteron"||
+              pname == "anti_He3"     ||
+	      pname == "anti_proton"  || 
+              pname == "anti_triton"  ||  
+	      pname == "anti_lambda"  ||
               pname == "anti_neutron" ||
               pname == "anti_omega-"  || 
-              pname == "anti_proton"  || 
               pname == "anti_sigma-"  || 
               pname == "anti_sigma+"  || 
-              pname == "anti_xi-"  || 
-              pname == "anti_xi0"  ||
-              pname == "omega-") {
-      //G4HadronicProcess* hp = FindInelasticProcess(particle);
-      //hp->RegisterMe(theFTFP1);
-      //hp->RegisterMe(theCHIPS);
-      pmanager->AddDiscreteProcess(theCHIPS);
-      store->RegisterParticleForExtraProcess(theCHIPS,particle);
+              pname == "anti_xi-"     || 
+              pname == "anti_xi0"     
+	      ) {
+
+      G4HadronicProcess* hp = FindInelasticProcess(particle);
+      hp->RegisterMe(theFTFP2);
+      hp->AddDataSet(anucxs);
+
+      //pmanager->AddDiscreteProcess(theCHIPS);
+      //store->RegisterParticleForExtraProcess(theCHIPS,particle);
     } 
   }
 }

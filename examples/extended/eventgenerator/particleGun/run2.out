@@ -1,0 +1,42 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+/run/verbose 1
+#
+/gunExample/selectGunAction 2
+#
+/gunExample/histo/setFileName run2
+###/gunExample/histo/setFileType hbook
+/gunExample/histo/setFileType root
+/gunExample/histo/setHisto 1 100 0. 200. keV
+----> SetHisto 1: energy spectrum dN/dE = f(E) (keV);  100 bins from 0 keV to 200 keV
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=0.4s Real=0.39s Sys=0s
+G4 kernel has come to Quit state.
+

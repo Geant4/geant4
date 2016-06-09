@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryonToResonance.cc,v 1.3 2006/06/29 20:37:28 gunter Exp $ //
+// $Id: G4CollisionMesonBaryonToResonance.cc,v 1.3 2006-06-29 20:37:28 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionMesonBaryonToResonance.hh"

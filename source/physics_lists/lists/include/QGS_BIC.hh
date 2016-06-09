@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGS_BIC.hh,v 1.1 2007/11/13 10:23:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGS_BIC.hh,v 1.1 2007-11-13 10:23:24 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

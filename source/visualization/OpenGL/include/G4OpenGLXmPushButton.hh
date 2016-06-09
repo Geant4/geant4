@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPushButton.hh,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmPushButton.hh,v 1.8 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent

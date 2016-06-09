@@ -1,0 +1,11 @@
+Analysis_F001: Fatal exception when trying to create a singleton manager twice
+
+Analysis_W001: Cannot create directory for histograms or ntpuple
+Analysis_W002: Writing histogram or ntuple on file failed
+Analysis_W003: Adding ntpule row failed
+
+Analysis_W004: Cannot create ntuple; only one ntuple supported.
+
+Analysis_W006: Trying to get/fill Histogram which does not exist
+Analysis_W007: Trying to get/fill Ntuple which does not exist
+Analysis_W008: Trying to get/fill Ntuple column which does not exist

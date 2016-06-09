@@ -23,13 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HadronFissionDataSet.cc,v 1.8 2006/06/29 19:57:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronFissionDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: HadronFissionDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
-// 
 
 #include "G4HadronFissionDataSet.hh"
+#include "G4DynamicParticle.hh"
+#include "G4NistManager.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
+
+
+G4HadronFissionDataSet::G4HadronFissionDataSet(const G4String& name)
+  : G4VCrossSectionDataSet(name)
+{
+  theHadronCrossSections = G4HadronCrossSections::Instance();
+}
+
+
+G4HadronFissionDataSet::~G4HadronFissionDataSet() {}
+
+
+void G4HadronFissionDataSet::CrossSectionDescription(std::ostream& outFile) const 
+{
+  outFile << "G4HadronFissionDataSet contains cross sections for\n"
+          << "neutron-induced fission of nuclei.  They were developed as\n"
+          << "part of the Gheisha hadronic package by H. Fesefeldt.  The\n"
+          << "cross sections are valid for all incident neutron energies.\n";
+}
+
+
+G4bool
+G4HadronFissionDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
+					    G4int /*Z*/,
+					    const G4Material*)
+{
+  return theHadronCrossSections->IsApplicable(aParticle);
+}
+
+G4double
+G4HadronFissionDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+					       G4int Z, 
+					       const G4Material*)
+{
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return theHadronCrossSections->GetFissionCrossSection(aParticle, Z, A);
+}

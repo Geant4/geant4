@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.20 2010/10/01 02:41:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EtaPrime.cc,v 1.20 2010-10-01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------
@@ -70,7 +70,7 @@ G4EtaPrime* G4EtaPrime::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     0.95778*GeV,     0.194*MeV,         0.0,
+                 name,     0.95778*GeV,     0.199*MeV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         331,

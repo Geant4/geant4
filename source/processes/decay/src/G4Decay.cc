@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.32 2010/10/30 06:51:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Decay.cc,v 1.32 2010-10-30 06:51:05 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
+#include "G4VDecayChannel.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
 #include "G4VExtDecayer.hh"
@@ -210,7 +211,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       G4cout << aParticle->GetDefinition()->GetParticleName()<< G4endl;
     }
     G4Exception( "G4Decay::DecayIt ",
-                 "No Decay Table",JustWarning, 
+                 "DECAY101",JustWarning, 
                  "Decay table is not defined");
 
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
@@ -234,7 +235,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     G4VDecayChannel *decaychannel = decaytable->SelectADecayChannel();
     if (decaychannel == 0 ){
       // decay channel not found
-      G4Exception("G4Decay::DoIt  : can not determine decay channel ");
+      G4Exception("G4Decay::DoIt", "DECAY003", FatalException,
+                  " can not determine decay channel ");
     } else {
       // execute DecayIt() 
 #ifdef G4VERBOSE
@@ -262,7 +264,6 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
   G4double   ParentMass    = aParticle->GetMass();
   if (ParentEnergy < ParentMass) {
-    ParentEnergy = ParentMass;
     if (GetVerboseLevel()>0) {
       G4cout << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
       G4cout << " Particle: " << aParticle->GetDefinition()->GetParticleName();
@@ -270,6 +271,10 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       G4cout << " Mass:"    << ParentMass/MeV << "[MeV]";
       G4cout << G4endl;
     }
+    G4Exception( "G4Decay::DecayIt ",
+                 "DECAY102",JustWarning, 
+                 "Total Energy is less than its mass");
+    ParentEnergy = ParentMass;
   }
 
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
@@ -277,9 +282,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   //boost all decay products to laboratory frame
   G4double energyDeposit = 0.0;
   G4double finalGlobalTime = aTrack.GetGlobalTime();
+  G4double finalLocalTime = aTrack.GetLocalTime();
   if (aTrack.GetTrackStatus() == fStopButAlive ){
     // AtRest case
     finalGlobalTime += fRemainderLifeTime;
+    finalLocalTime += fRemainderLifeTime;
     energyDeposit += aParticle->GetKineticEnergy();
     if (isPreAssigned) products->Boost( ParentEnergy, ParentDirection);
   } else {
@@ -328,7 +335,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   // Kill the parent particle
   fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
   fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
-  fParticleChangeForDecay.ProposeGlobalTime( finalGlobalTime );
+  fParticleChangeForDecay.ProposeLocalTime( finalLocalTime );
+
   // Clear NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
 

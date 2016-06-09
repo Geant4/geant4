@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc,v 1.2 2010/08/16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: Shielding.icc,v 1.2 2010-08-16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 //
 // Modified:
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -52,53 +53,96 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
+#include "G4HadronElasticPhysicsLEND.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsShielding.hh"
 
-#include "G4WarnPLStatus.hh"
-
-template<class T> TShielding<T>::TShielding(G4int ver):  T()
+//template<class T> TShielding<T>::TShielding(G4int ver):  T()
+template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model ):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
-  G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 0.1"<<G4endl;
+  G4DataQuestionaire it(photon, neutron, radioactive);
+  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 1.0"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
-  this->SetVerboseLevel(ver);
-
-  G4WarnPLStatus exp;
-  exp.Experimental("Shielding");
+  this->SetVerboseLevel(verbose);
 
  // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(verbose));
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  this->RegisterPhysics( new G4EmExtraPhysics(verbose) );
 
   // Decays 
-  this->RegisterPhysics( new G4DecayPhysics(ver) );
+  this->RegisterPhysics( new G4DecayPhysics(verbose) );
+  //if ( rad == true ) this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
+  this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
 
-   // Hadron Elastic scattering
-  this->RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
+  size_t find = LEN_model.find("LEND__");
+G4cout << LEN_model << G4endl;
+  G4String evaluation;
+  if ( find != G4String::npos )
+  {
+G4cout << LEN_model << G4endl;
+      evaluation=LEN_model;
+      evaluation.erase(0,find+6);
+      LEN_model="LEND";
+  }
+
+  // Hadron Elastic scattering
+  if ( LEN_model == "HP" ) 
+  {
+     this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
+  }
+  else if ( LEN_model == "LEND" ) 
+  {
+     this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
+     G4DataQuestionaire it(lend);
+  }
+  else 
+  {
+     G4cout << "Shielding Physics List: Warning!" <<G4endl;
+     G4cout << "\"" << LEN_model << "\" is not valid for the low energy neutorn model." <<G4endl;
+     G4cout << "Neutron HP package will be used." <<G4endl;
+     this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
+  } 
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsShielding(ver));
+  HadronPhysicsShielding* hps = new HadronPhysicsShielding(verbose);
+  if ( LEN_model == "HP" ) 
+  {
+     ;
+  }
+  else if ( LEN_model == "LEND" ) 
+  {
+     hps->UseLEND(evaluation); 
+  }
+  else 
+  {
+     //G4cout << "Shielding Physics List: Warning." <<G4endl;
+     //G4cout << "Name of Low Energy Neutron model " << LEN_model << " is invalid." <<G4endl;
+     //G4cout << "Will use neutron HP package." <<G4endl;
+  }
+  this->RegisterPhysics( hps );
+  //this->RegisterPhysics( new HadronPhysicsShielding(verbose,lend));
+
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4QStoppingPhysics(verbose) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonQMDPhysics(ver));
+  this->RegisterPhysics( new G4IonQMDPhysics(verbose));
   
   // Neutron tracking cut --> not by default
-  // this->RegisterPhysics( new G4NeutronTrackingCut(ver));
+  // this->RegisterPhysics( new G4NeutronTrackingCut(verbose));
 
 }
 

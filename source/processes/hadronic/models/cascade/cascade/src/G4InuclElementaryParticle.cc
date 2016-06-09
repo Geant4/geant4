@@ -24,12 +24,19 @@
 // ********************************************************************
 //
 // $Id: G4InuclElementaryParticle.cc,v 1.10 2010/09/23 05:33:56 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// Geant4 tag: $Name:  $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
 //		add Omega and antinucleons.
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 // 20100923  M. Kelsey -- Drop "uups" message when converting G4PartDef to code
+// 20101029  M. Kelsey -- Add instantiation of new particles, antiparticles
+// 20110214  M. Kelsey -- Drop unused "generation"
+// 20110307  M. Kelsey -- Add random K0 mixing if K0S/K0L passed to type()
+// 20110321  M. Kelsey -- Fix getStrangeness to return int
+// 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
+//		reuse of objects as buffers; c.f. G4InuclNuclei.
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -43,6 +50,8 @@
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4KaonZero.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
 #include "G4AntiKaonZero.hh"
 #include "G4Lambda.hh"
 #include "G4SigmaPlus.hh"
@@ -51,11 +60,21 @@
 #include "G4XiZero.hh"
 #include "G4XiMinus.hh"
 #include "G4OmegaMinus.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
+#include "G4AntiDeuteron.hh"
+#include "G4AntiTriton.hh"
+#include "G4AntiHe3.hh"
+#include "G4AntiAlpha.hh"
+#include "G4Deuteron.hh"
 #include "G4Diproton.hh"
 #include "G4UnboundPN.hh"
 #include "G4Dineutron.hh"
+#include "Randomize.hh"
 
 #include "G4InuclParticleNames.hh"
 using namespace G4InuclParticleNames;
@@ -81,11 +100,22 @@ G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   case xiZero:      return G4XiZero::Definition(); break;
   case xiMinus:     return G4XiMinus::Definition(); break;
   case omegaMinus:  return G4OmegaMinus::Definition(); break;
+    // NOTE:  The four light nuclei "particles" are actually G4Ions
+  case deuteron:    return G4Deuteron::Definition(); break;
+  case triton:      return G4Triton::Definition(); break;
+  case He3:	    return G4He3::Definition(); break;
+  case alpha:	    return G4Alpha::Definition(); break;
   case antiProton:  return G4AntiProton::Definition(); break;
   case antiNeutron: return G4AntiNeutron::Definition(); break;
-  case diproton:    return G4Diproton::Definition(); break;  // Bertini class!
-  case unboundPN:   return G4UnboundPN::Definition(); break; // Bertini class!
-  case dineutron:   return G4Dineutron::Definition(); break; // Bertini class!
+    // NOTE:  The the four light antinuclei "particles" are actually G4Ions
+  case antiDeuteron: return G4AntiDeuteron::Definition(); break;
+  case antiTriton:  return G4AntiTriton::Definition(); break;
+  case antiHe3:     return G4AntiHe3::Definition(); break;
+  case antiAlpha:   return G4AntiAlpha::Definition(); break;
+    // NOTE:  The three unbound dibaryons are local Bertini classes
+  case diproton:    return G4Diproton::Definition(); break;
+  case unboundPN:   return G4UnboundPN::Definition(); break;
+  case dineutron:   return G4Dineutron::Definition(); break;
   default:
     G4cerr << " uups, unknown particle type " << ityp << G4endl;
   }
@@ -114,11 +144,27 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4XiZero::Definition())       return xiZero;
   if (pd == G4XiMinus::Definition())      return xiMinus;
   if (pd == G4OmegaMinus::Definition())   return omegaMinus;
+  // NOTE:  The four light nuclei "particles" are actually G4Ions
+  if (pd == G4Deuteron::Definition())     return deuteron;
+  if (pd == G4Triton::Definition())       return triton;
+  if (pd == G4He3::Definition())          return He3;
+  if (pd == G4Alpha::Definition())        return alpha;
   if (pd == G4AntiProton::Definition())   return antiProton;
   if (pd == G4AntiNeutron::Definition())  return antiNeutron;
-  if (pd == G4Diproton::Definition())     return diproton;  // Bertini class!
-  if (pd == G4UnboundPN::Definition())    return unboundPN; // Bertini class!
-  if (pd == G4Dineutron::Definition())    return dineutron; // Bertini class!
+  // NOTE:  The the four light antinuclei "particles" are actually G4Ions
+  if (pd == G4AntiDeuteron::Definition()) return antiDeuteron;
+  if (pd == G4AntiTriton::Definition())   return antiTriton;
+  if (pd == G4AntiHe3::Definition())      return antiHe3;
+  if (pd == G4AntiAlpha::Definition())    return antiAlpha;
+  // NOTE:  The three unbound dibaryons are local Bertini classes
+  if (pd == G4Diproton::Definition())     return diproton;
+  if (pd == G4UnboundPN::Definition())    return unboundPN;
+  if (pd == G4Dineutron::Definition())    return dineutron;
+
+  // Weak neutral kaons must be mixed back to strong (strangeness states)
+  if (pd==G4KaonZeroShort::Definition() || pd==G4KaonZeroLong::Definition()) {
+    return ((G4UniformRand() > 0.5) ? kaonZero : kaonZeroBar);
+  }
 
   return 0;	// Unknown objects return zero (e.g., nuclei)
 }
@@ -128,18 +174,42 @@ void G4InuclElementaryParticle::setType(G4int ityp) {
 }
 
 
+// Overwrite data structure (avoids creating/copying temporaries)
+
+void G4InuclElementaryParticle::fill(const G4LorentzVector& mom, G4int type,
+				     G4InuclParticle::Model model) {
+  setType(type);
+  setMomentum(mom);
+  setModel(model);
+}
+
+void G4InuclElementaryParticle::fill(G4double ekin, G4int type,
+				     G4InuclParticle::Model model) {
+  setType(type);
+  setKineticEnergy(ekin);
+  setModel(model);
+}
+
+void G4InuclElementaryParticle::fill(const G4LorentzVector& mom,
+				     G4ParticleDefinition* pd,
+				     G4InuclParticle::Model model) {
+  setDefinition(pd);
+  setMomentum(mom);
+  setModel(model);
+}
+
+
 // Assignment operator for use with std::sort()
 G4InuclElementaryParticle& 
 G4InuclElementaryParticle::operator=(const G4InuclElementaryParticle& right) {
-  generation = right.generation;
   G4InuclParticle::operator=(right);
   return *this;
 }
 
 
-G4double G4InuclElementaryParticle::getStrangeness(G4int type) {
+G4int G4InuclElementaryParticle::getStrangeness(G4int type) {
   G4ParticleDefinition* pd = makeDefinition(type);
-  return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0.;
+  return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0;
 }
 
 G4double G4InuclElementaryParticle::getParticleMass(G4int type) {
@@ -150,10 +220,10 @@ G4double G4InuclElementaryParticle::getParticleMass(G4int type) {
 
 // Print particle parameters
 
-void G4InuclElementaryParticle::printParticle() const {
-  G4InuclParticle::printParticle();
-  G4cout << " Particle: " << getDefinition()->GetParticleName() 
-	 << " type " << type() << " mass " << getMass()
-	 << " ekin " << getKineticEnergy() << G4endl; 
+void G4InuclElementaryParticle::print(std::ostream& os) const {
+  G4InuclParticle::print(os);
+  os << G4endl << " Particle: " << getDefinition()->GetParticleName() 
+     << " type " << type() << " mass " << getMass()
+     << " ekin " << getKineticEnergy(); 
 }
 

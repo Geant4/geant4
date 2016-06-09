@@ -41,16 +41,16 @@
 //
 
 #ifndef G4GlauberGribovCrossSection_h
-#define G4GlauberGribovCrossSection_h
+#define G4GlauberGribovCrossSection_h 1
 
 #include "globals.hh"
 #include "G4Proton.hh"
 #include "G4Nucleus.hh"
-#include "G4HadTmpUtil.hh"
 
 #include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleDefinition;
+class G4HadronNucleonXsc;
 
 class G4GlauberGribovCrossSection : public G4VCrossSectionDataSet
 {
@@ -60,28 +60,15 @@ public:
   virtual ~G4GlauberGribovCrossSection ();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
+  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A, 
+			 const G4Element* elm = 0,
+			 const G4Material* mat = 0);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A);
-
-  virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
-			   G4double aTemperature = 0.0);
-
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*,
-                                G4int Z, G4int A,
-                                G4double aTemperature = 0.0);
-
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&)
-  {}
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&) 
-  {G4cout << "G4GlauberGribovCrossSection: uses Glauber-Gribov formula"<<G4endl;}
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
+			      const G4Isotope* iso = 0,
+			      const G4Element* elm = 0,
+			      const G4Material* mat = 0);
 
   G4double GetRatioSD(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4int At, G4int Zt);
@@ -91,9 +78,9 @@ public:
 
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
-
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, G4int At, G4int Zt);
+  G4double GetKaonNucleonXscVector(const G4DynamicParticle*, G4int At, G4int Zt);
 
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4int At, G4int Zt);
@@ -103,18 +90,20 @@ public:
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
 
-  G4double GetElasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
-  G4double GetInelasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
-
-  G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
-  G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
-  G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
-  G4double GetProductionGlauberGribovXsc(){ return fProductionXsc; }; 
-  G4double GetDiffractionGlauberGribovXsc(){ return fDiffractionXsc; }; 
-  G4double GetRadiusConst()              { return fRadiusConst;  }; 
-
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
   G4double GetNucleusRadius(G4int At);
+
+  virtual void CrossSectionDescription(std::ostream&) const;
+
+  inline G4double GetElasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
+  inline G4double GetInelasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
+
+  inline G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
+  inline G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
+  inline G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
+  inline G4double GetProductionGlauberGribovXsc(){ return fProductionXsc; }; 
+  inline G4double GetDiffractionGlauberGribovXsc(){ return fDiffractionXsc; }; 
+  inline G4double GetRadiusConst()              { return fRadiusConst;  }; 
 
   inline G4double GetParticleBarCorTot(const G4ParticleDefinition* theParticle, G4int Z);
   inline G4double GetParticleBarCorIn(const G4ParticleDefinition* theParticle, G4int Z);
@@ -173,6 +162,8 @@ private:
   G4ParticleDefinition* theA;
   G4ParticleDefinition* theHe3;
 
+  G4HadronNucleonXsc* hnXsc;
+
 };
 
 ////////////////////////////////////////////////////////////////
@@ -184,7 +175,7 @@ G4double
 G4GlauberGribovCrossSection::GetElasticGlauberGribov(const G4DynamicParticle* dp,
                                                      G4int Z, G4int A)
 {
-  GetZandACrossSection(dp, Z, A);
+  GetIsoCrossSection(dp, Z, A);
   return fElasticXsc;
 }
 
@@ -195,7 +186,7 @@ G4double
 G4GlauberGribovCrossSection::GetInelasticGlauberGribov(const G4DynamicParticle* dp,
                                                        G4int Z, G4int A)
 {
-  GetZandACrossSection(dp, Z, A);
+  GetIsoCrossSection(dp, Z, A);
   return fInelasticXsc;
 }
 

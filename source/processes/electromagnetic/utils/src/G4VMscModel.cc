@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.18 2010/09/07 16:05:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VMscModel.cc,v 1.18 2010-09-07 16:05:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 G4VMscModel::G4VMscModel(const G4String& nam):
   G4VEmModel(nam), 
   safetyHelper(0),
+  ionisation(0),
   facrange(0.04),
   facgeom(2.5),
   facsafety(0.3),
@@ -68,7 +69,11 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
-{}
+{
+  dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
+  localrange = DBL_MAX;
+  localtkin  = 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,24 +84,18 @@ G4VMscModel::~G4VMscModel()
 
 G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
 {
-  G4ParticleChangeForMSC* p = 0;
-  if (pParticleChange) {
-    p = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  } else {
-    p = new G4ParticleChangeForMSC();
-  }
-  return p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VMscModel::InitialiseSafetyHelper()
-{
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
       ->GetSafetyHelper();
     safetyHelper->InitialiseHelper();
   }
+  G4ParticleChangeForMSC* change = 0;
+  if (pParticleChange) {
+    change = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  } else {
+    change = new G4ParticleChangeForMSC();
+  }
+  return change;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -7376,3 +7376,45 @@
   -0.00194053, -0.00133768, -0.000691315, 9.19946e-17}; 
 
 
+G4double G4NeutronHPFastLegendre::regularEvaluate( int l , double x )
+{
+   double y_pre;
+   double y;
+   double y_post;
+
+   y_pre=1;
+   y=x;
+
+   for ( int n = 1; n<l ; n++ )
+   {
+      y_post = 1.0*(2*n+1)/(n+1)*x*y-1.0*n/(n+1)*y_pre;
+      y_pre=y;
+      y=y_post;
+   }
+   //G4cout << l << " " << x << " " << y << G4endl;
+
+   return y;
+}
+
+G4double G4NeutronHPFastLegendre::regularIntegrate( int l , double x )
+{
+   double y_pre;
+   double y;
+   double y_post;
+   double ydx;
+
+   y_pre=1;
+   y=x;
+
+   for ( int n = 1; n<l ; n++ )
+   {
+      y_post = 1.0*(2*n+1)/(n+1)*x*y-1.0*n/(n+1)*y_pre;
+      y_pre=y;
+      y=y_post;
+   }
+   //integerate from x to 1.
+   ydx=1.0/(l+1)*(-x*y+y_pre);
+   //std::cout << l << " " << x << " " << y << std::endl;
+
+   return -ydx;
+}

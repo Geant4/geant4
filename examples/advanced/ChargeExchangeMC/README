@@ -18,9 +18,7 @@ found in directory doc/ of this example.
 ------> Compilation
 
 Basic modules of Cexmc must compile with Geant4 version 9.4. Cexmc won't compile
-with Geant4 version 9.3 (if you still need to build the program against this
-version then remove qualifier const in the first argument of prototype of
-CexmcSetup::ReadTransforms()). Cexmc contains several optional modules which can
+with older versions of Geant4. Cexmc contains several optional modules which can
 be enabled or disabled in the makefile by setting dedicated macros: most of them
 are listed in the beginning of the makefile and well commented. Modules may
 involve additional dependencies. In the following table the dependencies and

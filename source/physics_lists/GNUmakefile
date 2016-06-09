@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2008/12/05 15:14:20 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2008-12-05 15:14:20 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for physicslists library, Gunter Folger 25-October 2006
 # ----------------------------------------------------------------------

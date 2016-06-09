@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.25 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eIonisationParameters.cc,v 1.26 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -41,6 +41,7 @@
 //                          chenged to "ion-..."
 // 17.02.04 V.Ivanchenko    Increase buffer size
 // 23.03.09 L.Pandola       Updated warning message
+// 03.12.10 V.Ivanchenko    Fixed memory leak in LoadData
 //
 // -------------------------------------------------------------------
 
@@ -153,7 +154,8 @@ void G4eIonisationParameters::LoadData()
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-     G4Exception("G4eIonisationParameters: no MaterialTable found)");
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em1001",FatalException,"Unable to find MaterialTable");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   
@@ -175,8 +177,9 @@ void G4eIonisationParameters::LoadData()
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4eIonisationParameters - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
+      return;
     }
     
   G4String pathString(path);
@@ -198,9 +201,10 @@ void G4eIonisationParameters::LoadData()
     std::filebuf* lsdp = file.rdbuf();
 
     if (! (lsdp->is_open()) ) {
-      G4String excep = G4String("G4IonisationParameters - data file: ")
-      + name + G4String(" not found. Please check and/or update G4LEDATA");
-      G4Exception(excep);
+      G4String excep = G4String("data file: ")
+      + name + G4String(" not found");
+      G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
     }
 
     // The file is organized into:
@@ -224,24 +228,37 @@ void G4eIonisationParameters::LoadData()
 
     G4int shell = 0;
     std::vector<G4DataVector*> a;
-    for (size_t j=0; j<length; j++) 
-      {
-	G4DataVector* aa = new G4DataVector();
-	a.push_back(aa);
-      } 
+    a.resize(length);
     G4DataVector e;
-    e.clear();
+    G4bool isReady = false;
     do {
       file >> energy >> sum;
+      //Check if energy is valid
+      if (energy < -2)
+	{
+	  G4String excep("invalid data file");
+          G4Exception("G4eIonisationParameters::LoadData",
+		    "em0005",FatalException,excep);
+	  return;
+	}
+
       if (energy == -2) break;
 
       if (energy >  -1) {
+	// new energy
+	if(!isReady) {
+	  isReady = true;
+	  e.clear();
+	  for (size_t j=0; j<length; ++j) { 
+	    a[j] = new G4DataVector(); 
+	  }  
+	}
         e.push_back(energy);
         a[0]->push_back(sum);
-        for (size_t j=0; j<length-1; j++) {
+        for (size_t j=1; j<length; ++j) {
 	  G4double qRead;
 	  file >> qRead;
-	  a[j + 1]->push_back(qRead);
+	  a[j]->push_back(qRead);
 	}    
 
       } else {
@@ -250,25 +267,22 @@ void G4eIonisationParameters::LoadData()
 	for (size_t k=0; k<length; k++) {
 
           G4VDataSetAlgorithm* interp;
-          if(0 == k) interp  = new G4LinLogLogInterpolation();
-          else       interp  = new G4LogLogInterpolation();
+          if(0 == k) { interp  = new G4LinLogLogInterpolation(); }
+          else       { interp  = new G4LogLogInterpolation(); }
 
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();
 	  for (size_t s=0; s<eSize; s++) {
-	       eVector->push_back(e[s]);
+	    eVector->push_back(e[s]);
 	  }
 	  G4VEMDataSet* set = new G4EMDataSet(shell,eVector,a[k],interp,1.,1.);
 
 	  p[k]->AddComponent(set);
 	} 
 	  
-	// clear vectors
-        for (size_t j2=0; j2<length; j2++) {
-	  a[j2] = new G4DataVector();
-	} 
-        shell++;
-        e.clear();
+	// next shell
+        ++shell;
+        isReady = false;
       }
     } while (energy > -2);
     
@@ -291,14 +305,16 @@ void G4eIonisationParameters::LoadData()
   std::filebuf* lsdp_b = file_b.rdbuf();
   
   if (! (lsdp_a->is_open()) ) {
-     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+     G4String excep = G4String("cannot open file ")
                     + name_a;
-     G4Exception(excep);
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
   }  
   if (! (lsdp_b->is_open()) ) {
-     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+     G4String excep = G4String("cannot open file ")
                     + name_b;
-     G4Exception(excep);
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
   }  
 
   // The file is organized into two columns:

@@ -1,5 +1,6 @@
-$Id: History,v 1.120 2010/11/10 08:42:47 kurasige Exp $
+$Id: History,v 1.120 2010-11-10 08:42:47 kurasige Exp $
 -------------------------------------------------------------------
+
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -16,7 +17,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- November 9th, 2011 H.Kurashige  (track-V09-04-13)
+- Fix Coverity defects
+  (copy constructor/assignment operator for G4Step/G4StepPoint)
 
+- October 21th, 2011 G.Folger     (track-V09-04-12)
+-  retag all of track, track-V09-04-11 was in src only.
+
+- October 14th, 2011 P.Gumplinger (track-V09-04-11)
+- modify G4Track.cc to work with materials-V09-04-15 (and 14)
+
+- September 21st,  2011  H.Kurashige (track-V09-04-10)
+- Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
+- ProposeParenetWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag 
+  is set true even wheen SetParentWeightByTracK is set to false
+
+-September 17, 2011, H.Kurashige (track-V09-04-09)
+- Fix problems related to treatments of weight in ParticleChange (see problem #1243)
+-- always set the parent track's weight to the value set by ProposeParentWeight() and  ProposeWeight() 
+   methods for all particle change classes.
+-- remove fSetParentWeightByProcess and all related code.
+-- SetSecondaryWeightByProcess() flag is set to true in default.
+
+-September 11, 2011, H.Kurashige (track-V09-04-08)
+- Modify ParticleChangeForTransport to fix a bug of wrong velocity
+  in PostStepPoint after Along/PostStepDoIt
+
+-August 22, 2011, H.Kurashige (track-V09-04-07)
+- G4VelocityTable is modified and it is not derived from G4PhysicsVector
+  (in order to avoid from creation of PhysicsVector as static objects)
+ 
+August 17, 2011, H.Kurashige (track-V09-04-05)
+- Add G4VelocityTable as singleton to avoid creation of G4PhysicsVector in event loop
+- Modify G4Step::InitializeStep to set correct velocity for the optical photon
+
+July 6, 2011, H.Kurashige (track-V09-04-04)
+- Modify ParticleChanges (forDecay, for Transportation and G4ParticleChange)
+  to handle local time change rather than global time
+  (see problem #1224)
+- Modify CalculateVelocityForOpticalPhoton() for Coverity report.
+
+May. 20, 2011, B.Morgan (track-V09-04-03)
+- CMakeLists.txt : Added G4TRACK_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+
+Apr. 29, 2011, H.Kurashige (track-V09-04-02)
+- Fix memory leak in G4Step
+- Rename GetVelocity to CalculateVelocity
+- Add fVelocity (and Set/Get methods for it) in G4Track
+- Set velocity of trak in UpdateStep in ParticleChange
+
+Apr. 2, 2011, H.Kurashige (track-V09-04-01)
+- Set maxT for Velocity Table to 1000
+- Add SetVelocityTableProperties
+
+Mar. 16, 2011, H.Kurashige (track-V09-04-00)
+- Fix problems reported by Coverity
+- Add  GetSecondaryInCurrentStep method in G4Step.
+ 
 Nov. 10, 2010, H.Kurashige (track-V09-03-11)
 - Remove  GetSecondaryInCurrentStep method in G4Step.
   (revert chages in track-V09-03-07)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.cc,v 1.16 2006/06/29 18:12:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3MatTable.cc,v 1.16 2006-06-29 18:12:57 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -64,10 +64,12 @@ void G3MatTable::Clear()
     a = fMatVector->back();
     fMatVector->pop_back();
     for (G3MaterialVector::iterator i=fMatVector->begin();
-                                    i!=fMatVector->end(); i++){
+                                    i!=fMatVector->end();){
       if (*i==a) {
-	fMatVector->erase(i);
-	i--;
+	i = fMatVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    

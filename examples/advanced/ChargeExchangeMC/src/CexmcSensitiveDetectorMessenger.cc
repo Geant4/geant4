@@ -46,22 +46,34 @@
 #include <G4UIcommandTree.hh>
 #include <G4UIcmdWithAnInteger.hh>
 #include <G4VPrimitiveScorer.hh>
+#include <G4MultiFunctionalDetector.hh>
 #include "CexmcSensitiveDetectorMessenger.hh"
 #include "CexmcMessenger.hh"
+#include "CexmcException.hh"
 
 
 CexmcSensitiveDetectorMessenger::CexmcSensitiveDetectorMessenger(
-            G4VPrimitiveScorer *  scorer, const G4String &  detectorName ) :
+                                                G4VPrimitiveScorer *  scorer ) :
     scorer( scorer ), detectorPath( NULL ), setVerboseLevel( NULL )
 {
-    G4String       detectorFullPath(
-            ( CexmcMessenger::detectorDirName + detectorName + "/" ).c_str() );
+    G4MultiFunctionalDetector *  detector(
+                                        scorer->GetMultiFunctionalDetector() );
+    /* detector of the scorer must have been already initialized provided
+     * CexmcPrimitiveScorer::InitializeMessenger() was properly called upon
+     * creation of the setup */
+    if ( ! detector )
+        throw CexmcException( CexmcWeirdException );
+
+    G4String       detectorFullPath( ( CexmcMessenger::detectorDirName +
+                       detector->GetName() + "/" + scorer->GetName() + "/" ).
+                                                                    c_str() );
     G4UImanager *  uiManager( G4UImanager::GetUIpointer() );
     if ( ! uiManager->GetTree()->FindCommandTree( detectorFullPath.c_str() ) )
     {
         detectorPath = new G4UIdirectory( detectorFullPath.c_str() );
         detectorPath->SetGuidance( "Settings for given sensitive detector" );
     }
+
     setVerboseLevel = new G4UIcmdWithAnInteger(
                             ( detectorFullPath + "verbose" ).c_str(), this );
     setVerboseLevel->SetGuidance( "0 - do not print messages, "

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmTableType.hh,v 1.4 2008/10/13 14:56:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmTableType.hh,v 1.4 2008-10-13 14:56:56 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //

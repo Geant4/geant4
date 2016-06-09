@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.149 2010/11/23 13:21:37 gcosmo Exp $
+# $Id: binmake.gmk,v 1.149 2010-11-23 13:21:37 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -45,6 +45,7 @@ ifndef INCFLAGS
   INCFLAGS := -I$(G4INCLUDE)
  else
   INCFLAGS := \
+              -I$(G4BASE)/analysis/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
@@ -77,6 +78,12 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/electromagnetic/highenergy/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/processes/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/models/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/utils/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/management/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/molecules/management/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/molecules/types/include \
               -I$(G4BASE)/processes/electromagnetic/pii/include \
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
@@ -106,6 +113,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
               -I$(G4BASE)/processes/hadronic/models/incl/include \
+              -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
+              -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
+              -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
               -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
               -I$(G4BASE)/processes/hadronic/models/lend/include \
               -I$(G4BASE)/processes/hadronic/models/lll_fission/include \
@@ -119,6 +129,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
+              -I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
               -I$(G4BASE)/processes/hadronic/models/rpg/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
@@ -164,13 +175,14 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 ifdef G4EXLIB
+# Redefine G4LIBDIR here to switch to local path for generation of app library
   G4LIBDIR := $(G4TMPDIR)
-  LDFLAGS += -L$(G4LIBDIR)
+  LDFLAGS += -L$(G4TMPDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
-#         For the example dependent directory, keep the 
-#         path to the shared lib in the executable.
-      LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
+#     For the example dependent directory, keep the 
+#     path to the shared lib in the executable.
+      LDFLAGS += $(G4RUNPATHOPTION)$(G4TMPDIR)
     endif
   endif
   include $(G4INSTALL)/config/common.gmk
@@ -212,7 +224,8 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4error_propagation \
+  LDLIBS2 += -lG4analysis \
+             -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
              -lG4run \
@@ -228,6 +241,18 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
+
+  ifdef G4LIB_USE_CLHEP
+    LDLIBS2 += -lG4clhep
+  endif
+
+  ifdef G4LIB_USE_EXPAT
+    LDLIBS2 += -lG4expat
+  endif
+
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDLIBS2 += -lG4expat
+  endif
 
   ifdef G4LIB_USE_ZLIB
     LDLIBS2 += -lG4zlib

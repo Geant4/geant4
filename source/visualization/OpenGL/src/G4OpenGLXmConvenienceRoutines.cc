@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.13 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.13 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -340,6 +340,9 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
 		 get_double_value_callback,
 		 val);
 
+  /* Not actually used - comment out to prevent compiler warnings.
+     Instead, just in case it matters, just invoke
+     XtVaCreateManagedWidget (JA)
   Widget sep = XtVaCreateManagedWidget ("sep",
 					xmSeparatorWidgetClass,
 					*row_col_box,
@@ -350,8 +353,20 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
 					XtNborderColor, pView->borcol,
 					XtNbackground, pView->bgnd,
 					NULL);
-
   sep = XtVaCreateManagedWidget ("sep",
+				 xmSeparatorWidgetClass,
+				 *row_col_box,
+				 XmNseparatorType, XmNO_LINE,
+				 XmNmargin, 1,
+				 XmNorientation, XmHORIZONTAL,
+				 XtNvisual, pView->vi->visual, 
+				 XtNdepth, pView->vi->depth, 
+				 XtNcolormap, pView->cmap, 
+				 XtNborderColor, pView->borcol,
+				 XtNbackground, pView->bgnd,
+				 NULL);
+  */
+  XtVaCreateManagedWidget ("sep",
 				 xmSeparatorWidgetClass,
 				 *row_col_box,
 				 XmNseparatorType, XmNO_LINE,
@@ -517,7 +532,7 @@ G4bool G4OpenGLXmViewer::get_boolean_userData (Widget w)
 {
   XtPointer userData;
   XtVaGetValues (w,XmNuserData,&userData,NULL);
-  return (G4bool)(unsigned long)userData;
+  return (G4bool)(((unsigned long)userData)&0xffff);
 }
 
 G4int G4OpenGLXmViewer::get_int_userData (Widget w)

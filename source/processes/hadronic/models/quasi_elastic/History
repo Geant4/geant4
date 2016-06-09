@@ -1,0 +1,28 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+              History file for quasi_elastic directory
+              -------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+11-Nov-2011, W.Pokorski     hadr-qelastic-V09-04-03
+- removing all the debug couts from the code
+
+21-Oct-2011, G.Folger       hadr-qelastic-V09-04-02
+- sources.cmake: correct name of module.
+
+18-Oct-2001, W.Pokorski hadr-qelastic-V09-04-01
+Removing unnecessary dependecies in GNUMakefile, fixing warnings about missing returns.
+
+04-Oct-2011, W.Pokorski	
+This new directory contains now the quasi-elastic process that have been extracted from CHIPS.
+It is used by all the physics lists and it has been made independent from CHIPS.

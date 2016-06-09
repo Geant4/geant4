@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.17 2009/11/21 16:47:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.17 2009-11-21 16:47:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,7 +51,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
-#include "G4StepLimiterBuilder.hh"
+#include "StepLimiterBuilder.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -110,7 +110,7 @@ void PhysicsList::ConstructProcess()
   if(verbose > 0) 
     G4cout << "### PhysicsList Construte Processes" << G4endl;
   if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
-  RegisterPhysics(new G4StepLimiterBuilder());
+  RegisterPhysics(new StepLimiterBuilder());
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes

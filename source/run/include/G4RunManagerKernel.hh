@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.11 2010/11/18 13:46:06 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RunManagerKernel.hh,v 1.11 2010-11-18 13:46:06 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -141,6 +141,7 @@ class G4RunManagerKernel
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
     G4Region* defaultRegion;
+    G4Region* defaultRegionForParallelWorld;
     G4String versionString;
 
   public: // with description

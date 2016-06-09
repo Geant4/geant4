@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh,v 1.17 2009/04/27 07:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLWriteMaterials.hh,v 1.17 2009-04-27 07:22:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLWriteMaterials
@@ -49,7 +49,7 @@
 class G4Isotope;
 class G4Element;
 class G4Material;
-class G4MaterialPropertyVector;
+class G4PhysicsOrderedFreeVector;
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine
 {
@@ -71,12 +71,13 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    void DWrite(xercesc::DOMElement*,const G4double&);
    void PWrite(xercesc::DOMElement*,const G4double&);
    void TWrite(xercesc::DOMElement*,const G4double&);
+   void MEEWrite(xercesc::DOMElement*,const G4double&);
    void IsotopeWrite(const G4Isotope* const);
    void ElementWrite(const G4Element* const);
    void MaterialWrite(const G4Material* const);
    void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
    void PropertyVectorWrite(const G4String&,
-                            const G4MaterialPropertyVector* const);
+                            const G4PhysicsOrderedFreeVector* const);
  protected:
 
    std::vector<const G4Isotope*> isotopeList;

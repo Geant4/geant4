@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02GeneralPhysics.cc,v 1.2 2006/06/29 17:45:16 gunter Exp $
+// $Id: RE02GeneralPhysics.cc,v 1.2 2006-06-29 17:45:16 gunter Exp $
 // --------------------------------------------------------------
 //
 // 22-Nov-2004 Construt ALL Particles by T. Koi

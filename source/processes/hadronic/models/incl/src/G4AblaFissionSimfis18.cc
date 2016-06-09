@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFissionSimfis18.cc,v 1.5 2010/11/17 20:19:09 kaitanie Exp $
+// $Id: G4AblaFissionSimfis18.cc,v 1.4 2010/11/16 16:28:57 gcosmo Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -252,23 +252,18 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
 
 
   G4double     n = 0.0;
-  G4double     nlight1 = 0.0, nlight2 = 0.0;
-  G4double     aheavy1 = 0.0,alight1 = 0.0, aheavy2 = 0.0, alight2 = 0.0;
-  G4double     eheavy1 = 0.0, elight1 = 0.0, eheavy2 = 0.0, elight2 = 0.0;
+  G4double     aheavy1 = 0.0, aheavy2 = 0.0;
   G4double     zheavy1_shell = 0.0, zheavy2_shell = 0.0;
-  G4double     zlight1 = 0.0, zlight2 = 0.0;
   G4double     masscurv = 0.0;
-  G4double     sasymm1 = 0.0, sasymm2 = 0.0, ssymm = 0.0, ysum = 0.0, yasymm = 0.0;
+  G4double     sasymm1 = 0.0, sasymm2 = 0.0, ssymm = 0.0, ysum = 0.0;
   G4double     ssymm_mode1 = 0.0, ssymm_mode2 = 0.0;
-  G4double     cz_asymm1_saddle = 0.0, cz_asymm2_saddle = 0.0;
   // Curvature at saddle, modified by ld-potential
   G4double     wzasymm1_saddle, wzasymm2_saddle, wzsymm_saddle  = 0.0;
   G4double     wzasymm1_scission = 0.0, wzasymm2_scission = 0.0, wzsymm_scission = 0.0;
   G4double     wzasymm1 = 0.0, wzasymm2 = 0.0, wzsymm = 0.0;
-  G4double     nlight1_eff = 0.0, nlight2_eff = 0.0;
   G4int  imode = 0;
   G4double     rmode = 0.0;
-  G4double     z1mean = 0.0, z2mean = 0.0, z1width = 0.0, za1width = 0.0;
+  G4double     z1mean = 0.0, z1width = 0.0, za1width = 0.0;
   //      G4double     Z1,Z2,N1R,N2R,A1R,A2R,N1,N2,A1,A2;
   G4double     n1r = 0.0, n2r = 0.0, a1r = 0.0, a2r = 0.0, n1 = 0.0, n2 = 0.0;
 
@@ -291,14 +286,13 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   //   /* Parameters of the semiempirical fission model */
   G4double a_levdens = 0.0;
   //           /* level-density parameter */
-  G4double a_levdens_light1 = 0.0, a_levdens_light2 = 0.0;
   G4double a_levdens_heavy1 = 0.0, a_levdens_heavy2 = 0.0;
   const G4double r_null = 1.16;
   //          /* radius parameter */
   G4double epsilon_1_saddle = 0.0, epsilon0_1_saddle = 0.0;
   G4double epsilon_2_saddle = 0.0, epsilon0_2_saddle = 0.0, epsilon_symm_saddle = 0.0;
-  G4double epsilon_1_scission = 0.0, epsilon0_1_scission = 0.0;
-  G4double epsilon_2_scission = 0.0, epsilon0_2_scission = 0.0;
+  G4double epsilon_1_scission = 0.0;
+  G4double epsilon_2_scission = 0.0;
   G4double epsilon_symm_scission = 0.0;
   //                                   /* modified energy */
   G4double e_eff1_saddle = 0.0, e_eff2_saddle = 0.0;
@@ -386,18 +380,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   G4double eexc2_saddle = 0.0;
   //omment(I: Excitation energy above lowest saddle);
   G4double eexc_max = 0.0;
-  //omment(I: Effective mass mode 1);
-  G4double aheavy1_mean = 0.0;
-  //omment(I: Effective mass mode 2);
-  G4double aheavy2_mean = 0.0;
-  //omment(I: Width of symmetric mode);
-  G4double wasymm_saddle = 0.0;
-  //OMMENT(I: Width of asymmetric mode 1);
-  G4double waheavy1_saddle = 0.0;
-  //OMMENT(I: Width of asymmetric mode 2);
-  G4double waheavy2_saddle = 0.0;
-  //omment(I: Width of symmetric mode);
-  G4double wasymm = 0.0;
   //OMMENT(I: Width of asymmetric mode 1);
   G4double waheavy1 = 0.0;
   //OMMENT(I: Width of asymmetric mode 2);
@@ -450,9 +432,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
     goto milledeux;
   }
 
-  nlight1 = n - nheavy1;
-  nlight2 = n - nheavy2;
-	
   //    /* Polarisation assumed for standard I and standard II:
   //      Z - Zucd = cpol (for A = const);
   //      from this we get (see Armbruster)
@@ -467,11 +446,8 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   //      /* Energy dissipated from saddle to scission                        */
   //      /* F. Rejmund et al., Nucl. Phys. A 678 (2000) 215, fig. 4 b        */
   //      E_saddle_scission = DMAX1(0.,E_saddle_scission);
-  if (e_saddle_scission > 0.) {
-    e_saddle_scission = e_saddle_scission;
-  }
-  else {
-    e_saddle_scission = 0.;
+  if(e_saddle_scission <= 0.0) {
+    e_saddle_scission = 0.0;
   }
   //     /* Semiempirical fission model: */
 
@@ -514,31 +490,16 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   //            /* position of valley due to influence of liquid-drop potential */
   nheavy1_eff = (zheavy1 + (a/n * cpol1))*(n/z);
   nheavy2_eff = (zheavy2 + (a/n * cpol2))*(n/z);
-  nlight1_eff = n - nheavy1_eff;
-  nlight2_eff = n - nheavy2_eff;
-  //  /* proton number of light fragments (centre) */
-  zlight1 = z - zheavy1;
-  //  /* proton number of light fragments (centre) */
-  zlight2 = z - zheavy2;
   aheavy1 = nheavy1_eff + zheavy1;
   aheavy2 = nheavy2_eff + zheavy2;
-  aheavy1_mean = aheavy1;
-  aheavy2_mean = aheavy2;
-  alight1 = nlight1_eff + zlight1;
-  alight2 = nlight2_eff + zlight2;
 
   a_levdens = a / xlevdens;
   a_levdens_heavy1 = aheavy1 / xlevdens;
   a_levdens_heavy2 = aheavy2 / xlevdens;
-  a_levdens_light1 = alight1 / xlevdens;
-  a_levdens_light2 = alight2 / xlevdens;
   gamma = a_levdens / (0.4 * (std::pow(a,1.3333)) );
   gamma_heavy1 = ( a_levdens_heavy1 / (0.4 * (std::pow(aheavy1,1.3333)) ) ) * fgamma1;
   gamma_heavy2 = a_levdens_heavy2 / (0.4 * (std::pow(aheavy2,1.3333)) );
 
-  cz_asymm1_saddle = cz_asymm1_shell + cz_symm;
-  cz_asymm2_saddle = cz_asymm2_shell + cz_symm;
-	
   // Up to here: Ok! Checked CS 10/10/05      	   
 
   cn = umass(zsymm,(nsymm+1.),0.0) + umass(zsymm,(nsymm-1.),0.0)
@@ -609,10 +570,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   //     /* energy above the lowest saddle.                                   */
 
   //  /* These energies are not used */
-  eheavy1 = e * aheavy1 / a;
-  eheavy2 = e * aheavy2 / a;
-  elight1 = e * alight1 / a;
-  elight2 = e * alight2 / a;
 
   epsilon0_1_saddle = eld - e_zero_point - epot0_mode1_saddle;
   //            /* excitation energy at saddle mode 1 without shell effect */
@@ -632,12 +589,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   eexc_max = max(eexc_max,eld);
        
   //         /* EEXC_MAX is energy above the lowest saddle */
-
-
-  epsilon0_1_scission = eld + e_saddle_scission - epot0_mode1_saddle;
-  //                    /* excitation energy without shell effect */
-  epsilon0_2_scission = eld + e_saddle_scission - epot0_mode2_saddle;
-  //                    /* excitation energy without shell effect */
 
   epsilon_1_scission = eld + e_saddle_scission - epot_mode1_saddle;
   //                    /* excitation energy at scission */
@@ -727,14 +678,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
 	  G4cout << "WZsymm(scission) final= " << WZsymm << G4endl;
 	  } */
       
-  wasymm = wzsymm * a/z;
-  waheavy1 = wzasymm1 * a/z;
-  waheavy2 = wzasymm2 * a/z;
-
-  wasymm_saddle = wzsymm_saddle * a/z;
-  waheavy1_saddle = wzasymm1_saddle * a/z;
-  waheavy2_saddle = wzasymm2_saddle * a/z;
-
   if (itest == 1) {
     G4cout << "wasymm = " << wzsymm << G4endl;
     G4cout << "waheavy1 = " << waheavy1 << G4endl;
@@ -809,7 +752,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
     ysymm = ysymm / ysum;
     yasymm1 = yasymm1 / ysum;
     yasymm2 = yasymm2 / ysum;
-    yasymm = yasymm1 + yasymm2;
   } 
   else {
     ysymm = 0.0;
@@ -958,7 +900,6 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   }
   // all fission modes features have been checked CS 11/10/05
   n2mean = n - n1mean;
-  z2mean = z - z1mean;
       
   //   /* Excitation energies */
   //     /* formulated in energies in close consistency with the fission model */

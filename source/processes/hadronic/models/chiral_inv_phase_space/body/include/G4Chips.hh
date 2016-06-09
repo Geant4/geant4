@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Chips.hh,v 1.19 2006/06/29 20:05:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Chips.hh,v 1.19 2006-06-29 20:05:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Chips ----------------
 //          by Mikhail Kossov, September 1999.
@@ -35,7 +35,7 @@
 #ifndef G4Chips_h
 #define G4Chips_h 1
 
-// >>> D O E S   N O T   W O R K   -   N O T   U S E D    N O W <<<
+// >->-> D O E S   N O T   W O R K   -   N O T   U S E D    N O W <-<-<
 // Instead the "static const G4double" are used in the member functions
 
 namespace G4Chips

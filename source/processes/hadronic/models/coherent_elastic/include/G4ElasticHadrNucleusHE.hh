@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.47 2009/09/22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.47 2009-09-22 16:21:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -50,7 +50,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChange.hh"
 #include "G4Nucleus.hh"
-#include "G4VHadronElastic.hh"
+#include "G4HadronElastic.hh"
 
 class G4NistManager;
 
@@ -94,7 +94,7 @@ public:
   G4double  massA2;
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
-  G4double  CrossSecMaxQ2[NENERGY];
+  //G4double  CrossSecMaxQ2[NENERGY];
 
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
@@ -104,17 +104,19 @@ public:
 //
 //
 
-class G4ElasticHadrNucleusHE : public G4VHadronElastic
+class G4ElasticHadrNucleusHE : public G4HadronElastic
 {
 public:
 
-  G4ElasticHadrNucleusHE();
+  G4ElasticHadrNucleusHE(const G4String& name = "hElasticGlauber");
 
   virtual ~G4ElasticHadrNucleusHE();
 
   virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
 				    G4double plab, 
 				    G4int Z, G4int A);
+
+  virtual void Description() const;
 
   G4double SampleT(const G4ParticleDefinition* p, 
 		   G4double plab, 
@@ -205,7 +207,7 @@ private:
             DDSect2, DDSect3, ConstU, FmaxT;
 
   // momentum limits for different models of hadron/nucleon scatetring
-    G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
+  G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
 
   // parameterisation of scattering
 

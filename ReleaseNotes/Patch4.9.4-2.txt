@@ -1,0 +1,266 @@
+
+                 Geant4 9.4 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                              24 June 2011
+
+List of fixes included in this public patch since the public release 9.4.p01:
+
+  o Configuration:
+    -------------
+    + CMake scripts:
+      o Added G4VERBOSE compilation option as default, replicating behaviour
+        of the standard Makefiles. The user can disable the option to remove
+        the definition from the compile flags.
+      o Make installation of examples optional. Addresses problem report #1205.
+      o Added G4_STORE_TRAJECTORY to global compile definitions.
+        Addressing problem report #1208. As 'advanced' option users can choose
+        not to store trajectories; by default this option is set to ON,
+        replicateing behaviour of the standard Makefiles.
+      o Added .svn to list of patterns to exclude when installing directories.
+      o Abilitated support for RayTracerX visualization driver.
+    + Configure script: 
+      o Corrected settings of G4LIB_USE_DLL for the case of DLLs build on
+        Windows. Partially addressing problem report #1189.
+      o Fixed detection of Qt4 and forbid use of Qt3.
+    + Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
+      user's environment beforehand.
+    + Fixed limitation of string argument length in liblist.c program.
+      Addressing problem report #1033.
+
+  o Digits_Hits:
+    -----------
+    + Fix in G4PSCylinderSurfaceFlux and G4PSSPhareSurfaceFlux for the way
+      how flux is scored.
+    + Fixed scorers used for cylindrical mesh that require cubic volume
+      or surface area.
+    + Fixed scoring meshes for visualizing scores of very few entries.
+
+  o Error Propagation:
+    -----------------
+    + Backport a fix to G4ErrorSymMatrix to address issues on Windows.
+    + Fixed cases of variables set but not used.
+
+  o G3toG4:
+    ------
+    + Fixed signature in functions of  G4gs* classes to be 'G4String *'
+      (was G4String[]) as used in clparse. Fixes Windows linking problem.
+    + Fixed cases of variables set but not used.
+
+  o Geometry:
+    --------
+    + Fixed cases of variables set but not used.
+    + magnetic_field:
+      o Reordered data members to group invariants, field parameters, etc...
+    + management:
+      o Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
+        of local field manager. Avoid forcing propagation to all daughters when
+        a local field manager is set already for the new daughter.
+        Addressing problem report #1183.
+      o Use internal header for physical constants in meshdefs.h.
+    + navigation:
+      o Adjusted constructor in G4PropagatorInField to reorder data members.
+      o Some code cleanup.
+    + solids/Boolean:
+      o Added protection for potential cases of infinite loop in
+        DistanceToIn(p,v) and related error message with event abortion.
+    + solids/BREPS:
+      o Use G4Transform3D typef in signature, where applicable.
+    + solids/CSG:
+      o G4Tubs: use safe formula for quadratic equation solution, to better
+        handle numerical errors.
+      o G4Torus: use relative radial tolerances to avoid loss of precision
+        issues for shapes of big dimensions. Addresses problem report #1175.
+      o Added protection for potential negative argument to sqrt() in
+        CalculateExtent() for G4Orb, G4Cons and G4Sphere.
+        Made radial tolerance a local constants in G4Orb and G4Sphere.
+    + solids/specific:
+      o G4ExtrudedSolid: fix in Inside(p) for false overlap reporting.
+        Addressing problem report #1211.
+      o Use internal typedefs for CLHEP types, where applicable.
+
+  o Global:
+    ------
+    + Fixed internal copy constructor in G4PhysicsVector.
+    + Added G4 internal types to CLHEP classes.
+    + Use G4UniformRand() in G4Poisson.
+    + Changed date for patch-02 to release 9.4.
+
+  o Graphical Representations:
+    -------------------------
+    + Fixed more minor Coverity reports.
+
+  o Interfaces:
+    ----------
+    + Fix in G4VBasicShell::ApplyShellCommand() for substring exact
+      comparisons; addressing problem report #1180.
+    + Removed obsolete Qt3 code and avoid inclusion of OGL flags in
+      compilation.
+
+  o Particles:
+    ---------
+    + Fixed energy of proton and neutrino in G4NeutronBetaDecayChannel.
+    + Modified PDGCodeChecker to allow setting of PDG code for neutron balls.
+    + Fix in G4ParticleDefinition::SetApplyCutsFlag() to get rid of
+      unnecessary warning messages for proton.
+    + Fixed Coverity reports, and cases of variables set but not used.
+
+  o Persistency:
+    -----------
+    + G4GDMLWriteMaterials: avoid dereferencing of null pointer in
+      PropertyWrite() for materials without property assigned; issue a
+      warning message. Addressing problem report #1214.
+    + Use internal typedefs for CLHEP types, where applicable.
+    + Fixed cases of variables set but not used.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Adjoint:
+      o Fixed cases of variables set but not used.
+    + Polarisation:
+      o Safer computation of a normal in G4PolarizationHelper.
+      o G4ePolarizedIonisation: cleared use of obsolete MinCutEnergy() method.
+      o Fixed cases of variables set but not used.
+    + Standard:
+      o G4IonFluctuation: replaced Gauss sampling by Gamma function sampling
+        for large step; important for stable sampling of struggling of range
+        and energy loss of low-energy ions.
+      o G4GoudsmitSaundersonMscModel: fixed computation of mean energy at 
+        a step for large steps; fixed computation of mean scattering angle.
+    + Utils:
+      o G4EmModelManager, G4EmCalculator: changed smoothing function
+        between two models; effect is seen for protons in non-NIST water.
+      o G4VEnergyLossProcess: start cross-section table from energy threshold
+        for given cut value, so lowest cross-section is zero only for the 
+        first element of the table. Number of bins per decade is not changed,
+        total number of bins is reduced. The fix improves the Spline
+        interpolation of the cross-section.
+      o G4VEmModel: use linear interpolation for G4EmElementSelectors to avoid
+        numerical imprecision for small number of bins (increase number of
+        bins will require extra memory).
+    + Xrays:
+      o Fixed Coverity reports.
+      o Fixed cases of variables set but not used.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4TripathiLightCrossSection: return 0 cross-section in method
+        GetZandACrossSection(), when E_cm <= DBL_MIN.
+        Addressing problem report #1174.
+    + models/cascade:
+      o G4InuclNuclei: removed prefatory message about PDGencoding.
+      o G4ElementaryParticleCollider: added protection in sampleCMcosFor2to2()
+        to avoid case of divide-by-zero.
+    + models/CHIPS:
+      o Fixed case of double-delete in G4QFragmentation::Breeder().
+        Addresses problem report #1179.
+    + models/high_energy:
+      o Fixed cases of variables set but not used.
+    + models/im_r_matrix:
+      o Fixed cases of variable set but not used in G4XPDGElastic.
+    + models/low_energy:
+      o Fixed case of variable set but not used in G4LCapture.
+    + models/neutron_hp:
+      o Added "Fermium" in G4NeutronHPNames and fixed bug in "Actinium".
+      o Bug fix in G4NeutronHPDiscreteTwoBody for MF=6, LAW=2 case.
+      o Added message where environment variable "G4NEUTRONHP_NEGLECT_DOPPLER"
+       is activated.
+    + models/pre_equilibrium:
+      o Fixed cases of variables set but not used.
+    + models/radioactive_decay:
+      o Fixed memory leak in G4RadioactiveDecay::AddDecayRateTable().
+      o Fixed array overrun in G4RadioactiveDecay::SetSourceTimeProfile() and
+        SetDecayBias(). Avoid possible dereferencing of zero pointer in
+        DecayIt() when in branching-ratio bias mode, fill 'tempprods' as if
+        no biasing is active.
+      o Removed unnecessary warning and added a check for maximum shell number,
+        in G4NuclearDecayChannel. 
+      o Initialize static data in G4RadioactiveDecayRate constructor.
+        and array data in G4RadioactiveDecay::LoadDecayTable().
+      o Fixed cases of variables set but not used.
+    + stopping:
+      o Fixed cases of variables set but not used.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Fixed defects reported by Coverity.
+      o Fixed cases of variables set but not used.
+    + Management:
+      o Fixed cases of variables set but not used.
+      o Fixed defects reported by Coverity.
+    + Scoring:
+      o Fix in G4ScoreSplittingProcess::PostStepDoIt() to not consider steps
+        if the voxel boundary is not skipped. Addressing problem report #1209.
+      o Added IsAtRestRequired() method to G4ParallelWorldScoringProcess.
+    + Transportation:
+      o Fix G4Transportation::AlongStepDoIt(): use only initial velocity to
+        update time. Results in one less sqrt() per tracking step.
+
+  o Run:
+    ---
+    + Ensure that a ScoreSplittingProcess is added only once in
+      SetScoreSplitter() of G4RunManagerKernel. Addresses problem report #1218.
+
+  o Track:
+    -----
+    + Set maxT for Velocity Table to 1000. Added SetVelocityTableProperties().
+      Addresses problem report #1185.
+    + Fixed some problems reported by Coverity.
+
+  o Tracking:
+    --------
+    + Fixed setting of 'fWorldBoundary' step status in G4SteppingManager
+      InvokePostStepDoItProcs() and DefinePhysicalStepLength(). Flag was not
+      set and not used.
+
+  o Visualization:
+    -------------
+    + HepRep:
+      o Use internal G4RotationMatrix typedef in G4HepRepFileSceneHandler
+        instead of native CLHEP type.
+      o Correction in GNUmakefile.
+    + OpenGL:
+      o Re-instated cutaways in intersection mode in G4OpenGLViewer, which
+        was apparently commented out accidentally in 9.4.
+    + RayTracer:
+      o Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
+        warning messages for each pixel when endOfEventAction() is "refresh".
+      o Fixed some Coverity warnings; fixed CMake scripts.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/eventgenerator/HepMC/MCTruth:
+      o Fixed compilation errors on MacOS for use of std::fmod()
+        in MCTruthManager.
+    + extended/hadronic/Hadr01:
+      o Fixed typo in printout.
+    + extended/medical/DICOM:
+      o Corrected name for sensitive detector to be consistently
+        named as "phantomSD" in DicomRunAction.
+        Addressing problem report #1210.
+      o Corrected axes slicing hint in nested-parameterisation.
+      o Removed redundant headers and fixed minor bugs in DicomHandler.
+    + extended/parallel/ParN02, ParN04:
+      o Synchronised with current version of novice example N02.
+        Includes fixes and missing migrations...
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.4 or 9.4.p01.
+  o  Technical notes distributed for release 9.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.4.p02 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

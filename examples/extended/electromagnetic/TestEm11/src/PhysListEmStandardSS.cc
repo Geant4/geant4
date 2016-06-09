@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.1 2010/05/25 21:03:44 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PhysListEmStandardSS.cc,v 1.2 2011-01-05 19:08:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -50,6 +50,8 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,6 +121,9 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
     }
   }
+  // scattering
+  G4EmProcessOptions emOptions;
+  emOptions.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

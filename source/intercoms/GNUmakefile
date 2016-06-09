@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004/06/01 15:36:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2004-06-01 15:36:48 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for intercoms library.  Gabriele Cosmo, 11/11/96.
 # -------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.20 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.19 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,7 +33,7 @@
 //#define DEBUGINCL 1
 
 #include "G4InclAblaCascadeInterface.hh"
-#include "G4FermiBreakUp.hh"
+#include "G4ExcitationHandler.hh"
 #include "math.h"
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
@@ -96,8 +96,9 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   G4DynamicParticle *cascadeParticle = 0;
   G4ParticleDefinition *aParticleDefinition = 0;
   
-  G4FermiBreakUp *fermiBreakUp = new G4FermiBreakUp();
-  G4FragmentVector *theFermiBreakupResult = 0;
+  G4ExcitationHandler *fermiBreakUp = new G4ExcitationHandler;
+  fermiBreakUp->SetMaxAandZForFermiBreakUp(17, 9);
+  G4ReactionProductVector *theFermiBreakupResult = 0;
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
   // INCL assumes the projectile particle is going in the direction of
@@ -383,7 +384,7 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       G4LorentzRotation toFragmentZ;
       toFragmentZ.rotateZ(-p4.theta());
       toFragmentZ.rotateY(-p4.phi());
-      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
+      //      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
       //      p4 *= toFragmentZ;
 
       G4LorentzVector p4rest = p4;
@@ -402,16 +403,9 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       G4Fragment theCascadeRemnant(G4int(varntp->massini), G4int(varntp->mzini), p4rest);
       theFermiBreakupResult = fermiBreakUp->BreakItUp(theCascadeRemnant);
       if(theFermiBreakupResult != 0) {
-      G4FragmentVector::iterator fragment;
+      G4ReactionProductVector::iterator fragment;
       for(fragment = theFermiBreakupResult->begin(); fragment != theFermiBreakupResult->end(); fragment++) {
-	G4ParticleDefinition *theFragmentDefinition = 0;
-	if((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 0) { // Neutron
-	  theFragmentDefinition = G4Neutron::NeutronDefinition();
-	} else if ((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 1) {
-	  theFragmentDefinition = G4Proton::ProtonDefinition();
-	} else {
-	  theFragmentDefinition = theTableOfParticles->GetIon((*fragment)->GetZ_asInt(), (*fragment)->GetA_asInt(), (*fragment)->GetExcitationEnergy());
-	}
+	G4ParticleDefinition *theFragmentDefinition = (*fragment)->GetDefinition();
 
 	if(theFragmentDefinition != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(theFragmentDefinition, (*fragment)->GetMomentum());
@@ -432,9 +426,6 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 	} else {
 	  G4cout <<"G4InclAblaCascadeInterface: Error. Fragment produced by Fermi break-up does not exist." << G4endl;
 	  G4cout <<"Resulting fragment: " << G4endl;
-	  G4cout <<" Z = " << (*fragment)->GetZ_asInt() << G4endl;
-	  G4cout <<" A = " << (*fragment)->GetA_asInt() << G4endl;
-	  G4cout <<" Excitation : " << (*fragment)->GetExcitationEnergy() / MeV << " MeV" << G4endl;
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }

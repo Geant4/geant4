@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLevel.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPLevel.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLevel_h
 #define G4NeutronHPLevel_h 1

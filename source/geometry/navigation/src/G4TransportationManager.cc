@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.16 2010/07/13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TransportationManager.cc,v 1.16 2010-07-13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4TransportationManager 
@@ -57,10 +57,8 @@ G4TransportationManager::G4TransportationManager()
 { 
   if (fTransportationManager)
   {
-    G4cerr << "Only ONE instance of G4TransportationManager is allowed!"
-           << G4endl;
     G4Exception("G4TransportationManager::G4TransportationManager()",
-                "InvalidSetup", FatalException,
+                "GeomNav0002", FatalException,
                 "Only ONE instance of G4TransportationManager is allowed!");
   }
 
@@ -198,7 +196,7 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
          = "World volume with name -" + worldName
          + "- does not exist. Create it first by GetParallelWorld() method!";      
       G4Exception("G4TransportationManager::GetNavigator(name)",
-                  "InvalidSetup", FatalException, message);
+                  "GeomNav0002", FatalException, message);
    }
 
    return aNavigator;
@@ -233,7 +231,7 @@ G4Navigator* G4TransportationManager::GetNavigator( G4VPhysicalVolume* aWorld )
          = "World volume with name -" + aWorld->GetName()
          + "- does not exist. Create it first by GetParallelWorld() method!";
       G4Exception("G4TransportationManager::GetNavigator(pointer)",
-                  "InvalidSetup", FatalException, message);
+                  "GeomNav0002", FatalException, message);
    }
 
    return aNavigator;
@@ -252,7 +250,7 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
    if (aNavigator == fNavigators[0])
    {
       G4Exception("G4TransportationManager::DeRegisterNavigator()",
-                  "InvalidCall", FatalException,
+                  "GeomNav0003", FatalException,
                   "The navigator for tracking CANNOT be deregistered!");
    }
    std::vector<G4Navigator*>::iterator pNav =
@@ -273,7 +271,7 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
          = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
          + "- not found in memory!";      
       G4Exception("G4TransportationManager::DeRegisterNavigator()",
-                  "NoEffect", JustWarning, message);
+                  "GeomNav1002", JustWarning, message);
    }
 }
 
@@ -296,7 +294,7 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
          = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
          + "- not found in memory!";      
       G4Exception("G4TransportationManager::ActivateNavigator()",
-                  "NoEffect", JustWarning, message);
+                  "GeomNav1002", JustWarning, message);
       return -1;
    }
 
@@ -335,7 +333,7 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
          = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
          + "- not found in memory!";
       G4Exception("G4TransportationManager::DeActivateNavigator()",
-                  "NoEffect", JustWarning, message);
+                  "GeomNav1002", JustWarning, message);
    }
 
    std::vector<G4Navigator*>::iterator pActiveNav =
@@ -427,6 +425,6 @@ void G4TransportationManager::DeRegisterWorld( G4VPhysicalVolume* aWorld )
      G4String message
        = "World volume -" + aWorld->GetName() + "- not found in memory!";      
      G4Exception("G4TransportationManager::DeRegisterWorld()",
-                 "InvalidSetup", FatalException, message);
+                 "GeomNav1002", JustWarning, message);
    }
 }

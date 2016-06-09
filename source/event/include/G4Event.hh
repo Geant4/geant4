@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.19 2010/10/27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Event.hh,v 1.19 2010-10-27 07:21:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4Event_h
@@ -185,13 +185,18 @@ class G4Event
       inline const G4String& GetRandomNumberStatus() const 
       {
         if(!validRandomNumberStatus)
-        { G4Exception("Random number status is not available for this event."); }
+        { G4Exception(
+              "G4Event::GetRandomNumberStatus","Event0701",JustWarning,
+              "Random number status is not available for this event."); }
         return *randomNumberStatus;
       }
       inline const G4String& GetRandomNumberStatusForProcessing() const 
       {
         if(!validRandomNumberStatusForProcessing)
-        { G4Exception("Random number status is not available for this event."); }
+        { G4Exception(
+              "G4Event::GetRandomNumberStatusForProcessing","Event0702",
+              JustWarning,
+              "Random number status is not available for this event."); }
         return *randomNumberStatusForProcessing;
       }
 };

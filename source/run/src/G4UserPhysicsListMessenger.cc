@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.30 2009/10/20 07:07:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.30 2009-10-20 07:07:51 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -36,10 +36,13 @@
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
+//        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
 // ------------------------------------------------------------
+
 
 #include "G4UserPhysicsListMessenger.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -73,36 +76,33 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   setCutCmd->SetGuidance("Set default cut value ");
   setCutCmd->SetParameterName("cut",false);
   setCutCmd->SetDefaultValue(1.0);
-  setCutCmd->SetRange("cut >0.0");
+  setCutCmd->SetRange("cut >=0.0");
   setCutCmd->SetDefaultUnit("mm");
   setCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  // /run/particle/setCut command
-  setPCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
-  setPCutCmd->SetGuidance("Set default cut value ");
-  setPCutCmd->SetGuidance("This command is equivallent to /run/setCut command.");
-  setPCutCmd->SetGuidance("This command is kept for backward compatibility.");
-  setPCutCmd->SetParameterName("cut",false);
-  setPCutCmd->SetDefaultValue(1.0);
-  setPCutCmd->SetRange("cut >0.0");
-  setPCutCmd->SetDefaultUnit("mm");
-  setPCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   // /run/setCutForAGivenParticle command
   setCutForAGivenParticleCmd = new G4UIcommand("/run/setCutForAGivenParticle",this) ;
-  setCutForAGivenParticleCmd->SetGuidance("Set a cut value to a specific particle") ;
+  setCutForAGivenParticleCmd->SetGuidance("Set a cut value to a specific particle ") ;
   setCutForAGivenParticleCmd->SetGuidance("Usage: /run/setCutForAGivenParticle  gamma  1. mm") ;
   param = new G4UIparameter("particleName",'s',false) ;
   param->SetParameterCandidates("e- e+ gamma proton");
   setCutForAGivenParticleCmd->SetParameter(param) ;
   param = new G4UIparameter("cut",'d',false) ;
   param->SetDefaultValue("1.") ;
-  param->SetParameterRange("cut>0.0") ;
+  param->SetParameterRange("cut>=0.0") ;
   setCutForAGivenParticleCmd->SetParameter(param) ;
   param = new G4UIparameter("unit",'s',false) ;
   param->SetDefaultValue("mm") ;
   setCutForAGivenParticleCmd->SetParameter(param) ;
   setCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  // /run/getCutForAGivenParticle command
+  getCutForAGivenParticleCmd = new G4UIcmdWithAString("/run/getCutForAGivenParticle",this) ;
+  getCutForAGivenParticleCmd->SetGuidance("Get a cut value to a specific particle ") ;
+  getCutForAGivenParticleCmd->SetGuidance("Usage: /run/getCutForAGivenParticle  gamma ") ;
+  getCutForAGivenParticleCmd->SetParameterName("particleName",false,false) ;
+  getCutForAGivenParticleCmd->SetCandidates("e- e+ gamma proton");
+  getCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   // /run/setCutForRegion command
   setCutRCmd = new G4UIcommand("/run/setCutForRegion",this);
@@ -110,7 +110,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param = new G4UIparameter("Region",'s',false);
   setCutRCmd->SetParameter(param);
   param = new G4UIparameter("cut",'d',false);
-  param->SetParameterRange("cut >0.0");
+  param->SetParameterRange("cut >=0.0");
   setCutRCmd->SetParameter(param);
   param = new G4UIparameter("Unit",'s',true);
   param->SetDefaultValue("mm");
@@ -195,15 +195,22 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetGuidance("current list if you have already issued 'run/beamOn' at least once.");
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");
-  dumpCutValuesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  dumpCutValuesCmd->AvailableForStates(G4State_Idle);
+
+  //  /run/particle/dumpCutValues command
+  dumpOrdParamCmd = new G4UIcmdWithAnInteger("/run/particle/dumpOrderingParam",this);
+  dumpOrdParamCmd->SetGuidance("Dump a list of ordering parameter ");
+  dumpOrdParamCmd->SetParameterName("subtype",true);
+  dumpOrdParamCmd->SetDefaultValue(-1);
+  dumpOrdParamCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
-  delete setPCutCmd; 
   delete setCutCmd; 
   delete setCutRCmd;
   delete setCutForAGivenParticleCmd;
+  delete getCutForAGivenParticleCmd;
   delete verboseCmd;
   delete dumpListCmd;
   delete addProcManCmd;
@@ -213,6 +220,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete asciiCmd;
   delete applyCutsCmd;
   delete dumpCutValuesCmd;
+  delete dumpOrdParamCmd;
   delete theDirectory;
 }
 
@@ -221,13 +229,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
-    thePhysicsList->SetCutsWithDefault();
-
-  } else if( command==setPCutCmd ){
-    G4cout << "Please use /run/setCut command instead. This command will be removed" << G4endl; 
-    G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
-    thePhysicsList->SetDefaultCutValue(newCut);
-    thePhysicsList->SetCutsWithDefault();
+    thePhysicsList->SetCuts();
 
   } else if( command==setCutForAGivenParticleCmd ){
     G4String particleName, unit ; G4double cut ;
@@ -235,12 +237,19 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     str >> particleName >> cut >> unit ;
     thePhysicsList->SetCutValue(cut*G4UIcommand::ValueOf(unit), particleName) ; 
 
+   } else if( command==getCutForAGivenParticleCmd ){
+    G4cout << thePhysicsList->GetCutValue(newValue)/mm <<"[mm]" << G4endl ;
+
   } else if( command==setCutRCmd ){
     std::istringstream is(newValue);
     char regName[50];
-    G4double cVal;
+    G4double cVal = -1.0;
     char uniName[10];
     is >> regName >> cVal >> uniName;
+    if (is.fail()) {
+      G4cout << "illegal arguments : try again " << G4endl;
+      return;
+    }
     G4String regN = regName;
     G4String uniN = uniName;
     thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniN)),regN);
@@ -250,6 +259,10 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   } else if( command==dumpListCmd ){
     thePhysicsList->DumpList();
+
+  } else if( command==dumpOrdParamCmd ){
+    G4int stype = dumpOrdParamCmd->GetNewIntValue(newValue);
+    G4PhysicsListHelper::GetPhysicsListHelper()->DumpOrdingParameterTable(stype);
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);

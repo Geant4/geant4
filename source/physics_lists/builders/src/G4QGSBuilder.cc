@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBuilder.cc,v 1.3 2010/06/19 11:12:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QGSBuilder.cc,v 1.3 2010-06-19 11:12:58 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,12 +53,11 @@
 
 G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel* p,
 			   G4bool quasiel, G4bool diff) 
-  : G4VHadronModelBuilder(aName), thePreCompound(p), 
+  : G4VHadronModelBuilder(aName), 
+    theQGStringModel(0), theQGStringDecay(0), 
+    theProjectileDiffraction(0),thePreCompound(p),theQGSM(0), 
     quasielFlag(quasiel), diffFlag(diff)
-{
-  theProjectileDiffraction = 0;
-  theQuasiElastic = 0;
-}
+{}
 
 G4QGSBuilder::~G4QGSBuilder() 
 {

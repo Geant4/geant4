@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.41 2010/12/15 07:41:15 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.41 2010-12-15 07:41:15 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
@@ -42,6 +42,8 @@
 // 20100724  M. Kelsey -- Replace std::vector<> D with trivial D[3] array.
 // 20100914  M. Kelsey -- Migrate to integer A and Z: this involves replacing
 //		a number of G4double terms with G4int, with consequent casts.
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -73,10 +75,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  if (verboseLevel > 2) {
-    G4cout << " evaporating target: " << G4endl;
-    target->printParticle();
-  }
+  if (verboseLevel > 2) G4cout << " evaporating target:\n" << *target << G4endl;
   
   const G4int a_cut = 5;
   const G4int z_cut = 3;
@@ -311,7 +310,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      EPART /= GeV; 		// From MeV to GeV
 		      
 		      G4InuclElementaryParticle particle(ptype);
-		      particle.setModel(5);
+		      particle.setModel(G4InuclParticle::NonEquilib);
 		      
 		      // generate particle momentum
 		      G4double mass = particle.getMass();
@@ -365,11 +364,10 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      
 		      particle.setMomentum(mom);
 		      output.addOutgoingParticle(particle);
-		      if (verboseLevel > 3) particle.printParticle();
-		      
 		      ppout += mom;
 		      if (verboseLevel > 3) {
-			G4cout << " ppout px " << ppout.px() << " py " << ppout.py()
+			G4cout << particle << G4endl
+			       << " ppout px " << ppout.px() << " py " << ppout.py()
 			       << " pz " << ppout.pz() << " E " << ppout.e() << G4endl;
 		      }
 
@@ -426,12 +424,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     output.addOutgoingNucleus(*nuclei_target);
   } else {
     G4LorentzVector pnuc = pin - ppout;
-    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 5);
+    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::NonEquilib);
     
-    if (verboseLevel > 3) {
-      G4cout << " remaining nucleus " << G4endl;
-      nuclei.printParticle();
-    }
+    if (verboseLevel > 3) G4cout << " remaining nucleus\n" << nuclei << G4endl;
     output.addOutgoingNucleus(nuclei);
   }
 

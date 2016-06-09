@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicatedSlice.cc,v 1.2 2010/11/10 09:16:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ReplicatedSlice.cc,v 1.2 2010-11-10 09:16:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
@@ -140,17 +140,19 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
 {
   if(!pMotherLogical)
   {
-    G4String message_1 = "NULL pointer specified as mother! Volume: "
-                       + GetName();
-    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "InvalidSetup",
-                FatalException, message_1);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother! Volume: " << GetName();
+    G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
+                FatalException, message);
   }
   if(pLogical == pMotherLogical)
   {
-    G4String message_2 = "Cannot place a volume inside itself! Volume: "
-                       + GetName();
-    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "InvalidSetup",
-                FatalException, message_2);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Cannot place a volume inside itself! Volume: " << GetName();
+    G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
+                FatalException, message);
   }
 
   //----- Check that mother solid is of the same type as
@@ -161,11 +163,14 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   G4String dsolType = pLogical->GetSolid()->GetEntityType();
   if( msolType != dsolType && ( msolType != "G4Trd" || dsolType != "G4Trap" ) )
   {
-    G4String message = "Incorrect solid type for division of volume "
-                     + GetName() + "    It is: " + msolType
-                     + ", while it should be: " + dsolType;
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Incorrect solid type for division of volume: "
+            << GetName() << G4endl
+            << "    It is: " << msolType
+            << ", while it should be: " << dsolType;
     G4Exception("G4ReplicatedSlice::CheckAndSetParameters()",
-                "IllegalConstruct", FatalException, message );
+                "GeomDiv0002", FatalException, message);
   }
 
   pMotherLogical->AddDaughter(this);
@@ -183,7 +188,7 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   }
   if (fnReplicas < 1 )
   {
-    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "IllegalConstruct",
+    G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
                 FatalException, "Illegal number of replicas!");
   }
   if( divType != DivNDIV)
@@ -196,12 +201,12 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   }
   if( fwidth < 0 )
   {
-    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "IllegalConstruct",
+    G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
                 FatalException, "Width must be positive!");
   }
   if( fwidth < 2.*half_gap )
   {
-    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "IllegalConstruct",
+    G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
                 FatalException, "Half_gap is too large!");
   }
   
@@ -228,7 +233,7 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
     case kZAxis:
       break;
     default:
-      G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "IllegalConstruct",
+      G4Exception("G4ReplicatedSlice::CheckAndSetParameters()", "GeomDiv0002",
                   FatalException, "Unknown axis of replication.");
       break;
   }
@@ -479,11 +484,10 @@ void G4ReplicatedSlice::SetParameterisation( G4LogicalVolume* motherLogical,
 //  }
   else
   {
-    G4cerr << "ERROR - G4ReplicatedSlice::SetParameterisation()" << G4endl
-           << "        Divisions for " << mSolidType
-           << " not implemented." << G4endl;
-    G4String message = "Solid type not supported: " + mSolidType;
-    G4Exception("G4ReplicatedSlice::SetParameterisation()", "IllegalConstruct",
+    std::ostringstream message;
+    message << "Solid type not supported: " << mSolidType << "." << G4endl
+            << "Divisions for " << mSolidType << " not implemented.";
+    G4Exception("G4ReplicatedSlice::SetParameterisation()", "GeomDiv0001",
                 FatalException, message);
   }
 
@@ -518,7 +522,7 @@ void G4ReplicatedSlice::ErrorInAxis( EAxis axis, G4VSolid* solid )
     default:
       break;
   }
-  G4Exception("G4ReplicatedSlice::ErrorInAxis()", "IllegalConstruct",
+  G4Exception("G4ReplicatedSlice::ErrorInAxis()", "GeomDiv0002",
               FatalException, error);
 }
 

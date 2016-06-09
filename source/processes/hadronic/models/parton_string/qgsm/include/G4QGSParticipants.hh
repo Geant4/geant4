@@ -35,6 +35,8 @@
 #include "G4SingleDiffractiveExcitation.hh"
 #include "G4PartonPair.hh" 
 #include "G4QGSMSplitableHadron.hh" 
+#include "G4V3DNucleus.hh"
+
 
 class G4QGSParticipants : public G4VParticipants
 {

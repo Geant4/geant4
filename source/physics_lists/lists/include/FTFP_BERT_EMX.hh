@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_EMX.hh,v 1.1 2009/05/11 11:11:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: FTFP_BERT_EMX.hh,v 1.1 2009-05-11 11:11:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

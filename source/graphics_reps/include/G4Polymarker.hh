@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.hh,v 1.11 2006/06/29 19:05:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Polymarker.hh,v 1.11 2006-06-29 19:05:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  November 1996
@@ -48,9 +48,10 @@ public: // With description
   friend std::ostream& operator << (std::ostream& os, const G4Polymarker& marker);
   enum MarkerType {dots, circles, squares};
   G4Polymarker ();
+  G4Polymarker (const G4VMarker&);
   virtual ~G4Polymarker ();
   MarkerType GetMarkerType () const;
-  void SetMarkerType (MarkerType type);
+  void SetMarkerType (MarkerType);
 private:
   MarkerType fMarkerType;
 };

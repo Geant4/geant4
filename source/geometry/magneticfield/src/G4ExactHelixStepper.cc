@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.11 2010/07/21 13:46:01 tnikitin Exp $ 
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExactHelixStepper.cc,v 1.11 2010-07-21 13:46:01 tnikitin Exp $ 
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h
@@ -88,7 +88,7 @@ G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
   AdvanceHelix(yIn, Bfld, h, yOut);
 
   G4Exception("G4ExactHelixStepper::DumbStepper",
-              "EHS:NoDumbStepper", FatalException,
+              "GeomField0002", FatalException,
               "Should not be called. Stepper must do all the work." ); 
 }  
 

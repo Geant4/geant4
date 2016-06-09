@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc,v 1.8 2010/09/27 17:12:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicInteraction.cc,v 1.8 2010-09-27 17:12:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch
@@ -36,6 +36,8 @@
 #include "G4HadronicInteraction.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicException.hh"
+#include <iostream>
+
 
 G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
   verboseLevel(0), theMinEnergy(0.0), theMaxEnergy(25.0*GeV), 
@@ -209,28 +211,35 @@ void G4HadronicInteraction::DeActivateFor( const G4Element *anElement )
   theBlockedListElements.push_back(anElement);
 }
 
-G4bool G4HadronicInteraction::IsBlocked( const G4Material *aMaterial ) const
+
+G4bool G4HadronicInteraction::IsBlocked(const G4Material* aMaterial) const
 {
-  for( size_t i=0; i<theBlockedList.size(); ++i )
-    {
-      if( aMaterial == theBlockedList[i] )
-	{
-	  return true;
-	}
-    }
+  for (size_t i=0; i<theBlockedList.size(); ++i) {
+    if (aMaterial == theBlockedList[i]) return true;
+  }
   return false;
 }
- 
-G4bool G4HadronicInteraction::IsBlocked( const G4Element *anElement ) const
+
+
+G4bool G4HadronicInteraction::IsBlocked(const G4Element* anElement) const
 {
-  for( size_t i=0; i<theBlockedListElements.size(); ++i )
-    {
-      if( anElement == theBlockedListElements[i] )
-	{
-	  return true;
-	}
-    }
+  for (size_t i=0; i<theBlockedListElements.size(); ++i) {
+    if (anElement == theBlockedListElements[i]) return true;
+  }
   return false;
+}
+
+
+std::pair<G4double, G4double>
+G4HadronicInteraction::GetEnergyMomentumCheckLevels() const
+{
+  return epCheckLevels;
+}
+
+
+void G4HadronicInteraction::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this model has not been written yet.\n";
 }
 
 /*

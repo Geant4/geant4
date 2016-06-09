@@ -59,6 +59,8 @@
 //
 // 26 Dec 2006, D. Wright - added isotope dependence
 //
+// 19 Aug 2011 V.Ivanchenko move to new design and make x-section per element
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // Class Description
@@ -75,39 +77,36 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4WilsonRadius.hh"
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 class G4TripathiLightCrossSection : public G4VCrossSectionDataSet
 {
-  public:
-    G4TripathiLightCrossSection();
-    ~G4TripathiLightCrossSection();
-    virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget);
+public:
 
-    virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
-                                   G4int ZZ, G4int AA);
+  G4TripathiLightCrossSection();
+  ~G4TripathiLightCrossSection();
 
-    virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget, G4double theTemperature);
+  virtual G4bool IsElementApplicable(const G4DynamicParticle* theProjectile,
+				     G4int Z, const G4Material*);
 
-    virtual 
-    G4double GetZandACrossSection(const G4DynamicParticle* theProjectile,
-                                  G4int ZZ, G4int AA, 
-                                  G4double theTemperature);
+  virtual 
+  G4double GetElementCrossSection(const G4DynamicParticle* theProjectile,
+				  G4int Z, const G4Material* mat = 0);
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&)
-    {}
+  inline void SetLowEnergyCheck(G4bool);
 
-    virtual void DumpPhysicsTable(const G4ParticleDefinition&)
-    {G4cout << "G4TripathiLightCrossSection: uses formula"<<G4endl;}
-    void SetLowEnergyCheck(G4bool);
+private:
 
-  private:
-    G4WilsonRadius *theWilsonRadius;
-    G4double       r_0;
-    G4double       third;
-    G4bool         lowEnergyCheck;
+  G4WilsonRadius *theWilsonRadius;
+  G4double       r_0;
+  G4bool         lowEnergyCheck;
 };
+
+inline void 
+G4TripathiLightCrossSection::SetLowEnergyCheck (G4bool aLowEnergyCheck)
+{
+  lowEnergyCheck = aLowEnergyCheck;
+}
 
 #endif

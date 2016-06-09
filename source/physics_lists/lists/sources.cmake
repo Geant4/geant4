@@ -11,13 +11,14 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010/11/29 17:29:30 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:29:30 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${EXPAT_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
@@ -42,6 +43,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/highenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/include)
@@ -72,7 +74,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/isotope_production/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -137,6 +143,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.hh
         HadronPhysicsQGSP_FTFP_BERT.hh
         HadronPhysicsQGSP.hh
+	HadronPhysicsQGSP_INCLXX.hh
         HadronPhysicsQGSP_INCL_ABLA.hh
         HadronPhysicsShielding.hh
         LBE.hh
@@ -178,6 +185,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_FTFP_BERT.icc
         QGSP.hh
         QGSP.icc
+	QGSP_INCLXX.hh
+	QGSP_INCLXX.icc
         QGSP_INCL_ABLA.hh
         QGSP_INCL_ABLA.icc
         QGSP_QEL.hh
@@ -185,6 +194,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         Shielding.hh
         Shielding.icc
         SpecialCuts.hh
+	G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
         G4HadronInelasticQLHEP.cc
@@ -209,17 +219,20 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_FTFP_BERT.cc
         HadronPhysicsQGSP_INCL_ABLA.cc
+        HadronPhysicsQGSP_INCLXX.cc
         HadronPhysicsShielding.cc
         MaxTimeCuts.cc
         MinEkineCuts.cc
         QBBC.cc
         SpecialCuts.cc
+	G4PhysListUtil.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
         G4cuts
         G4decay
         G4digits
+        G4emdna
         G4emhighenergy
         G4emlowenergy
         G4emstandard
@@ -228,6 +241,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4geometrymng
         G4globman
         G4had_im_r_matrix
+        G4had_lend
         G4had_mod_man
         G4had_mod_util
         G4had_muon_nuclear

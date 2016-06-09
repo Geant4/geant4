@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTopLevelShell.hh,v 1.7 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmTopLevelShell.hh,v 1.7 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //Top level shell class

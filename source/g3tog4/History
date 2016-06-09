@@ -1,7 +1,36 @@
-$Id: History,v 1.63 2008/11/17 08:34:11 gcosmo Exp $
-
+$Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
+--------------------------------------------------------------------
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V09-04-07 22-Nov-2011 G.Cosmo
+- Fixed compilation warnings in build DLLs on Windows when using
+  internal CLHEP.
+
+g3tog4-V09-04-06 16-Nov-2011 B.Morgan
+- Added G3toG4Defs.hh to sources.cmake
+
+g3tog4-V09-04-05 16-Nov-2011 G.Cosmo
+- Fixed signature in PG4gsdet() for unresolved symbol in building DLLs
+  on Windows.
+
+g3tog4-V09-04-04 15-Nov-2011 G.Cosmo
+- Added export flag for extern symbols to allow for generation of DLLs
+  on Windows with CMake.
+
+g3tog4-V09-04-03 11-Nov-2011 G.Folger
+- make safe to compile with -j and drop compilation of fortran
+
+g3tog4-V09-04-02 06-Jul-2011 G.Cosmo
+- Fixed Coverity defects.
+- Use canonic indexed form for G4Exception.
+
+g3tog4-V09-04-01 13-May-2011 G.Cosmo
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+g3tog4-V09-04-00 13-Apr-2011 G.Folger
+- Fixed signature for PG4gsxyzin all G4gsxyz.cc to be G4String *,
+  was G4String[] as used in clparse.cc. Fixes Windows linking problem.
 
 g3tog4-V09-01-01 17-Nov-2008 G.Cosmo
 - Fixed compilation warning for gcc-4.3.X in clparse.cc .

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.42 2009/02/20 14:48:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MuBremsstrahlung.cc,v 1.42 2009-02-20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -120,13 +120,12 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
-    em->SetLowestKineticEnergy(lowestKinEnergy);
+    if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 
     G4VEmFluctuationModel* fm = 0;
-    em->SetLowEnergyLimit(MinKinEnergy());
-    em->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, em, fm);
+    EmModel()->SetLowEnergyLimit(MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(), fm);
   }
 }
 

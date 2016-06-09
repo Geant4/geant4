@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIparameter.cc,v 1.1 2006/08/08 05:20:57 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4UIparameter.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UIparameter.cc
 //

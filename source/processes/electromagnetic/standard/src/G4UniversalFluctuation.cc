@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.28 2010/10/26 10:06:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UniversalFluctuation.cc,v 1.28 2010-10-26 10:06:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -118,10 +118,10 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 						    G4double& length,
 						    G4double& meanLoss)
 {
-// Calculate actual loss from the mean loss.
-// The model used to get the fluctuations is essentially the same
-// as in Glandz in Geant3 (Cern program library W5013, phys332).
-// L. Urban et al. NIM A362, p.416 (1995) and Geant4 Physics Reference Manual
+  // Calculate actual loss from the mean loss.
+  // The model used to get the fluctuations is essentially the same
+  // as in Glandz in Geant3 (Cern program library W5013, phys332).
+  // L. Urban et al. NIM A362, p.416 (1995) and Geant4 Physics Reference Manual
 
   // shortcut for very very small loss (out of validity of the model)
   //
@@ -151,6 +151,22 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       electronDensity = material->GetElectronDensity();
       siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                                 * electronDensity * chargeSquare;
+
+      G4double sigb = siga/(meanLoss*meanLoss);
+      G4double lambda = 1.0/sigb;
+  
+      if (lambda >= 5.0) {
+
+	sigb = sqrt(sigb);
+	do {
+	  loss = G4RandGauss::shoot(1.0,sigb);
+	} while (0.0 > loss || loss > 2.0);
+      } else {
+
+	loss = CLHEP::RandGamma::shoot(lambda,lambda);
+      }
+      loss *= meanLoss;  
+      /*
       siga = sqrt(siga);
       G4double twomeanLoss = meanLoss + meanLoss;
       if (twomeanLoss < siga) {
@@ -164,6 +180,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
           loss = G4RandGauss::shoot(meanLoss,siga);
         } while (loss < 0. || loss > twomeanLoss);
       }
+      */
       return loss;
     }
   }
@@ -181,12 +198,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     e0 = material->GetIonisation()->GetEnergy0fluct();
     esmall = 0.5*sqrt(e0*ipotFluct);  
-    lastMaterial = material;
-   
+    lastMaterial = material;   
   }
 
   // very small step or low-density material
-  if(tmax <= e0) return meanLoss;
+  if(tmax <= e0) { return meanLoss; }
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
@@ -309,7 +325,7 @@ G4double G4UniversalFluctuation::Dispersion(
  				G4double& tmax,
 			        G4double& length)
 {
-  if(!particle) InitialiseMe(dp->GetDefinition());
+  if(!particle) { InitialiseMe(dp->GetDefinition()); }
 
   electronDensity = material->GetElectronDensity();
 

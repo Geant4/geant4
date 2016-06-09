@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.54 2009/02/26 16:29:08 gcosmo Exp $
+# $Id: common.gmk,v 1.54 2009-02-26 16:29:08 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -126,7 +126,7 @@ endif
 #
 # Installation of include files
 #
-installed_includes:=$(foreach file,$(wildcard include/*),$(shell test -f $(file) && echo $(file)))
+installed_includes:=$(foreach file,$(wildcard include/*),$(shell test -e $(file) && echo $(file)))
 installed_includes:=$(patsubst include/%,$(G4INCLUDE)/%,$(installed_includes))
 
 # NOTE: the double colon rule allows to add other rules for the same target
@@ -137,7 +137,7 @@ includes:: $(installed_includes)
 #           target(s): target-pattern : dep-pattern
 #
 $(installed_includes): $(G4INCLUDE)/% : include/%
-	@cp -p $< $@
+	@cp -rp $< $@
 
 #
 # Clean up libraries

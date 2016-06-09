@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QBesIKJY.cc,v 1.4 2009/11/10 17:13:46 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QBesIKJY.cc,v 1.4 2009-11-10 17:13:46 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QBesIKJY ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -321,7 +321,7 @@ G4double G4QBesIKJY::operator() (G4double X) const
     else                             // K0/K1/EK0/EK1 Bessel functions
     {
 #ifdef debug
-      G4cout<<"G4BesIKJY: >>>>>>>>>>>>>> K is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
+      G4cout<<"G4BesIKJY: ------------>> K is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
 #endif
       G4double CK=0.;                // Prototype of the element of the CI0/CI1 matrix
       if (X < 0.)
@@ -332,7 +332,7 @@ G4double G4QBesIKJY::operator() (G4double X) const
       else if (X < 1.)
       {
 #ifdef debug
-        G4cout<<"G4BesIKJY: >>>> [ X < 1 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
+        G4cout<<"G4BesIKJY: -->> [ X < 1 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
 #endif
         G4double B=HF*X;
         G4double BK=-(std::log(B)+CE);
@@ -362,7 +362,7 @@ G4double G4QBesIKJY::operator() (G4double X) const
       else if (X < 5.)
       {
 #ifdef debug
-        G4cout<<"G4BesIKJY: >>>> [ X < 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
+        G4cout<<"G4BesIKJY: -->> [ X < 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
 #endif
         G4int NUS=0;              // @@ NU**2 for future NU>1 applications
         if (nu==1) NUS=1;
@@ -407,14 +407,14 @@ G4double G4QBesIKJY::operator() (G4double X) const
       else
       {
 #ifdef debug
-        G4cout<<"G4BesIKJY: >>> [ X >= 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
+        G4cout<<"G4BesIKJY: ->> [ X >= 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
 #endif
         G4double P=10./X-1.;
         G4double ALFA=P+P;
         G4double B1=0.;
         G4double B2=0.;
 #ifdef debug
-        G4cout<<"G4BesIKJY: >>> [ X >= 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
+        G4cout<<"G4BesIKJY: ->> [ X >= 5 ] is called, X="<<X<<",n="<<nu<<",E="<<ex<<G4endl;
 #endif
         for (G4int I=npkl; I>=0; I--)
         {

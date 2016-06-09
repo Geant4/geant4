@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.14 2009/09/16 18:07:30 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.cc,v 1.14 2009-09-16 18:07:30 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,12 +97,12 @@ void DetectorConstruction::DefineMaterials()
   G4double density;
   G4int ncomponents, natoms;
 
-  // water with ionisation potential 75 eV
+  // water with ionisation potential 78 eV
   G4Material* H2O = 
   new G4Material("Water", density= 1.00*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   // pure materails
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);

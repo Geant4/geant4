@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:11:41 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-23 20:31:28 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -34,6 +34,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 #
 # Module has optional sources
 #
+include(Geant4MacroDefineModule)
+
 # List those always built
 set(G4VIS_DAWN_MODULE_HEADERS
     G4DAWNFILE.hh
@@ -65,9 +67,10 @@ if(GEANT4_USE_NETWORKDAWN)
         G4FukuiRendererSceneHandler.cc
         G4FukuiRendererViewer.cc)
 
-    #
-    # Add extra needed defs here
-    #
+    # To activate the Fukui Renderer Network component, we need an
+    # extra compile definition
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_DAWN_MODULE_SOURCES}
+        COMPILE_DEFINITIONS G4VIS_BUILD_DAWN_DRIVER)
 endif()
 
 
@@ -75,7 +78,6 @@ endif()
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4FR
     HEADERS
         ${G4VIS_DAWN_MODULE_HEADERS}

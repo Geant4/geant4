@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.hh,v 1.2 2010/06/03 11:04:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronQElasticPhysics.hh,v 1.2 2010-06-03 11:04:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,9 +42,6 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-
-class G4HadronElastic;
-class G4QElastic;
 
 class G4HadronQElasticPhysics : public G4VPhysicsConstructor
 {
@@ -67,9 +64,6 @@ public:
   virtual void ConstructProcess();
 
 private:
-
-  G4HadronElastic* model;
-  G4QElastic*      process;
 
   G4String mname;
 

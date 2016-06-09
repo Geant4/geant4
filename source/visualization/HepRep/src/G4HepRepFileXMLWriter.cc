@@ -25,7 +25,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: G4HepRepFileXMLWriter.cc,v 1.3 2006/06/29 21:17:28 gunter Exp $
+// 	$Id: G4HepRepFileXMLWriter.cc,v 1.3 2006-06-29 21:17:28 gunter Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -42,6 +42,7 @@
 
 #include "G4HepRepFileXMLWriter.hh"
 
+#include "G4HepRepMessenger.hh"
 #include "G4ios.hh"
 
 G4HepRepFileXMLWriter::G4HepRepFileXMLWriter()
@@ -169,7 +170,16 @@ void G4HepRepFileXMLWriter::addPoint(double x, double y, double z)
       endPoint();
       inPoint = true;
       indent();
-      fout << "<heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
+		
+		// Include scale and center values
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+		G4double scale = messenger->getScale();
+		G4ThreeVector center = messenger->getCenter();
+		G4double xNew = scale * ( x - center.x());
+		G4double yNew = scale * ( y - center.y());
+		G4double zNew = scale * ( z - center.z());
+		
+      fout << "<heprep:point x=\"" << xNew << "\" y=\"" << yNew << "\" z=\"" << zNew << "\">" << G4endl;
     } else {
 #ifdef G4HEPREPFILEDEBUG
       G4cout <<	"G4HepRepFileXMLWriter:addPoint No HepRep Primitive is currently open" << G4endl;

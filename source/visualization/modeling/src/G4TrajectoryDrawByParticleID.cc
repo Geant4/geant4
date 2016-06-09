@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.11 2010/06/01 21:17:41 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.11 2010-06-01 21:17:41 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 
@@ -32,7 +32,6 @@
 #include "G4TrajectoryDrawerUtils.hh"
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectory.hh"
-#include <sstream>
 
 G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
@@ -87,11 +86,11 @@ G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)
 
   // Will not modify myColour if colour key does not exist  
   if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4ExceptionDescription ed;
+    ed << "G4Colour with key "<<colour<<" does not exist ";
     G4Exception
       ("G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
+       "modeling0124", JustWarning, ed);
   }
 
   SetDefault(myColour);

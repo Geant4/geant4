@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonPlus.cc,v 1.15 2010/10/01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DMesonPlus.cc,v 1.15 2010-10-01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4DMesonPlus* G4DMesonPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     1.86960*GeV,  6.33e-10*MeV,    +1.*eplus,
+                 name,     1.86957*GeV,  6.33e-10*MeV,    +1.*eplus,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         411,

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.6 2010/09/03 14:33:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.6 2010-09-03 14:33:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointAlongStepWeightCorrection.hh"
 #include "G4Step.hh"
@@ -38,13 +38,16 @@
 G4AdjointAlongStepWeightCorrection::G4AdjointAlongStepWeightCorrection(const G4String& name, 
   G4ProcessType type): G4VContinuousProcess(name, type)
 {fParticleChange = new G4ParticleChange();
+ currentMaterialIndex=0;
+ preStepKinEnergy=1.;
+ currentCouple=0;
 }
 
 ///////////////////////////////////////////////////////
 //
 
 G4AdjointAlongStepWeightCorrection::~G4AdjointAlongStepWeightCorrection()
-{; 
+{delete fParticleChange;
 }
 ///////////////////////////////////////////////////////
 //

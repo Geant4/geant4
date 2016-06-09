@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.10 2010/12/01 15:20:20 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.1 2010-12-20 14:11:37 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
 //
@@ -32,214 +32,343 @@
 //
 // Author:        Luciano Pandola
 // 
-// Creation date: February 2003
+// Creation date: November 2010
 //
 // History:
 // -----------
-// 04 Feb 2003  L. Pandola       1st implementation
-// 19 Mar 2003  L. Pandola       Bugs fixed
-// 07 Nov 2003  L. Pandola       Added GetAtomicNumber method for testing 
-//                               purposes
+// 23 Nov 2010  L. Pandola       1st implementation
+// 24 May 2011  L. Pandola       Renamed (make v2008 as default Penelope)
+//
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungAngular.hh"
-#include "G4PenelopeInterpolator.hh"
+#include "G4PhysicsFreeVector.hh"
+#include "G4PhysicsTable.hh"
 #include "Randomize.hh"
 #include "globals.hh"
 
-G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular (G4int Zed)
-  : Zmat(Zed)
+G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular() : 
+  theLorentzTables1(0),theLorentzTables2(0)
 {
-  InterpolationTableForZ();
-  InterpolationForK();
+  dataRead = false;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeBremsstrahlungAngular::~G4PenelopeBremsstrahlungAngular()
 {
+  ClearTables();
 }
 
-G4int G4PenelopeBremsstrahlungAngular::GetAtomicNumber()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeBremsstrahlungAngular::ClearTables()
 {
-  return Zmat;
+  std::map<G4double,G4PhysicsTable*>::iterator j;
+
+  if (theLorentzTables1)
+    {
+      for (j=theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
+        {
+	  G4PhysicsTable* tab = j->second;
+          tab->clearAndDestroy();
+          delete tab;
+        }
+      delete theLorentzTables1;
+      theLorentzTables1 = 0;
+    }
+
+  if (theLorentzTables2)
+    {
+      for (j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
+        {
+	  G4PhysicsTable* tab = j->second;
+          tab->clearAndDestroy();
+          delete tab;
+        }
+      delete theLorentzTables2;
+      theLorentzTables2 = 0;
+    }
 }
 
-void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 {
-  G4double pZ[NumberofZPoints] = {2.0,8.0,13.0,47.0,79.0,92.0};
-  G4double pX[NumberofZPoints],pY[NumberofZPoints];
-  G4double QQ1[NumberofZPoints][NumberofEPoints][NumberofKPoints];
-  G4double QQ2[NumberofZPoints][NumberofEPoints][NumberofKPoints];
- 
-  //Read information from DataBase file
+   //Read information from DataBase file
   char* path = getenv("G4LEDATA");
   if (!path)
     {
-      G4String excep = "G4PenelopeBremsstrahlungAngular - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4String excep = 
+	"G4PenelopeBremsstrahlungAngular - G4LEDATA environment variable not set!";
+      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
-  G4String pathFile = pathString + "/penelope/br-ang-pen.dat";
+  G4String pathFile = pathString + "/penelope/bremsstrahlung/pdbrang.p08";
   std::ifstream file(pathFile);
-  std::filebuf* lsdp = file.rdbuf();
   
-  if (!(lsdp->is_open()))
+  if (!file.is_open())
     {
       G4String excep = "G4PenelopeBremsstrahlungAngular - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0003",FatalException,excep);
+      return;
     }
   G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K 
-  G4double a1,a2;
-  while(i != -1) {
-    file >> i >> j >> k >> a1 >> a2; 
-    if (i > -1 && j > -1 && k >- 1)
-      {
-	QQ1[i][j][k]=a1;
-	QQ2[i][j][k]=a2;
-      }
-  } 
-  file.close();
-  
 
-  //Interpolation in Z
-  for (i=0;i<NumberofEPoints;i++){
-    for (j=0;j<NumberofKPoints;j++){
-      for (k=0;k<NumberofZPoints;k++){
-	pX[k]=std::log(QQ1[k][i][j]);
-	pY[k]=QQ2[k][i][j];
-      }
-      G4PenelopeInterpolator* interpolator1 = new G4PenelopeInterpolator(pZ,pX,NumberofZPoints);
-      Q1[i][j]=std::exp(interpolator1->CubicSplineInterpolation((G4double) Zmat));
-      delete interpolator1;
-      G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator(pZ,pY,NumberofZPoints);    
-      Q2[i][j]=interpolator2->CubicSplineInterpolation((G4double) Zmat);
-      delete interpolator2;
-    }
-  }
- 
-  
-  //std::ofstream fil("matrice.dat",std::ios::app);
-  //fil << "Numero atomico: " << Zmat << G4endl;
-  //for (i=0;i<NumberofEPoints;i++)
-  //{
-  //  fil << Q1[i][0] << " " << Q1[i][1] << " " << Q1[i][2] << " " << Q1[i][3] << G4endl;
-  //}
-  //fil.close();
-  
+  for (k=0;k<NumberofKPoints;k++)    
+    for (i=0;i<NumberofZPoints;i++)	
+      for (j=0;j<NumberofEPoints;j++)
+	{
+	  G4double a1,a2;
+	  G4int ik1,iz1,ie1; 
+	  G4double zr,er,kr;
+	  file >> iz1 >> ie1 >> ik1 >> zr >> er >> kr >> a1 >> a2;
+	  //check the data are correct
+	  if ((iz1-1 == i) && (ik1-1 == k) && (ie1-1 == j))
+	    {
+	      QQ1[i][j][k]=a1;
+	      QQ2[i][j][k]=a2;
+	    }
+	  else
+	    {	     
+	      G4ExceptionDescription ed;
+	      ed << "Corrupted data file " << pathFile << "?" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0005",FatalException,ed);	  
+	    }
+	}   
+  file.close();
+  dataRead = true;
 }
 
-void G4PenelopeBremsstrahlungAngular::InterpolationForK()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 {
-  G4double pE[NumberofEPoints] = {1.0e-03,5.0e-03,1.0e-02,5.0e-02,1.0e-01,5.0e-01};
-  G4double pK[NumberofKPoints] = {0.0,0.6,0.8,0.95};
-  G4double ppK[reducedEnergyGrid];
-  G4double pX[NumberofKPoints];
-  G4int i,j;
-
-  for(i=0;i<reducedEnergyGrid;i++){
-    ppK[i]=((G4double) i) * 0.05;
-  }
-
-  for(i=0;i<NumberofEPoints;i++){
-    betas[i]=std::sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
-  }
-
-  for (i=0;i<NumberofEPoints;i++){
-    for (j=0;j<NumberofKPoints;j++){
-      Q1[i][j]=Q1[i][j]/((G4double) Zmat);
+  //Check if data file has already been read
+  if (!dataRead)
+    {
+      ReadDataFile();
+      if (!dataRead)	
+	G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
+		    "em2001",FatalException,"Unable to build interpolation table");
     }
-  }
+
+  const G4int reducedEnergyGrid=21;
+  //Support arrays. 
+  G4double betas[NumberofEPoints]; //betas for interpolation
+  //tables for interpolation
+  G4double Q1[NumberofEPoints][NumberofKPoints];
+  G4double Q2[NumberofEPoints][NumberofKPoints];
+  //expanded tables for interpolation
+  G4double Q1E[NumberofEPoints][reducedEnergyGrid];
+  G4double Q2E[NumberofEPoints][reducedEnergyGrid]; 
+  G4double pZ[NumberofZPoints] = {2.0,8.0,13.0,47.0,79.0,92.0};
+
+  G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K 
+  //Interpolation in Z
+  for (i=0;i<NumberofEPoints;i++)
+    {
+      for (j=0;j<NumberofKPoints;j++)
+	{
+	  G4PhysicsFreeVector* QQ1vector = new G4PhysicsFreeVector(NumberofZPoints);
+	  QQ1vector->SetSpline(true);
+	  G4PhysicsFreeVector* QQ2vector = new G4PhysicsFreeVector(NumberofZPoints);
+	  QQ2vector->SetSpline(true);
+
+	  //fill vectors
+	  for (k=0;k<NumberofZPoints;k++)
+	    {
+	      QQ1vector->PutValue(k,pZ[k],std::log(QQ1[k][i][j]));
+	      QQ2vector->PutValue(k,pZ[k],QQ2[k][i][j]);
+	    }
+	  
+	  Q1[i][j]= std::exp(QQ1vector->Value(Zmat));	  
+	  Q2[i][j]=QQ2vector->Value(Zmat);
+	  delete QQ1vector;
+	  delete QQ2vector;
+	}
+    }
+  G4double pE[NumberofEPoints] = {1.0e-03*MeV,5.0e-03*MeV,1.0e-02*MeV,5.0e-02*MeV,
+				  1.0e-01*MeV,5.0e-01*MeV};
+  G4double pK[NumberofKPoints] = {0.0,0.6,0.8,0.95};
+  G4double ppK[reducedEnergyGrid]; 
+
+  for(i=0;i<reducedEnergyGrid;i++)
+    ppK[i]=((G4double) i) * 0.05;
+  
+
+  for(i=0;i<NumberofEPoints;i++)
+    betas[i]=std::sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
+  
+
+  for (i=0;i<NumberofEPoints;i++)
+    {
+      for (j=0;j<NumberofKPoints;j++)
+	Q1[i][j]=Q1[i][j]/Zmat;
+    }
 
   //Expanded table of distribution parameters
-  for (i=0;i<NumberofEPoints;i++){
-    for (j=0;j<NumberofKPoints;j++){
-      pX[j]=std::log(Q1[i][j]); //logarithmic 
+  for (i=0;i<NumberofEPoints;i++)
+    {
+      G4PhysicsFreeVector* Q1vector = new G4PhysicsFreeVector(NumberofKPoints);    
+      G4PhysicsFreeVector* Q2vector = new G4PhysicsFreeVector(NumberofKPoints);
+
+      for (j=0;j<NumberofKPoints;j++)
+	{
+	  Q1vector->PutValue(j,pK[j],std::log(Q1[i][j])); //logarithmic 
+	  Q2vector->PutValue(j,pK[j],Q2[i][j]);
+	}
+
+      for (j=0;j<reducedEnergyGrid;j++)
+	{
+	  Q1E[i][j]=Q1vector->Value(ppK[j]);
+	  Q2E[i][j]=Q2vector->Value(ppK[j]);
+	}
+      delete Q1vector;
+      delete Q2vector;
+    } 
+  //
+  //TABLES to be stored
+  //
+  G4PhysicsTable* theTable1 = new G4PhysicsTable();
+  G4PhysicsTable* theTable2 = new G4PhysicsTable();
+  // the table will contain reducedEnergyGrid G4PhysicsFreeVectors with different
+  // values of k, 
+  // Each of the G4PhysicsFreeVectors has a profile of
+  // y vs. E
+  //
+  //reserve space of the vectors.
+  for (j=0;j<reducedEnergyGrid;j++)   
+    {
+      G4PhysicsFreeVector* thevec = new G4PhysicsFreeVector(NumberofEPoints);
+      thevec->SetSpline(true);
+      theTable1->push_back(thevec);
+      G4PhysicsFreeVector* thevec2 = new G4PhysicsFreeVector(NumberofEPoints);
+      thevec2->SetSpline(true);
+      theTable2->push_back(thevec2);
+    }  
+
+  for (j=0;j<reducedEnergyGrid;j++)
+    {
+      G4PhysicsFreeVector* thevec = (G4PhysicsFreeVector*) (*theTable1)[j];
+      G4PhysicsFreeVector* thevec2 = (G4PhysicsFreeVector*) (*theTable2)[j];
+      for (i=0;i<NumberofEPoints;i++)
+	{
+	  thevec->PutValue(i,betas[i],Q1E[i][j]);
+	  thevec2->PutValue(i,betas[i],Q2E[i][j]);
+	}
     }
-    G4PenelopeInterpolator* interpolator = new G4PenelopeInterpolator(pK,pX,NumberofKPoints);
-    for (j=0;j<reducedEnergyGrid;j++){
-      Q1E[i][j]=interpolator->CubicSplineInterpolation(ppK[j]);
+
+  if (theLorentzTables1 && theLorentzTables2)
+    {
+      theLorentzTables1->insert(std::make_pair(Zmat,theTable1));
+      theLorentzTables2->insert(std::make_pair(Zmat,theTable2));
     }
-    delete interpolator;
-    for (j=0;j<NumberofKPoints;j++){
-      pX[j]=Q2[i][j];
+  else
+    {
+      G4ExceptionDescription ed;
+      ed << "Unable to create tables of Lorentz coefficients for " << G4endl;
+      ed << "<Z>= "  << Zmat << " in G4PenelopeBremsstrahlungAngular" << G4endl;
+      delete theTable1;
+      delete theTable2;
+      G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
+		  "em2005",FatalException,ed);	
     }
-    G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator(pK,pX,NumberofKPoints);
-    for (j=0;j<reducedEnergyGrid;j++){
-      Q2E[i][j]=interpolator2->CubicSplineInterpolation(ppK[j]);
-    }
-    delete interpolator2;
-  }
+  
+  return;
 }
 
-G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e2)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeBremsstrahlungAngular::SampleCosTheta(G4double Zmat,
+							   G4double ePrimary,
+							   G4double eGamma)
 {
-  //e1 = kinetic energy of the electron
-  //e2 = energy of the bremsstrahlung photon
+  G4double beta = std::sqrt(ePrimary*(ePrimary+2*electron_mass_c2))/
+    (ePrimary+electron_mass_c2);
+  G4double cdt = 0;
 
-  G4double beta = std::sqrt(e1*(e1+2*electron_mass_c2))/(e1+electron_mass_c2);
+  //Use a pure dipole distribution for energy above 500 keV
+  if (ePrimary > 500*keV)
+    {
+      cdt = 2.0*G4UniformRand() - 1.0;
+      if (G4UniformRand() > 0.75)
+	{
+	  if (cdt<0)
+	    cdt = -1.0*std::pow(-cdt,1./3.);
+	  else
+	    cdt = std::pow(cdt,1./3.);
+	}
+      cdt = (cdt+beta)/(1.0+beta*cdt);
+      return cdt;
+    }
   
+  //Else, retrieve tables and go through the full thing
+  if (!theLorentzTables1)
+      theLorentzTables1 = new std::map<G4double,G4PhysicsTable*>;
+  if (!theLorentzTables2)
+    theLorentzTables2 = new std::map<G4double,G4PhysicsTable*>;
 
+  //Check if tables exist for the given Zmat
+  if (!(theLorentzTables1->count(Zmat)))
+    PrepareInterpolationTables(Zmat);
 
-  G4double RK=20.0*e2/e1;
+  if (!(theLorentzTables1->count(Zmat)) || !(theLorentzTables2->count(Zmat)))
+    {
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve Lorentz tables for Z= " << Zmat << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleCosTheta()",
+		  "em2006",FatalException,ed);
+    }
+    
+  //retrieve actual tables
+  G4PhysicsTable* theTable1 = theLorentzTables1->find(Zmat)->second;
+  G4PhysicsTable* theTable2 = theLorentzTables2->find(Zmat)->second;
+      
+  G4double RK=20.0*eGamma/ePrimary;
   G4int ik=std::min((G4int) RK,19);
   
   G4double P10=0,P11=0,P1=0;
   G4double P20=0,P21=0,P2=0;
-  G4double pX[NumberofEPoints];
+
   //First coefficient
-  G4int i;
-  G4int j = ik;
-  for (i=0;i<NumberofEPoints;i++){
-    pX[i]=Q1E[i][j];
-  }
-  G4PenelopeInterpolator* interpolator = new G4PenelopeInterpolator(betas,pX,NumberofEPoints);
-  P10=interpolator->CubicSplineInterpolation(beta);
-  delete interpolator;
-  j++; //(j=ik+1)
-  for (i=0;i<NumberofEPoints;i++){
-    pX[i]=Q1E[i][j];
-  }
-  G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator(betas,pX,NumberofEPoints);
-  P11=interpolator2->CubicSplineInterpolation(beta);
-  delete interpolator2;
+  G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTable1)[ik];
+  G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTable1)[ik+1];
+  P10 = v1->Value(beta);
+  P11 = v2->Value(beta);
   P1=P10+(RK-(G4double) ik)*(P11-P10);
   
   //Second coefficient
-  j = ik;
-  for (i=0;i<NumberofEPoints;i++){
-    pX[i]=Q2E[i][j];
-  }
-  G4PenelopeInterpolator* interpolator3 = new G4PenelopeInterpolator(betas,pX,NumberofEPoints);
-  P20=interpolator3->CubicSplineInterpolation(beta);
-  delete interpolator3;
-  j++; //(j=ik+1)
-  for (i=0;i<NumberofEPoints;i++){
-    pX[i]=Q2E[i][j];
-  }
-  G4PenelopeInterpolator* interpolator4 = new G4PenelopeInterpolator(betas,pX,NumberofEPoints);
-  P21=interpolator4->CubicSplineInterpolation(beta);
-  delete interpolator4;
+  G4PhysicsFreeVector* v3 = (G4PhysicsFreeVector*) (*theTable2)[ik];
+  G4PhysicsFreeVector* v4 = (G4PhysicsFreeVector*) (*theTable2)[ik+1];
+  P20=v3->Value(beta); 
+  P21=v4->Value(beta);
   P2=P20+(RK-(G4double) ik)*(P21-P20);
   
   //Sampling from the Lorenz-trasformed dipole distributions
   P1=std::min(std::exp(P1)/beta,1.0);
   G4double betap = std::min(std::max(beta*(1.0+P2/beta),0.0),0.9999);
   
-  G4double cdt=0,testf=0;
+  G4double testf=0;
   
-  if (G4UniformRand() < P1){
-    do{
-      cdt = 2.0*G4UniformRand()-1.0;
-      testf=2.0*G4UniformRand()-(1.0+cdt*cdt);
-    }while(testf>0);
-  }
-  else{
-    do{
-      cdt = 2.0*G4UniformRand()-1.0;
-      testf=G4UniformRand()-(1.0-cdt*cdt);
-    }while(testf>0);
-  }
+  if (G4UniformRand() < P1)
+    {
+      do{
+	cdt = 2.0*G4UniformRand()-1.0;
+	testf=2.0*G4UniformRand()-(1.0+cdt*cdt);
+      }while(testf>0);
+    }
+  else
+    {
+      do{
+	cdt = 2.0*G4UniformRand()-1.0;
+	testf=G4UniformRand()-(1.0-cdt*cdt);
+      }while(testf>0);
+    }
   cdt = (cdt+betap)/(1.0+betap*cdt);
   return cdt;
 }

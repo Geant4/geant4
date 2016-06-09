@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.14 2007/04/11 08:00:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPhysicalVolume.cc,v 1.14 2007-04-11 08:00:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4VPhysicalVolume Implementation

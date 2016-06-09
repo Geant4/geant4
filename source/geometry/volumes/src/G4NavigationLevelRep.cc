@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.cc,v 1.2 2006/06/29 18:58:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NavigationLevelRep.cc,v 1.2 2006-06-29 18:58:06 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
@@ -89,11 +89,8 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 #ifdef DEBUG_NAVIG_LEVEL
   if(fCountRef>0)
   {
-    G4cerr << "ERROR! - A G4NavigationLevelRep is being deleted that has"
-           << G4endl << " positive reference count (fCountRef > 0) !"
-           << G4endl;
     G4Exception("G4NavigationLevelRep::~G4NavigationLevelRep()",
-                "MemoryCorruption", FatalException,
+                "GeomVol0003", FatalException,
                 "Deletion of data-level object with positive reference count.");
   } 
 #endif

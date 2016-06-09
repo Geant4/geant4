@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.22 2009/11/20 01:06:45 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpBoundaryProcess.hh,v 1.22 2009-11-20 01:06:45 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -245,6 +245,7 @@ private:
 
 	G4double theReflectivity;
 	G4double theEfficiency;
+        G4double theTransmittance;
 	G4double prob_sl, prob_ss, prob_bs;
 
         G4int iTE, iTM;

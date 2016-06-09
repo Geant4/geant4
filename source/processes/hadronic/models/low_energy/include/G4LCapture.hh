@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.hh,v 1.11 2006/06/29 20:43:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LCapture.hh,v 1.11 2006-06-29 20:43:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Low energy model: neutron capture -- header file
@@ -65,22 +65,25 @@
 
 class G4LCapture : public G4HadronicInteraction
 {
-public:
+  public:
 
-   G4LCapture();
+    G4LCapture(const G4String& name = "G4LCapture");
 
-   ~G4LCapture();
+    ~G4LCapture();
  
-   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack,
-                                    G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-private:
+    // void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
 
-// Computes atomic mass in GeV using method from G4LFission
-   inline
-   G4double Atomas(const G4double A, const G4double Z)
-   {
+  private:
+
+    // Computes atomic mass in GeV using method from G4LFission
+    inline
+    G4double Atomas(const G4double A, const G4double Z)
+    {
       return G4LFission::Atomas(A, Z)/GeV;
-   }
+    }
 };
 #endif

@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEPionPlusInelastic.hh,v 1.12 2007-02-24 05:23:52 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEPionPlusInelastic.hh,v 1.12 2007/02/24 05:23:52 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy PionPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy PionPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Nov-1996
  
 #ifndef G4LEPionPlusInelastic_h
 #define G4LEPionPlusInelastic_h 1
@@ -43,33 +41,31 @@
 
 #include "G4InelasticInteraction.hh"
  
- class G4LEPionPlusInelastic : public G4InelasticInteraction
- {
- public:
+class G4LEPionPlusInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LEPionPlusInelastic() : G4InelasticInteraction("G4LEPionPlusInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
-    }
+    G4LEPionPlusInelastic(const G4String& name = "G4LEPionPlusInelastic");
     
     ~G4LEPionPlusInelastic() { }
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
     
- private:
+  private:
     
     void Cascade(                               // derived from CASPIP
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
     
- };
+};
 #endif
  

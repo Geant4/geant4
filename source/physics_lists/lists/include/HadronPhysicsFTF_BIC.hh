@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.hh,v 1.4 2010/06/03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsFTF_BIC.hh,v 1.4 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,12 +44,13 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4BinaryPiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4FTFBinaryPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4KaonBuilder.hh"
+#include "G4BinaryPionBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFBinaryPionBuilder.hh"
+#include "G4FTFBinaryKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
 #include "G4LEPProtonBuilder.hh"
@@ -60,6 +61,10 @@
 #include "G4LEPNeutronBuilder.hh"
 #include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
 
 class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 {
@@ -79,17 +84,22 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
     G4BinaryNeutronBuilder * theBinaryNeutron;
     
-    G4PiKBuilder * thePiK;
-    G4BinaryPiKBuilder * theBICPiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4FTFBinaryPiKBuilder * theFTFBinaryPiK;
+    G4PionBuilder * thePion;
+    G4KaonBuilder * theKaon;
+    G4BinaryPionBuilder * theBICPion;
+    G4BertiniKaonBuilder * theBertiniKaon;
+    G4FTFBinaryPionBuilder * theFTFBinaryPion;
+    G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
     
     G4ProtonBuilder * thePro;
     G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4HyperonFTFPBuilder * theHyperon;
     
+    G4AntiBarionBuilder * theAntiBaryon;
+    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
     G4bool QuasiElastic;
 };
 

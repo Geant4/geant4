@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimplexDownhill.hh,v 1.4 2010/11/01 13:55:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SimplexDownhill.hh,v 1.4 2010-11-01 13:55:17 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.15 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsLogVector.hh,v 1.15 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //--------------------------------------------------------------------
@@ -47,6 +47,7 @@
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
 //
 //--------------------------------------------------------------------
 
@@ -71,43 +72,21 @@ class G4PhysicsLogVector : public G4PhysicsVector
        // Because of logarithmic scale, note that 'theEmin' has to be 
        // greater than zero. No protection exists against this error.
 
-    ~G4PhysicsLogVector();
+    virtual ~G4PhysicsLogVector();
       // Destructor
-
-    G4PhysicsLogVector(const G4PhysicsLogVector&);
-    G4PhysicsLogVector& operator=(const G4PhysicsLogVector&);
-      // Copy constructor and assignment operator.
       
-    G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
+    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
       // To retrieve persistent data from file stream.
-  
+
+    virtual void ScaleVector(G4double factorE, G4double factorV);
+      // Scale all values of the vector and second derivatives
+      // by factorV, energies by vectorE. 
+
   protected:
 
-    size_t FindBinLocation(G4double theEnergy) const;
+    virtual size_t FindBinLocation(G4double theEnergy) const;
       // Find bin# in which theEnergy belongs - pure virtual function
 
-  private:
-
-    G4double dBin;          // Bin width - useful only for fixed binning
-    G4double baseBin;       // Set this in constructor for performance
-
 };
-
-
-inline 
- size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsLogVector, FindBinLocation is implemented using
-  // a simple arithmetic calculation.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhyiscsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsLogVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-
-  return size_t( std::log10(theEnergy)/dBin - baseBin );
-}
 
 #endif

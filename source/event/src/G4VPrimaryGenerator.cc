@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.cc,v 1.5 2006/06/29 18:10:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPrimaryGenerator.cc,v 1.5 2006-06-29 18:10:35 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // G4VPrimaryGenerator
 #include "G4VPrimaryGenerator.hh"
 
-G4VPrimaryGenerator::G4VPrimaryGenerator()
+G4VPrimaryGenerator::G4VPrimaryGenerator() : particle_time(0.)
 {;}
 
 G4VPrimaryGenerator::~G4VPrimaryGenerator()

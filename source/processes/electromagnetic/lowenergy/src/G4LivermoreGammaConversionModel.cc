@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.cc,v 1.8 2009/06/11 15:47:08 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermoreGammaConversionModel.cc,v 1.9 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Author: Sebastien Inserti
+// Author: Sebastien Incerti
 //         30 October 2008
+//         on base of G4LowEnergyGammaConversion developed by A.Forti and M.G.Pia
 //
 // History:
 // --------
@@ -37,6 +38,7 @@
 //                  - do not apply low-energy limit (default is 0)
 //                  - use CLHEP electron mass for low-enegry limit
 //                  - remove MeanFreePath method and table
+// 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 
 
 #include "G4LivermoreGammaConversionModel.hh"
@@ -77,7 +79,7 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4Particl
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
+  if (crossSectionHandler) { delete crossSectionHandler; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,8 +88,9 @@ void
 G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition*,
 					    const G4DataVector&)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling G4LivermoreGammaConversionModel::Initialise()" << G4endl;
+  }
 
   if (crossSectionHandler)
   {
@@ -101,12 +104,11 @@ G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition*,
   crossSectionHandler->Initialise(0,lowEnergyLimit,100.*GeV,400);
   G4String crossSectionFile = "pair/pp-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
-
   //
   
-  if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
-
+  if (verboseLevel > 2) { 
+    G4cout << "Loaded cross section files for Livermore Gamma Conversion model" << G4endl;
+  }
   if (verboseLevel > 0) { 
     G4cout << "Livermore Gamma Conversion model is initialized " << G4endl
 	   << "Energy range: "
@@ -115,7 +117,7 @@ G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition*,
 	   << G4endl;
   }
 
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -132,7 +134,7 @@ G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(const G4ParticleDefi
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreGammaConversionModel" 
 	   << G4endl;
   }
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0;
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; } 
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
@@ -237,7 +239,7 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
-  if (CLHEP::RandBit::shootBit())
+  if (G4int(2*G4UniformRand()))
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;

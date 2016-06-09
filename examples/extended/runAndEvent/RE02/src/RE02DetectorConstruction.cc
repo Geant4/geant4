@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02DetectorConstruction.cc,v 1.5 2010/12/07 15:17:13 stesting Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RE02DetectorConstruction.cc,v 1.5 2010-12-07 15:17:13 stesting Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "RE02DetectorConstruction.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacZero.cc,v 1.18 2009/10/08 14:55:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AntiSigmacZero.cc,v 1.18 2009-10-08 14:55:19 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,9 +69,9 @@ G4AntiSigmacZero* G4AntiSigmacZero::Definition()
   //             shortlived      subType    anti_encoding
   
    anInstance = new G4ParticleDefinition(
-                 name,      2.45376*GeV,       2.2*MeV,  +0.0*eplus,
+                 name,      2.45376*GeV,       2.3*MeV,  +0.0*eplus,
                     1,              +1,             0,
-                    2,               0,             0,
+                    2,              +2,             0,
              "baryon",               0,            -1,       -4112,
                 false,          0.0*ns,          NULL,
                 false,       "sigma_c");

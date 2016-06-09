@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010/11/11 00:49:25 akimura Exp $
+$Id: History,v 1.17 2011-01-03 14:34:46 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,23 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+8th October 2011  Akinori Kimura (gMocren-V09-04-02)
+- Fixed Coverity defects in G4GMocrenFileSceneHandler.cc, G4GMocrenIO.cc, 
+  G4GMocrenFileViewer.cc, and G4GMocrenMessenger.cc.
+
+25th September 2011  John Allison (gMocren-V09-04-01)
+- Tagged.
+
+17th September 2011  John Allison
+- Migrated to new G4Exception.
+
+19 May 2011  Akinori Kimura (gMocren-V09-04-00)
+- Avoided warnings of the following codes in GCC 4.6.0.
+  G4GMocrenTouchable.hh, G4GMocrenFileSceneHandler.cc and G4GMocrenIO.cc.
+
+23, December L. Garnier 
+- GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 11 November 2010  Akinori Kimura (gMocren-V09-03-05)
 - Replaced G4cerr with G4cout and added the following line before G4cout.

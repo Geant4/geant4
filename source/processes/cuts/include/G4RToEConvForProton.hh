@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.hh,v 1.5 2009/09/14 07:27:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RToEConvForProton.hh,v 1.5 2009-09-14 07:27:46 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------

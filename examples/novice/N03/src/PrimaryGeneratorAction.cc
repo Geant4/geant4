@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2010/10/18 15:56:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -37,6 +37,7 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -45,12 +46,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                             DetectorConstruction* DC)
-:Detector(DC),rndmFlag("off")
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
+  Detector = (DetectorConstruction*)
+             G4RunManager::GetRunManager()->GetUserDetectorConstruction();  
   
   //create a messenger for this class
   gunMessenger = new PrimaryGeneratorMessenger(this);
@@ -66,6 +67,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
   particleGun->SetParticleEnergy(50.*MeV);
   G4double position = -0.5*(Detector->GetWorldSizeX());
   particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+  
+  rndmFlag = "off";
 
 }
 

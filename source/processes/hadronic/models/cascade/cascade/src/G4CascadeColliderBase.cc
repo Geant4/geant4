@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeColliderBase.cc,v 1.6 2010/12/15 07:40:08 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeColliderBase.cc,v 1.6 2010-12-15 07:40:08 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
@@ -34,6 +34,7 @@
 // 20100923  M. Kelsey -- Migrate to integer A and Z
 // 20100925  M. Kelsey -- Add explosion() interfaces for G4Fragment and for
 //		(A,Z,E).  Move implementation to latter.  Add Z==0 condition.
+// 20110225  M. Kelsey -- Add setVerboseLevel(), calls through to members
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -63,8 +64,13 @@ G4CascadeColliderBase::~G4CascadeColliderBase() {
   delete balance;
 }
 
+void G4CascadeColliderBase::setVerboseLevel(G4int verbose) {
+  G4VCascadeCollider::setVerboseLevel(verbose);
+  balance->setVerboseLevel(verbose);
+}
 
-// Both bullet and target must be hadrons or leptons for this to work
+
+// Both bullet and target must be hadrons or photons for this to work
 
 G4bool G4CascadeColliderBase::useEPCollider(G4InuclParticle* bullet, 
 					    G4InuclParticle* target) const {

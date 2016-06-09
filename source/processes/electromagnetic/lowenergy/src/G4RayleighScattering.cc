@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RayleighScattering.cc,v 1.2 2009/03/18 13:45:51 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RayleighScattering.cc,v 1.2 2009-03-18 13:45:51 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // 19-12-2008, first implementation, Luciano Pandola 

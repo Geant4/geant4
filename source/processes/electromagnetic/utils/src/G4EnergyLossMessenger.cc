@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EnergyLossMessenger.cc,v 1.40 2010/11/23 19:01:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EnergyLossMessenger.cc,v 1.41 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -35,7 +34,7 @@
 //
 // Author:        Michel Maire
 //
-// Creation date: 22-06-2000
+// Creation date: 17-03-2011 (original version of 22-06-2000)
 //
 // Modifications:
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
@@ -57,8 +56,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EnergyLossMessenger.hh"
-
-#include "G4VEnergyLoss.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -87,8 +84,8 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   emDirectory = new G4UIdirectory("/process/em/");
   emDirectory->SetGuidance("General commands for EM processes.");
 
-  RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/rndmStep",this);
-  RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
+  RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
+  RndmStepCmd->SetGuidance("Use cut in range as a final range");
   RndmStepCmd->SetParameterName("choice",true);
   RndmStepCmd->SetDefaultValue(false);
   RndmStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -200,6 +197,11 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   pixeXsCmd->SetParameterName("pixeXS",true);
   pixeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  pixeeXsCmd = new G4UIcmdWithAString("/process/em/pixeElecXSmodel",this);
+  pixeeXsCmd->SetGuidance("The name of PIXE cross section for electron");
+  pixeeXsCmd->SetParameterName("pixeEXS",true);
+  pixeeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
   deexCmd->SetGuidance("  regName   : G4Region name");
@@ -210,13 +212,13 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* regName = new G4UIparameter("regName",'s',false);
   deexCmd->SetParameter(regName);
 
-  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'b',false);
+  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'s',false);
   deexCmd->SetParameter(flagFluo);
 
-  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'b',false);
+  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'s',false);
   deexCmd->SetParameter(flagAuger);
 
-  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'b',false);
+  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
 
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
@@ -295,6 +297,71 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
   angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  bfCmd = new G4UIcommand("/process/em/setBiasingFactor",this);
+  bfCmd->SetGuidance("Set factor for the process cross section.");
+  bfCmd->SetGuidance("  procName   : process name");
+  bfCmd->SetGuidance("  procFact   : factor");
+  bfCmd->SetGuidance("  flagFact   : flag to change weight");
+
+  G4UIparameter* procName = new G4UIparameter("procName",'s',false);
+  bfCmd->SetParameter(procName);
+
+  G4UIparameter* procFact = new G4UIparameter("procFact",'d',false);
+  bfCmd->SetParameter(procFact);
+
+  G4UIparameter* flagFact = new G4UIparameter("flagFact",'s',false);
+  bfCmd->SetParameter(flagFact);
+  bfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
+  fiCmd->SetGuidance("Set factor for the process cross section.");
+  fiCmd->SetGuidance("  procNam    : process name");
+  fiCmd->SetGuidance("  regNam     : region name");
+  fiCmd->SetGuidance("  tlength    : fixed target length");
+  fiCmd->SetGuidance("  tflag      : flag to change weight");
+
+  G4UIparameter* procNam = new G4UIparameter("procNam",'s',false);
+  fiCmd->SetParameter(procNam);
+
+  G4UIparameter* regNam = new G4UIparameter("regNam",'s',false);
+  fiCmd->SetParameter(regNam);
+
+  G4UIparameter* tlength = new G4UIparameter("tlength",'d',false);
+  fiCmd->SetParameter(tlength);
+
+  G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
+  fiCmd->SetParameter(unitT);
+  unitT->SetGuidance("unit of tlength");
+
+  G4UIparameter* flagT = new G4UIparameter("tflag",'s',true);
+  fiCmd->SetParameter(flagT);
+  fiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
+  brCmd->SetGuidance("Set bremsstrahlung or delta-electron splitting/Russian roullette per region.");
+  brCmd->SetGuidance("  bProcNam : process name");
+  brCmd->SetGuidance("  bRegNam  : region name");
+  brCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
+  brCmd->SetGuidance("  bEnergy  : max energy of a secondary for this biasing method");
+
+  G4UIparameter* bProcNam = new G4UIparameter("bProcNam",'s',false);
+  brCmd->SetParameter(bProcNam);
+
+  G4UIparameter* bRegNam = new G4UIparameter("bRegNam",'s',false);
+  brCmd->SetParameter(bRegNam);
+
+  G4UIparameter* bFactor = new G4UIparameter("bFactor",'d',false);
+  brCmd->SetParameter(bFactor);
+
+  G4UIparameter* bEnergy = new G4UIparameter("bEnergy",'d',false);
+  brCmd->SetParameter(bEnergy);
+
+  G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
+  brCmd->SetParameter(bUnit);
+  brCmd->SetGuidance("unit of tlength");
+
+  brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -327,6 +394,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete auCmd;
   delete pixeCmd;
   delete pixeXsCmd;
+  delete pixeeXsCmd;
   delete frCmd;
   delete fgCmd;
   delete lllCmd;
@@ -335,46 +403,35 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete skinCmd;
   delete angCmd;
   delete mscfCmd;
+  delete bfCmd;
+  delete fiCmd;
+  delete brCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if(!opt) opt = new G4EmProcessOptions();
+  if(!opt) { opt = new G4EmProcessOptions(); }
 
   if (command == RndmStepCmd) {
-    G4VEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
     opt->SetRandomStep(RndmStepCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == EnlossFlucCmd) {
-    G4VEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+  } else if (command == EnlossFlucCmd) {
     opt->SetLossFluctuations(EnlossFlucCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == SubSecCmd) {
-    G4VEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
+  } else if(command == SubSecCmd) {
     opt->SetSubCutoff(SubSecCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MinSubSecCmd) {
+  } else if (command == MinSubSecCmd) {
     opt->SetMinSubRange(MinSubSecCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == StepFuncCmd) {
+  } else if (command == StepFuncCmd) {
     G4double v1,v2;
     G4String unt;
     std::istringstream is(newValue);
     is >> v1 >> v2 >> unt;
     v2 *= G4UIcommand::ValueOf(unt);
-    G4VEnergyLoss::SetStepFunction(v1,v2);
     opt->SetStepFunction(v1,v2);
-    return;
-  }
-  if (command == deexCmd) {
+  } else if (command == deexCmd) {
     G4String s1 (""), s2(""), s3(""), s4("");
     G4bool b2(false), b3(false), b4(false);
     std::istringstream is(newValue);
@@ -383,25 +440,24 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { b3 = true; }
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
-    return;
-  }
-  if (command == deCmd) {
-    opt->SetDeexcitationActive(deCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == auCmd) {
-    opt->SetAugerActive(auCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == pixeCmd) {
-    opt->SetPIXEActive(pixeCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == pixeXsCmd) {
-    opt->SetPIXECrossSectionModel(newValue);
-    return;
-  }
-  if (command == mscCmd) {
+  } else if (command == deCmd) {
+    opt->SetFluo(deCmd->GetNewBoolValue(newValue));
+  } else if (command == auCmd) {
+    opt->SetAuger(auCmd->GetNewBoolValue(newValue));
+  } else if (command == pixeCmd) {
+    opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
+  } else if (command == pixeXsCmd) {
+    G4String name;
+    if (newValue == "ecpssr_analytical") 
+      {name = "ECPSSR_Analytical";}
+    else if (newValue == "ecpssr_interpolated") 
+      {name = "ECPSSR_FormFactor";}
+    else 
+      {name = newValue;}
+    opt->SetPIXECrossSectionModel(name);
+  } else if (command == pixeeXsCmd) {
+    opt->SetPIXEElectronCrossSectionModel(newValue);
+  } else if (command == mscCmd) {
     if(newValue == "Minimal") 
       opt->SetMscStepLimitation(fMinimal);
 
@@ -417,95 +473,81 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       return;
     }
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MinEnCmd) {
+  } else if (command == MinEnCmd) {
     opt->SetMinEnergy(MinEnCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MaxEnCmd) { 
+  } else if (command == MaxEnCmd) { 
     opt->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == IntegCmd) {
+  } else if (command == IntegCmd) {
     opt->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == rangeCmd) {
+  } else if (command == rangeCmd) {
     opt->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == lpmCmd) {
+  } else if (command == lpmCmd) {
     opt->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == splCmd) {
+  } else if (command == splCmd) {
     opt->SetSplineFlag(splCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == aplCmd) {
+  } else if (command == aplCmd) {
     opt->SetApplyCuts(aplCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == latCmd) {
+  } else if (command == latCmd) {
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == verCmd) {
+  } else if (command == verCmd) {
     opt->SetVerbose(verCmd->GetNewIntValue(newValue));
-    return;
-  }
-  if (command == ver1Cmd) {
+  } else if (command == ver1Cmd) {
     opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
-    return;
-  }
-  if (command == lllCmd) {
+  } else if (command == lllCmd) {
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
-    return;
-  }
-  if (command == labCmd) {
+  } else if (command == labCmd) {
     opt->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
-    return;
-  }
-  if (command == skinCmd) {
+  } else if (command == skinCmd) {
     opt->SetSkin(skinCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == dedxCmd) { 
+  } else if (command == dedxCmd) { 
     opt->SetDEDXBinning(dedxCmd->GetNewIntValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == lamCmd) { 
+  } else if (command == lamCmd) { 
     opt->SetLambdaBinning(lamCmd->GetNewIntValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == frCmd) {
+  } else if (command == frCmd) {
     opt->SetMscRangeFactor(frCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == fgCmd) {
+  } else if (command == fgCmd) {
     opt->SetMscGeomFactor(fgCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == mscfCmd) {
+  } else if (command == mscfCmd) {
     opt->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == angCmd) { 
+  } else if (command == angCmd) { 
     opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  } else if (command == bfCmd) {
+    G4double v1(1.0);
+    G4String s(""),s1("");
+    std::istringstream is(newValue);
+    is >> s >> v1 >> s1;
+    G4bool yes = false;
+    if(s1 == "true") { yes = true; }
+    opt->SetProcessBiasingFactor(s,v1,yes);
+  } else if (command == fiCmd) {
+    G4double v1(0.0);
+    G4String s1(""),s2(""),s3(""),unt("mm");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> v1 >> unt >> s3;
+    G4bool yes = false;
+    if(s3 == "true") { yes = true; }
+    v1 *= G4UIcommand::ValueOf(unt);
+    opt->ActivateForcedInteraction(s1,v1,s2,yes);
+  } else if (command == brCmd) {
+    G4double fb(1.0),en(1.e+30);
+    G4String s1(""),s2(""),unt("MeV");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> fb >> en >> unt;
+    en *= G4UIcommand::ValueOf(unt);    
+    opt->ActivateSecondaryBiasing(s1,s2,fb,en);
   }  
 }
 

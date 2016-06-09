@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2007/06/05 13:37:36 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2007-06-05 13:37:36 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for tracking library.  Katsuya Amako, 5/9/95.
 # ----------------------------------------------------------

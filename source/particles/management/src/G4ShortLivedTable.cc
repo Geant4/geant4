@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.18 2010/08/10 15:47:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ShortLivedTable.cc,v 1.18 2010-08-10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -56,6 +56,25 @@ G4ShortLivedTable::~G4ShortLivedTable()
   fShortLivedList->clear();
   delete fShortLivedList;
   fShortLivedList =0;
+}
+
+G4ShortLivedTable::G4ShortLivedTable(const G4ShortLivedTable & right)
+{
+  fShortLivedList = new G4ShortLivedList(*(right.fShortLivedList)); 
+}
+
+G4ShortLivedTable & G4ShortLivedTable::operator=(const G4ShortLivedTable &right)
+{
+  if (this != & right) {
+    if (fShortLivedList !=0){
+      fShortLivedList->clear();
+      delete fShortLivedList;
+      fShortLivedList = new G4ShortLivedList(*(right.fShortLivedList));
+    } else {
+      fShortLivedList = new G4ShortLivedList();
+    }
+  }
+  return *this;
 }
 
 G4int G4ShortLivedTable::GetVerboseLevel() const

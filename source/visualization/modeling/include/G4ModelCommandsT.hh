@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.13 2009/02/24 12:00:56 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ModelCommandsT.hh,v 1.13 2009-02-24 12:00:56 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
 //
@@ -487,11 +487,11 @@ protected:
     else if (type == "circles") {myType = G4Polymarker::circles;}
     else if (type == "squares") {myType = G4Polymarker::squares;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetStepPtsType::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0109", JustWarning, ed);
       return;
     }
     G4VModelCommand<M>::Model()->SetStepPtsType(myType);
@@ -525,11 +525,11 @@ protected:
     else if (type == "circles") {myType = G4Polymarker::circles;}
     else if (type == "squares") {myType = G4Polymarker::squares;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetAuxPtsType::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0110", JustWarning, ed);
       return;
     }
     
@@ -563,11 +563,11 @@ protected:
     else if (type == "world") {mySizeType = G4VMarker::world;}
     else if (type == "screen") {mySizeType = G4VMarker::screen;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetStepPtsSizeType::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0111", JustWarning, ed);
       return;
     }
     G4VModelCommand<M>::Model()->SetStepPtsSizeType(mySizeType);
@@ -600,11 +600,11 @@ protected:
     else if (type == "world") {mySizeType = G4VMarker::world;}
     else if (type == "screen") {mySizeType = G4VMarker::screen;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetAuxPtsSizeType::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0112", JustWarning, ed);
       return;
     }
     G4VModelCommand<M>::Model()->SetAuxPtsSizeType(mySizeType);
@@ -637,11 +637,11 @@ protected:
     else if (type == "hashed") {myFillStyle = G4VMarker::hashed;}
     else if (type == "filled") {myFillStyle = G4VMarker::filled;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetStepPtsFillStyle::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0113", JustWarning, ed);
       return;
     }
     G4VModelCommand<M>::Model()->SetStepPtsFillStyle(myFillStyle);
@@ -674,11 +674,11 @@ protected:
     else if (type == "hashed") {myFillStyle = G4VMarker::hashed;}
     else if (type == "filled") {myFillStyle = G4VMarker::filled;}
     else {
-      std::ostringstream o;
-      o << "Invalid argument. See command guidance for options.";
+      G4ExceptionDescription ed;
+      ed << "Invalid argument. See command guidance for options.";
       G4Exception
 	("G4ModelCmdSetAuxPtsFillStyle::Apply",
-	 "InvalidArgument", JustWarning, o.str().c_str());
+	 "modeling0114", JustWarning, ed);
       return;
     }
     G4VModelCommand<M>::Model()->SetAuxPtsFillStyle(myFillStyle);

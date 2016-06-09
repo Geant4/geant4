@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc,v 1.4 2010/11/21 16:08:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PEEffectFluoModel.cc,v 1.4 2010-11-21 16:08:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +66,9 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;
+  SetDeexcitationFlag(true);
+  fParticleChange = 0;
+  fAtomDeexcitation = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,7 +83,7 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
-  if (isInitialized) return;
+  if (isInitialized) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialized = true;
 }
@@ -145,14 +148,22 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 
   // Select atomic shell
   G4int nShells = anElement->GetNbOfAtomicShells();
-  G4int i  = 0;  
-  while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) { ++i; }
-
+  G4int i = 0;  
+  for(; i<nShells; ++i) {
+    /*
+    G4cout << "i= " << i << " E(eV)= " << energy/eV 
+    	   << " Eb(eV)= " << anElement->GetAtomicShell(i)/eV
+           << "  " << anElement->GetName() 
+	   << G4endl;
+    */
+    if(energy >= anElement->GetAtomicShell(i)) { break; }
+  }
   // no shell available
   if (i == nShells) { return; }
   
   G4double bindingEnergy  = anElement->GetAtomicShell(i);
   G4double ElecKineEnergy = energy - bindingEnergy;
+  G4double edep = bindingEnergy;
 
   // create photo electron
   //
@@ -167,11 +178,10 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     G4DynamicParticle* aParticle = new G4DynamicParticle (
                        theElectron,ElecDirection, ElecKineEnergy);
     fvect->push_back(aParticle);
-  } 
+  } else { edep = energy; }
 
   // sample deexcitation
   //
-  G4double edep = bindingEnergy;
   if(fAtomDeexcitation) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
@@ -188,6 +198,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       }
     }
   }
+  if(edep < 0.0) { edep = 0.0; }
 
   // kill primary photon
   fParticleChange->SetProposedKineticEnergy(0.);
@@ -205,13 +216,13 @@ G4double G4PEEffectFluoModel::ElecCosThetaDistribution(G4double kineEnergy)
   //
   G4double costeta = 1.;
   G4double gamma   = 1. + kineEnergy/electron_mass_c2;
-  if (gamma > 5.) return costeta;
+  if (gamma > 5.) { return costeta; }
   G4double beta  = sqrt(gamma*gamma-1.)/gamma;
   G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
 
   G4double rndm,term,greject,grejsup;
-  if (gamma < 2.) grejsup = gamma*gamma*(1.+b-beta*b);
-  else            grejsup = gamma*gamma*(1.+b+beta*b);
+  if (gamma < 2.) { grejsup = gamma*gamma*(1.+b-beta*b); }
+  else            { grejsup = gamma*gamma*(1.+b+beta*b); }
 
   do { rndm = 1.-2*G4UniformRand();
        costeta = (rndm+beta)/(rndm*beta+1.);

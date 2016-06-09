@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2010/09/08 11:23:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoMessenger.cc,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

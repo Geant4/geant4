@@ -41,6 +41,7 @@
 //        add two_body_reaction
 // 100909 add safty 
 // 101111 add safty for _nat_ data case in Binary reaction, but break conservation  
+// 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -72,9 +73,8 @@ void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
    //   delete aName;
 }
 
-void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
 {
-
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -82,7 +82,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
   G4bool dbool;
-  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, aFSType, dbool);
+  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, tString, aFSType, dbool);
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
@@ -120,7 +120,15 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     if(sfType>=600||(sfType<100&&sfType>=50)) it = sfType%50;
     if(dataType==3) 
     {
-      theData >> dummy >> dummy;
+      //theData >> dummy >> dummy;
+      //TK110430
+      // QI and LR introudced since G4NDL3.15
+      G4double dqi;
+      G4int ilr;
+      theData >> dqi >> ilr;
+
+      QI[ it ] = dqi*eV;
+      LR[ it ] = ilr;
       theXsection[it] = new G4NeutronHPVector;
       G4int total;
       theData >> total;
@@ -319,6 +327,42 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	  iLevel--;
 	  eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
 	}
+        //110610TK BEGIN
+        //Use QI value for calculating excitation energy of residual.
+        G4bool useQI=false;
+        G4double dqi = QI[it]; 
+        if ( dqi < 0 || 849 < dqi ) useQI = true; //Former libraies does not have values of this range
+ 
+        if ( useQI ) 
+        {
+           // QI introudced since G4NDL3.15
+           eExcitation = -QI[it];
+           //Re-evluate iLevel based on this eExcitation 
+           iLevel = 0;
+           G4bool find = false;
+           G4int imaxEx = 0;
+           while( !theGammas.GetLevel(iLevel+1) == 0 ) 
+           { 
+              G4double maxEx = 0.0;
+              if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
+              {
+                 maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();  
+                 imaxEx = iLevel;
+              }
+              if ( eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
+              {
+                 find = true; 
+                 iLevel--; 
+                 // very small eExcitation, iLevel becomes -1, this is protected below.
+                 if ( iLevel == -1 ) iLevel = 0; // But cause energy trouble. 
+                 break;
+              }
+              iLevel++; 
+           }
+           // In case, cannot find proper level, then use the maximum level. 
+           if ( !find ) iLevel = imaxEx;
+        }
+        //110610TK END
 	
 	if(getenv("InelasticCompFSLogging") && eKinetic-eExcitation < 0) 
 	{
@@ -332,6 +376,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
       if( theFinalStatePhotons[it] == 0 )
       {
+        //G4cout << "110610 USE Gamma Level" << G4endl;
 // TK comment Most n,n* eneter to this  
 	thePhotons = theGammas.GetDecayGammas(iLevel);
 	eGamm -= theGammas.GetLevelEnergy(iLevel);

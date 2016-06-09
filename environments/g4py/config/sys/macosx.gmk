@@ -1,5 +1,5 @@
-# $Id: macosx.gmk,v 1.6 2010/12/02 08:33:02 kmura Exp $
-# $Name: geant4-09-04 $
+# $Id: macosx.gmk,v 1.6 2010-12-02 08:33:02 kmura Exp $
+# $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
 #
@@ -11,7 +11,7 @@
 CXX      := g++
 
 ifdef COMPILE_WITH_BOOST
-  CXXFLAGS := -ftemplate-depth-256 -Wno-long-double
+  CXXFLAGS := -ftemplate-depth-256
   CXXFLAGS += -no-cpp-precomp -finline-functions -Wno-inline
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
   CXXFLAGS += -O2
@@ -26,7 +26,7 @@ endif
 
 ifdef COMPILE_G4PY
   CXXFLAGS := -ansi -pipe  
-  CXXFLAGS += -ftemplate-depth-256 -Wno-long-double
+  CXXFLAGS += -ftemplate-depth-256
   CXXFLAGS += -no-cpp-precomp -finline-functions -Wno-inline
   CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
   CXXFLAGS += -O2
@@ -76,13 +76,13 @@ endif
 # building a module
 ifdef CPPVERBOSE
   define build-module
-    $(CXX) -Wl,-x -bundle -flat_namespace -dead_strip \
+    $(CXX) -Wl,-x -bundle -flat_namespace -dead_strip -undefined suppress \
       -o $@ $(objects) $(LOPT)
   endef
 else
   define build-module
     @echo Building a module $@ ...
-    @$(CXX) -Wl,-x -bundle -flat_namespace -dead_strip \
+    @$(CXX) -Wl,-x -bundle -flat_namespace -dead_strip -undefined suppress \
       -o $@ $(objects) $(LOPT)
   endef
 endif

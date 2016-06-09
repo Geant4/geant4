@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.4 2006/06/29 16:45:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.4 2006-06-29 16:45:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +105,7 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
   
@@ -114,9 +114,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
 
   new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
+  
+  new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.920*g/cm3);  
 
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
-  
+
+  new G4Material("Nb"         , z=41., a= 92.906*g/mole,density= 8.57*g/cm3);
+    
   G4Material* NaI = 
   new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
   NaI->AddElement(Na, natoms=1);
@@ -135,7 +139,9 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
 
-  new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
+  new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.25*g/cm3);
+  
+  new G4Material("Gold"       , z=79., a=196.97*g/mole, density= 19.30*g/cm3);  
 
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
 

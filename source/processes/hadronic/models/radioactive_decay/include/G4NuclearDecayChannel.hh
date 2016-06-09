@@ -52,45 +52,45 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
   
 public: // with description
 
-  G4NuclearDecayChannel (const G4RadioactiveDecayMode &, G4int Verbose) :
-    G4GeneralPhaseSpaceDecay (Verbose) {;}
+  G4NuclearDecayChannel(const G4RadioactiveDecayMode&, G4int Verbose) :
+    G4GeneralPhaseSpaceDecay(Verbose) {;}
   // default constructor
   //
-  G4NuclearDecayChannel (const G4RadioactiveDecayMode &theMode, G4int Verbose,
-			 const G4ParticleDefinition *theParentNucleus, 
-                         G4double theBR, G4double theQtransition, G4int A,
-                         G4int Z, G4double theDaughterExcitation);
+  G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
+			const G4ParticleDefinition* theParentNucleus, 
+                        G4double theBR, G4double theQtransition, G4int A,
+                        G4int Z, G4double theDaughterExcitation);
   // constructor decay channel with one decay product
   //
-  G4NuclearDecayChannel (const G4RadioactiveDecayMode &theMode, G4int Verbose,
-			 const G4ParticleDefinition *theParentNucleus,
-                         G4double theBR, G4double theQtransition, G4int A,
-                         G4int Z, G4double theDaughterExcitation,
-			 const G4String theDaughterName1);
+  G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
+			const G4ParticleDefinition* theParentNucleus,
+                        G4double theBR, G4double theQtransition, G4int A,
+                        G4int Z, G4double theDaughterExcitation,
+			const G4String theDaughterName1);
   // constructor decay channel with two decay products
   //
-  G4NuclearDecayChannel (const G4RadioactiveDecayMode &theMode, G4int Verbose,
-                         const G4ParticleDefinition *theParentNucleus,
-                         G4double theBR, G4double theFFN,
-			 G4bool betaS, CLHEP::RandGeneral* randBeta,
-                         G4double theQtransition, G4int A, G4int Z,
-                         G4double theDaughterExcitation,
-                         const G4String theDaughterName1,
-                         const G4String theDaughterName2);
+  G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
+                        const G4ParticleDefinition* theParentNucleus,
+                        G4double theBR, G4double /* theFFN */,
+                        G4bool /* betaS */, CLHEP::RandGeneral* randBeta,
+                        G4double theQtransition, G4int A, G4int Z,
+                        G4double theDaughterExcitation,
+                        const G4String theDaughterName1,
+                        const G4String theDaughterName2);
   // constructor decay channel with three decay product
   //
 
-  ~G4NuclearDecayChannel (){;} 
+  ~G4NuclearDecayChannel(){;} 
 
   // destructor
   //
-  G4DecayProducts *DecayIt (G4double theParentMass);
+  G4DecayProducts* DecayIt(G4double theParentMass);
   // Returns the decay products
   //
-  void SetHLThreshold (G4double hl) {halflifethreshold = hl;}
+  void SetHLThreshold(G4double hl) {halflifethreshold = hl;}
   // Set the half-life threshold for isomer production
   //
-  void SetICM (G4bool icm) {applyICM = icm;}
+  void SetICM(G4bool icm) {applyICM = icm;}
   // Enable/disable ICM 
   //
   void SetARM (G4bool arm) {applyARM = arm;}
@@ -106,28 +106,28 @@ public: // with description
   // Returns the daughter nuclide.
   //
 private:
-  G4NuclearDecayChannel (const G4String &theName, const G4String &theParentName,
-                         G4double theBR, G4int theNumberOfDaughters,
-                         const G4String theDaughterName1,
-                         const G4String theDaughterName2,
-                         const G4String theDaughterName3,
-                         const G4String theDaughterName4);
+  G4NuclearDecayChannel(const G4String& theName, const G4String& theParentName,
+                        G4double theBR, G4int theNumberOfDaughters,
+                        const G4String theDaughterName1,
+                        const G4String theDaughterName2,
+                        const G4String theDaughterName3,
+                        const G4String theDaughterName4);
 
-  G4NuclearDecayChannel (const G4String &theParentName,
-                         G4double theBR, G4int theNumberOfDaughters,
-                         const G4String& theDaughterName1,
-                         const G4String& theDaughterName2 = "",
-                         const G4String& theDaughterName3 = "");
+  G4NuclearDecayChannel(const G4String& theParentName,
+                        G4double theBR, G4int theNumberOfDaughters,
+                        const G4String& theDaughterName1,
+                        const G4String& theDaughterName2 = "",
+                        const G4String& theDaughterName3 = "");
 
-  G4NuclearDecayChannel (const G4String &theParentName,
-                         G4double theParentMass, G4double theBR,
-                         G4int theNumberOfDaughters,
-                         const G4String& theDaughterName1,
-                         const G4String& theDaughterName2 = "",
-                         const G4String& theDaughterName3 = "");
+  G4NuclearDecayChannel(const G4String& theParentName,
+                        G4double theParentMass, G4double theBR,
+                        G4int theNumberOfDaughters,
+                        const G4String& theDaughterName1,
+                        const G4String& theDaughterName2 = "",
+                        const G4String& theDaughterName3 = "");
 
-  void FillDaughterNucleus (G4int index, G4int A, G4int Z,
-                            G4double theDaughterExcitation);
+  void FillDaughterNucleus(G4int index, G4int A, G4int Z,
+                           G4double theDaughterExcitation);
 
   G4DecayProducts* BetaDecayIt();
   // to replace the ThreeBodyDecayIt() to generate the correct beta spectrum
@@ -142,8 +142,6 @@ protected:
   G4ParticleDefinition  *daughterNucleus;
   G4DynamicParticle     *dynamicDaughter;
   G4double               Qtransition;
-  G4double               FermiFN;
-  G4bool                 BetaSimple;
   G4double               halflifethreshold;
   G4bool                 applyICM;
   G4bool                 applyARM;

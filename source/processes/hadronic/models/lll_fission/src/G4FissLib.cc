@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissLib.cc,v 1.2 2007/06/27 09:57:42 gcosmo Exp $
+// $Id: G4FissLib.cc,v 1.2 2007-06-27 09:57:42 gcosmo Exp $
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01RunAction.hh,v 1.2 2006/06/29 17:43:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01RunAction.hh,v 1.2 2006-06-29 17:43:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
 #ifndef RE01RunAction_h

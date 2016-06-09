@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.70 2010/11/13 10:52:00 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VisCommandsScene.cc,v 1.71 2010-12-11 16:53:20 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -544,6 +544,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
+	  // Force rebuild of graphical database, if any.
+	  aViewer -> NeedKernelVisit();
 	  if (aViewer->GetViewParameters().IsAutoRefresh()) {
 	    aSceneHandler -> SetCurrentViewer (aViewer);
 	    // Ensure consistency of vis manager...
@@ -561,8 +563,6 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	    // to work for all viewers.  If it's a problem for you,
 	    // uncomment the next line.
 	    //aSceneHandler->ClearTransientStore();
-	    // Now, force rebuild of graphical database, if any, and re-draw.
-	    aViewer -> NeedKernelVisit();
 	    aViewer -> SetView ();
 	    aViewer -> ClearView ();
 	    aViewer -> DrawView ();

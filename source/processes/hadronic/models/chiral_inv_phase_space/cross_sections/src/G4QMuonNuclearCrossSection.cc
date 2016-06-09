@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.2 2010/06/02 09:08:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.2 2010-06-02 09:08:25 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QMuonNuclearCrossSection for gamma+A cross sections
@@ -36,7 +36,7 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
-//=========================================================================================
+// --------------------------------------------------------------------------------
 // Short description: reaction cross-sections for muon-nuclear reactions, which
 // are integrals over virtual equivalent photons photons. The muon-nuclear GHAD
 // model (not CHIPS) gives 2-3 times smaller scattering angle and deposited energy.
@@ -118,7 +118,7 @@ G4double G4QMuonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   if(std::abs(pPDG)!=13)
   {
 #ifdef pdebug
-    G4cout<<"G4QMNCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QMNCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -354,8 +354,8 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
   G4double A=targN+targZ;            // New A (can be different from targetAtomicNumber)
   if(F<=0)                           // >>>This isotope was not the last used isotop<<<
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-    {                                // ...........................................========
+    if(F<0)                          // This isotope was found in DAMDB =------=> RETRIEVE
+    {                                // ...........................................=------=
       if (lastE<=EMi)                // Energy is below the minimum energy in the table
       {
         lastE=0.;
@@ -373,7 +373,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       lastH  =colH[I];               // Last High Energy Coefficient (A-dependent)
     }
     else                             // This isotope wasn't calculated previously => CREATE
-    {                                // ............................................=======
+    {                                // ............................................=-----=
       lastJ1 = new G4double[nE];     // Allocate memory for the new J1 function
       lastJ2 = new G4double[nE];     // Allocate memory for the new J2 function
       lastJ3 = new G4double[nE];     // Allocate memory for the new J3 function
@@ -392,7 +392,7 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       colH.push_back(lastH);
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW Calculate the Cross Section =====================
+  // =-------------------= NOW Calculate the Cross Section =--------------------------=
   if (lastE<=lastTH || lastE<=EMi)   // Check that muKiE is higher than ThreshE
   {
     lastE=0.;

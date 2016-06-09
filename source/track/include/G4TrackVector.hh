@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackVector.hh,v 1.4 2010/11/10 08:42:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TrackVector.hh,v 1.4 2010-11-10 08:42:47 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //

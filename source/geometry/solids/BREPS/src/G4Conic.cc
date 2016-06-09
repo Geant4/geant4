@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Conic.cc,v 1.8 2006/06/29 18:41:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Conic.cc,v 1.8 2006-06-29 18:41:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

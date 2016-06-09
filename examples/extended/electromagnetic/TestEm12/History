@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010/12/06 12:24:10 maire Exp $
+$Id: History,v 1.37 2011-01-05 19:07:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-11 V.Ivant (testem12-V09-04-10)
+- PhysListEmStandardGS, PhysListEmStandardWVI - low energy threshold
+   for Coulomb scattering model is reduced to 10 eV for e+- and to
+   100 eV for muons and hadrons
+     
+08-11-11 mma (testem12-V09-04-09)
+- modify SteppingVerbose for OutOfWorld
+          
+06-11-11 mma (testem12-V09-04-08)
+- add back PhysListEmStandardGS, PhysListEmStandardWVI
+ 
+31-10-11 mma (testem12-V09-04-07)
+- PhysListEmStandard : msc95 by default
+- remove PhysListEmStandardGS, PhysListEmStandardWVI 
+     
+05-06-11 mma (testem12-V09-04-06)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
+17-05-11 seb-mma (testem12-V09-04-05)
+- PhysicsList : add G4EmDNAPhysics
+- new macro dna.mac
+     
+08-04-11 mma (testem12-V09-04-03)
+- PhysicsList : set back default lowest production cut (990 eV)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
+
+28-03-11 V.Ivant (testem12-V09-04-02)
+- Reduced statistic in TestEm12.in
+- removed obsolete Set methods in PhysListEmStandard
+     
+20-02-11 mma (testem12-V09-04-01)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+- update SteppingVerbose
+- update vis.mac
+
+05-01-11 V.Ivant (testem12-V09-04-00)
+- Minor cleanup of SS physics constructor
      
 05-12-10 mma (testem12-V09-03-05)
 - subdirectory berger : results of EGSnrc simulation

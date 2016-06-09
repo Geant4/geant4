@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.15 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.15 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -49,6 +49,8 @@ public:
   virtual ~G4OpenGLWin32Viewer ();
   void SetView ();
   void ShowView ();
+  void DrawText(const char * ,double x,double y,double z, double size);
+
 protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();

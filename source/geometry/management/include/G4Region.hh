@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.21 2009/11/27 16:34:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Region.hh,v 1.21 2009-11-27 16:34:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
 //
@@ -183,6 +183,13 @@ class G4Region
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline void UsedInMassGeometry(G4bool val=true);
+    inline void UsedInParallelGeometry(G4bool val=true);
+    inline G4bool IsInMassGeometry() const;
+    inline G4bool IsInParallelGeometry() const;
+      // Utility methods to identify if region is part of the main mass
+      // geometry for tracking or a parallel geometry.
+
   private:
 
     G4Region(const G4Region&);
@@ -213,6 +220,10 @@ class G4Region
     G4VPhysicalVolume* fWorldPhys;
 
     G4UserSteppingAction* fRegionalSteppingAction;
+
+    G4bool fInMassGeometry;
+    G4bool fInParallelGeometry;
+  
 };
 
 #include "G4Region.icc"

@@ -1,4 +1,4 @@
-# $Id: TestEm18.in,v 1.3 2010/11/19 12:17:50 vnivanch Exp $
+# $Id: TestEm18.in,v 1.4 2011-01-06 18:34:38 maire Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -8,7 +8,7 @@
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
 #
-/testem/phys/addPhysics local
+/testem/phys/addPhysics standard
 #
 /testem/phys/setCuts 1 mm
 #

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClientServer.hh,v 1.7 2006/06/29 21:16:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FRClientServer.hh,v 1.7 2006-06-29 21:16:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996
 ////////////////////////////////

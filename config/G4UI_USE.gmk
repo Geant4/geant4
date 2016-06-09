@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 1.15 2009/03/05 09:19:37 gbarrand Exp $
+# $Id: G4UI_USE.gmk,v 1.15 2009-03-05 09:19:37 gbarrand Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
@@ -65,6 +65,14 @@ ifdef G4UI_USE_QT
   INC_QT   = 1
   LOAD_QT   = 1
   CPPFLAGS += -DG4UI_USE_QT
+endif
+
+ifdef G4UI_USE_WT
+  G4UI_USE  = 1
+  G4INTY_USE_WT = 1
+  INC_WT   = 1
+  LOAD_WT   = 1
+  CPPFLAGS += -DG4UI_USE_WT
 endif
 
 ifdef G4UI_USE_XAW

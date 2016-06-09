@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LETritonInelastic.hh,v 1.10 2007-02-26 18:34:35 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LETritonInelastic.hh,v 1.10 2007/02/26 18:34:35 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy Triton Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy Triton Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
  
 #ifndef G4LETritonInelastic_h
 #define G4LETritonInelastic_h 1
@@ -43,22 +41,24 @@
 
 #include "G4InelasticInteraction.hh"
  
- class G4LETritonInelastic : public G4InelasticInteraction
- {
- public:
+class G4LETritonInelastic : public G4InelasticInteraction
+{
+  public:
     
     G4LETritonInelastic() : G4InelasticInteraction("G4LETritonInelastic")
     {
       SetMinEnergy( 0.0 );
       // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
       // Work around to avoid exception in G4EnergyRangeManager
-      SetMaxEnergy( 10.*TeV );  // NUCREC only worked for energies < 100MeV
+      SetMaxEnergy(10.*TeV);  // NUCREC only worked for energies < 100MeV
     }
     
     ~G4LETritonInelastic() { }
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
  };
  
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.21 2009/04/08 16:55:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.21 2009-04-08 16:55:44 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -67,19 +67,6 @@ void G4OpenGLImmediateXmViewer::Initialise () {
   CreateFontLists ();
 
   InitializeGLView ();
-
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
-  
-  glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glLineWidth (1.0);
-
-  glEnable (GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.

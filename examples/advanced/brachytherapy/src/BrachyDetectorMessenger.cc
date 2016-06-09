@@ -34,8 +34,8 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.12 2006/06/29 15:48:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyDetectorMessenger.cc,v 1.12 2006-06-29 15:48:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.18 2009/09/25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ShellEMDataSet.cc,v 1.18 2009-09-25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -71,7 +71,7 @@ G4ShellEMDataSet::G4ShellEMDataSet(G4int zeta, G4VDataSetAlgorithm* algo,
   unitEnergies(eUnit),
   unitData(dataUnit)
 {
-  if (algorithm == 0) G4Exception("G4ShellEMDataSet::G4ShellEMDataSet - interpolation == 0");
+  if (algorithm == 0) G4Exception("G4ShellEMDataSet::G4ShellEMDataSet()","em0007",FatalErrorInArgument, "Interpolation == 0");
 }
 
 
@@ -130,10 +130,9 @@ void G4ShellEMDataSet::SetEnergiesData(G4DataVector* energies,
       return;
     }
 
-  std::ostringstream message;
-  message << "G4ShellEMDataSet::SetEnergiesData - component " << componentId << " not found";
+  G4String msg = "component " + (G4String)componentId + " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4ShellEMDataSet::SetEnergiesData()","em0008", FatalErrorInArgument ,msg);
 }
 
 
@@ -151,10 +150,10 @@ void G4ShellEMDataSet::SetLogEnergiesData(G4DataVector* energies,
       return;
     }
 
-  std::ostringstream message;
-  message << "G4ShellEMDataSet::SetLogEnergiesData - component " << componentId << " not found";
+  G4String msg = "component " + (G4String)componentId + " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4ShellEMDataSet::SetLogEnergiesData()","em0008", FatalErrorInArgument ,msg);
+
 }
 
 
@@ -168,10 +167,11 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
 
   if (!in.is_open())
     {
-      G4String message("G4ShellEMDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4ShellEMDataSet::LoadData()", "em0003",FatalException, message);
+      return 0;
     }
 
   G4DataVector* orig_shell_energies = 0;
@@ -231,6 +231,12 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
       else k = 1;
     }
   while (a != -2);  // End of file
+ 
+
+  delete orig_shell_energies;
+  delete orig_shell_data;
+  delete log_shell_energies;
+  delete log_shell_data;
 
   return true;
 }
@@ -248,7 +254,8 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
       G4String message("G4ShellEMDataSet::LoadData - data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4ShellEMDataSet::LoadNonLogData()", "em0003",FatalException, message);
+      return 0;
     }
 
   G4DataVector* orig_shell_energies = 0;
@@ -299,6 +306,10 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
     }
   while (a != -2);  // End of file
 
+
+  delete orig_shell_energies;
+  delete orig_shell_data;
+
   return true;
 }
 
@@ -311,10 +322,10 @@ G4bool G4ShellEMDataSet::SaveData(const G4String& file) const
 
   if (!out.is_open())
     {
-      G4String message("G4EMDataSet::SaveData - cannot open \"");
+      G4String message("Cannot open \"");
       message += fullFileName;
       message += "\"";
-      G4Exception(message);
+      G4Exception("G4EMDataSet::SaveData()","em0005",FatalException,message);
     }
  
   const size_t n = NumberOfComponents();
@@ -389,8 +400,12 @@ void G4ShellEMDataSet::CleanUpComponents(void)
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {
   char* path = getenv("G4LEDATA");
+  
   if (!path)
-    G4Exception("G4ShellEMDataSet::FullFileName - G4LEDATA environment variable not set");
+  {
+    G4Exception("G4ShellEMDataSet::FullFileName()","em0006",JustWarning,"Please set G4LEDATA");
+    return "";
+  }
   
   std::ostringstream fullFileName;
  

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:15:02 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:15:02 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandModelCreate.hh
         G4VisCommands.hh
         G4VisCommandsCompound.hh
+        G4VisCommandsDefault.hh
         G4VisCommandsGeometry.hh
         G4VisCommandsGeometrySet.hh
         G4VisCommandsListManager.hh
@@ -103,6 +104,7 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4ViewerList.cc
         G4VisCommands.cc
         G4VisCommandsCompound.cc
+        G4VisCommandsDefault.cc
         G4VisCommandsGeometry.cc
         G4VisCommandsGeometrySet.cc
         G4VisCommandsScene.cc

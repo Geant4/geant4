@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: StandaloneVisAction.hh,v 1.2 2006/06/29 17:45:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: StandaloneVisAction.hh,v 1.2 2006-06-29 17:45:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef STANDALONEVISACTION_HH
 #define STANDALONEVISACTION_HH

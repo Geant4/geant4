@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.44 2010/05/30 11:30:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VSceneHandler.hh,v 1.44 2010-05-30 11:30:49 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996.

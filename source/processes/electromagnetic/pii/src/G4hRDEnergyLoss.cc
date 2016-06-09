@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.cc,v 1.3 2010/11/25 19:49:43 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4hRDEnergyLoss.cc,v 1.3 2010-11-25 19:49:43 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -59,6 +59,9 @@
 
 // 25 Nov 2010 MGP     Added some protections for FPE (mostly division by 0)
 //                     The whole energy loss domain would profit from a design iteration
+
+// 20 Jun 2011 MGP     Corrected some compilation warnings. The whole class will be heavily refactored anyway.
+
 // --------------------------------------------------------------
 
 #include "G4hRDEnergyLoss.hh"
@@ -66,7 +69,6 @@
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Initialisation of static members ******************************************
 // contributing processes : ion.loss ->NumberOfProcesses is initialized
@@ -511,7 +513,8 @@ void G4hRDEnergyLoss::BuildLabTimeVector(G4int materialIndex,
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  //G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
     LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
@@ -520,8 +523,8 @@ void G4hRDEnergyLoss::BuildLabTimeVector(G4int materialIndex,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(HighestKineticEnergy/ParticleMass) ;
+  //ltaulim = std::log(taulim);
+  //ltaumax = std::log(HighestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -570,7 +573,8 @@ void G4hRDEnergyLoss::BuildProperTimeVector(G4int materialIndex,
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  //G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
     LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
@@ -579,8 +583,8 @@ void G4hRDEnergyLoss::BuildProperTimeVector(G4int materialIndex,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(HighestKineticEnergy/ParticleMass) ;
+  //ltaulim = std::log(taulim);
+  //ltaumax = std::log(HighestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;

@@ -23,124 +23,140 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Low Energy Proton Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996
  
 #include "G4LEProtonInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LEProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {
-    theParticleChange.Clear();
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEProtonInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+#include <iostream>
+
+
+G4LEProtonInelastic::G4LEProtonInelastic(const G4String& name)
+ :G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(55.*GeV);
+}
+
+
+void G4LEProtonInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEProtonInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic proton scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to protons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus)
+{
+  theParticleChange.Clear();
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // Create the target particle
+
+  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEProtonInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    if( originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9. )
-    {
-      SlowProton( originalIncident, targetNucleus );
-      delete originalTarget;
-      return &theParticleChange;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
-    
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    const G4double cutOff = 0.1;
-    if( modifiedOriginal.GetKineticEnergy()/MeV <= cutOff )
-    {
-      SlowProton( originalIncident, targetNucleus );
-      delete originalTarget;
-      return &theParticleChange;
-    }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the sec. particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
-    
-    Cascade( vec, vecLen,
-             originalIncident, currentParticle, targetParticle,
-             incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
+  }
+
+  if (originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9.) {
+    SlowProton( originalIncident, targetNucleus );
     delete originalTarget;
     return &theParticleChange;
   }
 
- void
-  G4LEProtonInelastic::SlowProton(
-   const G4HadProjectile *originalIncident,
-   G4Nucleus &targetNucleus )
-  {
-    const G4double A = targetNucleus.GetN();    // atomic weight
-    const G4double Z = targetNucleus.GetZ();    // atomic number
-//    G4double currentKinetic = originalIncident->GetKineticEnergy()/MeV;
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
+    
+  G4double tkin = targetNucleus.Cinema( ek );
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+
+  tkin = targetNucleus.EvaporationEffects( ek );
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+  const G4double cutOff = 0.1;
+  if (modifiedOriginal.GetKineticEnergy()/MeV <= cutOff) {
+    SlowProton( originalIncident, targetNucleus );
+    delete originalTarget;
+    return &theParticleChange;
+  }
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
+  targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the sec. particles
+  G4int vecLen = 0;
+  vec.Initialize( 0 );
+    
+  Cascade(vec, vecLen,
+          originalIncident, currentParticle, targetParticle,
+          incidentHasChanged, targetHasChanged, quasiElastic);
+    
+  CalculateMomenta(vec, vecLen,
+                   originalIncident, originalTarget, modifiedOriginal,
+                   targetNucleus, currentParticle, targetParticle,
+                   incidentHasChanged, targetHasChanged, quasiElastic);
+    
+  SetUpChange(vec, vecLen,
+              currentParticle, targetParticle,
+              incidentHasChanged);
+    
+  delete originalTarget;
+  return &theParticleChange;
+}
+
+
+void
+G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
+                                G4Nucleus& targetNucleus)
+{
+    const G4double A = targetNucleus.GetA_asInt();    // atomic weight
+    const G4double Z = targetNucleus.GetZ_asInt();    // atomic number
     //
     // calculate Q-value of reactions
     //

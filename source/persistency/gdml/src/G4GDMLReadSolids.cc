@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.32 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLReadSolids.cc,v 1.32 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -60,6 +60,7 @@
 #include "G4Trd.hh"
 #include "G4TriangularFacet.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
@@ -178,7 +179,6 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double x = 0.0;
    G4double y = 0.0;
    G4double z = 0.0;
@@ -208,7 +208,6 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 
       if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="x") { x = eval.Evaluate(attValue); } else
       if (attName=="y") { y = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); }
@@ -321,8 +320,6 @@ ElconeRead(const xercesc::DOMElement* const elconeElement)
       if (attName=="zcut") { zcut = eval.Evaluate(attValue); }
    }
 
-   dx *= lunit;
-   dy *= lunit;
    zmax *= lunit;
    zcut *= lunit;
 
@@ -639,7 +636,6 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double rlo = 0.0;
    G4double rhi = 0.0;
    G4double dz = 0.0;
@@ -669,7 +665,6 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
 
       if (attName=="name")  { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="rlo")   { rlo =  eval.Evaluate(attValue); } else
       if (attName=="rhi")   { rhi = eval.Evaluate(attValue); } else
       if (attName=="dz")    { dz = eval.Evaluate(attValue); } 
@@ -851,6 +846,7 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = quadrangularElement->getAttributes();
@@ -883,11 +879,14 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
         { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex4")
         { vertex4 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4QuadrangularFacet(vertex1,vertex2,vertex3,vertex4,type);
+   return new G4QuadrangularFacet(vertex1*lunit,vertex2*lunit,
+                                  vertex3*lunit,vertex4*lunit,type);
 }
 
 void G4GDMLReadSolids::
@@ -1076,7 +1075,7 @@ TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateName(attValue); }
+      if (attName=="name")  { name = GenerateName(attValue); }
    }
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(name);
@@ -1112,6 +1111,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
+   G4double lunit = 1.0;
    
    const xercesc::DOMNamedNodeMap* const attributes
          = tetElement->getAttributes();
@@ -1138,6 +1138,8 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
 
       if (attName=="name")
         { name = GenerateName(attValue); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="vertex1")
         { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
@@ -1148,7 +1150,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
         { vertex4 = GetPosition(GenerateName(attValue)); }
    }
 
-   new G4Tet(name,vertex1,vertex2,vertex3,vertex4);
+   new G4Tet(name,vertex1*lunit,vertex2*lunit,vertex3*lunit,vertex4*lunit);
 }
 
 void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
@@ -1260,14 +1262,14 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 
    dz *= lunit;
    std::vector<G4TwoVector> vertices;
-   vertices.push_back(G4TwoVector(v1x,v1y));
-   vertices.push_back(G4TwoVector(v2x,v2y));
-   vertices.push_back(G4TwoVector(v3x,v3y));
-   vertices.push_back(G4TwoVector(v4x,v4y));
-   vertices.push_back(G4TwoVector(v5x,v5y));
-   vertices.push_back(G4TwoVector(v6x,v6y));
-   vertices.push_back(G4TwoVector(v7x,v7y));
-   vertices.push_back(G4TwoVector(v8x,v8y));
+   vertices.push_back(G4TwoVector(v1x*lunit,v1y*lunit));
+   vertices.push_back(G4TwoVector(v2x*lunit,v2y*lunit));
+   vertices.push_back(G4TwoVector(v3x*lunit,v3y*lunit));
+   vertices.push_back(G4TwoVector(v4x*lunit,v4y*lunit));
+   vertices.push_back(G4TwoVector(v5x*lunit,v5y*lunit));
+   vertices.push_back(G4TwoVector(v6x*lunit,v6y*lunit));
+   vertices.push_back(G4TwoVector(v7x*lunit,v7y*lunit));
+   vertices.push_back(G4TwoVector(v8x*lunit,v8y*lunit));
    new G4GenericTrap(name,dz,vertices);
 }
 
@@ -1346,7 +1348,6 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double x1 = 0.0;
    G4double x2 = 0.0;
    G4double y1 = 0.0;
@@ -1377,7 +1378,6 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 
       if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="x1") { x1 = eval.Evaluate(attValue); } else
       if (attName=="x2") { x2 = eval.Evaluate(attValue); } else
       if (attName=="y1") { y1 = eval.Evaluate(attValue); } else
@@ -1401,6 +1401,7 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = triangularElement->getAttributes();
@@ -1431,11 +1432,13 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
         { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
         { vertex3 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4TriangularFacet(vertex1,vertex2,vertex3,type);
+   return new G4TriangularFacet(vertex1*lunit,vertex2*lunit,vertex3*lunit,type);
 }
 
 void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
@@ -1489,6 +1492,68 @@ void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
    deltaphi *= aunit;
 
    new G4Tubs(name,rmin,rmax,z,startphi,deltaphi);
+}
+
+void G4GDMLReadSolids::CutTubeRead(const xercesc::DOMElement* const cuttubeElement)
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double rmin = 0.0;
+   G4double rmax = 0.0;
+   G4double z = 0.0;
+   G4double startphi = 0.0;
+   G4double deltaphi = 0.0;
+   G4ThreeVector lowNorm(0);
+   G4ThreeVector highNorm(0);
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = cuttubeElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::CutTubeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
+      if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
+      if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
+      if (attName=="z") { z = eval.Evaluate(attValue); } else
+      if (attName=="startphi") { startphi = eval.Evaluate(attValue); } else
+      if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); } else
+      if (attName=="lowX") { lowNorm.setX (eval.Evaluate(attValue)); } else
+      if (attName=="lowY") { lowNorm.setY (eval.Evaluate(attValue)); } else
+      if (attName=="lowZ") { lowNorm.setZ (eval.Evaluate(attValue)); } else
+      if (attName=="highX") { highNorm.setX (eval.Evaluate(attValue)); } else
+      if (attName=="highY") { highNorm.setY (eval.Evaluate(attValue)); } else
+      if (attName=="highZ") { highNorm.setZ (eval.Evaluate(attValue)); } 
+   
+   }
+
+   rmin *= lunit;
+   rmax *= lunit;
+   z *= 0.5*lunit;
+   startphi *= aunit;
+   deltaphi *= aunit;
+
+   new G4CutTubs(name,rmin,rmax,z,startphi,deltaphi,lowNorm,highNorm);
 }
 
 void G4GDMLReadSolids::
@@ -1957,6 +2022,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="trap") { TrapRead(child); } else
       if (tag=="trd") { TrdRead(child); } else
       if (tag=="tube") { TubeRead(child); } else
+      if (tag=="cutTube") { CutTubeRead(child); } else
       if (tag=="twistedbox") { TwistedboxRead(child); } else
       if (tag=="twistedtrap") { TwistedtrapRead(child); } else
       if (tag=="twistedtrd") { TwistedtrdRead(child); } else

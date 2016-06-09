@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.cc,v 1.4 2010/10/21 09:21:41 ivana Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Pythia6Decayer.cc,v 1.4 2010-10-21 09:21:41 ivana Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // According to TPythia6Decayer class in Root:
 // http://root.cern.ch/

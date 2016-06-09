@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2010/11/30 10:53:38 gcosmo Exp $
+$Id: History,v 1.11 2010-11-30 10:53:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 10th, 2011  Gabriele Cosmo G02-V09-04-01
+- Changed from no longer supported physics-list QGSP-BERT-EMV to QGSP-BERT.
+
+September 27th, 2011  Anton Pytel G02-V09-04-00
+- Updated test.gdml to add example of ionisation potential to materials.
+  Requires upgrade of the schema to GDML-3.0.1.
 
 November 30th, 2010  Ivana Hrivnacova G02-V09-03-04
 - Moved inclusion of vis headers as last in main().

@@ -7,16 +7,18 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 18:37:36 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:37:36 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
+add_subdirectory(analysis)
 add_subdirectory(digits_hits)
 add_subdirectory(error_propagation)
 add_subdirectory(event)
+add_subdirectory(externals)
 
 # Target G4g3tog4 is optional based on user selection...
-if(GEANT4_USE_GEANT3TOGEANT4)
+if(GEANT4_USE_G3TOG4)
     add_subdirectory(g3tog4)
 endif()
 

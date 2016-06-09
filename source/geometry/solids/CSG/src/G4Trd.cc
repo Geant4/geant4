@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.38 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Trd.cc,v 1.38 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Implementation for G4Trd class
@@ -97,15 +97,14 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
     }
     else
     {
-      G4cerr << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
-             << G4endl
-             << "        Invalid dimensions, some are < 0 !" << G4endl
-             << "          X - " << pdx1 << ", " << pdx2 << G4endl
-             << "          Y - " << pdy1 << ", " << pdy2 << G4endl
-             << "          Z - " << pdz << G4endl;
+      std::ostringstream message;
+      message << "Invalid negative dimensions for Solid: " << GetName()
+              << G4endl
+              << "          X - " << pdx1 << ", " << pdx2 << G4endl
+              << "          Y - " << pdy1 << ", " << pdy2 << G4endl
+              << "          Z - " << pdz;
       G4Exception("G4Trd::CheckAndSetAllParameters()",
-                  "InvalidSetup", FatalException,
-                  "Invalid parameters.");
+                  "GeomSolids0002", FatalException, message);
     }
   }
   fCubicVolume= 0.;
@@ -486,7 +485,7 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Trd::SurfaceNormal(p)", "Notification", JustWarning, 
+    G4Exception("G4Trd::SurfaceNormal(p)", "GeomSolids1002", JustWarning, 
                 "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
@@ -1246,7 +1245,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Trd::DistanceToOut(p,v,..)","Notification",JustWarning, 
+        G4Exception("G4Trd::DistanceToOut(p,v,..)",
+                    "GeomSolids1002", JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -1277,7 +1277,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc) ;
-     G4Exception("G4Trd::DistanceToOut(p)", "Notification", JustWarning, 
+     G4Exception("G4Trd::DistanceToOut(p)", "GeomSolids1002", JustWarning, 
                  "Point p is outside !?" );
   }
 #endif
@@ -1346,7 +1346,7 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   {
     DumpInfo();
     G4Exception("G4Trd::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -1376,6 +1376,7 @@ G4VSolid* G4Trd::Clone() const
 
 std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1387,6 +1388,7 @@ std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
      << "    half length Y, surface +dZ: " << fDy2/mm << " mm \n"
      << "    half length Z             : " << fDz/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

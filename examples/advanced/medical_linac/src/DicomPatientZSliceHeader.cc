@@ -85,7 +85,9 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
 #endif
 
     if( ! CheckMaterialExists( matename ) ) {
-      G4Exception("DicomPatientZSliceHeader::DicomPatientZSliceHeader","A material is found in file that is not built in the C++ code",FatalErrorInArgument,matename.c_str());
+      G4ExceptionDescription ed5;
+      ed5 << "A material is found in file that is not built in the C++ code " << matename.c_str() << G4endl;
+    G4Exception("DicomPatientZSliceHeader::DicomPatientZSliceHeader", "medical_linac0005", FatalException,ed5);
     }
 
     fMaterialNames.push_back(matename);
@@ -145,7 +147,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
 	   << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
 	   << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPatientZSliceHeader::operator+()", "medical_linac0006", FatalException, "");
   }
   //----- Check that both slices has the same extensions
   if( fMinX != rhs.GetMinX() || fMaxX != rhs.GetMaxX() 
@@ -156,19 +158,19 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
 	   << "  Ymin= " << fMinY << " =? " << rhs.GetMinY() 
 	   << "  Ymax= " << fMaxY << " =? " << rhs.GetMaxY() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPatientZSliceHeader::operator+()", "medical_linac0007", FatalException, "");
   }
   
   //----- Check that both slices has the same materials
   std::vector<G4String> fMaterialNames2 = rhs.GetMaterialNames();
   if( fMaterialNames.size() != fMaterialNames2.size() ) {
     G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different number of materials: " << fMaterialNames.size() << " =? " << fMaterialNames2.size() << G4endl;
-    G4Exception("");
+    G4Exception("DicomPatientZSliceHeader::operator+()", "medical_linac0008", FatalException, "");
   }
   for( unsigned int ii = 0; ii < fMaterialNames.size(); ii++ ) {
     if( fMaterialNames[ii] != fMaterialNames2[ii] ) {
       G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different material number " << ii << " : " << fMaterialNames[ii] << " =? " << fMaterialNames2[ii] << G4endl;
-      G4Exception("");
+      G4Exception("DicomPatientZSliceHeader::operator+()", "medical_linac0009", FatalException, "");
     }
   }
    
@@ -179,7 +181,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
 	   << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
 	   << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPatientZSliceHeader::operator+()", "medical_linac0010", FatalException, "");
   }
 
   //----- Build slice header copying first one

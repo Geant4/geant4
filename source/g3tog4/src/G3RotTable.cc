@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3RotTable.cc,v 1.16 2006/06/29 18:13:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3RotTable.cc,v 1.16 2006-06-29 18:13:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -64,10 +64,12 @@ void G3RotTable::Clear()
     a = fRotVector->back();
     fRotVector->pop_back();
     for (G3RotMatrixVector::iterator i=fRotVector->begin();
-                                     i!=fRotVector->end(); i++){
+                                     i!=fRotVector->end();){
       if (*i==a) {
-	fRotVector->erase(i);
-	i--;
+	i = fRotVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    

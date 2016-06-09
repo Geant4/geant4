@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.12 2010/11/17 20:42:14 allison Exp $
+// $Id: Microbeam.cc,v 1.12 2010-11-17 20:42:14 allison Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -100,7 +100,7 @@ int main(int argc,char** argv) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
   
   // local user files created by the simulation
-  system ("rm -rf microbeam.root");
+  remove ("microbeam.root");
        
   if (argc==1)   // define UI session for interactive mode.
     {

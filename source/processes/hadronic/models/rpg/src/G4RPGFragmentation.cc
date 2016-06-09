@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc,v 1.7 2010/11/22 06:42:03 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RPGFragmentation.cc,v 1.7 2010-11-22 06:42:03 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "G4RPGFragmentation.hh"
@@ -147,8 +147,8 @@ ReactionStage(const G4HadProjectile* originalIncident,
     currentParticle.SetMomentum( m );
     veryForward = true;
   }
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
   const G4double protonMass = aProton->GetPDGMass();
 
   if (originalIncident->GetDefinition()->GetParticleSubType() == "kaon"
@@ -865,9 +865,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
   numberofFinalStateNucleons = std::max(1, numberofFinalStateNucleons);
 
   G4int PinNucleus = std::max(0, 
-    G4int(targetNucleus.GetZ()) - protonsInFinalState);
+    G4int(targetNucleus.GetZ_asInt()) - protonsInFinalState);
   G4int NinNucleus = std::max(0,
-    G4int(targetNucleus.GetN()-targetNucleus.GetZ()) - neutronsInFinalState);
+    G4int(targetNucleus.GetA_asInt()-targetNucleus.GetZ_asInt()) - neutronsInFinalState);
 
   pseudoParticle[3].SetMomentum( 0.0, 0.0, pOriginal*GeV );
   pseudoParticle[3].SetMass( mOriginal*GeV );

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc,v 1.4 2007/05/29 13:50:15 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CoupledTransportation.icc,v 1.4 2007-05-29 13:50:15 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // 
@@ -126,3 +126,10 @@ inline void G4CoupledTransportation::ResetKilledStatistics(G4int report)
 }
      // Statistics for tracks killed (currently due to looping in field)
 
+
+inline G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  return lastValue; 
+}

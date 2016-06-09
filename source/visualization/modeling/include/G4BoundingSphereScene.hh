@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.20 2010/05/30 11:23:25 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4BoundingSphereScene.hh,v 1.20 2010-05-30 11:23:25 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  7th June 1997

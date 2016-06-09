@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.56 2010/05/27 14:22:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4eCoulombScatteringModel.hh,v 1.56 2010-05-27 14:22:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -102,9 +102,9 @@ public:
 				 G4double maxEnergy);
 
   // defines low energy limit of the model
-  inline void SetLowEnergyLimit(G4double val);
+  inline void SetLowEnergyThreshold(G4double val);
 
-  // obsolete method
+  // user definition of low-energy threshold of recoil
   inline void SetRecoilThreshold(G4double eth);
 
 protected:
@@ -130,7 +130,6 @@ protected:
 
   const G4MaterialCutsCouple* currentCouple;
   const G4Material*           currentMaterial;
-  const G4Element*            currentElement;
   G4int                       currentMaterialIndex;
 
   G4double                  cosThetaMin;
@@ -145,7 +144,7 @@ protected:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* theProton;
 
-  G4double                  lowEnergyLimit;
+  G4double                  lowEnergyThreshold;
 
 private:
 
@@ -179,9 +178,9 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4eCoulombScatteringModel::SetLowEnergyLimit(G4double val)
+inline void G4eCoulombScatteringModel::SetLowEnergyThreshold(G4double val)
 {
-  lowEnergyLimit = val;
+  lowEnergyThreshold = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

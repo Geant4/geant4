@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.23 2010/10/01 02:41:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.23 2010-10-01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -1403,7 +1403,7 @@ const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMulti
   {   1.474*GeV, 1.350*GeV,       0.0, 1.430*GeV,  1.430*GeV },
   {   1.230*GeV,1.2818*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
   {  1.3183*GeV,1.2751*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
-  {  1.6724*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
+  {  1.6722*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
   {   1.720*GeV, 1.670*GeV,       0.0, 1.717*GeV,  1.717*GeV },
   {  1.6888*GeV, 1.667*GeV, 1.854*GeV, 1.776*GeV,  1.776*GeV },
   {   1.300*GeV, 1.294*GeV, 1.476*GeV, 1.460*GeV,  1.460*GeV },
@@ -1427,7 +1427,7 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
   {  265.0*MeV, 350.0*MeV,       0.0, 270.0*MeV, 270.0*MeV },
   {  420.0*MeV,  24.3*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
   {  107.0*MeV, 185.1*MeV,  73.0*MeV,  98.5*MeV,  98.5*MeV },
-  {  259.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
+  {  260.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
   {  250.0*MeV, 315.0*MeV,       0.0, 320.0*MeV, 320.0*MeV },
   {  161.0*MeV, 168.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },
   {  400.0*MeV,  55.0*MeV,  85.0*MeV, 260.0*MeV, 260.0*MeV },

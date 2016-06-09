@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.20 2010/07/13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ReplicaNavigation.cc,v 1.20 2010-07-13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -164,7 +164,7 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
       }
       break;
     default:
-      G4Exception("G4ReplicaNavigation::Inside()", "WrongArgumentValue",
+      G4Exception("G4ReplicaNavigation::Inside()", "GeomNav0002",
                   FatalException, "Unknown axis!");
       break;
   }
@@ -231,7 +231,7 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       }
       break;
     default:
-     G4Exception("G4ReplicaNavigation::DistanceToOut()", "WrongArgumentValue",
+     G4Exception("G4ReplicaNavigation::DistanceToOut()", "GeomNav0002",
                  FatalException, "Unknown axis!");
      break;
   }
@@ -289,7 +289,7 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       Dist=DistanceToOutRad(localPoint,localDirection,width,offset,replicaNo);
       break;
     default:
-     G4Exception("G4ReplicaNavigation::DistanceToOut()", "WrongArgumentValue",
+     G4Exception("G4ReplicaNavigation::DistanceToOut()", "GeomNav0002",
                  FatalException, "Unknown axis!");
      break;
   }
@@ -782,23 +782,24 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   {
     if( motherSolid->Inside(localPoint)==kOutside )
     {
-      G4cout << "WARNING - G4ReplicaNavigation::ComputeStep()" << G4endl
-             << "          Point " << localPoint
-             << " is outside current volume " << motherPhysical->GetName()
-             << G4endl;
+      std::ostringstream message;
+      message << "Point outside volume !" << G4endl
+              << "          Point " << localPoint
+              << " is outside current volume " << motherPhysical->GetName()
+              << G4endl;
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
-      G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
-             << estDistToSolid << G4endl;
+      message << "          Estimated isotropic distance to solid (distToIn)= " 
+              << estDistToSolid;
       if( estDistToSolid > 100.0 * kCarTolerance )
       {
         motherSolid->DumpInfo();
         G4Exception("G4ReplicaNavigation::ComputeStep()",
-                    "FarOutsideCurrentVolume", FatalException,
+                    "GeomNav0003", FatalException, message,
                     "Point is far outside Current Volume !" ); 
       }
       else
         G4Exception("G4ReplicaNavigation::ComputeStep()",
-                    "OutsideCurrentVolume", JustWarning,
+                    "GeomNav1002", JustWarning, message,
                     "Point is a little outside Current Volume."); 
     }
   }
@@ -873,31 +874,30 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
             if ( insideIntPt != kSurface )
             {
               G4int oldcoutPrec = G4cout.precision(16); 
-              G4cout << "WARNING - G4ReplicaNavigation::ComputeStep()"
-                     << G4endl
-                     << "          Inaccurate DistanceToIn for solid "
-                     << sampleSolid->GetName() << G4endl;
-              G4cout << "          Solid gave DistanceToIn = "
-                     << sampleStepDistance << " yet returns " ;
+              std::ostringstream message;
+              message << "Navigator gets conflicting response from Solid."
+                      << G4endl
+                      << "          Inaccurate DistanceToIn for solid "
+                      << sampleSolid->GetName() << G4endl
+                      << "          Solid gave DistanceToIn = "
+                      << sampleStepDistance << " yet returns " ;
               if ( insideIntPt == kInside )
-                G4cout << "-kInside-"; 
+                message << "-kInside-"; 
               else if ( insideIntPt == kOutside )
-                G4cout << "-kOutside-";
+                message << "-kOutside-";
               else
-                G4cout << "-kSurface-"; 
-              G4cout << " for this point !" << G4endl; 
-              G4cout << "          Point = " << intersectionPoint << G4endl;
+                message << "-kSurface-"; 
+              message << " for this point !" << G4endl
+                      << "          Point = " << intersectionPoint << G4endl;
               if ( insideIntPt != kInside )
-                G4cout << "        DistanceToIn(p) = " 
+                message << "        DistanceToIn(p) = " 
                        << sampleSolid->DistanceToIn(intersectionPoint)
                        << G4endl;
               if ( insideIntPt != kOutside ) 
-                G4cout << "        DistanceToOut(p) = " 
-                       << sampleSolid->DistanceToOut(intersectionPoint)
-                       << G4endl;
+                message << "        DistanceToOut(p) = " 
+                       << sampleSolid->DistanceToOut(intersectionPoint);
               G4Exception("G4ReplicaNavigation::ComputeStep()", 
-                          "InaccurateDistanceToIn", JustWarning,
-                          "Navigator gets conflicting response from Solid."); 
+                          "GeomNav1002", JustWarning, message); 
               G4cout.precision(oldcoutPrec);
             }
           }
@@ -1035,8 +1035,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory &history,
     // All the tree of mother volumes were Replicas. 
     // This is an error, as the World volume must be a Placement
     //
-    G4cerr << "The World volume must be a Placement!" << G4endl;
-    G4Exception("G4ReplicaNavigation::BackLocate()", "InvalidSetup",
+    G4Exception("G4ReplicaNavigation::BackLocate()", "GeomNav0002",
                 FatalException, "The World volume must be a Placement!");
     return kInside;
   }

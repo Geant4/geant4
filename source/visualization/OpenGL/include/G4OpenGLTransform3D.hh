@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.hh,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLTransform3D.hh,v 1.9 2010-12-11 17:04:07 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  24th October 1996
@@ -38,13 +38,12 @@
 #define G4OPENGLTRANSFORM3D_HH
 
 #include "G4Transform3D.hh"
-
 #include "G4OpenGL.hh"
 
-class G4OpenGLTransform3D : public G4Transform3D {
+class G4OpenGLTransform3D {
 public:
   G4OpenGLTransform3D (const G4Transform3D &t);
-  const GLdouble* GetGLMatrix ();
+  const GLdouble* GetGLMatrix () {return m;}
 private:
   GLdouble m[16];
 };

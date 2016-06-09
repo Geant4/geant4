@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XPDGElastic.cc,v 1.4 2010/03/12 15:45:18 gunter Exp $ //
+// $Id: G4XPDGElastic.cc,v 1.4 2010-03-12 15:45:18 gunter Exp $ //
 // -------------------------------------------------------------------
 //      
 // PDG  Elastic cross section 
@@ -172,11 +172,6 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
       pLab = std::sqrt( (sqrtS*sqrtS - (m1+m2)*(m1+m2) ) * (sqrtS*sqrtS - (m1-m2)*(m1-m2)) ) / (2*m);
       
       // The PDG fit formula requires p in GeV/c
-      
-      G4double enc1 = def1->GetPDGEncoding();
-      G4double enc2 = def2->GetPDGEncoding();
-      G4double coeff = -1.;
-      if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
       
       // Order the pair: first is the lower mass particle, second is the higher mass one
       std::pair<G4ParticleDefinition *,G4ParticleDefinition *> trkPair(def1,def2);

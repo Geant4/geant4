@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXaw.cc,v 1.6 2006/06/29 19:09:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIXaw.cc,v 1.6 2006-06-29 19:09:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
 
@@ -201,9 +201,9 @@ void G4UIXaw::ExitHelp(
 /***************************************************************************/
 /***************************************************************************/
 void G4UIXaw::Callback (
- Widget a_widget
+ Widget
 ,XtPointer a_tag
-,XtPointer a_data
+,XtPointer
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -225,8 +225,8 @@ void G4UIXaw::Callback (
   XtSetArg     (args[0],XtNvalue,"");
   XtSetValues  (dialog,args,1);
 
-  a_widget     = NULL;
-  a_data       = NULL;
+  //a_widget     = NULL;  Not used (1st argument).  Comment out to avoid compiler warnings. (JA)
+  //a_data       = NULL;  Not used (3rd argument).  Comment out to avoid compiler warnings. (JA)
 }
 //////////////////////////////////////////////////////////////////////////////
 G4bool ConvertStringToInt(

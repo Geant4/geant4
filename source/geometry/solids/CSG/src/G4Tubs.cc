@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.84 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Tubs.cc,v 1.84 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Tubs
@@ -97,20 +97,17 @@ G4Tubs::G4Tubs( const G4String &pName,
 
   if (pDz<=0) // Check z-len
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
-           << "        Negative Z half-length (" << pDz << ") in solid: "
-           << GetName() << G4endl;
-    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
-                "Invalid Z half-length");
+    std::ostringstream message;
+    message << "Negative Z half-length (" << pDz << ") in solid: " << GetName();
+    G4Exception("G4Tubs::G4Tubs()", "GeomSolids0002", FatalException, message);
   }
   if ( (pRMin >= pRMax) || (pRMin < 0) ) // Check radii
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
-           << "        Invalid values for radii in solid " << GetName()
-           << G4endl
-           << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
-    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
-                "Invalid radii.");
+    std::ostringstream message;
+    message << "Invalid values for radii in solid: " << GetName()
+            << G4endl
+            << "        pRMin = " << pRMin << ", pRMax = " << pRMax;
+    G4Exception("G4Tubs::G4Tubs()", "GeomSolids0002", FatalException, message);
   }
 
   // Check angles
@@ -658,7 +655,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Tube::SurfaceNormal(p)", "Notification",
+    G4Exception("G4Tubs::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
     G4int oldprc = G4cout.precision(20);
     G4cout<< "G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
@@ -679,7 +676,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 // for points not on the surface
 
 G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{ ENorm side ;
+{
+  ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
   G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
@@ -778,7 +776,8 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     default:      // Should never reach this case ...
     {
       DumpInfo();
-      G4Exception("G4Tubs::ApproxSurfaceNormal()", "Notification", JustWarning,
+      G4Exception("G4Tubs::ApproxSurfaceNormal()",
+                  "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
     }    
@@ -912,7 +911,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if (d >= 0)  // If real root
       {
-        s = -b - std::sqrt(d) ;
+        s = c/(-b+std::sqrt(d));
         if (s >= 0)  // If 'forwards'
         {
           if ( s>dRmax ) // Avoid rounding errors due to precision issues on
@@ -1028,7 +1027,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         // Always want 2nd root - we are outside and know rmax Hit was bad
         // - If on surface of rmin also need farthest root
 
-        s = -b + std::sqrt(d) ;
+        s =( b > 0. )? c/(-b - std::sqrt(d)) : (-b + std::sqrt(d));
         if (s >= -halfCarTolerance)  // check forwards
         {
           // Check z intersection
@@ -1329,7 +1328,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         b     = t2/t1 ;
         c     = deltaR/t1 ;
         d2    = b*b-c;
-        if( d2 >= 0 ) { sr = -b + std::sqrt(d2); }
+        if( d2 >= 0 ) { sr = c/( -b - std::sqrt(d2)); }
         else          { sr = 0.; }
         sider = kRMax ;
       }
@@ -1364,7 +1363,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
           if (deltaR > kRadTolerance*fRMin)
           {
-            sr    = -b-std::sqrt(d2) ;
+            sr = c/(-b+std::sqrt(d2)); 
             sider = kRMin ;
           }
           else
@@ -1620,22 +1619,25 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         break ;
 
       default:
-        G4cout.precision(16) ;
         G4cout << G4endl ;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl ;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-        G4cout << "Direction:" << G4endl << G4endl ;
-        G4cout << "v.x() = "   << v.x() << G4endl ;
-        G4cout << "v.y() = "   << v.y() << G4endl ;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl ;
-        G4cout << "Proposed distance :" << G4endl << G4endl ;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4cout.precision(6) ;
-        G4Exception("G4Tubs::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl ;
+        message.precision(oldprc) ;
+        G4Exception("G4Tubs::DistanceToOut(p,v,..)", "GeomSolids1002",
+                    JustWarning, message);
         break ;
     }
   }
@@ -1664,8 +1666,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
     G4cout.precision(oldprc) ;
-    G4Exception("G4Tubs::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?");
+    G4Exception("G4Tubs::DistanceToOut(p)", "GeomSolids1002",
+                JustWarning, "Point p is outside !?");
   }
 #endif
 
@@ -1792,7 +1794,7 @@ G4Tubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   {
     DumpInfo();
     G4Exception("G4Tubs::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices ;
@@ -1822,6 +1824,7 @@ G4VSolid* G4Tubs::Clone() const
 
 std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1833,6 +1836,7 @@ std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
      << "    starting phi : " << fSPhi/degree << " degrees \n"
      << "    delta phi    : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

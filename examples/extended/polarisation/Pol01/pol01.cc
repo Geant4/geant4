@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pol01.cc,v 1.3 2010/11/08 16:58:33 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: pol01.cc,v 1.3 2010-11-08 16:58:33 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -68,7 +68,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
 
-  G4VisManager* visManager = 0;
+#ifdef G4VIS_USE
+   G4VisManager* visManager = 0;
+#endif
     
   HistoManager*  histo = new HistoManager();
       

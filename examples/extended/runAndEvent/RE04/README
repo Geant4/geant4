@@ -1,0 +1,92 @@
+
+ RE04 - An extended example for run and event
+ --------------------------------------------
+
+ Contact : M.Asai (SLAC)
+
+1. Introduction
+
+ This example demonstrates how to define a layered mass
+geometry in parallel world. In the mass (tracking) world,
+there are two boxes only. One is the world volume and the 
+other is a box in the world. They both are made of air.
+Thus, if tracks do not see materials (water and lead)
+defined in the parallel world, they rarely interact.
+In the parallel world, there are boxes made of water and
+lead.
+
+1.1 Geometry 
+
+ RE04DetectorConstruction defines the mass (tracking)
+geometry. It firstly defines all materials which apear
+either in mass world or parallel world. Then in SetupGeometry()
+method, it defines the world volume and a box named "phantom".
+Both boxes are made of air.
+
+ RE04ParallelWorldConstruction defines the parallel world.
+For a parallel world, solid, logical and physical volumes
+which represent parallel world must not be created here but
+should be taken through G4VUserParallelWorld::GetWorld()
+method which creates clones of solid, logical and physical
+volumes of the world volume of the mass world. Please note
+that this cloned logical volume of the parallel world volume
+does not have a valid pointer to aa material but null.
+
+ In the parallel world, if a logical volume has a valid
+material pointer, a track in this volume (precisely saying
+a physical volume which is made of this logical volume)
+will see the material defined in this logical volume,
+regardless of the material in the mass geometry. If a
+logical volume has a null material pointer, a track will
+see the ordinary material defined in the mass world.
+
+ RE04ParallelWorldConstruction defines one placement
+volume of box-shape, which is made of water, and a mother
+box (placement volume with null material pointer), which
+contains parameterized volumes. RE04ParallelWorldParam
+class defines a parameterization of the parameterized
+volume "paraPara", which represents two boxes at different
+locations and made of water and lead respectively.
+
+1.2 Physics
+
+ RE04PhysicsList uses ordinary physics builders. It also
+defines G4ParallelWorldProcess which deals with the parallel
+world. This G4ParallelWorldProcess is an extension of
+G4ParallelWorldScoringProcess. If SetLayeredMaterialFlag()
+of this process class is invoked, in addition to taking
+care of sensitive detectors in the parallel world, it also
+takes care of layered mass geometry. If this set method is
+not invoked, it behaves exactly same as G4ParallelWorldScoringProcess.
+The constructor of G4ParallelWorldProcess takes the name
+of the parallel world physical volume as an argument.
+
+ G4ParallelWorldProcess may be associated only to some
+limited kinds of particle types. The parallel world is
+seen only bythe particles which have G4ParallelWorldProcess
+in their process manager objects. In this RE04 example
+G4ParallelWorldProcess is defined to all particle types
+except ChargedGeantino. Thus, if you shoot CargedGeantino,
+it won't see any volume boundary defined in the parallel
+world.
+
+2. Macro files
+
+ The macro file "score.mac" defines a scoring mesh which covers
+the "Phantom" and scores energy deposition. It shoots 1000
+primary particles (by default 10 GeV muon-). Though the mass
+world has only air, given tracks, both primary muons and 
+secondary particles see water and lead defined in the parallel 
+world, you will see the energy deposition is not evenly
+distributed.
+
+3. User action classes
+
+ In the main() of RE04.cc, three user action classes, i.e.
+RE04EventAction, RE04TrackingAction and RE04SteppingAction,
+are commented out. By using RE04SteppingAction, you will
+see a material name which a track sees for each step.
+By using RE04EventAction and RE04TrackingAction, you will
+see the similar information for all trajectories of one
+event.
+

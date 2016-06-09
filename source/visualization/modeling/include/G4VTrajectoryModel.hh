@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.hh,v 1.8 2010/05/11 11:31:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VTrajectoryModel.hh,v 1.8 2010-05-11 11:31:31 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -70,6 +70,11 @@ public:
   G4bool GetVerbose() const;
 
 private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps Coverity happy.
+  G4VTrajectoryModel (const G4VTrajectoryModel&);
+  G4VTrajectoryModel& operator = (const G4VTrajectoryModel&);
 
   G4String fName;
   G4bool fVerbose;

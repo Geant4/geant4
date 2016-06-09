@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhotoElectricModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointPhotoElectricModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -45,14 +45,22 @@ G4AdjointPhotoElectricModel::G4AdjointPhotoElectricModel():
 
 { SetUseMatrix(false);
   SetApplyCutInRange(false);
+
+  //Initialization
   current_eEnergy =0.;
   totAdjointCS=0.;
+  factorCSBiasing =1.;
+  post_step_AdjointCS =0.;
+  pre_step_AdjointCS =0.;
+  totBiasedAdjointCS =0.;
+
+  index_element=0;
+
   theAdjEquivOfDirectPrimPartDef =G4AdjointGamma::AdjointGamma();
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
   theDirectPEEffectModel = new G4PEEffectModel();
- 
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -73,8 +81,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
   G4double electronEnergy = aDynPart->GetKineticEnergy();
   G4ThreeVector electronDirection= aDynPart->GetMomentumDirection() ;
   pre_step_AdjointCS = totAdjointCS; //The last computed CS was  at pre step point
-  G4double adjCS;
-  adjCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
+  post_step_AdjointCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
   post_step_AdjointCS = totAdjointCS; 
 				
 

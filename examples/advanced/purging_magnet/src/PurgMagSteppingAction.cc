@@ -32,8 +32,8 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.cc,v 1.5 2006/06/29 16:06:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMagSteppingAction.cc,v 1.5 2006-06-29 16:06:21 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,10 +63,10 @@ PurgMagSteppingAction::~PurgMagSteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifdef G4ANALYSIS_USE
 void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
   
 { 
-#ifdef G4ANALYSIS_USE
   //Collection at SSD in N-tuples. Electrons and photons separated
   //Prestep point in World, next volume MeasureVolume, process transportation
  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();	
@@ -141,6 +141,9 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  analysis->fill_Tuple_Positrons(px, py, pz, pe, ppx, ppy, ppz);
 	}
     }
+#else
+void PurgMagSteppingAction::UserSteppingAction(const G4Step* )
+{ 
 #endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -35,6 +35,15 @@ ifdef LOAD_GLQT
   INTYLIBS += $(GLQTLIBS)
 endif
 
+########################### Wt ###############################
+# Should be before X11.
+ifdef INC_WT
+  CPPFLAGS += $(WTFLAGS)
+endif
+ifdef LOAD_WT
+  INTYLIBS += $(WTLIBS)
+endif
+
 ########################### OpenGL ###############################
 
 ifdef INC_GL
@@ -86,12 +95,20 @@ ifdef G4INTY_BUILD_QT
   CPPFLAGS += -DG4INTY_BUILD_QT
 endif
 
+ifdef G4INTY_BUILD_WT
+  CPPFLAGS += -DG4INTY_BUILD_WT
+endif
+
 ifdef G4INTY_USE_XT
   CPPFLAGS += -DG4INTY_USE_XT
 endif
 
 ifdef G4INTY_USE_QT
   CPPFLAGS += -DG4INTY_USE_QT
+endif
+
+ifdef G4INTY_USE_WT
+  CPPFLAGS += -DG4INTY_USE_WT
 endif
 
 ifdef G4INTY_BUILD_WIN32

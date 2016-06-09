@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorSurfaceTrajParam.hh,v 1.2 2007/05/29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorSurfaceTrajParam.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class Description:
@@ -54,7 +54,8 @@ class G4ErrorSurfaceTrajParam
 {
  public:  // with description
 
-  G4ErrorSurfaceTrajParam(){}
+  G4ErrorSurfaceTrajParam()
+   : fInvP(0.), fPV(0.), fPW(0.), fV(0.), fW(0.) {}
   G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
                            const G4Vector3D& vecV, const G4Vector3D& vecW );
   G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,

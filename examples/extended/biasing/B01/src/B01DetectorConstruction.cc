@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.20 2007/06/22 13:15:29 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: B01DetectorConstruction.cc,v 1.20 2007-06-22 13:15:29 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Types.hh"
@@ -254,7 +254,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
 {
   if (!fPhysicalVolumeVector.size())
   {
-    G4Exception("B01-DetectorConstruction: no physical volumes created yet!");
+    G4Exception("B01DetectorConstruction::CreateImportanceStore","exampleB01_0001",RunMustBeAborted,"no physical volumes created yet!");
   }
 
   pWorldVolume = fPhysicalVolumeVector[0];
@@ -292,7 +292,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
 {
   if (!fPhysicalVolumeVector.size())
   {
-    G4Exception("B01-CreateWeightWindowStore: no physical volumes created yet!");
+    G4Exception("B01DetectorConstruction::CreateWeightWindowStore","exampleB01_0002",RunMustBeAborted,"no physical volumes created yet!");
   }
 
   pWorldVolume = fPhysicalVolumeVector[0];

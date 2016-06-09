@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.5 2010/07/23 04:34:59 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VPrimitiveScorer.cc,v 1.5 2010-07-23 04:34:59 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VPrimitiveScorer
 #include "G4VPrimitiveScorer.hh"
@@ -37,7 +37,7 @@
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
   :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
-   unitName("NoUnit"),unitValue(1.0)
+   unitName("NoUnit"),unitValue(1.0),fNi(0),fNj(0),fNk(0)
 {;} 
 
 G4VPrimitiveScorer::~G4VPrimitiveScorer()
@@ -80,7 +80,7 @@ void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
 	unitName = unit;
 	unitValue = G4UnitDefinition::GetValueOf(unit);
     } else {
-	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-	G4Exception(GetName(),"DetPS0000",JustWarning,msg);
+	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) requested for " + GetName();
+	G4Exception("G4VPrimitiveScorer::CheckAndSetUnit","Det0151",JustWarning,msg);
     }
 }

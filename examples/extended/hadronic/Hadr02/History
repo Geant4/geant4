@@ -1,0 +1,45 @@
+$Id: History,v 1.43 2010-11-19 20:13:26 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    hadr02 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+09-06-11  V.Ivant (exhadr02-V09-04-07)
+- IonDPMJETPhysics - fixed compillation when DPMJET is not enabled
+
+08-06-11  V.Ivant (exhadr02-V09-04-06)
+- IonDPMJETPhysics - use the same style as FTFP/Binary ion builder
+
+07-06-11  V.Ivant (exhadr02-V09-04-05)
+- Use Replace interface to the G4VModularPhysicsList to substitute
+  ion builders, Use FTFP/Binary ion builder from physics_list library
+- Cleanup printout
+
+17-05-11  G.Folger (exhadr02-V09-04-04)
+-  Allow to build without reference to DPMJET;
+    all .cc files linking to DPMJet are pretected by #ifdef G4_USE_DPMJET
+    
+21-04-11  V.Ivant (exhadr02-V09-04-03)
+- Fixed problems of energy intervals for models for ions
+  allowing to work with different reference Physics Lists
+
+21-03-11  V.Ivant (exhadr02-V09-04-02)
+- HistoManager - improved histograms
+
+16-03-11  V.Ivant (exhadr02-V09-04-01)
+- Simplified GNUmakefiles and directory structure
+
+15-03-11  V.Ivant (exhadr02-V09-04-00)
+- First tag
+

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FermiBreakUp.hh,v 1.3 2006/06/29 20:11:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FermiBreakUp.hh,v 1.3 2006-06-29 20:11:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,26 +33,25 @@
 #define G4FermiBreakUp_h 1
 
 #include "G4VFermiBreakUp.hh"
-#include "G4FermiConfiguration.hh"
 #include "G4FermiConfigurationList.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
 
 class G4FermiBreakUp : public G4VFermiBreakUp 
 {
 public:
+
   G4FermiBreakUp();
-  ~G4FermiBreakUp();
+  virtual ~G4FermiBreakUp();
+
+  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
   
 private:
-  G4FermiBreakUp(const G4FermiBreakUp &right);
-  
+
+  G4FermiBreakUp(const G4FermiBreakUp &right);  
   const G4FermiBreakUp & operator=(const G4FermiBreakUp &right);
   G4bool operator==(const G4FermiBreakUp &right) const;
   G4bool operator!=(const G4FermiBreakUp &right) const;
-  
-public:
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+
+  G4FermiConfigurationList theConfigurationList;
 };
 
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // G4 Hadron Elastic Scattering Process -- header file
 // F.W. Jones, TRIUMF, 04-JUN-96
 //  
@@ -58,15 +57,17 @@
 #include "G4HadronicProcess.hh"
 #include "G4HadronElasticDataSet.hh"
 
+
 class G4HadronElasticProcess : public G4HadronicProcess
 {
-public:
+  public:
 
-   G4HadronElasticProcess(const G4String& processName = "HadronElastic");
+    G4HadronElasticProcess(const G4String& processName = "HadronElastic");
 
-   virtual ~G4HadronElasticProcess();
+    virtual ~G4HadronElasticProcess();
  
-   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+    virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
 };
 #endif

@@ -24,34 +24,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.cc,v 1.7 2010/04/27 11:43:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VEvaporationFactory.cc,v 1.7 2010-04-27 11:43:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4VEvaporationFactory.hh"
 
-G4VEvaporationFactory::G4VEvaporationFactory() : _channel(0) 
+G4VEvaporationFactory::G4VEvaporationFactory() : channel(0) 
 {}
 
 G4VEvaporationFactory::~G4VEvaporationFactory()
 {
-  if (_channel != 0)
-    std::for_each(_channel->begin(), _channel->end(), 
-		    DeleteFragment());
-  delete _channel;
+  if (channel != 0) {
+    size_t n = channel->size();
+    for(size_t i=0; i<n; ++i) { delete (*channel)[i]; }
+    delete channel;
+    channel = 0;
+  }
 }
 
-
-std::vector<G4VEvaporationChannel*> * 
-G4VEvaporationFactory::GetChannel()
-{
-  // Lazy initialization
-  if (_channel == 0)
-    _channel = CreateChannel();
-  return _channel;
-}
 
 
 

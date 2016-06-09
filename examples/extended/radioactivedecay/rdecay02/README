@@ -253,3 +253,21 @@
 
 	test.mac: macro used to check if the right physics processes are assigned to different particles.
   
+    
+    UserRadDataPb210Test.mac : show how  the user can define its own radioactive decay datafile
+    
+    UserEvapDataBiTest.mac : show how  the user can define its own photo evaporation datafile 
+	
+	No252.mac : show how to simulate Radoactive decay for nuclei with Z>100 based on user datafile
+	
+9. Important Remark on the use of Atomic relaxation
+	
+	Since the Geant4.9.5 release, even if the atomic relaxation is switched on 
+	in radioactive decay module (default case) it is also necessary to add the macro lines:
+	/process/em/fluo true
+	/process/em/auger true
+	otherwise no atomic relaxation will take place.	
+	
+	The example macros have been updated accordingly!
+	  
+	

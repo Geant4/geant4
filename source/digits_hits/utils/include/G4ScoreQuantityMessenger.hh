@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh,v 1.5 2010/07/22 22:14:40 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreQuantityMessenger.hh,v 1.5 2010-07-22 22:14:40 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
 //  01-Nov-2007  M.Asai Class is splited into two.
 //  20-Jul-2010  T.Aso  Specify unit for scorer
+//  24-Mar-2011  T.Aso  Add StepChecker for debugging.
 
 
 #ifndef G4ScoreQuantityMessenger_h
@@ -112,6 +113,8 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     G4UIcommand*          qTrackCountCmd;
     G4UIcommand*          qTerminationCmd;
     G4UIcommand*          qMinKinEAtGeneCmd;
+  //
+    G4UIcommand*          qStepCheckerCmd;
 
     //
     // Filter commands 

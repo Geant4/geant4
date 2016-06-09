@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.12 2010/11/10 09:15:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParameterisationBox.cc,v 1.12 2010-11-10 09:15:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
 //
@@ -129,7 +129,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   else
   { 
     G4Exception("G4ParameterisationBoxX::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along X are allowed !  Axis: "+faxis);
   }
 #ifdef G4DIVDEBUG
@@ -230,7 +230,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   else
   {
     G4Exception("G4ParameterisationBoxY::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along Y are allowed !  Axis: "+faxis);
   }
 #ifdef G4DIVDEBUG
@@ -331,7 +331,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   else
   { 
     G4Exception("G4ParameterisationBoxZ::ComputeTransformation()",
-                "IllegalConstruct", FatalException,
+                "GeomDiv0002", FatalException,
                 "Only axes along Z are allowed !  Axis: "+faxis);
   }
 #ifdef G4DIVDEBUG

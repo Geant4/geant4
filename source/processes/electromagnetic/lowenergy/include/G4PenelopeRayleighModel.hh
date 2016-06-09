@@ -23,24 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.hh,v 1.3 2010/04/15 10:02:25 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PenelopeRayleighModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
-// 13 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
-//                            to EM model
-// 18 Dec 2009   L. Pandola   Added a dummy ComputeCrossSectioPerAtom() method issueing a
-//                            warning if users try to access atomic cross sections via 
-//                            G4EmCalculator
+// 03 Dec 2009   L. Pandola   1st implementation. 
+// 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
 //
 // -------------------------------------------------------------------
 //
 // Class description:
 // Low Energy Electromagnetic Physics, Rayleigh Scattering
-// with Penelope v2001 Model
+// with the model from Penelope, version 2008
 // -------------------------------------------------------------------
 
 #ifndef G4PENELOPERAYLEIGHMODEL_HH
@@ -55,6 +52,8 @@ class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
+class G4PhysicsFreeVector;
+class G4PenelopeSamplingData;
 
 class G4PenelopeRayleighModel : public G4VEmModel 
 {
@@ -67,21 +66,12 @@ public:
   
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
   
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
-  
-  //*This is a dummy method. Never inkoved by the tracking, it just issues 
-  //*a warning if one tries to get Cross Sections per Atom via the 
-  //*G4EmCalculator.
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double,
-                                              G4double,
-                                              G4double,
-                                              G4double,
-                                              G4double);
+                                              G4double kinEnergy,
+                                              G4double Z,
+                                              G4double A=0,
+                                              G4double cut=0,
+                                              G4double emax=DBL_MAX);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -92,44 +82,47 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
   
+  //Testing purposes
+  void DumpFormFactorTable(const G4Material*);
+
 protected:
   G4ParticleChangeForGamma* fParticleChange;
   
 private:
-  G4PenelopeRayleighModel & operator=(const G4PenelopeRayleighModel &right);
+  G4PenelopeRayleighModel& operator=(const G4PenelopeRayleighModel &right);
   G4PenelopeRayleighModel(const G4PenelopeRayleighModel&);
-  
-  //Method to initialize sampling 
-  void InitialiseSampling();
-  std::map <const G4Material*,G4DataVector*> SamplingTable;
-  G4DataVector* samplingFunction_x;
-  G4DataVector* samplingFunction_xNoLog;
-
-  //Parameters for building the sampling tables
-  G4int nPoints; 
-  G4double Xhigh;
-  G4double Xlow;
-
-  void PrepareConstants();
-  
-  //Parameters that must be in common between methods
-  const G4Material* theMaterial;
-  
-  //Cross section calculation
-  G4double MolecularFormFactor(G4double x);
-  G4double DifferentialCrossSection(G4double cosTheta);
-
-  // Energy dependent factor in the differential cross section
-  G4double factorE;
-  
-  //Intrinsic energy limits of the model: cannot be extended by the parent process
+    
+  //Intrinsic energy limits of the model: cannot be extended by 
+  //the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
   
   G4int verboseLevel;
   G4bool isInitialised;
-};
 
+  //Internal tables and manager methods
+  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  std::map<const G4int,G4PhysicsFreeVector*> *atomicFormFactor;
+
+
+  G4DataVector logQSquareGrid; //log(Q^2) grid for interpolation
+  std::map<const G4Material*,G4PhysicsFreeVector*> *logFormFactorTable; //log(Q^2) vs. log(F^2)
+ 
+  G4DataVector logEnergyGridPMax; //energy grid for PMac (and originally for the x-section)
+  std::map<const G4Material*,G4PhysicsFreeVector*> *pMaxTable; //E vs. Pmax
+
+  std::map<const G4Material*,G4PenelopeSamplingData*> *samplingTable;
+
+  //Helper methods
+  void ReadDataFile(G4int); 
+  void ClearTables();
+  void BuildFormFactorTable(const G4Material*);
+  void GetPMaxTable(const G4Material*);
+
+  G4double GetFSquared(const G4Material*,const G4double);
+  void InitializeSamplingAlgorithm(const G4Material*);
+
+};
 
 #endif
 

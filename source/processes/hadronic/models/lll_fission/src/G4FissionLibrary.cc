@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissionLibrary.cc,v 1.4 2007/06/01 14:02:08 gcosmo Exp $
+// $Id: G4FissionLibrary.cc,v 1.4 2007-06-01 14:02:08 gcosmo Exp $
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
@@ -78,12 +78,13 @@ G4NeutronHPFinalState * G4FissionLibrary::New()
   return theNew;
 }
 
-void G4FissionLibrary::Init (G4double A, G4double Z, G4String & dirName, G4String &)
+//void G4FissionLibrary::Init (G4double A, G4double Z, G4String & dirName, G4String &)
+void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &)
 {
   G4String tString = "/FS/";
   G4bool dbool;
   theIsotope = static_cast<G4int>(1000*Z+A);
-  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
+  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
   G4String filename = aFile.GetName();
 
   if(!dbool)

@@ -74,7 +74,7 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
 {
   G4int n = -1;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4FluoData::vacancyId()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");}
   else
     {
       std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -92,7 +92,10 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
 {
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
+    {
+      G4Exception("G4FluoData::NumberOfTransitions()","de0002",JustWarning,"vacancyIndex outside boundaries, energy deposited locally");
+      return 0;
+    }
   else
     {
       n = nInitShells[vacancyIndex]-1;
@@ -107,7 +110,8 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
  G4int n = -1;
 
  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4FluoData::StartShellId()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");
+    }
  else
    {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -133,7 +137,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
   G4double n = -1;
   
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4FluoData::StartShellEnergy()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");}
  else
    {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -157,7 +161,10 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
   G4double n = -1;
 
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyIndex outside boundaries");}
+    {
+      G4Exception("G4FluoData::StartShellEnergy()","de0002",JustWarning,"vacancyIndex outside boundaries, energy deposited locally");
+      return 0;
+}
   else
     {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -192,8 +199,9 @@ void G4FluoData::LoadData(G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4FluoData::LoadData()");
+      G4Exception(excep,"em0006",FatalException,"Please set G4LEDATA");
+      return;
     }
   
   G4String pathString(path);
@@ -204,8 +212,10 @@ void G4FluoData::LoadData(G4int Z)
   
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "G4FluoData - data file: " + dirFile + " not found";
-      G4Exception(excep);
+      G4String excep = "G4FluoData::LoadData()";
+      G4String msg = "data file: " + dirFile + " not found";
+      G4Exception(excep, "em0003",FatalException, msg );
+      return;
     }
   
   G4double a = 0;
@@ -245,14 +255,15 @@ void G4FluoData::LoadData(G4int Z)
 	    s = 0;
 	  }
       }
-    else if (a == -2)
+    // moved to the end in order to avoid possible leak
+    /*    else if (a == -2)
       {
 	// End of file; delete the empty vectors created 
 	//when encountering the last -1 -1 row
 	delete initIds;
 	delete transEnergies;
 	delete transProbabilities;
-      } 
+	}*/ 
     else
       {
 	
@@ -294,7 +305,11 @@ void G4FluoData::LoadData(G4int Z)
   } 
   while (a != -2); // end of file
   file.close();    
+  delete initIds;
+  delete transEnergies;
+  delete transProbabilities;
 }
+
 
 void G4FluoData::PrintData() 
 {

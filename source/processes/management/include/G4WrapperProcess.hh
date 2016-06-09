@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.9 2007/12/12 10:09:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4WrapperProcess.hh,v 1.9 2007-12-12 10:09:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

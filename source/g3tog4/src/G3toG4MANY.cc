@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4MANY.cc,v 1.2 2006/06/29 18:13:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4MANY.cc,v 1.2 2006-06-29 18:13:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // By I. Hrivnacova, 22.10.01 
 
@@ -46,14 +46,18 @@ void G3toG4MANY(G3VolTableEntry* curVTE)
       G4String text = "G3toG4MANY: volume ";
       text = text + curVTE->GetName() + " has specified overlaps \n";
       text = text + " but is not defined as MANY.";
-      G4Exception(text);
+      G4Exception("G3toG4MANY()", "G3toG40009",
+                  FatalException, text);
+      return;
     }  
 
     // only MANY volumes with one position are supported
     if (curVTE->NPCopies() != 1) {
       G4String text = "G3toG4MANY: volume ";
       text = text + curVTE->GetName() + " which has MANY has not just one position.";
-      G4Exception(text);
+      G4Exception("G3toG4MANY()", "G3toG40010",
+                  FatalException, text);
+      return;
     }  
 
     #ifdef G3G4DEBUG
@@ -130,7 +134,9 @@ void SubstractSolids(G3VolTableEntry* vte1, G3VolTableEntry* vte2,
     if (dVTE->NPCopies() != 1) {
       G4String text = "G3toG4MANY: volume ";
       text = text + dVTE->GetName() + " which has MANY has not just one position.";
-      G4Exception(text);
+      G4Exception("G3toG4MANY()", "G3toG40011",
+                  FatalException, text);
+      return;
     }
 	  
     G4Transform3D dt = GetTransform3D(dVTE->GetG3PosCopy(0)); 

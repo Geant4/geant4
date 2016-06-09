@@ -241,10 +241,10 @@ G4double G4IonCoulombCrossSection::SampleCosineTheta()
   	G4double x1 = 1. - cosTetMinNuc + screenZ;
   	G4double x2 = 1. - cosTetMaxNuc + screenZ;
   	G4double dx = cosTetMinNuc - cosTetMaxNuc;
-  	G4double grej, z1;
+  	G4double /*grej,*/ z1;
 
     		z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
-                grej = 1.0/(1.0 + z1);
+                //grej = 1.0/(1.0 + z1);
   
 
   return z1;

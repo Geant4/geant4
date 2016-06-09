@@ -132,12 +132,15 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 			G4cout << "Creating primaries and assigning to vertex" << G4endl;
 		// create new primaries and set them to the vertex
 		G4double mass = particle_definition->GetPDGMass();
-		G4double energy = particle_energy + mass;
-		G4double pmom = std::sqrt(energy * energy - mass * mass);
-		G4double px = pmom * particle_momentum_direction.x();
-		G4double py = pmom * particle_momentum_direction.y();
-		G4double pz = pmom * particle_momentum_direction.z();
-
+		G4PrimaryParticle* particle =
+		  new G4PrimaryParticle(particle_definition);
+		particle->SetKineticEnergy( particle_energy );
+		particle->SetMass( mass );
+		particle->SetMomentumDirection( particle_momentum_direction );
+		particle->SetCharge( particle_charge );
+		particle->SetPolarization(particle_polarization.x(),
+					  particle_polarization.y(),
+					  particle_polarization.z());
 		if (verbosityLevel > 1) {
 			G4cout << "Particle name: "
 					<< particle_definition->GetParticleName() << G4endl;
@@ -146,12 +149,6 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 			G4cout << "    Direction: " << particle_momentum_direction
 					<< G4endl;
 		}
-		G4PrimaryParticle* particle = new G4PrimaryParticle(
-				particle_definition, px, py, pz);
-		particle->SetMass(mass);
-		particle->SetCharge(particle_charge);
-		particle->SetPolarization(particle_polarization.x(),
-				particle_polarization.y(), particle_polarization.z());
 		// Set bweight equal to the multiple of all non-zero weights
 		particle_weight = eneGenerator->GetWeight()*biasRndm->GetBiasWeight();
 		// pass it to primary particle

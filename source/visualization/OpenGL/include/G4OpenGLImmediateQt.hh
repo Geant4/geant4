@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.hh,v 1.2 2009/02/04 16:48:40 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLImmediateQt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // OpenGLImmediateQt graphics system factory.

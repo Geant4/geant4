@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010/12/15 22:15:07 asaim Exp $
+$Id: History,v 1.142 2010-12-15 22:15:07 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 10th, 2011, M.Asai (event-V09-04-09)
+- Fixing Coverity warnings.
+
+October 28th, 2011, M.Asai (event-V09-04-08)
+- Cleaning up
+ -- G4ParticleGun.hh : added "const" to get methods and removed unnecessary inline keyword
+ -- G4SPSPosDistribution.cc : remove warning messages from Xcode on Mac
+
+October 20th, 2011, M.Asai (event-V09-04-07)
+- Removing obsolete G4Exception.
+
+July 7th, 2011, G.Cosmo (event-V09-04-06)
+- Fixed Coverity defects for uninitialised static data.
+
+June 21st, 2011, G.Cosmo (event-V09-04-05)
+- Fixed compilation warnings on gcc-4.6.0 for unused variables in
+  G4SPSPosDistribution and G4AdjointPosOnPhysVolGenerator sources.
+
+June 18th, 2011, H.Kurashige (event-V09-04-04)
+- Modify G4ParticleGun (and related) to use momentum direction
+
+June 16th, 2011, H.Kurashige (event-V09-04-03)
+- Fix bugs in G4HEPEvtInterface. 
+  In creation of G4PrimaryParticle, only PDG code is given to the constructor. Then mass and momentum is set .
+- Modify G4RayShooter and G4SingleParticleSource to use kinetic energy and momentum direction
+  instead of momentum.
+
+June 14th, 2011, H.Kurashige (event-V09-04-02)
+- Modify G4ParticleGun and G4PrimaryTransformer to use kinetic energy and momentum direction
+  instead of momentum.
+  (It requires particles-V09-04-06) 
+
+May 20th, 2011, B.Morgan (event-V09-04-01)
+- CMakeLists.txt : Added G4EVENT_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+
+February 10th, 2011, M.Asai (event-V09-04-00)
+- Adding one more reset of abortRequested flag at the top of G4EventManager::DoProcessing().
+- Addressing to Bug report #1169.
 
 December 15th, 2010, M.Asai (event-V09-03-10)
 - Fixing incorrect destination stack for the case more than three track stacks are used.

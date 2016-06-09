@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisFilterManager.hh,v 1.4 2006/06/29 21:29:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisFilterManager.hh,v 1.4 2006-06-29 21:29:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter manager. Manages filter models, factories, messengers, 
 // command placement, filter mode etc
@@ -38,7 +38,6 @@
 #include "G4UImessenger.hh"
 #include "G4VFilter.hh"
 #include "G4VModelFactory.hh"
-#include <sstream>
 #include <vector>
 
 namespace FilterMode {
@@ -176,10 +175,10 @@ G4VisFilterManager<T>::SetMode(const G4String& mode)
   else if (myMode == "hard") {result = true; SetMode(FilterMode::Hard);}
 
   if (!result) {
-    std::ostringstream o;
-    o << "Invalid Filter mode."<<mode;
+    G4ExceptionDescription ed;
+    ed << "Invalid Filter mode: "<<mode;
     G4Exception
-      ("G4VisFilterManager::SetMode(const G4String& mode)", "InvalidMode", JustWarning, o.str().c_str());
+      ("G4VisFilterManager::SetMode(const G4String& mode)", "visman0101", JustWarning, ed);
   }
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4QNeutronCaptureRatio -- header file
@@ -33,7 +33,7 @@
 //
 // **********************************************************************
 // This Header is a part of the CHIPS physics package (author: M. Kosov)
-//=======================================================================
+// ----------------------------------------------------------------------
 // Short description: (n,gamma) capture is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.
 // ----------------------------------------------------------------------

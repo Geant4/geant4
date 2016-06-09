@@ -23,13 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExitonConfiguration.hh,v 1.8 2010/12/15 07:39:50 gunter Exp $
+// $Id: G4ExitonConfiguration.hh,v 1.8 2010-12-15 07:39:50 gunter Exp $
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
+// 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+// 20110922  M. Kelsey -- Replace print() with stream operator<<(), put
+//		implementation into new .cc file.
 
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
+
+#include "globals.hh"
+#include <iosfwd>
 
 class G4ExitonConfiguration {
 public:
@@ -46,6 +52,21 @@ public:
     protonHoles = neutronHoles = 0;
   }
 
+  bool operator==(const G4ExitonConfiguration& right) {
+    return ( (&right == this) ||
+	     (protonQuasiParticles == right.protonQuasiParticles &&
+	      neutronQuasiParticles == right.neutronQuasiParticles &&
+	      protonHoles == right.protonHoles &&
+	      neutronHoles == right.neutronHoles) );
+  }
+
+  bool operator!=(const G4ExitonConfiguration& right) {
+    return !operator==(right);
+  }
+
+
+  // Modify configuration
+
   void incrementQP(G4int ip) {
     if (ip == 1) protonQuasiParticles++;
     else if (ip == 2) neutronQuasiParticles++;
@@ -56,18 +77,14 @@ public:
     else if (ip == 2) neutronHoles++;
   }
 
-  void print() const {
-    G4cout << " Exiton configuration " << G4endl
-	   << " proton particles " << protonQuasiParticles << " holes " 
-	   << protonHoles << G4endl
-	   << " neutron particles " << neutronQuasiParticles << " holes " 
-	   << neutronHoles << G4endl;
-  }
-     
   G4int protonQuasiParticles;
   G4int neutronQuasiParticles;
   G4int protonHoles;
   G4int neutronHoles;
 };        
+
+// Dump information to output
+
+std::ostream& operator<<(std::ostream& os, const G4ExitonConfiguration& ex);
 
 #endif // G4EXITON_CONFIGURATION_HH 

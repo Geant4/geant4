@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.28 2010/11/18 16:23:42 allison Exp $
+$Id: History,v 1.28 2010-11-18 16:23:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,16 @@ $Id: History,v 1.28 2010/11/18 16:23:42 allison Exp $
 
                       Category History file
                       ---------------------
+
+31.10.2011 L. Pandola. Migrated G4Exceptions to the new scheme
+	   tag radioprotection-V09-04-02
+
+23.09.2011 S. Guatelli. Scoring mesh introduced.
+           G4Analysis component subtitutes AIDA/PI analysis
+           tag radioprotection-V09-04-01
+
+21.09.2011 S. Guatelli. Update of the physics list, 
+           tag radioprotection-V09-04-00
 
 18.11.2010 J.Allison, tag radioprotection-V09-03-03
            Introduce G4UIExecutive.

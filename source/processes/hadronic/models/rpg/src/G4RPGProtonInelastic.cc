@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGProtonInelastic.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGProtonInelastic.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "G4RPGProtonInelastic.hh"
@@ -127,9 +127,8 @@ void
 G4RPGProtonInelastic::SlowProton(const G4HadProjectile *originalIncident,
                                  G4Nucleus &targetNucleus )
 {
-  const G4double A = targetNucleus.GetN();    // atomic weight
-  const G4double Z = targetNucleus.GetZ();    // atomic number
-//  G4double currentKinetic = originalIncident->GetKineticEnergy();
+  const G4double A = targetNucleus.GetA_asInt();    // atomic weight
+  const G4double Z = targetNucleus.GetZ_asInt();    // atomic number
   //
   // calculate Q-value of reactions
   //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.hh,v 1.1 2010/05/25 20:57:05 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PhysListEmStandardSS.hh,v 1.1 2010-05-25 20:57:05 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

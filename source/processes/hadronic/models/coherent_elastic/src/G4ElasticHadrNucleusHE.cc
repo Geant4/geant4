@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.82 2010/11/18 22:49:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.82 2010-11-18 22:49:57 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering
@@ -218,13 +218,19 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 //  The constructor for the generating of events
 //
 
-G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
-  : G4VHadronElastic("hElasticGlauber")
-  //  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
+G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
+  : G4HadronElastic(name)
 {
+  dQ2 = hMass = hMass2 =  hLabMomentum = hLabMomentum2 = MomentumCM = HadrEnergy 
+    = R1 = R2 = Pnucl = Aeff = HadrTot = HadrSlope = HadrReIm = TotP = DDSect2
+    = DDSect3 = ConstU = FmaxT = Slope1 = Slope2 = Coeff1 = Coeff2 = MaxTR 
+    = Slope0 = Coeff0 = aAIm = aDIm = Dtot11 = 0.0;
+  NumbN = iHadrCode = iHadron = 0;
+
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
   lowestEnergyLimit = 0.0;
+  //Description();
 
   MbToGeV2  =  2.568;
   sqMbToGeV =  1.602;
@@ -233,13 +239,13 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   protonM   =  proton_mass_c2/GeV;
   protonM2  =  protonM*protonM;
 
-   BoundaryP[0]=9.0;BoundaryTG[0]=5.0;BoundaryTL[0]=0.;
-   BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=0.;
-   BoundaryP[2]=5.0; BoundaryTG[2]=1.0;BoundaryTL[2]=1.5;
-   BoundaryP[3]=8.0; BoundaryTG[3]=3.0;BoundaryTL[3]=0.;
-   BoundaryP[4]=7.0; BoundaryTG[4]=3.0;BoundaryTL[4]=0.;
-   BoundaryP[5]=5.0; BoundaryTG[5]=2.0;BoundaryTL[5]=0.;
-   BoundaryP[6]=5.0; BoundaryTG[6]=1.5;BoundaryTL[6]=3.0;
+  BoundaryP[0]=9.0;BoundaryTG[0]=5.0;BoundaryTL[0]=0.;
+  BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=0.;
+  BoundaryP[2]=5.0; BoundaryTG[2]=1.0;BoundaryTL[2]=1.5;
+  BoundaryP[3]=8.0; BoundaryTG[3]=3.0;BoundaryTL[3]=0.;
+  BoundaryP[4]=7.0; BoundaryTG[4]=3.0;BoundaryTL[4]=0.;
+  BoundaryP[5]=5.0; BoundaryTG[5]=2.0;BoundaryTL[5]=0.;
+  BoundaryP[6]=5.0; BoundaryTG[6]=1.5;BoundaryTL[6]=3.0;
 
   Binom();
   // energy in GeV
@@ -277,9 +283,37 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
     HadronType[j]  = id[j];
     HadronType1[j] = id1[j];
 
-    for(G4int k = 0; k < 93; k++) SetOfElasticData[j][k] = 0;
+    for(G4int k = 0; k < 93; k++) { SetOfElasticData[j][k] = 0; }
   } 
 }
+
+
+void G4ElasticHadrNucleusHE::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4ElasticHadrNucleusHE Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4ElasticHadrNucleusHE is a hadron-nucleus elastic scattering\n"
+            << "model developed by N. Starkov which uses a Glauber model\n"
+            << "parameterization to calculate the final state.  It is valid\n"
+            << "for all hadrons with incident energies above 1 GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -451,7 +485,7 @@ G4double G4ElasticHadrNucleusHE::
 		<<Pnucl<<G4endl;
 	}
 
-      pElD->CrossSecMaxQ2[NumbOnE] = 1.0;
+      //pElD->CrossSecMaxQ2[NumbOnE] = 1.0;
 
       if(verboseLevel > 1)
 	G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
@@ -663,7 +697,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
  
   G4double    Prod0    = 0;
   G4double    N1       = -1.0;
-  G4double    Tot0     = 0;
+  //G4double    Tot0     = 0;
   G4double    exp1;
 
   G4double    Prod3 ;
@@ -675,7 +709,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
     {
       N1    = -N1*Unucl*(Nucleus-i1+1)/i1*Rho2;
       Prod1 = 0;
-      Tot0  = 0;
+      //Tot0  = 0;
       N2    = -1;
 
       for(i2 = 1; i2<=Nucleus; i2++) ////+++++++++ i2

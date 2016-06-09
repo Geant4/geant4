@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.5 2008/10/24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MultiNavigator.hh,v 1.5 2008-10-24 14:00:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4MultiNavigator
@@ -121,6 +121,22 @@ class G4MultiNavigator : public G4Navigator
   G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
+  virtual G4ThreeVector GetLocalExitNormal(G4bool* obtained); // const
+  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
+						   G4bool* obtained); // const
+  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
+ 					           G4bool* obtained); // const
+    // Return Exit Surface Normal and validity too.
+    // Can only be called if the Navigator's last Step either
+    //  - has just crossed a volume geometrical boundary and relocated, or
+    //  - has arrived at a boundary in a ComputeStep
+    // It returns the Normal to the surface pointing out of the volume that
+    //   was left behind and/or into the volume that was entered.
+    // Convention:x
+    //   The *local* normal is in the coordinate system of the *final* volume.
+    // Restriction:
+    //   Normals are not available for replica volumes (returns obtained= false)
+
  public:  // without description
 
   G4Navigator* GetNavigator(G4int n) const
@@ -160,6 +176,8 @@ class G4MultiNavigator : public G4Navigator
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
    G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
+   G4int         fNoLimitingStep;       // How many geometries limited the step
+   G4int         fIdNavLimiting;        // Id of Navigator limiting step (if only one limits)
 
    // Lowest values - determine step length, and safety 
    G4double      fMinStep;      // As reported by Navigators. Can be kInfinity

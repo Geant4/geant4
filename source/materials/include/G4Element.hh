@@ -24,19 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.28 2010/04/30 13:19:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4Element.hh,v 1.28 2010-04-30 13:19:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-// class description
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4Element
+//
+// Description: Contains element properties
+//
+// Class description:
 //
 // An element is a chemical element either directly defined in terms of
-// its charactaristics: its name, symbol,
+// its characteristics: its name, symbol,
 //                      Z (effective atomic number)
 //                      N (effective number of nucleons)
 //                      A (effective mass of a mole)
 // or in terms of a collection of constituent isotopes with specified 
-// relative abundance (i.e. fraction of nb of atomes per volume).
+// relative abundance (i.e. fraction of nb of atoms per volume).
 //
 // Quantities, with physical meaning or not, which are constant in a given 
 // element are computed and stored here as Derived data members.
@@ -47,6 +53,9 @@
 // Elements can be assembled singly or in mixtures into materials used
 // in volume definitions via the G4Material class.
 //
+// It is strongly recommended do not delete G4Element instance in the
+// user code. All G4Elements will be automatically deleted at the end 
+// of Geant4 session
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,7 +83,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4ELEMENT_HH
-#define G4ELEMENT_HH
+#define G4ELEMENT_HH 1
 
 #include "globals.hh"
 #include <vector>
@@ -116,18 +125,19 @@ public:  // with description
   //
   // retrieval methods
   //
-  const G4String& GetName()   const {return fName;}
-  const G4String& GetSymbol() const {return fSymbol;}
-  G4double GetZ()      const {return fZeff;}     //atomic number
-  G4double GetN()      const {return fNeff;}     //number of nucleons
-  G4double GetA()      const {return fAeff;}     //mass of a mole
-  G4bool   GetNaturalAbandancesFlag();
+  inline const G4String& GetName()   const {return fName;}
+  inline const G4String& GetSymbol() const {return fSymbol;}
+  inline G4double GetZ()      const {return fZeff;}     //atomic number
+  inline G4double GetN()      const {return fNeff;}     //number of nucleons
+  inline G4double GetA()      const {return fAeff;}     //mass of a mole
 
-  void     SetNaturalAbandancesFlag(G4bool);
+  inline G4bool   GetNaturalAbandancesFlag();
+
+  inline void     SetNaturalAbandancesFlag(G4bool);
   
   //the number of atomic shells in this element:
   //
-  G4int GetNbOfAtomicShells() const {return fNbOfAtomicShells;}
+  inline G4int GetNbOfAtomicShells() const {return fNbOfAtomicShells;}
   
   //the binding energy of the shell, ground shell index=0
   //
@@ -139,18 +149,18 @@ public:  // with description
     
   //number of isotopes constituing this element:
   //
-  size_t GetNumberOfIsotopes() const {return fNumberOfIsotopes;}
+  inline size_t GetNumberOfIsotopes() const {return fNumberOfIsotopes;}
    
   //vector of pointers to isotopes constituing this element:
   //
-  G4IsotopeVector* GetIsotopeVector() const {return theIsotopeVector;}
+  inline G4IsotopeVector* GetIsotopeVector() const {return theIsotopeVector;}
     
   //vector of relative abundance of each isotope:
   //
-  G4double* GetRelativeAbundanceVector() const 
+  inline G4double* GetRelativeAbundanceVector() const 
                    {return fRelativeAbundanceVector;}
     
-  const G4Isotope* GetIsotope(G4int iso) const 
+  inline const G4Isotope* GetIsotope(G4int iso) const 
                    {return (*theIsotopeVector)[iso];}
 
   //the (static) Table of Elements:
@@ -163,7 +173,7 @@ public:  // with description
   
   //the index of this element in the Table:
   //
-  size_t GetIndex() const {return fIndexInTable;}
+  inline size_t GetIndex() const {return fIndexInTable;}
     
   //return pointer to an element, given its name:
   //
@@ -172,25 +182,25 @@ public:  // with description
   
   //count number of materials which use this element
   //
-  G4int GetCountUse() const {return fCountUse;}
-  void  increaseCountUse()  {fCountUse++;}
-  void  decreaseCountUse()  {fCountUse--;}
+  inline G4int GetCountUse() const {return fCountUse;}
+  inline void  increaseCountUse()  {fCountUse++;}
+  inline void  decreaseCountUse()  {fCountUse--;}
   
   //count elements with same Z
   //
-  G4int GetIndexZ() const {return fIndexZ;}
+  inline G4int GetIndexZ() const {return fIndexZ;}
         
   //Coulomb correction factor:
   //
-  G4double GetfCoulomb() const {return fCoulomb;}
+  inline G4double GetfCoulomb() const {return fCoulomb;}
    
   //Tsai formula for the radiation length:
   //
-  G4double GetfRadTsai() const {return fRadTsai;}
+  inline G4double GetfRadTsai() const {return fRadTsai;}
     
   //pointer to ionisation parameters:
   //
-  G4IonisParamElm* GetIonisation() const {return fIonisation;}
+  inline G4IonisParamElm* GetIonisation() const {return fIonisation;}
     
   // printing methods
   //    
@@ -208,7 +218,7 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-  void SetName(const G4String& name)  {fName=name;}
+  inline void SetName(const G4String& name)  {fName=name;}
 
 private:
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.2 2010/10/11 14:31:39 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: TrackingAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -100,7 +100,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //example of saving random number seed of this event, under condition
   //
   ////condition = (ih == 3);
-  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();      
+  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +114,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //get time
   //   
   G4double time = track->GetGlobalTime();
-    
+  G4int ID = track->GetTrackID();
+  if (ID == 1) run->PrimaryTiming(time);	//time of life of primary ion  
+      
   //energy and momentum balance (from secondaries)
   //
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
@@ -123,31 +125,29 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     //there are secondaries --> it is a decay
     //
     //force 'single' decay
-    G4int ID = track->GetTrackID();
     if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
     //
     //balance    
-    G4double Ebalance = - track->GetTotalEnergy();
+    G4double EkinTot = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
        G4Track* trk = (*secondaries)[itr];
-       Ebalance += trk->GetTotalEnergy();
+       EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
        if (trk->GetDefinition() != G4Gamma::Gamma())	 
          Pbalance += trk->GetMomentum();	         
     }
     G4double Pbal = Pbalance.mag();  
-    run->Balance(Ebalance,Pbal);  
-    histoManager->FillHisto(6,Ebalance);
+    run->Balance(EkinTot,Pbal);  
+    histoManager->FillHisto(6,EkinTot);
     histoManager->FillHisto(7,Pbal);
   }
   
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    run->EventTiming(time);		//time of life
+    run->EventTiming(time);		//total time of life
     histoManager->FillHisto(8,time);
-    histoManager->FillHisto(9,time);	//activity                    
   }
 }
 

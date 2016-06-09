@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.15 2010/11/19 15:13:39 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.15 2010-11-19 15:13:39 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -191,7 +191,6 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
   G4VSolid* containerSolid = param->GetContainerSolid();
   G4Material* nextMate;
-  G4bool bLocatedOnEdge = false;
   G4bool bFirstStep = true;
   G4double newStep;
   G4double totalNewStep = 0.;
@@ -235,7 +234,6 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     containerPoint += newStep*localDirection;
     if( containerSolid->Inside( containerPoint ) != kInside )
     {
-      bLocatedOnEdge = true; // NEEDED??
       break;
     }
 

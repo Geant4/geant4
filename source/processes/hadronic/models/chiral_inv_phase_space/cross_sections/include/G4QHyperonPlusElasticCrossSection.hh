@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4QHyperonPlusElasticCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 5-Feb-2010
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 5-Feb-2010
 //
-//================================================================================
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@
 #define G4QHyperonPlusElasticCrossSection_h 1
 
 #include "G4QPDGCode.hh"
-#include "G4QException.hh"
+// #include "G4QException.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4VQCrossSection.hh"

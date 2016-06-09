@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010/09/13 16:09:47 japost Exp $
+$Id: History,v 1.155 2011-01-05 00:59:03 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,108 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 4th, 2011, J.Apostolakis transport-V09-04-13
+-----------------------------
+- Turned off tracking for magnetic moment - by default.
+  It can be enabled in 
+    G4Transportation, G4CoupledTransportation 
+  by using the new method EnableUseMagneticMoment().
+  Should ensure particles with a moment are not affected
+  unless user needs this.
+
+Nov. 4th, 2011, J.Apostolakis transport-V09-04-12
+-----------------------------
+* Reduce overhead of the addition of Gravity
+- G4Transportation: Revised condition for gravity field (version 1).
+  G4CoupledTransportation: Revised the field-detection condition, 
+   with improved logic to cope with ConfigureForTrack (for any field) (v2).
+  Deleted dependence on G4UniformGravityField in both.
+  Tag coworks with field-V09-04-05
+
+Nov. 1st, 2011, P.Gumplinger transport-V09-04-11
+-----------------------------
+- add condition to the condition, gravity != NULL, that the particle's mass is
+  also restMass != 0.0. Modify G4CoupledTransportation.cc according to
+  G4Transportation.cc
+
+Oct. 28th, 2011, P.Gumplinger transport-V09-04-10
+-----------------------------
+- allow for spin tracking of neutral particles with a magn. moment;
+  allow for uniform gravity field tracking of neutral particles;
+  tag coworks with field-V09-04-03.
+
+Oct. 28th, 2011, P.Gumplinger transport-V09-04-09
+-----------------------------
+- remove all special reverence and logic regarding "opticalphoton" from code
+  in G4Transportation.cc and G4CoupledTransportation.cc
+
+Aug. 8th, 2011, H.Kurashige  transport-V09-04-08
+---------------------------
+- Modify calculation of deltaTime for optical photon in Transportation (and CoupledTransportation)
+  Use the updated velocity obtained from G4Track::CalculateVelocityForOpticalPhoton
+  instead of the initial velocity of the step.  
+  (see problem #1239)
+  [ This is because the velocity at the initial point can refer to 
+  a previous volume.  If the PreStepPoint was on a surface, we 
+  the previous step was in another volume, which shared this 
+  PreStepPoint --> and its velocity would be wrong. ]
+
+July 6th, 2011, H.Kurashige  transport-V09-04-07
+---------------------------
+- Modify G4Transportation (and CoupledTtansportation)
+  to propose the final local time rather than the global time
+  so that local time can be updated properly.
+  (see problem #1224)  
+  [ This adapts to the recent change in Tracking, which made
+  the change of LocalTime trigger the change of Global Time 
+  (instead of vice-versa). ] 
+ 
+June 10th, 2011, J.Apostolakis  transport-V09-04-06
+------------------------------
+- Fix for invalid safety passed to SafetyHelper.
+
+June 10th, 2011, J.Apostolakis  transport-V09-04-05
+------------------------------
+- Fix G4Transportation::AlongStepDoIt
+  Use only initial velocity to update time. An estimate of velocity
+  at endpoint is not yet available. (finalVelocity still= initial)
+    ==> It will be updated later in the tracking sequence, when
+        energy loss is applied, and it will be available to 
+	Transportation only in the PostStepDoIt()
+
+May 26th, 2011, H.Kurashige  transport-V09-04-04
+---------------------------
+- Define ProcessSubType for processes under transportation category
+- Change process type of G4NeutronBuilder to fGeneral
+
+January 26th, 2011, G.Cosmo  transport-V09-04-03
+---------------------------
+- Simplified implementation of G4CoupledTransportation::EndTracking(), to
+  avoid unnecessary static pointer definition.
+
+January 21th, 2011, V.Ivanchenko  transport-V09-04-02
+--------------------------------
+- G4UserSpecialCuts - fixed compilation problem
+
+January 21th, 2011, V.Ivanchenko  transport-V09-04-01
+--------------------------------
+- G4UserSpecialCuts: fixed bug in energy tracking cut; changed order 
+  of checks: 1st energy tracking cut, 2nd track length, 3d time cut, 
+  4th range for charged particles with non-zero mass; removed unnecessary
+  string comparisons.
+
+January 4th, 2011, M.Asai  transport-V09-04-00
+-------------------------
+- G4CoupledTransportation: added EndTracking() method to reset the
+  activated navigator list.
+
+September 13th, 2010, J.Apostolakis  transport-V09-03-01
+-----------------------------------
+- Improvement to G4Transportation: copy current safety to SafetyHelper each
+  time it is computed (it used to be copied only when it was recalculated at
+  end of step).
+
 September 13th, 2010, J.Apostolakis  transport-V09-03-00
 ----------------------------------
 - Retagged - to propose for testing.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.cc,v 1.2 2010/10/21 09:21:41 ivana Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: Pythia6.cc,v 1.2 2010-10-21 09:21:41 ivana Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // According to TPythia6 class from Root:
 // (The TPythia6 class is an interface class to F77 routines in Pythia6                //

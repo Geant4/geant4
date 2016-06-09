@@ -100,18 +100,18 @@ G4VPhysicalVolume* G4VoxelLeftBreast::Construct(const G4String& volumeName,
 
 
   G4VPhysicalVolume* physBreast = new G4PVPlacement(matrix,G4ThreeVector(10.*cm, 52.* cm, 8.7 *cm),
-     			       "physicalVoxelLeftBreast",
-  		       breast_log,
-  		       mother,
-  		       false,
-  		       0, true);
+						    "physicalVoxelLeftBreast",
+						    breast_log,
+						    mother,
+						    false,
+						    0, true);
 
- G4VPhysicalVolume* physInnerBreast = new G4PVPlacement(0,0,
-      			       "LeftBreast",
-  			       innerBreast_log,
-			       physBreast,
-			       false,
-			       0, true);
+  G4VPhysicalVolume* physInnerBreast = new G4PVPlacement(0,G4ThreeVector(),
+							 "LeftBreast",
+							 innerBreast_log,
+							 physBreast,
+							 false,
+							 0, true);
 
  /*
  // Parameterisation with Replicas

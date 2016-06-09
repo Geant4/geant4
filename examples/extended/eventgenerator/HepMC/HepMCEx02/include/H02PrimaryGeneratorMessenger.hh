@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorMessenger.hh
-//   $Id: H02PrimaryGeneratorMessenger.hh,v 1.3 2006/06/29 17:10:04 gunter Exp $
+//   $Id: H02PrimaryGeneratorMessenger.hh,v 1.3 2006-06-29 17:10:04 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_MESSENGER_H

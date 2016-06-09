@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2010/10/27 07:47:04 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2010-10-27 07:47:04 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for adjoint library.  Hisaya Kurashige, 06/11/08.
 # --------------------------------------------------------------

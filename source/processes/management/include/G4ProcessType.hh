@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessType.hh,v 1.5 2006/06/29 21:07:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessType.hh,v 1.5 2006-06-29 21:07:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -52,7 +52,8 @@ enum G4ProcessType
   fDecay,
   fGeneral,
   fParameterisation,
-  fUserDefined
+  fUserDefined,
+  fParallel
 };
 #endif
 

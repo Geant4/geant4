@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.21 2009/04/21 15:35:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MaterialPropertiesTable.cc,v 1.21 2009-04-21 15:35:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -85,11 +85,11 @@ void G4MaterialPropertiesTable::DumpTable()
     G4cout << (*i).first << G4endl;
     if ( (*i).second != 0 )
     {
-      (*i).second->DumpVector();
+      (*i).second->DumpValues();
     }
     else
     {
-      G4Exception("G4MaterialPropertiesTable::DumpTable()", "NullVector",
+      G4Exception("G4MaterialPropertiesTable::DumpTable()", "mat204",
                   JustWarning, "NULL Material Property Vector Pointer.");
     }
   }
@@ -103,7 +103,7 @@ void G4MaterialPropertiesTable::DumpTable()
     }
     else
     {
-      G4Exception("G4MaterialPropertiesTable::DumpTable()", "NotFound",
+      G4Exception("G4MaterialPropertiesTable::DumpTable()", "mat202",
                   JustWarning, "No Material Constant Property.");
     }
   }
@@ -115,11 +115,10 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   //
   G4MaterialPropertyVector *rindex = this->GetProperty("RINDEX");
   if (rindex==0)  { return 0; }
-  rindex->ResetIterator();
 
   // RINDEX exists but has no entries, give up
   //
-  if ( (++*rindex) == false )  { return 0; }
+  if ( rindex->GetVectorLength() == 0 ) { return 0; }
 
   // add GROUPVEL vector
   //
@@ -130,26 +129,26 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   // fill GROUPVEL vector using RINDEX values
   // rindex built-in "iterator" was advanced to first entry above
   //
-  G4double E0 = rindex->GetPhotonEnergy();
-  G4double n0 = rindex->GetProperty();
+  G4double E0 = rindex->Energy(0);
+  G4double n0 = (*rindex)[0];
 
   if (E0 <= 0.)
   {
-    G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ZeroEnergy",
+    G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                 FatalException, "Optical Photon Energy <= 0");
   }
                                                                                 
-  if ( ++*rindex )
+  if ( rindex->GetVectorLength() >= 2 )
   {
     // good, we have at least two entries in RINDEX
     // get next energy/value pair
 
-    G4double E1 = rindex->GetPhotonEnergy();
-    G4double n1 = rindex->GetProperty();
+    G4double E1 = rindex->Energy(1);
+    G4double n1 = (*rindex)[1];
 
     if (E1 <= 0.)
     {
-      G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ZeroEnergy",
+      G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                   FatalException, "Optical Photon Energy <= 0");
     }
 
@@ -163,30 +162,30 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
     //
     if((vg<0) || (vg>c_light/n0))  { vg = c_light/n0; }
 
-    groupvel->AddElement( E0, vg );
+    groupvel->InsertValues( E0, vg );
 
     // add entries at midpoints between remaining photon energies
     //
-    while(1)
+
+    for (size_t i = 2; i < rindex->GetVectorLength(); i++)
     {
       vg = c_light/( 0.5*(n0+n1)+(n1-n0)/std::log(E1/E0));
 
       // allow only for 'normal dispersion' -> dn/d(logE) > 0
       //
       if((vg<0) || (vg>c_light/(0.5*(n0+n1))))  { vg = c_light/(0.5*(n0+n1)); }
-      groupvel->AddElement( 0.5*(E0+E1), vg );
+      groupvel->InsertValues( 0.5*(E0+E1), vg );
 
       // get next energy/value pair, or exit loop
       //
-      if (!(++*rindex))  { break; }
       E0 = E1;
       n0 = n1;
-      E1 = rindex->GetPhotonEnergy();
-      n1 = rindex->GetProperty();
+      E1 = rindex->Energy(i);
+      n1 = (*rindex)[i];
 
       if (E1 <= 0.)
       {
-        G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ZeroEnergy",
+        G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                     FatalException, "Optical Photon Energy <= 0");
       }
     }
@@ -198,11 +197,11 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
     //
     if((vg<0) || (vg>c_light/n1))  { vg = c_light/n1; }
-    groupvel->AddElement( E1, vg );
+    groupvel->InsertValues( E1, vg );
   }
   else // only one entry in RINDEX -- weird!
   {
-    groupvel->AddElement( E0, c_light/n0 );
+    groupvel->InsertValues( E0, c_light/n0 );
   }
                                                                                 
   return groupvel;

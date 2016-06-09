@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh,v 1.5 2009/10/30 18:01:22 bagoulia Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NistMessenger.hh,v 1.5 2009-10-30 18:01:22 bagoulia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File name:     G4NistMessenger
 //

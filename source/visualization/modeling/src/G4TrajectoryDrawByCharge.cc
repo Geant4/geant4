@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.10 2010/05/28 02:00:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.10 2010-05-28 02:00:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 #include "G4TrajectoryDrawByCharge.hh"
@@ -116,10 +116,10 @@ G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4String& colour)
   Charge myCharge;
   
   if (!ConvertToCharge(charge, myCharge)) {
-    std::ostringstream o;
-    o << "Invalid charge "<<charge;
+    G4ExceptionDescription ed;
+    ed << "Invalid charge "<<charge;
     G4Exception   
-      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "modeling0121", JustWarning, ed);
     return;
   }
 
@@ -132,10 +132,10 @@ G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4Colour& colour)
   Charge myCharge;
   
   if (!ConvertToCharge(charge, myCharge)) {
-    std::ostringstream o;
-    o << "Invalid charge "<<charge;
+    G4ExceptionDescription ed;
+    ed << "Invalid charge "<<charge;
     G4Exception   
-      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4Colour& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4Colour& colour)", "modeling0122", JustWarning, ed);
   }
 
   return Set(myCharge, colour);

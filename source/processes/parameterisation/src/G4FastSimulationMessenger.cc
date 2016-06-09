@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.9 2008/03/13 16:03:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastSimulationMessenger.cc,v 1.9 2008-03-13 16:03:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4FastSimulationMessenger.hh"

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Exception.cc,v 1.1 2006/11/20 05:57:16 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4Exception.cc,v 1.1 2006-11-20 05:57:16 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Exception.cc
 //
@@ -41,26 +41,6 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4Exception {
 
-////////////////////////////////////////
-void f1_G4Exception(const char* message)
-////////////////////////////////////////
-{
-  if(message) { 
-    G4cerr << message << G4endl;
-  }
-
-  if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,message)) {
-    G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-    PyErr_SetString(PyExc_RuntimeError, message);
-    PyErr_Print();
-  } else {
-    G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-           << G4endl << "*** No guarantee for further execution ***" 
-           << G4endl;
-  }
-}
-
-
 //////////////////////////////////////////////////
 void f2_G4Exception(const char* originOfException,
                     const char* exceptionCode,
@@ -75,33 +55,39 @@ void f2_G4Exception(const char* originOfException,
     toBeAborted = exceptionHandler
       -> Notify(originOfException,exceptionCode,severity,description);
   } else {
-    G4cerr << G4endl
-           << "*** ExceptionHandler is not defined ***" << G4endl;
-    G4cerr << G4endl;
-    G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
-    G4cerr << "      issued by : " << originOfException << G4endl;
-    G4cerr << description << G4endl;
-    G4cerr << G4endl << "Severity : ";
+    G4String e_banner = "\n!!!!! - !!!!! - !!!!! - !!!!! - !!!!! - !!!!!\n";
+    G4String w_banner = "\nwwwww - wwwww - wwwww - wwwww - wwwww - wwwww\n";
+    std::ostringstream message;
+    message << "\n*** ExceptionHandler is not defined ***\n"
+            << "*** G4Exception : " << exceptionCode << G4endl
+            << "      issued by : " << originOfException << G4endl
+            << description << G4endl;
     switch(severity) {
     case FatalException:
-      G4cerr << "*** Fatal Exception ***";
+      G4cerr << e_banner << message.str() << "*** Fatal Exception ***"
+             << e_banner;
       break;
     case FatalErrorInArgument:
-      G4cerr << "*** Fatal Error In Argument ***";
+      G4cerr << e_banner << message.str() << "*** Fatal Error In Argument ***"
+             << e_banner;
       break;
     case RunMustBeAborted:
-      G4cerr << "*** Run Must Be Aborted ***";
+      G4cerr << e_banner << message.str() << "*** Run Must Be Aborted ***"
+             << e_banner;
       break;
     case EventMustBeAborted:
-      G4cerr << "*** Event Must Be Aborted ***";
+      G4cerr << e_banner << message.str() << "*** Event Must Be Aborted ***"
+             << e_banner;
       break;
     default:
-      G4cerr << "*** This is just a warning message. ***";
+      G4cout << w_banner << message.str() 
+             << "*** This is just a warning message. ***"
+             << w_banner;
       toBeAborted = false;
       break;
     }
-    G4cerr << G4endl;
   }
+
   if(toBeAborted) {
     if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort)) {
       G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
@@ -124,7 +110,5 @@ using namespace pyG4Exception;
 // ====================================================================
 void export_G4Exception()
 {
-  def("G4Exception",   f1_G4Exception);
   def("G4Exception",   f2_G4Exception);
-
 }

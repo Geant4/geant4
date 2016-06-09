@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2010/11/11 17:43:55 gunter Exp $
+$Id: History,v 1.11 2010-11-11 17:43:55 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,18 @@ $Id: History,v 1.11 2010/11/11 17:43:55 gunter Exp $
 
                           History file
                           ------------
+
+03.10.2011   Gunter Folger,   Tag: gammaraytel-V09-04-03
+             Fix compilation warnings from gcc 4.6 in GammaRayTelEventAction.cc,
+	     GammaRayTelDetectorConstruction.cc and GammaRayTelTrackerROGeometry.cc
+
+16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-02
+             Added SVN eol property to file gammaraytel.err to allow proper file comparissons
+
+
+16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-01
+             Fixed the error introduced with G4USE_UI conditional code 
+             Added file gammaraytel.err with the expected error output
 
 11.11.2010   Gunter Folger,  Tag: gammaraytel-V09-03-03
 	     Use new G4MultipleScattering classes

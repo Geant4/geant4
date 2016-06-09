@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.8 2010/05/21 18:07:30 mkelsey Exp $
+// $Id: G4InuclEvaporation.hh,v 1.8 2010-05-21 18:07:30 mkelsey Exp $
 // Defines an interface to evaporation models of Bertini cascase (BERT)
 // based on INUCL code.
 //

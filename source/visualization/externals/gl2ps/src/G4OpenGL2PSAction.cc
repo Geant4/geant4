@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.6 2010/11/03 16:40:34 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGL2PSAction.cc,v 1.6 2010-11-03 16:40:34 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -52,6 +52,19 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
   fViewport[1] = 0;
   fViewport[2] = 0;
   fViewport[3] = 0;
+  fBufferSize = 1024;
+  fBufferSizeLimit = 8192;
+  resetBufferSizeParameters();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGL2PSAction::resetBufferSizeParameters(
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  fBufferSize = 1024;
+  fBufferSizeLimit = 8192;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -105,22 +118,38 @@ bool G4OpenGL2PSAction::enableFileWriting(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  fFile = ::fopen(fFileName,"w");
+  fFile = ::fopen(fFileName,"wb");
   if(!fFile) {
     return false;
   }
-  G4gl2psBegin();
-  return true;
+  return G4gl2psBegin();
 }
 //////////////////////////////////////////////////////////////////////////////
-void G4OpenGL2PSAction::disableFileWriting(
+bool G4OpenGL2PSAction::disableFileWriting(
 )
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  gl2psEndPage();        
+  int state = gl2psEndPage();
   ::fclose(fFile);
+  if (state == GL2PS_OVERFLOW) {
+    return false;
+  }
   fFile = 0;
+  return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+bool G4OpenGL2PSAction::extendBufferSize(
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  // extend buffer size *2
+  if (fBufferSize*2 <= fBufferSizeLimit) {
+    fBufferSize = fBufferSize*2;
+    return true;
+  }
+  return false;
 }
 //////////////////////////////////////////////////////////////////////////////
 bool G4OpenGL2PSAction::fileWritingEnabled(
@@ -131,24 +160,24 @@ bool G4OpenGL2PSAction::fileWritingEnabled(
   return (fFile?true:false);
 }
 //////////////////////////////////////////////////////////////////////////////
-void G4OpenGL2PSAction::G4gl2psBegin(
+bool G4OpenGL2PSAction::G4gl2psBegin(
 )
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(!fFile) return;
+  if(!fFile) return false;
   int options = GL2PS_OCCLUSION_CULL | 
     GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
 //   int options = GL2PS_OCCLUSION_CULL | 
 //      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
-  //int sort = GL2PS_SIMPLE_SORT;
+  //  int sort = GL2PS_SIMPLE_SORT;
   GLint buffsize = 0;
-  buffsize += 1024*1024;
+  buffsize += fBufferSize*fBufferSize;
   
   glGetIntegerv(GL_VIEWPORT,fViewport);
 
-  gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
+  GLint res = gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
                  fViewport,
                  GL2PS_EPS, 
                  sort, 
@@ -156,6 +185,11 @@ void G4OpenGL2PSAction::G4gl2psBegin(
                  GL_RGBA,0, NULL,0,0,0,
                  buffsize, 
                  fFile,fFileName);    
+  if (res == GL2PS_ERROR) {
+    return false;
+  }
+  return true;
+
 }
 
 

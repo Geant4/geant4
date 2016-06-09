@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.icc,v 1.5 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GenericTrap.icc,v 1.5 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -56,7 +56,7 @@ G4TwoVector G4GenericTrap::GetVertex(G4int index) const
 {
   if ( index<0 || index >= G4int(fVertices.size()) )
   {
-    G4Exception ("G4GenericTrap::GetVertex()", "InvalidInput",
+    G4Exception ("G4GenericTrap::GetVertex()", "GeomSolids0003",
                  FatalException, "Index outside range.");
     return G4TwoVector();
   }
@@ -78,7 +78,7 @@ G4double G4GenericTrap::GetTwistAngle(G4int index) const
 {
   if ( (index<0) || (index >= G4int(fVertices.size())) )
   {
-    G4Exception ("G4GenericTrap::GetTwistAngle()", "InvalidInput",
+    G4Exception ("G4GenericTrap::GetTwistAngle()", "GeomSolids0003",
                  FatalException, "Index outside range.");
     return 0.;
   }
@@ -100,7 +100,7 @@ void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
 {
   if ( (index<0) || (index >= G4int(fVertices.size())) )
   {
-    G4Exception ("G4GenericTrap::SetTwistAngle()", "InvalidInput",
+    G4Exception ("G4GenericTrap::SetTwistAngle()", "GeomSolids0003",
                  FatalException, "Index outside range.");
   }
   else

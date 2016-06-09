@@ -1,0 +1,258 @@
+//$Id$
+
+///\file "B4/.README"
+///\brief Example B4 README page
+
+/*! \page ExampleB4 Example B4
+
+ This example simulates a simple Sampling Calorimeter setup.
+ To demonstrate several possible ways of data scoring, the example 
+ is provided in four variants: B4a, B4b, B4c, B4d. 
+ (See also examples/extended/electromagnetic/TestEm3)
+   
+\section B4_s1 GEOMETRY DEFINITION
+ 
+   The calorimeter is a box made of a given number of layers. A layer
+   consists of an absorber plate and of a detection gap. The layer is
+   replicated.
+ 	
+   Four parameters define the geometry of the calorimeter :
+	- the thickness of an absorber plate,
+ 	- the thickness of a  gap,
+ 	- the number of layers, and
+ 	- the transverse size of the calorimeter (the entrance face is a square). 
+ 	
+   In addition a transverse uniform magnetic field can be applied (see
+   B4DetectorMessenger class) and set via the interactive command.
+   For example:
+ 
+\verbatim
+/B4/det/setMagField 0.2 tesla
+\endverbatim
+ 
+	
+<pre>
+	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+	|			|			|			|
+	==========================================================================
+	||		|	||		|	||		|	||
+     	||		|	||		|	||		|	||
+ beam   ||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
+======>	||		|	||		|	||		|	||
+	||		|	||		|	||		|	||
+ 	==========================================================================
+</pre>
+		    
+   A more general version of this geometry can be found in:
+   examples/extended/electromagnetic/TestEm3   
+   where all the geometry parameters, the absorber and gap materials 
+   can be modified interactively via the commands defined in the DetectorMessenger
+   class.
+ 	    
+\section B4_s2 PHYSICS LIST
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list. This physics
+   list requires data files for low energy electromagnetic processes which
+   path is defined via the G4LEDATA envirnoment variable.
+ 
+   In addition the build-in interactive command:
+\verbatim
+/process/(in)activate processName
+\endverbatim
+   allows to activate/inactivate the processes one by one.
+ 	 
+\section B4_s3 PRIMARY GENERATOR
+ 
+   The primary beam consists of a single particle which hits the
+   calorimeter perpendicular to the input face. The type of the particle
+   and its energy are set in the B4PrimaryGeneratorAction class, and can
+   be changed via the G4 build-in commands of the G4ParticleGun class (see
+   the macros provided with this example).
+ 	
+\section B4_s4 RUNS and EVENTS
+
+   A run is a set of events. 
+   
+   The user can choose the frequency of printing from B4aEventAction (or event 
+   action classes in other options) via the interactive command defined in
+   B4aEventActionMessenger (or messengers classes in other options), for 
+   example:
+    
+\verbatim
+/B4/event/setPrintModulo 100
+\endverbatim
+
+\section B4_s5- DETECTOR RESPONSE
+ 
+   The energy deposit and track lengths of the charged particles are recorded on
+   an event by event basis in the Absober and Gap layers.
+   
+   In order to demonstrate several possible ways of data scoring,
+   the example is provided in four variants:
+   
+\subsection s5a Variant a: User Actions
+   
+     These 4 quantities are data members of the B4aEventAction class.  
+     They are collected step by step in 
+     B4aSteppingAction::UserSteppingAction(), and passed to the event action
+     via two methods: B4aEventAction::AddAbs() and B4aEventAction::AddGap().
+   
+     In B4aEventAction::EndOfEventAction(), these quantities are printed and 
+     filled in H1D histograms and ntuple to accumulate statistic and compute 
+     dispersion.
+     
+\subsection s5b Variant b: User data object 
+   
+     In order to avoid dependencies between action classes, a user object
+     B4bRunData is defined with data members needed to the accounted
+     information. 
+     In order to reduce the number of data members a 2-dimensions array
+     is introduced for each quantity.
+     Then the quantities are collected step by step in user action classes:
+     B4bSteppingAction::UserSteppingAction() and 
+     B4bEventAction::EndOfEventAction() in a similar way as in variant a. 
+     
+\subsection s5c  Variant c: Hits and Sensitive detectors
+   
+     In this option, the physics quantities are accounted using the hits
+     and sensitive detectors framework defined in the Geant4 kernel.  
+     The physics quantities are stored in B4cCalorHit via two B4cCalorimeterSD
+     objects, one associated with the Absorber volume and another one with Gap
+     in B4cDetectorConstruction.
+     
+     In contrary to the B2 example (Tracker) where a new hit is created
+     with each track passing the sensitive volume (in the calorimeter), only one
+     hit is created for each calorimeter layer and one more hit to account for
+     the total quantities in all layers. In addition to the variants a and b,
+     the quantities per each layer are also available in addition to the total 
+     quantities.
+     
+\subsection s5d  Variant d: Scorer
+    
+     In this option, the Geant4 scorers which are defined on the top of hits
+     and sensitive detectors Geant4 framework are used.  
+     In practice this means that the user does not need to define hits and sensitive
+     detector classes but rather uses the classes already defined
+     in Geant4. In this example, the G4MultiFunctionalDetector with
+     G4PSEnergyDeposit and G4PSTrackLength primitive scores are used (see
+     B4dDetectorConstruction class).
+    
+     Also with this approach, the quantities per each layer are available 
+     in addition to the total quantities.
+              				
+\section B4_s6 HISTOGRAMS
+ 
+   The analysis tools are used to accumulate statistics and compute the dispersion
+   of the energy deposit and track lengths of the charged particles.
+   H1D histograms are created in B4RunAction::BeginOfRunAction() for the 
+   following quantities:
+   - Energy deposit in absorber
+   - Energy deposit in gap
+   - Track length in absorber
+   - Track length in gap
+   The same values are also saved in an ntuple.
+
+   The accumulated statistic and computed dispersion is printed at the end of 
+   run, in B4RunAction::EndOfRunAction().
+
+   The histograms and ntuple are saved in the output file in a format
+   according to a technology selected in B4Analysis.hh.
+ 
+\section B4_s7 VISUALIZATION TUTORIAL
+
+   Additional visualization tutorial macros are available in the visTutor
+   subdirectory.  They can be tried as:
+\verbatim
+% cd B4/B4[a,b,c,d]
+% ln -s ../macros/visTutor visTutor
+% exampleB4[a,b,c,d]
+Idle > /control/execute visTutor/exN03VisX.mac
+\endverbatim
+   For details, see comment lines  described in the macro files.
+   These macros are designed to help your understanding of the User's Guide.
+ 
+<hr>
+
+The following paragraphs are common to all basic examples
+
+\section B4_A VISUALISATION
+
+   The visualization manager is set via the G4VisExecutive class
+   in the main () function in exampleB4a.cc (or in b, c, d variants).    
+   The initialisation of the drawing is done via a set of /vis/ commands
+   in the macro vis.mac. This macro is automatically read from
+   the main () function when the example is used in interactive running mode.
+
+   By default, vis.mac opens an OpenGL viewer.
+   The user can switch to other graphics systems by commenting out this line
+   and instead uncommenting one of the other /vis/open statements, such as
+   HepRepFile or DAWNFILE (which produce files that can be viewed with the
+   HepRApp and DAWN viewers, respectively).
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires:
+     -# the visualisation & interfaces categories have been compiled
+        with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+     -# exampleB4a.cc has been compiled with G4VIS_USE_OPENGLX.
+   (This is best done through Configure or CMake.)
+
+   For more information on visualization, including information on how to
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,\n
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4OpenGLTutorial/G4OpenGLTutorial.html">
+     OpenGL Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4DAWNTutorial/G4DAWNTutorial.html">
+     DAWN Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4HepRAppTutorial/G4HepRAppTutorial.html">
+     HepRApp Tutorial </a>
+
+   The tracks are automatically drawn at the end of each event, accumulated
+   for all events and erased at the beginning of the next run.
+
+
+\section B4_B USER INTERFACES
+ 
+   The user command interface is set via the G4UIExecutive class
+   in the the main () function in exampleB4a.cc 
+   The selection of the user command interface is then done automatically 
+   according to the Geant4 configuration. The default command interface, 
+   called G4UIterminal, is done via a standard G4cin/G4cout.
+   On Linux and Sun-cc one can use a smarter command interface G4UItcsh. 
+   It is enough to set the environment variable G4UI_USE_TCSH before compiling 
+   exampleB4a.cc
+ 
+\section B4_C HOW TO RUN
+ 
+    - compile and link to generate an executable
+\verbatim
+% cd B4/B4a
+% make
+\endverbatim                
+ 
+    - execute exampleB4a in the 'interactive mode' with visualization
+\verbatim
+% exampleB4a
+and type in the commands from run1.mac line by line:  
+Idle> /tracking/verbose 1 
+Idle> /run/beamOn 1
+Idle> ...
+Idle> exit
+\endverbatim                
+      or
+\verbatim
+Idle> /control/execute run1.mac
+....
+Idle> exit
+\endverbatim                
+
+    - execute exampleB4a in the 'batch' mode from macro files 
+      (without visualization)
+\verbatim
+% exampleB4a run2.mac
+% exampleB4a exampleB4.in > exampleB4.out
+\endverbatim                
+
+*/
+ 
+  

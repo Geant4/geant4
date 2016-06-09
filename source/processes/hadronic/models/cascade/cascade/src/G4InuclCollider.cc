@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.52 2010/11/24 21:16:17 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4InuclCollider.cc,v 1.52 2010-11-24 21:16:17 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
@@ -52,16 +52,28 @@
 //		default is G4CascadeDeexcitation (i.e., built-in modules)
 // 20100924  M. Kelsey -- Migrate to integer A and Z
 // 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
+// 20110224  M. Kelsey -- Add ::rescatter() function which takes a list of
+//		pre-existing secondaries as input.  Add setVerboseLevel().
+// 20110301  M. Kelsey -- Pass verbosity to new or changed de-excitation
+// 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
+// 20110308  M. Kelsey -- Separate de-excitation block from collide(); check
+//		for single-nucleon "fragment", rather than for null fragment
+// 20110413  M. Kelsey -- Modify diagnostic messages in ::rescatter() to be
+//		equivalent to those from ::collide().
+// 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
+//		final-state tables instead of particle "isPhoton()"
 
 #include "G4InuclCollider.hh"
+#include "G4CascadeChannelTables.hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CascadeDeexcitation.hh"
-#include "G4PreCompoundDeexcitation.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4PreCompoundDeexcitation.hh"
 
 
 G4InuclCollider::G4InuclCollider()
@@ -77,16 +89,31 @@ G4InuclCollider::~G4InuclCollider() {
 }
 
 
+// Set verbosity and pass on to member objects
+void G4InuclCollider::setVerboseLevel(G4int verbose) {
+  G4CascadeColliderBase::setVerboseLevel(verbose);
+
+  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
+  theIntraNucleiCascader->setVerboseLevel(verboseLevel);
+  theDeexcitation->setVerboseLevel(verboseLevel);
+
+  output.setVerboseLevel(verboseLevel);
+  DEXoutput.setVerboseLevel(verboseLevel);
+}
+
+
 // Select post-cascade processing (default will be CascadeDeexcitation)
 
 void G4InuclCollider::useCascadeDeexcitation() {
   delete theDeexcitation;
   theDeexcitation = new G4CascadeDeexcitation;
+  theDeexcitation->setVerboseLevel(verboseLevel);
 }
 
 void G4InuclCollider::usePreCompoundDeexcitation() {
   delete theDeexcitation;
   theDeexcitation = new G4PreCompoundDeexcitation;
+  theDeexcitation->setVerboseLevel(verboseLevel);
 }
 
 
@@ -96,15 +123,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 			      G4CollisionOutput& globalOutput) {
   if (verboseLevel) G4cout << " >>> G4InuclCollider::collide" << G4endl;
 
-  // Initialize colliders verbosity
-  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
-  theIntraNucleiCascader->setVerboseLevel(verboseLevel);
-  theDeexcitation->setVerboseLevel(verboseLevel);
-
-  output.setVerboseLevel(verboseLevel);
-  DEXoutput.setVerboseLevel(verboseLevel);
-
-  const G4int itry_max = 1000;
+  const G4int itry_max = 100;
 
   // Particle-on-particle collision; no nucleus involved
   if (useEPCollider(bullet,target)) {
@@ -144,17 +163,21 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   if (interCase.hadNucleus()) { 	// particle with nuclei
     G4InuclElementaryParticle* pbullet = 
       dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
+
     if (!pbullet) {
       G4cerr << " InuclCollider -> ERROR bullet is not a hadron " << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
-    } else if (pbullet->isPhoton()) {
-      G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
+    }
+
+    if (!G4CascadeChannelTables::GetTable(pbullet->type())) {
+      G4cerr << " InuclCollider -> ERROR can not collide with "
+	     << pbullet->getDefinition()->GetParticleName() << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
-    } else {
-      btype = pbullet->type();
-    } 
+    }
+
+    btype = pbullet->type();
   } else { 				// nuclei with nuclei
     G4InuclNuclei* nbullet = 
       dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
@@ -203,32 +226,25 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   while (itry < itry_max) {
     itry++;
     if (verboseLevel > 2)
-      G4cout << " IntraNucleiCascader itry " << itry << G4endl;
+      G4cout << " InuclCollider itry " << itry << G4endl;
 
     globalOutput.reset();		// Clear buffers for this attempt
-    output.reset();	
-    DEXoutput.reset();
+    output.reset();
 
     theIntraNucleiCascader->collide(zbullet, target, output);
     
     if (verboseLevel > 1) G4cout << " After Cascade " << G4endl;
 
-    // FIXME:  The code below still does too much copying!  Would rather
-    //         remove initial fragment from list (or get it a different way)
-    DEXoutput.addOutgoingParticles(output.getOutgoingParticles());
-    
-    if (output.numberOfOutgoingNuclei() == 1) {	// Residual fragment
-      // FIXME:  Making a copy here because of constness issues
-      G4InuclNuclei recoil_nucleus = output.getOutgoingNuclei()[0];
-      theDeexcitation->collide(0, &recoil_nucleus, DEXoutput);
-    }
+    deexcite(output.getRecoilFragment(), output);
+    output.removeRecoilFragment();
 
     if (verboseLevel > 2)
       G4cout << " itry " << itry << " finished, moving to lab frame" << G4endl;
 
     // convert to the LAB frame and add to final result
-    DEXoutput.boostToLabFrame(convertToTargetRestFrame);
-    globalOutput.add(DEXoutput);
+    output.boostToLabFrame(convertToTargetRestFrame);
+
+    globalOutput.add(output);
 
     // Adjust final state particles to balance momentum and energy
     // FIXME:  This should no longer be necessary!
@@ -238,6 +254,9 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	G4cout << " InuclCollider output after trials " << itry << G4endl;
       delete zbullet;
       return;
+    } else {
+      if (verboseLevel>2)
+	G4cerr << " InuclCollider setOnShell failed." << G4endl;
     }
   }	// while (itry < itry_max)
   
@@ -250,4 +269,57 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
   delete zbullet;
   return;
+}
+
+
+// For use with Propagate to preload a set of secondaries
+
+void G4InuclCollider::rescatter(G4InuclParticle* bullet,
+				G4KineticTrackVector* theSecondaries,
+				G4V3DNucleus* theNucleus,
+				G4CollisionOutput& globalOutput) {
+  if (verboseLevel) G4cout << " >>> G4InuclCollider::rescatter" << G4endl;
+
+  G4int itry=1;		// For diagnostic post-processing only
+  if (verboseLevel > 2) G4cout << " InuclCollider itry " << itry << G4endl;
+
+  globalOutput.reset();		// Clear buffers for this attempt
+  output.reset();
+
+  theIntraNucleiCascader->rescatter(bullet, theSecondaries, theNucleus, 
+				    output);
+
+  if (verboseLevel > 1) G4cout << " After Rescatter" << G4endl;
+
+  deexcite(output.getRecoilFragment(), output);
+  output.removeRecoilFragment();
+
+  globalOutput.add(output);	// Add local results to global output
+
+  if (verboseLevel) 
+    G4cout << " InuclCollider output after trials " << itry << G4endl;
+}
+
+
+// De-excite nuclear fragment to ground state
+
+void G4InuclCollider::deexcite(const G4Fragment& fragment,
+			       G4CollisionOutput& globalOutput) {
+  if (fragment.GetA() <= 1) return;	// Nothing real to be de-excited
+
+  if (verboseLevel) G4cout << " >>> G4InuclCollider::deexcite" << G4endl;
+
+  G4InuclNuclei frag(fragment);		// Eventually unnecessary
+
+  const G4int itry_max = 10;		// Maximum number of attempts
+  G4int itry = 0;
+  do {
+    if (verboseLevel > 2) G4cout << " deexcite itry " << itry << G4endl;
+
+    DEXoutput.reset();
+    theDeexcitation->collide(0, &frag, DEXoutput);
+  } while (!validateOutput(0, &frag, DEXoutput) && (++itry < itry_max));
+
+  // Add de-excitation products to output buffer
+  globalOutput.add(DEXoutput);
 }

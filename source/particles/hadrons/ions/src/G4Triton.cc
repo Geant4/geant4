@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.17 2010/10/09 10:36:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Triton.cc,v 1.18 2010-12-20 01:39:59 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,12 +65,13 @@ G4Triton* G4Triton::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   //             excitation 
+    G4double  year = 31.536000e06 * second;
     anInstance = new G4Ions(
                  name,    2.808921*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +3, 1000010030,
-                 true,            -1.0,          NULL,
+                 true,      12.32*year,          NULL,
 		false,        "static",   -1000010030, 
                   0.0
               );

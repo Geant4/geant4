@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2004/06/01 15:39:56 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004-06-01 15:39:56 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # -----------------------------------------------------------

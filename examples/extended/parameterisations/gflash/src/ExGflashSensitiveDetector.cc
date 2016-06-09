@@ -33,7 +33,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include <iostream>
-
+using namespace std;
 //WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
 ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name, ExGflashDetectorConstruction* det):
 G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), Detector(det)
@@ -47,12 +47,12 @@ ExGflashSensitiveDetector::~ExGflashSensitiveDetector() {}
 
 void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
 {
-	cout<<"::Initializing the sensitive detector"<<endl;
+	G4cout<<"::Initializing the sensitive detector"<<G4endl;
 	static G4int HCID = -1;
 	if(HCID<0){ HCID = GetCollectionID(0); }
-	HCE->AddHitsCollection( HCID, caloHitsCollection );
 	caloHitsCollection=new 
 	ExGflashHitsCollection(SensitiveDetectorName,collectionName[0]); // first collection
+	HCE->AddHitsCollection( HCID, caloHitsCollection );
 }
 
 void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)

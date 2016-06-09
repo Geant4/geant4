@@ -1,0 +1,59 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Tree0.mac                                    #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#                                                                     #
+#  CONTENTS: A macro to demonstrate ASCII DTREE                       #
+#                                                                     #
+#  USAGE:                                                             #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Tree0.mac             #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix / Windows                     #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     # 
+#  VERBOSE LEVEL:                                                     #
+#                                                                     # 
+#    <  10: - does not print daughters of repeated logical volumes.   #
+#           - does not repeat replicas.                               #
+#    >= 10: prints all physical volumes.                              #
+#    For level of detail add:                                         #
+#    >=  0: prints physical volume name.                              #
+#    >=  1: prints logical volume name.                               #
+#    >=  2: prints solid name and type.                               #
+#                                                                     #
+#  ADDITIONAL NOTES:                                                  #
+#    * The geometry tree is displayed in the stdout.                  #
+#    * The compound command to visualize geometry tree:               # 
+#      /vis/drawTree [<physical-volume-name>] [<system>]              # 
+#######################################################################
+
+# Draw the whole geometry tree
+/vis/drawTree 
+
+# Draw a part of tree
+/vis/drawTree Gap 
+
+# Change the level to display details 
+/vis/ASCIITree/verbose 1
+/vis/drawTree
+
+# Change the level to display details
+/vis/ASCIITree/verbose 2
+/vis/drawTree
+
+# Change the level to display details
+/vis/ASCIITree/verbose 10
+/vis/drawTree

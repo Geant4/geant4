@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwistedTrd.cc,v 1.1 2007/07/13 04:58:29 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4TwistedTrd.cc,v 1.1 2007-07-13 04:58:29 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4TwistedTrap.cc
 //

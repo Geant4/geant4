@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.20 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BremsstrahlungParameters.cc,v 1.21 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -39,6 +39,7 @@
 // 18.11.02 V.Ivanchenko    Fix problem of load
 // 21.02.03 V.Ivanchenko    Number of parameters is defined in the constructor
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
+// 03.12.10 V.Ivanchenko    Fixed memory leak in LoadData
 //
 // -------------------------------------------------------------------
 
@@ -103,13 +104,16 @@ G4double G4BremsstrahlungParameters::Parameter(G4int parameterIndex,
 
 void G4BremsstrahlungParameters::LoadData(const G4String& name)
 {
-  // Build the complete string identifying the file with the data set
+  const G4double mConst = 
+    classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi;
 
+  // Build the complete string identifying the file with the data set
   // define active elements
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-     G4Exception("G4CrossSectionHandler: no MaterialTable found)");
+     G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em1001",FatalException,"Unable to find MaterialTable");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -128,8 +132,10 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
       G4Element* element = (*elementVector)[iEl];
       G4double Z = element->GetZ();
       G4int iz = (G4int)Z;
-      if(iz < 100)
-            paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
+      if(iz < 100) {
+	paramC[iz] = mConst*material->GetTotNbOfElectPerVolume();
+	//paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
+      }
       if (!(activeZ.contains(Z))) {
 	 activeZ.push_back(Z);
       }
@@ -141,8 +147,9 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   char* path = getenv("G4LEDATA");
   if (path == 0)
     {
-      G4String excep("G4BremsstrahlungParameters - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
+      return;
     }
 
   G4String pathString_a(path);
@@ -152,9 +159,10 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
 
   if (! (lsdp_a->is_open()) )
     {
-      G4String stringConversion2("G4BremsstrahlungParameters: cannot open file ");
+      G4String stringConversion2("G4BremsstrahlungParameters::LoadData");
       G4String excep = stringConversion2 + name_a;
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0003",FatalException,excep);
   }
 
   // The file is organized into two columns:
@@ -163,21 +171,17 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   // The file terminates with the pattern: -1   -1
   //                                       -2   -2
 
-  G4DataVector* energies;
-  G4DataVector* data;
   G4double ener = 0.0;
   G4double sum = 0.0;
-  energies   = new G4DataVector();
-  data       = new G4DataVector();
   G4int z    = 0;
 
   std::vector<G4DataVector*> a;
-  for (size_t j=0; j<length; j++) {
-    G4DataVector* aa = new G4DataVector();
-    a.push_back(aa);
-  }
+  a.resize(length);
+ 
   G4DataVector e;
   e.clear();
+
+  G4bool isReady = false;
 
   do {
     file_a >> ener >> sum;
@@ -189,37 +193,40 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
       // End of next element
     } else if (ener == (G4double)(-1)) {
 
-      z++;
+      ++z;
       G4double Z = (G4double)z;
 
-	// fill map if Z is used
+      // fill map if Z is used
       if (activeZ.contains(Z)) {
 
- 	for (size_t k=0; k<length; k++) {
+ 	for (size_t k=0; k<length; ++k) {
 
-	    G4int id = z*length + k;
-	    G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
-	    G4DataVector* eVector = new G4DataVector;
-	    size_t eSize = e.size();
-	    for (size_t s=0; s<eSize; s++) {
-	       eVector->push_back(e[s]);
-	    }
-	    G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
-    	    param[id] = set;
+	  G4int id = z*length + k;
+	  G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
+	  G4DataVector* eVector = new G4DataVector;
+	  size_t eSize = e.size();
+	  for (size_t s=0; s<eSize; s++) {
+	    eVector->push_back(e[s]);
+	  }
+	  G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
+	  param[id] = set;
 	}
-        a.clear();
-        for (size_t j=0; j<length; j++) {
-            G4DataVector* aa = new G4DataVector();
-            a.push_back(aa);
-        }
       } else {
         for (size_t j=0; j<length; j++) {
-          a[j]->clear();
-        }
+	  delete a[j];
+	}
       }
-      e.clear();
+      isReady = false;
 
     } else {
+
+      if(!isReady) {
+        isReady = true;
+	e.clear();
+        for (size_t j=0; j<length; ++j) {
+          a[j] = new G4DataVector();
+        }
+      }
 
       if(ener > 1000.) ener = 1000.;
       e.push_back(ener);
@@ -244,10 +251,11 @@ G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
   G4int n = paramC.size();
   if (id < 0 || id >= n)
     {
-      G4String stringConversion1("G4BremsstrahlungParameters::ParameterC - wrong id = ");
       G4String stringConversion2(id);
-      G4String ex = stringConversion1 + stringConversion2;
-      G4Exception(ex);
+      G4String ex = "Wrong id " + stringConversion2;
+      G4Exception("G4BremsstrahlungParameters::ParameterC",
+		    "em1002",FatalException,ex);
+
     }
 
   return paramC[id];

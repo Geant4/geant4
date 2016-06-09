@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UAtomicDeexcitation.cc,v 1.11 
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -51,15 +51,14 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShell.hh"
 #include "globals.hh"
-#include <vector>
 #include "G4DynamicParticle.hh"
-//#include "G4VhShellCrossSection.hh"
-#include "G4teoCrossSection.hh"
-#include "G4empCrossSection.hh"
+#include <vector>
+
 class G4AtomicTransitionManager;
 class G4VhShellCrossSection;
-//class G4teoCrossSection;
-//class G4empCrossSection;
+class G4EmCorrections;
+class G4Material;
+
 class G4UAtomicDeexcitation : public G4VAtomDeexcitation
 {  
 public: 
@@ -101,14 +100,16 @@ public:
   G4double GetShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 						 G4int Z, 
 						 G4AtomicShellEnumerator shell,
-						 G4double kinE);
+						 G4double kinE,
+                                                 const G4Material* mat = 0);
 
   //  access or compute PIXE cross section 
   virtual
   G4double ComputeShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 						     G4int Z, 
 						     G4AtomicShellEnumerator shell,
-						     G4double kinE);
+						     G4double kinE,
+						     const G4Material* mat = 0);
 
   //=================================================================
   // concrete methods of the deextation class
@@ -139,7 +140,6 @@ private:
 
   G4double minGammaEnergy;
   G4double minElectronEnergy;
-  //  G4bool   fAuger;
 
   // Data member wich stores the id of the shell where is the vacancy 
   // left from the Auger electron
@@ -148,8 +148,12 @@ private:
   // Data member for the calculation of the proton and alpha ionisation XS
 
   G4VhShellCrossSection* PIXEshellCS;
+  G4VhShellCrossSection* anaPIXEshellCS;
+  G4VhShellCrossSection* ePIXEshellCS;
+  G4EmCorrections*       emcorr;
 
- 
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
 };
 
 #endif

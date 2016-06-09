@@ -7,7 +7,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: ZipEntry.h,v 1.9 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: ZipEntry.h,v 1.9 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

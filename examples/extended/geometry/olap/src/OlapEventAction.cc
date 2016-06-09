@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.cc,v 1.5 2006/06/29 17:22:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapEventAction.cc,v 1.5 2006-06-29 17:22:54 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -54,7 +54,6 @@
 #include "OlapGenerator.hh"
 
 //#define OLAP_DEBUG
-//#define OLAP_DEBUG_2
 
 std::ostream & 
    operator<<(std::ostream& flux, OlapInfo & oi)
@@ -98,19 +97,6 @@ OlapInfo::~OlapInfo()
 
 G4bool OlapInfo::operator==(const OlapInfo & rh) 
 {
-   /*
-   const G4AffineTransform & in1 = rh.hist1.GetTopTransform();
-   const G4AffineTransform & in2 = rh.hist2.GetTopTransform();
-   const G4AffineTransform & th1 = hist1.GetTopTransform();
-   const G4AffineTransform & th2 = hist2.GetTopTransform();    
-
-   G4cout << "histories: 1 2: " << G4endl;
-   for (G4int i=0; i<16; i++) {
-     G4cout << th1[i] << '\t' << th2[i] << G4endl;
-     G4cout << in1[i] << '\t' << in2[i] << G4endl;
-     G4cout << "----------------------------" << G4endl;
-   } 
-   */ 
    G4bool result = false;   
    if (
         (
@@ -135,10 +121,11 @@ OlapEventAction::OlapEventAction(OlapRunAction * aRunAction)
       G4RunManager::GetRunManager()->GetUserDetectorConstruction();
     const OlapDetConstr * aConstDet =
       dynamic_cast<const OlapDetConstr *>(aDet);
-    if (!aDet) {
-       G4cerr << "OlapEventAction just can be used together with an OlapDetConstr!"
-              << G4endl << "exiting ..." << G4endl;
-       G4Exception("ERROR - OlapEventAction::OlapEventAction()");
+    if (!aDet)
+    {
+      G4Exception("OlapEventAction::OlapEventAction()",
+                  "InvalidSetup", FatalException,
+                  "Can't be used together with an OlapDetConstr! Exiting...");
     }
     theDet = const_cast<OlapDetConstr *>(aConstDet);                     
 }
@@ -181,8 +168,8 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
    }
    else
    {
-      G4cerr << "Warning: Primary generator is not OlapGenerator!" << G4endl
-                   << "       Overlap Detection will not work!" << G4endl;
+      G4cout << "Warning: Primary generator is not OlapGenerator!" << G4endl
+             << "         Overlap Detection will not work!" << G4endl;
       return;             
    }             
    
@@ -192,32 +179,11 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
         << theDet->GetNewWorld()->GetLogicalVolume()->GetDaughter(0)->GetName()
         << G4endl;
    }            
-
-   // try the starting points of AB and BA
-   // they must be in the theWorldLV volume ...      
-   // G4LogicalVolume * startLV =
-   //   (ABSteps[0])->theHist.GetTopVolume()->GetLogicalVolume();
    
    G4int axx = -1;
    if (aGenerator)
-     axx = aGenerator->GetAxis();  
-   
-   G4double distAB, distBA;
-   distAB = (ABSteps[0])->thePoint[axx]
-            - (ABSteps[ABSteps.size()-1])->thePoint[axx];
-   distBA = (BASteps[0])->thePoint[axx]
-            - (BASteps[BASteps.size()-1])->thePoint[axx];
-   #ifdef OLAP_DEBUG
-      G4cout << "OlapEventAction::EndOfEventAction(): "
-             << "deltaAB=" 
-             << (ABSteps[0])->thePoint[axx]
-                - (ABSteps[ABSteps.size()-1])->thePoint[axx]
-             << " deltaBA=" 
-             << (BASteps[0])->thePoint[axx]
-                - (BASteps[BASteps.size()-1])->thePoint[axx]
-             << G4endl;
-   #endif  
-   
+     axx = aGenerator->GetAxis();
+
    G4double tolerance = OlapManager::GetOlapManager()->Delta();
    
    if ( (ABSteps[ABSteps.size()-1])->theHist.GetTopVolume()->GetLogicalVolume() != 
@@ -226,10 +192,6 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
           theDet->GetNewWorld()->GetLogicalVolume()  
       )
     { 
-       #ifdef OLAP_DEBUG_2
-        G4cerr << "=============overlap: daughter protrudes mother" << G4endl;
-       #endif        
-       //G4cerr << ABSteps[0]->theHist << G4endl;
        OlapInfo * oi =
           new OlapInfo( ABSteps[ABSteps.size()-1]->theHist,
                         BASteps[BASteps.size()-1]->theHist,
@@ -256,12 +218,8 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
      return;
     
    // do we have as many steps from AB as from BA?
-   if (ABSteps.size() != BASteps.size()) {
-     #ifdef OLAP_DEBUG
-      G4cerr << "overlap: different no of steps AB, BA" << G4endl;
-     #endif 
-     //G4cerr << ABSteps[0]->theHist << G4endl;  
-     //G4cerr << "in that case we're are not logging (yet) ..." << G4endl;
+   if (ABSteps.size() != BASteps.size())
+   {
      OlapInfo * oi =
         new OlapInfo( ABSteps[1]->theHist,
                       BASteps[1]->theHist,
@@ -306,29 +264,13 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
                             BASteps[j]->thePoint,
                             axx,
                             OlapManager::GetOlapManager()->GetOriginalWorld() );
-          #ifdef OLAP_DEBUG
-           G4cerr << "overlap: delta=" << delta << G4endl;
-           G4cerr << *oi << G4endl;
-          #endif
-                                       
           if ( !InsertOI(oi) )
           {                       // already detected!
             delete oi;
           }
-                                                 
-          /*     
-          G4cerr << "overlap: delta=" << delta << G4endl;
-          G4cerr << *(ABSteps[i]) 
-                 << *(BASteps[j]);
-          */                 
        }  
        j--;         
    }
-
-  // G4cout << "From A to B:" << G4endl;
-  // G4cout << ABSteps << G4endl;
-  // G4cout << "From B to A:" << G4endl;
-  // G4cout << BASteps << G4endl;   
 }  
 
 G4bool OlapEventAction::InsertOI(OlapInfo * oi)
@@ -352,12 +294,6 @@ G4bool OlapEventAction::InsertOI(OlapInfo * oi)
    
    if (flag)
    {
-     #ifdef OLAP_DEBUG
-      G4cout << "===================================" << G4endl;
-      G4cout << "No of detected Overlaps: " << theRunAction->theOlaps.size()
-             << G4endl; 
-      G4cout << "===================================" << G4endl;
-     #endif
      return false; // already detected overlap
    }  
      

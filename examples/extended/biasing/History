@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2009/11/20 17:48:26 gcosmo Exp $
+$Id: History,v 1.37 2009-11-20 17:48:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 14th, 2011 G.Cosmo - exbiasing-V09-04-01
+- Archived obsolete example B03 laying on the trunk.
+
+Nov 14th, 2011 A.Howard - exbiasing-V09-04-00
+- migrated B01 example (B01DetectorConstruction.cc) to new G4Exception
 
 November 20, 2009  L. Desorgher - exbiasing-V09-02-00
 - Added new example ReverseMC01 demonstrating the Reverse MonteCarlo technique.

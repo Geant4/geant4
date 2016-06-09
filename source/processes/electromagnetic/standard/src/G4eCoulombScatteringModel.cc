@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010/11/13 18:45:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010-11-13 18:45:55 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -80,13 +80,17 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     cosThetaMax(-1.0),
     isInitialised(false)
 {
+  fParticleChange = 0;
   fNistManager = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
-  currentElement  = 0;
-  lowEnergyLimit  = 1*eV;
-  recoilThreshold = 0.*keV;
+
+  pCuts = 0;
+
+  lowEnergyThreshold = 1*keV;  // particle will be killed for lower energy
+  recoilThreshold = 0.*keV; // by default does not work
+
   particle = 0;
   currentCouple = 0;
   wokvi = new G4WentzelOKandVIxSection();
@@ -116,7 +120,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
   /*
-  G4cout << "G4eCoulombScatteringModel: factorA2(GeV^2) = " << factorA2/(GeV*GeV) 
+  G4cout << "G4eCoulombScatteringModel: "  
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
@@ -149,7 +153,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(p != particle) { SetupParticle(p); }
 
   // cross section is set to zero to avoid problems in sample secondary
-  if(kinEnergy < lowEnergyLimit) { return xsec; }
+  if(kinEnergy <= 0.0) { return xsec; }
   DefineMaterial(CurrentCouple());
   cosTetMinNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < cosTetMinNuc) {
@@ -185,26 +189,36 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) { return; }
+
+  // absorb particle below low-energy limit to avoid situation
+  // when a particle has no energy loss
+  if(kinEnergy < lowEnergyThreshold) { 
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
+    return; 
+  }
   SetupParticle(dp->GetDefinition());
+  DefineMaterial(couple);
 
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   //	 << kinEnergy << "  " << particle->GetParticleName() 
   //	 << " cut= " << cutEnergy<< G4endl;
  
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,cutEnergy,kinEnergy);
+  const G4Element* currentElement = 
+    SelectRandomAtom(couple,particle,kinEnergy,cutEnergy,kinEnergy);
 
   G4double Z = currentElement->GetZ();
-  
+
   if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
-				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
+  				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
     { return; }
 
   G4int iz = G4int(Z);
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  wokvi->SetTargetMass(targetMass);
 
   G4ThreeVector newDirection = 
     wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);
@@ -221,7 +235,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
   //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
-  if(finalT <= lowEnergyLimit) { 
+  if(finalT <= lowEnergyThreshold) { 
     trec = kinEnergy;  
     finalT = 0.0;
   } 
@@ -231,7 +245,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);

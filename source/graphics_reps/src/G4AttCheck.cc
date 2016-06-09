@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.15 2006/11/07 11:50:22 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AttCheck.cc,v 1.16 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
 
@@ -131,8 +131,8 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	"\nG4AttCheck: ERROR " << iError << ": Null definitions pointer"
 	"\n*******************************************************"
 	     << G4endl;
-      return error;
     }
+    return error;
   }
   vector<G4AttValue>::const_iterator iValue;
   for (iValue = fpValues->begin(); iValue != fpValues->end(); ++iValue) {

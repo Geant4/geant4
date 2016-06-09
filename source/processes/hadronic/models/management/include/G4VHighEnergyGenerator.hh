@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh,v 1.4 2006/06/29 20:45:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VHighEnergyGenerator.hh,v 1.4 2006-06-29 20:45:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1
@@ -59,8 +59,13 @@ class G4VHighEnergyGenerator
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
       virtual G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, 
                                              const G4DynamicParticle &thePrimary) = 0;
+      std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
+      void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double AbsoluteLevel);
+
+
 
   private:
+      std::pair<G4double, G4double> epCheckLevels;
 
 };
 #endif

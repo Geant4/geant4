@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.10 2010/03/25 15:31:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronicInteractionRegistry.cc,v 1.10 2010-03-25 15:31:42 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 

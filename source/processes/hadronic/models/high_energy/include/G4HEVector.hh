@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.15 2010/11/29 05:45:06 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEVector.hh,v 1.15 2010-11-29 05:45:06 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4UAtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -36,7 +36,11 @@
 //
 // Modified:
 // ---------
-//  
+// 20 Oct 2011  Alf  modified to take into account ECPSSR form Form Factor
+// 03 Nov 2011  Alf  Extended Empirical and Form Factor ionisation XS models
+//                   out thei ranges with Analytical one.
+// 07 Nov 2011  Alf  Restored original ioniation XS for alphas, 
+//                   letting scaled ones for other ions.   
 //
 // -------------------------------------------------------------------
 //
@@ -51,57 +55,172 @@
 #include "G4Electron.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4FluoTransition.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
+
+#include "G4teoCrossSection.hh"
+#include "G4empCrossSection.hh"
+#include "G4LivermoreIonisationCrossSection.hh"
+#include "G4EmCorrections.hh"
+#include "G4LossTableManager.hh"
+#include "G4Material.hh"
+#include "G4AtomicShells.hh"
 
 using namespace std;
 
 G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   G4VAtomDeexcitation("UAtomDeexcitation"),
   minGammaEnergy(DBL_MAX), 
-  minElectronEnergy(DBL_MAX)
+  minElectronEnergy(DBL_MAX),
+  emcorr(0)
 {
-  PIXEshellCS = 0;
+  PIXEshellCS    = 0;
+  ePIXEshellCS   = 0;
+  emcorr = G4LossTableManager::Instance()->EmCorrections();
+  theElectron = G4Electron::Electron();
+  thePositron = G4Positron::Positron();
+  transitionManager = 0;
+  anaPIXEshellCS = 0;
 }
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 {
   delete PIXEshellCS;
+  delete anaPIXEshellCS;
+  delete ePIXEshellCS;
 }
 
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
+ 
+  if(!IsFluoActive()) { return; }
   transitionManager = G4AtomicTransitionManager::Instance();
+  if(IsPIXEActive()) {
+    G4cout << G4endl;
+    G4cout << "### === G4UAtomicDeexcitation::InitialiseForNewRun()" << G4endl;
+    anaPIXEshellCS = new G4teoCrossSection("Analytical");
+ 
+ }
+  else  {return;}
+  // initializing PIXE x-section name
+  // 
+  if (PIXECrossSectionModel() == "" ||
+      PIXECrossSectionModel() == "Empirical" ||
+      PIXECrossSectionModel() == "empirical") 
+    {
+      SetPIXECrossSectionModel("Empirical");
+    }
+  else if (PIXECrossSectionModel() == "ECPSSR_Analytical" ||
+	   PIXECrossSectionModel() == "Analytical" || 
+	   PIXECrossSectionModel() == "analytical") 
+    {
+      SetPIXECrossSectionModel("Analytical");
+    }
+  else if (PIXECrossSectionModel() == "ECPSSR_FormFactor" ||
+	   PIXECrossSectionModel() == "ECPSSR_Tabulated" ||
+	   PIXECrossSectionModel() == "Analytical_Tabulated") 
+    {
+      SetPIXECrossSectionModel("ECPSSR_FormFactor");
+    }
+  else 
+    {
+      G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
+	     << G4endl;
+      G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
+	     << " is unknown, Analytical cross section will be used" << G4endl; 
+      SetPIXECrossSectionModel("Analytical");
+    }
+    
+  // Check if old model should be deleted 
+  if(PIXEshellCS) 
+    {
+      if(PIXECrossSectionModel() != PIXEshellCS->GetName()) 
+	{
+	  delete PIXEshellCS;
+          PIXEshellCS = 0;
+	}
+    }
 
-  // initializing PIXE  
-  if ("" == PIXECrossSectionModel()) {
-    SetPIXECrossSectionModel("Empirical");
+  // Instantiate empirical model
+  if(!PIXEshellCS) {
+    if (PIXECrossSectionModel() == "Empirical")
+      {
+	PIXEshellCS = new G4empCrossSection("Empirical");
+      }
+
+    if (PIXECrossSectionModel() == "ECPSSR_FormFactor")
+      {
+	PIXEshellCS = new G4teoCrossSection("ECPSSR_FormFactor");
+      }
   }
-  
-  if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
-    delete PIXEshellCS;
-    PIXEshellCS = new G4teoCrossSection("analytical");
-  }
-  
-  else if (PIXECrossSectionModel() == "Empirical") {
-    delete PIXEshellCS;
-    PIXEshellCS = new G4empCrossSection;
-  }
-  else {
-    G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
-	   << G4endl;
-    G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
-	   << " is unknown, PIXE is disabled" << G4endl; 
-    SetPIXEActive(false);
-  }
+
+  // Electron cross section
+  // initializing PIXE x-section name
+  // 
+  if (PIXEElectronCrossSectionModel() == "" ||
+      PIXEElectronCrossSectionModel() == "Livermore")
+    {
+      SetPIXEElectronCrossSectionModel("Livermore");
+    }
+  else if (PIXEElectronCrossSectionModel() == "ProtonAnalytical" ||
+	   PIXEElectronCrossSectionModel() == "Analytical" || 
+	   PIXEElectronCrossSectionModel() == "analytical") 
+    {
+      SetPIXEElectronCrossSectionModel("ProtonAnalytical");
+    }
+  else if (PIXEElectronCrossSectionModel() == "ProtonEmpirical" ||
+	   PIXEElectronCrossSectionModel() == "Empirical" || 
+	   PIXEElectronCrossSectionModel() == "empirical") 
+    {
+      SetPIXEElectronCrossSectionModel("ProtonEmpirical");
+    }
+  else 
+    {
+      G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
+	     << G4endl;
+      G4cout << "    PIXE e- cross section name " << PIXEElectronCrossSectionModel()
+	     << " is unknown, PIXE is disabled" << G4endl; 
+      SetPIXEElectronCrossSectionModel("Livermore");
+    }
+    
+  // Check if old model should be deleted 
+  if(ePIXEshellCS) 
+    {
+      if(PIXEElectronCrossSectionModel() != ePIXEshellCS->GetName()) 
+	{
+	  delete ePIXEshellCS;
+          ePIXEshellCS = 0;
+	}
+    }
+
+  // Instantiate empirical model
+  if(!ePIXEshellCS) 
+    {
+      if(PIXEElectronCrossSectionModel() == "Empirical")
+	{
+	  ePIXEshellCS = new G4empCrossSection("Empirical");
+	}
+
+      else if(PIXEElectronCrossSectionModel() == "Analytical") 
+	{
+	  ePIXEshellCS = new G4teoCrossSection("Analytical");
+	}
+
+      else if(PIXEElectronCrossSectionModel() == "Livermore")
+	{
+	  ePIXEshellCS = new G4LivermoreIonisationCrossSection();
+	}
+    } 
 }
 
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
 {}
 
-const G4AtomicShell* 
-G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
+const G4AtomicShell* G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
 {
-  return transitionManager->Shell(Z, G4int(shell));
+  return transitionManager->Shell(Z, size_t(shell));
 }
 
 void G4UAtomicDeexcitation::GenerateParticles(
@@ -111,90 +230,141 @@ void G4UAtomicDeexcitation::GenerateParticles(
 		      G4double gammaCut,
 		      G4double eCut)
 {
+
   // Defined initial conditions
   G4int givenShellId = atomicShell->ShellId();
+  //  G4cout << "generating particles for vacancy in shellId: " << givenShellId << G4endl;
   minGammaEnergy = gammaCut;
   minElectronEnergy = eCut;
 
+  // V.I. short-cut
+  if(!IsAugerActive()) {  minElectronEnergy = DBL_MAX; }
+
   // generation secondaries
-  G4DynamicParticle* aParticle;
+  G4DynamicParticle* aParticle=0;
   G4int provShellId = 0;
   G4int counter = 0;
   
+  // let's check that 5<Z<100
+
+  if (Z>5 && Z<100) {
+
   // The aim of this loop is to generate more than one fluorecence photon 
   // from the same ionizing event 
-  do
+    do
+      {
+	if (counter == 0) 
+	  // First call to GenerateParticles(...):
+	  // givenShellId is given by the process
+	  {
+	    provShellId = SelectTypeOfTransition(Z, givenShellId);
+
+	    if  ( provShellId >0) 
+	      {
+		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
+	      }
+	    else if ( provShellId == -1)
+	      {
+		aParticle = GenerateAuger(Z, givenShellId);
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+	      }
+	    else
+	      {
+		G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0002",JustWarning, "Energy deposited locally");
+	      }
+	  }
+	else 
+	  // Following calls to GenerateParticles(...):
+	  // newShellId is given by GenerateFluorescence(...)
+	  {
+	    provShellId = SelectTypeOfTransition(Z,newShellId);
+	    if  (provShellId >0)
+	      {
+		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
+	      }
+	    else if ( provShellId == -1)
+	      {
+		aParticle = GenerateAuger(Z, newShellId);
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+	      }
+	    else
+	      {
+		G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0002",JustWarning, "Energy deposited locally");
+	      }
+	  }
+	counter++;
+	if (aParticle != 0) 
+	  {
+	    vectorOfParticles->push_back(aParticle);
+	    //G4cout << "Deexcitation Occurred!" << G4endl; //debug
+	  }
+	else {provShellId = -2;}
+      }  
+    while (provShellId > -2); 
+  }
+  else
     {
-      if (counter == 0) 
-	// First call to GenerateParticles(...):
-	// givenShellId is given by the process
-	{
-	  provShellId = SelectTypeOfTransition(Z, givenShellId);
-	  
-	  if  ( provShellId >0) 
-	    {
-	      aParticle = GenerateFluorescence(Z,givenShellId,provShellId);  
-	    }
-	  else if ( provShellId == -1)
-	    {
-	      aParticle = GenerateAuger(Z, givenShellId);
-	    }
-	  else
-	    {
-	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
-	    }
-	}
-      else 
-	// Following calls to GenerateParticles(...):
-	// newShellId is given by GenerateFluorescence(...)
-	{
-	  provShellId = SelectTypeOfTransition(Z,newShellId);
-	  if  (provShellId >0)
-	    {
-	      aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-	    }
-	  else if ( provShellId == -1)
-	    {
-	      aParticle = GenerateAuger(Z, newShellId);
-	    }
-	  else
-	    {
-	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
-	    }
-	}
-      counter++;
-      if (aParticle != 0) 
-	{
-	  vectorOfParticles->push_back(aParticle);
-	  //	  G4cout << "FLUO!" << G4endl; //debug
-	}
-      else {provShellId = -2;}
+      G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0001",JustWarning, "Energy deposited locally");
     }
   
-  // Look this in a particular way: only one auger emitted! // ????
-  while (provShellId > -2); 
+  //  G4cout << "---------FATTO!---------" << G4endl; //debug 
+
 }
 
 G4double 
 G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 			       const G4ParticleDefinition* pdef, 
-			       G4int Z /*Z*/, 
-			       G4AtomicShellEnumerator shellEnum/*shell*/,
-			       G4double kineticEnergy/*kinE*/)
+			       G4int Z, 
+			       G4AtomicShellEnumerator shellEnum,
+			       G4double kineticEnergy,
+			       const G4Material* mat)
 {
-  // scaling to protons
-  G4double mass = proton_mass_c2;
-  G4double escaled = kineticEnergy*mass/(pdef->GetPDGMass());
-  G4double q = pdef->GetPDGCharge()/eplus;
 
+  // we must put a control on the shell that are passed: 
+  // some shells should not pass (line "0" or "2")
 
-  std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,escaled,mass,0);
-  G4double res = 0.0;
+  // check atomic number
+  G4double xsec = 0.0;
+  if(Z > 93 || Z < 6 ) { return xsec; } //corrected by alf - Z<6 missing
   G4int idx = G4int(shellEnum);
-  G4int length = atomXSs.size();
-  if(idx < length) { res = q*q*atomXSs[idx]; }
+  if(idx >= G4AtomicShells::GetNumberOfShells(Z)) { return xsec; }
 
-  return res;
+  // 
+  if(pdef == theElectron || pdef == thePositron) {
+    xsec = ePIXEshellCS->CrossSection(Z,shellEnum,kineticEnergy,0.0);
+    return xsec;
+  }
+
+  G4double mass = pdef->GetPDGMass();
+  G4double escaled = kineticEnergy;
+  G4double q2 = 0.0;
+
+  // scaling to protons
+  if ((pdef->GetParticleName() != "proton" && pdef->GetParticleName() != "alpha" ) )
+  {
+    mass = proton_mass_c2;
+    escaled = kineticEnergy*mass/(pdef->GetPDGMass());
+
+    if(mat) {
+      q2 = emcorr->EffectiveChargeSquareRatio(pdef,mat,kineticEnergy);
+    } else {
+      G4double q = pdef->GetPDGCharge()/eplus;
+      q2 = q*q;
+    }
+  }
+  
+  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
+  if(xsec < 1e-100) { 
+    
+    xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); 
+    
+  }
+
+  if (q2)  {xsec *= q2;}
+
+  return xsec;
 }
 
 void G4UAtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
@@ -212,17 +382,19 @@ G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
                                const G4ParticleDefinition* p, 
 			       G4int Z, 
 			       G4AtomicShellEnumerator shell,
-			       G4double kinE)
+			       G4double kinE,
+			       const G4Material* mat)
 {
-  return GetShellIonisationCrossSectionPerAtom(p,Z,shell,kinE);
+  return GetShellIonisationCrossSectionPerAtom(p,Z,shell,kinE,mat);
 }
 
 G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) {
-    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+    G4Exception("G4UAtomicDeexcitation::SelecttypeOfTransition()","de0002",JustWarning, "Energy deposited locally");
+    return 0;
   }
-  G4bool fluoTransitionFoundFlag = false;
+  //G4bool fluoTransitionFoundFlag = false;
   
   G4int provShellId = -1;
   G4int shellNum = 0;
@@ -265,7 +437,7 @@ G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
-	     fluoTransitionFoundFlag = true;
+	     //fluoTransitionFoundFlag = true;
 
 	     break;
 	   }
@@ -275,15 +447,12 @@ G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
       // here provShellId is the right one or is -1.
       // if -1, the control is passed to the Auger generation part of the package 
     }
-
-
-
   else 
     {
- 
-     provShellId = -1;
-
+      provShellId = -1;
     }
+  //G4cout << "FlagTransition= " << provShellId << " ecut(MeV)= " << minElectronEnergy
+  //	 << "  gcut(MeV)= " << minGammaEnergy << G4endl;
   return provShellId;
 }
 
@@ -291,6 +460,17 @@ G4DynamicParticle*
 G4UAtomicDeexcitation::GenerateFluorescence(G4int Z, G4int shellId,
 					    G4int provShellId )
 { 
+
+  //if(!IsDeexActive()) { return 0; }
+
+  if (shellId <=0 )
+
+    {
+      G4Exception("G4UAtomicDeexcitation::GenerateFluorescence()","de0002",JustWarning, "Energy deposited locally");
+      return 0;
+    }
+  
+
   //isotropic angular distribution for the outcoming photon
   G4double newcosTh = 1.-2.*G4UniformRand();
   G4double newsinTh = std::sqrt((1.-newcosTh)*(1. + newcosTh));
@@ -355,7 +535,12 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   if(!IsAugerActive()) { return 0; }
 
   if (shellId <=0 ) {
-    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+    {
+
+      G4Exception("G4UAtomicDeexcitation::GenerateAuger()","de0002",JustWarning, "Energy deposited locally");
+
+      return 0;
+    }
   }
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  
@@ -367,9 +552,6 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   // in the vector storing the list of the vacancies in the variuos shells 
   // that can originate a NON-radiative transition
   
-  // ---- MGP ---- Next line commented out to remove compilation warning
-  // G4int p = refAugerTransition->FinalShellId();
-
   G4int shellNum = 0;
 
   if ( shellId <= refAugerTransition->FinalShellId() ) 
@@ -527,7 +709,10 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	G4cout << "transitionShellId: " << transitionRandomShellId << G4endl;
       */
       
-      if (transitionEnergy < minElectronEnergy) return 0;
+      if (transitionEnergy < minElectronEnergy) {
+	//G4cout << "Problem!" << G4endl; // debug
+	return 0;
+      }
 
       // This is the shell where the new vacancy is: it is the same
       // shell where the electron came from

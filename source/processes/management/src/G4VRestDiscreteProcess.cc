@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestDiscreteProcess.cc,v 1.6 2007/10/02 08:23:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRestDiscreteProcess.cc,v 1.7 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -41,8 +41,8 @@
 G4VRestDiscreteProcess::G4VRestDiscreteProcess()
                    :G4VProcess("No Name Discrete Process") 
 {
-  G4Exception("G4VRestDiscreteProcess::G4VRestDiscreteProcess","Illegal operation",
-	      JustWarning,"default constructor is called");
+  G4Exception("G4VRestDiscreteProcess::G4VRestDiscreteProcess","ProcMan102",
+	      JustWarning,"Default constructor is called");
 }
 
 G4VRestDiscreteProcess::G4VRestDiscreteProcess(const G4String& aName , G4ProcessType aType)

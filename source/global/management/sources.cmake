@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:44:49 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:44:49 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -37,6 +37,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4DataVector.icc
         G4ErrorPropagatorData.hh
         G4ErrorPropagatorData.icc
+        G4Evaluator.hh
         G4ExceptionSeverity.hh
         G4FPEDetection.hh
         G4FastVector.hh
@@ -57,6 +58,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsVector.icc
         G4PhysicsVectorCache.hh
         G4PhysicsVectorType.hh
+        G4Physics2DVector.hh
+        G4Physics2DVector.icc
+        G4Physics2DVectorCache.hh
         G4Pow.hh
         G4ReferenceCountedHandle.hh
         G4RotationMatrix.hh
@@ -99,6 +103,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsOrderedFreeVector.cc
         G4PhysicsTable.cc
         G4PhysicsVector.cc
+        G4PhysicsVectorCache.cc
+        G4Physics2DVector.cc
+        G4Physics2DVectorCache.cc
         G4Pow.cc
         G4SliceTimer.cc
         G4StateManager.cc

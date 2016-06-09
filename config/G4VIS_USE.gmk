@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.28 2009/11/17 11:34:56 gcosmo Exp $
+# $Id: G4VIS_USE.gmk,v 1.28 2009-11-17 11:34:56 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -64,6 +64,16 @@ ifdef G4VIS_USE_OPENGLQT
   CPPFLAGS += -DG4VIS_USE_OPENGLQT
   VISLIBS  += -lG4OpenGL
   INC_GL    = 1
+  INC_QT   = 1
+  LOAD_GLQT   = 1
+endif
+ifdef G4VIS_USE_OPENGLWT
+  G4VIS_USE_OPENGL = 1
+  CPPFLAGS += -DG4VIS_USE_OPENGLWT
+  VISLIBS  += -lG4OpenGL
+  INC_GL    = 1
+  INC_WT   = 1
+  LOAD_GLWT   = 1
   INC_QT   = 1
   LOAD_GLQT   = 1
 endif

@@ -130,6 +130,28 @@
 	  </xs:annotation>
 	</xs:element>
       </xs:choice>
+      <!-- new property added >>>>>>>>>>>>>>>>>>>>>> -->
+      <xs:choice minOccurs="0">
+	<xs:element name="MEE">
+	  <xs:annotation>
+	    <xs:documentation>Ionisation potential or Mean Excitation Energy</xs:documentation>
+	  </xs:annotation>
+	  <xs:complexType>
+	    <xs:complexContent>
+	      <xs:restriction base="QuantityType">
+		<xs:attribute default="eV" type="xs:string" name="unit"></xs:attribute>
+		<xs:attribute fixed="excitationE" type="xs:string" name="type"></xs:attribute>
+	      </xs:restriction>
+	    </xs:complexContent>
+	  </xs:complexType>
+	</xs:element>
+	<xs:element name="MEEref" type="ReferenceType">
+	  <xs:annotation>
+	    <xs:documentation>A reference to previously defined named ionisation potential quantity value</xs:documentation>
+	  </xs:annotation>
+	</xs:element>
+      </xs:choice>
+      <!-- <<<<<<<<<<<<<<<<<<<<<<<<< new property added -->
     </xs:sequence>
   </xs:group>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->

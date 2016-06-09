@@ -24,26 +24,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.17 2009/09/22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DiffuseElastic.hh,v 1.17 2009-09-22 16:21:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: V. Grichine (Vladimir,Grichine@cern.ch)
 //
 //
-// G4 Model: optical elastic scattering with 4-momentum balance 
+// G4 Model: diffuse optical elastic scattering with 4-momentum balance 
 //
 // Class Description
 // Final state production model for hadron nuclear elastic scattering; 
 // Class Description - End
 //
 //
-// 24.05.07 V. Grichine first implementation for hadron (no Coulomb) elastic scattering
-// 04.09.07 V. Grichine implementation for Coulomb elastic scattering
-
+// 24.05.07 V. Grichine, first implementation for hadron (no Coulomb) elastic scattering
+// 04.09.07 V. Grichine, implementation for Coulomb elastic scattering
+// 12.06.11 V. Grichine, new interface to G4hadronElastic
 
 #ifndef G4DiffuseElastic_h
 #define G4DiffuseElastic_h 1
  
 #include "globals.hh"
-#include "G4HadronicInteraction.hh"
+// #include "G4HadronicInteraction.hh"
+#include "G4HadronElastic.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
@@ -53,13 +56,13 @@ class G4ParticleDefinition;
 class G4PhysicsTable;
 class G4PhysicsLogVector;
 
-class G4DiffuseElastic : public G4HadronicInteraction
+class G4DiffuseElastic : public G4HadronElastic // G4HadronicInteraction
 {
 public:
 
   G4DiffuseElastic();
 
-  G4DiffuseElastic(const G4ParticleDefinition* aParticle);
+  // G4DiffuseElastic(const G4ParticleDefinition* aParticle);
 
 
 
@@ -74,9 +77,11 @@ public:
   void BuildAngleTable();
 
  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-				  G4Nucleus & targetNucleus);
+  // G4HadFinalState* ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus & targetNucleus);
 
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab,
+				    G4int Z, G4int A);
 
   void SetPlabLowLimit(G4double value);
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2010/11/09 23:31:59 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoManager.cc,v 1.2 2010-11-09 23:31:59 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,7 +96,7 @@ void HistoManager::book()
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
   AIDA::ITupleFactory* ntf = af->createTupleFactory(*tree);
  
-  ntupl0 = ntf->create( "ntuple0", "Beam profile", "double flagParticle, flagProcess, x, y, z");
+  ntupl0 = ntf->create( "ntuple0", "Beam profile", "double flagParticle, flagProcess, x, y, z, e, d");
   factoryOn = true;
 
   delete hf;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeuteronEvaporationProbability.cc,v 1.20 2010/11/17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DeuteronEvaporationProbability.cc,v 1.20 2010-11-17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -41,7 +41,10 @@
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4DeuteronEvaporationProbability::~G4DeuteronEvaporationProbability()
 {}

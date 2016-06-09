@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc,v 1.6 2007/12/15 12:29:16 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UnknownDecay.cc,v 1.6 2007-12-15 12:29:16 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardNR.cc,v 1.5 2010/10/13 12:21:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PhysListEmStandardNR.cc,v 1.5 2010-10-13 12:21:56 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -152,7 +152,6 @@ void PhysListEmStandardNR::ConstructProcess()
       G4hIonisation* hion = new G4hIonisation();
       hion->SetFluctModel(new G4IonFluctuations());
       hion->SetStepFunction(0.1, 10.*um);
-      hion->ActivateNuclearStopping(false);
       pmanager->AddProcess(hion, -1, 2, 2);
 
       pmanager->AddDiscreteProcess(nucr);      
@@ -166,11 +165,10 @@ void PhysListEmStandardNR::ConstructProcess()
     }
   }
   G4EmProcessOptions opt;
-  opt.SetMinEnergy(0.1*keV);
+  opt.SetMinEnergy(0.01*keV);
   opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
-  opt.SetLinearLossLimit(1.e-6);
+  opt.SetDEDXBinning(200);
+  opt.SetLambdaBinning(200);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

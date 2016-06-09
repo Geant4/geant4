@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.19 2010/11/23 19:01:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EmProcessOptions.hh,v 1.19 2010-11-23 19:01:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // -------------------------------------------------------------------
@@ -106,22 +106,20 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
-  // obsolete will be removed
-  void ActivateDeexcitation(const G4String& proc, G4bool val, 
-			    const G4String& reg = "");
-
-  void SetDeexcitationActive(G4bool val);
-
   void SetDeexcitationActiveRegion(const G4String& rname = "", 
 				   G4bool valDeexcitation = true,
 				   G4bool valAuger = true,
 				   G4bool valPIXE = true);
 
-  void SetAugerActive(G4bool val);
+  void SetFluo(G4bool val);
 
-  void SetPIXEActive(G4bool val);
+  void SetAuger(G4bool val);
+
+  void SetPIXE(G4bool val);
 
   void SetPIXECrossSectionModel(const G4String& val);
+
+  void SetPIXEElectronCrossSectionModel(const G4String& val);
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 
@@ -142,6 +140,16 @@ public:
   void SetPolarAngleLimit(G4double val);
 
   void SetFactorForAngleLimit(G4double val);
+
+  void SetProcessBiasingFactor(const G4String& name, G4double val, 
+			       G4bool flag = true);
+
+  void ActivateForcedInteraction(const G4String& name, G4double length=0.0, 
+				 const G4String& region="",
+				 G4bool flag = true);
+
+  void ActivateSecondaryBiasing(const G4String& name, const G4String& region, 
+				G4double factor, G4double energyLimit);
 
 private:
 

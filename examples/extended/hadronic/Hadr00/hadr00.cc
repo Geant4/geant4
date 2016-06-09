@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr00.cc,v 1.4 2010/05/27 18:09:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: hadr00.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr00
@@ -97,7 +97,9 @@ int main(int argc,char** argv) {
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+#ifdef G4VIS_USE
   G4VisManager* visManager = 0;
+#endif
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
@@ -120,7 +122,9 @@ int main(int argc,char** argv) {
     }
 
   //job termination
+#ifdef G4VIS_USE
   delete visManager;
+#endif
   delete runManager;
 
   return 0;

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003/10/08 16:42:21 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2003-10-08 16:42:21 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -15,6 +15,7 @@ ifdef PRECOMPOUND_TEST
   CPPFLAGS += -DPRECOMPOUND_TEST
 endif
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \

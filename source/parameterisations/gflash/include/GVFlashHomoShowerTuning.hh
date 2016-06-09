@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GVFlashHomoShowerTuning.hh,v 1.7 2006/06/29 19:14:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GVFlashHomoShowerTuning.hh,v 1.7 2006-06-29 19:14:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ---------------------------------------------------------------
@@ -62,6 +62,10 @@
 
 class GVFlashHomoShowerTuning
 {
+  public:
+    GVFlashHomoShowerTuning() {}
+    virtual ~GVFlashHomoShowerTuning() {}
+  
   public: // with description
 
     virtual G4double ParAveT1(){ return -0.812;} // t1

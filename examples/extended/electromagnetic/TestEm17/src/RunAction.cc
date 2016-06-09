@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2008/03/31 10:22:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,10 +175,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
+G4double RunAction::ComputeTheory(G4String process,
+#ifdef G4ANALYSIS_USE
+       G4int NbOfMu)
+#else
+       G4int /* NbOfMu */)
+#endif       
 {   
   G4Material* material = detector->GetMaterial();
-  G4double length = detector->GetSize();
   G4double ekin = primary->GetParticleGun()->GetParticleEnergy();
   MuCrossSections crossSections;
 
@@ -198,6 +202,9 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   G4double binMin = -10., binMax = 0., binWidth = (binMax-binMin)/nbOfBins;
     
 #ifdef G4ANALYSIS_USE
+
+  G4double length = detector->GetSize();
+
   //create histo for theoritical crossSections, with same bining as simulation
   //
   const G4String label[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -223,7 +230,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   //(note: to compare with simulation, the integrated crossSection is function
   //       of the energy cut.) 
   // 
-  G4double lgeps, etransf, sigmaE, dsigma, NbProcess;
+  G4double lgeps, etransf, sigmaE, dsigma;
   G4double sigmaTot = 0.;
   const G4double ln10 = std::log(10.);
     
@@ -233,8 +240,8 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
     sigmaE = crossSections.CR_Macroscopic(process,material,ekin,etransf);
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    
-    NbProcess = NbOfMu*length*dsigma;
 #ifdef G4ANALYSIS_USE
+    G4double NbProcess = NbOfMu*length*dsigma;
     if (histoTh) histoTh->fill(lgeps,NbProcess);
 #endif     
   }

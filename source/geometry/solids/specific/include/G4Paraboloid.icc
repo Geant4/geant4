@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.icc,v 1.4 2007/08/21 12:58:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Paraboloid.icc,v 1.4 2007-08-21 12:58:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -59,7 +59,7 @@ void G4Paraboloid::SetZHalfLength(G4double pDz)
 {
   if(pDz <= 0)
   {
-    G4Exception("G4Paraboloid::SetZHalfLength()", "InvalidSetup", 
+    G4Exception("G4Paraboloid::SetZHalfLength()", "GeomSolids0002", 
                 FatalException, "Invalid dimensions.");
   }
   else
@@ -81,7 +81,7 @@ void G4Paraboloid::SetRadiusPlusZ(G4double pR2)
 {
   if(pR2 <= 0 || pR2 <= r1)
   {
-    G4Exception("G4Paraboloid::SetRadiusPlusZ()", "InvalidSetup", 
+    G4Exception("G4Paraboloid::SetRadiusPlusZ()", "GeomSolids0002", 
                 FatalException, "Invalid dimensions.");
   }
   else
@@ -103,7 +103,7 @@ void G4Paraboloid::SetRadiusMinusZ(G4double pR1)
 {
   if(pR1 < 0 || pR1 >= r2)
   {
-    G4Exception("G4Paraboloid::SetRadiusMinusZ()", "InvalidSetup", 
+    G4Exception("G4Paraboloid::SetRadiusMinusZ()", "GeomSolids0002", 
                 FatalException, "Invalid dimensions.");
   }
   else

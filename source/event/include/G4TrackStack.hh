@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.8 2009/09/10 21:31:41 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TrackStack.hh,v 1.8 2009-09-10 21:31:41 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai

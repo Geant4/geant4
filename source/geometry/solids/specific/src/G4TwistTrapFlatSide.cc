@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.cc,v 1.7 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTrapFlatSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -382,7 +382,7 @@ G4int G4TwistTrapFlatSide::GetAreaCode(const G4ThreeVector &xx,
     return areacode;
   } else {
     G4Exception("G4TwistTrapFlatSide::GetAreaCode()",
-                "NotImplemented", FatalException,
+                "GeomSolids0001", FatalException,
                 "Feature NOT implemented !");
   }
   
@@ -426,12 +426,12 @@ void G4TwistTrapFlatSide::SetCorners()
      SetCorner(sC0Min1Max, x, y, z);
      
    } else {
-     G4cerr << "ERROR - G4TwistTrapFlatSide::SetCorners()" << G4endl
-            << "        fAxis[0] = " << fAxis[0] << G4endl
-            << "        fAxis[1] = " << fAxis[1] << G4endl;
+     std::ostringstream message;
+     message << "Feature NOT implemented !" << G4endl
+             << "        fAxis[0] = " << fAxis[0] << G4endl
+             << "        fAxis[1] = " << fAxis[1];
      G4Exception("G4TwistTrapFlatSide::SetCorners()",
-                 "NotImplemented", FatalException,
-                 "Feature NOT implemented !");
+                 "GeomSolids0001", FatalException, message);
    }
 }
 
@@ -472,13 +472,13 @@ void G4TwistTrapFlatSide::SetBoundaries()
                 GetCorner(sC0Max1Max), sAxisX);
     
   } else {
-    G4cerr << "ERROR - G4TwistTrapFlatSide::SetBoundaries()" << G4endl
-           << "        fAxis[0] = " << fAxis[0] << G4endl
-           << "        fAxis[1] = " << fAxis[1] << G4endl;
+    std::ostringstream message;
+    message << "Feature NOT implemented !" << G4endl
+            << "        fAxis[0] = " << fAxis[0] << G4endl
+            << "        fAxis[1] = " << fAxis[1];
     G4Exception("G4TwistTrapFlatSide::SetCorners()",
-                "NotImplemented", FatalException,
-                "Feature NOT implemented !");
-   }
+                "GeomSolids0001", FatalException, message);
+  }
 }
 
 //=====================================================================

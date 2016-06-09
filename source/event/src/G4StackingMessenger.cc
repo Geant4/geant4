@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.cc,v 1.6 2009/09/16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4StackingMessenger.cc,v 1.6 2009-09-16 23:10:46 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 

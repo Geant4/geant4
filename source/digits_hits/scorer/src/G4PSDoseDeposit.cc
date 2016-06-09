@@ -65,29 +65,14 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4double edep = aStep->GetTotalEnergyDeposit();
   if ( edep == 0. ) return FALSE;
 
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                ->GetReplicaNumber(indexDepth);
-    if(idx<0)
-    {
-      G4Exception("G4PSDoseDeposit","G4PSDoseDeposit::ProcessHits",JustWarning,
-                  "Incorrect replica number");
-      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
-    }
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
+  G4int idx = ((G4TouchableHistory*)
+	       (aStep->GetPreStepPoint()->GetTouchable()))
+               ->GetReplicaNumber(indexDepth);
+  G4double cubicVolume = ComputeVolume(aStep, idx);
+
 
   G4double density = aStep->GetTrack()->GetStep()->GetPreStepPoint()->GetMaterial()->GetDensity();
-  G4double dose    = edep / ( density * (solid->GetCubicVolume()) );
+  G4double dose    = edep / ( density * cubicVolume );
   dose *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int  index = GetIndex(aStep);
   EvtMap->add(index,dose);  
@@ -131,6 +116,30 @@ void G4PSDoseDeposit::PrintAll()
 void G4PSDoseDeposit::SetUnit(const G4String& unit)
 {
 	CheckAndSetUnit(unit,"Dose");
+}
+
+G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx){
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    if(idx<0)
+    {
+      G4ExceptionDescription ED;
+      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
+      G4Exception("G4PSDoseDeposit::ComputeVolume","DetPS0004",JustWarning,ED);
+    }
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+  
+  return solid->GetCubicVolume();
 }
 
 

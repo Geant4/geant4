@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.5 2010/06/25 09:41:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.6 2010-12-29 18:56:04 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -124,7 +124,7 @@ private:
   G4double tausmall,taulim,tlimit,tlimitmin,geommin,geombig;
   G4double charge,lambdalimit;
   G4double tPathLength,stepmin ;
-  G4double lambda0,lambda1,lambda11,Qn1,Qn12;
+  G4double lambda0,lambda1,lambda11;
   G4double mass;
   G4int    currentMaterialIndex;
 
@@ -164,14 +164,13 @@ inline G4double G4GoudsmitSaundersonMscModel::GetLambda(G4double e)
 {
   G4double x;  
   if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
   } else {
     x = CrossSection(currentCouple,particle,e);
   }
 
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX;
+  if(x > DBL_MIN) { x = 1./x; }
+  else            { x = DBL_MAX; }
   return x;
 }
 

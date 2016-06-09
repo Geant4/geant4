@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux3D.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSPassageCellFlux3D.hh,v 1.3 2010-07-22 07:23:45 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4PSPassageCellFlux3D_h

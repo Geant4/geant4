@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2010/10/18 15:56:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PrimaryGeneratorAction.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -48,7 +48,7 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  PrimaryGeneratorAction(DetectorConstruction*);    
+  PrimaryGeneratorAction();    
   virtual ~PrimaryGeneratorAction();
 
   void GeneratePrimaries(G4Event*);

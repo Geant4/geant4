@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.17 2010/11/01 13:55:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicsTable.cc,v 1.18 2010-12-24 07:33:13 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -188,7 +188,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   clearAndDestroy();
   
   // Number of elements
-  G4int tableSize=0; 
+  size_t tableSize=0; 
   if (!ascii)
   {
     fIn.read((char*)(&tableSize), sizeof tableSize); 
@@ -197,19 +197,11 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   {
     fIn >> tableSize;
   }
-  if (tableSize<=0)
-  {
-#ifdef G4VERBOSE  
-    G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
-    G4cerr << " Invalid table size: " << tableSize << G4endl;
-#endif
-    return false;
-  }
   reserve(tableSize); 
   vecFlag.clear();
 
   // Physics Vector
-  for (G4int idx=0; idx<tableSize; ++idx)
+  for (size_t idx=0; idx<tableSize; ++idx)
   {
     G4int vType=0;
     if (!ascii)

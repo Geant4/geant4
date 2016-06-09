@@ -1,0 +1,56 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h2d
+#define tools_histo_h2d
+
+#include "h2"
+
+namespace tools {
+namespace histo {
+
+class h2d : public h2<double,unsigned int,double,double> {
+  typedef h2<double,unsigned int,double,double> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::h2d");
+    return s_v;
+  }
+public:
+  h2d(const std::string& a_title,
+                     bn_t aXnumber,double aXmin,double aXmax,
+                     bn_t aYnumber,double aYmin,double aYmax)
+  : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)
+  {}
+  h2d(const std::string& a_title,
+                     const std::vector<double>& aEdgesX,
+                     const std::vector<double>& aEdgesY)
+  : parent(a_title,aEdgesX,aEdgesY)
+  {}
+
+  virtual ~h2d(){}
+public:
+  h2d(const h2d& a_from): parent(a_from){}
+  h2d& operator=(const h2d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+#if defined(__CINT__)
+  bool fill(double aX,double aY,double aW = 1) {
+    h2<double,unsigned int,double,double>::fill(aX,aY,aW);    
+  }
+  void hprint(std::ostream& a_out) {
+    h2<double,unsigned int,double,double>::hprint(a_out);
+  }
+#endif
+};
+
+inline void h2d_check_instantiation() {h2d dummy("",10,0,1,10,0,1);}
+
+}}
+
+#endif
+
+
+
+

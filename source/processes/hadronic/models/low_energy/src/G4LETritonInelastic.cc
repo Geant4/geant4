@@ -23,25 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
- // Hadronic Process: Triton Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 27-Mar-1997
- // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
- //                          from NuclearReaction
- //
+// Hadronic Process: Triton Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
+// J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+//                          from NuclearReaction
+
 #include "G4LETritonInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
- 
- G4HadFinalState *
-  G4LETritonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {
-    bool triton_debug = false;
-    if(getenv("TritonLEDebug")) triton_debug = true;
-    theParticleChange.Clear();
-    const G4HadProjectile *originalIncident = &aTrack;
+
+void G4LETritonInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LETritonInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic triton scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to tritons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus)
+{
+  G4bool triton_debug = false;
+  if (getenv("TritonLEDebug")) triton_debug = true;
+  theParticleChange.Clear();
+  const G4HadProjectile *originalIncident = &aTrack;
     if(triton_debug)  std::cout << "entering LETritonInelastic "<<originalIncident->GetKineticEnergy()<<std::endl;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
     {
@@ -71,23 +83,23 @@
       }
 
     if(triton_debug)std::cout << "running LETritonInelastic 2"<<std::endl;
-    G4double A = targetNucleus.GetN();
-    G4double Z = targetNucleus.GetZ();
-    G4double theAtomicMass = targetNucleus.AtomicMass( A, Z );
+    G4double A = targetNucleus.GetA_asInt();
+    G4double Z = targetNucleus.GetZ_asInt();
+    G4double theAtomicMass = targetNucleus.AtomicMass(A, Z);
     G4double massVec[9];
     massVec[0] = targetNucleus.AtomicMass( A+3.0, Z+1.0 );
     massVec[1] = targetNucleus.AtomicMass( A+2.0, Z+1.0 );
     massVec[2] = targetNucleus.AtomicMass( A+2.0, Z     );
     massVec[3] = targetNucleus.AtomicMass( A+1.0, Z     );
     massVec[4] = theAtomicMass;
-    massVec[5] = 0.;
+    massVec[5] = massVec[3]; //0.;
     if (A > 1.0 && Z > 1.0) 
-        massVec[5] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
+      massVec[5] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
     massVec[6] = targetNucleus.AtomicMass( A+1.0, Z+1.0 );
     massVec[7] = massVec[3];
-    massVec[8] = 0.;
+    massVec[8] = massVec[2]; //0.;
     if (Z > 1.0) 
-        massVec[8] = targetNucleus.AtomicMass( A+1.0, Z-1.0 );
+      massVec[8] = targetNucleus.AtomicMass( A+1.0, Z-1.0 );
     
     G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
@@ -98,10 +110,20 @@
                                          targetNucleus, theAtomicMass, massVec );
     if(triton_debug)std::cout << "running LETritonInelastic 4"<<std::endl;
     //
+    //    G4cout << "0  E(MeV)= " << vec[0]->GetKineticEnergy() << G4endl;
     G4double p = vec[0]->GetMomentum().mag();
     theParticleChange.SetMomentumChange( vec[0]->GetMomentum()*(1./p) );
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
     delete vec[0];
+
+    if (vecLen <= 1) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
+
     //
     G4DynamicParticle *pd;
     for( G4int i=1; i<vecLen; ++i )
@@ -110,12 +132,14 @@
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      //G4cout << "i  E(MeV)= " << pd->GetKineticEnergy() 
+      //	     << "  " << pd->GetDefinition()->GetParticleName() << G4endl;
       delete vec[i];
     }
     
-    if(triton_debug)std::cout << "leaving LETritonInelastic"<<std::endl;
-    return &theParticleChange;
-  }
+  if(triton_debug)std::cout << "leaving LETritonInelastic"<<std::endl;
+  return &theParticleChange;
+}
  
  /* end of file */
  

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Navigator.cc,v 1.1 2007/11/13 10:23:51 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4Navigator.cc,v 1.1 2007-11-13 10:23:51 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Navigator.cc
 //

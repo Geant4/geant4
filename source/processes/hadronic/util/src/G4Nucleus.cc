@@ -120,8 +120,9 @@ GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) 
   return result;
 }
 
-G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double temp) const
-  {
+G4ReactionProduct
+G4Nucleus::GetThermalNucleus(G4double targetMass, G4double temp) const
+{
     G4double currentTemp = temp;
     if(currentTemp < 0) currentTemp = theTemp;
     G4ReactionProduct theTarget;    
@@ -144,58 +145,61 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
       theTarget.SetKineticEnergy(tMom*tMom/(2.*theTarget.GetMass()));
     }    
     return theTarget;
-  }
+}
+
  
- void
-  G4Nucleus::ChooseParameters( const G4Material *aMaterial )
-  {
-    G4double random = G4UniformRand();
-    G4double sum = aMaterial->GetTotNbOfAtomsPerVolume();
-    const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    G4double running(0);
-    G4Element* element(0);
-    for(unsigned int i=0; i<aMaterial->GetNumberOfElements(); ++i )
-    {
-      running += aMaterial->GetVecNbOfAtomsPerVolume()[i];
-      if( running > random*sum ) {
-        element=(*theElementVector)[i];
-        break;
-      }
-    }
-    if ( element->GetNumberOfIsotopes() > 0 ) {
-      G4double randomAbundance = G4UniformRand();
-      G4double sumAbundance = element->GetRelativeAbundanceVector()[0];
-      unsigned int iso=0;
-      while ( iso < element->GetNumberOfIsotopes() &&
-               sumAbundance < randomAbundance ) {
-         ++iso;
-	 sumAbundance += element->GetRelativeAbundanceVector()[iso];
-      }
-      theA=element->GetIsotope(iso)->GetN();
-      theZ=element->GetIsotope(iso)->GetZ();
-      aEff=theA;
-      zEff=theZ;
-    } else {   
-      aEff = element->GetN();
-      zEff = element->GetZ();
-      theZ = G4int(zEff + 0.5);
-      theA = G4int(aEff + 0.5);   
+void
+G4Nucleus::ChooseParameters(const G4Material* aMaterial)
+{
+  G4double random = G4UniformRand();
+  G4double sum = aMaterial->GetTotNbOfAtomsPerVolume();
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  G4double running(0);
+  //  G4Element* element(0);
+  G4Element* element = (*theElementVector)[aMaterial->GetNumberOfElements()-1];
+
+  for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); ++i) {
+    running += aMaterial->GetVecNbOfAtomsPerVolume()[i];
+    if (running > random*sum) {
+      element = (*theElementVector)[i];
+      break;
     }
   }
- 
- void
-  G4Nucleus::SetParameters( const G4double A, const G4double Z )
-  {
-    theZ = G4int(Z + 0.5);
-    theA = G4int(A + 0.5);   
-    if( theA<1 || theZ<0 || theZ>theA )
-    {
-      throw G4HadronicException(__FILE__, __LINE__,
-                               "G4Nucleus::SetParameters called with non-physical parameters");
+
+  if (element->GetNumberOfIsotopes() > 0) {
+    G4double randomAbundance = G4UniformRand();
+    G4double sumAbundance = element->GetRelativeAbundanceVector()[0];
+    unsigned int iso=0;
+    while (iso < element->GetNumberOfIsotopes() &&
+           sumAbundance < randomAbundance) {
+      ++iso;
+      sumAbundance += element->GetRelativeAbundanceVector()[iso];
     }
-    aEff = A;  // atomic weight
-    zEff = Z;  // atomic number
+    theA=element->GetIsotope(iso)->GetN();
+    theZ=element->GetIsotope(iso)->GetZ();
+    aEff=theA;
+    zEff=theZ;
+  } else {   
+    aEff = element->GetN();
+    zEff = element->GetZ();
+    theZ = G4int(zEff + 0.5);
+    theA = G4int(aEff + 0.5);   
   }
+}
+
+
+void
+G4Nucleus::SetParameters(const G4double A, const G4double Z)
+{
+  theZ = G4int(Z + 0.5);
+  theA = G4int(A + 0.5);   
+  if (theA<1 || theZ<0 || theZ>theA) {
+    throw G4HadronicException(__FILE__, __LINE__,
+            "G4Nucleus::SetParameters called with non-physical parameters");
+  }
+  aEff = A;  // atomic weight
+  zEff = Z;  // atomic number
+}
 
  void
   G4Nucleus::SetParameters( const G4int A, const G4int Z )

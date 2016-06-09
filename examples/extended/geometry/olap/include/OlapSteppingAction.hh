@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapSteppingAction.hh,v 1.3 2006/06/29 17:22:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: OlapSteppingAction.hh,v 1.3 2006-06-29 17:22:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

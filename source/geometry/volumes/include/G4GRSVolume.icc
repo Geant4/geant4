@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.icc,v 1.10 2006/06/29 18:57:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GRSVolume.icc,v 1.10 2006-06-29 18:57:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4GRSVolume inline implementation
@@ -44,7 +44,7 @@ G4GRSVolume::G4GRSVolume( G4VPhysicalVolume *pVol,
     frot = new G4RotationMatrix(*pRot);
     if ( !frot )
     {
-      G4Exception("G4GRSVolume::G4GRSVolume()", "NullPointer", FatalException,
+      G4Exception("G4GRSVolume::G4GRSVolume()", "GeomVol0002", FatalException,
                   "Cannot allocate G4RotationMatrix, NULL pointer.");
     }
   }
@@ -65,7 +65,7 @@ G4GRSVolume::G4GRSVolume( G4VPhysicalVolume *pVol,
   frot = new G4RotationMatrix(rot);
   if ( !frot )
   {
-    G4Exception("G4GRSVolume::G4GRSVolume()", "NullPointer", FatalException,
+    G4Exception("G4GRSVolume::G4GRSVolume()", "GeomVol0002", FatalException,
                 "Cannot allocate G4RotationMatrix, NULL pointer.");
   }
 }
@@ -75,7 +75,7 @@ G4VPhysicalVolume* G4GRSVolume::GetVolume( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSVolume::GetVolume()", "WrongArgumentValue",
+    G4Exception("G4GRSVolume::GetVolume()", "GeomVol0003",
                 FatalException, "History depth in input must be 0 !");
   }
   return fvol;
@@ -86,7 +86,7 @@ G4VSolid* G4GRSVolume::GetSolid( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSVolume::GetSolid()", "WrongArgumentValue",
+    G4Exception("G4GRSVolume::GetSolid()", "GeomVol0003",
                 FatalException, "History depth in input must be 0 !");
   }
   return fvol->GetLogicalVolume()->GetSolid();
@@ -97,7 +97,7 @@ const G4ThreeVector& G4GRSVolume::GetTranslation( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSVolume::GetTranslation()", "WrongArgumentValue",
+    G4Exception("G4GRSVolume::GetTranslation()", "GeomVol0003",
                 FatalException, "History depth in input must be 0 !");
   }
   return ftlate;
@@ -108,7 +108,7 @@ const G4RotationMatrix* G4GRSVolume::GetRotation( G4int depth ) const
 {
   if( depth != 0 )
   {
-    G4Exception("G4GRSVolume::GetRotation()", "WrongArgumentValue",
+    G4Exception("G4GRSVolume::GetRotation()", "GeomVol0003",
                 FatalException, "History depth in input must be 0 !");
   }
   return frot;

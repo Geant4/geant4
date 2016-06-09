@@ -1,5 +1,5 @@
-# $Id: TestEm9.in,v 1.18 2010/11/19 18:33:42 vnivanch Exp $
-# GEANT4 tag $Name: geant4-09-04 $
+# $Id: TestEm9.in,v 1.19 2011-01-06 15:56:39 vnivanch Exp $
+# GEANT4 tag $Name: not supported by cvs2svn $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
@@ -23,12 +23,20 @@
 /testem/det/acceptance25 0.9793 0.00884 2.5
 #
 /run/initialize
-/process/em/applyCuts      true
+#/process/em/applyCuts      true
 #
 #/testem/histo/fileName  e_pr.root
 #/testem/histo/fileType  root
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
+#
+/testem/det/acceptance1  0.0136 0.0001 500
+/testem/det/acceptance9  0.0139 0.0001 500
+/testem/det/acceptance25 0.0139 0.0001 500
+#
+/gun/particle mu-
+/gun/energy 20 GeV
+/run/beamOn 1000
 #
 

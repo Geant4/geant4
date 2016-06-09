@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CachedMagneticField.cc,v 1.1 2009/11/05 11:06:13 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CachedMagneticField.cc,v 1.1 2009-11-05 11:06:13 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ G4CachedMagneticField::~G4CachedMagneticField()
 void
 G4CachedMagneticField::ReportStatistics()
 {
-  G4cout << " Cached field: " << this << G4endl
+  G4cout << " Cached field: " << G4endl
 	 << "   Number of calls:        " << fCountCalls << G4endl
 	 << "   Number of evaluations : " << fCountEvaluations << G4endl;                     
 }

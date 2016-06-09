@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.14 2009/12/16 17:51:13 gunter Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.14 2009-12-16 17:51:13 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -177,8 +177,8 @@ G4bool G4ElasticHNScattering::
 
 // ------ Now we can calculate the transfered Pt --------------------------
 	   G4double Pt2;                                                    
-           G4double ProjMassT2, ProjMassT;                                  
-           G4double TargMassT2, TargMassT;
+           G4double ProjMassT2; //, ProjMassT;                                  
+           G4double TargMassT2; //, TargMassT;
 
 	   G4LorentzVector Qmomentum;
 
@@ -187,10 +187,10 @@ G4bool G4ElasticHNScattering::
 	   Pt2=G4ThreeVector(Qmomentum.vect()).mag2();                  
 
            ProjMassT2=Mprojectile2+Pt2;                           
-           ProjMassT =std::sqrt(ProjMassT2);                            
+//           ProjMassT =std::sqrt(ProjMassT2);                            
 
            TargMassT2=Mtarget2+Pt2;                               
-           TargMassT =std::sqrt(TargMassT2);                            
+//           TargMassT =std::sqrt(TargMassT2);                            
 
            PZcms2=(S*S+ProjMassT2*ProjMassT2+                           
                        TargMassT2*TargMassT2-                           

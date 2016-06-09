@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4materials.cc,v 1.8 2008/12/12 03:03:59 kmura Exp $
-// $Name: geant4-09-03 $
+// $Id: pymodG4materials.cc,v 1.8 2008-12-12 03:03:59 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4materials.cc [Geant4Py module]
 //

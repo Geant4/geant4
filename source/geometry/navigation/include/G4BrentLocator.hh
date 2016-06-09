@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BrentLocator.hh,v 1.2 2008/10/29 14:31:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BrentLocator.hh,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator
 //

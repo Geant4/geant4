@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.32 2009/04/28 14:33:04 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXViewer.hh,v 1.32 2009-04-28 14:33:04 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -42,6 +42,7 @@
 
 #include <X11/Intrinsic.h>
 
+#include "G4OpenGL.hh"
 #include <GL/glx.h>
 
 class G4OpenGLSceneHandler;
@@ -56,6 +57,7 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
+  void DrawText(const char * ,double x,double y,double z, double size);
 
 protected:
   void GetXConnection ();

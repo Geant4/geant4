@@ -1,4 +1,4 @@
-$Id: 00README,v 1.5 2006/08/09 06:26:23 kmura Exp $
+$Id: 00README,v 1.5 2006-08-09 06:26:23 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -48,8 +48,7 @@ CLHEPBASE /opt/heplib/CLHEP
 # G4 version and CLHEP version (starting with "-")
 #
 # G4 version          CLHEP version
-- geant4.8.1.p01      2.0.2.3
-- geant4.8.1          2.0.2.3
+- geant4.9.5          2.1.1.0
 
 #
 # Visualization Options (starting with "v")
@@ -59,6 +58,7 @@ v DAWN
 v VRML
 v RAYTRACERX_DRIVER
 v OPENGLX
+v OPENGLQT
 
 #
 # UI Options (starting with "u")
@@ -66,6 +66,14 @@ v OPENGLX
 #
 u TCSH
 u GAG
+u QT
+
+#
+# Optional packages (starting with "o")
+# G4LIB_BUILD_XXX_DRIVER and G4LIB_USE_XXX are activated.
+#
+o GDML
+
 ---------------------------------------------------------------------
 
 Users just specify the base directories of Geant4 and CLHEP, 
@@ -92,9 +100,9 @@ setting DYLD_LIBRARY_PATH in MacOSX, especially for CLHEP.
 For example, on MacOSX,
 
 $ ./g4pack --with-g4system=Darwin-g++ \
-   --with-g4-dir=/opt/heplib/Geant4/geant4.8.1.p01 \
-   --with-clhep-dir=/opt/heplib/CLHEP/2.0.2.3 \
-   --with-install-dir=/Library/Frameworks/Geant4.framework/Versions/8.1.1
+   --with-g4-dir=/opt/heplib/Geant4/geant4.9.5 \
+   --with-clhep-dir=/opt/heplib/CLHEP/2.1.1.0 \
+   --with-install-dir=/Library/Frameworks/Geant4.framework/Versions/9.5.0
 
 creates new package in a "g4" directory. Then you can copy it to the framework
 directory specified.

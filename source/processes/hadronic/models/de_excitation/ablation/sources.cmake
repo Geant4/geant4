@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:59:10 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:59:10 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -47,7 +47,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_ma
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -78,7 +77,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_ablation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
         G4hadronic_mgt
-        G4hadronic_proc
         G4hadronic_util
         G4hadronic_xsect
         G4hepnumerics

@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QAntiBaryonElasticCrossSection.cc,v 1.2 2010/02/16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QAntiBaryonElasticCrossSection.cc,v 1.2 2010-02-16 07:53:05 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QAntiBaryonElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 5-Feb-2010
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 5-Feb-2010
-// 
-//================================================================================
+//
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -166,7 +166,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetCrossSection(G4bool fCS, G4double 
 #endif
   if(pPDG<-3334 || pPDG>-1111)
   {
-    G4cout<<"*Warning*G4QAntiBaryElCS::GetCS:**> Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"*Warning*G4QAntiBaryElCS::GetCS:**> Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -361,7 +361,7 @@ G4double G4QAntiBaryonElasticCrossSection::CalculateCrossSection(G4bool CS,G4int
     S4T.push_back(lastS4T);             // Fill Tabulated 4-th mantissa to AMDB 
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
+  // =---------= NOW Update (if necessary) and Calculate the Cross Section =-----------=
 #ifdef pdebug
   G4cout<<"G4QaBElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
 #endif
@@ -580,7 +580,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
                <<", "<<lastPAR[42]<<", "<<lastPAR[43]<<", "<<lastPAR[44]<<G4endl;
 #endif
         }
-        else
+        else // A > Li6 (li7, ...)
         {
           G4double p1a10=2.2e-28*a10;
           G4double r4a16=6.e14/a16;
@@ -718,9 +718,14 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
   }
   else
   {
-    G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
-    throw G4QException("G4QAntiBaryonElasticCrossSection::GetPTables:onlyaBA implemented");
+    // G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
+    // throw G4QException("G4QAntiBaryonElasticCrossSection::GetPTables:onlyaBA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for Anti Baryons" << G4endl;
+    G4Exception("G4QAntiBaryonElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -927,9 +932,14 @@ G4double G4QAntiBaryonElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int 
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG<-3334 || PDG>-1111)
   {
-    G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
-    throw G4QException("G4QAntiBaryonElasticCrossSection::GetSlope: AnBa are implemented");
+    // G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
+    // throw G4QException("G4QAntiBaryonElasticCrossSection::GetSlope: AnBa are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for Anti Baryons" << G4endl;
+    G4Exception("G4QAntiBaryonElasticCrossSection::GetSlope()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QaBaElasticCrossS::Getslope:"<<theB1<<G4endl;
@@ -1055,7 +1065,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
 #ifdef tdebug
     G4cout<<"G4QAntiBarElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
 #endif
-    G4double dlp=lp-lastPAR[5]; // ax
+    G4double dlp=lp-lastPAR[4]; // ax
     //         p1               p2          p3                 p4
     return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]/p)/(1.+lastPAR[3]/p);
   }
@@ -1086,8 +1096,14 @@ G4double G4QAntiBaryonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int 
   }
   else
   {
-    G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetQ2ma:PDG="<<PDG<<",Z="<<tgZ<<",N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QAntiBaryonElasticCrossSection::GetQ2max: only aBA implemented");
+    // G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetQ2ma:PDG="<<PDG<<",Z="<<tgZ<<",N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QAntiBaryonElasticCrossSection::GetQ2max: only aBA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QAntiBaryonElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

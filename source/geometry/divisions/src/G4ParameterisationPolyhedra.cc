@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.19 2009/05/20 08:35:52 ivana Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.19 2009-05-20 08:35:52 ivana Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
@@ -54,11 +54,11 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
-    G4String message =
-         "Sorry, generic construct for G4Polyhedra NOT supported.\n Solid: "
-         + msol->GetName();
+    std::ostringstream message;
+    message << "Generic construct for G4Polyhedra NOT supported." << G4endl
+            << "Sorry! Solid: " << msol->GetName();
     G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
-                "NotSupported", FatalException, message);
+                "GeomDiv0001", FatalException, message);
   }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
@@ -174,23 +174,23 @@ void G4ParameterisationPolyhedraRho::CheckParametersValidity()
 
   if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraRho::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along R will be done with a width "
-           << "different for each solid section." << G4endl
-           << "          WIDTH will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << "Division along R will be done with a width "
+            << "different for each solid section." << G4endl
+            << "WIDTH will not be used !";
+    G4Exception("G4ParameterisationPolyhedraRho::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
   if( foffset != 0. )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraRho::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along  R will be done with a width "
-           << "different for each solid section." << G4endl
-           << "          OFFSET will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << "Division along  R will be done with a width "
+            << "different for each solid section." << G4endl
+            << "OFFSET will not be used !";
+    G4Exception("G4ParameterisationPolyhedraRho::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
 }
 
@@ -324,41 +324,37 @@ void G4ParameterisationPolyhedraPhi::CheckParametersValidity()
 
   if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along PHI will be done splitting "
-           << "in the defined numSide." << G4endl
-           << "          WIDTH will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << " Division along PHI will be done splitting "
+            << "in the defined numSide." << G4endl
+            << "WIDTH will not be used !";
+    G4Exception("G4ParameterisationPolyhedraPhi::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
   if( foffset != 0. )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along PHI will be done splitting "
-           << "in the defined numSide." << G4endl
-           << "          OFFSET will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << "Division along PHI will be done splitting "
+            << "in the defined numSide." << G4endl
+            << "OFFSET will not be used !";
+    G4Exception("G4ParameterisationPolyhedraPhi::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
 
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
 
   if( origparamMother->numSide != fnDiv &&  fDivisionType != DivWIDTH)
   { 
-    G4cerr << "ERROR - "
-           << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
-           << G4endl
-           << "        Division along PHI will be done splitting in the defined"
-           << G4endl
-           << "        numSide, i.e, the number of division would be :"
-           << "        " << origparamMother->numSide
-           << " instead of " << fnDiv << " !"
-           << G4endl; 
+    std::ostringstream message;
+    message << "Configuration not supported." << G4endl
+            << "Division along PHI will be done splitting in the defined"
+            << G4endl
+            << "numSide, i.e, the number of division would be :"
+            << origparamMother->numSide << " instead of " << fnDiv << " !"; 
     G4Exception("G4ParameterisationPolyhedraPhi::CheckParametersValidity()",
-                "IllegalConstruct", FatalException,
-                "Not supported configuration.");
+                "GeomDiv0001", FatalException, message);
   }
 }
 
@@ -518,18 +514,15 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
   // Division will be following the mother polyhedra segments
   if( fDivisionType == DivNDIV ) {
     if( fOrigParamMother->Num_z_planes-1 != fnDiv ) { 
-      G4cerr << "ERROR - "
-             << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
-             << G4endl
-             << "        Division along Z will be done splitting in the defined"
-             << G4endl
-             << "        z_planes, i.e, the number of division would be :"
-             << "        " << fOrigParamMother->Num_z_planes-1
-             << " instead of " << fnDiv << " !"
-             << G4endl; 
+      std::ostringstream message;
+      message << "Configuration not supported." << G4endl
+              << "Division along Z will be done splitting in the defined"
+              << G4endl
+              << "Z planes, i.e, the number of division would be :"
+              << fOrigParamMother->Num_z_planes-1 << " instead of "
+              << fnDiv << " !"; 
       G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
-                  "IllegalConstruct", FatalException,
-                  "Not supported configuration.");
+                  "GeomDiv0001", FatalException, message);
     }
   }  
 
@@ -588,17 +581,13 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
     }
   
     if ( isegstart != isegend ) {
-      G4cerr << "WARNING - "
-             << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
-             << G4endl
-             << "          Division with user defined width." << G4endl
-             << "          Solid " << fmotherSolid->GetName() << G4endl
-             << "          Divided region is not between two z planes." 
-             << G4endl;
- 
+      std::ostringstream message;
+      message << "Configuration not supported." << G4endl
+              << "Division with user defined width." << G4endl
+              << "Solid " << fmotherSolid->GetName() << G4endl
+              << "Divided region is not between two Z planes."; 
       G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
-                  "IllegalConstruct", FatalException,
-                  "Not supported configuration.");
+                  "GeomDiv0001", FatalException, message);
     }
   
     fNSegment = isegstart;
@@ -739,4 +728,3 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
   }
 #endif
 }
-

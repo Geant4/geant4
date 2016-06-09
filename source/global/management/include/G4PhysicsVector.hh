@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.31 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsVector.hh,v 1.31 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -55,17 +55,20 @@
 //    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
 //    04 May. 2010  H.Kurashige  : Use G4PhysicsVectorCache
 //    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
+//    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
 #define G4PhysicsVector_h 1
 
-#include <vector>
 #include "globals.hh"
 #include "G4ios.hh"
+
 #include <iostream>
 #include <fstream>
+#include <vector>
 
+#include "G4Allocator.hh"
 #include "G4PhysicsVectorCache.hh"
 #include "G4PhysicsVectorType.hh"
 
@@ -73,7 +76,7 @@ typedef std::vector<G4double> G4PVDataVector;
 
 class G4PhysicsVector 
 {
-  public:  
+  public:  // with description
 
     G4PhysicsVector(G4bool spline = false);
          // constructor  
@@ -85,32 +88,33 @@ class G4PhysicsVector
     G4PhysicsVector& operator=(const G4PhysicsVector&);
          // Copy constructor and assignment operator.
 
-  public:  // with description
-
     virtual ~G4PhysicsVector();
          // destructor
+
+    inline void* operator new(size_t);
+    inline void  operator delete(void*);
 
     G4double Value(G4double theEnergy);
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
 
-    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+    G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // Obolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 
     G4int operator==(const G4PhysicsVector &right) const ;
     G4int operator!=(const G4PhysicsVector &right) const ;
 
-    inline G4double operator[](const size_t binNumber) const ;
+    G4double operator[](const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be done. 
 
-    inline G4double operator()(const size_t binNumber) const ;
+    G4double operator()(const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be Done. 
 
-    inline void PutValue(size_t index, G4double theValue);
+    void PutValue(size_t index, G4double theValue);
          // Put 'theValue' into the bin specified by 'binNumber'.
          // Take note that the 'index' starts from '0'.
          // To fill the vector, you have beforehand to construct a vector
@@ -119,13 +123,13 @@ class G4PhysicsVector
          // energy of the index. You can get this energy by the next method
          // or by the old method GetLowEdgeEnergy().
 
-    void ScaleVector(G4double factorE, G4double factorV);
+    virtual void ScaleVector(G4double factorE, G4double factorV);
          // Scale all values of the vector and second derivatives
          // by factorV, energies by vectorE. This method may be applied 
          // for example after Retrieve a vector from an external file to 
          // convert values into Geant4 units
 
-    inline G4double Energy(size_t index) const;
+    G4double Energy(size_t index) const;
          // Returns simply the value in the energy specified by 'index'
          // of the energy vector. The boundary check will not be done. 
          // Use this function when you fill physis vector by PutValue().
@@ -137,7 +141,7 @@ class G4PhysicsVector
          // This value should be defined before the call.
          // The boundary check will not be done.
 
-    inline size_t GetVectorLength() const;
+    size_t GetVectorLength() const;
          // Get the toal length (bin number) of the vector. 
 
     void FillSecondDerivatives();
@@ -157,20 +161,20 @@ class G4PhysicsVector
          // Warning: this method should be called when the vector 
          // is already filled
 
-    inline G4bool IsFilledVectorExist() const;
+    G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    inline void PutComment(const G4String& theComment);
+    void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
 
-    inline const G4String& GetComment() const;
+    const G4String& GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
 
-    inline G4PhysicsVectorType GetType() const;
+    G4PhysicsVectorType GetType() const;
          // Get physics vector type
   
-    inline void SetSpline(G4bool);
+    void SetSpline(G4bool);
          // Activate/deactivate Spline interpolation.
 
     virtual G4bool Store(std::ofstream& fOut, G4bool ascii=false);
@@ -184,6 +188,10 @@ class G4PhysicsVector
     G4double GetLastValue() const;
     size_t GetLastBin() const;
          // Get cache values 
+
+    void SetVerboseLevel(G4int value);
+    G4int GetVerboseLevel(G4int);
+         // Set/Get Verbose level
 
   protected:
 
@@ -213,15 +221,21 @@ class G4PhysicsVector
 
     G4bool SplinePossible();
 
-    inline G4double LinearInterpolation(G4int lastBin);
+    G4double LinearInterpolation(G4int lastBin);
          // Linear interpolation function
-    inline G4double SplineInterpolation(G4int lastBin);
+    G4double SplineInterpolation(G4int lastBin);
          // Spline interpolation function
 
-    inline void Interpolation(G4int lastBin);
+    void Interpolation(G4int lastBin);
 
     G4String   comment;
     G4bool     useSpline;
+
+  protected:
+    G4double dBin;          // Bin width - useful only for fixed binning
+    G4double baseBin;       // Set this in constructor for performance
+
+    G4int verboseLevel;
 };
 
 #include "G4PhysicsVector.icc"

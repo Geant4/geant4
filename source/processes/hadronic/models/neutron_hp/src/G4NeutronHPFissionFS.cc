@@ -28,18 +28,19 @@
 // A prototype of the low energy neutron transport model.
 //
 // 12-Apr-06 fix in delayed neutron and photon emission without FS data by T. Koi
-//
+// 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
+
 #include "G4NeutronHPFissionFS.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
- void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+ void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
  {
-    theFS.Init(A, Z, dirName, aFSType);
-    theFC.Init(A, Z, dirName, aFSType);
-    theSC.Init(A, Z, dirName, aFSType);
-    theTC.Init(A, Z, dirName, aFSType);
-    theLC.Init(A, Z, dirName, aFSType);
+    theFS.Init(A, Z, M, dirName, aFSType);
+    theFC.Init(A, Z, M, dirName, aFSType);
+    theSC.Init(A, Z, M, dirName, aFSType);
+    theTC.Init(A, Z, M, dirName, aFSType);
+    theLC.Init(A, Z, M, dirName, aFSType);
  }
  G4HadFinalState * G4NeutronHPFissionFS::ApplyYourself(const G4HadProjectile & theTrack)
  {  
@@ -142,8 +143,10 @@
    if(theNeutrons != 0)
    {
      theDecayConstants = new G4double[delayed];
-     G4int nPhotons = 0;
-     if(thePhotons!=0) nPhotons = thePhotons->size();
+     //
+     //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
+     //G4int nPhotons = 0;
+     //if(thePhotons!=0) nPhotons = thePhotons->size();
      for(i=0; i<theNeutrons->size(); i++)
      {
        theResult.AddSecondary(theNeutrons->operator[](i));
@@ -156,9 +159,8 @@
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i];
        time += theTrack.GetGlobalTime();
-       G4HadSecondary * track = new G4HadSecondary(theDelayed->operator[](i));
-       track->SetTime(time);
-       theResult.AddSecondary(track);
+       theResult.AddSecondary(theDelayed->operator[](i));
+       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theDelayed;                  
    }
@@ -169,8 +171,9 @@
      theDecayConstants = new G4double[delayed];
      if(Prompt==0&&delayed==0) Prompt=all;
      theNeutrons = theFS.ApplyYourself(Prompt, delayed, theDecayConstants);
-     G4int nPhotons = 0;
-     if(thePhotons!=0) nPhotons = thePhotons->size();
+     //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
+     //G4int nPhotons = 0;
+     //if(thePhotons!=0) nPhotons = thePhotons->size();
      G4int i0;
      for(i0=0; i0<Prompt; i0++)
      {
@@ -180,10 +183,8 @@
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
        time += theTrack.GetGlobalTime();        
-       //G4HadSecondary * track = new G4HadSecondary(theNeutrons->operator[](i)); this line will be delete
-       G4HadSecondary * track = new G4HadSecondary( theNeutrons->operator[]( i0 ) );
-       track->SetTime(time);
-       theResult.AddSecondary(track);
+       theResult.AddSecondary(theNeutrons->operator[](i0));
+       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theNeutrons;   
    }

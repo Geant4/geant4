@@ -23,16 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadParticle.cc,v 1.18 2010/10/20 14:34:26 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadParticle.cc,v 1.18 2010-10-20 14:34:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector 
 // 20101012  M. Kelsey -- Check for negative d2 in getPathToTheNextZone()
+// 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
+//		Add stream argument to print(), add operator<<().
+// 20111017  M. Kelsey -- Add check for zero momentum in path calculation.
 
 #include "G4CascadParticle.hh"
 #include "G4ios.hh"
 #include <cmath>
+
+
+// Default constructor produces non-functional object
 
 G4CascadParticle::G4CascadParticle()
   : verboseLevel(0), current_zone(-1), current_path(-1.), movingIn(false),
@@ -41,6 +48,24 @@ G4CascadParticle::G4CascadParticle()
     G4cout << " >>> G4CascadParticle::G4CascadParticle" << G4endl;
   }
 }
+
+// Analogue to operator=() to support filling vectors w/o temporaries
+
+void G4CascadParticle::fill(const G4InuclElementaryParticle& particle, 
+			    const G4ThreeVector& pos, G4int izone,
+			    G4double cpath, G4int gen) {
+  if (verboseLevel > 3) G4cout << " >>> G4CascadParticle::fill" << G4endl;
+
+  theParticle = particle;
+  position = pos;
+  current_zone = izone;
+  current_path = cpath;
+  movingIn = true;
+  reflectionCounter = 0;
+  reflected = false;
+  generation = gen;
+}
+
 
 G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in, 
 						G4double rz_out) {
@@ -55,6 +80,11 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
   G4double rp = mom.vect().dot(position);
   G4double rr = position.mag2();
   G4double pp = mom.vect().mag2();
+
+  if (std::abs(pp) < 1e-9) {	// Cut-off for "at rest" is 1 eV momentum
+    if (verboseLevel > 3) G4cout << " at rest; path length is zero" << G4endl;
+    return 0.;
+  }
 
   G4double ra = rr - rp * rp / pp;
   pp = std::sqrt(pp);
@@ -90,7 +120,9 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
 
   if (verboseLevel > 3) G4cout << " ds " << ds << " d2 " << d2 << G4endl;
 
-  path = ds * std::sqrt(d2) - rp / pp;
+  if (d2 < 0.0 && d2 > -1e-6) d2 = 0.;		// Account for round-off
+
+  if (d2 > 0.0) path = ds * std::sqrt(d2) - rp / pp;	// Avoid FPE failure
 
   return path;    
 }
@@ -103,11 +135,19 @@ void G4CascadParticle::propagateAlongThePath(G4double path) {
   position += getMomentum().vect().unit()*path;
 }
 
-void G4CascadParticle::print() const {
-  theParticle.printParticle();
-  G4cout << " zone " << current_zone << " current_path " << current_path
-	 << " reflectionCounter " << reflectionCounter << G4endl
-	 << " x " << position.x() << " y " << position.y()
-	 << " z " << position.z() << G4endl;
+
+// Proper stream output (just calls print())
+
+std::ostream& operator<<(std::ostream& os, const G4CascadParticle& part) {
+  part.print(os);
+  return os;
+}
+
+void G4CascadParticle::print(std::ostream& os) const {
+  os << theParticle << G4endl
+     << " zone " << current_zone << " current_path " << current_path
+     << " reflectionCounter " << reflectionCounter << G4endl
+     << " x " << position.x() << " y " << position.y()
+     << " z " << position.z() << G4endl;
 }
 

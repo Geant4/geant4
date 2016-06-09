@@ -51,7 +51,7 @@ class G4LEpp : public G4HadronicInteraction
 {
  private:
 
-   enum { NENERGY=22, NANGLE=180 };
+   enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
 
  public:
 
@@ -78,10 +78,9 @@ class G4LEpp : public G4HadronicInteraction
      dSigmax[NENERGY], Sigtot[NENERGY];
 
  // Coulomb effects not suppressed:
-   static G4float SigCoul[NENERGY][NANGLE];
-   static G4float PcmCoul[NENERGY], ElabCoul[NENERGY], 
-     dSigmaxCoul[NENERGY], SigtotCoul[NENERGY];
-
+   static G4float SigCoul[NENERGYC][NANGLE];
+   static G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
+     dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
 
 };
 

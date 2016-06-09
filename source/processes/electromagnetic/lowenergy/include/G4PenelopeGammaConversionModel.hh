@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.hh,v 1.1 2008/10/28 08:50:21 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeGammaConversionModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
-// 06 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
-//                            to EM model
+// 13 Jan 2010   L. Pandola  First implementation
+// 24 May 2011   L. Pandola  Renamed (make v2008 as default Penelope)
 //
 // -------------------------------------------------------------------
 //
 // Class description:
 // Low Energy Electromagnetic Physics, Gamma Conversion 
-// with Penelope Model
+// with Penelope Model, version 2008
 // -------------------------------------------------------------------
 
 #ifndef G4PENELOPEGAMMACONVERSIONMODEL_HH
@@ -52,7 +52,7 @@ class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
-class G4VCrossSectionHandler;
+class G4PhysicsFreeVector;
 
 class G4PenelopeGammaConversionModel : public G4VEmModel 
 {
@@ -60,7 +60,7 @@ class G4PenelopeGammaConversionModel : public G4VEmModel
 public:
   
   G4PenelopeGammaConversionModel(const G4ParticleDefinition* p=0,
-			 const G4String& processName ="PenConversion");
+				 const G4String& processName ="PenConversion");
   
   virtual ~G4PenelopeGammaConversionModel();
 
@@ -87,15 +87,9 @@ protected:
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
-  G4PenelopeGammaConversionModel & operator=(const G4PenelopeGammaConversionModel &right);
+  G4PenelopeGammaConversionModel & operator=(const 
+					       G4PenelopeGammaConversionModel &right);
   G4PenelopeGammaConversionModel(const G4PenelopeGammaConversionModel&);
-
-  G4double GetScreeningRadius(G4double Z);
-  std::vector<G4double>  ScreenFunction(G4double screenVariable);
-  G4double CoulombCorrection(G4double ZAlpha);
-  G4double LowEnergyCorrection(G4double ZAlpha,G4double eki);
-
-  std::map<G4int,G4double>* fTheScreeningRadii;
 
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
@@ -105,7 +99,23 @@ private:
   //Use a quicker sampling algorithm if E < smallEnergy
   G4double fSmallEnergy; 
 
-  G4VCrossSectionHandler* crossSectionHandler;
+  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  void ReadDataFile(const G4int Z);
+
+  void InitializeScreeningRadii();
+  G4double fAtomicScreeningRadius[99];
+
+  void InitializeScreeningFunctions(const G4Material*);
+  //Effective (scalar) properties attached to materials:
+  // effective charge
+  std::map<const G4Material*,G4double> *fEffectiveCharge;
+  // 2/Rs (Rs = screening radius), BCB array in Penelope
+  std::map<const G4Material*,G4double> *fMaterialInvScreeningRadius;
+  // Parameters of screening functions
+  std::map<const G4Material*,std::pair<G4double,G4double> > *fScreeningFunction;
+
+  std::pair<G4double,G4double> GetScreeningFunctions(G4double);	
+
 
   G4int verboseLevel;
   G4bool isInitialised;

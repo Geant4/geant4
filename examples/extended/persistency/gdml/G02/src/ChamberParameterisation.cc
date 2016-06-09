@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ChamberParameterisation.cc,v 1.2 2008/12/18 12:57:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ChamberParameterisation.cc,v 1.2 2008-12-18 12:57:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class ChamberParameterisation implementation
 //

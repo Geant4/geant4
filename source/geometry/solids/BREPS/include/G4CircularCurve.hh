@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.hh,v 1.9 2006/06/29 18:38:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CircularCurve.hh,v 1.9 2006-06-29 18:38:30 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4CircularCurve
@@ -55,8 +55,7 @@ public: // with description
   G4CircularCurve& operator=(const G4CircularCurve& right);
     // Copy-constructor and assignment operator.
 
-  virtual G4Curve* Project(const G4Transform3D& tr=
-                           HepGeom::Transform3D::Identity);
+  virtual G4Curve* Project(const G4Transform3D& tr= G4Transform3D::Identity);
     // Project along trasformation tr.
 
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

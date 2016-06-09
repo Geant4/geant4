@@ -4,34 +4,16 @@
 
  Contact : M.Asai (SLAC), A.Kimura (AIT), T.Aso (TNCMT)
 
-****************************************************************
-* IMPORTANT NOTICE for version 9.2                             *
-*                                                              *
-*  This UI-command base scoring is still in beta release and   *
-* functionality offered is preliminary. We do not guarantee    *
-* the correctness of the code. Also, we may change any of the  *
-* commands / methods in the near future release.               *
-*  In particular for the cylindrical scoring mesh, we are      *
-* aware of rather frequent warning messages issued by the      *
-* G4Navigator for the zero-length steps. I believe the results *
-* is correct, but we appreciate the user's patient for this    *
-* messy warning messages. It is identified that if a track     *
-* enters at exactly the center of the top/bottom circlic face  *
-* exactly along the local z-axis of the scoring cylinder, this *
-* warning message is mostlikely issued.                        *
-*                                                              *
-****************************************************************
-
 1. Introduction
 
  This example demonstrates how to use UI-command base scoring.
 It create parallel world(s) for defining scoring mesh(es).
 
- Since this UI-command base scoring is preliminary, this
-functionality is not provided by default. To get it included,
-the pointer to G4ScoringManager must be accessed. The access
-to the static method G4ScoringManager::GetScoringManager()
-activate this functionality. 
+ Due to some performance overhead, this functionality is not 
+provided by default. To get it included, the pointer to 
+G4ScoringManager must be accessed. The access to the static 
+method G4ScoringManager::GetScoringManager() activates this 
+functionality. 
 
 1.1 Geometry and primary particle
 

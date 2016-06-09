@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3SensVolVector.hh,v 1.7 2006/06/29 18:12:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3SensVolVector.hh,v 1.7 2006-06-29 18:12:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // vector of logical volumes that were defined with
 // tracking medium with ISVOL=1
@@ -36,9 +36,10 @@
 #define G3SENSVOLVECTOR_HH 1
 
 #include <vector>
+#include "G3toG4Defs.hh"
 #include "G4LogicalVolume.hh"
 
 typedef std::vector<G4LogicalVolume*> G3SensVolVector;
 
-extern G3SensVolVector G3SensVol;
+extern G3G4DLL_API G3SensVolVector G3SensVol;
 #endif

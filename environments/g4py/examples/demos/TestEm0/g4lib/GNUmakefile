@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.2 2007/07/06 06:41:39 kmura Exp $
-# $Name: geant4-09-02 $
+# $Id: GNUmakefile,v 1.2 2007-07-06 06:41:39 kmura Exp $
+# $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================

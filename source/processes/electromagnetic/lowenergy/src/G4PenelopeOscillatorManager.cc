@@ -38,10 +38,15 @@
 //               and plasma energy (used for Ionisation). L Pandola
 //  18 Mar 2010  Added method to retrieve number of atoms per 
 //               molecule. L. Pandola
+//  06 Sep 2011  Override the local Penelope database and use the main
+//               G4AtomicDeexcitation database to retrieve the shell 
+//               binding energies. L. Pandola
 //
 // -------------------------------------------------------------------
 
 #include "G4PenelopeOscillatorManager.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4AtomicShell.hh"
 #include "G4Material.hh"
 #include "globals.hh"
 
@@ -201,10 +206,6 @@ void G4PenelopeOscillatorManager::Dump(const G4Material* material)
     }
   G4cout << "*********************************************************************" << G4endl;
   
-
-  //just to test it
-  //Clear();
- 
   return;
 }
 
@@ -219,14 +220,11 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
       oscillatorStoreIonisation = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreIonisation)
-	{
-	  //It should be ok now
-	  G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableIonisation() " << G4endl;
-	  G4cout << "Problem in allocating the Oscillator Store for Ionisation" << G4endl;
-	  G4cout << "Abort execution" << G4endl;
-	  G4Exception();
-	}
+      if (!oscillatorStoreIonisation)	
+	//It should be ok now
+	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
+		    "em2034",FatalException,
+		    "Problem in allocating the Oscillator Store for Ionisation");    
     }
 
   if (!oscillatorStoreCompton) 
@@ -234,14 +232,11 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
       oscillatorStoreCompton = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreCompton)
-	{
-	  //It should be ok now
-	  G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableCompton() " << G4endl;
-	  G4cout << "Problem in allocating the Oscillator Store for Compton" << G4endl;
-	  G4cout << "Abort execution" << G4endl;
-	  G4Exception();
-	}
+      if (!oscillatorStoreCompton)	
+	//It should be ok now
+	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
+		    "em2034",FatalException,
+		    "Problem in allocating the Oscillator Store for Compton");        
     }
 
   if (!atomicNumber)
@@ -460,9 +455,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (MaxStechiometricFactor<1e-16)
     {
-      G4cout << "G4PenelopeOscillatorManager::BuildOscillatorTable" << G4endl;
-      G4cout << "Problem with the mass composition of " << material->GetName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Problem with the mass composition of " << material->GetName() << G4endl;
+      ed << "MaxStechiometricFactor = " << MaxStechiometricFactor << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2035",FatalException,ed);
     }
   //Normalize
   for (G4int i=0;i<nElements;i++)
@@ -603,11 +600,15 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (conductionStrength < 0.5 || plasmaEnergy<1.0*eV) //this is an insulator
     {
+      if (verbosityLevel >1 )
+	G4cout << material->GetName() << " is an insulator " << G4endl;
       //remove conduction band oscillator
       helper->erase(helper->begin());
     }
   else //this is a conductor, Outer shells moved to conduction band
     {
+      if (verbosityLevel >1 )		
+	G4cout << material->GetName() << " is a conductor " << G4endl;	   
       isAConductor = true;
       //copy the conduction strenght.. The number is going to change.
       G4double conductionStrengthCopy = conductionStrength;
@@ -616,7 +617,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	{
 	  G4double oscStre = (*helper)[i].GetOscillatorStrength();
 	  //loop is repeated over here
-	  if (oscStre < conductionStrength)
+	  if (oscStre < conductionStrengthCopy)
 	    {
 	      conductionStrengthCopy = conductionStrengthCopy-oscStre;
 	      (*helper)[i].SetOscillatorStrength(0.);
@@ -643,7 +644,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 					Bohr_radius*Bohr_radius*Bohr_radius*conductionStrength);
       (*helper)[0].SetHartreeFactor(hartree/fine_structure_const);
     }
-  
+
   //Check f-sum rule
   G4double sum = 0;
   for (size_t i=0;i<helper->size();i++)
@@ -652,9 +653,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (std::fabs(sum-totalZ) > (1e-6*totalZ))
     {
-      G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
-      G4cout << sum << " " << totalZ << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Inconsistent oscillator data for " << material->GetName() << G4endl;
+      ed << sum << " " << totalZ << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2036",FatalException,ed);
     }
   if (std::fabs(sum-totalZ) > (1e-12*totalZ))
     {
@@ -737,16 +740,20 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (std::fabs(TST-totalZ)>1e-8*totalZ)
     {
-      G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
-      G4cout << TST << " " << totalZ << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Inconsistent oscillator data " << G4endl;
+      ed << TST << " " << totalZ << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2036",FatalException,ed);
     }
   xcheck = std::exp(xcheck/totalZ);
   if (std::fabs(xcheck-meanExcitationEnergy) > 1e-8*meanExcitationEnergy)
     {
-      G4cout << "G4PenelopeOscillatorManager - Error in Sterheimer factor calculation " << G4endl;
-      G4cout << xcheck/eV << " " << meanExcitationEnergy/eV << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Error in Sterheimer factor calculation " << G4endl;
+      ed << xcheck/eV << " " << meanExcitationEnergy/eV << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2037",FatalException,ed);    
     }
 
   //Selection of the lowest ionisation energy for inner shells. Only the K, L and M shells with 
@@ -811,13 +818,13 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       if (Nost>firstIndex+1)
 	{
 	  removedLevels = 0;
-	  for (size_t i=firstIndex;i<Nost-1;i++)
+	  for (size_t i=firstIndex;i<theTable->size()-1;i++)
 	    {
 	      G4bool skipLoop = false;
 	      G4int shellFlag = (*theTable)[i]->GetShellFlag();
 	      G4double ionEne = (*theTable)[i]->GetIonisationEnergy();
 	      G4double resEne = (*theTable)[i]->GetResonanceEnergy();
-	      G4double resEnePlus1 = (*theTable)[i+1]->GetResonanceEnergy();
+	      G4double resEnePlus1 = (*theTable)[i+1]->GetResonanceEnergy();	      	     
 	      G4double oscStre = (*theTable)[i]->GetOscillatorStrength();
 	      G4double oscStrePlus1 = (*theTable)[i+1]->GetOscillatorStrength();
 	      //if (shellFlag < 10 && ionEne>cutEnergy) in Penelope
@@ -855,14 +862,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		  //We've lost anyway the track of the original level
 		  (*theTable)[i]->SetParentShellID((*theTable)[i]->GetShellFlag());
 
-		  if (i<Nost-2)
+		  
+		  if (i<theTable->size()-2)
 		    {
-		      for (size_t ii=i+1;ii<Nost-1;ii++)
-			(*theTable)[ii] = (*theTable)[ii+1];		
+		      for (size_t ii=i+1;ii<theTable->size()-1;ii++)			
+			(*theTable)[ii] = (*theTable)[ii+1];	       			  			
 		    }
 		  //G4cout << theTable->size() << G4endl;
-		  //theTable->erase(theTable->end()); 
-		  theTable->erase(theTable->begin()+theTable->size()-1); //delete last element
+		  theTable->erase(theTable->begin()+theTable->size()-1); //delete last element		  
 		  removedLevels++;
 		}		      
 	    }
@@ -934,12 +941,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       if (Nost>firstIndex+1)
 	{
 	  removedLevels = 0;
-	  for (size_t i=firstIndex;i<Nost-1;i++)
+	  for (size_t i=firstIndex;i<theTableC->size()-1;i++)
 	    {
 	      G4bool skipLoop = false;
 	      //G4int shellFlag = (*theTableC)[i]->GetShellFlag();
 	      G4double ionEne = (*theTableC)[i]->GetIonisationEnergy();
-	      G4double ionEnePlus1 = (*theTableC)[i+1]->GetIonisationEnergy();
+	      G4double ionEnePlus1 = (*theTableC)[i+1]->GetIonisationEnergy();	   
 	      G4double oscStre = (*theTableC)[i]->GetOscillatorStrength();
 	      G4double oscStrePlus1 = (*theTableC)[i+1]->GetOscillatorStrength();
 	      //if (shellFlag < 10 && ionEne>cutEnergy) in Penelope
@@ -967,13 +974,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		  (*theTableC)[i]->SetShellFlag(30);
 		  (*theTableC)[i]->SetParentShellID((*theTableC)[i]->GetShellFlag());
 
-		  if (i<Nost-2)
+		  if (i<theTableC->size()-2)
 		    {
-		      for (size_t ii=i+1;ii<Nost-1;ii++)
-			(*theTableC)[ii] = (*theTableC)[ii+1];		
+		      for (size_t ii=i+1;ii<theTableC->size()-1;ii++)			
+			(*theTableC)[ii] = (*theTableC)[ii+1];							
 		    }
 		  theTableC->erase(theTableC->begin()+theTableC->size()-1); //delete last element
-		  //theTableC->erase(theTableC->end()); //delete last element
 		  removedLevels++;
 		}		      
 	    }
@@ -1046,7 +1052,8 @@ void G4PenelopeOscillatorManager::ReadElementData()
   if (!path)
     {
       G4String excep = "G4PenelopeOscillatorManager - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeOscillatorManager::ReadElementData()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -1056,8 +1063,13 @@ void G4PenelopeOscillatorManager::ReadElementData()
   if (!file.is_open())
     {
       G4String excep = "G4PenelopeOscillatorManager - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeOscillatorManager::ReadElementData()",
+		  "em0003",FatalException,excep);
     }
+
+  G4AtomicTransitionManager* theTransitionManager = 
+    G4AtomicTransitionManager::Instance();
+  
   //Read header (22 lines)
   G4String theHeader;
   for (G4int iline=0;iline<22;iline++)
@@ -1069,6 +1081,9 @@ void G4PenelopeOscillatorManager::ReadElementData()
   G4int occupationNumber = 0;
   G4double ionisationEnergy = 0.0*eV;
   G4double hartreeProfile = 0.;
+  G4int shellCounter = 0;
+  G4int oldZ = -1;
+  G4int numberOfShells = 0;
   //Start reading data
   for (G4int i=0;!file.eof();i++)
     {
@@ -1078,8 +1093,25 @@ void G4PenelopeOscillatorManager::ReadElementData()
 	  elementData[0][i] = Z;
 	  elementData[1][i] = shellCode;
 	  elementData[2][i] = occupationNumber;
-	  elementData[3][i] = ionisationEnergy*eV;
+	  //reset things
+	  if (Z != oldZ)
+	    {
+	      shellCounter = 0;
+	      oldZ = Z;
+	      numberOfShells = theTransitionManager->NumberOfShells(Z);
+	    }
+	  G4double bindingEnergy = -1*eV;
+	  if (shellCounter<numberOfShells)
+	    {
+	      G4AtomicShell* shell = theTransitionManager->Shell(Z,shellCounter);
+	      bindingEnergy = shell->BindingEnergy();	 
+	    }
+	  //Valid level found in the G4AtomicTransition database: keep it, otherwise use 
+	  //the ionisation energy found in the Penelope database
+	  elementData[3][i] = (bindingEnergy) ? bindingEnergy : ionisationEnergy*eV;	  	  
+	  //elementData[3][i] = ionisationEnergy*eV;
 	  elementData[4][i] = hartreeProfile;
+	  shellCounter++;
 	}
     }
   file.close();

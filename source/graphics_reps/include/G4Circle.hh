@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Circle.hh,v 1.9 2006/06/29 19:05:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Circle.hh,v 1.9 2006-06-29 19:05:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  17/11/96.
@@ -46,8 +46,8 @@ class G4Circle: public G4VMarker {
 public: // With description
 
   G4Circle ();
-  G4Circle (const G4VMarker& marker);
-  G4Circle (const G4Point3D& pos);
+  G4Circle (const G4VMarker&);
+  G4Circle (const G4Point3D& position);
   virtual ~G4Circle ();
 
  };

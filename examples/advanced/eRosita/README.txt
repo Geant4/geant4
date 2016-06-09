@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.6 2010/11/30 13:44:05 pia Exp $
+$Id: README.txt,v 1.6 2010-11-30 13:44:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,10 +10,11 @@ $Id: README.txt,v 1.6 2010/11/30 13:44:05 pia Exp $
 
 Authors:
 
-Dieter Schlosser (pnSensor, Munich), Georg Weidenspointner (MPE Garching
-and MPI Halbleiterlabor, Munich), and Maria Grazia Pia (INFN Genova)
+Dieter Schlosser (pnSensor, Munich), 
+Georg Weidenspointner (MPE Garching and MPI Halbleiterlabor, Munich),
+Maria Grazia Pia (INFN Genova)
 
-References:
+Main references:
 
 M.G. Pia et al., 2009, "PIXE Simulation With Geant4", 
 IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649
@@ -22,9 +23,9 @@ N. Meidinger et al., 2010, "Development of the focal plane PNCCD
 camera system for the X-ray space telescope eROSITA", Nuclear
 Instruments and Methods in Physics Research A 624, 321-329
 
-Web sites:
+Web site:
 
-????
+http://www.ge.infn.it/geant4/physics/pixe/erosita.html
 
 Contact persons:
 
@@ -32,8 +33,26 @@ Dieter Schlosser     : dis@hll.mpg.de
 Georg Weidenspointner: ggw@hll.mpg.de
 Maria Grazia Pia     : Maria.Grazia.Pia@cern.ch
 
+---- OVERVIEW ----
 
-Example description:
+This example demonstrates:
+- the generation of XRF and PIXE,
+- how to use different physics processes from those encompassed in the 
+Geant4 toolkit in a simulation application.
+
+The examples/advanced/eRosita/application directory contains files pertinent 
+to the experimental simulation model.
+
+The examples/advanced/eRosita/physics directory contains the original Geant4
+low energy physics processes for electron and photon interactions based on the
+EEDL/EPDL/EADL data libraries (along with their complementary files),
+that are actively used in several experimental applications
+(http://indico.cern.ch/contributionListDisplay.pi?confId=159659).
+
+The physics capabilities and validation of the physics processes used in this example
+are documented in the PHYSICS REFERENCES section below.
+
+---- EXAMPLE DESCRIPTION ----
 
 This is example is based on simulations of the instrumental background
 of the eROSITA X-ray telescope, in particular the strength of
@@ -113,3 +132,85 @@ Instructions on how to build and run the example:
     An ASCII output file TrackerPhotonEnergy.out is created. However,
     this file may be empty in case the first 100 protons do not 
     produce any fluorescence photons that reach the tracker.
+
+
+---- HOW TO INCLUDE ALTERNATIVE PHYSICS PROCESSES IN A REGULAR GEANT4 BUILD ----
+
+Users wishing the convenience of including the physics processes encompassed in the 
+example in a regularly built Geant4 library may consider the following workaround:
+
+*** prior to compiling the local Geant4 installation ***
+- copy the content of eRosita/physics/include/ and eRosita/physics/src/ to /source/processes/electromagnetic/pii/include/ and /source/processes/electromagnetic/pii/src/ 
+- replace /source/processes/electromagnetic/pii/GNUmakefile with eRosita/physics/GNUmakefile
+- compile the local Geant4 installation as usual (according to the instructions in Geant4 User Documentation)
+
+cp $G4INSTALL/examples/advanced/eRosita/physics/include/*.* $G4INSTALL/source/processes/electromagnetic/pii/include/.
+cp $G4INSTALL/examples/advanced/eRosita/physics/src/*.*     $G4INSTALL/source/processes/electromagnetic/pii/src/.
+cp $G4INSTALL/examples/advanced/eRosita/physics/GNUmakefile $G4INSTALL/source/processes/electromagnetic/pii/.
+[then compile Geant4 as described in Geant4 User Documentation]
+
+If one wishes to perform the above operation after having already compiled Geant4, 
+it is recommended to first remove the result of the existing compilation (by issuing
+"gmake clean" in $G4INSTALL/source/); then one can proceed with the above instructions.
+
+Do not forget to delete the content of $G4INSTALL/examples/advanced/eRosita/physics/include/ 
+and $G4INSTALL/examples/advanced/eRosita/physics/src/, if you wish to exercise 
+the eRosita example after moving the physics files to the pii package.
+
+---- PHYSICS REFERENCES ----
+
+M.G. Pia et al., 
+PIXE Simulation With Geant4, 
+IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, 2009.
+
+A. Lechner, M.G. Pia, M. Sudhakar,
+Validation of Geant4 low energy electromagnetic processes against precision measurements of electron energy deposit,
+IEEE Trans. Nucl. Sci., vol. 56, no. 2, pp. 398-416, 2009.
+
+K. Amako et al.,
+Comparison of Geant4 electromagnetic physics models against the NIST reference data, 
+IEEE Trans. Nucl. Sci., vol. 52, no. 4, pp. 910-918, 2005.
+
+S. Guatelli, A. Mantero, B. Mascialino, P. Nieminen, M. G. Pia, 
+Geant4 Atomic Relaxation, 
+IEEE Trans. Nucl. Sci.,  vol. 54, no. 3, pp. 585-593, 2007.
+
+M.G. Pia, P. Saracco, M. Sudhakar,
+Validation of radiative transition probability calculations,  
+IEEE Trans. Nucl. Sci.,  vol. 56, no. 6, pp. 3650-3661, 2009.
+
+S. Guatelli, A. Mantero, B. Mascialino, P. Nieminen, M. G. Pia, V. Zampichelli, 
+Validation of Geant4 Atomic Relaxation against the NIST Physical Reference Data,  
+IEEE Trans. Nucl. Sci.,  vol. 54, no. 3,  pp. 594-603, 2007.
+
+L. Peralta et al.,
+A new low-energy bremsstrahlung generator for GEANT4,
+Radiat. Prot. Dosim., vol. 116, no. 1-4, pp. 59-64, 2005.
+
+F. Longo et al.,  
+New Geant4 Developments for Doppler Broadening Simulation in Compton Scattering - Development of Charge Transfer Simulation Models in Geant4,  
+Proc. IEEE Nuclear Science Symposium, Dresden, 2008. 
+
+S. Chauvie et al.,  
+Validation of the Bremsstrahlung Models of Geant4,
+Proc. IEEE Nuclear Science Symposium, 2006. 
+
+S. Chauvie et al.,
+Geant4 Low Energy Electromagnetic Physics, 
+The Monte Carlo Method: Versatility Unbounded in a Dynamic Computing World, American Nucl. Soc., LaGrange Park, IL, 2005.
+
+S. Chauvie et al.,
+Geant4 low energy electromagnetic physics, 
+Proc.Nuclear Science Symposium, 2004.  
+
+S. Chauvie et al.,
+Geant4 Low Energy Electromagnetic Physics,  
+Proc. CHEP 2001.
+
+J. Apostolakis, S. Giani, M. Maire, P. Nieminen, M.G. Pia, L. Urban, 
+Geant4 low energy electromagnetic models for electrons and photons  
+CERN-OPEN-99-034 and INFN/AE-99/18, 1999.
+
+Further references are listed in http://www.ge.infn.it/geant4/papers/,
+that also documents recent developments intended for future improvements 
+to Geant4, and their validation.

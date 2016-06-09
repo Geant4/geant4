@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.141 2010/05/30 11:15:52 allison Exp $
+cvs log $Id: History,v 1.144 2010-12-27 12:18:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th November 2011  John Allison  (greps-V09-04-10)
+- Fixed most Coverity warnings.
+
+2nd November 2011  John Allison  (greps-V09-04-09)
+- G4Colour.hh:
+  o Removed "using std::map" statement.
+  o Addwd GetMap so that current colour map options can be listed.
+- G4Colour.cc:
+  o Made std scope explicit.
+  o Implemented GetMap.
+
+29th September 2011  John Allison  (greps-V09-04-08)
+- G4DimensionedType.hh:
+  o Reversed action of 27th Sep.  Warnings are false.  Function is needed.
+
+27th September 2011  John Allison  (greps-V09-04-07)
+- G4DimensionedType.hh:
+  o Commented out unused function to suppress project warnings.
+- G4Polymarker: Added constructor G4Polymarker(const G4VMarker&).
+- G4VMarker: Added constructor G4VMarker(const G4VMarker&);
+- G4VMarker.hh, G4Circle.hh, G4Square.hh, G4Polymarker.hh, G4Text.hh:
+  o Tidied.
+- greps-V09-04-06: Inadvertent tag.
+
+16th September 2011  John Allison  (greps-V09-04-05)
+- Migrated to new G4Exception.
+
+2nd August 2011  John Allison  (greps-V09-04-04)
+- G4PolyhedronArbitrary:  Added SetReferences and InvertFacets.
+  SetReferences is necessary at the end to complete the polyhedron.
+  It particularly matters if the polyhedron suffers subsequent
+  boolean operations.
+  InvertFacets can be useful.
+
+1st March 2011  John Allison  (greps-V09-04-03)
+- BooleanProcessor.cc:
+  o Changed cout to G4cout, etc.
+  o Fixed Coverity warnings.
+
+24th March 2011  Gabriele Cosmo  (greps-V09-04-02)
+- Consistently make use of G4 types in HepPolyhedron and BooleanProcessor,
+  to allow for centralized control of CLHEP classes.
+
+1st March 2011  John Allison  (greps-V09-04-01)
+- Fixed Coverity warnings.
+
+27th December 2010  John Allison  (greps-V09-04-00)
+- Tagged.
+
+7th December 2010  John Allison
+- Fixed Coverity warnings.
+
+6th December 2010  John Allison
+- G4Visible.cc::operator!=: protect zero vis attributes pointers.
+- G4Visible.cc::operator=: delete allocated vis attributes (fixes
+  memory leak).
 
 30th May 2010  John Allison  (greps-V09-03-02)
 - G4VVisManager: Added Draw(const G4VDigi&) and FilterDigi(const G4VDigi&).

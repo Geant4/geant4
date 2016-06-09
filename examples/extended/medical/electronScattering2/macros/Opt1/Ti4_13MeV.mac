@@ -1,4 +1,4 @@
-/physics/SetList Opt1
+/testem/phys/addPhysics emstandard_opt1
 /run/initialize
 /run/setCut 0.01 mm
 /primFoil/material TiAlloy

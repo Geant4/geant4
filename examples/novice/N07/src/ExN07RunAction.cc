@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.cc,v 1.8 2007/05/12 20:02:58 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN07RunAction.cc,v 1.8 2007-05-12 20:02:58 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN07RunAction.hh"

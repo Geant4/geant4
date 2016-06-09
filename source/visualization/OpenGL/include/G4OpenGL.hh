@@ -23,27 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.9 2009/11/17 09:18:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGL.hh,v 1.9 2009-11-17 09:18:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand.
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-#ifndef G4OpenGL_h
-#define G4OpenGL_h 
+ #ifndef G4OpenGL_h
+ #define G4OpenGL_h 
 
-#ifdef WIN32
-#include <windows.h>
-#undef min
-#undef max
+ #ifdef WIN32
+ #include <windows.h>
+ #undef min
+ #undef max
+ #endif
+
+
+ #ifdef G4VIS_BUILD_OPENGLX_DRIVER
+ #  include <GL/gl.h>
+ #  include <GL/glu.h>
+ #endif
+
+ #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+ #    include <GL/gl.h>
+ #    include <GL/glu.h>
+ #endif
+
+ #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+ #    include <GL/gl.h>
+ #    include <GL/glu.h>
+ #endif
+//# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
+//#  include <GL/glx.h>
+
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+ #include <Wt/WGLWidget>
+ #include <qgl.h>
 #endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+#ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
+  #ifndef G4VIS_BUILD_OPENGLX_DRIVER
+    #ifdef __MACH__
+      #include <OpenGL/gl.h>
+      #include <OpenGL/glu.h>
+    #endif
+    #include <qgl.h>
+  #endif
+#endif
 
 #define G4OPENGL_FLT_BIG 1.e20
 
-#endif
+ #endif
 
 #endif

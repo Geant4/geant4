@@ -49,7 +49,6 @@
 #include <boost/variant/get.hpp>
 #endif
 #endif
-#include <G4Version.hh>
 #include <G4UImanager.hh>
 #include <G4String.hh>
 #ifdef G4UI_USE
@@ -66,9 +65,7 @@
 #include <G4VisExecutive.hh>
 #endif
 #include "CexmcRunManager.hh"
-#ifdef CEXMC_USE_ROOT
 #include "CexmcHistoManager.hh"
-#endif
 #include "CexmcSetup.hh"
 #include "CexmcPhysicsList.hh"
 #include "CexmcPhysicsManager.hh"
@@ -155,7 +152,7 @@ void  printUsage( void )
 }
 
 
-G4bool  parseArgs( int  argc, char ** argv, CexmcCmdLineData &  cmdLineData )
+G4bool  parseArgs( int  argc, char **  argv, CexmcCmdLineData &  cmdLineData )
 {
     if ( argc < 2 )
         return false;
@@ -341,11 +338,10 @@ int  main( int  argc, char **  argv )
     }
 
     CexmcRunManager *  runManager( NULL );
+    CexmcMessenger::Instance();
 #ifdef G4VIS_USE
     G4VisManager *     visManager( NULL );
 #endif
-
-    CexmcMessenger::Instance();
 #ifdef CEXMC_USE_ROOT
     CexmcHistoManager::Instance();
 #endif
@@ -430,11 +426,7 @@ int  main( int  argc, char **  argv )
 #ifdef G4VIS_USE
         if ( cmdLineData.isInteractive )
         {
-#if G4VERSION_NUMBER < 940
-            visManager = new G4VisExecutive;
-#else
             visManager = new G4VisExecutive( CexmcVisManagerVerboseLevel );
-#endif
             visManager->Initialize();
         }
 #endif
@@ -452,9 +444,7 @@ int  main( int  argc, char **  argv )
                                      cmdLineData.initMacro );
 
         if ( cmdLineData.isInteractive )
-        {
             productionModel->PrintInitialData();
-        }
 
 #ifdef G4UI_USE
         if ( cmdLineData.isInteractive )
@@ -462,7 +452,8 @@ int  main( int  argc, char **  argv )
             if ( cmdLineData.startQtSession )
             {
 #ifdef G4UI_USE_QT
-                session = new G4UIQt( argc, argv );
+                /* no need to pass all command line options to QApplication */
+                session = new G4UIQt( 1, argv );
                 const G4String &  guiMacroName( runManager->GetGuiMacroName() );
                 if ( guiMacroName != "" )
                     uiManager->ApplyCommand( "/control/execute " +
@@ -487,9 +478,7 @@ int  main( int  argc, char **  argv )
 
 #ifdef CEXMC_USE_PERSISTENCY
         if ( runManager->ProjectIsSaved() )
-        {
             runManager->SaveProject();
-        }
 #endif
     }
     catch ( CexmcException &  e )
@@ -518,11 +507,10 @@ int  main( int  argc, char **  argv )
 #ifdef CEXMC_USE_ROOT
     CexmcHistoManager::Destroy();
 #endif
-    CexmcMessenger::Destroy();
-
 #ifdef G4VIS_USE
     delete visManager;
 #endif
+    CexmcMessenger::Destroy();
     delete runManager;
 #ifdef G4UI_USE
     delete session;

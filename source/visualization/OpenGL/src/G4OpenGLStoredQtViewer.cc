@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.32 2010/06/23 13:29:23 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.32 2010-06-23 13:29:23 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -47,11 +47,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   QGLWidget()
 {
 
-#if QT_VERSION < 0x040000
-  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
-#else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
-#endif
   fHasToRepaint = false;
   fIsRepainting = false;
 
@@ -71,8 +67,10 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #endif
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
-  CreateFontLists ();
-  
+  //  CreateFontLists ();
+
+  glDrawBuffer (GL_BACK);
+
   fReadyToPaint = true;
 }
 
@@ -81,15 +79,8 @@ void G4OpenGLStoredQtViewer::initializeGL () {
   InitializeGLView ();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::InitialiseGL () 1\n");
+  printf("G4OpenGLStoredQtViewer::InitialiseGL () 1 %d\n", this);
 #endif
-
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-   
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
 
   if (fSceneHandler.GetScene() == 0) {
     fHasToRepaint =false;
@@ -102,6 +93,24 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 #endif
 }
 
+// Until tree is fixed use this
+G4bool G4OpenGLStoredQtViewer::POSelected(size_t)
+{
+  return true;
+}
+
+/***
+// When tree is fixed use this
+G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
+{
+  return isTouchableVisible(POListIndex);
+}
+***/
+
+G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
+{
+  return true;
+}
 
 void G4OpenGLStoredQtViewer::DrawView () {  
   updateQWidget();
@@ -225,9 +234,6 @@ void G4OpenGLStoredQtViewer::paintGL()
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
   if ( !fHasToRepaint) {
-#if QT_VERSION < 0x040000
-    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
-#else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
     int sw = 0;
@@ -240,7 +246,6 @@ void G4OpenGLStoredQtViewer::paintGL()
       sh = frameGeometry().height();
     }
     if ((getWinWidth() == (unsigned int)sw) &&(getWinHeight() == (unsigned int)sh)) {
-#endif
       return;
     }
   }
@@ -255,6 +260,8 @@ void G4OpenGLStoredQtViewer::paintGL()
 
   fHasToRepaint = false;
 
+  // update the view component tree
+  displayViewComponentTree();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
@@ -323,11 +330,25 @@ void G4OpenGLStoredQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#if QT_VERSION < 0x040000
-  setActiveWindow();
-#else
+  // Some X servers fail to draw all trajectories, particularly Mac
+  // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
+  // extra...
+  ClearView();
+  DrawView();
   activateWindow();
-#endif
+  glFlush();
+
 }
+void G4OpenGLStoredQtViewer::DrawText(const char * ,double /* x */,double /* y */,double /* z */, double /* size */){
+  static G4bool warned = false;
+  if (!warned) {
+    warned = true;
+    G4cerr <<
+      "Text is not implemented in Qt Stored mode, please use Immediate"
+      "\n  mode if you want to see it."
+	   << G4endl;
+  }
+}
+
 
 #endif

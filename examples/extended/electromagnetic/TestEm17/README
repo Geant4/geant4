@@ -1,17 +1,17 @@
-$Id: README,v 1.3 2008/09/26 20:15:04 maire Exp $
+$Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
-
+ 
                             TestEm17
                             --------
         This example is intended to check implementation of the processes 
         of muon interactions: ionization, direct (e+,e-) production,
 	bremsstrahlung, mu-nuclear interaction.
 	It allows to compute differential cross sections (as function of the
-	energy tranfered to secondaries), total cross sections and to compare
+	energy transfered to secondaries), total cross sections and to compare
 	with analytic calculations.
 	
  1- GEOMETRY DEFINITION
@@ -27,12 +27,14 @@ $Id: README,v 1.3 2008/09/26 20:15:04 maire Exp $
  	
  2- PHYSICS LIST
  
- 	The physics list contains only electromagnetic processes for muon,
-	adding G4MuNuclearInteraction and seting of upper energy range limit 
-	to 1000 PeV).
-	 
-        Standard (default) and g4v52 (frozen at the release Geant4 v.5.2) 
-	physics can be choosen.
+ 	The Physics List of the example uses the main local physics constructor
+        (builder) which called "standard". In this builder a limited set 
+        of physics processes are defined for muons, pions and proton:
+        ionisation, bremsstrahlung and e+e- pair production. Energy range 
+        for these processes is from 100*eV to 1000*PeV.
+
+        Optionally "muNucl" builder may be added activating muon-nuclear 
+        inelastic interaction.
 	 	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -49,11 +51,11 @@ $Id: README,v 1.3 2008/09/26 20:15:04 maire Exp $
 	
 	The number of interactions are plotted as a function of the energy 
 	transfered to the secondaries.
-	The total number of interactions is recorded, and the total crossSection
+	The total number of interactions is recorded, and the total cross section
 	computed from this.  
 
         At EndOfRun, the above results are compared with analytic calculations.
-	The functions which compute the theoritical crossSections have been
+	The functions which compute the theoretical cross sections have been
 	provided by the G4 MEPhI group, and grouped in MuCrossSection class.
 
  5- HISTOGRAMS
@@ -68,12 +70,12 @@ $Id: README,v 1.3 2008/09/26 20:15:04 maire Exp $
         4  -"- nuclear interaction
 	
 	The histos can be activated individually with the command :
-	/testem/histo/setHisto id nbBins  valMin valMax : min and max values of 
-                                                          log10(eps/Emu kin).
+	/testem/histo/setHisto id nbBins  valMin valMax : 
+          min and max values of log10(eps/Emu kin).
 	
 	At EndOfRun the corresponding histos for analytic calculations are
-	automatically created anf filled (histo 6 to 9), and the comparison
-	(G4 divided by theory) is done in histos 11 to 14.
+	automatically created and filled (histo 9 to 12), and the comparison
+	(G4 divided by theory) is done in histos 17 to 20.
 							  
  	One can control the name and the type of the histograms file with 
 	the commands:

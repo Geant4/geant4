@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2009/10/21 15:28:53 allison Exp $
+# $Id: GNUmakefile,v 1.8 2009-10-21 15:28:53 allison Exp $
 
 name := G4visXXX
 
@@ -14,7 +14,7 @@ GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
-include $(G4INSTALL)/config/G4VIS_BUILD.gmk
+# include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -I$(G4BASE)/visualization/management/include

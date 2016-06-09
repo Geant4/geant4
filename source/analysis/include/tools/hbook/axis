@@ -1,0 +1,158 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_axis
+#define tools_hbook_axis
+
+#include "CHBOOK"
+
+namespace tools {
+namespace hbook {
+
+class axis {
+public:
+  enum { UNDERFLOW_BIN = -2, OVERFLOW_BIN = -1 };
+public:
+  axis(const std::string& a_path,int aID,
+              int aDimension,bool aIsX,bool aFixed)
+  :m_path(a_path),m_id(aID)
+  ,m_dimension(aDimension),m_is_x(aIsX),m_fixed(aFixed)
+  {}
+  virtual ~axis(){}
+public:
+  axis(const axis& a_from)
+  :m_path(a_from.m_path),m_id(a_from.m_id),m_dimension(a_from.m_dimension)
+  ,m_is_x(a_from.m_is_x),m_fixed(a_from.m_fixed)
+  {}
+  axis& operator=(const axis& a_from){
+    m_path = a_from.m_path;
+    m_id = a_from.m_id;
+    m_dimension = a_from.m_dimension;
+    m_is_x = a_from.m_is_x;
+    m_fixed = a_from.m_fixed;
+    return *this;
+  }
+public:
+  bool is_fixed_binning() const {return m_fixed;}
+  rarg lower_edge() const {
+    int xn,yn;
+    rarg xmin,xmax,ymin,ymax;
+    cd_beg();
+    CHGIVE(m_id,xn,xmin,xmax,yn,ymin,ymax);
+    cd_end();
+    return m_is_x?xmin:ymin;
+  }
+  rarg upper_edge() const {
+    int xn,yn;
+    rarg xmin,xmax,ymin,ymax;
+    cd_beg();
+    CHGIVE(m_id,xn,xmin,xmax,yn,ymin,ymax);
+    cd_end();
+    return m_is_x?xmax:ymax;
+  }
+
+  int bins() const {
+    int xn,yn;
+    rarg xmin,xmax,ymin,ymax;
+    cd_beg();
+    CHGIVE(m_id,xn,xmin,xmax,yn,ymin,ymax);
+    cd_end();
+    return m_is_x?xn:yn;
+  }
+
+  rret bin_lower_edge(int a_index) const {
+    int index = a_index + 1; //HBOOK counts in [1,NX]
+    if(m_dimension==1) {
+      cd_beg();
+      rret v = CHIX(m_id,index);
+      cd_end();
+      return v;
+    } else { //dimension 2
+      rarg x,y;
+      if(m_is_x) {
+        cd_beg();
+        CHIJXY(m_id,index,1,x,y);
+        cd_end();
+        return x;
+      } else {
+        cd_beg();
+        CHIJXY(m_id,1,index,x,y);
+        cd_end();
+        return y;
+      }
+    }
+  }
+
+  rret bin_upper_edge(int a_index) const {
+    //FIXME : is it correct to ask for the lower bound of the next bin ?
+    int index = a_index + 1 + 1; //HBOOK counts in [1,NX]
+    if(m_dimension==1) {
+      cd_beg();
+      rret v = CHIX(m_id,index);
+      cd_end();
+      return v;
+    } else { //dimension 2
+      rarg x,y;
+      if(m_is_x) {
+        cd_beg();
+        CHIJXY(m_id,index,1,x,y);
+        cd_end();
+        return x;
+      } else {
+        cd_beg();
+        CHIJXY(m_id,1,index,x,y);
+        cd_end();
+        return y;
+      }
+    }
+  }
+
+  rret bin_width(int a_index) const {
+    return bin_upper_edge(a_index) - bin_lower_edge(a_index);
+  }
+ 
+  int coord_to_index(rarg aCoord) const {
+    if(m_dimension==1) {
+      cd_beg();
+      int v = CHXI(m_id,aCoord)-1; //HBOOK counts in [1,NX]
+      cd_end();
+      return v;
+    } else { //dimension 2
+      int i,j;
+      if(m_is_x) {
+        cd_beg();
+        CHXYIJ(m_id,aCoord,0,i,j);
+        cd_end();
+        return i-1;
+      } else {
+        cd_beg();
+        CHXYIJ(m_id,0,aCoord,i,j);
+        cd_end();
+        return j-1;
+      }
+    }
+  }
+
+  rret bin_center(int a_index) const {
+    return (bin_lower_edge(a_index) + bin_upper_edge(a_index))/2;
+  }
+
+private:
+  void cd_beg() const {
+    axis& self = const_cast<axis&>(*this);
+    CHPWDF(self.m_tmp);
+    CHCDIR(m_path," ");
+  }
+  void cd_end() const {CHCDIR(m_tmp," ");}
+private:
+  std::string m_path;
+  int m_id;
+  int m_dimension;
+  bool m_is_x;
+  bool m_fixed;
+  char m_tmp[1024];
+};
+
+}}
+
+#endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc,v 1.18 2010/11/11 11:30:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UIbatch.cc,v 1.18 2010-11-11 11:30:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -33,6 +33,7 @@
 #include "G4UIbatch.hh"
 #include "G4UImanager.hh"
 #include <vector>
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////
 static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
@@ -40,8 +41,8 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 {
   const char* delimiter= " ";
 
-  str_size pos0= str.find_first_not_of(delimiter);
-  str_size pos = str.find_first_of(delimiter, pos0);
+  G4String::size_type pos0= str.find_first_not_of(delimiter);
+  G4String::size_type pos = str.find_first_of(delimiter, pos0);
   
   while (pos != G4String::npos || pos0 != G4String::npos) {
     if (str[pos0] == '\"') {
@@ -132,8 +133,9 @@ G4String G4UIbatch::ReadCommand()
         qcontinued= true;
         // check nothing after line continuation character
         if( i != G4int(tokens.size())-1) {
-          G4Exception("unexpected character after "
-                      "line continuation character");
+          G4Exception("G4UIbatch::ReadCommand","UI0003",
+             JustWarning,
+             "unexpected character after line continuation character");
         }
         break; // stop parsing
       }

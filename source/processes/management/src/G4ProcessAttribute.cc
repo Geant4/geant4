@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.cc,v 1.6 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ProcessAttribute.cc,v 1.6 2010-10-30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -63,6 +63,7 @@ G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
     idxProcVector[idx] = right.idxProcVector[idx];
     ordProcVector[idx] = right.ordProcVector[idx];
   }
+  isActive = right.isActive;
 }
 
  G4ProcessAttribute::~G4ProcessAttribute()
@@ -70,7 +71,7 @@ G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
    // do nothing
 }
 
-G4ProcessAttribute & G4ProcessAttribute::operator=(G4ProcessAttribute &right)
+G4ProcessAttribute & G4ProcessAttribute::operator=(const G4ProcessAttribute &right)
 {
   if (this != &right) {
     pProcess       = right.pProcess;

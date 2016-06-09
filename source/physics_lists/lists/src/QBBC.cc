@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.10 2010/11/19 19:50:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: QBBC.cc,v 1.10 2010-11-19 19:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,8 +33,10 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-// 24.11.06 Add G4HadronHElasticPhysics and G4NeutronTrackingCut
-// 16.05.2007 V.Ivanchenko: rename EM builders
+// 24.11.06 V.Ivanchenko: Add G4HadronHElasticPhysics and G4NeutronTrackingCut
+// 16.05.07 V.Ivanchenko: rename EM builders
+// 20.04.11 V.Ivanchenko: remove extra headers of elastic builders
+//                        added FTFP/Binary ion physics 
 //
 //----------------------------------------------------------------------------
 //
@@ -52,26 +54,24 @@
 #include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
-#include "G4HadronElasticPhysics93.hh"
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
-#include "G4HadronDElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
-QBBC::QBBC( G4int ver, const G4String& type )
+QBBC::QBBC( G4int ver, const G4String&)
 {
-  G4DataQuestionaire it(photon, neutron, no, no, no, neutronxs);
-  G4cout << "<<< Geant4 Physics List simulation engine: QBBC of type <"
-	 << type <<">" <<G4endl;	
-  G4cout <<G4endl;
+  G4DataQuestionaire it(photon, neutronxs);
+  G4cout << "<<< Reference Physics List QBBC "
+	 <<G4endl;	
+
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(ver);
 
   // EM Physics
-  //RegisterPhysics( new G4EmStandardPhysics(ver));
-  RegisterPhysics( new G4EmStandardPhysics_option2(ver) );
+  RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics( new G4EmExtraPhysics(ver) );
@@ -83,7 +83,8 @@ QBBC::QBBC( G4int ver, const G4String& type )
   RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
 
   RegisterPhysics( new G4QStoppingPhysics(ver) );
-  RegisterPhysics( new G4IonBinaryCascadePhysics(ver) );
+
+  RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver) );
 
   RegisterPhysics( new G4HadronInelasticQBBC(ver));
 

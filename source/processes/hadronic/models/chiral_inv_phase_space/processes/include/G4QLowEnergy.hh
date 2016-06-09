@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.2 2010/01/14 11:24:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QLowEnergy.hh,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy header ----------------
 //                 by Mikhail Kossov, Aug 2007.

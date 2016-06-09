@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.27 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.26 2010/11/16 16:28:56 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -247,7 +247,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
   }
 
   if(esrem >= 1.0e-3) {
-    evapora(zprf,aprf,ee,jprf, &zf, &af, &mtota, &pleva, &pxeva, &pyeva, &ff, &inttype, &inum);
+    evapora(zprf,aprf,&ee,jprf, &zf, &af, &mtota, &pleva, &pxeva, &pyeva, &ff, &inttype, &inum);
   }
   else {
     ff = 0; 
@@ -458,7 +458,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
       G4double zf1 = 0.0, af1 = 0.0, malpha1 = 0.0, ffpleva1 = 0.0, ffpxeva1 = 0.0, ffpyeva1 = 0.0;
       G4int ff1 = 0, ftype1 = 0;
-      evapora(zff1, aff1, epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
+      evapora(zff1, aff1, &epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
 	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
       // C On ajoute le fragment:
       volant->iv = volant->iv + 1;
@@ -535,7 +535,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
       G4double zf2 = 0.0, af2 = 0.0, malpha2 = 0.0, ffpleva2 = 0.0, ffpxeva2 = 0.0, ffpyeva2 = 0.0;
       G4int ff2 = 0, ftype2 = 0;
-      evapora(zff2,aff2,epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
+      evapora(zff2,aff2,&epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
 	      &ffpxeva2,&ffpyeva2,&ff2,&ftype2,&inum);
       // C On ajoute le fragment:
       volant->iv = volant->iv + 1;
@@ -970,7 +970,9 @@ void G4Abla::initEvapora()
     }
   }
   else {
-    G4Exception("ERROR: Failed to read datafiles.");
+    // G4Exception("ERROR: Failed to read datafiles.");
+    G4Exception("G4Abla::initEvapora()", "HAD_INCL_0000", FatalException,
+                "Failed to read datafiles");
   }
   
   for(int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
@@ -1044,11 +1046,7 @@ void G4Abla::mglw(G4double a, G4double z, G4double *el)
   // MODEL DE LA GOUTTE LIQUIDE DE C. F. WEIZSACKER.
   // USUALLY AN OBSOLETE OPTION
 
-  G4int a1 = 0, z1 = 0;
   G4double xv = 0.0, xs = 0.0, xc = 0.0, xa = 0.0;                                   
-
-  a1 = idnint(a);
-  z1 = idnint(z);
 
   if ((a <= 0.01) || (z < 0.01)) {
     (*el) = 1.0e38;
@@ -1197,13 +1195,14 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
   return fissilityResult;
 }
 
-void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
+void G4Abla::evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 		     G4double *zf_par, G4double *af_par, G4double *mtota_par,
 		     G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
 		     G4int *ff_par, G4int *inttype_par, G4int *inum_par)
 {
   G4double zf = (*zf_par);
   G4double af = (*af_par);
+  G4double ee = (*ee_par);
   G4double mtota = (*mtota_par);
   G4double pleva = (*pleva_par);
   G4double pxeva = (*pxeva_par);
@@ -1341,7 +1340,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   static G4double epsiln = 0.0, probp = 0.0, probn = 0.0, proba = 0.0, ptotl = 0.0, e = 0.0;  
   static G4double sn = 0.0, sbp = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0;
   G4double ecn = 0.0, ecp = 0.0,eca = 0.0, bp = 0.0, ba = 0.0;         
-  static G4double pteva = 0.0;                       
 
   static G4int itest = 0;
   static G4double probf = 0.0;
@@ -1360,7 +1358,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   zf = zprf;
   af = aprf;
   pleva = 0.0;
-  pteva = 0.0;
   pxeva = 0.0;
   pyeva = 0.0;
 
@@ -1565,6 +1562,7 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
  evapora100:
   (*zf_par) = zf;
   (*af_par) = af;
+  (*ee_par) = ee;
   (*mtota_par) = mtota;
   (*pleva_par) = pleva;
   (*pxeva_par) = pxeva;
@@ -1583,8 +1581,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 		    G4double *ecp_par,G4double *eca_par, G4double *bp_par,
 		    G4double *ba_par, G4int, G4int inum, G4int itest)
 {
-  G4int dummy0 = 0;
-  
   G4double probp = (*probp_par);
   G4double probn = (*probn_par);
   G4double proba = (*proba_par);
@@ -1917,17 +1913,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     else {
       ecp = 2.0 * pt;
     }
-
-  direct2914:
-    dummy0 = 0;
-    //    G4cout <<""<<G4endl;
   }
   else {
     densp = 0.0;
     ecp = 0.0;
     pt = 0.0;
   }
-
+ direct2914:
   if (in >= 2) {
     bshell = ecld->ecgnz[in-1][iz] - ecld->vgsld[in-1][iz];
     defbet = 1.5e0 * (ecld->alpha[in-1][iz]);
@@ -1972,20 +1964,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 	if(verboseLevel > 2)
 	  G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
     }
-//       if((ecn + sn) <= eer) {
-// 	ecn = 2.0 * nt;
-// 	G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
-//       }
-    direct2915: 
-      dummy0 = 0;
-      //      G4cout <<"" <<G4endl;
   } 
   else {
     densn = 0.0;
     ecn = 0.0;
     nt = 0.0;
   }
-
+ direct2915:
   if ((in >= 3) && (iz >= 3)) {
     bshell = ecld->ecgnz[in-2][iz-2] - ecld->vgsld[in-2][iz-2];
     defbet = 1.5 * (ecld->alpha[in-2][iz-2]);
@@ -2029,15 +2014,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     else {
       eca = 2.0 * at;
     }
-    direct2916:
-      dummy0 = 0;
-      //      G4cout <<"" << G4endl;
   }
   else {
     densa = 0.0;
     eca = 0.0;
     at = 0.0;
   }
+ direct2916:
   //} // PK
 
   // special treatment for unbound nuclei                                                
@@ -2317,7 +2300,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   G4double ecor = 0.0;
   G4double ecor1 = 0.0;
   G4double ecr = 0.0;
-  G4double er = 0.0;
   G4double fe = 0.0;
   G4double fp = 0.0;
   G4double he = 0.0;
@@ -2338,12 +2320,11 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 
   G4double pi6 = std::pow(3.1415926535,2) / 6.0;
   ecr=10.0;
-  er=28.0;
   afp=idnint(a);
   iz=idnint(z);
 
   // level density parameter                                               
-  if((ald->optafan == 1)) {
+  if(ald->optafan == 1) {
     pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
   }
   else {
@@ -2392,8 +2373,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 	parite(z,&parz);
 	if (parz > 0.e0) {
 	  e = e - 2.0*delta0/std::sqrt(a);
-	} else {
-	  e = e;
 	}
       }
     } else {                                                          
@@ -2551,15 +2530,11 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   G4double f = 0.0, ca = 0.0, w = 0.0, dp = 0.0, dn = 0.0, dpn = 0.0, efl = 0.0;
   G4double rmac = 0.0, bs = 0.0, h = 0.0, r0 = 0.0, kf = 0.0, ks = 0.0;
   G4double kv = 0.0, rp = 0.0, ay = 0.0, aden = 0.0, x0 = 0.0, y0 = 0.0;
-  G4double mh = 0.0, mn = 0.0, esq = 0.0, ael = 0.0, i = 0.0;
+  G4double esq = 0.0, ael = 0.0, i = 0.0;
   G4double pi = 3.141592653589793238e0;
 
   // fundamental constants
   // hydrogen-atom mass excess
-  mh  = 7.289034;
-
-  // neutron mass excess
-  mn  = 8.071431;
 
   // electronic charge squared
   esq = 1.4399764;
@@ -3348,7 +3323,7 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
 }
 
 //       SUBROUTINE TRANSLAB(GAMREM,ETREM,CSREM,NOPART,NDEC)
-void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int nopart, G4int ndec)
+void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int /*unused*/, G4int ndec)
 {
   // c Ce subroutine transforme dans un repere 1 les impulsions pcv des 
   // c particules acv, zcv et de cosinus directeurs xcv, ycv, zcv calculees 
@@ -3378,7 +3353,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 
   // C Matrice de rotation dans le labo:
   G4double avv = 0.0, zvv = 0.0, enerj = 0.0, plab = 0.0, tetlab = 0.0, philab = 0.0;
-  G4int itypcasc = 0;
   G4double sitet = std::sqrt(std::pow(csrem[1],2)+std::pow(csrem[2],2));
   G4double cstet = 0.0, siphi = 0.0, csphi = 0.0;
   G4double R[4][4];
@@ -3416,7 +3390,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
     R[3][3] = 1.0;
   } //endif
 
-  G4int intp = 0;
   G4double el = 0.0;
   G4double masse = 0.0;
   G4double er = 0.0;
@@ -3430,7 +3403,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
   }
   ndec = 1;
   for(G4int i = ndec; i <= volant->iv; i++) { //do i=ndec,iv
-    intp = i + nopart;
     if(volant->copied[i]) continue; // Avoid double copying
 #ifdef USE_LEGACY_CODE
     varntp->ntrack = varntp->ntrack + 1;
@@ -3453,7 +3425,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 #else
     avv = nint(volant->acv[i]);
     zvv = nint(volant->zpcv[i]);
-    itypcasc = 0;    
 #endif
     // transformation de lorentz remnan --> labo:
 #ifdef USE_LEGACY_CODE
@@ -3872,15 +3843,8 @@ G4int G4Abla::idint(G4double a)
 
 G4int G4Abla::idnint(G4double value)
 {
-  G4double valueCeil = int(std::ceil(value));
-  G4double valueFloor = int(std::floor(value));
-
-  if(std::fabs(value - valueCeil) < std::fabs(value - valueFloor)) {
-    return int(valueCeil);
-  }
-  else {
-    return int(valueFloor);
-  }
+  if(value > 0.0) return (int (std::ceil(value)));
+  else return (int (std::floor(value)));
 }
 
 G4double G4Abla::dmin1(G4double a, G4double b, G4double c)

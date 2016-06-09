@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenTouchable.hh,v 1.2 2009/10/12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenTouchable.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -68,28 +68,29 @@ G4GMocrenTouchable::G4GMocrenTouchable(G4int & _depth0, G4int & _depth1) {
 }
 
 const G4ThreeVector& G4GMocrenTouchable::GetTranslation(G4int depth) const {
-  // to avoid a warning in the compile process
-  G4int dummydepth;
-  dummydepth = depth;
-
-  G4ThreeVector * vec = 0;
+  // never used
+  // in the purpose to avoid a warning in the compile process
+  G4ThreeVector * vec = new G4ThreeVector();
+  *vec *= static_cast<G4double>(depth);
   return *vec;
 }
 const G4RotationMatrix* G4GMocrenTouchable::GetRotation(G4int depth) const {
-  // to avoid a warning in the compile process
-  G4int dummydepth;
-  dummydepth = depth;
-
-  G4RotationMatrix * rot = 0;
+  // never used
+  // in the puspose to avoid a warning in the compile process
+  G4RotationMatrix * rot = new G4RotationMatrix();
+  rot->setPhi(static_cast<G4double>(depth));
   return rot;
 }
 inline
 G4int G4GMocrenTouchable::GetReplicaNumber(G4int depth) const {
   if(depth > 1) {
-    G4Exception("G4GMocrenTouchable::GetReplicaNumber(G4int)", "NotApplicable",
+    G4Exception("G4GMocrenTouchable::GetReplicaNumber(G4int)", "gMocren0001",
 		FatalException, "depth number is less than 2.");
   }
-  return  repno[depth];
+  G4int rvalue;
+  if(depth < 2) rvalue = depth;
+  else rvalue = 0;
+  return  rvalue;
 }
 
 

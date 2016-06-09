@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.15 2008/05/30 16:04:40 grichine Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PAIxSection.hh,v 1.15 2008-05-30 16:04:40 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIxSection.hh -- header file
@@ -42,8 +42,8 @@
 //
 // History:
 //
-// 19.10.03, V. Grichine: Integral dEdx was added for G4PAIModel class  
-//                       
+// 28.10.11, V. Ivanchenko: Migration of exceptions to the new design 
+// 19.10.03, V. Grichine: Integral dEdx was added for G4PAIModel class 
 // 13.05.03, V. Grichine: Numerical instability was fixed in SumOverInterval/Border 
 //                        functions
 // 10.02.02, V. Grichine: New functions and arrays/gets for Cerenkov and 
@@ -210,9 +210,12 @@ public:
 	  inline G4double GetIntegralPlasmon(G4int i) const;
 	  inline G4double GetIntegralResonance(G4int i) const;
 
-protected :
-
 private :
+
+  void CallError(G4int i, const G4String& methodName) const;
+
+  G4PAIxSection & operator=(const G4PAIxSection &right);
+  G4PAIxSection(const G4PAIxSection&);
 
 // Local class constants
  
@@ -283,7 +286,6 @@ G4double fPAItable[500][112]; // Output array
 ////////////////  Inline methods //////////////////////////////////
 //
 
-
 inline G4double G4PAIxSection::GetPAItable(G4int i, G4int j) const
 {
    return fPAItable[i][j];
@@ -296,65 +298,44 @@ inline G4double G4PAIxSection::GetLorentzFactor(G4int j) const
 
 inline G4double G4PAIxSection::GetSplineEnergy(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-      G4Exception("Invalid argument in G4PAIxSection::GetSplineEnergy");
-   }
-   return fSplineEnergy[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetSplineEnergy"); }
+  return fSplineEnergy[i];
 }
 	  
 inline G4double G4PAIxSection::GetIntegralPAIxSection(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralPAIxSection");
-   }
-   return fIntegralPAIxSection[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPAIxSection"); }
+  return fIntegralPAIxSection[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralPAIdEdx(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralPAIxSection");
-   }
-   return fIntegralPAIdEdx[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPAIdEdx"); }
+  return fIntegralPAIdEdx[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralCerenkov(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralCerenkov");
-   }
-   return fIntegralCerenkov[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralCerenkov"); }
+  return fIntegralCerenkov[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralMM(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralMM");
-   }
-   return fIntegralMM[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralMM"); }
+  return fIntegralMM[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralPlasmon(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralPlasmon");
-   }
-   return fIntegralPlasmon[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPlasmon"); }
+  return fIntegralPlasmon[i];
 }
 
 inline G4double G4PAIxSection::GetIntegralResonance(G4int i) const 
 {
-   if(i < 1 || i > fSplineNumber)
-   {
-    G4Exception("Invalid argument in G4PAIxSection::GetIntegralResonance");
-   }
-   return fIntegralResonance[i];
+  if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralResonance"); }
+  return fIntegralResonance[i];
 }
 
 #endif   

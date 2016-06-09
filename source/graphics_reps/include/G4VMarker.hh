@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.13 2009/02/24 10:58:04 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VMarker.hh,v 1.13 2009-02-24 10:58:04 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.
@@ -101,11 +101,16 @@ public: // With description
   //////////////////////////////////////////////////////
   // Constructors...
   G4VMarker ();
-  G4VMarker (const G4Point3D& pos);
+  G4VMarker (const G4VMarker&);
+  G4VMarker (const G4Point3D& position);
 
   //////////////////////////////////////////////////////
   // Destructor...
   virtual ~G4VMarker ();
+
+  //////////////////////////////////////////////////////
+  // Assignment...
+  G4VMarker& operator = (const G4VMarker&);
 
   //////////////////////////////////////////////////////
   // Logical...

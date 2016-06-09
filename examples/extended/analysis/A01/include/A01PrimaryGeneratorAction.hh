@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PrimaryGeneratorAction.hh,v 1.4 2006/06/29 16:31:35 gunter Exp $
+// $Id: A01PrimaryGeneratorAction.hh,v 1.4 2006-06-29 16:31:35 gunter Exp $
 // --------------------------------------------------------------
 //
 

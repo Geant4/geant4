@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.22 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExtrudedSolid.cc,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -62,37 +62,41 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // General constructor 
 
-  G4String errorDescription = "InvalidSetup in \"";
-  errorDescription += pName;
-  errorDescription += "\"";
-
   // First check input parameters
 
   if ( fNv < 3 )
   {
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-                FatalException, "Number of polygon vertices < 3");
+    std::ostringstream message;
+    message << "Number of polygon vertices < 3 - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
      
   if ( fNz < 2 )
   {
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-                FatalException, "Number of z-sides < 2");
+    std::ostringstream message;
+    message << "Number of z-sides < 2 - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
      
   for ( G4int i=0; i<fNz-1; ++i ) 
   {
     if ( zsections[i].fZ > zsections[i+1].fZ ) 
     {
-      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-        FatalException, 
-        "Z-sections have to be ordered by z value (z0 < z1 < z2 ...)");
+      std::ostringstream message;
+      message << "Z-sections have to be ordered by z value (z0 < z1 < z2...) - "
+              << pName;
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+                  FatalErrorInArgument, message);
     }
     if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
     {
-      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-        FatalException, 
-        "Z-sections with the same z position are not supported.");
+      std::ostringstream message;
+      message << "Z-sections with the same z position are not supported - "
+              << pName;
+      G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0001",
+                  FatalException, message);
     }
   }  
   
@@ -114,7 +118,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   }
   else {
     // Polygon vertices are defined anti-clockwise, we revert them
-    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
     //            JustWarning, 
     //            "Polygon vertices defined anti-clockwise, reverting polygon");      
     for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
@@ -129,8 +133,10 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-                FatalException, "Making facets failed.");
+    std::ostringstream message;
+    message << "Making facets failed - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0003",
+                FatalException, message);
   }
   fIsConvex = IsConvex();
 
@@ -157,16 +163,14 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 {
   // Special constructor for solid with 2 z-sections
 
-  G4String errorDescription = "InvalidSetup in \"";
-  errorDescription += pName;
-  errorDescription += "\"";
-
   // First check input parameters
   //
   if ( fNv < 3 )
   {
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-                FatalException, "Number of polygon vertices < 3");
+    std::ostringstream message;
+    message << "Number of polygon vertices < 3 - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
      
   // Check if polygon vertices are defined clockwise
@@ -191,7 +195,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   else
   {
     // Polygon vertices are defined anti-clockwise, we revert them
-    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
+    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
     //            JustWarning, 
     //            "Polygon vertices defined anti-clockwise, reverting polygon");      
     for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
@@ -205,8 +209,10 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   G4bool result = MakeFacets();
   if (!result)
   {   
-    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
-                FatalException, "Making facets failed.");
+    std::ostringstream message;
+    message << "Making facets failed - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0003",
+                FatalException, message);
   }
   fIsConvex = IsConvex();
 
@@ -558,8 +564,9 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       counter++;
       
       if ( counter > fNv) {
-        G4Exception("G4ExtrudedSolid::AddGeneralPolygonFacets", "InvalidSetup" ,
-                    FatalException, "Triangularisation has failed.");
+        G4Exception("G4ExtrudedSolid::AddGeneralPolygonFacets",
+                    "GeomSolids0003", FatalException,
+                    "Triangularisation has failed.");
         break;
       }  
     }
@@ -763,7 +770,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   for ( G4int i=0; i<fNv; ++i )
   {
     G4int j = (i+1) % fNv;
-    if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
+    if ( IsSameLineSegment(pscaled, fPolygon[i], fPolygon[j]) )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on polygon) "
       //        << G4endl;
@@ -838,6 +845,7 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p) const
 
 std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -865,7 +873,7 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   }     
 
 /*
-  // Triangles (for debogging)
+  // Triangles (for debugging)
   os << G4endl; 
   os << " Triangles:" << G4endl;
   os << " Triangle #   vertex1   vertex2   vertex3" << G4endl;
@@ -879,5 +887,7 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
         << G4endl;
   }          
 */
+  os.precision(oldprc);
+
   return os;
 }  

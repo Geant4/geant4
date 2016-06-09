@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:08:07 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:08:07 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -45,12 +46,16 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
     HEADERS
         G4AlphaInelasticProcess.hh
+        G4AntiAlphaInelasticProcess.hh
+        G4AntiDeuteronInelasticProcess.hh
+        G4AntiHe3InelasticProcess.hh
         G4AntiLambdaInelasticProcess.hh
         G4AntiNeutronInelasticProcess.hh
         G4AntiOmegaMinusInelasticProcess.hh
         G4AntiProtonInelasticProcess.hh
         G4AntiSigmaMinusInelasticProcess.hh
         G4AntiSigmaPlusInelasticProcess.hh
+        G4AntiTritonInelasticProcess.hh
         G4AntiXiMinusInelasticProcess.hh
         G4AntiXiZeroInelasticProcess.hh
         G4DeuteronInelasticProcess.hh
@@ -64,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroLInelasticProcess.hh
         G4KaonZeroSInelasticProcess.hh
         G4LambdaInelasticProcess.hh
+        G4MuonNuclearProcess.hh
         G4NeutronInelasticProcess.hh
         G4OmegaMinusInelasticProcess.hh
         G4PhotoNuclearProcess.hh
@@ -74,18 +80,52 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4SigmaMinusInelasticProcess.hh
         G4SigmaPlusInelasticProcess.hh
         G4TritonInelasticProcess.hh
+        G4WHadronElasticProcess.hh
         G4XiMinusInelasticProcess.hh
         G4XiZeroInelasticProcess.hh
     SOURCES
+        G4AlphaInelasticProcess.cc
+        G4AntiAlphaInelasticProcess.cc
+        G4AntiDeuteronInelasticProcess.cc
+        G4AntiHe3InelasticProcess.cc
+        G4AntiLambdaInelasticProcess.cc
+        G4AntiNeutronInelasticProcess.cc
+        G4AntiOmegaMinusInelasticProcess.cc
+        G4AntiProtonInelasticProcess.cc
+        G4AntiSigmaMinusInelasticProcess.cc
+        G4AntiSigmaPlusInelasticProcess.cc
+        G4AntiTritonInelasticProcess.cc
+        G4AntiXiMinusInelasticProcess.cc
+        G4AntiXiZeroInelasticProcess.cc
+        G4DeuteronInelasticProcess.cc
         G4ElectronNuclearProcess.cc
         G4HadronCaptureProcess.cc
         G4HadronElasticProcess.cc
         G4HadronFissionProcess.cc
+        G4IonInelasticProcess.cc
+        G4KaonMinusInelasticProcess.cc
+        G4KaonPlusInelasticProcess.cc
+        G4KaonZeroLInelasticProcess.cc
+        G4KaonZeroSInelasticProcess.cc
+        G4LambdaInelasticProcess.cc
+        G4MuonNuclearProcess.cc
+        G4NeutronInelasticProcess.cc
+        G4OmegaMinusInelasticProcess.cc
         G4PhotoNuclearProcess.cc
+        G4PionMinusInelasticProcess.cc
+        G4PionPlusInelasticProcess.cc
         G4PositronNuclearProcess.cc
+        G4ProtonInelasticProcess.cc
+        G4SigmaMinusInelasticProcess.cc
+        G4SigmaPlusInelasticProcess.cc
+        G4TritonInelasticProcess.cc
+        G4WHadronElasticProcess.cc
+        G4XiMinusInelasticProcess.cc
+        G4XiZeroInelasticProcess.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
+        G4cuts
         G4geometrymng
         G4globman
         G4had_mod_man

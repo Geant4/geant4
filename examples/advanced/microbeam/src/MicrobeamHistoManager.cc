@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MicrobeamHistoManager.cc,v 1.2 2010/11/09 23:27:56 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: MicrobeamHistoManager.cc,v 1.2 2010-11-09 23:27:56 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

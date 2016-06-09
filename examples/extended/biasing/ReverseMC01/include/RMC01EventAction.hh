@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01EventAction.hh,v 1.1 2009/11/19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RMC01EventAction.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01EventAction

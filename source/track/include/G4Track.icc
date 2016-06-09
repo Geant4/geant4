@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.21 2010/11/08 21:25:38 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Track.icc,v 1.21 2010-11-08 21:25:38 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -120,6 +120,14 @@
    inline void G4Track::SetProperTime(const G4double aValue)
    { fpDynamicParticle->SetProperTime(aValue); }
       // Proper time of the current track
+
+// velocity
+   inline G4double G4Track::GetVelocity() const
+   { return fVelocity; }
+
+   inline void  G4Track::SetVelocity(G4double val)
+   { fVelocity = val; }
+ 
 
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
@@ -318,3 +326,4 @@
 
    inline void G4Track::SetStep(const G4Step* aValue)
    { fpStep = aValue; }
+

@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2010/12/15 13:55:06 gcosmo Exp $
+$Id: History,v 1.23 2010-12-15 13:55:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16, 2011 B.Morgan (procscore-V09-04-05)
+- Added G4ParallelWorldProcess files to sources.cmake
+
+November 10, 2011 M.Asai (procscore-V09-04-04)
+- Removed call to obsolete G4Exception in G4EnergySplitter.
+
+August 10, 2011 M.Asai (procscore-V09-04-03)
+- Adding test/test2 for parallel layered mass geometry
+
+August 10, 2011 M.Asai (procscore-V09-04-02)
+- Introducing parallel layered mass geometry
+  G4ParallelWorldProcess takes care of both layered mass geometry
+  and sensitivity of a parallel world.
+
+June 05, 2011 P.Arce (procscore-V09-04-01)
+- Fix in G4ScoreSplittingProcess::PostStepDoIt() to not consider steps
+  if the voxel boundary is not skipped.
+  Addressing problem report #1209.
+
+May 01, 2011 M.Asai (procscore-V09-04-00)
+- Added IsAtRestRequired() method to G4ParallelWorldScoringProcess.
 
 December 15, 2010 G.Cosmo (procscore-V09-03-02)
 - Fixed creation of touchable-history to allow DLL builds on Windows.

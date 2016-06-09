@@ -23,6 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4OpticalPhysicsMessenger
+//
+// Author:      P.Gumplinger 30.09.2009
+//
+// Modified:    P.Gumplinger 29.09.2011
+//              (based on code from I. Hrivnacova)
+//
+//----------------------------------------------------------------------------
+//
+// This class defines commands for the optical physics
+//
 
 #ifndef G4OpticalPhysicsMessenger_h
 #define G4OpticalPhysicsMessenger_h 1
@@ -30,6 +45,7 @@
 #include "globals.hh"
 
 #include "G4UImessenger.hh"
+#include "G4OpticalProcessIndex.hh"
 
 class G4VProcess;
 class G4OpticalPhysics;
@@ -40,16 +56,30 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
+// Messenger class that defines commands for the optical physics
+//
+// Implements commands:
+// - /optics_engine/selectOpProcess  processName
+// - /optics_engine/setOpProcessUse  true|false
+// - /optics_engine/setOpProcessVerbose  verboseLevel
+// - /optics_engine/setCerenkovMaxPhotons maxNofPhotons
+// - /optics_engine/setCerenkovMaxBetaChange maxBetaChange
+// - /optics_engine/setScintillationYieldFactor yieldFactor
+// - /optics_engine/setScintillationByParticleType true|false
+// - /optics_engine/setOpticalSurfaceModel glisur|unified
+// - /optics_engine/setWLSTimeProfile delta|exponential
+// - /optics_engine/setTrackSecondariesFirst true|false
+// - /optics_engine/setFiniteRiseTime true|false
+
 class G4OpticalPhysicsMessenger: public G4UImessenger
 {
-
   public:
 
     G4OpticalPhysicsMessenger(G4OpticalPhysics*);
-    ~G4OpticalPhysicsMessenger();
+    virtual ~G4OpticalPhysicsMessenger();
 
     // methods
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
@@ -62,22 +92,22 @@ private:
 
   // data members
 
-  /// associated clas
+  /// associated class
   G4OpticalPhysics*     fOpticalPhysics;
 
   /// command directory
   G4UIdirectory*         fDir;
 
   /// selected optical process
-  G4VProcess*            fSelectedProcess;
+  G4OpticalProcessIndex  fSelectedProcessIndex;
 
   /// selectOpProcess command
   G4UIcmdWithAString*    fSelectOpProcessCmd;
 
-  /// setCerenkovActivation command
-  G4UIcmdWithABool*      fSetOpProcessActivationCmd;
+  /// setProcessUse command
+  G4UIcmdWithABool*      fSetOpProcessUseCmd;
 
-  /// setCerenkovVerbose command
+  /// setProcessVerbose command
   G4UIcmdWithAnInteger*  fSetOpProcessVerboseCmd;
 
   /// setCerenkovMaxPhotons command
@@ -101,6 +131,9 @@ private:
   /// setTrackSecondariesFirst command
   G4UIcmdWithABool*      fSetTrackSecondariesFirstCmd;
 
+  /// setFiniteRiseTime command
+  G4UIcmdWithABool*      fSetFiniteRiseTimeCmd;
+
 };
 
-#endif
+#endif // G4OpticalPhysicsMessenger_h

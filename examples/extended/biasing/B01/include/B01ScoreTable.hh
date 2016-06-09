@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B01ScoreTable.hh,v 1.1 2007/06/05 18:20:09 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: B01ScoreTable.hh,v 1.1 2007-06-05 18:20:09 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class B01ScoreTable

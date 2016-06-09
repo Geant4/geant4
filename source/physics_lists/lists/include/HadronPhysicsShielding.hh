@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsShielding.hh,v 1.1 2010/06/08 16:05:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsShielding.hh,v 1.1 2010-06-08 16:05:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 class HadronPhysicsShielding : public G4VPhysicsConstructor
 {
   public: 
+    //HadronPhysicsShielding(G4int verbose =1,G4bool blend=false);
     HadronPhysicsShielding(G4int verbose =1);
     HadronPhysicsShielding(const G4String& name, G4bool quasiElastic=false);
     virtual ~HadronPhysicsShielding();
@@ -70,13 +71,16 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
   public: 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
+    void UseLEND( G4String s="" ){useLEND=true;evaluation=s;};
+    void UnuseLEND(){useLEND=false;};
 
   private:
     void CreateModels();
     G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
     
     G4NeutronBuilder * theNeutrons;
-    G4NeutronHPBuilder * theHPNeutron;
+    //G4NeutronHPBuilder * theHPNeutron;
+    G4VNeutronBuilder * theLENeutron;
     G4BertiniNeutronBuilder * theBertiniNeutron;
     G4FTFPNeutronBuilder * theFTFPNeutron;
     G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
@@ -96,6 +100,9 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
     G4VCrossSectionDataSet * BGGxsNeutron;
     G4VCrossSectionDataSet * NeutronHPJENDLHEInelastic;
     G4VCrossSectionDataSet * BGGxsProton;
+
+    G4bool useLEND;
+    G4String evaluation;
 };
 
 #endif

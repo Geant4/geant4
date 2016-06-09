@@ -1,0 +1,48 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_base_histo
+#define tools_hbook_base_histo
+
+#include "axis"
+
+namespace tools {
+namespace hbook {
+
+class base_histo {
+protected:
+  base_histo(int aID):m_path(CHPWD()),m_id(aID){}
+  virtual ~base_histo(){}
+protected:
+  base_histo(const base_histo& aFrom)
+  :m_path(aFrom.m_path),m_id(aFrom.m_id){}
+  base_histo& operator=(const base_histo& aFrom){
+    m_path = aFrom.m_path;
+    m_id = aFrom.m_id;
+    return *this;
+  }
+protected:
+  void cd_beg() const{
+    base_histo& self = const_cast<base_histo&>(*this);
+    CHPWDF(self.m_tmp);
+    CHCDIR(m_path," ");
+  }
+  void cd_end() const {CHCDIR(m_tmp," ");}
+protected:
+  static int hindex(int aIndex,const hbook::axis& aAxis){
+    if(aIndex==hbook::axis::UNDERFLOW_BIN) 
+      return 0;
+    else if(aIndex==hbook::axis::OVERFLOW_BIN) 
+      return aAxis.bins()+1;
+    else 
+      return aIndex+1;
+  }
+protected:
+  std::string m_path;
+  int m_id;
+  char m_tmp[1024];
+};
+
+}}
+
+#endif

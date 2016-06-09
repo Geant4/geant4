@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2010/11/12 19:16:31 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RunAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

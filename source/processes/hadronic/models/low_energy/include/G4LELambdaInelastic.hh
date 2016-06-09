@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LELambdaInelastic.hh,v 1.11 2007-02-26 18:27:08 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LELambdaInelastic.hh,v 1.11 2007/02/26 18:27:08 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy Lambda Inelastic Process
- // J.L. Chuma, TRIUMF, 18-Feb-1997
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy Lambda Inelastic Process
+// J.L. Chuma, TRIUMF, 18-Feb-1997
  
 #ifndef G4LELambdaInelastic_h
 #define G4LELambdaInelastic_h 1
@@ -42,36 +40,32 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
+
  
- class G4LELambdaInelastic : public G4InelasticInteraction
- {
- public:
+class G4LELambdaInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LELambdaInelastic() : G4InelasticInteraction("G4LELambdaInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
-    }
+    G4LELambdaInelastic(const G4String& name = "G4LELambdaInelastic");
     
     ~G4LELambdaInelastic() { }
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
+
+  private:
     
- private:
-    
-    void
-     Cascade(                               // derived from CASL0
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
-    
- };
- 
+    void Cascade(                          // derived from CASL0
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
+};
+
 #endif
- 

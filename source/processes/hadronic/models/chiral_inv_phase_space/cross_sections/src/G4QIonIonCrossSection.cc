@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 19-Aug-07
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QIonIonCrossSection for gamma+A cross sections
@@ -89,7 +89,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
   if(!pPDG)
   {
 #ifdef pdebug
-    G4cout<<"G4QIonIonCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QIonIonCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -313,7 +313,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
       HENE.push_back(lastHENE);      // added HEN Elastic
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW the Magic Formula =================================
+  // =------------= NOW the Magic Formula =--------------------------=
   if (Momentum<lastTH) return 0.;    // It must be already checked in the interface class
   else if (Momentum<Pmin)            // LEN region (approximated in E, not in lnE)
   {

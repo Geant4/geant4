@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:08:23 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:08:23 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -42,6 +42,14 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
@@ -60,12 +68,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4AntiNeutronAnnihilationAtRest.hh
         G4AntiProtonAnnihilationAtRest.hh
         G4DistributionGenerator.hh
+        G4FTFCaptureAtRest.hh
         G4KaonMinusAbsorption.hh
         G4KaonMinusAbsorptionAtRest.hh
         G4MuMinusCaptureCascade.hh
         G4MuonMinusCaptureAtRest.hh
         G4NeutronCaptureAtRest.hh
         G4PiMinusAbsorptionAtRest.hh
+        G4PiMinusAbsorptionBertini.hh
         G4PiMinusStopAbsorption.hh
         G4PiMinusStopAl.hh
         G4PiMinusStopC.hh
@@ -87,12 +97,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4AntiNeutronAnnihilationAtRest.cc
         G4AntiProtonAnnihilationAtRest.cc
         G4DistributionGenerator.cc
+        G4FTFCaptureAtRest.cc
         G4KaonMinusAbsorption.cc
         G4KaonMinusAbsorptionAtRest.cc
         G4MuMinusCaptureCascade.cc
         G4MuonMinusCaptureAtRest.cc
         G4NeutronCaptureAtRest.cc
         G4PiMinusAbsorptionAtRest.cc
+        G4PiMinusAbsorptionBertini.cc
         G4PiMinusStopAbsorption.cc
         G4PiMinusStopAl.cc
         G4PiMinusStopC.cc
@@ -117,7 +129,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4had_mod_man
         G4had_mod_util
         G4had_preequ_exciton
+        G4had_string_diff
+        G4had_string_frag
+        G4had_string_man
+        G4had_theo_max
         G4hadronic_HE
+        G4hadronic_binary
+		G4hadronic_bert_cascade
+        G4hadronic_body_ci
+        G4hadronic_crosec_ci
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_fission
@@ -143,6 +163,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4global
         G4materials
         G4particles
+        G4processes
         G4track
     LINK_LIBRARIES
 )

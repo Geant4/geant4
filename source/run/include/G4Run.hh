@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.16 2007/03/07 03:00:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Run.hh,v 1.16 2007-03-07 03:00:14 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4Run_h

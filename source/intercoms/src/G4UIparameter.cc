@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.14 2006/06/29 19:09:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIparameter.cc,v 1.14 2006-06-29 19:09:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UIparameter.hh"
@@ -47,6 +47,8 @@ G4UIparameter::G4UIparameter():paramERR(0)
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::G4UIparameter(char theType):paramERR(0)
@@ -61,6 +63,8 @@ G4UIparameter::G4UIparameter(char theType):paramERR(0)
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmittable):paramERR(0)
@@ -75,6 +79,8 @@ G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmitt
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::~G4UIparameter()

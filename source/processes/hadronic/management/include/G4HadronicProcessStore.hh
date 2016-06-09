@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.7 2010/07/05 14:50:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicProcessStore.hh,v 1.7 2010-07-05 14:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include "G4HadronicProcessType.hh"
 #include <map>
 #include <vector>
+#include <iostream>
 
 class G4Element;
 class G4HadronicEPTestMessenger;
@@ -84,7 +85,7 @@ public:
   G4double GetInelasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetInelasticCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -99,7 +100,7 @@ public:
   G4double GetElasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetElasticCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -114,7 +115,7 @@ public:
   G4double GetCaptureCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetCaptureCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -129,7 +130,7 @@ public:
   G4double GetFissionCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetFissionCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -144,7 +145,7 @@ public:
   G4double GetChargeExchangeCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetChargeExchangeCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -173,6 +174,8 @@ public:
   void PrintInfo(const G4ParticleDefinition*); 
 
   void Dump(G4int level);
+  void DumpHtml();
+  void PrintHtml(const G4ParticleDefinition*, std::ofstream&);
 
   void SetVerbose(G4int val);
 

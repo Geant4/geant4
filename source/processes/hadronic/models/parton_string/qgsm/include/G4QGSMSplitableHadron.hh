@@ -53,6 +53,8 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
       const G4QGSMSplitableHadron & operator=(const G4QGSMSplitableHadron &right);
 
       virtual void SplitUp();
+      virtual void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
+      virtual void SetSecondParton(G4int PDGcode);  // Uzhi 24.11.10
       virtual G4Parton * GetNextParton();
       virtual G4Parton * GetNextAntiParton();
 
@@ -104,6 +106,10 @@ inline G4Parton* G4QGSMSplitableHadron::GetNextAntiParton()
    return result;
 }
 
+inline void G4QGSMSplitableHadron::SetFirstParton(G4int PDGcode)  // Uzhi 24.11.10
+{PDGcode++;}
+inline void G4QGSMSplitableHadron::SetSecondParton(G4int PDGcode)  // Uzhi 24.11.10
+{PDGcode++;}
 #endif
 
 

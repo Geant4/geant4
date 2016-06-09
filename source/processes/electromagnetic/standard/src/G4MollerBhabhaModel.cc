@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.38 2010/04/06 17:10:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4MollerBhabhaModel.cc,v 1.38 2010-04-06 17:10:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -76,11 +76,12 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
     particle(0),
     isElectron(true),
     twoln10(2.0*log(10.0)),
-    lowLimit(0.2*keV),
+    lowLimit(0.02*keV),
     isInitialised(false)
 {
   theElectron = G4Electron::Electron();
-  if(p) SetParticle(p);
+  if(p) { SetParticle(p); }
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,23 +91,11 @@ G4MollerBhabhaModel::~G4MollerBhabhaModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
-                                           const G4MaterialCutsCouple* /*couple*/)
-{
-  //  G4double electronDensity = couple->GetMaterial()->GetElectronDensity();
-  //G4double Zeff  = electronDensity/couple->GetMaterial()->GetTotNbOfAtomsPerVolume();
-  //return 0.25*sqrt(Zeff)*keV;
-  //return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-  return 0.1*keV;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 						 G4double kinEnergy) 
 {
   G4double tmax = kinEnergy;
-  if(isElectron) tmax *= 0.5;
+  if(isElectron) { tmax *= 0.5; }
   return tmax;
 }
 
@@ -115,10 +104,9 @@ G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
-  SetDeexcitationFlag(false);
+  if(!particle) { SetParticle(p); }
 
-  if(isInitialised) return;
+  if(isInitialised) { return; }
 
   isInitialised = true;
   fParticleChange = GetParticleChangeForLoss();
@@ -126,25 +114,26 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MollerBhabhaModel::ComputeCrossSectionPerElectron(
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double cutEnergy,
-                                                 G4double maxEnergy)
+G4double 
+G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
+						    G4double kineticEnergy,
+						    G4double cutEnergy,
+						    G4double maxEnergy)
 {
-  if(!particle) SetParticle(p);
+  if(!particle) { SetParticle(p); }
 
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  tmax = min(maxEnergy, tmax);
+  tmax = std::min(maxEnergy, tmax);
 
   if(cutEnergy < tmax) {
 
     G4double xmin  = cutEnergy/kineticEnergy;
     G4double xmax  = tmax/kineticEnergy;
-    G4double gam   = kineticEnergy/electron_mass_c2 + 1.0;
+    G4double tau   = kineticEnergy/electron_mass_c2;
+    G4double gam   = tau + 1.0;
     G4double gamma2= gam*gam;
-    G4double beta2 = 1.0 - 1.0/gamma2;
+    G4double beta2 = tau*(tau + 2)/gamma2;
 
     //Moller (e-e-) scattering
     if (isElectron) {
@@ -186,9 +175,7 @@ G4double G4MollerBhabhaModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double cross = Z*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -196,14 +183,25 @@ G4double G4MollerBhabhaModel::ComputeCrossSectionPerAtom(
 G4double G4MollerBhabhaModel::CrossSectionPerVolume(
 					   const G4Material* material,
                                            const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
+                                                 G4double kinEnergy,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
   G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,cutEnergy,maxEnergy);
+  /*
+  G4double Zeff     = eDensity/material->GetTotNbOfAtomsPerVolume();
+  G4double th       = 0.25*sqrt(Zeff)*keV;
+  G4double cut;  
+  if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
+  else           { cut  = std::max(th, cutEnergy); }
+  G4double res = 0.0;
+  // below this threshold no bremsstrahlung
+  if (kinEnergy > th) { 
+    res = eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,cut,maxEnergy);
+  }
+  return res; 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -212,31 +210,32 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 					  const G4Material* material,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
-                                                G4double cutEnergy)
+                                                G4double cut)
 {
-  if(!particle) SetParticle(p);
+  if(!particle) { SetParticle(p); }
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
-  
+  // checl low-energy limit
   G4double electronDensity = material->GetElectronDensity();
+  
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
+  //  G4double cut;  
+  // if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
+  // else           { cut  = std::max(th, cutEnergy); }
   G4double tkin  = kineticEnergy;
-  G4bool   lowEnergy = false;
-  if (kineticEnergy < th) {
-    tkin = th;
-    lowEnergy = true;
-  }
+  if (kineticEnergy < th) { tkin = th; }
+ 
   G4double tau   = tkin/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
-  G4double beta2 = 1. - 1./gamma2;
-  G4double bg2   = beta2*gamma2;
+  G4double bg2   = tau*(tau + 2);
+  G4double beta2 = bg2/gamma2;
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
-  G4double d = min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
+  G4double d = std::min(cut, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
   G4double dedx;
 
   // electron
@@ -251,7 +250,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 
     G4double d2 = d*d*0.5;
     G4double d3 = d2*d/1.5;
-    G4double d4 = d3*d*3.75;
+    G4double d4 = d3*d*0.75;
     G4double y  = 1.0/(1.0 + gam);
     dedx = log(2.0*(tau + 2.0)/eexc2) + log(tau*d)
          - beta2*(tau + 2.0*d - y*(3.0*d2 
@@ -259,30 +258,19 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   } 
 
   //density correction 
-  //G4double cden  = material->GetIonisation()->GetCdensity();
-  //G4double mden  = material->GetIonisation()->GetMdensity();
-  //G4double aden  = material->GetIonisation()->GetAdensity();
-  //G4double x0den = material->GetIonisation()->GetX0density();
-  //G4double x1den = material->GetIonisation()->GetX1density();
-  G4double x     = log(bg2)/twoln10;
-
-  //if (x >= x0den) {
-  //  dedx -= twoln10*x - cden;
-  //  if (x < x1den) dedx -= aden*pow(x1den-x, mden);
-  //}
+  G4double x = log(bg2)/twoln10;
   dedx -= material->GetIonisation()->DensityCorrection(x); 
 
   // now you can compute the total ionization loss
   dedx *= twopi_mc2_rcl2*electronDensity/beta2;
-  if (dedx < 0.0) dedx = 0.0;
-
+  if (dedx < 0.0) { dedx = 0.0; }
+ 
   // lowenergy extrapolation
-
-  if (lowEnergy) {
-
-    if (kineticEnergy >= lowLimit) dedx *= sqrt(tkin/kineticEnergy);
-    else                           dedx *= sqrt(tkin*kineticEnergy)/lowLimit;
-
+ 
+  if (kineticEnergy < th) {
+    x = kineticEnergy/th;
+    if(x > 0.25) { dedx /= sqrt(x); }
+    else { dedx *= 1.4*sqrt(x)/(0.1 + x); }
   }
   return dedx;
 }
@@ -292,14 +280,22 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 					    const G4MaterialCutsCouple*,
 					    const G4DynamicParticle* dp,
-					    G4double tmin,
+					    G4double cutEnergy,
 					    G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = kineticEnergy;
-  if(isElectron) tmax *= 0.5;
-  if(maxEnergy < tmax) tmax = maxEnergy;
-  if(tmin >= tmax) return;
+  //const G4Material* mat = couple->GetMaterial();
+  //G4double Zeff = mat->GetElectronDensity()/mat->GetTotNbOfAtomsPerVolume();
+  // G4double th   = 0.25*sqrt(Zeff)*keV;
+  G4double tmax;
+  G4double tmin = cutEnergy;  
+  if(isElectron) { 
+    tmax = 0.5*kineticEnergy; 
+  } else {
+    tmax = kineticEnergy; 
+  }
+  if(maxEnergy < tmax) { tmax = maxEnergy; }
+  if(tmin >= tmax) { return; }
 
   G4double energy = kineticEnergy + electron_mass_c2;
   G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
@@ -372,8 +368,9 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totalMomentum);
-  G4double sint = 1.0 - cost*cost;
-  if(sint > 0.0) sint = sqrt(sint);
+  G4double sint = (1.0 - cost)*(1. + cost);
+  if(sint > 0.0) { sint = sqrt(sint); }
+  else { sint = 0.0; }
 
   G4double phi = twopi * G4UniformRand() ;
 
@@ -384,11 +381,9 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
   kineticEnergy -= deltaKinEnergy;
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
-  if(kineticEnergy > DBL_MIN) {
-    G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
-    direction = dir.unit();
-    fParticleChange->SetProposedMomentumDirection(direction);
-  }
+  G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
+  direction = dir.unit();
+  fParticleChange->SetProposedMomentumDirection(direction);
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,

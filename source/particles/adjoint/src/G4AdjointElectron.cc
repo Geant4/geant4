@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointElectron.cc,v 1.2 2008/11/13 08:23:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AdjointElectron.cc,v 1.2 2008-11-13 08:23:12 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------

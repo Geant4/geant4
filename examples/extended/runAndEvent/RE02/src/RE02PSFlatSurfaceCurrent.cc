@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02PSFlatSurfaceCurrent.cc,v 1.3 2007/05/18 18:16:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE02PSFlatSurfaceCurrent.cc,v 1.3 2007-05-18 18:16:28 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // RE02PSFlatSurfaceCurrent
 #include "RE02PSFlatSurfaceCurrent.hh"

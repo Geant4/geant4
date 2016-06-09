@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajParam.cc,v 1.3 2007/09/24 16:24:45 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorFreeTrajParam.cc,v 1.3 2007-09-24 16:24:45 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -83,14 +83,12 @@ void G4ErrorFreeTrajParam::Update( const G4Track* aTrack )
 //------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajParam& tp)
 {
-  //  long mode = out.setf(std::ios::fixed,std::ios::floatfield);
-  
-  //  out << tp.theType;
-  //  out << std::setprecision(5) << std::setw(10);
-  out << std::setprecision(8) << " InvP= " << tp.fInvP << " Theta= "
+  G4int oldprc = out.precision(8);
+  out << " InvP= " << tp.fInvP << " Theta= "
       << tp.fLambda << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp
       << " ZPerp= " << tp.fZPerp << G4endl;
   out << " momentum direction= " << tp.fDir << G4endl;
+  out.precision(oldprc);
     
   return out;
 }

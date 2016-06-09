@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.9 2010/09/17 11:34:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QuasiElasticChannel.cc,v 1.9 2010-09-17 11:34:29 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Author : Gunter Folger March 2007
@@ -36,23 +36,37 @@
 // Class Description - End
 //
 // Modified:
+// 20110805  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons()
+// 20110808  M. Kelsey -- Move #includes from .hh, add many missing
 
 #include "G4QuasiElasticChannel.hh"
 
 #include "G4Fancy3DNucleus.hh"
-
-
-#include "G4HadTmpUtil.hh"  //lrint
+#include "G4DynamicParticle.hh"
+#include "G4HadTmpUtil.hh"	  /* lrint */
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4LorentzVector.hh"
+#include "G4Neutron.hh"
+#include "G4Nucleon.hh"
+#include "G4Nucleus.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4QuasiElRatios.hh"
+#include "globals.hh"
+#include <vector>
 
 //#define debug_scatter
 
+
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-{
- theQuasiElastic=G4QuasiFreeRatios::GetPointer();
-}
+  : theQuasiElastic(G4QuasiElRatios::GetPointer()),
+    the3DNucleus(new G4Fancy3DNucleus) {}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
-{}
+{
+  delete the3DNucleus;
+}
 
 G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
     const G4DynamicParticle & thePrimary)
@@ -84,16 +98,16 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
   G4int A=theNucleus.GetA_asInt();
   G4int Z=theNucleus.GetZ_asInt();
   //   build Nucleus and choose random nucleon to scatter with
-  the3DNucleus.Init(theNucleus.GetA_asInt(),theNucleus.GetZ_asInt());
-  const std::vector<G4Nucleon *> nucleons=the3DNucleus.GetNucleons();
-  G4double targetNucleusMass=the3DNucleus.GetMass();                  // M.K. ResNuc
+  the3DNucleus->Init(theNucleus.GetA_asInt(),theNucleus.GetZ_asInt());
+  const std::vector<G4Nucleon>& nucleons=the3DNucleus->GetNucleons();
+  G4double targetNucleusMass=the3DNucleus->GetMass();                  // M.K. ResNuc
   G4LorentzVector targetNucleus4Mom(0.,0.,0.,targetNucleusMass);      // M.K. ResNuc
   G4int index;
   do
   {
     index=G4lrint((A-1)*G4UniformRand());
   } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
-  G4ParticleDefinition * pDef= nucleons[index]->GetDefinition();
+  G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
 
   G4int resA=A-1;                                                     // M.K. ResNuc
   G4int resZ=Z-static_cast<int>(pDef->GetPDGCharge());                // M.K. ResNuc
@@ -112,7 +126,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
            <<pDef->GetParticleName()<<G4endl;
    #endif
 
-  G4LorentzVector pNucleon=nucleons[index]->Get4Momentum();
+  G4LorentzVector pNucleon=nucleons[index].Get4Momentum();
   G4double residualNucleusEnergy=std::sqrt(residualNucleusMass*residualNucleusMass+
                                            pNucleon.vect().mag2());   // M.K. ResNuc
   pNucleon.setE(targetNucleusMass-residualNucleusEnergy);             // M.K. ResNuc

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LFission.hh,v 1.11 2006/06/29 20:44:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LFission.hh,v 1.11 2006-06-29 20:44:27 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Low-energy Model: Fission -- header file
@@ -35,7 +34,6 @@
 //
 // use -scheme for elastic scattering: HPW, 20th June 1997
 // most of the code comes from the old Low-energy Fission class
-//
 
 // Class Description
 // Final state production model for induced fission; 
@@ -67,20 +65,21 @@
 
 class G4LFission : public G4HadronicInteraction
 {
-public:
+  public:
 
-   G4LFission();
-   ~G4LFission();
+    G4LFission(const G4String& name = "G4LFission");
+    ~G4LFission();
  
-   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack,
-                                    G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   static G4double Atomas(const G4double A, const G4double Z);
+    static G4double Atomas(const G4double A, const G4double Z);
 
-private:
+    virtual void ModelDescription(std::ostream& outFile) const;
 
-   void init();
+  private:
 
-   G4double spneut[10];
+    void init();
+    G4double spneut[10];
 };
 #endif

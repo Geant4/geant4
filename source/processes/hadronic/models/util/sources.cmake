@@ -11,8 +11,9 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010/09/29 20:31:16 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:31:16 bmorgan Exp $
 #
+# 20110727  M. Kelsey -- Add G4DecayKineticTracks
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -44,10 +45,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_mod_util
     HEADERS
+	G4DecayKineticTracks.hh
         G4DecayStrongResonances.hh
         G4ExcitedString.hh
         G4ExcitedStringVector.hh
         G4Fancy3DNucleus.hh
+        G4Fancy3DNucleusHelper.hh
         G4FermiMomentum.hh
         G4Fragment.hh
         G4FragmentVector.hh
@@ -62,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4SampleResonance.hh
         G4WilsonRadius.hh
     SOURCES
+	G4DecayKineticTracks.cc
         G4DecayStrongResonances.cc
         G4ExcitedString.cc
         G4Fancy3DNucleus.cc

@@ -23,62 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4B9FermiFragment.cc,v 1.7 2006/06/29 20:12:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4B9FermiFragment.cc,v 1.7 2006-06-29 20:12:39 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko: 
 
 #include "G4B9FermiFragment.hh"
-#include "G4IonTable.hh"
-#include "G4HadronicException.hh"
+#include "G4NucleiProperties.hh"
 
-G4B9FermiFragment::G4B9FermiFragment()
-{
-}
-
-G4B9FermiFragment::G4B9FermiFragment(const G4B9FermiFragment &) : G4UnstableFermiFragment()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4B9FermiFragment::copy_constructor meant to not be accessable");
-}
-
-
-G4B9FermiFragment::~G4B9FermiFragment()
-{
-}
-
-
-const G4B9FermiFragment & G4B9FermiFragment::operator=(const G4B9FermiFragment &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4B9FermiFragment::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4B9FermiFragment::operator==(const G4B9FermiFragment &) const
-{
-    return false;
-}
-
-G4bool G4B9FermiFragment::operator!=(const G4B9FermiFragment &) const
-{
-    return true;
-}
-
-
-
-G4B9FermiFragment::G4B9FermiFragment(const G4int anA, const G4int aZ, const G4int Pol, const G4double ExE)
+G4B9FermiFragment::G4B9FermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE)
   : G4UnstableFermiFragment(anA,aZ,Pol,ExE)
 {
   // B9 ----> alpha + alpha + proton
-
-  G4double alpha_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(2,4);
-  G4double proton_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(1,1);
   
-  Masses.push_back(alpha_mass);
-  Masses.push_back(alpha_mass);
-  Masses.push_back(proton_mass);
+  Masses.push_back(G4NucleiProperties::GetNuclearMass(4,2));
+  Masses.push_back(G4NucleiProperties::GetNuclearMass(4,2));
+  Masses.push_back(CLHEP::proton_mass_c2);
   
   AtomNum.push_back(4);
   AtomNum.push_back(4);
@@ -89,3 +53,6 @@ G4B9FermiFragment::G4B9FermiFragment(const G4int anA, const G4int aZ, const G4in
   Charges.push_back(1);
 
 }
+
+G4B9FermiFragment::~G4B9FermiFragment()
+{}

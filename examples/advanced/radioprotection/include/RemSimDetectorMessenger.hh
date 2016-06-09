@@ -30,8 +30,8 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: RemSimDetectorMessenger.hh,v 1.9 2006/06/29 16:22:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimDetectorMessenger.hh,v 1.9 2006-06-29 16:22:37 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef RemSimDetectorMessenger_h

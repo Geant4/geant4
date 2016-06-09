@@ -23,108 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// History
+// 14/01/11 Alf re-adapt this file from Physiclist of testEm18
 //
-// $Id: XrayFluoPhysicsList.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
-//
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//
-// History:
-// -----------
-//  28 Nov 2001  Elena Guardincerri   Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef XrayFluoPhysicsList_h
 #define XrayFluoPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-//#include "G4LivermorePhotoElectricModel.hh"
 
-//#include "XrayFluoPlaneDetectorConstruction.hh"
-//#include "XrayFluoDetectorConstruction.hh"
-//#include "XrayFluoMercuryConstruction.hh"
-
-
-class G4LowEnergyIonisation;
-class G4LivermorePhotoElectricModel;
-class G4LowEnergyBremsstrahlung;
-class G4eIonisation;
-
-
+class G4VPhysicsConstructor;
 class XrayFluoPhysicsListMessenger;
-class XrayFluoDetectorConstruction;
-class XrayFluoPlaneDetectorConstruction;
-class XrayFluoMercuryDetectorConstruction;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class XrayFluoPhysicsList: public G4VUserPhysicsList
+class XrayFluoPhysicsList: public G4VModularPhysicsList
 {
 public:
-
-  XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
-  XrayFluoPhysicsList(XrayFluoPlaneDetectorConstruction*);
-  XrayFluoPhysicsList(XrayFluoMercuryDetectorConstruction*);
-
-
+  XrayFluoPhysicsList();
   virtual ~XrayFluoPhysicsList();
-  
-protected:
 
-  // Construct particle and physics
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  
-protected:
+  void ConstructParticle();
+        
+  void AddPhysicsList(const G4String& name);
+    
+  void ConstructProcess();    
+  void AddDecay();
+  void AddStepMax();       
 
-  // these methods Construct particles 
-  virtual void ConstructBosons();
-  virtual void ConstructLeptons();
-  virtual void ConstructBarions();
-  virtual void ConstructIons();
-
-protected:
-  // these methods Construct physics processes and register them
-  void ConstructEM();
-  void ConstructGeneral();
-
-public:
- 
   void SetCuts();
-  void SetGammaCut(G4double);
-  void SetElectronCut(G4double);
-
-  void SetGammaLowLimit(G4double);
-  void SetElectronLowLimit(G4double);
-
-  void SetGELowLimit(G4double);
-
-  void SetLowEnSecPhotCut(G4double);
-//  void SetLowEnSecElecCut(G4double);
-  void SetProtonCut(G4double);
-  void SetCutsByEnergy(G4double);
-  
-
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
+  void SetCutForProton(G4double);
+  void SetFluorescence(G4bool);
+  void SetPIXE(G4bool);
+    
 private:
 
+  XrayFluoPhysicsListMessenger* pMessenger; 
 
-  G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel;	
-  XrayFluoPhysicsListMessenger* physicsListMessenger;
+  G4String emName;
+  G4VPhysicsConstructor*  emPhysicsList;
+    
   G4double cutForGamma;
   G4double cutForElectron;
-  G4double cutForProton;
-  XrayFluoDetectorConstruction* pDet;
-  XrayFluoPlaneDetectorConstruction* planeDet;
-  XrayFluoMercuryDetectorConstruction* mercuryDet;
+  G4double cutForPositron;    
+  G4double cutForProton;    
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
-
-
-
 

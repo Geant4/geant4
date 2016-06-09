@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMagFieldLimitProcess.cc,v 1.3 2009/11/11 17:10:33 arce Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ErrorMagFieldLimitProcess.cc,v 1.3 2009-11-11 17:10:33 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

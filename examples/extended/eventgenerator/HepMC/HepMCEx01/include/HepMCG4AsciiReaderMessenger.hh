@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReaderMessenger.hh
-//   $Id: HepMCG4AsciiReaderMessenger.hh,v 1.3 2006/06/29 17:05:20 gunter Exp $
+//   $Id: HepMCG4AsciiReaderMessenger.hh,v 1.3 2006-06-29 17:05:20 gunter Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_ASCII_READER_MESSENGER_H

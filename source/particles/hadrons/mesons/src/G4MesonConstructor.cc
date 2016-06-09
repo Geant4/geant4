@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MesonConstructor.cc,v 1.5 2006/06/29 19:19:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MesonConstructor.cc,v 1.5 2006-06-29 19:19:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "G4AntiDMesonZero.hh"
 #include "G4DsMesonPlus.hh"
 #include "G4DsMesonMinus.hh"
+#include "G4Etac.hh"
 #include "G4JPsi.hh"
 
 #include "G4BMesonPlus.hh"
@@ -64,6 +65,9 @@
 #include "G4AntiBMesonZero.hh"
 #include "G4BsMesonZero.hh"
 #include "G4AntiBsMesonZero.hh"
+#include "G4BcMesonPlus.hh"
+#include "G4BcMesonMinus.hh"
+#include "G4Upsiron.hh"
 
 G4MesonConstructor::G4MesonConstructor()
 {
@@ -103,6 +107,7 @@ void G4MesonConstructor::ConstructCharmMesons()
   G4AntiDMesonZero::AntiDMesonZeroDefinition();
   G4DsMesonPlus::DsMesonPlusDefinition();
   G4DsMesonMinus::DsMesonMinusDefinition();
+  G4Etac::EtacDefinition();
   G4JPsi::JPsiDefinition();
 }
 void G4MesonConstructor::ConstructBottomMesons()
@@ -113,4 +118,7 @@ void G4MesonConstructor::ConstructBottomMesons()
   G4AntiBMesonZero::AntiBMesonZeroDefinition();
   G4BsMesonZero::BsMesonZeroDefinition();
   G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
+  G4BcMesonPlus::BcMesonPlusDefinition();
+  G4BcMesonMinus::BcMesonMinusDefinition();
+  G4Upsiron::UpsironDefinition();
 }

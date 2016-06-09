@@ -14,7 +14,55 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11-Nov-2010 Dennis Wright        (hadr-stopping-V09-03-01)
+09 November 2011 Gunter Folger     (hadr-stopping-V09-04-07)
+------------------------------------------------------------
+-  fix stupid typo in sources.cmake
+
+08 November 2011 Gunter Folger     (hadr-stopping-V09-04-06)
+------------------------------------------------------------
+-  add required include of "Bertini" to GNUmakefile and sources.cmake
+
+07 November 2011  Witold Pokorski  (hadr-stopping-V09-04-05)
+------------------------------------------------------------
+  (entry added by Gunter)
+-  G4PiMinusAbsorptionBertini added. please more detail    ???
+
+02 November 2011  Alberto Ribon    (hadr-stopping-V09-04-04)
+------------------------------------------------------------
+- Migrated G4FTFCaptureAtRest to the new G4Exception.
+  Files affected:
+    G4FTFCaptureAtRest.cc
+
+18 October 2011  Alberto Ribon    (hadr-stopping-V09-04-03)
+-----------------------------------------------------------
+- Added class G4FTFCaptureAtRest to handle nuclear capture
+  of anti-protons at rest with Fritiof.
+  Files affected:
+    G4FTFCaptureAtRest.hh
+    G4FTFCaptureAtRest.cc
+    GNUmakefile
+    sources.cmake
+
+27 September 2011  Dennis Wright  (hadr-stopping-V09-04-02)
+-----------------------------------------------------------
+- Migrate to integer Z and A.  File affected: 
+    G4KaonMinusAbsorptionAtRest.cc
+
+17 September 2011  Dennis Wright  (hadr-stopping-V09-04-01)
+-----------------------------------------------------------
+- G4Exception migration:
+    G4PiMinusAbsorptionAtRest.cc
+    G4KaonMinusAbsorptionAtRest.cc
+
+15-May-2011 Dennis Wright  (hadr-stopping-V09-04-00)
+----------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest.cc, G4AntiProtonAnnihilationAtRest.cc,
+  G4KaonMinusAbsorptionAtRest.cc, G4KaonMinusAbsorption.cc,
+  G4NeutronCaptureAtRest.cc, G4PionMinusAbsorptionAtRest.cc :
+  remove variables which were set but not used, based on warnings from
+  gcc-4.6.0 compiler.
+
+11-Nov-2010 Dennis Wright  (hadr-stopping-V09-03-01)
 ----------------------------------------------------------
 - G4MuonMinusCaptureAtRest::DoMuCapture : fix unused branch  
     pd = G4Deuteron::Deuteron() in mass calculation
@@ -27,7 +75,7 @@ code and to keep track of all tags.
     particles to default of switch/case to avoid possible NULL
     pointers
  
-20-Sep-2010 Gunter Folger        (hadr-stopping-V09-03-00)
+20-Sep-2010 Gunter Folger  (hadr-stopping-V09-03-00)
 ----------------------------------------------------------
 - G4MuonMinusCaptureAtRest use integer A&Z for G4Fancy3DNucleus
 

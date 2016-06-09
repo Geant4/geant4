@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh,v 1.10 2008/06/03 14:30:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonisParamElm.hh,v 1.10 2008-06-03 14:30:10 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // class description
@@ -85,7 +85,7 @@ public:  // with description
 public:  // without description
 
     G4IonisParamElm(G4IonisParamElm&);
-    const G4IonisParamElm& operator=(const G4IonisParamElm&);   
+    G4IonisParamElm& operator=(const G4IonisParamElm&);   
     G4int operator==(const G4IonisParamElm&) const;
     G4int operator!=(const G4IonisParamElm&) const;
      

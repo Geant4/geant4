@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronNuclearProcess.hh,v 1.6 2009/03/31 19:16:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ElectronNuclearProcess.hh,v 1.6 2009-03-31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
@@ -46,9 +46,10 @@ class G4ElectronNuclearProcess : public G4HadronInelasticProcess
 {
 public:
     
-  G4ElectronNuclearProcess( const G4String& processName = "ElectroNuclear" );
+  G4ElectronNuclearProcess(const G4String& processName = "ElectroNuclear" );
   virtual ~G4ElectronNuclearProcess();
 
+  virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

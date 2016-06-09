@@ -1,4 +1,4 @@
-# $Id: ParGNUmakefile,v 1.7 2007/05/25 17:25:51 cooperma Exp $
+# $Id: ParGNUmakefile,v 1.7 2007-05-25 17:25:51 cooperma Exp $
 # --------------------------------------------------------------
 #This file should be included in GNUmakefile of local directory.
 

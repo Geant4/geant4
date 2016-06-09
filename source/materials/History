@@ -1,4 +1,4 @@
-$Id: History,v 1.190 2010/11/23 17:35:54 vnivanch Exp $
+$Id: History,v 1.191 2010-12-23 16:12:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,92 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-11-11 V.Ivanchenko (materials-V09-04-18)
+- G4SandiaTable, G4IonisParamElm, G4IonisParamMat, G4OpticalSurface
+    fixed problems reported by Coverity, mainly in assignment operator
+     
+29-10-11 mma (materials-V09-04-17)
+- G4Exception : unified exceptionCode
+     
+28-10-11 mma (materials-V09-04-16)
+- new scheme for G4Exception
+
+14-10-11 gum (materials-V09-04-15)
+- remove G4MaterialPropertyVector.icc, G4MaterialPropertyVector.cc,
+  G4MPVEntry.hh and G4MPVEntry.cc from sources.cmake and put all
+  entries in alphabetic order
+
+13-10-11 gum (materials-V09-04-14)
+- typedef G4PhysicsOrderedFreeVector G4MaterialPropertyVector;
+  remove G4MPVEntry and modify G4MaterialPropertiesTable accordingly
+     
+20-08-11 mma (materials-V09-04-13)
+- G4Isotope : add flag fm to identify isomer level
+
+14-06-11 V.Ivanchenko (materials-V09-04-12)
+- Fixed typo in previous tag
+
+14-06-11 V.Ivanchenko (materials-V09-04-11)
+- A.Ivanchenko review and updated body tissue compositions
+  according ICRU Report 46 (1992) instead of old data (1975);
+  G4_TESTES_ICRP is renamed to G4_TESTIS_ICRP;
+  removed G4_CYTOSINE, G4_THYMINE, G4_URACIL, because existing 
+  G4_DNA... materials more adequate to DNA applications 
+
+08-06-11 V.Ivanchenko (materials-V09-04-10)
+- G4Material - fixed typo in previous tag
+
+08-06-11 V.Ivanchenko (materials-V09-04-09)
+- G4Element, G4Material - comments to the class are rewritten to
+  address bug report #1220
+- G4NistMaterialBuilder - added two new materials
+
+04-05-11 V.Ivanchenko (materials-V09-04-08)
+03-05-11 V.Ivanchenko (materials-V09-04-07)
+- G4IonisParamMat, G4NistManager, G4NistMessenger - attempt to fix
+  Coverity bugs
+
+01-05-11 V.Ivanchenko (materials-V09-04-06)
+- G4IonisParamMat - cleanup methods, use G4Pow
+- G4NistMaterialBuilder - improved comments 
+
+05-04-11 V.Ivanchenko (materials-V09-04-05)
+- G4IonisParamMat: make method DensityCorrection() inline and make 
+  'twoln10' member of the class
+- G4Material - fixed computation of radiation length and nuclear interaction
+   length when G4Material is constructed from a BaseMaterial
+
+04-04-11 G.Cosmo (materials-V09-04-04)
+- G4IonisParamMat: move method DensityCorrection() to source file, as it is
+  now using static value 'twoln10'. Required for Windows DLLs build.
+
+03-04-11 V.Ivanchenko
+- G4NistManager - implemented forgotten inline method
+
+25-03-11 V.Ivanchenko (materials-V09-04-03)
+- G4ElementData - added extra array
+
+11-03-11 V.Ivanchenko (materials-V09-04-02)
+- G4Material - added extra protections against incorrect mass fraction
+               during material construction
+
+08-03-11 V.Ivanchenko (materials-V09-04-01)
+- G4Material - added Base Material pointer and corresponding methods
+- G4NistMaterial - added constructor of a material using variable
+     density; reduce size of internal vectors
+- G4NistMaterialBuilder - cleanup methods to build materials
+- G4IonisParamMat - use mean ionisation potential provided by user
+     in computation of density effect 
+- G4ExtDEDXTable - try to fix minor Coverity warning
+- G4ElementData - added new class
+
+23-12-10 V.Ivanchenko (materials-V09-04-00)
+- G4SandiaTable - fixed trivial Coverity warning introduced in 
+                  previous tag
+- G4NistMaterialBuilder - fixed warning reported by Coverity concerning 
+                  unnecessary instantiation of an element
+- G4ExtDEDXTable - fixed Coverity warning in RetrievePhysicsTable method
 
 23-11-10 V.Ivanchenko (materials-V09-03-14)
 - G4SandiaTable - V.Grichine Bug fix in G4_Ar 

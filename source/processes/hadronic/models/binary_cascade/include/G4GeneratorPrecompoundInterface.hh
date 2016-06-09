@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeneratorPrecompoundInterface.hh,v 1.6 2010/08/31 16:16:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GeneratorPrecompoundInterface.hh,v 1.6 2010-08-31 16:16:51 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

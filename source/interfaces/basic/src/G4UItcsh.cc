@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.17 2008/07/18 06:37:06 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UItcsh.cc,v 1.17 2008-07-18 06:37:06 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef WIN32
@@ -603,29 +603,29 @@ G4String G4UItcsh::ReadLine()
     // treatment for ESC. character
     if( cc == AsciiESC) { // ESC
       G4cin.get(cc);
-      if (cc == '[' || 'O') { // care for another termcap, such as konsole
-	G4cin.get(cc);
-	switch(cc) {
-	case 'A': // [UP]
-	  cc = 'P' - '@';
-	  PreviousCommand();  // ... show previous commad
-	  break;
-	case 'B': // [DOWN]
-	  cc = 'N' - '@';
-	  NextCommand();  // ... show next commad
-	  break;
-	case 'C': // [RIGHT]
-	  cc = 'F' - '@';
-	  ForwardCursor();   // ... forward cursor
-	  break;
-	case 'D': // [LEFT]
-	  cc = 'B' - '@';
-	  BackwardCursor();      // ... backward cursor
-	  break;
-	default:  // who knows !?
-	  cc = 0;
-	  break;
-	}
+      if (cc == '[' || cc == 'O') { // care for another termcap, such as konsole
+        G4cin.get(cc);
+        switch(cc) {
+        case 'A': // [UP]
+          cc = 'P' - '@';
+          PreviousCommand();  // ... show previous commad
+          break;
+        case 'B': // [DOWN]
+          cc = 'N' - '@';
+          NextCommand();  // ... show next commad
+          break;
+        case 'C': // [RIGHT]
+          cc = 'F' - '@';
+          ForwardCursor();   // ... forward cursor
+          break;
+        case 'D': // [LEFT]
+          cc = 'B' - '@';
+          BackwardCursor();      // ... backward cursor
+          break;
+        default:  // who knows !?
+          cc = 0;
+          break;
+        }
       }
     }
 

@@ -36,10 +36,10 @@
 #include <fstream>
 // #include <strstream>
 
-void G4NeutronHPNInelasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+void G4NeutronHPNInelasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
 {
    // G4cout << "Getting initialized for: "<<A<<" "<< Z<<G4endl;
-   G4NeutronHPInelasticCompFS::Init(A, Z, dirName, aFSType);
+   G4NeutronHPInelasticCompFS::Init(A, Z, M, dirName, aFSType);
    G4double ResidualA = A;
    G4double ResidualZ = Z;
    G4NeutronHPInelasticCompFS::InitGammas(ResidualA, ResidualZ);

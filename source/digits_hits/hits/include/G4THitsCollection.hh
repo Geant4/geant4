@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.7 2010/10/27 08:10:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4THitsCollection.hh,v 1.7 2010-10-27 08:10:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4THitsCollection_h

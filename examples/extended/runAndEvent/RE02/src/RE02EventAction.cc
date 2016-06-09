@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02EventAction.cc,v 1.3 2006/11/18 01:37:24 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE02EventAction.cc,v 1.3 2006-11-18 01:37:24 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "RE02EventAction.hh"
@@ -52,18 +52,19 @@ void RE02EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
   
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
   // periodic printing
   //
   if (event_id < 100 || event_id%100 == 0) {
     G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-    //G4cout << "    " << n_trajectories 
-    //       << " trajectories stored in this event." << G4endl;
+#ifdef print_stored_trajectories
+    // get number of stored trajectories
+    //
+    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
+    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+    G4cout << "    " << n_trajectories 
+           << " trajectories stored in this event." << G4endl;
+#endif
   }
 
 }

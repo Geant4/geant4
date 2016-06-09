@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.7 2009/01/29 08:13:27 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.7 2009-01-29 08:13:27 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -93,6 +93,8 @@ private:
  const G4VEnergySpectrum* theParam;
 
   G4VDataSetAlgorithm* interp;
+  G4int verbose;
+  
 };
  
 #endif

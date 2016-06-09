@@ -23,212 +23,150 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.10 2006/06/29 16:24:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimPhysicsList.cc,v 1.10 2006-06-29 16:24:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Susanna Guatelli
+// Author: Susanna Guatelli, susanna@uow.edu.au
 
 #include "RemSimPhysicsList.hh"
 #include "RemSimPhysicsListMessenger.hh"
-#include "RemSimParticles.hh"
-#include "RemSimPhotonEPDL.hh"
-#include "RemSimElectronEEDL.hh"
-#include "RemSimPositronStandard.hh"
-#include "RemSimIonICRU.hh"
-#include "RemSimMuonStandard.hh"
-#include "RemSimDecay.hh"
-#include "RemSimHadronicBertini.hh"
-#include "RemSimHadronicBinary.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4VProcess.hh"
 
-RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
-					electronIsRegistered(false), 
-					positronIsRegistered(false),
-					photonIsRegistered(false), 
-                                        ionIsRegistered(false),
-                                        hadronicIsRegistered(false),
-                                        decayIsRegistered(false),
-                                        muonIsRegistered(false)
+#include "G4PhysListFactory.hh"
+#include "G4VPhysicsConstructor.hh"
+
+// Physic lists (contained inside the Geant4 distribution)
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4Decay.hh"
+#include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4EmProcessOptions.hh"
+#include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "HadronPhysicsQGSP_BIC.hh"
+// The electromagnetic physics and the decay are 
+// registered by default. The user has to execute the
+// macro physics.mac to activate the hadronic component of the physics.
+// Look vehicle1.mac, vehicle2.mac and moon.mac for example
+
+RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList()
+					
 {
-  defaultCutValue = 1.* mm;
+  defaultCutValue = 0.1* mm;
   //  SetVerboseLevel(1);
 
+  helIsRegistered  = false;
+  bicIsRegistered  = false;
+  bicIonIsRegistered = false;
+  radioactiveDecayIsRegistered = false;
+
   messenger = new RemSimPhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
+  // EM physics
+  emPhysicsList = new G4EmStandardPhysics_option3(1);
  
-  RegisterPhysics( new RemSimParticles("particles") );
+  // Decay physics 
+  decPhysicsList = new G4DecayPhysics();
+  
+  G4cout<< ">> PhysicsList:: G4EmStandardPhysics_option3 activated << "<<G4endl;
+  G4cout<< ">> PhysicsList:: Decay activated << "<<G4endl;
 }
 
 
 RemSimPhysicsList::~RemSimPhysicsList()
 {
   delete messenger;
+  delete emPhysicsList;
+  delete decPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void RemSimPhysicsList::ConstructParticle()
+{
+  decPhysicsList->ConstructParticle();
+}
+
+void RemSimPhysicsList::ConstructProcess()
+{
+  // transportation
+  //
+  AddTransportation();
+
+  // electromagnetic physics list
+  //
+  emPhysicsList->ConstructProcess();
+  em_config.AddModels();
+
+  // decay physics list
+  //
+  decPhysicsList->ConstructProcess();
+
+  // hadronic physics lists
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
+}
 
 void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 {
 
-  G4cout << "Adding PhysicsList chunk " << name << G4endl;
-
-   // Register LowE-EPDL processes for photons
-  if (name == "photon-epdl") 
-    {
-      if (photonIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimPhotonEPDL(name) );
-	  photonIsRegistered = true;
-	}
-    } 
-
-  // Register LowE-EEDL processes for electrons
-  if (name == "electron-eedl") 
-    {
-      if (electronIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing"                  << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimElectronEEDL(name) );
-	  electronIsRegistered = true;
-	}
-    } 
-
-  // Register standard processes for positrons
-  if (name == "positron-standard") 
-    {
-      if (positronIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing"                  << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimPositronStandard(name) );
-	  positronIsRegistered = true;
-	}
-    }
-
-  // Register LowEnergy processes - ICRU Model - for p, alpha, ions. 
-  if (name == "ion-ICRU") 
-    {
-      if (ionIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ----ion e.m. List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimIonICRU(name) );
-	  ionIsRegistered = true;
-	}
-    }
-
- //  // Register hadronic process for p and alpha particle, activating the
-//   // Binary model
-
- 
- if (name == "hadronic-binary") 
-    {
-      if (hadronicIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic physics List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimHadronicBinary(name) );
-	  hadronicIsRegistered = true;
-	}
-    }
+  if (verboseLevel>1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
 
 
-  // Register hadronic process for p and alpha particle, activating the
-  // Bertini model
+ if (name == "elastic" && !helIsRegistered) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegistered = true;
 
-if (name == "hadronic-bertini") 
-    {
-      if (hadronicIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic physics List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimHadronicBertini(name) );
-	  hadronicIsRegistered = true;
-	}
-    }
+  } else if (name == "DElastic" && !helIsRegistered) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronDElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegistered = true;
 
+  } else if (name == "HElastic" && !helIsRegistered) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronHElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
+    helIsRegistered = true;
 
-if (name == "muon-standard") 
-    {
-      if (muonIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered -- muon e.m. List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimMuonStandard(name) );
-	  muonIsRegistered = true;
-	}
-    }
+  } else if (name == "QElastic" && !helIsRegistered) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronQElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
+    helIsRegistered = true;
 
-if (name == "decay") 
-    {
-    if (decayIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay  physics  List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimDecay(name) );
-	  decayIsRegistered = true;
-	}
-    }
+  } else if (name == "binary" && !bicIsRegistered) {
+    hadronPhys.push_back(new HadronPhysicsQGSP_BIC);
+    bicIsRegistered = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: QGSP_BIC" << G4endl;
 
-  if (electronIsRegistered && positronIsRegistered && photonIsRegistered && 
-      ionIsRegistered)
-    {
-      G4cout << "The electromagnetic processes are registered" << G4endl;
-    
-  
-  if (muonIsRegistered && decayIsRegistered && hadronicIsRegistered) 
-    {
-      G4cout << "The hadronic physics is registered for p (up to 100 GeV) and alpha (up to 10 GeV), the e.m. physics for muons is registered, the decay is registered" 
-             << G4endl;
-    }
-    }
+  } else if (name == "binary_ion" && !bicIonIsRegistered) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    bicIonIsRegistered = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4IonBinaryCascadePhysics()" << G4endl;
+  } else if (name == "radioactive_decay" && !radioactiveDecayIsRegistered ) {
+    hadronPhys.push_back(new G4RadioactiveDecayPhysics());
+    radioactiveDecayIsRegistered = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4RadioactiveDecayPhysics()" << G4endl;
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
 }
 
 void RemSimPhysicsList::SetCuts()

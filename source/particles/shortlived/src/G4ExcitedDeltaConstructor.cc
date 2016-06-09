@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 1.13 2010/10/01 02:41:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.13 2010-10-01 02:41:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

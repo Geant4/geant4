@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.29 2010/10/20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DisplacedSolid.cc,v 1.29 2010-10-20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -370,8 +370,8 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
 {
   DumpInfo();
   G4Exception("G4DisplacedSolid::ComputeDimensions()",
-                "NotApplicable", FatalException,
-                "Method not applicable in this context!");
+              "GeomSolids0001", FatalException,
+              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -23,15 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HEPionMinusInelastic.hh,v 1.17 2010/11/29 05:45:06 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEPionMinusInelastic.hh,v 1.17 2010-11-29 05:45:06 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
-
 // A prototype of the Gheisha High Energy collision model.
 
 #ifndef G4HEPionMinusInelastic_h
@@ -64,6 +61,8 @@ class G4HEPionMinusInelastic : public G4HEInelastic
    }
 
    ~G4HEPionMinusInelastic(){ };
+
+   virtual void ModelDescription(std::ostream&) const;
          
    G4int vecLength;
         

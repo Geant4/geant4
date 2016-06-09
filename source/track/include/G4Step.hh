@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.23 2010/11/10 08:42:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Step.hh,v 1.23 2010-11-10 08:42:47 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -84,6 +84,10 @@ class G4Step
 // Constructor/Destrcutor
    G4Step();
    ~G4Step();
+
+// Copy Counstructor and assignment operator
+   G4Step(const G4Step& );
+   G4Step & operator=(const G4Step &);   
 
 //--------
    public: // WIth description
@@ -197,6 +201,9 @@ class G4Step
 
 // Secondary buckets
 public:
+  // secodaries in the current step
+   const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
+
    // NOTE: Secondary bucket of the Step contains  
    //       all secondaries during tracking the current track 
    //       (i.e. NOT secondaries produced in the current step)
@@ -216,6 +223,12 @@ public:
 private: 
    // Secondaty bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;
+
+   // number of secondaries which have been created by the last step
+   G4int  nSecondaryByLastStep;
+
+   typedef const G4Track* CT;
+   std::vector<CT>* secondaryInCurrentStep;
 
   // Prototyping implementation of smooth representation of curved
   // trajectories. (jacek 30/10/2002)

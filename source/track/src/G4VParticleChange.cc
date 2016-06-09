@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.22 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VParticleChange.cc,v 1.22 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -55,17 +55,18 @@ G4VParticleChange::G4VParticleChange():
    theTrueStepLength(0.0),
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
-   verboseLevel(1),
    theParentWeight(1.0),
-   fSetSecondaryWeightByProcess(false),  
-   fSetParentWeightByProcess(true)  
+   isParentWeightSetByProcess(true),
+   isParentWeightProposed(false),
+   fSetSecondaryWeightByProcess(true),
+   verboseLevel(1), 
+   debugFlag(false)
 {
-   debugFlag = false;
 #ifdef G4VERBOSE
   // activate CHeckIt if in VERBOSE mode
   debugFlag = true;
 #endif
-   theListOfSecondaries = new G4TrackFastVector();
+  theListOfSecondaries = new G4TrackFastVector();
 }
 
 G4VParticleChange::~G4VParticleChange() {
@@ -73,12 +74,12 @@ G4VParticleChange::~G4VParticleChange() {
   if (theNumberOfSecondaries>0) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VParticleChange::~G4VParticleChange() Warning  ";
-      G4cerr << "theListOfSecondaries is not empty ";
+      G4cout << "G4VParticleChange::~G4VParticleChange() Warning  ";
+      G4cout << "theListOfSecondaries is not empty ";
     }
 #endif
     for (G4int index= 0; index<theNumberOfSecondaries; index++){
-      if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+      delete (*theListOfSecondaries)[index] ;
     }
   }
   delete theListOfSecondaries; 
@@ -86,62 +87,64 @@ G4VParticleChange::~G4VParticleChange() {
 
 // copy and assignment operators are implemented as "shallow copy"
 G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
-   theNumberOfSecondaries(0),
-   theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
-   theStatusChange(fAlive),
-   theSteppingControlFlag(NormalCondition),     
-   theLocalEnergyDeposit(0.0),
-   theNonIonizingEnergyDeposit(0.0),
-   theFirstStepInVolume(false),
-   theLastStepInVolume(false),
-   verboseLevel(1),
-   theParentWeight(1.0),
-   fSetSecondaryWeightByProcess(false)
+  theListOfSecondaries(right.theListOfSecondaries),
+  theNumberOfSecondaries(right.theNumberOfSecondaries),
+  theSizeOftheListOfSecondaries(right.theSizeOftheListOfSecondaries),
+  theStatusChange( right.theStatusChange),
+  theSteppingControlFlag(right.theSteppingControlFlag),
+  theLocalEnergyDeposit(right.theLocalEnergyDeposit),
+  theNonIonizingEnergyDeposit(right.theNonIonizingEnergyDeposit),
+  theTrueStepLength(right.theTrueStepLength),
+  theFirstStepInVolume( right.theFirstStepInVolume),
+  theLastStepInVolume(right.theLastStepInVolume),
+  theParentWeight(right.theParentWeight),
+  isParentWeightSetByProcess(true),
+  isParentWeightProposed(false),
+  fSetSecondaryWeightByProcess(right.fSetSecondaryWeightByProcess),
+  verboseLevel(right.verboseLevel),
+  debugFlag(right.debugFlag)
 {
-   debugFlag = false;
-#ifdef G4VERBOSE
-  // activate CHeckIt if in VERBOSE mode
-  debugFlag = true;
-#endif
-
-  theListOfSecondaries = right.theListOfSecondaries;
-  theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-  theNumberOfSecondaries = right.theNumberOfSecondaries;
-  theStatusChange = right.theStatusChange;
-  theTrueStepLength = right.theTrueStepLength;
-  theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-  theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
-  theSteppingControlFlag = right.theSteppingControlFlag;
-  fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
-
-  theFirstStepInVolume = right.theFirstStepInVolume;
-  theLastStepInVolume =  right.theLastStepInVolume;
 }
 
 
 G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
 {
-   debugFlag = false;
+  if (this != &right){
+    if (theNumberOfSecondaries>0) {
 #ifdef G4VERBOSE
-  // activate CHeckIt if in VERBOSE mode
-  debugFlag = true;
+      if (verboseLevel>0) {
+	G4cout << "G4VParticleChange: assignment operator Warning  ";
+	G4cout << "theListOfSecondaries is not empty ";
+      }
 #endif
-   if (this != &right)
-   {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
-      fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
+      for (G4int index = 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) delete ((*theListOfSecondaries)[index]) ;
+      }
+    }
+    delete theListOfSecondaries; 
+    
+    theListOfSecondaries = right.theListOfSecondaries;
+    theNumberOfSecondaries = right.theNumberOfSecondaries;
+    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theStatusChange = right.theStatusChange;
+    theSteppingControlFlag = right.theSteppingControlFlag;
+    theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+    theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
+    theTrueStepLength = right.theTrueStepLength;
+    
+    theFirstStepInVolume = right.theFirstStepInVolume;
+    theLastStepInVolume =  right.theLastStepInVolume;
 
-      theFirstStepInVolume = right.theFirstStepInVolume;
-      theLastStepInVolume =  right.theLastStepInVolume;
-   }
-   return *this;
+    theParentWeight = right.theParentWeight;
+    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
+    isParentWeightProposed = right.isParentWeightProposed;
+    fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
+
+    verboseLevel = right.verboseLevel;
+    debugFlag = right.debugFlag;
+    
+  }
+  return *this;
 }
 
 G4bool G4VParticleChange::operator==(const G4VParticleChange &right) const
@@ -154,6 +157,114 @@ G4bool G4VParticleChange::operator!=(const G4VParticleChange &right) const
 {
    return (this != (G4VParticleChange *) &right);
 }
+void G4VParticleChange::AddSecondary(G4Track *aTrack)
+{
+  if (debugFlag) CheckSecondary(*aTrack);
+
+  // add a secondary after size check
+  if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
+    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
+    theNumberOfSecondaries++;
+  } else {
+    delete aTrack;
+
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cout << "G4VParticleChange::AddSecondary() Warning  ";
+      G4cout << "theListOfSecondaries is full !! " << G4endl;
+      G4cout << " The track is deleted " << G4endl;
+    }
+#endif
+    G4Exception("G4VParticleChange::AddSecondary",
+                "TRACK101", JustWarning,
+                "Secondary Bug is full. The track is deleted"); 
+  }
+}
+
+
+ 
+// Virtual methods for updating G4Step 
+//
+
+G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
+{
+  // Update the G4Step specific attributes
+  pStep->SetStepLength( theTrueStepLength );
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  pStep->SetControlFlag( theSteppingControlFlag );
+
+  if (theFirstStepInVolume) {pStep->SetFirstStepFlag();}
+  else                      {pStep->ClearFirstStepFlag();} 
+  if (theLastStepInVolume)  {pStep->SetLastStepFlag();}
+  else                      {pStep->ClearLastStepFlag();} 
+
+  return pStep;
+}
+
+
+G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
+{ 
+  if (isParentWeightProposed ){
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( theParentWeight );
+    }
+
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
+  }
+  return UpdateStepInfo(Step);
+}
+
+
+G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
+{
+  if (isParentWeightProposed ){ 
+    // Weight is relaclulated 
+    G4double newWeight= theParentWeight/(Step->GetPreStepPoint()->GetWeight())*(Step->GetPostStepPoint()->GetWeight());
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( newWeight );
+    }
+ 
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+	}
+      }
+    }
+  }
+  
+  return UpdateStepInfo(Step);
+}
+
+G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
+{
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( theParentWeight );
+    }
+
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
+  }
+
+  return UpdateStepInfo(Step);
+}
+
 
 //----------------------------------------------------------------
 // methods for printing messages  
@@ -267,9 +378,8 @@ G4bool G4VParticleChange::CheckIt(const G4Track& )
   // Exit with error
   if (exitWithError) {
     G4Exception("G4VParticleChange::CheckIt",
-		"100",
-		EventMustBeAborted,
-		"step length and/or energy deposit was  illegal");
+		"TRACK001", EventMustBeAborted,
+		"Step length and/or energy deposit was  illegal");
   }
 
   // correction 
@@ -315,36 +425,21 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
     if (accuracy < accuracyForException) { exitWithError = false;}
     else { exitWithError = true; }
   }
-  G4bool itsOKforProperTime = true;
-  //accuracy = (aTrack.GetProperTime())/ns;
-  //  if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-  //  G4cout << "  G4VParticleChange::CheckSecondary    : ";
-  //  G4cout << "the proper time goes back  !!" << G4endl;
-  //  G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
-#endif
-  //  itsOKforProperTime = false;
-  //  if (accuracy > accuracyForException) exitWithError = true;
-  //}
   
   // Exit with error
   if (exitWithError) {
     G4Exception("G4VParticleChange::CheckSecondary",
-		"10",
-		EventMustBeAborted,  
-		"momentum, energy and/or proper time was illegal");
+		"TRACK002", EventMustBeAborted,  
+		"Momentum, and/or energy was illegal");
   }
 
-  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime;
+  G4bool itsOK = itsOKforMomentum && itsOKforEnergy;
 
   //correction
   if (!itsOKforMomentum) {
     G4double vmag = (aTrack.GetMomentumDirection()).mag();
     aTrack.SetMomentumDirection((1./vmag)*aTrack.GetMomentumDirection());
   }
-  //if (!itsOKforProperTime) {
-  //  aTrack.SetProperTime(0.0);
-  //}
   if (!itsOKforEnergy) {
     aTrack.SetKineticEnergy(0.0);
   }
@@ -363,31 +458,18 @@ G4double G4VParticleChange::GetAccuracyForException() const
   return accuracyForException;
 }
 
-void G4VParticleChange::AddSecondary(G4Track *aTrack)
+
+/////////////////////////////////////////////////////////
+void  G4VParticleChange::SetParentWeightByProcess(G4bool val)
 {
-  if (debugFlag) CheckSecondary(*aTrack);
-
-  if (!fSetSecondaryWeightByProcess){
-    // pass the weight of parent track 
-    aTrack->SetWeight(theParentWeight);
-  }
-
-  // add a secondary after size check
-  if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
-    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
-    theNumberOfSecondaries++;
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
-      G4cerr << "theListOfSecondaries is full !! " << G4endl;
-      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
-    }
-#endif
-  }
+  isParentWeightSetByProcess = val;
 }
 
 
+G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
+{
+  return  isParentWeightSetByProcess;
+}
 
 
 

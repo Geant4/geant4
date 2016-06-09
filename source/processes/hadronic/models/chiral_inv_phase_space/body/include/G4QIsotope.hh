@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.hh,v 1.6 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QIsotope.hh,v 1.6 2009-02-23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //      ---------------- G4QIsotope header ----------------
@@ -63,9 +63,9 @@ public:
   ~G4QIsotope(); // It's public for compilation purposes on Windows, user must not call it!
 
   // Create newElement with the Abundancy vector (User must delete elements of the vector)
-  // ===================================================================================
+  // -----------------------------------------------------------------------------------
   // Example of initialization of the new Element (not natural abanduncies of isotopes):
-  // ======= ---------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
   //std::vector<std::pair<G4int,G4double> >*a= new std::vector<std::pair<G4int,G4double> >;
   // a->push_back(std::make_pair(n1,abundancy1));
   // a->push_back(std::make_pair(n2,abundancy2));
@@ -85,21 +85,19 @@ public:
   G4int InitElement(G4int Z, G4int index, std::vector<std::pair<G4int,G4double>*>* abund);
 
   // The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
-  // ======================================================================================
+  // -----------------------------------------------------------------------------------
   G4int GetLastIndex(G4int Z); // Returns the last defined index (if only natural: =0)
 
   // Indices can have differen numbers (not 1,2,3,...) & in different sequences (9,3,7,...)
-  // ======================================================================================
   G4bool IsDefined(G4int Z, G4int Ind); // Returns true if defined, false, if not defined
 
   // A#ofNeutrons in Element with Z & UseDefIndex. Universal for Nat(index=0) & UserDefElem
-  // ======================================================================================
   G4int GetNeutrons(G4int Z, G4int index=0);//If theElement doesn't exist, returns negative
 
   // #ofProtons in stable isotopes with fixed A=Z+N. Returns length and fils VectOfIsotopes
-  // ======================================================================================
+  // -----------------------------------------------------------------------------------
   // Example of printing of isotopes with A=152:
-  // ======= -----------------------------------
+  // -------------------------------------------
   // G4int A=152;               // A can not be more than 269 
   // std::vector<G4int> isV(4); // At present A with nIso>4 are not known
   // G4int nIso= G4QIsotope::Get()->GetProtons(A, isV); // isV is cleaned up before filling
@@ -107,9 +105,9 @@ public:
   G4int GetProtons(G4int A, std::vector<G4int>& isoV);
 
   // Get a pointer to the vector of pairs(N,CrosS), where N is used to calculate CrosS
-  // =================================================================================
+  // -----------------------------------------------------------------------------------
   // Example of initialization of the Cross Section to randomize weighted isotopes:
-  // ======= ----------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
   // std::vector<std::pair<G4int,G4double>*>* cs= G4QIsotope::Get()->GetCSVector(Z, index);
   // G4int nIs=cs->size; // A#Of Isotopes in the element
   // if(nIs) for(G4int i; i<nIs; i++)

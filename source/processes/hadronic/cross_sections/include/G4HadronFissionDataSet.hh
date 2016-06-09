@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // GEANT4 physics class: G4HadronFissionDataSet -- header file
 // F.W. Jones, TRIUMF, 19-MAY-98
 //
@@ -46,54 +44,24 @@ class G4HadronFissionDataSet : public G4VCrossSectionDataSet
 {
 public:
 
-   G4HadronFissionDataSet()
-   {
-      theHadronCrossSections = G4HadronCrossSections::Instance();
-   }
+  G4HadronFissionDataSet(const G4String& name = "GheishaFissionXS"); 
 
-   ~G4HadronFissionDataSet()
-   {
-   }
+  virtual ~G4HadronFissionDataSet();
 
-   G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
-   {
-      return theHadronCrossSections->IsApplicable(aParticle, anElement);
-   }
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-   G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int AA)
-   {
-     return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
-   }
+  virtual G4bool
+  IsElementApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,
+                      const G4Material*);
 
+  virtual G4double
+  GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z, 
+			 const G4Material*);
 
-   G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement, G4double )
-   {
-      return theHadronCrossSections->GetFissionCrossSection(aParticle,
-                                                              anElement);
-   }
-
-   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                 G4int ZZ, G4int AA,
-                                 G4double /*aTemperature*/)
-   {
-     return theHadronCrossSections->GetFissionCrossSection(aParticle, ZZ, AA);
-   }
-
-
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
-
-   void DumpPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
 
 private:
-
-   G4HadronCrossSections* theHadronCrossSections;
+  
+  G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

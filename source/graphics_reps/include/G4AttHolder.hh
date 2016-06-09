@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.6 2007/06/08 14:24:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AttHolder.hh,v 1.6 2007-06-08 14:24:29 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTHOLDER_HH
 #define G4ATTHOLDER_HH

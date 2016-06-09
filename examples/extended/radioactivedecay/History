@@ -1,0 +1,25 @@
+$Id: History,v 1.37 2009-11-20 17:48:26 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 4, 2011  L. Desorgher - exradioactive-V09-04-00
+- Create this History file
+- Add macro files and user data files in rdecay02  to illustrate the possibility for a user to define its own 
+  radioactive decay data and evaporation data. An example No252.g4mac shows also how to treat
+  nuclei with Z>100.
+	

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryGeneratorAction.cc,v 1.5 2006/06/29 21:14:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VUserPrimaryGeneratorAction.cc,v 1.5 2006-06-29 21:14:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -44,7 +44,7 @@ G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4VUserPrimaryParticleGeneratorAction.";
    G4Exception("G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()",
-              "Run0001",FatalException,msg);
+              "Run0061",FatalException,msg);
  }
 }
 

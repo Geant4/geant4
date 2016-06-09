@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.8 2010/11/05 06:25:23 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLViewerMessenger.hh,v 1.8 2010-11-05 06:25:23 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH

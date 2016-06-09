@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.hh,v 1.8 2006/06/29 19:05:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NURBStubesector.hh,v 1.8 2006-06-29 19:05:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -63,6 +63,11 @@ class  G4NURBStubesector : public G4NURBS
 
   private:
     static t_inddCtrlPt DecideNbrCtrlPts(G4double PHI1, G4double PHI2);
+    // Private copy constructor and assignment operator added to satisfy
+    // Coverity - JA 11/11/11.
+    G4NURBStubesector(const G4NURBStubesector&);
+    G4NURBStubesector& operator= (const G4NURBStubesector&);
+
 };
 
 #endif

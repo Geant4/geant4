@@ -23,55 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.12 2006-06-29 20:45:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEOmegaMinusInelastic.cc,v 1.12 2006/06/29 20:45:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: OmegaMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 20-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: OmegaMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 20-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEOmegaMinusInelastic.hh"
 #include "Randomize.hh"
 
- G4HadFinalState *
-  G4LEOmegaMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                          G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
+void G4LEOmegaMinusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEOmegaMinusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic Omega- scattering from\n"
+          << "nuclei.  It is a re-engineered version of the GHEISHA code of\n"
+          << "H. Fesefeldt.  It divides the initial collision products into\n"
+          << "backward- and forward-going clusters which are then decayed\n"
+          << "into final state hadrons.  The model does not conserve energy\n"
+          << "on an event-by-event basis.  It may be applied to Omega- with\n"
+          << "initial energies between 0 and 25 GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                       G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
     
-    // create the target particle
+  // create the target particle  
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
+  G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-//    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
-    G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
-    
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEOmegaMinusInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEOmegaMinusInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    G4ReactionProduct currentParticle( const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ));
-    currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
-    currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
+  }
+  G4ReactionProduct currentParticle( const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ));
+  currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
+  currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    
-    G4double ek = originalIncident->GetKineticEnergy();
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass();
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done  
+  G4double ek = originalIncident->GetKineticEnergy();
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass();
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -127,10 +133,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LEOmegaMinusInelastic::Cascade(
+void G4LEOmegaMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -138,8 +143,8 @@
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
-   G4bool &quasiElastic )
-  {
+   G4bool &quasiElastic)
+{
     // derived from original FORTRAN code CASOM by H. Fesefeldt (31-Jan-1989)
     //
     // OmegaMinus undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -152,7 +157,6 @@
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass();
     const G4double etOriginal = originalIncident->GetTotalEnergy();
-//    const G4double pOriginal = originalIncident->GetTotalMomentum();
     const G4double targetMass = targetParticle.GetMass();
     G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
@@ -372,7 +376,7 @@
       }
     }
     return;
-  }
+}
 
  /* end of file */
  

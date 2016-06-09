@@ -98,7 +98,10 @@ const G4DataVector* G4AugerTransition::AugerTransitionEnergies(G4int startShellI
   std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionEnergiesMap.find(startShellId);
 
   if (shellId == augerTransitionEnergiesMap.end() ) 
-    {G4Exception("G4AugerTransition: corresponding map element not found");}
+    {
+      G4Exception("G4AugerTransition::AugerTransitionEnergies()","de0002",JustWarning,"corresponding map element not found, energy deposited locally");
+      return 0; 
+    }
 
   const G4DataVector* dataSet = &(*shellId).second;
 
@@ -118,7 +121,11 @@ const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startS
   std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionProbabilitiesMap.find(startShellId);
 
   if (shellId == augerTransitionProbabilitiesMap.end() ) 
-    {G4Exception("G4AugerTransition: corresponding map element not found");}
+    {
+
+      G4Exception("G4AugerTransition::AugerTransitionProbabilities()","de0002",JustWarning,"corresponding map element not found, energy deposited locally");
+      return 0;
+    }
   
   const G4DataVector* dataSet = &(*shellId).second;
   // debugging purpose:

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.15 2008/11/27 16:43:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ChargeExchangeProcess.cc,v 1.15 2008-11-27 16:43:00 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Geant4 Hadron Charge Exchange Process -- source file
@@ -56,6 +56,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
 {
   SetProcessSubType(fChargeExchange);
   thEnergy = 20.*MeV;
+  pPDG = 0;
   verboseLevel= 1;
   AddDataSet(new G4HadronElasticDataSet);
   theProton   = G4Proton::Proton();
@@ -86,7 +87,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   theD        = G4Deuteron::Deuteron();
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
-  theA        = G4He3::He3();
+  theHe3      = G4He3::He3();
 }
 
 G4ChargeExchangeProcess::~G4ChargeExchangeProcess()
@@ -129,10 +130,10 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   G4HadronicProcess::BuildPhysicsTable(aParticleType);
 }
 
-G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
+G4double G4ChargeExchangeProcess::GetElementCrossSection(
                                   const G4DynamicParticle* dp,
 				  const G4Element* elm,
-				  G4double temp)
+				  const G4Material* mat)
 {
   // gives the microscopic cross section in GEANT4 internal units
   G4double Z = elm->GetZ();
@@ -146,7 +147,7 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
     G4cout << "G4ChargeExchangeProcess compute GHAD CS for element "
 	   << elm->GetName()
 	   << G4endl;
-  x = store->GetCrossSection(dp, elm, temp);
+  x = store->GetCrossSection(dp, elm, mat);
 
   if(verboseLevel>1)
     G4cout << "G4ChargeExchangeProcess cross(mb)= " << x/millibarn

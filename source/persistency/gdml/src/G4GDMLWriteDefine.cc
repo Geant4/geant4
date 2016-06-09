@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc,v 1.20 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLWriteDefine.cc,v 1.20 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteDefine Implementation
 //

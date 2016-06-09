@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.cc,v 1.11 2006/06/29 18:09:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEPEvtInterface.cc,v 1.11 2006-06-29 18:09:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,8 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
     fileName = evfile;
   }
   else {
-    G4Exception("G4HEPEvtInterface:: cannot open file.");
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
+    "G4HEPEvtInterface:: cannot open file.");
   }
   G4ThreeVector zero;
   particle_position = zero;
@@ -62,7 +63,8 @@ G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
     fileName = evfile;
   }
   else {
-    G4Exception("G4HEPEvtInterface:: cannot open file.");
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
+    "G4HEPEvtInterface:: cannot open file.");
   }
   G4ThreeVector zero;
   particle_position = zero;
@@ -78,7 +80,8 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   inputFile >> NHEP;
   if( inputFile.eof() ) 
   {
-    G4Exception("End-Of-File : HEPEvt input file");
+    G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
+    JustWarning,"End-Of-File : HEPEvt input file");
     return;
   }
 
@@ -98,8 +101,9 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 
     // create G4PrimaryParticle object
     G4PrimaryParticle* particle 
-      = new G4PrimaryParticle( IDHEP, PHEP1*GeV, PHEP2*GeV, PHEP3*GeV );
+      = new G4PrimaryParticle( IDHEP );
     particle->SetMass( PHEP5*GeV );
+    particle->SetMomentum(PHEP1*GeV, PHEP2*GeV, PHEP3*GeV );
 
     // create G4HEPEvtParticle object
     G4HEPEvtParticle* hepParticle

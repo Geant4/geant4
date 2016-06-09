@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.hh,v 1.3 2008/12/18 12:56:22 gunter Exp $
+// $Id: PhysicsList.hh,v 1.3 2008-12-18 12:56:22 gunter Exp $
 // -------------------------------------------------------------------
 
 #ifndef PhysicsList_h
@@ -32,7 +32,7 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4ParticleTypes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -58,8 +58,6 @@ public:
   
   void SetGammaLowLimit(G4double);
   void SetElectronLowLimit(G4double);
-  void SetPositronLowLimit(G4double);
-  void SetProtonLowLimit(G4double);
   void SetGEPLowLimit(G4double);
 
   void SetGELowLimit(G4double);

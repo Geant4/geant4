@@ -32,6 +32,7 @@
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+//        2002 Alf moved everything to XrayFluoSimulation 
 //
 // -------------------------------------------------------------------
 

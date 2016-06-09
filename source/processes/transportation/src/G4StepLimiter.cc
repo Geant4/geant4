@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiter.cc,v 1.4 2007/06/01 07:53:27 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StepLimiter.cc,v 1.4 2007-06-01 07:53:27 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 // History
@@ -34,6 +34,7 @@
 // --------------------------------------------------------------
 
 #include "G4StepLimiter.hh"
+#include "G4TransportationProcessType.hh"
 
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
@@ -42,9 +43,12 @@
 
 ////////////////////////////////////
 G4StepLimiter::G4StepLimiter(const G4String& aName)
-  : G4VProcess(aName)
+  : G4VProcess(aName, fGeneral )
 {
-   if (verboseLevel>1) {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(STEP_LIMITER));
+
+  if (verboseLevel>1) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }

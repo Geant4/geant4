@@ -15,6 +15,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June, 11  G.Cosmo (mctruth-V09-04-03)
+- Use cast as workaround to fix compilation error on VC2010 below...
+
+14 June, 11  G.Cosmo (mctruth-V09-04-02)
+- Workaround in G4MCTEvent::GetSimParticle() to fix compilation error on VC2010.
+
+3 May, 11  G.Cosmo (mctruth-V09-04-01)
+- Updated CMake script.
+
+3 May, 11  G.Cosmo (mctruth-V09-04-00)
+- Removed obsolete HepMC code.
+
 14 October, 10  G.Cosmo (mctruth-V09-03-01)
 - Fixed possible case of NULL forward in G4PersistencyCenter class.
 

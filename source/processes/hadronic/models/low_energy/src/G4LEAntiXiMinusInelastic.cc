@@ -23,56 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEAntiXiMinusInelastic.cc,v 1.11 2006-06-29 20:44:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEAntiXiMinusInelastic.cc,v 1.11 2006/06/29 20:44:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// Hadronic Process: AntiXiMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 20-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
 //
- // Hadronic Process: AntiXiMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 20-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
- //
- // NOTE:  The FORTRAN version of the cascade, CASAXM, simply called the
- //        routine for the XiMinus particle.  Hence, the ApplyYourself function
- //        below is just a copy of the ApplyYourself from the XiMinus particle.
+// NOTE:  The FORTRAN version of the cascade, CASAXM, simply called the
+//        routine for the XiMinus particle.  Hence, the ApplyYourself function
+//        below is just a copy of the ApplyYourself from the XiMinus particle.
  
 #include "G4LEAntiXiMinusInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LEAntiXiMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                           G4Nucleus &targetNucleus )
-  { 
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV)
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAntiXiMinusInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+
+
+void G4LEAntiXiMinusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEAntiXiMinusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic antiXi- scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be applied\n"
+          << "to antiXi- with initial energies between 0 and 25 GeV.\n";
+}
+
+G4HadFinalState*
+G4LEAntiXiMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                        G4Nucleus& targetNucleus)
+{ 
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
+
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEAntiXiMinusInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -129,10 +136,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LEAntiXiMinusInelastic::Cascade(
+void G4LEAntiXiMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -141,7 +147,7 @@
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
-  {
+{
     // derived from original FORTRAN code CASAXM by H. Fesefeldt (17-Jan-1989)
     // which is just a copy of casxm (cascade for Xi-).
     //
@@ -394,7 +400,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

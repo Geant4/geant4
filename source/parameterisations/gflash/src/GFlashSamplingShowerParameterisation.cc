@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashSamplingShowerParameterisation.cc,v 1.6 2006/06/29 19:14:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashSamplingShowerParameterisation.cc,v 1.6 2006-06-29 19:14:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -35,9 +35,9 @@
 // Authors: E.Barberio & Joanna Weng - 11.2005
 // ------------------------------------------------------------
 
+#include <cmath>
 #include "GVFlashShowerParameterisation.hh"
 #include "GFlashSamplingShowerParameterisation.hh"
-#include <cmath>
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include "G4Material.hh"
@@ -47,10 +47,15 @@ GFlashSamplingShowerParameterisation::
 GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
                                      G4double dd1, G4double dd2,
                                      GFlashSamplingShowerTuning* aPar)
-  : GVFlashShowerParameterisation()
+  : GVFlashShowerParameterisation(),
+    ParAveT2(0.), ParSigLogT1(0.), ParSigLogT2(0.),
+    ParSigLogA1(0.), ParSigLogA2(0.), ParRho1(0.), ParRho2(0.), ParsAveA2(0.),
+    AveLogAlphah(0.), AveLogTmaxh(0.), SigmaLogAlphah(0.), SigmaLogTmaxh(0.),
+    Rhoh(0.), Alphah(0.), Tmaxh(0.), Betah(0.), AveLogAlpha(0.), AveLogTmax(0.),
+    SigmaLogAlpha(0.), SigmaLogTmax(0.), Rho(0.), Alpha(0.), Tmax(0.), Beta(0.)
 {  
-  if(!aPar) { thePar = new GFlashSamplingShowerTuning; }
-  else      { thePar = aPar; }
+  if(!aPar) { thePar = new GFlashSamplingShowerTuning; owning = true; }
+  else      { thePar = aPar; owning = false; }
 
   SetMaterial(aMat1,aMat2 );
   d1=dd1;
@@ -135,7 +140,9 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
 // ------------------------------------------------------------
 
 GFlashSamplingShowerParameterisation::~GFlashSamplingShowerParameterisation()
-{}
+{
+  if(owning) { delete thePar; }
+}
 
 // ------------------------------------------------------------
 

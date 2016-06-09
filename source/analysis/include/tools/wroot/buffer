@@ -1,0 +1,400 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_buffer
+#define tools_wroot_buffer
+
+// class used for serializing objects.
+
+#include "wbuf"
+#include "ibo"
+
+#include "../realloc"
+#include "../mnmx"
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include <string>
+#include <vector>
+#include <ostream>
+#include <map>
+
+namespace tools {
+namespace wroot {
+
+class buffer {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::buffer");
+    return s_v;
+  }
+public:
+  buffer(std::ostream& a_out,
+                bool a_byte_swap,
+                uint32 a_size) // we expect a not zero value.
+  :m_out(a_out)
+  ,m_byte_swap(a_byte_swap)
+  ,m_size(0)
+  ,m_buffer(0)
+  ,m_max(0)
+  ,m_pos(0)
+  ,m_wb(a_out,a_byte_swap,0,m_pos) //it holds a ref on m_pos.
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_size = a_size;
+    m_buffer = new char[m_size];
+    //if(!m_buffer) {}
+    m_max = m_buffer+m_size;
+    m_pos = m_buffer;
+    m_wb.set_eob(m_max);
+  }
+
+  virtual ~buffer(){
+    m_objs.clear();
+    m_obj_mapped.clear();
+
+    m_clss.clear();
+    m_cls_mapped.clear();
+
+    delete [] m_buffer;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  buffer(const buffer& a_from)
+  :m_out(a_from.m_out)
+  ,m_byte_swap(a_from.m_byte_swap)
+  ,m_size(0)
+  ,m_buffer(0)
+  ,m_max(0)
+  ,m_pos(0)
+  ,m_wb(a_from.m_out,a_from.m_byte_swap,0,m_pos)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  buffer& operator=(const buffer&){return *this;}
+public:
+  std::ostream& out() const {return m_out;}
+
+  //void set_offset(unsigned int a_off) {m_pos = m_buffer+a_off;}
+
+  char* buf() {return m_buffer;}
+  const char* buf() const {return m_buffer;}
+  uint32 length() const {return m_pos-m_buffer;}
+  uint32 size() const {return m_size;}
+
+  char*& pos() {return m_pos;}          //used in basket.
+  char* max_pos() const {return m_max;} //used in basket.
+
+public:
+  template <class T>
+  bool write(T x){
+    if(m_pos+sizeof(T)>m_max) {
+      if(!expand(m_size+sizeof(T))) return false;
+    }
+    return m_wb.write(x);
+  }
+
+  bool write(bool x){ 
+    return write<unsigned char>(x?1:0);
+  }
+
+  bool write(const std::string& x) {
+    uint32 sz = (uint32)(x.size() + sizeof(int) + 1);
+    if((m_pos+sz)>m_max) {
+      if(!expand(m_size+sz)) return false;
+    }
+    return m_wb.write(x);
+  }
+
+  bool write_fast_array(const char* a_a,uint32 a_n) {
+    if(!a_n) return true;
+    uint32 l = a_n * sizeof(char);
+    if((m_pos+l)>m_max) {
+      if(!expand(m_size+l)) return false;
+    }
+    ::memcpy(m_pos,a_a,l);
+    m_pos += l;
+    return true;
+  }
+
+  bool write_cstring(const char* a_s) {
+    return write_fast_array(a_s,(::strlen(a_s)+1)*sizeof(char));
+  }
+
+  template <class T>
+  bool write_fast_array(const T* a_a,uint32 a_n) {
+    if(!a_n) return true;
+    uint32 l = a_n * sizeof(T);
+    if((m_pos+l)>m_max) {
+      if(!expand(m_size+l)) return false;
+    }
+    return m_wb.write<T>(a_a,a_n);
+  }
+
+  template <class T>
+  bool write_fast_array(const std::vector<T>& a_v) {
+    if(a_v.empty()) return true;
+    uint32 l = a_v.size() * sizeof(T);
+    if((m_pos+l)>m_max) {
+      if(!expand(m_size+l)) return false;
+    }
+    return m_wb.write<T>(a_v);
+  }
+
+  template <class T>
+  bool write_array(const T* a_a,uint32 a_n) {
+    if(!write(a_n)) return false;
+    return write_fast_array(a_a,a_n);
+  }
+
+  template <class T>
+  bool write_array(const std::vector<T> a_v) {
+    if(!write((uint32)a_v.size())) return false;
+    return write_fast_array(a_v);
+  }
+
+public:
+  bool write_version(short a_version){
+    if(a_version>kMaxVersion()) {
+      m_out << "tools::wroot::buffer::write_version :"
+            << " version number " << a_version
+            << " cannot be larger than " << kMaxVersion() << "."
+            << std::endl;
+      return false;
+    }
+    return write(a_version);
+  }
+  bool write_version(short a_version,uint32& a_pos){
+    // reserve space for leading byte count
+    a_pos = (uint32)(m_pos-m_buffer);
+
+    //NOTE : the below test is lacking in CERN-ROOT !
+    if((m_pos+sizeof(unsigned int))>m_max) {
+      if(!expand(m_size+sizeof(unsigned int))) return false;
+    }
+    m_pos += sizeof(unsigned int);
+
+    if(a_version>kMaxVersion()) {
+      m_out << "tools::wroot::buffer::write_version :"
+            << " version number " << a_version
+            << " cannot be larger than " << kMaxVersion() << "."
+            << std::endl;
+      return false;
+    }
+    return write(a_version);
+  }
+
+  bool set_byte_count(uint32 a_pos){
+    uint32 cnt = (uint32)(m_pos-m_buffer) - a_pos - sizeof(unsigned int);
+    if(cnt>=kMaxMapCount()) {
+      m_out << "tools::wroot::buffer::set_byte_count :"
+            << " bytecount too large (more than "
+            << kMaxMapCount() << ")."
+            << std::endl;
+      return false;
+    }
+
+    union {
+      uint32 cnt;
+      short vers[2];
+    } v;
+    v.cnt = cnt;
+
+    char* opos = m_pos;
+    m_pos = (char*)(m_buffer+a_pos);
+    if(m_byte_swap) {
+      if(!m_wb.write(short(v.vers[1]|kByteCountVMask()))) 
+        {m_pos = opos;return false;}
+      if(!m_wb.write(v.vers[0])) {m_pos = opos;return false;}
+    } else {
+      if(!m_wb.write(short(v.vers[0]|kByteCountVMask())))
+        {m_pos = opos;return false;}
+      if(!m_wb.write(v.vers[1])) {m_pos = opos;return false;}
+    }
+    m_pos = opos;
+
+    return true;
+  }
+
+  bool write_object(const ibo& a_obj){
+    //GB : if adding a write map logic, think to have a displace_mapped()
+    //     in basket::write_on_file().
+
+    std::map<ibo*,uint32>::const_iterator it = m_objs.find((ibo*)&a_obj);
+    if(it!=m_objs.end()) {
+      uint32 objIdx = (*it).second;
+
+      unsigned int offset = (unsigned int)(m_pos-m_buffer);
+
+      // save index of already stored object
+      if(!write(objIdx)) return false;
+
+      m_obj_mapped.push_back(std::pair<uint32,uint32>(offset,objIdx));
+
+    } else {
+
+      // reserve space for leading byte count
+      uint32 cntpos = (unsigned int)(m_pos-m_buffer);
+
+      //NOTE : the below test is lacking in CERN-ROOT !
+      if((m_pos+sizeof(unsigned int))>m_max) {
+        if(!expand(m_size+sizeof(unsigned int))) return false;
+      }
+      m_pos += sizeof(unsigned int);
+    
+      // write class of object first
+      if(!write_class(a_obj.store_cls())) return false;
+    
+      // add to map before writing rest of object (to handle self reference)
+      // (+kMapOffset so it's != kNullTag)
+      m_objs[(ibo*)&a_obj] = cntpos + kMapOffset();
+    
+      // let the object write itself :
+      if(!a_obj.stream(*this)) return false;
+    
+      // write byte count
+      if(!set_byte_count_obj(cntpos)) return false;
+    }
+    return true;
+  }
+
+ 
+  bool expand(uint32 a_new_size) {
+    unsigned long len = m_pos-m_buffer;
+    if(!realloc<char>(m_buffer,a_new_size,m_size)) {
+      m_out << "tools::wroot::buffer::expand :"
+            << " can't realloc " << a_new_size << " bytes."
+            << std::endl;
+      m_size = 0;
+      m_max = 0;
+      m_pos = 0;
+      m_wb.set_eob(m_max);
+      return false;
+    }
+    m_size = a_new_size;
+    m_max = m_buffer + m_size;
+    m_pos = m_buffer + len;
+    m_wb.set_eob(m_max);
+    return true;
+  }
+
+  unsigned int to_displace() const {
+    return m_cls_mapped.size()+m_obj_mapped.size();
+  }
+
+  bool displace_mapped(unsigned int a_num){
+    char* opos = m_pos;
+
+    //m_out << "tools::wroot::buffer::displace_mapped :"
+    //      << " cls num " << m_cls_mapped.size()
+    //      << std::endl;
+
+   {std::vector< std::pair<uint32,uint32> >::const_iterator it;
+    for(it=m_cls_mapped.begin();it!=m_cls_mapped.end();++it) {
+      unsigned int offset = (*it).first;
+      unsigned int id = (*it).second;
+      //m_out << "displace " << offset << " " << id << std::endl;
+      m_pos = m_buffer+offset;
+      unsigned int clIdx = id+a_num;
+      if(!write(uint32(clIdx|kClassMask()))) {m_pos = opos;return false;}
+    }}
+  
+    //m_out << "tools::wroot::buffer::displace_mapped :"
+    //      << " obj num " << m_obj_mapped.size()
+    //      << std::endl;
+
+   {std::vector< std::pair<uint32,uint32> >::const_iterator it;
+    for(it=m_obj_mapped.begin();it!=m_obj_mapped.end();++it) {
+      uint32 offset = (*it).first;
+      uint32 id = (*it).second;
+      //m_out << "displace at " << offset
+      //      << " the obj pos " << id
+      //      << " by " << a_num
+      //      << std::endl;
+      m_pos = m_buffer+offset;
+      unsigned int objIdx = id+a_num;
+      if(!write(objIdx)) {m_pos = opos;return false;}
+    }}
+  
+    m_pos = opos;
+    return true;
+  }
+
+protected:
+  static short kMaxVersion() {return 0x3FFF;}
+  static uint32 kMaxMapCount() {return 0x3FFFFFFE;}
+  static short kByteCountVMask() {return 0x4000;}
+  static uint32 kNewClassTag() {return 0xFFFFFFFF;}
+
+  static int kMapOffset() {return 2;}
+  static unsigned int kClassMask() {return 0x80000000;}
+  static uint32 kByteCountMask() {return 0x40000000;}
+
+  bool write_class(const std::string& a_cls){
+
+    std::map<std::string,uint32>::const_iterator it = m_clss.find(a_cls);
+    if(it!=m_clss.end()) {
+      uint32 clIdx = (*it).second;
+
+      unsigned int offset = (unsigned int)(m_pos-m_buffer);
+
+      // save index of already stored class
+      if(!write(uint32(clIdx|kClassMask()))) return false;
+
+      m_cls_mapped.push_back(std::pair<uint32,uint32>(offset,clIdx));
+
+    } else {
+
+      unsigned int offset = (unsigned int)(m_pos-m_buffer);
+      if(!write(kNewClassTag())) return false;
+      if(!write_cstring(a_cls.c_str())) return false;
+      m_clss[a_cls] = offset + kMapOffset();
+
+    }
+    return true;
+  }
+
+  bool set_byte_count_obj(uint32 a_pos){
+    uint32 cnt = (uint32)(m_pos-m_buffer) - a_pos - sizeof(unsigned int);
+    if(cnt>=kMaxMapCount()) {
+      m_out << "tools::wroot::buffer::set_byte_count_obj :"
+            << " bytecount too large (more than "
+            << kMaxMapCount() << ")."
+            << std::endl;
+      return false;
+    }
+    char* opos = m_pos;
+    m_pos = (char*)(m_buffer+a_pos);
+    if(!m_wb.write(uint32(cnt|kByteCountMask()))) {m_pos = opos;return false;}
+    m_pos = opos;
+    return true;
+  }
+
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+protected:
+  std::ostream& m_out;
+  bool m_byte_swap;
+  uint32 m_size;
+  char* m_buffer;
+  char* m_max;
+  char* m_pos;
+  wbuf m_wb;
+
+  std::map<ibo*,uint32> m_objs;
+  std::vector< std::pair<uint32,uint32> > m_obj_mapped;
+
+  std::map<std::string,uint32> m_clss;
+  std::vector< std::pair<uint32,uint32> > m_cls_mapped;
+};
+
+}}
+
+#endif

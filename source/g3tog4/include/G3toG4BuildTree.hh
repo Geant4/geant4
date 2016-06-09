@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.hh,v 1.8 2006/06/29 18:12:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4BuildTree.hh,v 1.8 2006-06-29 18:12:37 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class Description:

@@ -1,0 +1,48 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                       --- RandExponential ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+#include <cmath>	// for std::log()
+
+namespace CLHEP {
+
+inline RandExponential::RandExponential(HepRandomEngine & anEngine,
+                                        double mean )
+: HepRandom(), localEngine(&anEngine, do_nothing_deleter()), defaultMean(mean) {}
+
+inline RandExponential::RandExponential(HepRandomEngine * anEngine,
+                                        double mean )
+: HepRandom(), localEngine(anEngine), defaultMean(mean) {}
+
+//-------------
+
+inline double RandExponential::shoot(HepRandomEngine* anEngine) {
+  return -std::log(anEngine->flat());
+}
+
+inline double RandExponential::shoot(HepRandomEngine* anEngine,
+                                        double mean) {
+  return -std::log(anEngine->flat())*mean;
+}
+
+//-------------
+
+inline double RandExponential::fire() {
+  return -std::log(localEngine->flat())*defaultMean;
+}
+
+inline double RandExponential::fire(double mean) {
+  return -std::log(localEngine->flat())*mean;
+}
+
+}  // namespace CLHEP

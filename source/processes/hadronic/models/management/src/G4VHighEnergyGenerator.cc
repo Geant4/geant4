@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.cc,v 1.5 2006/06/29 20:46:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VHighEnergyGenerator.cc,v 1.5 2006-06-29 20:46:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
 #include "G4HadronicException.hh"
 
 G4VHighEnergyGenerator::G4VHighEnergyGenerator()
+  :   epCheckLevels(DBL_MAX,DBL_MAX)
 {
 }
 
@@ -62,4 +63,16 @@ int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &) const
 {
   return 1;
 }
+
+std::pair<G4double, G4double> G4VHighEnergyGenerator::GetEnergyMomentumCheckLevels() const
+{
+   return epCheckLevels;
+}
+void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
+									G4double relativeLevel, G4double absoluteLevel)
+{
+	epCheckLevels.first=relativeLevel;
+	epCheckLevels.second=absoluteLevel;
+}
+
 

@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.4 2010/01/20 15:41:14 maire Exp $
+# $Id: run01.mac,v 1.4 2010-01-20 15:41:14 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2

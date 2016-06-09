@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.hh,v 1.1 2007/05/25 07:30:47 gunter Exp $
+// $Id: G4QGSDiffractiveExcitation.hh,v 1.1 2007-05-25 07:30:47 gunter Exp $
 
 #ifndef G4QGSDiffractiveExcitation_h
 #define G4QGSDiffractiveExcitation_h 1

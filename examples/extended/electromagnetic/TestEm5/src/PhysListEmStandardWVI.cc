@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardWVI.cc,v 1.1 2010/11/19 15:59:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PhysListEmStandardWVI.cc,v 1.1 2010-11-19 15:59:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -138,21 +138,17 @@ void PhysListEmStandardWVI::ConstructProcess()
 	       particleName == "He3"    ) {
       //alpha
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4IonCoulombScatteringModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);
             
     } else if( particleName == "GenericIon" ) {
       //Ions
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4IonCoulombScatteringModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);            
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
       
     } else if ((!particle->IsShortLived()) &&
@@ -161,9 +157,9 @@ void PhysListEmStandardWVI::ConstructProcess()
       //all others charged particles except geantino
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);      
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);                  
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
     }
   }
 

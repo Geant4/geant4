@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.16 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.15 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,10 +33,10 @@
 #include <vector>
 
 #include "G4InclAblaLightIonInterface.hh"
-#include "G4FermiBreakUp.hh"
 #include "math.h"
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
+#include "G4ExcitationHandler.hh"
 
 G4InclAblaLightIonInterface::G4InclAblaLightIonInterface()
 {
@@ -105,9 +105,10 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
   // Inverse kinematics for targets with Z = 1 and A = 1
   //  if(false) {
   G4LorentzRotation toBreit = aTrack.Get4Momentum().boostVector();
+  G4LorentzRotation boostBack = toBreit.inverse();
 
-  if(theNucleus.GetZ_asInt() == 1 && theNucleus.GetA_asInt() == 1 && G4InclInput::canUseInverseKinematics(aTrack, theNucleus)) {
-    G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt(), 0.0);
+  if(theNucleus.GetZ_asInt() >= 1 && theNucleus.GetA_asInt() >= 1 && theNucleus.GetA_asInt() <= 18 && G4InclInput::canUseInverseKinematics(aTrack, theNucleus)) {
+    G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 
     if(oldProjectileDef != 0 && oldTargetDef != 0) {
@@ -118,22 +119,19 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     if(newTargetA > 0 && newTargetZ > 0) {
       G4Nucleus swappedTarget(oldProjectileDef->GetAtomicMass(), oldProjectileDef->GetAtomicNumber());
 
-      //      G4cout <<"Original projectile kinE = " << aTrack.GetKineticEnergy() / MeV << G4endl;
-
       // We need the same energy/nucleon.
       G4double projectileE = ((aTrack.GetKineticEnergy() / MeV) / newTargetA) * oldTargetA * MeV;
-
-      //    G4cout <<"projectileE = " << projectileE << G4endl;
       G4DynamicParticle swappedProjectileParticle(oldTargetDef, G4ThreeVector(0.0, 0.0, 1.0), projectileE);
-      const G4LorentzVector swapped4Momentum = (swappedProjectileParticle.Get4Momentum()*=toBreit);
+      const G4LorentzVector swapped4Momentum = swappedProjectileParticle.Get4Momentum();
       swappedProjectileParticle.Set4Momentum(swapped4Momentum);
       const G4HadProjectile swappedProjectile(swappedProjectileParticle);
-      //  G4cout <<"New projectile kinE = " << swappedProjectile.GetKineticEnergy() / MeV << G4endl;
       calincl = new G4InclInput(swappedProjectile, swappedTarget, true);
     } else {
       G4cout <<"Badly defined target after swapping. Falling back to normal (non-swapped) mode." << G4endl;
       calincl = new G4InclInput(aTrack, theNucleus, false);
     }
+    } else {
+      G4cout <<"oldProjectileDef or oldTargetDef was null" << G4endl;
     }
   } else {
     calincl = new G4InclInput(aTrack, theNucleus, false);
@@ -163,9 +161,13 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
   G4cout << "Projectile energy = " << bulletE << " MeV" << G4endl;
   */
 
-  G4FermiBreakUp *fermiBreakUp = new G4FermiBreakUp();
-  G4FragmentVector *theSpectatorFermiBreakupResult = 0;
-  G4FragmentVector *theFermiBreakupResult = 0;
+  //  G4FermiBreakUp *fermiBreakUp = new G4FermiBreakUp();
+  G4ExcitationHandler *fermiBreakUp = new G4ExcitationHandler();
+  fermiBreakUp->SetMaxAandZForFermiBreakUp(17, 9);
+  G4ReactionProductVector *theSpectatorFermiBreakupResult = 0;
+  //  G4FragmentVector *theSpectatorFermiBreakupResult = 0;
+  //G4FragmentVector *theFermiBreakupResult = 0;
+  G4ReactionProductVector *theFermiBreakupResult = 0;
 
   theResult.Clear(); // Make sure the output data structure is clean.
 
@@ -423,6 +425,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       G4LorentzVector p4(momentumScaling * varntp->spectatorP1 * MeV, momentumScaling * varntp->spectatorP2 * MeV,
 			 momentumScaling * varntp->spectatorP3 * MeV,
 			 varntp->spectatorT * MeV + nuclearMass);
+
       // Four-momentum, baryon number and charge balance:
       G4LorentzVector fourMomentumBalance = p4;
       G4int baryonNumberBalance = G4int(varntp->masp);
@@ -433,7 +436,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       // Assume that Fermi breakup uses Z as the direction of the projectile
       toFragmentZ.rotateZ(-p4.theta());
       toFragmentZ.rotateY(-p4.phi());
-      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
+      //      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
       //      p4 *= toFragmentZ;
       
       G4LorentzVector p4rest = p4;
@@ -450,16 +453,10 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       G4Fragment theSpectatorNucleus(G4int(varntp->masp), G4int(varntp->mzsp), p4rest);
       theSpectatorFermiBreakupResult = fermiBreakUp->BreakItUp(theSpectatorNucleus);
       if(theSpectatorFermiBreakupResult != 0) {
-      G4FragmentVector::iterator fragment;
+      G4ReactionProductVector::iterator fragment;
       for(fragment = theSpectatorFermiBreakupResult->begin(); fragment != theSpectatorFermiBreakupResult->end(); fragment++) {
-	G4ParticleDefinition *theFragmentDefinition = 0;
-	if((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 0) { // Neutron
-	  theFragmentDefinition = G4Neutron::NeutronDefinition();
-	} else if ((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 1) {
-	  theFragmentDefinition = G4Proton::ProtonDefinition();
-	} else {
-	  theFragmentDefinition = theTableOfParticles->GetIon((*fragment)->GetZ_asInt(), (*fragment)->GetA_asInt(), (*fragment)->GetExcitationEnergy());
-	}
+	G4ParticleDefinition *theFragmentDefinition = (*fragment)->GetDefinition();
+
 	if(theFragmentDefinition != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(theFragmentDefinition, (*fragment)->GetMomentum());
 	  G4LorentzVector labMomentum = theFragment->Get4Momentum();
@@ -480,9 +477,6 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 	  G4cout <<"G4InclAblaCascadeInterface: Error. Fragment produced by Fermi break-up does not exist." 
 		 << G4endl;
 	  G4cout <<"Resulting fragment: " << G4endl;
-	  G4cout <<" Z = " << (*fragment)->GetZ_asInt() << G4endl;
-	  G4cout <<" A = " << (*fragment)->GetA_asInt() << G4endl;
-	  G4cout <<" Excitation : " << (*fragment)->GetExcitationEnergy() / MeV << " MeV" << G4endl;
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }
@@ -533,7 +527,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       G4LorentzRotation toFragmentZ;
       toFragmentZ.rotateZ(-p4.theta());
       toFragmentZ.rotateY(-p4.phi());
-      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
+      //      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
       //      p4 *= toFragmentZ;
 
       G4LorentzVector p4rest = p4;
@@ -552,16 +546,9 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       G4Fragment theCascadeRemnant(G4int(varntp->massini), G4int(varntp->mzini), p4rest);
       theFermiBreakupResult = fermiBreakUp->BreakItUp(theCascadeRemnant);
       if(theFermiBreakupResult != 0) {
-      G4FragmentVector::iterator fragment;
+      G4ReactionProductVector::iterator fragment;
       for(fragment = theFermiBreakupResult->begin(); fragment != theFermiBreakupResult->end(); fragment++) {
-	G4ParticleDefinition *theFragmentDefinition = 0;
-	if((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 0) { // Neutron
-	  theFragmentDefinition = G4Neutron::NeutronDefinition();
-	} else if ((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 1) {
-	  theFragmentDefinition = G4Proton::ProtonDefinition();
-	} else {
-	  theFragmentDefinition = theTableOfParticles->GetIon((*fragment)->GetZ_asInt(), (*fragment)->GetA_asInt(), (*fragment)->GetExcitationEnergy());
-	}
+	G4ParticleDefinition *theFragmentDefinition = (*fragment)->GetDefinition();
 
 	if(theFragmentDefinition != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(theFragmentDefinition, (*fragment)->GetMomentum());
@@ -582,9 +569,6 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 	} else {
 	  G4cout <<"G4InclAblaCascadeInterface: Error. Fragment produced by Fermi break-up does not exist." << G4endl;
 	  G4cout <<"Resulting fragment: " << G4endl;
-	  G4cout <<" Z = " << (*fragment)->GetZ_asInt() << G4endl;
-	  G4cout <<" A = " << (*fragment)->GetA_asInt() << G4endl;
-	  G4cout <<" Excitation : " << (*fragment)->GetExcitationEnergy() / MeV << " MeV" << G4endl;
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }
@@ -686,15 +670,14 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 
   // Finally copy the accumulated secondaries into the result collection:
   G4ThreeVector boostVector = aTrack.Get4Momentum().boostVector();
-  G4LorentzRotation boostBack = toBreit.inverse();
 
   for(std::vector<G4DynamicParticle*>::iterator i = result.begin(); i != result.end(); ++i) {
     // If the calculation was performed in inverse kinematics we have to
     // convert the result back...
     if(calincl->isInverseKinematics()) {
       G4LorentzVector mom = (*i)->Get4Momentum();
-      mom.setPz(-1.0 * mom.pz()); // Reverse the z-component of the momentum vector
       mom *= boostBack;
+      mom.setPz(-1.0 * mom.pz()); // Reverse the z-component of the momentum vector
       (*i)->Set4Momentum(mom);
     }
     theResult.AddSecondary((*i));

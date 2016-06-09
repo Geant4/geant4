@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007/11/15 16:07:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007-11-15 16:07:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Author : Gunter Folger Nov 2007
@@ -61,8 +61,7 @@ G4double G4ProjectileDiffractiveChannel::GetFraction(G4Nucleus &theNucleus,
 	G4double ratio;
 	ratio=theQDiffraction->GetRatio(thePrimary.GetTotalMomentum(),
 			thePrimary.GetDefinition()->GetPDGEncoding(),
-			G4lrint(theNucleus.GetZ()),
-			G4lrint(theNucleus.GetN()-theNucleus.GetZ()));
+			theNucleus.GetZ_asInt(), theNucleus.GetN_asInt() );
 	   #ifdef debug_getFraction			
 	      G4cout << "G4ProjectileDiffractiveChannel::ratio " << ratio << G4endl;
 	   #endif
@@ -75,8 +74,8 @@ G4KineticTrackVector * G4ProjectileDiffractiveChannel::Scatter(G4Nucleus &theNuc
 {
 	
 	
-	G4int A=G4lrint(theNucleus.GetN());
-	G4int Z=G4lrint(theNucleus.GetZ());
+	G4int A=theNucleus.GetA_asInt();
+	G4int Z=theNucleus.GetZ_asInt();
 
 	G4ParticleDefinition * pDef=thePrimary.GetDefinition();
 	   #ifdef debug_scatter

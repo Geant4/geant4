@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.19 2010/06/04 17:50:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: exampleN04.cc,v 1.19 2010-06-04 17:50:22 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

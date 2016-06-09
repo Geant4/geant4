@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.29 2010/09/26 04:06:03 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CollisionOutput.hh,v 1.29 2010-09-26 04:06:03 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100407  M. Kelsey -- Replace ::resize(0) with ::clear()
@@ -40,6 +40,10 @@
 //		and access functions for initial post-cascade processing.
 //		Move implementation of add() to .cc file.
 // 20100925  M. Kelsey -- Add function to process G4ReactionProduct list
+// 20110225  M. Kelsey -- Add interface to remove entries from lists
+// 20110311  M. Kelsey -- Add function to boost individual four-vector
+// 20110323  M. Kelsey -- Add non-const access to lists (for G4NucleiModel)
+// 20110922  M. Kelsey -- Add optional stream argument to printCollisionOutput
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -49,6 +53,8 @@
 #include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ReactionProductVector.hh"
+#include "G4ios.hh"
+#include <iosfwd>
 #include <algorithm>
 #include <vector>
 
@@ -96,11 +102,31 @@ public:
     theRecoilFragment = aFragment;
   }
 
+  // ===== Remove contents of lists, by index, reference or value  =====
+
+  void removeOutgoingParticle(G4int index);
+  void removeOutgoingParticle(const G4InuclElementaryParticle& particle);
+  void removeOutgoingParticle(const G4InuclElementaryParticle* particle) {
+    if (particle) removeOutgoingParticle(*particle);
+  }
+
+  void removeOutgoingNucleus(G4int index);
+  void removeOutgoingNucleus(const G4InuclNuclei& nuclei);
+  void removeOutgoingNucleus(const G4InuclNuclei* nuclei) {
+    if (nuclei) removeOutgoingNucleus(*nuclei);
+  }
+
+  void removeRecoilFragment();		// There is only one fragment
+
   // ===== Access contents of lists =====
 
   G4int numberOfOutgoingParticles() const { return outgoingParticles.size(); }
     
   const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
+    return outgoingParticles;
+  };
+
+  std::vector<G4InuclElementaryParticle>& getOutgoingParticles() {
     return outgoingParticles;
   };
 
@@ -110,7 +136,11 @@ public:
     return outgoingNuclei;
   };
 
+  std::vector<G4InuclNuclei>& getOutgoingNuclei() { return outgoingNuclei; };
+
   const G4Fragment& getRecoilFragment() const { return theRecoilFragment; }
+
+  G4Fragment& getRecoilFragment() { return theRecoilFragment; }
 
   // ===== Get event totals for conservation checking, recoil, etc. ======
 
@@ -118,11 +148,14 @@ public:
   G4int getTotalCharge() const;			// NOTE:  No fractional charges!
   G4int getTotalBaryonNumber() const;
 
-  void printCollisionOutput() const;
+  void printCollisionOutput(std::ostream& os=G4cout) const;
 
   // ===== Manipulate final-state particles for kinematics =====
 
   void boostToLabFrame(const G4LorentzConvertor& convertor);
+  G4LorentzVector boostToLabFrame(G4LorentzVector mom,	// Note pass by value!
+				  const G4LorentzConvertor& convertor) const;
+
   void rotateEvent(const G4LorentzRotation& rotate);
   void trivialise(G4InuclParticle* bullet, G4InuclParticle* target);
   void setOnShell(G4InuclParticle* bullet, G4InuclParticle* target);

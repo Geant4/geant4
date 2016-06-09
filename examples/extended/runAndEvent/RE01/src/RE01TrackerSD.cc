@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE01TrackerSD.cc,v 1.2 2006/06/29 17:44:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01TrackerSD.cc,v 1.2 2006-06-29 17:44:32 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 

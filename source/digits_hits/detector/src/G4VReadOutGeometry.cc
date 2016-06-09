@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.cc,v 1.2 2006/06/29 18:06:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VReadOutGeometry.cc,v 1.2 2006-06-29 18:06:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -42,13 +42,14 @@ G4VReadOutGeometry::G4VReadOutGeometry()
 
 G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry &right)
 {
-  fincludeList = right.fincludeList;
-  fexcludeList = right.fexcludeList;
+  fincludeList = 0;
+  fexcludeList = 0;
   name = right.name;
   ROworld = right.ROworld;
   touchableHistory = 0;
+  ROnavigator = new G4Navigator();
   // COPY CONSTRUCTOR NOT STRAIGHT FORWARD: need to copy the touchabelHistory
-  // VALUE, same foe navigator and same for the World+Geom hierachy ??
+  // VALUE, same for navigator and same for the World+Geom hierachy
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(G4String n) 
@@ -69,11 +70,12 @@ G4VReadOutGeometry::~G4VReadOutGeometry()
 
 const G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
 {
-  fincludeList     = right.fincludeList;
-  fexcludeList     = right.fexcludeList;
+  delete fincludeList; fincludeList     = 0;
+  delete fexcludeList; fexcludeList     = 0;
   name             = right.name;
   ROworld          = right.ROworld;
-  touchableHistory = 0;
+  delete touchableHistory; touchableHistory = 0;
+  delete ROnavigator; ROnavigator = new G4Navigator();
   return *this;
 }
 

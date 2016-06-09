@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2010/11/10 17:53:22 allison Exp $
+$Id: History,v 1.110 2010-12-27 13:02:19 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,28 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+30th November 2011 Ben Morgan (openinventor-V09-04-04)
+- sources.cmake : Added explicit inclusion and linking of X11 and Motif
+  libraries. Appears needed so that OpenGL X11/XM and OpenInventor can
+  co-exist.
+
+30th November 2011 Ben Morgan (openinventor-V09-04-03)
+- sources.cmake : Added inclusion and linking to Inventor base library and
+  OpenGL. Needed on Mac to correctly find X11 GL.
+
+8th November 2011 Ben Morgan (openinventor-V09-04-02)
+- source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
+  driver (NB requires cotag cmake-V09-04-32).
+
+27th December 2010  Gabriele Cosmo  (openinventor-V09-04-01)
+- Fixed compilation error in SbPainterPS.cc introduced in previous tag.
+
+27th December 2010  John Allison  (openinventor-V09-04-00)
+- Tagged.
+
+11th December 2010  John Allison
+- Fixed some Coverity warnings.
 
 10th November 2010  John Allison  (openinventor-V09-03-02)
 - G4OpenInventor*Viewer.cc:

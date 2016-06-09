@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointCSManager.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
@@ -96,9 +96,15 @@ G4AdjointCSManager::G4AdjointCSManager()
   forward_CS_mode = true;
   
   currentParticleDef = 0;
+  currentCouple =0;
+  currentMaterial=0;
+  lastMaterial=0;
+
   
   theAdjIon = 0;
   theFwdIon = 0;  
+
+
  
  
 }
@@ -307,7 +313,6 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
 		//make first the total fwd CS table for FwdProcess
 		G4PhysicsVector* aVector =  new G4PhysicsLogVector(Tmin, Tmax, nbins);
 		G4bool Emin_found=false;
-		size_t ind=0;
 		G4double sigma_max =0.;
 		G4double e_sigma_max =0.;
 		for(size_t l=0; l<aVector->GetVectorLength(); l++) { 
@@ -354,7 +359,6 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
 		Emin_found=false;
 		sigma_max=0;
 		e_sigma_max =0.;
-		ind=0;
 		G4PhysicsVector* aVector1 =  new G4PhysicsLogVector(Tmin, Tmax, nbins);
 		for(eindex=0; eindex<aVector->GetVectorLength(); eindex++) { 
 			G4double e=aVector->GetLowEdgeEnergy(eindex);

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTrapParallelSide.cc,v 
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -430,7 +430,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
         }
       } else { // kDontValidate
         G4Exception("G4TwistTrapParallelSide::DistanceToSurface()",
-                    "NotImplemented kDontValidate", FatalException,
+                    "GeomSolids0001", FatalException,
                     "Feature NOT implemented !");
       }
 
@@ -570,7 +570,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
           }
         } else { // kDontValidate
           G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-                      "NotImplemented kDontValidate", FatalException,
+                      "GeomSolids0001", FatalException,
                       "Feature NOT implemented !");
         }
         
@@ -849,7 +849,7 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
       return areacode;
    } else {
       G4Exception("G4TwistTrapParallelSide::GetAreaCode()",
-                  "NotImplemented", FatalException,
+                  "GeomSolids0001", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -900,7 +900,7 @@ void G4TwistTrapParallelSide::SetCorners()
   } else {
 
     G4Exception("G4TwistTrapParallelSide::SetCorners()",
-                "NotImplemented", FatalException,
+                "GeomSolids0001", FatalException,
                 "Method NOT implemented !");
   }
 }
@@ -944,7 +944,7 @@ void G4TwistTrapParallelSide::SetBoundaries()
   } else {
     
   G4Exception("G4TwistTrapParallelSide::SetCorners()",
-              "NotImplemented", FatalException,
+              "GeomSolids0001", FatalException,
               "Feature NOT implemented !");
   }
   

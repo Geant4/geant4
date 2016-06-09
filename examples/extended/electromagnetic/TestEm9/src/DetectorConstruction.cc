@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.14 2009/11/21 17:28:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.cc,v 1.14 2009-11-21 17:28:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -191,14 +191,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double y  = x0;
   G4double x;
   G4int k = 0;
-  G4VPhysicalVolume* pv;
   G4int i,j;
 
   for (i=0; i<5; i++) {
     x  = x0;
     for (j=0; j<5; j++) {
 
-      pv = new G4PVPlacement(0,G4ThreeVector(x,y,0.),"Ecal",logicCal,
+      new G4PVPlacement(0,G4ThreeVector(x,y,0.),"Ecal",logicCal,
                                     physE,false,k);
       k++;
       x += ecalWidth + gap;
@@ -210,7 +209,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Box* solidA = new G4Box("Abso",worldX,worldX,absLength*0.5);
   logicA2 = new G4LogicalVolume( solidA,absMaterial,"Abs2");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,absZ2),
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,absZ2),
 			 "Abs2",logicA2,world,false,0);
 
   G4cout << "Absorber is " << G4BestUnit(absLength,"Length")
@@ -225,15 +224,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Box* solidY = new G4Box("York",worldX,worldX,york*0.5);
   logicY = new G4LogicalVolume( solidY,yorkMaterial,"York");
-  pv = new G4PVPlacement(0,G4ThreeVector(),
+  new G4PVPlacement(0,G4ThreeVector(),
 			 "York",logicY,physYV,false,0);
 
   logicA3 = new G4LogicalVolume( solidA,absMaterial,"Abs3");
   logicA4 = new G4LogicalVolume( solidA,absMaterial,"Abs4");
 
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,-(york+absLength)*0.5),
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,-(york+absLength)*0.5),
 			 "Abs3",logicA3,physYV,false,0);
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,(york+absLength)*0.5),
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,(york+absLength)*0.5),
 			 "Abs4",logicA4,physYV,false,0);
 
   //Vertex volume
@@ -244,7 +243,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   //Absorber
   logicA1 = new G4LogicalVolume( solidA,absMaterial,"Abs1");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*2.-absLength*0.5),
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*2.-absLength*0.5),
 			 "Abs1",logicA1,physVV,false,0);
 
   //Vertex
@@ -266,7 +265,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   logicV = new G4LogicalVolume( solidV,vertMaterial,"Vert");
 
   for (i=0; i<3; i++) {
-    pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,z),"VertDet",logicVD,
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,z),"VertDet",logicVD,
                                     physVV,false,i);
     z += vertexLength;
   }
@@ -274,7 +273,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   for (j=0; j<npads; j++) {
 
-    pv = new G4PVPlacement(0,G4ThreeVector(x,0.,0.),logicV,"Vert",logicVD,
+    new G4PVPlacement(0,G4ThreeVector(x,0.,0.),logicV,"Vert",logicVD,
                                     false,k);
     x += padWidth;
   }

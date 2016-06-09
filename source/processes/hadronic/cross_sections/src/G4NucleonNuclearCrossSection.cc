@@ -35,10 +35,9 @@
 //
 
 #include "G4NucleonNuclearCrossSection.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
-#include "G4HadTmpUtil.hh"
-
 
 // Group 1: He, Be, C for 44 energies  
 
@@ -179,47 +178,48 @@ const G4double G4NucleonNuclearCrossSection::na_p_in[44] =
 
 const G4double G4NucleonNuclearCrossSection::e3[45] =     
 {
-  0.014, 0.015, 0.016, 0.017, .02, 0.022, 0.025, 0.027, 0.03, 0.035, .04, 0.045, 0.05, 
-  .06, 0.07, .08, 0.09,  .1, .12, .14, .15, .16, .18, .20, .25, .30, .35, .4 , 0.5, 0.6, 
-  0.7,  0.8,  0.9,   1, 1.5,   2,   3,   5,  7, 10,  20,   50,  100,  500, 1000  
+  0.014, 0.015, 0.016, 0.017, .02, 0.022, 0.025, 0.027, 0.03, 0.035, .04, 0.045, 0.05, .06, 0.07, 
+    .08, 0.09,   .1,    .12,  .14,  .15,   .16,   .18,   .20,  .25,  .30,  .35,  0.4, 0.5,  0.6, 
+    0.7, 0.8,   0.9,    1,   1.5,   2,     3,     5,     7,   10,   20,   50,  100,   500, 1000  
 };
 
 const G4double G4NucleonNuclearCrossSection::al_m_t[45] = 
 { 
-  1735, 1750, 1760, 1795, 1830, 1855, 1885, 1895, 1900, 1870, 1835, 1785, 1710, 1522, 
-  1350, 1212, 1080, 972, 816, 720, 678, 642, 600, 567, 558, 560, 578, 592, 616, 644, 
-  672, 688, 708, 720, 736, 754, 736, 706, 680, 672, 646, 632, 632, 632, 632
+  1735, 1750, 1760, 1795, 1830, 1855, 1885, 1895, 1900, 1870, 1835, 1785, 1710, 1522, 1350, 
+  1212, 1080,  972,  816,  720,  678,  642,  600,  567,  558,  560,  578,  592,  616,  644,  
+   672,  688,  708,  720,  736,  754,  736,  706,  680,  672,  646,  632,  632,  632,  632
 };
 const G4double G4NucleonNuclearCrossSection::al_m_in[45] = 
 {
-  1000, 990, 975, 950, 905, 875, 825, 800, 762, 690, 652, 610, 570, 495, 480, 456, 444, 
-  432, 420, 420, 420, 420, 410, 410, 400, 402, 404, 408, 424, 438, 448, 450, 454, 456, 
-  472, 480, 466, 456, 452, 448, 444, 440, 440, 440, 440
+  1000,  990,  975,  950,  905,  875,  825,  800,  762,  690,  652,  610,  570,  495,  480, 
+   456,  444,  432,  420,  420,  420,  420,  410,  410,  400,  402,  404,  408,  424,  438, 
+   448,  450,  454,  456,  472,  480,  466,  456,  452,  448,  444,  440,  440,  440,  440
 };
 const G4double G4NucleonNuclearCrossSection::al_p_in[45] = 
 {
-  650, 682, 690, 715, 750, 762, 750, 740, 720, 655, 617, 575, 540, 470, 455, 532, 420, 
-  408, 400, 403, 403, 408, 406, 404, 400, 402, 404, 408, 424, 438, 448, 450, 454, 456, 
-  472, 480, 466, 456, 452, 448, 444, 440, 440, 440, 440 
+   650,  682,  690,  715,  750,  762,  750,  740,  720,  655,  617,  575,  540,  470,  455, 
+   //   532,  420,  408,  400,  403,  403,  408,  406,  404,  400,  402,  404,  408,  424,  438, 
+   432,  420,  408,  400,  403,  403,  408,  406,  404,  400,  402,  404,  408,  424,  438, 
+   448,  450,  454,  456,  472,  480,  466,  456,  452,  448,  444,  440,  440,  440,  440 
 };
 
 const G4double G4NucleonNuclearCrossSection::si_m_t[45] = 
 { 
-  1810, 1833, 1850, 1872, 1920, 1950, 1995, 2020, 2035, 2000, 1930, 1850, 1760, 1570, 
-  1400, 1255, 1110, 1008, 846, 742, 696, 671, 623, 588, 584, 584, 602, 618, 645, 679, 
-  708, 727, 746, 757, 769, 782, 771, 734, 710, 698, 672, 654, 650, 650, 650 
+  1810, 1833, 1850, 1872, 1920, 1950, 1995, 2020, 2035, 2000, 1930, 1850, 1760, 1570, 1400, 
+  1255, 1110, 1008,  846,  742,  696,  671,  623,  588,  584,  584,  602,  618,  645,  679, 
+   708,  727,  746,  757,  769,  782,  771,  734,  710,  698,  672,  654,  650,  650,  650 
 };
 const G4double G4NucleonNuclearCrossSection::si_m_in[45] = 
 {
-  1060, 1035, 1015, 990, 935, 900, 860, 830, 790, 725, 665, 630, 600, 520, 504, 486, 
-  470, 456, 444, 432, 432, 432, 418, 418, 415, 412, 416, 422, 440, 460, 472, 476, 479, 
-  480, 492, 496, 488, 472, 472, 464, 460, 452, 448, 448, 448 
+  1060, 1035, 1015,  990,  935,  900,  860,  830,  790,  725,  665,  630,  600,  520,  504, 
+   486,  470,  456,  444,  432,  432,  432,  418,  418,  415,  412,  416,  422,  440,  460, 
+   472,  476,  479,  480,  492,  496,  488,  472,  472,  464,  460,  452,  448,  448,  448 
 };
 const G4double G4NucleonNuclearCrossSection::si_p_in[45] = 
 {
-  670, 700, 725, 750, 780, 780, 770, 757, 735, 690, 635, 585, 570, 490, 475, 460, 446, 
-  431, 423, 425, 425, 425, 425, 422, 422, 412, 416, 422, 440, 460, 472, 476, 479, 
-  480, 492, 496, 488, 472, 472, 464, 460, 452, 448, 448, 448
+   670,  700,  725,  750,  780,  780,  770,  757,  735,  690,  635,  585,  570,  490,  475, 
+   460,  446,  431,  423,  425,  425,  425,  425,  422,  422,  412,  416,  422,  440,  460, 
+   472,  476,  479,  480,  492,  496,  488,  472,  472,  464,  460,  452,  448,  448,  448
 };
 
 const G4double G4NucleonNuclearCrossSection::ca_m_t[45] = 
@@ -450,7 +450,8 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
- :fTotalXsc(0.0), fElasticXsc(0.0)
+ : G4VCrossSectionDataSet("G4NucleonNuclearCrossSection"),
+   fTotalXsc(0.0), fElasticXsc(0.0)
 {
   theNeutron = G4Neutron::Neutron();
   theProton  = G4Proton::Proton();
@@ -550,34 +551,10 @@ G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
 ////////////////////////////////////////////////////////////////////////////
 //
 
-G4double G4NucleonNuclearCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double)
-
-{
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int A = G4lrint(anElement->GetN());
-  return GetZandACrossSection(aParticle, Z, A, 0.);
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-
 G4bool
-G4NucleonNuclearCrossSection::IsApplicable(const G4DynamicParticle* aParticle, 
-						  const G4Element* anElement)
-{
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int A = G4lrint(anElement->GetN());
-  return IsIsoApplicable(aParticle, Z, A); 
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-
-G4bool
-G4NucleonNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* aParticle, 
-						    G4int Z, G4int)
+G4NucleonNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* aParticle, 
+						  G4int Z, 
+						  const G4Material*)
 {
   G4bool result = false;
   if(aParticle->GetDefinition() == theNeutron ) result = true;
@@ -587,93 +564,49 @@ G4NucleonNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* aParticle
   return result;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////
 //
 
-G4double G4NucleonNuclearCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                     G4int zElement, G4int, G4double  )
+G4double 
+G4NucleonNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+						     G4int Z, const G4Material*)
 {
    G4double kineticEnergy = aParticle->GetKineticEnergy();
   
    G4double result = 0;
-   G4int Z = zElement;
-
    // G4cout<<"Z = "<<Z<<G4endl;
 
    size_t it = 0;
-
-   while( it < theZ.size() && Z > theZ[it] ) {++it;}
-   if(it >= theZ.size()) it = theZ.size() - 1; 
-
-   if( Z > theZ[it] ) Z = theZ[it]; 
+   size_t itmax = theZ.size() - 1;
+   for(; it <= itmax; ++it) { if(Z <= theZ[it]) { break; } }
+   if( it > itmax ) { it = itmax; }
    G4int Z1, Z2;
    G4double x1, x2, xt1, xt2;
 
-   if(aParticle->GetDefinition() == theNeutron )
-   {
-     if( theZ[it] == Z )
+   std::vector<G4PiData *> * theData = &thePimData;
+   if(aParticle->GetDefinition() == theProton) { theData = &thePipData; }
+
+   if( theZ[it] == Z )
      {
-       result = thePimData[it]->ReactionXSection(kineticEnergy);
-       fTotalXsc = thePimData[it]->TotalXSection(kineticEnergy);
+       result = (*theData)[it]->ReactionXSection(kineticEnergy);
+       fTotalXsc = (*theData)[it]->TotalXSection(kineticEnergy);
      }
-     else
+   else
      {
-       x1 = thePimData[it-1]->ReactionXSection(kineticEnergy);
-       xt1 = thePimData[it-1]->TotalXSection(kineticEnergy);
-       Z1 = theZ[it-1];
-       x2 = thePimData[it]->ReactionXSection(kineticEnergy);
-       xt2 = thePimData[it]->TotalXSection(kineticEnergy);
-       Z2 = theZ[it];
+       if(0 == it) { it = 1; }
+       x1  = (*theData)[it-1]->ReactionXSection(kineticEnergy);
+       xt1 = (*theData)[it-1]->TotalXSection(kineticEnergy);
+       Z1  = theZ[it-1];
+       x2  = (*theData)[it]->ReactionXSection(kineticEnergy);
+       xt2 = (*theData)[it]->TotalXSection(kineticEnergy);
+       Z2  = theZ[it];
 
        result = Interpolate(Z1, Z2, Z, x1, x2);
        fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
      }
-   }
-   else if(aParticle->GetDefinition() == theProton)
-   {
-     if( theZ[it] == Z )
-     {
-       // at high energies, when no data for proton, use neutron 
 
-       std::vector<G4PiData *> * theData = &thePimData;
-
-       if( thePipData[it]->AppliesTo(kineticEnergy) )
-       {
-         theData = &thePipData;
-       }
-       result = theData->operator[](it)->ReactionXSection(kineticEnergy);
-       fTotalXsc = theData->operator[](it)->TotalXSection(kineticEnergy);
-
-     }
-     else
-     {
-       std::vector<G4PiData*>* theLData = &thePimData;
-
-       if(thePipData[it-1]->AppliesTo(kineticEnergy))
-       {
-         theLData = &thePipData;
-       }
-       std::vector<G4PiData *> * theHData = &thePimData;
-
-       if( thePipData[it]->AppliesTo(kineticEnergy) )
-       {
-         theHData = &thePipData;
-       }
-       x1 = theLData->operator[](it-1)->ReactionXSection(kineticEnergy);
-       xt1 = theLData->operator[](it-1)->TotalXSection(kineticEnergy);
-       Z1 = theZ[it-1];
-       x2 = theHData->operator[](it)->ReactionXSection(kineticEnergy);
-       xt2 = theHData->operator[](it)->TotalXSection(kineticEnergy);
-       Z2 = theZ[it];
-
-       result = Interpolate(Z1, Z2, Z, x1, x2);
-       fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
-     }
-   }
    fElasticXsc = fTotalXsc - result;
-   if( fElasticXsc < 0.) fElasticXsc = 0.;
+   if( fElasticXsc < 0.) { fElasticXsc = 0.; }
 
    return result;
 }
@@ -729,3 +662,15 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
   //       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
   return result;
 }
+
+void
+G4NucleonNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4NucleonNuclearCrossSection is a variant of the Barashenkov\n"
+          << "cross section parameterization to be used of protons and\n"
+          << "nucleons on targets heavier than hydrogen.  It is intended for\n"
+          << "use as a cross section component and is currently used by\n"
+          << "G4BGGNucleonInelasticXS.  It is valid for incident energies up\n"
+          << "to 1 TeV.\n"; 
+}
+

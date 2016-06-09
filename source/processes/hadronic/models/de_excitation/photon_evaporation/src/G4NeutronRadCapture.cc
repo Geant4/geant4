@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc,v 1.6 2010/11/17 16:21:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NeutronRadCapture.cc,v 1.6 2010-11-17 16:21:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -69,6 +69,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
   theParticleChange.Clear();
+  theParticleChange.SetStatusChange(stopAndKill);
 
   G4int A = theNucleus.GetA_asInt();
   G4int Z = theNucleus.GetZ_asInt();
@@ -129,7 +130,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
   // Use photon evaporation  
   } else {
  
-    G4Fragment aFragment(A+1, Z, lv1);
+    G4Fragment* aFragment = new G4Fragment(A+1, Z, lv1);
 
     if (verboseLevel > 1) {
       G4cout << "G4NeutronRadCapture::ApplyYourself initial G4Fragmet:" << G4endl;
@@ -139,38 +140,37 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     //
     // Sample final state
     //
-    G4FragmentVector* fv = photonEvaporation->BreakUpFragment(&aFragment);
-    if(fv) {
-      size_t n = fv->size();
+    G4FragmentVector* fv = photonEvaporation->BreakUpFragment(aFragment);
+    if(!fv) { fv = new G4FragmentVector(); }
+    fv->push_back(aFragment);
+    size_t n = fv->size();
+
+    if (verboseLevel > 1) {
+      G4cout << "G4NeutronRadCapture: " << n << " final particle" << G4endl;
+    }
+    for(size_t i=0; i<n; ++i) {
+      G4Fragment* f = (*fv)[i];    
+      G4LorentzVector lvres = f->GetMomentum();   
+      Z = f->GetZ_asInt();
+      A = f->GetA_asInt();
+
+      G4ParticleDefinition* theDef = 0;
+      if(0 == Z && 0 == A) {theDef =  f->GetParticleDefinition();}
+      else
+	{
+	  theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
+	}
 
       if (verboseLevel > 1) {
-	G4cout << "G4NeutronRadCapture: " << n << " final particle" << G4endl;
+	G4cout << i << ". " << theDef->GetParticleName()
+	       << "   " << lvres << G4endl;
       }
-      for(size_t i=0; i<n; ++i) {
-	G4Fragment* f = (*fv)[i];    
-	G4LorentzVector lvres = f->GetMomentum();   
-	Z = f->GetZ_asInt();
-	A = f->GetA_asInt();
-
-	G4ParticleDefinition* theDef = 0;
-	if(0 == Z && 0 == A) {theDef =  f->GetParticleDefinition();}
-	else
-	  {
-	    theDef = 
-	      G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
-	  }
-
-	if (verboseLevel > 1) {
-	  G4cout << i << ". " << theDef->GetParticleName()
-		 << "   " << lvres << G4endl;
-	}
-	if(theDef) {
-	  theParticleChange.AddSecondary(new G4DynamicParticle(theDef, lvres));
-	}
-	delete f;
+      if(theDef) {
+	theParticleChange.AddSecondary(new G4DynamicParticle(theDef, lvres));
       }
-      delete fv;
+      delete f;
     }
+    delete fv;
   }
   return &theParticleChange;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.15 2008/05/20 21:24:28 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPChannel.hh,v 1.15 2008-05-20 21:24:28 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -117,7 +117,9 @@ public:
 
   void Init(G4Element * theElement, const G4String dirName, const G4String fsType); 
   
-  void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
+  //void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
+  void UpdateData(G4int A, G4int Z, G4int index, G4double abundance) { G4int M = 0; UpdateData( A, Z, M, index, abundance); };
+  void UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance);
   
   void Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew);
 

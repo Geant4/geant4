@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Square.hh,v 1.8 2006/06/29 19:06:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Square.hh,v 1.8 2006-06-29 19:06:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  17/11/96.
@@ -46,8 +46,8 @@ class G4Square: public G4VMarker {
 public: // With description
 
   G4Square ();
-  G4Square (const G4Point3D& pos);
-  G4Square (const G4VMarker& marker);
+  G4Square (const G4VMarker&);
+  G4Square (const G4Point3D& position);
   ~G4Square ();
 
 };

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.8 2009/04/24 15:47:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
 //

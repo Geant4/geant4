@@ -31,17 +31,7 @@
 ##########################
 # Set of the physic models
 #
-
-/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
-/Physics/addPhysics Em_extra_physics			
-/Physics/addPhysics Elastic                             # Hadronic elastic model
-/Physics/addPhysics decay
-/Physics/addPhysics radioactive_decay
-/Physics/addPhysics Stopping_physics
-/Physics/addPhysics Neutron_tracking_cut
-/Physics/addPhysics binary                              # Hadronic inelastic model
-
-#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
+/Physics/addPhysics QGSP_BIC_EMY
  
 ##########################
 # Initialisation procedure
@@ -83,7 +73,7 @@
 # THE FOLLOWIG PARAMETERS
 # SETTING FOR THE RANGE SHIFTER
 
-/beamLine/RangeShifter/RSMat Air
+/beamLine/RangeShifter/RSMat G4_AIR
 /beamLine/RangeShifter/thickness 1 cm
 
 

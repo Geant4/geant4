@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.73 2010/10/19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Cons.cc,v 1.74 2011-01-07 10:01:09 tnikitin Exp $
+// GEANT4 tag $Name: $
 //
 //
 // class G4Cons
@@ -90,23 +90,23 @@ G4Cons::G4Cons( const G4String& pName,
   //
   if ( pDz < 0 )
   {
-    G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
-    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
-                FatalException, "Invalid Z half-length.");
+    std::ostringstream message;
+    message << "Invalid Z half-length for Solid: " << GetName() << G4endl
+            << "        hZ = " << pDz;
+    G4Exception("G4Cons::G4Cons()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Check radii
   //
   if (((pRmin1>=pRmax1) || (pRmin2>=pRmax2) || (pRmin1<0)) && (pRmin2<0))
   {
-    G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Invalide values for radii ! - "
-           << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
-           << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2 << G4endl;
-    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
-                FatalException, "Invalid radii.") ;
+    std::ostringstream message;
+    message << "Invalid values of radii for Solid: " << GetName() << G4endl
+            << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
+            << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2;
+    G4Exception("G4Cons::G4Cons()", "GeomSolids0002",
+                FatalException, message) ;
   }
   if( (pRmin1 == 0.0) && (pRmin2 > 0.0) ) { fRmin1 = 1e3*kRadTolerance ; }
   if( (pRmin2 == 0.0) && (pRmin1 > 0.0) ) { fRmin2 = 1e3*kRadTolerance ; }
@@ -275,7 +275,7 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
     G4double yoffset, yMin, yMax ;
     G4double zoffset, zMin, zMax ;
 
-    G4double diff1, diff2, maxDiff, newMin, newMax, RMax ;
+    G4double diff1, diff2, delta, maxDiff, newMin, newMax, RMax ;
     G4double xoff1, xoff2, yoff1, yoff2 ;
       
     zoffset = pTransform.NetTranslation().z();
@@ -366,9 +366,10 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
         {
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
-         
-          diff1   = std::sqrt(RMax*RMax - yoff1*yoff1) ;
-          diff2   = std::sqrt(RMax*RMax - yoff2*yoff2) ;
+          delta=RMax*RMax-yoff1*yoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=RMax*RMax-yoff2*yoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1>diff2) ? diff1:diff2 ;
           newMin  = xoffset - maxDiff ;
           newMax  = xoffset + maxDiff ;
@@ -390,9 +391,10 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
         {
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
-
-          diff1   = std::sqrt(RMax*RMax - xoff1*xoff1) ;
-          diff2   = std::sqrt(RMax*RMax-xoff2*xoff2) ;
+          delta=RMax*RMax-xoff1*xoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=RMax*RMax-xoff2*xoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1 > diff2) ? diff1:diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
@@ -564,8 +566,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Cons::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Cons::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -674,8 +676,9 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       break ;
     default:          // Should never reach this case...
       DumpInfo();
-      G4Exception("G4Cons::ApproxSurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.") ;
+      G4Exception("G4Cons::ApproxSurfaceNormal()",
+                  "GeomSolids1002", JustWarning,
+                  "Undefined side for valid surface normal to solid.");
       break ;    
   }
   return norm ;
@@ -714,7 +717,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   static const G4double halfRadTolerance=kRadTolerance*0.5;
 
   G4double tanRMax,secRMax,rMaxAv,rMaxOAv ;  // Data for cones
-  G4double tanRMin,secRMin,rMinAv,rMinIAv,rMinOAv ;
+  G4double tanRMin,secRMin,rMinAv,rMinOAv ;
   G4double rout,rin ;
 
   G4double tolORMin,tolORMin2,tolIRMin,tolIRMin2 ; // `generous' radii squared
@@ -738,12 +741,10 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   if (rMinAv > halfRadTolerance)
   {
     rMinOAv = rMinAv - halfRadTolerance ;
-    rMinIAv = rMinAv + halfRadTolerance ;
   }
   else
   {
     rMinOAv = 0.0 ;
-    rMinIAv = 0.0 ;
   }  
   tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
   secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;
@@ -858,7 +859,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     b = nt2/nt1;
     c = nt3/nt1;
     d = b*b-c  ;
-    if ( (nt3 > rout*kRadTolerance*secRMax) || (rout < 0) )
+    if ( (nt3 > rout*rout*kRadTolerance*kRadTolerance*secRMax*secRMax)
+      || (rout < 0) )
     {
       // If outside real cone (should be rho-rout>kRadTolerance*0.5
       // NOT rho^2 etc) saves a std::sqrt() at expense of accuracy
@@ -871,13 +873,14 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           // Inside `shadow cone' with -ve radius
           // -> 2nd root could be on real cone
 
-          s = -b + std::sqrt(d) ;
+          if (b>0) { s = c/(-b-std::sqrt(d)); }
+          else     { s = -b + std::sqrt(d);   }
         }
         else
         {
           if ((b <= 0) && (c >= 0)) // both >=0, try smaller root
           {
-            s = -b - std::sqrt(d) ;
+            s=c/(-b+std::sqrt(d));
           }
           else
           {
@@ -1010,7 +1013,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         d = b*b-c ;
         if (d >= 0)   // > 0
         {
-          s = -b + std::sqrt(d) ;
+           if(b>0){s = c/( -b-std::sqrt(d));}
+           else   {s = -b + std::sqrt(d) ;}
 
           if ( s >= 0 )   // > 0
           {
@@ -1074,7 +1078,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
         if ( d >= 0 )  // > 0
         {
-          s  = -b + std::sqrt(d) ;
+          if (b>0) { s = c/(-b-std::sqrt(d)); }
+          else     { s = -b + std::sqrt(d);   }
           zi = p.z() + s*v.z() ;
           ri = rMinAv + zi*tanRMin ;
 
@@ -1124,7 +1129,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           }
           else
           {
-            s  = -b - std::sqrt(d) ;
+	    if (b>0) { s = -b - std::sqrt(d);   }
+            else     { s = c/(-b+std::sqrt(d)); }
             zi = p.z() + s*v.z() ;
             ri = rMinAv + zi*tanRMin ;
 
@@ -1204,13 +1210,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( d >= 0 )   // > 0
             {
-              s  = -b - std::sqrt(d) ;
+              if (b>0) { s = -b - std::sqrt(d);   }
+              else     { s = c/(-b+std::sqrt(d)); }
               zi = p.z() + s*v.z() ;
               ri = rMinAv + zi*tanRMin ;
               
               if ( ri > 0 )   // 2nd root
               {
-                s  = -b + std::sqrt(d) ;
+                if (b>0) { s = c/(-b-std::sqrt(d)); }
+                else     { s = -b + std::sqrt(d);   }
+                
                 zi = p.z() + s*v.z() ;
 
                 if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
@@ -1244,7 +1253,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           if ( d > 0 )
           {  
-            s  = -b + std::sqrt(d) ;
+            if (b>0) { s = c/(-b-std::sqrt(d)); }
+            else     { s = -b + std::sqrt(d) ;  }
             zi = p.z() + s*v.z() ;
 
             if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
@@ -1579,7 +1589,9 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       else
       {
         sider = kRMax  ;
-        sr    = -b - std::sqrt(d) ; // was +srqrt(d), vmg 28.04.99
+        if (b>0) { sr = -b - std::sqrt(d);    }
+        else     { sr = c/(-b+std::sqrt(d)) ; }
+
         zi    = p.z() + sr*v.z() ;
         ri    = tanRMax*zi + rMaxAv ;
           
@@ -1596,7 +1608,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           // Safety: if both roots -ve ensure that sr cannot `win'
           //         distance to out
 
-          sr2 = -b + std::sqrt(d) ;
+          if (b>0) { sr2 = c/(-b-std::sqrt(d)); }
+          else     { sr2 = -b + std::sqrt(d);   }
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMax*zi + rMaxAv ;
 
@@ -1723,7 +1736,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         }
         else
         {
-          sr2 = -b - std::sqrt(d) ;
+          if (b>0) { sr2 = -b - std::sqrt(d);   }
+          else     { sr2 = c/(-b+std::sqrt(d)); }
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMin*zi + rMinAv ;
 
@@ -1737,7 +1751,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           }
           if( (ri<0) || (sr2 < halfRadTolerance) )
           {
-            sr3 = -b + std::sqrt(d) ;
+            if (b>0) { sr3 = c/(-b-std::sqrt(d)); }
+            else     { sr3 = -b + std::sqrt(d) ;  }
 
             // Safety: if both roots -ve ensure that sr cannot `win'
             //         distancetoout
@@ -2015,29 +2030,32 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         *validNorm = true ;
         break ;
       default:
-        G4cout.precision(16) ;
         G4cout << G4endl ;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl ;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-        G4cout << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm
-               << " mm" << G4endl << G4endl ;
+        std::ostringstream message;
+        G4int oldprc = message.precision(16) ;
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm
+                << " mm" << G4endl << G4endl ;
         if( p.x() != 0. || p.x() != 0.)
         {
-           G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree
-                  << " degree" << G4endl << G4endl ; 
+           message << "point phi = "   << std::atan2(p.y(),p.x())/degree
+                   << " degree" << G4endl << G4endl ; 
         }
-        G4cout << "Direction:" << G4endl << G4endl ;
-        G4cout << "v.x() = "   << v.x() << G4endl ;
-        G4cout << "v.y() = "   << v.y() << G4endl ;
-        G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
-        G4cout << "Proposed distance :" << G4endl<< G4endl ;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4cout.precision(6) ;
-        G4Exception("G4Cons::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.") ;
+        message << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl<< G4endl
+                << "Proposed distance :" << G4endl<< G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl ;
+        message.precision(oldprc) ;
+        G4Exception("G4Cons::DistanceToOut(p,v,..)","GeomSolids1002",
+                    JustWarning, message) ;
         break ;
     }
   }
@@ -2074,7 +2092,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
              << " degree" << G4endl << G4endl ; 
     }
     G4cout.precision(oldprc) ;
-    G4Exception("G4Cons::DistanceToOut(p)", "Notification",
+    G4Exception("G4Cons::DistanceToOut(p)", "GeomSolids1002",
                 JustWarning, "Point p is outside !?" );
   }
 #endif
@@ -2211,7 +2229,7 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Cons::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
 
@@ -2242,6 +2260,7 @@ G4VSolid* G4Cons::Clone() const
 
 std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -2255,6 +2274,7 @@ std::ostream& G4Cons::StreamInfo(std::ostream& os) const
      << "   starting angle of segment: " << fSPhi/degree << " degrees \n"
      << "   delta angle of segment   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

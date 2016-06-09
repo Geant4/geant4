@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiLambdaInelastic.hh,v 1.11 2007/02/24 06:11:24 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LEAntiLambdaInelastic.hh,v 1.11 2007-02-24 06:11:24 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -57,6 +57,8 @@
     
     G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus );
+
+    virtual void ModelDescription(std::ostream& outFile) const;
     
  private:
     

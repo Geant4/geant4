@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.cc,v 1.8 2006/06/29 21:13:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserRunAction.cc,v 1.8 2006-06-29 21:13:58 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UserRunAction.hh"
@@ -45,7 +45,7 @@ G4UserRunAction::G4UserRunAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserRunAction.";
    G4Exception("G4UserRunAction::G4UserRunAction()",
-              "Run0002",FatalException,msg);
+              "Run0041",FatalException,msg);
  }
 }
 

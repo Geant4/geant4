@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.57 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eIonisation.cc,v 1.57 2009-02-20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -90,8 +90,6 @@ G4eIonisation::G4eIonisation(const G4String& name)
     isInitialised(false)
 {
   //  SetStepFunction(0.2, 1*mm);
-  // SetIntegral(true);
-  // SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
 }
 
@@ -115,7 +113,7 @@ G4double G4eIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
+  return (&p == theElectron || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,12 +123,12 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 		    const G4ParticleDefinition*)
 {
   if(!isInitialised) {
-    if(part == G4Positron::Positron()) isElectron = false;
+    if(part != theElectron) { isElectron = false; }
     SetSecondaryParticle(theElectron);
-    if (!EmModel()) SetEmModel(new G4MollerBhabhaModel());
+    if (!EmModel()) { SetEmModel(new G4MollerBhabhaModel()); }
     EmModel()->SetLowEnergyLimit (MinKinEnergy());
     EmModel()->SetHighEnergyLimit(MaxKinEnergy());
-    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
                 
     AddEmModel(1, EmModel(), FluctModel());
     isInitialised = true;

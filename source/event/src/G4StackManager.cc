@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.15 2010/12/15 22:15:07 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4StackManager.cc,v 1.15 2010-12-15 22:15:07 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -118,7 +118,10 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
       default:
         G4int i = classification - 10;
         if(i<1||i>numberOfAdditionalWaitingStacks) {
-          G4Exception("G4StackManager : invalid classification");
+          G4ExceptionDescription ED;
+          ED << "invalid classification " << classification << G4endl;
+          G4Exception("G4StackManager::PushOneTrack","Event0051",
+          FatalException,ED);
         } else {
           additionalWaitingStacks[i-1]->PushToStack( newStackedTrack );
         }
@@ -216,7 +219,10 @@ void G4StackManager::ReClassify()
       default:
         G4int i = classification - 10;
         if(i<1||i>numberOfAdditionalWaitingStacks) {
-          G4Exception("G4StackManager : invalid classification");
+          G4ExceptionDescription ED;
+          ED << "invalid classification " << classification << G4endl;
+          G4Exception("G4StackManager::ReClassify","Event0052",
+          FatalException,ED);
         } else {
           additionalWaitingStacks[i-1]->PushToStack( aStackedTrack );
         }
@@ -279,7 +285,10 @@ G4int G4StackManager::PrepareNewEvent()
           default:
             G4int i = classification - 10;
             if(i<1||i>numberOfAdditionalWaitingStacks) {
-              G4Exception("G4StackManager : invalid classification");
+              G4ExceptionDescription ED;
+              ED << "invalid classification " << classification << G4endl;
+              G4Exception("G4StackManager::PrepareNewEvent","Event0053",
+              FatalException,ED);
             } else {
               additionalWaitingStacks[i-1]->PushToStack( aStackedTrack );
             }

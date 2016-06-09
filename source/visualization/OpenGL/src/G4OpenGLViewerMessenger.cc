@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.21 2010/11/07 10:31:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.22 2011-01-07 09:47:23 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -60,39 +60,6 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpDirectory = new G4UIdirectory("/vis/ogl/");
   fpDirectory->SetGuidance("G4OpenGLViewer commands.");
-
-  fpCommandPrintEPS =
-    new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
-  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetGuidance
-    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0."
-     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
-
-  fpCommandPrintSize =
-    new G4UIcommand("/vis/ogl/set/printSize", this);
-  fpCommandPrintSize->SetGuidance ("Set print size");
-  fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
-  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
-  G4UIparameter* parameterPrintSize;
-  parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
-  parameterPrintSize->SetDefaultValue(-1);
-  fpCommandPrintSize->SetParameter(parameterPrintSize);
-  parameterPrintSize = new G4UIparameter ("height", 'd', omitable = false);
-  parameterPrintSize->SetDefaultValue(-1);
-  fpCommandPrintSize->SetParameter(parameterPrintSize);
-
-  fpCommandPrintFilename =
-    new G4UIcommand("/vis/ogl/set/printFilename", this);
-  fpCommandPrintFilename->SetGuidance ("Set print filename");
-  fpCommandPrintFilename->SetGuidance ("Setting 'incremental' will increment filename by one at each new print, starting at 0");
-  G4UIparameter* parameterPrintFilename;
-  parameterPrintFilename = new G4UIparameter ("name", 's', omitable = true);
-  parameterPrintFilename->SetDefaultValue("G4OpenGL");
-  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
-  parameterPrintFilename = new G4UIparameter ("incremental", 'b', omitable = true);
-  parameterPrintFilename->SetDefaultValue(1);
-  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -210,12 +177,45 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandFade->SetRange("fadefactor>=0.&&fadefactor<=1.");
   fpCommandFade->SetDefaultValue(0.);
 
+  fpCommandPrintEPS =
+    new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
+  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
+  fpCommandPrintEPS->SetGuidance
+    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
+     "\nnumber, starting at 0."
+     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
+
+  fpCommandPrintFilename =
+    new G4UIcommand("/vis/ogl/set/printFilename", this);
+  fpCommandPrintFilename->SetGuidance ("Set print filename");
+  fpCommandPrintFilename->SetGuidance ("Setting 'incremental' will increment filename by one at each new print, starting at 0");
+  G4UIparameter* parameterPrintFilename;
+  parameterPrintFilename = new G4UIparameter ("name", 's', omitable = true);
+  parameterPrintFilename->SetDefaultValue("G4OpenGL");
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
+  parameterPrintFilename = new G4UIparameter ("incremental", 'b', omitable = true);
+  parameterPrintFilename->SetDefaultValue(1);
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
+
   fpCommandPrintMode = new G4UIcmdWithAString
     ("/vis/ogl/set/printMode",this);
   fpCommandPrintMode->SetGuidance("Set print mode");
   fpCommandPrintMode->SetParameterName("print_mode",omitable = true);
   fpCommandPrintMode->SetCandidates("vectored pixmap");
   fpCommandPrintMode->SetDefaultValue("vectored");
+
+  fpCommandPrintSize =
+    new G4UIcommand("/vis/ogl/set/printSize", this);
+  fpCommandPrintSize->SetGuidance ("Set print size");
+  fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
+  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
+  G4UIparameter* parameterPrintSize;
+  parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
+  parameterPrintSize = new G4UIparameter ("height", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
 
   fpCommandStartTime =
     new G4UIcommand("/vis/ogl/set/startTime", this);
@@ -244,16 +244,18 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
 G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
 {
-  delete fpCommandPrintMode;
   delete fpCommandTransparency;
   delete fpCommandStartTime;
+  delete fpCommandPrintSize;
+  delete fpCommandPrintMode;
+  delete fpCommandPrintFilename;
+  delete fpCommandPrintEPS;
   delete fpCommandFade;
   delete fpCommandEndTime;
   delete fpCommandDisplayListLimit;
   delete fpCommandDisplayLightFront;
   delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
-  delete fpCommandPrintEPS;
   delete fpDirectory;
 
   delete fpInstance;
@@ -289,6 +291,8 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (command == fpCommandPrintEPS) 
     {
       pOGLViewer->printEPS();
+      if (pOGLViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
       return;
     }
 
@@ -299,6 +303,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       iss >> width
 	  >> height;
       pOGLViewer->setPrintSize(width,height);
+      return;
     }
 
   if (command == fpCommandPrintFilename) 
@@ -309,6 +314,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       iss >> name
 	  >> inc;
       pOGLViewer->setPrintFilename(name,inc);
+      return;
     }
 
   if (command == fpCommandPrintMode)
@@ -405,6 +411,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       pOGLSViewer->fFadeFactor = command->ConvertToDouble(newValue);
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
   if (command == fpCommandStartTime)
@@ -471,6 +478,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       G4int displayListLimit =
 	fpCommandDisplayListLimit->GetNewIntValue(newValue);
       pOGLSSceneHandler->SetDisplayListLimit(displayListLimit);
+      return;
     }
 }
 

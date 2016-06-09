@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.16 2008/10/24 14:00:03 gcosmo Exp $
+// $Id: G4SafetyHelper.cc,v 1.16 2008-10-24 14:00:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation

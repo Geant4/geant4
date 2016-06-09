@@ -1,0 +1,24 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example RE03 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+ 
+Nov. 11, 2011 G.Folger (exampleRE04-V09-04-02)
+-  Correct name in CMakeList.txt to RE04
+
+Nov. 09, 2011 M.Asai   (exampleRE04-V09-04-01)
+- Correcting banner of each file.
+
+Nov. 07, 2011 M.Asai   (exampleRE04-V09-04-00)
+- Introducing this example.
+

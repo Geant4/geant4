@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.cc,v 1.4 2006/06/29 18:36:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DrawVoxels.cc,v 1.4 2006-06-29 18:36:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4DrawVoxels
@@ -234,11 +234,8 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
    }
    else
    {
-     G4cerr << "ERROR - G4DrawVoxels::DrawVoxels()" << G4endl
-            << "        Pointer to visualization manager is null!"
-            << G4endl; 
      G4Exception("G4DrawVoxels::DrawVoxels()",
-                 "NotApplicable", JustWarning,
+                 "GeomNav1002", JustWarning,
                  "Pointer to visualization manager is null!");
    }
    delete pplist;

@@ -8,9 +8,15 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.2 2010/11/19 08:43:44 gcosmo Exp $
+# $Id: CMakeLists.txt,v 1.3 2010-11-23 13:29:25 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
+
+# Add allocation export symbol for the EM category
+add_definitions(-DG4EM_ALLOC_EXPORT)
+
+# Add allocation export symbol for the hadronic category
+add_definitions(-DG4HADRONIC_ALLOC_EXPORT)
 
 add_subdirectory(biasing)
 add_subdirectory(cuts)
@@ -31,6 +37,12 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             cuts/sources.cmake
             decay/sources.cmake
             electromagnetic/adjoint/sources.cmake
+            electromagnetic/dna/processes/sources.cmake
+            electromagnetic/dna/models/sources.cmake
+            electromagnetic/dna/utils/sources.cmake
+            electromagnetic/dna/management/sources.cmake
+            electromagnetic/dna/molecules/management/sources.cmake
+            electromagnetic/dna/molecules/types/sources.cmake
             electromagnetic/highenergy/sources.cmake
             electromagnetic/lowenergy/sources.cmake
             electromagnetic/muons/sources.cmake
@@ -66,7 +78,11 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/high_energy/sources.cmake
             hadronic/models/im_r_matrix/sources.cmake
             hadronic/models/incl/sources.cmake
+            hadronic/models/inclxx/utils/sources.cmake
+            hadronic/models/inclxx/incl_physics/sources.cmake
+            hadronic/models/inclxx/interface/sources.cmake
             hadronic/models/isotope_production/sources.cmake
+            hadronic/models/lend/sources.cmake
             hadronic/models/lll_fission/sources.cmake
             hadronic/models/low_energy/sources.cmake
             hadronic/models/management/sources.cmake
@@ -79,6 +95,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/pre_equilibrium/exciton_model/sources.cmake
             hadronic/models/qmd/sources.cmake
             hadronic/models/radioactive_decay/sources.cmake
+            hadronic/models/quasi_elastic/sources.cmake
             hadronic/models/rpg/sources.cmake
             hadronic/models/theo_high_energy/sources.cmake
             hadronic/models/util/sources.cmake

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPCaptureFS.hh,v 1.11 2006/06/29 20:46:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPCaptureFS.hh,v 1.11 2006-06-29 20:46:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1
@@ -37,6 +37,7 @@
 #include "G4ReactionProductVector.hh"
 #include "G4NeutronHPNames.hh"
 #include "G4NeutronHPPhotonDist.hh"
+#include "G4NeutronHPEnAngCorrelation.hh"
 
 class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
 {
@@ -45,6 +46,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4NeutronHPCaptureFS()
   {
     hasXsec = false; 
+    hasExactMF6 = false;
     targetMass = 0;
   }
   
@@ -52,7 +54,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   {
   }
   
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {
@@ -65,6 +67,9 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4double targetMass;
   
   G4NeutronHPPhotonDist theFinalStatePhotons;
+
+   G4NeutronHPEnAngCorrelation theMF6FinalState;
+   G4bool hasExactMF6;
   
   G4NeutronHPNames theNames;
   

@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.11 2007/01/05 14:06:28 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Colour.cc,v 1.11 2007-01-05 14:06:28 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 20th October 1996
 
 #include "G4Colour.hh"
-
-#include <sstream>
 
 G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
 red (r), green (g), blue (b), alpha (a)
@@ -71,7 +69,7 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-map<G4String, G4Colour> G4Colour::fColourMap;
+std::map<G4String, G4Colour> G4Colour::fColourMap;
 bool G4Colour::fInitColourMap = false;
 
 void
@@ -81,15 +79,16 @@ G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
   G4String myKey(key);
   myKey.toLower();
 
-  map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
   
   if (iter == fColourMap.end()) fColourMap[myKey] = colour;  
   else {
-    std::ostringstream o; 
-    o << "G4Colour with key "<<myKey<<" already exists ";
+    G4ExceptionDescription ed; 
+    ed << "G4Colour with key "<<myKey<<" already exists."<<G4endl;
     G4Exception
       ("G4Colour::AddToMap(const G4String& key, const G4Colour& colour)",
-       "ColourKeyExists", JustWarning, o.str().c_str());
+       "greps0001", JustWarning, ed,
+       "Colour key exists");
   }
 }
 
@@ -121,7 +120,7 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
   G4String myKey(key);
   myKey.toLower();
  
-  map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
 
   // Don't modify "result" if colour was not found in map
   if (iter == fColourMap.end()) return false;
@@ -129,4 +128,15 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
   result = iter->second;
 
   return true;
+}
+
+const std::map<G4String, G4Colour>& G4Colour::GetMap()
+{
+  if (false == fInitColourMap) {
+    fInitColourMap = true;
+    // Add standard colours to map
+    InitialiseColourMap();
+  }
+ 
+  return fColourMap;
 }

@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2007/08/19 20:52:53 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.7 2007-08-19 20:52:53 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
-#include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "StepMax.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -86,24 +85,41 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //
   status[0] = status[1] = status[2] = 0;
   
-  //get csdaRange from EmCalculator
+  //normalized binwidth
   //
-  G4EmCalculator emCalculator;
-  G4Material* material = detector->GetAbsorMaterial();
-  G4ParticleDefinition* particle = kinematic->GetParticleGun()
-                                          ->GetParticleDefinition();
-  G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
-  csdaRange = DBL_MAX;
-  if (particle->GetPDGCharge() != 0.)
-    csdaRange = emCalculator.GetCSDARange(energy,particle,material);
-        
+  for (G4int i=0; i< MaxAbsor; i++) {
+  csdaRange[i] = xfrontNorm[i] = 0.;
+  }
+    
   //histograms
   //
   histoManager->book();
-    
-  //set StepMax from histos
+  
+  //set StepMax from histos 1 and 8
   //
-  G4double stepMax = histoManager->ComputeStepMax(csdaRange);
+  G4double stepMax = DBL_MAX;
+  G4int ih = 1;
+  if (histoManager->HistoExist(ih)) stepMax = histoManager->GetBinWidth(ih);     
+  //
+  ih = 8;
+  G4ParticleDefinition* particle = kinematic->GetParticleGun()
+                                          ->GetParticleDefinition();
+  if (particle->GetPDGCharge() != 0.) {
+    G4double width = histoManager->GetBinWidth(ih);   					    
+    G4EmCalculator emCalculator;
+    G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
+    G4int NbOfAbsor = detector->GetNbOfAbsor();
+    for (G4int i=1; i<= NbOfAbsor; i++) {
+      G4Material* material = detector->GetAbsorMaterial(i);  
+      csdaRange[i] = emCalculator.GetCSDARange(energy,particle,material);
+      if (histoManager->HistoExist(ih))
+        stepMax = std::min(stepMax, width*csdaRange[i]);
+      if (i>1) {
+        G4double thickness = detector->GetAbsorThickness(i-1);
+        xfrontNorm[i] = xfrontNorm[i-1] + thickness/csdaRange[i-1];
+      }			      
+    }        
+  }     
   physics->GetStepMaxProcess()->SetMaxStep(stepMax);           
 }
 
@@ -119,25 +135,30 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double fNbofEvents = double(NbofEvents);
 
   //run conditions
-  //  
-  G4Material* material = detector->GetAbsorMaterial();
-  G4double density = material->GetDensity();
-   
+  //     
   G4ParticleDefinition* particle = kinematic->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();    		         
   G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
   
+  G4int NbOfAbsor = detector->GetNbOfAbsor();
+  
   G4cout << "\n ======================== run summary ======================\n";
   
   G4int prec = G4cout.precision(2);
   
-  G4cout << "\n The run consists of " << NbofEvents << " "<< partName << " of "
-         << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(detector->GetAbsorSizeX(),"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-	 
+  G4cout 
+    << "\n The run consists of " << NbofEvents << " "<< partName << " of "
+    << G4BestUnit(energy,"Energy") 
+    << " through "  << NbOfAbsor << " absorbers: \n";
+  for (G4int i=1; i<= NbOfAbsor; i++) {
+     G4Material* material = detector->GetAbsorMaterial(i);
+     G4double thickness = detector->GetAbsorThickness(i);
+     G4double density = material->GetDensity();    
+     G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
+	    << material->GetName() << " (density: " 
+	    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+  }	 
   G4cout << "\n ============================================================\n";
   
   //compute total energy deposit
@@ -165,13 +186,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     
   //compare with csda range
   //
-  //G4EmCalculator emCalculator;
-  //G4double csdaRange = 0.;
-  //if (particle->GetPDGCharge() != 0.)
-  //  csdaRange = emCalculator.GetCSDARange(energy,particle,material);
-  G4cout 
-    << "\n Range from EmCalculator       = " << G4BestUnit(csdaRange,"Length")
-    << " (from full dE/dx)" << G4endl;
+  if (NbOfAbsor == 1) {
+    G4cout 
+     << "\n Range from EmCalculator = " << G4BestUnit(csdaRange[1],"Length")
+     << " (from full dE/dx)" << G4endl;
+  }
    	 	 
   //compute projected range of primary track
   //
@@ -224,8 +243,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   ih = 8;
   binWidth = histoManager->GetBinWidth(ih);
-  G4double range = histoManager->GetcsdaRange();
-  fac = (1./(NbofEvents*binWidth*range*density))*(g/(MeV*cm2));
+  fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
   histoManager->Scale(ih,fac);
     
    // reset default formats

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.cc,v 1.3 2006/06/29 20:55:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VParticipants.cc,v 1.3 2006-06-29 20:55:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,24 +35,34 @@
 //      abstract class finding participants in a hadron Nucleus collision
 //       in Parton String Models.
 // ------------------------------------------------------------
+// 20110805  M. Kelsey -- Reduce external rebuilds: move #include, Init()
+//		and SetNucleus() here.
 
 #include "G4VParticipants.hh"
-#include "Randomize.hh"
+#include "G4Fancy3DNucleus.hh"
+
 
 G4VParticipants::G4VParticipants() : theNucleus(NULL)
 {}
 
 
-
 G4VParticipants::~G4VParticipants()
 {
 // G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
-	if ( theNucleus != NULL ) delete theNucleus;
+  if ( theNucleus != NULL ) delete theNucleus;
 }
 
 
+inline void G4VParticipants::Init(G4int theA, G4int theZ)
+{
+  if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
+  theNucleus->Init(theA, theZ);
+  theNucleus->SortNucleonsIncZ();
+}
 
 
-
-
-
+inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
+{
+  if (theNucleus != NULL) delete theNucleus;
+  theNucleus = aNucleus;
+}

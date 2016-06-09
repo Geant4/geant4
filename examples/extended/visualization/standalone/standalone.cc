@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: standalone.cc,v 1.3 2010/11/09 10:02:45 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: standalone.cc,v 1.3 2010-11-09 10:02:45 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"

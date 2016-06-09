@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.38 2010/12/15 07:39:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleDefinition.cc,v 1.39 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -127,6 +127,9 @@ G4ParticleDefinition::G4ParticleDefinition(
        G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
 #endif
+     G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+		  "PART102", JustWarning, 
+		  "Strange PDGEncoding ");
    }
 
    // check initialization is in Pre_Init state except for ions
@@ -140,7 +143,7 @@ G4ParticleDefinition::G4ParticleDefinition(
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
-		  "Illegal operation", JustWarning, 
+		  "PART101", JustWarning, 
 		  "G4ParticleDefinition should be created in PreInit state");
    }
 
@@ -163,15 +166,15 @@ G4ParticleDefinition::G4ParticleDefinition(
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)
 {
   G4Exception("G4ParticleDefinition::G4ParticleDefinition()",
-	      "illegal constructor call", FatalException,
-	      "You call Copy Constructor of G4ParticleDefinition ");
+	      "PART001", FatalException,
+	      "Illegal call of copy Constructor for G4ParticleDefinition ");
 }
 
 G4ParticleDefinition::G4ParticleDefinition()
 {
   G4Exception("G4ParticleDefinition::G4ParticleDefinition()",
-	      "illegal constructor call", FatalException,
-	      "You call Default Constructor of G4ParticleDefinition ");
+	      "PART001", FatalException,
+	      "Illegal call of default Constructor for G4ParticleDefinition ");
 }
 
 
@@ -226,6 +229,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
       // check charge
       if (!checker.CheckCharge(thePDGCharge) ){
 	temp = 0;
+	G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+		  "PART103", JustWarning, 
+		  "Inconsistent charge against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
 	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
@@ -237,6 +243,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
       // check spin 
       if (checker.GetSpin() != thePDGiSpin) {
 	temp=0;
+	G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+		  "PART104", JustWarning, 
+		  "Inconsistent spin against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
 	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
@@ -312,7 +321,8 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
 {
   if(theParticleName=="gamma"
   || theParticleName=="e-"
-  || theParticleName=="e+")
+  || theParticleName=="e+"
+  || theParticleName=="proton")
   { fApplyCutsFlag = flg; }
   else
   {
@@ -321,6 +331,6 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << G4endl;
     G4cerr
      << "becomes obsolete. Production threshold is applied only for "
-     << "gamma, e- and e+." << G4endl;
+     << "gamma, e- ,e+ and proton." << G4endl;
   }
 }

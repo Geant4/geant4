@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010/09/14 07:57:13 gcosmo Exp $
+$Id: History,v 1.153 2010-09-14 07:57:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,67 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 11th,  2011 J.Apostolakis - field-V09-04-06
+----------------------------------
+- Added G4Field.cc to list of files in sources.cmake
+
+November  4th,  2011 J.Apostolakis - field-V09-04-05
+----------------------------------
+G4Field: revised to improve ability to detect gravity field:
+- Added new data member to identify gravity field
+- Added new method IsGravityActive()  (to access this data member)
+- Created new source file - moving constructors to it.
+Changed G4UniformGravityField and G4ElectroMagneticField 
+to accomodate this refinement.
+
+November 2nd,  2011 P.Gumplinger - field-V09-04-04
+--------------------------------
+- update list of files in sources.cmake
+
+October 28th,  2011 P.Gumplinger - field-V09-04-03
+--------------------------------
+- Added (uniform) gravity field capability. 
+  New classes G4EqGravityField, G4UniformGravityField.
+
+  *Required* for co-working tag in Transportation
+
+October 12th,  2011 P.Gumplinger - field-V09-04-02
+--------------------------------
+- replaced: omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss)
+  with:     omegac = (eplus/particleMass)*c_light
+  in G4EqEMFieldWithEDM.cc, G4Mag_SpinEqRhs.cc, G4EqEMFieldWithSpin.cc
+  changed calculation: 
+     std::sqrt(kineticEnergy*kineticEnergy + 2.0*restMass_c2*kineticEnergy);
+  to:
+     std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2))
+  in G4FieldTrack.cc
+
+August 11th,  2011 G.Cosmo - field-V09-04-01
+--------------------------
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+
+May 13th, 2011 J.Apostolakis
+----------------------------
+- Added new class G4TrialsCounter for keeping statistics of trials.
+- Avoid printing out pointer in G4CachedMagneticField::ReportStatistics().
+- Updated unit tests.
+
+May 12th,  2011 G.Cosmo - field-V09-04-00
+-----------------------
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+May 5th,  2011 J.Apostolakis
+----------------------------
+- Reordered data members to group invariants, field parameters, etc...
 
 Sep 10th,  2010 J.Apostolakis - field-V09-03-03
 -----------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighScattering.hh,v 1.2 2009/03/18 13:45:51 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RayleighScattering.hh,v 1.2 2009-03-18 13:45:51 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4RayleighScattering physics process -----------------------
 //

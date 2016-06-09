@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.9 2009/04/30 10:23:57 sincerti Exp $
+// $Id: MicrobeamEMField.cc,v 1.9 2009-04-30 10:23:57 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
@@ -238,17 +238,15 @@ if (z>=-1400*mm && z <-200*mm)
 
   G4double s = 0;
   G4double G0, G1, G2, G3;
-  G4double K0, K1, K2, K3;
-  G4double P0, P1, P2, P3, cte;
+  G4double     K1, K2, K3;
+  G4double P0, P1, P2,     cte;
 
-  K0=0;
   K1=0;
   K2=0;
   K3=0;
   P0=0;
   P1=0;
   P2=0;
-  P3=0;
   G0=0;
   G1=0;
   G2=0;
@@ -339,8 +337,6 @@ if (z>=-1400*mm && z <-200*mm)
 	 if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];
 
 	 P2 = 2*c2[i]/a0[i]/a0[i];
-
-	 P3 = 0;
 
 	 cte = 1 + std::exp(c0[i]);
 
@@ -520,26 +516,7 @@ if (z>=-1400*mm && z <-200*mm)
       Bfield[5] = 0;
   }
 
-// ZERO FIELD REGIONS
-
-if (
-     (Bfield[0]==0. &&
-      Bfield[1]==0. &&
-      Bfield[2]==0. &&
-      Bfield[3]==0. &&
-      Bfield[4]==0. &&
-      Bfield[5]==0. )
-   )
-{
-
-G4FieldManager *pFieldMgr;
-pFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-pFieldMgr = NULL;
-
-}
-
 //
-
 
 }
 

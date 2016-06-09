@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh,v 1.2 2010/11/23 16:42:15 flongo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermorePolarizedPhotoElectricModel.hh,v 1.2 2010-11-23 16:42:15 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Authors: G.Depaola & F.Longo
 //
 
 #ifndef G4LivermorePolarizedPhotoElectricModel_h
@@ -97,9 +99,6 @@ private:
   G4VEMDataSet* meanFreePathTable;
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
-
-  G4double cutForLowEnergySecondaryPhotons;
-  G4double cutForLowEnergySecondaryElectrons;
 
   G4AtomicDeexcitation deexcitationManager;
 

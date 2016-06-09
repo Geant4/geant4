@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionBaseFS.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPFissionBaseFS.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
 #define G4NeutronHPFissionBaseFS_h 1
@@ -53,7 +53,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
     delete theXsection;
   }
 
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit);
 
   G4DynamicParticleVector * ApplyYourself(G4int Prompt);
 

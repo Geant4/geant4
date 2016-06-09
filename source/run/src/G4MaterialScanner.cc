@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialScanner.cc,v 1.3 2006/06/29 21:13:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MaterialScanner.cc,v 1.3 2006-06-29 21:13:46 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //

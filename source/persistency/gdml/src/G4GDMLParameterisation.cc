@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLParameterisation.cc,v 1.11 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParameterisation.cc,v 1.11 2008-07-16 15:46:34 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParameterisation Implementation
 //

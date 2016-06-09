@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.28 2010/11/10 16:20:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ElectroNuclearReaction.hh,v 1.28 2010-11-10 16:20:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// GEANT4 physics class: G4ElectroNuclearReaction -- header file for CHIPS
+// Class description:
+// G4ElectroNuclearReaction = eA interface to use CHIPS in the G4Hadronic frame
 // Created: J.P. Wellisch, following M. Kossov's algorithm. 12/11/2001
 // The last update: J.P. Wellisch, 06-June-02
 // 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
 // 10.11.2010 V.Ivanchenko use cross sections by pointer and not by value
-//
+// 07.09.2011 M.Kelsey, follow changes to G4HadFinalState interface
+
 #ifndef G4ElectroNuclearReaction_h
 #define G4ElectroNuclearReaction_h 1
 
@@ -52,12 +54,13 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4ExcitedStringDecay.hh"
- 
+#include <iostream>
+
+
 class G4ElectroNuclearReaction : public G4HadronicInteraction
 {
 public: 
-
-  G4ElectroNuclearReaction():G4HadronicInteraction("CHIPS")
+  G4ElectroNuclearReaction():G4HadronicInteraction("CHIPSElectroNuclear")
   {
     SetMinEnergy(0*GeV);
     SetMaxEnergy(30*TeV);
@@ -72,32 +75,74 @@ public:
     theHEModel->SetMaxEnergy(100*TeV);
     theElectronData = new G4ElectroNuclearCrossSection;
     thePhotonData = new G4PhotoNuclearCrossSection;
+    Description();
   }
 
-  virtual ~G4ElectroNuclearReaction() {delete  theStringDecay;};
+  ~G4ElectroNuclearReaction()
+  {
+    delete theHEModel;
+    delete theCascade;
+    delete theStringDecay;
+    delete theElectronData; 
+    delete thePhotonData;
+  }
     
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-     G4Nucleus& aTargetNucleus);
+  G4HadFinalState*
+  ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+
+  void Description() const 
+  {
+    char* dirName = getenv("G4PhysListDocDir");
+    if (dirName) {
+      std::ofstream outFile;
+      G4String outFileName = GetModelName() + ".html";
+      G4String pathName = G4String(dirName) + "/" + outFileName;
+
+      outFile.open(pathName);
+      outFile << "<html>\n";
+      outFile << "<head>\n";
+
+      outFile << "<title>Description of CHIPS ElectroNuclear Model</title>\n";
+      outFile << "</head>\n";
+      outFile << "<body>\n";
+
+      outFile << "G4ElectroNuclearReaction handles the inelastic scattering\n"
+              << "of e- and e+ from nuclei using the Chiral Invariant Phase\n"
+              << "Space (CHIPS) model of M. Kossov.  This model uses the\n"
+              << "Equivalent Photon Approximation in which the incoming\n"
+              << "electron generates a virtual photon at the electromagnetic\n"
+              << "vertex, and the virtual photon is converted to a real photon\n"
+              << "before it interacts with the nucleus.  The real photon\n"
+              << "interacts with the hadrons in the target by producing\n"
+              << "quasmons (or generalized excited hadrons) which then decay\n"
+              << "into final state hadrons.  This model is valid for e- and\n"
+              << "e+ of all incident energies.\n";
+
+      outFile << "</body>\n";
+      outFile << "</html>\n";
+      outFile.close();
+    }
+  }
 
 private:
 
-  G4ChiralInvariantPhaseSpace theLEModel;
-  G4TheoFSGenerator * theHEModel;
-  G4GeneratorPrecompoundInterface * theCascade;
-  G4QGSModel< G4GammaParticipants > theStringModel;
-  G4QGSMFragmentation theFragmentation;
-  G4ExcitedStringDecay * theStringDecay;
-  G4ElectroNuclearCrossSection* theElectronData;
-  G4PhotoNuclearCrossSection* thePhotonData;
-  G4HadFinalState theResult;
+  G4ChiralInvariantPhaseSpace      theLEModel;
+  G4TheoFSGenerator*               theHEModel;
+  G4GeneratorPrecompoundInterface* theCascade;
+  G4QGSModel<G4GammaParticipants>  theStringModel;
+  G4QGSMFragmentation              theFragmentation;
+  G4ExcitedStringDecay*            theStringDecay;
+  G4ElectroNuclearCrossSection*    theElectronData;
+  G4PhotoNuclearCrossSection*      thePhotonData;
+  G4HadFinalState                  theResult;
 };
 
-inline   
+inline
 G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& aTrack, 
-        G4Nucleus& aTargetNucleus)
+                                                               G4Nucleus& aTargetNucleus)
 {
   theResult.Clear();
-  static const G4double dM=G4Proton::Proton()->GetPDGMass()+
+  static const G4double dM=G4Proton::Proton()->GetPDGMass() +
     G4Neutron::Neutron()->GetPDGMass(); // MeanDoubleNucleon Mass = m_n+m_p (@@ no binding)
   static const G4double me=G4Electron::Electron()->GetPDGMass(); // electron mass
   static const G4double me2=me*me;                               // squared electron mass
@@ -110,24 +155,21 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
         "G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
   const G4ElementTable* aTab = G4Element::GetElementTable();
   G4Element * anElement = 0;
-  G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ()+.1);
-  for(size_t ii=0; ii<aTab->size(); ii++)
+  G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ_asInt()+.1);
+  for(size_t ii=0; ii<aTab->size(); ++ii) if ( std::abs((*aTab)[ii]->GetZ()-aZ) < .1)
   {
-    if ( std::abs((*aTab)[ii]->GetZ()-aZ) < .1)
-    {
-      anElement = (*aTab)[ii];
-      break;
-    }
+    anElement = (*aTab)[ii];
+    break;
   }
   if(0==anElement) 
   {
     G4cerr<<"***G4ElectroNuclearReaction::ApplyYourself: element with Z="
-          <<aTargetNucleus.GetZ()<<" is not in the element table"<<G4endl;
+          <<aTargetNucleus.GetZ_asInt()<<" is not in the element table"<<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, "Anomalous element error.");
   }
 
   // Note: high energy gamma nuclear now implemented.
-  G4double xSec = theElectronData->GetCrossSection(theElectron, anElement);// Check XSection
+  G4double xSec = theElectronData->GetCrossSection(theElectron, anElement);// Check out XS
   if(xSec<=0.) 
   {
     theResult.SetStatusChange(isAlive);
@@ -161,16 +203,16 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
     // new direction for the electron
     theResult.SetMomentumChange(theElectron->GetMomentumDirection());
     return &theResult;        // DO-NOTHING condition
-    throw G4HadronicException(__FILE__, __LINE__,
-                    "G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
+    // throw G4HadronicException(__FILE__, __LINE__,
+    //             "G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
   }
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 
-                     G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);        //----->-*
+                     G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);         //----->-*
   G4double sigNu=thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
-  theDynamicPhoton->SetKineticEnergy(W); // Redefine photon with equivalent energy    |
+  theDynamicPhoton->SetKineticEnergy(W);  // Redefine photon with equivalent energy    |
   G4double sigK =thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
-  delete theDynamicPhoton; // <-------------------------------------------------------*
+  delete theDynamicPhoton; // <--------------------------------------------------------*
   G4double rndFraction = theElectronData->GetVirtualFactor(photonEnergy, photonQ2);
   if(sigNu*G4UniformRand()>sigK*rndFraction) 
   {
@@ -189,7 +231,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4double iniP=std::sqrt(iniE*iniE-me2);          // Initial momentum of the electron
   G4double finP=std::sqrt(finE*finE-me2);          // Final momentum of the electron
   G4double cost=(EEm+EEm-photonQ2)/iniP/finP;// std::cos(theta) for the electron scattering
-  if(cost>1.) cost=1.;
+  if(cost> 1.) cost= 1.;
   if(cost<-1.) cost=-1.;
   G4ThreeVector dir=theElectron->GetMomentumDirection(); // Direction of primary electron
   G4ThreeVector ort=dir.orthogonal();    // Not normed orthogonal vector (!) (to dir)
@@ -208,19 +250,13 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4ThreeVector position(0,0,0);
   G4HadProjectile localTrack(localGamma);
   G4HadFinalState * result;
-  if(photonEnergy < 3*GeV)  
-  {
+  if (photonEnergy < 3*GeV)
     result = theLEModel.ApplyYourself(localTrack, aTargetNucleus, &theResult);
-  } 
-  else 
-  {
+  else {
     // G4cout << "0) Getting a high energy electro-nuclear reaction"<<G4endl;
     G4HadFinalState * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
-    for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
-    {
-      theResult.AddSecondary(aResult->GetSecondary(all));
-    }
-    aResult->SecondariesAreStale();
+    theResult.AddSecondaries(aResult);
+    aResult->Clear();
     result = &theResult;
   }
   return result;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.6 2010/05/28 02:00:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.6 2010-05-28 02:00:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay March 2006
 
@@ -34,7 +34,6 @@
 #include "G4TransportationManager.hh"
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectoryPoint.hh"
-#include <sstream>
 
 G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
@@ -96,11 +95,10 @@ G4TrajectoryDrawByOriginVolume::SetDefault(const G4String& colour)
 
   // Will not modify default colour if colour key does not exist  
   if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4ExceptionDescription ed;
+    ed << "G4Colour with key "<<colour<<" does not exist ";
     G4Exception
-      ("G4TrajectoryDrawByOriginParticleID::SetDefault(const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByOriginParticleID::SetDefault(const G4String& colour)", "modeling0123", JustWarning, ed);
     return;
   }
 

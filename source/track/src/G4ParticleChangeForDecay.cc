@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.12 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.12 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -46,7 +46,8 @@
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForDecay::G4ParticleChangeForDecay()
-  : G4VParticleChange(), theTimeChange(0.)
+  : G4VParticleChange(), 
+    theGlobalTime0(0.),theLocalTime0(0.),theTimeChange(0.)
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -67,6 +68,8 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 // copy and assignment operators are implemented as "shallow copy"
 G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDecay &right): G4VParticleChange(right)
 {
+  theGlobalTime0 = right.theGlobalTime0;
+  theLocalTime0 = right.theLocalTime0;
   theTimeChange = right.theTimeChange;
   thePolarizationChange = right.thePolarizationChange;
 }
@@ -74,19 +77,34 @@ G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDeca
 
 G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleChangeForDecay &right)
 {
-   if (this != &right){
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
-     
-      theTimeChange = right.theTimeChange;
-      thePolarizationChange = right.thePolarizationChange;
-   }
-   return *this;
+  if (this != &right){
+    if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+      if (verboseLevel>0) {
+	G4cout << "G4ParticleChangeForDecay: assignment operator Warning  ";
+	G4cout << "theListOfSecondaries is not empty ";
+       }
+#endif
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+      }
+    }
+    delete theListOfSecondaries; 
+    
+    theListOfSecondaries = right.theListOfSecondaries;
+    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theNumberOfSecondaries = right.theNumberOfSecondaries;
+    theStatusChange = right.theStatusChange;
+    theTrueStepLength = right.theTrueStepLength;
+    theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+    theSteppingControlFlag = right.theSteppingControlFlag;
+    
+    theGlobalTime0 = right.theGlobalTime0;
+    theLocalTime0 = right.theLocalTime0;
+    theTimeChange = right.theTimeChange;
+    thePolarizationChange = right.thePolarizationChange;
+  }
+  return *this;
 }
 
 G4bool G4ParticleChangeForDecay::operator==(const G4ParticleChangeForDecay &right) const
@@ -109,8 +127,12 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
 
-  // set Time e equal to those of the parent track
-  theTimeChange          = track.GetGlobalTime();
+  // set TimeChange equal to local time of the parent track
+  theTimeChange                = track.GetLocalTime();
+
+  // set initial Local/Global time of the parent track
+  theLocalTime0           = track.GetLocalTime();
+  theGlobalTime0          = track.GetGlobalTime();
 
   // set the Polarization equal to those of the parent track
   thePolarizationChange  = pParticle->GetPolarization();
@@ -122,6 +144,22 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
 G4Step* G4ParticleChangeForDecay::UpdateStepForPostStep(G4Step* pStep)
 { 
+  if (isParentWeightProposed) {
+    // update weight
+    if (isParentWeightSetByProcess) {
+      G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+      pPostStepPoint->SetWeight( theParentWeight );
+    }
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
+  }
+
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -131,24 +169,33 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
 { 
   // A physics process always calculates the final state of the particle
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
 
   // update polarization
   pPostStepPoint->SetPolarization( thePolarizationChange );
  
   // update time
-  pPostStepPoint->SetGlobalTime( theTimeChange  );
-  pPostStepPoint->AddLocalTime(  theTimeChange 
-                                 - pPreStepPoint->GetGlobalTime());
-  pPostStepPoint->AddProperTime( theTimeChange  
-                                 - pPreStepPoint->GetGlobalTime());
-
+  pPostStepPoint->SetGlobalTime( GetGlobalTime() );
+  pPostStepPoint->SetLocalTime(  theTimeChange ); 
+  pPostStepPoint->AddProperTime (theTimeChange-theLocalTime0);
 
 #ifdef G4VERBOSE
   G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
+
+  if (isParentWeightProposed ) {
+    // update weight
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
+  }
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -173,7 +220,7 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
 
   // global time should not go back
   G4bool itsOK =true;
-  accuracy = -1.0*(theTimeChange - aTrack.GetGlobalTime())/ns;
+  accuracy = -1.0*(theTimeChange - theLocalTime0)/ns;
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
@@ -195,8 +242,7 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
   // Exit with error
   if (exitWithError) {
     G4Exception("G4ParticleChangeForDecay::CheckIt",
-		"500",
-		EventMustBeAborted,
+		"TRACK005",EventMustBeAborted,
 		"time was  illegal");
   } 
 

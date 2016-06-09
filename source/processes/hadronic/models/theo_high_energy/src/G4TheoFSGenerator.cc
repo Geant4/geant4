@@ -23,21 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TheoFSGenerator.cc,v 1.11 2009/04/09 08:28:42 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4TheoFSGenerator.cc,v 1.11 2009-04-09 08:28:42 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
+//
+// 20110307  M. Kelsey -- Add call to new theTransport->SetPrimaryProjectile()
+//		to provide access to full initial state (for Bertini)
+// 20110805  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons()
 
 #include "G4DynamicParticle.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4IonTable.hh"
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
     , theQuasielastic(0), theProjectileDiffraction(0)
-{
+ {
  theParticleChange = new G4HadFinalState;
 }
 
@@ -149,20 +153,56 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	return theParticleChange;
      } 
   }
-  //G4cout << "____G4TheoFSGenerator: before Scatter (3) " << G4endl;
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
-  //G4cout << "^^^^G4TheoFSGenerator: after Scatter (3) " << G4endl;
-  
+
+//#define DEBUG_initial_result
+  #ifdef DEBUG_initial_result
+  	  G4double E_out(0);
+  	  G4IonTable * ionTable=G4ParticleTable::GetParticleTable()->GetIonTable();
+  	  std::vector<G4KineticTrack *>::iterator ir_iter;
+  	  for(ir_iter=theInitialResult->begin(); ir_iter!=theInitialResult->end(); ir_iter++)
+  	  {
+  		  E_out += (*ir_iter)->Get4Momentum().e();
+  	  }
+  	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
+          G4double init_E=aPart->Get4Momentum().e();
+  	  // residual nucleus
+  	  const std::vector<G4Nucleon> & thy = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+  	  G4int resZ(0),resA(0);
+	  G4double delta_m(0);
+  	  for(size_t them=0; them<thy.size(); them++)
+  	  {
+   	     if(thy[them].AreYouHit()) {
+  	       ++resA;
+  	       if ( thy[them].GetDefinition() == G4Proton::Proton() ) {
+	          ++resZ;
+		  delta_m +=G4Proton::Proton()->GetPDGMass();
+	       } else {
+	          delta_m +=G4Neutron::Neutron()->GetPDGMass();
+	       }  
+  	     }
+	  }
+  	  G4double final_mass(0);
+	  if ( theNucleus.GetA_asInt() ) {
+	   final_mass=ionTable->GetIonMass(theNucleus.GetZ_asInt()-resZ,theNucleus.GetA_asInt()- resA);
+  	  }
+	  G4double E_excit=init_mass + init_E - final_mass - E_out;
+	  G4cout << " Corrected delta mass " << init_mass - final_mass - delta_m << G4endl;
+  	  G4cout << "initial E, mass = " << init_E << ", " << init_mass << G4endl;
+  	  G4cout << "  final E, mass = " << E_out <<", " << final_mass << "  excitation_E " << E_excit << G4endl;
+    #endif
+
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;
-  const std::vector<G4Nucleon *> & they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+  const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
   for(size_t them=0; them<they.size(); them++)
   {
-    if(they[them]->AreYouHit()) hitCount ++;
+    if(they[them].AreYouHit()) hitCount ++;
   }
   if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
   {
+    theTransport->SetPrimaryProjectile(thePrimary);	// For Bertini Cascade
     theTransportResult = 
                theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
     if ( !theTransportResult ) {
@@ -199,3 +239,11 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   return theParticleChange;
 }
 
+std::pair<G4double, G4double> G4TheoFSGenerator::GetEnergyMomentumCheckLevels() const
+{
+  if ( theHighEnergyGenerator ) {
+	 return theHighEnergyGenerator->GetEnergyMomentumCheckLevels();
+  } else {
+	 return std::pair<G4double, G4double>(DBL_MAX, DBL_MAX);
+  }
+}

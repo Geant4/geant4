@@ -1,0 +1,46 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- RandGeneral ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 20th August 1998
+//
+// M. Fischler    - Moved fire() and shoot(anEngine) into inline so that
+//		    the use of mapRandom does not cost an extra function call.
+// =======================================================================
+
+namespace CLHEP {
+
+inline double RandGeneral::fire()
+{
+  double rand = localEngine->flat();
+  return mapRandom(rand);
+}
+
+inline double RandGeneral::shoot()
+{
+  return fire();
+}
+
+inline double RandGeneral::operator() ()
+{
+  return fire();
+}
+
+inline double RandGeneral::shoot( HepRandomEngine* anEngine )
+{ 
+  double rand = anEngine->flat();
+  return mapRandom(rand);
+}
+
+inline void RandGeneral::shootArray( const int size, double* vect )
+{
+  fireArray(size, vect);
+}
+
+}  // namespace CLHEP

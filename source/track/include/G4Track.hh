@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.23 2010/11/08 21:25:38 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Track.hh,v 1.23 2010-11-08 21:25:38 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -43,6 +43,9 @@
 //---------------------------------------------------------------
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
 //   Add MaterialCutCouple                          08 Oct. 2002  H.Kurashige
+//   Add SetVelocityTableProperties                 02 Apr. 2011  H.Kurashige
+//   Add fVelocity and Set/GetVelocity              29 Apr. 2011  H.Kurashige
+//   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -58,12 +61,11 @@
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
 
-#include "G4PhysicsLogVector.hh"
-
 #include "G4Material.hh"
 
 class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
+class G4VelocityTable;
 
 //////////////
 class G4Track
@@ -173,8 +175,12 @@ public: // With description
 
    G4ThreeVector GetMomentum() const;
 
+   // velocity
    G4double GetVelocity() const;
-
+   void     SetVelocity(G4double val);
+ 
+   G4double CalculateVelocity() const;
+   G4double CalculateVelocityForOpticalPhoton() const;
 
   // polarization 
    const G4ThreeVector& GetPolarization() const;
@@ -239,21 +245,25 @@ public: // With description
   // User information
   G4VUserTrackInformation* GetUserInformation() const;
   void SetUserInformation(G4VUserTrackInformation* aValue);
+ 
+  // Velocity table
+  static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
+  static G4double GetMaxTOfVelocityTable();
+  static G4double GetMinTOfVelocityTable();
+  static G4int    GetNbinOfVelocityTable();
 
 //---------
    private:
 //---------
-  // prepare velocity table
-  void PrepareVelocityTable();
-
-// Member data
+   // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
    G4ThreeVector fPosition;        // Current positon
    G4double fGlobalTime;           // Time since the event is created
    G4double fLocalTime;            // Time since the track is created
    G4double fTrackLength;          // Accumulated track length
-   G4int fParentID;
-   G4int fTrackID;
+   G4int    fParentID;
+   G4int    fTrackID;
+   G4double fVelocity; 
 
    G4TouchableHandle fpTouchable;
    G4TouchableHandle fpNextTouchable;
@@ -289,15 +299,14 @@ public: // With description
    
    G4VUserTrackInformation* fpUserInformation;
 
+   // cached values for CalculateVelocity  
    mutable G4Material*               prev_mat;
    mutable G4MaterialPropertyVector* groupvel;
    mutable G4double                  prev_velocity;
    mutable G4double                  prev_momentum;
 
-   static G4PhysicsLogVector* velTable;
-   static const G4double maxT;
-   static const G4double minT;
-   G4bool              is_OpticalPhoton; 
+   G4bool          is_OpticalPhoton; 
+   static G4VelocityTable*  velTable;
 };
 
 #include "G4Track.icc"

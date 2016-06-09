@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.15 2006/06/29 19:04:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Timer.cc,v 1.15 2006-06-29 19:04:30 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -40,7 +40,11 @@
 #undef times
 
 // Global error function
-void G4Exception(const char* s=0);
+#include "G4ExceptionSeverity.hh"
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 const char* comments);
 
 #if defined(IRIX6_2)
 #  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)
@@ -105,7 +109,8 @@ G4double G4Timer::GetRealElapsed() const
 {
     if (!fValidTimes)
     {
-      G4Exception("G4Timer::GetRealElapsed - Timer not stopped or times not recorded");
+      G4Exception("G4Timer::GetRealElapsed()", "InvalidCondition",
+                  FatalException, "Timer not stopped or times not recorded!");
     }
     G4double diff=fEndRealTime-fStartRealTime;
     return diff/sysconf(_SC_CLK_TCK);
@@ -116,7 +121,8 @@ G4double G4Timer::GetSystemElapsed() const
 {
     if (!fValidTimes)
     {
-      G4Exception("G4Timer::GetSystemElapsed - Timer not stopped or times not recorded");
+      G4Exception("G4Timer::GetSystemElapsed()", "InvalidCondition",
+                  FatalException, "Timer not stopped or times not recorded!");
     }
     G4double diff=fEndTimes.tms_stime-fStartTimes.tms_stime;
     return diff/sysconf(_SC_CLK_TCK);
@@ -126,7 +132,8 @@ G4double G4Timer::GetUserElapsed() const
 {
     if (!fValidTimes)
     {
-      G4Exception("G4Timer::GetUserElapsed - Timer not stopped or times not recorded");
+      G4Exception("G4Timer::GetUserElapsed()", "InvalidCondition",
+                  FatalException, "Timer not stopped or times not recorded");
     }
     G4double diff=fEndTimes.tms_utime-fStartTimes.tms_utime;
     return diff/sysconf(_SC_CLK_TCK);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.19 2006/11/14 14:59:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsScene.hh,v 1.19 2006-11-14 14:59:54 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
 

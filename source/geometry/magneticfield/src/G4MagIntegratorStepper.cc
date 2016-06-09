@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.12 2009/11/05 18:31:15 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MagIntegratorStepper.cc,v 1.12 2009-11-05 18:31:15 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 

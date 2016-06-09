@@ -101,7 +101,10 @@ void DicomPartialDetectorConstruction::ReadPhantomData()
   std::ifstream finDF("Data.dat");
   G4String fname;
   if(finDF.good() != 1 ) {
-    G4Exception(" DicomPartialDetectorConstruction::ReadPhantomData.  Problem reading data file: Data.dat");
+    G4Exception(" DicomPartialDetectorConstruction::ReadPhantomData",
+		"",
+		FatalErrorInArgument,
+		" Problem reading data file: Data.dat");
   }
 
   G4int compression;
@@ -111,9 +114,9 @@ void DicomPartialDetectorConstruction::ReadPhantomData()
   finDF >> fNoFiles;  // only 1 file supported for the moment
   if( fNoFiles != 1 ) {
     G4Exception("DicomPartialDetectorConstruction::ReadPhantomData",
-		"More than 1 DICOM file is not supported",
+		"",
 		FatalErrorInArgument,
-		"");
+		"More than 1 DICOM file is not supported");
   }
   for(G4int i = 0; i < fNoFiles; i++ ) {    
     finDF >> fname;
@@ -136,7 +139,10 @@ void DicomPartialDetectorConstruction::ReadPhantomDataFile(const G4String& fname
 #endif 
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
-    G4Exception("DicomPartialDetectorConstruction::ReadPhantomDataFile. File not found " + fname );
+    G4Exception("DicomPartialDetectorConstruction::ReadPhantomDataFile",
+		"",
+		FatalException,
+		G4String("File not found " + fname).c_str());
   }
  G4int nMaterials;
   fin >> nMaterials;
@@ -145,7 +151,11 @@ void DicomPartialDetectorConstruction::ReadPhantomDataFile(const G4String& fname
   for( G4int ii = 0; ii < nMaterials; ii++ ){
     fin >> nmate >> stemp;
     G4cout << "DicomPartialDetectorConstruction::ReadPhantomData reading nmate " << ii << " = " << nmate << " mate " << stemp << G4endl;
-    if( ii != nmate ) G4Exception("DicomPartialDetectorConstruction::ReadPhantomData material number should be in increasing order: wrong material number ");
+    if( ii != nmate ) G4Exception("DicomPartialDetectorConstruction::ReadPhantomData",
+				  "",
+				  FatalErrorInArgument,
+				  "Material number should be in increasing order: wrong material number ");
+
   }
 
   fin >> nVoxelX >> nVoxelY >> nVoxelZ;
@@ -210,9 +220,9 @@ void DicomPartialDetectorConstruction::ReadPhantomDataFile(const G4String& fname
 	  fin >> mateID1;
 	  if( mateID1 < 0 || mateID1 >= nMaterials ) {
 	    G4Exception("DicomPartialDetectorConstruction::ReadPhantomData",
-			"Wrong index in phantom file",
+			"",
 			FatalException,
-			G4String("It should be between 0 and "
+			G4String("Wrong index in phantom file: It should be between 0 and "
 				 + G4UIcommand::ConvertToString(nMaterials-1) 
 				 + ", while it is " 
 				 + G4UIcommand::ConvertToString(mateID1)).c_str());
@@ -439,7 +449,10 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
 					  kXAxis, theNVoxels, thePartialPhantomParam);
     thePartialPhantomParam->SetSkipEqualMaterials(bSkipEqualMaterials);
   } else {
-    G4Exception("GmReadPhantomGeometry::ConstructPhantom","Wrong argument to parameter GmReadPhantomGeometry:Phantom:OptimAxis",FatalErrorInArgument,(G4String("Only allowed 'kUndefined' or 'kXAxis', it is: "+OptimAxis).c_str()));
+    G4Exception("GmReadPhantomGeometry::ConstructPhantom",
+		"",
+		FatalErrorInArgument,
+		(G4String("Wrong argument to parameter GmReadPhantomGeometry:Phantom:OptimAxis: Only allowed 'kUndefined' or 'kXAxis', it is: "+OptimAxis).c_str()));
   }
 
   phantom_phys->SetRegularStructureId(regStructureID);  

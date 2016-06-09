@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreStore.hh,v 1.12 2008/06/13 00:29:26 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPLegendreStore.hh,v 1.12 2008-06-13 00:29:26 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1

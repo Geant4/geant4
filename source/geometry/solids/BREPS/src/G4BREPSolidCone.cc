@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.17 2010/10/20 09:14:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BREPSolidCone.cc,v 1.17 2010-10-20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

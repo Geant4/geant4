@@ -25,8 +25,8 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.12 2008/07/18 06:39:43 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4UIGainServer.cc,v 1.12 2008-07-18 06:39:43 kmura Exp $
+// $Name: not supported by cvs2svn $
 //
 #ifndef WIN32
 
@@ -414,10 +414,10 @@ void G4UIGainServer::WaitingConnection(){
 #endif
             G4cerr<<"accept:"<<i<<G4endl;
             //exit(1);
-            G4Exception("G4UIGainServer::WaitingConnection", "Invalid Socket",
-                        FatalException, "Cannot establish connection");
-
-
+            G4Exception("G4UIGainServer::WaitingConnection()",
+                        "UI0004",
+                        FatalException,
+                        "Invalid Socket. Cannot establish connection");
         }
     }
     close(socketD[0]);

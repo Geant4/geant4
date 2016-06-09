@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.cc,v 1.3 2010/11/22 11:29:38 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PixeShellDataSet.cc,v 1.3 2010-11-22 11:29:38 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -58,7 +58,10 @@ G4PixeShellDataSet::G4PixeShellDataSet(G4int zeta,
   unitEnergies(eUnit),
   unitData(dataUnit)
 {
-  if (algorithm == 0) G4Exception("G4PixeShellDataSet::G4PixeShellDataSet - interpolation == 0");
+  if (algorithm == 0) G4Exception("G4PixeShellDataSet::G4PixeShellDataSet",
+				  "pii00000301",
+				  FatalException,
+				  "interpolation == 0");
 
   crossModel.push_back(modelK);
   crossModel.push_back(modelL);
@@ -148,7 +151,10 @@ void G4PixeShellDataSet::SetEnergiesData(G4DataVector* energies,
   std::ostringstream message;
   message << "G4PixeShellDataSet::SetEnergiesData - component " << componentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4PixeShellDataSet::SetEnergiesData",
+	      "pii000000310",
+	      FatalException,
+	      message.str().c_str());
 }
 
 
@@ -199,7 +205,10 @@ G4String G4PixeShellDataSet::FullFileName(const G4String& file,
 {
   char* path = getenv("G4PIIDATA");
   if (!path)
-    G4Exception("G4PixeShellDataSet::FullFileName - G4PIIDATA environment variable not set");
+    G4Exception("G4PixeShellDataSet::FullFileName",
+				  "pii00000320",
+				  FatalException,
+				  "G4PIIDATA environment variable not set");
   
   // Identify the shell this subshell belongs to
   G4int shellIndex = TranslateShell(subShell);

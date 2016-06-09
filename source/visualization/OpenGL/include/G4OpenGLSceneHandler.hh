@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.30 2010/05/30 09:53:05 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.30 2010-05-30 09:53:05 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -41,8 +41,7 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLBitMapStore.hh"
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "G4OpenGL.hh"
 
 #include <map>
 
@@ -63,7 +62,8 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitives (std::vector <G4VMarker>);
+  void AddPrimitivesCircle (const std::vector <G4VMarker>&);
+  void AddPrimitivesSquare (const std::vector <G4VMarker>&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
@@ -103,10 +103,17 @@ protected:
 
   G4bool fProcessing2D;
 
+  // Shared code to wait until we make a single glFlush
+  void ScaledFlush () ;
+  // Number of stored list to wait until we make a single glFlush
+  const G4int fNbListsBeforeFlush;
+  // Effective number of stored list
+  G4int fNbListsToBeFlush;
+
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
-  void AddCircleSquareVector (std::vector <G4VMarker>, G4OpenGLBitMapStore::Shape);
+  void AddCircleSquareVector (const std::vector <G4VMarker>&, G4OpenGLBitMapStore::Shape);
 
   void DrawXYPolygon
   (G4OpenGLBitMapStore::Shape,

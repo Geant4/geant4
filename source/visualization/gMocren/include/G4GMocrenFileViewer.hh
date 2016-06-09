@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.hh,v 1.2 2009/10/12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenFileViewer.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver

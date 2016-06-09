@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MinEkineCuts.hh,v 1.1 2006/10/31 11:35:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MinEkineCuts.hh,v 1.1 2006-10-31 11:35:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

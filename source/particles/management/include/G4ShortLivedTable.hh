@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.hh,v 1.14 2010/08/10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ShortLivedTable.hh,v 1.14 2010-08-10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -63,8 +63,10 @@ class G4ShortLivedTable
    G4ShortLivedTable();
 
  protected:
-   G4ShortLivedTable(const  G4ShortLivedTable &right);
-
+   // Copy constructor and assignment operator
+    G4ShortLivedTable(const  G4ShortLivedTable &right);
+    G4ShortLivedTable & operator=(const G4ShortLivedTable &);
+ 
  public: // With Description
    virtual ~G4ShortLivedTable();
 

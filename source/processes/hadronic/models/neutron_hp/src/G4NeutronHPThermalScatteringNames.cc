@@ -40,27 +40,62 @@
 #include "G4ElementTable.hh"
 //#include "G4NeutronHPData.hh"
 
-
-
 G4NeutronHPThermalScatteringNames::G4NeutronHPThermalScatteringNames()
 {
-   names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Water" , "h_water" ) ); 
-   names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Polyethylene" , "h_polyethylene" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_Aluminium_Metal" , "al_metal" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_Beryllium_Metal" , "be_metal" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_Be_of_Beryllium_Oxide" , "be_beo" ) ); 
    names.insert ( std::pair < G4String , G4String > ( "TS_C_of_Graphite" , "graphite" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_D_of_Heavy_Water" , "d_heavy_water" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Water" , "h_water" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Zirconium_Hydride" , "h_zrh" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Polyethylene" , "h_polyethylene" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_Iron_Metal" , "fe_metal" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_O_of_Uranium_Dioxide" , "o_uo2" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_O_of_Beryllium_Oxide" , "o_beo" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_U_of_Uranium_Dioxide" , "u_uo2" ) ); 
+   names.insert ( std::pair < G4String , G4String > ( "TS_Zr_of_Zirconium_Hydride" , "zr_zrh" ) ); 
+
+
+   //names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Para_Hydrogen" , "h_para_h2" ) ); 
+   //names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Ortho_Hydrogen" , "h_ortho_h2" ) ); 
+   
+   //names.insert ( std::pair < G4String , G4String > ( "TS_D_of_Para_Deuterium" , "d_para_d2" ) ); 
+   //names.insert ( std::pair < G4String , G4String > ( "TS_D_of_Ortho_Deuterium" , "d_ortho_d2" ) ); 
+   
+   //names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Liquid_Methane", "h_l_ch4" ) ); 
+   //names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Solid_Methane", "h_s_ch4" ) ); 
+   
+   //names.insert ( std::pair < G4String , G4String > ( "TS_Benzene", "benzen" ) ); 
+
+
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_BERYLLIUM_OXIDE" , "Be" ) , "be_beo" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_BERYLLIUM_OXIDE" , "O" ) , "o_beo" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_GRAPHITE" , "C" ) , "graphite" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_POLYETHYLENE" , "H" ) , "h_polyethylene" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_URANIUM_OXIDE" , "O" ) , "o_uo2" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_URANIUM_OXIDE" , "U" ) , "u_uo2" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_WATER" , "H" ) , "h_water" ) );
+
+   //nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_BENZENE" , "H" ) , "benzen" ) );
+   //nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_BENZENE" , "C" ) , "benzen" ) );
 }
-
-
 
 G4NeutronHPThermalScatteringNames::~G4NeutronHPThermalScatteringNames()
 {
 ;
 }
 
-
-
 G4bool G4NeutronHPThermalScatteringNames::IsThisThermalElement( G4String aname)
 {
    G4bool result = false;
    if ( names.find ( aname ) != names.end() ) result = true; 
+   return result;
+}
+
+G4bool G4NeutronHPThermalScatteringNames::IsThisThermalElement( G4String material , G4String element )
+{
+   G4bool result = false;
+   if ( nist_names.find ( std::pair<G4String,G4String>(material,element) ) != nist_names.end() ) result = true; 
    return result;
 }

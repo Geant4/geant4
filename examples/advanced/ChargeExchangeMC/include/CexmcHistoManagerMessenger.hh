@@ -50,13 +50,16 @@
 
 class  G4UIcommand;
 class  G4UIcmdWithoutParameter;
+class  G4UIcmdWithAnInteger;
 class  G4UIcmdWithAString;
+class  CexmcHistoManager;
 
 
 class  CexmcHistoManagerMessenger : public G4UImessenger
 {
     public:
-        CexmcHistoManagerMessenger();
+        explicit CexmcHistoManagerMessenger(
+                                        CexmcHistoManager *  histoManager );
 
         ~CexmcHistoManagerMessenger();
 
@@ -64,6 +67,10 @@ class  CexmcHistoManagerMessenger : public G4UImessenger
         void  SetNewValue( G4UIcommand *  cmd, G4String  value );
 
     private:
+        CexmcHistoManager *        histoManager;
+
+        G4UIcmdWithAnInteger *     setVerboseLevel;
+
         G4UIcmdWithoutParameter *  listHistos;
 
         G4UIcmdWithAString *       printHisto;
@@ -74,7 +81,6 @@ class  CexmcHistoManagerMessenger : public G4UImessenger
 };
 
 #endif
-
 
 #endif
 

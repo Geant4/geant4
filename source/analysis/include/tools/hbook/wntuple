@@ -1,0 +1,201 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_wntuple
+#define tools_hbook_wntuple
+
+// A class to write an HBOOK ntuple.
+
+#include <tools/vmanip>
+#include <tools/vfind>
+#include <tools/srep>
+#include <tools/sto>
+#include <tools/scast>
+#include <tools/stype>
+
+#include "CHBOOK"
+
+#ifdef WIN32
+extern "C" int NTUC[1];
+#else
+extern "C" int ntuc_[1];
+#endif
+
+namespace tools {
+namespace hbook {
+
+class wntuple {
+
+protected:
+  class icol {
+  public:
+    virtual ~icol(){}
+  public:
+    virtual void* cast(const std::string&) const = 0;
+    virtual const std::string& s_cls() const = 0;
+  public:
+    virtual const std::string& name() const = 0; //for find_named
+  };
+  
+public:
+  template <class T>
+  class column : public virtual icol {
+  public:
+    static const std::string& s_class() {
+      static const std::string s_v
+        ("tools::hbook::wntuple::column<"+tools::stype(T())+">");
+      return s_v;
+    }
+  public: //icol
+    virtual void* cast(const std::string& a_class) const {
+      if(void* p = tools::cmp_cast< column<T> >(this,a_class)) return p;
+      else return 0;
+    }
+    virtual const std::string& s_cls() const {return s_class();}
+    virtual const std::string& name() const {return m_name;}
+  public:
+    column(const std::string& a_name)
+    :m_name(a_name),m_tmp(0)
+    {}
+    virtual ~column(){}
+  protected:
+    column(const column& a_from)
+    :icol(a_from),m_name(a_from.m_name),m_tmp(a_from.m_tmp)
+    {}
+    column& operator=(const column& a_from){
+      m_name = a_from.m_name;
+      m_tmp = a_from.m_tmp;
+      return *this;
+    }
+  public:
+    void set_address(T* a_pos) {m_tmp = a_pos;}
+    bool fill(const T& a_value) {*m_tmp = a_value;return true;}
+  protected:
+    std::string m_name;
+    T* m_tmp;
+  };
+  
+public:
+  wntuple(int a_id,const std::string& a_title)
+  :m_path(CHPWD()),m_id(a_id),m_path_file(CHPWD())
+  {
+    // WARNING : the below assumes that we are under //PAWC/<something>
+    //           and that a //<something> exists and is attached to a file.
+    tools::replace(m_path_file,"//PAWC","/");
+    cd_beg();
+    CHBNT(m_id,a_title," ");
+    cd_end();
+  }
+  virtual ~wntuple(){
+    cd_beg();
+    CHDELET(m_id);
+    cd_end();
+    tools::clear<icol>(m_cols);
+  }
+protected:
+  //Can we copy the HBOOK object ?
+  wntuple(const wntuple& a_from)
+  :m_path(a_from.m_path),m_id(a_from.m_id)
+  {}
+  wntuple& operator=(const wntuple& a_from){
+    m_path = a_from.m_path;
+    m_id = a_from.m_id;
+    return *this;
+  }
+public:
+  template <class T>
+  column<T>* create_column(const std::string& a_name) {
+    if(tools::find_named<icol>(m_cols,a_name)) return 0;
+
+    std::string block("blk"); //8 chars max.
+    block += tools::to<unsigned int>(m_cols.size());
+    if(block.size()>8) return 0;
+
+    column<T>* col = new column<T>(a_name);
+
+#ifdef WIN32
+    int nvar = NTUC[0];
+    char* pos = ((char*)NTUC)+8+8*nvar;
+    NTUC[0]++;
+#else
+    int nvar = ntuc_[0];
+    char* pos = ((char*)ntuc_)+8+8*nvar;
+    ntuc_[0]++;
+#endif
+
+    col->set_address((T*)pos);
+
+    cd_beg();
+    CHBNAME(m_id,block,pos,a_name+":"+h_type(T()));
+    cd_end();
+
+    m_cols.push_back(col);
+
+    return col;
+  }
+
+  bool add_row() {
+    cd_beg();
+    CHFNT(m_id);
+    cd_end();
+    return true;
+  }
+
+  // optimization :
+  void add_row_beg() const {cd_beg();}
+  bool add_row_fast() {CHFNT(m_id);return true;}
+  void add_row_end() const {cd_end();}
+
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    icol* col = tools::find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return tools::cast<icol, column<T> >(*col);
+  }
+
+  //std::string title() const {
+  //  std::string title;
+  //  int ncx,ncy;
+  //  rarg xmin,xmax,ymin,ymax;
+  //  cd_beg();
+  //  CHGIVE(m_id,title,ncx,xmin,xmax,ncy,ymin,ymax);
+  //  cd_end();
+  //  return title;
+  //}
+
+  const std::vector<icol*>& columns() const {return m_cols;}
+
+protected:
+  static const std::string& h_type(int) {
+    static const std::string s_v("I*4");
+    return s_v;
+  }
+  static const std::string& h_type(float) {
+    static const std::string s_v("R*4");
+    return s_v;
+  }
+  static const std::string& h_type(double) {
+    static const std::string s_v("R*8");
+    return s_v;
+  }
+
+protected:
+  void cd_beg() const{
+    wntuple& self = const_cast<wntuple&>(*this);
+    CHPWDF(self.m_tmp);
+    CHCDIR(m_path," ");
+    CHCDIR(m_path_file," "); // cd on file.
+  }
+  void cd_end() const {CHCDIR(m_tmp," ");}
+protected:
+  std::string m_path;
+  int m_id;
+  std::string m_path_file;
+  char m_tmp[1024];
+  std::vector<icol*> m_cols;
+};
+
+}}
+
+#endif

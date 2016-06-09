@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.56 2009/02/20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eBremsstrahlung.cc,v 1.56 2009-02-20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -78,6 +78,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4Gamma.hh"
 #include "G4eBremsstrahlungModel.hh"
+#include "G4SeltzerBergerModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -110,20 +111,23 @@ G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseEnergyLossProcess(
-                                                const G4ParticleDefinition* p,
-                                                const G4ParticleDefinition*)
+void 
+G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					       const G4ParticleDefinition*)
 {
   if(!isInitialised) {
-    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    if (!EmModel(1)) SetEmModel(new G4eBremsstrahlungModel(), 1);
-    if (!EmModel(2)) SetEmModel(new G4eBremsstrahlungRelModel(), 2);
+    //    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
+    if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }
+    if (!EmModel(2)) { SetEmModel(new G4eBremsstrahlungRelModel(), 2); }
+
+    G4double energyLimit = 1*GeV;
 
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(EmModel(2)->LowEnergyLimit());
+    EmModel(1)->SetHighEnergyLimit(energyLimit);
+    EmModel(2)->SetLowEnergyLimit(energyLimit);
     EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
                 
     G4VEmFluctuationModel* fm = 0;
@@ -150,7 +154,9 @@ void G4eBremsstrahlung::PrintInfo()
     G4double eth = man->BremsstrahlungTh(); 
     G4cout << "      LPM flag: " << man->LPMFlag() << " for E > " 
 	   << EmModel(1)->HighEnergyLimit()/GeV << " GeV";
-    if(eth < DBL_MAX) G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+    if(eth < DBL_MAX) { 
+      G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+    }
     G4cout << G4endl;
   }
 }

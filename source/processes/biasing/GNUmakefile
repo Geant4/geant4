@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2007/05/30 17:58:37 ahoward Exp $
+# $Id: GNUmakefile,v 1.2 2007-05-30 17:58:37 ahoward Exp $
 # ------------------------------------------------------------
 # GNUmakefile for biasing process library.  
 # ------------------------------------------------------------

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EmCalculator.cc,v 1.7 2008/03/13 07:32:18 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4EmCalculator.cc,v 1.7 2008-03-13 07:32:18 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4EmCalculator.cc
 //

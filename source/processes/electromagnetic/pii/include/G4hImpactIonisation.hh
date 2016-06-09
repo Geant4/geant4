@@ -27,8 +27,8 @@
 // ------------------------------------------------------------
 // G4hImpactIonisation
 //
-// $Id: G4hImpactIonisation.hh,v 1.2 2010/11/19 17:16:09 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4hImpactIonisation.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //

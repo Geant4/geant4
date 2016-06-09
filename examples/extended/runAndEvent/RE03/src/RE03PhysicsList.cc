@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE03PhysicsList.cc,v 1.2 2010/04/07 01:30:07 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: RE03PhysicsList.cc,v 1.2 2010-04-07 01:30:07 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

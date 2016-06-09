@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.22 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EllipticalTube.hh,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaDataFile.cc,v 1.10 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4InclAblaDataFile.cc,v 1.9 2010/06/14 16:10:01 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -58,7 +58,9 @@ bool G4InclAblaDataFile::readData()
     G4String errorMessage2 = "\t to point to the directory containing data files needed\n";
     G4String errorMessage3 = "\t by INCL and ABLA models.\n";
     G4String errorMessage = errorMessage1 + errorMessage2 + errorMessage3;
-    G4Exception(errorMessage);
+    G4ExceptionDescription ed;
+    ed << errorMessage;
+    G4Exception("G4InclAblaDataFile::readData", "HAD_INCL_001", FatalException, ed);
   }
   
   G4String dataPath(getenv("G4ABLADATA"));
@@ -85,8 +87,10 @@ bool G4InclAblaDataFile::readData()
   std::filebuf *buf3 = vgsldin.rdbuf();
   std::filebuf *buf4 = pace2in.rdbuf();  
   if (!((buf1->is_open()) && (buf2->is_open()) && (buf3->is_open()) && (buf4->is_open()))) {
-    G4Exception("ERROR: Data missing. Could not find ABLA data file in " + dataPath +
-		" defined by environment variable G4ABLADATA");
+    G4ExceptionDescription ed;
+    ed << "ERROR: Data missing. Could not find ABLA data file in " << dataPath
+       << " defined by environment variable G4ABLADATA" << G4endl;
+    G4Exception("G4InclAblaDataFile::readData", "HAD_INCL_002", FatalException, ed);
   }
   
   G4double flalpha, frldm, vgsld, pace2;

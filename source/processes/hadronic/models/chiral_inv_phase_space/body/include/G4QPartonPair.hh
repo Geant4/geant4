@@ -26,8 +26,8 @@
 #ifndef G4QPartonPair_h
 #define G4QPartonPair_h 1
 //
-// $Id: G4QPartonPair.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QPartonPair.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

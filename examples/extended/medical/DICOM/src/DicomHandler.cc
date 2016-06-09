@@ -144,10 +144,12 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	    
 	    if(elementLength2 == 0x5153)
 	    {
-	     if(elementLength4 == 0xFFFFFFFF)
+	     if(elementLength4 == 0xFFFFFFFF)	   
+		 {
 	      read_undefined_nested( dicom );
-	     else{
-	      if(read_defined_nested( dicom, elementLength4 )==0){
+             elementLength4=0;	   
+	      }  else{
+ 	      if(read_defined_nested( dicom, elementLength4 )==0){
 	       G4cerr << "Function read_defined_nested() failed!" << G4endl;
 	       exit(-10);	       }
 	      }
@@ -166,8 +168,6 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 		  std::fread(buffer, 2, 1, dicom);
 		  GetValue(buffer, elementLength2);
 		  elementLength4 = elementLength2;
-		  
-		  
 	          
 		  std::fread(data, elementLength4, 1, dicom);
 	        
@@ -186,12 +186,11 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	          //G4cout <<  std::hex<< elementLength4 << G4endl;
 	      
 	          if(elementLength4 == 0xFFFFFFFF) 
-	           read_undefined_nested(dicom);
-		  else {
-	          
-	          
+	              {
+	              read_undefined_nested(dicom);
+                     elementLength4=0;	   
+	          }  else{
 		  std::fread(data, elementLength4, 1, dicom);
-	        
 		 } 
 		      
 	       } 
@@ -369,8 +368,8 @@ void DicomHandler::GetInformation(G4int & tagDictionary, char * data) {
 
     // others
     else {
-	std::printf("[0x%x] -> %s\n", tagDictionary, data);
-
+	//std::printf("[0x%x] -> %s\n", tagDictionary, data);
+        ;
     }
 
 }
@@ -380,7 +379,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
   G4int mean;
   G4double density;
   G4bool overflow = false;
-  G4int cpt=1;
 
   //----- Print indices of material 
   if(compression == 1) { // no compression: each pixel has a density value)
@@ -408,7 +406,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 	  if(overflow) break;
 	}
 	mean /= compression*compression;
-	cpt = 1;
 	
 	if(!overflow) {
 	  G4double density = Pixel2density(mean);
@@ -446,7 +443,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 	  if(overflow) break;
 	}
 	mean /= compression*compression;
-	cpt = 1;
 	
 	if(!overflow) {
 	  G4double density = Pixel2density(mean);
@@ -498,7 +494,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 
     //  READING THE PIXELS :
     G4int w = 0;
-    G4int len = 0;
     
     tab = new G4int*[rows];
     for ( G4int i = 0; i < rows; i ++ ) {
@@ -513,7 +508,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 
 	unsigned char ch = 0;
 
-	len = rows*columns;
 	for(G4int j = 0; j < rows; j++) {
 	    for(G4int i = 0; i < columns; i++) {
 		w++;
@@ -526,7 +520,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     } else { //  from 12 to 16 bits :
 	char sbuff[2];
 	short pixel;
-	len = rows*columns;
 	for( G4int j = 0; j < rows; j++) {
 	    for( G4int i = 0; i < columns; i++) {
 		w++;
@@ -591,7 +584,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     G4int mean;
     G4float density;
     G4bool overflow = false;
-    G4int cpt=1;
 
     //----- Write index of material for each pixel
     if(compSize == 1) { // no compression: each pixel has a density value)
@@ -619,7 +611,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 	    if(overflow) break;
 	  }
 	  mean /= compSize*compSize;
-	  cpt = 1;
 	  
 	  if(!overflow) {
 	    density = Pixel2density(mean);
@@ -656,7 +647,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 	    if(overflow) break;
 	  }
 	  mean /= compSize*compSize;
-	  cpt = 1;
 	  
 	  if(!overflow) {
 	    density = Pixel2density(mean);
@@ -851,7 +841,7 @@ void DicomHandler::GetValue(char * _val, Type & _rval) {
 }
 
 G4int DicomHandler::read_defined_nested(FILE * nested,G4int SQ_Length)
-{
+{ 
   //      VARIABLES
   unsigned short item_GroupNumber;
   unsigned short item_ElementNumber;
@@ -890,7 +880,7 @@ void DicomHandler::read_undefined_nested(FILE * nested)
   //      VARIABLES
   unsigned short item_GroupNumber;
   unsigned short item_ElementNumber;
-  unsigned long item_Length;
+  unsigned int item_Length;
   char * buffer= new char[LINEBUFFSIZE];
   
 

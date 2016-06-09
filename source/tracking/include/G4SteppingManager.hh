@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.32 2010/10/06 13:17:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SteppingManager.hh,v 1.32 2010-10-06 13:17:15 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
 //

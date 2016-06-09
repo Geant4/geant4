@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010/11/29 18:01:57 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.3 2010-11-29 18:01:57 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -48,10 +48,12 @@ GEANT4_DEFINE_MODULE(NAME G4scoring
     HEADERS
         G4EnergySplitter.hh
         G4EnergySplitter.icc
+        G4ParallelWorldProcess.hh
         G4ParallelWorldScoringProcess.hh
         G4ScoreSplittingProcess.hh
     SOURCES
         G4EnergySplitter.cc
+        G4ParallelWorldProcess.cc
         G4ParallelWorldScoringProcess.cc
         G4ScoreSplittingProcess.cc
     GRANULAR_DEPENDENCIES

@@ -61,7 +61,6 @@
 
 // Geant4 de-excitation
 #include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 
 #include <fstream>
 #include <iostream>
@@ -69,7 +68,7 @@
 using namespace std;
 
 /**
- * <h1>INCL intra-nuclear cascade with Geant4 PreCompound for de-excitation</h1>
+ * <h1>INCL intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
  *
  * Interface for INCL. This interface handles basic hadron
  * bullet particles (protons, neutrons, pions).
@@ -145,7 +144,6 @@ private:
   G4double previousTargetZ;
 
   G4ExcitationHandler *theExcitationHandler;
-  G4PreCompoundModel *thePrecoModel;
 };
 
 #endif // G4INCLABLACASCADEINTERFACE_H

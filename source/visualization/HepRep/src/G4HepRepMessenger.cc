@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.13 2010/06/21 04:43:07 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HepRepMessenger.cc,v 1.13 2010-06-21 04:43:07 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
 
@@ -44,6 +44,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	overwrite(false),
 	cullInvisibles(false),
 	cylAsPolygons(false),
+	scale(1.),
     suffix (""),
     geometry(true),
     solids(true),
@@ -108,6 +109,18 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	renderCylAsPolygonsCommand->SetDefaultValue(false);
 	renderCylAsPolygonsCommand->AvailableForStates(G4State_Idle);
 		
+	setScaleCommand = new G4UIcmdWithADouble("/vis/heprep/scale",this);
+	setScaleCommand->SetGuidance("Re-Scale coordinates.");
+	setScaleCommand->SetParameterName("Scale",true);
+	setScaleCommand->SetDefaultValue(1.);
+	setScaleCommand->SetRange("Scale > 0");
+	
+	setCenterCommand = new G4UIcmdWith3VectorAndUnit("/vis/heprep/center",this);
+	setCenterCommand->SetGuidance("Re-Center coordinates.");
+	setCenterCommand->SetParameterName("CenterX","CenterY","CenterZ",true);
+	setCenterCommand->SetDefaultValue(G4ThreeVector(0.,0.,0.));
+	setCenterCommand->SetDefaultUnit("m");
+		
     setEventNumberSuffixCommand = new G4UIcmdWithAString("/vis/heprep/setEventNumberSuffix", this);
     setEventNumberSuffixCommand->SetGuidance("Write separate event files, appended with given suffix.");
     setEventNumberSuffixCommand->SetGuidance("Define the suffix with a pattern such as '-0000'.");
@@ -144,6 +157,8 @@ G4HepRepMessenger::~G4HepRepMessenger() {
 	delete setOverwriteCommand;
 	delete setCullInvisiblesCommand;
     delete renderCylAsPolygonsCommand;
+	delete setScaleCommand;
+	delete setCenterCommand;
     delete setEventNumberSuffixCommand;
     delete appendGeometryCommand;
     delete addPointAttributesCommand;
@@ -162,6 +177,10 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
         return cullInvisibles; 
     } else if (command==renderCylAsPolygonsCommand) {
         return renderCylAsPolygonsCommand->ConvertToString(cylAsPolygons);
+    } else if (command==setScaleCommand) {
+        return setScaleCommand->ConvertToString(scale);
+    } else if (command==setCenterCommand) {
+        return setCenterCommand->ConvertToString(center,"m");
     } else if (command==setEventNumberSuffixCommand) {
         return suffix; 
     } else if (command==appendGeometryCommand) {
@@ -186,6 +205,10 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
 		cullInvisibles = setCullInvisiblesCommand->GetNewBoolValue(newValue);
     } else if (command==renderCylAsPolygonsCommand) {
         cylAsPolygons = renderCylAsPolygonsCommand->GetNewBoolValue(newValue);
+    } else if (command==setScaleCommand) {
+        scale = setScaleCommand->GetNewDoubleValue(newValue);
+    } else if (command==setCenterCommand) {
+        center = setCenterCommand->GetNew3VectorValue(newValue);
     } else if (command==setEventNumberSuffixCommand) {
         suffix = newValue;
     } else if (command==appendGeometryCommand) {
@@ -215,6 +238,14 @@ G4bool G4HepRepMessenger::getCullInvisibles() {
 
 G4bool G4HepRepMessenger::renderCylAsPolygons() {
     return cylAsPolygons;
+}
+
+G4double G4HepRepMessenger::getScale() {
+    return scale;
+}
+
+G4ThreeVector G4HepRepMessenger::getCenter() {
+    return center;
 }
 
 G4String G4HepRepMessenger::getEventNumberSuffix() {

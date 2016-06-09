@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CHIPSElasticXS.hh,v 1.1 2010/09/23 18:28:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CHIPSElasticXS.hh,v 1.1 2010-09-23 18:28:00 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 // Author  Ivantchenko, Geant4, 23-SEP-2010
 //
 // Modifications:
+// 31-05-2011 V.Uzhinsky added anti-baryons, Pi+, Pi-, K+, K- cross sections
+// 23-08-2011 V.Ivanchenko migration to new design and cleanup
 //
 
 // Class Description:
@@ -64,46 +66,32 @@ public:
   virtual ~G4CHIPSElasticXS();
 
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
-
-  virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, 
-			G4double /*Z*/, G4double /*A*/);
-
-  virtual
   G4bool IsIsoApplicable(const G4DynamicParticle*, 
-			 G4int /*Z*/, G4int /*N*/);
+			 G4int /*Z*/, G4int /*A*/,
+			 const G4Element*, const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
-	 		   G4double aTemperature = 0.);
+  G4double GetIsoCrossSection(const G4DynamicParticle*, 
+			      G4int /*Z*/, G4int /*A*/, 
+			      const G4Isotope*, const G4Element*, 
+			      const G4Material*);
 
-  virtual
-  G4double GetIsoCrossSection(const G4DynamicParticle*, const G4Isotope*,
-                              G4double aTemperature = 0.);
-
-  virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
-                                G4double /*A*/, G4double aTemperature = 0.);
-
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
-                                G4int /*A*/, G4double aTemperature = 0.);
-
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void Description() const;
 
 private: 
 
   G4CHIPSElasticXS & operator=(const G4CHIPSElasticXS &right);
   G4CHIPSElasticXS(const G4CHIPSElasticXS&);
   
-  G4VQCrossSection*           pCManager;
-  G4VQCrossSection*           nCManager;
+  G4VQCrossSection* pCManager;
+  G4VQCrossSection* nCManager;
+
+  G4VQCrossSection* PBARxsManager;   
+  G4VQCrossSection* PIPxsManager;    
+  G4VQCrossSection* PIMxsManager;    
+  G4VQCrossSection* KPxsManager;     
+  G4VQCrossSection* KMxsManager;     
+
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theParticle;

@@ -1,10 +1,11 @@
-# $Id: GNUmakefile,v 1.15 2010/09/23 05:02:14 mkelsey Exp $
+# $Id: GNUmakefile,v 1.15 2010-09-23 05:02:14 mkelsey Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #
 # Map user environment/GMake variables onto preprocessor debugging flags
 #
 # 20100922 J. Yarba -- Add include directories for pre-compound model
+# 20110919 M. Kelsey -- Add flag for final-state clustering
 # -----------------------------------------------------------
 
 name := G4hadronic_bert_cascade
@@ -41,11 +42,16 @@ ifdef G4CASCADE_CHECK_ECONS
   CPPFLAGS += -DG4CASCADE_CHECK_ECONS=1
 endif
 
+ifdef G4CASCADE_DO_COALESCENCE
+  CPPFLAGS += -DG4CASCADE_DO_COALESCENCE=1
+endif
+
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
 endif
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionStore.cc,v 1.17 2010/12/15 07:41:05 gunter Exp $
+// $Id: G4FissionStore.cc,v 1.17 2010-12-15 07:41:05 gunter Exp $
 //
 // 20100728  Move ::addConfig() implementation to .cc file
+// 20110801  Make configuration probs a data member array, reduce memory churn
+// 20110922  Replace config::print() with stream output.
 
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
@@ -40,7 +42,7 @@ void G4FissionStore::addConfig(G4double a, G4double z, G4double ez,
 			       G4double ek, G4double ev) {
   G4FissionConfiguration config(a, z, ez, ek, ev);
   configurations.push_back(config);
-  if (verboseLevel > 2) config.print();
+  if (verboseLevel > 2) G4cout << config << G4endl;
 }
 
 G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
@@ -51,27 +53,28 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
   const G4double small = -30.0;
 
   G4double totProb = 0.0;
-  std::vector<G4double> probs(size());
+  configProbs.resize(size(),0.);
 
   if (verboseLevel > 3)
     G4cout << " amax " << amax << " ic " << size() << G4endl;
 
-  for (G4int i = 0; i < size(); i++) {
+  for (size_t i = 0; i < size(); i++) {
     G4double ez = configurations[i].ezet;
     G4double pr = ez - amax;
 
     if (pr < small) pr = small;
-    pr = std::exp(pr); 
-    //  configurations[i].print();
-    //  G4cout << " probability " << pr << G4endl; 
+    pr = std::exp(pr);
+    if (verboseLevel > 2) {
+      G4cout << configurations[i] << "\n probability " << pr << G4endl; 
+    }
     totProb += pr;
-    probs[i] = totProb;  
+    configProbs[i] = totProb;  
   };
 
   G4double st = totProb * rand;
-  G4int igen = 0;
 
-  while (probs[igen] <= st && igen < size()) igen++;
+  size_t igen = 0;
+  while (configProbs[igen] <= st && igen < size()) igen++;
 
   if (verboseLevel > 3) G4cout << " igen " << igen << G4endl;
 

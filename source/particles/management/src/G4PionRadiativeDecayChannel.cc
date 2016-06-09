@@ -43,6 +43,13 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
+G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel()
+  : G4VDecayChannel(),
+    beta(0.),cib(0.),csdp(0.),csdm(0.),cif(0.),cig(0.),
+    xl(0.), yl(0.), xu(0.), yu(0.), d2wmax(0.)
+{
+}
+
 G4PionRadiativeDecayChannel::
            G4PionRadiativeDecayChannel(const G4String& theParentName,
                                        G4double        theBR)
@@ -67,7 +74,7 @@ G4PionRadiativeDecayChannel::
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4RadiativePionDecayChannel:: constructor :";
-      G4cout << " parent particle is not muon but ";
+      G4cout << " parent particle is not charged pion but ";
       G4cout << theParentName << G4endl;
     }
 #endif
@@ -93,6 +100,52 @@ G4PionRadiativeDecayChannel::
 
 G4PionRadiativeDecayChannel::~G4PionRadiativeDecayChannel()
 {
+}
+G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel &right)
+  :G4VDecayChannel(right),
+   beta(right.beta),cib(right.cib),csdp(right.csdp),
+   csdm(right.csdm),cif(right.cif),cig(right.cig),
+   xl(right.xl), yl(right.yl), xu(right.xu), yu(right.yu), 
+   d2wmax(right.d2wmax)
+{
+}
+
+G4PionRadiativeDecayChannel & G4PionRadiativeDecayChannel::operator=(const G4PionRadiativeDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+    beta = right.beta;
+    cib  = right.cib;
+    csdp = right.csdp;
+    csdm = right.csdm;
+    cif  = right.cif;
+    cig  = right.cig;
+    xl   = right.xl;
+    yl   = right.yl;
+    xu   = right.xu;
+    yu   = right.yu; 
+    d2wmax = right.d2wmax;
+  }
+  return *this;
 }
 
 G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double) 

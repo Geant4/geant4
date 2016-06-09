@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.41 2010/11/12 18:37:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BetheBlochModel.cc,v 1.41 2010-11-12 18:37:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -97,14 +97,6 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
 
 G4BetheBlochModel::~G4BetheBlochModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
-                                         const G4MaterialCutsCouple* couple)
-{
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -236,7 +228,6 @@ G4double G4BetheBlochModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  currentMaterial   = material;
   G4double eDensity = material->GetElectronDensity();
   G4double cross = eDensity*ComputeCrossSectionPerElectron
                                          (p,kineticEnergy,cutEnergy,maxEnergy);
@@ -289,6 +280,10 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   }
 
   if (dedx < 0.0) { dedx = 0.0; }
+
+  //G4cout << "E(MeV)= " << kineticEnergy/MeV << " dedx= " << dedx 
+  //	 << "  " << material->GetName() << G4endl;
+
   return dedx;
 }
 
@@ -305,14 +300,16 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     const G4Material* mat = couple->GetMaterial();
     G4double preKinEnergy = dp->GetKineticEnergy();
     G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
+    if(e < preKinEnergy*0.75) { e = preKinEnergy*0.75; }
 
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
     G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor;
     G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
-    eloss *= qfactor; 
-    eloss += highOrder;
+    G4double elossnew  = eloss*qfactor + highOrder;
+    if(elossnew > preKinEnergy)   { elossnew = preKinEnergy; }
+    else if(elossnew < eloss*0.5) { elossnew = eloss*0.5; }
+    eloss = elossnew;
     //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " qfactor= " << qfactor 
     //	   << " highOrder= " << highOrder << " (" << highOrder/eloss << ")" << G4endl;    
@@ -331,7 +328,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
-  if(minKinEnergy >= maxKinEnergy) return;
+  if(minKinEnergy >= maxKinEnergy) { return; }
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
@@ -340,7 +337,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double deltaKinEnergy, f; 
   G4double f1 = 0.0;
   G4double fmax = 1.0;
-  if( 0.5 == spin ) fmax += 0.5*maxKinEnergy*maxKinEnergy/etot2; 
+  if( 0.5 == spin ) { fmax += 0.5*maxKinEnergy*maxKinEnergy/etot2; }
 
   // sampling without nuclear size effect
   do {
@@ -368,9 +365,9 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
       G4double x2 = 0.5*electron_mass_c2*deltaKinEnergy/(mass*mass);
       g *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
     }
-    if(g > 1.0) {
+    if(g > 1.1) {
       G4cout << "### G4BetheBlochModel WARNING: g= " << g
-	     << dp->GetDefinition()->GetParticleName()
+	     << "  " << dp->GetDefinition()->GetParticleName()
 	     << " Ekin(MeV)= " <<  kineticEnergy
 	     << " delEkin(MeV)= " << deltaKinEnergy
 	     << G4endl;

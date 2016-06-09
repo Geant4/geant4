@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopoleEq.hh,v 1.1 2009/11/17 09:53:03 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MonopoleEq.hh,v 1.1 2009-11-17 09:53:03 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4MonopoleEq

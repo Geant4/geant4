@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.15 2010/11/02 11:13:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbGeometryDumper.cc,v 1.15 2010-11-02 11:13:05 gcosmo Exp $
+// GEANT4 tag $Name: $
 //
 //
 // class G4tgbGeometryDumper
@@ -228,9 +228,9 @@ G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv,
     // apply a Z reflection (reflection matrix is decomposed in new
     // reflection-free rotation + z-reflection)
     colz *= -1.;
-    CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),
-                             colx.y(),coly.y(),colz.y(),
-                             colx.z(),coly.z(),colz.z());
+    G4Rep3x3 rottemp(colx.x(),coly.x(),colz.x(),
+                     colx.y(),coly.y(),colz.y(),
+                     colx.z(),coly.z(),colz.z());
     // matrix representation (inverted)
     *rotMat = G4RotationMatrix(rottemp);
     *rotMat = (*rotMat).inverse();
@@ -541,6 +541,32 @@ G4String G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
   (*theFile) << ":MATE_MEE " << AddQuotes(mateName) << " " 
              << mat->GetIonisation()->GetMeanExcitationEnergy()/eV
              << "*eV" << G4endl;
+
+  (*theFile) << ":MATE_TEMPERATURE " << AddQuotes(mateName) << " "
+               << mat->GetTemperature()/kelvin << "*kelvin" << G4endl;
+
+  (*theFile) << ":MATE_PRESSURE " << AddQuotes(mateName) << " "
+               << mat->GetPressure()/atmosphere << "*atmosphere" << G4endl;
+
+  G4State state = mat->GetState();
+  G4String stateStr; 
+  switch (state) {
+  case kStateUndefined:
+    stateStr = "Undefined";
+    break;
+  case kStateSolid:
+    stateStr = "Solid";
+    break;
+  case kStateLiquid:
+    stateStr = "Liquid";
+    break;
+  case kStateGas:
+    stateStr = "Gas";
+    break;
+  }
+ 
+  (*theFile) << ":MATE_STATE " << AddQuotes(mateName) << " "
+	     << stateStr << G4endl;
 
   theMaterials[mateName] = mat;
 
@@ -1049,7 +1075,7 @@ G4String G4tgbGeometryDumper::GetTGSolidType( const G4String& solidType )
 //------------------------------------------------------------------------
 G4double G4tgbGeometryDumper::MatDeterminant(G4RotationMatrix * ro) 
 {
-   CLHEP::HepRep3x3 r = ro->rep3x3();
+   G4Rep3x3 r = ro->rep3x3();
    return       r.xx_*(r.yy_*r.zz_ - r.zy_*r.yz_)
               - r.yx_*(r.xy_*r.zz_ - r.zy_*r.xz_)
               + r.zx_*(r.xy_*r.yz_ - r.yy_*r.xz_);

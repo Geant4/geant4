@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: eventgendefs.hh,v 1.4 2006/06/29 18:09:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: eventgendefs.hh,v 1.4 2006-06-29 18:09:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef EventGenerator_DEBUG
 #define EventGenerator_DEBUG

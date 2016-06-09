@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionHandler.cc,v 1.4 2006/06/29 21:13:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExceptionHandler.cc,v 1.4 2006-06-29 21:13:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -75,26 +75,37 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
                         G4ExceptionSeverity severity,
                         const char* description)
 {
-  G4cerr << G4endl;
-  G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
-  G4cerr << "      issued by : " << originOfException << G4endl;
-  G4cerr << description << G4endl;
+  static const G4String es_banner
+    = "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
+  static const G4String ee_banner
+    = "\n-------- EEEE -------- G4Exception-END --------- EEEE -------\n";
+  static const G4String ws_banner
+    = "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
+  static const G4String we_banner
+    = "\n-------- WWWW -------- G4Exception-END --------- WWWW -------\n";
+  std::ostringstream message;
+  message << "*** G4Exception : " << exceptionCode << G4endl
+          << "      issued by : " << originOfException << G4endl
+          << description << G4endl;
   G4bool abortionForCoreDump = false;
   G4ApplicationState aps = G4StateManager::GetStateManager()->GetCurrentState();
   switch(severity)
   {
    case FatalException:
-    G4cerr << "*** Fatal Exception *** core dump ***";
+    G4cerr << es_banner << message.str() << "*** Fatal Exception *** core dump ***"
+           << ee_banner << G4endl;
     abortionForCoreDump = true;
     break;
    case FatalErrorInArgument:
-    G4cerr << "*** Fatal Error In Argument *** core dump ***";
+    G4cerr << es_banner << message.str() << "*** Fatal Error In Argument *** core dump ***"
+           << ee_banner << G4endl;
     abortionForCoreDump = true;
     break;
    case RunMustBeAborted:
     if(aps==G4State_GeomClosed || aps==G4State_EventProc)
     {
-      G4cerr << "*** Run Must Be Aborted ";
+      G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
+             << ee_banner << G4endl;
       G4RunManager::GetRunManager()->AbortRun(false);
     }
     abortionForCoreDump = false;
@@ -102,18 +113,17 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
    case EventMustBeAborted:
     if(aps==G4State_EventProc)
     {
-      G4cerr << "*** Event Must Be Aborted ";
+      G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
+             << ee_banner << G4endl;
       G4RunManager::GetRunManager()->AbortEvent();
     }
     abortionForCoreDump = false;
     break;
    default:
-    G4cerr << "*** This is just a warning message.";
+    G4cout << ws_banner << message.str() << "*** This is just a warning message. ***"
+           << we_banner << G4endl;
     abortionForCoreDump = false;
     break;
   }
-  G4cerr << G4endl;
   return abortionForCoreDump;
 }
-
-

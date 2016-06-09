@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GVFlashShowerParameterisation.cc,v 1.2 2006/06/29 19:14:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GVFlashShowerParameterisation.cc,v 1.2 2006-06-29 19:14:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -44,7 +44,7 @@
 #include "G4MaterialTable.hh"
 
 GVFlashShowerParameterisation::GVFlashShowerParameterisation()
-  : thePar(0)
+  : thePar(0), density(0.), A(0.), Z(0.), X0(0.), Ec(0.), Rm(0.), NSpot(0.)
 {
 }
 

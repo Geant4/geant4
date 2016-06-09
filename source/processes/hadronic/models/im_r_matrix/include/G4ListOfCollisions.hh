@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ListOfCollisions.hh,v 1.2 2010/03/12 15:45:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ListOfCollisions.hh,v 1.2 2010-03-12 15:45:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: G4ListOfCollisions.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

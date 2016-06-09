@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.21 2010/10/28 23:29:21 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Scintillation.hh,v 1.21 2010-10-28 23:29:21 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -213,13 +213,10 @@ protected:
         // Class Data Members
         ///////////////////////
 
-
         G4PhysicsTable* theSlowIntegralTable;
         G4PhysicsTable* theFastIntegralTable;
 
-
-
-	G4bool fTrackSecondariesFirst;
+        G4bool fTrackSecondariesFirst;
         G4bool fFiniteRiseTime;
 
         G4double YieldFactor;
@@ -255,7 +252,7 @@ G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 inline 
 void G4Scintillation::SetTrackSecondariesFirst(const G4bool state) 
-{ 
+{
 	fTrackSecondariesFirst = state;
 }
 

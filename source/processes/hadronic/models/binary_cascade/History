@@ -13,6 +13,78 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 Nov 2011 Gunter Folger        had-binary-V09-04-14
+- correct G4GeneratorPrecompoundInterface.cc to delete correct object, 
+    i.e. the kinetic track,
+
+21 Nov 2011 Gunter Folger        had-binary-V09-04-13
+- fix memory leak in G4GeneratorPrecompoundInterface.cc.
+
+11-November-2011, Gunter Folger  had-binary-V09-04-12
+-  move to G4HadronicException in G4BinaryCascade::GetIonMass()
+
+11-November 2011, Dennis Wright  had-binary-V09-04-11
+- G4BinaryCascade.cc : update G4Exception to new format
+
+07-November 2011, Dennis Wright  had-binary-V09-04-10
+- G4BinaryCascade.hh, .cc: add ModelDescription()
+
+03/04-November 2011, Gunter Folger had-binary-V09-04-09
+-  G4RKFieldIntegrator.cc fix for Xcode warning.
+-  BinaryCascade: add handling of detroyed nucleus, ie. when charge becomes 0
+
+28-October-2011, Gunter Folger  had-binary-V09-04-08
+   svn rev 53628 ( except History)
+-  BinaryCascade: more changes/fixes for use with propagate interface.
+
+14-October-2011, Gunter Folger  had-binary-V09-04-07
+   svn rev 53102
+-  G4GeneratorPrecompoundInterface: without de-excitation, need to 
+    add Fragment Nucleus to reaction products.
+-  BinaryCascade: More cleanup. Revised claculation of excitation energy 
+    when used for rescattering, removing systematic energy non-conservation. 	 
+
+12-October-2011, Gunter Folger  had-binary-V09-04-06
+   svn rev 53051
+-  G4GeneratorPrecompoundInterface: If (exact) excitation energy is <0,
+    not not try to de-execite; energy non-conservation remains, but at a 
+	smaller value. 
+
+28-September-2011, Gunter Folger
+   svn rev 52599
+-  Some code cleanup in G4BinaryCascade, mostly ApplyCollision. No change in
+    functionality. 
+
+4-August-2011, M.Kelsey			had-binary-V09-04-05
+-  G4GeneratorPrecompoundInterface.cc: BUG FIXES: had wrong order of iterators
+   in theFinalResult->insert(...), and incorrectly deleted precompound
+   output after moving onto result.  The tests I ran (test25 and test30) did
+   not exercise this module.
+
+28-July-2011, M.Kelsey			had-binary-V09-04-04
+-  G4GeneratorPrecompoundInterface.cc: replace loop to decay input
+    secondaries with new G4DecayKineticTracks utility.
+
+   NOTE:  Requires hadronic/model/util tag hadr-mod-util-V09-04-01 or later.
+
+10-June-2011, G.Folger		         had-binary-V09-04-03
+-  G4GeneratorPrecompoundInterface: add code to calculate excitation
+    energy from as difference of initial-final state; Results in Energy 
+    conservation for string models. Requires tag on QGS increasing exciattion
+    energy by decrease of participant nucleon energies.
+    
+25-May-2011,G.Folger		         had-binary-V09-04-02
+-  Fix compilation warning on almost unused variables
+
+12 May 2011, G.Folger		         had-binary-V09-04-01
+-  Fix large  energy non-conservation for Hydrogen target.
+     (theFinalState vector was not cleared before use)
+   Also move check for Hydrogen to ApplyYourSelf, directly calling 
+    Progategate1H1().
+
+17 Mar 2011, G.Folger		         had-binary-V09-04-00
+-  set E/p checking limits
+
 11 Nov 2010, G.Folger		         had-binary-V09-03-05
 - fix compilation errors and warnings in G4BinaryCascade.
 

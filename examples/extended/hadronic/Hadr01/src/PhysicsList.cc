@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.37 2010/11/19 20:12:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PhysicsList.cc,v 1.37 2010-11-19 20:12:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -61,6 +61,7 @@
 #include "G4QStoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
@@ -320,7 +321,7 @@ void PhysicsList::SetBuilderList3()
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
+  hadronPhys.push_back( new G4IonFTFPBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 

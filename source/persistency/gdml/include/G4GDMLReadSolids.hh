@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.16 2010/06/02 13:53:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GDMLReadSolids.hh,v 1.16 2010-06-02 13:53:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLReadSolids
@@ -91,6 +91,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void TrapRead(const xercesc::DOMElement* const);
    void TrdRead(const xercesc::DOMElement* const);
    void TubeRead(const xercesc::DOMElement* const);
+   void CutTubeRead(const xercesc::DOMElement* const);
    void TwistedboxRead(const xercesc::DOMElement* const);
    void TwistedtrapRead(const xercesc::DOMElement* const);
    void TwistedtrdRead(const xercesc::DOMElement* const);

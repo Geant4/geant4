@@ -25,8 +25,8 @@
 //
 #ifndef G4CASCADE_INTERPOLATOR_ICC
 #define G4CASCADE_INTERPOLATOR_ICC
-// $Id: G4CascadeInterpolator.icc,v 1.9 2010/12/15 07:39:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CascadeInterpolator.icc,v 1.9 2010-12-15 07:39:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //
@@ -46,9 +46,9 @@
 //		i=1, not i=0 (since i-1 is the key).
 // 20100803  M. Kelsey -- Add printBins() function for debugging
 // 20101019  M. Kelsey -- CoVerity reports: recursive #include, index overrun
+// 20110728  M. Kelsey -- Fix Coverity #20238, recursive #include.
+// 20110923  M. Kelsey -- Add optional ostream& argument to printBins()
 
-#include "globals.hh"
-#include "G4CascadeInterpolator.hh"
 #include <iomanip>
 
 
@@ -112,13 +112,13 @@ interpolate(const G4double (&yb)[nBins]) const {
 // Print bin edges for debugging
 
 template <int NBINS>
-void G4CascadeInterpolator<NBINS>::printBins() const {
-  G4cout << " G4CascadeInterpolator<" << NBINS << "> : " << G4endl;
+void G4CascadeInterpolator<NBINS>::printBins(std::ostream& os) const {
+  os << " G4CascadeInterpolator<" << NBINS << "> : " << G4endl;
   for (G4int k=0; k<NBINS; k++) {
-    G4cout << " " << std::setw(5) << xBins[k];
-    if ((k+1)%12 == 0) G4cout << G4endl;
+    os << " " << std::setw(5) << xBins[k];
+    if ((k+1)%12 == 0) os << G4endl;
   }
-  G4cout << G4endl;
+  os << G4endl;
 }
 
 #endif	/* G4CASCADE_INTERPOLATOR_ICC */

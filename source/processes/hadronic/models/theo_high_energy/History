@@ -14,6 +14,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08-Nov-2011, G.Folger	    had-theo-HE-V09-04-04
+- G4QuasiElasticChannel: use QuasiElRatios from models/quasi_elastic
+	in place of QuasiFreeRatios from chips.
+	also update Gnumakefile and sources.cmake for added(*) dependency.
+	 (*) ProjectileDiffraction still(?) relies on chips, so dependency on chips
+	 cannot be removed. 
+
+21-Sep-2011, G.Folger	    had-theo-HE-V09-04-03 
+              note that had-theo-HE-V09-04-02 was done without record 
+- G4ProjectileDiffractiveChannel.cc: finish migration to integer A&Z 
+- G4QuasiElasticChannel: use QuasiFreeRatios in place of QuasiElRatios
+
+8-Aug-2011, M. Kelsey
+- G4QuasiElasticChannel:  Move #includes from .hh to .cc to reduce external
+  dependences.
+
+5-Aug-2011, M. Kelsey	    had-theo-HE-V09-04-01
+- G4TheoFSGenerator.cc, G4QuasiElasticChannel.cc: Follow change in return
+  value of G4V3DNucleus::GetNucleons()
+
+  Requires consistent changes in other packages:
+  	hadr-modman-V09-04-01
+  	hadr-mod-util-V09-04-02
+	had-partonstring-mgt-V09-04-01
+  	hadr-qgsm-V09-04-04
+  	had-theo-HE-V09-04-01
+
+17-Mar-2011 G.Folger        had-theo-HE-V09-04-00
+-  Add G4TheoFSGenerator::GetEnergyMomentumCheckLevel() method. 
+-  M.Kelsey: store primary particle, so that cascade in Propagate has access
+
 17-Sep-2010 G.Folger        had-theo-HE-V09-03-01
 -  Correct G4QuasiElasticChannel for bug introduced in A&Z migration
 

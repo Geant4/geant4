@@ -1,4 +1,4 @@
-$Id: NEW_APP_INSTALL,v 1.2 2002/03/09 08:07:55 cooperma Exp $
+$Id: NEW_APP_INSTALL,v 1.2 2002-03-09 08:07:55 cooperma Exp $
 ------------------------------------------------------------------------------
 These are instructions for parallelizing a new application.  Before
 doing so, try out the examples, ParN02 and ParN04, which have

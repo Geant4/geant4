@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc,v 1.5 2008/10/30 22:34:23 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedGammaConversion.cc,v 1.5 2008-10-30 22:34:23 schaelic Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

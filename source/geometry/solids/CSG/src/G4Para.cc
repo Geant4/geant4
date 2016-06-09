@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.43 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Para.cc,v 1.43 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
 //
@@ -85,11 +85,12 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
   }
   else
   {
-    G4cerr << "ERROR - G4Para()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid dimensions ! - "
-           << pDx << ", " << pDy << ", " << pDz << G4endl;
-    G4Exception("G4Para::SetAllParameters()", "InvalidSetup",
-                FatalException, "Invalid Length Parameters.");
+    std::ostringstream message;
+    message << "Invalid Length Parameters for Solid: " << GetName() << G4endl
+            << "        pDx, pDy, pDz = "
+            << pDx << ", " << pDy << ", " << pDz;
+    G4Exception("G4Para::SetAllParameters()", "GeomSolids0002",
+                FatalException, message);
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
@@ -106,11 +107,12 @@ G4Para::G4Para(const G4String& pName,
 {
   if ((pDx<=0) || (pDy<=0) || (pDz<=0))
   {
-    G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
-           << "        Invalid dimensions ! - "
-           << pDx << ", " << pDy << ", " << pDz << G4endl;
-    G4Exception("G4Para::G4Para()", "InvalidSetup",
-                FatalException, "Invalid Length Parameters.");
+    std::ostringstream message;
+    message << "Invalid Length Parameters for Solid: " << GetName() << G4endl
+            << "        pDx, pDy, pDz = "
+            << pDx << ", " << pDy << ", " << pDz;
+    G4Exception("G4Para::G4Para()", "GeomSolids0002",
+                FatalException, message);
   }
   SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
 }
@@ -134,10 +136,10 @@ G4Para::G4Para( const G4String& pName,
        ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0   && 
        ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0) )
   {
-    G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl;
-    G4Exception("G4Para::G4Para()", "InvalidSetup",
-                FatalException, "Invalid vertice coordinates.");
+    std::ostringstream message;
+    message << "Invalid vertice coordinates for Solid: " << GetName();
+    G4Exception("G4Para::G4Para()", "GeomSolids0002",
+                FatalException, message);
   }    
   fDx = ((pt[3]).x()-(pt[2]).x())*0.5;
   fDy = ((pt[2]).y()-(pt[1]).y())*0.5;
@@ -535,8 +537,8 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Para::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Para::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -1102,7 +1104,8 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Para::DistanceToOut(p,v,..)","Notification",JustWarning,
+        G4Exception("G4Para::DistanceToOut(p,v,..)",
+                    "GeomSolids1002",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -1132,7 +1135,7 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc) ;
-     G4Exception("G4Para::DistanceToOut(p)", "Notification",
+     G4Exception("G4Para::DistanceToOut(p)", "GeomSolids1002",
                  JustWarning, "Point p is outside !?" );
   }
 #endif
@@ -1220,7 +1223,7 @@ G4Para::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   {
     DumpInfo();
     G4Exception("G4Para::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -1250,6 +1253,7 @@ G4VSolid* G4Para::Clone() const
 
 std::ostream& G4Para::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1264,6 +1268,7 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
      << "    std::tan(theta)*std::sin(phi): " << fTthetaSphi/degree
      << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

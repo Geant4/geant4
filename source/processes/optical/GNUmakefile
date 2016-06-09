@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2004/10/28 14:26:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004-10-28 14:26:38 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for optical photons library. G.Folger 10-Dec-97.
 # ------------------------------------------------------------

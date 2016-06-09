@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.hh,v 1.1 2010/10/18 15:56:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: SteppingAction.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -45,7 +45,7 @@ class EventAction;
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(DetectorConstruction*, EventAction*);
+  SteppingAction();
   virtual ~SteppingAction();
 
   void UserSteppingAction(const G4Step*);

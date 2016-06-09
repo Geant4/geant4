@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EnergyLossMessenger.hh,v 1.26 2010/11/23 19:01:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EnergyLossMessenger.hh,v 1.26 2010-11-23 19:01:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,7 +32,7 @@
 //
 // File name:     G4EnergyLossMessenger
 //
-// Author:        Michel Maire
+// Author:        Michel Maire 
 //
 // Creation date: 22-06-2000
 //
@@ -49,20 +48,9 @@
 // -------------------------------------------------------------------
 //
 
-//
 // Class Description:
 //  This is a messenger class to interface to exchange information
-//  between G4VEnergyLoss and UI.
-//
-//  /process/eLoss/   directory
-//
-//   Commands :
-//
-//    rndmStep *     Randomize the proposed step by eLoss (false/true)
-//    fluct *        Switch true/false the energy loss fluctuations
-//    subsec *       Switch true/false the subcutoff generation
-//    minsubsec *    Set the min. cut for subcutoff delta in range
-//    StepFunction * Set the energy loss step limitation parameters
+//  between G4VEm and UI.
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,6 +108,7 @@ private:
   G4UIcmdWithABool*          auCmd;
   G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithAString*        pixeXsCmd;
+  G4UIcmdWithAString*        pixeeXsCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      dedxCmd;
@@ -131,6 +120,9 @@ private:
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  G4UIcommand*               bfCmd;
+  G4UIcommand*               fiCmd;
+  G4UIcommand*               brCmd;
 };
 
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPosOnPhysVolGenerator.cc,v 1.2 2009/11/18 17:57:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointPosOnPhysVolGenerator.cc,v 1.2 2009-11-18 17:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -65,14 +65,11 @@ G4AdjointPosOnPhysVolGenerator::~G4AdjointPosOnPhysVolGenerator()
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator::G4AdjointPosOnPhysVolGenerator()
+   : theSolid(0), thePhysicalVolume(0), NStat(1000000), epsilon(0.001),
+     UseSphere(true), ModelOfSurfaceSource("OnSolid"),
+     ExtSourceRadius(0.), ExtSourceDx(0.), ExtSourceDy(0.), ExtSourceDz(0.),
+     AreaOfExtSurfaceOfThePhysicalVolume(0.), CosThDirComparedToNormal(0.)
 { 
-  theSolid=0;
-  NStat =1000000;
-  epsilon=0.001;
-  ModelOfSurfaceSource = "OnSolid"; //OnSolid, ExternalSphere, ExternalBox
-  thePhysicalVolume = 0;
-  theTransformationFromPhysVolToWorld = G4AffineTransform();
-  UseSphere =true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -162,16 +159,15 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSoli
 ////////////////////////////////////////////////////
 void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnTheExtSurfaceOfASolid(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector& direction)
 {
-  G4double area;
-  area =1.;
   if (ModelOfSurfaceSource == "OnSolid" ){
-	return GenerateAPositionOnASolidBoundary(aSolid, p,direction);
+	GenerateAPositionOnASolidBoundary(aSolid, p,direction);
+        return;
   }
   if (ModelOfSurfaceSource == "ExternalSphere" ) {
-  	area = GenerateAPositionOnASphereBoundary(aSolid, p, direction);
+  	GenerateAPositionOnASphereBoundary(aSolid, p, direction);
   	return;
   }	
-  	area = GenerateAPositionOnABoxBoundary(aSolid, p, direction);
+  	GenerateAPositionOnABoxBoundary(aSolid, p, direction);
 	return;
 }
 ////////////////////////////////////////////////////
@@ -219,21 +215,17 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurfaceStartingFromSphe
 void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction)
 { 
   G4bool find_pos =false;
-  G4double area=1.;
   while (!find_pos){
-  	 if (UseSphere) area = GenerateAPositionOnASphereBoundary( aSolid,p, direction);
-  	 else  area = GenerateAPositionOnABoxBoundary( aSolid,p, direction);
-	 G4double dist_to_in = aSolid->DistanceToIn(p,direction);
-	 if (dist_to_in<kInfinity/2.) {
-		find_pos =true;
-		G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
-		G4ThreeVector norm =aSolid->SurfaceNormal(p1);
-		p+= 0.999999*direction*dist_to_in;
-		CosThDirComparedToNormal=direction.dot(-norm);
-		//std::cout<<CosThDirComparedToNormal<<std::endl;
-		
-		return;
-	}
+    if (UseSphere) GenerateAPositionOnASphereBoundary( aSolid,p, direction);
+    else  GenerateAPositionOnABoxBoundary( aSolid,p, direction);
+    G4double dist_to_in = aSolid->DistanceToIn(p,direction);
+    if (dist_to_in<kInfinity/2.) {
+      find_pos =true;
+      G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
+      G4ThreeVector norm =aSolid->SurfaceNormal(p1);
+      p+= 0.999999*direction*dist_to_in;
+      CosThDirComparedToNormal=direction.dot(-norm);
+    }
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +233,6 @@ void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary(G4VSolid*
 G4double G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASphereBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction)
 {
   G4double minX,maxX,minY,maxY,minZ,maxZ;
-  G4bool yesno;
 
   // values needed for CalculateExtent signature
 
@@ -250,9 +241,9 @@ G4double G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASphereBoundary(G4VS
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = aSolid->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = aSolid->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = aSolid->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  aSolid->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  aSolid->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  aSolid->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   G4ThreeVector center = G4ThreeVector((minX+maxX)/2.,(minY+maxY)/2.,(minZ+maxZ)/2.);
   
@@ -283,7 +274,6 @@ G4double G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnABoxBoundary(G4VSoli
 {
 
   G4double ran_var,px,py,pz,minX,maxX,minY,maxY,minZ,maxZ;
-  G4bool yesno;
   
   // values needed for CalculateExtent signature
 
@@ -292,9 +282,9 @@ G4double G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnABoxBoundary(G4VSoli
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = aSolid->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = aSolid->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = aSolid->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  aSolid->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  aSolid->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  aSolid->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
   
   G4double scale=.1;
   minX-=scale*std::abs(minX);

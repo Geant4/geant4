@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HyperNucleiProperties.cc,v 1.4 2008/10/22 12:35:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HyperNucleiProperties.cc,v 1.4 2008-10-22 12:35:46 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 

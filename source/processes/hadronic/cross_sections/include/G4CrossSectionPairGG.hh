@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.hh,v 1.3 2010/11/18 11:01:01 gunter Exp $
-// $ GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CrossSectionPairGG.hh,v 1.3 2010-11-18 11:01:01 gunter Exp $
+// $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
 //
@@ -44,6 +44,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4GlauberGribovCrossSection.hh"
 #include <valarray>
+#include <iostream>
+
+class G4NistManager;
 
 class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 {
@@ -60,27 +63,23 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 			      
   virtual ~G4CrossSectionPairGG();
 
-  G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* element)
-  { return IsIsoApplicable(particle, G4lrint(element->GetZ()), G4lrint(element->GetN())); }  
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int N);
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z, 
+			     const G4Material* mat = 0);
 
-  G4double GetCrossSection(const G4DynamicParticle* particle, 
-                           const G4Element* element,
-                           G4double temperature)
-         { return GetZandACrossSection(particle, G4lrint(element->GetZ()), 
-                                G4lrint(element->GetN()), temperature);    }
+  virtual
+  G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+				  const G4Material* mat = 0);
 
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int Z,
-				G4int A, G4double aTemperature = 0.);
-
-
-  void BuildPhysicsTable(const G4ParticleDefinition&);
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void DumpPhysicsTable(const G4ParticleDefinition&);
   
   private:
+
+    G4NistManager* NistMan;
     G4VCrossSectionDataSet * theLowX;   
-//    G4VCrossSectionDataSet * theHighX;
     G4GlauberGribovCrossSection * theHighX;
     G4double ETransition;
     typedef std::valarray<G4double> XS_factors;

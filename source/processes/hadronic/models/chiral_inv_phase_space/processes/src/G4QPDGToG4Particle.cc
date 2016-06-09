@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.1 2009/11/17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QPDGToG4Particle.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
 //                 by Mikhail Kossov, December 2003.
@@ -53,14 +53,12 @@ G4QPDGToG4Particle::~G4QPDGToG4Particle() // The map is distructed only in the E
 
 // Returns Pointer to the G4QPDGToG4Particle
 G4QPDGToG4Particle* G4QPDGToG4Particle::Get()
-//                  =========================
 {
   static G4QPDGToG4Particle theMap;        // *** Static body of the G4QPDGToG4Particle ***
   return &theMap;
 }
 
 G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
-//                    ====================================================
 {
   if(!PDG) return 0;
   else if(PDG>0)     // Positive PDG Code
@@ -358,9 +356,8 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
 }
 
 void G4QPDGToG4Particle::DefineAllParticles()
-// ==========================================
 {
-  //======== LEPTONS =========
+  //=---------= LEPTONS =---------------=
   G4Gamma::GammaDefinition();
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
@@ -374,7 +371,7 @@ void G4QPDGToG4Particle::DefineAllParticles()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  //================ MESONS ===================
+  //=--------------= MESONS =---------------=
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -399,7 +396,7 @@ void G4QPDGToG4Particle::DefineAllParticles()
   G4AntiBMesonZero::AntiBMesonZeroDefinition();
   G4BsMesonZero::BsMesonZeroDefinition();
   G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
-  // ========== BARYONS ==================
+  // =---------= BARYONS =-----------=
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();

@@ -25,8 +25,8 @@
 //
 #ifndef G4CASCADE_RECOIL_MAKER_HH
 #define G4CASCADE_RECOIL_MAKER_HH
-// $Id: G4CascadeRecoilMaker.hh,v 1.7 2010/12/15 07:39:44 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeRecoilMaker.hh,v 1.7 2010-12-15 07:39:44 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.
@@ -42,6 +42,8 @@
 // 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
 // 20100924  M. Kelsey -- Add raw excitation energy (mass difference) function
+// 20110214  M. Kelsey -- Replace "model" with G4InuclParticle::Model enum
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -69,7 +71,7 @@ public:
 
   // This is for use with G4IntraNucleiCascader
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       const std::vector<G4InuclElementaryParticle>& particles,
+	       G4CollisionOutput& output,
 	       const std::vector<G4CascadParticle>& cparticles);
 
   // Modifiable parameters
@@ -78,7 +80,7 @@ public:
   void setRecoilExcitation(G4double Eexc) { excitationEnergy = Eexc; }
 
   // Build nucleus from current parameters, if physically reasonable
-  G4InuclNuclei* makeRecoilNuclei(G4int model=0);
+  G4InuclNuclei* makeRecoilNuclei(G4InuclParticle::Model model=G4InuclParticle::DefaultModel);
   G4Fragment* makeRecoilFragment();	// For use with PreCompound
 
   // Attach exciton configuration for use by "nucleus makers"

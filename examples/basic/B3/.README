@@ -1,0 +1,157 @@
+//$Id$
+
+///\file "B3/.README"
+///\brief Example B3 README page
+
+/*! \page ExampleB3 Example B3
+
+ This example simulates schematically a Positron Emitted Tomography system.
+	
+\section B3_s1 GEOMETRY DEFINITION
+
+   The support of gamma detection are scintillating crystals. A small number
+   of such crystals are optically grouped in a matrix of crystals. In
+   this example, individual crystals are not described; only the matrix of
+   crystals is and it is still called 'Crystal' hereafter.
+
+   Crystals are circularly arranged to form a ring. Few rings make up the full
+   detector (gamma camera). This is done by positionning Crystals in 
+   Ring with an appropriate rotation matrix. Several copies of Ring are 
+   then placed in the full detector.  
+
+   The head of a patient is schematised as a homogeneous cylinder of brain
+   tissue, placed at the center of full detector.
+	
+   The Crystal material, Lu2SiO5, is not included in the G4Nist database. 
+   Therefore, it is explicitly built in DefineMaterials().
+ 	 	
+\section B3_s2 PHYSICS LIST
+
+   The physics list contains standard electromagnetic processes and the
+   radioactiveDecay module for GenericIon. It is defined in the B3PhysicsList 
+   class as a Geant4 modular physics list with registered physics builders 
+   provided in Geant4:
+   - G4DecayPhysics - defines all particles and their decay processes
+   - G4RadioactiveDecayPhysics - defines radioactiveDecay for GenericIon
+   - G4EmStandardPhysics - defines all EM standard processes
+   
+   This physics list requires data files for:
+   - low energy electromagnetic processes which path is defined via 
+     the G4LEDATA envirnoment variable
+   - radioactive decay hadronic processes which path is defined via 
+     the G4RADIOACTIVEDATA envirnoment variable.
+ 	 
+\section B3_s3 PRIMARY GENERATOR
+
+   The default particle beam is an ion (F18), at rest, randomly distributed 
+   within a zone inside a patient and is defined in 
+   B3PrimaryGeneratorAction::GeneratePrimaries().
+   The type of a primary particle can be changed with G4ParticleGun commands 
+   (see run2.mac).
+   
+\section B3_s4 DETECTOR RESPONSE : scorers
+
+   A 'good' event is an event in which an identical energy of 511 keV is 
+   deposited in two separate Crystals. A count of the number of such events 
+   corresponds to a measure of the efficiency of the PET system. 
+   The total dose deposited in a patient during a run is also computed. 
+   
+   Scorers are defined in DetectorConstruction::CreateScorers(). There are
+   two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
+   and one for the Patient (DoseDeposit)
+	
+   EventAction::EndOfEventAction() collects informations event per event
+   from the hits collections, and accumulates statistic for 
+   RunAction::EndOfRunAction().	
+   	
+\section B3_s5 STACKING ACTION
+
+   Beta decay of Fluor generates a neutrino. One wishes do not track this
+   neutrino. Therefore one kills it immediately, before created particles
+   will put in a stack.
+   The function B3StackingAction::ClassifyNewTrack() is invoked by G4 kernel
+   each time a new particle is created.
+       		
+<hr>
+
+The following paragraphs are common to all basic examples
+
+\section B3_A VISUALISATION
+
+   The visualization manager is set via the G4VisExecutive class
+   in the main () function in exampleB3.cc.    
+   The initialisation of the drawing is done via a set of /vis/ commands
+   in the macro vis.mac. This macro is automatically read from
+   the main () function when the example is used in interactive running mode.
+
+   By default, vis.mac opens an OpenGL viewer.
+   The user can switch to other graphics systems by commenting out this line
+   and instead uncommenting one of the other /vis/open statements, such as
+   HepRepFile or DAWNFILE (which produce files that can be viewed with the
+   HepRApp and DAWN viewers, respectively).
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires:
+     -# the visualisation & interfaces categories have been compiled
+        with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+     -# exampleB3.cc has been compiled with G4VIS_USE_OPENGLX.
+   (This is best done through Configure or CMake.)
+
+   For more information on visualization, including information on how to
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,\n
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4OpenGLTutorial/G4OpenGLTutorial.html">
+     OpenGL Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4DAWNTutorial/G4DAWNTutorial.html">
+     DAWN Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4HepRAppTutorial/G4HepRAppTutorial.html">
+     HepRApp Tutorial </a>
+
+   The tracks are automatically drawn at the end of each event, accumulated
+   for all events and erased at the beginning of the next run.
+
+
+\section B3_B USER INTERFACES
+ 
+   The user command interface is set via the G4UIExecutive class
+   in the the main () function in exampleB3.cc 
+   The selection of the user command interface is then done automatically 
+   according to the Geant4 configuration. The default command interface, 
+   called G4UIterminal, is done via a standard G4cin/G4cout.
+   On Linux and Sun-cc one can use a smarter command interface G4UItcsh. 
+   It is enough to set the environment variable G4UI_USE_TCSH before compiling 
+   exampleB3.cc
+
+\section B3_C HOW TO RUN
+ 
+    - compile and link to generate an executable
+\verbatim
+% cd B3
+% make
+\endverbatim                
+ 
+    - execute exampleB3 in the 'interactive mode' with visualization
+\verbatim
+% exampleB3
+and type in the commands from run1.mac line by line:  
+Idle> /control/verbose 2
+Idle> /tracking/verbose 2
+Idle> /run/beamOn 1 
+Idle> ...
+Idle> exit
+\endverbatim                
+      or
+\verbatim
+Idle> /control/execute run1.mac
+....
+Idle> exit
+\endverbatim                
+
+    - execute exampleB3 in the 'batch' mode from macro files 
+      (without visualization)
+\verbatim
+% exampleB3 run2.mac
+% exampleB3 exampleB3.in > exampleB3.out
+\endverbatim                
+
+*/

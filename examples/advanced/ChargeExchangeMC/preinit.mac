@@ -1,7 +1,10 @@
 # specify gdml file and production model here.
+# histogram manager verbosity level and option to validate gdml file
+# may also be put here.
 # do not set gun parameters or anything else.
 
 /cexmc/geometry/gdmlFile lht.gdml
 /cexmc/geometry/validateGdmlFile
+/cexmc/histo/verbose 0
 
 /cexmc/physics/productionModel eta

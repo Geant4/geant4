@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellStepStream.hh,v 1.3 2006/06/29 18:15:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometryCellStepStream.hh,v 1.3 2006-06-29 18:15:59 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Declarations

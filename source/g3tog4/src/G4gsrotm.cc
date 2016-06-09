@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsrotm.cc,v 1.12 2006/06/29 18:14:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsrotm.cc,v 1.12 2006-06-29 18:14:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
 #include "G4ThreeVector.hh"
 #include "G3toG4RotationMatrix.hh"
 
-void PG4gsrotm(G4String tokens[])
+void PG4gsrotm(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsrotm);
@@ -86,7 +86,9 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
         G4cerr << " theta3=" << theta3;
         G4cerr << " phi3=" << phi3;
         G4cerr << G4endl;
-        G4Exception("G4gsrotm error");
+        G4Exception("G4gsrotm()", "G3toG40023", FatalException,
+                    "Non orthogonal axes!");
+        return;
     }
     //else if (1+check<=tol) {
     //    G4cerr << "G4gsrotm warning: coordinate axes forming rotation "

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousProcess.cc,v 1.6 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VContinuousProcess.cc,v 1.7 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -42,7 +42,8 @@ G4VContinuousProcess::G4VContinuousProcess()
   :G4VProcess("No Name Continuous Process"),
    valueGPILSelection(CandidateForSelection) 
 {
-  G4Exception("G4VContinuousProcess:: default constructor is called");
+  G4Exception("G4VContinuousProcess::G4VContinuousProcess()","ProcMan102",
+	      JustWarning,"Default constructor is called");
 }
 
 G4VContinuousProcess::G4VContinuousProcess(const G4String& aName , G4ProcessType aType)

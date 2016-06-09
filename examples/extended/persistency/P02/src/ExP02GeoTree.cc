@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExP02GeoTree.cc,v 1.2 2007/12/10 16:29:20 gunter Exp $
+// $Id: ExP02GeoTree.cc,v 1.2 2007-12-10 16:29:20 gunter Exp $
 // Include files
 
 // local

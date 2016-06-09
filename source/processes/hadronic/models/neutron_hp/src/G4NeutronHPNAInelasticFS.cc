@@ -47,9 +47,9 @@ G4HadFinalState * G4NeutronHPNAInelasticFS::ApplyYourself(const G4HadProjectile 
 }
 
 void G4NeutronHPNAInelasticFS::
-Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
 {
-   G4NeutronHPInelasticBaseFS::Init(A, Z, dirName, aFSType);
+   G4NeutronHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType);
    G4double ResidualA = A-4;
    G4double ResidualZ = Z-2;
    G4NeutronHPInelasticBaseFS::InitGammas(ResidualA, ResidualZ);

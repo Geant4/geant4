@@ -14,7 +14,47 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 November 2011 - Dennis Wright    (hadr-modman-V09-04-05)
+----------------------------------------------------------
+- add constructor and virtual destructor to G4VIsotopeProduction to 
+  fix mac compiler warning
+
+25 October 2011 - Dennis Wright    (hadr-modman-V09-04-04)
+----------------------------------------------------------
+- add virtual ModelDescription to G4HadronicInteraction
+
+11 October 2011 - Gunter Folger    (hadr-modman-V09-04-03)
+----------------------------------------------------------
+- G4VIntraNuclearTransportModel.cc initialise thePrimaryProjectile to 0
+
+27 September 2011 - Dennis Wright  (hadr-modman-V09-04-02)
+----------------------------------------------------------
+- G4HadronicInteraction:  clean-up
+
+- Migrate to integer Z and A.  File affected:
+  G4InelasticInteraction.cc
+
+5 August 2011 - M. Kelsey   (hadr-modman-V09-04-01)
+---------------------------------------------------
+- G4V3DNucleus.hh:  Change GetNucleons() array to objects instead of pointers.
+
+  Requires consistent changes in other packages:
+  	hadr-modman-V09-04-01
+  	hadr-mod-util-V09-04-02
+	had-partonstring-mgt-V09-04-01
+  	hadr-qgsm-V09-04-04
+  	had-theo-HE-V09-04-01
+
+3 November 2010  - G.Folger   (hadr-modman-V09-04-00)
+------------------------------------------------------
+- E/p checking extended to allow string models to set limits:
+   GetEnergyMomentumCheckLevels() made virtual in G4HadronicInteraction,
+     implemented to query string model in G4VHighEnergyGenerator
+- M.Kelsey: G4VIntraNuclearTransportModel add data member and 
+   Set/Get method to store/retrieve original projectile   
+
 3 November 2010  - G.Folger   (hadr-modman-V09-03-05)
+------------------------------------------------------
 - G4VNuclearDensity: coverity warning: init data member in ctor
 
 8 September 2010 - G.Folger   (hadr-modman-V09-03-04)

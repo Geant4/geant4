@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,45 +13,45 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:    Mylar     density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.391 cm   Imean:  75.967 eV 
+ Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.391 cm   Imean:  75.967 eV 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
 
- Material: Polypropelene     density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.517 cm   Imean:  56.518 eV 
+ Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.517 cm   Imean:  56.518 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
 
- Material:       Kr     density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.292 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.292 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Argon     density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.233 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Argon    density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.233 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       N2     density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 675.036 m    Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       N2    density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 675.036 m    Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       O2     density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       O2    density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  0.000 kg/m3   RadL: 28329263.098 km   Nucl.Int.Length: 66202169.471 km   Imean:  85.664 eV   temperature: 273.15 K  pressure:   0.00 atm
+ Material:      Air    density:  0.000 kg/m3   RadL: 28329263.098 km   Nucl.Int.Length: 66202169.471 km   Imean:  85.664 eV   temperature: 273.15 K  pressure:   0.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.57 %  ElmAbundance  78.48 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.15 %  ElmAbundance  21.05 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material:    Xenon     density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 304.114 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 304.114 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      CO2     density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      CO2    density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
- Material:  Xe20CO2     density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.445 m    Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.445 m    Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  92.20 %  ElmAbundance  56.91 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.13 %  ElmAbundance  14.36 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   5.67 %  ElmAbundance  28.73 %
 
- Material:  Kr20CO2     density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.057 m    Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.057 m    Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  89.00 %  ElmAbundance  58.62 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.00 %  ElmAbundance  13.79 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   8.00 %  ElmAbundance  27.59 %
@@ -104,165 +104,169 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
+
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -281,9 +285,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.81272e-13          1      500 MeV0.00387478 eV    1.58938 m     1.58938 m       World  Transportation
-    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43792e-06 eV          1 mm    1.59038 m    Absorber  Transportation
-    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.3162e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0 8.71844e-13          1      500 MeV0.0038748 eV    1.58938 m     1.58938 m       World  Transportation
+    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43793e-06 eV          1 mm    1.59038 m    Absorber  Transportation
+    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31622e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -294,8 +298,8 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -314,9 +318,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.00183029 eV    79.5502 cm    79.5502 cm      World  Transportation
-    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.3008e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
-    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18645e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.0018303 eV    79.5502 cm    79.5502 cm      World  Transportation
+    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30082e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
+    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18647e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -327,8 +331,8 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -347,9 +351,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.18033e-09          1      200 MeV0.00143688 eV    63.6725 cm    63.6725 cm      World  Transportation
-    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.25668e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
-    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.1449e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0 -2.18033e-09          1      200 MeV0.00143689 eV    63.6725 cm    63.6725 cm      World  Transportation
+    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.2567e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
+    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14492e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -360,8 +364,8 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -380,9 +384,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.000676603 eV    31.9171 cm    31.9171 cm      World  Transportation
-    2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.11991e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
-    3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.01788e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
+    1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.00067661 eV    31.9171 cm    31.9171 cm      World  Transportation
+    2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.11993e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
+    3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.0179e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -393,8 +397,8 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -413,9 +417,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m           0 -7.69215e-09          1       50 MeV0.000318167 eV    16.0391 cm    16.0391 cm      World  Transportation
-    2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98383e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
-    3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89949e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
+    1          0 fm    10.2108 cm    21.9895 m           0 -7.69214e-09          1       50 MeV0.000318171 eV    16.0391 cm    16.0391 cm      World  Transportation
+    2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98385e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
+    3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89951e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -429,8 +433,8 @@ Setting Field strength to 1000 Gauss. Magnetic field vector is (0,0,1000) G
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -460,8 +464,8 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

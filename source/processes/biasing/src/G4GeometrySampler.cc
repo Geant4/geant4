@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.10 2008/04/21 09:10:28 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeometrySampler.cc,v 1.10 2008-04-21 09:10:28 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

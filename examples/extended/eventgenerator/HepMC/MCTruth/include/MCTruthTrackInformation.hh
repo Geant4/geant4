@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MCTruthTrackInformation.hh,v 1.1 2006/11/22 14:51:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MCTruthTrackInformation.hh,v 1.1 2006-11-22 14:51:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------

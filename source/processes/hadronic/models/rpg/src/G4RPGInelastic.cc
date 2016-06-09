@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.8 2009/11/20 16:39:38 dennis Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RPGInelastic.cc,v 1.8 2009-11-20 16:39:38 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RPGInelastic.hh"
@@ -253,7 +253,7 @@ G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
       
     const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass();
     if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
-    const G4double atomicWeight = targetNucleus.GetN();
+    const G4double atomicWeight = targetNucleus.GetA_asInt();
     ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
     G4double tkin = targetNucleus.Cinema(ek);
     ek += tkin;

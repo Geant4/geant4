@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.hh,v 1.2 2006/06/29 19:23:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronBetaDecayChannel.hh,v 1.2 2006-06-29 19:23:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -54,6 +54,14 @@ class G4NeutronBetaDecayChannel :public G4VDecayChannel
 				G4double        theBR);
     //  Destructor
       virtual ~G4NeutronBetaDecayChannel();
+
+  protected:
+    // Copy constructor and assignment operator
+      G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &);
+      G4NeutronBetaDecayChannel & operator=(const G4NeutronBetaDecayChannel &);
+
+  protected:
+      G4NeutronBetaDecayChannel();
 
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     

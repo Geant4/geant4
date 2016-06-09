@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.15 2010/03/19 08:59:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: ExN05PhysicsList.cc,v 1.15 2010-03-19 08:59:39 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

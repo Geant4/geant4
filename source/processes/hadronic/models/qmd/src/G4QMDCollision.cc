@@ -39,7 +39,8 @@ G4QMDCollision::G4QMDCollision()
 , bcmax0 ( 1.323142 ) // NN maximum impact parameter
 , bcmax1 ( 2.523 )    // others maximum impact parameter
 , sig0 ( 55 )   // NN cross section
-, sig1 ( 200 )  // others cross section
+//110617 fix for gcc 4.6 compilation warnings 
+//, sig1 ( 200 )  // others cross section
 , epse ( 0.0001 )
 {
    theScatterer = new G4Scatterer();
@@ -311,20 +312,23 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 
          G4double cutoff = 0.0;
          G4double bcmax = 0.0;
-         G4double sig = 0.0;
+         //110617 fix for gcc 4.6 compilation warnings 
+         //G4double sig = 0.0;
 
          if ( rmi < 0.94 && rmj < 0.94 ) 
          {
 //          nucleon or pion case
             cutoff = rmi + rmj + 0.02; 
             bcmax = bcmax0;
-            sig = sig0;
+            //110617 fix for gcc 4.6 compilation warnings 
+            //sig = sig0;
          }
          else
          {
             cutoff = rmi + rmj; 
             bcmax = bcmax1;
-            sig = sig1;
+            //110617 fix for gcc compilation warnings 
+            //sig = sig1;
          }
 
          //std::cout << "Collision cutoff " << i << " " << j << " " << cutoff << std::endl;

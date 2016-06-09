@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapPhysicsList.cc,v 1.3 2010/08/16 08:23:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: OlapPhysicsList.cc,v 1.3 2010-08-16 08:23:55 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

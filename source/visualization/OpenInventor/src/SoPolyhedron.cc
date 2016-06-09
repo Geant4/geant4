@@ -342,8 +342,6 @@ void Geant4_SoPolyhedron::generateAlternateRep(
     SoIndexedFaceSet* indexedFaceSet = new SoIndexedFaceSet;
     separator->addChild(indexedFaceSet);
 
-    SbBool empty = TRUE;
-
     int nvert = fPolyhedron->GetNoVertices();
     int nface = fPolyhedron->GetNoFacets();
 
@@ -373,8 +371,6 @@ void Geant4_SoPolyhedron::generateAlternateRep(
         points[ipoint].setValue(vertex[0],vertex[1],vertex[2]);
         coords[ipoint] = icoord + ipoint;
         ipoint++;
-        empty = FALSE;
-
       } while (notLastEdge);
 
       // end face.
@@ -396,11 +392,7 @@ void Geant4_SoPolyhedron::generateAlternateRep(
     delete [] coords;
     delete [] points;
 
-    if(empty==TRUE) {
-      separator->unref();
-    } else {
-      alternateRep.setValue(separator);
-    }
+    alternateRep.setValue(separator);
 
   } else {
 

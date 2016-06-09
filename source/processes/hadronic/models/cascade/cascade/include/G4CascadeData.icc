@@ -23,20 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4_CASCADE_DATA_ICC
-#define G4_CASCADE_DATA_ICC
-// $Id: G4CascadeData.icc,v 1.3 2010/12/15 07:39:34 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeData.icc,v 1.3 2010-12-15 07:39:34 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
 //		string to report output
+// 20110718  M. Kelsey -- Add inelastic cross-section sum to deal with
+//		suppressing elastic scattering off free nucleons (hydrogen)
+// 20110719  M. Kelsey -- Add ctor argument for two-body initial state
+// 20110725  M. Kelsey -- Save initial state as data member
+// 20110728  M. Kelsey -- Fix Coverity #22954, recursive #include.
+// 20110923  M. Kelsey -- Add optional ostream& argument to print() fns,
+//		drop all "inline" keywords
 
-#include "G4CascadeData.hh"
+#ifndef G4_CASCADE_DATA_ICC
+#define G4_CASCADE_DATA_ICC
+
+#include <iostream>
 #include <iomanip>
 
 
 // Fill cumulative cross-section arrays from input data
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
 void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
   // Initialize index offsets for cross-section array (can't do globally)
   index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
@@ -54,39 +62,49 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
       }
     }
   }
-  
-  // Initialize total cross section array
+
+  // Initialize total cross section arrays
   for (G4int k = 0; k < NE; k++) {
     sum[k] = 0.0;
     for (G4int m = 0; m < NM; m++) {
       sum[k] += multiplicities[m][k];
     }
   }
+
+  // Identify elastic scattering channel and subtract from inclusive
+  G4int i2b = 0;
+  for (i2b=index[0]; i2b<index[1]; i2b++) {
+    if (x2bfs[i2b][0]*x2bfs[i2b][1] == initialState) break;	// Found it
+  }
+
+  for (G4int k = 0; k < NE; k++) {
+    if (i2b<index[1]) inelastic[k] = tot[k] - crossSections[i2b][k];
+    else inelastic[k] = tot[k];		// FIXME:  No elastic channel in table!
+  }
 }
 
 
-// Dump individual cross-section table, two lines of 12 values
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
-printXsec(const G4double (&xsec)[NE]) const {
-  for (G4int k=0; k<NE; k++) {
-    G4cout << std::setw(6) << xsec[k];		// Use sign-gap as separator
-    if ((k+1)%12 == 0) G4cout << G4endl;
-  }
-  G4cout << G4endl;
+// Dump complete final state tables, all multiplicities
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(std::ostream& os) const {
+  os << "\n " << name << " Total cross section:" << G4endl;
+  printXsec(tot, os);
+  os << "\n Summed cross section:" << G4endl;
+  printXsec(sum, os);
+  os << "\n Inelastic cross section:" << G4endl;
+  printXsec(inelastic, os);
+  os << "\n Individual channel cross sections" << G4endl;
+  
+  for (int m=2; m<NM+2; m++) print(m, os);
+  return;
 }
 
 // Dump tables for specified multiplicity
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
-  if (mult < 0) {
-    G4cout << "\n " << name << " Total cross section:" << G4endl;
-    printXsec(tot);
-    G4cout << "\n Summed cross section:" << G4endl;
-    printXsec(sum);
-    G4cout << "\n Individual channel cross sections" << G4endl;
-
-    for (int m=2; m<NM+2; m++) print(m);
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
+print(G4int mult, std::ostream& os) const {
+  if (mult < 0) {		// Old interface used mult == -1 for all
+    print(os);
     return;
   }
 
@@ -94,30 +112,41 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
 
   G4int start = index[im];
   G4int stop = index[im+1];
-  G4cout << "\n Mulitplicity " << mult << " (indices " << start << " to "
+  os << "\n Mulitplicity " << mult << " (indices " << start << " to "
 	 << stop-1 << ") summed cross section:" << G4endl;
 
-  printXsec(multiplicities[im]);
+  printXsec(multiplicities[im], os);
   
   for (G4int i=start; i<stop; i++) {
     G4int ichan=i-start;
-    G4cout << "\n final state x" << mult << "bfs[" << ichan << "] : ";
+    os << "\n final state x" << mult << "bfs[" << ichan << "] : ";
     for (G4int fsi=0; fsi<mult; fsi++) {
       switch (mult) {
-      case 2: G4cout << " " << x2bfs[ichan][fsi]; break;
-      case 3: G4cout << " " << x3bfs[ichan][fsi]; break;
-      case 4: G4cout << " " << x4bfs[ichan][fsi]; break;
-      case 5: G4cout << " " << x5bfs[ichan][fsi]; break;
-      case 6: G4cout << " " << x6bfs[ichan][fsi]; break;
-      case 7: G4cout << " " << x7bfs[ichan][fsi]; break;
-      case 8: G4cout << " " << x8bfs[ichan][fsi]; break;
-      case 9: G4cout << " " << x9bfs[ichan][fsi]; break;
+      case 2: os << " " << x2bfs[ichan][fsi]; break;
+      case 3: os << " " << x3bfs[ichan][fsi]; break;
+      case 4: os << " " << x4bfs[ichan][fsi]; break;
+      case 5: os << " " << x5bfs[ichan][fsi]; break;
+      case 6: os << " " << x6bfs[ichan][fsi]; break;
+      case 7: os << " " << x7bfs[ichan][fsi]; break;
+      case 8: os << " " << x8bfs[ichan][fsi]; break;
+      case 9: os << " " << x9bfs[ichan][fsi]; break;
       default: ;
       }
     }
-    G4cout << " -- cross section [" << i << "]:" << G4endl;
-    printXsec(crossSections[i]);
+    os << " -- cross section [" << i << "]:" << G4endl;
+    printXsec(crossSections[i], os);
   }
+}
+
+// Dump individual cross-section table, two lines of 12 values
+template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
+printXsec(const G4double (&xsec)[NE], std::ostream& os) const {
+  for (G4int k=0; k<NE; k++) {
+    os << std::setw(6) << xsec[k];		// Use sign-gap as separator
+    if ((k+1)%12 == 0) os << G4endl;
+  }
+  os << G4endl;
 }
 
 #endif	/* G4_CASCADE_DATA_ICC */

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:42:59 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:42:59 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -39,6 +39,8 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4CSGSolid.hh
         G4Cons.hh
         G4Cons.icc
+        G4CutTubs.hh
+        G4CutTubs.icc
         G4Orb.hh
         G4Orb.icc
         G4Para.hh
@@ -57,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Box.cc
         G4CSGSolid.cc
         G4Cons.cc
+        G4CutTubs.cc
         G4Orb.cc
         G4Para.cc
         G4Sphere.cc

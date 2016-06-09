@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.14 2010/06/04 08:40:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronInelasticQBBC.hh,v 1.14 2010-06-04 08:40:36 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 
 class G4ExcitationHandler;
 class G4Evaporation;
+class G4ComponentAntiNuclNuclearXS;
 
 class G4HadronInelasticQBBC : public G4VHadronPhysics
 {
@@ -73,6 +74,7 @@ private:
 
   G4ExcitationHandler*  theHandler;
   G4Evaporation*        theEvaporation;
+  G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
 
   G4String htype;
   G4int    verbose;

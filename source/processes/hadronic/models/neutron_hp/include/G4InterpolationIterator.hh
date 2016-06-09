@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationIterator.hh,v 1.9 2006/06/29 20:46:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4InterpolationIterator.hh,v 1.9 2006-06-29 20:46:13 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationIterator_h
 #define G4InterpolationIterator_h 1

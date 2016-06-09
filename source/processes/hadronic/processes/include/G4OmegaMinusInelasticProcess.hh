@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: OmegaMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 05-Nov-1996
- // Last modified: 03-Apr-1997
-
- // Note:  there is no .cc file
+// Hadronic Process: OmegaMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 05-Nov-1996
+//
  
 #ifndef G4OmegaMinusInelasticProcess_h
 #define G4OmegaMinusInelasticProcess_h 1
@@ -40,18 +38,16 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4OmegaMinusInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4OmegaMinusInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4OmegaMinusInelasticProcess(
-     const G4String& processName = "OmegaMinusInelastic" ) :
-      G4HadronInelasticProcess( processName, G4OmegaMinus::OmegaMinus() )
-    { }
+    G4OmegaMinusInelasticProcess(const G4String& processName = "OmegaMinusInelastic");
     
-    ~G4OmegaMinusInelasticProcess()
-    { }
- };
+    ~G4OmegaMinusInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
  
 #endif
  

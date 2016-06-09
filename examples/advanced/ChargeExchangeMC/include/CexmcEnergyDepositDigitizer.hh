@@ -51,7 +51,6 @@
 #include "CexmcException.hh"
 #include "CexmcCommon.hh"
 
-
 class  G4String;
 class  CexmcEnergyDepositDigitizerMessenger;
 
@@ -125,10 +124,10 @@ class  CexmcEnergyDepositDigitizer : public G4VDigitizerModule
                                     G4bool  fromMessenger = true );
 
         void      SetOuterCrystalsVetoFraction( G4double  value,
-                                                G4bool fromMessenger = true );
+                                                G4bool  fromMessenger = true );
 
         void      ApplyFiniteCrystalResolution( G4bool  value,
-                                                G4bool fromMessenger = true );
+                                                G4bool  fromMessenger = true );
 
         void      AddCrystalResolutionRange( G4double  bottom, G4double  top,
                                              G4double  value,
@@ -164,9 +163,6 @@ class  CexmcEnergyDepositDigitizer : public G4VDigitizerModule
 
     public:
         G4bool    IsOuterCrystal( G4int  column, G4int  row ) const;
-
-        void      TransformToAdjacentInnerCrystal( G4int &  column,
-                                                   G4int &  row ) const;
 
     private:
         void      InitializeData( void );
@@ -509,20 +505,6 @@ inline G4bool  CexmcEnergyDepositDigitizer::IsOuterCrystal( G4int  column,
 {
     return column == 0 || column == nCrystalsInRow - 1 ||
            row == 0 || row == nCrystalsInColumn - 1;
-}
-
-
-inline void  CexmcEnergyDepositDigitizer::TransformToAdjacentInnerCrystal(
-                                        G4int &  column, G4int &  row ) const
-{
-    if ( column == 0 )
-        ++column;
-    if ( column == nCrystalsInRow - 1 )
-        --column;
-    if ( row == 0 )
-        ++row;
-    if ( row == nCrystalsInColumn - 1 )
-        --row;
 }
 
 

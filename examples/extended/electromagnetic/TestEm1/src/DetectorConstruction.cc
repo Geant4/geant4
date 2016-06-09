@@ -25,8 +25,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.8 2007/11/12 15:48:58 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.8 2007-11-12 15:48:58 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -109,7 +109,7 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   ///H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   density = 0.001*mg/cm3;
   G4Material* CO2 = new G4Material("CO2", density, ncomponents=2);

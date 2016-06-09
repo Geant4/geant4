@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.20 2010/05/20 01:01:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VDecayChannel.cc,v 1.21 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -45,15 +45,30 @@
 
 const G4String G4VDecayChannel::noName = " ";
 
+G4VDecayChannel::G4VDecayChannel()
+  :kinematics_name(""),
+   rbranch(0.0),
+   numberOfDaughters(0),
+   parent_name(0), daughters_name(0),
+   particletable(0),
+   parent(0), daughters(0),
+   parent_mass(0.0), daughters_mass(0),
+   verboseLevel(1)		
+{
+  // set pointer to G4ParticleTable (static and singleton object)
+  particletable = G4ParticleTable::GetParticleTable();
+}
+
+
 G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
-               :kinematics_name(aName),
-		rbranch(0.0),
-		numberOfDaughters(0),
-		parent_name(0), daughters_name(0),
-		particletable(0),
-		parent(0), daughters(0),
-		parent_mass(0.0), daughters_mass(0),
-		verboseLevel(Verbose)		
+  :kinematics_name(aName),
+   rbranch(0.0),
+   numberOfDaughters(0),
+   parent_name(0), daughters_name(0),
+   particletable(0),
+   parent(0), daughters(0),
+   parent_mass(0.0), daughters_mass(0),
+   verboseLevel(Verbose)		
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -109,6 +124,7 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
   //create array
   numberOfDaughters = right.numberOfDaughters;
 
+  daughters_name =0;
   if ( numberOfDaughters >0 ) {
     daughters_name = new G4String*[numberOfDaughters];
     //copy daughters name
@@ -142,6 +158,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       //copy daughters name
       for (G4int index=0; index < numberOfDaughters; index++) {
@@ -269,7 +286,10 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
   if (verboseLevel>1) G4cout << "G4VDecayChannel::FillDaughters()" <<G4endl;
 #endif
-  if (daughters != 0) delete [] daughters;
+  if (daughters != 0) {
+    delete [] daughters;
+    daughters = 0;
+  }
 
   // parent mass
   if (parent == 0) FillParent();  
@@ -287,8 +307,8 @@ void G4VDecayChannel::FillDaughters()
 #endif
     daughters = 0;
     G4Exception("G4VDecayChannel::FillDaughters",
-		"can not fill daughters", FatalException,
-		"numberOfDaughters is not defined yet");    
+		"PART011", FatalException,
+		"Can not fill daughters: numberOfDaughters is not defined yet");    
   } 
 
   //create and set the array of pointers to daughter particles
@@ -308,8 +328,8 @@ void G4VDecayChannel::FillDaughters()
 #endif
       daughters[index] = 0;
       G4Exception("G4VDecayChannel::FillDaughters",
-		  "can not fill daughters", FatalException,
-		  "name of a daughter is not defined yet");    
+		  "PART011", FatalException,
+		  "Can not fill daughters: name of a daughter is not defined yet");    
     } 
     //search daughter particles in the particle table 
     daughters[index] = particletable->FindParticle(*daughters_name[index]);
@@ -374,8 +394,8 @@ void G4VDecayChannel::FillParent()
 #endif
     parent = 0;
     G4Exception("G4VDecayChannel::FillParent()",
-		"can not fill parent", FatalException,
-		"parent name is not defined yet");    
+		"PART012", FatalException,
+		"Can not fill parent: parent name is not defined yet");    
   }
   // search parent particle in the particle table
   parent = particletable->FindParticle(*parent_name);
@@ -388,8 +408,8 @@ void G4VDecayChannel::FillParent()
     }
 #endif
     G4Exception("G4VDecayChannel::FillParent()",
-		"can not fill parent", FatalException,
-		"parent does not exist");    
+		"PART012", FatalException,
+		"Can not fill parent: parent does not exist");    
   }
   parent_mass = parent->GetPDGMass();
 }
@@ -447,13 +467,13 @@ G4int G4VDecayChannel::GetAngularMomentum()
     }
   } else {
     G4Exception("G4VDecayChannel::GetAngularMomentum",
-		"can not calculate", JustWarning,
+		"PART111", JustWarning,
 		"Sorry, can't handle 3 particle decays (up to now)");
     return 0;
   }
   G4Exception ("G4VDecayChannel::GetAngularMomentum",
-		"can not calculate", JustWarning,
-		"Can't find angular momentum for this decay!");
+		"PART111", JustWarning,
+		"Can't find angular momentum for this decay");
   return 0;
 }
 

@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.27 2010/11/02 11:29:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TessellatedSolid.cc,v 1.27 2010-11-02 11:29:07 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -41,12 +41,18 @@
 //
 // CHANGE HISTORY
 // --------------
+// 22 August 2011,    I Hrivnacova, Orsay, fix in DistanceToOut(p) and
+//                    DistanceToIn(p) to exactly compute distance from facet
+//                    avoiding use of 'outgoing' flag shortcut variant.
 //
-// 12 April 2010      P R Truscott, QinetiQ, bug fixes to treat optical
+// 04 August 2011,    T Nikitina, CERN, added SetReferences() to
+//                    CreatePolyhedron() for Visualization of Boolean Operations  
+//
+// 12 April 2010,     P R Truscott, QinetiQ, bug fixes to treat optical
 //                    photon transport, in particular internal reflection
 //                    at surface.
 //
-// 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
+// 14 November 2007,  P R Truscott, QinetiQ & Stan Seibert, U Texas
 //                    Bug fixes to CalculateExtent
 //
 // 17 September 2007, P R Truscott, QinetiQ Ltd & Richard Holmberg
@@ -234,7 +240,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
 
   if (solidClosed)
   {
-    G4Exception("G4TessellatedSolid::AddFacet()", "InvalidSetup",
+    G4Exception("G4TessellatedSolid::AddFacet()", "GeomSolids1002",
                 JustWarning, "Attempt to add facets when solid is closed.");
     return false;
   }
@@ -268,12 +274,9 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
   }
   else
   {
-    G4Exception("G4TessellatedSolid::AddFacet()", "InvalidSetup",
-                JustWarning, "Attempt to add facet not properly defined.");
-    G4cerr << "Facet attributes:" << G4endl;
-    aFacet->StreamInfo(G4cerr);
-    G4cerr << G4endl;
-    
+    G4Exception("G4TessellatedSolid::AddFacet()", "GeomSolids1002",
+                JustWarning, "Attempt to add facet not properly defined.");    
+    aFacet->StreamInfo(G4cout);
     return false;
   }
 }
@@ -541,18 +544,20 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 // low (nTries <= 0.5*maxTries) then this would indicate that there is
 // something wrong with geometry.
 //
-      G4cout.precision(16) ;
-      G4cout << G4endl ;
-      G4cout << "Solid name       = " << GetName()  << G4endl;
-      G4cout << "Geometry Type    = " << geometryType  << G4endl;
-      G4cout << "Number of facets = " << facets.size() << G4endl;
-      G4cout << "Position:"  << G4endl << G4endl ;
-      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+      std::ostringstream message;
+      G4int oldprc = message.precision(16);
+      message << "Cannot determine whether point is inside or outside volume!"
+              << G4endl
+              << "Solid name       = " << GetName()  << G4endl
+              << "Geometry Type    = " << geometryType  << G4endl
+              << "Number of facets = " << facets.size() << G4endl
+              << "Position:"  << G4endl << G4endl
+              << "p.x() = "   << p.x()/mm << " mm" << G4endl
+              << "p.y() = "   << p.y()/mm << " mm" << G4endl
+              << "p.z() = "   << p.z()/mm << " mm";
+      message.precision(oldprc);
       G4Exception("G4TessellatedSolid::Inside()",
-                "UnknownInsideOutside-MaxTries", JustWarning,
-                "Cannot determine whether point is inside or outside volume!");
+                  "GeomSolids1002", JustWarning, message);
     }
 #endif
 //
@@ -582,18 +587,20 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 // Different ray directions result in different answer.  Seems like the
 // geometry is not constructed correctly.
 //
-      G4cout.precision(16) ;
-      G4cout << G4endl ;
-      G4cout << "Solid name       = " << GetName()  << G4endl;
-      G4cout << "Geometry Type    = " << geometryType  << G4endl;
-      G4cout << "Number of facets = " << facets.size() << G4endl;
-      G4cout << "Position:"  << G4endl << G4endl ;
-      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+      std::ostringstream message;
+      G4int oldprc = message.precision(16);
+      message << "Cannot determine whether point is inside or outside volume!"
+              << G4endl
+              << "Solid name       = " << GetName()  << G4endl
+              << "Geometry Type    = " << geometryType  << G4endl
+              << "Number of facets = " << facets.size() << G4endl
+              << "Position:"  << G4endl << G4endl
+              << "p.x() = "   << p.x()/mm << " mm" << G4endl
+              << "p.y() = "   << p.y()/mm << " mm" << G4endl
+              << "p.z() = "   << p.z()/mm << " mm";
+      message.precision(oldprc);
       G4Exception("G4TessellatedSolid::Inside()",
-                "UnknownInsideOutside", JustWarning,
-                "Cannot determine whether point is inside or outside volume!");
+                  "GeomSolids1002", JustWarning, message);
     }
 #endif
   }
@@ -632,11 +639,12 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
   else
   {
 #ifdef G4VERBOSE
-    G4cout << "WARNING - G4TessellatedSolid::SurfaceNormal(p)" << G4endl
-           << "          No facets found for point: " << p << " !" << G4endl
-           << "          Returning approximated value for normal." << G4endl;
-    G4Exception("G4TessellatedSolid::SurfaceNormal(p)", "Notification",
-                JustWarning, "Point p is not on surface !?" );
+    std::ostringstream message;
+    message << "Point p is not on surface !?" << G4endl
+            << "          No facets found for point: " << p << " !" << G4endl
+            << "          Returning approximated value for normal.";
+    G4Exception("G4TessellatedSolid::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, message );
 #endif
     normal = (p.z()>0 ? G4ThreeVector(0,0,1) : G4ThreeVector(0,0,-1));
   }
@@ -665,17 +673,17 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4int oldprc = G4cout.precision(16) ;
-     G4cout << G4endl ;
-     //     DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "Notification", JustWarning, 
-                 "Point p is already inside!?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16) ;
+     message << "Point p is already inside!?" << G4endl
+             << "Position:"  << G4endl << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm" << G4endl
+             << "DistanceToOut(p) == " << DistanceToOut(p);
+     message.precision(oldprc) ;
+     G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
@@ -720,23 +728,24 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4int oldprc = G4cout.precision(16) ;
-     G4cout << G4endl ;
-     //     DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4TriangularFacet::DistanceToIn(p)", "Notification", JustWarning, 
-                 "Point p is already inside!?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16) ;
+     message << "Point p is already inside!?" << G4endl
+             << "Position:"  << G4endl << G4endl
+             << "p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "p.z() = "   << p.z()/mm << " mm" << G4endl
+             << "DistanceToOut(p) == " << DistanceToOut(p);
+     message.precision(oldprc) ;
+     G4Exception("G4TriangularFacet::DistanceToIn(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
-    dist = (*f)->Distance(p,minDist,false);
+    //dist = (*f)->Distance(p,minDist,false);
+    dist = (*f)->Distance(p,minDist);
     if (dist < minDist)  { minDist  = dist; }
   }
   
@@ -774,17 +783,17 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4int oldprc = G4cout.precision(16) ;
-     G4cout << G4endl ;
-     //     DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is already outside !?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16) ;
+     message << "Point p is already outside!?" << G4endl
+             << "Position:"  << G4endl << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm" << G4endl
+             << "DistanceToIn(p) == " << DistanceToIn(p);
+     message.precision(oldprc) ;
+     G4Exception("G4TriangularFacet::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
@@ -848,23 +857,24 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4int oldprc = G4cout.precision(16) ;
-     G4cout << G4endl ;
-     //     DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is already outside !?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16) ;
+     message << "Point p is already outside!?" << G4endl
+             << "Position:"  << G4endl << G4endl
+             << "p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "p.z() = "   << p.z()/mm << " mm" << G4endl
+             << "DistanceToIn(p) == " << DistanceToIn(p);
+     message.precision(oldprc) ;
+     G4Exception("G4TriangularFacet::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
-    dist = (*f)->Distance(p,minDist,true);
+    //dist = (*f)->Distance(p,minDist,true);
+    dist = (*f)->Distance(p,minDist);
     if (dist < minDist) minDist  = dist;
   }
   
@@ -958,7 +968,8 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
     }
     polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
   }
-  
+  polyhedron->SetReferences();  
+ 
   return (G4Polyhedron*) polyhedron;
 }
 
@@ -1135,7 +1146,7 @@ G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
 {
   // Select randomly a facet and return a random point on it
 
-  G4int i = CLHEP::RandFlat::shootInt(facets.size());
+  G4int i = G4RandFlat::shootInt(facets.size());
   return facets[i]->GetPointOnFace();
 }
 ///////////////////////////////////////////////////////////////////////////////

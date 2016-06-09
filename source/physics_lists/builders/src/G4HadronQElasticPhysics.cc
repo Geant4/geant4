@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.9 2010/06/03 14:28:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronQElasticPhysics.cc,v 1.9 2010-06-03 14:28:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,7 +42,7 @@
 
 #include "G4HadronQElasticPhysics.hh"
 
-#include "G4UHadronElasticProcess.hh"
+#include "G4WHadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronElastic.hh"
 #include "G4QElastic.hh"
@@ -64,24 +64,20 @@ G4HadronQElasticPhysics::G4HadronQElasticPhysics(G4int ver)
     G4cout << "### G4HadronQElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
-  model = 0;
 }
 
 G4HadronQElasticPhysics::G4HadronQElasticPhysics(const G4String&,  G4int ver)
-  : G4VPhysicsConstructor("hElasticCHIPS_UELAST"), verbose(ver),
+  : G4VPhysicsConstructor("hElasticCHIPS_LHEP"), verbose(ver),
     wasActivated(false)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronQElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
-  model = 0;
 }
 
 G4HadronQElasticPhysics::~G4HadronQElasticPhysics()
-{
-  delete model;
-}
+{}
 
 void G4HadronQElasticPhysics::ConstructParticle()
 {
@@ -101,17 +97,11 @@ void G4HadronQElasticPhysics::ConstructProcess()
   if(wasActivated) { return; }
   wasActivated = true;
 
-  G4double elimit = DBL_MAX;
-
   if(verbose > 1) {
-    G4cout << "### HadronQElasticPhysics: use HE limit " << elimit << " MeV" 
-	   << G4endl;
+    G4cout << "### HadronQElasticPhysics::ConstructProcess" << G4endl;
   }
-  process = new G4QElastic();
-
-  model = new G4HadronElastic();
-  model->SetHEModelLowLimit(elimit);
-  G4VQCrossSection* man  = model->GetCS();
+  G4QElastic* process = new G4QElastic();
+  G4HadronElastic* lhep = new G4HadronElastic();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
@@ -139,12 +129,15 @@ void G4HadronQElasticPhysics::ConstructProcess()
        pname == "xi-"       || 
        pname == "alpha"     ||
        pname == "deuteron"  ||
-       pname == "triton") {
+       pname == "triton"    ||
+       pname == "anti_alpha"     ||
+       pname == "anti_deuteron"  ||
+       pname == "anti_triton"    ||
+       pname == "anti_He3"       ) {
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4UHadronElasticProcess* hel = new G4UHadronElasticProcess("hElastic");
-      hel->SetQElasticCrossSection(man);
-      hel->RegisterMe(model);
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      hel->RegisterMe(lhep);
       pmanager->AddDiscreteProcess(hel);
 
     } else if(pname == "neutron" || pname == "proton") {   

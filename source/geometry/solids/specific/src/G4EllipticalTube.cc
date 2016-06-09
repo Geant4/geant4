@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.33 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EllipticalTube.cc,v 1.33 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -311,7 +311,7 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4SPECSDEBUG
-    G4Exception("G4EllipticalTube::SurfaceNormal(p)", "Notification",
+    G4Exception("G4EllipticalTube::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
 #endif 
     norm = ApproxSurfaceNormal(p);
@@ -663,22 +663,23 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
   {
     if (sBest == kInfinity)
     {
-      G4cout.precision(16) ;
-      G4cout << G4endl ;
       DumpInfo();
-      G4cout << "Position:"  << G4endl << G4endl ;
-      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-      G4cout << "Direction:" << G4endl << G4endl;
-      G4cout << "v.x() = "   << v.x() << G4endl;
-      G4cout << "v.y() = "   << v.y() << G4endl;
-      G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-      G4cout << "Proposed distance :" << G4endl << G4endl;
-      G4cout << "snxt = "    << sBest/mm << " mm" << G4endl << G4endl;
-      G4cout.precision(6) ;
+      std::ostringstream message;
+      G4int oldprc = message.precision(16) ;
+      message << "Point p is outside !?" << G4endl
+              << "Position:"  << G4endl
+              << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+              << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+              << "   p.z() = "   << p.z()/mm << " mm" << G4endl
+              << "Direction:" << G4endl << G4endl
+              << "   v.x() = "   << v.x() << G4endl
+              << "   v.y() = "   << v.y() << G4endl
+              << "   v.z() = "   << v.z() << G4endl
+              << "Proposed distance :" << G4endl
+              << "   snxt = "    << sBest/mm << " mm";
+      message.precision(oldprc) ;
       G4Exception( "G4EllipticalTube::DistanceToOut(p,v,...)",
-                   "Notification", JustWarning, "Point p is outside !?" );
+                   "GeomSolids1002", JustWarning, message);
     }
     if (calcNorm)  { *norm = nBest; }
     return sBest;
@@ -886,6 +887,7 @@ G4double G4EllipticalTube::GetSurfaceArea()
 //
 std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -895,6 +897,7 @@ std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
      << "    surface equation in X and Y: \n"
      << "       (X / " << dx << ")^2 + (Y / " << dy << ")^2 = 1 \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EDecayType.hh,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: EDecayType.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // According to EDecayType enum in TPythia6Decayer class in Root:
 // http://root.cern.ch/

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc,v 1.5 2010/10/30 07:55:00 kurasige Exp $
+// $Id: G4ParticlePropertyData.cc,v 1.5 2010-10-30 07:55:00 kurasige Exp $
 //
 // class G4ParticlePropertyData
 //
@@ -135,7 +135,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4ParticlePropertyData &rig
 }
       
 ////////////////////////
-const G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePropertyData &right)
+G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePropertyData &right)
 {
   if (this != &right) {
     verboseLevel      = right.verboseLevel; 

@@ -23,60 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LELambdaInelastic.cc,v 1.11 2006-06-29 20:45:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LELambdaInelastic.cc,v 1.11 2006/06/29 20:45:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Lambda Inelastic Process
- // J.L. Chuma, TRIUMF, 18-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: Lambda Inelastic Process
+// J.L. Chuma, TRIUMF, 18-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LELambdaInelastic.hh"
 #include "Randomize.hh"
+#include <iostream>
 
- G4HadFinalState *
-  G4LELambdaInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    //
-    // create the target particle
-    // 
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+
+G4LELambdaInelastic::G4LELambdaInelastic(const G4String& name)
+ :G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(25.*GeV);
+}
+
+
+void G4LELambdaInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LELambdaInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic Lambda scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to lambdas with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LELambdaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+
+  // create the target particle
+
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LELambdaInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LELambdaInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }    
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }    
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
+  G4double tkin = targetNucleus.Cinema( ek );
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+
     tkin = targetNucleus.EvaporationEffects( ek );
     ek -= tkin;
     modifiedOriginal.SetKineticEnergy( ek*MeV );
@@ -116,43 +136,42 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
+  delete originalTarget;
+  return &theParticleChange;
+}
  
- void
-  G4LELambdaInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
+void G4LELambdaInelastic::Cascade(
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
    G4int& vecLen,
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4bool &incidentHasChanged,
-   G4bool &targetHasChanged,
-   G4bool &quasiElastic )
-  {
-    // derived from original FORTRAN code CASL0 by H. Fesefeldt (13-Sep-1987)
-    //
-    // Lambda undergoes interaction with nucleon within a nucleus.  Check if it is
-    // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
-    // occurs and input particle is degraded in energy. No other particles are produced.
-    // If reaction is possible, find the correct number of pions/protons/neutrons
-    // produced using an interpolation to multiplicity data.  Replace some pions or
-    // protons/neutrons by kaons or strange baryons according to the average
-    // multiplicity per Inelastic reaction.
-    //
-    const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-    const G4double targetMass = targetParticle.GetMass()/MeV;
-    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
+   const G4HadProjectile* originalIncident,
+   G4ReactionProduct& currentParticle,
+   G4ReactionProduct& targetParticle,
+   G4bool& incidentHasChanged,
+   G4bool& targetHasChanged,
+   G4bool& quasiElastic )
+{
+  // derived from original FORTRAN code CASL0 by H. Fesefeldt (13-Sep-1987)
+  //
+  // Lambda undergoes interaction with nucleon within a nucleus.  Check if it
+  // is energetically possible to produce pions/kaons.  In not, assume
+  // nuclear excitation occurs and input particle is degraded in energy. No
+  // other particles are produced.  If reaction is possible, find the correct
+  // number of pions/protons/neutrons produced using an interpolation to
+  // multiplicity data.  Replace some pions or protons/neutrons by kaons or
+  // strange baryons according to the average multiplicity per inelastic
+  // reaction.
+
+  const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
+  const G4double targetMass = targetParticle.GetMass()/MeV;
+  G4double centerofmassEnergy = std::sqrt(mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
-    G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-    if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-    {
-      quasiElastic = true;
-      return;
-    }
+  G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
+  if (availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV) {
+    quasiElastic = true;
+    return;
+  }
     static G4bool first = true;
     const G4int numMul = 1200;
     const G4int numSec = 60;
@@ -352,9 +371,7 @@
          break;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
-    return;
-  }
 
- /* end of file */
- 
+  SetUpPions( np, nm, nz, vec, vecLen );
+  return;
+}

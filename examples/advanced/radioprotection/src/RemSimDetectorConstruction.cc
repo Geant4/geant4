@@ -30,10 +30,10 @@
 //    *                                    *          
 //    **************************************
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.17 2006/06/29 16:23:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimDetectorConstruction.cc,v 1.17 2006-06-29 16:23:39 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author:Susanna Guatelli, guatelli@ge.infn.it 
+// Author:Susanna Guatelli, susanna@uow.edu.au 
 //
 #include "RemSimDetectorConstruction.hh"
 #include "RemSimMaterial.hh"
@@ -47,15 +47,10 @@
 #include "globals.hh"
 #include "G4RunManager.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4UserLimits.hh"
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimVehicle1.hh"
 #include "RemSimMoonHabitat.hh"
 #include "G4VisAttributes.hh"
-#include "RemSimSensitiveDetector.hh"
-#include "G4SDManager.hh"
-#include "RemSimROGeometry.hh"
 #include "RemSimDecorator.hh"
 #include "RemSimShieldingDecorator.hh"
 #include "RemSimShelterSPEDecorator.hh"

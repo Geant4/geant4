@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GEMCoulombBarrierHE.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -40,28 +40,27 @@
 class G4GEMCoulombBarrierHE : public G4VCoulombBarrier
 {
 public:
-  G4GEMCoulombBarrierHE() : G4VCoulombBarrier(1,0) {};
-  G4GEMCoulombBarrierHE(const G4int anA,const G4int aZ) :
-  G4VCoulombBarrier(anA,aZ) {};
-  ~G4GEMCoulombBarrierHE() {};
+
+  G4GEMCoulombBarrierHE(G4int anA, G4int aZ);
+
+  ~G4GEMCoulombBarrierHE();
+
+  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
 
 private:
-  G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & right);
 
+  G4GEMCoulombBarrierHE();
+  G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & right);
   const G4GEMCoulombBarrierHE & operator=(const G4GEMCoulombBarrierHE & right);
   G4bool operator==(const G4GEMCoulombBarrierHE & right) const;
   G4bool operator!=(const G4GEMCoulombBarrierHE & right) const;
   
 public:
-  G4double GetCoulombBarrier(const G4int ARes, const G4int ZRes, 
-			     const G4double U) const;
 
+  virtual G4double BarrierPenetrationFactor(G4double /*aZ*/) const
+  {return 1.0;};
 
-private:
-
-   G4double BarrierPenetrationFactor(const G4double aZ) const;
-
-  virtual G4double CalcCompoundRadius(const G4double ARes) const;
+  G4double CalcCompoundRadius(G4int ARes) const;
 
 };
 #endif

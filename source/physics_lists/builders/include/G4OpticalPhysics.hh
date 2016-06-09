@@ -31,7 +31,8 @@
 //
 // Author:      P.Gumplinger 30.09.2009
 //
-// Modified:
+// Modified:    P.Gumplinger 29.09.2011
+//              (based on code from I. Hrivnacova)
 //
 //----------------------------------------------------------------------------
 //
@@ -45,6 +46,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
+#include "G4OpticalProcessIndex.hh"
 #include "G4OpticalPhysicsMessenger.hh"
 
 #include "G4OpWLS.hh"
@@ -58,15 +60,20 @@
 
 #include "G4OpticalSurface.hh"
 
+#include <vector>
+
+class G4VProcess;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4OpticalPhysics : public G4VPhysicsConstructor
 {
   public:
 
-    G4OpticalPhysics(G4int verbose = 0);
-    G4OpticalPhysics(G4int verbose, const G4String& name);
+    G4OpticalPhysics(G4int verbose = 0, const G4String& name = "Optical");
     virtual ~G4OpticalPhysics();
+
+  protected:
 
     // construct particle and physics
     virtual void ConstructParticle();
@@ -79,7 +86,10 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// Not implemented
     G4OpticalPhysics& operator=(const G4OpticalPhysics& right);
 
-  public: 
+  public:
+
+    // configure G4OpticalPhysics builder
+    void Configure(G4OpticalProcessIndex, G4bool ); 
 
     // get methods
     virtual G4Scintillation* GetScintillationProcess() 
@@ -98,6 +108,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
                                        { return fOpBoundaryProcess; }
 
     // set methods
+    void SetProcessVerbose(G4int , G4int );
 
     void SetMaxNumPhotonsPerStep(G4int );
     void SetMaxBetaChangePerStep(G4double );
@@ -109,16 +120,33 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetScintillationByParticleType(G4bool );
     void AddScintillationSaturation(G4EmSaturation* );
 
-
-    void SetTrackSecondariesFirst(G4bool );
+    void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
+    void SetFiniteRiseTime(G4bool );
 
   private:
+
+    // methods
+    void PrintStatistics() const;
 
     // data members
   
     G4bool wasActivated;
 
+    // messenger
     G4OpticalPhysicsMessenger* fMessenger;
+
+    // The vector of optical processes
+    std::vector<G4VProcess*>    fProcesses;
+
+    // The vector of process configuration
+    std::vector<G4bool>         fProcessUse;
+
+    // The vector of process verbose level
+    std::vector<G4int>          fProcessVerbose;
+
+    // The vector of track secondaries options;
+    // the option to track secondaries before finishing their parent track
+    std::vector<G4bool>         fProcessTrackSecondariesFirst;
 
     G4Scintillation*     fScintillationProcess;
     G4Cerenkov*          fCerenkovProcess;
@@ -147,8 +175,10 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// the WLS process time profile
     G4String                    fProfile;
 
-    /// option to track secondaries before finishing their parent track
-    G4bool                      fTrackSecondariesFirst;
+    /// option to set a finite rise-time; Note: the G4Scintillation 
+    /// process expects the user to have set the constant material 
+    /// property FAST/SLOWSCINTILLATIONRISETIME
+    G4bool                      fFiniteRiseTime;
 
     /// option to  allow for the light yield to be a function of
     /// particle type and deposited energy in case of non-linear
@@ -159,4 +189,4 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+#endif // G4OpticalPhysics_h

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacPlusPlus.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SigmacPlusPlus.cc,v 1.13 2006-10-12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------

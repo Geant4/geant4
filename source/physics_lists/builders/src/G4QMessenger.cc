@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QMessenger.cc,v 1.1 2009/11/13 18:50:14 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QMessenger.cc,v 1.1 2009-11-13 18:50:14 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,7 +46,20 @@ G4QMessenger::G4QMessenger()
   rootDir = new G4UIdirectory("/CHIPS_physics/");
   rootDir->SetGuidance("messenger of the CHIPS processes");
   weakDir=0;
+  theWeak=0;
+  theNuElN=0;
+  theNuMuN=0;
+  theNuTaN=0;
+  biasNuNuc=0;
   photoDir=0;
+  thePhoto=0;
+  theSynchR=0;
+  minGamSR=0;
+  theGamN=0;
+  theEleN=0;
+  theMuoN=0;
+  theTauN=0;
+  biasPhotoN=0;
 }
 
 G4QMessenger::~G4QMessenger()
@@ -90,7 +103,7 @@ void G4QMessenger::Add(G4QNeutrinoPhysics* weak)
   // commands for neutrino_el-nuclear physics.
   theNuElN = new G4UIcmdWithAString("/CHIPS_physics/neutrino/NuElNuclear",this);
   theNuElN->SetGuidance("Switching of nu_el-nuclear physics.");
-  theNuElN->SetParameterName("status","off");
+  theNuElN->SetParameterName("status",false);
   theNuElN->SetCandidates("on off");
   theNuElN->SetDefaultValue("off");
   theNuElN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -98,7 +111,7 @@ void G4QMessenger::Add(G4QNeutrinoPhysics* weak)
   // commands for neutrino_mu-nuclear physics.
   theNuMuN = new G4UIcmdWithAString("/CHIPS_physics/neutrino/NuMuNuclear",this);
   theNuMuN->SetGuidance("Switching of nu_mu-nuclear physics.");
-  theNuMuN->SetParameterName("status","off");
+  theNuMuN->SetParameterName("status",false);
   theNuMuN->SetCandidates("on off");
   theNuMuN->SetDefaultValue("off");
   theNuMuN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -106,7 +119,7 @@ void G4QMessenger::Add(G4QNeutrinoPhysics* weak)
   // commands for neutrino_tau-nuclear physics.
   theNuTaN = new G4UIcmdWithAString("/CHIPS_physics/neutrino/NuTauNuclear",this);
   theNuTaN->SetGuidance("Switching of nu_tau-nuclear physics.");
-  theNuTaN->SetParameterName("status","off");
+  theNuTaN->SetParameterName("status",false);
   theNuTaN->SetCandidates("on off");
   theNuTaN->SetDefaultValue("off");
   theNuTaN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -132,7 +145,7 @@ void G4QMessenger::Add(G4QPhotoNuclearPhysics* photo)
   // command for synchrotron radiation.
   theSynchR = new G4UIcmdWithAString("/CHIPS_physics/photoNuclear/SynchRadiation",this);
   theSynchR->SetGuidance("Switching on/off synchrotron radiation.");
-  theSynchR->SetParameterName("status","off");
+  theSynchR->SetParameterName("status",false);
   theSynchR->SetCandidates("on off");
   theSynchR->SetDefaultValue("off");
   theSynchR->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -147,7 +160,7 @@ void G4QMessenger::Add(G4QPhotoNuclearPhysics* photo)
   // command for gamma-nuclear physics.
   theGamN = new G4UIcmdWithAString("/CHIPS_physics/photoNuclear/GammaNuclear",this);
   theGamN->SetGuidance("Switching of gamma-nuclear physics.");
-  theGamN->SetParameterName("status","off");
+  theGamN->SetParameterName("status",false);
   theGamN->SetCandidates("on off");
   theGamN->SetDefaultValue("on");
   theGamN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -155,7 +168,7 @@ void G4QMessenger::Add(G4QPhotoNuclearPhysics* photo)
   // command for electro-nuclear physics.
   theEleN = new G4UIcmdWithAString("/CHIPS_physics/photoNuclear/ElectroNuclear",this);
   theEleN->SetGuidance("Switching of electron-nuclear physics.");
-  theEleN->SetParameterName("status","off");
+  theEleN->SetParameterName("status",false);
   theEleN->SetCandidates("on off");
   theEleN->SetDefaultValue("off");
   theEleN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -163,7 +176,7 @@ void G4QMessenger::Add(G4QPhotoNuclearPhysics* photo)
   // command for muon-nuclear physics.
   theMuoN = new G4UIcmdWithAString("/CHIPS_physics/photoNuclear/MuonNuclear",this);
   theMuoN->SetGuidance("Switching of muon nuclear physics.");
-  theMuoN->SetParameterName("status","off");
+  theMuoN->SetParameterName("status",false);
   theMuoN->SetCandidates("on off");
   theMuoN->SetDefaultValue("off");
   theMuoN->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -171,7 +184,7 @@ void G4QMessenger::Add(G4QPhotoNuclearPhysics* photo)
   // command for tau-nuclear physics.
   theTauN = new G4UIcmdWithAString("/CHIPS_physics/photoNuclear/TauNuclear",this);
   theTauN->SetGuidance("Switching of tau nuclear physics.");
-  theTauN->SetParameterName("status","off");
+  theTauN->SetParameterName("status",false);
   theTauN->SetCandidates("on off");
   theTauN->SetDefaultValue("off");
   theTauN->AvailableForStates(G4State_PreInit, G4State_Idle);

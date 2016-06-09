@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleTable.cc,v 1.5 2007/11/07 09:12:53 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4ParticleTable.cc,v 1.5 2007-11-07 09:12:53 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ParticleTable.cc
 //

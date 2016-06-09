@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.7 2010/06/06 04:57:51 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G3toG4EventAction.cc,v 1.7 2010-06-06 04:57:51 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

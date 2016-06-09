@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2007/11/05 13:19:16 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.2 2007-11-05 13:19:16 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,13 +94,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", 1.0*g/cm3, 2);
   H2O->AddElement(H, 2);
   H2O->AddElement(O, 1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   G4Material* gas = 
   new G4Material("Water_gas", 1.0*mg/cm3, 2);
   gas->AddElement(H, 2);
   gas->AddElement(O, 1);
-  gas->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  gas->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   new G4Material("Graphite",     6, 12.01*g/mole, 2.265*g/cm3);
   new G4Material("Graphite_gas", 6, 12.01*g/mole, 2.265*mg/cm3);  

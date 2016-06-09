@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh,v 1.3 2009/11/09 18:24:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AnnihiToMuPair.hh,v 1.3 2009-11-09 18:24:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.hh,v 1.9 2006/06/29 21:12:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DCtable.hh,v 1.9 2006-06-29 21:12:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4DCtable_H

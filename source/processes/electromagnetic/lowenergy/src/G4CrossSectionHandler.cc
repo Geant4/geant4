@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.21 2009/09/27 10:47:42 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CrossSectionHandler.cc,v 1.21 2009-09-27 10:47:42 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -134,6 +134,7 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
 
       matCrossSections->push_back(setForMat);
     }
+  delete interpolationAlgo;
   return matCrossSections;
 }
 

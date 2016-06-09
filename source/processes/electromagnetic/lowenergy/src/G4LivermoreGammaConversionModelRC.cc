@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModelRC.cc,v 1.1 2010/11/10 17:12:22 flongo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermoreGammaConversionModelRC.cc,v 1.1 2010-11-10 17:12:22 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// Author: Sebastien Inserti
-//         30 October 2008
+// Author: Francesco Longo & Gerardo Depaola
+//         on base of G4LivermoreGammaConversionModel
 //
 // History:
 // --------
@@ -105,7 +104,7 @@ G4LivermoreGammaConversionModelRC::Initialise(const G4ParticleDefinition*,
   //
   
   if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
+    G4cout << "Loaded cross section files for Livermore Gamma Conversion model RC" << G4endl;
 
   if (verboseLevel > 0) { 
     G4cout << "Livermore Gamma Conversion model is initialized " << G4endl
@@ -174,7 +173,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
     {
       epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
  
-    if (CLHEP::RandBit::shootBit())
+     if (G4int(2*G4UniformRand()))
       {
         electronTotEnergy = (1. - epsilon) * photonEnergy;
         positronTotEnergy = epsilon * photonEnergy;
@@ -255,7 +254,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
 	     }
          } while ( gReject < G4UniformRand() );
                   
-         if (CLHEP::RandBit::shootBit()) epsilon = (1. - epsilon); // Extención de Epsilon hasta 1.
+         if (G4int(2*G4UniformRand())) epsilon = (1. - epsilon); // Extención de Epsilon hasta 1.
        
          G4double logepsilon = log(epsilon);
          G4double deltaP_R1 = 1. + (a + b*logepsilon + c/logepsilon + d*pow(logepsilon,2.) + e/pow(logepsilon,2.) + 

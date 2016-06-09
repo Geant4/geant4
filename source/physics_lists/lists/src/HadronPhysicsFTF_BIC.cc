@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTF_BIC.cc,v 1.3 2010/06/03 10:42:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsFTF_BIC.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,31 +75,46 @@ void HadronPhysicsFTF_BIC::CreateModels()
   thePro->RegisterMe(theBinaryPro=new G4BinaryProtonBuilder);
   theBinaryPro->SetMaxEnergy(5.0*GeV);
   
-  thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theFTFBinaryPiK=new G4FTFBinaryPiKBuilder(QuasiElastic));
-  thePiK->RegisterMe(theBICPiK = new G4BinaryPiKBuilder);
-  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMinPionEnergy(10*GeV);   // don't use LEP for pion
-  theBICPiK->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
-  theLEPPiK->SetMaxEnergy(5*GeV); 
+  thePion=new G4PionBuilder;
+  thePion->RegisterMe(theFTFBinaryPion=new G4FTFBinaryPionBuilder(QuasiElastic));
+  thePion->RegisterMe(theBICPion = new G4BinaryPionBuilder);
+  theBICPion->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
 
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theKaon=new G4KaonBuilder;
+  theKaon->RegisterMe(theFTFBinaryKaon=new G4FTFBinaryKaonBuilder(QuasiElastic));
+  theKaon->RegisterMe(theBertiniKaon=new G4BertiniKaonBuilder);
+  theBertiniKaon->SetMaxEnergy(5*GeV);
+
+  
+  theHyperon=new G4HyperonFTFPBuilder;
+    
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 HadronPhysicsFTF_BIC::~HadronPhysicsFTF_BIC() 
 {
-   delete theMiscLHEP;
    delete theFTFBinaryNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
    delete theNeutrons;
+
    delete theFTFBinaryPro;
    delete theBinaryPro;
    delete thePro;
-   delete theFTFBinaryPiK;
-   delete theBICPiK;
-   delete theLEPPiK;
-   delete thePiK;
+
+   delete theFTFBinaryPion;
+   delete theBICPion;
+   delete thePion;
+
+   delete theFTFBinaryKaon;
+   delete theBertiniKaon;
+   delete theKaon;
+
+   delete theHyperon;
+   delete theAntiBaryon;
+   delete theFTFPAntiBaryon;
+  
 }
 
 void HadronPhysicsFTF_BIC::ConstructParticle()
@@ -114,13 +129,17 @@ void HadronPhysicsFTF_BIC::ConstructParticle()
   pShortLivedConstructor.ConstructParticle();  
 }
 
-#include "G4ProcessManager.hh"
+//#include "G4ProcessManager.hh"
+#include "G4PhysListUtil.hh"
 void HadronPhysicsFTF_BIC::ConstructProcess()
 {
   CreateModels();
   theNeutrons->Build();
   thePro->Build();
-  thePiK->Build();
-  theMiscLHEP->Build();
+  thePion->Build();
+  theKaon->Build();
+  
+  theHyperon->Build();
+  theAntiBaryon->Build();
 }
 

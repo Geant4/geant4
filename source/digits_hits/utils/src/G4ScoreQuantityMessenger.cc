@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.10 2010/11/03 08:28:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.10 2010-11-03 08:28:42 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
 // Modifications
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
+//  24-Mar-2011  T.Aso  Add StepChecker for debugging.
+//  24-Mar-2011  T.Aso  Size and segmentation for replicated cylinder.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -38,9 +40,12 @@
 
 #include "G4PSCellCharge3D.hh"
 #include "G4PSCellFlux3D.hh"
+#include "G4PSCellFluxForCylinder3D.hh"
 #include "G4PSPassageCellFlux3D.hh"
+#include "G4PSPassageCellFluxForCylinder3D.hh"
 #include "G4PSEnergyDeposit3D.hh"
 #include "G4PSDoseDeposit3D.hh"
+#include "G4PSDoseDepositForCylinder3D.hh"
 #include "G4PSNofStep3D.hh"
 #include "G4PSNofSecondary3D.hh"
 //
@@ -58,6 +63,9 @@
 #include "G4PSTrackCounter3D.hh"
 #include "G4PSTermination3D.hh"
 #include "G4PSMinKinEAtGeneration3D.hh"
+//
+// For debug purpose
+#include "G4PSStepChecker3D.hh"
 
 #include "G4SDChargedFilter.hh"
 #include "G4SDNeutralFilter.hh"
@@ -190,6 +198,8 @@ G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
     delete          qTerminationCmd;
     delete          qMinKinEAtGeneCmd;
     //
+    delete          qStepCheckerCmd;
+    //
     delete   filterDir;
     delete   fchargedCmd;
     delete   fneutralCmd;
@@ -228,15 +238,39 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	  }
       } else if(command== qCellFluxCmd) {
 	  if ( CheckMeshPS(mesh,token[0]) ){
+            if( mesh->GetShape()==boxMesh ) {
 	      G4PSCellFlux3D* ps = new G4PSCellFlux3D(token[0]);
 	      ps->SetUnit(token[1]);
 	      mesh->SetPrimitiveScorer(ps);
+            } else if( mesh->GetShape()==cylinderMesh ) {
+              G4PSCellFluxForCylinder3D* ps = 
+		new G4PSCellFluxForCylinder3D(token[0]);
+              ps->SetUnit(token[1]);
+	      G4ThreeVector msize = mesh->GetSize(); // gevin in R Z N/A
+              ps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
+              G4int nSeg[3];
+              mesh->GetNumberOfSegments(nSeg);
+              ps->SetNumberOfSegments(nSeg);
+	      mesh->SetPrimitiveScorer(ps);
+            }
 	  }
       } else if(command== qPassCellFluxCmd) {
 	  if ( CheckMeshPS(mesh,token[0]) ){
+            if( mesh->GetShape()==boxMesh ) {
 	      G4PSPassageCellFlux3D* ps = new G4PSPassageCellFlux3D(token[0]);
 	      ps->SetUnit(token[1]);
 	      mesh->SetPrimitiveScorer(ps);
+            } else if( mesh->GetShape()==cylinderMesh ) {
+              G4PSPassageCellFluxForCylinder3D* ps = 
+		new G4PSPassageCellFluxForCylinder3D(token[0]);
+              ps->SetUnit(token[1]);
+	      G4ThreeVector msize = mesh->GetSize();  // gevin in R Z N/A
+              ps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
+              G4int nSeg[3];
+              mesh->GetNumberOfSegments(nSeg);
+              ps->SetNumberOfSegments(nSeg);
+	      mesh->SetPrimitiveScorer(ps);
+            }
 	  }
       } else if(command==qeDepCmd) {
 	  if ( CheckMeshPS(mesh,token[0]) ){
@@ -246,9 +280,21 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	  }
       } else if(command== qdoseDepCmd) {
 	  if ( CheckMeshPS(mesh,token[0]) ){
+            if( mesh->GetShape()==boxMesh ) {
 	      G4PSDoseDeposit3D* ps = new G4PSDoseDeposit3D(token[0]);
 	      ps->SetUnit(token[1]);
 	      mesh->SetPrimitiveScorer(ps);
+            } else if( mesh->GetShape()==cylinderMesh ) {
+              G4PSDoseDepositForCylinder3D* ps = 
+		new G4PSDoseDepositForCylinder3D(token[0]);
+              ps->SetUnit(token[1]);
+	      G4ThreeVector msize = mesh->GetSize(); // gevin in R Z N/A
+              ps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
+              G4int nSeg[3];
+              mesh->GetNumberOfSegments(nSeg);
+              ps->SetNumberOfSegments(nSeg);
+	      mesh->SetPrimitiveScorer(ps);
+            }
 	  }
       } else if(command== qnOfStepCmd) {
 	  if ( CheckMeshPS(mesh,token[0]) ){
@@ -355,6 +401,11 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	  if( CheckMeshPS(mesh,token[0]) ){
 	      G4PSMinKinEAtGeneration3D* ps =new G4PSMinKinEAtGeneration3D(token[0]); 
 	      ps->SetUnit(token[1]);
+	      mesh->SetPrimitiveScorer(ps);
+	  }
+      } else if(command== qStepCheckerCmd){
+	  if( CheckMeshPS(mesh,token[0]) ){
+	      G4PSStepChecker3D* ps =new G4PSStepChecker3D(token[0]); 
 	      mesh->SetPrimitiveScorer(ps);
 	  }
 

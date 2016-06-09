@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.cc,v 1.4 2010/11/10 23:53:23 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GMocrenFileViewer.cc,v 1.4 2010-11-10 23:53:23 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -67,20 +67,24 @@ G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandle
     kMessenger(messenger)
 {
   // Set a g4.gdd-file viewer 
-  std::strcpy( kG4GddViewer, "gMocren" ); 
+  std::strncpy( kG4GddViewer, "gMocren", 7); 
   if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
-    std::strcpy( kG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;			
+    char * env = getenv( "G4GMocrenFile_VIEWER" );
+    std::strncpy( kG4GddViewer, env, std::strlen(env));
+    //std::strcpy( kG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;				
   } 
 
   // string for viewer invocation
   if ( !std::strcmp( kG4GddViewer, "NONE" ) ) {
 		
-    std::strcpy( kG4GddViewerInvocation, "" );
+    //std::strcpy( kG4GddViewerInvocation, "" );
+    kG4GddViewerInvocation[0] = '\0';
   } else {
 
-    std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
-    std::strcat( kG4GddViewerInvocation, " ");
-    std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
+    std::strncpy( kG4GddViewerInvocation, kG4GddViewer, std::strlen(kG4GddViewer));
+    std::strncat( kG4GddViewerInvocation, " ", 1);
+    const char * gddfname = kSceneHandler.GetGddFileName();
+    std::strncat( kG4GddViewerInvocation, gddfname, std::strlen(gddfname) );
   }
 
 }
@@ -159,12 +163,14 @@ void G4GMocrenFileViewer::ShowView( void )
       //----- string for viewer invocation
       if ( !strcmp( kG4GddViewer, "NONE" ) ) {
 		
-	std::strcpy( kG4GddViewerInvocation, "" );
+	kG4GddViewerInvocation[0] = '\0';
+	//std::strcpy( kG4GddViewerInvocation, "" );
       } else {
 
-	std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
-	std::strcat( kG4GddViewerInvocation, " ");
-	std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
+	std::strncpy( kG4GddViewerInvocation, kG4GddViewer, std::strlen(kG4GddViewer));
+	std::strncat( kG4GddViewerInvocation, " ", 1);
+	const char * gddfname = kSceneHandler.GetGddFileName();
+	std::strncat( kG4GddViewerInvocation, gddfname, std::strlen(gddfname));
       }
 
     }

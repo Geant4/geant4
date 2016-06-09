@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.7 2010/06/11 05:50:20 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ShortLivedConstructor.hh,v 1.7 2010-06-11 05:50:20 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

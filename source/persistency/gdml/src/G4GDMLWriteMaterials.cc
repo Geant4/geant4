@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -83,6 +83,15 @@ TWrite(xercesc::DOMElement* element,const G4double& T)
    TElement->setAttributeNode(NewAttribute("unit","K"));
    TElement->setAttributeNode(NewAttribute("value",T/kelvin));
    element->appendChild(TElement);
+}
+
+void G4GDMLWriteMaterials::
+MEEWrite(xercesc::DOMElement* element,const G4double& MEE)
+{
+   xercesc::DOMElement* PElement = NewElement("MEE");
+   PElement->setAttributeNode(NewAttribute("unit","eV"));
+   PElement->setAttributeNode(NewAttribute("value",MEE/electronvolt));
+   element->appendChild(PElement);
 }
 
 void G4GDMLWriteMaterials::
@@ -158,11 +167,17 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
      { TWrite(materialElement,materialPtr->GetTemperature()); }
    if (materialPtr->GetPressure() != STP_Pressure)
      { PWrite(materialElement,materialPtr->GetPressure()); }
+
+   // Write Ionisation potential (mean excitation energy)
+   MEEWrite(materialElement,materialPtr->GetIonisation()->GetMeanExcitationEnergy());
+   
    DWrite(materialElement,materialPtr->GetDensity());
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
 
-   if (NumberOfElements>1)
+   if ( (NumberOfElements>1)
+      || ( materialPtr->GetElement(0)
+        && materialPtr->GetElement(0)->GetNumberOfIsotopes()>1 ) )
    {
       const G4double* MassFractionVector = materialPtr->GetFractionVector();
 
@@ -191,18 +206,17 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 }
 
 void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
-                           const G4MaterialPropertyVector* const pvec)
+                           const G4PhysicsOrderedFreeVector* const pvec)
 {
    const G4String matrixref = GenerateName(key, pvec);
    xercesc::DOMElement* matrixElement = NewElement("matrix");
    matrixElement->setAttributeNode(NewAttribute("name", matrixref));
    matrixElement->setAttributeNode(NewAttribute("coldim", "2"));
    std::ostringstream pvalues;
-   for (G4int i=0; i<pvec->Entries(); i++)
+   for (size_t i=0; i<pvec->GetVectorLength(); i++)
    {
-     G4MPVEntry cval = pvec->GetEntry(i);
-     if (i!=0)  { pvalues << " "; }
-     pvalues << cval.GetPhotonEnergy() << " " << cval.GetProperty();
+       if (i!=0)  { pvalues << " "; }
+       pvalues << pvec->Energy(i) << " " << (*pvec)[i];
    }
    matrixElement->setAttributeNode(NewAttribute("values", pvalues.str()));
 
@@ -214,11 +228,11 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
 {
    xercesc::DOMElement* propElement;
    G4MaterialPropertiesTable* ptable = mat->GetMaterialPropertiesTable();
-   const std::map< G4String, G4MaterialPropertyVector*,
+   const std::map< G4String, G4PhysicsOrderedFreeVector*,
                  std::less<G4String> >* pmap = ptable->GetPropertiesMap();
    const std::map< G4String, G4double,
                  std::less<G4String> >* cmap = ptable->GetPropertiesCMap();
-   std::map< G4String, G4MaterialPropertyVector*,
+   std::map< G4String, G4PhysicsOrderedFreeVector*,
                  std::less<G4String> >::const_iterator mpos;
    std::map< G4String, G4double,
                  std::less<G4String> >::const_iterator cpos;
@@ -228,8 +242,19 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
       propElement->setAttributeNode(NewAttribute("name", mpos->first));
       propElement->setAttributeNode(NewAttribute("ref",
                                     GenerateName(mpos->first, mpos->second)));
-      PropertyVectorWrite(mpos->first, mpos->second);
-      matElement->appendChild(propElement);
+      if (mpos->second)
+      {
+         PropertyVectorWrite(mpos->first, mpos->second);
+         matElement->appendChild(propElement);
+      }
+      else
+      {
+         G4String warn_message = "Null pointer for material property -"
+                  + mpos->first + "- of material -" + mat->GetName() + "- !";
+         G4Exception("G4GDMLWriteMaterials::PropertyWrite()", "NullPointer",
+                     JustWarning, warn_message);
+         continue;
+      }
    }
    for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
    {

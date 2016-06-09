@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.23 2006/09/13 13:17:29 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsViewer.hh,v 1.23 2006-09-13 13:17:29 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -49,6 +49,7 @@ public:
   virtual ~G4VVisCommandViewer ();
 protected:
   void SetViewParameters(G4VViewer*, const G4ViewParameters&);
+  void RefreshIfRequired(G4VViewer*);
 private:
   G4VVisCommandViewer (const G4VVisCommandViewer&);
   G4VVisCommandViewer& operator = (const G4VVisCommandViewer&);

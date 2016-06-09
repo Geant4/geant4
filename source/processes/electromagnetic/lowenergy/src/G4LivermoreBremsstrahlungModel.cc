@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.8 2010/12/02 16:07:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.9 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
+//         on base of G4LowEnergyBremsstrahlung developed by A.Forti and V.Ivanchenko
 //
 // History:
 // --------
@@ -62,6 +63,7 @@
 //
 #include "G4VEnergySpectrum.hh"
 #include "G4eBremsstrahlungSpectrum.hh"
+#include "G4VEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -105,10 +107,8 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
   //Check that the Livermore Bremsstrahlung is NOT attached to e+
   if (particle != G4Electron::Electron())
     {
-      G4cout << "ERROR: Livermore Bremsstrahlung Model is applicable only to electrons" 
-	     << G4endl;
-      G4cout << "It cannot be registered to " << particle->GetParticleName() << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreBremsstrahlungModel::Initialise",
+		    "em0002",FatalException,"Livermore Bremsstrahlung Model is applicable only to electrons");
     }
   //Prepare energy spectrum
   if (energySpectrum) 
@@ -148,8 +148,9 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
   crossSectionHandler->Clear();
   crossSectionHandler->LoadShellData("brem/br-cs-");
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
-  
+  G4VEMDataSet* p = crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
+  delete p;  
+ 
   if (verboseLevel > 0)
     {
       G4cout << "Livermore Bremsstrahlung model is initialized " << G4endl
@@ -192,9 +193,8 @@ G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4ParticleDefin
   G4int iZ = (G4int) Z;
   if (!crossSectionHandler)
     {
-      G4cout << "G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom",
+		    "em1007",FatalException,"The cross section handler is not correctly initialized");
       return 0;
     }
   

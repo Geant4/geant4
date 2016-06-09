@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.8 2010/03/18 00:19:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: ExN07PhysicsList.cc,v 1.8 2010-03-18 00:19:12 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN07PhysicsList.hh"

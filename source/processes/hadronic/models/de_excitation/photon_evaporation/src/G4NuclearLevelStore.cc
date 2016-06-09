@@ -23,14 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.cc,v 1.5 2010/11/17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NuclearLevelStore.cc,v 1.5 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 06-10-2010 M. Kelsey -- Drop static data members.
 // 17-11-2010 V. Ivanchenko - make as a classical singleton. 
+// 17-10-2011 V. L. Desorgher - allows to define separate datafile for given isotope
 
 #include "G4NuclearLevelStore.hh"
 #include <sstream>
+#include <fstream>
 
 G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
 
@@ -65,6 +67,24 @@ G4NuclearLevelStore::~G4NuclearLevelStore()
     delete i->second;
 }
 
+////////////////////////////////////////////////////////////////////
+//
+void G4NuclearLevelStore::AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename)
+{ if (Z<1 || A<2) {
+	G4cout<<"Z and A not valid!"<<G4endl;
+  }
+
+
+  std::ifstream DecaySchemeFile(filename);
+  if (DecaySchemeFile){
+	G4int ID_ion=A*1000+Z;
+	theUserEvaporationDataFiles[ID_ion]=filename;
+  }
+  else {
+	G4cout<<"The file "<<filename<<" does not exist!"<<G4endl;
+  }
+}
+
 G4String 
 G4NuclearLevelStore::GenerateFilename(G4int Z, G4int A) const 
 {
@@ -93,9 +113,14 @@ G4NuclearLevelStore::GetManager(G4int Z, G4int A)
   // If doesn't exists then create it
   if ( idx == theManagers.end() )
     {
-      G4String file = GenerateFilename(Z,A);
-      result = new G4NuclearLevelManager(Z,A,dirName + file);
-      theManagers.insert(std::make_pair(key,result));
+	  //Check if data have been provided by the user
+	   G4String file= theUserEvaporationDataFiles[1000*A+Z];
+	   if (file ==""){
+		   file = dirName +GenerateFilename(Z,A);
+	   }
+	   result = new G4NuclearLevelManager(Z,A,file);
+	   theManagers.insert(std::make_pair(key,result));
+
     }
   // But if it exists...
   else

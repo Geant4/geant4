@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.8 2010/11/19 16:29:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PhysListEmStandardSS.cc,v 1.9 2011-01-05 19:02:39 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -150,6 +150,9 @@ void PhysListEmStandardSS::ConstructProcess()
   //ionization
   //
   emOptions.SetSubCutoff(false);	//default  
+
+  // scattering
+  emOptions.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

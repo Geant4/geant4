@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterpolator.hh,v 1.3 2010/08/03 23:09:36 mkelsey Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CascadeInterpolator.hh,v 1.3 2010-08-03 23:09:36 mkelsey Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //
@@ -39,12 +39,14 @@
 // fractional part.
 //
 // 20100803  M. Kelsey -- Add printBins() function for debugging
+// 20110923  M. Kelsey -- Add optional ostream& argument to printBins()
 
 #ifndef G4CASCADE_INTERPOLATOR_HH
 #define G4CASCADE_INTERPOLATOR_HH
 
 #include "globals.hh"
 #include <cfloat>
+#include <iosfwd>
 
 
 template <int NBINS>
@@ -65,7 +67,7 @@ public:
   G4double interpolate(const G4double x, const G4double (&yb)[nBins]) const;
   G4double interpolate(const G4double (&yb)[nBins]) const;
 
-  void printBins() const;	// Show bin edges for debugging purposes
+  void printBins(std::ostream& os) const;	// Show bin edges for debugging
 
 private:
   const G4double (&xBins)[nBins];

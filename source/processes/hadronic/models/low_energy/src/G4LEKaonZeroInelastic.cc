@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroInelastic.cc,v 1.9 2006/06/29 20:45:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LEKaonZeroInelastic.cc,v 1.9 2006-06-29 20:45:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997
@@ -34,34 +34,44 @@
  
 #include "G4LEKaonZeroInelastic.hh"
 #include "Randomize.hh"
+
+void G4LEKaonZeroInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEKaonZeroInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement K0 scattering from nuclei.  It\n"
+          << "is a re-engineered version of the GHEISHA code of\n"
+          << "H. Fesefeldt.  It divides the initial collision products\n"
+          << "into backward- and forward-going clusters which are then\n"
+          << "decayed into final state hadrons.  The model does not conserve\n"
+          << "energy on an event-by-event basis.  It may be applied to\n"
+          << "K0s with initial energies between 0 and 25 GeV.\n";
+}
+
  
- G4HadFinalState *
-  G4LEKaonZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                         G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEKaonZeroInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+G4HadFinalState*
+G4LEKaonZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                     G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
+
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEKaonZeroInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -117,10 +127,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LEKaonZeroInelastic::Cascade(
+void G4LEKaonZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -129,7 +138,7 @@
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
-  {
+{
     // derived from original FORTRAN code CASK0 by H. Fesefeldt (13-Sep-1987)
     //
     // K0Short undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -402,7 +411,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

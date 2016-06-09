@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.25 2006/06/29 19:08:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcommand.cc,v 1.25 2006-06-29 19:08:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -40,8 +40,9 @@
 #include <sstream>
 
 G4UIcommand::G4UIcommand()
-:messenger(0),token(IDENTIFIER),paramERR(0)
-{;}
+  : messenger(0), bp(0), token(IDENTIFIER), paramERR(0)
+{
+}
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
 			 G4UImessenger * theMessenger)

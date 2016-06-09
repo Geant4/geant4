@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: Low Energy Neutron Inelastic Process
- // original by J.L. Chuma, TRIUMF, 04-Feb-1997
+// Hadronic Process: Low Energy Neutron Inelastic Process
+// original by J.L. Chuma, TRIUMF, 04-Feb-1997
  
 #ifndef G4LENeutronInelastic_h
 #define G4LENeutronInelastic_h 1
@@ -37,41 +37,42 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
- 
- class G4LENeutronInelastic : public G4InelasticInteraction
- {
- public:
+
+
+class G4LENeutronInelastic : public G4InelasticInteraction
+{
+  public:
     
     G4LENeutronInelastic() : G4InelasticInteraction("G4LENeutronInelastic")
     {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
+      SetMinEnergy(0.0);
+      SetMaxEnergy(55.*GeV);
     }
     
-    ~G4LENeutronInelastic()
-    { }
+    ~G4LENeutronInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
     
- private:
+  private:
     
     void Cascade(                               // derived from CASN
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
     
-    void SlowNeutron(
-     const G4HadProjectile *originalIncident,
-     G4ReactionProduct &modifiedOriginal,
-     G4ReactionProduct &targetParticle,
-     G4Nucleus & targetNucleus );
- };
+    void SlowNeutron(const G4HadProjectile* originalIncident,
+                     G4ReactionProduct& modifiedOriginal,
+                     G4ReactionProduct& targetParticle,
+                     G4Nucleus& targetNucleus);
+};
  
 #endif
  

@@ -1,0 +1,6 @@
+# Macro file for example B2
+# 
+# To be run preferably in batch, without graphics:
+# % exampleB2[a,b] run2.mac
+#
+/run/beamOn 500

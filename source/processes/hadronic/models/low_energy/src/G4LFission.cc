@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LFission.cc,v 1.15 2007/02/26 19:29:30 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LFission.cc,v 1.15 2007-02-26 19:29:30 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Model: Low Energy Fission
@@ -40,28 +39,39 @@
 // the code comes mostly from the old Low-energy Fission class
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
-//
 
 #include "globals.hh"
 #include "G4LFission.hh"
 #include "Randomize.hh"
+#include <iostream>
 
-G4LFission::G4LFission() : G4HadronicInteraction("G4LFission")
+
+G4LFission::G4LFission(const G4String& name)
+ : G4HadronicInteraction(name)
 {
-   init();   
-   SetMinEnergy( 0.0*GeV );
-   SetMaxEnergy( DBL_MAX );
-   
+  init();
+  SetMinEnergy(0.0*GeV);
+  SetMaxEnergy(DBL_MAX);
 }
+
 
 G4LFission::~G4LFission()
 {
-   theParticleChange.Clear();
+  theParticleChange.Clear();
 }
- 
 
-void 
-G4LFission::init()
+
+void G4LFission::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LFission is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement neutron-induced fission of\n"
+          << "nuclei.  It is a re-engineered version of the GHEISHA code\n"
+          << "of H. Fesefeldt which emits neutrons and gammas but no\n"
+          << "nuclear fragments.  The model is applicable to all incident\n"
+          << "neutron energies.\n";
+}
+
+void G4LFission::init()
 {
    G4int i;
    G4double xx = 1. - 0.5;
@@ -86,8 +96,8 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
    theParticleChange.Clear();
    const G4HadProjectile* aParticle = &aTrack;
 
-   G4double N = targetNucleus.GetN();
-   G4double Z = targetNucleus.GetZ();
+   G4double N = targetNucleus.GetA_asInt();
+   G4double Z = targetNucleus.GetZ_asInt();
    theParticleChange.SetStatusChange(stopAndKill);
 
    G4double P = aParticle->GetTotalMomentum()/MeV;

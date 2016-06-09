@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.12 2010/09/06 16:02:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ToroidalSurface.cc,v 1.12 2010-09-06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

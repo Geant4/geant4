@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh,v 1.14 2010/10/27 07:47:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DecayProducts.hh,v 1.14 2010-10-27 07:47:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------

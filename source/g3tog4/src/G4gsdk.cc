@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdk.cc,v 1.7 2006/06/29 18:13:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdk.cc,v 1.7 2006-06-29 18:13:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Decay.hh"
 #include "G3toG4.hh"
 #include "G3PartTable.hh"
 
-void PG4gsdk(G4String tokens[])
+void PG4gsdk(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdk);

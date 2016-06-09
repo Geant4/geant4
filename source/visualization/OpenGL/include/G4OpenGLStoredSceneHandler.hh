@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010/11/10 17:10:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -77,6 +77,11 @@ protected:
   void AddPrimitivePreamble(const G4Visible& visible);
   void AddPrimitivePostamble();
 
+  // Two virtual functions for extra processing in a sub-class, for
+  // example, to make a display tree.
+  virtual void ExtraPOProcessing(size_t) {}
+  virtual void ExtraTOProcessing(size_t) {}
+
   static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
   // Display list management.  All static since there's only one OGL store.
   static G4int  fDisplayListId;  // Workspace.
@@ -109,6 +114,7 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
+
 };
 
 #endif

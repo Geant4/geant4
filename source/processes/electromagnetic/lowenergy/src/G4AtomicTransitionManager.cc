@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -203,7 +203,7 @@ G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) cons
     }
   else
     {
-      G4Exception("G4AtomicTransitionManager:Z not found");
+      G4Exception("G4AtomicTransitionManager::Shell()","de0001",FatalErrorInArgument,"Z not found");
       return 0;
     } 
 }
@@ -220,15 +220,20 @@ const G4FluoTransition* G4AtomicTransitionManager::ReachableShell(G4int Z,size_t
       std::vector<G4FluoTransition*> v = (*pos).second;      
       if (shellIndex < v.size()) return(v[shellIndex]);
       else {
-	G4Exception("G4AtomicTransitionManager:reachable shell not found");
+	G4Exception("G4AtomicTransitionManager::ReachebleShell()","de0002", JustWarning,"Energy Deposited Locally.");
 	return 0;
       }
   }
   else{
-    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
-    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+    //    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    //    G4cout << "Absorbed enrgy deposited locally" << G4endl;
 
-    //    G4Exception("G4AtomicTransitionManager:Z not found");
+    //    G4String pippo = (G4String(Z));
+
+    G4String msg = "No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.";
+
+    G4Exception("G4AtomicTransitionManager::ReachableShell()","de0001",JustWarning,msg);
+    //"No deexcitation for Z=" + (G4String(Z))+". Energy Deposited Locally.");
     return 0;
   } 
 }
@@ -257,10 +262,15 @@ std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> >::const_iterator po
   }
 
   else{
-    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
-    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+    //    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    //    G4cout << "Absorbed enrgy deposited locally" << G4endl;
 
-    //    G4Exception("G4AtomicTransitionManager:Z not found");
+    G4String msg = "No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.";
+
+    G4Exception("G4AtomicTransitionManager::NumberOfShells()","de0001",JustWarning,msg);
+
+    //"No deexcitation for Z=" + (G4String(Z))+". Energy Deposited Locally.");
+
     return 0;
   } 
 }
@@ -281,10 +291,15 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::const_iterator
     }
   else
     {
-      G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
-      G4cout << "Absorbed enrgy deposited locally" << G4endl;
+      //      G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+      //      G4cout << "Absorbed enrgy deposited locally" << G4endl;
+      
+      G4String msg = "No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.";
 
-      //    G4Exception("G4AtomicTransitionManager:Z not found");
+      G4Exception("G4AtomicTransitionManager::NumberOfReachebleShells()","de0001",JustWarning,msg);
+
+      //"No deexcitation for Z=" + (G4String(Z))+". Energy Deposited Locally.");
+
       return 0;
     } 
 }
@@ -326,16 +341,21 @@ std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> >::iterator pos;
       
     }
     else {
-      G4Exception( "G4AtomicTransitionManager: shell not found" );
+
+      G4Exception("G4AtomicTransitionManager::TotalRadiativeTransitionProbability()","de0002", JustWarning,"Energy Deposited Locally.");
       return 0;
       
     }
   }
   else{
-    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
-    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+    //G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    //G4cout << "Absorbed enrgy deposited locally" << G4endl;
+    
+    G4String msg = "No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.";
 
-    //    G4Exception("G4AtomicTransitionManager:Z not found");
+    G4Exception("G4AtomicTransitionManager::TotalRadiativeTransitionProbability()","de0001",JustWarning,msg);
+    //"No deexcitation for Z=" + (G4String(Z))+". Energy Deposited Locally.");
+
 
     return 0;
   } 
@@ -366,7 +386,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
 	}
       
       if (totalRadTransProb > 1) {
-      G4Exception( "Wrong Total Probability");
+	G4Exception( "G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability()","de0003",FatalException,"Total probability mismatch");
       return 0;
 }
       G4double totalNonRadTransProb= (1 - totalRadTransProb);
@@ -374,15 +394,22 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
       return totalNonRadTransProb;    }
     
     else {
-      G4Exception( "shell not found");
+
+G4Exception("G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability()","de0002", JustWarning,"Energy Deposited Locally.");
+
       return 0;
     }
   }
   else{
-    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
-    G4cout << "Absorbed enrgy deposited locally" << G4endl;
+    //    G4cout << "G4AtomicTransitionMagare warning: No fluorescence or Auger for Z=" << Z << G4endl;
+    //    G4cout << "Absorbed enrgy deposited locally" << G4endl;
 
-    //    G4Exception("G4AtomicTransitionManager:Z not found");
+    G4String msg = "No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.";
+
+    G4Exception("G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability()","de0001",JustWarning,msg);
+
+//"No deexcitation for Z=" + (G4String(Z))+ ". Energy Deposited Locally.");
+
     return 0;
   } 
 }

@@ -23,49 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEAntiXiZeroInelastic.cc,v 1.11 2006-06-29 20:44:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEAntiXiZeroInelastic.cc,v 1.11 2006/06/29 20:44:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// Hadronic Process: AntiXiZero Inelastic Process
+// J.L. Chuma, TRIUMF, 20-Feb-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
 //
- // Hadronic Process: AntiXiZero Inelastic Process
- // J.L. Chuma, TRIUMF, 20-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
- //
- // NOTE:  The FORTRAN version of the cascade, CASAXO, simply called the
- //        routine for the XiZero particle.  Hence, the ApplyYourself function
- //        below is just a copy of the ApplyYourself from the XiZero particle.
+// NOTE:  The FORTRAN version of the cascade, CASAXO, simply called the
+//        routine for the XiZero particle.  Hence, the ApplyYourself function
+//        below is just a copy of the ApplyYourself from the XiZero particle.
  
 #include "G4LEAntiXiZeroInelastic.hh"
 #include "Randomize.hh"
- 
- G4HadFinalState *
-  G4LEAntiXiZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                          G4Nucleus &targetNucleus )
-  { 
-    const G4HadProjectile *originalIncident = &aTrack;
-    //
-    // create the target particle
-    //
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+
+void G4LEAntiXiZeroInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEAntiXiZeroInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic antiXi0 scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to antiXi0 with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+G4HadFinalState*
+G4LEAntiXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                       G4Nucleus& targetNucleus)
+{ 
+  const G4HadProjectile *originalIncident = &aTrack;
+
+  // create the target particle
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAntiXiZeroInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEAntiXiZeroInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -122,10 +130,9 @@
     
     delete originalTarget;
     return &theParticleChange;
-  }
+}
  
- void
-  G4LEAntiXiZeroInelastic::Cascade(
+void G4LEAntiXiZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -133,8 +140,8 @@
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
-   G4bool &quasiElastic )
-  {
+   G4bool &quasiElastic)
+{
     // derived from original FORTRAN code CASAX0 by H. Fesefeldt (20-Jan-1989)
     // which is just a copy of CASX0 (cascade for Xi0)
     //
@@ -387,7 +394,7 @@
     }
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
-  }
+}
 
  /* end of file */
  

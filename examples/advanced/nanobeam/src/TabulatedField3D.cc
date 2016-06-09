@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: TabulatedField3D.cc,v 1.4 2009/03/02 16:47:52 gunter Exp $
+// $Id: TabulatedField3D.cc,v 1.4 2009-03-02 16:47:52 gunter Exp $
 // -------------------------------------------------------------------
 
 #include "TabulatedField3D.hh"
@@ -405,8 +405,8 @@ if (model==3)
   Bx_local = 0; By_local = 0; Bz_local = 0;
   
   // FIELD CREATED BY A QUADRUPOOLE IN WORLD FRAME
-  G4double Bx_quad,By_quad,Bz_quad;
-  Bx_quad = 0; By_quad=0; Bz_quad=0;
+  //unused G4double Bx_quad,By_quad,Bz_quad;
+  //unsued Bx_quad = 0; By_quad=0; Bz_quad=0;
   
   // QUADRUPOLE FRAME
   G4double x_local,y_local,z_local;
@@ -414,17 +414,19 @@ if (model==3)
 
   G4double s = 0;               // For Enges formula
   G4double G0, G1, G2, G3;	// For Enges formula
-  G4double K0, K1, K2, K3;	// For Enges formula
-  G4double P0, P1, P2, P3, cte;	// For Enges formula
+  //G4double K0, K1, K2, K3;	// For Enges formula
+  //G4double P0, P1, P2, P3, cte;	// For Enges formula
+  G4double     K1, K2, K3;	// For Enges formula
+  G4double P0, P1, P2,     cte;	// For Enges formula
 
-  K0=0;
+  //K0=0;
   K1=0;
   K2=0;
   K3=0;
   P0=0;
   P1=0;
   P2=0;
-  P3=0;
+  //P3=0;
   G0=0;
   G1=0;
   G2=0;
@@ -483,7 +485,7 @@ if (model==3)
 
 	  P2 = 2*c2[i]/a0[i]/a0[i]; 	//   d2P/dz2
 
-	  P3 = 0;    			//  d3P/dw3 ??
+	  //P3 = 0;    			//  d3P/dw3 ??
 
 	  cte = 1 + std::exp(c0[i]);   // (1+e^c0)
 

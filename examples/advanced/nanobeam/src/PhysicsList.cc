@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.6 2010/10/06 12:16:59 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.6 2010-10-06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PhysicsList.hh"
@@ -111,9 +111,12 @@ void PhysicsList::ConstructProcess()
 #include "G4eplusAnnihilation.hh"
 
 #include "G4MuMultipleScattering.hh"
+#include "G4WentzelVIModel.hh"
+
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4CoulombScattering.hh"
 
 #include "G4hMultipleScattering.hh"
 #include "G4ionIonisation.hh"
@@ -128,6 +131,8 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::ConstructEM()
 {
 
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
 // ****************************************************************
 // Identical to G4EmStandardPhysics but added G4StepLimiter process
 // ****************************************************************
@@ -137,50 +142,57 @@ void PhysicsList::ConstructEM()
   while( (*theParticleIterator)() ){
 
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {
 
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
+      ph->RegisterProcess(new G4ComptonScattering(), particle);
+      ph->RegisterProcess(new G4GammaConversion(), particle);
 
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
+      ph->RegisterProcess(new G4eIonisation(), particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
+      ph->RegisterProcess(new G4eIonisation(), particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);       
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(new G4MuIonisation(), particle);
+      ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4MuPairProduction(), particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "alpha" ||
-               particleName == "He3" ||
-               particleName == "GenericIon") {
-      // ions with charge >= +2
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
+               particleName == "He3") {
+
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4ionIonisation(), particle);
+
+    } else if (particleName == "GenericIon") {
+
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4ionIonisation(), particle);
      
     } else if (particleName == "proton") {
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4hBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4hPairProduction,    -1,-4, 4);
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4hPairProduction(), particle);
 
-      pmanager->AddProcess(new G4StepLimiter(),-1,-1,5);
+      ph->RegisterProcess(new G4StepLimiter(), particle);
             
     }
   }
@@ -241,34 +253,6 @@ void PhysicsList::SetElectronLowLimit(G4double lowcut)
 
   // G4Electron::SetEnergyRange(lowcut,1e5);
   SetGELowLimit(lowcut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::SetPositronLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "Positron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-
-  G4cerr << "PhysicsList::SetPositronLowLimit: Not currently able to set Positron LowLimit." << G4endl;
-  G4Exception("Positron Low Limit: not implemented in PhysicsList"); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::SetProtonLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "Proton cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;  
-  }  
-
-  G4cerr << "PhysicsList::SetProtonLowLimit: Not currently able to set Proton LowLimit." << G4endl;
-  G4Exception("Proton Low Limit: not implemented in PhysicsList"); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

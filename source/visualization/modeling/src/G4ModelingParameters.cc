@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.16 2010/05/11 11:13:35 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ModelingParameters.cc,v 1.16 2010-05-11 11:13:35 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  31st December 1997.

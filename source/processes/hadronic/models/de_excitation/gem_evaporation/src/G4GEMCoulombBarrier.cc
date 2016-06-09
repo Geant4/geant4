@@ -23,89 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // J. M. Quesada (July 2009):  New class based on G4GEMCoulombBarrierHE
 // Coded strictly according to Furihata's GEM paper 
 // NEW:effective decrease  of barrier with E* (Barashenkov) has been added
 //
 #include "G4GEMCoulombBarrier.hh"
 #include "G4HadronicException.hh"
-#include <sstream>
+#include "G4Pow.hh"
 
-G4GEMCoulombBarrier::G4GEMCoulombBarrier(const G4GEMCoulombBarrier & ) : G4VCoulombBarrier()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4GEMCoulombBarrier::copy_constructor meant to not be accessable.");
-}
+G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
+  G4VCoulombBarrier(anA,aZ) 
+{}
 
+G4GEMCoulombBarrier::~G4GEMCoulombBarrier() 
+{}
 
-const G4GEMCoulombBarrier & G4GEMCoulombBarrier::operator=(const G4GEMCoulombBarrier & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4GEMCoulombBarrier::operator= meant to not be accessable.");
-  return *this;
-}
-
-G4bool G4GEMCoulombBarrier::operator==(const G4GEMCoulombBarrier & ) const 
-{
-  return false;
-}
-
-G4bool G4GEMCoulombBarrier::operator!=(const G4GEMCoulombBarrier & ) const 
-{
-  return true;
-}
-
-
-
-G4double G4GEMCoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes, const G4double U) const 
+G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const 
 // Calculation of Coulomb potential energy (barrier) for outgoing fragment
 {
   G4double Barrier = 0.0;
   if (ZRes > ARes || ARes < 1) {
-    std::ostringstream errOs;
-    errOs << "G4GEMCoulombBarrier::GetCoulombBarrier: ";
-    errOs << "Wrong values for ";
-    errOs << "residual nucleus A = " << ARes << " ";
-    errOs << "and residual nucleus Z = " << ZRes << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+    G4cout << "G4GEMCoulombBarrier::GetCoulombBarrier: "
+	   << "Wrong values for "
+	   << "residual nucleus A = " << ARes << " "
+	   << "and residual nucleus Z = " << ZRes << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__,"FATAL error");
   }
   if (GetZ() == 0) {
     Barrier = 0.0;   // If there is no charge there is neither barrier
-  } else 
-    {
-      G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ARes));
-      Barrier = ( elm_coupling * static_cast<G4double>(GetZ()) * static_cast<G4double>(ZRes) )/CompoundRadius;
+
+  } else {
+    G4double CompoundRadius = CalcCompoundRadius(ARes);
+    Barrier = ( elm_coupling * GetZ() * ZRes)/CompoundRadius;
       
-      // Barrier penetration coeficient
-      G4double K=1.;
-      if(GetA() <= 4) K = BarrierPenetrationFactor(ZRes);
-      
-      Barrier *= K;
-      
-    }
-  //JMQ 200709 effective decrease  of barrier with E* (Barashenkov)
-  // (not inclued in original Furihata's formulation)
-  Barrier /= (1.0 + std::sqrt(U/(2.0*static_cast<G4double>(ARes))));
-  // JMQ end test
+    // Barrier penetration coeficient
+    if(GetA() <= 4) { Barrier *= BarrierPenetrationFactor(G4double(ZRes)); }
+  
+    //JMQ 200709 effective decrease  of barrier with E* (Barashenkov)
+    // (not inclued in original Furihata's formulation)
+    Barrier /= (1.0 + std::sqrt(U/(static_cast<G4double>(2*ARes))));
+  }
   return Barrier;
 }
 
-
-G4double G4GEMCoulombBarrier::CalcCompoundRadius(const G4double ARes) const
+G4double G4GEMCoulombBarrier::CalcCompoundRadius(G4int ARes) const
 {      
-    G4double AresOneThird = std::pow(ARes,1.0/3.0);
-    G4double AejectOneThird = std::pow(G4double(GetA()),1.0/3.0);
+  G4Pow* g4pow = G4Pow::GetInstance();
+  G4double AresOneThird = g4pow->Z13(ARes);
+  G4int A = GetA();
+  G4double AejectOneThird = g4pow->Z13(A);
 
-    if(GetA()==1){
-    G4double Rd=1.7* AresOneThird;
-    return Rd*fermi;
-   } else if (GetA()==2 || GetA()==3 || GetA()==4){
-    G4double Rd=1.7* AresOneThird;
-    G4double Rj=1.2;
-    return (Rd+Rj)*fermi;
-   } else {
-    G4double Result = 1.12*(AresOneThird + AejectOneThird) - 
+  G4double Result = 0.0;
+  if(A == 1){
+    Result = 1.7* AresOneThird;
+
+  } else if (A <= 4){
+    Result = 1.7* AresOneThird + 1.2;
+
+  } else {
+    Result = 1.12*(AresOneThird + AejectOneThird) - 
       0.86*(AresOneThird+AejectOneThird)/(AresOneThird*AejectOneThird)+3.75;
-    return Result*fermi;}
+  }
+  return Result*fermi;
 }
 
 

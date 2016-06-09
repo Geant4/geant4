@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.hh,v 1.12 2010/10/15 21:05:10 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IonProtonCrossSection.hh,v 1.12 2010-10-15 21:05:10 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 //                         add constructor and destructor,
 //                         make G4ProtonInelasticCrossSection class member,
 //                         fix bug in kinematics
+// 18.08.2011 V.Ivanchenko migration to new design
 //
 
 #ifndef G4IonProtonCrossSection_h
@@ -63,24 +64,17 @@ public:
 
   virtual ~G4IonProtonCrossSection();
 
-  virtual
-  G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle);
+  G4double GetProtonCrossSection(G4double kinEnergy, G4int Z);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
-                         G4int Z, G4int A);
+  G4bool IsElementApplicable(const G4DynamicParticle* aPart, G4int Z,
+			     const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle* aPart, 
-			   const G4Element*, G4double);
-  
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle* aPart, 
-				G4int Z=1, G4int A=1, G4double T=0.);
+  G4double GetElementCrossSection(const G4DynamicParticle* aPart, 
+				  G4int Z, const G4Material*);
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 private: // Without Description
 

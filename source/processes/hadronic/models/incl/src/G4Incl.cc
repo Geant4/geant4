@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.37 2010/12/15 07:41:31 gunter Exp $ 
+// $Id: G4Incl.cc,v 1.35 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1008,12 +1008,36 @@ void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
       be->bind_be=92.17;
       i_tabled=1;
     } else if(be->iz_be == 6 && be->ia_be == 12) {
+      be->rms_be=2.47;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 13) {
+      be->rms_be=2.44;
+      be->bind_be=97.11;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 14) {
       be->rms_be=2.44;
       be->bind_be=92.17;
       i_tabled=1;
-    } else if(be->iz_be == 7 && be->ia_be == 16) {
+    } else if(be->iz_be == 7 && be->ia_be == 14) {
+      be->rms_be=2.54;
+      be->bind_be=104.66;
+      i_tabled=1;
+    } else if(be->iz_be == 7 && be->ia_be == 15) {
+      be->rms_be=2.65;
+      be->bind_be=115.50;
+      i_tabled=1;
+    } else if(be->iz_be == 8 && be->ia_be == 16) {
       be->rms_be=2.73;
       be->bind_be=127.62;
+      i_tabled=1;
+    } else if(be->iz_be == 8 && be->ia_be == 17) {
+      be->rms_be=2.66;
+      be->bind_be=131.77;
+      i_tabled=1;
+    } else if(be->iz_be == 8 && be->ia_be == 18) {
+      be->rms_be=2.73;
+      be->bind_be=139.81;
       i_tabled=1;
     } else {
       G4cout <<"Warning: No rms and binding for projectile ion A = " << be->ia_be << " Z = " << be->iz_be << G4endl;
@@ -1547,14 +1571,6 @@ void G4Incl::initIncl(G4bool initRandomSeed)
   // for the 19 secondary seeds of hazard:
   G4int nbtirhaz[IGRAINESIZE] = {38,82,76,18,39,31,41,59,26,54,
 				 14,84,13,15,91,89,10,6,52};
-
-  // specific parameters for incl:	 
-  // espace de phases test (r et p) pour pauli: 
-  // valeur recommandee par j.c. v-test=0.592 h**3:
-  G4double rbl = 2.;
-
-  // valeur pour avoir v-test=2 h**3 (avec pbl=200)
-  rbl = 3.1848;
 
   // preparation of 19 other seeds (can also be initialized from outside):
   if(initRandomSeed) {
@@ -2148,7 +2164,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   //  G4cout <<"(clean-up)" << G4endl;
   G4int npenter = 0;
   G4int nnenter = 0;
-  G4int n_enter_pot = 0;
   G4int avatarCounter = 0;
   ps->clear(); // For projectile spectators
   //  G4int i_c = 0;
@@ -2207,7 +2222,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double ccr = 0.0;
   G4double cg = 0.0;
   G4double cif = 0.0;
-  G4double cmultn = 0.0;
   G4double cobe = 0.0;
   G4double coeffb0 = 0.0;
   G4double comom = 0.0;
@@ -2221,10 +2235,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double efer = 0.0;
   G4double egs = 0.0;
   G4double eh5 = 0.0;
-  G4double eh6 = 0.0;
   G4double eij = 0.0;
   G4double ekout = 0.0;
-  G4double elead = 0.0;
   G4double energie_in = 0.0;
   G4double ener_max = 0.0;
   G4double eout = 0.0;
@@ -2237,14 +2249,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double epsv = 0.0;
   G4double erecg = 0.0;
   G4double erem = 0.0;
-  G4double exi = 0.0;
   G4double expob0 = 0.0;
   G4double factemp = 0.0;
   G4double fffc = 0.0;
   G4double fm = 0.0;
   G4double g1 = 0.0;
-  G4double g2 = 0.0;
-  G4double ge = 0.0;
   G4double geff = 0.0;
   G4double gg = 0.0;
   G4double gl1 = 0.0;
@@ -2261,9 +2270,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int ichpion = 0;
   G4int idecf = 0;
   G4int idep = 0;
-  G4int iej = 0;
-  G4int iejn = 0;
-  G4int iejp = 0;
   G4int i_emax = 0;
   G4int iflag = 0;
   G4int iflag20 = 0; 
@@ -2285,11 +2291,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
   G4int iqe = 0;
   G4int irem = 0;
-  G4int irst_avatar = 0;
   G4int isos = 0; 
   G4int itch = 0;
   G4int iteste = 0;
-  G4int itt = 0;
   G4int ixr1 = 0;
   G4int ixr2 = 0;
   G4int ixr3 = 0;
@@ -2300,7 +2304,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 //   G4int l1; 
 //   G4int l2; 
   G4int ldel = 0;
-  G4int lead = 0;
   G4int led = 0;
   G4int lnew = 0;
   G4int lp = 0; 
@@ -2321,7 +2324,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int nbquit = 0;
   G4int nbtest = 0;
   G4int nc[300];
-  G4bool isPartOfSpectatorNucleus[300];
+  //  G4bool isPartOfSpectatorNucleus[300];
   G4int npproj[300];
   for(G4int init_i = 0; init_i < 300; init_i++) {
     nc[init_i] = 0;
@@ -2332,9 +2335,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int next = 0;
   G4int nmiss = 0;
   G4int np = 0;
-  G4int npidir = 0;
   G4int npion = 0;
-  G4int npx = 0;
   G4int nsum_col = 0;
   G4double p1v = 0.0;
   G4double p2v = 0.0;
@@ -2373,7 +2374,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double s2t1 = 0.0;
   G4double s3t1 = 0.0;
   G4double schi = 0.0;
-  G4double sepa = 0.0;
   G4double sif = 0.0;
   G4double sitet = 0.0;
   G4double sp1t1 = 0.0;
@@ -2436,7 +2436,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double xl1 = 0.0;
   G4double xl2 = 0.0;
   G4double xl3 = 0.0;
-  G4double xlab = 0.0;
   G4double xleng = 0.0;
   G4double xlengm = 0.0;
   G4double xpb = 0.0;
@@ -2451,10 +2450,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double xr8 = 0.0;
   G4double xv = 0.0;
   G4double xxx = 0.0;
-  G4double xy1 = 0.0;
-  G4double xy2 = 0.0;
-  G4double xy3 = 0.0;
-  G4double xye = 0.0;
   G4double y = 0.0;
   G4double q1[BL1SIZE];
   G4double q2[BL1SIZE];
@@ -2715,7 +2710,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // Initialize array:
    for(G4int i = 0; i < 300; i++) {
      npproj[i] = 0;
-     isPartOfSpectatorNucleus[i] = false;
+     //     isPartOfSpectatorNucleus[i] = false;
      nc[i] = 0;
    }
 
@@ -2815,7 +2810,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     jparticip[i] = 0;
   }
 
-  G4double beproj = 0.;
   bl3->ia2 = calincl->targetA(); // f(1)->f[0] and so on..., calincl added
   G4int iz2 = calincl->targetZ();
   G4double r02 = 1.12;
@@ -2890,8 +2884,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   paul->pr=pbl;
   paul->pr2 = paul->pr*(paul->pr);
 
-  G4double tem[10];
-  tem[0] = 100000.0;  // tem(1) -> tem[0]
   // temfin (time at which the inc is stopped), tmax5 defined after chosing b
 
   G4double v0 = calincl->getPotential();
@@ -3005,7 +2997,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     ws->bmax = ws->bmax;     // comme alain
   }
   else {
-    beproj = fmpinc - bl3->ia1*fmp;
     ws->bmax = ws->rmaxws + rms1;     // maximum extension of the nucleus ( w.s.)
   }
 
@@ -3107,7 +3098,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // attention !!! 30/04/2001 scaling time is now a multiplication factor
   temfin = temfin*factemp;
 
-  exi = 0.0;
   nbquit = 0;
   iqe = 0;
   idecf = 0;
@@ -3585,11 +3575,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // (here,=lab frame)
 
   bevar = 0.0;
-  ge = 1.0;
   b1 = (binc - bevar)/(1.0 - bevar*binc);
   b2 = -bevar;
   g1 = 1.0/std::sqrt(1.0 - b1*b1);
-  g2 = 1.0;
   // deutons
   // here for nucleons
   if (kindstruct->kindf7 <= 2 && kindstruct->kindf7 > 0) {
@@ -3884,7 +3872,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 	  // this is a projectile spectator:
 	  //	  G4cout <<"(checkpoint 'incripspnu36)" << G4endl;
 	  ips=ips+1;
-	  isPartOfSpectatorNucleus[i] = true;
+	  //	  isPartOfSpectatorNucleus[i] = true;
 	  ps->n_projspec[ips] = i;
 	  continue;
 	  //goto pnu38;
@@ -3940,7 +3928,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       // (another nucleon can enter later at RMAX).
       kcol = 1;
       n_activnuc = ia-ips;  //number of active nucleons (not missing the target)
-      n_enter_pot = ia-ips; //number of projectile nucleons that can enter
 
       /*
       if(useProjSpect) { // Treat the projectile spectators:
@@ -4122,7 +4109,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     bl5->tlg[i] = 0.0;
     nc[i] = 0;
   }
-  itt = 1;
 
   // tableau des energies a l'initialisation
   if(varavat->kveux == 1) {
@@ -4137,7 +4123,6 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // search for the smallest positive t(a,b)
   // pour tests, =0 G4interdit les  reflexions avant un avatar du projectile,
   //             =1 comme avant (reflexions autorisees). (a.b. 3/2002)
-  irst_avatar = 1;
 
   if(verboseLevel > 3) {
     G4cout <<"Now arriving to label pnu449." << G4endl;
@@ -5655,7 +5640,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   if(bl3->ia1 > 1 && nc[bl9->l1] == 0) {
     //    G4cout <<"(checkpoint 'incripspnu1610)" << G4endl;
     ips=ips+1;
-    isPartOfSpectatorNucleus[bl9->l1] = true;
+    //    isPartOfSpectatorNucleus[bl9->l1] = true;
     ps->n_projspec[ips]=bl9->l1;
     nb_transprojo = nb_transprojo + 1;
   } // endif
@@ -5821,8 +5806,6 @@ pnu255:
     goto pnu256;
   }
 
-  npidir = npion;
-
   idq = 0;
   destar = 0.;
 
@@ -5838,10 +5821,6 @@ pnu255:
     if(var_ab > 0.0) {
       ym[npion] = std::sqrt(var_ab);
     }
-    xy1 = bl1->p1[i];
-    xy2 = bl1->p2[i];
-    xy3 = bl1->p3[i];
-    xye = bl1->eps[i];
     ichd=bl1->ind2[i];
     if(varavat->kveux == 1) {
       iavat = iavat + 1;
@@ -6011,9 +5990,6 @@ pnu255:
     G4cout <<"G4Incl: Now at pnu256." << G4endl;
   }
 
-  elead = 0.0;
-  lead = 0;
-  npx = 0;
   erem = 0.;
   // Excitation energy of the final delta of blocked decay: (AB CV 6/2005)
   erem = erem + destar;
@@ -6035,7 +6011,6 @@ pnu255:
   p1spec=0.;
   p2spec=0.;
   p3spec=0.;
-  cmultn = 0.0;
 
   if (kindstruct->kindf7 <= 2 && kindstruct->kindf7 > 0) {
     if (ncol == 0 || nc[1] == 0) { // then nc(1)->nc[0]
@@ -6202,8 +6177,6 @@ pnu255:
   pfrem3 = pinc - pout3;
 
   inrem = iarem - izrem;
-  iejp = iz2 - izrem;
-  iejn = bl3->ia2 - inrem - iz2;
   irem = inrem + izrem;
 
   // intrinsic momentum of the remnant (a.b. 05/2001): 
@@ -6220,8 +6193,6 @@ pnu255:
   xl3 = xl3 - (rcm1/irem - x1_target)*pfrem2+(rcm2/irem - x2_target)*pfrem1;
   l = int(std::sqrt(xl1*xl1 + xl2*xl2 + xl3*xl3)/hc + 0.5);
 
-  iej = bl3->ia2 - irem;
-
   eh5 = erem - std::pow(double(irem)/double(a2),1.666667)*efer;
   if(verboseLevel > 3) {
     G4cout <<"erem used for excitation energy calculation = " << erem << G4endl;
@@ -6229,8 +6200,6 @@ pnu255:
     G4cout <<"a2 used for excitation energy calculation = " << a2 << G4endl;
     G4cout <<"eh5 used for excitation energy calculation = " << eh5 << G4endl;
   }
-  sepa = (bl3->ia2 - irem)*(v0 - tf);
-  eh6 = eh5;
 
   // deutons ajout beproj ?????? on retire beproj (18/06/2002 ab cv)
   // eh5=erem-efer-beproj+(ia2-irem)*tf
@@ -6239,7 +6208,6 @@ pnu255:
     eh5 = 0.00000001;
   }
 
-  xlab = tlab - eout - eh5 - sepa;
   ecoreh5 = 0.0;
 
   if (iqe == 1) {
@@ -6411,9 +6379,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   G4double e1 = (*e1_p);
 
-  G4double debugOutput = 0.0;
-  debugOutput = am(p1,p2,p3,e1);
-
   G4double pout11 = (*pout11_p);
   G4double pout12 = (*pout12_p);
   G4double pout13 = (*pout13_p);
@@ -6427,6 +6392,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   G4int np = (*np_p);
   G4int ip = (*ip_p);
+  ip = ip + 1; // "dummy" usage of the variable
+  ip--;
 
   G4int k2 = (*k2_p);
   G4int k3 = (*k3_p);
@@ -6668,8 +6635,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   }
 
  collis82:
-  debugOutput = am(p1,p2,p3,e1);
-  
   btmax = 4.0*psq*b;
   z = std::exp(-btmax);
   standardRandom(&rndm, &(hazard->igraine[1]));
@@ -6720,8 +6685,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   xx = p1*p1 + p2*p2;
   zz = p3*p3;    
 
-  debugOutput = am(p1,p2,p3,e1);
-
   if(xx >= (zz*1.0e-8)) {
     yn=std::sqrt(xx);
     zn=yn*pnorm;
@@ -6746,7 +6709,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   pout11 = -p1;
   pout12 = -p2;
   pout13 = -p3;
-  debugOutput = am(p1,p2,p3,e1);
 
   // backward scattering according the parametrization of ref
   // prc56(1997)1
@@ -6764,7 +6726,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   } // endif
  collis133:
 
-  debugOutput = am(p1,p2,p3,e1);
   goto exitRoutine;
 
   // delta production
@@ -6914,13 +6875,11 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     p3 = -xp3;
     e1 = e3;
   }
-  debugOutput = am(p1,p2,p3,e1);
 
   if (iso == 0) {
     goto collis150;
   }
   if (rndm > 0.333333) {
-    debugOutput = am(p1,p2,p3,e1);
     goto exitRoutine;
   }
 
@@ -6929,7 +6888,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
  collis150:
   if (index == 1) {
-    debugOutput = am(p1,p2,p3,e1);
     goto exitRoutine;
   }
   if (rndm < 0.5) {
@@ -6938,21 +6896,18 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   is1 = 1;
   is2 = 1;
   ip = -2;
-  debugOutput = am(p1,p2,p3,e1);
   goto exitRoutine;
 
  collis152: 
   is1 = -1;
   is2 = -1;
   ip = 2;
-  debugOutput = am(p1,p2,p3,e1);
   goto exitRoutine;
 
  collis160:
   pout11 = -p1;
   pout12 = -p2;
   pout13 = -p3;
-  debugOutput = am(p1,p2,p3,e1);
   goto exitRoutine;
 
   // long-lived delta
@@ -6973,7 +6928,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
     e1=ecm-eout1;
     m1=1;
   }
-  debugOutput = am(p1,p2,p3,e1);
 
   // symmetrization of charges in pn -> n delta
   // the test on "index" above symetrizes the excitation of one 
@@ -7018,7 +6972,6 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   m2 = 0;
   e1 = std::sqrt(p1*p1 + p2*p2 + p3*p3 + xm*xm);
   eout1 = ecm - e1;
-  debugOutput = am(p1,p2,p3,e1);
 
   if (iso == 0) {
     goto collis160;
@@ -7028,14 +6981,12 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
   goto collis160;
   
  exitRoutine:
-  debugOutput = am(p1,p2,p3,e1);
   (*p1_p) = p1;// Was pq
   (*p2_p) = p2;
   (*p3_p) = p3;
 
   (*e1_p) = e1;
 
-  debugOutput = am(pout11,pout12,pout13,eout1);
   (*pout11_p) = pout11;
   (*pout12_p) = pout12;
   (*pout13_p) = pout13;
@@ -8089,10 +8040,7 @@ G4double G4Incl::forceAbs(G4double iprojo, G4double at, G4double zt, G4double ep
   G4double sig_exp, sig_incl;
   G4double proba;
   
-  G4double ap,zp,A,Z,E; 
-  A=at;
-  Z=zt;
-  E=ep;
+  G4double ap,zp;
   double sig_g = 31.41592654*bmax*bmax;
   if(iprojo == 1) {
     ap = 1.0;
@@ -8121,9 +8069,8 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
 {	                                   
   G4double sig = 0.0;
   
-  G4double Const, xzt, xat, Const1 = 0.0, t1, gcm, bcm, plab, ecmp, ecmt, rela, ecm, rm, bigr, bigb;
+  G4double Const, xzt, xat, Const1 = 0.0, t1, gcm, bcm, plab, ecmp, ecmt, rela, ecm, bigr, bigb;
   G4double xm, x1, sl, phst, ce, term1, delta, beta, twxsec;
-  G4double xsec;
 
   const G4double dp0 = 0.e0, dp1 = 1.e0, dp2 = 2.e0, dp3 = 3.e0, dph = 0.5e0;
   const G4double dp10 = 1.e1, dpth = dp1/dp3, dppi = 3.1415926535898;
@@ -8188,7 +8135,6 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   if (ecm < (0.1*rela)) {
     ecm = 0.1*rela;
   }                             
-  rm = (197.32/137.01)*zp*zt/ecm;                                      
   bigr = rp + rt + 1.2*(std::pow(ap,dpth) + std::pow(at,dpth))/(std::pow(ecm,dpth));                   
 
   bigb = 1.44*zp*zt/bigr;                                              
@@ -8231,7 +8177,6 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   if ((nint(zp) == 0) || (nint(zt) == 0)) {
     bigb = dp0;
   }	                     
-  xsec = dp10*dppi*bigr*bigr*(dp1-bigb/ecm);			                        
   xm=1.0;                                                             
   if (nint(zp) == 0) {
     if (nint(at) < 200) {
@@ -9121,29 +9066,7 @@ void G4Incl::print_one_avatar(G4int index)
     return;
   }
 
-  G4int i_ind1 = bl1->ind1[bl2->ind[index]];
-  //  G4int i_ind2 = bl1->ind2[bl2->ind[index]];
-  G4int j_ind1 = -1;
-  G4int j_ind2 = -1;
-
-  if(bl2->jnd[index] != -1) {
-    j_ind1 = bl1->ind1[bl2->jnd[index]];
-    j_ind2 = bl1->ind2[bl2->jnd[index]];
-  } else {
-    j_ind1 = -1;
-    j_ind2 = -1;
-  }
-
   G4cout <<"(avatar " << bl2->crois[index] << G4endl;// Create avatar with time crois(index)
-
-// C     Now we print the avatar type
-  if(i_ind1 == 0 && j_ind2 == 0) { // NN collision
-    G4cout <<"(quote nn-collision)" << G4endl;
-  } else if(bl2->ind[index] != -1 && bl2->jnd[index] == -1) {
-    G4cout <<"(quote reflection)" << G4endl;
-  } else {
-    G4cout <<"(quote unidentified-avatar)" << G4endl;
-  }
 
 // C     Print the list of particles in the avatar
   G4cout <<"(list ;; List of particles in the avatar" << G4endl;

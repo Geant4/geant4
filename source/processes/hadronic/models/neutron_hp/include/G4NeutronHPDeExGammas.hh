@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1

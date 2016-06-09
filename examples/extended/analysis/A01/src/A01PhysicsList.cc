@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.cc,v 1.8 2006/06/29 16:33:03 gunter Exp $
+// $Id: A01PhysicsList.cc,v 1.8 2006-06-29 16:33:03 gunter Exp $
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi

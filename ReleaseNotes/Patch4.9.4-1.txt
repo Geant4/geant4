@@ -1,0 +1,215 @@
+
+                 Geant4 9.4 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                              18 February 2011
+
+List of fixes included in this public patch since the public release 9.4:
+
+  o Configuration:
+    -------------
+    + Configure script: 
+      o Fixed restoring of default settings for XercesC.
+        Corrected duplication of text in setup dump.
+        Addressing problem reports #1159 and #1160.
+    + Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
+
+  o Event:
+    -----
+    + Added resetting of 'abortRequested' flag at start of DoProcessing()
+      in G4EventManager. Addressing to problem report #1169.
+
+  o Geometry:
+    --------
+    + solids/CSG:
+      o G4Cons: fix in DistanceToIn(p,v,..) to squared tolerance in comparison.
+        Replaced calculation of the solution for the quadratic equation, to use
+        safe formula, in order to avoid numerical errors when b is almost equal
+        to sqrt(d). Addressing problem report #1153.
+
+  o Global:
+    ------
+    + Extended length of internal arrays in G4Pow from 256 to 512.
+      Allows to fix numerical problems observed in some ion/ion collision tests.
+    + Use unsigned-int for table size type in G4PhysicsTable. Fixes a problem
+      for data persistency.
+    + Changed date for patch-01 to release 9.4.
+
+  o Graphical Representations:
+    -------------------------
+    + Fixes to G4Visible operators against possible zero pointers and minor
+      memory leaks. Fixed more minor Coverity reports.
+
+  o Particles:
+    ---------
+    + Register BetaDecay for anti_neutron though anti_neutron keeps as "stable"
+      with finite life-time, to avoid run-time warnings as reported by CMS.
+    + Defined error codes for G4Exceptions.
+
+  o Persistency:
+    -----------
+    + Fixed dumping of pressure and state for materials in ASCII module,
+      and added enumeration of units.
+    + Correction in G4GDMLWriteMaterials::MaterialWrite() to properly treat
+      export of materials with single element defined as isotope composition.
+
+  o physics_lists:
+    -------------
+    + G4EmStandardPhysics_option1: fixed missing line defining polar angle
+      limit, responsible for significant CPU penalty in single scattering
+      of muons.
+    + Fix in QGSP_BERT_NOLEP and QGSP_QEL for missing inclusion of
+      G4HadronQElasticPhysics header.
+    + Corrected shielding physics-list to include correct header for HP
+      hadron elastic. Addressing problem report #1166.
+
+  o Low-energy Electromagnetic Processes:
+    ------------------------------------
+    + G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection,
+      G4VhShellCrossSection: fixed inefficiency in computation of ionisation
+      cross-sections; added extra protections for limited usage of a model in
+      applicability range.
+    + Fixed Coverity defects for G4Penelope08 models, G4EMDataSet, G4ShellData
+      and G4DNA classes.
+    + Moved constructor and destructor to source in G4VEMDataSet.
+    + Fixed memory leak in G4CrossSectionHandler.
+      Fixed memory leaks at initialisation in several classes.
+
+  o Standard Electromagnetic Processes:
+    ----------------------------------
+    + Muons:
+      o G4ErrorEnergyLoss: fixed initialisation in constructor, addressing a
+        problem identified on Windows.
+    + Standard:
+      o G4KleinNishinaModel: improved computation of kinematics.
+      o G4GoudsmitSaundersonMscModel, G4UrbanMscModel90, G4UrbanMscModel92,
+        G4UrbanMscModel93: use recommended method Value() to access transport
+        cross section instead of obsolete GetValue().
+      o G4IonCoulombScatteringModel, G4GoudsmitSaundersonMscModel, 
+        G4GoudsmitSaundersonTable: fixed Coverity warnings for data
+        initialisation.
+      o G4PEEffectFluoModel: fixed K-shell selection (was off by mistake).
+      o G4MollerBhabhaModel: fixed expression for computation of positron dEdx
+        according to PDG formula and original paper.
+    + Utils:
+      o G4VEmModel: reduced memory 2 times for element selectors data, as for
+        ATLAS report. Fixed problem of de-excitation flags, allowing settings
+        by user command.
+      o G4LossTableManager: fixed problem happening at initilisation, for the
+        case when Bremsstrahlung process is instantiated but not added to
+        physics list.
+      o G4EmCalculator, G4VAtomDeexcitation, G4EnergyLossMessenger: cleaned
+        logic of activation of deexcitation and computation of ionisation
+        cross-sections.
+      o G4VEnergyLossProcess: fixed minor memory leak at initialisation.
+        Fixed Coverity warnings in G4EnergyLossTables.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4NeutronCaptureXS: added protection for the case Ekin=0.
+      o Added cross-section name to constructors, so that they can be retrieved
+        for physics list print out.
+    + models/cascade:
+      o G4ElementaryParticleCollider: added protection sampleCMcosFor2to2(),
+        against potential divide-by-zero. Addresses rare cases (~10^-7) of
+        FP exceptions.
+    + models/CHIPS:
+      o Unlock inelastic h+p cross-sections below 1 GeV;
+        K+ + p low energy inelastic CS blocking below 600 MeV/c.
+      o Fix in photon-nuclear environment for Quasmons.
+      o Added correct handling of splitting of target for (A>=2,Z=0).
+        Added throwing of exception to signal NULL pointer.
+    + models/de_excitation:
+      o G4ParaFissionModel: fixed initialisation of G4Fragment (A,Z order),
+        use G4NucleiProperties to access mass.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Added protection in G4ProductionCuts::SetProductionCuts() to check
+        consistencies of size of given vector.
+      o Defined error codes for G4Exceptions.
+    + Management:
+      o Defined error codes for G4Exceptions. Some code cleanup.
+    + Parameterisation:
+      o Added missing implementation of inlined method
+        ProposePrimaryTrackFinalKineticEnergy() in G4FastStep.
+    + Transportation:
+      o G4UserSpecialCuts: fixed bug in energy tracking cut; changed order of
+        checks: 1st energy tracking cut, 2nd track length, 3d time cut,
+        4th range for charged particles with non-zero mass.
+        Removed unnecessary string comparisons.
+      o G4CoupledTransportation: added missing EndTracking() method to reset
+        the activated navigator list.
+
+  o Physics Lists:
+    -------------
+    + G4EmStandardPhysics_option1: fixed missing line defining polar angle
+      limit, responsible for significant CPU penalty in single scattering of
+      muons.
+    + Fix in QGSP_BERT_NOLEP and QGSP_QEL for missing inclusion of
+      G4HadronQElasticPhysics header.
+
+  o Run:
+    ---
+    + G4RunManager: added protection for WIN32 against already existing
+      directory when saving random seeds. Addressing problem report #1157.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + Fixed use of 3Vector in some advanced examples, causing compilation error.
+    + advanced/composite_calorimeter, lAr_calorimeter:
+      o Updated physics lists.
+    + advanced/human_phantom, underground_physics:
+      o Some code cleanup.
+    + extended/biasing/ReverseMC01:
+      o Added protection for unitialised mean&error in
+        RMC01AnalysisManager::ComputeMeanEdepAndError().
+    + extended/electromagnetic/TestEm5, TestEm7, TestEm11, TestEm12:
+      o Minor cleanup of SS physics constructor. 
+    + extended/electromagnetic/TestEm9:
+      o Added extra run with 20 GeV mu- into input macro TestEm9.in.
+    + extended/eventgenerator/particleGun:
+      o Fixed Aida file-option in HistoManager.
+    + extended/medical/electronScattering, fanoCavity, fanoCavity2:
+      o Minor cleanup of SS physics constructor.
+    + extended/medical/electronScattering2:
+      o Added physics builders from electronScattering example.
+    + extended/optical/wls:
+      o Added missing inclusion of <ctime> header in WLSRunAction, to allow
+        for compilation on Windows.
+    + extended/parameterisations/gflash:
+      o Corrections in use of namespaces to allow for compilation on Windows.
+        Some cleanup.
+    + extended/persistency/P03:
+      o Added batch.mac input macro, replacing use of OGL vis driver by ASCII.
+    + extended/radioactivedecay/rdecay01:
+      o Modified PhysicsList, setting ARM to false.
+      o Print global time from SteppingVerbose.
+      o Fixed Aida file-option in HistoManager.
+      o Added macro Co60.mac.
+    + novice/N02, N03:
+      o Changed step-point size in visualization macro to 1.
+    + novice/N05:
+      o Fix in ExN05DetectorConstruction::SetProductionCuts() in array
+        initialisation.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of relese 9.4.
+  o  Technical notes distributed for release 9.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.4 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

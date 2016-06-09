@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2010/11/02 16:10:48 allison Exp $
+$Id: History,v 1.33 2010-11-02 16:10:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-11-11  V.Ivant (gtherapy-V09-04-00)
+- rename step limiter classes to avoid clash with class name in kernel
 
 01-11-10  J.Allison (gtherapy-V09-03-05)
 - Introduced G4UIExecutive.

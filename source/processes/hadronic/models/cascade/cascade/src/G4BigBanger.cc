@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.40 2010/09/28 20:15:00 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4BigBanger.cc,v 1.40 2010-09-28 20:15:00 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
@@ -41,6 +41,9 @@
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100923  M. Kelsey -- Migrate to integer A and Z
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110806  M. Kelsey -- Pre-allocate buffers to reduce memory churn
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -83,9 +86,8 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   if (etot < 0.0) etot = 0.0;
   
   if (verboseLevel > 2) {
-    G4cout << " BigBanger: target " << G4endl;
-    nuclei_target->printParticle(); 
-    G4cout << " etot " << etot << G4endl;
+    G4cout << " BigBanger: target\n" << *nuclei_target
+	   << "\n etot " << etot << G4endl;
   }
 
   if (verboseLevel > 3) {
@@ -101,7 +103,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   if (verboseLevel > 2) {
     G4cout << " particles " << particles.size() << G4endl;
     for(G4int i = 0; i < G4int(particles.size()); i++) 
-      particles[i].printParticle();
+      G4cout << particles[i] << G4endl;
   }
 
   if (particles.empty()) {	// No bang!  Don't know why...
@@ -127,7 +129,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
     if (verboseLevel > 2) totlab += mom;
 
     ipart->setMomentum(mom); 
-    if (verboseLevel > 2) ipart->printParticle();
+    if (verboseLevel > 2) G4cout << *ipart << G4endl;
   }
   
   std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
@@ -229,9 +231,10 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
   }	// while (bad && itry<itry_max)
 
   if (!bad) {
+    particles.resize(a);	// Use assignment to avoid temporaries
     for(G4int i = 0; i < a; i++) {
       G4int knd = i < z ? 1 : 2;
-      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd, 8));
+      particles[i].fill(scm_momentums[i], knd, G4InuclParticle::BigBanger);
     };
   };
 
@@ -257,15 +260,15 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
 
   if (a > 2) {			// For "large" nuclei, energy is distributed
     G4double promax = maxProbability(a);
-    
+
+    momModules.resize(a, 0.);	// Pre-allocate to avoid memory churn
     for(G4int i = 0; i < a; i++) { 
-      G4double x = generateX(a, promax);
+      momModules[i] = generateX(a, promax);
+      xtot += momModules[i];
       
       if (verboseLevel > 2) {
-	G4cout << " i " << i << " x " << x << G4endl;
+	G4cout << " i " << i << " x " << momModules[i] << G4endl;
       }
-      momModules.push_back(x);
-      xtot += x;
     }
   } else {			// Two-body case is special, must be 50%
     xtot = 1.;
@@ -276,7 +279,7 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
   for(G4int i = 0; i < a; i++) {
     G4double m = i < z ? mp : mn;
 
-    momModules[i] = momModules[i] * etot / xtot;
+    momModules[i] *= etot/xtot;
     momModules[i] = std::sqrt(momModules[i] * (momModules[i] + 2.0 * m));
 
     if (verboseLevel > 2) {

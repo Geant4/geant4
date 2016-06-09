@@ -1,0 +1,10 @@
+      INTEGER FUNCTION HISID(ID)
+      IMPLICIT NONE
+      INTEGER ID
+      LOGICAL HEXIST
+      IF(HEXIST(ID).EQV..TRUE.) THEN
+        HISID = 1
+      ELSE
+        HISID = 0
+      ENDIF
+      END

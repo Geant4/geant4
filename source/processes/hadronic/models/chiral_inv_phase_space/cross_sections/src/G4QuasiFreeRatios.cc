@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.4 2010/09/03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QuasiFreeRatios.cc,v 1.4 2010-09-03 15:19:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QuasiFreeRatios for N+A elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-06
 // 
-//=======================================================================
+// ----------------------------------------------------------------------
 // Short description: Provides percentage of quasi-free and quasi-elastic
 // reactions in the inelastic reactions.
 // ----------------------------------------------------------------------
@@ -181,7 +181,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
       sv+=ds;
       lastT[j]=CalcQF2IN_Ratio(sv,A);
     }
-    lastL=new G4double[mls];          // Create the logarithmic Table
+    lastL=new G4double[mls];            // Create the logarithmic Table
     if(s>sma)                           // Initialize the logarithmic Table
     {
 #ifdef pdebug
@@ -351,7 +351,6 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
   static const G4double pbt=.3;        // total (lnP-lmi)^2 parabola coefficient
   static const G4double pmi=.1;        // Below that fast LE calculation is made
   static const G4double pma=1000.;     // Above that fast HE calculation is made
-  // ======================================================================================
   G4double El=0.;                      // prototype of the elastic hN cross-section
   G4double To=0.;                      // prototype of the total hN cross-section
   if(p<=0.)
@@ -443,7 +442,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     else
     {
       G4double lr=lp+1.27;                    // p1
-      G4double LE=1.53/(lr*lr+.0676);         // p2, p3        
+      G4double LE=1.53/(lr*lr+.0676);         // p2, p3         
       G4double ld=lp-lmi;                     // p4 (lmi=3.5)
       G4double ld2=ld*ld;
       G4double p2=p*p;
@@ -1024,7 +1023,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
   G4LorentzVector tot4M=N4M+p4M;
   G4int Z=0;
   G4int N=1;
-  G4int RPDG=2212;                                     // PDG of the recoil nucleon
   G4int sPDG=0;                                        // PDG code of the scattered hadron
   G4double mS=0.;                                      // proto of mass of scattered hadron
   G4double mT=mProt;                                   // mass of the recoil nucleon
@@ -1033,7 +1031,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
     mT=mNeut;
     Z=1;
     N=0;
-    RPDG=2112;                                         // PDG of the recoil nucleon
     if(pPDG==-211) sPDG=111;                           // pi+    -> pi0
     else if(pPDG==-321)
     {

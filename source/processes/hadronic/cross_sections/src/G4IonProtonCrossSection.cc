@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc,v 1.4 2010/10/15 23:49:33 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IonProtonCrossSection.cc,v 1.4 2010-10-15 23:49:33 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -53,56 +53,33 @@ G4IonProtonCrossSection::G4IonProtonCrossSection()
 }
 
 G4IonProtonCrossSection::~G4IonProtonCrossSection()
-{
-  delete theForward;
-}
-
-G4bool 
-G4IonProtonCrossSection::IsApplicable(const G4DynamicParticle* dp, 
-				      const G4Element* elm)
-{
-  G4int Z = G4lrint(elm->GetZ());
-  G4int A = G4lrint(elm->GetN());
-  return IsIsoApplicable(dp, Z, A);
-}
-
-
-G4bool 
-G4IonProtonCrossSection::IsIsoApplicable(const G4DynamicParticle* dp,
-					 G4int Z, G4int A)
-{
-  G4bool result = false;
-  if(Z < 2 && A < 2 && dp->GetDefinition()->GetPDGCharge()/eplus > 2.5) 
-    { result = true;}
-  return result;
-}
-
-
-G4double 
-G4IonProtonCrossSection::GetCrossSection(const G4DynamicParticle* dp, 
-					 const G4Element*, G4double)
-{
-  return GetZandACrossSection(dp);
-}
-
-
-G4double 
-G4IonProtonCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, 
-					      G4int /*ZZ*/, G4int /*AA*/, 
-					      G4double /*temperature*/)
-{
-  const G4ParticleDefinition* p = dp->GetDefinition();
-  G4double e = dp->GetKineticEnergy()*proton_mass_c2/p->GetPDGMass();
-  return theForward->GetCrossSection(e, p->GetBaryonNumber(),
-				     G4lrint(p->GetPDGCharge()/eplus) );
-}
-
-void G4IonProtonCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
 {}
 
-void G4IonProtonCrossSection::DumpPhysicsTable(const G4ParticleDefinition&)
+G4bool 
+G4IonProtonCrossSection::IsElementApplicable(const G4DynamicParticle* dp, 
+					     G4int Z, const G4Material*)
 {
-  G4cout << "G4IonProtonCrossSection: " << GetName() << " uses formula"
-	 <<G4endl;
+  return ((1 == Z) && (dp->GetDefinition()->GetPDGCharge()/eplus > 1.5)); 
+}
+
+
+G4double 
+G4IonProtonCrossSection::GetElementCrossSection(
+                                   const G4DynamicParticle* dp, 
+				   G4int, const G4Material*)
+{
+  const G4ParticleDefinition* p = dp->GetDefinition();
+  G4double e = dp->GetKineticEnergy()*CLHEP::proton_mass_c2/p->GetPDGMass();
+  return 
+    theForward->GetProtonCrossSection(e, G4lrint(p->GetPDGCharge()/eplus));
+}
+
+void 
+G4IonProtonCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4IonProtonCrossSection calculates the inelastic cross section\n"
+          << "for ions scattering from protons using inverse kinematics and\n"
+          << "the Axen-Wellisch inelastic cross sections in the\n"
+          << "G4ProtonInelasticCrossSection class.\n"; 
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.cc,v 1.4 2010/11/01 18:18:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExtDEDXTable.cc,v 1.6 2010-12-24 12:23:39 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -422,18 +422,19 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
     return false;
   }   
 
-  std::string::size_type nmbVectors = 0;
+  std::string::size_type nmbVectors;
   ifilestream >> nmbVectors;
 
-  if(nmbVectors == std::string::npos || nmbVectors == 0) {
+  if(nmbVectors == std::string::npos) {
 #ifdef G4VERBOSE
     G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
-	   << " The file is empty "<< nmbVectors 
-	   << G4endl;
+	   << " The file is corrupted " << G4endl;
 #endif
     return false;
   }  
-  for(size_t i = 0; i<nmbVectors; ++i) {
+
+  size_t nm = size_t(nmbVectors);
+  for(size_t i = 0; i<nm; ++i) {
 
     G4String line = "";
     while( line.empty() ) {

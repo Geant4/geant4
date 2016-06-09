@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.14 2010/11/13 19:08:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.14 2010-11-13 19:08:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -87,17 +87,20 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+      //ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
   }
   currentMaterial = 0;
-  elecXSRatio = factB = formfactA = screenZ = 0.0;
-  cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = 1.0;
+  elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
+  cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
+
+  factB1= 0.5*CLHEP::pi*fine_structure_const;
 
   Initialise(theElectron, 1.0);
-  SetTargetMass(proton_mass_c2);
+  targetMass = proton_mass_c2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +114,7 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
 					  G4double CosThetaLim)
 {
   SetupParticle(p);
-  tkin = mom2 = 0.0;
+  tkin = mom2 = momCM2 = 0.0;
   ecut = etag = DBL_MAX;
   targetZ = 0;
   cosThetaMax = CosThetaLim;
@@ -134,6 +137,7 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
   charge3 = chargeSquare*q;
   tkin = 0.0;
   currentMaterial = 0;
+  targetZ = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -146,7 +150,14 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     etag    = tkin; 
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
-    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*amu_c2);
+    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2);
+    //G4double tmass2 = targetMass*targetMass;
+    //G4double etot = tkin + mass;
+    //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
+    //momCM2 = mom2*tmass2/invmass2;
+    //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
+    //pcmp2    = tmass2/invmass2;
+
     kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
@@ -155,19 +166,21 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
       screenZ *=std::min(Z*invbeta2,
       	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
     }
-    if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
-      cosTetMaxNuc = 0.0;
+    if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
+      cosTetMaxNuc2 = 0.0;
     }
     formfactA = FormFactor[targetZ]*mom2;
 
     // allowing do not compute scattering off e-
     cosTetMaxElec = 1.0;
     if(cut < DBL_MAX) { 
+      /*
       if(mass < MeV) { 
 	if(cosTetMaxNuc < 1.0 && cosTetMaxNuc > 0.0 && tkin < 10*cut) { 
 	  cosTetMaxNuc2 *= 0.1*tkin/cut;
 	}
       }
+      */
       ComputeMaxElectronScattering(cut); 
     }
   }
@@ -195,18 +208,15 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   // scattering off electrons
   if(costm < 1.0) {
     x = (1.0 - costm)/screenZ;
-    x1= x/(1 + x);
     if(x < numlimit) { 
       x2 = 0.5*x*x;
-      y  = x2*(1.0 - 1.3333333*x + 3*x2); 
+      y  = x2*(1.0 - 1.3333333*x + 3*x2);
+      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
+      x1= x/(1 + x);
       xlog = log(1.0 + x);  
       y = xlog - x1; 
-    }
-
-    if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
-      else             { y -= fb*(x + x1 - 2*xlog); }
+      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
 
     if(y < 0.0) {
@@ -236,19 +246,17 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   // scattering off nucleus
   if(cosTMax < 1.0) {
     x = (1.0 - cosTMax)/screenZ;
-    x1= x/(1 + x);
     if(x < numlimit) { 
       x2 = 0.5*x*x;
       y  = x2*(1.0 - 1.3333333*x + 3*x2); 
+      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
+      x1= x/(1 + x);
       xlog = log(1.0 + x);  
       y = xlog - x1; 
+      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
 
-    if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
-      else             { y -= fb*(x + x1 - 2*xlog); }
-    }
     if(y < 0.0) {
       ++nwarnings;
       if(nwarnings < nwarnlimit) {
@@ -300,12 +308,16 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   G4double w1 = 1. - cost1 + screenZ;
   G4double w2 = 1. - cost2 + screenZ;
   G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
-  if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
-    G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
-    G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
-    if( G4UniformRand() > grej ) { return v; }
-  }  
+
+  //G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
+  G4double fm =  1.0 + formf*z1;
+  //G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
+  G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))/( (1.0 + z1*factD)*fm*fm );
+  // "false" scattering
+  if( G4UniformRand() > grej ) { return v; }
+    // } 
   G4double cost = 1.0 - z1;
+
   if(cost > 1.0)       { cost = 1.0; }
   else if(cost < -1.0) { cost =-1.0; }
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));

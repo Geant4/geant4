@@ -28,8 +28,14 @@
 //
 //      History:
 //               01 August 2007 P.Gumplinger
-//               Reference: TRIUMF TWIST Technotes TN-55:
-//                          Pierre Depommier - "Radiative MuonDecay"
+//               10 August 2011 D. Mingming - Center for HEP, Tsinghua Univ.
+//               References:
+//                    TRIUMF/TWIST Technote TN-55:
+//                    "Radiative muon decay" by P. Depommier and A. Vacheret
+//                    ------------------------------------------------------
+//                    Yoshitaka Kuno and Yasuhiro Okada
+//                    "Muon Decays and Physics Beyond the Standard Model"
+//                    Rev. Mod. Phys. 73, 151 (2001)
 //
 // ------------------------------------------------------------
 //
@@ -42,10 +48,17 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
+G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin()
+	     : G4VDecayChannel(),
+	       parent_polarization()
+{
+}
+
 G4MuonRadiativeDecayChannelWithSpin::
            G4MuonRadiativeDecayChannelWithSpin(const G4String& theParentName,
                                                G4double        theBR)
-                            : G4VDecayChannel("Radiative Muon Decay",1)
+	     : G4VDecayChannel("Radiative Muon Decay",1),
+	       parent_polarization()
 {
   // set names for daughter particles
   if (theParentName == "mu+") {
@@ -73,13 +86,46 @@ G4MuonRadiativeDecayChannelWithSpin::
     }
 #endif
   }
-  EMMU  = 0.*MeV;
-  EMASS = 0.*MeV;
 }
 
 G4MuonRadiativeDecayChannelWithSpin::~G4MuonRadiativeDecayChannelWithSpin()
 {
 }
+
+G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin(const G4MuonRadiativeDecayChannelWithSpin &right):
+  G4VDecayChannel(right)
+{
+  parent_polarization = right.parent_polarization;
+}
+
+G4MuonRadiativeDecayChannelWithSpin & G4MuonRadiativeDecayChannelWithSpin::operator=(const G4MuonRadiativeDecayChannelWithSpin & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+    parent_polarization = right.parent_polarization;
+  }
+  return *this;
+}
+
 
 G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double) 
 {
@@ -95,7 +141,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   // parent mass
   G4double parentmass = parent->GetPDGMass();
 
-  EMMU = parentmass;
+  G4double EMMU = parentmass;
 
   //daughters'mass
   G4double daughtermass[4]; 
@@ -105,7 +151,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
     sumofdaughtermass += daughtermass[index];
   }
 
-  EMASS = daughtermass[0];
+  G4double EMASS = daughtermass[0];
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -263,7 +309,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 //   Sample the decay rate
 //
 
-  } while (G4UniformRand()*250000.0 > som0);
+  } while (G4UniformRand()*177.0 > som0);
 
 ///   if(i<10000000)goto leap1:
 //
@@ -406,7 +452,7 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
                        -(x*x*x)*y*(4.0+3.0*y));
       G4double f2s   = 1.5*((x*x*x)*(y*y)*(2.0+y));
 
-      G4double f_1se = 12.0*(x*y*(1.0-x)+(x*x)*(2.0-3.0*y)
+      G4double f_1se = 12.0*(x*y*(1.0-y)+(x*x)*(2.0-3.0*y)
                        -2.0*(x*x*x));
       G4double f0se  = 6.0*(-(x*x)*(2.0-y-2.0*(y*y))
                        +(x*x*x)*(2.0+3.0*y));
@@ -481,7 +527,7 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
       G4double ntg = term*f_1tg+f0tg+delta*f1tg+(delta*delta)*f2tg;
 
       G4double term1 = nv;
-      G4double term2 = 2.0*ns-nv-nt;
+      G4double term2 = 2.0*ns+nv-nt;
       G4double term3 = 2.0*ns-2.0*nv+nt;
 
       G4double term1e = 1.0/3.0*(1.0-4.0/3.0*del);
@@ -493,9 +539,11 @@ G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,
       G4double term3g = 2.0*nsg-2.0*nvg+ntg;
 
       G4double som00 = term1+(1.0-4.0/3.0*rho)*term2+eps*term3;
-      G4double som01 =  Pmu*ksi*(cthetaE*(nve-term1e*term2e+kap*term3e)
+      G4double som01 = Pmu*ksi*(cthetaE*(nve-term1e*term2e+kap*term3e)
                        +cthetaG*(nvg-term1g*term2g+kap*term3g));
-      G4double som0 = som00+som01;
+
+      G4double som0 = (som00+som01)/y;
+      som0  = fine_structure_const/8./(twopi*twopi*twopi)*som0;
 
 //      G4cout << x     << " " << y    << " " << som00 << " " 
 //             << som01 << " " << som0 << G4endl;

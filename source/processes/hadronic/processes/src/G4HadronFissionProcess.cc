@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // F.W. Jones, TRIUMF, 03-DEC-96
 // 
 // This is a prototype of a low-energy fission process.
@@ -52,11 +50,20 @@ G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) :
   AddDataSet(new G4HadronFissionDataSet());
 }
 
+
 G4HadronFissionProcess::~G4HadronFissionProcess()
-{
-}
- 
+{}
+
+
 G4bool G4HadronFissionProcess::IsApplicable(const G4ParticleDefinition& p)
 { 
   return (&p == G4Neutron::Neutron());
+}
+
+
+void G4HadronFissionProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process handles neutron-induced fission of nuclei by\n"
+          << "invoking one or more hadronic models and one or more hadronic\n"
+          << "cross sections.\n";
 }

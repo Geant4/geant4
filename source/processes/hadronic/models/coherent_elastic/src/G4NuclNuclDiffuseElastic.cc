@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc,v 1.5 2010/11/09 09:04:29 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NuclNuclDiffuseElastic.cc,v 1.5 2010-11-09 09:04:29 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -39,6 +39,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
+#include "G4NucleiProperties.hh"
 
 #include "Randomize.hh"
 #include "G4Integrator.hh"
@@ -63,7 +64,7 @@
 
 
 G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic() 
-  : G4HadronicInteraction(), fParticle(0)
+  : G4HadronElastic("NNDiffuseElastic"), fParticle(0)
 {
   SetMinEnergy( 50*MeV );
   SetMaxEnergy( 1.*TeV );
@@ -98,63 +99,24 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   fAddCoulomb = false;
   // Ranges of angle table relative to current Rutherford (Coulomb grazing) angle
 
-  fCofAlphaMax     = 1.5;
-  fCofAlphaCoulomb = 0.5;
-
-  fProfileDelta  = 1.;
-  fProfileAlpha   = 0.5;
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Constructor with initialisation
-
-G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic(const G4ParticleDefinition* aParticle) 
-  : G4HadronicInteraction(), fParticle(aParticle)
-{
-  SetMinEnergy( 50.*MeV); // 0.01*GeV );
-  SetMaxEnergy( 1.*TeV);  // 1.*TeV );
-  verboseLevel = 0;
-  lowEnergyRecoilLimit = 100.*keV;  
-  lowEnergyLimitQ  = 0.0*GeV;  
-  lowEnergyLimitHE = 0.0*GeV;  
-  lowestEnergyLimit= 0.0*keV;  
-  plabLowLimit     = 20.0*MeV;
-
-  theProton   = G4Proton::Proton();
-  theNeutron  = G4Neutron::Neutron();
-  theDeuteron = G4Deuteron::Deuteron();
-  theAlpha    = G4Alpha::Alpha();
-  thePionPlus = G4PionPlus::PionPlus();
-  thePionMinus= G4PionMinus::PionMinus();
-
-  fEnergyBin = 200; //200; // 200; // 100;
-  fAngleBin  = 400; // 400; // 200; // 100;
-
-  // fEnergyVector = 0;
-  fEnergyVector = new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
-  fAngleTable = 0;
-
-  fParticle = aParticle;
-  fWaveVector = 0.;
-  fAtomicWeight = 0.;
-  fAtomicNumber = 0.;
-  fNuclearRadius = 0.;
-  fBeta = 0.;
-  fZommerfeld = 0.;
-  fAm = 0.;
-  fAddCoulomb = false;
-
-  // Ranges of angle table relative to current Rutherford (Coulomb grazing) angle
+  // Empirical parameters
 
   fCofAlphaMax     = 1.5;
   fCofAlphaCoulomb = 0.5;
 
   fProfileDelta  = 1.;
-  fProfileAlpha   = 0.5;
+  fProfileAlpha  = 0.5;
 
-  // Initialise();
+  fCofLambda = 1.0;
+  fCofDelta  = 0.04;
+  fCofAlpha  = 0.095;
+
+  fNuclearRadius1 = fNuclearRadius2 = fNuclearRadiusSquare = fNuclearRadiusCof 
+    = fRutherfordRatio = fCoulombPhase0 = fHalfRutThetaTg = fHalfRutThetaTg2 
+    = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar = fCofAlphaMax 
+    = fCofAlphaCoulomb = fSumSigma = fEtaRatio = fReZ = 0.0;
+  fMaxL = 0;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -208,181 +170,6 @@ void G4NuclNuclDiffuseElastic::Initialise()
     BuildAngleTable();
     fAngleBank.push_back(fAngleTable);
   }  
-  return;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Model analog of DoIt function
-
-G4HadFinalState* 
-G4NuclNuclDiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack, 
-                                       G4Nucleus& targetNucleus )
-{
-  theParticleChange.Clear();
-
-  const G4HadProjectile* aParticle = &aTrack;
-
-  G4double ekin = aParticle->GetKineticEnergy();
-
-  if(ekin <= lowestEnergyLimit) 
-  {
-    theParticleChange.SetEnergyChange(ekin);
-    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
-    return &theParticleChange;
-  }
-
-  G4double aTarget = targetNucleus.GetN();
-  G4double zTarget = targetNucleus.GetZ();
-
-  G4double plab = aParticle->GetTotalMomentum();
-
-  if (verboseLevel >1)
-  { 
-    G4cout << "G4NuclNuclDiffuseElastic::DoIt: Incident particle plab=" 
-	   << plab/GeV << " GeV/c " 
-	   << " ekin(MeV) = " << ekin/MeV << "  " 
-	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
-  }
-  // Scattered particle referred to axis of incident particle
-
-  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
-  G4double m1 = theParticle->GetPDGMass();
-
-  G4int Z = static_cast<G4int>(zTarget+0.5);
-  G4int A = static_cast<G4int>(aTarget+0.5);
-  G4int N = A - Z;
-
-  G4int projPDG = theParticle->GetPDGEncoding();
-
-  if (verboseLevel>1) 
-  {
-    G4cout << "G4NuclNuclDiffuseElastic for " << theParticle->GetParticleName()
-	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
-	   << " A= " << A << " N= " << N 
-	   << G4endl;
-  }
-  G4ParticleDefinition * theDef = 0;
-
-  if(Z == 1 && A == 1)       theDef = theProton;
-  else if (Z == 1 && A == 2) theDef = theDeuteron;
-  else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
-  else if (Z == 2 && A == 3) theDef = G4He3::He3();
-  else if (Z == 2 && A == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
- 
-  G4double m2 = theDef->GetPDGMass();
-  G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv(0.0,0.0,0.0,m2);   
-  lv += lv1;
-
-  G4ThreeVector bst = lv.boostVector();
-  lv1.boost(-bst);
-
-  G4ThreeVector p1 = lv1.vect();
-  G4double ptot = p1.mag();
-  G4double tmax = 4.0*ptot*ptot;
-  G4double t = 0.0;
-
-
-  //
-  // Sample t
-  //
-  
-  // t = SampleT( theParticle, ptot, A);
-
-  t = SampleTableT( theParticle, ptot, Z, A); // use initialised table
-
-  // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) 
-  {
-    if (verboseLevel > 0) 
-    {
-      G4cout << "G4NuclNuclDiffuseElastic:WARNING: Z= " << Z << " N= " 
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV 
-              << " S-wave will be sampled" 
-	     << G4endl; 
-    }
-    t = G4UniformRand()*tmax; 
-  }
-  if(verboseLevel>1)
-  {
-    G4cout <<" t= " << t << " tmax= " << tmax 
-	   << " ptot= " << ptot << G4endl;
-  }
-  // Sampling of angles in CM system
-
-  G4double phi  = G4UniformRand()*twopi;
-  G4double cost = 1. - 2.0*t/tmax;
-  G4double sint;
-
-  if( cost >= 1.0 ) 
-  {
-    cost = 1.0;
-    sint = 0.0;
-  }
-  else if( cost <= -1.0) 
-  {
-    cost = -1.0;
-    sint =  0.0;
-  }
-  else  
-  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }    
-  if (verboseLevel>1) 
-    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
-
-  G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
-  v1 *= ptot;
-  G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
-
-  nlv1.boost(bst); 
-
-  G4double eFinal = nlv1.e() - m1;
-
-  if (verboseLevel > 1)
-  { 
-    G4cout << "Scattered: "
-	   << nlv1<<" m= " << m1 << " ekin(MeV)= " << eFinal 
-	   << " Proj: 4-mom " << lv1 
-	   <<G4endl;
-  }
-  if(eFinal < 0.0) 
-  {
-    G4cout << "G4NuclNuclDiffuseElastic WARNING ekin= " << eFinal
-	   << " after scattering of " 
-	   << aParticle->GetDefinition()->GetParticleName()
-	   << " p(GeV/c)= " << plab
-	   << " on " << theDef->GetParticleName()
-	   << G4endl;
-    eFinal = 0.0;
-    nlv1.setE(m1);
-  }
-
-  theParticleChange.SetMomentumChange(nlv1.vect().unit());
-  theParticleChange.SetEnergyChange(eFinal);
-  
-  G4LorentzVector nlv0 = lv - nlv1;
-  G4double erec =  nlv0.e() - m2;
-
-  if (verboseLevel > 1) 
-  {
-    G4cout << "Recoil: "
-	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
-	   <<G4endl;
-  }
-  if(erec > lowEnergyRecoilLimit) 
-  {
-    G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
-    theParticleChange.AddSecondary(aSec);
-  } else {
-    if(erec < 0.0) erec = 0.0;
-    theParticleChange.SetLocalEnergyDeposit(erec);
-  }
-
-  return &theParticleChange;
 }
 
 
@@ -907,7 +694,8 @@ G4NuclNuclDiffuseElastic::IntegralElasticProb(  const G4ParticleDefinition* part
 //
 // Return inv momentum transfer -t > 0
 
-G4double G4NuclNuclDiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, G4double p, G4double A)
+G4double G4NuclNuclDiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, 
+					    G4double p, G4double A)
 {
   G4double theta = SampleThetaCMS( aParticle,  p, A); // sample theta in cms
   G4double t     = 2*p*p*( 1 - std::cos(theta) ); // -t !!!
@@ -969,6 +757,32 @@ G4NuclNuclDiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////  Table preparation and reading ////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return inv momentum transfer -t > 0 from initialisation table
+
+G4double G4NuclNuclDiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G4double p, 
+                                               G4int Z, G4int A)
+{
+  fParticle = aParticle;
+  G4double m1 = fParticle->GetPDGMass();
+  G4double totElab = std::sqrt(m1*m1+p*p);
+  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4LorentzVector lv1(p,0.0,0.0,totElab);
+  G4LorentzVector  lv(0.0,0.0,0.0,m2);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double momentumCMS = p1.mag();
+
+  G4double t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+  return t;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return inv momentum transfer -t > 0 from initialisation table
@@ -1143,7 +957,7 @@ void G4NuclNuclDiffuseElastic::InitialiseOnFly(G4double Z, G4double A)
 void G4NuclNuclDiffuseElastic::BuildAngleTable() 
 {
   G4int i, j;
-  G4double partMom, kinE, a = 0., z = fParticle->GetPDGCharge(), m1 = fParticle->GetPDGMass();
+  G4double partMom, kinE, m1 = fParticle->GetPDGMass();
   G4double alpha1, alpha2, alphaMax, alphaCoulomb, delta = 0., sum = 0.;
 
   // G4cout<<"particle z = "<<z<<"; particle m1 = "<<m1/GeV<<" GeV"<<G4endl;
@@ -1161,30 +975,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
 
     partMom     = std::sqrt( kinE*(kinE + 2*m1) );
 
-    fWaveVector = partMom/hbarc;
-
-    G4double kR     = fWaveVector*fNuclearRadius;
-
-    if( z )
-    {
-      a           = partMom/m1;         // beta*gamma for m1
-      fBeta       = a/std::sqrt(1+a*a);
-      fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
-      fRutherfordRatio = fZommerfeld/fWaveVector; 
-      fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
-    }
-    // G4cout<<"fZommerfeld = "<<fZommerfeld<<G4endl;
-
-    fProfileLambda = kR; // *std::sqrt(1.-2*fZommerfeld/kR);
-
-    // G4cout<<"fProfileLambda = "<<fProfileLambda<<G4endl;
-
-    fProfileDelta  = fCofDelta*fProfileLambda;
-    fProfileAlpha  = fCofAlpha*fProfileLambda;
-
-    // CalculateCoulombPhaseZero();
-
-    CalculateRutherfordAnglePar();
+    InitDynParameters(fParticle, partMom);
 
     alphaMax = fRutherfordTheta*fCofAlphaMax;
 
@@ -1219,7 +1010,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
       // if(alpha1 < kRlim2) alpha1 = kRlim2;
       alpha2 = alpha1 + delth;
 
-      delta = integral.Legendre10(this, &G4NuclNuclDiffuseElastic::GetFresnelDiffuseXsc, alpha1, alpha2);
+      delta = integral.Legendre10(this, &G4NuclNuclDiffuseElastic::GetFresnelIntegrandXsc, alpha1, alpha2);
       // delta = integral.Legendre96(this, &G4NuclNuclDiffuseElastic::GetIntegrandFunction, alpha1, alpha2);
 
       sum += delta;

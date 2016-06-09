@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:50:38 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:50:38 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -55,7 +55,6 @@ GEANT4_DEFINE_MODULE(NAME G4mctruth
         G4Pevent.hh
         G4VDCIOentry.hh
         G4VHCIOentry.hh
-        G4VHepMCIO.hh
         G4VMCTruthIO.hh
         G4VPDigitIO.hh
         G4VPDigitsCollectionIO.hh
@@ -78,7 +77,6 @@ GEANT4_DEFINE_MODULE(NAME G4mctruth
         G4Pevent.cc
         G4VDCIOentry.cc
         G4VHCIOentry.cc
-        G4VHepMCIO.cc
         G4VMCTruthIO.cc
         G4VPDigitIO.cc
         G4VPDigitsCollectionIO.cc

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.25 2009/10/28 13:38:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HepPolyhedron.h,v 1.25 2009-10-28 13:38:54 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class Description:
@@ -169,8 +169,10 @@
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
 
-#include <CLHEP/Geometry/Point3D.h>
-#include <CLHEP/Geometry/Normal3D.h>
+#include "G4Types.hh"
+#include "G4Point3D.hh"
+#include "G4Normal3D.hh"
+#include "G4Transform3D.hh"
 
 #ifndef DEFAULT_NUMBER_OF_STEPS
 #define DEFAULT_NUMBER_OF_STEPS 24
@@ -181,12 +183,12 @@ class G4Facet {
   friend std::ostream& operator<<(std::ostream&, const G4Facet &facet);
 
  private:
-  struct G4Edge { int v,f; };
+  struct G4Edge { G4int v,f; };
   G4Edge edge[4];
 
  public:
-  G4Facet(int v1=0, int f1=0, int v2=0, int f2=0, 
-          int v3=0, int f3=0, int v4=0, int f4=0)
+  G4Facet(G4int v1=0, G4int f1=0, G4int v2=0, G4int f2=0, 
+          G4int v3=0, G4int f3=0, G4int v4=0, G4int f4=0)
   { edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
     edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4; }
 };
@@ -195,38 +197,38 @@ class HepPolyhedron {
   friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
 
  protected:
-  static int fNumberOfRotationSteps;
-  int nvert, nface;
-  HepGeom::Point3D<double> *pV;
+  static G4int fNumberOfRotationSteps;
+  G4int nvert, nface;
+  G4Point3D  *pV;
   G4Facet    *pF;
 
   // Re-allocate memory for HepPolyhedron
-  void AllocateMemory(int Nvert, int Nface);
+  void AllocateMemory(G4int Nvert, G4int Nface);
 
   // Find neighbouring facet
-  int FindNeighbour(int iFace, int iNode, int iOrder) const;
+  G4int FindNeighbour(G4int iFace, G4int iNode, G4int iOrder) const;
 
   // Find normal at node
-  HepGeom::Normal3D<double> FindNodeNormal(int iFace, int iNode) const;
+  G4Normal3D FindNodeNormal(G4int iFace, G4int iNode) const;
 
   // Create HepPolyhedron for prism with quadrilateral base
   void CreatePrism();
 
   // Generate facets by revolving an edge around Z-axis
-  void RotateEdge(int k1, int k2, double r1, double r2,
-                  int v1, int v2, int vEdge,
-                  bool ifWholeCircle, int ns, int &kface);
+  void RotateEdge(G4int k1, G4int k2, G4double r1, G4double r2,
+                  G4int v1, G4int v2, G4int vEdge,
+                  G4bool ifWholeCircle, G4int ns, G4int &kface);
 
   // Set side facets for the case of incomplete rotation
-  void SetSideFacets(int ii[4], int vv[4],
-                     int *kk, double *r,
-                     double dphi, int ns, int &kface);
+  void SetSideFacets(G4int ii[4], G4int vv[4],
+                     G4int *kk, G4double *r,
+                     G4double dphi, G4int ns, G4int &kface);
 
   // Create HepPolyhedron for body of revolution around Z-axis
-  void RotateAroundZ(int nstep, double phi, double dphi,
-                     int np1, int np2,
-                     const double *z, double *r,
-                     int nodeVis, int edgeVis);
+  void RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
+                     G4int np1, G4int np2,
+                     const G4double *z, G4double *r,
+                     G4int nodeVis, G4int edgeVis);
 
   // For each edge set reference to neighbouring facet
   void SetReferences();
@@ -248,66 +250,64 @@ class HepPolyhedron {
   HepPolyhedron & operator=(const HepPolyhedron & from);
 
   // Get number of vertices
-  int GetNoVertices() const { return nvert; }
+  G4int GetNoVertices() const { return nvert; }
 
   // Get number of facets
-  int GetNoFacets() const { return nface; }
+  G4int GetNoFacets() const { return nface; }
 
   // Transform the polyhedron
-  HepPolyhedron & Transform(const HepGeom::Transform3D & t);
+  HepPolyhedron & Transform(const G4Transform3D & t);
 
   // Get next vertex index of the quadrilateral
-  bool GetNextVertexIndex(int & index, int & edgeFlag) const;
+  G4bool GetNextVertexIndex(G4int & index, G4int & edgeFlag) const;
 
   // Get vertex by index 
-  HepGeom::Point3D<double> GetVertex(int index) const;
+  G4Point3D GetVertex(G4int index) const;
 
   // Get next vertex + edge visibility of the quadrilateral
-  bool GetNextVertex(HepGeom::Point3D<double> & vertex, int & edgeFlag) const;
+  G4bool GetNextVertex(G4Point3D & vertex, G4int & edgeFlag) const;
 
   // Get next vertex + edge visibility + normal of the quadrilateral
-  bool GetNextVertex(HepGeom::Point3D<double> & vertex, int & edgeFlag,
-                     HepGeom::Normal3D<double> & normal) const;
+  G4bool GetNextVertex(G4Point3D & vertex, G4int & edgeFlag,
+                       G4Normal3D & normal) const;
 
   // Get indeces of the next edge with indeces of the faces
-  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag,
-                          int & iface1, int & iface2) const;
+  G4bool GetNextEdgeIndeces(G4int & i1, G4int & i2, G4int & edgeFlag,
+                          G4int & iface1, G4int & iface2) const;
 
   // Get indeces of the next edge
-  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag) const;
+  G4bool GetNextEdgeIndeces(G4int & i1, G4int & i2, G4int & edgeFlag) const;
 
   // Get next edge
-  bool GetNextEdge(HepGeom::Point3D<double> &p1,
-                   HepGeom::Point3D<double> &p2, int &edgeFlag) const;
+  G4bool GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag) const;
 
   // Get next edge
-  bool GetNextEdge(HepGeom::Point3D<double> &p1,
-                   HepGeom::Point3D<double> &p2, int &edgeFlag,
-                   int &iface1, int &iface2) const;
+  G4bool GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag,
+                     G4int &iface1, G4int &iface2) const;
 
   // Get face by index
-  void GetFacet(int iFace, int &n, int *iNodes,
-                int *edgeFlags = 0, int *iFaces = 0) const;
+  void GetFacet(G4int iFace, G4int &n, G4int *iNodes,
+                G4int *edgeFlags = 0, G4int *iFaces = 0) const;
 
   // Get face by index
-  void GetFacet(int iFace, int &n, HepGeom::Point3D<double> *nodes,
-                int *edgeFlags=0, HepGeom::Normal3D<double> *normals=0) const;
+  void GetFacet(G4int iFace, G4int &n, G4Point3D *nodes,
+                G4int *edgeFlags=0, G4Normal3D *normals=0) const;
 
   // Get next face with normals at the nodes
-  bool GetNextFacet(int &n, HepGeom::Point3D<double> *nodes, int *edgeFlags=0,
-                    HepGeom::Normal3D<double> *normals=0) const;
+  G4bool GetNextFacet(G4int &n, G4Point3D *nodes, G4int *edgeFlags=0,
+                      G4Normal3D *normals=0) const;
 
   // Get normal of the face given by index
-  HepGeom::Normal3D<double> GetNormal(int iFace) const;
+  G4Normal3D GetNormal(G4int iFace) const;
 
   // Get unit normal of the face given by index
-  HepGeom::Normal3D<double> GetUnitNormal(int iFace) const;
+  G4Normal3D GetUnitNormal(G4int iFace) const;
 
   // Get normal of the next face
-  bool GetNextNormal(HepGeom::Normal3D<double> &normal) const;
+  G4bool GetNextNormal(G4Normal3D &normal) const;
 
   // Get normal of unit length of the next face 
-  bool GetNextUnitNormal(HepGeom::Normal3D<double> &normal) const;
+  G4bool GetNextUnitNormal(G4Normal3D &normal) const;
 
   // Boolean operations 
   HepPolyhedron add(const HepPolyhedron &p) const;
@@ -315,16 +315,16 @@ class HepPolyhedron {
   HepPolyhedron intersect(const HepPolyhedron &p) const;
 
   // Get area of the surface of the polyhedron
-  double GetSurfaceArea() const;
+  G4double GetSurfaceArea() const;
 
   // Get volume of the polyhedron
-  double GetVolume() const;
+  G4double GetVolume() const;
 
   // Get number of steps for whole circle
-  static int GetNumberOfRotationSteps();
+  static G4int GetNumberOfRotationSteps();
 
   // Set number of steps for whole circle
-  static void SetNumberOfRotationSteps(int n);
+  static void SetNumberOfRotationSteps(G4int n);
 
   // Reset number of steps for whole circle to default value
   static void ResetNumberOfRotationSteps();
@@ -338,8 +338,8 @@ class HepPolyhedron {
    * @param  xy2 2nd base (at z = +Dz)
    * @return status of the operation - is non-zero in case of problem
    */
-  int createTwistedTrap(double Dz,
-                        const double xy1[][2], const double xy2[][2]);
+  G4int createTwistedTrap(G4double Dz,
+                        const G4double xy1[][2], const G4double xy2[][2]);
 
   /**
    * Creates user defined polyhedron.
@@ -358,156 +358,156 @@ class HepPolyhedron {
    * @param  faces  faces (quadrilaterals or triangles)
    * @return status of the operation - is non-zero in case of problem
    */
-  int createPolyhedron(int Nnodes, int Nfaces,
-                       const double xyz[][3], const int faces[][4]);
+  G4int createPolyhedron(G4int Nnodes, G4int Nfaces,
+                         const G4double xyz[][3], const G4int faces[][4]);
 };
 
 class HepPolyhedronTrd2 : public HepPolyhedron
 {
  public:
-  HepPolyhedronTrd2(double Dx1, double Dx2,
-                    double Dy1, double Dy2, double Dz);
+  HepPolyhedronTrd2(G4double Dx1, G4double Dx2,
+                    G4double Dy1, G4double Dy2, G4double Dz);
   virtual ~HepPolyhedronTrd2();
 };
 
 class HepPolyhedronTrd1 : public HepPolyhedronTrd2
 {
  public:
-  HepPolyhedronTrd1(double Dx1, double Dx2,
-                    double Dy, double Dz);
+  HepPolyhedronTrd1(G4double Dx1, G4double Dx2,
+                    G4double Dy, G4double Dz);
   virtual ~HepPolyhedronTrd1();
 };
 
 class HepPolyhedronBox : public HepPolyhedronTrd2
 {
  public:
-  HepPolyhedronBox(double Dx, double Dy, double Dz);
+  HepPolyhedronBox(G4double Dx, G4double Dy, G4double Dz);
   virtual ~HepPolyhedronBox();
 };
 
 class HepPolyhedronTrap : public HepPolyhedron
 {
  public:
-  HepPolyhedronTrap(double Dz, double Theta, double Phi,
-                    double Dy1,
-                    double Dx1, double Dx2, double Alp1,
-                    double Dy2,
-                    double Dx3, double Dx4, double Alp2);
+  HepPolyhedronTrap(G4double Dz, G4double Theta, G4double Phi,
+                    G4double Dy1,
+                    G4double Dx1, G4double Dx2, G4double Alp1,
+                    G4double Dy2,
+                    G4double Dx3, G4double Dx4, G4double Alp2);
   virtual ~HepPolyhedronTrap();
 };
 
 class HepPolyhedronPara : public HepPolyhedronTrap
 {
  public:
-  HepPolyhedronPara(double Dx, double Dy, double Dz,
-                    double Alpha, double Theta, double Phi);
+  HepPolyhedronPara(G4double Dx, G4double Dy, G4double Dz,
+                    G4double Alpha, G4double Theta, G4double Phi);
   virtual ~HepPolyhedronPara();
 };
 
 class HepPolyhedronParaboloid : public HepPolyhedron
 {
  public:
-  HepPolyhedronParaboloid(double r1,
-                          double r2,
-                          double dz,
-                          double Phi1,
-                          double Dphi);
+  HepPolyhedronParaboloid(G4double r1,
+                          G4double r2,
+                          G4double dz,
+                          G4double Phi1,
+                          G4double Dphi);
   virtual ~HepPolyhedronParaboloid();
 };
 
 class HepPolyhedronHype : public HepPolyhedron
 {
  public:
-  HepPolyhedronHype(double r1,
-                    double r2,
-                    double tan1,
-                    double tan2,
-                    double halfZ);
+  HepPolyhedronHype(G4double r1,
+                    G4double r2,
+                    G4double tan1,
+                    G4double tan2,
+                    G4double halfZ);
   virtual ~HepPolyhedronHype();
 };
 
 class HepPolyhedronCons : public HepPolyhedron
 {
  public:
-  HepPolyhedronCons(double Rmn1, double Rmx1, 
-                    double Rmn2, double Rmx2, double Dz,
-                    double Phi1, double Dphi); 
+  HepPolyhedronCons(G4double Rmn1, G4double Rmx1, 
+                    G4double Rmn2, G4double Rmx2, G4double Dz,
+                    G4double Phi1, G4double Dphi); 
   virtual ~HepPolyhedronCons();
 };
 
 class HepPolyhedronCone : public HepPolyhedronCons
 {
  public:
-  HepPolyhedronCone(double Rmn1, double Rmx1, 
-                    double Rmn2, double Rmx2, double Dz);
+  HepPolyhedronCone(G4double Rmn1, G4double Rmx1, 
+                    G4double Rmn2, G4double Rmx2, G4double Dz);
   virtual ~HepPolyhedronCone();
 };
 
 class HepPolyhedronTubs : public HepPolyhedronCons
 {
  public:
-  HepPolyhedronTubs(double Rmin, double Rmax, double Dz, 
-                    double Phi1, double Dphi);
+  HepPolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz, 
+                    G4double Phi1, G4double Dphi);
   virtual ~HepPolyhedronTubs();
 };
 
 class HepPolyhedronTube : public HepPolyhedronCons
 {
  public:
-  HepPolyhedronTube (double Rmin, double Rmax, double Dz);
+  HepPolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz);
   virtual ~HepPolyhedronTube();
 };
 
 class HepPolyhedronPgon : public HepPolyhedron
 {
  public:
-  HepPolyhedronPgon(double phi, double dphi, int npdv, int nz,
-                    const double *z,
-                    const double *rmin,
-                    const double *rmax);
+  HepPolyhedronPgon(G4double phi, G4double dphi, G4int npdv, G4int nz,
+                    const G4double *z,
+                    const G4double *rmin,
+                    const G4double *rmax);
   virtual ~HepPolyhedronPgon();
 };
 
 class HepPolyhedronPcon : public HepPolyhedronPgon
 {
  public:
-  HepPolyhedronPcon(double phi, double dphi, int nz,
-                    const double *z,
-                    const double *rmin,
-                    const double *rmax);
+  HepPolyhedronPcon(G4double phi, G4double dphi, G4int nz,
+                    const G4double *z,
+                    const G4double *rmin,
+                    const G4double *rmax);
   virtual ~HepPolyhedronPcon();
 };
 
 class HepPolyhedronSphere : public HepPolyhedron
 {
  public:
-  HepPolyhedronSphere(double rmin, double rmax,
-                      double phi, double dphi,
-                      double the, double dthe);
+  HepPolyhedronSphere(G4double rmin, G4double rmax,
+                      G4double phi, G4double dphi,
+                      G4double the, G4double dthe);
   virtual ~HepPolyhedronSphere();
 };
 
 class HepPolyhedronTorus : public HepPolyhedron
 {
  public:
-  HepPolyhedronTorus(double rmin, double rmax, double rtor,
-                     double phi, double dphi);
+  HepPolyhedronTorus(G4double rmin, G4double rmax, G4double rtor,
+                     G4double phi, G4double dphi);
   virtual ~HepPolyhedronTorus();
 };
 
 class HepPolyhedronEllipsoid : public HepPolyhedron
 {
  public:
-  HepPolyhedronEllipsoid(double dx, double dy, double dz, 
-                         double zcut1, double zcut2);
+  HepPolyhedronEllipsoid(G4double dx, G4double dy, G4double dz, 
+                         G4double zcut1, G4double zcut2);
   virtual ~HepPolyhedronEllipsoid();
 };
 
 class HepPolyhedronEllipticalCone : public HepPolyhedron
 {
  public:
-  HepPolyhedronEllipticalCone(double dx, double dy, double z,
-                              double zcut1);
+  HepPolyhedronEllipticalCone(G4double dx, G4double dy, G4double z,
+                              G4double zcut1);
   virtual ~HepPolyhedronEllipticalCone();
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02IonPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
+// $Id: RE02IonPhysics.cc,v 1.3 2010-04-07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 // 13-Oct-2003 Add Comment for Ionisation of Generic Ion by T. Koi 

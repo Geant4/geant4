@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010/11/09 19:46:30 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010-11-09 19:46:30 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParameterisation
 //

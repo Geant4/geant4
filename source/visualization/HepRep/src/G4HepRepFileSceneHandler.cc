@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010/06/05 06:25:03 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010-06-05 06:25:03 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Joseph Perl  27th January 2002
@@ -41,6 +41,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Material.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyline.hh"
@@ -211,7 +212,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	
 	// HepRApp does not correctly represent the end faces of cones at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -249,18 +250,18 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		
 		vertex1 = (*fpObjectTransformation) * vertex1;
 		vertex2 = (*fpObjectTransformation) * vertex2;
-		
+				
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1",cons.GetOuterRadiusMinusZ());
-		hepRepXMLWriter->addAttValue("Radius2",cons.GetOuterRadiusPlusZ());
+		hepRepXMLWriter->addAttValue("Radius1",messenger->getScale() * cons.GetOuterRadiusMinusZ());
+		hepRepXMLWriter->addAttValue("Radius2",messenger->getScale() * cons.GetOuterRadiusPlusZ());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		
 		// Inner cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1",cons.GetInnerRadiusMinusZ());
-		hepRepXMLWriter->addAttValue("Radius2",cons.GetInnerRadiusPlusZ());
+		hepRepXMLWriter->addAttValue("Radius1",messenger->getScale() * cons.GetInnerRadiusMinusZ());
+		hepRepXMLWriter->addAttValue("Radius2",messenger->getScale() * cons.GetInnerRadiusPlusZ());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 	}
@@ -278,7 +279,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	
 	// HepRApp does not correctly represent the end faces of cylinders at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -317,16 +318,16 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1", tubs.GetOuterRadius());
-		hepRepXMLWriter->addAttValue("Radius2", tubs.GetOuterRadius());
+		hepRepXMLWriter->addAttValue("Radius1", messenger->getScale() * tubs.GetOuterRadius());
+		hepRepXMLWriter->addAttValue("Radius2", messenger->getScale() * tubs.GetOuterRadius());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		
 		// Inner cylinder.
 		if (tubs.GetInnerRadius() != 0.) {
 			hepRepXMLWriter->addPrimitive();
-			hepRepXMLWriter->addAttValue("Radius1", tubs.GetInnerRadius());
-			hepRepXMLWriter->addAttValue("Radius2", tubs.GetInnerRadius());
+			hepRepXMLWriter->addAttValue("Radius1", messenger->getScale() * tubs.GetInnerRadius());
+			hepRepXMLWriter->addAttValue("Radius2", messenger->getScale() * tubs.GetInnerRadius());
 			hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 			hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		}
@@ -486,7 +487,8 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	G4TrajectoriesModel* pTrModel =
 		dynamic_cast<G4TrajectoriesModel*>(fpModel);
 	if (!pTrModel) G4Exception
-		("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+	  ("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&)",
+	   "vis-HepRep0001", FatalException, "Not a G4TrajectoriesModel.");
 	
 	// Pointers to hold trajectory attribute values and definitions.
 	std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();

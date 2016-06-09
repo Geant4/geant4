@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.25 2010/09/17 18:45:43 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RunAction.cc,v 1.25 2010-09-17 18:45:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,12 +142,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4int tallyNumber = detector->GetTallyNumber();
   if (tallyNumber > 0) {
-    G4double tallyMass = detector->GetTallyMass();
     G4double Ebeam = kinematic->GetEbeamCumul();
     G4cout << "\n---------------------------------------------------------\n";
     G4cout << " Cumulated Doses : \tEdep      \tEdep/Ebeam \tDose" << G4endl;
-    for (G4int j=0; j<tallyNumber; j++) {
+    for (G4int j=1; j <= tallyNumber; j++) {
       G4double Edep = tallyEdep[j], ratio = 100*Edep/Ebeam;
+      G4double tallyMass = detector->GetTallyMass(j);      
       G4double Dose = Edep/tallyMass;
       G4cout << " tally " << j << ": \t \t"
              << G4BestUnit(Edep,"Energy") << "\t"
@@ -170,6 +170,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->save();
  
   // show Rndm status
+  //
   CLHEP::HepRandom::showEngineStatus();
 }
 

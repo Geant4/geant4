@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.25 2010/10/26 09:16:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PAIPhotonModel.cc,v 1.25 2010-10-26 09:16:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -104,6 +104,8 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
 
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
+
+  fParticleChange = 0;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
@@ -280,7 +282,7 @@ void
 G4PAIPhotonModel::BuildPAIonisationTable()
 {
   G4double LowEdgeEnergy , ionloss ;
-  G4double massRatio, tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
+  G4double /*massRatio,*/ tau, Tmax, Tmin, Tkin, deltaLow, /*gamma,*/ bg2 ;
   /*
   if( fPAItransferTable )
   {
@@ -319,10 +321,10 @@ G4PAIPhotonModel::BuildPAIonisationTable()
     LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
     tau = LowEdgeEnergy/proton_mass_c2 ;
     //    if(tau < 0.01)  tau = 0.01 ;
-    gamma = tau +1. ;
+    //gamma = tau +1. ;
     // G4cout<<"gamma = "<<gamma<<endl ;
     bg2 = tau*(tau + 2. ) ;
-    massRatio = electron_mass_c2/proton_mass_c2 ;
+    //massRatio = electron_mass_c2/proton_mass_c2 ;
     Tmax = MaxSecondaryEnergy(fParticle, LowEdgeEnergy); 
     // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
     // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;

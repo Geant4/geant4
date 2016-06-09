@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.7 2008/07/25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFMicroCanonical.cc,v 1.7 2008-07-25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,40 +33,8 @@
 
 #include "G4StatMFMicroCanonical.hh"
 #include "G4HadronicException.hh"
+#include "G4Pow.hh"
 #include <numeric>
-
-
-// Copy constructor
-G4StatMFMicroCanonical::G4StatMFMicroCanonical(const G4StatMFMicroCanonical &
-					       ) : G4VStatMFEnsemble()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::copy_constructor meant to not be accessable");
-}
-
-// Operators
-
-G4StatMFMicroCanonical & G4StatMFMicroCanonical::
-operator=(const G4StatMFMicroCanonical & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4StatMFMicroCanonical::operator==(const G4StatMFMicroCanonical & ) const
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator== meant to not be accessable");
-    return false;
-}
- 
-
-G4bool G4StatMFMicroCanonical::operator!=(const G4StatMFMicroCanonical & ) const
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator!= meant to not be accessable");
-    return true;
-}
-
-
 
 // constructor
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(G4Fragment const & theFragment) 
@@ -99,24 +67,26 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
 
   // Excitation Energy 
   G4double U = theFragment.GetExcitationEnergy();
-  
-  G4double A = theFragment.GetA();
-  G4double Z = theFragment.GetZ();
-  
+
+  G4int A = theFragment.GetA_asInt();
+  G4int Z = theFragment.GetZ_asInt();
+  G4double x = 1.0 - 2.0*Z/G4double(A);
+  G4Pow* g4pow = G4Pow::GetInstance();
+    
   // Configuration temperature
-  G4double TConfiguration = std::sqrt(8.0*U/A);
+  G4double TConfiguration = std::sqrt(8.0*U/G4double(A));
   
   // Free internal energy at Temperature T = 0
   __FreeInternalE0 = A*( 
 			// Volume term (for T = 0)
 			-G4StatMFParameters::GetE0() +  
 			// Symmetry term
-			G4StatMFParameters::GetGamma0()*(1.0-2.0*Z/A)*(1.0-2.0*Z/A) 
+			G4StatMFParameters::GetGamma0()*x*x 
 			) + 
     // Surface term (for T = 0)
-    G4StatMFParameters::GetBeta0()*std::pow(A,2.0/3.0) + 
+    G4StatMFParameters::GetBeta0()*g4pow->Z23(A) + 
     // Coulomb term 
-    elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*std::pow(A,1.0/3.0));
+    elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*g4pow->Z13(A));
   
   // Statistical weight
   G4double W = 0.0;
@@ -182,21 +152,18 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
 }
 
 
-
-
-
 G4double G4StatMFMicroCanonical::CalcFreeInternalEnergy(const G4Fragment & theFragment, 
-							const G4double T)
+							G4double T)
 {
-  G4double A = theFragment.GetA();
-  G4double Z = theFragment.GetZ();
-  G4double A13 = std::pow(A,1.0/3.0);
+  G4int A = theFragment.GetA_asInt();
+  G4int Z = theFragment.GetZ_asInt();
+  G4double A13 = G4Pow::GetInstance()->Z13(A);
   
-  G4double InvLevelDensityPar = G4StatMFParameters::GetEpsilon0()*(1.0 + 3.0/(A-1.0));
+  G4double InvLevelDensityPar = G4StatMFParameters::GetEpsilon0()*(1.0 + 3.0/G4double(A-1));
   
   G4double VolumeTerm = (-G4StatMFParameters::GetE0()+T*T/InvLevelDensityPar)*A;
   
-  G4double SymmetryTerm = G4StatMFParameters::GetGamma0()*(A - 2.0*Z)*(A - 2.0*Z)/A;
+  G4double SymmetryTerm = G4StatMFParameters::GetGamma0()*(A - 2*Z)*(A - 2*Z)/G4double(A);
   
   G4double SurfaceTerm = (G4StatMFParameters::Beta(T)-T*G4StatMFParameters::DBetaDT(T))*A13*A13;
   
@@ -205,15 +172,15 @@ G4double G4StatMFMicroCanonical::CalcFreeInternalEnergy(const G4Fragment & theFr
   return VolumeTerm + SymmetryTerm + SurfaceTerm + CoulombTerm;
 }
 
-
-
-G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragment,G4double & TConf)
+G4double 
+G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragment,
+						     G4double & TConf)
   // Calculates Temperature and Entropy of compound nucleus
 {
-  const G4double A = theFragment.GetA();
+  G4int A = theFragment.GetA_asInt();
   //    const G4double Z = theFragment.GetZ();
-  const G4double U = theFragment.GetExcitationEnergy();
-  const G4double A13 = std::pow(A,1.0/3.0);
+  G4double U = theFragment.GetExcitationEnergy();
+  G4double A13 = G4Pow::GetInstance()->Z13(A);
   
   G4double Ta = std::max(std::sqrt(U/(0.125*A)),0.0012*MeV); 
   G4double Tb = Ta;
@@ -221,10 +188,8 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   G4double ECompoundNucleus = CalcFreeInternalEnergy(theFragment,Ta);
   G4double Da = (U+__FreeInternalE0-ECompoundNucleus)/U;
   G4double Db = 0.0;
-  
-  
+    
   G4double InvLevelDensity = CalcInvLevelDensity(static_cast<G4int>(A));
-  
   
   // bracketing the solution
   if (Da == 0.0) {
@@ -244,8 +209,7 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
     } while (Db > 0.0);
   }
   
-  
-  G4double eps = 1.0e-14 * std::abs(Tb-Ta);
+  G4double eps = 1.0e-14 * std::fabs(Tb-Ta);
   
   for (G4int i = 0; i < 1000; i++) {
     G4double Tc = (Ta+Tb)/2.0;
@@ -277,9 +241,6 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   return 0.0;
 }
 
-
-
-
 G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFragment)
   // Choice of fragment atomic numbers and charges 
 {
@@ -289,7 +250,7 @@ G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFra
     if (RandNumber < _WCompoundNucleus) { 
 	
 	G4StatMFChannel * aChannel = new G4StatMFChannel;
-	aChannel->CreateFragment(theFragment.GetA(),theFragment.GetZ());
+	aChannel->CreateFragment(theFragment.GetA_asInt(),theFragment.GetZ_asInt());
 	return aChannel;
 	
     } else {
@@ -308,10 +269,7 @@ G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFra
     return 0;	
 }
 
-
-
-
-G4double G4StatMFMicroCanonical::CalcInvLevelDensity(const G4int anA)
+G4double G4StatMFMicroCanonical::CalcInvLevelDensity(G4int anA)
 {
     // Calculate Inverse Density Level
     // Epsilon0*(1 + 3 /(Af - 1))

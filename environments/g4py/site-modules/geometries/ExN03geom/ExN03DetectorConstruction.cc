@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.5 2006/12/01 02:37:01 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN03DetectorConstruction.cc,v 1.5 2006-12-01 02:37:01 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

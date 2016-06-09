@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh,v 1.23 2007/11/14 20:41:17 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ScoringManager.hh,v 1.23 2007-11-14 20:41:17 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4ScoringManager_h

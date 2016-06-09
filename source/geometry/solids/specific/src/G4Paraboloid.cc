@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.14 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Paraboloid.cc,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Paraboloid
 //
@@ -66,11 +66,12 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 {
   if( (pDz <= 0.) || (pR2 <= pR1) || (pR1 < 0.) )
   {
-    G4cerr << "Error - G4Paraboloid::G4Paraboloid(): " << GetName() << G4endl
-           << "Z half-length must be larger than zero or R1>=R2 " << G4endl;
-    G4Exception("G4Paraboloid::G4Paraboloid()", "InvalidSetup", 
-                FatalException,
-                "Invalid dimensions. Negative Input Values or R1>=R2.");
+    std::ostringstream message;
+    message << "Invalid dimensions. Negative Input Values or R1>=R2 - "
+            << GetName();
+    G4Exception("G4Paraboloid::G4Paraboloid()", "GeomSolids0002", 
+                FatalErrorInArgument, message,
+                "Z half-length must be larger than zero or R1>=R2.");
   }
 
   r1 = pR1;
@@ -262,6 +263,7 @@ G4Paraboloid::CalculateExtent(const EAxis pAxis,
 
     if(pAxis == kXAxis || pAxis == kYAxis || pAxis == kZAxis)
     {
+
       pMin =  kInfinity;
       pMax = -kInfinity;
 
@@ -423,10 +425,11 @@ G4ThreeVector G4Paraboloid::SurfaceNormal( const G4ThreeVector& p) const
 
   if(n.mag2() == 0)
   {
-    G4cerr << "WARNING - G4Paraboloid::SurfaceNormal(p)" << G4endl
-           << "          p = " << 1 / mm * p << " mm" << G4endl;
-    G4Exception("G4Paraboloid::SurfaceNormal(p)", "Notification",
-                JustWarning, "No normal defined for this point p.");
+    std::ostringstream message;
+    message << "No normal defined for this point p." << G4endl
+            << "          p = " << 1 / mm * p << " mm";
+    G4Exception("G4Paraboloid::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, message);
   }
   return n;
 }
@@ -501,7 +504,7 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
   {
     // Is there a problem with squaring rho twice?
 
-    if(!vRho2) // Needs to be treated seperately.
+    if(vRho2<tol2) // Needs to be treated seperately.
     {
       intersection = ((rho2 - k2)/k1 - p.z())/v.z();
       if(intersection < 0) { return kInfinity; }
@@ -547,19 +550,20 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
   }
   else
   {
-    G4cerr << "WARNING - G4Paraboloid::DistanceToIn(p,v)" << G4endl
-           << "          p = " << p * (1/mm) << " mm" << G4endl
-           << "          v = " << v * (1/mm) << " mm" << G4endl;
+    std::ostringstream message;
     if(Inside(p) == kInside)
     {
-      G4Exception("G4Paraboloid::DistanceToIn(p,v)", "Notification",
-                  JustWarning, "Point p is inside!");
+      message << "Point p is inside! - " << GetName() << G4endl;
     }
     else
     {
-      G4Exception("G4Paraboloid::DistanceToIn(p,v)", "Notification",
-                  JustWarning, "There's a bug in this function (apa)!");
+      message << "Likely a problem in this function, for solid: " << GetName()
+              << G4endl;
     }
+    message << "          p = " << p * (1/mm) << " mm" << G4endl
+            << "          v = " << v * (1/mm) << " mm";
+    G4Exception("G4Paraboloid::DistanceToIn(p,v)", "GeomSolids1002",
+                JustWarning, message);
     return 0;
   }
 }
@@ -571,40 +575,34 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double safe = 0;
-  if(std::fabs(p.z()) > dz + 0.5 * kCarTolerance)
+  G4double safz = -dz+std::fabs(p.z());
+  if(safz<0) { safz=0; }
+  G4double safr = kInfinity;
+
+  G4double rho = p.x()*p.x()+p.y()*p.y();
+  G4double paraRho = (p.z()-k2)/k1;
+  G4double sqrho = std::sqrt(rho);
+
+  if(paraRho<0)
   {
-    // If we're below or above the paraboloid treat it as a cylinder with
-    // radius r2.
-
-    if(p.perp2() > sqr(r2 + 0.5 * kCarTolerance))
-    {
-      // This algorithm is exact for now but contains 2 sqrt calculations.
-      // Might be better to replace with approximated version
-
-      G4double dRho = p.perp() - r2;
-      safe = std::sqrt(sqr(dRho) + sqr(std::fabs(p.z()) - dz));
-    }
-    else
-    {
-      safe = std::fabs(p.z()) - dz;
-    }
+    safr=sqrho-r2;
+    if(safr>safz) { safz=safr; }
+    return safz;
   }
-  else 
-  {
-    G4double paraRho = std::sqrt(k1 * p.z() + k2);
-    G4double rho = p.perp();
 
-    if(rho > paraRho + 0.5 * kCarTolerance)
-    {
-      // Should check the value of paraRho here,
-      // for small values the following algorithm is bad.
+  G4double sqprho = std::sqrt(paraRho);
+  G4double dRho = sqrho-sqprho;
+  if(dRho<0) { return safz; }
 
-      safe = k1 / 2 * (-paraRho + rho) / rho;
-      if(safe < 0) { safe = 0; }
-    }
-  }
-  return safe;
+  G4double talf = -2.*k1*sqprho;
+  G4double tmp  = 1+talf*talf;
+  if(tmp<0.) { return safz; }
+
+  G4double salf = talf/std::sqrt(tmp);
+  safr = std::fabs(dRho*salf);
+  if(safr>safz) { safz=safr; }
+
+  return safz;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -727,12 +725,13 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
       }
       return intersection;
     }
-    G4cerr << "WARNING - G4Paraboloid::DistanceToOut(p,v,...)" << G4endl
-           << "          p = " << p << G4endl
-           << "          v = " << v << G4endl;
-    G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "Notification",
-                JustWarning,
-                "There is no intersection between given line and solid!");
+    std::ostringstream message;
+    message << "There is no intersection between given line and solid!"
+            << G4endl
+            << "          p = " << p << G4endl
+            << "          v = " << v;
+    G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "GeomSolids1002",
+                JustWarning, message);
 
     return kInfinity;
   }
@@ -905,11 +904,11 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
 #ifdef G4SPECSDEBUG
     if(kOutside == Inside(p))
     {
-      G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "Notification",
+      G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "GeomSolids1002",
                   JustWarning, "Point p is outside!");
     }
     else
-      G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "Notification",
+      G4Exception("G4Paraboloid::DistanceToOut(p,v,...)", "GeomSolids1002",
                   JustWarning, "There's an error in this functions code.");
 #endif
     return kInfinity;
@@ -929,16 +928,18 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
-     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4Paraboloid::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16);
+     message << "Point p is outside !?" << G4endl
+             << "Position:" << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm";
+     message.precision(oldprc) ;
+     G4Exception("G4Paraboloid::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
@@ -980,6 +981,7 @@ G4VSolid* G4Paraboloid::Clone() const
 
 std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -989,6 +991,7 @@ std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
      << "    radius at -dz: " << r1/mm << " mm \n"
      << "    radius at dz:  " << r2/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }
@@ -1133,7 +1136,7 @@ G4Paraboloid::CreateRotatedVertices(const G4AffineTransform& pTransform,
   {
     DumpInfo();
     G4Exception("G4Paraboloid::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;

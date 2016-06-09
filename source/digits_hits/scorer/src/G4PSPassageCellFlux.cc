@@ -52,8 +52,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
-     weighted(true)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+    weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -61,7 +61,8 @@ G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
 					 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+    weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);
@@ -74,22 +75,12 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
-    G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-    G4VPVParameterisation* physParam = physVol->GetParameterisation();
-    G4VSolid* solid = 0;
-    if(physParam)
-    { // for parameterized volume
-      G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                  ->GetReplicaNumber(indexDepth);
-      solid = physParam->ComputeSolid(idx, physVol);
-      solid->ComputeDimensions(physParam,idx,physVol);
-    }
-    else
-    { // for ordinary volume
-      solid = physVol->GetLogicalVolume()->GetSolid();
-    }
+    G4int idx = ((G4TouchableHistory*)
+		 (aStep->GetPreStepPoint()->GetTouchable()))
+                 ->GetReplicaNumber(indexDepth);
+    G4double cubicVolume = ComputeVolume(aStep, idx);
 
-    fCellFlux /= solid->GetCubicVolume();
+    fCellFlux /= cubicVolume;
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
   }
@@ -175,3 +166,26 @@ void G4PSPassageCellFlux::DefineUnitAndCategory(){
 }
 
 
+G4double G4PSPassageCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    if(idx<0)
+    {
+      G4ExceptionDescription ED;
+      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
+      G4Exception("G4PSPassageCellFlux::ComputeVolume","DetPS0013",JustWarning,ED);
+    }
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+  
+  return solid->GetCubicVolume();
+}

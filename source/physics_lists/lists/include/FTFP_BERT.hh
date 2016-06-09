@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT.hh,v 1.1 2007/10/19 15:35:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FTFP_BERT.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

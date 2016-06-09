@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRep.hh,v 1.18 2009/11/23 05:42:28 perl Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HepRep.hh,v 1.18 2009-11-23 05:42:28 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 /**

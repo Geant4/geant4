@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackTerminator.hh,v 1.4 2007/06/01 07:53:26 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrackTerminator.hh,v 1.4 2007-06-01 07:53:26 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4TrackTerminator

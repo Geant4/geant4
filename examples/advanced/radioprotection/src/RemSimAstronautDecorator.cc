@@ -29,7 +29,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAstronautDecorator.cc,v 1.7 2006/06/29 16:23:33 gunter Exp $
+// $Id: RemSimAstronautDecorator.cc,v 1.7 2006-06-29 16:23:33 gunter Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 
@@ -44,18 +44,14 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
-#include "RemSimSensitiveDetector.hh"
-#include "RemSimROGeometry.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
-#include "G4UserLimits.hh"
 #include "RemSimMoonHabitat.hh"
 
 RemSimAstronautDecorator::RemSimAstronautDecorator(RemSimVGeometryComponent* comp, G4bool moon)
   : RemSimDecorator(comp), phantom(0), phantomLog(0), phantomPhys(0)
 { 
  flag = moon;
- sensitiveDetector = 0;
 }
 RemSimAstronautDecorator::~RemSimAstronautDecorator()
 {
@@ -111,36 +107,6 @@ void RemSimAstronautDecorator::ConstructAstronaut(G4VPhysicalVolume* motherVolum
   phantomVisAtt -> SetVisibility(true);
   phantomVisAtt -> SetForceSolid(true);
   phantomLog -> SetVisAttributes(phantomVisAtt); 
- 
- //Sensitive Detector  
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
-  G4String sensitiveDetectorName = "AstronautSD";
-  
-  
-  sensitiveDetector = new  RemSimSensitiveDetector(sensitiveDetectorName);
-  G4int VoxelNbAlongZ = 30;
- 
-  G4double  translation = 0;
-    
-  if (flag == true) 
-    {
-      G4double thickShelter = 4.5 *m;
-      translation = 0.5*m + thickShelter/2.;
-   }
- 
-  RemSimROGeometry* ROGeometry = new RemSimROGeometry(phantomX,
-                                                      phantomY,
-                                                      phantomZ,
-						      VoxelNbAlongZ, 
-                                                      translation);
-  ROGeometry -> BuildROGeometry();
-  sensitiveDetector -> SetROgeometry(ROGeometry);
-  SDman->AddNewDetector(sensitiveDetector);
-  phantomLog -> SetSensitiveDetector(sensitiveDetector);
-
-  // Set max step allowd to particles in the phantom
-  phantomLog -> SetUserLimits(new G4UserLimits(0.1*cm));
 }
 
 void RemSimAstronautDecorator::ChangeThickness(G4double)

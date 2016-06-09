@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010/11/26 13:36:35 gcosmo Exp $
+$Id: History,v 1.186 2010-11-26 13:36:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,61 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-Nov-2011  G.Cosmo (geom-specific-V09-04-09)
+- Fixed trivial Coverity defects on assignment operators...
+
+25-Oct-2011  G.Cosmo (geom-specific-V09-04-08)
+- Fixed logic in G4VTwistSurface::GetEdgeVisibility() in treatment of corners.
+
+16-Sep-2011  G.Cosmo (geom-specific-V09-04-07)
+- Fix compilation error in code within G4SPECSDEBUG. No functional changes.
+
+13-Sep-2011  I.Hrivnacova (geom-specific-V09-04-06)
+- G4TriangularFacet: fixed tests where square root was compared to
+  half Cartesian tolerance; now compared to kCarTolerance.
+  Addressing problem report #1242.
+
+25-Aug-2011  G.Cosmo
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+- Added unit test for G4ExtrudedSolid (J.Apostolakis).
+
+22-Aug-2011  I.Hrivnacova (geom-specific-V09-04-05)
+- Fix in G4TriangularFacet::Intersect() to take into account geometrical
+  tolerance and cases of zero distance from surface's facet.
+- Fix in G4TessellatedSolid::DistanceToOut(p) and DistanceToIn(p) to exactly
+  compute distance from facet avoiding use of 'outgoing' flag shortcut variant.
+- Addressing problem report #1242.
+
+17-Aug-2011  T.Nikitina (geom-specific-V09-04-04)
+- Fix in G4Paraboloid::DistanceToIn(p,v) and DistanceToIn(p) to properly
+  take into account tolerance and provide better estimation of distance
+  respectively. Addresses problem report #1234.
+
+04-Aug-2011  T.Nikitina (geom-specific-V09-04-03)
+- Added SetReferences() and InvertFacets() to G4GenericTrap::CreatePolyhedron()
+  for proper visualisation of Boolean compositions with G4GenericTrap.
+- Added SetReferences() to G4TessellatedSolid::CreatePolyhedron()
+  for proper visualisation of Boolean compositions with G4TessellatedSolid.
+- Requires tag "greps-V09-04-04", for addressing problem report #1235.
+
+17-May-2011  I.Hrivnacova (geom-specific-V09-04-02)
+- G4ExtrudedSolid: fix in Inside(p) for false overlap reporting.
+  Addressing problem report #1211.
+
+12-May-2011  G.Cosmo (geom-specific-V09-04-01)
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+06-May-2011  G.Cosmo (geom-specific-V09-04-00)
+- Use G4 typedef for CLHEP types.
 
 26-Nov-2010  T.Nikitina (geom-specific-V09-03-20)
 - Fixes in G4GenericTrap reported by SBT unit test in SurfaceNormal(),

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.16 2008/08/19 15:31:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalSkinSurface.cc,v 1.16 2008-08-19 15:31:52 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation

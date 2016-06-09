@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiMinusInelastic.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGPiMinusInelastic.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
  
 #include "G4RPGPiMinusInelastic.hh"

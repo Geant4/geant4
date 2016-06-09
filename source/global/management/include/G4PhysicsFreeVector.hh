@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.15 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsFreeVector.hh,v 1.15 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //--------------------------------------------------------------------
@@ -88,37 +88,9 @@ class G4PhysicsFreeVector : public G4PhysicsVector
 
   protected:
 
-    size_t FindBinLocation(G4double theEnergy) const;
+    virtual size_t FindBinLocation(G4double theEnergy) const;
          // Find bin# in which theEnergy belongs - virtual function
 };
 
-
-inline 
-size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsFreeVector, FindBinLocation is implemented using
-  // the binary search algorithm.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhysicsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsFreeVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-
-  size_t lowerBound = 0;
-  size_t upperBound = numberOfNodes-2;
-
-  while (lowerBound <= upperBound)
-  {
-    size_t midBin = (lowerBound + upperBound)/2;
-    if( theEnergy < binVector[midBin] )
-       { upperBound = midBin-1; }
-    else
-       { lowerBound = midBin+1; }
-  }
-
-  return upperBound;
-}
 
 #endif

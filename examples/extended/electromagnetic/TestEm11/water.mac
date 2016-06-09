@@ -1,12 +1,12 @@
-# $Id: water.mac,v 1.5 2009/09/22 14:20:31 maire Exp $
+# $Id: water.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
 #
 # no constraint on tracking step
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
-/testem/det/setSizeX  3 cm
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Water  3 cm
 /testem/det/setSizeYZ 3 cm
 #
 /testem/phys/addPhysics  local	# em physics

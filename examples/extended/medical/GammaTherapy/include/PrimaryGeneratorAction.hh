@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.6 2010/10/26 12:09:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: PrimaryGeneratorAction.hh,v 1.6 2010-10-26 12:09:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef PrimaryGeneratorAction_h

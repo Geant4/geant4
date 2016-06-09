@@ -23,79 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4UnstableFermiFragment.cc,v 1.8 2006/06/29 20:13:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UnstableFermiFragment.cc,v 1.8 2006-06-29 20:13:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko: integer Z and A, constructor
 
 #include "G4UnstableFermiFragment.hh"
-#include "G4FermiPhaseSpaceDecay.hh"
-#include "G4HadronicException.hh"
-#include <numeric>
 
-G4UnstableFermiFragment::G4UnstableFermiFragment()
+G4UnstableFermiFragment::G4UnstableFermiFragment(G4int anA, G4int aZ, 
+						 G4int Pol, G4double ExE)
+  : G4VFermiFragment(anA,aZ,Pol,ExE)
 {
-}
-
-G4UnstableFermiFragment::G4UnstableFermiFragment(const G4UnstableFermiFragment &) : G4VFermiFragment()
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4UnstableFermiFragment::copy_constructor meant to not be accessable");
-}
-
+  isStable = false;
+} 
 
 G4UnstableFermiFragment::~G4UnstableFermiFragment()
+{}
+
+G4FragmentVector * 
+G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
 {
-}
-
-  
-const G4UnstableFermiFragment & G4UnstableFermiFragment::operator=(const G4UnstableFermiFragment &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4UnstableFermiFragment::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4UnstableFermiFragment::operator==(const G4UnstableFermiFragment &) const
-{
-  return false;
-}
-
-G4bool G4UnstableFermiFragment::operator!=(const G4UnstableFermiFragment &) const
-{
-  return true;
-}
-
-
-
-G4FragmentVector * G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
-{
-  G4FermiPhaseSpaceDecay thePhaseSpace;
-
-  std::vector<G4LorentzVector*> * P_i = thePhaseSpace.Decay(aMomentum.m(), Masses);
+  std::vector<G4LorentzVector*> * P = thePhaseSpace.Decay(aMomentum.m(), Masses);
 
   G4ThreeVector Beta = aMomentum.boostVector();
 
   G4FragmentVector * theResult = new G4FragmentVector;
+  size_t N = P->size();
 
-  for (std::vector<G4LorentzVector*>::iterator i = P_i->begin(); i != P_i->end(); i++)
+  for (size_t i=0; i<N; ++i)
     {
-#ifdef G4NO_ISO_VECDIST
-      std::vector<G4LorentzVector*>::difference_type tmp_n = 0;
-      std::distance(P_i->begin(),i,tmp_n);
-      G4int n = tmp_n;
-#else
-      G4int n = std::distance(P_i->begin(),i);
-#endif
-      (*i)->boost(Beta);
-      theResult->push_back(new G4Fragment(static_cast<G4int>(AtomNum[n]),
-					  static_cast<G4int>(Charges[n]),
-					  *(*i)));
+      G4LorentzVector* v = (*P)[i];
+      v->boost(Beta);
+      theResult->push_back(new G4Fragment(AtomNum[i],Charges[i],*v));
       
-      delete *i;
+      delete v;
     }
-  delete P_i;
+  delete P;
   
   return theResult;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.5 2010/06/02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EmStandardPhysics.hh,v 1.5 2010-06-02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

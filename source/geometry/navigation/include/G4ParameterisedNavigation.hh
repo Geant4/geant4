@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.6 2007/11/09 16:06:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParameterisedNavigation.hh,v 1.6 2007-11-09 16:06:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4ParameterisedNavigation

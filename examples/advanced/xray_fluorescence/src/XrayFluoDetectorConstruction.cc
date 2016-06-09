@@ -58,8 +58,8 @@
 #include "XrayFluoNistMaterials.hh"
 
 
-//#include "G4Region.hh"
-//#include "G4RegionStore.hh"
+// #include "G4Region.hh"
+// #include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,7 +91,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       =  std::sqrt(40) * mm;
+  PixelSizeXY       =  std::sqrt(40.) * mm;
   PixelThickness = 2.7 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
@@ -135,8 +135,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
 
-  // G4String regName = "SampleRegion";
-  //sampleRegion = new G4Region(regName);  
+//   G4String regName = "SampleRegion";
+//   sampleRegion = new G4Region(regName);  
 
   if (!phaseSpaceFlag) SetDetectorType(defaultDetectorType);
   
@@ -178,8 +178,10 @@ void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
        }*/
   else 
     {
-      G4String excep = type + "detector type unknown";
-      G4Exception(excep);
+      G4ExceptionDescription execp;
+      execp << type + "detector type unknown";
+      G4Exception("XrayFluoDataSet::LoadData()","example-xray_fluorescence06",
+	  FatalException, execp);
     }
 }
 
@@ -649,8 +651,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   }
   // cut per region
   
-  //logicSample->SetRegion(sampleRegion);
-  //sampleRegion->AddRootLogicalVolume(logicSample);
+//   logicSample->SetRegion(sampleRegion);
+//   sampleRegion->AddRootLogicalVolume(logicSample);
   
 
   
@@ -749,7 +751,7 @@ void XrayFluoDetectorConstruction::UpdateGeometry()
   if (logicHPGe) delete logicHPGe;
   if (physiHPGe) delete physiHPGe;
 
-  //if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
+  if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
   if (solidSample) delete solidSample;
   if (logicSample) delete logicSample;
   if (physiSample) delete physiSample;

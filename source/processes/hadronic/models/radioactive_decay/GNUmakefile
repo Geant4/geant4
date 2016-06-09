@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2009/07/24 18:27:13 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2009-07-24 18:27:13 vnivanch Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -18,6 +19,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/lowenergy/include/ \
             -I$(G4BASE)/processes/electromagnetic/utils/include/ \

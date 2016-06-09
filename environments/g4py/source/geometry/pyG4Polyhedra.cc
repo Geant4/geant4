@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Polyhedra.cc,v 1.2 2007/07/11 10:02:22 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4Polyhedra.cc,v 1.2 2007-07-11 10:02:22 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Polyhedra.cc
 //

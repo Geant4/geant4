@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BoldyshevTripletModel.hh,v 1.1 2010/11/10 17:09:16 flongo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BoldyshevTripletModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #ifndef G4BoldyshevTripletModel_h
@@ -87,8 +87,22 @@ private:
   G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right);
   G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&);
 
-
+  G4double asinh (G4double value);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4BoldyshevTripletModel::asinh (G4double value)
+{
+  G4double out;
+  
+  if (value>0) 
+    out = std::log(value+std::sqrt(value*value+1));
+  else
+    out = -std::log(-value+std::sqrt(value*value+1));
+  
+  return out;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

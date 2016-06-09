@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.23 2010/10/25 09:20:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Isotope.cc,v 1.23 2010-10-25 09:20:40 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,6 +38,7 @@
 // 26.02.02: fIndexInTable renewed
 // 17.10.06: if fA is not defined in the constructor, it is computed from
 //           NistManager v.Ivanchenko
+// 25.10.11: new scheme for G4Exception  (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,14 +54,16 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 
 // Create an isotope
 //
-G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
-: fName(Name), fZ(Z), fN(N), fA(A), fCountUse(0)
+G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int m)
+: fName(Name), fZ(Z), fN(N), fA(A), fm(m), fCountUse(0)
 {
-  if (Z<1) { G4Exception
-    ("G4Isotope: ERROR! It is not allowed to create an Isotope with Z < 1" );
+  if (Z<1) { 
+    G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException,
+      "G4Isotope: ERROR! It is not allowed to create an Isotope with Z < 1" );
   }
-  if (N<Z) { G4Exception
-    ("G4Isotope: ERROR! Attempt to create an Isotope with N < Z !!!" );
+  if (N<Z) {
+    G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, 
+      "G4Isotope: ERROR! Attempt to create an Isotope with N < Z !!!" );
   }
   if (A<=DBL_MIN) {
     fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  
@@ -75,7 +78,7 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
 //                            for usage restricted to object persistency
 
 G4Isotope::G4Isotope(__void__&)
-  : fZ(0), fN(0), fA(0), fCountUse(0), fIndexInTable(0)
+  : fZ(0), fN(0), fA(0), fm(0), fCountUse(0), fIndexInTable(0)
 {
 }
 
@@ -114,6 +117,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fZ = right.fZ;
     fN = right.fN;
     fA = right.fA;
+    fm = right.fm;    
     fCountUse = right.fCountUse;
   }
   return *this;

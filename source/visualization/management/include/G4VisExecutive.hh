@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.10 2010/05/28 16:48:03 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VisExecutive.hh,v 1.10 2010-05-28 16:48:03 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).

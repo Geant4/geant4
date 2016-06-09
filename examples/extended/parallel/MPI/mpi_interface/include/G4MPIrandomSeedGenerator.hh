@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPIrandomSeedGenerator.hh,v 1.1 2007/11/16 14:05:40 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: G4MPIrandomSeedGenerator.hh,v 1.1 2007-11-16 14:05:40 kmura Exp $
+// $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   G4MPIrandomSeedGenerator.hh

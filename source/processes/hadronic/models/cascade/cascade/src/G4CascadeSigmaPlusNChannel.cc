@@ -23,11 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSigmaPlusNChannel.cc,v 1.7 2010/12/15 07:40:41 gunter Exp $
+// $Id: G4CascadeSigmaPlusNChannel.cc,v 1.7 2010-12-15 07:40:41 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadeSigmaPlusNChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -906,4 +911,4 @@ namespace {
 G4CascadeSigmaPlusNChannelData::data_t
 G4CascadeSigmaPlusNChannelData::data(spn2bfs, spn3bfs, spn4bfs,
 				     spn5bfs, spn6bfs, spn7bfs,
-				     spnCrossSections, "SigmaPlusN");
+				     spnCrossSections, sp*neu, "SigmaPlusN");

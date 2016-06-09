@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.30 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Ellipsoid.cc,v 1.30 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
 //
@@ -79,11 +79,10 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
   // Check Semi-Axis
   if ( (pxSemiAxis<=0.) || (pySemiAxis<=0.) || (pzSemiAxis<=0.) )
   {
-     G4cerr << "ERROR - G4Ellipsoid::G4Ellipsoid(): " << GetName() << G4endl
-           << "         Invalid semi-axis !"
-           << G4endl;
-     G4Exception("G4Ellipsoid::G4Ellipsoid()", "InvalidSetup",
-                 FatalException, "Invalid semi-axis.");
+     std::ostringstream message;
+     message << "Invalid semi-axis - " << GetName();
+     G4Exception("G4Ellipsoid::G4Ellipsoid()", "GeomSolids0002",
+                 FatalErrorInArgument, message);
   }
   SetSemiAxis(pxSemiAxis, pySemiAxis, pzSemiAxis);
 
@@ -98,11 +97,10 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
   }
   else
   {
-     G4cerr << "ERROR - G4Ellipsoid::G4Ellipsoid(): " << GetName() << G4endl
-           << "         Invalid z-coordinate for cutting plane !"
-           << G4endl;
-     G4Exception("G4Ellipsoid::G4Ellipsoid()", "InvalidSetup",
-                 FatalException, "Invalid z-coordinate for cutting plane.");
+     std::ostringstream message;
+     message << "Invalid z-coordinate for cutting plane - " << GetName();
+     G4Exception("G4Ellipsoid::G4Ellipsoid()", "GeomSolids0002",
+                 FatalErrorInArgument, message);
   }
 }
 
@@ -726,23 +724,24 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
           *n= truenorm;
         } break;
         default:           // Should never reach this case ...
-          G4int oldprc = G4cout.precision(16);
-          G4cout << G4endl;
           DumpInfo();
-          G4cout << "Position:"  << G4endl << G4endl;
-          G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-          G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-          G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-          G4cout << "Direction:" << G4endl << G4endl;
-          G4cout << "v.x() = "   << v.x() << G4endl;
-          G4cout << "v.y() = "   << v.y() << G4endl;
-          G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-          G4cout << "Proposed distance :" << G4endl << G4endl;
-          G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
-          G4cout.precision(oldprc);
+          std::ostringstream message;
+          G4int oldprc = message.precision(16);
+          message << "Undefined side for valid surface normal to solid."
+                  << G4endl
+                  << "Position:"  << G4endl
+                  << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+                  << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+                  << "   p.z() = "   << p.z()/mm << " mm" << G4endl
+                  << "Direction:" << G4endl << G4endl
+                  << "   v.x() = "   << v.x() << G4endl
+                  << "   v.y() = "   << v.y() << G4endl
+                  << "   v.z() = "   << v.z() << G4endl
+                  << "Proposed distance :" << G4endl
+                  << "   distMin = "    << distMin/mm << " mm";
+          message.precision(oldprc);
           G4Exception("G4Ellipsoid::DistanceToOut(p,v,..)",
-                      "Notification", JustWarning,
-                      "Undefined side for valid surface normal to solid.");
+                      "GeomSolids1002", JustWarning, message);
           break;
       }
     }
@@ -762,16 +761,17 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
-     G4int oldprc = G4cout.precision(16) ;
-     G4cout << G4endl ;
      DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4cout.precision(oldprc) ;
-     G4Exception("G4Ellipsoid::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?" );
+     std::ostringstream message;
+     G4int oldprc = message.precision(16);
+     message << "Point p is outside !?" << G4endl
+             << "Position:"  << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm";
+     message.precision(oldprc) ;
+     G4Exception("G4Ellipsoid::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, message);
   }
 #endif
 
@@ -922,7 +922,7 @@ G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
   {
     DumpInfo();
     G4Exception("G4Ellipsoid::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
 
@@ -956,6 +956,7 @@ G4VSolid* G4Ellipsoid::Clone() const
 
 std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -969,6 +970,7 @@ std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
      << "    lower cut plane level z: " << zBottomCut/mm << " mm \n"
      << "    upper cut plane level z: " << zTopCut/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }
@@ -979,7 +981,7 @@ std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 
 G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
 {
-  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi, theta;
+  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi;
   G4double cosphi, sinphi, costheta, sintheta, alpha, beta, max1, max2, max3;
 
   max1  = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
@@ -989,7 +991,6 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
   phi   = RandFlat::shoot(0.,twopi);
-  theta = RandFlat::shoot(0.,pi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);
   costheta = RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;

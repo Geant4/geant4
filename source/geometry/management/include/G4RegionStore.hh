@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.10 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RegionStore.hh,v 1.10 2006-11-30 10:39:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4RegionStore
 //
@@ -84,7 +84,7 @@ class G4RegionStore : public std::vector<G4Region*>
       // to FALSE. Used by the run manager to notify that the
       // physics table has been updated.
 
-    void UpdateMaterialList(G4VPhysicalVolume* currentWorld);
+    void UpdateMaterialList(G4VPhysicalVolume* currentWorld=0);
       // Forces recomputation of material lists in all regions
       // in the store.
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.17 2010/11/23 15:14:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BezierSurface.cc,v 1.17 2010-11-23 15:14:51 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

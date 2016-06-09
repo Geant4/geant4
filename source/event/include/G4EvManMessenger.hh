@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.hh,v 1.6 2006/11/03 03:11:13 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EvManMessenger.hh,v 1.6 2006-11-03 03:11:13 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4EvManMessenger_h

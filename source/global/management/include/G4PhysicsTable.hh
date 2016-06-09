@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.18 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsTable.hh,v 1.18 2007-11-13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

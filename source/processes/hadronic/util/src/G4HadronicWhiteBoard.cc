@@ -22,12 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+
 #include "G4HadronicWhiteBoard.hh"
 
 
 G4HadronicWhiteBoard::G4HadronicWhiteBoard()
-  : theProjectile(0), theDef(0), theName(0)
+ : theProjectile(0), theDef(0), theName(0), theE(0.0), thePx(0.0),
+   thePy(0.0), thePz(0.0), theA(0), theZ(0)
 {}
 
 

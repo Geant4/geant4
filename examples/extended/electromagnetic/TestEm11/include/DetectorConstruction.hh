@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006/06/29 16:39:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.hh,v 1.13 2006-06-29 16:51:06 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,58 +34,77 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 
+class G4Box;
+class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
+     const G4int MaxAbsor = 10;			// 0 + 9  
+     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+ ~DetectorConstruction();
 
-  public:
-       
-     void SetSizeX      (G4double);
-     void SetSizeYZ     (G4double);           
-     void SetMaterial   (G4String);
-     void SetNbOfLayers (G4int nb);                    
-     void SetMagField   (G4double);
-          
-     G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
-     
-  public:  
-                    
-     G4double     GetAbsorSizeX()    {return absorSizeX;};
-     G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};           
-     G4Material*  GetAbsorMaterial() {return absorMaterial;};
-     G4int        GetNbOfLayers()    {return nbOfLayers;};   
-     
-     void         PrintParameters();
-                       
-  private:
-
-     G4double            absorSizeX;
-     G4double            absorSizeYZ;     
-     G4Material*         absorMaterial;
-     G4int               nbOfLayers;
-     G4double            layerThickness;
-     G4UniformMagField*  magField;
-     G4VPhysicalVolume*  pAbsor;
-
-     DetectorMessenger* detectorMessenger;
-
-  private:
+public:
+  
+  void SetNbOfAbsor     (G4int);      
+  void SetAbsorMaterial (G4int,const G4String&);     
+  void SetAbsorThickness(G4int,G4double);
+                
+  void SetAbsorSizeYZ   (G4double);          
+  void SetNbOfDivisions (G4int,G4int);
     
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+  void SetMagField      (G4double);
+     
+  G4VPhysicalVolume* Construct();
+  void               UpdateGeometry();
+     
+public:
+
+  G4int       GetNbOfAbsor()             {return NbOfAbsor;}     
+  G4Material* GetAbsorMaterial (G4int i) {return AbsorMaterial[i];};
+  G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
+  G4double    GetXfront        (G4int i) {return xfront[i];};
+            
+  G4double GetAbsorSizeX()               {return AbsorSizeX;}; 
+  G4double GetAbsorSizeYZ()              {return AbsorSizeYZ;};
+  
+  G4int  GetNbOfDivisions(G4int i)       {return NbOfDivisions[i];}; 
+  
+  void PrintParameters();
+   
+private:
+
+  G4int              NbOfAbsor;
+  G4Material*        AbsorMaterial [MaxAbsor];
+  G4double           AbsorThickness[MaxAbsor];
+  G4double           xfront[MaxAbsor];  
+
+  G4int              NbOfDivisions[MaxAbsor];
+
+  G4double           AbsorSizeX;
+  G4double           AbsorSizeYZ;
+  G4Material*        defaultMaterial;  
+  
+  G4VPhysicalVolume* physiWorld;
+  
+  G4UniformMagField* magField;
+
+  DetectorMessenger* detectorMessenger;
+
+private:
+
+  void DefineMaterials();
+  void ComputeParameters();
+  G4VPhysicalVolume* ConstructVolumes();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ConversionUtils.hh,v 1.2 2006/09/12 18:29:31 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ConversionUtils.hh,v 1.2 2006-09-12 18:29:31 tinslay Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay September 2006
 //

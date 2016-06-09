@@ -32,8 +32,8 @@
 //    *                              *
 //    ********************************
 //
-// $Id: PurgMagEventAction.cc,v 1.6 2010/06/07 05:18:38 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PurgMagEventAction.cc,v 1.6 2010-06-07 05:18:38 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

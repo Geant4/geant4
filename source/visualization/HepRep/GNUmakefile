@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.24 2006/05/22 08:54:13 allison Exp $
+# $Id: GNUmakefile,v 1.24 2006-05-22 08:54:13 allison Exp $
 
 name := G4visHepRep
 
@@ -16,7 +16,7 @@ GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
-include $(G4INSTALL)/config/G4VIS_BUILD.gmk
+# include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 ifdef G4LIB_USE_ZLIB

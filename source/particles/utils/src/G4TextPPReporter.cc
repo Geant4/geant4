@@ -29,15 +29,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPReporter.cc,v 1.3 2010/08/10 15:47:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TextPPReporter.cc,v 1.3 2010-08-10 15:47:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4TextPPReporter.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4DecayTable.hh"  
+#include "G4VDecayChannel.hh"  
 #include "G4Tokenizer.hh"
 #include <iomanip>
 #include <fstream>       

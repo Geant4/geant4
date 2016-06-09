@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EventActionMessenger.cc,v 1.6 2006/06/29 16:32:39 gunter Exp $
+// $Id: A01EventActionMessenger.cc,v 1.6 2006-06-29 16:32:39 gunter Exp $
 // --------------------------------------------------------------
 //
 

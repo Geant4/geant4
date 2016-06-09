@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.1 2010/10/18 15:56:17 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: SteppingAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -38,15 +38,17 @@
 #include "EventAction.hh"
 
 #include "G4Step.hh"
-
-////#include "G4RunManager.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,
-                                         EventAction* evt)
-:detector(det), eventaction(evt)					 
-{ }
+SteppingAction::SteppingAction()					 
+{
+  detector = (DetectorConstruction*)
+             G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  eventaction = (EventAction*)
+                G4RunManager::GetRunManager()->GetUserEventAction();	       
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

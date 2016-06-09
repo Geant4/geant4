@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VElasticCollision.hh,v 1.2 2006/06/29 20:36:10 gunter Exp $ //
+// $Id: G4VElasticCollision.hh,v 1.2 2006-06-29 20:36:10 gunter Exp $ //
 
 #ifndef G4VElasticCollision_h
 #define G4VElasticCollision_h

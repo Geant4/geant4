@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.19 2008/07/10 09:40:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalVolumeStore.cc,v 1.19 2008-07-10 09:40:09 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4LogicalVolumeStore
 //
@@ -165,11 +165,12 @@ G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
   }
   if (verbose)
   {
-     G4cerr << "ERROR - G4LogicalVolumeStore::GetVolume()" << G4endl
-            << "        Volume " << name << " NOT found in store !" << G4endl
-            << "        Returning NULL pointer." << G4endl;
-     G4Exception("G4LogicalVolumeStore::GetVolume()", "InvalidQuery",
-                 JustWarning, "Volume NOT found in store !");
+     std::ostringstream message;
+     message << "Volume NOT found in store !" << G4endl
+             << "        Volume " << name << " NOT found in store !" << G4endl
+             << "        Returning NULL pointer.";
+     G4Exception("G4LogicalVolumeStore::GetVolume()",
+                 "GeomMgt1001", JustWarning, message);
   }
   return 0;
 }

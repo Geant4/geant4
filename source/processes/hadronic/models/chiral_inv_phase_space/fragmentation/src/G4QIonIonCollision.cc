@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.9 2010/06/19 07:46:44 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QIonIonCollision.cc,v 1.9 2010-06-19 07:46:44 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -139,7 +139,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
 #endif
   G4int maxCuts = 7;                                 // @@ Can be reduced for low energies
   //
-  // >>>>>>>>>> Find collisions meeting collision conditions and the NN interaction XS
+  // >>----------->> Find collisions meeting collision conditions and the NN interaction XS
   //
   G4double outerRadius = theProjNucleus.GetOuterRadius()+theTargNucleus.GetOuterRadius();
   G4QProbability theProbability(2212);               // *** proj/targ nucleons ***
@@ -314,7 +314,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
           if((theProbability.GetPomDiffProbability(s,Distance2)/Probability >
               G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
           { 
-            // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
+            // ------------->> diffractive interaction @@ IsSingleDiffractive called once
             if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
             else                          ExciteDiffParticipants(aProjectile, aTarget);
             G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
@@ -329,7 +329,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
           }
           else
           {
-            // -------------->>>>> nondiffractive = soft interaction
+            // -------------->> nondiffractive = soft interaction
             // sample nCut+1 (cut Pomerons) pairs of strings can be produced
             G4int nCut;                              // Result in a chosen number of cuts
             G4double* running = new G4double[nCutMax];// @@ This limits the max cuts
@@ -451,7 +451,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
 #endif
   }  
   // 
-  // >>>>>>>> make soft collisions (ordering is vital)
+  // >>........>> make soft collisions (ordering is vital)
   //
   G4QInteractionVector::iterator it;
 #ifdef debug
@@ -506,7 +506,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
   G4cout<<"G4QIonIonCollision::Constr: -> Parton pairs for SOFT strings are made"<<G4endl;
 #endif  
   //
-  // >>>>>>>>>>>>>>> make the rest as the diffractive interactions
+  // >>.............>> make the rest as the diffractive interactions
   //
   for(unsigned i = 0; i < theInteractions.size(); i++) // Interactions are reduced bySoft
   {
@@ -546,7 +546,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
   G4cout<<"G4QIonIonCollision::Construct: DiffractivePartonPairs are created"<<G4endl;
 #endif  
   //
-  // >>>>>>>>>>>>>> clean-up  Interactions, if necessary
+  // >>.......>> clean-up  Interactions, if necessary
   //
   std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
   theInteractions.clear();
@@ -558,7 +558,7 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
   theTargNucleus.DoLorentzBoost(theCMVelocity);// Boost theResidualTargNucleus to RotatedLS
   // @@ Nucleus isn't completely in LS, it needs the toZ (-ProjRot) rotation to consE/M
 #ifdef debug
-  G4cout<<">>>>>>>>>>>>G4QIonIonCollision::Construct: >>>>>> Strings are created "<<G4endl;
+  G4cout<<">>........>>G4QIonIonCollision::Construct: >>..>> Strings are created "<<G4endl;
 #endif
   G4QPartonPair* aPair;
   G4QString* aString=0;
@@ -1742,7 +1742,9 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
     catch (G4QException& error)                             //                          | |
     {                                                       //                          | |
       G4cerr<<"***G4QIonIonCollision::Fragment: G4QE Exception is catched"<<G4endl; //  | |
-      G4Exception("G4QIonIonCollision::Fragment:","27",FatalException,"CHIPSCrash");//  | |
+      // G4Exception("G4QIonIonCollision::Fragment:","27",FatalException,"CHIPSCrash");//  | |
+      G4Exception("G4QIonIonCollision::Fragment()", "HAD_CHPS_0027",
+                  FatalException, "CHIPSCrash");
     }                                                       //                          | |
     delete pan;                              // Delete the Nuclear Environment <-----<--+-+
     if(output)                               // Output exists                           |
@@ -1759,7 +1761,7 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
   }
   else if(!striNum) G4cout<<"-Warning-G4QIonIonCollision::Fragment:NothingWasDone"<<G4endl;
 #ifdef debug
-  G4cout<<"====>G4QIonIonCollision::Fragment: Final #OfResult="<<theResult->size()<<G4endl;
+  G4cout<<"=--=>G4QIonIonCollision::Fragment: Final #OfResult="<<theResult->size()<<G4endl;
 #endif
     G4int nQ =theQuasmons.size();
     if(nQ) theQuasmons.clear();                              // @@ Not necesary ?
@@ -1882,7 +1884,7 @@ void G4QIonIonCollision::Breeder()
 #endif
     G4LorentzVector curString4M = curString->Get4Momentum();
 #ifdef debug
-    G4cout<<"====>G4QIonIonCollision::Breeder: String#"<<astring<<",s4M/m="<<curString4M
+    G4cout<<"=--=>G4QIonIonCollision::Breeder: String#"<<astring<<",s4M/m="<<curString4M
           <<curString4M.m()<<", LPart="<<curString->GetLeftParton()->GetPDGCode()
           <<", RPart="<<curString->GetRightParton()->GetPDGCode()<<G4endl;
 #endif
@@ -2391,7 +2393,9 @@ void G4QIonIonCollision::Breeder()
             G4int icon=0;                              // Loop counter
 #endif
             G4QHadronVector::iterator ih;
+#ifdef debug
             G4bool found=false;
+#endif
             for(ih = theResult->begin(); ih != theResult->end(); ih++)
             {
 #ifdef debug
@@ -2410,12 +2414,14 @@ void G4QIonIonCollision::Breeder()
                 G4int BaN=selHP->GetBaryonNumber();
                 curStrChg+=Chg;
                 curStrBaN+=BaN;
-                G4cout<<"-EMC->>>>G4QIonIonCollision::Breed: S+=H, 4M="<<curString4M<<",M="
+                G4cout<<"-EMC->>>G4QIonIonCollision::Breed: S+=H, 4M="<<curString4M<<", M="
                       <<curString4M.m()<<", Charge="<<curStrChg<<", B="<<curStrBaN<<G4endl;
 #endif
                 delete selHP;                          // delete the Hadron
                 theResult->erase(ih);                  // erase the Hadron from theResult
+#ifdef debug
                 found=true;
+#endif
                 break;                                 // beak the LOOP over hadrons
               }
             } // End of the LOOP over hadrons
@@ -2997,7 +3003,7 @@ void G4QIonIonCollision::Breeder()
             G4QHadron* sHad = new G4QHadron(miPDG, mi4M);
             theResult->push_back(sHad);          // The original string=hadron is filled
 #ifdef debug
-            G4cout<<">>>>>>G4QIonIonCollision::Breeder: CorStr=Hadr is Filled, 4M="
+            G4cout<<">>..>>G4QIonIonCollision::Breeder: CorStr=Hadr is Filled, 4M="
                   <<curString4M<<", StPDG="<<miPDG<<G4endl;
 #endif
           }
@@ -3040,7 +3046,7 @@ void G4QIonIonCollision::Breeder()
         G4QContent pSQC=strings[i]->GetQC();             // String Quark Content
         ssQC+=pSQC;
 #ifdef debug
-        G4cout<<"====>G4QIonIonCollision::Breed:S#"<<i<<",4M="<<pS4M<<",QC="<<pSQC<<G4endl;
+        G4cout<<"=--=>G4QIonIonCollision::Breed:S#"<<i<<",4M="<<pS4M<<",QC="<<pSQC<<G4endl;
 #endif
       }
 #ifdef debug
@@ -3063,7 +3069,7 @@ void G4QIonIonCollision::Breeder()
       G4int           curHBN=curHadron->GetBaryonNumber();
 #endif
 #ifdef debug
-      G4cout<<">>>>>>>>G4QIonIonCollision::Breeder:S#"<<astring<<",H#"<<aTrack<<",PDG="
+      G4cout<<">>...>>G4QIonIonCollision::Breeder:S#"<<astring<<",H#"<<aTrack<<",PDG="
             <<hPDG<<",4M="<<curHadron->Get4Momentum()<<G4endl;
 #endif
       if(std::abs(hPDG)%10 > 2)
@@ -3090,7 +3096,7 @@ void G4QIonIonCollision::Breeder()
           curStrBaN-=BaN;
           curHCh-=Chg;
           curHBN-=BaN;
-          G4cout<<"-EMC->>>>G4QIonIonCollision::Breed:Str*Filled, 4M="<<p4M<<", PDG="<<PDG
+          G4cout<<"-EMC->.>>G4QIonIonCollision::Breed:Str*Filled, 4M="<<p4M<<", PDG="<<PDG
                 <<", Chg="<<Chg<<", BaN="<<BaN<<G4endl;
 #endif
         }
@@ -3109,7 +3115,7 @@ void G4QIonIonCollision::Breeder()
         G4int curBN=curHadron->GetBaryonNumber();
         curStrChg-=curCh;
         curStrBaN-=curBN;
-        G4cout<<"-EMC->>>>>>G4QIonIonCollision::Breeder: curH filled 4M="<<curH4M<<",PDG="
+        G4cout<<"-EMC->>..>>G4QIonIonCollision::Breeder: curH filled 4M="<<curH4M<<",PDG="
               <<curHadron->GetPDGCode()<<", Chg="<<curCh<<", BaN="<<curBN<<G4endl;
 #endif
       }
@@ -3534,7 +3540,7 @@ G4bool G4QIonIonCollision::ExciteSingDiffParticipants(G4QHadron* projectile,
 } // End of ExciteSingleDiffParticipants
 
 void G4QIonIonCollision::SetParameters(G4int nC,G4double stT, G4double tbD, G4double SigPt)
-{//  ======================================================================================
+{
   nCutMax            = nC;             // max number of pomeron cuts
   stringTension      = stT;            // string tension for absorbed energy
   tubeDensity        = tbD;            // Flux Tube Density of nuclear nucleons

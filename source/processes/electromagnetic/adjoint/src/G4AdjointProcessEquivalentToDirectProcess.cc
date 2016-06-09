@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointProcessEquivalentToDirectProcess.cc,v 1.1 2009/11/11 00:31:19 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointProcessEquivalentToDirectProcess.cc,v 1.1 2009-11-11 00:31:19 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

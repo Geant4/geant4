@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEPionMinusInelastic.hh,v 1.12 2007-02-24 05:23:37 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEPionMinusInelastic.hh,v 1.12 2007/02/24 05:23:37 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// original by J.L. Chuma, TRIUMF, 03-Feb-1997
 //
- // Hadronic Process: Low Energy PionMinus Inelastic Process
- // original by J.L. Chuma, TRIUMF, 03-Feb-1997
- // Last modified: 27-Mar-1997
  
 #ifndef G4LEPionMinusInelastic_h
 #define G4LEPionMinusInelastic_h 1
@@ -42,23 +40,22 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
- 
- class G4LEPionMinusInelastic : public G4InelasticInteraction
- {
- public:
+
+
+class G4LEPionMinusInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LEPionMinusInelastic() : G4InelasticInteraction("G4LEPionMinusInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
-    }
+    G4LEPionMinusInelastic(const G4String& name = "G4LEPionMinusInelastic");
     
-    ~G4LEPionMinusInelastic() { }
+    ~G4LEPionMinusInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
-    
- private:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
+
+  private:
     
     void Cascade(                               // derived from CASPIM
       G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
@@ -68,9 +65,7 @@
       G4ReactionProduct &targetParticle,
       G4bool &incidentHasChanged, 
       G4bool &targetHasChanged,
-      G4bool &quasiElastic );
-    
- };
- 
+      G4bool &quasiElastic );  
+};
+
 #endif
- 

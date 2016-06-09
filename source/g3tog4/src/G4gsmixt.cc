@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.13 2006/06/29 18:14:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsmixt.cc,v 1.13 2006-06-29 18:14:37 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4Isotope.hh"
 
-void PG4gsmixt(G4String tokens[])
+void PG4gsmixt(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsmixt);
@@ -53,11 +53,12 @@ void PG4gsmixt(G4String tokens[])
     G4double *a = Rpar + 1;
     G4double *z = Rpar + 1+std::abs(nlmat);
     G4double *wmat = Rpar + 1 + 2*std::abs(nlmat);
-
+/*
     for (int i=0; i<std::abs(nlmat); i++){
       //Rpar[i]=Rpar[i]*g/mole;
       Rpar[i]=Rpar[i];
     };
+*/
     G4gsmixt(imate,name,a,z,dens,nlmat,wmat);
 }
 
@@ -85,9 +86,11 @@ void G4gsmixt(G4int imate, G4String name, G4double* a, G4double* z,
       // total molecular weight 
       aMol += wmat[i]*a[i]; 
     }  
-    if (aMol == 0.)
-      G4Exception("\nG4mixt: Total molecular weight in " +
-        name + " = 0.");       
+    if (aMol == 0.) {
+      G4String text = "G4mixt: Total molecular weight in " + name + " = 0.";       
+      G4Exception("G4gsmixt()", "G3toG40016", FatalException, text);
+      return;
+    }
     for (i=0; i<std::abs(nlmat); i++) {
       // weight fractions
       wmat[i] = wmat[i]*a[i]/aMol;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.25 2009/10/29 16:57:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ionEffectiveCharge.cc,v 1.25 2009-10-29 16:57:39 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

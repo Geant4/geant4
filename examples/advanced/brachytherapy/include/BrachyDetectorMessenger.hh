@@ -30,8 +30,8 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.7 2006/06/29 15:47:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyDetectorMessenger.hh,v 1.7 2006-06-29 15:47:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef BrachyDetectorMessenger_h
@@ -41,13 +41,9 @@
 #include "G4UImessenger.hh"
 
 class BrachyDetectorConstruction;
-//class BrachyFactoryIr;
-//class BrachyRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-//class G4UIcmdWithAnInteger;
-//class G4UIcmdWithADoubleAndUnit;
-//class G4UIcmdWithoutParameter;
+
 
 class BrachyDetectorMessenger: public G4UImessenger
 {

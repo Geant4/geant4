@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserStackingAction.cc,v 1.7 2006/06/29 18:10:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserStackingAction.cc,v 1.7 2006-06-29 18:10:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UserStackingAction.hh"
@@ -47,7 +47,7 @@ G4UserStackingAction::G4UserStackingAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserStackingAction.";
    G4Exception("G4UserStackingAction::G4UserStackingAction()",
-              "Event0002",FatalException,msg);
+              "Event0031",FatalException,msg);
  }
 }
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2010/11/09 23:36:31 asaim Exp $
+$Id: History,v 1.11 2010-11-09 23:36:31 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,30 @@ $Id: History,v 1.11 2010/11/09 23:36:31 asaim Exp $
 
                        Package History file
                        --------------------
+
+05 November 2011- tag nanobeam-V09-04-06 - S. Incerti  
+- removed export=root option in HistoManager.cc
+
+03 October 2011- tag nanobeam-V09-04-05 - G.Folger  
+- fix compilation warnings from gcc46 in TabulatedField3D.cc
+
+19 August 2011- tag nanobeam-V09-04-04 - S. Incerti
+- Removed usage of G4Exception
+
+18 August 2011- tag nanobeam-V09-04-03 - S. Incerti
+- Removed usage of water material and cleanup
+
+16 August 2011- tag nanobeam-V09-04-02 - S. Incerti
+- Removed usage of system command
+
+03 July 2011 - tag nanobeam-V09-04-01 - S. Incerti
+- Updated README for use with full version of CLHEP
+
+27 May 2011 - tag nanobeam-V09-04-00 - S. Incerti
+- Created new tag
+
+20 May 2011 - tag nanobeam-V09-03-05 - S. Incerti
+- Switched to non-numbered physics list
 
 09 November 2010 - tag nanobeam-V09-03-04 - M. Asai
 - Fix AIDA file option.

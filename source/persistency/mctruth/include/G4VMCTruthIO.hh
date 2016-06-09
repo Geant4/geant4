@@ -42,7 +42,7 @@ class G4VMCTruthIO
       G4VMCTruthIO();
       // Constructor
 
-      virtual ~G4VMCTruthIO() {};
+      virtual ~G4VMCTruthIO();
       // Destructor
 
     public: // With description

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01SteppingMessenger.hh,v 1.3 2006/06/29 17:16:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F01SteppingMessenger.hh,v 1.3 2006-06-29 17:16:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

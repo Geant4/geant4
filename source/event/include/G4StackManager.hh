@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.13 2009/08/15 15:45:50 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4StackManager.hh,v 1.13 2009-08-15 15:45:50 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

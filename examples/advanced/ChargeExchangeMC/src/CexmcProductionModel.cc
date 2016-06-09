@@ -78,7 +78,7 @@ void  CexmcProductionModel::SetAngularRange( G4double  top, G4double  bottom,
     {
         G4double  binWidth( ( top - bottom ) / nmbOfDivs );
         G4double  curTop( curBottom );
-        curBottom -=  binWidth;
+        curBottom -= binWidth;
         angularRanges.push_back( CexmcAngularRange( curTop, curBottom, i ) );
     }
 #ifdef CEXMC_USE_ROOT

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:48:36 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:48:36 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -35,7 +35,9 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4AntiBsMesonZero.hh
         G4AntiDMesonZero.hh
         G4AntiKaonZero.hh
+        G4BcMesonMinus.hh
         G4BMesonMinus.hh
+        G4BcMesonPlus.hh
         G4BMesonPlus.hh
         G4BMesonZero.hh
         G4BsMesonZero.hh
@@ -45,6 +47,7 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4DsMesonMinus.hh
         G4DsMesonPlus.hh
         G4Eta.hh
+        G4Etac.hh
         G4EtaPrime.hh
         G4JPsi.hh
         G4KaonMinus.hh
@@ -56,13 +59,16 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4PionMinus.hh
         G4PionPlus.hh
         G4PionZero.hh
+	G4Upsiron.hh
     SOURCES
         G4AntiBMesonZero.cc
         G4AntiBsMesonZero.cc
         G4AntiDMesonZero.cc
         G4AntiKaonZero.cc
         G4BMesonMinus.cc
+        G4BcMesonMinus.cc
         G4BMesonPlus.cc
+        G4BcMesonPlus.cc
         G4BMesonZero.cc
         G4BsMesonZero.cc
         G4DMesonMinus.cc
@@ -71,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4DsMesonMinus.cc
         G4DsMesonPlus.cc
         G4Eta.cc
+        G4Etac.cc
         G4EtaPrime.cc
         G4JPsi.cc
         G4KaonMinus.cc
@@ -82,6 +89,7 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4PionMinus.cc
         G4PionPlus.cc
         G4PionZero.cc
+	G4Upsiron.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4materials

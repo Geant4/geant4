@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.29 2009/06/18 19:08:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RunAction.cc,v 1.29 2009-06-18 19:08:18 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -278,6 +278,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   fac = unit/(TotNbofEvents*binWidth);
   histoManager->Scale(ih,fac);
     
+  ih = 12;
+  fac = 1./TotNbofEvents;
+  histoManager->Scale(ih,fac);
+      
   // save histograms
   histoManager->save();
 

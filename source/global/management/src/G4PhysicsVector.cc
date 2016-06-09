@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.49 2010/11/01 13:55:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicsVector.cc,v 1.49 2010-11-01 13:55:53 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -51,17 +51,22 @@
 //    17 Nov. 2009, H.Kurashige   : use pointer for DataVector
 //    04 May  2010  H.Kurashige   : use G4PhyscisVectorCache
 //    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
+//    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
 #include <iomanip>
+
+G4Allocator<G4PhysicsVector> aPVAllocator;
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   useSpline(spline)
+   useSpline(spline), 
+   dBin(0.), baseBin(0.),
+   verboseLevel(0)
 {
   cache      = new G4PhysicsVectorCache();
 }
@@ -77,7 +82,12 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  cache      = new G4PhysicsVectorCache();
+  cache        = new G4PhysicsVectorCache();
+  dBin         = right.dBin;
+  baseBin      = right.baseBin;
+  verboseLevel = right.verboseLevel;
+
+  DeleteData();
   CopyData(right);
 }
 
@@ -86,11 +96,12 @@ G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
   if (&right==this)  { return *this; }
-  if (type != right.type)  { return *this; }
+  dBin         = right.dBin;
+  baseBin      = right.baseBin;
+  verboseLevel = right.verboseLevel;
 
-  //DeleteData();
+  DeleteData();
   CopyData(right);
-
   return *this;
 }
 
@@ -198,8 +209,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   comment = "";
 
   // retrieve in ascii mode
-  if (ascii)
-  {
+  if (ascii){
     // binning
     fIn >> edgeMin >> edgeMax >> numberOfNodes; 
     if (fIn.fail())  { return false; }
@@ -229,6 +239,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
       binVector.push_back(vBin);
       dataVector.push_back(vData);
     }
+
     return true ;
   }
 
@@ -258,6 +269,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     dataVector.push_back(value[2*i+1]);
   }
   delete [] value;
+
   return true;
 }
 
@@ -274,8 +286,9 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
       dataVector[i] *= factorV;
     } 
   }
-  n = secDerivative.size();
-  if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
+  //  n = secDerivative.size();
+  // if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
+  secDerivative.clear();
 
   edgeMin *= factorE;
   edgeMax *= factorE;
@@ -364,7 +377,8 @@ void G4PhysicsVector::FillSecondDerivatives()
  
   G4int n = numberOfNodes-1;
 
-  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n << G4endl;
+  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n 
+  //	 << "   " << this << G4endl;
   // G4cout << *this << G4endl;
 
   G4double* u = new G4double [n];
@@ -452,8 +466,8 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(!useSpline)  { return useSpline; }
   secDerivative.clear();
+  if(!useSpline)  { return useSpline; }
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
   {

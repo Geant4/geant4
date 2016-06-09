@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.hh,v 1.17 2010/09/28 20:15:00 mkelsey Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4BigBanger.hh,v 1.17 2010-09-28 20:15:00 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.

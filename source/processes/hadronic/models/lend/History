@@ -1,0 +1,324 @@
+# $Id: History,v 1.8 2010-11-25 19:47:46 tkoi Exp $
+# -----------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for LEND Cross Section and Model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+30 September 2011 Tatsumi Koi (hadr-lend-V09-04-24)
+fix problem, after setting changes
+        include/G4LENDModel.hh
+
+25 September 2011 Tatsumi Koi (hadr-lend-V09-04-23)
+----------------------------------------------
+migrate to integer A and Z 
+	src/G4LENDModel.cc
+	src/G4LENDElastic.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDCapture.cc
+	src/G4LENDFission.cc
+
+13 September 2011 Tatsumi Koi (hadr-lend-V09-04-22)
+----------------------------------------------
+- Add protection of 0 or negative kinetic energy neutrons produced by numerical precision issues
+        src/G4LENDElastic.cc
+
+12 September 2011 Tatsumi Koi (hadr-lend-V09-04-21)
+----------------------------------------------
+- Merge to new interface of VCrossSectionDataSet (hadr-cross-V09-04-14)
+
+6 September 2011 Tatsumi Koi (hadr-lend-V09-04-20)
+----------------------------------------------
+- Introduce BuildPhysicsTable
+        include/G4LENDModel.hh
+- Bug fix 
+        src/G4LENDCaptureCrossSection.cc
+        src/G4LENDElasticCrossSection.cc
+        src/G4LENDFissionCrossSection.cc
+        src/G4LENDInelasticCrossSection.cc
+
+6 September 2011 Tatsumi Koi (hadr-lend-V09-04-19)
+----------------------------------------------
+This tag keeps OLD interface of VCrossSectionDataSet
+- Change for reducing output
+        include/G4LENDModel.hh
+        include/G4LENDCrossSection.hh
+- Add UltraLowEnergyExtrapolatedXS
+        src/G4LENDCaptureCrossSection.cc
+        src/G4LENDElasticCrossSection.cc
+        src/G4LENDFissionCrossSection.cc
+        src/G4LENDInelasticCrossSection.cc
+- Fix oddy output
+        src/G4LENDManager.cc
+
+29 August 2011 Tatsumi Koi (hadr-lend-V09-04-18)
+----------------------------------------------
+- Migrate new interface of VCrossSectionDataSet (hadr-cross-V09-04-14)
+	src/G4LENDCrossSection.cc
+	include/G4LENDCrossSection.hh
+
+16 June 2011 Ben Morgan (hadr-lend-V09-04-17)
+----------------------------------------------
+- sources.cmake : Add additional G4PROCESSES_EXPORT compile definition needed
+  for DLL build.
+
+2 June 2011 Tatsumi Koi (hadr-lend-V09-04-16)
+----------------------------------------------
+- Fix gcc4.6 warning message
+	src/tpia_target.cc
+
+2 June 2011 Tatsumi Koi (hadr-lend-V09-04-15)
+----------------------------------------------
+- Fix bug 
+	include/tpia_target.h
+
+2 June 2011 Ben Morgan (hadr-lend-V09-04-14)
+----------------------------------------------
+- sources.cmake : Added support for expat in the CMake build. The expat 
+  include directories are added to the include path, and the module is linked 
+  to the expat libraries.
+  The interface variables EXPAT_INCLUDE_DIRS and EXPAT_LIBRARIES are used
+  so there is no dependence on whether the internal or system expat is used.
+
+1 June 2011 Tatsumi Koi (hadr-lend-V09-04-14)<-Actually I did not make this tag
+------------------------------------------------
+- Migrate recent update in G4CrossSectionDataStore
+	include/G4LENDCrossSection.hh
+	src/G4LENDCrossSection.cc
+
+31 May 2011 Tatsumi Koi (hadr-lend-V09-04-13)
+------------------------------------------------
+- Set proper name for cross section
+- Migrate minKinEnergy and maxKinEnergy in G4VCrossSectionDataSet
+	include/G4LENDElasticCrossSection.hh
+	include/G4LENDCaptureCrossSection.hh
+	include/G4LENDFissionCrossSection.hh
+	include/G4LENDInelasticCrossSection.hh
+	include/G4LENDCrossSection.hh
+	src/G4LENDCrossSection.cc
+
+30 May 2011 Tatsumi Koi (hadr-lend-V09-04-12)
+------------------------------------------------
+- Set proper name 
+	include/G4LENDElastic.hh
+- Change format of output messages 
+	src/G4LENDCrossSection.cc
+	src/G4LENDModel.cc
+- Introduce verboseLevel and its changing method 
+	include/G4LENDManager.hh
+	src/G4LENDManager.cc
+
+30 May 2011 Gabriele Cosmo (hadr-lend-V09-04-11)
+------------------------------------------------
+- Renamed DLL_API macro to DLL_LEND.
+
+27 May 2011 Tatsumi Koi (hadr-lend-V09-04-10)
+------------------------------------------------
+- Rename endlXXX -> lendXXX in private values
+- Move create_used_target_map from constructor to BuildPhysicsTable
+  Cross Sections 
+- Set proper name
+- Set proper modelName
+- Fix link error undefined reference to `tpia_samplingMethods_linear'
+	include/tpia_target.h
+
+26 May 20111 Gunter Folger (hadr-lend-V09-04-09)
+------------------------------------------------
+- Fix compiler warning in tpia_mac.cc on slc5/gcc43, 
+	empty body of for() at line 321 
+
+26 May 2011 Gabriele Cosmo (hadr-lend-V09-04-08)
+------------------------------------------------
+- Added corrections to allow for generation of DLLs on Windows.
+- Fixed file name for G4LENDUsedTarget.cc.
+- Updated sources.cmake script.
+
+24 May 2011 Gunter Folger (hadr-lend-V09-04-07)
+------------------------------------------------
+- Fix sources.cmake to reflect renamed header files
+
+18 May 2011 Gunter Folger (hadr-lend-V09-04-06)
+------------------------------------------------
+- include expat headers froom externals on Windows
+- xDataMisc.cc: imporve condition to include unistd.h/direct.h 
+   to avoid warning on Windows from g++ dependency building.
+    
+5 May 2011 Tatsumi Koi (hadr-lend-V09-04-05)
+------------------------------------------------
+- protect by namescope GIDI
+
+30 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-04)
+------------------------------------------------
+- rename GIDI4GEANT to G4GIDI
+
+
+30 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-03)
+------------------------------------------------
+- rename .hpp to .hh
+
+
+26 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-02)
+------------------------------------------------
+- Migration to WIN-VC
+	src/statusMessageReporting.cc
+	src/tpia_decayChannel.cc
+	src/tpia_Legendre.cc
+	src/tpia_map.cc
+	src/tpia_misc.cc
+	src/xData.cc
+	src/xDataMisc.cc
+
+
+25 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-01)
+------------------------------------------------
+- delete unneccesary "namespace std" 
+	src/G4LENDCapture.cc
+	src/G4LENDCaptureCrossSection.cc
+	src/G4LENDCrossSection.cc
+	src/G4LENDElastic.cc
+	src/G4LENDElasticCrossSection.cc
+	src/G4LENDFission.cc
+	src/G4LENDFissionCrossSection.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDInelasticCrossSection.cc
+	src/G4LENDManager.cc
+	src/G4LENDModel.cc
+	src/G4LENDUesdTarget.cc
+- move "namespace std" to proper position 
+	src/GIDI4GEANT.cc
+	src/GIDI4GEANT_map.cc
+	src/GIDI4GEANT_target.cc
+
+
+1 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-00)
+------------------------------------------------
+- delete "namespace std" in headers 
+	include/GIDI4GEANT_map.hpp
+	include/GIDI4GEANT.hpp
+	include/GIDI4GEANT_target.hpp
+
+
+25 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-07)
+------------------------------------------------
+- Modified expected value of G4LENDDATA
+	From LENDDATA/xmcf.n_1.map          
+      	To   LENDDATA/
+
+25 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-06)
+------------------------------------------------
+- One more move "namespace std" in headers to sources
+
+25 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-05)
+------------------------------------------------
+- Fixed compile error in gcc4.4 and make printing out banner
+  Move "namespace std" in headers to sources
+
+24 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-04)
+------------------------------------------------
+- Fixed compile error in gcc4.4, however still have 17 warning in gcc 4.4
+	src/GIDI4GEANT_Misc.cc
+
+24 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-03)
+------------------------------------------------
+- Fixed warning messages, now we have no warning in gcc 4.1.2
+
+24 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-02)
+------------------------------------------------
+- Fixed most of warning messages, however still remain some
+
+23 Nov 2010 Gabriele Cosmo (hadr-lend-V09-03-01)
+------------------------------------------------
+- Corrected GNUmakefile and added CMake scripts with dependencies.
+
+18 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-00)
+---------------------------------------------
+- First implementation of LEND (Low Energy Nuclear Data) Cross Section and Model
+	History
+	GNUMakefile
+	include/G4LENDCapture.hh
+	include/G4LENDCaptureCrossSection.hh
+	include/G4LENDCrossSection.hh
+	include/G4LENDElastic.hh
+	include/G4LENDElasticCrossSection.hh
+	include/G4LENDFission.hh
+	include/G4LENDFissionCrossSection.hh
+	include/G4LENDHeader.hh
+	include/G4LENDInelastic.hh
+	include/G4LENDInelasticCrossSection.hh
+	include/G4LENDManager.hh
+	include/G4LENDModel.hh
+	include/G4LENDUsedTarget.hh
+	src/G4LENDCapture.cc
+	src/G4LENDCaptureCrossSection.cc
+	src/G4LENDCrossSection.cc
+	src/G4LENDElastic.cc
+	src/G4LENDElasticCrossSection.cc
+	src/G4LENDFission.cc
+	src/G4LENDFissionCrossSection.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDInelasticCrossSection.cc
+	src/G4LENDManager.cc
+	src/G4LENDModel.cc
+	src/G4LENDUesdTarget.cc
+
+	include/GIDI4GEANT.hpp
+	include/GIDI4GEANT_Misc.hpp
+	include/GIDI4GEANT_map.hpp
+	include/GIDI4GEANT_mass.hpp
+	include/GIDI4GEANT_target.hpp
+	src/GIDI4GEANT.cc
+	src/GIDI4GEANT_Misc.cc
+	src/GIDI4GEANT_map.cc
+	src/GIDI4GEANT_mass.cc
+	src/GIDI4GEANT_target.cc
+
+	include/tpi_IDs.h
+	include/tpia_depot.h
+	include/tpia_map.h
+	include/tpia_mass.h
+	include/tpia_misc.h
+	include/tpia_target.h
+	src/tpi_IDs.cc
+	src/tpia_Legendre.cc
+	src/tpia_angular.cc
+	src/tpia_angularEnergy.cc
+	src/tpia_channel.cc
+	src/tpia_decayChannel.cc
+	src/tpia_depot.cc
+	src/tpia_frame.cc
+	src/tpia_kinetics.cc
+	src/tpia_map.cc
+	src/tpia_mass.cc
+	src/tpia_misc.cc
+	src/tpia_multiplicity.cc
+	src/tpia_particle.cc
+	src/tpia_product.cc
+	src/tpia_samplingMethods.cc
+	src/tpia_target.cc
+	src/tpia_target_heated.cc
+
+	include/gString.h
+	include/statusMessageReporting.h
+	include/xData.h
+	include/xDataExtras.h
+	src/gString.cc
+	src/statusMessageReporting.cc
+	src/xData.cc
+	src/xDataExtras.cc
+	src/xDataMisc.cc
+	src/xData_1d_x.cc
+	src/xData_2d_xindex_y.cc
+	src/xData_2d_xshared_yhistogram.cc
+	src/xData_2d_xy.cc
+	src/xData_matrix.cc
+

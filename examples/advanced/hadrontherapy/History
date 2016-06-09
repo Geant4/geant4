@@ -8,6 +8,47 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+25.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-08
+	   - remove #include for not needed unistd.h in 
+	      HadrontherapyMatrix.cc
+
+21.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-07
+	   - remove #include for not needed unistd.h in 
+	      HadrontherapyInteractionParameters; unistd.h does not exist on Windows
+	   - Fix compilation error when G4ANALYSIS_USE_ROOT is set in 
+	       HadrontherapyMatrix::TotalEnergyDeposit()
+
+21.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-06
+	   - Updated and cleaned physics
+	   - Updated macro files;
+	   
+14.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-05
+	   - Corrected macro files for a double call to the Decay physics
+	   - Added the complete physics to the batch.mac file
+	   - Improved and corrected the hadron_therapy.mac file
+
+14.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-04
+	   - Warnings removed.
+	   - A batch.mac file is added to permit batch runs without visualisation.
+
+02.11.2011 F.Romano; Tag: hadrontherapy-V09-04-03
+	   - Migration to new G4Exception scheme
+
+29.10.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-02
+	   - Various warnings removed.
+	   - Removed a wrong dependence on ROOT.
+
+23.09.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-01
+	   - Warnings removal.
+
+06.06.2011 V.Ivanchenko; Tag: hadrontherapy-V09-04-00
+           - Removed obsolete hadron elastic builders
+
+09.12.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-17
+           - Changed materials definition (by macro command) for Range Shifter with the NIST one. 
+	     The same macro /beamLine/RangeShifter/RSMat must be used, but with 
+	     NIST material name as parameter.
+
 26.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-16
 	   - General code review
 

@@ -96,8 +96,8 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   G4FragmentVector * result = new G4FragmentVector;
   
   // Read properties of the nucleus.
-  nucleusA = ( G4int ) nucleus.GetN(); // GetN should in fact get GetA
-  nucleusZ = ( G4int ) nucleus.GetZ();
+  nucleusA = nucleus.GetA_asInt();
+  nucleusZ = nucleus.GetZ_asInt();
   excE                  = nucleus.GetEnergyDeposit();
   nucleusMomentumVector = nucleus.GetMomentum();
 

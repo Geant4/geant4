@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.9 2010/01/11 16:41:02 gcosmo Exp $
-# GEANT4 tag $Name: geant4-09-04-beta-01 $
+# $Id: GNUmakefile,v 1.9 2010-01-11 16:41:02 gcosmo Exp $
+# GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------

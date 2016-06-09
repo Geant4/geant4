@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.14 2006/06/29 18:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ImportanceAlgorithm.cc,v 1.14 2006-06-29 18:17:20 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,15 +41,11 @@
 #include "G4ImportanceAlgorithm.hh"
 
 G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false)
-{}
+{
+}
 
 G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
 {
-  if(fWorned) {
-    G4cout << G4endl;
-    Warning("~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen");
-    G4cout << G4endl;
-  }
 }
 
 G4Nsplit_Weight
@@ -60,21 +56,21 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
   G4Nsplit_Weight nw = {0,0};
   if (ipost>0.){
     if (!(ipre>0.)){
-      Error("G4ImportanceAlgorithm::Calculate() - ipre==0.");
+      Error("Calculate() - ipre==0.");
     }
     G4double ipre_over_ipost = ipre/ipost;
     if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
       std::ostringstream os;
-      os << "Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = "
-	 << ipre_over_ipost << '\0' << G4endl;
+      os << "Calculate() - ipre_over_ipost ! in [0.25, 4]." << G4endl
+         << "ipre_over_ipost = " << ipre_over_ipost << ".";
       Warning(os.str());
       fWorned = true;
       if (ipre_over_ipost<=0) {
-	Error("G4ImportanceAlgorithm::Calculate() - ipre_over_ipost<=0");
+	Error("Calculate() - ipre_over_ipost<=0.");
       }
     }
     if (init_w<=0.) {
-      Error("G4ImportanceAlgorithm::Calculate() - iniitweight<= 0. found");
+      Error("Calculate() - iniitweight<= 0. found!");
     }
 
     // default geometrical splitting 
@@ -119,13 +115,12 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
 
 void G4ImportanceAlgorithm::Error(const G4String &m) const
 {
-  G4cerr << "ERROR - G4ImportanceAlgorithm: " << m << G4endl;
   G4Exception("G4ImportanceAlgorithm::Error()",
-              "FatalException", FatalException, m);
+              "GeomBias0002", FatalException, m);
 }
 
 void G4ImportanceAlgorithm::Warning(const G4String &m) const
 {
   G4Exception("G4ImportanceAlgorithm::Warning()",
-              "Notification", JustWarning, m);
+              "GeomBias1001", JustWarning, m);
 }

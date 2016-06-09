@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.2 2010/01/14 11:24:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QCoherentChargeExchange.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -61,7 +61,9 @@
 #include "G4QCoherentChargeExchange.hh"
 
 // Initialization of static vectors
-G4int    G4QCoherentChargeExchange::nPartCWorld=152;  // #of particles initialized in CHIPS
+//G4int    G4QCoherentChargeExchange::nPartCWorld=152;// #of particles initialized in CHIPS
+//G4int    G4QCoherentChargeExchange::nPartCWorld=122;// #of particles initialized in CHIPS
+G4int    G4QCoherentChargeExchange::nPartCWorld=85;// #of particles initialized in CHIPSRed
 std::vector<G4int> G4QCoherentChargeExchange::ElementZ; // Z of element(i) in theLastCalc
 std::vector<G4double> G4QCoherentChargeExchange::ElProbInMat; // SumProbOfElem in Material
 std::vector<std::vector<G4int>*> G4QCoherentChargeExchange::ElIsoN;// N of isotope(j), E(i)
@@ -349,12 +351,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   //G4double pM2=proj4M.m2();        // in MeV^2
   //G4double pM=std::sqrt(pM2);      // in MeV
   G4double pM=mNeut;
-  G4int    fPDG=2112;
-  if(projPDG==2112)
-  {
-    pM=mProt;
-    fPDG=2212;
-  }
+  if(projPDG==2112) pM=mProt;
   G4double pM2=pM*pM;
   // Element treatment
   G4int EPIM=ElProbInMat.size();

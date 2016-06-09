@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.8 2006/06/29 21:29:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisListManager.hh,v 1.9 2010-12-11 17:01:25 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -39,7 +39,6 @@
 #include "G4String.hh"
 #include <map>
 #include <ostream>
-#include <sstream>
 
 template <typename T>
 class G4VisListManager {
@@ -93,19 +92,9 @@ G4VisListManager<T>::Register(T* ptr)
 {
   assert (0 != ptr);
 
-  typename std::map<G4String, T*>::const_iterator iter = fMap.find(ptr->Name());
- 
-  if (iter == fMap.end()) {
-    fMap[ptr->Name()] = ptr;
-    fpCurrent = ptr;    
-  }
-  else {
-    std::ostringstream o;
-    o << "Key "<<ptr->Name()<<" already registered";
-    G4Exception
-      ("G4VisListManager<T>::Register(T* ptr) ",
-       "KeyExists", FatalErrorInArgument, o.str().c_str());
-  }
+  // Add to map.  Replace if name the same.
+  fMap[ptr->Name()] = ptr;
+  fpCurrent = ptr;    
 }
 
 template <typename T>
@@ -116,11 +105,11 @@ G4VisListManager<T>::SetCurrent(const G4String& name)
 
   if (iter != fMap.end()) fpCurrent = fMap[name];
   else {
-    std::ostringstream o;
-    o << "Key "<<name<<" has not been registered";
+    G4ExceptionDescription ed;
+    ed << "Key \"" << name << "\" has not been registered";
     G4Exception
       ("G4VisListManager<T>::SetCurrent(T* ptr) ",
-       "NonExistentName", FatalErrorInArgument, o.str().c_str());
+       "visman0102", JustWarning, ed, "Non-existent name");
   }
 }
 

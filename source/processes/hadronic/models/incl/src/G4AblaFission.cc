@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFission.cc,v 1.5 2010/11/17 20:19:09 kaitanie Exp $
+// $Id: G4AblaFission.cc,v 1.4 2010/11/16 16:28:57 gcosmo Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -251,25 +251,21 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   // 238U + 208Pb, 1000 A MeV, Timo Enqvist et al.         
 
   G4double     n = 0.0;
-  G4double     nlight1 = 0.0, nlight2 = 0.0;
-  G4double     aheavy1 = 0.0,alight1 = 0.0, aheavy2 = 0.0, alight2 = 0.0;
+  G4double     aheavy1 = 0.0, aheavy2 = 0.0;
   //  G4double     eheavy1 = 0.0, elight1 = 0.0, eheavy2 = 0.0, elight2 = 0.0;
   G4double     zheavy1_shell = 0.0, zheavy2_shell = 0.0;
-  G4double     zlight1 = 0.0, zlight2 = 0.0;
   G4double     masscurv = 0.0;
-  G4double     sasymm1 = 0.0, sasymm2 = 0.0, ssymm = 0.0, ysum = 0.0, yasymm = 0.0;
+  G4double     sasymm1 = 0.0, sasymm2 = 0.0, ssymm = 0.0, ysum = 0.0;
   G4double     ssymm_mode1 = 0.0, ssymm_mode2 = 0.0;
-  G4double     cz_asymm1_saddle = 0.0, cz_asymm2_saddle = 0.0;
   // Curvature at saddle, modified by ld-potential
   G4double     wzasymm1_saddle, wzasymm2_saddle, wzsymm_saddle  = 0.0;
   G4double     wzasymm1_scission = 0.0, wzasymm2_scission = 0.0, wzsymm_scission = 0.0;
   G4double     wzasymm1 = 0.0, wzasymm2 = 0.0, wzsymm = 0.0;
-  G4double     nlight1_eff = 0.0, nlight2_eff = 0.0;
   G4int  imode = 0;
   G4double     rmode = 0.0;
   G4double     z1mean = 0.0, z1width = 0.0;
   //      G4double     Z1,Z2,N1R,N2R,A1R,A2R,N1,N2,A1,A2;
-  G4double     n1r = 0.0, n2r = 0.0, n1 = 0.0, n2 = 0.0;
+  G4double     n1r = 0.0, n2r = 0.0;
 
   G4double     zsymm = 0.0, nsymm = 0.0, asymm = 0.0;
   G4double     n1mean = 0.0, n1width = 0.0;
@@ -285,7 +281,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   //   /* Parameters of the semiempirical fission model */
   G4double a_levdens = 0.0;
   //           /* level-density parameter */
-  G4double a_levdens_light1 = 0.0, a_levdens_light2 = 0.0;
   G4double a_levdens_heavy1 = 0.0, a_levdens_heavy2 = 0.0;
   const G4double r_null = 1.16;
   //          /* radius parameter */
@@ -296,11 +291,10 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   G4double epsilon_symm_scission = 0.0;
   //                                   /* modified energy */
   G4double e_eff1_saddle = 0.0, e_eff2_saddle = 0.0;
-  G4double a1r;
   G4int icz = 0, k = 0;
 
   G4int i_inter = 0;
-  G4double ne_min = 0, ne_m1 = 0, ne_m2 = 0;
+  G4double ne_min = 0;
   G4double ed1_low = 0.0, ed2_low = 0.0, ed1_high = 0.0, ed2_high = 0.0, ed1 = 0.0, ed2 = 0.0;
   G4double atot = 0.0;
 
@@ -375,22 +369,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   G4double eexc2_saddle = 0.0;
   //omment(I: Excitation energy above lowest saddle);
   G4double eexc_max = 0.0;
-  //omment(I: Effective mass mode 1);
-  G4double aheavy1_mean = 0.0;
-  //omment(I: Effective mass mode 2);
-  G4double aheavy2_mean = 0.0;
-  //omment(I: Width of symmetric mode);
-  G4double wasymm_saddle = 0.0;
-  //OMMENT(I: Width of asymmetric mode 1);
-  G4double waheavy1_saddle = 0.0;
-  //OMMENT(I: Width of asymmetric mode 2);
-  G4double waheavy2_saddle = 0.0;
-  //omment(I: Width of symmetric mode);
-  G4double wasymm = 0.0;
-  //OMMENT(I: Width of asymmetric mode 1);
-  G4double waheavy1 = 0.0;
-  //OMMENT(I: Width of asymmetric mode 2);
-  G4double waheavy2 = 0.0;
   //OMMENT(I: Even-odd effect in Z);
   G4double r_e_o = 0.0;
   G4double r_e_o_max = 0.0;
@@ -409,7 +387,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   G4double Bsym = 0.0;
   G4double Basym_1 = 0.0;
   G4double Basym_2 = 0.0;
-  G4int iz = 0;  
   //     I_MODE = 0;
 
   if(itest == 1) {
@@ -429,9 +406,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
     goto milledeux;
   }
 
-  nlight1 = n - nheavy1;
-  nlight2 = n - nheavy2;
-	
   //    /* Polarisation assumed for standard I and standard II:
   //      Z - Zucd = cpol (for A = const);
   //      from this we get (see Armbruster)
@@ -499,18 +473,8 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   //            /* position of valley due to influence of liquid-drop potential */
   nheavy1_eff = (zheavy1 + 0.8)*(n/z);
   nheavy2_eff = (zheavy2 + 0.8)*(n/z);
-  nlight1_eff = n - nheavy1_eff;
-  nlight2_eff = n - nheavy2_eff;
-  //  /* proton number of light fragments (centre) */
-  zlight1 = z - zheavy1;
-  //  /* proton number of light fragments (centre) */
-  zlight2 = z - zheavy2;
   aheavy1 = nheavy1_eff + zheavy1;
   aheavy2 = nheavy2_eff + zheavy2;
-  aheavy1_mean = aheavy1;
-  aheavy2_mean = aheavy2;
-  alight1 = nlight1_eff + zlight1;
-  alight2 = nlight2_eff + zlight2;
   // Eheavy1 = E * Aheavy1 / A
   // Eheavy2 = E * Aheavy2 / A
   // Elight1 = E * Alight1 / A
@@ -518,15 +482,10 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   a_levdens = a / 8.0;
   a_levdens_heavy1 = aheavy1 / 8.0;
   a_levdens_heavy2 = aheavy2 / 8.0;
-  a_levdens_light1 = alight1 / 8.0;
-  a_levdens_light2 = alight2 / 8.0;
   gamma = a_levdens / (0.4 * (std::pow(a,1.3333)) );
   gamma_heavy1 = ( a_levdens_heavy1 / (0.4 * (std::pow(aheavy1,1.3333)) ) ) * fgamma1;
   gamma_heavy2 = a_levdens_heavy2 / (0.4 * (std::pow(aheavy2,1.3333)) );
 
-  cz_asymm1_saddle = cz_asymm1_shell + cz_symm;
-  cz_asymm2_saddle = cz_asymm2_shell + cz_symm;
-	
   // Up to here: Ok! Checked CS 10/10/05      	   
 
   cn = umass(zsymm,(nsymm+1.),0.0) + umass(zsymm,(nsymm-1.),0.0)
@@ -699,15 +658,7 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
 // 	  G4cout << "WZsymm(scission) final= " << WZsymm << G4endl;
 // 	  } */
       
-  wasymm = wzsymm * a/z;
-  waheavy1 = wzasymm1 * a/z;
-  waheavy2 = wzasymm2 * a/z;
-
   //  G4cout <<"al, e, es, cn " << a_levdens << e << e_saddle_scission << cn << G4endl;
-
-  wasymm_saddle = wzsymm_saddle * a/z;
-  waheavy1_saddle = wzasymm1_saddle * a/z;
-  waheavy2_saddle = wzasymm2_saddle * a/z;
 
   //   if (itest == 1) {
   //     G4cout << "wasymm = " << wzsymm << G4endl;
@@ -775,7 +726,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
     ysymm = ysymm / ysum;
     yasymm1 = yasymm1 / ysum;
     yasymm2 = yasymm2 / ysum;
-    yasymm = yasymm1 + yasymm2;
   } else {
     ysymm = 0.0;
     yasymm1 = 0.0;
@@ -802,7 +752,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   //      /* simple parametrization KHS, Nov. 2000. From Rejmund et al. */
   eexc_max = max(eexc1_saddle, eexc2_saddle);
   eexc_max = max(eexc_max, e);
-  iz = (G4int)z;
   //  G4cout << "mod(z, 2)" << iz%2 << G4endl;
   if ((G4int)(z) % 2 == 0) {
     r_e_o_max = 0.3 * (1.0 - 0.2 * (std::pow(z, 2)/a - std::pow(92.0, 2)/238.0));
@@ -928,14 +877,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
       ne_min = 0.095e0 * a - 20.4e0;                                  
       if (ne_min < 0) ne_min = 0.0;                                 
       ne_min = ne_min + e / 8.e0; // 1 neutron per 8 mev */           
-      a1r = z1 + n1r;              // mass of first fragment */        
-      ne_m1 = a1r / a * ne_min; // devide nbr. of neutrons acc. mass
-      ne_m2 = ne_min - ne_m1;   // nmbr. of neutrons of 2. fragment 
-      n1 = n1r - ne_m1;         // final neutron number 1. fragment 
-      n2 = n2r - ne_m2;     //     ! final neutron number 2. fragment 
-    } else {
-      n1 = n1r;                                                       
-      n2 = n2r;                                                       
     }
 
     // excitation energy due to deformation                                 

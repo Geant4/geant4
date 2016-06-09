@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc,v 1.15 2010/11/05 14:43:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GEMProbability.cc,v 1.15 2010-11-05 14:43:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
 //
@@ -52,45 +52,20 @@
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
-#include "G4Pow.hh"
-#include "G4IonTable.hh"
-
-G4GEMProbability:: G4GEMProbability() : 
-  theA(0), theZ(0), Spin(0.0), theCoulombBarrierPtr(0),
-  ExcitationEnergies(0), ExcitationSpins(0), ExcitationLifetimes(0), Normalization(1.0)
-{
-  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
-  fG4pow = G4Pow::GetInstance(); 
-  fPairCorr = G4PairingCorrection::GetInstance();
-}
 
 G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
-  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0),
-  ExcitationEnergies(0), ExcitationSpins(0), ExcitationLifetimes(0), Normalization(1.0)
+  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0), 
+  Normalization(1.0)
 {
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 
+  fPlanck= CLHEP::hbar_Planck*fG4pow->logZ(2);
   fPairCorr = G4PairingCorrection::GetInstance();
 }
     
 G4GEMProbability::~G4GEMProbability()
 {
   delete theEvapLDPptr;
-}
-
-G4double G4GEMProbability::CalcAlphaParam(const G4Fragment & ) const 
-{
-  return 1.0;
-}
-
-G4double G4GEMProbability::CalcBetaParam(const G4Fragment & ) const 
-{
-  return 1.0;
-}
-
-G4double G4GEMProbability::CCoeficient(const G4double ) const 
-{
-  return 0.0;
 }
 
 G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
@@ -101,21 +76,23 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
   if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
     G4double CoulombBarrier = GetCoulombBarrier(fragment);
       
-    EmissionProbability = CalcProbability(fragment,MaximalKineticEnergy,CoulombBarrier);
-    Normalization = EmissionProbability;
-    // Next there is a loop over excited states for this channel summing probabilities
-    if (ExcitationEnergies  &&  ExcitationSpins && ExcitationLifetimes) {
+    EmissionProbability = 
+      CalcProbability(fragment,MaximalKineticEnergy,CoulombBarrier);
+
+    // Next there is a loop over excited states for this channel 
+    // summing probabilities
+    size_t nn = ExcitEnergies.size();
+    if (0 < nn) {
       G4double SavedSpin = Spin;
-      for (size_t i = 0; i < ExcitationEnergies->size(); ++i) {
-	Spin = ExcitationSpins->operator[](i);
+      for (size_t i = 0; i <nn; ++i) {
+	Spin = ExcitSpins[i];
 	// substract excitation energies
-	G4double Tmax = MaximalKineticEnergy - ExcitationEnergies->operator[](i);
+	G4double Tmax = MaximalKineticEnergy - ExcitEnergies[i];
 	if (Tmax > 0.0) {
 	  G4double width = CalcProbability(fragment,Tmax,CoulombBarrier);
 	  //JMQ April 2010 added condition to prevent reported crash
 	  // update probability
-	  if (width > 0. && 
-	      hbar_Planck*fG4pow->logZ(2) < width*ExcitationLifetimes->operator[](i)) {
+	  if (width > 0. && fPlanck < width*ExcitLifetimes[i]) {
 	    EmissionProbability += width;
 	  }
 	}
@@ -124,6 +101,7 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
       Spin = SavedSpin;
     }
   }
+  Normalization = EmissionProbability;
   return EmissionProbability;
 }
 
@@ -151,8 +129,8 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   
   G4double delta0 = fPairCorr->GetPairingCorrection(ResidualA, ResidualZ);  
   
-  G4double a = theEvapLDPptr->LevelDensityParameter(ResidualA,
-  						    ResidualZ,MaximalKineticEnergy+V-delta0);
+  G4double a = theEvapLDPptr->
+    LevelDensityParameter(ResidualA,ResidualZ,MaximalKineticEnergy+V-delta0);
   G4double Ux = (2.5 + 150.0/G4double(ResidualA))*MeV;
   G4double Ex = Ux + delta0;
   G4double T  = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
@@ -205,11 +183,8 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double Rb = 0.0;
   if (theA > 4) 
     {
-      //	G4double R1 = std::pow(ResidualA,1.0/3.0);
-      //	G4double R2 = std::pow(G4double(theA),1.0/3.0);
       G4double Ad = fG4pow->Z13(ResidualA);
       G4double Aj = fG4pow->Z13(theA);
-      //	RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
       Rb = 1.12*(Aj + Ad) - 0.86*((Aj+Ad)/(Aj*Ad))+2.85;
       Rb *= fermi;
     }
@@ -237,20 +212,20 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
       //JMQ fixed bug in units
       //VI moved the computation here
       G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 
-				  - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
+				  - 1.25*std::log(UxCN/MeV) 
+				  + 2.0*std::sqrt(aCN*UxCN));
       InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
     } 
   else 
     {
-      //InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
       //VI speedup
       G4double x  = U-deltaCN;
       G4double x1 = std::sqrt(aCN*x);
       InitialLevelDensity = (pi/12.0)*std::exp(2*x1)/(x*std::sqrt(x1));
     }
 
-  //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according to Furihata's report:
-  //    Width *= std::sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
+  //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according 
+  // to Furihata's report:
   Width *= pi*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
    
   return Width;

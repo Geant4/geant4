@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: userVisAction.cc,v 1.3 2009/12/22 15:07:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: userVisAction.cc,v 1.3 2009-12-22 15:07:19 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,9 +90,9 @@ int main(int argc,char** argv) {
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
   if(argc==1)
-#ifdef G4UI_USE
   // Define (G)UI terminal for interactive mode  
   { 
+#ifdef G4UI_USE
     G4UIExecutive * ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");    
     ui->SessionStart();

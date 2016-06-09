@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.13 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UniformElectricField.cc,v 1.13 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
@@ -54,7 +54,7 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    if ( (vField<0) || (vTheta<0) || (vTheta>pi) || (vPhi<0) || (vPhi>twopi) )
    {
       G4Exception("G4UniformElectricField::G4UniformElectricField()",
-                  "WrongArgumentValue", FatalException, "Invalid parameters.");
+                  "GeomField0002", FatalException, "Invalid parameters.");
    }
 
    fFieldComponents[0] = 0.0;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstMessenger.hh,v 1.4 2006/06/29 16:30:32 gunter Exp $
+// $Id: A01DetectorConstMessenger.hh,v 1.4 2006-06-29 16:30:32 gunter Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01DetectorConstMessenger_h

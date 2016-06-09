@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForPositron.cc,v 1.7 2009/09/11 15:21:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RToEConvForPositron.cc,v 1.7 2009-09-11 15:21:39 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------

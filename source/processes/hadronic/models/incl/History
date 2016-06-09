@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.37 2010/11/17 20:19:09 kaitanie Exp $
+$Id: History,v 1.36 2010/11/16 16:30:55 gcosmo Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,46 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+31 October 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-06)
+--------------------------------------------------------
+- Fixed a GCC 4.6 compiler warning
+
+26 October 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-05)
+--------------------------------------------------------
+- Eliminated some Mac/Xcode compilation warnings
+
+21 October 2011 - Dennis Wright (hadr-incl-V09-04-04)
+-----------------------------------------------------
+- fixed incorrect G4Exception format in G4Abla.cc
+
+25 September 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-03)
+----------------------------------------------------------
+- Migrated to the new G4Exception
+
+31 May 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-02)
+----------------------------------------------------
+- ABLA bugfixes that make the C++ version of ABLA agree with the FORTRAN
+	version:
+  o Rounding bug
+	o Allow evaporation function to modify nucleus excitation energy via a
+	side-effect
+
+23 May 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-01)
+----------------------------------------------------
+- Use inverse kinematics in INCL light ion collisions:
+  o Inverse kinematics improves INCL light ion model performance in
+  applications where we are interested in beam fragmentation
+- INCL light ion model now supports light ion projectiles up to and including
+  Oxygen-18
+
+18 May 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-00)
+----------------------------------------------------
+- Fixed GCC4.6 "variable set but not used" warnings
+
+09 March 2011 - Pekka Kaitaniemi
+--------------------------------
+- Fix: Correct the order of Z and A parameters in GetIon call
 
 17 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-10)
 ---------------------------------------------------------

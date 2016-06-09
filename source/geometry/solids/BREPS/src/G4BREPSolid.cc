@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.42 2010/11/01 16:43:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BREPSolid.cc,v 1.42 2010-11-01 16:43:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -200,7 +200,6 @@ void G4BREPSolid::CheckSurfaceNormals()
   G4Surface* srf;
   G4Point3D V;
   
-  G4int PointNum=0;
   G4int SrfNum = 0;
   G4double YValue=0;
   G4Point3D Pt;
@@ -219,7 +218,6 @@ void G4BREPSolid::CheckSurfaceNormals()
       if(YValue < Pt.y())
       {
         YValue = Pt.y();
-        PointNum = b; // Save point number
         SrfNum = a;   // Save srf number
       }
     }
@@ -761,7 +759,7 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   else
   {
-    G4Exception("G4BREPSolid::CreateRotatedVertices()", "FatalError",
+    G4Exception("G4BREPSolid::CreateRotatedVertices()", "GeomSolids0003",
                 FatalException, "Out of memory - Cannot allocate vertices!");
   }
   return vertices;
@@ -1132,6 +1130,7 @@ void G4BREPSolid::CalcBBoxes()
       // Get first in List
       //
       srf = SurfaceVec[a];
+/*
       G4int convex=1; 
       G4int concavepoint=-1;
 
@@ -1143,7 +1142,8 @@ void G4BREPSolid::CalcBBoxes()
 
       // Make bbox for face
       //
-      //    if(convex && Concavepoint==-1)
+      if(convex && Concavepoint==-1)
+*/
       {
         srf->CalcBBox();
         G4Point3D box_min = srf->GetBBox()->GetBoxMin();
@@ -1168,8 +1168,8 @@ void G4BREPSolid::CalcBBoxes()
     bbox =  new G4BoundingBox3D(min, max);
     return;
   }
-  G4cerr << "ERROR - G4BREPSolid::CalcBBoxes()" << G4endl
-         << "        No bbox calculated for solid. Error." << G4endl;
+  G4Exception("G4BREPSolid::CalcBBoxes()", "GeomSolids1002",
+              JustWarning, "No bbox calculated for solid.");
 }
 
 void G4BREPSolid::RemoveHiddenFaces(register const G4Ray& rayref,
@@ -1297,7 +1297,6 @@ G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
   for(register G4int a=0;a<nb_of_surfaces;a++)
   {
     srf = SurfaceVec[a];
-    G4int included = 0;
     
     if(srf->IsActive())
     {
@@ -1328,7 +1327,6 @@ G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
       }   
       else  // No hit
       {
-        included = 1;
         srf->Deactivate();
       }
     }

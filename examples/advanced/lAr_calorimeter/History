@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.21 2010/11/16 17:54:39 allison Exp $
+$Id: History,v 1.21 2010-11-16 17:54:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.21 2010/11/16 17:54:39 allison Exp $
 
                       Category History file
                       ---------------------
+
+17.01.2011   G.A.P.Cirrone (lAr_calorimeter-V09-04-00)
+	     Fixed compilation errors and physics models updated
 
 16.11.2010   John Allison (lAr_calorimeter-V09-03-01)
              Introduced G4UIExecutive.

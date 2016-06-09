@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2004/01/23 16:39:53 hpw Exp $
+# $Id: GNUmakefile,v 1.10 2004-01-23 16:39:53 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -16,6 +16,7 @@ ifdef PRECOMPOUND_TEST
   CPPFLAGS += -DPRECOMPOUND_TEST
 endif
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

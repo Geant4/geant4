@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.8 2010/09/20 12:46:23 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.8 2010-09-20 12:46:23 vuzhinsk Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -181,7 +181,6 @@ protected:
    G4double  StrangeSuppress ;
    G4int     StringLoopInterrupt;
    G4int     ClusterLoopInterrupt;
-   G4int     SideOfDecay;
    G4HadronBuilder *hadronizer;
 
    G4double pspin_meson;

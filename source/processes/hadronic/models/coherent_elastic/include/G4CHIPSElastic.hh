@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CHIPSElastic.hh,v 1.4 2010/01/13 15:42:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4CHIPSElastic.hh,v 1.4 2010-01-13 15:42:06 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4CHIPSElastic
 //
@@ -40,12 +40,12 @@
 #ifndef G4CHIPSElastic_h
 #define G4CHIPSElastic_h 1
  
-#include "G4VHadronElastic.hh"
+#include "G4HadronElastic.hh"
 #include "globals.hh"
 
 class G4VQCrossSection;
 
-class G4CHIPSElastic : public G4VHadronElastic
+class G4CHIPSElastic : public G4HadronElastic
 {
 public:
 
@@ -56,11 +56,18 @@ public:
   virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
 				    G4double plab,
 				    G4int Z, G4int A);
+  virtual void Description() const;
 
 private:
 
   static G4VQCrossSection* pxsManager;
   static G4VQCrossSection* nxsManager;
+
+  static G4VQCrossSection* PBARxsManager;
+  static G4VQCrossSection* PIPxsManager;
+  static G4VQCrossSection* PIMxsManager;
+  static G4VQCrossSection* KPxsManager;
+  static G4VQCrossSection* KMxsManager;
 
 };
 

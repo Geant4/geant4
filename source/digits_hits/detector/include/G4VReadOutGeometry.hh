@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.hh,v 1.3 2009/11/23 18:13:30 asaim Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VReadOutGeometry.hh,v 1.3 2009-11-23 18:13:30 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 
@@ -45,11 +45,8 @@ class G4VReadOutGeometry
 
   public:
       G4VReadOutGeometry();
-      G4VReadOutGeometry(const G4VReadOutGeometry &right);
       G4VReadOutGeometry(G4String);
       virtual ~G4VReadOutGeometry();
-
-      const G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
 
       G4int operator==(const G4VReadOutGeometry &right) const;
       G4int operator!=(const G4VReadOutGeometry &right) const;
@@ -61,14 +58,17 @@ class G4VReadOutGeometry
       virtual G4bool CheckROVolume(G4Step*,G4TouchableHistory*&);
 
   protected:
+      G4VReadOutGeometry(const G4VReadOutGeometry &right);
+      const G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
+
       virtual G4bool FindROTouchable(G4Step*);
 
+  protected:
       G4VPhysicalVolume* ROworld;
       G4SensitiveVolumeList* fincludeList;
       G4SensitiveVolumeList* fexcludeList;
       G4String name;
 
-  protected:
       G4Navigator*        ROnavigator;
       G4TouchableHistory* touchableHistory;
 

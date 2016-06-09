@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LorentzConvertor.hh,v 1.18 2010/12/15 07:39:58 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4LorentzConvertor.hh,v 1.18 2010-12-15 07:39:58 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector
@@ -32,6 +32,7 @@
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 // 20100616  M. Kelsey -- Report bullet and target four-momenta when set
 // 20100915  M. Kelsey -- Move constructors to .cc file, add initializers
+// 20110602  M. Kelsey -- Drop some unnecessary kinematics intermediates
 
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
@@ -82,8 +83,10 @@ public:
     if (verboseLevel > 3) printTarget();
   }
 
+  // Select reference frame for boosts, rotations, etc.
   void toTheCenterOfMass();
   void toTheTargetRestFrame(); 
+  void fillKinematics();	// Common calculations after either of above
 
   G4LorentzVector backToTheLab(const G4LorentzVector& mom) const;
 
@@ -117,16 +120,13 @@ private:
   G4LorentzVector target_mom;
 
   G4LorentzVector scm_momentum;		// CM momentum relative to target/bullet
+  G4ThreeVector   scm_direction;	// Unit vector to reduce repeated calcs
 
   // Buffer variables for doing ::rotate() calculations
   G4ThreeVector velocity;
-  G4double gamma;
   G4double v2;
   G4double ecm_tot;
-  G4double ga;
-  G4double gb;
-  G4double gbpp;
-  G4double gapp;
+  G4double valong;
   G4bool degenerated;
 };        
 

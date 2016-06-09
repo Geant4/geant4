@@ -1,0 +1,33 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                        --- RandPoisson ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandPoisson::RandPoisson(HepRandomEngine & anEngine, double m )
+: HepRandom(), meanMax(2.0E9), defaultMean(m),
+  localEngine(&anEngine, do_nothing_deleter()), oldm(-1.0) {
+  status[0] = status[1] = status[2] = 0.;
+}
+
+inline RandPoisson::RandPoisson(HepRandomEngine * anEngine, double m )
+: HepRandom(), meanMax(2.0E9), defaultMean(m), 
+  localEngine(anEngine), oldm(-1.0) {
+  status[0] = status[1] = status[2] = 0.;
+}
+
+inline HepRandomEngine * RandPoisson::getLocalEngine() {
+  return localEngine.get();
+}
+
+}  // namespace CLHEP

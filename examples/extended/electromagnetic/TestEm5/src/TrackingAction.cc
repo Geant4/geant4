@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.18 2008/08/28 15:28:04 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TrackingAction.cc,v 1.18 2008-08-28 15:28:04 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc,v 1.6 2009/05/03 08:29:55 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePolarizedComptonModel.cc,v 1.6 2009-05-03 08:29:55 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Authors: G.Depaola & F.Longo
 //
 // History:
 // --------

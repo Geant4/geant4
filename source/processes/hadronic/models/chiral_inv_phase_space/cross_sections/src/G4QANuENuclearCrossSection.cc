@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuENuclearCrossSection.cc,v 1.1 2009/11/16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QANuENuclearCrossSection.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QANuENuclearCrossSection for (anti_nu_e,e+) cross sections
@@ -36,7 +36,9 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
-//=========================================================================================
+// ----------------------------------------------------------------------------------------
+// Short description: antinu_e -> e cross-section
+// ----------------------------------------------------------------------------------------
 
 //#define debug
 //#define edebug
@@ -106,7 +108,7 @@ G4double G4QANuENuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
   if(pPDG!=-12)
   {
 #ifdef debug
-    G4cout<<"G4QAENCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QAENCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -302,7 +304,7 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
   G4int Z=targZ;                     // New Z, which can change the sign
   if(F<=0)                           // This isotope was not the last used isotop
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
+    if(F<0)                          // This isotope was found in DAMDB =-------=> RETRIEVE
     {
       lastTX =(*TX)[I];              // Pointer to the prepared TX function (same isotope)
       lastQE =(*QE)[I];              // Pointer to the prepared QE function (same isotope)
@@ -326,7 +328,7 @@ G4double G4QANuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       QE->push_back(lastQE);
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW Calculate the Cross Section =====================
+  // =------------------------= NOW Calculate the Cross Section =--------------------=
   if (lastE<=EMi)                    // Check that antiNuEnergy is higher than ThreshE
   {
     lastE=0.;

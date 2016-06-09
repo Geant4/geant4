@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.22 2010/10/30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleTable.hh,v 1.22 2010-10-30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -80,8 +80,11 @@ class G4ParticleTable
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
 
  protected:
+   // default constructor
    G4ParticleTable();
+   // Copy constructor and assignment operator
    G4ParticleTable(const  G4ParticleTable &right);
+   G4ParticleTable & operator=(const G4ParticleTable &);
 
  public:
    virtual ~G4ParticleTable();

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GEMChannel.cc,v 1.12 2010/11/18 16:21:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GEMChannel.cc,v 1.12 2010-11-18 16:21:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -50,29 +49,14 @@ G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
   theEvaporationProbabilityPtr(aEmissionStrategy),
   theCoulombBarrierPtr(aCoulombBarrier),
   EmissionProbability(0.0),
-  MaximalKineticEnergy(-1000.0)
+  MaximalKineticEnergy(-CLHEP::GeV)
 { 
   theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
   MyOwnLevelDensity = true;
   EvaporatedMass = G4NucleiProperties::GetNuclearMass(A, Z);
   ResidualMass = CoulombBarrier = 0.0;
   fG4pow = G4Pow::GetInstance(); 
-}
-
-G4GEMChannel::G4GEMChannel() :
-  G4VEvaporationChannel("dummy"),
-  A(0),
-  Z(0),
-  theEvaporationProbabilityPtr(0),
-  theCoulombBarrierPtr(0),
-  EmissionProbability(0.0),
-  MaximalKineticEnergy(-1000.0)
-{ 
-  theLevelDensityPtr = 0;
-  MyOwnLevelDensity = true;
-  EvaporatedMass = 0.0;
-  ResidualMass = CoulombBarrier = 0.0;
-  fG4pow = G4Pow::GetInstance(); 
+  ResidualZ = ResidualA = 0;
 }
 
 G4GEMChannel::~G4GEMChannel()
@@ -94,7 +78,7 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
       (ResidualA == ResidualZ && ResidualA > 1)) 
     {
       CoulombBarrier = 0.0;
-      MaximalKineticEnergy = -1000.0*MeV;
+      MaximalKineticEnergy = -CLHEP::GeV;
       EmissionProbability = 0.0;
     } 
   else 
@@ -162,7 +146,8 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
   // ** And now the residual nucleus ** 
   G4double theExEnergy = theNucleus.GetExcitationEnergy();
   G4double theMass = theNucleus.GetGroundStateMass();
-  G4double ResidualEnergy = theMass + (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
+  G4double ResidualEnergy = 
+    theMass + (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
 	
   G4LorentzVector ResidualMomentum(-momentum,ResidualEnergy);
   ResidualMomentum.boost(theNucleus.GetMomentum().boostVector());
@@ -171,25 +156,6 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
     
   G4FragmentVector * theResult = new G4FragmentVector;
     
-#ifdef debug
-  G4double Efinal = ResidualMomentum.e() + EvaporatedMomentum.e();
-  G4ThreeVector Pfinal = ResidualMomentum.vect() + EvaporatedMomentum.vect();
-  if (std::abs(Efinal-theNucleus.GetMomentum().e()) > 10.0*eV) {
-    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4GEMChanel: ENERGY @@@@@@@@@@@@@@@@" << G4endl;
-    G4cout << "Initial : " << theNucleus.GetMomentum().e()/MeV << " MeV    Final :" 
-	   <<Efinal/MeV << " MeV    Delta: " <<  (Efinal-theNucleus.GetMomentum().e())/MeV 
-	   << " MeV" << G4endl;
-  }
-  if (std::abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 10.0*eV ||
-      std::abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 10.0*eV ||
-      std::abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 10.0*eV ) {
-    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4GEMChanel: MOMENTUM @@@@@@@@@@@@@@@@" << G4endl;
-    G4cout << "Initial : " << theNucleus.GetMomentum().vect() << " MeV    Final :" 
-	   <<Pfinal/MeV << " MeV    Delta: " <<  Pfinal-theNucleus.GetMomentum().vect()
-	   << " MeV" << G4endl;   
-        
-  }
-#endif
   theResult->push_back(EvaporatedFragment);
   theResult->push_back(ResidualFragment);
   return theResult; 

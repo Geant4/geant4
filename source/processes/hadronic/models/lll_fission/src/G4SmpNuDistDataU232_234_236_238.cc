@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNuDistDataU232_234_236_238.cc,v 1.2 2007/06/01 13:46:53 gcosmo Exp $
+// $Id: G4SmpNuDistDataU232_234_236_238.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
 #include <cmath>

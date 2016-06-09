@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.19 2007/10/30 10:14:34 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIGAG.cc,v 1.19 2007-10-30 10:14:34 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal

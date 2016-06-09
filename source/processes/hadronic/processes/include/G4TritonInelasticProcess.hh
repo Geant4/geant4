@@ -23,33 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: Triton Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 03-Apr-1997
+// Hadronic Process: Triton Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
+//
 
 // Class Description
 // Process for Triton Inelastic scattering; 
 // to be used in your physics list in case you need this physics.
 // Class Description - End
+
 #ifndef G4TritonInelasticProcess_h
 #define G4TritonInelasticProcess_h 1
  
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4TritonInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4TritonInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4TritonInelasticProcess(
-     const G4String& processName = "TritonInelastic" ) :
-      G4HadronInelasticProcess( processName, G4Triton::Triton() )
-    { }
+    G4TritonInelasticProcess(const G4String& processName = "TritonInelastic");
         
-    ~G4TritonInelasticProcess()
-    { }
- };
- 
-#endif
- 
+    ~G4TritonInelasticProcess() {}
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
+#endif

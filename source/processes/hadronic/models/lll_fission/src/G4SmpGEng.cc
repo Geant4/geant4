@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpGEng.cc,v 1.4 2007/06/01 13:46:53 gcosmo Exp $
+// $Id: G4SmpGEng.cc,v 1.4 2007-06-01 13:46:53 gcosmo Exp $
 //
 
 #include <cmath>

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.25 2010/10/08 10:07:31 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLQtViewer.hh,v 1.25 2010-10-08 10:07:31 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -38,9 +38,9 @@
 
 #include "globals.hh"
 
-#include <qobject.h>
 #include "G4OpenGLViewer.hh"
 
+#include <qobject.h>
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
@@ -49,11 +49,7 @@ class G4UImanager;
 class QGLWidget;
 class QDialog;
 class QContextMenuEvent;
-#if QT_VERSION < 0x040000
-class QPopupMenu;
-#else
 class QMenu;
-#endif
 class QImage;
 class QAction;
 class QMouseEvent;
@@ -61,7 +57,9 @@ class QKeyEvent;
 class QWheelEvent;
 class QProcess;
 class QTime;
-
+class QVBoxLayout;
+class QTreeWidgetItem;
+class QTreeWidget;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 
@@ -72,7 +70,6 @@ class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
-  void SetView ();
   virtual void updateQWidget()=0;
   QString setEncoderPath(QString path);
   QString getEncoderPath();
@@ -101,29 +98,30 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
-  void drawText(const char * ,int x,int y,int z, int size);
+  void DrawText(const char * ,double x,double y,double z, double size);
+  void ResetView ();
+  void addTreeElement(const G4String model,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > >);
+  bool isTouchableVisible(unsigned int POindex);
+
+public:
+  void G4MousePressEvent(QMouseEvent *event);
+  void G4wheelEvent (QWheelEvent * event); 
+  void G4keyPressEvent (QKeyEvent * event); 
+  void G4MouseDoubleClickEvent();
+  void G4MouseReleaseEvent();
+  void G4MouseMoveEvent(QMouseEvent *event);
 
 protected:
   void CreateGLQtContext ();
+  void CreateFontLists ();
   virtual void CreateMainWindow (QGLWidget*,QString);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
-  void G4MousePressEvent(QMouseEvent *event);
-  void G4MouseReleaseEvent();
-  void G4MouseDoubleClickEvent();
-  void G4MouseMoveEvent(QMouseEvent *event);
-  void G4wheelEvent (QWheelEvent * event); 
-  void G4keyPressEvent (QKeyEvent * event); 
   void rotateQtScene(float, float);
-  void rotateQtCamera(float, float);
-  void rotateQtSceneInViewDirection(float, float);
-  void rotateQtCameraInViewDirection(float, float);
+  void rotateQtSceneToggle(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
-#if QT_VERSION < 0x040000
-  void updateKeyModifierState(Qt::ButtonState);
-#else
   void updateKeyModifierState(Qt::KeyboardModifiers);
-#endif
+  void displayViewComponentTree();
 
 
 protected:
@@ -153,27 +151,22 @@ private:
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
+  bool parseAndInsertInTree(QTreeWidgetItem *,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect,QString parentRoot);
+  void setCheckComponent(QTreeWidgetItem* item,bool check);
+  void initViewComponent();
+  bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,unsigned int POindex);
 
-#if QT_VERSION < 0x040000
-  QPopupMenu *fContextMenu;
-#else
   QMenu *fContextMenu;
-#endif
 
   mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
   QPoint fLastPos1;
   QPoint fLastPos2;
   QPoint fLastPos3;
-  /** delta of scene rotation. This delta is put in degree */
-  G4double fDeltaRotation;
-  /** delta of scene translation. This delta is put in % of the scene view */
-  G4double fDeltaSceneTranslation;
+
   /** delta of depth move. This delta is put in % of the scene view */
   G4double fDeltaDepth;
   /** delta of zoom move. This delta is put in % of the scene view */
   G4double fDeltaZoom;
-  /** delta of auto move/rotation. This delta is put in % of the move/rotation param */
-  G4double fDeltaMove;
   /** To ensure key event are keep one by one */
   bool fHoldKeyEvent;
   /** To ensure move event are keep one by one */
@@ -203,25 +196,22 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
-
-  G4double fXRot;
-  G4double fYRot;
+  QWidget* fUIViewComponentsTBWidget;
+  QVBoxLayout* fLayoutViewComponentsTBWidget;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
   bool fShiftKeyPress;
+  bool fBatchMode;
+  bool fCheckViewComponentLock;
+  QTreeWidget * fViewerComponentTreeWidget;
+  int fNbRotation ;
+  int fTimeRotation;
 
-signals:
- void rotateTheta(int);
- void rotatePhi(int);
- void moveX(int);
- void moveY(int);
- void moveZ(int);
-
-public slots :
+public Q_SLOTS :
   void startPauseVideo();
 
-private slots :
+private Q_SLOTS :
   void actionMouseRotate();
   void actionMouseMove();
   void actionMousePick();
@@ -248,6 +238,7 @@ private slots :
   void processEncodeFinished();
   void processLookForFinished();
   void processEncodeStdout();
+  void viewComponentItemChanged(QTreeWidgetItem* item, int id);
   // Only use for Qt>4.0
   //  void dialogClosed();
 };

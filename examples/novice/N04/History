@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2010/06/06 04:07:31 perl Exp $
+$Id: History,v 1.65 2010-06-06 04:07:31 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-11-11 Ben Morgan (exampleN04-V09-04-02)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
+30-09-2011 G.Folger        (exampleN04-V09-04-01)
+- Fix gcc46 compilation warning in ExN04DetectorConstruction.cc
+
+14-07-11 M.Asai (exampleN04-V09-04-00)
+- Optimise initialisation of Phi angles in parameterisations to avoid
+  recomputation of trigonometry.
 
 04-06-10 J.Perl (exampleN04-V09-03-01)
 - Updated vis usage

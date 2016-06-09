@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.23 2010/05/27 14:26:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4BetheBlochModel.hh,v 1.23 2010-05-27 14:26:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -80,9 +80,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
@@ -149,7 +146,6 @@ private:
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
   const G4ParticleDefinition* particle;
-  const G4Material*           currentMaterial;
   G4ParticleDefinition*       theElectron;
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;

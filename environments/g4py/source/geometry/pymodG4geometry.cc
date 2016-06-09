@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4geometry.cc,v 1.10 2008/12/03 07:21:56 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pymodG4geometry.cc,v 1.10 2008-12-03 07:21:56 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4geometry.cc [Geant4Py module]
 //

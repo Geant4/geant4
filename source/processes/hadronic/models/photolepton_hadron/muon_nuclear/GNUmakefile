@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2003/11/11 19:08:58 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2010-12-16 17:12:12 dennis Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
@@ -24,10 +25,28 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
+            -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/low_energy/include \
-	    -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
+            -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+            -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+            -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

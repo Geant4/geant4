@@ -1,0 +1,108 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis0.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka, John Allison                            #
+#                                                                     #
+#  DATE:                                                              #
+#        Nov      11, 2010 Updated (JA)                               #
+#        Nov      07, 2001                                            #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#        November 26, 2000                                            #
+#        October  17, 2000                                            # 
+#        June     06, 2000                                            # 
+#        May      20, 2000                                            # 
+#        November 10, 1999                                            #
+#                                                                     #
+#  CONTENTS: A simplest macro to demonstrate visualization of         #
+#            detector geometry and events                             #
+#                                                                     #
+#  USAGE with terminal session:                                       #
+#        Idle> /control/execute visTutor/exN03Vis0.mac                #
+#  USAGE with GUI session:                                            #
+#        /control/execute visTutor/exN03Vis0.mac                      #
+#    or pull-down "Vis" menu and click on "Vis0"                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES:                                    #
+#    See geant4.cern.ch and Installation Guide.                       #
+#    We recommend standard installation.                              #
+#                                                                     #
+#  ADDITIONAL NOTES:                                                  #
+#    The compound command "/vis/open <vis-driver-name>"               #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
+#                                                                     #
+#    The compound command "/vis/drawVolume <physical-volume-name>"    #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/scene/create                                              #
+#      /vis/scene/add/volume $1                                       #
+#      /vis/sceneHandler/attach                                       #
+#                                                                     #
+#######################################################################
+
+##############################################
+# Visualization of detector geometry 
+#  with the OGL (OpenGL) driver
+##############################################
+
+# Invoke the OGL driver
+/vis/open OGL
+
+# Set camera 
+/vis/viewer/reset 
+#/vis/viewer/set/viewpointThetaPhi 70 20
+/vis/viewer/set/viewpointThetaPhi 160. 200.
+
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
+
+# Draw an event
+/run/beamOn
+
+# The following command "flush" 
+#  the action of the current viewer.
+#  They are required for the post-processing drivers 
+#  such as DAWNFILE, VRMLFILE, HepRep drivers, etc.
+#  For OpenGL drivers, these commands are not required
+#  but harmless even if they are described.
+/vis/viewer/flush
+
+#########################################################
+# Visualization of events with the DAWNFILE driver
+#
+#  * Each visualized view is saved to a file "g4_XX.eps"  
+#    with the "vectorized" PostScript format.
+#
+#  * Set an environmental variable if you wish to 
+#    skip DAWN GUI:
+#     % setenv G4DAWNFILE_VIEWER "dawn -d"
+##########################################################
+
+# Invoke the DAWNFILE driver
+/vis/open DAWNFILE
+
+# Add the world volume to the current scene
+/vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/drawVolume
+
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
+
+# Draw an event
+/run/beamOn
+
+# Set camera 
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/set/viewpointThetaPhi 160. 200.
+/vis/viewer/set/projection perspective 30 deg
+/run/beamOn
+
+# Add more stuff to the current scene
+/vis/scene/add/axes  	  0 0 0 10 cm
+/vis/scene/add/text       0 0 0 mm  50 -100 -240   B4 
+/vis/scene/add/scale      10 cm z 1 0 0 manual -2.5 -13  0 cm
+/run/beamOn

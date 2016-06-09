@@ -1,31 +1,28 @@
-# $Id: pixe.mac,v 1.2 2010/11/22 18:32:59 vnivanch Exp $
+# $Id: pixe.mac,v 1.2 2009-02-22 17:48:53 maire Exp $
 #
 # macro file for TestEm18.cc
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_Cu
-/testem/det/setSize 1 cm
+/testem/det/setMat Tungsten
+/testem/det/setSize 100 um
 #
-/testem/phys/addPhysics emstandardFLUO
-#/testem/phys/addPhysics emstandard_opt2
-#/testem/phys/addPhysics emlivermore
-#/testem/phys/addPhysics empenelope
-#
-/testem/phys/setCuts 0.01 mm
-/testem/stack/killSecondaries false
+/testem/phys/setCuts 1 um
 #
 /run/initialize
-/testem/phys/fluo true
-/testem/phys/pixe true
 #
-/gun/particle proton
-/gun/energy 100 MeV
+/process/em/pixe true
 #
-/testem/histo/setFileName proton100mev_fluo
-/testem/histo/setHisto 4 80  0 800 keV  #e- energy spectrum
-/testem/histo/setHisto 5 500 0 50   keV  #g energy spectrum
+/gun/particle proton 
+/gun/energy 10 MeV
 #
-/run/beamOn 10000
+/testem/histo/setFileName pixe
+/testem/histo/setFileType root
+# 
+/testem/histo/setHisto 3 100 0 10 MeV	#total eLoss
+/testem/histo/setHisto 5 100 0 100 keV	#gamma energy spectrum
 #
+/testem/event/printModulo 100000
+#
+/run/beamOn 1000000

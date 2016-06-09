@@ -1,4 +1,4 @@
-$Id: History,v 1.493 2010/11/16 01:58:41 perl Exp $
+$Id: History,v 1.495 2010-12-27 13:28:38 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,211 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th November 2011  John Allison (vis-V09-04-18)
+- opengl-V09-04-25: Fix compiler warning + cosmetics.
+
+14th November 2011  Gabriele Cosmo (vis-V09-04-17)
+- Tagged
+
+14th November 2011  John Allison and Laurent Garnier
+- visman-V09-04-12: Changed "Fatal" to "JustWarning" for non-existent model.
+- opengl-V09-04-23: Bug fix for Qt < 4.4 and warning message improvement.
+
+12th November 2011  John Allison
+- opengl-V09-04-22: Minor fixes, suppression of debug printing.
+
+11th November 2011 Joseph Perl (vis-V09-04-16)
+- tag global tag for release 9.5
+
+11th November 2011  John Allison
+- modeling-V09-04-05: Coverity fix.
+- visman-V09-04-10: Fixed compiler warnings.
+- visman-V09-04-11: Coverity fix.
+- opengl-V09-04-20: Fixed compiler errors and warnings.
+- opengl-V09-04-21: Coverity fix.
+- visXXX-V09-04-01: Fixed compiler warnings.
+
+10th November 2011  Laurent Garnier
+- visexternal-V09-04-03: Fixes to gl2ps.
+- visXXX-V08-04-01: Implemented simple ad hoc tree and removed include/tree.
+
+8th November 2011  Ben Morgan
+- openinventor-V09-04-02:
+  o source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
+    driver (NB requires cotag cmake-V09-04-32).
+
+6th November 2011  Joseph Perl (vis-V09-04-15)
+- global tag for release 9.5
+- opengl-V09-04-19 backed off on release of tree viewer
+
+5th November 2011  Joseph Perl (vis-V09-04-14)
+- global tag for release 9.5
+- opengl-V09-04-17 fixed missing file from sources.cmake
+
+5th November 2011  Joseph Perl (vis-V09-04-13)
+- global tag for release 9.5
+- visman-V09-04-09 fixed missing file from sources.cmake
+
+5th November 2011  Joseph Perl (vis-V09-04-12)
+- global tag for release 9.5
+- On top of vis-V09-04-11:
+  o modeling-V09-04-04  o visman-V09-04-08  o vis-HepRep-V09-04-03  o vistest-V09-04-01  o opengl-V09-04-16
+
+4th November 2011  John Allison
+- visman-V09-04-08 (needs greps-V09-04-09):
+  o Added printing of available colours on nitialisation and in /vis/lst.
+- opengl-V09-04-15:
+  o Qt improvements.
+  o Use program loop to call display lists for "permanent objects"
+    (instead of using a "top display list").
+  o Fixed compilation warnings.
+
+30th October 2011  John Allison
+- modeling-V09-04-04:
+  o Fixed compiler warning.
+  o G4PhysicalVolumeModel: Added flag to G4PhysicalVolumeNodeID: true if drawn.
+- visman-V09-04-07:
+  o Added concept of default view parameters.
+  o These can be set in the vis manager for future operations either
+    by code or by command.
+  o Added /vis/default/hiddenEdge and /vis/default/style.
+
+28th October 2011  Joseph Perl
+- vis-HepRep-V09-04-03:
+  o Add /vis/heprep/scale and /vis/heprep/center
+
+26th October 2011  John Allison
+- vistest-V09-04-01: Minor improvements.
+
+25th October 2011  John Allison
+- vistest-V09-04-00: Minor improvements.
+
+25th October 2011  John Allison  (vis-V09-04-11)
+- Another interim tag.
+- Branch for Begin/EndDrawGroup development - vis-V09-04-11-branch.
+
+21st October 2011  John Allison  (vis-V09-04-10)
+- Interim tag:
+  o opengl-V09-04-14:
+    . Fixed circles/squares problem.
+    . Some work on ogl/print and gl2ps.
+  o visexternal-V09-04-02:
+    . gl2ps improvements.
+
+18th October 2011  John Allison  (vis-V09-04-09)
+- opengl-V09-04-13:
+  Xm: Fixed consistency and reset issue with control panels.
+  Stored mode: Improved efficiency for handling transients (trajectories).
+
+15th October 2011  John Allison
+- opengl-V09-04-12: Fixes to several problems:
+  o Failure to see complete drawing on Mac (missing trajectories).
+  o Slow drawing in Mac (reduced the frequency of glFlush).
+  o Inconsistent parameters on Xm panels.
+  o Sub-class parameters not being restet (introduced new virtual
+      function, ResetView).
+
+13th October 2011  Andrea Dotti
+- vis-HepRep-V09-04-02:
+  o Solving "variable set but not used" warning in GCC 4.6 
+
+11th October 2011  John Allison
+- visman-V09-04-06: G4VisCommandsViewer: Introduce RefreshIfRequired.
+
+10th October 2011  John Allison
+- visman-V09-04-05:
+  o G4VViewer: Added virtual function ResetView.
+  o Do not set auto-refresh for viewers that are not auto-refresh by default.
+
+8th October 2011  Akinori Kimura
+- gMocren-V09-04-02: Fixed Coverity defects.
+
+7th October 2011  John Allison
+- modeling-V09-04-03: Improve warning messages.
+- opengl-V09-04-11: Fixed compilation warnings.
+
+6th October 2011 Laurent Garnier
+- opengl-V09-04-10: Fixed one more compilation error on Windows.
+
+3rd October 2011 Laurent Garnier
+- opengl-V09-04-09: Fix Warning with DrawText and compilation error on Windows.
+
+25th September 2011  John Allison (vis-V09-04-08)
+- modeling-V09-04-02: Migrated to new G4Exception.
+- visman-V09-04-04:  Migrated to new G4Exception.  Also:
+  o G4VisCommandsSceneAdd.cc: When adding trajectories
+    (/vis/scene/add/trajectories) print attributes even if warnings
+    are suppressed.
+  o Added /vis/viewer/set/rotationStyle
+- opengl-V09-04-08: Migrated to new G4Exception.  Also:
+  o Fixed transparency problem.
+  o Improved first pass rendering speed (reduced use of glFlush).
+  o Fixed non-appearance of trajectories in Qt (added final glFlush).
+  o Many improvements in Qt.
+- vis-HepRep-V09-04-01: Migrated to new G4Exception.
+- vistree-V09-04-01: Migrated to new G4Exception.
+- gMocren-V09-04-01: Migrated to new G4Exception.
+
+17th June 2011 Ben Morgan (vis-V09-04-07)
+- opengl-V09-04-05 : Support added for CMake build of Xm and Win32 components.
+- raytracer-V09-04-04 : Changed to use new standard GEANT4_USE_RAYTRACER_X11
+  variable.
+
+17th June 2011  John Allison  (vis-V09-04-06)
+- opengl-V09-04-04: Re-instated cutaways in intersection mode.
+
+16th June 2011  John Allison  (vis-V09-04-05)
+- opengl-V09-04-03: L. Garnier:
+  o Fix conflict with qgl.h and GL/gh.h in include files
+
+2nd June 2011  John Allison  (vis-V09-04-04)
+- opengl-V09-04-02: Coverity warning fixes and Qt developments.
+- vistree-V09-04-00: GNUmakefile : Remove OpenGL/Qt stuff from Makefile
+- visXXX-V08-04-00: GNUMakefile : Remove G4VIS_BUILD.gmk use
+
+17th May 2010  John Allison  (vis-V09-04-03)
+- visman-V09-04-02: Fixed warnings, added G4Scene::SetName.
+- DAWN-V09-04-00: Fixed gcc-4.6.0 warning.
+- opengl-V09-04-01:
+  o Fixed numerous warnings.
+  o Several fixes for interoperablility between Qt, X and Xm.
+  o Qt improvemnts.
+  o Eliminate Qt3 code.
+
+6th April 2011 Laurent Garnier
+- G4OpenGLQtViewer add flag for batch mode. It works !
+
+14th March 2011, Laurent Garnier
+- Add Wt driver files
+- G4VisExecutive.icc, G4VisFeaturesOfOpenGL, G4OpenGL.hh : Add some modifications for Wt Driver
+- G4OpenGLQtMovieDialog.hh : Add protection against mix between slots/signals from Qt and Wt (boost)
+
+1st March 2011  John Allison
+- raytracer-V09-04-01: Fix bug introduced by fix to Coverity warnings
+- raytracer-V09-04-00:
+  o Trap recursive calls.
+  o Fix Coverity warnings.
+
+26th January 2011  Gabriele Cosmo  (vis-V09-04-02)
+- Fixed compilation error in OpenInventor SbPainterPS.cc introduced in
+  previous tag.
+- Fixed GNUmakefile in externals/gl2ps causing build failure.
+- Removed empty directories from main trunk.
+
+25th January 2011  John Allison  (vis-V09-04-01)
+- modeling-V09-04-01: Fixed unresolved reference.
+
+27th December 2010  John Allison  (vis-V09-04-00)
+- modeling-V09-04-00:
+  o Changed some exceptions from FatalError to JustWarnings.
+  o G4TrajectoryDrawerUtils.cc: Rework TimesValidity.
+- visman-V09-04-00:
+  o Improvements to /vis/scene commands.
+- opengl-V09-04-00, openinventor-V09-04-00:
+  o Fixed some Coverity warnings.
+- VRML-V09-04-00, visexternal-V09-04-00:
+  o GNUmakefile : Remove Qt stuff.
 
 15th November 2010  Joseph Perl (vis-V09-03-13)
 - Global Vis Tag. Candidate for Geant4 release 9.4

@@ -1,7 +1,7 @@
 
-       ==========================================================
+       =--------------------------------------------------------=
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+       =--------------------------------------------------------=
 
 History file for  hadronic/models/chiral_inv_phase_space/body  directory.
 	
@@ -16,7 +16,25 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-<<<<<<< History (please, make changes only with Mikhail.Kossov@cern.ch approval)
+<<-!- History (please, make changes only with Mikhail.Kossov@cern.ch approval)
+
+27-May-2011 M.Kosov [The main changes ar in body] (hadr-chips-V09-04-02)
+------------------------------------------------------------------------
+Mutual CHIPS tag: Further tuning of the Quasmon/Evaporation transition
+
+16-May-2011 M.Kosov [The main changes ar in body] (hadr-chips-V09-04-01)
+------------------------------------------------------------------------
+Mutual CHIPS tag: Tuning of the Quasmon/Evaporation transition to meet
+                  Requirements of the LHS Calorimeter response level
+                + In G4QEnvironment fix for the Current/Last delete bug
+this tag corrects the Gunter's mistake for the tag hadr-chips-V09-04-00
+- the images 7<, 7> and 7= are removed in all CHIPS files
+
+10-May-2011 M.Kosov                              (hadr-chips-V09-04-00)
+-----------------------------------------------------------------------
+Mutual CHIPS tag: Tuning of the Quasmon/Evaporation transition to meet
+                  Requirements of the LHS Calorimeter response level
+                + In G4QEnvironment fix for the Current/Last delete bug
 
 21-Nov-2010 Dennis Wright                       (hadr-chips-V09-03-09)
 ----------------------------------------------------------------------
@@ -168,7 +186,7 @@ Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the Valgrind induced improvement
 
-=======
+=-----------------=
 8-Sep-2009 M.Kosov                              (hadr-chips-V09-02-09)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the hadron+proton improvement (mostly body)

@@ -49,7 +49,9 @@
 
 #include "G4SPSEneDistribution.hh"
 
-G4SPSEneDistribution::G4SPSEneDistribution() {
+G4SPSEneDistribution::G4SPSEneDistribution()
+  : particle_definition(0), eneRndm(0), Splinetemp(0)
+{
 	//
 	// Initialise all variables
 	particle_energy = 1.0 * MeV;
@@ -165,7 +167,9 @@ void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input) {
 void G4SPSEneDistribution::ArbEnergyHistoFile(G4String filename) {
 	std::ifstream infile(filename, std::ios::in);
 	if (!infile)
-		G4Exception("Unable to open the histo ASCII file");
+		G4Exception("G4SPSEneDistribution::ArbEnergyHistoFile",
+                "Event0301",FatalException,
+                "Unable to open the histo ASCII file");
 	G4double ehi, val;
 	while (infile >> ehi >> val) {
 		ArbEnergyH.InsertValues(ehi, val);
@@ -630,7 +634,9 @@ void G4SPSEneDistribution::SplineInterpolation() {
 		// change currently stored values (emin etc) which are actually momenta
 		// to energies.
 		if (particle_definition == NULL)
-			G4cout << "Error: particle not defined" << G4endl;
+                    G4Exception("G4SPSEneDistribution::SplineInterpolation",
+                                "Event0302",FatalException,
+			        "Error: particle not defined");
 		else {
 			// Apply Energy**2 = p**2c**2 + m0**2c**4
 			// p should be entered as E/c i.e. without the division by c
@@ -663,8 +669,10 @@ void G4SPSEneDistribution::SplineInterpolation() {
 	    ei[count] = Arb_x[i - 1] + de*count ;
 	    prob[count] =  Splinetemp->CubicSplineInterpolation(ei[count]);
 	    if (prob[count] < 0.) { 
-	      G4cout <<   "Warning: G4DataInterpolation returns value < 0  " << prob[count] <<" "<<ei[count]<< G4endl;
-	      G4Exception("         Please use an alternative method, e.g. Lin, for interpolation");
+              G4ExceptionDescription ED;
+	      ED << "Warning: G4DataInterpolation returns value < 0  " << prob[count] <<" "<<ei[count]<< G4endl;
+              G4Exception("G4SPSEneDistribution::SplineInterpolation","Event0303",
+              FatalException,ED);
 	    }
 	    area += prob[count]*de;
 	  }

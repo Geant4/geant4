@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010/11/30 12:00:56 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.4 2010-11-30 12:00:56 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -27,6 +27,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 #
 # Module has optional sources
 #
+include(Geant4MacroDefineModule)
+
+
 # List those always built
 set(G4INTERFACES_COMMON_MODULE_HEADERS 
     G4InteractorMessenger.hh
@@ -63,32 +66,49 @@ if(GEANT4_USE_QT)
 endif()
 
 #
-# Win32 option
+# Win32 option - always built when we're using MSVC
 #
-if(MSVC AND GEANT4_USE_WIN32TERMINAL)
+if(MSVC)
     # Add the sources
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Win32.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Win32.cc)
 
-    # Any extra things here
+    # Add the needed compile definitions to these sources
+    GEANT4_ADD_COMPILE_DEFINITIONS(
+        SOURCES G4Win32.cc
+        COMPILE_DEFINITIONS G4INTY_BUILD_WIN32
+    )
 endif()
 
 #
-# X11/Xt options
+# X11 options - we only need this for Xm UI
 #
-if(UNIX AND GEANT4_USE_X11TERMINAL)
+if(UNIX)
+  if(GEANT4_USE_XM OR GEANT4_USE_INVENTOR)
     # Add the sources
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Xt.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Xt.cc)
 
-    # Any extra things here
+    # Must have X11 includes...
+    include_directories(${X11_INCLUDE_DIR})
+
+    # Source needs to have a compile definition
+    GEANT4_ADD_COMPILE_DEFINITIONS(
+        SOURCES G4Xt.cc
+        COMPILE_DEFINITIONS G4INTY_BUILD_XT
+    )
+
+    # It uses the X11 libs?
+    list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
+        "${X11_LIBRARIES}"
+    )
+  endif()
 endif()
 
 
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4UIcommon
     HEADERS
         ${G4INTERFACES_COMMON_MODULE_HEADERS}

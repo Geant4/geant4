@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007-02-24 06:45:04 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007/02/24 06:45:04 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy Deuteron Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy Deuteron Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
  
 #ifndef G4LEDeuteronInelastic_h
 #define G4LEDeuteronInelastic_h 1
@@ -43,9 +41,9 @@
 
 #include "G4InelasticInteraction.hh"
  
- class G4LEDeuteronInelastic : public G4InelasticInteraction
- {
- public:
+class G4LEDeuteronInelastic : public G4InelasticInteraction
+{
+  public:
     
     G4LEDeuteronInelastic() : G4InelasticInteraction("G4LEDeuteronInelastic")
     {
@@ -55,11 +53,13 @@
       SetMaxEnergy( 10.*TeV );  // NUCREC only worked for energies < 100MeV
     }
     
-    ~G4LEDeuteronInelastic() { }
+    ~G4LEDeuteronInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
- };
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
+};
  
 #endif
  

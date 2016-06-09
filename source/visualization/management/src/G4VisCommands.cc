@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.24 2009/03/09 12:42:00 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VisCommands.cc,v 1.24 2009-03-09 12:42:00 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -146,6 +146,8 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   fpVisManager->PrintAvailableGraphicsSystems();
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
+  G4cout << G4endl;
+  fpVisManager->PrintAvailableColours(verbosity);
   G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand(G4String("/vis/viewer/list ! ") + verbosityString);

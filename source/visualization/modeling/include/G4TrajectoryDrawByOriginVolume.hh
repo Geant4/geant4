@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.5 2010/05/11 11:31:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.5 2010-05-11 11:31:31 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 // Trajectory model which colours a trajectory according to

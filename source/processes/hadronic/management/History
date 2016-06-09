@@ -14,6 +14,143 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-23)
+--------------------------------------------------------
+- G4HadronicProcess - changed order of checks - first track status,
+    after value of cross section to remove potential numerical problem
+    of cross section computation for zero kinetic energy hadrons
+
+6 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-22)
+--------------------------------------------------------
+- G4HadronicProcess - more accurate check of zero primary energy
+
+4 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-21)
+--------------------------------------------------------
+- G4HadronicProcess - more accurate check of zero primary energy
+
+3 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-20)
+--------------------------------------------------------
+- G4HadronicProcess - added change status if final energy
+    of primary particle is zero
+
+1 November 2011 Vladimir Ivanchenko (hadr-man-V09-04-19)
+21 October 2011 Vladimir Ivanchenko (hadr-man-V09-04-18)
+----------------------------------------------------------
+- G4HadronicProcess: added protected method GetTargetNucleusPointer;
+                     make DumpState method protected
+
+18 October 2011 Michael Kelsey (hadr-man-V09-04-17)
+---------------------------------------------------
+- G4HadronicProcess.cc: In ::CheckEnergyMomentumConservation(), check for
+  projectile kinetic energy below the absolute energy-conservation bound;
+  extremely slow particles should not have a "relative" conservation check.
+
+11 October 2011 Michael Kelsey (hadr-man-V09-04-16)
+---------------------------------------------------
+- G4HadronicProcess.cc: In ::CheckEnergyMomentumConservation(), check for
+  "do nothing" result (G4ParticleChange with "fAlive" status), and compute
+  final-state momentum differently than just adding up secondaries.
+
+06 October 2011 Dennis Wright (hadr-man-V09-04-15)
+--------------------------------------------------
+- replace Description() with ProcessDescription(std::ostream&)
+
+28 September 2011 Vladimir Ivanchenko (hadr-man-V09-04-14)
+----------------------------------------------------------
+- G4HadronicProcess: complete migration to integer Z and A.
+
+26 Sepember 2011 Michael Kelsey (hadr-man-V09-04-13)
+----------------------------------------------------
+- G4HadronicProcess.cc:  Add file-scope variable to capture envvar with name
+  of file for saving random engine state.  Used immediately prior to model
+  "ApplyYourself" call.
+
+9 September 2011 Michael Kelsey (hadr-man-V09-04-12)
+----------------------------------------------------
+- G4HadronicProcess.cc: migration to new G4HadFinalState interface
+- G4HadLeadBias.cc: migration to new G4HadFinalState interface
+
+  Requires hadr-util-V09-04-02
+
+6 September 2011 Vladimir Ivanchenko (hadr-man-V09-04-11)
+--------------------------------------------------------
+- G4HadronicProcess: migration to new G4Exception interface;
+                     return back GetMicroscopicCrossSection and mark
+                     it as an obsolete method;
+                     make GetElementCrossSection inlined
+
+23 August 2011 Vladimir Ivanchenko (hadr-man-V09-04-10)
+--------------------------------------------------------
+- G4HadronicProcess: use new interface to cross sections;
+                     substitute GetMicroscopicCrossSection by
+                     GetElementCrossSection;
+                     added check on zero kinetic energy of primary and 
+                     secondary after interaction (active if 
+                     G4HadronicProcess_debug environment variable is set)
+- G4HadronicProcessStore - use  new interface to cross sections
+
+ 1 August 2011  Dennis Wright (hadr-man-V09-04-09)
+--------------------------------------------------
+- Add method G4HadronicProcessStore::DumpHtml to write out html physics 
+     list documentation
+- Add method G4HadronicProcessStore::PrintHtml to print html
+     documentation for processes, models and cross sections for each
+     particle
+   
+25 July 2011 Vladimir Ivanchenko (hadr-man-V09-04-08)
+----------------------------------------------------
+- G4HadronicProcess: added public method GetTargetNucleus to access
+  target isotope; added private method FillResult which provides
+  more simple and transparent handle of primary and secondaries, 
+  in particular, allowing primary be unchanged 
+
+20 July 2011 Michael Kelsey
+---------------------------
+- G4HadronicProcess:  Add null-pointer checks for material and volume to
+   DumpState()
+
+ 7 June 2011 Dennis Wright      (hadr-man-V09-04-07)
+----------------------------------------------------
+- G4HadronicProcessType: fRadioactiveDecay changed from 211 to 210
+
+ 5 June 2011 Dennis Wright      (hadr-man-V09-04-06)
+----------------------------------------------------
+- G4HadronicProcessType: add fRadioactiveDecay = 211 to enum
+  
+6 April 2011 Gunter Folger      (hadr-man-V09-04-05)
+----------------------------------------------------
+- enhance printout for case 3 in E/p checking with initial state info.
+
+5 April 2011 Gunter Folger      (hadr-man-V09-04-04)
+----------------------------------------------------
+- modify E/p checking to allow to use stdout or stderr, depending on 
+   checklevel>0 or checklevel<0.
+
+
+17 March 2011 Gunter Folger     (hadr-man-V09-04-03)
+----------------------------------------------------
+- modify E/p checking to take the tighter limit of process and model
+
+
+25 February 2011 Gunter Folger  (hadr-man-V09-04-02)
+----------------------------------------------------
+-  allow to turn on checking for E/p conservation by environment variables:
+	G4Hadronic_epReportLevel : set to checklevel [1,4]
+	G4Hadronic_epCheckRelativeLevel: level of relative conservation
+	G4Hadronic_epCheckAbsoluteLevel: level for absolute conservation
+     
+10 February 2011 Dennis Wright  (hadr-man-V09-04-01)
+----------------------------------------------------
+- add method MultiplyCrossSectionBy() to G4HadronicProcess so that 
+cross sections can be scaled for testing
+
+ 7 January 2011  Dennis Wright  (hadr-man-V09-04-00)
+----------------------------------------------------
+- G4HadronicProcess.cc: make GetCrossSectionDataStore public so it 
+    can be accessed through the process
+- G4HadronicProcessStore::Print() : extend to include cross section
+    info
+
 30 November 2010  Dennis Wright  (hadr-man-V09-03-06)
 -----------------------------------------------------
 - G4HadronicProcess.cc : in PostStepDoIt, check cross section value

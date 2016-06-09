@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007/05/22 00:39:08 dennis Exp $
+# $Id: GNUmakefile,v 1.1 2007-05-22 00:39:08 dennis Exp $
 # ------------------------------------------------------------------------
 # GNUmakefile for Livermore fission library.  Dennis Wright, 14 March 2007
 # ------------------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/processes/hadronic/util/include \

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.5 2010/08/28 15:53:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.5 2010-08-28 15:53:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -33,6 +33,8 @@
 //      A.Pavliouk 26.11.98
 //          In Set...() methods a pointer is deleted now before new
 //          value will be asigned.
+//	M.Kelsey 07.03.2011
+//	    Add data member and Set method to store original projectile
 // -----------------------------------------------------------------------------
 
 #ifndef G4VIntraNuclearTransportModel_h
@@ -71,6 +73,8 @@ public:
 
   inline void Set3DNucleus(G4V3DNucleus* const value);
 
+  inline void SetPrimaryProjectile(const G4HadProjectile &aPrimary);
+
   inline const G4String& GetModelName() const;
 
 private:
@@ -86,11 +90,15 @@ protected:
 
   inline G4VPreCompoundModel* GetDeExcitation() const;
 
+  inline const G4HadProjectile* GetPrimaryProjectile() const;
+
   G4String theTransportModelName;
 
   G4V3DNucleus* the3DNucleus;
 
   G4VPreCompoundModel* theDeExcitation;
+
+  const G4HadProjectile* thePrimaryProjectile;
 };
 
 inline const G4String& G4VIntraNuclearTransportModel::GetModelName() const
@@ -118,6 +126,19 @@ G4VIntraNuclearTransportModel::SetDeExcitation(G4VPreCompoundModel* const  value
 {
    delete theDeExcitation; 
    theDeExcitation = value;
+}
+
+inline const G4HadProjectile* 
+G4VIntraNuclearTransportModel::GetPrimaryProjectile() const
+{
+  return thePrimaryProjectile;
+}
+
+inline void  
+G4VIntraNuclearTransportModel::SetPrimaryProjectile(const G4HadProjectile &aPrimary)
+{
+  // NOTE:  Previous pointer is NOT deleted: passed by reference, no ownership
+  thePrimaryProjectile = &aPrimary;
 }
 
 #endif

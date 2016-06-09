@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.hh,v 1.10 2006/06/29 19:06:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Text.hh,v 1.10 2006-06-29 19:06:06 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  17/11/96.
@@ -77,8 +77,8 @@ public: // With description
 
   enum Layout {left, centre, right};
   G4Text (const G4String& text);
-  G4Text (const G4String& text, const G4Point3D& pos);
-  G4Text (const G4VMarker& marker);
+  G4Text (const G4String& text, const G4Point3D& position);
+  G4Text (const G4VMarker&);
   ~G4Text ();
 
   G4String GetText   () const;
@@ -88,7 +88,7 @@ public: // With description
   G4double GetYOffset () const ;
 
   void SetText   (const G4String& text);
-  void SetLayout (Layout layout);
+  void SetLayout (Layout);
 
   void SetOffset ( double dx,  double dy ) ;   
 

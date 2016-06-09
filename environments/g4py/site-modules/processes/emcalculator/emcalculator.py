@@ -1,4 +1,4 @@
-#$Id: emcalculator.py,v 1.1 2008/12/01 07:04:08 kmura Exp $
+#$Id: emcalculator.py,v 1.1 2008-12-01 07:04:08 kmura Exp $
 """
 # ==================================================================
 #   Python module

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006/04/25 07:54:28 kmura Exp $
+# $Id: GNUmakefile,v 1.2 2006-04-25 07:54:28 kmura Exp $
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2006/06/29 16:57:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:57:29 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
-      const G4int MaxTally = 20;
+      const G4int MaxTally = 21;		// 0 + 20
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,9 +59,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetMaterial (G4String);            
      void SetMagField (G4double);
      
-     void SetTallySize     (G4ThreeVector);
-     void SetTallyMaterial (G4String);
-     void SetTallyPosition (G4ThreeVector);
+     void SetTallyNumber   (G4int);     
+     void SetTallySize     (G4int, G4ThreeVector);
+     void SetTallyMaterial (G4int, G4String);
+     void SetTallyPosition (G4int, G4ThreeVector);
      
      G4VPhysicalVolume* Construct();
      void               UpdateGeometry();
@@ -75,9 +76,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};           
      G4Material*  GetAbsorMaterial() {return absorMaterial;};
      
-     G4LogicalVolume* GetLogicalTally() {return lTally;}
-     G4double         GetTallyMass()    {return tallyMass;};
      G4int            GetTallyNumber()  {return tallyNumber;};
+     G4double         GetTallyMass(G4int n)    {return tallyMass[n];};          
+     G4LogicalVolume* GetLogicalTally(G4int n) {return lTally[n];}
      
      void         PrintParameters();
                        
@@ -91,13 +92,13 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Material*         absorMaterial;
      G4UniformMagField*  magField;
      G4LogicalVolume*    lAbsor;
-               
-     G4ThreeVector       tallySize;
-     G4Material*         tallyMaterial;
-     G4double            tallyMass;
-     G4int               tallyNumber;     
-     G4ThreeVector*      tallyPosition;
-     G4LogicalVolume*    lTally;
+     
+     G4int               tallyNumber;                   
+     G4ThreeVector       tallySize[MaxTally];
+     G4Material*         tallyMaterial[MaxTally];
+     G4double            tallyMass[MaxTally]; 
+     G4ThreeVector       tallyPosition[MaxTally];
+     G4LogicalVolume*    lTally[MaxTally];
      
      DetectorMessenger* detectorMessenger;
 

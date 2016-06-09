@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc,v 1.4 2008/05/05 21:21:55 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGTwoBody.cc,v 1.4 2008-05-05 21:21:55 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RPGTwoBody.hh"
@@ -71,7 +71,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   G4double targetMass = targetParticle.GetDefinition()->GetPDGMass()/GeV;
 
   targetMass = targetParticle.GetMass()/GeV;
-  const G4double atomicWeight = targetNucleus.GetN();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
     
   G4double etCurrent = currentParticle.GetTotalEnergy()/GeV;
   G4double pCurrent = currentParticle.GetTotalMomentum()/GeV;
@@ -208,9 +208,9 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   G4int neutronsInFinalState = finalStateNucleons.second;
 
   G4int PinNucleus = std::max(0, 
-    G4int(targetNucleus.GetZ()) - protonsInFinalState);
+    G4int(targetNucleus.GetZ_asInt()) - protonsInFinalState);
   G4int NinNucleus = std::max(0,
-    G4int(targetNucleus.GetN()-targetNucleus.GetZ()) - neutronsInFinalState);
+    G4int(targetNucleus.GetA_asInt()-targetNucleus.GetZ_asInt()) - neutronsInFinalState);
 
   if( atomicWeight >= 1.5 )
   {

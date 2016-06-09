@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.16 2007/03/25 22:54:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VParticleChange.hh,v 1.16 2007-03-25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -73,6 +73,7 @@
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //   add flag for first/last step in volume 30 Oct. 2006 H.Kurashige
 //   add nonIonizingEnergyLoss          26 Mar 2007 H.Kurashige 
+//   modify/fix bugs related to weight  17 Sep. 2011   H.Kurashige 
 //
 
 #ifndef G4VParticleChange_h
@@ -198,23 +199,28 @@ class G4VParticleChange
     //  Add a secondary particle to theListOfSecondaries.
     // ------------------------------------------------------   
 
+    G4double GetWeight() const;
     G4double GetParentWeight() const ;
     //  Get weight of the parent (i.e. current) track
-    void     ProposeParentWeight(G4double);
+    void ProposeWeight(G4double finalWeight);
+    void ProposeParentWeight(G4double finalWeight);
     //  Propse new weight of the parent (i.e. current) track
-
-    void     SetParentWeightByProcess(G4bool);
-    G4bool   IsParentWeightSetByProcess() const;  
-    // If fParentWeightByProcess flag is false (true in default),
-    // G4VParticleChange can change the weight of the parent track,
-    // in any DoIt by using  ProposeParentWeight(G4double)
- 
 
     void     SetSecondaryWeightByProcess(G4bool);
     G4bool   IsSecondaryWeightSetByProcess() const;  
-    // If fSecondaryWeightByProcess flag is false (false in default),
-    // G4VParticleChange set the weight of the secondary tracks
-    // equal to the parent weight when the secondary tracks are added.
+    // In default (fSecondaryWeightByProcess flag is true), 
+    // the weight of secondary tracks will not be changed 
+    // (i.e. the process determine the secodary weight)
+    // If fSecondaryWeightByProcess flag is false, the weight of 
+    // secondary tracks will be set to the parent weight
+
+    void   SetParentWeightByProcess(G4bool);
+    // Weight of parent track can be changed only via ParticleChange 
+    // If you set this flag to 'false', 
+    // the weight of the parent track will not be modified,
+    // but the proposed weight is applied to secondaries
+    // (if SetSecondaryWeightByProcess is set to false) 
+    G4bool   IsParentWeightSetByProcess() const;  
 
     virtual void DumpInfo() const;
     //  Print out information
@@ -257,11 +263,18 @@ class G4VParticleChange
     //  The value of "True" Step Length
     
 
-  // flag for initial/last step
-   G4bool theFirstStepInVolume;
-   G4bool theLastStepInVolume;
+    G4bool theFirstStepInVolume;
+    G4bool theLastStepInVolume;
+    // flag for initial/last step
 
-
+    G4double theParentWeight;
+    // Weight ofparent track
+    G4bool isParentWeightSetByProcess;
+    G4bool isParentWeightProposed;
+    // flags for Weight ofparent track
+    G4bool   fSetSecondaryWeightByProcess;  
+    //  flag for setting weight of secondaries  
+ 
     G4int verboseLevel;
     //  The Verbose level
 
@@ -290,10 +303,6 @@ class G4VParticleChange
     static const G4double accuracyForException; 
 
 
-  protected:
-    G4double theParentWeight;
-    G4bool   fSetSecondaryWeightByProcess;  
-    G4bool   fSetParentWeightByProcess;  
 };
 
 #include "G4Step.hh"

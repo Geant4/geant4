@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.10 2010/09/07 16:05:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VMscModel.hh,v 1.10 2010-09-07 16:05:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Track.hh"
 #include "G4SafetyHelper.hh"
+#include "G4VEnergyLossProcess.hh"
 
 class G4ParticleChangeForMSC;
 
@@ -68,8 +69,8 @@ public:
 
   virtual ~G4VMscModel();
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, 
-					      G4PhysicsTable* theLambdaTable, 
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,  
+					      G4PhysicsTable*, 
 					      G4double currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
@@ -102,13 +103,15 @@ public:
 
   inline void SetSampleZ(G4bool);
 
+  inline G4VEnergyLossProcess* GetIonisation() const;
+
+  inline void SetIonisation(G4VEnergyLossProcess*);
+
 protected:
 
   // initialisation of the ParticleChange for the model
+  // initialisation of interface with geometry and ionisation 
   G4ParticleChangeForMSC* GetParticleChangeForMSC();
-
-  // initialisation of interface with geometry
-  void InitialiseSafetyHelper();
 
   // shift point of the track PostStep 
   void ComputeDisplacement(G4ParticleChangeForMSC*,  
@@ -123,6 +126,14 @@ protected:
   inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
 				   G4double limit);
 
+  inline G4double GetRange(const G4ParticleDefinition* part,
+                           G4double kineticEnergy,
+			   const G4MaterialCutsCouple* couple);
+
+  inline G4double GetEnergy(const G4ParticleDefinition* part,
+			    G4double range,
+			    const G4MaterialCutsCouple* couple);
+
 private:
 
   //  hide assignment operator
@@ -130,6 +141,11 @@ private:
   G4VMscModel(const  G4VMscModel&);
 
   G4SafetyHelper* safetyHelper;
+  G4VEnergyLossProcess* ionisation;
+
+  G4double dedx;
+  G4double localtkin;
+  G4double localrange;
 
 protected:
 
@@ -214,6 +230,50 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
 	  limit, presafety);
   }
   return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4VMscModel::GetRange(const G4ParticleDefinition* part,
+		      G4double kinEnergy, const G4MaterialCutsCouple* couple)
+{
+  localrange = DBL_MAX;
+  localtkin  = kinEnergy;
+  if(ionisation) { localrange = ionisation->GetRangeForLoss(localtkin, couple); }
+  else { 
+    G4double q = part->GetPDGCharge()/eplus;
+    localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
+  }
+  return localrange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4VMscModel::GetEnergy(const G4ParticleDefinition* part,
+		       G4double range, const G4MaterialCutsCouple* couple)
+{
+  G4double e = localtkin;
+  if(ionisation) { e = ionisation->GetKineticEnergy(range, couple); }
+  else { 
+    G4double q = part->GetPDGCharge()/eplus;
+    if(localrange > range) {
+      e -= (localrange - range)*dedx*q*q*couple->GetMaterial()->GetDensity(); 
+    }
+  }
+  if(e < 0.0) { e = 0.0; }
+  return e;
+}
+
+inline G4VEnergyLossProcess* G4VMscModel::GetIonisation() const
+{
+  return ionisation;
+}
+
+inline void G4VMscModel::SetIonisation(G4VEnergyLossProcess* p)
+{
+  ionisation = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

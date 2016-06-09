@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2010/09/30 09:29:34 gcosmo Exp $
+# $Id: GNUmakefile,v 1.27 2010-09-30 09:29:34 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.

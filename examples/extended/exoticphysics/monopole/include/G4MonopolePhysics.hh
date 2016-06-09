@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.hh,v 1.4 2010/11/29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MonopolePhysics.hh,v 1.4 2010-11-29 15:14:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2009/11/17 08:55:50 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2009-11-17 08:55:50 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

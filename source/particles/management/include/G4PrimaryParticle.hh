@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.8 2010/10/27 07:47:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PrimaryParticle.hh,v 1.8 2010-10-27 07:47:05 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -66,148 +66,115 @@ class G4VUserPrimaryParticleInformation;
 
 class G4PrimaryParticle 
 {
-  public:
-      inline void *operator new(size_t);
-      inline void operator delete(void *aStackedTrack);
+ public:
+  inline void *operator new(size_t);
+  inline void operator delete(void *aStackedTrack);
+  
+ public: // with description
+  G4PrimaryParticle();
+  G4PrimaryParticle(G4int Pcode);
+  G4PrimaryParticle(G4int Pcode,
+		    G4double px,G4double py,G4double pz);
+  G4PrimaryParticle(G4int Pcode,
+		    G4double px,G4double py,G4double pz,G4double E);
+  G4PrimaryParticle(const G4ParticleDefinition* Gcode);
+  G4PrimaryParticle(const G4ParticleDefinition* Gcode,
+		    G4double px,G4double py,G4double pz);
+  G4PrimaryParticle(const G4ParticleDefinition* Gcode,
+		    G4double px,G4double py,G4double pz,G4double E);
+  
+ public:
+  virtual ~G4PrimaryParticle();
+  
+  // copy constructor and assignment operator 
+  // nextParticle and daughterParticle is copied by object (i.e. deep copy)
+  // userInfo will nt be copied
+  G4PrimaryParticle(const G4PrimaryParticle &right);   
+  G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
+  
+  // equal operator  returns 'true' only if the same object (i.e comarison by pointer value)
+  G4int operator==(const G4PrimaryParticle &right) const;
+  G4int operator!=(const G4PrimaryParticle &right) const;
+  
+ public: // with description
+  void Print() const;
+  // Print the properties of the particle.
+  
 
-      G4PrimaryParticle();
-      G4PrimaryParticle(G4int Pcode);
-      G4PrimaryParticle(G4int Pcode,
-                        G4double px,G4double py,G4double pz);
-      G4PrimaryParticle(G4int Pcode,
-                        G4double px,G4double py,G4double pz,G4double E);
-      G4PrimaryParticle(const G4ParticleDefinition* Gcode);
-      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
-                        G4double px,G4double py,G4double pz);
-      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
-                        G4double px,G4double py,G4double pz,G4double E);
-      ~G4PrimaryParticle();
+ public: // with description
+  // followings are get/set methods available.
+  //   "trackID" will be set if this particle is sent to G4EventManager 
+  //    and converted to G4Track. Otherwise = -1.
+  //    The mass and charge in G4ParticleDefinition will be used in default.
+  //   "SetMass" and "SetCharge" methods are used to set dynamical mass and charge 
+  //   G4DynamicParticle."GetMass" and "GetCharge" methods will return 
+  //   those in G4ParticleDefinition if users do not set dynamical ones. 
 
-      const G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
-      G4int operator==(const G4PrimaryParticle &right) const;
-      G4int operator!=(const G4PrimaryParticle &right) const;
+  G4int GetPDGcode()  const;
+  void SetPDGcode(G4int Pcode);
+  G4ParticleDefinition * GetG4code() const;
+  void SetG4code(const G4ParticleDefinition * Gcode);
+  const G4ParticleDefinition * GetParticleDefinition() const;
+  void SetParticleDefinition(const G4ParticleDefinition * pdef);
+  G4double GetMass() const;
+  void SetMass(G4double mas);
+  G4double GetCharge() const;
+  void SetCharge(G4double chg);
+  G4double GetKineticEnergy() const;
+  void SetKineticEnergy(G4double eKin); 
+  const G4ThreeVector& GetMomentumDirection() const;
+  void SetMomentumDirection(const G4ThreeVector& p); 
+  G4double GetTotalMomentum() const;
+  void Set4Momentum(G4double px, G4double py, G4double pz, G4double E);
+  G4double GetTotalEnergy() const;
+  void SetTotalEnergy(G4double eTot ); 
+  G4ThreeVector GetMomentum() const;
+  void SetMomentum(G4double px, G4double py, G4double pz);
+  G4double GetPx() const;
+  G4double GetPy() const;
+  G4double GetPz() const;
+  G4PrimaryParticle * GetNext() const;
+  void SetNext(G4PrimaryParticle * np);
+  G4PrimaryParticle * GetDaughter() const;
+  void SetDaughter(G4PrimaryParticle * np);
+  G4int GetTrackID() const;
+  void SetTrackID(G4int id);
+  G4ThreeVector GetPolarization() const;
+  void SetPolarization(const G4ThreeVector& pol);
+  void SetPolarization(G4double px,G4double py,G4double pz);
+  G4double GetPolX() const;
+  G4double GetPolY() const;
+  G4double GetPolZ() const;
+  G4double GetWeight() const;
+  void SetWeight(G4double w);
+  G4double GetProperTime() const;
+  void SetProperTime(G4double t);
+  G4VUserPrimaryParticleInformation* GetUserInformation() const;
+  void SetUserInformation(G4VUserPrimaryParticleInformation* anInfo);
 
-  public: // with description
-      void Print() const;
-      // Print the properties of the particle.
+ private:
+  G4int PDGcode;
+  const G4ParticleDefinition * G4code;
+  
+  G4ThreeVector direction;
+  G4double kinE;
+  
+  G4PrimaryParticle * nextParticle;
+  G4PrimaryParticle * daughterParticle;
+  
+  G4int trackID;  // This will be set if this particle is
+  // sent to G4EventManager and converted to
+  // G4Track. Otherwise = -1.
+  
+  G4double mass;  
+  G4double charge;
+  G4double polX;
+  G4double polY;
+  G4double polZ;
+  G4double Weight0;
+  G4double properTime;
+  G4VUserPrimaryParticleInformation* userInfo;
 
-  private:
-      G4int PDGcode;
-      const G4ParticleDefinition * G4code;
-      G4double Px;
-      G4double Py;
-      G4double Pz;
-      
-      G4PrimaryParticle * nextParticle;
-      G4PrimaryParticle * daughterParticle;
-
-      G4int trackID;  // This will be set if this particle is
-                      // sent to G4EventManager and converted to
-                      // G4Track. Otherwise = -1.
-
-      G4double mass;  
-      G4double charge;
-      G4double polX;
-      G4double polY;
-      G4double polZ;
-      G4double Weight0;
-      G4double properTime;
-      G4VUserPrimaryParticleInformation* userInfo;
-
-  public: // with description
-      // followings are get methods available.
-      //   "trackID" will be set if this particle is sent to G4EventManager 
-      //    and converted to G4Track. Otherwise = -1.
-      //    The mass and charge in G4ParticleDefinition will be used in default.
-      //   "SetMass" and "SetCharge" methods are used to set dynamical mass and charge 
-      //   G4DynamicParticle."GetMass" and "GetCharge" methods will return 
-      //   those in G4ParticleDefinition if users do not set dynamical ones. 
-
-      G4double GetMass() const;
-      G4double GetCharge() const;
-
-      inline G4int GetPDGcode() const
-      { return PDGcode; }
-      inline G4ParticleDefinition * GetG4code() const
-      { return const_cast<G4ParticleDefinition*>(G4code); }
-      inline const G4ParticleDefinition * GetParticleDefinition() const
-      { return G4code; }
-      inline G4ThreeVector GetMomentum() const
-      { return G4ThreeVector(Px,Py,Pz); }
-      inline G4double GetPx() const
-      { return Px; }
-      inline G4double GetPy() const
-      { return Py; }
-      inline G4double GetPz() const
-      { return Pz; }
-      inline G4PrimaryParticle * GetNext() const
-      { return nextParticle; }
-      inline G4PrimaryParticle * GetDaughter() const
-      { return daughterParticle; }
-      inline G4int GetTrackID() const
-      { return trackID; }
-      inline G4ThreeVector GetPolarization() const
-      { return G4ThreeVector(polX,polY,polZ); }
-      inline G4double GetPolX() const { return polX; }
-      inline G4double GetPolY() const { return polY; }
-      inline G4double GetPolZ() const { return polZ; }
-      inline G4double GetWeight() const { return Weight0; }
-      inline void SetWeight(G4double w) { Weight0 = w; }
-      inline void SetProperTime(G4double t) { properTime = t; }
-      inline G4double GetProperTime() const { return properTime; }
-      inline void SetUserInformation(G4VUserPrimaryParticleInformation* anInfo)
-      { userInfo = anInfo; }
-      inline G4VUserPrimaryParticleInformation* GetUserInformation() const
-      { return userInfo; }
-
-  public: // with description
-      // Followings are available Set methods.
-      void SetPDGcode(G4int Pcode);
-      void SetG4code(const G4ParticleDefinition * Gcode);
-      void SetParticleDefinition(const G4ParticleDefinition * pdef);
-      inline void SetMomentum(G4double px, G4double py, G4double pz)
-      { 
-        Px = px;
-        Py = py;
-        Pz = pz; 
-      }
-      inline void Set4Momentum(G4double px, G4double py, G4double pz, G4double E)
-      { 
-        Px = px;
-        Py = py;
-        Pz = pz; 
-        G4double mas2 = E*E - px*px - py*py - pz*pz;
-        if(mas2>=0.)
-        { mass = std::sqrt(mas2); }
-        else
-        { mass = -1.0; }
-      }
-      inline void SetNext(G4PrimaryParticle * np)
-      { 
-        if(nextParticle == 0)
-        { nextParticle = np; }
-        else
-        { nextParticle->SetNext(np); }
-      }
-      inline void SetDaughter(G4PrimaryParticle * np)
-      { 
-        if(daughterParticle == 0)
-        { daughterParticle = np; }
-        else
-        { daughterParticle->SetNext(np); }
-      }
-      inline void SetTrackID(G4int id)
-      { trackID = id; }
-      inline void SetMass(G4double mas)
-      { mass = mas; }
-      inline void SetCharge(G4double chg)
-      { charge = chg; }
-     inline void SetPolarization(G4double px,G4double py,G4double pz)
-      {
-        polX = px;
-        polY = py;
-        polZ = pz;
-      }
 };
 
 #if defined G4PARTICLES_ALLOC_EXPORT
@@ -228,6 +195,141 @@ inline void G4PrimaryParticle::operator delete(void * aPrimaryParticle)
   aPrimaryParticleAllocator.FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
 }
 
+inline G4double G4PrimaryParticle::GetMass() const
+{ return mass;  }
+
+inline G4double G4PrimaryParticle::GetCharge() const
+{ return charge; }
+
+inline G4int G4PrimaryParticle::GetPDGcode() const
+{ return PDGcode; }
+     
+inline G4ParticleDefinition * G4PrimaryParticle::GetG4code() const
+{ return const_cast<G4ParticleDefinition*>(G4code); }
+
+inline const G4ParticleDefinition * G4PrimaryParticle::GetParticleDefinition() const
+{ return G4code; }
+    
+inline G4double G4PrimaryParticle::GetTotalMomentum() const
+{ 
+  if (mass<0.)  return kinE; 
+  else          return std::sqrt(kinE*(kinE+2.*mass));
+}
+
+inline G4ThreeVector G4PrimaryParticle::GetMomentum() const
+{ return GetTotalMomentum()*direction;}
+
+inline const G4ThreeVector& G4PrimaryParticle::GetMomentumDirection() const
+{ return direction;}
+
+inline void G4PrimaryParticle::SetMomentumDirection(const G4ThreeVector& p) 
+{ direction = p;}
+
+inline G4double G4PrimaryParticle::GetPx() const
+{ return GetTotalMomentum()*direction.x();}
+
+inline G4double G4PrimaryParticle::GetPy() const
+{ return GetTotalMomentum()*direction.y();}
+
+inline G4double G4PrimaryParticle::GetPz() const
+{ return GetTotalMomentum()*direction.z();}
+
+inline G4double G4PrimaryParticle::GetTotalEnergy() const
+{ 
+  if (mass<0.)  return kinE; 
+  else          return kinE+mass;
+}
+
+inline void G4PrimaryParticle::SetTotalEnergy(G4double eTot ) 
+{ 
+  if (mass<0.)  kinE = eTot; 
+  else          kinE = eTot - mass;
+}
+
+inline G4double G4PrimaryParticle::GetKineticEnergy() const
+{ return kinE; }
+   
+inline void G4PrimaryParticle::SetKineticEnergy(G4double eKin) 
+{ kinE = eKin; }
+
+inline G4PrimaryParticle * G4PrimaryParticle::GetNext() const
+{ return nextParticle; }
+
+inline G4PrimaryParticle * G4PrimaryParticle::GetDaughter() const
+{ return daughterParticle; }
+
+inline G4int G4PrimaryParticle::GetTrackID() const
+{ return trackID; }
+
+inline G4ThreeVector G4PrimaryParticle::GetPolarization() const
+{ return G4ThreeVector(polX,polY,polZ); }
+
+inline G4double G4PrimaryParticle::GetPolX() const 
+{ return polX; }
+
+inline G4double G4PrimaryParticle::GetPolY() const 
+{ return polY; }
+
+inline G4double G4PrimaryParticle::GetPolZ() const 
+{ return polZ; }
+
+inline G4double G4PrimaryParticle::GetWeight() const 
+{ return Weight0; }
+
+inline void G4PrimaryParticle::SetWeight(G4double w) 
+{ Weight0 = w; }
+
+inline void G4PrimaryParticle::SetProperTime(G4double t)
+{ properTime = t; }
+
+inline G4double G4PrimaryParticle::GetProperTime() const 
+{ return properTime; }
+
+inline void G4PrimaryParticle::SetUserInformation(G4VUserPrimaryParticleInformation* anInfo)
+{ userInfo = anInfo; }
+
+inline G4VUserPrimaryParticleInformation* G4PrimaryParticle::GetUserInformation() const
+{ return userInfo; }
+
+inline void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
+{
+  SetParticleDefinition(Gcode);
+}
+
+inline void G4PrimaryParticle::SetNext(G4PrimaryParticle * np)
+{ 
+  if   (nextParticle == 0) { nextParticle = np; }
+  else                     { nextParticle->SetNext(np); }
+}
+
+inline void G4PrimaryParticle::SetDaughter(G4PrimaryParticle * np)
+{ 
+  if(daughterParticle == 0)  { daughterParticle = np; }
+  else                       { daughterParticle->SetNext(np); }
+}
+     
+inline void G4PrimaryParticle::SetTrackID(G4int id)
+{ trackID = id; }
+
+inline void G4PrimaryParticle::SetMass(G4double mas)
+{ mass = mas; }
+
+inline void G4PrimaryParticle::SetCharge(G4double chg)
+{ charge = chg; }
+
+inline void G4PrimaryParticle::SetPolarization(G4double px,G4double py,G4double pz)
+{
+  polX = px;
+  polY = py;
+  polZ = pz;
+}
+  
+inline void G4PrimaryParticle::SetPolarization(const G4ThreeVector& pol)
+{
+  polX = pol.x();
+  polY = pol.y();
+  polZ = pol.z();
+}
 
 #endif
 

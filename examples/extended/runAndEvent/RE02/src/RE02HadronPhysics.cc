@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02HadronPhysics.cc,v 1.3 2010/04/07 01:29:00 asaim Exp $
+// $Id: RE02HadronPhysics.cc,v 1.3 2010-04-07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi

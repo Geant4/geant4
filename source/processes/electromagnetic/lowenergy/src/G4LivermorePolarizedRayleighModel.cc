@@ -23,8 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.5 2009/05/02 15:20:53 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.5 2009-05-02 15:20:53 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Sebastien Incerti
+//         30 October 2008
+//         on base of G4LowEnergyPolarizedRayleigh developed by R. Capra
 //
 // History:
 // --------
@@ -251,7 +255,13 @@ G4double G4LivermorePolarizedRayleighModel::GenerateCosTheta(G4double incomingPh
   G4double x;
   G4double fValue;
 
-  do
+  if (incomingPhotonEnergy > 5.*MeV)
+  {
+    cosTheta = 1.;
+  }
+  else
+  {
+    do
     {
       do
 	{
@@ -270,7 +280,8 @@ G4double G4LivermorePolarizedRayleighModel::GenerateCosTheta(G4double incomingPh
       fValue/=zAtom;
       fValue*=fValue;
     }
-  while(fValue < G4UniformRand());
+    while(fValue < G4UniformRand());
+  }
 
   return cosTheta;
 }

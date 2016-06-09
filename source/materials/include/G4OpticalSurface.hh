@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.17 2010/04/22 21:19:14 gum Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpticalSurface.hh,v 1.17 2010-04-22 21:19:14 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ public: // Without description
         //////////////
   
 	G4OpticalSurface(const G4OpticalSurface &right);
-	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
+	G4OpticalSurface & operator=(const G4OpticalSurface &right);
   
 	G4int operator==(const G4OpticalSurface &right) const;
 	G4int operator!=(const G4OpticalSurface &right) const;

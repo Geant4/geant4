@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointBremsstrahlungModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -60,7 +60,9 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   SetApplyCutInRange(true);
   highKinEnergy= 100.*TeV;
   lowKinEnergy = 1.0*keV;
-  theTimer =new G4Timer();
+
+  lastCZ =0.;
+
   
   theAdjEquivOfDirectPrimPartDef =G4AdjointElectron::AdjointElectron();
   theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
@@ -81,6 +83,12 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   
 
   
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
+{if (theDirectStdBremModel) delete theDirectStdBremModel;
+ if (theEmModelManagerForFwdModels) delete theEmModelManagerForFwdModels;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -271,11 +279,6 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	
   }	
 } 
-////////////////////////////////////////////////////////////////////////////////
-//
-G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
-{;}
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(const G4Material* aMaterial,

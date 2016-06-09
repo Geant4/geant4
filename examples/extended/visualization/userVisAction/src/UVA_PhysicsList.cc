@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: UVA_PhysicsList.cc,v 1.3 2010/11/05 15:10:31 stesting Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: UVA_PhysicsList.cc,v 1.3 2010-11-05 15:10:31 stesting Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

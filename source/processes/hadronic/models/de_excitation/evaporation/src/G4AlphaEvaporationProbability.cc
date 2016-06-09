@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AlphaEvaporationProbability.cc,v 1.18 2010/11/17 11:06:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AlphaEvaporationProbability.cc,v 1.18 2010-11-17 11:06:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -39,7 +39,10 @@
 
 G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
     G4EvaporationProbability(4,2,1,&theCoulombBarrier) // A,Z,Gamma,&theCoumlombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4AlphaEvaporationProbability::~G4AlphaEvaporationProbability()
 {}

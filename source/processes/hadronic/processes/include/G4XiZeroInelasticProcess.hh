@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // G4 Process: XiZero Inelastic Process
- // J.L. Chuma, TRIUMF, 05-Nov-1996
- // Last modified: 03-Apr-1997
+// G4 Process: XiZero Inelastic Process
+// J.L. Chuma, TRIUMF, 05-Nov-1996
+//
 
 // Class Description
 // Process for XiZero inelastic scattering; 
@@ -38,18 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4XiZeroInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4XiZeroInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4XiZeroInelasticProcess(
-     const G4String& processName = "XiZeroInelastic" ) :
-      G4HadronInelasticProcess( processName, G4XiZero::XiZero() )
-    { }
+    G4XiZeroInelasticProcess(const G4String& processName = "XiZeroInelastic");
     
-    ~G4XiZeroInelasticProcess()
-    { }
-    
- };
- 
+    ~G4XiZeroInelasticProcess() {}
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
 #endif

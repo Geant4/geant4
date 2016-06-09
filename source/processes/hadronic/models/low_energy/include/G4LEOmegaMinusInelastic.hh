@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEOmegaMinusInelastic.hh,v 1.11 2007-02-26 18:29:56 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEOmegaMinusInelastic.hh,v 1.11 2007/02/26 18:29:56 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: Low Energy OmegaMinus Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy OmegaMinus Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Nov-1996
  
 #ifndef G4LEOmegaMinusInelastic_h
 #define G4LEOmegaMinusInelastic_h 1
@@ -43,22 +41,24 @@
 
 #include "G4InelasticInteraction.hh"
  
- class G4LEOmegaMinusInelastic : public G4InelasticInteraction
- {
- public:
+class G4LEOmegaMinusInelastic : public G4InelasticInteraction
+{
+  public:
     
     G4LEOmegaMinusInelastic() : G4InelasticInteraction("G4LEOmegaMinusInelastic")
     {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMinEnergy(0.0);
+      SetMaxEnergy(25.*GeV);
     }
     
-    ~G4LEOmegaMinusInelastic() { }
+    ~G4LEOmegaMinusInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
     
- private:
+  private:
     
     void Cascade(                               // derived from CASOM
       G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
@@ -70,7 +70,7 @@
       G4bool &targetHasChanged,
       G4bool &quasiElastic );
     
- };
+};
  
 #endif
  

@@ -54,7 +54,9 @@ G4HadFinalState* G4NeutronHPorLEInelasticModel::ApplyYourself(const G4HadProject
       return theLEInelastic->ApplyYourself( aTrack , aTargetNucleus );
    }
 
-   G4int Z =  (G4int)(aTargetNucleus.GetZ()+0.5);  
+   //G4int Z =  (G4int)(aTargetNucleus.GetZ()+0.5);  
+   //migrate to integer A and Z
+   G4int Z =  aTargetNucleus.GetZ_asInt();  
    G4String theNameOfElement = theHPNames->GetName( Z-1 ); // GetName(0) reply "Hydrogen" 
 
    if ( theHPInelastic->IsThisElementOK( theNameOfElement ) )

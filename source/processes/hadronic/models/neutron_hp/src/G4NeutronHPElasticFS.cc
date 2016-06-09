@@ -43,11 +43,11 @@
 #include "G4ParticleTable.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
+  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
   {
-    G4String tString = "/FS/";
+    G4String tString = "/FS";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();
@@ -146,10 +146,11 @@
 
           energy *= eV;
 
-//        consistensy check  
+//        consistency check
           if ( i == 0 )
-             if ( energy !=  tE_of_repFlag3 )
-                G4cout << "Warning Trangition Energy of repFlag3 is not consistent." << G4endl; 
+             //if ( energy != tE_of_repFlag3 ) //110620TK This is too tight for 32bit machines 
+             if ( std::abs( energy - tE_of_repFlag3 ) / tE_of_repFlag3 > 1.0e-15 )
+                G4cout << "Warning Transition Energy of repFlag3 is not consistent." << G4endl; 
 
           theProbArray->InitInterpolation( i , theData );
           theProbArray->SetT( i , temp );
@@ -280,6 +281,9 @@
       // and back to lab
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
       theTarget.Lorentz(theTarget, -1.*theCMS);      
+//111005 Protection for not producing 0 kinetic energy target
+      if ( theNeutron.GetKineticEnergy() <= 0 ) theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+      if ( theTarget.GetKineticEnergy() <= 0 ) theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
     }
     else if (frameFlag == 2) // CMS
     {
@@ -320,18 +324,22 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
 
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
 //080904 Add Protection for very low energy (1e-6eV) scattering 
-      if ( theNeutron.GetKineticEnergy() < 0 )
+      if ( theNeutron.GetKineticEnergy() <= 0 )
       {
-         theNeutron.SetMomentum( G4ThreeVector(0) ); 
-         theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
+         //theNeutron.SetMomentum( G4ThreeVector(0) ); 
+         //theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
+//110822 Protection for not producing 0 kinetic energy neutron
+         theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
 
       theTarget.Lorentz(theTarget, -1.*theCMS);
 //080904 Add Protection for very low energy (1e-6eV) scattering 
       if ( theTarget.GetKineticEnergy() < 0 )
       {
-         theTarget.SetMomentum( G4ThreeVector(0) ); 
-         theTarget.SetTotalEnergy ( theTarget.GetMass() );
+         //theTarget.SetMomentum( G4ThreeVector(0) ); 
+         //theTarget.SetTotalEnergy ( theTarget.GetMass()  );
+//110822 Protection for not producing 0 kinetic energy target
+         theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
     }
     else

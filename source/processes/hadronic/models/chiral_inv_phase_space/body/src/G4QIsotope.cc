@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.16 2010/05/28 15:03:46 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QIsotope.cc,v 1.16 2010-05-28 15:03:46 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -719,7 +719,6 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
 
 // Returns Pointer to the G4QIsotope singletone
 G4QIsotope* G4QIsotope::Get()
-//          =================
 {
 #ifdef pdebug
   G4cout<<"G4QIsotope::Get is called"<<G4endl;
@@ -730,7 +729,6 @@ G4QIsotope* G4QIsotope::Get()
 
 // #ofProtons in stable isotopes with fixed A=Z+N. Returns length and fils VectOfIsotopes
 G4int G4QIsotope::GetProtons(G4int A, vector<G4int>& isoV) 
-//    =========================================================
 {
   const G4int nAZ=270;  // Dimension of the table
   // Best Z for the given A
@@ -884,7 +882,6 @@ G4int G4QIsotope::GetProtons(G4int A, vector<G4int>& isoV)
 
 // Randomize a#ofNeutrons in the Element (independent function @@ can be used for initial)
 G4int G4QIsotope::RandomizeNeutrons(G4int i) 
-//    ======================================
 {
   static const G4int nElements = 110; // Max=Meitnerium(Mt)Z=99(starts with Z=0 - neuteron)
   // If an error is found in this simple tree, please, correct the initialization above
@@ -912,7 +909,7 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
   if(N==-1)
   {
     G4double rnd=G4UniformRand();
-    if          (i<44)        // ====== H - Mo
+    if          (i<44)        // =----= H - Mo
     {
       if        (i<23)        // ------ H - Ti
       {
@@ -1203,7 +1200,7 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
         }
       }
     }
-    else                      // ====== Ru - U
+    else                      // =----= Ru - U
     {
       if         (i<66)       // ------ Ru - Gd
       {
@@ -1560,7 +1557,6 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
 // Returns the input index (if it is >0 & unique) or theFirstFreeIndex (<=0 or nonunique)
 G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wrong (sum>1)
                               vector<pair<G4int,G4double>*>* abund)
-//    =======================================================================
 {
   G4int I=abund->size();
 #ifdef debug
@@ -1645,7 +1641,6 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
 
 // The highest index defined for Element with Z (Index>0 correspondToUserDefinedElements)
 G4int G4QIsotope::GetLastIndex(G4int Z) // Returns theLastDefinedIndex (if onlyNatural: =0)
-//    =================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::GetLastIndex is called Z="<<Z<<G4endl;
@@ -1664,7 +1659,6 @@ G4int G4QIsotope::GetLastIndex(G4int Z) // Returns theLastDefinedIndex (if onlyN
 
 // Indices can have differen numbers (not 1,2,3,...) & in different sequences (9,3,7,...)
 G4bool G4QIsotope::IsDefined(G4int Z, G4int Ind) // Ind is an index to be found (true)
-//    ==========================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::IsDefined is called Z="<<Z<<", I="<<Ind<<G4endl;
@@ -1687,7 +1681,6 @@ G4bool G4QIsotope::IsDefined(G4int Z, G4int Ind) // Ind is an index to be found 
 
 // A#ofNeutrons in theElement with Z & UserDefIndex. Universal for Nat(index=0) & UserDefEl
 G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist, returns <0
-//    =============================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::GetNeutrons is called Z="<<Z<<", index="<<index<<G4endl;
@@ -1743,7 +1736,6 @@ G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist,
 
 // Get a pointer to the vector of pairs(N,CrosSec), where N is used to calculate CrosSec
 vector<pair<G4int,G4double>*>* G4QIsotope::GetCSVector(G4int Z, G4int index)
-//                                       =============================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::GetCSVector is called"<<G4endl;
@@ -1779,7 +1771,6 @@ vector<pair<G4int,G4double>*>* G4QIsotope::GetCSVector(G4int Z, G4int index)
 
 // Get a pointer to the vector of pairs(N,IntAbundancy) for the element with Z
 vector<pair<G4int,G4double>*>* G4QIsotope::GetAbuVector(G4int Z, G4int index)
-//                                       ==============================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::GetAbuVector is called"<<G4endl;
@@ -1815,7 +1806,6 @@ vector<pair<G4int,G4double>*>* G4QIsotope::GetAbuVector(G4int Z, G4int index)
 
 // Get a pointer to the vector of pairs(N,SumAbundancy) for the element with Z
 vector<pair<G4int,G4double>*>* G4QIsotope::GetSumAVector(G4int Z, G4int index)
-//                             ===============================================
 {
 #ifdef debug
   G4cout<<"G4QIsotope::GetSumAVector is called"<<G4endl;
@@ -1851,7 +1841,6 @@ vector<pair<G4int,G4double>*>* G4QIsotope::GetSumAVector(G4int Z, G4int index)
 
 // Calculates the mean Cross Section for the initialized Element(ind=0 Nat,ind>0 UserDef)
 G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
-//                   =========================================
 {
   vector<pair<G4int,G4double>*>* ab;
   vector<pair<G4int,G4double>*>* cs;
@@ -1863,7 +1852,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
     G4cerr<<"---Worning---G4QIsotope::GetMeanCS:(-1) Negative Index i="<<index<<G4endl;
     return -1.;
   }
-  else if(!index)           // =========> Natural Abundancies for Isotopes of the Element
+  else if(!index)           // =-------=> Natural Abundancies for Isotopes of the Element
   {
 #ifdef ppdebug
     G4cout<<"G4QIsotope::GetMeanCrossSection: Nat Abundance, Z="<<Z<<G4endl;
@@ -1871,7 +1860,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
     ab=natElements[Z];
     cs=natIsoCrosS[Z];
   }
-  else                      // =========> UserDefinedAbundancies for Isotopes of theElement
+  else                      // =------=> UserDefinedAbundancies for Isotopes of theElement
   {
 #ifdef ppdebug
     G4cout<<"G4QIsotope::GetMeanCrossSection: Art Abund, Z="<<Z<<",ind="<<index<<G4endl;
@@ -1926,7 +1915,6 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
 
 // Randomize A#OfNeutrons in the Isotope weighted by theAbubdancies and theCrossSections
 G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
-//                ===================================
 {
   vector<pair<G4int,G4double>*>* ab;
   vector<pair<G4int,G4double>*>* cs;
@@ -1938,12 +1926,12 @@ G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
     G4cerr<<"---Worning---G4QIsotope::GetCSNeutrons:(-1) Negative Index i="<<index<<G4endl;
     return -1;
   }
-  else if(!index)           // =========> Natural Abundancies for Isotopes of the Element
+  else if(!index)           // =---------=> Natural Abundancies for Isotopes of the Element
   {
     ab=natElements[Z];
     cs=natIsoCrosS[Z];
   }
-  else                      // =========> UserDefinedAbundancies for Isotopes of theElement
+  else                      // =-------=> UserDefinedAbundancies for Isotopes of theElement
   {
     // For the positive index tries to find the newUserDefinedElement
     G4bool found=false;               // Prototype of the"ZWithTheSameIndex is found" event

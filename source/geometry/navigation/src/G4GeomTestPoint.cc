@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestPoint.cc,v 1.3 2006/06/29 18:36:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeomTestPoint.cc,v 1.3 2006-06-29 18:36:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -74,6 +74,24 @@ G4GeomTestPoint::G4GeomTestPoint( const G4GeomTestPoint &other )
 // Destructor
 //
 G4GeomTestPoint::~G4GeomTestPoint() {;}
+
+//
+// Assignment operator
+//
+G4GeomTestPoint& G4GeomTestPoint::operator=(const G4GeomTestPoint& other)
+{
+   // Check assignment to self
+   //
+   if (this == &other)  { return *this; }
+
+   // Copy data
+   //
+   p = other.p;
+   s = other.s;
+   entering = other.entering;
+
+   return *this;
+}
 
 
 //

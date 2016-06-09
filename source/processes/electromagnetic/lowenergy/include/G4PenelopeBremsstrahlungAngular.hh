@@ -25,52 +25,57 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.3 2006/06/29 19:36:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.1 2010-12-20 14:11:13 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
 //
 // History:
 // -----------
-// 04 Feb 2003  L. Pandola       1st implementation
-// 07 Nov 2003  L. Pandola       Added method for testing
+// 23 Nov 2010  L. Pandola       1st implementation
+// 24 May 2011  L. Pandola       Renamed (make default Penelope)
+//
 // Class description:
 // Calculation of angular distribution for Penelope Bremsstrahlung
+// version 2008
 // --------------------------------------------------------------
 
 
 #ifndef G4PENELOPEBREMSSTRAHLUNGANGULAR_HH
 #define G4PENELOPEBREMSSTRAHLUNGANGULAR_HH 1
 #include "globals.hh"
+#include <map>
+
+class G4PhysicsTable;
 
 class G4PenelopeBremsstrahlungAngular
 { 
 
-private:
-  enum{NumberofZPoints=6,
-	 NumberofEPoints=6,
-	 NumberofKPoints=4,
-	 reducedEnergyGrid=21};
-
 public:
- 
-  G4PenelopeBremsstrahlungAngular(G4int Zmat); 
+  G4PenelopeBremsstrahlungAngular(); 
   ~G4PenelopeBremsstrahlungAngular();
-  G4double ExtractCosTheta(G4double PrimaryEnergy,G4double GammaEnergy);
-  G4int GetAtomicNumber(); //testing purpose
+  G4double SampleCosTheta(G4double Zeq,
+			  G4double primaryEnergy,G4double gammaEnergy);
+  void ClearTables();
   
 private:
+  void PrepareInterpolationTables(G4double Zeq);
+  
+  //Tables containing the Lorentz sampling coefficients 
+  //The key is the effective Z of the material
+  std::map<G4double,G4PhysicsTable*> *theLorentzTables1;
+  std::map<G4double,G4PhysicsTable*> *theLorentzTables2;
 
-  void InterpolationTableForZ(); //Initialization of tables (part 1)
-  void InterpolationForK();  //Initialization of tables (part 2)
+  void ReadDataFile();
+  G4bool dataRead;
+  
+  static const G4int NumberofZPoints=6;
+  static const G4int NumberofEPoints=6;
+  static const G4int NumberofKPoints=4;
 
-  G4double betas[NumberofEPoints]; //betas for interpolation
-  //tables for interpolation
-  G4double Q1[NumberofEPoints][NumberofKPoints],Q2[NumberofEPoints][NumberofKPoints];
-  //expanded tables for interpolation
-  G4double Q1E[NumberofEPoints][reducedEnergyGrid],Q2E[NumberofEPoints][reducedEnergyGrid]; 
-  //Z of the element
-  G4int Zmat;
+  G4double QQ1[NumberofZPoints][NumberofEPoints][NumberofKPoints];
+  G4double QQ2[NumberofZPoints][NumberofEPoints][NumberofKPoints];
+
 };
 
 

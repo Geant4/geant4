@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE03PrimaryGeneratorAction.hh,v 1.1 2007/11/13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE03PrimaryGeneratorAction.hh,v 1.1 2007-11-13 19:55:43 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef RE03PrimaryGeneratorAction_h

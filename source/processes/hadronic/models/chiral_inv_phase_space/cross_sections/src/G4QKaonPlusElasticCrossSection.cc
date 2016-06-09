@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QKaonPlusElasticCrossSection.cc,v 1.1 2010/02/16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QKaonPlusElasticCrossSection.cc,v 1.1 2010-02-16 07:53:05 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QKaonPlusElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 5-Feb-2010
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 5-Feb-2010
 // 
-//================================================================================
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -361,7 +361,7 @@ G4double G4QKaonPlusElasticCrossSection::CalculateCrossSection(G4bool CS, G4int 
     S4T.push_back(lastS4T);             // Fill Tabulated 4-th mantissa to AMDB 
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
+  // =----------= NOW Update (if necessary) and Calculate the Cross Section =----------=
 #ifdef pdebug
   G4cout<<"G4QKPElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
 #endif
@@ -719,9 +719,14 @@ G4double G4QKaonPlusElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4
   }
   else
   {
-    G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=321"<<G4endl;
-    throw G4QException("G4QKaonPlusElasticCrossSection::GetPTables:onlyK+ is implemented");
+    // G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=321"<<G4endl;
+    // throw G4QException("G4QKaonPlusElasticCrossSection::GetPTables:onlyK+ is implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=321 (K+) " << G4endl;
+    G4Exception("G4QKaonPlusElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -928,9 +933,14 @@ G4double G4QKaonPlusElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PD
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG != 321)
   {
-    G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=321"<<G4endl;
-    throw G4QException("G4QKaonPlusElasticCrossSection::GetSlope:Only K+ is implemented");
+    // G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=321"<<G4endl;
+    // throw G4QException("G4QKaonPlusElasticCrossSection::GetSlope:Only K+ is implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=321 (K+)" << G4endl;
+    G4Exception("G4QKaonPlusElasticCrossSection::GetSlope()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QKaonPlusElCS::GetSlope:B1="<<theB1<<G4endl;
@@ -995,8 +1005,11 @@ G4double G4QKaonPlusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4
 #endif
     // Returns the total elastic pim-p cross-section (to avoid spoiling lastSIG)
     G4double dp=lp-lastPAR[4];
+//G4cout<<"lastPAR[8] "<<lastPAR[8]<<" lastPAR[9] "<<lastPAR[9]<<" lastPAR[10] "<<lastPAR[10]<<G4endl; 
     return lastPAR[0]/(lastPAR[2]+sqr(p-lastPAR[1]))+(lastPAR[3]*dp*dp+lastPAR[5])/
-           (1.-lastPAR[6]/sp+lastPAR[7]/p4);
+           (1.-lastPAR[6]/sp+lastPAR[7]/p4)
+           +lastPAR[8]/(sqr(p-lastPAR[9])+lastPAR[10]);    // Uzhi
+
   }
   else
   {
@@ -1056,7 +1069,7 @@ G4double G4QKaonPlusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4
 #ifdef tdebug
     G4cout<<"G4QKaonPlusElCS::GTV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
 #endif
-    G4double dlp=lp-lastPAR[5]; // ax
+    G4double dlp=lp-lastPAR[4]; // ax
     //         p1                p2          p3                 p4
     return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]/p2)/(1.+lastPAR[3]/p2/sp);
   }
@@ -1090,8 +1103,14 @@ G4double G4QKaonPlusElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tg
   }
   else
   {
-    G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetQ2m:PDG="<<PDG<<",Z="<<tgZ<<",N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QKaonPlusElasticCrossSection::GetQ2max:only K+ is implemented");
+    // G4cout<<"*Error*G4QKaonPlusElasticCrossSection::GetQ2m:PDG="<<PDG<<",Z="<<tgZ<<",N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QKaonPlusElasticCrossSection::GetQ2max:only K+ is implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ",Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QKaonPlusElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

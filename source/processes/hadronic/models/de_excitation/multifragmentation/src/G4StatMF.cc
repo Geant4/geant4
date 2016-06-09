@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.7 2010/10/29 17:35:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4StatMF.cc,v 1.7 2010-10-29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4StatMF.hh"
-
+#include "G4Pow.hh"
 
 
 // Default constructor
@@ -40,39 +40,6 @@ G4StatMF::G4StatMF() : _theEnsemble(0) {}
 
 // Destructor
 G4StatMF::~G4StatMF() {} //{if (_theEnsemble != 0) delete _theEnsemble;}
-
-
-// Copy constructor
-G4StatMF::G4StatMF(const G4StatMF & ) : G4VMultiFragmentation()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::copy_constructor meant to not be accessable");
-}
-
-
-// Operators
-
-G4StatMF & G4StatMF::operator=(const G4StatMF & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4StatMF::operator==(const G4StatMF & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator== meant to not be accessable");
-    return false;
-}
- 
-
-G4bool G4StatMF::operator!=(const G4StatMF & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator!= meant to not be accessable");
-    return true;
-}
-
-
-
 
 
 G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
@@ -179,7 +146,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   
   
   G4FragmentVector * theResult = theChannel->
-    GetFragments(theFragment.GetA(),theFragment.GetZ(),Temperature);
+    GetFragments(theFragment.GetA_asInt(),theFragment.GetZ_asInt(),Temperature);
   
   
 	
@@ -233,8 +200,8 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
 						  G4double & Temperature)
   // This finds temperature of breaking channel.
 {
-  G4double A = theFragment.GetA();
-  G4double Z = theFragment.GetZ();
+  G4int A = theFragment.GetA_asInt();
+  G4int Z = theFragment.GetZ_asInt();
   G4double U = theFragment.GetExcitationEnergy();
   
   G4double T = std::max(Temperature,0.0012*MeV);
@@ -254,7 +221,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     return true;
   } else if (Da < 0.0) {
     do {
-      Tb -= 0.5 * std::abs(Tb);
+      Tb -= 0.5 * std::fabs(Tb);
       T = Tb;
       if (Tb < 0.001*MeV) return false;
       
@@ -265,7 +232,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     
   } else {
     do {
-      Tb += 0.5 * std::abs(Tb);
+      Tb += 0.5 * std::fabs(Tb);
       T = Tb;
       
       TotalEnergy = CalcEnergy(A,Z,aChannel,T);
@@ -309,15 +276,14 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
   return false;
 }
 
-
-
-G4double G4StatMF::CalcEnergy(const G4double A, const G4double Z, const G4StatMFChannel * aChannel,
-			      const G4double T)
+G4double G4StatMF::CalcEnergy(G4int A, G4int Z, const G4StatMFChannel * aChannel,
+			      G4double T)
 {
-    G4double MassExcess0 = G4NucleiProperties::GetMassExcess(static_cast<G4int>(A),static_cast<G4int>(Z));
+    G4double MassExcess0 = G4NucleiProperties::GetMassExcess(A,Z);
 	
-    G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)*std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-	(G4StatMFParameters::Getr0()*std::pow(A,1./3.));
+    G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)
+      *std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
+      (G4StatMFParameters::Getr0()*G4Pow::GetInstance()->Z13(A));
 
     G4double ChannelEnergy = aChannel->GetFragmentsEnergy(T);
 	

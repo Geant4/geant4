@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonInclAblaPhysics.cc,v 1.2 2010/06/03 15:03:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4IonInclAblaPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 
 // Nuclei
 #include "G4IonConstructor.hh"
+#include "G4BuilderType.hh"
 
 G4IonInclAblaPhysics::G4IonInclAblaPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonInclAbla"), verbose(ver), wasActivated(false)
@@ -66,8 +67,10 @@ G4IonInclAblaPhysics::G4IonInclAblaPhysics(G4int ver)
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
+  emax       = 12 * 3.0 * GeV;
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
 }
 
@@ -82,6 +85,7 @@ G4IonInclAblaPhysics::G4IonInclAblaPhysics(const G4String& name,
   emax_alpha = 4 * 3.0 * GeV;
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
 }
 
@@ -121,8 +125,7 @@ void G4IonInclAblaPhysics::ConstructProcess()
   AddProcess("tInelastic",G4Triton::Triton(),  fInclAblaIons, fLETModel, emax_t);
   AddProcess("He3Inelastic",G4He3::He3(),  fInclAblaIons, 0, emax_he3);
   AddProcess("alphaInelastic", G4Alpha::Alpha(),  fInclAblaIons, fLEAModel, emax_alpha);
-  // Support for light ions heavier than Alpha will be included in a future release of INCL/ABLA
-  //  AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fInclAblaIons, 0);
+  AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fInclAblaIons, 0, emax);
 }
 
 void G4IonInclAblaPhysics::AddProcess(const G4String& name,

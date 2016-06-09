@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundDeexcitation.cc,v 1.7 2010/12/15 07:41:19 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4PreCompoundDeexcitation.cc,v 1.7 2010-12-15 07:41:19 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
@@ -36,6 +36,8 @@
 //		explosion condition to base-class function.
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class,
 //		replace getDeexcitationFragments() with deExcite().
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110803  M. Kelsey -- Add post-deexcitation diagnostic messages
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -81,7 +83,8 @@ void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/,
   // NOTE:  Should not get this case, as G4IntraNucleiCascade should catch it
   if (ntarget->getA() == 1) {		// Just a nucleon; move to output list
     G4int type = (ntarget->getZ() == 0) ? neutron : proton;
-    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 9);
+    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 
+				      G4InuclParticle::PreCompound);
 
     globalOutput.addOutgoingParticle(ptarget);
     return;
@@ -113,14 +116,24 @@ void G4PreCompoundDeexcitation::deExcite(G4Fragment* fragment,
   // FIXME: in principle, the explosion(...) stuff should also 
   //        handle properly the case of Z=0 (neutron blob) 
   if (explosion(fragment) && theExcitationHandler) {
+    if (verboseLevel) G4cout << " calling BreakItUp" << G4endl;
     precompoundProducts = theExcitationHandler->BreakItUp(*fragment);
   } else {
+    if (verboseLevel) G4cout << " calling DeExcite" << G4endl;
     precompoundProducts = theDeExcitation->DeExcite(*fragment);
   }
 
   // Transfer output of de-excitation back into Bertini objects
   if (precompoundProducts) {
+    if (verboseLevel>1) {
+      G4cout << " Got " << precompoundProducts->size()
+	     << " secondaries back from PreCompound:" << G4endl;
+    }
+
+    globalOutput.setVerboseLevel(verboseLevel);	// For debugging
     globalOutput.addOutgoingParticles(precompoundProducts);
+    globalOutput.setVerboseLevel(0);
+
     precompoundProducts->clear();
     delete precompoundProducts;
   }

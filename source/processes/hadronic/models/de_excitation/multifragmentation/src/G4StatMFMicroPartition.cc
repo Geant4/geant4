@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.8 2008/07/25 11:20:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StatMFMicroPartition.cc,v 1.8 2008-07-25 11:20:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 // --------------------------------------------------------------------

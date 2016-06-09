@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.hh,v 1.3 2008/11/20 12:35:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ChargeExchangeProcess.hh,v 1.3 2008-11-20 12:35:19 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Geant4 Hadron Elastic Charge Exchange Process -- header file
@@ -65,9 +65,9 @@ public:
 
   virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  virtual G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-					      const G4Element* anElement,
-					      G4double aTemp);
+  virtual G4double GetElementCrossSection(const G4DynamicParticle* aParticle,
+					  const G4Element* anElement,
+					  const G4Material* mat = 0);
 
 private:
 

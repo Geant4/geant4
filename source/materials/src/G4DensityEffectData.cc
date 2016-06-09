@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.12 2010/05/15 15:37:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4DensityEffectData.cc,v 1.12 2010-05-15 15:37:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
 //

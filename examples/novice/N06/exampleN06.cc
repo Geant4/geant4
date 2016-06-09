@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.18 2010/10/23 19:33:55 gum Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: exampleN06.cc,v 1.18 2010-10-23 19:33:55 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

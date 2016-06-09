@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc,v 1.7 2007/11/14 17:01:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorPropagator.cc,v 1.7 2007-11-14 17:01:14 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -55,6 +55,7 @@
 
 //---------------------------------------------------------------------------
 G4ErrorPropagator::G4ErrorPropagator()
+  : theInitialTrajState(0), theFinalTrajState(0)
 {
   verbose =  G4ErrorPropagatorData::verbose();
 #ifdef G4EVERBOSE

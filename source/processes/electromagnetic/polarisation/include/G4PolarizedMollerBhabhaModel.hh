@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.hh,v 1.3 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedMollerBhabhaModel.hh,v 1.3 2007-05-23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -107,6 +107,11 @@ public:
     return fPositronPolarization;
   }
 private:
+
+  // copy constructor and hide assignment operator
+  G4PolarizedMollerBhabhaModel(G4PolarizedMollerBhabhaModel &);
+  G4PolarizedMollerBhabhaModel & operator=(const G4PolarizedMollerBhabhaModel &right);
+
   G4StokesVector theBeamPolarization;
   G4StokesVector theTargetPolarization;
 

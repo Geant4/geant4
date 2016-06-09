@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2010/11/02 17:39:48 allison Exp $
+$Id: History,v 1.158 2010-12-23 14:09:53 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,46 +17,120 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8, October L. Garnier  (interfaces-V09-03-13)
+30th November 2011 Ben Morgan (interfaces-V09-04-14)
+- basic/sources.cmake : Ensure Motif libraries linked before X11 libraries to 
+  prevent item 321 in the Motif FAQ regarding 'non-widget child "dsm"' errors. 
+
+29 November 2011 Ben Morgan (interfaces-V09-04-13)
+- common/source.cmake : Ensure G4Xt gets built for OpenInventor
+
+23 November 2011 Laurent Garnier (interfaces-V09-04-12)
+- Fix for displing a QMessageBox on G4err output
+
+12 November 2011 Koichi Murakami (interfaces-V09-04-11)
+- G4UIExective is rollback to interfaces-V09-04-05. (w/o run-time selection)
+
+12 November 2011 Koichi Murakami (interfaces-V09-04-10)
+- add G4UIExecutive.cc in sources.cmake
+
+10 November 2011 Koichi Murakami (interfaces-V09-04-09)
+- update G4UIExecutive (if-else instead of goto)
+
+07 November 2011 Koichi Murakami (interfaces-V09-04-08)
+- Code quality improvements by Coverity.
+- Change G4UIExecutive. Run-time selection of UI session.
+- Messages of G4Exception are modified in collaboration format.
+
+
+4th November 2011 Laurent Garnier
+- Resize toolBox
+
+10th August 2011 Laurent Garnier (interfaces-V09-04-05)
+- Add a flag to know if there is a external Qapp inited
+
+27th June 2011 Gabriele Cosmo (interfaces-V09-04-04)
+- Fixed compilation gcc-4.6.0 warning for unused variable in G4UIQt.
+- Removed incomplete Wt code
+- Archived obsolete XVT module lying on trunk...
+
+17th June 2011 Ben Morgan (interfaces-V09-04-03)
+- common/sources.cmake
+- basic/sources.cmake : Support for Win32 and Xm added
+
+3rd June 2011  John Allison  (interfaces-V09-04-02)
+- Tagged.
+
+2 June, 2011 L. Garnier
+- G4UIQt : Comment ViewerComponent Panel
+
+20 May, 2011 L. Garnier
+- G4UIQt : Add ViewerComponent Panel
+
+17th May 2011  John Allison
+- G4UIXaw.cc, G4UIXm.cc:
+  o Fix gcc-4.6.0 warnings about unused variables.
+
+11th April, 2011 L. Garnier
+- Coverity warning fix
+
+24th March, 2011 G. Cosmo  (interfaces-V09-04-01)
+- Corrected typo.
+
+23rd March, 2011 G. Cosmo  (interfaces-V09-04-00)
+- Fix in G4VBasicShell::ApplyShellCommand() for substring exact comparisons.
+  Thanks to A.Radkov for spotting the problem.
+
+2nd March, 2011 Laurent Garnier
+- Get rid of old Qt3 code
+
+24th January, 2011 L.Garnier
+- basic/GNUmakefile : Fix mistake in last commit (did not compile on windows)
+- common/GNUmakefile : Fix mistake in last commit (did not compile on windows)
+
+23rd December, 2010 L. Garnier 
+- basic/GNUmakefile : Remove OGL stuff from Makefile
+- common/GNUmakefile : Remove OGL stuff from Makefile
+
+8th October, 2010 L. Garnier  (interfaces-V09-03-13)
 - G4UIQt : Fiw problem with redraw of help tree.
 
-6, October J. Allison  (interfaces-V09-03-12)
+6th October, 2010 J. Allison  (interfaces-V09-03-12)
 - G4UIQt : Remove message about empty viewer (comment out
            fEmptyViewerTabLabel - suggested by Laurent).
 
-5, June L. Garnier
+5th June, 2010 L. Garnier
 - G4UIQt : Fix some bug on helpTree view
 
-23, June L. Garnier
+23rd June, 2010 L. Garnier
 - G4UIQt : Fix compilation warnings on Qt3 and Qt4
 
-22, June L. Garnier (interfaces-V09-03-11)
+22nd June, 2010 L. Garnier (interfaces-V09-03-11)
 - G4UIQt : Fix crash when open UI with no vis tab
 
-18, June L. Garnier
+18th June, 2010 L. Garnier
 - Fix Qt3 compilation bug (setVisible(...) unprotected
 
-17, June G. Cosmo (interfaces-V09-03-10)
+17th June, 2010 G. Cosmo (interfaces-V09-03-10)
 - Fixed compilation errors in G4UIQt for Qt3....
 
-17, June K. Murakami (interfaces-V09-03-09)
+17th June, 2010 K. Murakami (interfaces-V09-03-09)
 - Tagged.
 
-10th June L. Garnier
+10th June, 2010 L. Garnier
 - G4UIQt : Fix crash when del all viewer tabs and create a new one.
            Fix widget QLabel strange effect on OSX 10.5
 
-10th June L. Garnier
+10th June, L. Garnier
 - G4UIQt : Improvments on OpenGL tab at initialisation (tab size was 
   too small). Remove some flicker effect at initialisation. Remove a
   compilation warning. Improvment on Cout Filter for Qt3 
 
-8, June, 2010 K.Murakami (interfaces-V09-03-08)
+8th June, 2010 K.Murakami (interfaces-V09-03-08)
 - G4VBasicShell : wrong version is in the cvs head.
                   back to previous version (1.14) which includes 
                   a correct bug fix.
 
-4th June  L. Garnier (interfaces-V09-03-07)
+4th June,  L. Garnier (interfaces-V09-03-07)
 - G4UIQt : Fix recursive repaint on windows and linux
   Also fixed compilation problem for Qt3.
 - G4VBasicShell : Command completion improvments (was solve in

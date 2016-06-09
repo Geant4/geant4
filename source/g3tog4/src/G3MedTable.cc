@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.cc,v 1.15 2006/06/29 18:13:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3MedTable.cc,v 1.15 2006-06-29 18:13:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -79,10 +79,12 @@ void G3MedTable::Clear()
     a = fMedVector->back();
     fMedVector->pop_back();
     for (G3MediumVector::iterator i=fMedVector->begin();
-                                  i!=fMedVector->end(); i++){
+                                  i!=fMedVector->end();){
       if (*i==a) {
-	fMedVector->erase(i);
-	i--;
+	i = fMedVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    

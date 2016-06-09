@@ -7,7 +7,7 @@
 #                                              Q, 2005
 # ==================================================================
 """
-#$Id: g4thread.py,v 1.1 2010/12/02 08:22:21 kmura Exp $
+#$Id: g4thread.py,v 1.1 2010-12-02 08:22:21 kmura Exp $
 
 import thread
 from G4run import *

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNAInelasticFS.hh,v 1.9 2006/06/29 20:48:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPNAInelasticFS.hh,v 1.9 2006-06-29 20:48:41 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNAInelasticFS_h
 #define G4NeutronHPNAInelasticFS_h 1
@@ -45,7 +45,7 @@ class G4NeutronHPNAInelasticFS : public G4NeutronHPInelasticBaseFS
   
   G4NeutronHPNAInelasticFS(){}
   ~G4NeutronHPNAInelasticFS(){}
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {

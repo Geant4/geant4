@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.4 2006/06/29 19:55:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SynchrotronRadiation.hh,v 1.4 2006-06-29 19:55:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

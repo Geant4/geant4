@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.19 2007/01/05 16:59:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ASCIITreeMessenger.cc,v 1.19 2007-01-05 16:59:43 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001

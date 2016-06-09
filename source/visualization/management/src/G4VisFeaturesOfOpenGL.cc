@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfOpenGL.cc,v 1.6 2007/10/03 14:21:55 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisFeaturesOfOpenGL.cc,v 1.6 2007-10-03 14:21:55 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -99,4 +99,9 @@ G4String G4VisFeaturesOfOpenGLIQt () {
 G4String G4VisFeaturesOfOpenGLSQt () {
   return
     "\n It runs everywhere ";
+}
+
+G4String G4VisFeaturesOfOpenGLIWt () {
+  return
+    "\n It runs everywhere";
 }

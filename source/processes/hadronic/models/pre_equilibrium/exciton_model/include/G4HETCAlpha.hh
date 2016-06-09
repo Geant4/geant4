@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCAlpha.hh,v 1.3 2010/08/28 15:16:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HETCAlpha.hh,v 1.3 2010-08-28 15:16:55 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //

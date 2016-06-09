@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.45 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Polyhedra.cc,v 1.45 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -88,11 +88,11 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
 {
   if (theNumSide <= 0)
   {
-    G4cerr << "ERROR - G4Polyhedra::G4Polyhedra(): " << GetName() << G4endl
-           << "        No sides specified !"
-           << G4endl;
-    G4Exception("G4Polyhedra::G4Polyhedra()", "InvalidSetup",
-                FatalException, "Solid must have at least one side.");
+    std::ostringstream message;
+    message << "Solid must have at least one side - " << GetName() << G4endl
+            << "        No sides specified !";
+    G4Exception("G4Polyhedra::G4Polyhedra()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   //
@@ -125,15 +125,16 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
         ||(rInner[i+1] > rOuter[i])   )
       {
         DumpInfo();
-        G4cerr << "ERROR - G4Polyhedra::G4Polyhedra()"
-               << G4endl
-               << "        Segments are not contiguous !" << G4endl
-               << "        rMin[" << i << "] = " << rInner[i]
-               << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
-               << "        rMin[" << i+1 << "] = " << rInner[i+1]
-               << " -- rMax[" << i << "] = " << rOuter[i] << G4endl;
-        G4Exception("G4Polyhedra::G4Polyhedra()","InvalidSetup",FatalException, 
-                    "Cannot create a Polyhedra with no contiguous segments.");
+        std::ostringstream message;
+        message << "Cannot create a Polyhedra with no contiguous segments."
+                << G4endl
+                << "        Segments are not contiguous !" << G4endl
+                << "        rMin[" << i << "] = " << rInner[i]
+                << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
+                << "        rMin[" << i+1 << "] = " << rInner[i+1]
+                << " -- rMax[" << i << "] = " << rOuter[i];
+        G4Exception("G4Polyhedra::G4Polyhedra()", "GeomSolids0002",
+                    FatalErrorInArgument, message);
       }
     }
     original_parameters->Z_values[i] = zPlane[i];
@@ -198,11 +199,11 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   if (rz->Amin() < 0.0)
   {
-    G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        All R values must be >= 0 !"
-           << G4endl;
-    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
-                FatalException, "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        All R values must be >= 0 !";
+    G4Exception("G4Polyhedra::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   G4double rzArea = rz->Area();
@@ -211,30 +212,30 @@ void G4Polyhedra::Create( G4double phiStart,
 
   else if (rzArea < -kCarTolerance)
   {
-    G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z cross section is zero or near zero: "
-           << rzArea << G4endl;
-    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
-                FatalException, "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        R/Z cross section is zero or near zero: " << rzArea;
+    G4Exception("G4Polyhedra::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
     
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
     || (!rz->RemoveRedundantVertices( kCarTolerance )) ) 
   {
-    G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        Too few unique R/Z values !"
-           << G4endl;
-    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
-                FatalException, "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        Too few unique R/Z values !";
+    G4Exception("G4Polyhedra::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   if (rz->CrossesItself( 1/kInfinity )) 
   {
-    G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z segments cross !"
-           << G4endl;
-    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
-                FatalException, "Illegal input parameters.");
+    std::ostringstream message;
+    message << "Illegal input parameters - " << GetName() << G4endl
+            << "        R/Z segments cross !";
+    G4Exception("G4Polyhedra::Create()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   numCorner = rz->NumVertices();
@@ -311,8 +312,7 @@ void G4Polyhedra::Create( G4double phiStart,
     if (nextNext >= corners+numCorner) nextNext = corners;
     
     if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
-
-    //
+/*
     // We must decide here if we can dare declare one of our faces
     // as having a "valid" normal (i.e. allBehind = true). This
     // is never possible if the face faces "inward" in r *unless*
@@ -333,7 +333,7 @@ void G4Polyhedra::Create( G4double phiStart,
       allBehind = !rz->BisectedBy( corner->r, corner->z,
                                    next->r, next->z, kCarTolerance );
     }
-    
+*/
     *face++ = new G4PolyhedraSide( prev, corner, next, nextNext,
                  numSide, startPhi, endPhi-startPhi, phiIsOpen );
   } while( prev=corner, corner=next, corner > corners );
@@ -467,10 +467,11 @@ G4bool G4Polyhedra::Reset()
 {
   if (genericPgon)
   {
-    G4cerr << "Solid " << GetName() << " built using generic construct."
-           << G4endl << "Not applicable to the generic construct !" << G4endl;
-    G4Exception("G4Polyhedra::Reset()", "NotApplicableConstruct",
-                JustWarning, "Parameters NOT resetted.");
+    std::ostringstream message;
+    message << "Solid " << GetName() << " built using generic construct."
+            << G4endl << "Not applicable to the generic construct !";
+    G4Exception("G4Polyhedra::Reset()", "GeomSolids1001",
+                JustWarning, message, "Parameters NOT resetted.");
     return 1;
   }
 
@@ -583,6 +584,7 @@ G4VSolid* G4Polyhedra::Clone() const
 //
 std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -622,6 +624,7 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
           << corners[i].r << ", " << corners[i].z << "\n";
      }
   os << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }
@@ -1139,10 +1142,10 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
     delete [] xyz;
     if (problem)
     {
-      std::ostringstream oss;
-      oss << "Problem creating G4Polyhedron for: " << GetName();
-      G4Exception("G4Polyhedra::CreatePolyhedron()", "BadPolyhedron",
-                  JustWarning, oss.str().c_str());
+      std::ostringstream message;
+      message << "Problem creating G4Polyhedron for: " << GetName();
+      G4Exception("G4Polyhedra::CreatePolyhedron()", "GeomSolids1002",
+                  JustWarning, message);
       delete polyhedron;
       return 0;
     }

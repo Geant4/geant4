@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.24 2010/11/18 11:48:21 allison Exp $
+$Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,28 @@ $Id: History,v 1.24 2010/11/18 11:48:21 allison Exp $
 
                        Package History file
                        --------------------
+
+
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
+- Added scoring of msc 
+
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-05
+- Removed initStep test in SteppingAction
+
+16 August 2011 - S. Incerti -  microdosimetry-V09-04-04
+- Removed usage of system command
+
+27 May 2011 - S. Incerti -  microdosimetry-V09-04-03
+- Switched back to ordered physics list
+
+20 May 2011 - S. Incerti -  microdosimetry-V09-04-02
+- Switched to non-ordered physics list
+
+02 April 2011 - S. Incerti -  microdosimetry-V09-04-01
+- Added new variables to histogram
+
+13 March 2011 - S. Incerti -  microdosimetry-V09-04-00
+- Switched to G4ionIonisation and 5 MeV proton
 
 18 November 2010 - J. Allison -  microdosimetry-V09-03-10
 - Introduced G4UIExecutive.

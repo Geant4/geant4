@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashSamplingShowerTuning.hh,v 1.3 2006/06/29 19:13:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashSamplingShowerTuning.hh,v 1.3 2006-06-29 19:13:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -54,6 +54,12 @@
 
 class GFlashSamplingShowerTuning : public GVFlashHomoShowerTuning
 {
+  public:
+
+    GFlashSamplingShowerTuning() {}
+    virtual ~GFlashSamplingShowerTuning() {}
+  
+
   public: // with description
 
   G4double ParsAveT1(){ return -0.55;} // t1

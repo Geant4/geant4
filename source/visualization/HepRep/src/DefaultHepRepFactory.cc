@@ -19,7 +19,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepFactory.cc,v 1.6 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepFactory.cc,v 1.6 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

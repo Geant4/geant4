@@ -23,25 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
- // J.L. Chuma, TRIUMF, 31-Oct-1996
- // last modified: 19-Dec-1996
- // modified by J.L.Chuma, 24-Jul-1997   to include total momentum
- // inluded operator *, and some minor modifications.
- // modified by H.P.Wellisch to add functionality needed by string models,
- // cascade and Nucleus. (Mon Mar 16 1998) 
+// J.L. Chuma, TRIUMF, 31-Oct-1996
+// last modified: 19-Dec-1996
+// modified by J.L.Chuma, 24-Jul-1997   to include total momentum
+// inluded operator *, and some minor modifications.
+// modified by H.P.Wellisch to add functionality needed by string models,
+// cascade and Nucleus. (Mon Mar 16 1998) 
+// M. Kelsey 29-Aug-2011 -- Use G4Allocator model to avoid memory churn.
  
 #ifndef G4ReactionProduct_h
 #define G4ReactionProduct_h 1
 
 #include "globals.hh"
+#include "G4Allocator.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadProjectile.hh"
 #include "G4HadronicException.hh"
- 
- class G4ReactionProduct
- {
+
+// To support better memory management and reduced fragmentation
+class G4ReactionProduct;
+#if defined G4HADRONIC_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4ReactionProduct> aRPAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4ReactionProduct> aRPAllocator;
+#endif
+
+class G4ReactionProduct
+{
     friend G4ReactionProduct operator+(
      const G4ReactionProduct & p1, const G4ReactionProduct &p2 );
     
@@ -63,11 +71,20 @@
     G4ReactionProduct();
     
     G4ReactionProduct( G4ParticleDefinition *aParticleDefinition );
-    
+
     ~G4ReactionProduct() {}
     
     G4ReactionProduct( const G4ReactionProduct &right );
-    
+
+    // Override new and delete for use with G4Allocator
+    inline void* operator new(size_t) {
+      return (void *)aRPAllocator.MallocSingle();
+    }
+
+    inline void operator delete(void* aReactionProduct) {
+      aRPAllocator.FreeSingle((G4ReactionProduct*)aReactionProduct);
+    }
+
     G4ReactionProduct &operator= ( const G4ReactionProduct &right );
     
     G4ReactionProduct &operator= ( const G4DynamicParticle &right );

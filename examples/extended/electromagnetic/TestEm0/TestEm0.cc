@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.7 2010/11/02 15:00:31 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: TestEm0.cc,v 1.7 2010-11-02 15:00:31 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

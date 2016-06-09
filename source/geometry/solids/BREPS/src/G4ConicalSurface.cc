@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.cc,v 1.12 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ConicalSurface.cc,v 1.12 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -60,9 +60,11 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D&,
   }
   else
   {
-    G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
-	   << "\tAxis has zero length" << G4endl
-	   << "\tDefault axis ( 1.0, 0.0, 0.0 ) is used." << G4endl;
+    std::ostringstream message;
+    message << "Axis has zero length." << G4endl
+	    << "Default axis ( 1.0, 0.0, 0.0 ) is used.";
+    G4Exception("G4ConicalSurface::G4ConicalSurface()", "GeomSolids1001",
+                JustWarning, message);
 
     axis = G4Vector3D( 1.0, 0.0, 0.0 );
   }
@@ -75,11 +77,13 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D&,
   }
   else
   {
-    G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
-	   << "\tAsked for angle out of allowed range of 0 to "
-	   << 0.5*pi << " (PI/2): " << e << G4endl
-	   << "\tDefault angle of 1.0 is used." << G4endl;    
-
+    std::ostringstream message;
+    message << "Angle out of range." << G4endl
+            << "Asked for angle out of allowed range of 0 to "
+	    << 0.5*pi << " (PI/2): " << e << G4endl
+	    << "Default angle of 1.0 is used.";    
+    G4Exception("G4ConicalSurface::G4ConicalSurface()", "GeomSolids1001",
+                JustWarning, message);
     angle = 1.0;
   }
 }
@@ -571,10 +575,13 @@ void G4ConicalSurface::SetAngle( G4double e )
   }
   else   // use old value (do not change angle) if out of the range, 
   {      // but print warning message
-    G4cerr << "WARNING - G4ConicalSurface::SetAngle" << G4endl
-	   << "\tAsked for angle out of allowed range of 0 to "
-	   << 0.5*pi << " (PI/2):" << e << G4endl
-	   << "\tDefault angle of " << angle << " is used." << G4endl;
+    std::ostringstream message;
+    message << "Angle out of range." << G4endl
+            << "Asked for angle out of allowed range of 0 to "
+	    << 0.5*pi << " (PI/2): " << e << G4endl
+	    << "Default angle of " << angle << " is used.";    
+    G4Exception("G4ConicalSurface::SetAngle()", "GeomSolids1001",
+                JustWarning, message);
   }
 }
 

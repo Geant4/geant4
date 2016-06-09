@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.12 2009/11/18 23:16:57 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4NeutronHPElasticData.hh,v 1.12 2009-11-18 23:16:57 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi
@@ -52,30 +52,46 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
 {
    public:
    
-   G4NeutronHPElasticData();
+      G4NeutronHPElasticData();
    
-   ~G4NeutronHPElasticData();
+      ~G4NeutronHPElasticData();
    
-   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+      G4bool IsIsoApplicable( const G4DynamicParticle* , 
+                              G4int /*Z*/ , G4int /*A*/ ,
+                              const G4Element* /*elm*/ ,
+                              const G4Material* /*mat*/ );
+
+      G4double GetIsoCrossSection( const G4DynamicParticle*  , 
+                                   G4int /*Z*/ , G4int /*A*/ ,
+                                   const G4Isotope* /*iso*/  ,
+                                   const G4Element* /*elm*/  ,
+                                   const G4Material* /*mat*/ );
+
+
+      //G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
    public:
-      G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
-      { return false;}
+      //G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+      //{ return false;}
 
-   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
+      G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
-   void BuildPhysicsTable(const G4ParticleDefinition&);
-
-   void DumpPhysicsTable(const G4ParticleDefinition&);
+      void BuildPhysicsTable(const G4ParticleDefinition&);
+      void DumpPhysicsTable(const G4ParticleDefinition&);
 
       void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
       void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
    
    private:
    
-   G4PhysicsTable * theCrossSections;
+      G4PhysicsTable * theCrossSections;
       G4bool onFlightDB;
    
+      G4double ke_cache;
+      G4double xs_cache;
+      const G4Element* element_cache;
+      const G4Material* material_cache;
 };
 
 #endif

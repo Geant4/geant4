@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exMPI01.cc,v 1.2 2010/05/18 06:07:43 kmura Exp $
-// $Name: geant4-09-04-beta-01 $
+// $Id: exMPI01.cc,v 1.2 2010-05-18 06:07:43 kmura Exp $
+// $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   exMPI01.cc

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.21 2010/11/09 09:04:29 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.21 2010-11-09 09:04:29 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 
@@ -47,7 +47,7 @@
 #include <complex>
 #include "G4Integrator.hh"
 
-#include "G4HadronicInteraction.hh"
+#include "G4HadronElastic.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
@@ -57,13 +57,13 @@ class G4ParticleDefinition;
 class G4PhysicsTable;
 class G4PhysicsLogVector;
 
-class G4NuclNuclDiffuseElastic : public G4HadronicInteraction
+class G4NuclNuclDiffuseElastic : public G4HadronElastic   // G4HadronicInteraction
 {
 public:
 
   G4NuclNuclDiffuseElastic();
 
-  G4NuclNuclDiffuseElastic(const G4ParticleDefinition* aParticle);
+  // G4NuclNuclDiffuseElastic(const G4ParticleDefinition* aParticle);
 
 
 
@@ -78,9 +78,11 @@ public:
   void BuildAngleTable();
 
  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-				  G4Nucleus & targetNucleus);
+  // G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus & targetNucleus);
 
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab,
+				    G4int Z, G4int A);
 
   void SetPlabLowLimit(G4double value);
 
@@ -252,6 +254,7 @@ public:
   G4double  GetRatioGen(G4double theta);
   
   G4double  GetFresnelDiffuseXsc(G4double theta);
+  G4double  GetFresnelIntegrandXsc(G4double alpha);
   
 
   G4complex AmplitudeGla(G4double theta);
@@ -261,7 +264,10 @@ public:
   G4double  AmplitudeGGMod2(G4double theta);
 
   void      InitParameters(const G4ParticleDefinition* theParticle,  
-			      G4double partMom, G4double Z, G4double A); 
+			      G4double partMom, G4double Z, G4double A);
+ 
+  void      InitDynParameters(const G4ParticleDefinition* theParticle,  
+			      G4double partMom); 
 
   void      InitParametersGla(const G4DynamicParticle* aParticle,  
 			      G4double partMom, G4double Z, G4double A);
@@ -1415,6 +1421,17 @@ inline G4double G4NuclNuclDiffuseElastic::GetFresnelDiffuseXsc(G4double theta)
   return xsc;
 }
 
+/////////////////////////////////////////////////////////////////
+//
+// The xsc for Fresnel smooth nucleus profile for integration
+
+inline G4double G4NuclNuclDiffuseElastic::GetFresnelIntegrandXsc(G4double alpha)
+{
+  G4double theta = std::sqrt(alpha);
+  G4double xsc     = GetFresnelDiffuseXsc(theta);
+  return xsc;
+}
+
 
 
 /////////////////////////////////////////////////////////////////
@@ -1552,6 +1569,39 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
 
   return;
 }
+///////////////////////////////////////////////////////////////////////////////
+//
+// Test for given particle and element table of momentum, angle probability.
+// For the partMom in CMS. 
+
+inline void G4NuclNuclDiffuseElastic::InitDynParameters(const G4ParticleDefinition* theParticle,  
+                                          G4double partMom) 
+{
+  G4double a = 0.;
+  G4double z = theParticle->GetPDGCharge();
+  G4double m1 = theParticle->GetPDGMass();
+
+  fWaveVector = partMom/hbarc;
+
+  G4double lambda = fCofLambda*fWaveVector*fNuclearRadius;
+
+  if( z )
+  {
+    a           = partMom/m1; // beta*gamma for m1
+    fBeta       = a/std::sqrt(1+a*a);
+    fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+    fRutherfordRatio = fZommerfeld/fWaveVector; 
+    fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
+  }
+  fProfileLambda = lambda; // *std::sqrt(1.-2*fZommerfeld/lambda);
+  fProfileDelta  = fCofDelta*fProfileLambda;
+  fProfileAlpha  = fCofAlpha*fProfileLambda;
+
+  CalculateCoulombPhaseZero();
+  CalculateRutherfordAnglePar();
+
+  return;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1623,7 +1673,7 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
                                                  G4double pTkin, 
                                                  G4ParticleDefinition* tParticle)
 {
-  G4double xsection(0), Delta, A0, B0;
+  G4double xsection(0), /*Delta,*/ A0, B0;
   G4double hpXsc(0);
   G4double hnXsc(0);
 
@@ -1667,9 +1717,9 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   if( proj_momentum >= 10. ) // high energy: pp = nn = np
     // if( proj_momentum >= 2.)
   {
-    Delta = 1.;
+    //Delta = 1.;
 
-    if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+    //if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
     if( proj_momentum >= 10.)
     {

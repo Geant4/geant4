@@ -28,8 +28,8 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.4 2010/11/25 19:49:43 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4hImpactIonisation.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //
@@ -346,21 +346,21 @@ void G4hImpactIonisation::BuildPhysicsTable(const G4ParticleDefinition& particle
 // --------------------------------------------------------------------
 void G4hImpactIonisation::BuildLossTable(const G4ParticleDefinition& particleDef)
 {
-
   // Initialisation
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
-  G4double lowEnergy, highEnergy;
+  //G4double lowEnergy, highEnergy;
+  G4double highEnergy;
   G4Proton* proton = G4Proton::Proton();
 
   if (particleDef == *proton) 
     {
-      lowEnergy = protonLowEnergy ;
+      //lowEnergy = protonLowEnergy ;
       highEnergy = protonHighEnergy ;
       charge = 1. ;
     } 
   else 
     {
-      lowEnergy = antiprotonLowEnergy ;
+      //lowEnergy = antiprotonLowEnergy ;
       highEnergy = antiprotonHighEnergy ;
       charge = -1. ;
     }
@@ -1368,14 +1368,14 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
   if(0.0 >= beta2) return 0.0;
 
   G4double BarkasTerm = 0.0;
-  G4double AMaterial = 0.0;
+  //G4double AMaterial = 0.0;
   G4double ZMaterial = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int numberOfElements = material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
-    AMaterial = (*theElementVector)[i]->GetA()*mole/g;
+    //AMaterial = (*theElementVector)[i]->GetA()*mole/g;
     ZMaterial = (*theElementVector)[i]->GetZ();
 
     G4double X = 137.0 * 137.0 * beta2 / ZMaterial;

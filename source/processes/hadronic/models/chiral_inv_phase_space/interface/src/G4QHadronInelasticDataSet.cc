@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronInelasticDataSet.cc,v 1.2 2010/05/26 12:19:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QHadronInelasticDataSet.cc,v 1.2 2010-05-26 12:19:06 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4QHadronInelasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 11.11.09
@@ -35,13 +35,21 @@
 // 
 
 #include "G4QHadronInelasticDataSet.hh"
+#include <iostream>
 
 // Initialization of static vectors
-std::vector<G4int> G4QHadronInelasticDataSet::ElementZ; // Z of the element(i) in LastCalc
-std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN; // N of iso(j) of El(i)
-std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;//SumProbIsoInEl
+std::vector<G4int> G4QHadronInelasticDataSet::ElementZ;
+// Z of the element(i) in LastCalc
 
-G4QHadronInelasticDataSet::G4QHadronInelasticDataSet()
+std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN;
+// N of iso(j) of El(i)
+
+std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;
+//SumProbIsoInEl
+
+
+G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   //CHIPSpAin    = G4QProtonNuclearCrossSection::GetPointer();
   //CHIPSnAin    = G4QNeutronNuclearCrossSection::GetPointer();
@@ -66,7 +74,36 @@ G4QHadronInelasticDataSet::G4QHadronInelasticDataSet()
   ////CHIPSananAin = G4QANuANuNuclearCrossSection::GetPointer();
 
   Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
+  Description();
 }
+
+
+void G4QHadronInelasticDataSet::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of CHIPSInelasticXS</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "CHIPSInelasticXS provides hadron-nuclear inelastic cross\n"
+            << "sections for all hadrons at all energies.  These cross\n"
+            << "sections represent parameterizations developed by M. Kossov.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4bool G4QHadronInelasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4Element*)
 {
@@ -156,8 +193,7 @@ G4bool G4QHadronInelasticDataSet::IsZAApplicable(const G4DynamicParticle* Pt,
 }
 
 G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
-                                                    const G4Element* pElement,
-                                                    G4double)
+                                                    const G4Element* pElement, G4double)
 {
   G4int IPIE=IsoProbInEl.size();          // How many old elements?
   if(IPIE) for(G4int ip=0; ip<IPIE; ++ip) // Clean up the SumProb's of Isotopes (SPI)
@@ -227,7 +263,7 @@ G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle
   G4ParticleDefinition* particle = Pt->GetDefinition();
   G4double Momentum=Pt->GetTotalMomentum();
   G4VQCrossSection* CSmanager=0;
-  //G4VQCrossSection* CSmanager2=0;
+
   G4int pPDG=0;
   if(particle == G4Neutron::Neutron())
   {
@@ -395,11 +431,16 @@ G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle
   //  CSmanager2=G4QANuANuNuclearCrossSection::GetPointer();
   //  pPDG=-12;
   //}
-  else G4cout<<"-Warning-G4QHadronInelasticDataSet::GetIsoZACrossSection: PDG="
-             <<particle->GetPDGEncoding()<<" isn't supported by CHIPS"<<G4endl;
+  else
+  {
+    G4cerr << "-ERROR-G4QHadronInelasticDataSet::GetIsoZACrossSection: PDG="
+           << particle->GetPDGEncoding() << " isn't supported by CHIPS" << G4endl;
+    //throw G4HadronicException(__FILE__, __LINE__,
+    //"G4QHadronInelasticDataSet::GetIsoZACrossSection: Particle not supported by CHIPS");
+    return 0; 
+  }
   G4int tZ=(G4int)(Z);
   G4int tN=(G4int)(A-Z);
   G4double CSI=CSmanager->GetCrossSection(true, Momentum, tZ, tN, pPDG); // CS(j,i) basic
-  //if(CSmanager2) CSI+=CSmanager2->GetCrossSection(true,Momentum,Z,N,pPDG); // e.g.(nu,nu)
   return CSI;
 }

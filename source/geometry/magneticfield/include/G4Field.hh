@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.10 2006/06/29 18:22:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Field.hh,v 1.10 2006-06-29 18:22:13 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4Field
@@ -80,8 +80,9 @@ class G4Field
        //      array 'fieldArr' are determined by the type of field.
        //      See for example the class G4ElectroMagneticField.
 
-      G4Field(){;}
-      virtual ~G4Field(){;}
+      G4Field( G4bool gravityOn= false);
+      G4Field( const G4Field & );
+      virtual ~G4Field();
       inline G4Field& operator = (const G4Field &p); 
 
      // A field signature function that can be used to insure
@@ -94,12 +95,15 @@ class G4Field
        //    - an electric field     should return "true"
        //    - a pure magnetic field should return "false"
 
+      G4bool   IsGravityActive() const { return fGravityActive;}
+       //  Does this field include gravity?
+      inline void SetGravityActive( G4bool OnOffFlag ); 
+  private: 
+      G4bool  fGravityActive;
 };
 
-inline G4Field& G4Field::operator = (const G4Field &p)
-{
-  if (&p != this) { *this = p; }
-  return *this;
-}
-
+inline void  G4Field::SetGravityActive( G4bool OnOffFlag )
+{ 
+  fGravityActive= OnOffFlag; 
+} 
 #endif /* G4FIELD_HH */

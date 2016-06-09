@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010/11/02 15:46:42 allison Exp $
+$Id: History,v 1.7 2011-01-05 18:49:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 October 2011, Joseph Perl (exampleES2-V09-04-03)
+- Updated PhysListEmStandard.cc to match version in electronScattering
+
+28 October 2011, Joseph Perl (exampleES2-V09-04-02)
+- Correct physics list setting in macros
+
+08 June 2011, Joseph Perl (exampleES2-V09-04-01)
+- Correct README comments on opt2 and opt3
+
+05 January 2011, V.Ivanchenko (exampleES2-V09-04-00)
+- Added all physics builders from electronScattering example
 
 02 November 2010, John Allison  (exampleES2-V09-03-02)
 - Introduced G4UIexecutive.

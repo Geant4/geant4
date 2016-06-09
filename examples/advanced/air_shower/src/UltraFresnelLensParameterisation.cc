@@ -78,7 +78,9 @@ void UltraFresnelLensParameterisation::ComputeTransformation
   G4double     dZ = FresnelLens->GetSagita(Rmax1) - FresnelLens->GetSagita(Rmin1) ;
 
   if (dZ <= 0.0){
-     G4Exception("UltraFresnelLensParameterisation::ComputeTransformation: Groove depth<0 !");
+    G4Exception("UltraFresnelLensParameterisation::ComputeTransformation()",
+		"AirSh003",FatalException,
+		"UltraFresnelLensParameterisation::ComputeTransformation: Groove depth<0 !");
   }
  
   G4ThreeVector origin(0,0,(dZ-dZOffset)/2.);
@@ -100,7 +102,9 @@ void UltraFresnelLensParameterisation::ComputeDimensions
   G4double  dZ = FresnelLens->GetSagita(Rmax1) - FresnelLens->GetSagita(Rmin1) ;
 
   if (dZ <= 0.0){
-     G4Exception("UltraFresnelLensParameterisation::ComputeDimensions: Groove depth<0 !");
+    G4Exception("UltraFresnelLensParameterisation::ComputeDimensions()",
+		"AirSh004",FatalException,
+		"UltraFresnelLensParameterisation::ComputeDimensions: Groove depth<0 !");
   }
 
 

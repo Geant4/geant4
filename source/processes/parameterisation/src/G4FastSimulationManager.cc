@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.13 2007/05/11 13:50:20 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FastSimulationManager.cc,v 1.13 2007-05-11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -405,9 +405,14 @@ G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const
 	     << " (inactivated)." << G4endl;
     }
   
-  if(!unique)
-    G4cout << "\a\n >>>>>>Warning: two or more Models for the same "
-	   << "particle type attached to the same envelope!"
-	   << G4endl;
+  if( !unique )
+    {
+      G4ExceptionDescription ed;
+      ed << "Two or more Models are available for the same particle type, in the same envelope/region." << G4endl;
+      G4Exception("G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const",
+		  "FastSim001",
+		  JustWarning, ed,
+		  "Models risk to exclude each other.");
+    }
   unique=false;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh,v 1.1 2010/06/09 01:55:38 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HistoManager.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

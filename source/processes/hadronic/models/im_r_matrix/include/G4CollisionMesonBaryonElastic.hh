@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryonElastic.hh,v 1.2 2006/06/29 20:32:49 gunter Exp $ //
+// $Id: G4CollisionMesonBaryonElastic.hh,v 1.2 2006-06-29 20:32:49 gunter Exp $ //
 
 #ifndef G4CollisionMesonBaryonElastic_h
 #define G4CollisionMesonBaryonElastic_h

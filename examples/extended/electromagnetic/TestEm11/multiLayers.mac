@@ -1,0 +1,29 @@
+# $Id: multiLayers.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
+#
+# multiLayers
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  5
+/testem/det/setAbsor 1 Water  13 cm
+/testem/det/setAbsor 2 G4_AIR  1 cm
+/testem/det/setAbsor 3 Water   1 cm
+/testem/det/setAbsor 4 G4_B-100_BONE   3 cm
+/testem/det/setAbsor 5 Water  12 cm
+/testem/det/setSizeYZ  30 cm
+#
+/testem/phys/addPhysics  emstandard_opt0	# em physics
+#
+/run/initialize
+#
+/gun/particle gamma
+/gun/energy 6 MeV
+#
+/testem/histo/setFileType root
+/testem/histo/setFileName bone
+/testem/histo/setHisto 1 300 0. 300. mm		#edep profile
+#
+/testem/event/printModulo 100000
+#
+/run/beamOn 1000000

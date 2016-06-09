@@ -24,15 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.1 2009/11/16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VQCrossSection.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // CHIPS virtual class: G4VQCrossSection for the collision cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-04
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 27-Nov-04
 // 
-//=========================================================================================
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******

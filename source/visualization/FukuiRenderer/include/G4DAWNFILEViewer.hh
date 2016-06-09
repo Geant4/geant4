@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.10 2006/06/29 21:16:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DAWNFILEViewer.hh,v 1.10 2006-06-29 21:16:32 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
 // DAWNFILE viewer - opens window, hard copy, etc.

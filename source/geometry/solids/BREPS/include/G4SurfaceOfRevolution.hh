@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceOfRevolution.hh,v 1.7 2010/07/13 14:44:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SurfaceOfRevolution.hh,v 1.7 2010-07-13 14:44:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4SurfaceOfRevolution

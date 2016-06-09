@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.13 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Hyperbola.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -95,7 +95,7 @@ G4Hyperbola& G4Hyperbola::operator=(const G4Hyperbola& right)
 
 G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 {
-  G4Exception("G4Hyperbola::Project()", "NotImplemented",
+  G4Exception("G4Hyperbola::Project()", "GeomSolids0001",
               FatalException, "Sorry, not yet implemented.");
 
   G4Point3D newLocation= tr*position.GetLocation();

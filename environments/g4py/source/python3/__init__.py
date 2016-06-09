@@ -5,12 +5,11 @@
 #  Welcome to Geant4Py.
 #
 #  This package contains a set of Python interface with Geant4.
-#  Hava A Fun!
 # ==================================================================
 """
-# $Id: __init__.py,v 1.1 2010/12/02 08:22:21 kmura Exp $
-__version__ ='9.4.0'
-__date__ = '17/December/2010'
+# $Id: __init__.py,v 1.1 2010-12-02 08:22:21 kmura Exp $
+__version__ ='9.5.0'
+__date__ = '02/December/2011'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules

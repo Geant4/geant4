@@ -24,37 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.21 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Exception.cc,v 1.21 2007-11-13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
 // G4Exception
 //
-// Global error function prints string to G4cerr, and aborts
-// program
-//
-// History:
-// 30.06.95 P.Kent
+// Global error function prints string to G4cerr (or G4cout in case of
+// warning). May abort program according to severity.
+// ----------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "G4String.hh"
 #include "G4StateManager.hh"
-
-void G4Exception(const char* emessage)
-{
-   if(emessage)  { G4cerr << emessage << G4endl; }
-   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,emessage))
-   {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   }
-   else
-   {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
-}
 
 void G4Exception(const char* originOfException,
                  const char* exceptionCode,
@@ -71,33 +54,44 @@ void G4Exception(const char* originOfException,
   }
   else
   {
-    G4cerr << G4endl
-       << "*** ExceptionHandler is not defined ***" << G4endl;
-    G4cerr << G4endl;
-    G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
-    G4cerr << "      issued by : " << originOfException << G4endl;
-    G4cerr << description << G4endl;
-    G4cerr << G4endl << "Severity : ";
+    static const G4String es_banner
+      = "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
+    static const G4String ee_banner
+      = "\n-------- EEEE -------- G4Exception-END --------- EEEE -------\n";
+    static const G4String ws_banner
+      = "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
+    static const G4String we_banner
+      = "\n-------- WWWW -------- G4Exception-END --------- WWWW -------\n";
+    std::ostringstream message;
+    message << "\n*** ExceptionHandler is not defined ***\n"
+            << "*** G4Exception : " << exceptionCode << G4endl
+            << "      issued by : " << originOfException << G4endl
+            << description << G4endl;
     switch(severity)
     {
      case FatalException:
-      G4cerr << "*** Fatal Exception ***";
+      G4cerr << es_banner << message.str() << "*** Fatal Exception ***"
+             << ee_banner << G4endl;
       break;
      case FatalErrorInArgument:
-      G4cerr << "*** Fatal Error In Argument ***";
+      G4cerr << es_banner << message.str() << "*** Fatal Error In Argument ***"
+             << ee_banner << G4endl;
       break;
      case RunMustBeAborted:
-      G4cerr << "*** Run Must Be Aborted ***";
+      G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
+             << ee_banner << G4endl;
       break;
      case EventMustBeAborted:
-      G4cerr << "*** Event Must Be Aborted ***";
+      G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
+             << ee_banner << G4endl;
       break;
      default:
-      G4cerr << "*** This is just a warning message. ***";
+      G4cout << ws_banner << message.str()
+             << "*** This is just a warning message. ***"
+             << we_banner << G4endl;
       toBeAborted = false;
       break;
     }
-    G4cerr << G4endl;
   }
   if(toBeAborted)
   {
@@ -114,12 +108,21 @@ void G4Exception(const char* originOfException,
   }
 }
 
-void G4Exception(std::string emessage)
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDescription & description)
 {
-  G4Exception(emessage.c_str());
+  G4String des = description.str();
+  G4Exception(originOfException, exceptionCode, severity, des.c_str());
 }
 
-void G4Exception(G4String emessage)
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDescription & description,
+                 const char* comments)
 {
-  G4Exception(emessage.c_str());
+  description << comments << G4endl;
+  G4Exception(originOfException, exceptionCode, severity, description);
 }

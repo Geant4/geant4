@@ -1,4 +1,4 @@
-.$Id: History,v 1.136 2010/11/07 22:29:30 perl Exp $
+.$Id: History,v 1.136 2010-11-07 22:29:30 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,25 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+28th October 2011  Joseph Perl  (vis-HepRep-V09-04-03)
+- Add /vis/heprep/scale and /vis/heprep/center
+
+13th October 2011  Andrea Dotti (vis-HepRep-V09-04-02)
+- Solving "variable set but not used" warning in GCC 4.6 
+
+26th September 2011  John Allison  (vis-HepRep-V09-04-01)
+- Tagged.
+
+17th September 2011  John Allison
+- Migrated to new G4Exception.
+
+25th March 2011 G.Cosmo  (vis-HepRep-V09-04-00)
+- Use G4RotationMatrix typedef instead of native CLHEP type in
+  G4HepRepFileSceneHandler.cc.
+
+23th January 2011 L.Garnier
+- GNUMakefile : Remove G4VIS_BUILD.gmk use
 
 7th November 2010  Joseph Perl  (vis-HepRep-V09-03-04)
 - G4HepRepFileSceneHandler.hh: Fix coverity warning about uninitialized variables. Turns out they were unneeded.

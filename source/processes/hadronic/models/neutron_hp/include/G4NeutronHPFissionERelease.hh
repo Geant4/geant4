@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.12 2007/06/08 22:39:50 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.12 2007-06-08 22:39:50 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070606 fix for Valgrind by T. Koi
 //

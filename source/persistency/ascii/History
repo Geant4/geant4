@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2010/12/15 11:32:48 arce Exp $
+$Id: History,v 1.19 2010-12-15 11:32:48 arce Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 2011 - G.Cosmo (ascii-V09-04-08)
+- Removed call to obsolete G4Exception format in G4tgrMaterialFactory.
+
+27 October 2011 - G.Cosmo (ascii-V09-04-07)
+- Fixed trivial compilation warning from Xcode in G4tgbVolume.
+
+1 September 2011 - P.Arce (ascii-V09-04-06)
+- Fixed bug on the usage of units. Addressing problem report #1240.
+
+1 July 2011 - G.Cosmo (ascii-V09-04-05)
+- Fixed case of dereferencing null pointer in G4tgbGeometryDumper
+  DumpRotationMatrix() method.
+
+13 May 2011 - G.Cosmo (ascii-V09-04-04)
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+5 May, 11 G.Cosmo (ascii-V09-04-03)
+- Use G4Evaluator typedef for evaluator and 3x3 rotations.
+
+25 March, 11 G.Cosmo (ascii-V09-04-02)
+- Use G4 types for 3-vectors and 3x3 rotations.
+
+25 January, 11 G.Cosmo (ascii-V09-04-01)
+- Removed function WordIsFunction() in G4tgrUtils with missing implementation
+  introduced in previous tag.
+
+10 January, 11 P.Arce (ascii-V09-04-00)
+- Added missing dumping of pressure and state for materials.
+  Added enumeration of units.
 
 15 December, 10 P.Arce (ascii-V09-03-05)
 - Introduced fixes for Coverity reports...

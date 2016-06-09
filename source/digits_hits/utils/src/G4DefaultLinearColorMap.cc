@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.cc,v 1.3 2008/08/29 02:50:05 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DefaultLinearColorMap.cc,v 1.3 2008-08-29 02:50:05 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4DefaultLinearColorMap.hh"

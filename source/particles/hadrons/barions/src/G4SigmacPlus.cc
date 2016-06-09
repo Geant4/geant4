@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacPlus.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SigmacPlus.cc,v 1.13 2006-10-12 10:59:45 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4SigmacPlus* G4SigmacPlus::Definition()
    anInstance = new G4ParticleDefinition(
                  name,      2.4529*GeV,       2.2*MeV,  +1.0*eplus,
                     1,              +1,             0,
-                    2,              +1,             0,
+                    2,               0,             0,
              "baryon",               0,            +1,        4212,
                 false,          0.0*ns,          NULL,
                 false,       "sigma_c");

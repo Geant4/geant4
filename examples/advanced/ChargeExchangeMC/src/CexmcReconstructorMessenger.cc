@@ -72,11 +72,11 @@ CexmcReconstructorMessenger::CexmcReconstructorMessenger(
         "             deposit in crystals,\n"
         "    sqrt - entry points defined by square root weights of\n"
         "           energy deposit in crystals" );
-    setCalorimeterEntryPointDefinitionAlgorithm->SetDefaultValue( "sqrt" );
     setCalorimeterEntryPointDefinitionAlgorithm->SetParameterName(
                                             "EntryPointDefinitionAlgo", false );
     setCalorimeterEntryPointDefinitionAlgorithm->SetCandidates(
                                             "center simple linear sqrt" );
+    setCalorimeterEntryPointDefinitionAlgorithm->SetDefaultValue( "sqrt" );
     setCalorimeterEntryPointDefinitionAlgorithm->AvailableForStates(
                                             G4State_PreInit, G4State_Idle );
 
@@ -93,12 +93,12 @@ CexmcReconstructorMessenger::CexmcReconstructorMessenger(
         "             with origin in the center of the target;\n"
         "             radius of the sphere is sum of distance to\n"
         "             the calorimeter and 'entryPointDepth' value" );
-    setCalorimeterEntryPointDepthDefinitionAlgorithm->SetDefaultValue(
-                                                                    "plain" );
     setCalorimeterEntryPointDepthDefinitionAlgorithm->SetParameterName(
                                     "EntryPointDepthDefinitionAlgo", false );
     setCalorimeterEntryPointDepthDefinitionAlgorithm->SetCandidates(
                                     "plain sphere" );
+    setCalorimeterEntryPointDepthDefinitionAlgorithm->SetDefaultValue(
+                                    "plain" );
     setCalorimeterEntryPointDepthDefinitionAlgorithm->AvailableForStates(
                                                 G4State_PreInit, G4State_Idle );
 
@@ -106,14 +106,14 @@ CexmcReconstructorMessenger::CexmcReconstructorMessenger(
         ( CexmcMessenger::reconstructorDirName + "crystalSelectionAlgo" ).
                 c_str(), this );
     setCrystalSelectionAlgorithm->SetGuidance(
-        "\n    Choose which crystals will be selected in weighted entry point\n"
+        "\n    Choose crystals to be selected in weighted entry point\n"
         "    reconstruction algorithms\n"
         "    all - all,\n"
         "    adjacent - crystal with maximum energy deposit and\n"
         "               adjacent crystals" );
-    setCrystalSelectionAlgorithm->SetDefaultValue( "all" );
     setCrystalSelectionAlgorithm->SetParameterName( "CrystalSelAlgo", false );
     setCrystalSelectionAlgorithm->SetCandidates( "all adjacent" );
+    setCrystalSelectionAlgorithm->SetDefaultValue( "all" );
     setCrystalSelectionAlgorithm->AvailableForStates( G4State_PreInit,
                                                       G4State_Idle );
 
@@ -124,11 +124,12 @@ CexmcReconstructorMessenger::CexmcReconstructorMessenger(
         "\n    Defines that if the crystal with maximum energy deposit in\n"
         "    calorimeter is an outer crystal then the closest inner crystal\n"
         "    will be chosen as the reference for adjacent crystal selection\n"
-        "    algorithm and simple entry point definition algorithm.\n"
-        "    If not set then the reference crystal will be found from all\n"
-        "    crystals in calorimeter" );
-    useInnerRefCrystal->SetDefaultValue( false );
-    useInnerRefCrystal->SetParameterName( "UseInnerRefCrystal", false );
+        "    algorithm and simple entry point definition algorithm. It also\n"
+        "    affects energy deposit collection if adjacent crystals\n"
+        "    algorithm was chosen for that. If not set then the reference\n"
+        "    crystal will be found from all crystals in calorimeter" );
+    useInnerRefCrystal->SetParameterName( "UseInnerRefCrystal", true );
+    useInnerRefCrystal->SetDefaultValue( true );
     useInnerRefCrystal->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     setCalorimeterEntryPointDepth = new G4UIcmdWithADoubleAndUnit(
@@ -139,8 +140,8 @@ CexmcReconstructorMessenger::CexmcReconstructorMessenger(
         "    between output particle decay products" );
     setCalorimeterEntryPointDepth->SetParameterName( "EntryPointDepth", false );
     setCalorimeterEntryPointDepth->SetDefaultValue( 0 );
-    setCalorimeterEntryPointDepth->SetDefaultUnit( "cm" );
     setCalorimeterEntryPointDepth->SetUnitCandidates( "mm cm m" );
+    setCalorimeterEntryPointDepth->SetDefaultUnit( "cm" );
     setCalorimeterEntryPointDepth->AvailableForStates( G4State_PreInit,
                                                        G4State_Idle );
 }
@@ -167,18 +168,18 @@ void  CexmcReconstructorMessenger::SetNewValue( G4UIcommand *  cmd,
                             epDefinitionAlgorithm( CexmcEntryPointInTheCenter );
             do
             {
-                if ( value  == "simple" )
+                if ( value == "simple" )
                 {
                     epDefinitionAlgorithm =
                             CexmcEntryPointInTheCenterOfCrystalWithMaxED;
                     break;
                 }
-                if ( value  == "linear" )
+                if ( value == "linear" )
                 {
                     epDefinitionAlgorithm = CexmcEntryPointByLinearEDWeights;
                     break;
                 }
-                if ( value  == "sqrt" )
+                if ( value == "sqrt" )
                 {
                     epDefinitionAlgorithm = CexmcEntryPointBySqrtEDWeights;
                     break;
@@ -194,7 +195,7 @@ void  CexmcReconstructorMessenger::SetNewValue( G4UIcommand *  cmd,
                         epDepthDefinitionAlgorithm( CexmcEntryPointDepthPlain );
             do
             {
-                if ( value  == "sphere" )
+                if ( value == "sphere" )
                 {
                     epDepthDefinitionAlgorithm = CexmcEntryPointDepthSphere;
                     break;
@@ -210,7 +211,7 @@ void  CexmcReconstructorMessenger::SetNewValue( G4UIcommand *  cmd,
                                         csAlgorithm( CexmcSelectAllCrystals );
             do
             {
-                if ( value  == "adjacent" )
+                if ( value == "adjacent" )
                 {
                     csAlgorithm = CexmcSelectAdjacentCrystals;
                     break;

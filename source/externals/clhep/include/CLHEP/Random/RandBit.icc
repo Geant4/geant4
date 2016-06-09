@@ -1,0 +1,65 @@
+// $Id:$
+// -*- C++ -*-
+//
+// -----------------------------------------------------------------------
+//                            HEP Random
+//                         --- RandBit ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+
+// =======================================================================
+// M.Fischler     - Created, along same lines as RandGaussQ.icc
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandBit::RandBit(HepRandomEngine & anEngine)
+: RandFlat (anEngine)
+{}
+
+inline RandBit::RandBit(HepRandomEngine & anEngine, double width )
+: RandFlat (anEngine, width)
+{}
+
+inline RandBit::RandBit(HepRandomEngine & anEngine, double a,
+                                                      double b )
+: RandFlat (anEngine, a, b)
+{}
+
+inline RandBit::RandBit(HepRandomEngine * anEngine)
+: RandFlat (anEngine)
+{}
+
+inline RandBit::RandBit(HepRandomEngine * anEngine, double width )
+: RandFlat (anEngine, width)
+{}
+
+inline RandBit::RandBit(HepRandomEngine * anEngine, double a,
+                                                      double b )
+: RandFlat (anEngine, a, b)
+{}
+
+//---------------------
+
+inline int RandBit::shootBit() {
+  double x = shoot();
+  return (x > .5) ? 1 : 0;
+}
+
+//---------------------
+
+
+inline int RandBit::shootBit(HepRandomEngine* engine) {
+  double x = shoot(engine);
+  return (x > .5) ? 1 : 0;
+}
+
+//---------------------
+
+
+inline int RandBit::fireBit() {
+  double x = fire(0,1);
+  return (x > .5) ? 1 : 0;
+}
+
+}  // namespace CLHEP

@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReaderMessenger.cc
-//   $Id: HepMCG4AsciiReaderMessenger.cc,v 1.4 2006/06/29 17:12:20 gunter Exp $
+//   $Id: HepMCG4AsciiReaderMessenger.cc,v 1.4 2006-06-29 17:12:20 gunter Exp $
 //
 // ====================================================================
 #include "HepMCG4AsciiReaderMessenger.hh"

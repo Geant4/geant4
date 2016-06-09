@@ -65,13 +65,13 @@ void  GetNormalizedAngularRange( const CexmcAngularRangeList &  src,
         if ( std::fabs( k->top - ( k - 1 )->top ) < epsilon ||
              k->bottom + epsilon >= ( k - 1 )->bottom )
         {
-            dst.erase( k );
+            k = dst.erase( k );
             continue;
         }
         if ( k->top + epsilon >= ( k - 1 )->bottom )
         {
             ( k - 1 )->bottom = k->bottom;
-            dst.erase( k );
+            k = dst.erase( k );
             continue;
         }
         ++k;

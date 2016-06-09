@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.hh,v 1.13 2006/06/29 18:11:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3MatTable.hh,v 1.13 2006-06-29 18:11:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -41,6 +41,7 @@
 #define G3MATTABLE_HH 1
 
 #include "G3MatTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -67,6 +68,6 @@ class G3MatTable
     G3MaterialVector*  fMatVector;
 };
 
-extern G3MatTable G3Mat;
+extern G3G4DLL_API G3MatTable G3Mat;
 
 #endif

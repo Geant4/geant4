@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.105 2010/11/04 12:55:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LossTableManager.cc,v 1.105 2010-11-04 12:55:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -368,6 +368,8 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << " run= " << run << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   startInitialisation = true;
 
@@ -394,6 +396,8 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
@@ -412,10 +416,12 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
-  }
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -464,16 +470,19 @@ void G4LossTableManager::BuildPhysicsTable(
 
       if(el) {
 	const G4ProcessManager* pm = el->GetProcessManager();
-        isActive[i] = pm->GetProcessActivation(el);
+        isActive[i] = false;
+        if(pm) { isActive[i] = pm->GetProcessActivation(el); }
       	if(0 == run) { base_part_vector[i] = el->BaseParticle(); }
         tables_are_built[i] = false;
 	all_tables_are_built= false;
         if(!isActive[i]) { el->SetIonisation(false); }
   
 	if(1 < verbose) { 
-	  G4cout << i <<".   "<< el->GetProcessName() 
-		 << "  for "  << pm->GetParticleType()->GetParticleName()
-		 << "  active= " << pm->GetProcessActivation(el)
+	  G4cout << i <<".   "<< el->GetProcessName();
+          if(el->Particle()) {
+	    G4cout << "  for "  << el->Particle()->GetParticleName();
+	  }
+	  G4cout << "  active= " << isActive[i]
                  << "  table= " << tables_are_built[i]
 		 << "  isIonisation= " << el->IsIonisationProcess();
 	  if(base_part_vector[i]) { 
@@ -713,10 +722,11 @@ G4EnergyLossMessenger* G4LossTableManager::GetMessenger()
 void G4LossTableManager::ParticleHaveNoLoss(
      const G4ParticleDefinition* aParticle)
 {
-  G4String s = " dE/dx table not found for "
-             + aParticle->GetParticleName() + " !";
-  G4Exception("G4LossTableManager::ParticleHaveNoLoss", "EM01",
-	      FatalException, s);
+  G4ExceptionDescription ed;
+  ed << "Energy loss process not found for " << aParticle->GetParticleName() 
+     << " !" << G4endl;
+  G4Exception("G4LossTableManager::ParticleHaveNoLoss", "em0001",
+	      FatalException, ed);
 
 }
 
@@ -1070,9 +1080,17 @@ G4VAtomDeexcitation* G4LossTableManager::AtomDeexcitation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
+{
+  return tableBuilder;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 void G4LossTableManager::SetAtomDeexcitation(G4VAtomDeexcitation* p)
 {
   atomDeexcitation = p;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

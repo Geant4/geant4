@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.cc,v 1.7 2010/06/25 09:44:44 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04-beta-01 $
+// $Id: G4InuclParticle.cc,v 1.7 2010-06-25 09:44:44 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
+// 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
+//		don't have to call SetModel()).
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #include "G4InuclParticle.hh"
 #include "G4ios.hh"
 #include <cmath>
 
 
-// WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
+// Internal constructor only usable by subclasses
 G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
-				 const G4LorentzVector& mom)
-  : modelId(0) {
+				 const G4LorentzVector& mom,
+				 G4InuclParticle::Model model)
+  : modelId(model) {
   setDefinition(pd);
   setMomentum(mom);
 }
@@ -50,6 +54,17 @@ G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
   return *this;
 }
 
+
+// Set particle definition allowing for null pointer to erase DynPart content
+void G4InuclParticle::setDefinition(G4ParticleDefinition* pd) {
+  if (pd) pDP.SetDefinition(pd);
+  else {
+    static const G4DynamicParticle empty;	// To zero out everything
+    pDP = empty;
+  }
+}
+
+
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
 void G4InuclParticle::setMomentum(const G4LorentzVector& mom) {
   G4double mass = getMass();
@@ -60,10 +75,17 @@ void G4InuclParticle::setMomentum(const G4LorentzVector& mom) {
 }
 
 
-void G4InuclParticle::printParticle() const {
+// Proper stream output (just calls print())
+
+std::ostream& operator<<(std::ostream& os, const G4InuclParticle& part) {
+  part.print(os);
+  return os;
+}
+
+void G4InuclParticle::print(std::ostream& os) const {
   G4LorentzVector mom = getMomentum();
-  G4cout << " px " << mom.px() << " py " << mom.py() << " pz " << mom.pz()
-	 << " pmod " << mom.rho() << " E " << mom.e()
-	 << " creator model " << modelId << G4endl;
+  os << " px " << mom.px() << " py " << mom.py() << " pz " << mom.pz()
+     << " pmod " << mom.rho() << " E " << mom.e()
+     << " creator model " << modelId;
 }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01CalorimeterHit.cc,v 1.5 2006/11/14 07:07:38 perl Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE01CalorimeterHit.cc,v 1.5 2006-11-14 07:07:38 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 

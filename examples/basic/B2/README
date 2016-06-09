@@ -1,0 +1,167 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example B2
+                            ----------
+
+ This example simulates a simplified fixed target experiment.
+
+ 1- GEOMETRY DEFINITION
+ 
+     The setup consists of a target followed by six chambers of increasing
+     transverse size. These chambers are located in a region called the Tracker
+     region. Their shape are boxes, constructed as simple boxes 
+     (in B2aDetectorConstruction) and as parametrised volumes 
+     (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
+
+     The default geometry is constructed in the detector construction class.
+     One can change the materials of the target and the chambers
+     interactively via the commands defined in B2aDetectorMessenger
+     (or B2bDetectorMessenger). For example:
+
+     /B2/det/setTargetMaterial G4_WATER
+     /B2/det/setChamberMaterial G4_Ar
+ 
+     In addition, a transverse uniform magnetic field can be applied (see
+     B2MagneticField and B2aDetectorMessenger, B2bDetectorMessenger classes) 
+     and set interactively. For example:
+
+     /B2/det/setField 0.2 tesla
+ 
+ 2- PHYSICS LIST
+
+     The particle's type and the physic processes which will be available
+     in this example are set in the FTFP_BERT physics list. This physics
+     list requires data files for low energy electromagnetic processes which
+     path is defined via the G4LEDATA envirnoment variable.
+ 
+     In addition, the build-in interactive command:
+	         /process/(in)activate processName
+     allows the user to activate/inactivate the processes one by one.
+
+ 3- PRIMARY GENERATOR
+
+     The primary kinematic consists of a single particle which hits the
+     target perpendicular to the entrance face. The type of the particle
+     and its energy are set in the B2PrimaryGeneratorAction class, and can
+     be changed via the G4 build-in commands of the G4ParticleGun class.
+  
+ 4- RUNS and EVENTS
+ 
+     A run is a set of events.
+ 
+     The user has control:
+        - at Begin and End of each run (class B2RunAction)
+        - at Begin and End of each event (class B2EventAction)
+        - at Begin and End of each track (class TrackingAction, not used here)
+	- at End of each step (class SteppingAction, not used here)
+
+ 5- USER LIMITS
+ 
+    This example also illustrates how to introduce tracking constraints
+    like maximum step length, minimum kinetic energy etc. via the G4UserLimits
+    class and associated G4StepLimiter and G4UserSpecialCuts processes.    
+    See B2aDetectorConstruction (or B2bDetectorConstruction).
+
+    The maximum step limit in the tracker region can be set by the interactive
+    command (see B2aDetectorMessenger, B2bDetectorMessenger classes). 
+    For example:
+
+    /B2/det/stepMax 1.0 mm
+
+ 6- DETECTOR RESPONSE
+ 
+     A HIT is a step per step record of all the information needed to
+     simulate and analyse the detector response.
+ 
+     In this example the Tracker chambers are considered to be the detector.
+     Therefore, the chambers are declared 'sensitive detectors' (SD) in
+     the B2aDetectorConstruction (or B2bDetectorConstruction) class.
+     They are associated with an instance of the B2TrackerSD class.
+ 
+     Then, a Hit is defined as a set of 4 informations per step, inside
+     the chambers, namely:
+        - the track identifier (an integer),
+	- the chamber number,
+ 	- the total energy deposit in this step, and
+ 	- the position of the energy deposit.
+
+     A given hit is an instance of the class B2TrackerHit which is created
+     during the tracking of a particle, step by step, in the method
+     B2TrackerSD::ProcessHits(). This hit is inserted in a HitsCollection. 
+
+     The HitsCollection is printed at the end of each event (via the method
+     B2TrackerSD::EndOfEvent()), under the control of the command:
+     /hits/verbose 2
+
+ The following paragraphs are common to all basic examples
+
+ A- VISUALISATION
+
+   The visualization manager is set via the G4VisExecutive class
+   in the main() function in exampleB2a.cc (or exampleB2b.cc).    
+   The initialisation of the drawing is done via a set of /vis/ commands
+   in the macro vis.mac. This macro is automatically read from
+   the main function when the example is used in interactive running mode.
+
+   By default, vis.mac opens an OpenGL viewer.
+   The user can switch to other graphics systems by commenting out this line
+   and instead uncommenting one of the other /vis/open statements, such as
+   HepRepFile or DAWNFILE (which produce files that can be viewed with the
+   HepRApp and DAWN viewers, respectively).
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires:
+     1- the visualisation & interfaces categories have been compiled
+        with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+     2- exampleB2a.cc has been compiled with G4VIS_USE_OPENGLX.
+   (This is best done through Configure or CMake.)
+
+   For more information on visualization, including information on how to
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,
+   http://geant4.slac.stanford.edu/Presentations/vis/G4[VIS]Tutorial/G4[VIS]Tutorial.html
+   (where [VIS] can be replaced by DAWN, OpenGL and HepRApp)
+
+   The tracks are automatically drawn at the end of each event, accumulated
+   for all events and erased at the beginning of the next run.
+
+ B- USER INTERFACES
+ 
+   The user command interface is set via the G4UIExecutive class
+   in the the main() function in exampleB2a.cc 
+   The selection of the user command interface is then done automatically 
+   according to the Geant4 configuration. The default command interface, 
+   called G4UIterminal, is done via a standard G4cin/G4cout.
+   On Linux and Sun-cc one can use a smarter command interface G4UItcsh. 
+   It is enough to set the environment variable G4UI_USE_TCSH before compiling 
+   exampleB2a.cc (or exampleB2b.cc).
+ 
+ 
+ C- HOW TO RUN
+ 
+    - compile and link to generate an executable
+        % cd B2/B2a 
+        % make
+ 
+    - execute exampleB2a in the 'interactive mode' with visualization
+        % exampleB2a
+      and type in the commands from run1.mac line by line:  
+        Idle> /tracking/verbose 1 
+        Idle> /run/beamOn 1
+        Idle> ...
+        Idle> exit
+      or
+        Idle> /control/execute run1.mac  or run2.mac 
+        ....
+        Idle> exit
+
+    - execute exampleB2a in the 'batch' mode from macro files 
+      (without visualization)
+        % exampleB2a run2.mac
+        % exampleB2a exampleB2.in > exampleB2.out
+ 

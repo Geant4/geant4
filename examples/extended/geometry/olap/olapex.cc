@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: olapex.cc,v 1.5 2010/10/27 10:40:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: olapex.cc,v 1.5 2010-10-27 10:40:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -40,6 +40,7 @@
 
 // Geant4
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 // this module
 #include "OlapGenerator.hh"

@@ -26,21 +26,6 @@
 #include "G4HadTmpUtil.hh"
 #include <sstream>
 
-G4int G4lrint(double ad)
-  {
-    return (ad>0) ? static_cast<int>(ad+.5) : static_cast<int>(ad-.5);
-  }
-
-G4int G4lint(double ad)
-  {
-    return (ad>0) ? static_cast<int>(ad) : static_cast<int>(ad-1.);
-  }
-
-G4int G4rint(double ad)
-  {
-    return (ad>0) ? static_cast<int>(ad+1) : static_cast<int>(ad);
-  }
-
 G4String G4inttostring(int ai)
 {
   std::ostringstream ost;

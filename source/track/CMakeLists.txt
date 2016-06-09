@@ -7,9 +7,12 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 19:10:50 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.1 2010-09-29 19:10:50 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
+
+# Add allocation export symbol for the track category
+add_definitions(-DG4TRACK_ALLOC_EXPORT)
 
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)

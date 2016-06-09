@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TRTMaterials.hh,v 1.3 2006/06/29 16:38:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TRTMaterials.hh,v 1.3 2006-06-29 16:38:29 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

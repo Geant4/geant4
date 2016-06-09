@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc,v 1.14 2010/11/17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NuclearLevelManager.cc,v 1.14 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -58,12 +58,12 @@
 #include <sstream>
 #include <algorithm>
 #include "G4HadTmpUtil.hh"
-
+/*
 G4NuclearLevelManager::G4NuclearLevelManager():
     _nucleusA(0), _nucleusZ(0), _fileName(""), _validity(false), 
     _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
 { }
-
+*/
 G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A, const G4String& filename) :
     _nucleusA(A), _nucleusZ(Z), _fileName(filename), _validity(false), 
     _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
@@ -389,7 +389,7 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 	_levels = new G4PtrLevelVector;
 	G4int n = right._levels->size();
 	G4int i;
-	for (i=0; i<n; i++)
+	for (i=0; i<n; ++i)
 	  {
 	    _levels->push_back(new G4NuclearLevel(*(right.GetLevel(i))));
 	  }
@@ -400,5 +400,8 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
       {
 	_levels = 0;
       }
+    for (G4int i=0; i<30; ++i) {
+      buffer[i] = right.buffer[i];
+    }
 }
 

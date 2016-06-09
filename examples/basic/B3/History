@@ -1,0 +1,47 @@
+$Id: History,v 1.132 2010-12-01 05:56:40 allison Exp $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example B3 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+29/11/11 B.Morgan (exbasic-V09-04-05)
+- Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
+  to build directory so executable is runnable directly.
+
+23/11/11 I. Hrivnacova (exbasic-V09-04-04)     
+- Fixed the example name in the top comment line in init.mac and
+  init_vis.mac  
+
+21/11/11 I. Hrivnacova (exbasic-V09-04-03)     
+- Improved vis.mac
+- Removed alternative detector construction class  
+
+18/11/11 I. Hrivnacova (exbasic-V09-04-02)
+- Fixes in macros and README files
+     
+14/11/11 I. Hrivnacova (exbasic-V09-04-00)
+- The first tagged version of the new B3 example.
+
+11-11-11 (mma)     
+- EventAction: printModulo 10000
+     
+01-11-11 (mma)     
+- DetectorConstruction2: - add an offset when replicate dPhi
+			     
+29-09-11 (mma)     
+- DetectorConstruction: - replace crystal shape Trd by Box
+                        - add a gap for wrapping
+    
+27-06-11 michel maire     
+- Created.

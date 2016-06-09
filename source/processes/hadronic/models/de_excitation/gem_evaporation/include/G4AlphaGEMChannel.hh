@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMChannel.hh,v 1.5 2010/10/29 17:35:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AlphaGEMChannel.hh,v 1.5 2010-10-29 17:35:04 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)

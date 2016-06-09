@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.15 2008/11/14 16:21:42 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIXm.cc,v 1.15 2008-11-14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
 
@@ -357,7 +357,7 @@ G4String G4UIXm::GetCommand (
 /***************************************************************************/
 /***************************************************************************/
 void G4UIXm::CommandEnteredCallback (
- Widget    a_widget
+ Widget
 ,XtPointer a_tag
 ,XtPointer a_data
 )
@@ -378,7 +378,7 @@ void G4UIXm::CommandEnteredCallback (
     This->ApplyShellCommand (command,exitSession,exitPause);
   }
 
-  a_widget = NULL;
+  //a_widget     = NULL;  Not used (1st argument).  Comment out to avoid compiler warnings. (JA)
   a_tag    = NULL;
 }
 /***************************************************************************/

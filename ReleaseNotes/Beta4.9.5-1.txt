@@ -1,0 +1,747 @@
+
+                  Geant4 9.5-beta-01 Release Notes
+                  --------------------------------
+
+                                                            30 June 2011
+
+                            Migration Notes
+                            --------------- 
+
+  o The CMake system for installation has been now extended to cover all
+    features. The old Configure script is still kept for this Beta release
+    but will be removed in the final release of December.
+    A startup guide with basic instructions for installing Geant4 with CMake
+    can be found in geant4.9.5.b01/cmake/INSTALL.g4cmake
+    You're therefore encouraged to try it out and provide feedback!
+  o Geant4 now comes with an embedded CLHEP module (currently based on
+    version 2.1.0.1 of CLHEP), which includes a subset of the CLHEP library
+    classes relevant for Geant4. It is therefore possible to choose not to
+    install CLHEP as external library and use directly the embedded module.
+    Use/installation of the embedded CLHEP module is triggered if no
+    CLHEP_BASE_DIR variable is being set (or if using the default settings
+    through CMake).
+  o An additional package, 'expat', required by the new hadronic 'lend'
+    module is embedded in 'externals' and is automatically built on Windows.
+    On Linux or Mac, the 'expat' library available in the system is used
+    instead.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Official platforms:
+    + Linux, gcc-4.1.2, gcc-4.3.x.
+      Tested on 32 bits architectures and 64 bits architectures
+      (Intel or AMD) with the Scientific Linux CERN 5 (SLC5) distribution
+      (based on RedHat Linux Enterprise 5).
+      Versions of Geant4 have also been compiled successfully on other
+      Linux distributions, like Debian, Suse or other RedHat systems.
+    + MacOSX 10.6, gcc-4.2.1
+    + Windows/XP and CygWin Tools with: Visual C++ 9.0 (Visual Studio 2008)
+
+  o More verified configurations:
+    + Linux, gcc-4.6.1
+    + Linux, Intel-icc 11.1
+
+  o Geant4 9.5-beta-01 has been tested using CLHEP-2.1.0.1.
+
+ Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+ for further information about using Geant4.
+
+ ----------------------------------------------------------------------------
+
+List of main features and fixes included in this Beta release since 9.4.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Set default to build shared libraries on all platforms.
+      o Added support for Xm Motif and OpenInventor drivers.
+      o Updated scripts to export use of internal CLHEP when used.
+        Option to use system CLHEP is automatically set to ON if the user
+        has supplied a CLHEP_ROOT_DIR argument.
+      o Added script UseGeant4.cmake providing a simple CMake module which
+        users can include to setup the build of a basic Geant4 application.
+        It sets definitions, include directories and compiler flags.
+      o Added support for generation of DLL libraries on WIN32 platform.
+      o Abilitated built-in dylib symbols on Mac for shared libraries;
+        it is now no longer necessary to specify paths in DYLD_LIBRARY_PATH.
+      o Automatically use GDML if user supplies XERCESC_ROOT_DIR argument
+        as path to XercesC installation.
+      o Providing full setup of environment from build and install trees,
+        allowing developers to build applications directly using the build
+        tree.
+      o Fix for Unix platforms in setting the output directory for libraries.
+        Partially addressing problem report #1200.
+      o Added universal shell script skeleton for generating backward
+        compatible environment variable setup. Addressing problem report #1202.
+      o Added 'uninstall' target to remove all items installed via the install
+        command.
+      o Removed unsetting of data library environment variables in generated
+        environment scripts.
+      o Updated text guide.
+    + Configure script:
+      o Added support for internal CLHEP. LD_LIBRARY_PATH is correctly set
+        when external installation of CLHEP is used.
+    + Added default for CLHEP_BASE_DIR to built-in package in externals.
+      Integrated flags in architecture.gmk and binmake.gmk for use of the
+      CLHEP built-in package, and adapted setup for build of DLLs on Windows.
+    + Changed common.gmk to take into account sub-directories for headers
+      installation.
+    + Added flags to handle future driver OpenGLWt.
+
+  o Event:
+    -----
+    + Modified G4ParticleGun, G4PrimaryTransformer, G4RayShooter and
+      G4SingleParticleSource to use kinetic energy and momentum direction.
+    + Fixed minor bugs in G4HEPEvtInterface: in creation of G4PrimaryParticle,
+      only PDG code is given to the constructor; then mass and momentum are set.
+    + Fixed compilation warnings on gcc-4.6 for unused variables in
+      G4SPSPosDistribution and G4AdjointPosOnPhysVolGenerator sources.
+
+  o Externals
+    ---------
+    + New module for optional external packages. Currently including:
+      o Built-in "CLHEP" module, including a subset of CLHEP classes imported
+        from version CLHEP-2.1.0.1 and adapted to the Geant4 build scheme.
+      o Built-in  "expat" module, including source code from original 2.0.1
+        version of expat. Required only on WIN32 for "lend" hadronic model.
+
+  o Global:
+    ------
+    + Added protection in G4Pow::powN() method for high exponent values.
+    + Changed date for release 9.5-beta.
+
+  o Graphical Representations:
+    -------------------------
+    + BooleanProcessor: use G4cout and G4 types coherently.
+      Fixed Coverity warnings.
+
+  o Interfaces:
+    ----------
+    + Fixed Coverity reports and gcc-4.6 warnings about unused variables.
+
+  o Materials:
+    ---------
+    + G4Material: added new "Base-material" approach allowing to share
+      internal tables for dedx, ranges, cross section between similar
+      materials; a pointer to the base material (NULL by default) and
+      corresponding methods have been added; added also extra protections 
+      against incorrect mass fraction during material construction.
+    + G4NistMaterial: added constructor of a material using base material;
+      reduced size of internal vectors. Cleanup in methods to build materials
+      in G4NistMaterialBuilder.
+    + G4IonisParamMat: use mean ionisation potential provided by user in
+      computation of density effect.
+    + Added new class G4ElementData, data structure for cross-sections, shell
+      and isotope cross-sections.
+    + Reviewed and updated body tissue compositions according to ICRU Report
+      46 (1992) instead of old data (1975); renamed G4_TESTES_ICRP to
+      G4_TESTIS_ICRP; removed G4_CYTOSINE, G4_THYMINE, G4_URACIL, as already
+      existing as G4_DNA materials.
+    + Addressing Coverity defects in G4ExtDEDXTable, G4IonisParamMat,
+      G4NistManager and G4NistMessenger. Code cleanup in G4IonisParamMat and
+      G4NistMaterialBuilder.
+    + G4Element, G4Material: reviewed comments.
+      Addressing problem report #1220.
+
+  o Particles:
+    ---------
+    + Modified G4PrimaryParticle to avoid precision loss in conversion from
+      momentum to energy.
+    + Some code cleanup in G4PrimaryParticle and G4PrimaryVertex: added copy
+      constructors; fixed Print() method in G4PrimaryVertex.
+    + Moved GetParticleName() and FindParticle() methods in G4ParticleTable
+      to be non-inline (defining multiple return statements).
+
+  o Persistency:
+    -----------
+    + mctruth: removed disabled obsolete HepMC code.
+
+  o Physics Lists:
+    -------------
+    + Added OrderingParameterTable for G4PhysicsListHelper.
+    + Migrated EM standard, low energy and DNA builders to the new approach
+      based on G4PhysicsListHelper: no more use of integer numbers to
+      identify processes order; added de-excitation module to all EM builders.
+    + Added G4BuilderType header with enumerator of builder types.
+      Added type for all EM and Ion builders.
+    + G4EmStandardPhysics_option2: use updated G4UrbanMscModel95 model for
+      e+-. Also use relativistic Bremsstrahlung for all energies (wider
+      EM shower shape).
+    + G4EmStandardPhysics_option3: experimental change of options: reduced
+      low-energy limit to 10 eV; reduced StepFunction parameters per particle
+      type; Activated Rayleigh Scattering. Use updated G4UrbanMscModel95 model
+      for e+-.
+    + Added process names in G4EmDNAPhysics.
+    + G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmPenelopePhysics:
+      use UrbanMscModel95 for e+-.
+    + Modified G4EmExtraPhysics builder to use the new muon-nuclear model and
+      process.
+    + G4DecayPhysics, G4RadioactiveDecayPhysics: use G4PhysicsListHelper.
+    + G4HadronElasticPhysics: added light anti-nuclei using LHEP model below
+      100 MeV and above using G4AntiNuclElastic model and 
+      G4ComponentAntiNuclNuclearXS.
+    + G4HadronElasticPhysicsXS, G4HadronElasticPhysicsHP,
+      G4HadronElasticPhysicsLEND: use G4HadronElasticPhysics for all
+      particles and modified only neutron models and cross-sections
+    + Replaced G4UHadronElasticProcess by G4WHadronElasticProcess in
+      G4HadronQElasticPhysics.
+    + Removed obsolete G4HadronElasticPhysics93 configuration.
+    + G4FTFPAntiBarionBuilder: added cross section to light anti-nuclei.
+    + Added builders for anti-deuteron, anti-triton, anti-He and anti-Alpha.
+    + Revised QGSP_FTFP_BERT to utilise the new FTF/P processes: changing them
+      for anti-proton, anti-neutron; adding them also for the above list of
+      light anti-ions (d,t,He3,alpha).
+    + Added anti-triton to anti-barions. Use default energy limit for
+      anti-barions, i.e. up o 100 TeV
+    + In QGSP_FTFP_BERT use G4IonBinaryCascadePhysics in place of G4IonPhysics.
+    + Fixed several small bugs in G4HyperonFTFPBuilder.
+      Make use of new features of FTF in FTFP_BERT and in QGSP_FTFP_BERT:
+      added builder G4HyperonFTFPBuilder for Hyperons using FTF and Bertini
+      as models. Delete cross-section objects in G4FTFPAntiBarionBuilder.
+    + HadronPhysicsFTFP_BERT: use G4HyperonFTFPBuilder, replacing
+      G4MiscCHIPSBuilder; use G4FTFPAntiBarionBuilder for anti barions;
+      FTFP_BERT and QGSP_FTFP_BERT uses new IonFTFPBinaryPhysics, replacing
+      LHEP IonPhysics and IonBinaryPhysics, respectively.
+    + G4HadronInelasticQBBC: use FTFP for all anti-baryons, set energy
+      interval for FTFP above 2 GeV, below 6 GeV for Bertini.
+    + QGSP_INCL_ABLA: enabled INCL/ABLA treatment for GenericIons.
+    + Added builders for new LEND hadronic model. Enable to use LEND model and
+      cross-section for low energy neutron in Shielding physics list (default
+      is still neutron-HP) and added G4RadioactiveDecayPhysics.
+      Updated G4PhysListFactory accordingly.
+    + Added new builder G4IonFTFPBinaryCascadePhysics applicable for projectile
+      ions up to 100 TeV and use it within QBBC; set transition energy
+      to 2-4 GeV.
+    + Fixed coverity issues in many files; most were uninitialised data members
+      for processes/models. Not yet addressed LBE related classes.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Fixed compilation warnings on gcc-4.6 for unused variables.
+    + Fixed defects reported by Coverity.
+    + DNA:
+      o New module with Geant4-DNA classes imported from 'lowenergy' module.
+      o Updated all models for handling of variable density.
+      o Changed process sub-type numbering.
+      o Added atomic deexcitation to ionisation models.
+    + Low Energy:
+      o Added new Bremsstrahlung model based on Penelope v2008.
+      o Removed all obsolete G4Penelope processes and obsolete class
+        G4PenelopeCrossSectionHandler.
+      o Made all Penelope v2008 models the default models.
+        Renamed all PenelopeModels (v2001) as Penelope01xxxModel.
+      o Edited G4PenelopeIonisation models to avoid the production of
+        sub-threshold delta-rays.
+      o Changed G4PenelopePhotoElectric models to suppress fake
+        energy-violation warning and to make sure that fluorescence/Auger
+        is generated only if above threshold.
+      o Migrated PhotoElectric and Compton Penelope models (v2008) to the new
+        interface for atomic de-excitation. Migration does not affect for now
+        Ionisation and v2001 models.
+      o Removed unnecessary dependency over HepMatrix in Penelope codes.
+      o Fixed cases of floating-point exceptions in G4PenelopeRayleighModel.
+      o Fixed bug in G4PenelopeOscillatorManager causing crash on Windows.
+      o G4BremsstrahlungParameters: fixed value of the density effect constant
+        (Migdal constant) using standard relativistic model.
+      o Corrected control of warnings in ion cross-section model classes.
+      o Moved all Geant4-DNA classes to external module and removed
+        obsolete and dummy classes.
+      o Added G4CrossSectionDataSet table in G4AnalyticalEcpssrKCrossSection.
+      o Added Boldyshev triplet model.
+      o Commented DNA ionization classes for better clarity.
+      o Removed obsolete classes:
+        - old livermore photon polarized processes (G4LowEnergyPolarized*);
+        - old shell cross sections (G4hShell*);
+        - old ion ionisation process (G4ionLowEnergyIonisation);
+        - old h-ionisation process (G4hLowEnergyIonisation);
+        - old G4hLowEnergyLoss.
+      o Added G4LivermoreIonisationCrossSection and G4eCrossSectionHandler
+        classes.
+      o Fixed run time crash in G4LivermorePhotoElectricModel.
+      o Migrated G4LivermoreIonisationModel and G4LivermorePhotoElectricModel
+        to common design with standard for de-excitation.
+        Added de-excitation to G4LivermoreComptonModel.
+        Added e+- cross section separately from hadron cross-sections in
+        G4UAtomicDeexcitation.
+      o G4LivermorePolarizedGammaConversionModel: added protection in numeric
+        computations to avoid FPE crash, minor cleanup of the initialisation
+      o Replaced use of RandBit() with simple formula to avoid problems of
+        non reproducibility.
+      o Requires new data set version 6.22 of G4LEDATA.
+    + Pii:
+      o Implemented workaround in logarithmic interpolator to deal with
+        zeros in new data library G4PII1.3.
+    + Standard:
+      o G4UrbanMscModel95: new version of multiple-scattering model providing
+        improved sampling of the tail of angular distribution, better sampling
+        of lateral displacement and true-step length.
+      o G4UrbanMscModel90, G4UrbanMscModel93,
+        G4UrbanMscModel95, G4GoudsmitSaundersonMscModel, G4WentzelVIModel:
+        use G4VMscModel methods to compute range and inverse range.
+      o G4UrbanMscModel90, G4UrbanMscModel93: use simplified
+        computation of geom path length if true path length is equal to the
+        range; providing minor CPU improvement and more stable computation.
+      o G4GoudsmitSaundersonMscModel: added protection against infinite loop
+        for solving equation for the screening parameter.
+        Addresses problem report #1221.
+      o G4PhotoElectricEffect: use G4PEEffectFluoModel as default.
+      o G4KleinNishinaModel: set 'limitFactor' to 4 (was 10).
+        Use dynamic selection between high energy sampling and sampling
+        with Doppler broadening.
+        Fixed infinite loop in new model for 1 keV gamma and added extra
+        protection during sampling of final state (very low-energy gamma).
+      o Added new model G4eBremParametrizedModel.
+      o G4MollerBhabhaModel: modified parameterisation of dedx at very low
+        energy providing more smooth shape.
+      o G4WentzelOKandVIxSection, G4eCoulombScatteringModel: tuned screening
+        function.
+      o G4eeToTwoGammaModel: added numerical protection in cross section
+        computation for very small energy.
+      o New classes G4XrayRayleighModel and G4DipBustGenerator for simplified
+        Rayleigh scattering and Bremsstrahlung angular generator, respectively.
+      o G4BraggModel, G4BraggIonModel: use ASTAR and PSTAR parameterisations
+        for moleculas from list of ICRU'49. Some code cleanup.
+      o G4eplusAnnihilation: disable creation of PhysicsTable and compute the
+        cross-section at run time (no visible CPU penalty, reduced memory).
+      o G4NuclearStopping: use new sub-type 'fNuclearStopping'.
+      o G4PhotoElectricEffect, G4ComptonScattering, G4CoulombScattering:
+        implemented constructors in same style and removed obsolete unused
+        methods.
+      o Removed obsolete classes G4ionGasIonisation, G4CoulombScatteringModel,
+        G4UniversalFluctuation93 and G4UrbanMscModel92.
+      o G4PAIySection: added method ComputeLowEnergyCof() allowing for
+        extended low energy limit of the model down to 10 eV.
+      o General cleanup: cleared usage of obsolete MinEnergyCut() methods,
+        improved comments.
+    + Utils:
+      o G4VMscModel: updated signature of GetRange() and GetEnergy() methods.
+        Added Get/Set method for ionisation process; use these methods at run
+        time in G4VMultipleScattering.
+        Added protected method for common computation of range and energy for
+        all multiple-scattering models. Removed obsolete method MinEnergyCut().
+      o G4VEmModel: fixed non-accurate internal vector initialisation.
+      o G4VEmProcess: allow to use the Integral approach also if the physics
+        table is not built (before it was forbidden).
+      o G4VMultipleScattering: fixed problem of initialisation of true step
+        length when multiple-scattering model is inactive (needed for DNA
+        Phsyics List).
+      o Updated G4VAtomDeexcitation methods names and improved printout;
+        created G4AtomicShellEnumerator.
+        G4EmProcessOptions: improved names of methods for de-excitation.
+      o G4EmProcessOptions, G4EnergyLossMessenger, G4LossTableManager,
+        G4VAtomDeexcitation: cleanup options for de-excitation
+      o G4ElectronIonPair: substituted Gaussian sampling by Gamma function
+        sampling of number of electron/ion pairs.
+      o G4LossTableManager, G4LossTableBuilder, G4VEmProcess,
+        G4VMultipleScattering, G4VEnergyLossProcess: adopt base material
+        approach; build physics vectors only for base materials and scale
+        values for other materials.
+      o G4EmProcessSubType: added 'fNuclearStopping=8' sub-type.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o G4ProcessPlacer: using SetProcessOrderingToSecond() for biasing
+        process, and leave transportation as first.
+    + Decay:
+      o Added sub-type for radioactive decay 'DECAY_Radioactive' (equal to 210).
+    + Management:
+      o Suppressed warning message of G4ProcessTable::Insert() in case of
+        adding ions with inactivate processes. Addresses problem report #1173.
+      o Added check for duplicate call for SetOrderingToFirst(Last).
+      o Fixed defects reported by Coverity.
+      o Fixed memory leak in copy constructor of G4ProcessAttribute
+      o Fixed compilation warnings from gcc-4.6 in G4ProcessTableMessenger.
+    + Transportation:
+      o Defined 'ProcessSubType' for transportation processes.
+      o Changed process type of G4NeutronBuilder to 'fGeneral'.
+
+  o Hadronic Processes:
+    ------------------
+    + Fixed compilation warnings on gcc-4.6 for unused variables.
+    + cross_sections
+      o New class G4KokoulinMuonNuclearXS: derived from code in the
+        direct-implementation process G4MuNuclearInteraction, replacing the
+        old-style implementation for conforming to the hadronic framework design
+        of process, model, cross-section. This new class is now the default
+        cross-section for G4MuonNuclearProcess.
+      o G4CrossSectionElastic, G4CrossSectionInelastic and
+        G4ComponentAntiNuclNuclearXS: adopt modified names and fixed usage in
+        physics-list. Fixed problem of double-deletion.
+      o G4VComponentCrossSection: changed method names to
+        GetTotalElementCrossSection() and GetTotalIsotopeCrossSection().
+      o G4CrossSectionDataStore: fix in DumpPhysicsTable() method, responsible
+        for incorrect ion cross-sections values when invocated.
+      o G4IonsShenCrossSection: extended energy range up to 100 TeV.
+      o G4IonProtonCrossSection: implemented all virtual IfApplicable() methods.
+      o Added name to G4ComponentAntiNuclNuclearXS.
+    + management
+      o G4HadronicProcess: make GetCrossSectionDataStore() public so it can be
+        accessed through the process. Added method MultiplyCrossSectionBy() so
+        that cross-sections can be scaled for testing.
+      o Allow to turn on checking for E/p conservation by environment variables.
+      o Extended Print() method in G4HadronicProcessStore to include
+        cross-section info.
+      o Modified E/p checking to take the tighter limit of process and model.
+        Enhanced printout for case 3 in E/p checking with initial state info.
+      o G4HadronicProcessType: added 'RadioactiveDecay' with ID 210 to
+        enumeration.
+    + models/binary_cascade
+      o Set E/p checking limits for energy non-conservation checks.
+      o Fixed large energy non-conservation for Hydrogen target (vector for the
+        final state was not cleared before use). Also moved check for Hydrogen
+        to ApplyYourSelf().
+      o G4GeneratorPrecompoundInterface: added code to calculate excitation
+        energy as difference of initial-final state, to allow for energy
+        conservation for string models.
+    + models/cascade
+      o Developed infrastructure to support using Bertini as a "rescattering"
+        model for the output of the FTF simulation.
+      o Modified G4NucleiModel for parameterisation of "rescaled" nuclear model
+        parameters.
+      o Simplified cascade test-and-repeat loops; do four-momentum balancing
+        with nuclear fragment, now used exclusively as G4Fragment, at end of
+        cascade, not after de-excitation.
+      o G4NucleiModel: Added trailing effect. Added optional argument to
+        reset() with list of collision points, for copying cascade state when
+        rescattering. Optimised computation of "rho". Reverted length scales
+        to "2.82" factor.
+      o Set up for E/p checking by G4HadronicProcess in ctor of G4CascadeInterface.
+        Set internal E/p limits (currently 5% and 10 MeV).
+      o G4CascadeCheckBalance: added non-limit ctor and explicit limit setting.
+      o G4IntraNucleiCascader: added list of hit-nucleon locations, filled by
+        copyWoundedNucleus() for initialization of G4NucleiModel.
+        Reduced number of retries from 1000 to 100.
+      o G4CollisionOutput: added non-const accessors for lists.
+      o G4CascadeInterface: added support for capturing random-engine state for
+        debug at each ApplyYourself() or Propagate() invocation.
+      o G4LorentzConvertor: added diagnostic messages in rotate().
+        Drop most "intermediate" kinematic parameters used in rotate,
+        in favor of somewhat more direct vector operations.
+    + models/chiral_inv_phase_space
+      o Tuning of the Quasmon/Evaporation transition.
+      o Fix in G4QEnvironment for object deletions.
+      o Correction for Coulomb Barrier. Addressing problem report #1192.
+      o Fixed initialization in constructor in G4QEnvironment.
+      o G4QHadron(Elastic/Inelastic)DataSet: returning '0' for missing hadrons.
+      o Improvement in destructor in G4ElectronNuclearReaction.
+    + models/coherent_elastic
+      o G4WHadronElasticProcess: added light anti-nuclei; using particle names
+        in the IfApplicable() method. Added NIEL energy deposition if recoil
+        is below the threshold.
+      o New class G4AntiNuclElastic for simulation of elastic anti-A - A
+        scattering.
+      o G4HadronElastic: do not create an ion if the recoil energy is below the
+        threshold; fixed SampleInvariantT() default implementation to be used
+        in testing;
+      o Removed obsolete class G4UHadronElasticProcess.
+        Renamed G4VHadronElastic to G4HadronElastic (main interface).
+      o G4CHIPSElasticXS: added calculations of anti-baryons, Pi+, Pi-, K+, K-
+        nucleus elastic cross-sections.
+    + models/de_excitation
+      o G4NeutronRadCapture: fixed in particle change, kill primary particle
+        and save residual nucleus.
+      o G4ExcitationHandler: fix for Fermi break-up products de-excitation.
+        Added protection for small excitation energy into photon evaporation
+        loop.
+        Updated logic: first call only to MFM model, second start evaporation
+        loop, where FBU is called for light fragments, products of FBU are sent
+        to the 3d loop on photon evaporation.
+      o General cleanup of the FermiBreakUp model:
+        Removed G4FermiSplitter and G4FermiIntegerPartition.
+        Modified G4FermiConfiguration to be a simple container.
+        Removed unused methods in G4FermiConfigurationList and fixed minor
+        memory leak.
+        Removed map and access to map methods in G4FermiFragmentsPool.
+        Extended printout when kinematics fail in G4FermiPhaseSpaceDecay; fixed
+        computation of majorant in BetaKopylov method, general cleanup.
+      o G4VGammaDeexcitation: added accessors for the ICM flag, commented
+        out usage of this flag during sampling.
+      o Corrected defects reported by Coverity in Evaporation,
+        Photon_evaporation, GEM classes and utils. Use integer Z and A.
+        Make use of G4Pow where applicable.
+      o G4Evaporation: directly send low Z,A fragments to the FermiBreakUp
+        model. Added extra protection: do not compute GEM probability for the
+        case 'Eexc > 3MeV*A'; fixing FPE problem for rare FTFP events.
+      o Fixed numerical problem for exp() function in G4EvaporationProbability.
+    + models/incl
+      o Use inverse kinematics in INCL light ion collisions: it improves INCL
+        light ion model performance in applications where we are interested in
+        beam fragmentation.
+      o INCL light ion model now supports light ion projectiles up to and
+        including Oxygen-18.
+      o Bug fixes in ABLA for rounding problem, causing evaporation function to
+        modify nucleus excitation energy via a side-effect.
+    + models/lend:
+      o First implementation of LEND (Low Energy Nuclear Data) cross-section
+        and physics model.
+    + models/management
+      o E/p checking extended to allow string models to set limits;
+        GetEnergyMomentumCheckLevels() made virtual in G4HadronicInteraction,
+        and implemented to query string model in G4VHighEnergyGenerator.
+      o Added data member in G4VIntraNuclearTransportModel with related
+        accessor methods to store/retrieve original projectile.
+    + models/neutron_hp
+      o Added reaction Q value and break up flag (MF3::QI and LR) in
+        G4NeutronHPInelasticCompFS.
+      o Enabled FSMF6 in capture final state (G4NeutronHPCaptureFS).
+      o Bug fix in G4NeutronHPFinalState for unexpected baryon balance.
+        Fix for setting an index of the last element of an array.
+      o Bug fix in G4NeutronHPPhotonDist for call to element with negative
+        index.
+      o Modified G4NeutronHPIsoData, G4NeutronHPFission and
+        G4NeutronHPorLFission for ENDF-VII.
+      o Relaxed checking condition of inconsistency in repFlag3 in
+        G4NeutronHPElasticFS, to avoid rounding problems on 32-bits systems.
+      o Added protection for very low "remaining_energy" and fixes in
+        G4NeutronHPContAngularPar.
+      o Fixes in G4NeutronHPInelasticCompFS and use QI value for calculating
+        excitation energy of residual.
+      o Fixes for migration to ENDF-VII.r0. Bug fix in G4NeutronHPPartial.
+      o Requires new data set G4NDL-3.15.
+    + models/parton_string
+      o First implementation of barion - anti-barion annihilation.
+        Added new G4FTFAnnihilation class in the FTF model, and made
+        corresponding changes in related FTF classes.
+      o Implemented simulation of anti-barion - nucleus interactions from the
+        rest to 1000 GeV. Reggeon cascading is switched off.
+        Good results are obtained in combination with the binary cascade model.
+      o Implemented first variant of FTF code for simulation of
+        anti-nucleus-nucleus and nucleus-nucleus interactions.
+        The anti-nucleus nucleus part is working starting from 150*A MeV/c.
+        The nucleus-nucleus part is applicable at Plab > 2 * A GeV/c.
+      o Decreased low energy limit for FTF.
+      o Small improvement introduced in G4FTFParameters in order to treat
+        Labmda-Bar, Sigma-Bar, etc...
+      o Tuned parameters of Kaon-Proton interactions in FTF.
+        CHIPS cross sections are used now in FTF for needed X's; created
+        corresponding class: G4ComponentCHIPShadronNuclearXS.
+      o G4QGSParticipants: reduced energy of participant nucleons by binding
+        energy. This increases excitation energy, as calculated by
+        initial-final. Without this, excitation E often is close to 0, or
+        negative.
+      o Set limits for E/p checking.
+    + models/photolepton_hadron/muon_nuclear
+      o New model G4VDMuonNuclearModel to replace old-style
+        G4MuNuclearInteraction and G4ParametrizedHadronicVertex based
+        on GHEISHA.
+      o Removed G4MuonNucleusProcess and G4MuonNucleusInteractionModel classes.
+        These were the old GHEISHA-style models no longer used.
+    + models/pre_equilibrium
+      o G4PreCompoundModel: added limit on nucleon number maxZ=9, maxA=17,
+        low fragments with lower Z and A directly call equilibrium emission.
+      o Fixed Coverity defect in G4VPreCompoundFragment.
+    + models/radioactive_decay
+      o G4RadioactiveDecay: added data members and Set/Get functions to support
+        directional biasing ("collimation") of visible decay daughters (e+, e-,
+        gamma, neutron, and alphas, but not neutrinos or the residual nucleus).
+        Added corresponding commands in G4RadiactiveDecaymessenger.
+        Set process subtype (fRadioactiveDecay = 210).
+      o Added check for maximum shell number in G4NuclearDecayChannel.
+    + models/theo_high_energy
+      o Added GetEnergyMomentumCheckLevel() method to G4TheoFSGenerator. 
+      o Store primary particle, so that cascade in Propagate() has access.
+    + models/util
+      o Added new methods in G4Nucleon for creation of anti-nucleus.
+        They can be used to replace protons and neutrons into anti-protons
+        and anti-neutron, respectively.
+    + processes
+      o Added G4MuonNuclearProcess, meant to replace the old process
+        G4MuNuclearInteraction by separating model and cross-section classes.
+      o Added processes for light anti-ions: G4AntiAlphaInelasticProcess,
+        G4AntiDeuteronInelasticProcess, G4AntiHe3InelasticProcess and
+        G4AntiTritonInelasticProcess.
+
+  o Run
+    ---
+    + Added new utility G4PhysicsListHelper for controlling process ordering
+      in physics lists and related classes. If a process is added through the
+      new method RegisterProcess(), the ordering parameters can be omitted.
+      Default values for process ordering are applied. The user can choose
+      to adopt his/her own parameter table by setting G4ORDPARAMTABLE.
+    + Added ReplacePhysics() in G4VModulerPhysicsList to replace physics
+      constructor in a given physics list.
+    + Default implementation of SetCuts() is provided. Now, it is no longer
+      needed to implement a SetCuts() method (old scheme still supported).
+      The obsolete method SetCutValueForOthers() has been removed.
+      It is now allowed to set zero cut length in SetCuts commands.
+    + Removed unnecessary AtRest GPIL in G4ParallelWorldScoringProcess.
+
+  o Track
+    -----
+    + Renamed GetVelocity to CalculateVelocity() in G4Track; added accessor
+      and modifier for velocity.
+    + Set velocity of track within UpdateStep() in G4ParticleChange.
+    + Added GetSecondaryInCurrentStep() method in G4Step.
+
+  o Tracking
+    --------
+    + Fixed compilation warning from gcc-4.6 for variable set but not used
+      in G4TrackingManager.
+
+  o Visualization:
+    -------------
+    + management:
+      o Improvements to /vis/scene commands.
+    + modeling:
+      o Relaxed some exceptions to warnings.
+      o G4TrajectoryDrawerUtils: reworked TimesValidity.
+    + DAWN, gMocren, VRML:
+      o Replaced G4cerr with G4cout and added verbosity control.
+    + HepRep:
+      o 
+    + OpenGL:
+      o Fixed conflict with qgl.h and GL/gh.h in include files.
+      o Coverity warning fixes and Qt developments.
+      o Added CMake support for Xm and Win32 components.
+    + OpenInventor:
+      o Fixed some Coverity reports.
+    + RayTracer:
+      o Updated setup to use new GEANT4_USE_RAYTRACER_X11 variable.
+
+  o Data Sets:
+    ---------
+    + G4EMLOW-6.22:
+      o Added module penelope/bremsstrahlung for G4PenelopeBremsstrahlung
+        v2008 model.
+      o Updated FL2.dat and Paul data.
+    + G4NDL-3.15:
+      o Updated most data to ENDF/B-VII.
+      o Added Zinc
+          Zn_nat:ENDF/B-VII Original BROND-2.2 data taken from JEFF-3.1
+      o Added Tantalum
+          Ta181:Ta-181 (neutron) from ENDF/B-VI Tape 106
+          Ta182:Ta-182 (neutron) from ENDF/B-VI Tape 106
+      o Replaced Lithium data
+          Li6:ENDF/B-VII
+          Li7:ENDF/B-VII
+      o Replaced Boron data
+          B10:ENDF/B-VII
+          B11:ENDF/B-VII.
+    + G4PII-1.3
+      o Refined values of the theoretical cross-sections.
+    + PhotonEvaporation-2.2:
+      o Updated z93.a237 element using data from:
+        http://www.nndc.bnl.govgtt/useroutput/AR_22452_1.html.
+
+  o Examples:
+    --------
+    + Various fixes, improvements, adoption of new features.
+    + Migrated physics-list to use G4PhysListHelper.
+    + In DetectorConstruction in EM examples set I=78 eV (vs 75 eV)for Water.
+    + advanced/dnaphysics
+      o New example exercising G4DNA processes.
+    + advanced/microbeam
+      o Removed obsolete hadron elastic builders.
+    + advanced/microdosimetry
+      o Switched to G4ionIonisation and 5 MeV proton.
+      o Added new variables to histogram.
+    + advanced/nanobeam
+      o Switched to non-numbered physics list.
+    + advanced/xray_fluorescence
+      o Migrated physicslist to standard EM+Fluo.
+      o Added several classes (XrayFluoPhysListEmStandardFLUO, XrayFluoStepMax
+        and XrayFluoStepMaxMessenger) and adapted code accordingly for use.
+    + extended/analysis/AnaEx02
+      o New example showing the usage of histogram and ntuple manipulations
+        using the Root analysis tool. All analysis manipulations (histo booking,
+        filling, saving histos in a file, etc...) are located the class 
+        HistoManager.
+    + extended/electromagnetic/TestEm1
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+        Set lowest production cut to 100 eV in PhysicsList
+      o Updated SteppingVerbose.
+    + extended/electromagnetic/TestEm2
+      o Updated PhysListEmStandard for de-excitation.
+        Set lowest production cut to 100 eV in PhysicsList.
+      o Updated SteppingVerbose and vis.mac.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+      o Fixed misprint in cout in RunAction.
+    + extended/electromagnetic/TestEm3
+      o Updated PhysListEmStandard for de-excitation.
+        Set lowest production cut to 100 eV in PhysicsList.
+      o Updated SteppingVerbose, tileCal.mac and vis.mac.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+    + extended/electromagnetic/TestEm5
+      o Updated PhysListEmStandard for de-excitation.
+        Set lowest production cut to 100 eV in PhysicsList.
+      o Added gammaSpectrum.mac macro, activating EM fluorescence.
+      o Added data for hanson.mac.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+      o Updated vis.mac macro and SteppingVerbose.
+    + extended/electromagnetic/TestEm7
+      o Updated PhysListEmStandard for deexcitation and multiple-scattering-95.
+      o Updated PhysListEmStandard for de-excitation.
+        Set lowest production cut to 100 eV in PhysicsList.
+      o Removed calls to obsolete methods and cleaned up options in 
+        PhysListEmStandardNR and PhysListEmStandardSS.
+      o Added compiler depended selection of the math library to c2_function.
+      o Allow tallies of different materials and sizes.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+      o Updated HistoManager and SteppingVerbose.
+    + extended/electromagnetic/TestEm9
+      o Added extra run with 20 GeV mu- in TestEm9.in.
+    + extended/electromagnetic/TestEm11
+      o Updated PhysListEmStandard for de-excitation.
+        Set lowest production cut to 100 eV in PhysicsList.
+      o Allow several absorbers to DetectorConstruction.
+      o Modified RunAction, SteppingAction, SteppingVerbose, DetectorMessenger.
+      o HistoManager and Messenger: removed 'csda' and 'stepMax' computation.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+      o Updated all macros and Readme.
+    + extended/electromagnetic/TestEm12
+      o Added G4EmDNAPhysics in PhysicsList and new macro dna.mac.
+      o PhysicsList: set back default lowest production cut (990 eV).
+      o Updated PhysListEmStandard for msc95 and deexcitation.
+      o Reduced statistic in input macro.
+      o Removed obsolete modifiers in PhysListEmStandard.
+    + extended/electromagnetic/TestEm13
+    + extended/electromagnetic/TestEm14
+      o Modified PhysListEmStandard, included AtomicDeexcitation,
+        new G4PEEffectFluoModel and G4KleinNishinaModel.
+    + extended/electromagnetic/TestEm15
+      o Updated PhysListEmStandard to multiple-scattering-95.
+    + extended/electromagnetic/TestEm18
+      o Modified PhysListEmStandard, included AtomicDeexcitation,
+        new G4PEEffectFluoModel and G4KleinNishinaModel.
+      o Moved Fluo and Pixe tests to TestEm14.
+    + extended/hadronic/Hadr01
+      o Added new builders for ions.
+    + extended/hadronic/Hadr02
+      o New example providing simulation of ion beam interaction with different
+        targets. Hadronic aspects of beam target interaction are demonstrating
+        in the example including longitudinal profile of energy deposition,
+        spectra of secondary  particles, isotope production spectra.
+    + extended/medical/electronScattering
+      o Updated PhysListEmStandard to multiple-scattering-95.
+      o Added EGS_13MeV results.
+    + extended/medical/electronScattering2
+      o Corrected README comments on opt2 and opt3.
+    + extended/medical/fanoCavity
+    + extended/medical/fanoCavity2
+      o Updated PhysListEmStandard_opt3 to multiple-scattering-95.
+        Suppressed PhysListEmStandard_opt2, and use same configuration as for
+        opt3 in PhysListEmStandard_GS, VWI, SS.
+    + extended/radioactivedecay/rdecay01
+      o Fixed bug in time counting in RunAction.
+      o Compute activity from primary ion in RunAction.
+      o Modified setting for total kinetic energy in histo 6.
+      o Suppressed histo #9.
+    + extended/radioactivedecay/rdecay02
+      o Migrated physics list to remove use of obsolete low energy EM processes.
+      o Corrected pre-processor lines in exrdmHisto.
+    + examples/novice/N03
+      o Get pointers to UserAction classes via G4RunManager.
+
+ ----------------------------------------------------------------------------
+ 

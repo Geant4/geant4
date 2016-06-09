@@ -107,9 +107,11 @@
       {
         // G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
+        G4int M = theElement->GetIsotope(i1)->Getm();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
         theFinalStates[i1]->SetA_Z(A, Z);
-	UpdateData(A, Z, count++, frac);
+	//UpdateData(A, Z, count++, frac);
+	UpdateData(A, Z, M, count++, frac);
       }
     } else {
       //G4cout <<" Init: mean case: "
@@ -131,9 +133,11 @@
     return result;
   }
   
-  void G4NeutronHPChannel::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
+  //void G4NeutronHPChannel::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
+  void G4NeutronHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance)
   {
-    theFinalStates[index]->Init(A, Z, theDir, theFSType);
+    //theFinalStates[index]->Init(A, Z, theDir, theFSType);
+    theFinalStates[index]->Init(A, Z, M, theDir, theFSType);
     if(!theFinalStates[index]->HasAnyData()) return; // nothing there for exactly this isotope.
 
     // the above has put the X-sec into the FS
@@ -146,8 +150,9 @@
     }
     else // get data from CrossSection directory
     {
-      G4String tString = "/CrossSection/";
-      active[index] = theIsotopeWiseData[index].Init(A, Z, abundance, theDir, tString);
+      G4String tString = "/CrossSection";
+      //active[index] = theIsotopeWiseData[index].Init(A, Z, abundance, theDir, tString);
+      active[index] = theIsotopeWiseData[index].Init(A, Z, M, abundance, theDir, tString);
       if(active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();
     }
     if(theBuffer != 0) Harmonise(theChannelData, theBuffer);

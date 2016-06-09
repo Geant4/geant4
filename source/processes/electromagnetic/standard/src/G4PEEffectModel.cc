@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.8 2009/04/09 18:41:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PEEffectModel.cc,v 1.8 2009-04-09 18:41:18 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@ G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*,
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,7 +84,7 @@ void G4PEEffectModel::Initialise(const G4ParticleDefinition*,
   // always false before the run
   SetDeexcitationFlag(false);
 
-  if (isInitialized) return;
+  if (isInitialized) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialized = true;
 }
@@ -185,13 +186,13 @@ G4double G4PEEffectModel::ElecCosThetaDistribution(G4double kineEnergy)
   //
   G4double costeta = 1.;
   G4double gamma   = 1. + kineEnergy/electron_mass_c2;
-  if (gamma > 5.) return costeta;
+  if (gamma > 5.) { return costeta; }
   G4double beta  = sqrt(gamma*gamma-1.)/gamma;
   G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
 
   G4double rndm,term,greject,grejsup;
-  if (gamma < 2.) grejsup = gamma*gamma*(1.+b-beta*b);
-  else            grejsup = gamma*gamma*(1.+b+beta*b);
+  if (gamma < 2.) { grejsup = gamma*gamma*(1.+b-beta*b); }
+  else            { grejsup = gamma*gamma*(1.+b+beta*b); }
 
   do { rndm = 1.-2*G4UniformRand();
        costeta = (rndm+beta)/(rndm*beta+1.);

@@ -24,31 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.32 2010/01/13 15:42:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HadronElastic.hh,v 1.4 2009-09-23 14:37:44 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Geant4 Header : G4HadronElastic
 //
-// G4 Model: Low energy elastic scattering with 4-momentum balance 
-// Derived fron G4LElastic of F.W. Jones, TRIUMF, 04-JUN-96
-// Uses  G4ElasticHadrNucleusHE and G4VQCrossSection
+// Author : V.Ivanchenko 29 June 2009 (redesign old elastic model)
 //  
 // Modified:
-// 14-Dec-05 V.Ivanchenko rename the class
-// 13-Apr-06 V.Ivanchenko move to coherent_elastic 
-// 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
-// 20-Oct-06 V.Ivanchenko default ekinhigh = GeV (use HE model)
-// 16-Nov-06 V.Ivanchenko remove definition 
-// 16-Nov-06 V.Ivanchenko default ekinhigh = 0.4*GeV 
-// 16-Nov-06 V.Ivanchenko cleanup and rename Set methods and variables 
-// 28-Mar-07 V.Ivanchenko add NIST manager
-// 11-May-07 V.Ivanchenko remove unused method Defs1
-// 13.01.10: M.Kosov: Use G4Q(Pr/Neut)ElasticCS instead of G4QElasticCS
-//
 //
 // Class Description
-// Final state production model for hadron nuclear elastic scattering; 
+// Default model for elastic scattering; GHEISHA algorithm is used 
 // Class Description - End
-
 
 #ifndef G4HadronElastic_h
 #define G4HadronElastic_h 1
@@ -57,100 +44,65 @@
 #include "G4HadronicInteraction.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
-
-enum G4ElasticGenerator
-{
-  fLElastic = 0,
-  fHElastic,
-  fQElastic,
-  fSWave
-};
+#include "G4NucleiProperties.hh"
 
 class G4ParticleDefinition;
-class G4VQCrossSection;
-class G4ElasticHadrNucleusHE;
 
 class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4ElasticHadrNucleusHE* HModel = 0);
+  G4HadronElastic(const G4String& name = "hElasticLHEP");
 
   virtual ~G4HadronElastic();
  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-				  G4Nucleus & targetNucleus);
+  // implementation of the G4HadronicInteraction interface
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
+					  G4Nucleus & targetNucleus);
 
-  G4VQCrossSection* GetCS();
+  // sample momentum transfer using Lab. momentum
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab,
+				    G4int Z, G4int A);
 
-  G4ElasticHadrNucleusHE* GetHElastic();
+  inline void SetLowestEnergyLimit(G4double value);
 
-  void SetPlabLowLimit(G4double value);
+  inline G4double LowestEnergyLimit() const;
 
-  void SetHEModelLowLimit(G4double value);
-
-  void SetQModelLowLimit(G4double value);
-
-  void SetLowestEnergyLimit(G4double value);
-
-  void SetRecoilKinEnergyLimit(G4double value);
-
-  G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
+  inline G4double ComputeMomentumCMS(const G4ParticleDefinition* p, 
+				     G4double plab, G4int Z, G4int A);
+  
+  virtual void Description() const;
 
 private:
-
-  G4int Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
-	     G4int iend,
-	     G4double aa, G4double bb, G4double cc, G4double dd, 
-	     G4double rr);
-
-  G4double Fctcos(G4double t, 
-		  G4double aa, G4double bb, G4double cc, G4double dd, 
-		  G4double rr);
-
-  static G4VQCrossSection* pCManager;
-  static G4VQCrossSection* nCManager;
-
-  G4ElasticHadrNucleusHE*     hElastic;
 
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;
   G4ParticleDefinition* theDeuteron;
   G4ParticleDefinition* theAlpha;
-  const G4ParticleDefinition* thePionPlus;
-  const G4ParticleDefinition* thePionMinus;
 
-  G4double lowEnergyRecoilLimit;  
-  G4double lowEnergyLimitHE;  
-  G4double lowEnergyLimitQ;  
   G4double lowestEnergyLimit;  
-  G4double plabLowLimit;
 
 };
-
-inline void G4HadronElastic::SetRecoilKinEnergyLimit(G4double value)
-{
-  lowEnergyRecoilLimit = value;
-}
-
-inline void G4HadronElastic::SetPlabLowLimit(G4double value)
-{
-  plabLowLimit = value;
-}
-
-inline void G4HadronElastic::SetHEModelLowLimit(G4double value)
-{
-  lowEnergyLimitHE = value;
-}
-
-inline void G4HadronElastic::SetQModelLowLimit(G4double value)
-{
-  lowEnergyLimitQ = value;
-}
 
 inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)
 {
   lowestEnergyLimit = value;
+}
+
+inline G4double G4HadronElastic::LowestEnergyLimit() const
+{
+  return lowestEnergyLimit;
+}
+
+inline G4double
+G4HadronElastic::ComputeMomentumCMS(const G4ParticleDefinition* p, 
+				     G4double plab, G4int Z, G4int A)
+{
+  G4double m1 = p->GetPDGMass();
+  G4double m12= m1*m1;
+  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  return plab*m2/std::sqrt(m12 + m2*m2 + 2.*m2*std::sqrt(m12 + plab*plab));
 }
 
 #endif

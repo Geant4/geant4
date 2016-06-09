@@ -25,56 +25,65 @@
 //
 #ifndef G4_CASCADE_FUNCTIONS_ICC
 #define G4_CASCADE_FUNCTIONS_ICC
-// $Id: G4CascadeFunctions.icc,v 1.6 2010/12/15 07:39:40 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeFunctions.icc,v 1.6 2010-12-15 07:39:40 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
 //		getOutgoingPartTypes().
 // 20100803  M. Kelsey -- Add printing function for debugging
 // 20100804  M. Kelsey -- Pretty up printing function
+// 20110725  M. Kelsey -- Use ctor to register table in lookup factory
+// 20110728  M. Kelsey -- Fix Coverity #22955, recursive #include; fix
+//		Coverity #20228, test (mult>maxMult), set to max if over
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
+//		Drop "inline" keyword on complex functions
+// 20110923  M. Kelsey -- Add optional ostream& argument to printTable(),
+//		pass through to SAMP and DATA
 
-#include "G4CascadeFunctions.hh"
+#include "G4CascadeChannelTables.hh"
 #include "globals.hh"
 
 
-// Make sure singleton is instantiated
+// Constructor registers table in lookup
+
 template <class DATA, class SAMP>
-const G4CascadeFunctions<DATA,SAMP> G4CascadeFunctions<DATA,SAMP>::instance;
+G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {}
 
 
 // Compare summed partial cross section with total cross section
 // Truncate multiplicity at maximum if summed < total
 
-template <class DATA, class SAMP> inline 
-G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) {
+template <class DATA, class SAMP>
+G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
   // Use pointer comparison to see whether tot is just a ref to sum)
   if (&DATA::data.sum != &DATA::data.tot) {
-    G4double summed = instance.findCrossSection(ke, DATA::data.sum); 
-    G4double total  = instance.findCrossSection(ke, DATA::data.tot);
+    G4double summed = this->findCrossSection(ke, DATA::data.sum); 
+    G4double total  = this->findCrossSection(ke, DATA::data.tot);
     if (G4UniformRand() > summed/total) return DATA::data.maxMultiplicity();
   }
 
-  return instance.findMultiplicity(ke, DATA::data.multiplicities);
+  return this->findMultiplicity(ke, DATA::data.multiplicities);
 }
 
 
 // Generate list of final state particles
 
-template <class DATA, class SAMP> inline 
+template <class DATA, class SAMP>
 void G4CascadeFunctions<DATA,SAMP>::
-getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
+getOutgoingParticleTypes(std::vector<G4int>& kinds, 
+			 G4int mult, G4double ke) const {
   const G4int maxMult = DATA::data.maxMultiplicity();
+
+  if (mult > maxMult) {
+    G4cerr << " Illegal multiplicity " << mult << " > " << maxMult << G4endl;
+    mult = maxMult;
+  }
 
   kinds.clear();
   kinds.reserve(mult);
 
-  if (mult > maxMult+2) {
-    G4cerr << " Illegal multiplicity " << G4endl;
-    return;
-  }
-
-  G4int channel = instance.findFinalStateIndex(mult, ke, DATA::data.index,
-					       DATA::data.crossSections);
+  G4int channel = this->findFinalStateIndex(mult, ke, DATA::data.index,
+				            DATA::data.crossSections);
 #ifdef G4CASCADE_DEBUG_SAMPLER
   G4cout << " getOutgoingParticleTypes: mult=" << mult << " KE=" << ke
 	 << ": channel=" << channel << G4endl;
@@ -104,12 +113,12 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
 
 // Dump lookup tables, including interpolation bins, to log file
 
-template <class DATA, class SAMP> inline 
-void G4CascadeFunctions<DATA,SAMP>::printTable() {
-  G4cout << " ---------- " << DATA::data.name << " ----------" << G4endl;
-  instance.print();
-  DATA::data.print();
-  G4cout << " ------------------------------" << G4endl;
+template <class DATA, class SAMP>
+void G4CascadeFunctions<DATA,SAMP>::printTable(std::ostream& os) const {
+  os << " ---------- " << DATA::data.name << " ----------" << G4endl;
+  SAMP::print(os);
+  DATA::data.print(os);
+  os << " ------------------------------" << G4endl;
 }
 
 #endif	/* G4_CASCADE_FUNCTIONS_ICC */

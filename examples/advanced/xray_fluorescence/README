@@ -7,61 +7,29 @@ $Id: README,v 1.14 2005/12/09 22:15:52 mantero Exp $
 
                             xray_fluorescence
                             -----------------
-XrayFluo is an advanced Geant4 example based on a realistic simulation of 
-a test beam. 
-The aim of the test beam was to characterize the response function of various
-X-Rays detectors used to measure fluorescence emissions from samples composed
-of different materials irradiated with a monochromatic beam of photons.
-In this example the geometry of the detector is simplified:
-one single pixel is used, since the test beams has used monolithic detectors.
-The response function is tabulated for different values of incident 
-energy and stored in the file response.dat and SILIresponse.dat.
-At the moment, two kinds of detectors are available: HPGe and Si(Li).
-The sample, a simple box whose material can be selected, can be irradiated
-with different particles, with different spectra for the incident energy and
-with different shapes of the primary generator. 
-Apart from the sample and the detector there are two diaphragm reproducing 
-those used to collimate the incident beam during the test beam.
+XrayFluo is an advanced Geant4 example reproducing various setups for PIXE or XRF experiments.
 
-The aim of this advanced example is to illustrate the use of particle 
-generation and analysis schemes available in Geant4:
+A sample macro (livermore.mac) is provided.
 
-- the generation of particles is done via the G4ParticleGun: the example
-  shows how to use it in order to obtain a beam of circular section or
-  a particle source isotropic in space
+The detector is a monolitic Si(Li) or HPGe detector, with real response functions, stored in response.dat and SILIresponse.dat.
 
-- the example includes the possibility to shoot particles according to a 
-  given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat
-  store the spectra of photons during solar flares, the files 
-  mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of
-  protons respectively during solar maximum and solar minimum conditions, and 
-  merc2_flx_alp_max.dat merc_flx_alp_min.dat contain  the spectra of alpha
-  particles again respectively during solar maximum and solar minimum
-  conditions.
+The sample, a simple box whose material can be selected, can be irradiated with different particles, with different spectra for the incident energy and with different shapes of the primary generator. 
 
-- histograming facilities are presently provided for the Linux environment 
-  by using the AIDA3 interfaces.
-  The AIDA compliant version has not been tested by the developers and is
-  here as a example of "forward compatibility" on how to use analysis.
+Two diaphragms reproducing those used to collimate the incident beam on sample and detector during the test beam are simulated as well
 
-In order to be able to use any of these packages, prior installation is 
-necessary to configure you environment to get visulaization, as described in geant4 manual.
-If we want to use analisys, we provide an example for the use of PI:
+The aim of this advanced example is to illustrate Deexcitation products generation and analysis schemes available in Geant4.
 
-# flag that we want to use analysis:
-setenv G4ANALYSIS_USE               1
+Generation of particles is done via the G4ParticleGun: the example shows how to use it in order to obtain a beam of circular section or a particle source isotropic in space
 
-#select AIDA implementation: PI 1.3.3
+The example includes the possibility to shoot particles according to a  given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat store the spectra of photons during solar flares, the files mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of protons respectively during solar maximum and solar minimum conditions, and merc2_flx_alp_max.dat merc_flx_alp_min.dat contain  the spectra of alpha particles again respectively during solar maximum and solar minimum conditions. These features are available by changing hard-doced values in XrayFluoRunAction.cc
 
-setenv G4ANALYSIS_BUILD  1
+Histogramming facilities are presently provided for the Linux environment by using the AIDA interfaces.The AIDA compliant version has not been tested by the developers and is here as a example of "forward compatibility" on how to use analysis.
 
-setenv PI_VERSION 1_3_3
-setenv PATH /your/path/to/PI/app/releases/PI/PI_1_3_0/slc3_ia32_gcc323/bin/:${PATH}
-eval `aida-config -r csh`
+In order to be able to use any of these packages, prior installation is necessary to configure you environment to get visulaization, as described in geant4 manual.
 
 #path to the lowEnergy data base
 
-setenv G4LEDATA /your/path/to/geant4/data/G4EMLOW3.0
+setenv G4LEDATA /your/path/to/geant4/data/G4EMLOWXX.XX
 
 #path to Xray_Fluorescence data files, if not set, PWD is assumed:
 
@@ -80,94 +48,48 @@ Please Select Simulation Geometrical Set-Up:
 3 - Planet and Sun
 4 - Phase-Space Production
 
-The first three choices are to choose different experimental set-ups 
-(a test beam one, an infite plane and a planetary geometry), while 
-the fourth is a simplified version of the first, without a detector, 
-only to generate a tuple with particles genereted or exiting the sample.
+The first three choices are to choose different experimental set-ups  (a test beam one, an infite plane and a planetary geometry), while the fourth is a simplified version of the first, without a detector, only to generate a tuple with particles genereted or exiting the sample.
 
 In order to run a macro, type the following command:
 
 idle> execute command "/control/execute xxxxx.mac"
 
-If the analysis options are set, histograms will
-automatically stored in the corresponding files (hbook or XML)
+If the analysis options are set, histograms will automatically stored in the corresponding files (hbook or XML)
 
-In order to launch the application in batch mode, it is necessary to specify, 
-after the executable file name, the name of the macro file and the number of the choice:
+In order to launch the application in batch mode, it is necessary to specify, after the executable file name, the name of the macro file and the number of the choice:
 
 $G4WORKDIR/bin/Linux-g++/XrayFluo xxxxx.mac 1
 
-2. Detector description
-The telescope and detector geometry is defined in 
-XrayFluoDetectorConstruction.cc
+2. Detector description 
+The telescope and detector geometry is defined in XrayFluoDetectorConstruction.cc and similar
 
-3. Detector peculiar properties are described in XrayFluoSiLiDetectorType and
-XrayFluoHPGeDetectorType, both derived from XrayFluoVDetectorType. Other 
-detector types can be added, creating other implementations of 
-XrayFluoVDetectorType objects. 
-Detector type selection is made in  XrayFluoDetectorConstruction, and can be 
-modified trough /apparate/detector command of the UI.  
-Other commands (apparate/sample /apparate/sampleGranularity 
-/apparate/GrainDiameter) are present to simulate sample granulosity:
- grains are spheres, disposed in a compact cubic structure, i.e superipmposition 
-of planes of maximum density with ABC ABC path. The fundamental cell is of type 
-cubic with centered-faces.
+3. Detector peculiar properties are described in XrayFluoSiLiDetectorType and XrayFluoHPGeDetectorType, both derived from XrayFluoVDetectorType. Other detector types can be added, creating other implementations of XrayFluoVDetectorType objects. Detector type selection is made in  XrayFluoDetectorConstruction, and can be modified trough /apparate/detector command of the UI.  
+Other commands (apparate/sample /apparate/sampleGranularity /apparate/GrainDiameter) are present to simulate sample granulosity: grains are spheres, disposed in a compact cubic structure, i.e superipmposition of planes of maximum density with ABC ABC path. The fundamental cell is of type cubic with centered-faces.
 
 4. Physics processes
 
-The physics processes are in XrayFluoPhysicsList.cc
-The main process in this example is fluorescence emission from the sample.
+Tha user can select the preferred physics list form the pre-built ones producin atomic deexcitation products: livermore, standard (opt 0, 1, 2, 3) and penelope.
 
 5. Event generation
 
-This is done using the G4ParticleGun with some modifications. See 
-XrayFluoParticleGeneratorAction.cc
+This is done using the G4ParticleGun with some modifications. See XrayFluoParticleGeneratorAction.cc
 
-Event generation is controlled by commands in the /gun/category (see help for further details).
-In this readme only two commands are undrlined: 
+Event generation is controlled by commands in the /gun/category (see help for further details). In this readme only two commands are undrlined: 
 
-- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 
-	in the setup #4. The loaded particles will be generated and will be directed 
-	ALL OF THEM to the detector. This can be useful to perform detector studies 
-	with encreased efiiciency.
+- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 	in the setup #4. The loaded particles will be generated and will be directed ALL OF THEM to the detector. This can be useful to perform detector studies with encreased eficiency.
 
-- /gun/loadRayleighFlag <true/false> This is used to let the user decide if backscattered 
-	primary particles should be loaded and directed toward the detector. This command, 
-	in order to be useful, must be used BEFORE the previous one.
+- /gun/loadRayleighFlag <true/false> This is used to let the user decide if backscattered primary particles should be loaded and directed toward the detector. This command, in order to be useful, must be used BEFORE the previous one.
 
 6. Analysis
 
 At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
-In the example the Anaphe toolkit is used.
 
-AIDA implementation configuration for compilation and link are in GNUmakefile, once 
-is set the environmente as above:
+To build and execute the example on platforms where there is no implementation of the analysis system, the environment variable G4ANALYSIS_USE must not be set.
 
-ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
-endif
+By setting visPlotter variable in XrayFluoAnalysisManager to true, it is possible to display the simulated output of the detector while simulation is in progress. Graph window is updated every 1000 events. 
 
-To build and execute the example on platforms where there is no
-implementation of the analysis system, the environment variable
-G4ANALYSIS_USE must not be set.
+Various commads, with help,  are available for Geant4 UI. /analysis/outputFile and /analysis/fileType respectively for changing the name and the type (xml or Hbook) of the file in wich results are saved. 
 
-By setting visPlotter variable in XrayFluoAnalysisManager to true, 
-it is possible to display the simulated output of the detector while 
-simulation is in progress. Graph window is updated every 1000 events. 
+If these commands are used, to make the changes effective, another command, /anaysis/update, must be executed.
 
-The example provides also a simple Python file (readPY) used to display
-histograms with the python interface of PI. This must be run after the 
-configuration script config.csh and the python interpreter.
-
-Various commads, with help,  are available for Geant4 UI. 
-/analysis/outputFile and /analysis/fileType respectively for 
-changing the name and the type (xml or Hbook) of the file in wich results 
-are saved. 
-If these commends are used, to make the changes effective, another
-command, /anaysis/update, must be executed.
-
-NOTE: if a file named xrayfluo.hbk (default name) is present, it 
-will be deleted, even if /analysis/outputFile command is issued 
-before any run.
+NOTE: if a file named xrayfluo.hbk (default name) is present, it will be deleted, even if /analysis/outputFile command is issued before every run.

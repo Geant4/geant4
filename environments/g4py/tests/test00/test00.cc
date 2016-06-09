@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: test00.cc,v 1.4 2006/06/29 15:37:46 gunter Exp $
+// $Id: test00.cc,v 1.4 2006-06-29 15:37:46 gunter Exp $
 // ====================================================================
 //   test00.cc
 //   Hallo World of Boost.Python

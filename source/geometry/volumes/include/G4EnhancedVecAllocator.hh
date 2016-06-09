@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnhancedVecAllocator.hh,v 1.3 2010/04/23 10:25:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EnhancedVecAllocator.hh,v 1.3 2010-04-23 10:25:22 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

@@ -69,12 +69,23 @@ G4HadronNucleonXsc::G4HadronNucleonXsc()
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
   theHe3      = G4He3::He3();
+
+  InitialiseKaonNucleonTotXsc();
 }
 
 
 G4HadronNucleonXsc::~G4HadronNucleonXsc()
 {}
 
+void G4HadronNucleonXsc::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4HadronNucleonXsc calculates the total, inelastic and elastic\n"
+          << "hadron-nucleon cross sections using several different\n"
+          << "parameterizations within the Glauber-Gribov approach. It is\n"
+          << "valid for all incident gammas and long-lived hadrons at\n"
+          << "energies above 30 keV.  This is a cross section component which\n"
+          << "is to be used to build a cross section data set.\n"; 
+}
 
 G4bool 
 G4HadronNucleonXsc::IsApplicable(const G4DynamicParticle* aDP, 
@@ -333,9 +344,9 @@ G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle,
   xsection *= millibarn; // parametrised in mb
 
   fTotalXsc     = xsection;
-  fInelasticXsc = 0.83*xsection;
+  fInelasticXsc = 0.75*xsection;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
-  if (fElasticXsc < 0.)fElasticXsc = 0.;
+  if (fElasticXsc < 0.) fElasticXsc = 0.;
 
   return xsection;
 }
@@ -350,7 +361,9 @@ G4double
 G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4double xsection(0), Delta, A0, B0;
+  G4double xsection(0);
+  // G4double Delta;  DHW 19 May 2011: variable set but not used
+  G4double A0, B0;
   G4int Zt=1, Nt=1, At=1;
   G4double hpXsc(0);
   G4double hnXsc(0);
@@ -385,12 +398,15 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
 
   if( theParticle == theNeutron && pORn) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,nucleon);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      // Delta = 1.;   DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {
@@ -450,12 +466,15 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
   } 
   else if(theParticle == theProton && pORn) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,nucleon);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      // Delta = 1.;  DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {
@@ -891,6 +910,219 @@ G4double G4HadronNucleonXsc::CalcMandelstamS( const G4double mp ,
 
   return sMand;
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+// Initialaise K(p,m)-(p,n) total cross section vectors
+
+
+void G4HadronNucleonXsc::InitialiseKaonNucleonTotXsc()
+{
+  G4int i = 0, iMax;
+  G4double tmpxsc[106];
+
+  // Kp-proton tot xsc
+
+  iMax = 66;
+  fKpProtonTotXscVector = G4LPhysicsFreeVector(iMax, fKpProtonTotTkin[0], fKpProtonTotTkin[iMax-1]);
+  fKpProtonTotXscVector.SetSpline(true);
+
+  for( i = 0; i < iMax; i++)
+  {
+    tmpxsc[i] = 0.;
+
+    if( i == 0 || i == iMax-1 ) tmpxsc[i] = fKpProtonTotXsc[i];
+    else                        tmpxsc[i] = 0.5*(fKpProtonTotXsc[i-1]+fKpProtonTotXsc[i+1]);
+
+    fKpProtonTotXscVector.PutValues(size_t(i), fKpProtonTotTkin[i], tmpxsc[i]*millibarn);
+  }
+
+  // Kp-neutron tot xsc
+
+  iMax = 75;
+  fKpNeutronTotXscVector = G4LPhysicsFreeVector(iMax, fKpNeutronTotTkin[0], fKpNeutronTotTkin[iMax-1]);
+  fKpNeutronTotXscVector.SetSpline(true);
+
+  for( i = 0; i < iMax; i++)
+  {
+    tmpxsc[i] = 0.;
+    if( i == 0 || i == iMax-1 ) tmpxsc[i] = fKpNeutronTotXsc[i];
+    else                        tmpxsc[i] = 0.5*(fKpNeutronTotXsc[i-1]+fKpNeutronTotXsc[i+1]);
+
+    fKpNeutronTotXscVector.PutValues(size_t(i), fKpNeutronTotTkin[i], tmpxsc[i]*millibarn);
+  }
+
+  // Km-proton tot xsc
+
+  iMax = 106;
+  fKmProtonTotXscVector = G4LPhysicsFreeVector(iMax, fKmProtonTotTkin[0], fKmProtonTotTkin[iMax-1]);
+  fKmProtonTotXscVector.SetSpline(true);
+
+  for( i = 0; i < iMax; i++)
+  {
+    tmpxsc[i] = 0.;
+
+    if( i == 0 || i == iMax-1 ) tmpxsc[i] = fKmProtonTotXsc[i];
+    else                        tmpxsc[i] = 0.5*(fKmProtonTotXsc[i-1]+fKmProtonTotXsc[i+1]);
+
+    fKmProtonTotXscVector.PutValues(size_t(i), fKmProtonTotTkin[i], tmpxsc[i]*millibarn);
+  }
+
+  // Km-neutron tot xsc
+
+  iMax = 68;
+  fKmNeutronTotXscVector = G4LPhysicsFreeVector(iMax, fKmNeutronTotTkin[0], fKmNeutronTotTkin[iMax-1]);
+  fKmNeutronTotXscVector.SetSpline(true);
+
+  for( i = 0; i < iMax; i++)
+  {
+    tmpxsc[i] = 0.;
+    if( i == 0 || i == iMax-1 ) tmpxsc[i] = fKmNeutronTotXsc[i];
+    else                        tmpxsc[i] = 0.5*(fKmNeutronTotXsc[i-1]+fKmNeutronTotXsc[i+1]);
+
+    fKmNeutronTotXscVector.PutValues(size_t(i), fKmNeutronTotTkin[i], tmpxsc[i]*millibarn);
+  }
+}
+
+///////////////////////////////////////////////////////
+//
+// K-nucleon tot xsc (mb) fit data, std::log(Tkin(MeV))
+
+const G4double G4HadronNucleonXsc::fKpProtonTotXsc[66] = {
+0.000000e+00, 1.592400e-01, 3.184700e-01, 7.961800e-01, 1.433120e+00, 2.070060e+00, 
+2.866240e+00, 3.582800e+00, 4.378980e+00, 5.015920e+00, 5.573250e+00, 6.449040e+00, 
+7.404460e+00, 8.200640e+00, 8.837580e+00, 9.713380e+00, 1.027070e+01, 1.090764e+01, 
+1.130573e+01, 1.170382e+01, 1.242038e+01, 1.281847e+01, 1.321656e+01, 1.337580e+01, 
+1.345541e+01, 1.329618e+01, 1.265924e+01, 1.242038e+01, 1.250000e+01, 1.305732e+01, 
+1.369427e+01, 1.425159e+01, 1.544586e+01, 1.648089e+01, 1.751592e+01, 1.791401e+01, 
+1.791401e+01, 1.775478e+01, 1.751592e+01, 1.735669e+01, 1.719745e+01, 1.711783e+01, 
+1.703822e+01, 1.695860e+01, 1.695860e+01, 1.695860e+01, 1.695860e+01, 1.687898e+01, 
+1.687898e+01, 1.703822e+01, 1.719745e+01, 1.735669e+01, 1.751592e+01, 1.767516e+01, 
+1.783439e+01, 1.799363e+01, 1.815287e+01, 1.839172e+01, 1.855095e+01, 1.871019e+01, 
+1.886943e+01, 1.918790e+01, 1.942675e+01, 1.966561e+01, 2.006369e+01, 2.054140e+01 
+}; // 66
+
+
+const G4double G4HadronNucleonXsc::fKpProtonTotTkin[66] = {
+2.100000e+00, 2.180770e+00, 2.261540e+00, 2.396150e+00, 2.476920e+00, 2.557690e+00, 
+2.557690e+00, 2.584620e+00, 2.638460e+00, 2.665380e+00, 2.719230e+00, 2.746150e+00, 
+2.800000e+00, 2.853850e+00, 2.934620e+00, 3.042310e+00, 3.150000e+00, 3.311540e+00, 
+3.446150e+00, 3.607690e+00, 3.930770e+00, 4.226920e+00, 4.361540e+00, 4.846150e+00, 
+4.980770e+00, 5.088460e+00, 5.465380e+00, 5.653850e+00, 5.950000e+00, 6.084620e+00, 
+6.246150e+00, 6.300000e+00, 6.380770e+00, 6.515380e+00, 6.730770e+00, 6.838460e+00, 
+7.000000e+00, 7.161540e+00, 7.323080e+00, 7.457690e+00, 7.619230e+00, 7.780770e+00, 
+7.915380e+00, 8.130770e+00, 8.265380e+00, 8.453850e+00, 8.642310e+00, 8.803850e+00, 
+9.019230e+00, 9.234620e+00, 9.530770e+00, 9.773080e+00, 1.001538e+01, 1.017692e+01, 
+1.033846e+01, 1.058077e+01, 1.082308e+01, 1.098462e+01, 1.114615e+01, 1.138846e+01, 
+1.160385e+01, 1.173846e+01, 1.192692e+01, 1.216923e+01, 1.238461e+01, 1.257308e+01 
+}; // 66
+
+const G4double G4HadronNucleonXsc::fKpNeutronTotXsc[75] = {
+3.980900e-01, 3.184700e-01, 3.184700e-01, 3.980900e-01, 3.980900e-01, 3.980900e-01, 
+3.980900e-01, 3.980900e-01, 3.980900e-01, 4.777100e-01, 3.980900e-01, 3.980900e-01, 
+4.777100e-01, 5.573200e-01, 1.035030e+00, 1.512740e+00, 2.149680e+00, 2.786620e+00, 
+3.503180e+00, 4.219750e+00, 5.015920e+00, 5.652870e+00, 6.289810e+00, 7.245220e+00, 
+8.121020e+00, 8.837580e+00, 9.633760e+00, 1.042994e+01, 1.114650e+01, 1.194268e+01, 
+1.265924e+01, 1.329618e+01, 1.393312e+01, 1.449045e+01, 1.496815e+01, 1.552548e+01, 
+1.592357e+01, 1.664013e+01, 1.727707e+01, 1.783439e+01, 1.831210e+01, 1.902866e+01, 
+1.902866e+01, 1.878981e+01, 1.847134e+01, 1.831210e+01, 1.807325e+01, 1.791401e+01, 
+1.783439e+01, 1.767516e+01, 1.759554e+01, 1.743631e+01, 1.743631e+01, 1.751592e+01, 
+1.743631e+01, 1.735669e+01, 1.751592e+01, 1.759554e+01, 1.767516e+01, 1.783439e+01, 
+1.783439e+01, 1.791401e+01, 1.815287e+01, 1.823248e+01, 1.847134e+01, 1.878981e+01, 
+1.894905e+01, 1.902866e+01, 1.934713e+01, 1.966561e+01, 1.990446e+01, 2.014331e+01, 
+2.030255e+01, 2.046178e+01, 2.085987e+01 
+}; // 75
+
+const G4double G4HadronNucleonXsc::fKpNeutronTotTkin[75] = {
+2.692000e-02, 1.615400e-01, 2.961500e-01, 4.576900e-01, 6.461500e-01, 7.538500e-01, 
+8.884600e-01, 1.103850e+00, 1.211540e+00, 1.400000e+00, 1.561540e+00, 1.776920e+00, 
+1.992310e+00, 2.126920e+00, 2.342310e+00, 2.423080e+00, 2.557690e+00, 2.692310e+00, 
+2.800000e+00, 2.988460e+00, 3.203850e+00, 3.365380e+00, 3.500000e+00, 3.688460e+00, 
+3.850000e+00, 4.011540e+00, 4.173080e+00, 4.415380e+00, 4.630770e+00, 4.873080e+00, 
+5.061540e+00, 5.276920e+00, 5.492310e+00, 5.707690e+00, 5.896150e+00, 6.030770e+00, 
+6.138460e+00, 6.219230e+00, 6.273080e+00, 6.326920e+00, 6.407690e+00, 6.650000e+00, 
+6.784620e+00, 7.026920e+00, 7.242310e+00, 7.350000e+00, 7.484620e+00, 7.619230e+00, 
+7.807690e+00, 7.915380e+00, 8.050000e+00, 8.211540e+00, 8.453850e+00, 8.588460e+00, 
+8.830770e+00, 9.073080e+00, 9.288460e+00, 9.476920e+00, 9.665380e+00, 9.826920e+00, 
+1.004231e+01, 1.031154e+01, 1.052692e+01, 1.071538e+01, 1.095769e+01, 1.120000e+01, 
+1.138846e+01, 1.155000e+01, 1.176538e+01, 1.190000e+01, 1.214231e+01, 1.222308e+01, 
+1.238461e+01, 1.246538e+01, 1.265385e+01 
+}; // 75
+
+const G4double G4HadronNucleonXsc::fKmProtonTotXsc[106] = {
+1.136585e+02, 9.749129e+01, 9.275262e+01, 8.885017e+01, 8.334146e+01, 7.955401e+01, 
+7.504530e+01, 7.153658e+01, 6.858537e+01, 6.674913e+01, 6.525784e+01, 6.448781e+01, 
+6.360279e+01, 6.255401e+01, 6.127526e+01, 6.032404e+01, 5.997910e+01, 5.443554e+01, 
+5.376307e+01, 5.236934e+01, 5.113937e+01, 5.090941e+01, 4.967944e+01, 4.844948e+01, 
+4.705575e+01, 4.638327e+01, 4.571080e+01, 4.475958e+01, 4.397213e+01, 4.257840e+01, 
+4.102090e+01, 4.090592e+01, 3.906969e+01, 3.839721e+01, 3.756097e+01, 3.644599e+01, 
+3.560976e+01, 3.533101e+01, 3.533101e+01, 3.644599e+01, 3.811847e+01, 3.839721e+01, 
+3.979094e+01, 4.090592e+01, 4.257840e+01, 4.341463e+01, 4.425087e+01, 4.564460e+01, 
+4.759582e+01, 4.703833e+01, 4.843206e+01, 4.787457e+01, 4.452962e+01, 4.202090e+01, 
+4.034843e+01, 3.839721e+01, 3.616725e+01, 3.365854e+01, 3.170732e+01, 3.087108e+01, 
+3.170732e+01, 3.254355e+01, 3.310104e+01, 3.254355e+01, 3.142857e+01, 3.059233e+01, 
+2.947735e+01, 2.891986e+01, 2.836237e+01, 2.752613e+01, 2.696864e+01, 2.641115e+01, 
+2.501742e+01, 2.473868e+01, 2.418118e+01, 2.362369e+01, 2.334495e+01, 2.278746e+01, 
+2.250871e+01, 2.222997e+01, 2.167247e+01, 2.139373e+01, 2.139373e+01, 2.139373e+01, 
+2.111498e+01, 2.083624e+01, 2.055749e+01, 2.083624e+01, 2.055749e+01, 2.083624e+01, 
+2.083624e+01, 2.055749e+01, 2.055749e+01, 2.055749e+01, 2.027875e+01, 2.000000e+01, 
+2.055749e+01, 2.027875e+01, 2.083624e+01, 2.083624e+01, 2.055749e+01, 2.083624e+01, 
+2.083624e+01, 2.083624e+01, 2.139373e+01, 2.139373e+01
+}; // 106
+
+const G4double G4HadronNucleonXsc::fKmProtonTotTkin[106] = {
+4.017980e+00, 4.125840e+00, 4.179780e+00, 4.251690e+00, 4.287640e+00, 4.341570e+00, 
+4.395510e+00, 4.467420e+00, 4.503370e+00, 4.575280e+00, 4.683150e+00, 4.737080e+00, 
+4.773030e+00, 4.826970e+00, 4.880900e+00, 4.916850e+00, 4.952810e+00, 4.988760e+00, 
+4.988760e+00, 5.006740e+00, 5.006740e+00, 5.042700e+00, 5.078650e+00, 5.114610e+00, 
+5.132580e+00, 5.150560e+00, 5.186520e+00, 5.204490e+00, 5.276400e+00, 5.348310e+00, 
+5.366290e+00, 5.384270e+00, 5.456180e+00, 5.564040e+00, 5.600000e+00, 5.671910e+00, 
+5.743820e+00, 5.833710e+00, 5.905620e+00, 5.977530e+00, 6.085390e+00, 6.085390e+00, 
+6.157300e+00, 6.175280e+00, 6.211240e+00, 6.229210e+00, 6.247190e+00, 6.337080e+00, 
+6.391010e+00, 6.516850e+00, 6.462920e+00, 6.498880e+00, 6.570790e+00, 6.606740e+00, 
+6.660670e+00, 6.678650e+00, 6.696630e+00, 6.732580e+00, 6.804490e+00, 6.876400e+00, 
+6.948310e+00, 7.020220e+00, 7.074160e+00, 7.182020e+00, 7.235960e+00, 7.289890e+00, 
+7.397750e+00, 7.523600e+00, 7.631460e+00, 7.757300e+00, 7.901120e+00, 8.062920e+00, 
+8.260670e+00, 8.386520e+00, 8.530340e+00, 8.674160e+00, 8.817980e+00, 8.943820e+00, 
+9.087640e+00, 9.267420e+00, 9.429210e+00, 9.573030e+00, 9.698880e+00, 9.896630e+00, 
+1.002247e+01, 1.016629e+01, 1.031011e+01, 1.048989e+01, 1.063371e+01, 1.077753e+01, 
+1.095730e+01, 1.108315e+01, 1.120899e+01, 1.135281e+01, 1.149663e+01, 1.162247e+01, 
+1.174831e+01, 1.187416e+01, 1.200000e+01, 1.212584e+01, 1.221573e+01, 1.234157e+01, 
+1.239551e+01, 1.250337e+01, 1.261124e+01, 1.273708e+01 
+}; // 106
+
+const G4double G4HadronNucleonXsc::fKmNeutronTotXsc[68] = {
+2.621810e+01, 2.741123e+01, 2.868413e+01, 2.963889e+01, 3.067343e+01, 3.178759e+01, 
+3.282148e+01, 3.417466e+01, 3.536778e+01, 3.552620e+01, 3.544576e+01, 3.496756e+01, 
+3.433030e+01, 3.401166e+01, 3.313537e+01, 3.257772e+01, 3.178105e+01, 3.138264e+01, 
+3.074553e+01, 2.970952e+01, 2.891301e+01, 2.827542e+01, 2.787700e+01, 2.715978e+01, 
+2.660181e+01, 2.612394e+01, 2.564574e+01, 2.516721e+01, 2.421098e+01, 2.365235e+01, 
+2.317366e+01, 2.261437e+01, 2.237389e+01, 2.205427e+01, 2.181395e+01, 2.165357e+01, 
+2.149335e+01, 2.133297e+01, 2.109232e+01, 2.093128e+01, 2.069030e+01, 2.052992e+01, 
+2.028927e+01, 2.012824e+01, 1.996737e+01, 1.996590e+01, 1.988530e+01, 1.964432e+01, 
+1.948361e+01, 1.940236e+01, 1.940040e+01, 1.931882e+01, 1.947593e+01, 1.947429e+01, 
+1.939320e+01, 1.939157e+01, 1.946922e+01, 1.962715e+01, 1.970481e+01, 1.970301e+01, 
+1.993958e+01, 2.009669e+01, 2.025380e+01, 2.033178e+01, 2.049003e+01, 2.064747e+01, 
+2.080540e+01, 2.096333e+01 
+}; // 68
+
+const G4double G4HadronNucleonXsc::fKmNeutronTotTkin[68] = {
+5.708500e+00, 5.809560e+00, 5.896270e+00, 5.954120e+00, 5.997630e+00, 6.041160e+00, 
+6.142160e+00, 6.171410e+00, 6.272470e+00, 6.344390e+00, 6.416230e+00, 6.459180e+00, 
+6.487690e+00, 6.501940e+00, 6.544740e+00, 6.573280e+00, 6.616110e+00, 6.644710e+00, 
+6.658840e+00, 6.744700e+00, 6.773150e+00, 6.830410e+00, 6.859010e+00, 6.916240e+00, 
+6.973530e+00, 6.987730e+00, 7.030670e+00, 7.102360e+00, 7.173880e+00, 7.288660e+00, 
+7.374720e+00, 7.547000e+00, 7.690650e+00, 7.791150e+00, 7.920420e+00, 8.020980e+00, 
+8.107160e+00, 8.207720e+00, 8.365740e+00, 8.523790e+00, 8.710560e+00, 8.811110e+00, 
+8.969140e+00, 9.127190e+00, 9.270860e+00, 9.400230e+00, 9.486440e+00, 9.673210e+00, 
+9.802510e+00, 9.946220e+00, 1.011870e+01, 1.029116e+01, 1.047808e+01, 1.062181e+01, 
+1.075114e+01, 1.089488e+01, 1.106739e+01, 1.118244e+01, 1.135496e+01, 1.151307e+01, 
+1.171439e+01, 1.190130e+01, 1.208822e+01, 1.223199e+01, 1.231829e+01, 1.247646e+01, 
+1.259150e+01, 1.270655e+01 
+}; // 68
+
+
+
 
 
 //

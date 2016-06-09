@@ -718,19 +718,19 @@ void drawMarker(
     xorig = yorig = 2;
     GLubyte* bitmap = getBitmap(w,h,sFigures[aStyle]);
     glBitmap(w,h,xorig,yorig,0.,0.,bitmap);
-    delete bitmap;
+    delete [] bitmap;
   } else if((aStyle>=18)&&(aStyle<36)) {
     w = h = 7;
     xorig = yorig = 3;
     GLubyte* bitmap = getBitmap(w,h,sFigures[aStyle]);
     glBitmap(w,h,xorig,yorig,0.,0.,bitmap);
-    delete bitmap;
+    delete [] bitmap;
   } else if((aStyle>=36)&&(aStyle<54)) {
     w = h = 9;
     xorig = yorig = 4;
     GLubyte* bitmap = getBitmap(w,h,sFigures[aStyle]);
     glBitmap(w,h,xorig,yorig,0.,0.,bitmap);
-    delete bitmap;
+    delete [] bitmap;
   } else {
     return;
   }

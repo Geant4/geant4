@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.hh
-//   $Id: HepMCG4PythiaInterface.hh,v 1.5 2006/06/29 17:05:24 gunter Exp $
+//   $Id: HepMCG4PythiaInterface.hh,v 1.5 2006-06-29 17:05:24 gunter Exp $
 //
 //   A generic interface class with Pythia event generator via HepMC.
 //

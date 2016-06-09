@@ -50,14 +50,19 @@ class G4NeutronHPThermalScatteringNames
       ~G4NeutronHPThermalScatteringNames();
 
       G4bool IsThisThermalElement ( G4String ); 
+      G4bool IsThisThermalElement ( G4String , G4String ); 
       size_t GetSize() { return names.size(); };
       G4String GetTS_NDL_Name( G4String nameG4Element ) { return  names.find ( nameG4Element )->second; };
+      G4String GetTS_NDL_Name( G4String material , G4String element ) { return  nist_names.find ( std::pair< G4String , G4String > ( material , element ) )->second; };
       //G4String GetTS_G4E_Name( G4int i ) { return  names[i]->first; };
    
    private:
 
 //              G4Element  NDL name 
       std::map< G4String , G4String > names;
+
+//                         G4Material G4Element    NDL name
+      std::map< std::pair < G4String , G4String > , G4String > nist_names;
 
 };
 

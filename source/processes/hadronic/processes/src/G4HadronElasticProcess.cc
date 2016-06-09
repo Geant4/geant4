@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4 Process: Low-energy Elastic scattering
 // F.W. Jones, TRIUMF, 04-JUN-96
 // 
@@ -50,6 +48,8 @@
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronElasticDataSet.hh"
+#include <iostream>
+
  
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) : 
   G4HadronicProcess(processName)
@@ -58,40 +58,48 @@ G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) :
   AddDataSet(new G4HadronElasticDataSet());
 }
 
+
 G4HadronElasticProcess::~G4HadronElasticProcess()
-{
-}
+{}
+
  
 G4bool 
 G4HadronElasticProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return (aParticleType == *(G4PionPlus::PionPlus()) ||
-           aParticleType == *(G4PionZero::PionZero()) ||
-           aParticleType == *(G4PionMinus::PionMinus()) ||
-           aParticleType == *(G4KaonPlus::KaonPlus()) ||
-           aParticleType == *(G4KaonZeroShort::KaonZeroShort()) ||
-           aParticleType == *(G4KaonZeroLong::KaonZeroLong()) ||
-           aParticleType == *(G4KaonMinus::KaonMinus()) ||
-           aParticleType == *(G4Proton::Proton()) ||
-           aParticleType == *(G4AntiProton::AntiProton()) ||
-           aParticleType == *(G4Neutron::Neutron()) ||
-           aParticleType == *(G4AntiNeutron::AntiNeutron()) ||
-           aParticleType == *(G4Lambda::Lambda()) ||
-           aParticleType == *(G4AntiLambda::AntiLambda()) ||
-           aParticleType == *(G4SigmaPlus::SigmaPlus()) ||
-           aParticleType == *(G4SigmaZero::SigmaZero()) ||
-           aParticleType == *(G4SigmaMinus::SigmaMinus()) ||
-           aParticleType == *(G4AntiSigmaPlus::AntiSigmaPlus()) ||
-           aParticleType == *(G4AntiSigmaZero::AntiSigmaZero()) ||
-           aParticleType == *(G4AntiSigmaMinus::AntiSigmaMinus()) ||
-           aParticleType == *(G4XiZero::XiZero()) ||
-           aParticleType == *(G4XiMinus::XiMinus()) ||
-           aParticleType == *(G4AntiXiZero::AntiXiZero()) ||
-           aParticleType == *(G4AntiXiMinus::AntiXiMinus()) ||
-           aParticleType == *(G4Deuteron::Deuteron()) ||
-           aParticleType == *(G4Triton::Triton()) ||
-           aParticleType == *(G4Alpha::Alpha()) ||
-           aParticleType == *(G4OmegaMinus::OmegaMinus()) ||
-           aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));
+  return (aParticleType == *(G4PionPlus::PionPlus()) ||
+          aParticleType == *(G4PionZero::PionZero()) ||
+          aParticleType == *(G4PionMinus::PionMinus()) ||
+          aParticleType == *(G4KaonPlus::KaonPlus()) ||
+          aParticleType == *(G4KaonZeroShort::KaonZeroShort()) ||
+          aParticleType == *(G4KaonZeroLong::KaonZeroLong()) ||
+          aParticleType == *(G4KaonMinus::KaonMinus()) ||
+          aParticleType == *(G4Proton::Proton()) ||
+          aParticleType == *(G4AntiProton::AntiProton()) ||
+          aParticleType == *(G4Neutron::Neutron()) ||
+          aParticleType == *(G4AntiNeutron::AntiNeutron()) ||
+          aParticleType == *(G4Lambda::Lambda()) ||
+          aParticleType == *(G4AntiLambda::AntiLambda()) ||
+          aParticleType == *(G4SigmaPlus::SigmaPlus()) ||
+          aParticleType == *(G4SigmaZero::SigmaZero()) ||
+          aParticleType == *(G4SigmaMinus::SigmaMinus()) ||
+          aParticleType == *(G4AntiSigmaPlus::AntiSigmaPlus()) ||
+          aParticleType == *(G4AntiSigmaZero::AntiSigmaZero()) ||
+          aParticleType == *(G4AntiSigmaMinus::AntiSigmaMinus()) ||
+          aParticleType == *(G4XiZero::XiZero()) ||
+          aParticleType == *(G4XiMinus::XiMinus()) ||
+          aParticleType == *(G4AntiXiZero::AntiXiZero()) ||
+          aParticleType == *(G4AntiXiMinus::AntiXiMinus()) ||
+          aParticleType == *(G4Deuteron::Deuteron()) ||
+          aParticleType == *(G4Triton::Triton()) ||
+          aParticleType == *(G4Alpha::Alpha()) ||
+          aParticleType == *(G4OmegaMinus::OmegaMinus()) ||
+          aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));
 }
 
+
+void G4HadronElasticProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process handles the elastic scattering of hadrons by\n"
+          << "invoking one or more hadronic models and one or more hadronic\n"
+          << "cross sections.\n";
+}

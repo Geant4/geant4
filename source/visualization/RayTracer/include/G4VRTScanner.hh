@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRTScanner.hh,v 1.6 2010/06/14 14:33:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VRTScanner.hh,v 1.6 2010-06-14 14:33:34 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

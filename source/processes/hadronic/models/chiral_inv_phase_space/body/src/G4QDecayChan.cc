@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.28 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QDecayChan.cc,v 1.28 2009-02-23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -127,7 +127,6 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 
 // Standard output for QDecayChan
 std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
-//       =========================================
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 
   G4QPDGCodeVector VSH = rhs.GetVecOfSecHadrons();
@@ -142,8 +141,3 @@ std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
   lhs << "]";
   return lhs;
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2010/11/29 10:34:36 gcosmo Exp $
+$Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,24 +8,51 @@ $Id: README,v 1.16 2010/11/29 10:34:36 gcosmo Exp $
                          Examples module
                          ---------------
 
-This module collects three sets of user examples aimed to demonstrate to
+This module collects four sets of user examples aimed to demonstrate to
 the user how to make correct use of the GEANT4 toolkit by implementing
 in a correct way those user-classes which the user is supposed to
 customize in order to define his/her own simulation setup.
-One set of examples is oriented to "novice" users and covering all
+
+The "novice" set of examples is oriented to novice users and covering all
 possible general use-cases typical of an "application"-oriented kind of
-development. An "extended" set of examples require some additional
+development. As several examples in this "novice" set became too complicated, 
+a new "basic" set, covering the most typical use-cases of a Geant4 application
+with keeping simplicity and ease of use, is provided and is going to replace
+the "novice" set in future.
+
+An "extended" set of examples require some additional
 libraries besides of Geant4. This set covers some specific use cases
 for actual detector simulation. An "advanced" set of examples covers
 the use-cases typical of a "toolkit"-oriented kind of development,
 where real complete applications for different simulation studies are
 provided; may require additional third party products to be built.
+
 Most of the examples can be run both in interactive and batch mode, and 
 input macro files (*.in) and reference output files (*.out) are provided.
-Novice and most of the extended examples are considered part of the
+Basic, novice and most of the extended examples are considered part of the
 system testing suite for validation of the official releases of the
-GEANT4 toolkit. Novice examples and some of the extended and advanced
+GEANT4 toolkit. Basic, novice and some of the extended and advanced
 examples are also used as "acceptance"-tests for the release process.
+
+Basic examples
+ ExampleB1
+   - Simple geometry with a few solids 
+   - Scoring total dose in a selected volume user action classes
+   
+ ExampleB2
+   - Simplified tracker geometry with global constant magnetic field
+   - Scoring within tracker via G4 sensitive detector and hits
+   - Started from novice/N02 example
+   
+ ExampleB3
+   - Simplified calorimeter crystals 
+   - Radioactive source 
+   - Scoring within Crystals via G4 scorers
+
+ ExampleB4
+   - Simplified calorimeter with layers of two materials
+   - Scoring within layers in four ways: via user actions (a), via user own 
+     object (b), via G4 sensitive detector and hits (c) and via scorers (d)
 
 Novice level examples
  ExampleN01
@@ -56,6 +83,9 @@ Extended level examples
    - Histogramming through the AIDA interface
  biasing
    - Examples of event biasing, scoring and reverse-MC
+ common
+   - A set of common classes which can be reused in other examples demonstrating
+     just a particular feature  
  electromagnetic
    - Specific EM physics simulation with histogramming
  errorpropagation

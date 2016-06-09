@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.22 2010/09/23 10:27:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistedFaceted.cc,v 1.22 2010-09-23 10:27:38 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -111,13 +111,13 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
     pDytmp = fDy1 * ( fDx3 - fDx4 ) / ( fDx1 - fDx2 ) ;
     if ( std::fabs(pDytmp - fDy2) > kCarTolerance )
     {
-      G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): "
-             << GetName() << G4endl
-             << "        Not planar ! - " << G4endl 
-             << "fDy2 is " << fDy2 << " but should be "
-             << pDytmp << "." << G4endl ;
-      G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "InvalidSetup",
-                  FatalException, "Not planar surface in untwisted Trapezoid.");
+      std::ostringstream message;
+      message << "Not planar surface in untwisted Trapezoid: "
+              << GetName() << G4endl
+              << "fDy2 is " << fDy2 << " but should be "
+              << pDytmp << ".";
+      G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "GeomSolids0002",
+                  FatalErrorInArgument, message);
     }
   }
 
@@ -131,16 +131,14 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 
   if ( (  fDx1 == fDx2 && fDx3 != fDx4 ) || ( fDx1 != fDx2 && fDx3 == fDx4 ) )
   {
-    G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): "
-           << GetName() << G4endl
-           << "        Not planar ! - " << G4endl 
-           << "One endcap is rectengular, the other is a trapezoid." << G4endl
-           << "For planarity reasons they have to be rectangles or trapezoids "
-           << G4endl
-           << "on both sides."
-           << G4endl ;
-    G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "InvalidSetup",
-                FatalException, "Not planar surface in untwisted Trapezoid.");
+    std::ostringstream message;
+    message << "Not planar surface in untwisted Trapezoid: "
+            << GetName() << G4endl
+            << "One endcap is rectangular, the other is a trapezoid." << G4endl
+            << "For planarity reasons they have to be rectangles or trapezoids "
+            << "on both sides.";
+    G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   // twist angle
@@ -167,8 +165,8 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
          && ( fDx2  > 2*kCarTolerance)
          && ( fDx3  > 2*kCarTolerance)
          && ( fDx4  > 2*kCarTolerance)
-         && ( fDy1   > 2*kCarTolerance)
-         && ( fDy2   > 2*kCarTolerance)
+         && ( fDy1  > 2*kCarTolerance)
+         && ( fDy2  > 2*kCarTolerance)
          && ( fDz   > 2*kCarTolerance) 
          && ( std::fabs(fPhiTwist) > 2*kAngTolerance )
          && ( std::fabs(fPhiTwist) < pi/2 )
@@ -176,20 +174,18 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
          && ( fTheta < pi/2 && fTheta >= 0 ) )
       )
   {
-    G4cerr << "ERROR - G4VTwistedFaceted()::G4VTwistedFaceted(): "
-           << GetName() << G4endl
-           << "        Dimensions too small or too big! - " << G4endl 
-           << "fDx 1-4 = " << fDx1/cm << ", " << fDx2/cm << ", "
-           << fDx3/cm << ", " << fDx4/cm << " cm" << G4endl 
-           << "fDy 1-2 = " << fDy1/cm << ", " << fDy2/cm << ", "
-           << " cm" << G4endl 
-           << "fDz = " << fDz/cm << " cm" << G4endl 
-           << " twistangle " << fPhiTwist/deg << " deg" << G4endl 
-           << " phi,theta = " << fPhi/deg << ", "  << fTheta/deg
-           << " deg" << G4endl ;
+    std::ostringstream message;
+    message << "Invalid dimensions. Too small, or twist angle too big: "
+            << GetName() << G4endl
+            << "fDx 1-4 = " << fDx1/cm << ", " << fDx2/cm << ", "
+            << fDx3/cm << ", " << fDx4/cm << " cm" << G4endl 
+            << "fDy 1-2 = " << fDy1/cm << ", " << fDy2/cm << ", "
+            << " cm" << G4endl 
+            << "fDz = " << fDz/cm << " cm" << G4endl 
+            << " twistangle " << fPhiTwist/deg << " deg" << G4endl 
+            << " phi,theta = " << fPhi/deg << ", "  << fTheta/deg << " deg";
     G4Exception("G4TwistedTrap::G4VTwistedFaceted()",
-                "InvalidSetup", FatalException,
-                "Invalid dimensions. Too small, or twist angle too big.");
+                "GeomSolids0002", FatalErrorInArgument, message);
   }
   CreateSurfaces();
   fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2 );
@@ -287,7 +283,7 @@ void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
                                           const G4VPhysicalVolume* )
 {
   G4Exception("G4VTwistedFaceted::ComputeDimensions()",
-              "NotSupported", FatalException,
+              "GeomSolids0001", FatalException,
               "G4VTwistedFaceted does not support Parameterisation.");
 }
 
@@ -513,7 +509,7 @@ CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4VTwistedFaceted::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -745,11 +741,8 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector xx;
    G4ThreeVector bestxx;
    G4int i;
-   G4int besti = -1;
    for (i=0; i < 6 ; i++)
-     //for (i=1; i < 2 ; i++)
    {
-
 #ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
 #endif
@@ -762,7 +755,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
       {
          distance = tmpdistance;
          bestxx = xx;
-         besti = i;
       }
    }
 
@@ -836,7 +828,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
          surfaces[5] = fUpperEndcap;
 
          G4int i;
-         G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
          for (i=0; i< 6; i++)
@@ -846,7 +837,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
             {
                distance = tmpdistance;
                bestxx = xx;
-               besti = i;
             }
          }
          *tmpdist = distance;
@@ -855,7 +845,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
 
       default :
       {
-         G4Exception("G4VTwistedFaceted::DistanceToIn(p)", "InvalidCondition",
+         G4Exception("G4VTwistedFaceted::DistanceToIn(p)", "GeomSolids0003",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -1017,7 +1007,7 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
         G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
         G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
         G4cout.precision(oldprc) ;
-        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "Notification",
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "GeomSolids1002",
                     JustWarning, "Point p is outside !?" );
 #endif
         break;
@@ -1047,7 +1037,6 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
         surfaces[5] = fUpperEndcap;
 
         G4int i;
-        G4int besti = -1;
         G4ThreeVector xx;
         G4ThreeVector bestxx;
         for (i=0; i< 6; i++)
@@ -1057,7 +1046,6 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
           {
             distance = tmpdistance;
             bestxx = xx;
-            besti = i;
           }
         }
         *tmpdist = distance;
@@ -1068,7 +1056,7 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
       
       default :
       {
-        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "GeomSolids0003",
                     FatalException, "Unknown point location!");
         break;
       }
@@ -1086,6 +1074,7 @@ std::ostream& G4VTwistedFaceted::StreamInfo(std::ostream& os) const
   //
   // Stream object contents to an output stream
   //
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1108,6 +1097,7 @@ std::ostream& G4VTwistedFaceted::StreamInfo(std::ostream& os) const
      << "  Half length along x (upper endcap, top) = "    << fDx4/cm << " cm"
      << G4endl 
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }
@@ -1246,7 +1236,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
 
-  G4double  phi = CLHEP::RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double  phi = G4RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
   G4double u , umin, umax ;  //  variable for twisted surfaces
   G4double y  ;              //  variable for flat surface (top and bottom)
 
@@ -1271,14 +1261,14 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4cout << "Surface Upper   = " << a6 << G4endl ;
 #endif 
 
-  G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = G4RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
 
   if(chose < a1)
   {
 
     umin = fSide0->GetBoundaryMin(phi) ;
     umax = fSide0->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0deg surface
   }
@@ -1289,7 +1279,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
     
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
   }
@@ -1299,7 +1289,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
      return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
@@ -1309,7 +1299,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
@@ -1317,19 +1307,19 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
 
-    y = CLHEP::RandFlat::shoot(-fDy1,fDy1) ;
+    y = G4RandFlat::shoot(-fDy1,fDy1) ;
     umin = fLowerEndcap->GetBoundaryMin(y) ;
     umax = fLowerEndcap->GetBoundaryMax(y) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
   else {
 
-    y = CLHEP::RandFlat::shoot(-fDy2,fDy2) ;
+    y = G4RandFlat::shoot(-fDy2,fDy2) ;
     umin = fUpperEndcap->GetBoundaryMin(y) ;
     umax = fUpperEndcap->GetBoundaryMax(y) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fUpperEndcap->SurfacePoint(u,y,true) ; // point on upper endcap
 

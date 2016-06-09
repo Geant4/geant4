@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc,v 1.12 2010/11/11 00:14:50 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VRML1FileViewer.cc,v 1.12 2010-11-11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada

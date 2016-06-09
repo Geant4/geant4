@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNNToNDelta.cc,v 1.2 2006/06/29 20:39:54 gunter Exp $ //
+// $Id: G4ConcreteNNToNDelta.cc,v 1.2 2006-06-29 20:39:54 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"

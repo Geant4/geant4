@@ -1,4 +1,4 @@
-q$Id: History,v 1.171 2010/11/25 07:44:55 sincerti Exp $
+$Id: History,v 1.174 2011-01-05 15:41:39 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,383 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-11-2011, V.Ivanchenko               (phys-lists-V09-04-74)
+- fix in all EM builders - return back old method of definition of
+  high energy model per particle type, new method provoke 
+  enegry non-conservation in hadron calorimetery
+
+15-11-2011, G.Folger                   (phys-lists-V09-04-73)
+-  lists/*/HadronPhysicsFTF_BIC: fix bug wrongly deleting theCHIPSInelastic
+    and remove theCHIPSInelastic as data-member.
+
+12-11-2011, V.Ivanchenko               (phys-lists-V09-04-72)
+- G4HadronElasticXS - use G4BGGHadronElasticXS proton cross section
+
+10-11-2011, M.Karamitros               (phys-lists-V09-04-71)
+- Add comments into EmDNAPhysChem builder
+- Make transparent the use of ITStepMan from outside the builder
+
+10-11-2011, G.Folger                   (phys-lists-V09-04-70)
+- correct builders/source.cmake for new classes
+- G4DataQuestionaire: fix typo in new abla part; replace G4cout by 
+	G4ExceptionDescription
+- QGSP_BERT_ENV: add missing #include "G4QWarnStatus.hh"
+
+10-11-2011,M.Karamitros                (phys-lists-V09-04-69)
+- Correct another typo in the process name DNAElectronSolvatation
+
+10-11-2011, V.Ivanchenko               (phys-lists-V09-04-68)
+- G4PhysListFactory - fixed printout
+
+09-11-2011, V.Ivanchenko               (phys-lists-V09-04-67)
+- QBBC - cleanup of the code
+- G4HadronInelasticQBBC - use CHIPS x-sections for kaons
+
+09-11-2011, G.Folger                   (phys-lists-V09-04-66)
+- implement changes of supportlevel:
+   mark unsupported: QGSP_BERT_NOLEP, QGSP_BERT_TRV,
+   make supported:   Shielding
+   mark experimental:  CHIPS
+- EM variants (EMV, EMX, EMY) are now available only from 
+    physics list factory, with the exception of FTFP_BERT_EMV 
+	and QGSP_BIC_EMY. The following now raise G4Exception explaining
+	to the user what he needs to do:
+	  FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BERT_EMV
+- FTF_BIC: remove use of LEP for Kaons; this required new builders
+	  G4KaonBuilder, G4FTFBinaryPionBuilder,  G4FTFBinaryKaonBuilder,
+	  G4BinaryPionBuilder, G4BertiniKaonBuilder
+- G4DataQuestionaire: updated for use more datasets.
+- updated lists to ask for check datasets needed:
+	QGSP_BIC_HP, Shielding, QGSP_BERT_EMV, QGSP_INCL_ABLA
+
+08-11-2011, P.Gumplinger               (phys-lists-V09-04-65)
+- changes to G4OpticalPhysics and G4OpticalPhysicsMessenger
+  to avoid dynamic_cast
+
+08-11-2011, V.Ivanchenko               (phys-lists-V09-04-64)
+- Removed He3 from elastic builders, because cross section is 
+  still unavailable
+- G4PhysListFactory - implemented selection of EM builder via 
+  Physics List name
+- QBBC - cleanup printout and use default EM builder
+- G4HadronInelasticQBBC - use Bertini up tp 12 GeV, 
+    FTFP - down to 3 GeV
+
+04-11-2011, M.Karamitros               (phys-lists-V09-04-63)
+- Add History description
+     
+04-11-2011, M.Karamitros               (phys-lists-V09-04-62)
+- Add G4DNAEmPhysicsChemistry builder
+  
+04-11-2011, P.Gumplinger               (phys-lists-V09-04-60)
+- change static_cast to dynamic_cast in G4OpticalPhysicsMessenger
+  this is a bug fix - of an old bug!
+
+04-11-2011, T.Koi                      (phys-lists-V09-04-59)
+-Fix Xcode warning 
+	builders/include/G4NeutronLENDBuilder.hh
+	builders/src/G4NeutronLENDBuilder.cc
+
+03-10-2011, V.Ivanchenko               (phys-lists-V09-04-58)
+- Updated mu+-, pi+-, kaon+-, configuration reusing the same
+  bremsstrahlung and pair production models for particle and 
+  anti-particle; by this some memory is saved and expected reduction
+  of initialisation time
+
+02-11-2011, P.Gumplinger               (phys-lists-V09-04-57)
+- Add class G4StepLimiterBuilder to /builders
+
+01-11-2011, P.Gumplinger               (phys-lists-V09-04-56)
+- Add SetFiniteRiseTime to G4OpticalPhysics and
+  G4OpticalPhysicsMessenger
+
+01-11-2011, S.Incerti                  (phys-lists-V09-04-55)
+- Further extended G4EmDNAPhysics builder to the handling of HZE
+- to be used on top of tag emdna-V09-04-36
+
+27-10-2011, P.Kaitaniemi               (phys-lists-V09-04-54)
+- Added new physics list QGSP_INCLXX and assosiated builders
+- Uses INLC++ for protons, neutrons and pions in the energy
+  range 0 - 3 GeV
+- This tag requires hadr-inclxx-V09-04-03 (or later)
+
+21-10-2011, S.Incerti                  (phys-lists-V09-04-53)
+- Extended G4EmDNAPhysics builder to the handling of HZE
+- to be used on top of tag emdna-V09-04-25
+
+21-10-2011, V.Ivanchenko               (phys-lists-V09-04-52)
+- G4EmStandardPhysics_option1 - use UrbanMsc95 
+- G4EmStandardPhysics_option2 - copy of Opt1 with UrbanMsc93
+- G4HadronElasticBuilder - He3 x-section from the new AntiNuclei class
+                           to avoid crash in GHEISHA x-sections  
+- G4HadronDElasticBuilder - x-sections from CHIPS, Diffuse model 
+- G4HadronHElasticBuilder - alternative x-sections and models  
+
+18-10-2011, A. Ribon            (phys-lists-V09-04-51)
+- Fixed small mistake in builders/sources.cmake.
+
+18-10-2011, A.Ribon             (phys-lists-V09-04-50)
+- Changed FTFP_BERT_TRV to use Fritiof for the nuclear capture of
+  anti-protons at rest. Introduced the class G4QandFTFStoppingPhysics.
+
+14-10-2011, P.Gumplinger        (phys-lists-V09-04-49)
+- modify G4OpticalPhysicsMessenger so that: /optics_engine/setOpProcessVerbose
+  and /optics_engine/setTrackSecondariesFirst work in G4State_PreInit
+  required changing the signature of: G4OpticalPhysics::SetProcessVerbose
+
+05-10-2011, G.Cosmo             (phys-lists-V09-04-48)
+- Added missing header in builders/sources.cmake introduced in tag -45.
+
+04-10-2011, P.Gumplinger        (phys-lists-V09-04-47)
+- builders: G4OpticalPhysicsMessenger modified to allow G4State_PreInit
+            for most commands
+
+03-10-2011, T.Koi               (phys-lists-V09-04-46)
+- Enable to change the default data library of LEND
+	builders/include/G4HadronElasticPhysicsLEND.hh
+	builders/include/G4NeutronLENDBuilder.hh
+	builders/src/G4HadronElasticPhysicsLEND.cc
+	builders/src/G4NeutronLENDBuilder.cc
+	lists/include/Shielding.icc
+	lists/include/HadronPhysicsShielding.hh
+	lists/src/HadronPhysicsShielding.cc
+
+30-09-2011, P.Gumplinger               (phys-lists-V09-04-45)
+- builders: G4OpticalPhysics, G4OpticalPhysicsMessenger modified
+            G4OpticalProcessIndex class added
+            fix bug report #1216
+
+14-09-2011, V.Ivanchenko               (phys-lists-V09-04-44)
+- G4EmStandardPhysics_option1,2 - pi+-, kaon+-, proton, anti_proton 
+      use WentzelVI model of multiple scattering
+- G4EmStandardPhysics_option2 - e- use Livermore bremsstrahlung 
+      below 100 MeV
+
+05-09-2011, A.M., M.K., S.I.         (phys-lists-V09-04-43)
+- Updated sources.cmake in builders for new dna architecture
+
+31-08-2011, A.M., M.K., S.I.         (phys-lists-V09-04-42)
+- Updated builders/GNUmakefile and builders/sources.cmake 
+for new DNA architecture. Must be applied on top of tag emdna-V09-04-19
+
+24-08-2011, S. Incerti               (phys-lists-V09-04-41)
+- G4EmDNAPhysics - changed elastic scattering model
+
+22-08-2011, V.Ivanchenko               (phys-lists-V09-04-40)
+- G4ChargeExchangePhysics - removed obsolete header
+
+01-08-2011, G.Folger                      (phys-lists-V09-04-39)
+- In HadronPhysicsFTFP_BERT_TRV, change overlap BERT/FTFP to be 
+   from 3 to 12 GeV, affecting FTFP_BERT_TRV.
+
+14/20-07-2011, G.Folger                   (phys-lists-V09-04-38)
+- Add in lists class PhysListUtil. Contains a single function
+     FindInelasticProcess(), up to now implemeted multiple times 
+- HadronPhysicsFTFP_BERT_TRV: update to use FTF for antibarions and 
+     Hyperons, and to use CHIPS cross-sections for Hyperons and Kaons.
+     This make it identical to HadronPhysicsFTFP_BERT, except the 
+     transition energy.     
+- HadronPhysicsQGSP_FTFP_BERT:update to use FTFP for hyperons 
+    using G4HyperonFTFPBuilder
+- HadronPhysicsFTF_BIC: No longer using LEP for "misc" particles, 
+   but use FTFP for:
+    - Antibarions using G4FTFPAntiBarionBuilder
+    - Hyperons using G4HyperonFTFPBuilder
+   and switch to CHIPS cross-section for kaons.
+
+13-07-2011, V.Ivanchenko               (phys-lists-V09-04-37)
+- G4HadronDElasticPhysics - is done coherently with the 
+  modifications in G4DiffuseElastic class 
+
+13-07-2011, V.Ivanchenko               (phys-lists-V09-04-36)
+- Fixed typo in previous tag
+
+08-07-2011, V.Ivanchenko               (phys-lists-V09-04-35)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1
+- G4EmStandardPhysics_option2, G4EmStandardPhysics_option3,
+- G4EmLivermorePhysics, G4EmPenelopePhysics - set msc polar
+  angle limit from 0.2 to pi (reduction of number of steps for
+  low-energy muons/hadrons)
+
+21-06-2011, B.Morgan                   (phys-lists-V09-04-34)
+- builders/CMakeLists.txt - removed install of OrderingParameterTable
+- builders/sources.cmake - Added include of EXPAT headers for lend.
+- lists/sources.cmake - Added include of EXPAT headers for lend.
+
+20-06-2011, V.Ivanchenko               (phys-lists-V09-04-33)
+- G4EmStandardPhysics_option2 - use relativistic bremsstrahlung for
+    all energies (EM shower shape issue)
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, 
+  G4EmPenelopePhysics - use UrbanMscModel95 for e+-
+
+18-06-2011, B.Morgan                   (phys-lists-V09-04-32)
+- builders/CMakeLists.txt - added install of OrderingParameterTable.
+
+14-06-2011, V.Ivanchenko               (phys-lists-V09-04-31)
+- G4HadronElasticPhysics - added LHEP model for anti-nuclei below 100 MeV  
+
+13-06-2011, G.Folger                   (phys-lists-V09-04-30)
+-  fix several small bugs in G4HyperonFTFPBuilder.cc
+
+10-06-2011, G.Folger                   (phys-lists-V09-04-29)
+Make use of new features of FTF in FTFP_BERT, and (less) in QGSP_FTFP_BERT:
+- Add Builder for Hyperons using FTF and Bertini as models, 
+   G4HyperonFTFPBuilder.{hh,cc}
+- G4FTFPAntiBarionBuilder.cc: delete cross-section objects
+- HadronPhysicsFTFP_BERT: 
+    + use G4HyperonFTFPBuilder, replacing G4MiscCHIPSBuilder
+    + use/add G4FTFPAntiBarionBuilder for anti barions, 
+- FTFP_BERT.icc and QGSP_FTFP_BERT.icc uses new IonFTFPBinaryPhysics, 
+    replacing LHEP IonPhysics and IonBinaryPhysics, resp.
+    
+- update builders/sources.cmake for new files.    
+
+
+10-06-2011, V.Ivanchenko               (phys-lists-V09-04-28)  
+- G4IonFTFPBinaryCascadePhysics - set transition 2-4 GeV
+- G4HadronInelasticQBBC - added destruction of anti-nuclei cross
+    section component
+- G4DecayPhysics, G4RadioactiveDecayPhysics - use G4PhysicsListHelper
+
+09-06-2011, L.Pandola
+- G4EmPenelopePhysics - added activation of deexcitation
+
+09-06-2011, P. Kaitaniemi              (phys-lists-V09-04-27)
+- QGSP_INCL_ABLA: Enabled INCL/ABLA treatment for GenericIons in
+	G4IonInclAblaPhysics builder
+
+08-05-2011, V.Ivanchenko               (phys-lists-V09-04-26)
+- Fixed GNUmakefile and source.cmake for LEND
+
+07-05-2011, V.Ivanchenko               (phys-lists-V09-04-25)
+- Added G4BuilderType.hh file with enumerator of builder type
+- For all EM and Ion builders added type
+
+06-05-2011, V.Ivanchenko               (phys-lists-V09-04-24)
+- Updated GNUmakefile and source.cmake for LEND
+
+04-05-2011, V.Ivanchenko               (phys-lists-V09-04-23)
+- G4HadronElasticPhysics - use G4AntiNuclElastic model and 
+   G4ComponentAntiNuclNuclearXS 
+- G4HadronInelasticQBBC - use FTFP for all anti-baryons,
+   energy interval FTFP above 2 GeV, Bertini - below 6 GeV
+- G4HadronElasticPhysicsXS, G4HadronElasticPhysicsHP, 
+  G4HadronElasticPhysicsLEND - use G4HadronElasticPhysics for all 
+  particles and modified only neutron models and cross sections
+- G4PhysListFactory - added "ShieldingLEND"
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmDNAPhysics -
+    added deexcitation   
+
+02-06-2011, T.Koi                      
+- Add LEND builders
+- Enable to use LEND model and cross section 
+  for low energy neutron in Shielding physics list
+  (Default is still neutron HP package)
+- Add G4RadioactiveDecayPhysics to Shielding physics list
+
+20-05-2011, S.Incerti                  (phys-lists-V09-04-22)
+- following Vladimir, EM low energy + DNA builders are migrated to the 
+  new approach based on G4PhysicsListHelper 
+  - no integer numbers to identify process order is needed anymore
+
+19-05-2011, V.Ivanchenko               (phys-lists-V09-04-21)
+- EM standard builders are migrated to the new approach based on
+  G4PhysicsListHelper - no integer numbers to identify process
+  order is needed anymore
+
+03-05-2011, D.H. Wright                (phys-lists-V09-04-20)
+- modify builder G4EmExtraPhysics so that it uses new muon-nuclear
+  model and process
+
+03-05-2011, H.Kurashige                (phys-lists-V09-04-19)
+- Add OrderingParameterTable for G4PhysicsListHelper
+
+27-04-2011, V.Ivanchenko               (phys-lists-V09-04-18)
+- G4HadronInelasticQBBC - comment out QGSP model to avoid crash due double
+  model definition for the same energy range (bug was introduced in -16)
+
+26-04-2011,G.Folger                    (phys-lists-V09-04-17)
+- In QGSP_FTFP_BERT use G4IonBinaryCascadePhysics inplace of G4IonPhysics 
+
+21-04-2011, V.Ivanchenko                (phys-lists-V09-04-16)
+- G4IonFTFPBinaryCascadePhysics - fixed run time bugs 
+
+21-04-2011, V.Ivanchenko                (phys-lists-V09-04-15)
+- G4EmStandardPhysics_option3 - activate Rayleigh Scattering
+- G4IonFTFPBinaryCascadePhysics - added new builder
+- QBBC - use new G4IonFTFPBinaryCascadePhysics
+- G4HadronElasticPhysics93 is removed as obsolete
+- G4HadronQElasticPhysics substitute G4UHadronElasticProcess by
+  G4WHadronElasticProcess
+- G4QElasticPhysics - removed unused header of G4UHadronElasticProcess
+
+28-03-2011, V.Ivanchenko                (phys-lists-V09-04-14)
+- G4EmStandardPhysics_option3 - instead of deactivation of
+  Rayleigh Scattering used G4DummyModel
+
+28-03-2011, G.Folger                    (phys-lists-V09-04-13)
+- Fix coverity issues in many files; most were uninitialised data
+    members for processes/models. LBE not fixed, requires bigger 
+    rework to avoid leaks for processes at program end.
+- Correct inclusion of G4UrbanMscModel95    
+
+24-03-2011, V.Ivanchenko                (phys-lists-V09-04-12)
+- G4EmStandardPhysics_option3, G4EmStandardPhysics_option2 - use
+    updated G4UrbanMscModel95 model for e+-
+
+23-03-2011, V.Ivanchenko                (phys-lists-V09-04-11)
+- G4EmStandardPhysics_option3 - experimental change of of options:
+      - reduced low-energy limit to 10 eV, 
+      - reduced StepFunction parameters per particle type, 
+      - added G4RayleighScattering inactive by default.
+
+23-03-2011, G.Cosmo                     (phys-lists-V09-04-10)
+- Added missing source file in sources.cmake builders list.
+
+17-03-2011, G.Cosmo                     (phys-lists-V09-04-09)
+- Added electromagnetic/dna module dependencies.
+- Coworks with tags "processes-V09-04-00" and "config-V09-04-01"
+
+17-03-2011, V.Ivanchenko                (phys-lists-V09-04-08)
+- G4HadronElasticPhysicsHP, G4HadronElasticPhysicsXS - added
+    anti_nuclei, reshape the code as in G4HadronElasticPhysics
+- G4HadronElasticPhysicsLHEP - use G4WHadronElasticProcess which
+    allowing not to kill primary after scattering
+
+10-03-2011, G.Folger                    (phys-lists-V09-04-07)
+- Use default energy limit for antibaryons, i.e. up o 100 TeV
+
+10-03-2011, G.Folger                    (phys-lists-V09-04-06)
+- Add antiTriton to antibarions
+
+26-02-2011, G.Folger                    (phys-lists-V09-04-05)
+- correct energy limit for antibarions
+
+24-02-2011, V.Ivanchenko                (phys-lists-V09-04-04)
+- G4HadronElasticPhysics - added light anti-nuclei
+- G4FTFPAntiBarionBuilder - added cross section to light anti-nuclei
+
+23-02-2011, J.Apostolakis            
+- Added builders for anti-deuteron, anti-triton, anti-He and anti-Alpha
+- Revised QGSP_FTFP_BERT to utilise the new FTF/P processes
+   changing them for anti-proton, anti-neutron 
+   adding them also for the above list of light anti-ions (d,t,He3,alpha).
+
+16-02-2011, S.Incerti                    (phys-lists-V09-04-03)
+- Added process names in G4EmDNAPhysics.cc
+
+14-02-2011, G.Folger             (phys-lists-V09-04-02 and phys-lists-V09-03-45)
+- Shielding PL corrected .icc file to include correct G4HadronElasticPhysicsHP
+
+05-01-2011, G.Folger             (phys-lists-V09-04-01 and phys-lists-V09-03-44)
+- QGSP_BERT_NOLEP and QGSP_QEL were missing the include 
+   for G4HadronQElasticPhysics.hh, but included G4HadronElasticPhysics 
+
+19-12-2010, V.Ivanchenko                (phys-lists-V09-04-00)
+- G4EmStandardPhysics_option1 - fixed missing line defing polar
+  angle limit (in the release single scattering of muons providing
+  significant CPU penalty) 
 
 25-11-2010, S.Incerti                   (phys-lists-V09-03-43)
 - changed default elastic model in G4EmDNAPhysics.cc

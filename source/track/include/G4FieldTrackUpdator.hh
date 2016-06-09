@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrackUpdator.hh,v 1.2 2006/12/13 15:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FieldTrackUpdator.hh,v 1.2 2006-12-13 15:49:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   M. Asai - first implementation Apr/28/2006
 //

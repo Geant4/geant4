@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.22 2010/09/24 21:09:01 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4InuclEvaporation.cc,v 1.22 2010-09-24 21:09:01 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
@@ -39,6 +39,7 @@
 //		G4InuclParticle, no switch-block required.  Fix scaling factors.
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20100924  M. Kelsey -- Migrate to "OutgoingNuclei" names in CollisionOutput 
+// 20110728  M. Kelsey -- Fix Coverity #28776, remove return after throw.
 
 #include "G4InuclEvaporation.hh"
 #include <numeric>
@@ -79,7 +80,6 @@ G4InuclEvaporation::~G4InuclEvaporation() {
 
 const G4InuclEvaporation & G4InuclEvaporation::operator=(const G4InuclEvaporation &) {
   throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::operator= meant to not be accessable.");
-  return *this;
 }
 
 

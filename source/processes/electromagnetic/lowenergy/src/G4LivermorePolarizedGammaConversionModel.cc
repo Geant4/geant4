@@ -23,6 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LivermorePolarizedGammaConversionModel.hh,v 1.2 2010-11-23 16:42:15 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Authors: G.Depaola & F.Longo
+//
+//
 
 #include "G4LivermorePolarizedGammaConversionModel.hh"
 
@@ -32,17 +38,19 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
+G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
+   const G4ParticleDefinition*, const G4String& nam)
   :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
 {
-  lowEnergyLimit = 1.0220000 * MeV; 
+  lowEnergyLimit = 2*electron_mass_c2;
   highEnergyLimit = 100 * GeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   smallEnergy = 2.*MeV;
 
-
+  Phi=0.;
+  Psi=0.;
+  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -51,24 +59,23 @@ G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionMod
   // 3 = calculation of cross sections, file openings, samping of atoms
   // 4 = entering in methods
 
-  G4cout << "Livermore Polarized GammaConversion is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "Livermore Polarized GammaConversion is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / keV << " keV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
+  }
 
   crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Initialise(0,1.0220*MeV,100.*GeV,400);
-
-
+  crossSectionHandler->Initialise(0,lowEnergyLimit,highEnergyLimit,400);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionModel()
 {  
-  //  if (meanFreePathTable)   delete meanFreePathTable;
-  if (crossSectionHandler) delete crossSectionHandler;
+  delete crossSectionHandler;
 }
 
 
@@ -87,21 +94,22 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
     delete crossSectionHandler;
   }
 
-
   // Energy limits
-  
+  /*
+  // V.Ivanchenko: this was meanless check  
   if (LowEnergyLimit() < lowEnergyLimit)
     {
       G4cout << "G4LivermorePolarizedGammaConversionModel: low energy limit increased from " << 
 	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
+      //      SetLowEnergyLimit(lowEnergyLimit);
     }
-
+  */
   if (HighEnergyLimit() > highEnergyLimit)
     {
       G4cout << "G4LivermorePolarizedGammaConversionModel: high energy limit decreased from " << 
 	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
+      // V.Ivanchenko: this is forbidden 
+     // SetHighEnergyLimit(highEnergyLimit);
     }
 
   // Reading of data files - all materials are read
@@ -111,53 +119,53 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
   G4String crossSectionFile = "pair/pp-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
-  //  meanFreePathTable = 0;
-  //meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
-
-
   //
-  if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for Livermore Polarized GammaConversion model" << G4endl;
-
+  if (verboseLevel > 2) {
+    G4cout << "Loaded cross section files for Livermore Polarized GammaConversion model" 
+	   << G4endl;
+  }
   InitialiseElementSelectors(particle,cuts);
 
-  G4cout << "Livermore Polarized GammaConversion model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "Livermore Polarized GammaConversion model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / keV << " keV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
-  //
-    
-  if(isInitialised) return;
-
-  fParticleChange = GetParticleChangeForGamma();
-    
-  isInitialised = true;
+  //    
+  if(!isInitialised) { 
+    isInitialised = true;
+    fParticleChange = GetParticleChangeForGamma();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
-                                             G4double GammaEnergy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
+				       G4double GammaEnergy,
+				       G4double Z, G4double,
+				       G4double, G4double)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePolarizedGammaConversionModel" << G4endl;
-
+  if (verboseLevel > 3) {
+    G4cout << "G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom()" 
+	   << G4endl;
+  }
+  if(Z < 0.9 || GammaEnergy <= lowEnergyLimit) { return 0.0; }
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-							       const G4MaterialCutsCouple* couple,
-							       const G4DynamicParticle* aDynamicGamma,
-							       G4double,
-							       G4double)
+void 
+G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+							    const G4MaterialCutsCouple* couple,
+							    const G4DynamicParticle* aDynamicGamma,
+							    G4double,
+							    G4double)
 {
 
   // Fluorescence generated according to:
@@ -220,16 +228,21 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
       const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
       const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
+      /*
       if (element == 0)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - element = 0" << G4endl;
         }
+      */
+      
       G4IonisParamElm* ionisation = element->GetIonisation();
+      
+      /*
       if (ionisation == 0)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - ionisation = 0" << G4endl;
         }
-
+      */
 
 
       // Extract Coulomb factor for this Element
@@ -281,7 +294,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   G4double positronTotEnergy;
 
 
-  if (CLHEP::RandBit::shootBit())
+  if (G4int(2*G4UniformRand()))  
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;
@@ -296,6 +309,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
 
+/*
   G4double u;
   const G4double a1 = 0.625;
   G4double a2 = 3. * a1;
@@ -308,6 +322,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
     {
       u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
+*/
 
   G4double Ene = electronTotEnergy/electron_mass_c2; // Normalized energy
 
@@ -520,8 +535,10 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
   G4double c1 = 0.;
   c1 = Glor(pl, xe);
 
+/*
   G4double xm = 0.;
   xm = Flor(pl,pl[3])*Glor(pl,pl[3]);
+*/
 
   G4double r1,r2,r3;
   G4double xco=0.;
@@ -606,10 +623,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
       xe0 = Encu(p0l, p0t, xi);
       //G4cout << "ENCU1 "<< xe0 << G4endl;
       xepm = Encu(ppml, ppmt, xi);
-
-
       //G4cout << "ENCU2 "<< xepm << G4endl;
-
     }
   else
     {
@@ -633,8 +647,6 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
       ppml[3] = xcp;
 
     }
-
-
 
   G4double a,b=0.;
 
@@ -718,30 +730,29 @@ G4double G4LivermorePolarizedGammaConversionModel::Fln
 
 
 G4double G4LivermorePolarizedGammaConversionModel::Encu
-(G4double* p_p1, G4double* p_p2, G4double x)
+(G4double* p_p1, G4double* p_p2, G4double x0)
 {
-  G4double value=0.;
   G4int i=0;
   G4double fx = 1.;
+  G4double x = x0;
+  const G4double xmax = 3.0;
 
-  do
+  for(i=0; i<100; ++i)
     {
-      x -= (Flor(p_p1, x)*Glor(p_p1,x) - Ftan(p_p2, x))/
-        (Fdlor(p_p1,x) - Fdtan(p_p2,x));
-      fx = Flor(p_p1,x)*Glor(p_p1,x) - Ftan(p_p2, x);
-      i += 1;
-      //G4cout << abs(fx) << " " << i << " " << x << "dentro ENCU " << G4endl;
-    } while( (i<100) && (abs(fx) > 1e-6)) ;
+      fx = (Flor(p_p1,x)*Glor(p_p1,x) - Ftan(p_p2, x))/
+	(Fdlor(p_p1,x) - Fdtan(p_p2,x));
+      x -= fx;
+      if(x > xmax) { return xmax; }
+      //      x -= (Flor(p_p1, x)*Glor(p_p1,x) - Ftan(p_p2, x))/
+      //  (Fdlor(p_p1,x) - Fdtan(p_p2,x));
+      // fx = Flor(p_p1,x)*Glor(p_p1,x) - Ftan(p_p2, x);
+      // G4cout << std::fabs(fx) << " " << i << " " << x << "dentro ENCU " << G4endl;
+      if(std::fabs(fx) <= x*1.0e-6) { break; }
+    } 
 
-  if (i>100||x>pi) x = 3.0;
-  value = x;
-
-  if (value<0.) value=0.;
-
-  return value;
+  if(x < 0.0) { x = 0.0; }
+  return x;
 }
-
-
 
 
 G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double x)
@@ -756,6 +767,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double
   return value;
 }
 
+
 G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double x)
 {
   G4double value =0.;
@@ -767,6 +779,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double
   value = (y0 *pi*(w*w +  4.*(x-xc)*(x-xc)) + 2.*A*w);
   return value;
 }
+
 
 G4double G4LivermorePolarizedGammaConversionModel::Fdlor(G4double* p_p1, G4double x)
 {
@@ -810,6 +823,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvlor(G4double* p_p1, G4dou
   return value;
 }
 
+
 G4double G4LivermorePolarizedGammaConversionModel::Ftan(G4double* p_p1, G4double x)
 {
   G4double value =0.;
@@ -842,6 +856,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Finttan(G4double* p_p1, G4dou
   value = a*log(b-x);
   return value;
 }
+
 
 G4double G4LivermorePolarizedGammaConversionModel::Finvtan(G4double* p_p1, G4double cnor, G4double r)
 {

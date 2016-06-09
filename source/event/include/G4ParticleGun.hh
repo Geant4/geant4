@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.hh,v 1.11 2007/11/07 17:13:19 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleGun.hh,v 1.11 2007-11-07 17:13:19 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4ParticleGun_h
@@ -68,7 +68,7 @@ class G4ParticleGun:public G4VPrimaryGenerator
      G4ParticleGun(G4ParticleDefinition * particleDef, 
                    G4int numberofparticles = 1);
      // costructors. "numberofparticles" is number of particles to be shoot at one invokation
-     // of GeneratePrimaryVertex() method. All paricles are shoot with the same physical
+     // of GeneratePrimaryVertex() method. All paricles are shot with the same physical
      // quantities.
 
   public:
@@ -93,30 +93,30 @@ class G4ParticleGun:public G4VPrimaryGenerator
      void SetParticleEnergy(G4double aKineticEnergy);
      void SetParticleMomentum(G4double aMomentum);
      void SetParticleMomentum(G4ParticleMomentum aMomentum);
-     inline void SetParticleMomentumDirection
+     void SetParticleMomentumDirection
                  (G4ParticleMomentum aMomentumDirection)
      { particle_momentum_direction =  aMomentumDirection.unit(); }
-     inline void SetParticleCharge(G4double aCharge)
+     void SetParticleCharge(G4double aCharge)
      { particle_charge = aCharge; }
-     inline void SetParticlePolarization(G4ThreeVector aVal)
+     void SetParticlePolarization(G4ThreeVector aVal)
      { particle_polarization = aVal; }
-     inline void SetNumberOfParticles(G4int i)
+     void SetNumberOfParticles(G4int i)
      { NumberOfParticlesToBeGenerated = i; }
 
   public:
-     inline G4ParticleDefinition* GetParticleDefinition()
+     G4ParticleDefinition* GetParticleDefinition() const
      { return particle_definition; }
-     inline G4ParticleMomentum GetParticleMomentumDirection()
+     G4ParticleMomentum GetParticleMomentumDirection() const
      { return particle_momentum_direction; }
-     inline G4double GetParticleEnergy()
+     G4double GetParticleEnergy() const
      { return particle_energy; }
-     inline G4double GetParticleMomentum()
+     G4double GetParticleMomentum() const
      { return particle_momentum; }
-     inline G4double GetParticleCharge()
+     G4double GetParticleCharge() const
      { return particle_charge; }
-     inline G4ThreeVector GetParticlePolarization()
+     G4ThreeVector GetParticlePolarization() const
      { return particle_polarization; }
-     inline G4int GetNumberOfParticles()
+     G4int GetNumberOfParticles() const
      { return NumberOfParticlesToBeGenerated; }
 
   protected:  

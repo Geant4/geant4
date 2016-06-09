@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.20 2008/11/20 20:34:50 vnivanch Exp $
+# $Id: TestEm7.in,v 1.20 2008-11-20 20:34:50 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -11,12 +11,15 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat G4_WATER
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
+/testem/det/tallyNumber 4
+/testem/det/tallyDefinition 1 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 2 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 3 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 4 G4_WATER 2. 2. 2. mm
+/testem/det/tallyPosition 1 -9.9 0. 0. cm
+/testem/det/tallyPosition 2 -5.  0. 0. cm
+/testem/det/tallyPosition 3  0.  0. 0. cm
+/testem/det/tallyPosition 4  5.  0. 0. cm
 #
 /testem/phys/addPhysics   emstandard_opt3
 #
@@ -27,35 +30,46 @@
 # beam size
 /testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 1000
 /testem/stepMax 1 mm
+#
+/testem/event/printModulo 1000
 #
 /run/beamOn 10000
 #
-/testem/stepMax 100 mm
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3.5 GeV
+#
+/testem/stepMax 100 mm
+#
 /run/beamOn 1000
 #
 /testem/det/setMat G4_Cu
-/testem/det/tallyMat G4_Cu
+/testem/det/tallyNumber 0 
 /testem/det/update
+#
 /gun/particle kaon+
 /gun/energy 100 MeV
 /run/beamOn 1000
 #
 /testem/det/setMat TechVacuum
-/testem/det/tallyMat TechVacuum
 /testem/det/update
+#
 /gun/particle alpha
 /gun/energy 0.265 keV
 /run/beamOn 100
 #
 /testem/det/setMat G4_WATER
-/testem/det/tallyMat G4_WATER
 /testem/det/update
+#
 /gun/particle alpha
 /gun/energy 100 MeV
 /run/beamOn 100
+#
+/testem/det/setMat Water_1.05
+/gun/particle proton
+/gun/energy 160 MeV
+/testem/stepMax 1 mm
+/tracking/verbose 0
+/run/beamOn 1000
 #

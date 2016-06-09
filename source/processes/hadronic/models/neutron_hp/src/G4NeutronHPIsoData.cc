@@ -32,13 +32,15 @@
 #include "G4NeutronHPIsoData.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
+  //G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
+  G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName, G4String aFSType)
   {
     theChannelData = 0;
     G4double abundance = abun/100.;
     G4String filename;
     G4bool result = true;
-    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
+    //G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
+    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, M, dirName, aFSType, result);
     filename = aFile.GetName();
 //    if(filename=="") return false;
     std::ifstream theChannel(filename);
@@ -70,16 +72,19 @@
     return result;
   }
   
-  void G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this Isotope
+  //void G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this Isotope
+  void G4NeutronHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun) //fill PhysicsVector for this Isotope
   {
     G4String dirName;
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     G4String baseName = getenv("G4NEUTRONHPDATA");
     dirName = baseName+"/Fission";
-    if(Z>89) 
+    //if(Z>89) 
+    if(Z>87) //TK Modifed for ENDF VII.0 
     {
-      Init(A, Z, abun, dirName, "/CrossSection/");
+      //Init(A, Z, abun, dirName, "/CrossSection/");
+      Init(A, Z, M, abun, dirName, "/CrossSection");
     }
     else
     {
@@ -88,15 +93,18 @@
     theFissionData = theChannelData;
     theChannelData = 0; // fast fix for double delete; revisit later. @@@@@@@
     dirName = baseName+"/Capture";
-    Init(A, Z, abun, dirName, "/CrossSection/");
+    //Init(A, Z, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theCaptureData = theChannelData;
     theChannelData = 0;
     dirName = baseName+"/Elastic";
-    Init(A, Z, abun, dirName, "/CrossSection/");
+    //Init(A, Z, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theElasticData = theChannelData;
     theChannelData = 0;
     dirName = baseName+"/Inelastic";
-    Init(A, Z, abun, dirName, "/CrossSection/");
+    //Init(A, Z, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theInelasticData = theChannelData;
     theChannelData = 0;
     

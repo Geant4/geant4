@@ -23,14 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// GEANT4 tag $Name: geant4-09-04 $
-//
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
-//
 
 #ifndef G4ElectroNuclearCrossSection_h
 #define G4ElectroNuclearCrossSection_h 1
@@ -49,41 +46,25 @@ class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4ElectroNuclearCrossSection();
+  G4ElectroNuclearCrossSection(const G4String& name = "ElectroNuclearXS");
   virtual ~G4ElectroNuclearCrossSection();
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
-  {
-    return IsIsoApplicable(aParticle, 0, 0);
-  }
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-  G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                         G4int /*ZZ*/, G4int /*AA*/)
-  {
-    G4bool result = false;
-    if (aParticle->GetDefinition() == G4Electron::ElectronDefinition())
-       result = true;
-    if (aParticle->GetDefinition() == G4Positron::PositronDefinition())
-       result = true;
-    return result;
-  }
+  virtual G4bool
+  IsIsoApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,
+                  G4int /*A*/, const G4Element*, const G4Material*);
 
-
-  G4double GetCrossSection(const G4DynamicParticle* aParticle, 
-                           const G4Element* anElement, G4double T=0.);
-
-  G4double GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                                G4int ZZ, G4int AA, G4double T=0.);
+  virtual G4double
+  GetIsoCrossSection(const G4DynamicParticle* aParticle, 
+		     G4int /*Z*/, G4int /*A*/, 
+		     const G4Isotope*, const G4Element*, const G4Material*);
 
   G4double GetEquivalentPhotonEnergy();
 
   G4double GetVirtualFactor(G4double nu, G4double Q2);
 
   G4double GetEquivalentPhotonQ2(G4double nu);
-
-  void BuildPhysicsTable(const G4ParticleDefinition&) {}
-
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
 private:
   G4int    GetFunctions(G4double a, G4double* x, G4double* y, G4double* z);

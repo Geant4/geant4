@@ -1,5 +1,5 @@
 
-$Id: History,v 1.67 2010/10/20 07:31:58 gcosmo Exp $
+$Id: History,v 1.67 2010-10-20 07:31:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ August 25, 2011  G.Cosmo                 geom-bool-V09-04-03
+  - Corrected printout stream precision settings.
+
+ August 25, 2011  G.Cosmo                 geom-bool-V09-04-02
+  - Migrated to new G4Exception scheme for warnings and errors.
+  - Defined scheme for warnings/errors coding:
+    + 1xxx for warnings, 0xxx for errors.
+    Code numbering:
+    + 0001: not supported or implemented features;
+    + 0002: invalid setup/construct;
+    + 0003: invalid run condition;
+    + 1001: incorrect setup; automatically adapted.
+    + 1002: notification.
+
+ July 22, 2011  T.Nikitina                geom-bool-V09-04-01
+  - Corrected protection in G4SubtractionSolid::DistanceToIn(p,v) introduced
+    in previous tag and relaxed to not cause event abortion.
+
+ May 27, 2011  T.Nikitina                 geom-bool-V09-04-00
+  - Added protection for potential cases of infinite loop in DistanceToIn(p,v)
+    and related error message with event abortion.
 
  October 19, 2010  G.Cosmo                geom-bool-V09-03-03
   - Implemented Clone() virtual method for all solids, returning a pointer

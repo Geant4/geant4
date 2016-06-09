@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.6 2010/10/08 10:01:35 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.6 2010-10-08 10:01:35 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,7 +56,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
 { 
  G4double flagParticle=0.;
  G4double flagProcess=0.;
- G4double x,y,z;
+ G4double x,y,z,xp,yp,zp;
  
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "e-")       flagParticle = 1;    
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")   flagParticle = 2;
@@ -65,6 +65,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha+")   flagParticle = 5;
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "helium")   flagParticle = 6;
 
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="msc")				flagProcess =10;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAElastic")		flagProcess =11;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAExcitation")		flagProcess =12;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAIonisation")		flagProcess =13;
@@ -96,21 +97,22 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hIoni")				flagProcess =33;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="eIoni")				flagProcess =34;
 
- if (
-      s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="initStep"
-      &&
-      s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation"
-    )
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation")
  {  
    x=s->GetPreStepPoint()->GetPosition().x()/nanometer;
    y=s->GetPreStepPoint()->GetPosition().y()/nanometer;
    z=s->GetPreStepPoint()->GetPosition().z()/nanometer;
+   xp=s->GetPostStepPoint()->GetPosition().x()/nanometer;
+   yp=s->GetPostStepPoint()->GetPosition().y()/nanometer;
+   zp=s->GetPostStepPoint()->GetPosition().z()/nanometer;
    
    Histo->FillNtuple(0, 0, flagParticle);
    Histo->FillNtuple(0, 1, flagProcess);
    Histo->FillNtuple(0, 2, x);
    Histo->FillNtuple(0, 3, y);
    Histo->FillNtuple(0, 4, z);
+   Histo->FillNtuple(0, 5, s->GetTotalEnergyDeposit()/eV);
+   Histo->FillNtuple(0, 6, sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
    Histo->AddRowNtuple(0);      
  }
 }    

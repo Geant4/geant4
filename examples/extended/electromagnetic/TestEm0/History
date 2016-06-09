@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2010/11/02 15:00:30 allison Exp $
+$Id: History,v 1.23 2010-11-02 15:00:30 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+31-05-11 mma (testem0-V09-04-00)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
      
 02-02-10 ja (testem0-V09-03-05)
 - TestEm0.cc : 

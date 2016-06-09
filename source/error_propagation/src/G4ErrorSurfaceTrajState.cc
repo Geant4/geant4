@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSurfaceTrajState.cc,v 1.6 2007/06/21 15:04:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorSurfaceTrajState.cc,v 1.6 2007-06-21 15:04:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -222,10 +222,12 @@ void G4ErrorSurfaceTrajState::Dump( std::ostream& out ) const
 //------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorSurfaceTrajState& ts)
 {
+  std::ios::fmtflags oldFlags = out.flags();
   out.setf(std::ios::fixed,std::ios::floatfield);
   
   ts.DumpPosMomError( out );
  
   out << " G4ErrorSurfaceTrajState: Params: " << ts.fTrajParam << G4endl;
+  out.flags(oldFlags);
   return out;
 }

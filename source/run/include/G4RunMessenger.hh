@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.18 2007/11/13 15:48:44 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RunMessenger.hh,v 1.18 2007-11-13 15:48:44 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //	GEANT 4 class header file 

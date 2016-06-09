@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimShelterSPEDecorator.cc,v 1.3 2006/06/29 16:24:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimShelterSPEDecorator.cc,v 1.3 2006-06-29 16:24:21 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Code developed by: S.Guatelli, guatelli@ge.infn.it
+// Code developed by: S.Guatelli, susanna@uow.edu.au
 //
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
@@ -39,11 +39,9 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
-#include "RemSimSensitiveDetector.hh"
-#include "RemSimROGeometry.hh"
-#include "G4SDManager.hh"
+
 #include "G4RunManager.hh"
-#include "G4VisAttributes.hh"
+
 
 RemSimShelterSPEDecorator::RemSimShelterSPEDecorator(RemSimVGeometryComponent* comp)
   : RemSimDecorator(comp)

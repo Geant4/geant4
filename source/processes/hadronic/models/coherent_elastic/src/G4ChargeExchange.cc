@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.18 2010/11/19 18:50:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ChargeExchange.cc,v 1.18 2010-11-19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -79,7 +79,7 @@ G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
   theD        = G4Deuteron::Deuteron();
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
-  theA        = G4He3::He3();
+  theHe3      = G4He3::He3();
 }
 
 G4ChargeExchange::~G4ChargeExchange()
@@ -227,10 +227,12 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     theDef = 
       G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
   }
+  if(!theSecondary) { return &theParticleChange; }
+
   G4double m11 = theSecondary->GetPDGMass();
   G4double m21 = theDef->GetPDGMass();
-  if(theRecoil)  m21 += theRecoil->GetPDGMass();
-  else           theRecoil = theDef;
+  if(theRecoil)  { m21 += theRecoil->GetPDGMass(); }
+  else           { theRecoil = theDef; }
 
   G4double etot = lv0.e() + lv1.e();
 

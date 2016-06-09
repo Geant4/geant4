@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.18 2010/11/10 23:53:23 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.18 2010-11-10 23:53:23 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -77,7 +77,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4HitsModel.hh"
 #include "G4GMocrenMessenger.hh"
-#include "G4PSHitsModel.hh"
+//#include "G4PSHitsModel.hh"
 #include "G4GMocrenIO.hh"
 #include "G4VNestedParameterisation.hh"
 #include "G4GMocrenTouchable.hh"
@@ -131,11 +131,14 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 
   // g4.gdd filename and its directory
   if(getenv("G4GMocrenFile_DEST_DIR") == NULL) {
-    std::strcpy(kGddDestDir , "");                    // output dir
-    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
+    kGddDestDir[0] = '\0';
+    //std::strcpy(kGddDestDir , "");                    // output dir
+    //std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename
   } else {
-    std::strcpy(kGddDestDir , getenv("G4GMocrenFile_DEST_DIR")); // output dir
-    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename 
+    const char * env = getenv("G4GMocrenFile_DEST_DIR");
+    std::strncpy(kGddDestDir, env, std::strlen(env)); // output dir
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename 
   }
 		
   // maximum number of g4.gdd files in the dest directory
@@ -157,7 +160,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 //----- G4GMocrenFileSceneHandler, destructor
 G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler () 
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** ~G4GMocrenFileSceneHandler" << G4endl;
 
   if(kGddDest) {
@@ -180,6 +183,8 @@ void G4GMocrenFileSceneHandler::InitializeParameters() {
     kNestedVolumeDirAxis[i] = -1;
   }
 
+  // delete kgMocrenIO;
+
 }
 
 //-----
@@ -189,10 +194,10 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strcpy ( kGddFileName, kGddDestDir) ; 
+  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir));
 
   // create full path name (default)
-  std::strcat ( kGddFileName, DEFAULT_GDD_FILE_NAME );
+  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
 
   // Automatic updation of file names
   static G4int currentNumber = 0;
@@ -201,7 +206,7 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
     // Message in the final execution
     if( i == MAX_FILE_INDEX ) 
       {
-	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	if (G4VisManager::GetVerbosity() >= G4VisManager::warnings) {
 	  G4cout << "==========================================="   << G4endl; 
 	  G4cout << "WARNING MESSAGE from GMocrenFile driver:   "   << G4endl;
 	  G4cout << "  This file name is the final one in the   "   << G4endl;
@@ -256,12 +261,12 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
 //-----
 void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** BeginSavingGdd (called)" << G4endl;
 
   if( !IsSavingGdd() ) {
 
-    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations) {
       G4cout << "*****                   (started) " ;
       G4cout << "(open g4.gdd, ##)"  << G4endl;
     }
@@ -327,11 +332,11 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 
 void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void ) 
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** EndSavingGdd (called)" << G4endl;
 
   if(IsSavingGdd()) {
-    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "*****                 (started) (close "
 	     << kGddFileName << ")" << G4endl;
 
@@ -490,7 +495,7 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
   if( !GFIsInModeling() ) {
 
 
-    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
 
       //----- Send saving command and heading comment
@@ -499,7 +504,8 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
       kFlagInModeling = true ;
 
       // These models are entrusted to user commands /vis/scene/add/psHits or hits
-      //scene->AddEndOfEventModel(new G4PSHitsModel()); 
+      //GetScene()->AddEndOfEventModel(new G4PSHitsModel()); 
+      //GetScene()->AddEndOfRunModel(new G4PSHitsModel()); 
       //scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
         G4Scene * scene = GetScene();
@@ -519,7 +525,7 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 //----- Add polyline 
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline) 
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive" << G4endl;
 
 
@@ -535,7 +541,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
-	("G4VSceneHandler::AddCompound(const G4Polyline&): Not a G4TrajectoriesModel.");
+	("G4VSceneHandler::AddCompound(const G4Polyline&)",
+	 "gMocren0002", FatalException, "Not a G4TrajectoriesModel.");
     }
 
     G4ThreeVector trans;
@@ -600,7 +607,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
 {
   //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4NURBS )" << G4endl;
 
   //----- Initialize if necessary
@@ -617,7 +624,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
   G4Text dummytext = text;
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Text )" << G4endl;
 
   //----- Initialize IF NECESSARY
@@ -633,7 +640,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   G4Circle dummycircle = mark_circle;
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Circle )" << G4endl;
 
   //----- Initialize IF NECESSARY
@@ -650,7 +657,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   G4Square dummysquare = mark_square;
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Square )" << G4endl;
 
   //----- Initialize if necessary
@@ -663,7 +670,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron ) 
 {
   //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Polyhedron )" << G4endl;
 
 
@@ -674,15 +681,17 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
 
   //---------- (3) Facet block
   for (G4int f = polyhedron.GetNoFacets(); f; f--){
-    G4int notLastEdge;
+    G4bool notLastEdge = true;
     G4int index = -1; // initialization
     G4int edgeFlag = 1;
-    G4int preedgeFlag = 1;
-    G4int work[4], i = 0;
+    //G4int preedgeFlag = 1;
+    //G4int work[4], i = 0;
+    G4int i = 0;
     do {
-      preedgeFlag = edgeFlag;
+      //preedgeFlag = edgeFlag;
       notLastEdge = polyhedron.GetNextVertexIndex(index, edgeFlag);
-      work[i++] = index;
+      //work[i++] = index;
+      i++;
     }while (notLastEdge);
     switch (i){
     case 3:
@@ -692,18 +701,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
       //SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3] );
       break;
     default:
-      if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	G4cout <<
 	  "ERROR G4GMocrenFileSceneHandler::AddPrimitive(G4Polyhedron)" << G4endl;
       G4PhysicalVolumeModel* pPVModel =
         dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
       if (pPVModel)   
-	if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+	if(G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	  G4cout << "Volume " << pPVModel->GetCurrentPV()->GetName() <<
 	    ", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
 	    " (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
 
-      if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      if(G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	G4cout <<
 	  "\nG4Polyhedron facet with " << i << " edges" << G4endl;	
     }
@@ -718,12 +727,12 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
   G4VSceneHandler::EndModeling();
 
   //----- 		
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** GFEndModeling (called)" << G4endl;
 
   if( GFIsInModeling() ) {
 
-    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations) {
       G4cout << "***** GFEndModeling (started) " ; 
       G4cout << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
     }
@@ -742,7 +751,7 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
 //----- 
 void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** BeginPrimitives " << G4endl;
 
   GFBeginModeling();
@@ -756,7 +765,7 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
 //----- 
 void G4GMocrenFileSceneHandler::EndPrimitives ()
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** EndPrimitives " << G4endl;
 
   G4VSceneHandler::EndPrimitives ();
@@ -768,7 +777,7 @@ void G4GMocrenFileSceneHandler::EndPrimitives ()
 //----- Add box
 void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( box )" << G4endl;
 
   if(GFDEBUG_DET > 0)
@@ -868,7 +877,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4VPhysicalVolume * pv[3] = {0,0,0};
     pv[0] = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetDaughter(0);
     if(!pv[0]) {
-      G4Exception("Error[gMocrenFileSceneHandler]: Unexpected volume.");
+      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		  "gMocren0003", FatalException, "Unexpected volume.");
     }
     G4int dirAxis[3] = {-1,-1,-1};
     G4int nDaughters[3] = {0,0,0};
@@ -880,7 +890,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     case kXAxis: dirAxis[0] = 0; break;
     case kYAxis: dirAxis[0] = 1; break;
     case kZAxis: dirAxis[0] = 2; break;
-    default: G4Exception("Error.");
+    default:
+      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		  "gMocren0004", FatalException, "Error.");
     }
     kNestedVolumeNames.push_back(pv[0]->GetName());
     if(GFDEBUG_DET) 
@@ -893,7 +905,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	G4cout << "# of daughters : " 
 	       << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
       } else {
-	//G4Exception("Error: G4GMocrenFileSceneHandler: 0000010");
+	//G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+	//	    "gMocren0005", FatalException, "Error.");
       }
     }
 
@@ -902,7 +915,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 			   << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
     if(pv[0]->GetLogicalVolume()->GetNoDaughters() == 0) {
       kFlagParameterization = 1;
-      //G4Exception("Error: G4GMocrenFileSceneHandler: 0000020");
+      //G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+      //	    "gMocren0006", FatalException, "Error.");
     }
     
     if(kFlagParameterization == 0) {
@@ -915,7 +929,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	case kXAxis: dirAxis[1] = 0; break;
 	case kYAxis: dirAxis[1] = 1; break;
 	case kZAxis: dirAxis[1] = 2; break;
-	default: G4Exception("Error.");
+	default:
+	  G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		      "gMocren0007", FatalException, "Error.");
 	}
 	kNestedVolumeNames.push_back(pv[1]->GetName());
 	if(GFDEBUG_DET) 
@@ -934,7 +950,10 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  if(nDaughters[2] > 1) {
 	    G4VNestedParameterisation * nestPara
 	      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-	    if(!nestPara) G4Exception("Error[gMocrenFileSceneHandler]: None nested parameterisation");
+	    if(nestPara == NULL)
+	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+			  "gMocren0008", FatalException, "Non-nested parameterisation");
+
 	    nestPara->ComputeTransformation(0, pv[2]);
 	    G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
 	    nestPara->ComputeTransformation(1, pv[2]);
@@ -946,7 +965,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	    if(diff.x() != 0.) dirAxis[2] = 0;
 	    else if(diff.y() != 0.) dirAxis[2] = 1;
 	    else if(diff.z() != 0.) dirAxis[2] = 2;
-	    else G4Exception("Error[gMocrenFileSceneHandler]: Unexpected nested parameterisation");
+	    else
+	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+			  "gMocren0009", FatalException, "Unexpected nested parameterisation");
 	  }
 	}
       }
@@ -962,7 +983,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       // get densities
       G4VNestedParameterisation * nestPara
 	= dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-      if(nestPara) {
+      if(nestPara != NULL) {
 	G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
 	for(G4int n0 = 0; n0 < nDaughters[0]; n0++) {
 	  for(G4int n1 = 0; n1 < nDaughters[1]; n1++) {
@@ -986,7 +1007,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	      xyz[2] = tbox.GetZHalfLength()/mm;
 	      if(n0 != 0 || n1 != 0 || n2 != 0) {
 		for(G4int i = 0; i < 3; i++) {
-		  if(xyz[i] != prexyz[i]) G4Exception("Error[gMocrenFileSceneHandler]: Unsupported parameterisation.");
+		  if(xyz[i] != prexyz[i])
+		    G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+				"gMocren0010", FatalException, "Unsupported parameterisation");
 		}
 	      }
 	      if(GFDEBUG_DET) 
@@ -1025,7 +1048,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       } else {
 	if(GFDEBUG_DET) 
 	  G4cout << pv[2]->GetName() << G4endl;
-	G4Exception("Error[gMocrenFileSceneHandler]: none nested parameterization");
+	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		    "gMocren0011", FatalException, "Non-nested parameterisation");
       }
 
 
@@ -1102,8 +1126,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       // get the dimension of the parameterized patient geometry
       G4PhantomParameterisation * phantomPara
 	= dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
-      if(!phantomPara) {
-	G4Exception("Error: G4GMocrenFileSceneHandler: no G4PhantomParameterisation");
+      if(phantomPara == NULL) {
+	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		    "gMocren0012", FatalException, "no G4PhantomParameterisation");
       } else {
 	;
       }
@@ -1301,7 +1326,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( tubes )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1344,7 +1369,7 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( cons )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1362,7 +1387,7 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 //----- Add trd
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( trd )" << G4endl;
 
 
@@ -1381,7 +1406,7 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 //----- Add sphere
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( sphere )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1399,7 +1424,7 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 //----- Add para
 void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( para )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1417,7 +1442,7 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 //----- Add trap
 void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( trap )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1436,7 +1461,7 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Torus& torus )
 {
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( torus )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1485,7 +1510,8 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
-	("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
+	 "gMocren0013", FatalException, "Not a G4TrajectoriesModel.");
     } else {
       traj.DrawTrajectory(pTrModel->GetDrawingMode());
 
@@ -1604,7 +1630,8 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 	}
       }
     } else {
-      G4Exception("Error in G4GMocrenFileSceneHandler::AddCompound(const G4VHit &)");
+      G4Exception("G4GMocrenFileSceneHandler::AddCompound(const G4VHit &)",
+		  "gMocren0014", FatalException, "Error");
     }
 
     delete attval;

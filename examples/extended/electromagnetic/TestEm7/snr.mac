@@ -1,4 +1,4 @@
-# $Id: snr.mac,v 1.4 2009/11/21 22:02:51 maire Exp $
+# $Id: snr.mac,v 1.4 2009-11-21 22:02:51 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -11,18 +11,17 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat G4_WATER
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
+/testem/det/tallyNumber 4
+/testem/det/tallyDefinition 1 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 2 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 3 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 4 G4_WATER 2. 2. 2. mm
+/testem/det/tallyPosition 1 -9.9 0. 0. cm
+/testem/det/tallyPosition 2 -5.  0. 0. cm
+/testem/det/tallyPosition 3  0.  0. 0. cm
+/testem/det/tallyPosition 4  5.  0. 0. cm
 #
-#/testem/phys/addPhysics  emstandard_opt0
-#/testem/phys/addPhysics  emstandard_opt2
-#/testem/phys/addPhysics  emstandard_opt3  
 /testem/phys/addPhysics  standardNR	  
-###/testem/phys/addPhysics  binary
 #
 /run/initialize
 #

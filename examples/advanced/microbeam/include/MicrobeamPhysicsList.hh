@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MicrobeamPhysicsList.hh,v 1.7 2010/06/10 09:54:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: MicrobeamPhysicsList.hh,v 1.7 2010-06-10 09:54:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

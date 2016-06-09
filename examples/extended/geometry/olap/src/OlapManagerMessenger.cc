@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManagerMessenger.cc,v 1.4 2010/08/24 07:57:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: OlapManagerMessenger.cc,v 1.4 2010-08-24 07:57:14 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

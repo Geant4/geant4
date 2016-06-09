@@ -65,6 +65,7 @@ enum  CexmcHistoType
 {
     CexmcMomentumBP_TPT_Histo,
     CexmcMomentumBP_RT_Histo,
+    CexmcMomentumIP_TPT_Histo,
     CexmcTPInMonitor_TPT_Histo,
     CexmcTPInTarget_TPT_Histo,
     CexmcTPInTarget_RT_Histo,
@@ -113,11 +114,11 @@ enum  CexmcHistoType
 class  CexmcHistoManager
 {
     private:
-        typedef std::vector< TH1 * >                           CexmcHistoVector;
+        typedef std::vector< TH1 * >                          CexmcHistoVector;
 
-        typedef std::map< CexmcHistoType, CexmcHistoVector >   CexmcHistosMap;
+        typedef std::map< CexmcHistoType, CexmcHistoVector >  CexmcHistosMap;
 
-        typedef std::pair< CexmcHistoType, CexmcHistoVector >  CexmcHistoPair;
+        typedef CexmcHistosMap::value_type                    CexmcHistoPair;
 
         struct  CexmcHistoAxisData
         {
@@ -136,7 +137,7 @@ class  CexmcHistoManager
             Double_t  nBinsMax;
         };
 
-        typedef std::vector< CexmcHistoAxisData >              CexmcHistoAxes;
+        typedef std::vector< CexmcHistoAxisData >             CexmcHistoAxes;
 
         enum  CexmcHistoImpl
         {
@@ -217,6 +218,11 @@ class  CexmcHistoManager
                     const G4String &  histoDrawOptions = "" );
 #endif
 
+    public:
+        void   SetVerboseLevel( G4int  value );
+
+        G4int  GetVerboseLevel( void ) const;
+
     private:
         void  AddHisto( const CexmcHistoData &  data,
                     const CexmcAngularRange &  aRange = CexmcAngularRange() );
@@ -242,6 +248,8 @@ class  CexmcHistoManager
 
         G4double                      nopMass;
 
+        G4int                         verboseLevel;
+
 #ifdef CEXMC_USE_ROOTQT
     private:
 
@@ -255,8 +263,19 @@ class  CexmcHistoManager
         static CexmcHistoManager *    instance;
 };
 
-#endif
 
+inline void  CexmcHistoManager::SetVerboseLevel( G4int  value )
+{
+    verboseLevel = value;
+}
+
+
+inline G4int  CexmcHistoManager::GetVerboseLevel( void ) const
+{
+    return verboseLevel;
+}
+
+#endif
 
 #endif
 

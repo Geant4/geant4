@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.20 2010/06/06 06:18:54 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: GammaRayTelEventAction.cc,v 1.20 2010-06-06 06:18:54 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -114,16 +114,12 @@ void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
-
-  G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   
   
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   GammaRayTelTrackerHitsCollection* THC = 0;
-  GammaRayTelCalorimeterHitsCollection* CHC = 0;
-  GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
+//  GammaRayTelCalorimeterHitsCollection* CHC = 0;
+//  GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
 
 
   G4DigiManager * fDM = G4DigiManager::GetDMpointer();
@@ -131,10 +127,10 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
   if (HCE)
     {
       THC = (GammaRayTelTrackerHitsCollection*)(HCE->GetHC(trackerCollID));
-      CHC = (GammaRayTelCalorimeterHitsCollection*)
-	(HCE->GetHC(calorimeterCollID));
-      AHC = (GammaRayTelAnticoincidenceHitsCollection*)
-	(HCE->GetHC(anticoincidenceCollID));
+//      CHC = (GammaRayTelCalorimeterHitsCollection*)
+//	(HCE->GetHC(calorimeterCollID));
+//      AHC = (GammaRayTelAnticoincidenceHitsCollection*)
+//	(HCE->GetHC(anticoincidenceCollID));
       
       if (THC)
 	{
@@ -217,6 +213,10 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	(GammaRayTelDigitizer*)fDM->FindDigitizerModule( "GammaRayTelDigitizer" );
       myDM->Digitize();
       
+#ifdef write_outfile
+      // the whole block is needed only when outfile is active; protect block to avoid
+      //     compilations warnings from gcc4.6, Gunter Folger
+
       G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
       
       // G4cout << "digi collecion" << myDigiCollID << G4endl;
@@ -234,10 +234,11 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	  NPlane = (*DC)[i]->GetPlaneNumber();
 	  IsX = (*DC)[i]->GetPlaneType();
 	  
-	  //      outFile << std::setw(7) << event_id << " " << NStrip << 
-	  //	" " << NPlane << " " << IsX << " " << G4endl;	
+	  outFile << std::setw(7) << event_id << " " << NStrip << 
+	   	" " << NPlane << " " << IsX << " " << G4endl;	
 	}
       }
+#endif      
     }
 }
 

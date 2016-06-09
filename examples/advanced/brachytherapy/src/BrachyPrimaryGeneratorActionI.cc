@@ -37,15 +37,10 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.10 2006/06/29 15:48:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.10 2006-06-29 15:48:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "BrachyAnalysisManager.hh"
-#endif
-
 #include "globals.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
@@ -76,10 +71,6 @@ BrachyPrimaryGeneratorActionI::~BrachyPrimaryGeneratorActionI()
 
 void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
 {
-#ifdef G4ANALYSIS_USE
-  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-#endif
-
   // Define the primary particle type
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String ParticleName = "gamma";
@@ -133,11 +124,6 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
     else {primaryParticleEnergy = 35.5*keV;}}
 
   particleGun -> SetParticleEnergy(primaryParticleEnergy);
-
-  // Fill 1D histogram with gamma energy spectrum ...
-#ifdef G4ANALYSIS_USE    
-  analysis -> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
-#endif  
 
   // generate primary particle
   particleGun->GeneratePrimaryVertex(anEvent);

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileViewer.cc,v 1.15 2006/06/29 21:17:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepFileViewer.cc,v 1.15 2006-06-29 21:17:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
 

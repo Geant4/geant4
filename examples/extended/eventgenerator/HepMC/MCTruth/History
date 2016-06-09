@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010/12/03 12:51:29 gcosmo Exp $
+$Id: History,v 1.4 2010-12-03 12:51:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 May 2011 G.Cosmo (mctruthex-V09-04-00)
+- Fixed compilation errors on MacOS for use of std::fmod() in MCTruthManager.
 
 2 December 2010 W.Pokorski (mctruthex-V09-03-00)
 - Updated to use HepMC-2.06.03; reviewd use of 4-vectors.

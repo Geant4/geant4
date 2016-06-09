@@ -29,15 +29,16 @@
 // 22.01.07 V.Ivanchenko - add interface with Z and A
 // 05.03.07 V.Ivanchenko - add IfZAApplicable
 // 11.06.10 V. Grichine - update for antiprotons
+// 10.11.11 V. Grichine - update for kaons
 
 #include "G4GlauberGribovCrossSection.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4HadronNucleonXsc.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
-//
 
 const G4double G4GlauberGribovCrossSection::fNeutronBarCorrectionTot[93] = {
 
@@ -220,11 +221,11 @@ const G4double G4GlauberGribovCrossSection::fPionMinusBarCorrectionIn[93] = {
 //
 
 G4GlauberGribovCrossSection::G4GlauberGribovCrossSection() 
-: fUpperLimit( 100000 * GeV ),
-  fLowerLimit( 3 * GeV ),
-  fRadiusConst( 1.08*fermi ),  // 1.1, 1.3 ?
-  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-  fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
+ : G4VCrossSectionDataSet("Glauber-Gribov"),
+   fUpperLimit(100000*GeV), fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
+   fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
+   fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
+   fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -256,6 +257,8 @@ G4GlauberGribovCrossSection::G4GlauberGribovCrossSection()
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
   theHe3      = G4He3::He3();
+
+  hnXsc = new G4HadronNucleonXsc();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -264,29 +267,16 @@ G4GlauberGribovCrossSection::G4GlauberGribovCrossSection()
 
 G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
 {
+  if (hnXsc) delete hnXsc;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
-
-G4bool 
-G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
-					  const G4Element*  anElement)
-{
-  return IsIsoApplicable(aDP, G4lrint(anElement->GetZ()),
-                              G4lrint(anElement->GetN()));
-} 
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 G4bool 
 G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP, 
-					     G4int Z, G4int)
+					     G4int Z, G4int /*A*/, 
+					     const G4Element*,
+					     const G4Material*)
 {
   G4bool applicable      = false;
   // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
@@ -300,11 +290,10 @@ G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
          theParticle == theGamma     ||
          theParticle == theKPlus     ||
          theParticle == theKMinus    || 
-         theParticle == theSMinus)      )    ||  
-
-       ( kineticEnergy  >= fLowerLimit &&
-         Z > 1 &&      // >=  He
-       ( theParticle == theProton    ||
+         theParticle == theK0L     ||
+         theParticle == theK0S    || 
+         theParticle == theSMinus    ||  
+         theParticle == theProton    ||
          theParticle == theNeutron   ||   
          theParticle == thePiPlus    ||
          theParticle == thePiMinus       ) )    ) applicable = true;
@@ -316,28 +305,15 @@ G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
 //
 // Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
 // Glauber model with Gribov correction calculated in the dipole approximation on
-// light cone. Gaussian density helps to calculate rest integrals of the model.
-// [1] B.Z. Kopeliovich, nucl-th/0306044 
-
-
-G4double G4GlauberGribovCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double T)
-{
-  return GetZandACrossSection(aParticle, G4lrint(anElement->GetZ()),
-                              G4lrint(anElement->GetN()), T);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
-// Glauber model with Gribov correction calculated in the dipole approximation on
 // light cone. Gaussian density of point-like nucleons helps to calculate rest integrals of the model.
 // [1] B.Z. Kopeliovich, nucl-th/0306044 + simplification above
 
-
-
-G4double G4GlauberGribovCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle, G4int Z, G4int A, G4double)
+G4double 
+G4GlauberGribovCrossSection::GetIsoCrossSection(const G4DynamicParticle* aParticle, 
+						G4int Z, G4int A,  
+						const G4Isotope*,
+						const G4Element*,
+						const G4Material*)
 {
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
   G4double R             = GetNucleusRadius(A); 
@@ -352,6 +328,17 @@ GetZandACrossSection(const G4DynamicParticle* aParticle, G4int Z, G4int A, G4dou
     sigma        = GetHadronNucleonXscNS(aParticle, A, Z);
     cofInelastic = 2.4;
     cofTotal     = 2.0;
+  }
+  else if( theParticle == theKPlus   || 
+           theParticle == theKMinus  || 
+           theParticle == theK0S     || 
+           theParticle == theK0L        ) 
+  {
+    sigma        = GetKaonNucleonXscVector(aParticle, A, Z);
+    cofInelastic = 2.2;
+    cofTotal     = 2.0;
+    R = 1.3*fermi;
+    R *= std::pow(G4double(A), 0.3333);
   }
   else
   {
@@ -517,9 +504,6 @@ G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParti
   return GetHadronNucleonXsc(aParticle, At, Zt);
 }
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to differnt parametrisations:
@@ -529,15 +513,13 @@ G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParti
 
 G4double 
 G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
-                                                 G4int At, G4int Zt)
+                                                 G4int At, G4int /*Zt*/)
 {
   G4double xsection;
 
-  G4double targ_mass = G4ParticleTable::GetParticleTable()->
-  GetIonTable()->GetIonMass(Zt, At);
-//  GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
+  //G4double targ_mass = G4NucleiProperties::GetNuclearMass(At, Zt);
 
-  targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
+  G4double targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
   G4double proj_mass     = aParticle->GetMass();
   G4double proj_momentum = aParticle->GetMomentum().mag();
@@ -688,7 +670,7 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aPa
     xsection  = aa*( 20.86 + B*std::pow(std::log(sMand/s0),2.) 
                           + 19.24*std::pow(sMand,-eta1) + 6.03*std::pow(sMand,-eta2));
   } 
-  else if(theParticle == theKPlus) 
+  else if(theParticle == theKPlus || theParticle == theK0L ) 
   {
     xsection  = zz*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
                           + 7.14*std::pow(sMand,-eta1) - 13.45*std::pow(sMand,-eta2));
@@ -696,7 +678,7 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aPa
     xsection += nn*( 17.87 + B*std::pow(std::log(sMand/s0),2.) 
                           + 5.17*std::pow(sMand,-eta1) - 7.23*std::pow(sMand,-eta2));
   } 
-  else if(theParticle == theKMinus) 
+  else if(theParticle == theKMinus || theParticle == theK0S ) 
   {
     xsection  = zz*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
                           + 7.14*std::pow(sMand,-eta1) + 13.45*std::pow(sMand,-eta2));
@@ -755,7 +737,9 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                                    G4int At, G4int Zt)
 {
-  G4double xsection(0), Delta, A0, B0;
+  G4double xsection(0);
+  // G4double Delta;   DHW 19 May 2011: variable set but not used
+  G4double A0, B0;
   G4double hpXsc(0);
   G4double hnXsc(0);
 
@@ -795,12 +779,15 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
 
   if(theParticle == theNeutron) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,At,Zt);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      //  Delta = 1.;  // DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {
@@ -852,12 +839,15 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
   } 
   else if(theParticle == theProton) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,At,Zt);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      // Delta = 1.;  DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {
@@ -1081,7 +1071,40 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
   return xsection;
 }
 
+G4double 
+G4GlauberGribovCrossSection::GetKaonNucleonXscVector(const G4DynamicParticle* aParticle, 
+                                                   G4int At, G4int Zt)
+{
+  G4double Tkin, logTkin, xsc, xscP, xscN;
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
+  G4int Nt = At-Zt;              // number of neutrons
+  if (Nt < 0) Nt = 0;  
+
+  Tkin = aParticle->GetKineticEnergy(); // Tkin in MeV
+
+  if( Tkin > 70*GeV ) return GetHadronNucleonXscPDG(aParticle,At,Zt);
+
+  logTkin = std::log(Tkin); // Tkin in MeV!!!
+
+ if( theParticle == theKPlus )
+ {
+   xscP = hnXsc->GetKpProtonTotXscVector(logTkin);
+   xscN = hnXsc->GetKpNeutronTotXscVector(logTkin);
+ }
+ else if( theParticle == theKMinus )
+ {
+   xscP = hnXsc->GetKmProtonTotXscVector(logTkin);
+   xscN = hnXsc->GetKmNeutronTotXscVector(logTkin);
+ }
+ else // K-zero as half of K+ and K-
+ {
+   xscP = (hnXsc->GetKpProtonTotXscVector(logTkin)+hnXsc->GetKmProtonTotXscVector(logTkin))*0.5;
+   xscN = (hnXsc->GetKpNeutronTotXscVector(logTkin)+hnXsc->GetKmNeutronTotXscVector(logTkin))*0.5;
+ }
+ xsc = xscP*Zt + xscN*Nt;
+  return xsc;
+}
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon inelastic cross-section based on proper parametrisation 
@@ -1453,7 +1476,6 @@ G4double G4GlauberGribovCrossSection::CalculateEcmValue( const G4double mp ,
   return Ecm ; // KEcm;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -1468,6 +1490,20 @@ G4double G4GlauberGribovCrossSection::CalcMandelstamS( const G4double mp ,
   return sMand;
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+void G4GlauberGribovCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4GlauberGribovCrossSection calculates total, inelastic and\n"
+          << "elastic cross sections for hadron-nucleus cross sections using\n"
+          << "the Glauber model with Gribov corrections.  It is valid for all\n"
+          << "targets except hydrogen, and for incident p, pbar, n, sigma-,\n"
+          << "pi+, pi-, K+, K- and gammas with energies above 3 GeV.  This is\n"
+          << "a cross section component which is to be used to build a cross\n"
+          << "data set.\n";
+}
 
 //
 //

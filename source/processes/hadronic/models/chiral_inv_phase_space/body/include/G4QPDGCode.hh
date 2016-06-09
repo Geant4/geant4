@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.30 2009/11/04 11:01:59 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QPDGCode.hh,v 1.30 2009-11-04 11:01:59 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -203,7 +203,8 @@ private:
   G4double QHaM(G4int nQ);                      // Definition of hadronic masses in Q-order
 private:
   // Static parameter
-  static const G4int nQHM=90;
+  //static const G4int nQHM=90;
+  static const G4int nQHM=53; // Reduced CHIPS
   // the Body
   G4int              thePDGCode;
   G4int              theQCode;
@@ -338,7 +339,6 @@ inline G4bool   G4QPDGCode::TestRealNeutral(){return TestRealNeutral(thePDGCode)
 
 // Redefinition of the PDG instance
 inline void  G4QPDGCode::SetPDGCode(G4int newPDGCode)
-//           ========================================
 {
   thePDGCode=newPDGCode;
   if(!thePDGCode) theQCode = -2;
@@ -347,7 +347,7 @@ inline void  G4QPDGCode::SetPDGCode(G4int newPDGCode)
 
 // Init existing QPDG by Quark Content
 inline void  G4QPDGCode::InitByQCont(G4QContent QCont)
-{//          =========================================
+{
   thePDGCode = QCont.GetSPDGCode();
   if(!thePDGCode) theQCode = -2;
   else theQCode   = MakeQCode(thePDGCode);
@@ -355,7 +355,7 @@ inline void  G4QPDGCode::InitByQCont(G4QContent QCont)
 
 // Init existing QPDG by Quark Content
 inline void  G4QPDGCode::InitByQCode(G4int QCode)
-{//          ====================================
+{
   theQCode   = QCode;
   thePDGCode = MakePDGCode(QCode);
 }

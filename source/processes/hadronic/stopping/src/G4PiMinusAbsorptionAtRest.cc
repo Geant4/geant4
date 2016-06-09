@@ -142,8 +142,8 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double excitation = pionEnergy - stopAbsorption.Energy();
   if (excitation < 0.) 
   {
-    G4Exception("G4PiMinusAbsorptionAtRest", "007", FatalException,
-                "AtRestDoIt -- excitation energy < 0");
+    G4Exception("G4PiMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0000",
+                FatalException, "Excitation energy < 0");
   }
   if (verboseLevel>0) { G4cout << " excitation " << excitation << G4endl; }
 

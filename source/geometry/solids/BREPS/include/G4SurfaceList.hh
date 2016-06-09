@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceList.hh,v 1.6 2006/06/29 18:40:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceList.hh,v 1.6 2006-06-29 18:40:50 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4SurfaceList

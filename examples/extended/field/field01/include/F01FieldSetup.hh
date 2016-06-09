@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.hh,v 1.3 2006/06/29 17:15:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F01FieldSetup.hh,v 1.3 2006-06-29 17:15:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

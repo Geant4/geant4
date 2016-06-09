@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id: H02PrimaryGeneratorAction.hh,v 1.5 2006/06/29 17:10:02 gunter Exp $
+//   $Id: H02PrimaryGeneratorAction.hh,v 1.5 2006-06-29 17:10:02 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H

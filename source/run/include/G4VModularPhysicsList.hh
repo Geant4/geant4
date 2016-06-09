@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh,v 1.7 2006/06/29 21:13:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VModularPhysicsList.hh,v 1.7 2006-06-29 21:13:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -37,15 +37,16 @@
 //   by using 
 //         G4VModularPhysicsList::RegsiterPhysics() 
 //   to construt particles and processes.
-//   In addition the user must implement the four virtual methods
-//   in his own concrete class derived from this class. 
-//        G4VModularPhysicsList::SetCuts()
-//   to set cut values in range to all particles
-//   (rebuild of physics table will be invoked).
-
+//
+//   Only one physics constructor can be registered for each "physics_type".
+//   Physics constructors with same "physics_type" can be replaced by
+//   G4VModularPhysicsList::ReplacePhysics() method
+//
 // ------------------------------------------------------------ 
 // History
 // - first version                   12 Nov 2000 by H.Kurashige 
+// - Add  ReplacePhysics             14 Mar 2011 by H.Kurashige
+//
 // ------------------------------------------------------------
 #ifndef G4VModularPhysicsList_h
 #define G4VModularPhysicsList_h 1
@@ -62,12 +63,13 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
   public: 
     G4VModularPhysicsList();
     virtual ~G4VModularPhysicsList();
+  
+ protected:
+    // hide copy constructor and assignment operator
+    G4VModularPhysicsList(const G4VModularPhysicsList&);
+    G4VModularPhysicsList & operator=(const G4VModularPhysicsList&);
 
   public:  // with description
-    //  "SetCuts" method sets a cut value for all particle types 
-    //   in the particle table
-    virtual void SetCuts() = 0; 
-
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
     virtual void ConstructParticle();
@@ -78,48 +80,50 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     virtual void ConstructProcess();
   
   public: // with description
+    // Register Physics Constructor 
     void RegisterPhysics(G4VPhysicsConstructor* );
-
+    
     const G4VPhysicsConstructor* GetPhysics(G4int index) const;
     const G4VPhysicsConstructor* GetPhysics(const G4String& name) const;
+    const G4VPhysicsConstructor* GetPhysicsWithType(G4int physics_type) const;
 
+    // Replace Physics Constructor 
+    //  The existing physics constructor with same physics_type as one of
+    //  the given physics constructor is replaced
+    //  (existing physics will be deleted)
+    //  If any corresponding physics constructor is found, 
+    //  the given physics constructor is just added         
+    void ReplacePhysics(G4VPhysicsConstructor* );
+
+   // Remove Physics Constructor from the list
+    void RemovePhysics(G4VPhysicsConstructor* );
+    void RemovePhysics(G4int type);
+    void RemovePhysics(const G4String& name);
+    
   /////////////////////////////////////
+  public: // with description
+   void  SetVerboseLevel(G4int value);
+   G4int GetVerboseLevel() const;
+   // set/get controle flag for output message
+   //  0: Silent
+   //  1: Warning message
+   //  2: More
+   // given verbose level is set to all physics constructors 
 
   protected: // with description
    // vector of pointers to G4VPhysicsConstructor
    typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
    G4PhysConstVector* physicsVector;
+   G4int verboseLevel;
 };
    
 
-inline 
- void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
-{
-  physicsVector->push_back(fPhysics);
-}    
 
 inline  
- const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(G4int idx) const
+ G4int G4VModularPhysicsList::GetVerboseLevel() const
 {
-  G4int i;
-  G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (i=0; i<idx && itr!= physicsVector->end() ; ++i) ++itr;
-  if (itr!= physicsVector->end()) return (*itr);
-  else return 0;
-}
-
-inline  
- const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(const G4String& name) const
-{
-  G4PhysConstVector::iterator itr;
-  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
-    if ( name == (*itr)->GetPhysicsName()) break;
-  }
-  if (itr!= physicsVector->end()) return (*itr);
-  else return 0;
-}
-
-   
+  return  verboseLevel;
+}   
     
 
 #endif

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.25 2009/11/21 16:12:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: Em10PhysicsList.cc,v 1.25 2009-11-21 16:12:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "Em10PhysicsList.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeViewer.cc,v 1.8 2006/06/29 21:24:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ASCIITreeViewer.cc,v 1.8 2006-06-29 21:24:59 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ASCIITreeViewer.hh"
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_BERT.icc,v 1.4 2010/08/16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: QGSC_BERT.icc,v 1.4 2010-08-16 07:14:44 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,6 +61,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_BERT.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_BERT<T>::TQGSC_BERT(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -70,6 +72,9 @@ template<class T> TQGSC_BERT<T>::TQGSC_BERT(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSC_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );

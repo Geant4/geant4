@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2009/09/22 15:18:20 maire Exp $
+$Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -44,6 +44,7 @@ $Id: README,v 1.11 2009/09/22 15:18:20 maire Exp $
                       analog to "local" above  
   - "emlivermore"  low-energy EM physics using Livermore data
   - "empenelope"   low-energy EM physics implementing Penelope models
+  - "dna"          em physics for DNA simulation
       
  Physics lists and options can be (re)set with UI commands
     

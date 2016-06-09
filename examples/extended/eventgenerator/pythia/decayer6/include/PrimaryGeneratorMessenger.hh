@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------------
 

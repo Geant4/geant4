@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManager.cc,v 1.4 2010/08/24 07:57:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: OlapManager.cc,v 1.4 2010-08-24 07:57:14 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -57,9 +57,6 @@ OlapManager::OlapManager()
 {
    theMessenger = new OlapManagerMessenger(this);
    theLVStore = G4LogicalVolumeStore::GetInstance();
-   // for SUN
-   //std::vector<G4LogicalVolume*>::iterator aIt = theLVStore->begin();
-   //G4LogicalVolumeStore::iterator aIt = theLVStore->begin();
 
    delta = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
    theRunManager = G4RunManager::GetRunManager();
@@ -68,10 +65,10 @@ OlapManager::OlapManager()
    
    const OlapDetConstr * aConstDetConstr =
      dynamic_cast<const OlapDetConstr*>(aTmp);
-   if (!aConstDetConstr) {
-     G4cerr << "OlapManger(): can't get the OlapDetConstr instance!" << G4endl;
-     G4cerr << "              exiting ..." << G4endl;
-     G4Exception("ERROR - OlapManager::OlapManager()");
+   if (!aConstDetConstr)
+   {
+     G4Exception("OlapManager::OlapManager()", "InvalidSetup", FatalException,
+                 "Can't get the OlapDetConstr instance! Exiting...");
    }  
  
    // need a  non-const instance for building NewWords!          
@@ -106,8 +103,6 @@ OlapManager * OlapManager::GetOlapManager()
 void OlapManager::SetRotation(G4double theta, G4double phi, G4double alpha)
 {
   theDet->SetRotation(theta,phi,alpha);
-  
-  // ?? set the current new-world again to activate the rotation??
 }
 
 
@@ -123,8 +118,8 @@ void OlapManager::TriggerRun()
    }
    else
    {
-      G4cerr << "Warning: Primary generator is not OlapGenerator!" << G4endl
-                   << "Overlap Detection will not work!" << G4endl;
+      G4cout << "Warning: Primary generator is not OlapGenerator!" << G4endl
+             << "         Overlap Detection will not work!" << G4endl;
       return;
    }             
    //while
@@ -145,8 +140,8 @@ void OlapManager::TriggerFull(G4int trg)
    }
    else
    {
-      G4cerr << "Warning: Primary generator is not OlapGenerator!" << G4endl
-             << "Overlap Detection will not work!" << G4endl;
+      G4cout << "Warning: Primary generator is not OlapGenerator!" << G4endl
+             << "         Overlap Detection will not work!" << G4endl;
       return;
    }             
    //while
@@ -195,59 +190,9 @@ G4bool OlapManager::Next()
    return false;
 }
 
-/*
-G4bool OlapManager::SetNextWorld(G4int aOffs)
-{
-   if (aOffs >= theLVs.size())
-   {
-      G4cout << aOffs << ">" << theLVs.size() -1 << G4endl;
-      return false;
-   } 
-   else
-   {
-      G4cout << "no daughters: " << (*theLVit)->GetNoDaughters() << G4endl;
-      theDet->SetNewWorld(theLVs[aOffs]);
-      lvPos=aOffs;
-      return true;
-   }
-   
-}
-*/
-
-/*
-G4bool OlapManager::SetPrevWorld(G4int aOffs)
-{
-   //FIXME: OlapManager::SetPrevWorld(int) - remove this method!
-   G4cerr << "DON'T CALL OlapManager::SetPrevWorld(..)!" << G4endl;
-   G4Exception("ERROR - OlapManager::SetPrevWorld()");
-   
-   for (G4int i=1; i<aOffs; i++)
-   {
-      if (theLVit == theLVs.begin())
-      {
-        theDet->SetNewWorld(*theLVit);
-        return true;
-      }
-      theLVit--;        
-   }        
-        
-   if (theLVit != theLVs.begin())
-   {
-     theLVit--;
-     if ( *theLVit != 0)
-     {
-        theDet->SetNewWorld(*theLVit);   
-        return true;
-     }        
-   }
-     
-   return false;
-} 
-*/
-  
 void OlapManager::ListLV(const G4String & aRegexStr)
 {
-    G4cout << "logical volumes matching " << aRegexStr << ":" <<G4endl;
+    G4cout << "Logical volumes matching " << aRegexStr << ":" <<G4endl;
     
     std::vector<G4LogicalVolume *> aLVVec;
     G4int c = theGeoNav->FilterLV(aRegexStr,aLVVec);
@@ -292,7 +237,7 @@ void OlapManager::ChangeLV(const G4String & aDir)
    G4LogicalVolume * aLv = theGeoNav->ChangeLV(aDir);
    if (aLv)
    {
-       G4cout << "new world: " << aLv->GetName() << G4endl;
+       G4cout << "New world: " << aLv->GetName() << G4endl;
        theDet->SetNewWorld(aLv);
        notifyNewWorld(theDet->GetNewWorld()->GetLogicalVolume());
    }
@@ -303,7 +248,7 @@ void OlapManager::GotoLV(const G4String & aRegexStr)
     std::vector<G4LogicalVolume*> lvs; 
     if (theGeoNav->FilterLV(aRegexStr,lvs,true))
     {
-       G4cout << "new world: " << (lvs[0])->GetName() << G4endl;
+       G4cout << "New world: " << (lvs[0])->GetName() << G4endl;
        theDet->SetNewWorld((lvs[0]));
        notifyNewWorld(theDet->GetNewWorld()->GetLogicalVolume());
     }   
@@ -332,8 +277,8 @@ void OlapManager::SetGrid(G4int x, G4int y, G4int z)
    }
    else
    {
-      G4cerr << "Warning: Primary generator is not OlapGenerator!" << G4endl
-             << "Overlap Detection will not work!" << G4endl;
+      G4cout << "Warning: Primary generator is not OlapGenerator!" << G4endl
+             << "         Overlap Detection will not work!" << G4endl;
       return;
    }     
    
@@ -346,7 +291,6 @@ void OlapManager::SetGrid(G4int x, G4int y, G4int z)
 
 void OlapManager::notifyNewWorld(G4LogicalVolume* nw)
 {
-   //G4cout << G4endl << "NewWorld-Notif: " << nw->GetName() << G4endl;
    std::set<OlapNotify*>::iterator i = theNotifs.begin();
    for(;i!=theNotifs.end();++i)
      (*i)->worldChanged(nw);   

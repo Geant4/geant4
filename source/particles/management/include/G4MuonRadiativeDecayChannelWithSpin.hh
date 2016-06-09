@@ -27,11 +27,17 @@
 //      GEANT 4 class header file
 //
 //      History:
-//               25 July 2007 P.Gumplinger
+//               25 July 2007   P.Gumplinger - Triumf
+//               10 August 2011 D. Mingming - Center for HEP, Tsinghua Univ.
+//
 //               Samples Radiative Muon Decay
-//               Reference: 
-//                    TRIUMF/TWIST Technote: 
+//               References:
+//                    TRIUMF/TWIST Technote TN-55:
 //                    "Radiative muon decay" by P. Depommier and A. Vacheret
+//                    ------------------------------------------------------
+//                    Yoshitaka Kuno and Yasuhiro Okada
+//                    "Muon Decays and Physics Beyond the Standard Model"
+//                    Rev. Mod. Phys. 73, 151 (2001)
 //
 // ------------------------------------------------------------
 //
@@ -64,6 +70,14 @@ class G4MuonRadiativeDecayChannelWithSpin : public G4VDecayChannel
     //  Destructor
     virtual ~G4MuonRadiativeDecayChannelWithSpin();
 
+  protected:
+    // Copy constructor and assignment operator
+    G4MuonRadiativeDecayChannelWithSpin(const G4MuonRadiativeDecayChannelWithSpin &);
+    G4MuonRadiativeDecayChannelWithSpin & operator=(const G4MuonRadiativeDecayChannelWithSpin &);
+  
+  private:
+    G4MuonRadiativeDecayChannelWithSpin();
+
   public:  // With Description
 
     virtual G4DecayProducts *DecayIt(G4double);
@@ -85,9 +99,6 @@ class G4MuonRadiativeDecayChannelWithSpin : public G4VDecayChannel
     void rn3dim(G4double& x, G4double& y, G4double& z, G4double xlong);
 
     G4double atan4(G4double x, G4double y);
-
-    G4double EMMU;
-    G4double EMASS;
 
 };
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: UVA_ChamberParameterisation.hh,v 1.2 2006/06/29 17:46:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: UVA_ChamberParameterisation.hh,v 1.2 2006-06-29 17:46:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

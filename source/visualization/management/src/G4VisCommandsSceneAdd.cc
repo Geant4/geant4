@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.84 2010/11/06 18:34:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.85 2010-12-11 16:50:10 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -65,8 +65,12 @@
 #include "G4IdentityTrajectoryFilter.hh"
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
+#include "G4Trajectory.hh"
+#include "G4TrajectoryPoint.hh"
 #include "G4RichTrajectory.hh"
 #include "G4RichTrajectoryPoint.hh"
+#include "G4SmoothTrajectory.hh"
+#include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
 #include "G4ios.hh"
 #include <sstream>
@@ -794,6 +798,10 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
       break;
     }
   }
+
+  /* sxmin, etc., not actually used.  Comment out to prevent compiler
+     warnings but keep in case need in future.  Extract transform into
+     reduced code below.
   G4double sxmin(sxmid), sxmax(sxmid);
   G4double symin(symid), symax(symid);
   G4double szmin(szmid), szmax(szmid);
@@ -811,6 +819,15 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   case G4Scale::z:
     szmin = szmid - halfHeight;
     szmax = szmid + halfHeight;
+    transform = G4RotateY3D(halfpi);
+    break;
+  }
+  */
+  G4Transform3D transform;
+  switch (logoDirection) {
+  case G4Scale::x: break;
+  case G4Scale::y: break;
+  case G4Scale::z:
     transform = G4RotateY3D(halfpi);
     break;
   }
@@ -1202,6 +1219,10 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       break;
     }
   }
+
+  /* sxmin, etc., not actually used.  Comment out to prevent compiler
+     warnings but keep in case need in future.  Extract transform and
+     scaleExtent into reduced code below.
   G4double sxmin(sxmid), sxmax(sxmid);
   G4double symin(symid), symax(symid);
   G4double szmin(szmid), szmax(szmid);
@@ -1226,8 +1247,24 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
     break;
   }
+  */
+  G4Transform3D transform;
+  G4VisExtent scaleExtent;
+  switch (scaleDirection) {
+  case G4Scale::x:
+    scaleExtent = G4VisExtent(-halfLength,halfLength,0,0,0,0);
+    break;
+  case G4Scale::y:
+    transform = G4RotateZ3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,-halfLength,halfLength,0,0);
+    break;
+  case G4Scale::z:
+    transform = G4RotateY3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
+    break;
+  }
   transform = G4Translate3D(sxmid,symid,szmid) * transform;
-  //////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+  /////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
 
 
   model->SetTransformation(transform);
@@ -1458,14 +1495,21 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
   UImanager->SetVerboseLevel(keepVerbose);
 
-  if (rich) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"Attributes available for modeling and filtering with"
-	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
-	"\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:\n"
-	     << G4RichTrajectory().GetAttDefs()
+  if (verbosity >= G4VisManager::errors) {
+    G4cout <<
+      "Attributes available for modeling and filtering with"
+      "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
+      "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands:"
+	   << G4endl;
+    if (rich) {
+      G4cout << G4RichTrajectory().GetAttDefs()
 	     << G4RichTrajectoryPoint().GetAttDefs();
+    } else if (smooth) {
+      G4cout << G4SmoothTrajectory().GetAttDefs()
+	     << G4SmoothTrajectoryPoint().GetAttDefs();
+    } else {
+      G4cout << G4Trajectory().GetAttDefs()
+	     << G4TrajectoryPoint().GetAttDefs();
     }
   }
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.27 2009/07/23 09:15:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VeLowEnergyLoss.cc,v 1.27 2009-07-23 09:15:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -70,22 +70,28 @@ G4double     G4VeLowEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
-     lastMaterial(0),
-     nmaxCont1(4),
-     nmaxCont2(16)
+		    lastMaterial(0),
+		    imat(-1),
+		    f1Fluct(0),f2Fluct(0),e1Fluct(0),e2Fluct(0),rateFluct(0),
+		    ipotFluct(0),e1LogFluct(-1),e2LogFluct(-1),ipotLogFluct(-1),		    
+		    nmaxCont1(4),
+		    nmaxCont2(16)
 {
-  G4Exception("G4VeLowEnergyLoss:: default constructor is called");
+      G4Exception("G4VeLowEnergyLoss::G4VeLowEnergyLoss()",
+		    "em1009",FatalException,"default constructor is called");
 }
 
 //
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName, G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
-     lastMaterial(0),
-     nmaxCont1(4),
-     nmaxCont2(16)
-{
-}
+		    lastMaterial(0),
+		    imat(-1),
+		    f1Fluct(0),f2Fluct(0),e1Fluct(0),e2Fluct(0),rateFluct(0),
+		    ipotFluct(0),e1LogFluct(-1),e2LogFluct(-1),ipotLogFluct(-1),	    
+		    nmaxCont1(4),
+		    nmaxCont2(16)
+{;}
 
 //
 
@@ -97,11 +103,13 @@ G4VeLowEnergyLoss::~G4VeLowEnergyLoss()
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
-     lastMaterial(0),
-     nmaxCont1(4),
-     nmaxCont2(16)
-{
-}
+		    lastMaterial(0),
+		    imat(-1),
+		    f1Fluct(0),f2Fluct(0),e1Fluct(0),e2Fluct(0),rateFluct(0),
+		    ipotFluct(0),e1LogFluct(-1),e2LogFluct(-1),ipotLogFluct(-1),
+		    nmaxCont1(4),
+		    nmaxCont2(16)
+{;}
 
 void G4VeLowEnergyLoss::SetRndmStep(G4bool value)
 {
@@ -324,7 +332,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
 
 void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
 					   G4double, // lowestKineticEnergy
-					   G4double highestKineticEnergy, G4int TotBin,
+					   G4double /*highestKineticEnergy*/, G4int TotBin,
 					   G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
 {
@@ -332,8 +340,9 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
            LowEdgeEnergy,tau,Value ;
+  //G4double ltaulim,ltaumax; 
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
 
@@ -341,8 +350,8 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
+  //ltaulim = std::log(taulim);
+  //ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -385,15 +394,16 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
 
 void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
 					      G4double, // lowestKineticEnergy
-					      G4double highestKineticEnergy, G4int TotBin,
+					      G4double /*highestKineticEnergy*/, G4int TotBin,
 					      G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
 {
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
            LowEdgeEnergy,tau,Value ;
+  //G4double ltaulim,ltaumax;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
   //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -402,8 +412,8 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
+  //ltaulim = std::log(taulim);
+  //ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;

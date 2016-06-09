@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.20 2010/11/17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VGammaDeexcitation.cc,v 1.20 2010-11-17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -51,6 +51,8 @@
 //
 //        23 April 2010, V.Ivanchenko rewite kinematic part using PDG formula
 //                                    for 2-body decay
+//
+//        07 May   2011, V.Ivanchenko implement check ICM flag - produce or not e-
 //
 // -------------------------------------------------------------------
 
@@ -133,14 +135,15 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   // 23/04/10 V.Ivanchenko rewrite complitely
   G4double eGamma = 0.;
   
-  if (_transition != 0) {
+  if (_transition) {
     _transition->SelectGamma();  // it can be conversion electron too
     eGamma = _transition->GetGammaEnergy(); 
     if(eGamma <= 0.0) { return 0; }
-  }
+  } else { return 0; }
+
   G4double excitation = _nucleus->GetExcitationEnergy() - eGamma;
   if(excitation < 0.0) { excitation = 0.0; } 
-  if (_verbose > 1 && _transition != 0 ) 
+  if (_verbose > 1) 
     {
       G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << eGamma 
 	     << " ** left Eexc(MeV)= " << excitation
@@ -157,7 +160,10 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 
   G4DiscreteGammaTransition* dtransition = 
     dynamic_cast <G4DiscreteGammaTransition*> (_transition);
-  if ( dtransition && !( dtransition->IsAGamma()) ) { 
+
+  G4bool eTransition = false;
+  if (dtransition && !( dtransition->IsAGamma()) ) {
+    eTransition = true; 
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
@@ -182,14 +188,19 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 			  mom * cosTheta,
 			  GammaEnergy);
   Gamma4P.boost(bst);  
-  G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
-
   G4double gammaTime = _nucleus->GetCreationTime() + _transition->GetGammaCreationTime();
-  thePhoton->SetCreationTime(gammaTime);
 
+  // modified primary fragment 
   lv -= Gamma4P;
   _nucleus->SetMomentum(lv);
   _nucleus->SetCreationTime(gammaTime);
+
+  // e- is not produced
+  if(eTransition && !dtransition->GetICM()) { return 0; }
+
+  // gamma or e- are produced
+  G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
+  thePhoton->SetCreationTime(gammaTime);
 
   //G4cout << "G4VGammaDeexcitation::GenerateGamma left nucleus: " << _nucleus << G4endl;
   return thePhoton;

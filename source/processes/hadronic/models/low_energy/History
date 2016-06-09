@@ -14,6 +14,42 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2011 - V.Ivanchenko (hadr-lep-V09-04-05)
+----------------------------------------------------
+  Added protection against return back only primary particle with 
+  increased energy (warning in simplified calorimeter test):
+   G4LEDeuteronInelastic.cc
+   G4LETritonInelastic.cc
+   G4LEAlphaInelastic.cc
+
+25 October 2011 - Dennis Wright (hadr-lep-V09-04-04)
+----------------------------------------------------
+  Replace Description() with ModelDescription(std::ostream&) in all models
+
+27 September 2011 - Dennis Wright (hadr-lep-V09-04-03)
+------------------------------------------------------
+  Migrate to integer Z and A.  Files affected: 
+   G4LCapture.cc
+   G4LEAlphaInelastic.cc
+   G4LEDeuteronInelastic.cc
+   G4LENeutronInelastic.cc
+   G4LEProtonInelastic.cc
+   G4LETritonInelastic.cc
+   G4LElastic.cc
+   G4LFission.cc
+
+02 August 2011 - Dennis Wright (hadr-lep-V09-04-02)
+---------------------------------------------------
+  Remove test directory from trunk.  It remains in tag hadr-lep-V09-04-01
+
+02 August 2011 - Dennis Wright (hadr-lep-V09-04-01)
+---------------------------------------------------
+  Add Description() method to all model classes for html documentation
+
+19 May 2011 - Dennis Wright (hadr-lep-V09-04-00)
+------------------------------------------------
+  G4LCapture.cc: fix gcc-4.6 compiler warning (variable e0 set but not used)
+
 26 February 2007 - Dennis Wright (hadr-lep-V08-02-01)
 -----------------------------------------------------
   G4LEAntiProtonInelastic.cc : for low energy (< 0.1 MeV) anti-protons,

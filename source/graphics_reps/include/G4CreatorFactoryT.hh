@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CreatorFactoryT.hh,v 1.2 2006/12/13 15:44:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CreatorFactoryT.hh,v 1.2 2006-12-13 15:44:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic identifier-creator based factory. Based on 
 // factory presented in "Modern C++ Design, Andrei Alexandrescu"
@@ -36,7 +36,6 @@
 
 #include "globals.hh"
 #include <map>
-#include <sstream>
 
 template <typename T, typename Identifier, typename Creator>
 class G4CreatorFactoryT {
@@ -76,11 +75,12 @@ G4CreatorFactoryT<T, Identifier, Creator>::Register(const Identifier& id,
 						    Creator creator)
 {
   if (fMap.find(id) != fMap.end()) {
-    std::ostringstream o;
-    o << "Creator with identifier "<<id<<" already exists.";
+    G4ExceptionDescription ed;
+    ed << "Creator with identifier "<<id<<" already exists."<<G4endl;
     G4Exception
       ("G4CreatorFactoryT::Register(const Identifier& id, Creator creator)",
-       "CreatorExists", JustWarning, o.str().c_str());
+       "greps0102", JustWarning, ed,
+       "Creator exists");
     return false;
   }
 
@@ -96,10 +96,11 @@ G4CreatorFactoryT<T, Identifier, Creator>::Create(const Identifier& id) const
   typename Map::const_iterator iter = fMap.find(id);
   
   if (iter == fMap.end()) {
-    std::ostringstream o;
-    o << "Identifier "<<id<<" does not exist.";
+    G4ExceptionDescription ed;
+    ed << "Identifier "<<id<<" does not exist."<<G4endl;
     G4Exception("G4CreatorFactoryT::Create(const Identifier& id)",
-		"NonExistentIdentifier", JustWarning, o.str().c_str());
+		"greps0103", JustWarning, ed,
+		"Non-existent identifier");
     return 0;
   }
   

@@ -1,4 +1,4 @@
-$Id: NEW_APP_README,v 1.2 2002/03/09 10:15:01 cooperma Exp $
+$Id: NEW_APP_README,v 1.2 2002-03-09 10:15:01 cooperma Exp $
 ------------------------------------------------------------------------------
 This file and NEW_APP_INSTALL describe important information if you are
   planning to create a new parallel Geant4 application, similarly

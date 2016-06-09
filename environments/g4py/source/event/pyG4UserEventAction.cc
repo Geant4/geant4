@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UserEventAction.cc,v 1.6 2006/06/29 15:31:41 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4UserEventAction.cc,v 1.6 2006-06-29 15:31:41 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserEventAction.cc
 //

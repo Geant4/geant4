@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc,v 1.3 2010/10/26 10:06:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4alphaIonisation.cc,v 1.3 2010-10-26 10:06:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -65,8 +65,10 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
     theParticle(0),
     isInitialised(false)
 {
-  //  SetLinearLossLimit(0.15);
-  SetStepFunction(0.2, 0.1*mm);
+  G4Exception("G4alphaIonisation::G4alphaIonisation","em0007",JustWarning,
+	      " The process is not ready for use - incorrect results are expected");
+  SetLinearLossLimit(0.02);
+  SetStepFunction(0.2, 0.01*mm);
   //  SetIntegral(true);
   SetProcessSubType(fIonisation);
   //  SetVerboseLevel(1);
@@ -85,7 +87,7 @@ G4alphaIonisation::~G4alphaIonisation()
 G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (!p.IsShortLived() &&
-	  std::fabs(p.GetPDGCharge() - 2*CLHEP::eplus) < 0.01);
+	  std::fabs(p.GetPDGCharge()/CLHEP::eplus - 2) < 0.01);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

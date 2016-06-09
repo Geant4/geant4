@@ -64,11 +64,12 @@ public:
 public:
   // constructor
   //
-  G4IsotopeMagneticMomentTable ();
+  G4IsotopeMagneticMomentTable();
 
 protected:
-  // hide copy construictor as protected
+  // hide copy construictor and assignment operator as protected
   G4IsotopeMagneticMomentTable(const  G4IsotopeMagneticMomentTable &right);
+  G4IsotopeMagneticMomentTable & operator= (const  G4IsotopeMagneticMomentTable &right);
 
 public:
   // destructor

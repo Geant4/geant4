@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorimeterSD.cc,v 1.6 2006/06/29 17:17:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F02CalorimeterSD.cc,v 1.6 2006-06-29 17:17:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

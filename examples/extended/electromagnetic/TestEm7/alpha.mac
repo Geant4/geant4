@@ -3,16 +3,14 @@
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
 #
-#
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_WATER
+/testem/det/setMat Water
 /testem/det/setSizeX  10 cm
 /testem/det/setSizeYZ 10 cm
-/testem/det/tallyMat G4_WATER
 #
-#/testem/phys/addPhysics local
+/testem/phys/addPhysics local
 #/testem/phys/addPhysics emstandard_opt0
 #/testem/phys/addPhysics emstandard_opt3
 #
@@ -22,8 +20,7 @@
 /gun/energy 400 MeV
 #
 # step limit
-/testem/phys/setCuts 0.5 mm
-#/testem/stepMax 0.5 mm
+/testem/stepMax 0.5 mm
 #
 /testem/event/printModulo 1000
 #
@@ -33,4 +30,3 @@
 /testem/histo/setHisto 3 100 75 85 mm
 #
 /run/beamOn 10000
-#

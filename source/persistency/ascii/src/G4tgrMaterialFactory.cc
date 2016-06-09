@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialFactory.cc,v 1.5 2010/10/13 07:56:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgrMaterialFactory.cc,v 1.5 2010-10-13 07:56:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgrMaterialFactory
@@ -327,7 +327,8 @@ ErrorAlreadyExists(const G4String& object,
   if( bNoRepeating )
   {
     G4tgrUtils::DumpVS( wl, (G4String("!!!! EXITING: ") + msg).c_str() );
-    G4Exception("");
+    G4Exception("G4tgrMaterialFactory", "FatalError",
+                FatalException, "Aborting...");
   }
   else
   {

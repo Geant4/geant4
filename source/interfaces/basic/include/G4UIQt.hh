@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.23 2010/06/10 15:37:13 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4UIQt.hh,v 1.23 2010-06-10 15:37:13 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -45,14 +45,9 @@
 class QMainWindow;
 class QLineEdit;
 class G4UIsession;
-#if QT_VERSION < 0x040000
-class QListView;
-class QListViewItem;
-#else
 class QListWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
-#endif
 class QTextEdit;
 class QLabel;
 class QResizeEvent;
@@ -115,6 +110,9 @@ public: // With description
   bool AddTabWidget(QWidget*,QString,int,int);
   // To add a tab for vis openGL Qt driver
   
+  QWidget* GetViewComponentsTBWidget();
+  // Get the viewComponent
+
   bool IsSplitterReleased();
 
 public:
@@ -133,13 +131,8 @@ private:
   void FillHelpTree();
   void ExitHelp();
 
-#if QT_VERSION < 0x040000
-  void CreateChildTree(QListViewItem*,G4UIcommandTree*);
-  QListViewItem* FindTreeItem(QListViewItem *,const QString&);
-#else
   void CreateChildTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
-#endif
 
   QString GetCommandList(const G4UIcommand*);
 
@@ -149,17 +142,12 @@ private:
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 
   void CreateVisParametersTBWidget();
-  void CreateViewComponentsTBWidget();
   void CreateHelpTBWidget();
   void CreateCoutTBWidget();
   void CreateHistoryTBWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
-#if QT_VERSION < 0x040000
-  QString GetLongCommandPath(QListViewItem*);
-#else
   QString GetLongCommandPath(QTreeWidgetItem*);
-#endif
 
 private:
 
@@ -176,13 +164,8 @@ private:
   QStringList fG4cout;
   QLineEdit * fCoutFilter;
 
-#if QT_VERSION < 0x040000
-  QListView *fHistoryTBTableList;
-  QListView *fHelpTreeWidget;
-#else
   QListWidget *fHistoryTBTableList;
   QTreeWidget *fHelpTreeWidget;
-#endif
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
   QWidget* fCoutTBWidget;
@@ -197,7 +180,7 @@ private:
   int fLastQTabSizeX;
   int fLastQTabSizeY;
 
-private slots :
+private Q_SLOTS :
   void ExitSession();
   void ClearButtonCallback();
   void CommandEnteredCallback();

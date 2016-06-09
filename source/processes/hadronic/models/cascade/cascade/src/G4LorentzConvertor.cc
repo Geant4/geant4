@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LorentzConvertor.cc,v 1.30 2010/12/15 07:41:13 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4LorentzConvertor.cc,v 1.30 2010-12-15 07:41:13 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,6 +34,8 @@
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 // 20100617  M. Kelsey -- Add more diagnostic messages with multiple levels
 // 20100713  M. Kelsey -- All diagnostic messages should be verbose > 1
+// 20110525  M. Kelsey -- Add some diagnostic messages in both ::rotate()
+// 20110602  M. Kelsey -- Simplify some kinematics, dropping intermediate calcs
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
@@ -44,17 +46,12 @@
 const G4double G4LorentzConvertor::small = 1.0e-10;
 
 G4LorentzConvertor::G4LorentzConvertor() 
-  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
-    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
-  if (verboseLevel)
-    G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
-}
+  : verboseLevel(0), v2(0.), ecm_tot(0.), valong(0.), degenerated(false) {}
 
 G4LorentzConvertor::
 G4LorentzConvertor(const G4LorentzVector& bmom, G4double bmass, 
 		   const G4LorentzVector& tmom, G4double tmass) 
-  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
-    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
+  : verboseLevel(0), v2(0.), ecm_tot(0.), valong(0.), degenerated(false) {
   setBullet(bmom, bmass);
   setTarget(tmom, tmass);
 }
@@ -62,8 +59,7 @@ G4LorentzConvertor(const G4LorentzVector& bmom, G4double bmass,
 G4LorentzConvertor::
 G4LorentzConvertor(const G4InuclParticle* bullet, 
 		   const G4InuclParticle* target) 
-  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
-    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
+  : verboseLevel(0), v2(0.), ecm_tot(0.), valong(0.), degenerated(false) {
   setBullet(bullet);
   setTarget(target);
 }
@@ -78,52 +74,23 @@ void G4LorentzConvertor::setTarget(const G4InuclParticle* target) {
 }
 
 
-// Boost bullet and target four-vectors into destired frame
+// Boost bullet and target four-vectors into desired frame
 
 void G4LorentzConvertor::toTheCenterOfMass() {
   if (verboseLevel > 2)
     G4cout << " >>> G4LorentzConvertor::toTheCenterOfMass" << G4endl;
 
-  G4LorentzVector cm4v = target_mom + bullet_mom;
-  velocity = cm4v.boostVector();
-  if (verboseLevel > 3)
-    G4cout << " boost " << velocity.x() << " " << velocity.y() << " "
-	   << velocity.z() << G4endl;
+  velocity = (target_mom+bullet_mom).boostVector();
+  if (verboseLevel > 3) G4cout << " boost " << velocity << G4endl;
 
   // "SCM" is reverse target momentum in the CM frame
   scm_momentum = target_mom;
   scm_momentum.boost(-velocity);
   scm_momentum.setVect(-scm_momentum.vect());
 
-  if (verboseLevel > 3)
-    G4cout << " pscm " << scm_momentum.x() << " " << scm_momentum.y()
-	   << " " << scm_momentum.z() << G4endl;
+  if (verboseLevel > 3) G4cout << " pscm " << scm_momentum.vect() << G4endl;
 
-  // Compute kinematic quantities for rotate() functions
-  v2 = velocity.mag2();
-  ecm_tot = cm4v.m();
-  gamma = cm4v.e()/ecm_tot;
-
-  G4double pscm = scm_momentum.rho();
-  G4double pa   = pscm*pscm;
-  G4double pb   = scm_momentum.vect().dot(velocity);
-
-  G4double gasq = v2-pb*pb/pa;
-  ga = (gasq > small*small) ? std::sqrt(gasq) : 0.;
-
-  gb = pb / pscm;
-  gbpp = gb / pscm;
-  gapp = ga * pscm;
-
-  degenerated = (ga < small);
-  if (degenerated && verboseLevel > 2) 
-    G4cout << " degenerated case (already in CM frame) " << G4endl; 
-
-  if (verboseLevel > 3) {
-    G4double pv = target_mom.vect().dot(velocity);
-    G4cout << " ga " << ga << " v2 " << v2 << " pb " << pb
-	   << " pb * pb / pa " << pb * pb / pa << " pv " << pv << G4endl;
-  }
+  fillKinematics();
 }
 
 void G4LorentzConvertor::toTheTargetRestFrame() {
@@ -131,40 +98,37 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
     G4cout << " >>> G4LorentzConvertor::toTheTargetRestFrame" << G4endl;
 
   velocity = target_mom.boostVector();
-  if (verboseLevel > 3)
-    G4cout << " boost " << velocity.x() << " " << velocity.y() << " "
-	   << velocity.z() << G4endl;
+  if (verboseLevel > 3) G4cout << " boost " << velocity << G4endl;
 
   // "SCM" is bullet momentum in the target's frame
   scm_momentum = bullet_mom;
   scm_momentum.boost(-velocity);
 
-  if (verboseLevel > 3)
-    G4cout << " pseudo-pscm " << scm_momentum.x() << " " << scm_momentum.y()
-	   << " " << scm_momentum.z() << G4endl;
+  if (verboseLevel > 3) G4cout << " pseudo-pscm " << scm_momentum.vect() << G4endl;
 
-  // Compute kinematic quantities for rotate() functions
+  fillKinematics();
+}
+
+// Compute kinematic quantities for rotate() functions
+
+void G4LorentzConvertor::fillKinematics() {
+  ecm_tot = (target_mom+bullet_mom).m();
+
+  scm_direction = scm_momentum.vect().unit();
+  valong = velocity.dot(scm_direction);
+
   v2 = velocity.mag2();
-  gamma = target_mom.e() / target_mom.m();
 
-  G4double pscm = scm_momentum.rho();
-  G4double pa   = pscm*pscm;
-  G4double pb   = velocity.dot(scm_momentum.vect());
+  G4double pvsq = v2 - valong*valong;		// velocity perp to scm_momentum
+  if (verboseLevel > 3) G4cout << " pvsq " << pvsq << G4endl;
 
-  G4double gasq = v2-pb*pb/pa;
-  ga = (gasq > small*small) ? std::sqrt(gasq) : 0.;
-
-  gb = pb/pscm;
-  gbpp = gb/pscm;
-  gapp = ga*pscm;
-
-  degenerated = (ga < small);
+  degenerated = (pvsq < small);
   if (degenerated && verboseLevel > 2) 
-    G4cout << " degenerated case (already in target frame) " << G4endl; 
+    G4cout << " degenerated case (already along Z) " << G4endl; 
 
   if (verboseLevel > 3) {
-    G4cout << " ga " << ga << " v2 " << v2 << " pb " << pb
-	   << " pb * pb / pa " << pb * pb / pa << G4endl;
+    G4cout << " v2 " << v2 << " valong " << valong
+	   << " valong*valong " << valong*valong << G4endl;
   }
 }
 
@@ -195,13 +159,9 @@ G4double G4LorentzConvertor::getKinEnergyInTheTRS() const {
   if (verboseLevel > 2)
     G4cout << " >>> G4LorentzConvertor::getKinEnergyInTheTRS" << G4endl;
 
-  G4double pv = bullet_mom.vect().dot(target_mom.vect());
-  
-   G4double ekin_trf =
-    (target_mom.e() * bullet_mom.e() - pv) / target_mom.m()
-    - bullet_mom.m();
-  
-  return ekin_trf; 
+  G4LorentzVector bmom = bullet_mom;
+  bmom.boost(-target_mom.boostVector());
+  return bmom.e()-bmom.m();
 }
 
 G4double G4LorentzConvertor::getTRSMomentum() const {
@@ -218,8 +178,7 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom) const {
     G4cout << " >>> G4LorentzConvertor::rotate(G4LorentzVector)" << G4endl;
 
   if (verboseLevel > 3) {
-    G4cout << " ga " << ga << " gbpp " << gbpp << " gapp " << gapp << G4endl
-	   << " degenerated " << degenerated << G4endl
+    G4cout << " valong " << valong << " degenerated " << degenerated << G4endl
 	   << " before rotation: px " << mom.x() << " py " << mom.y()
 	   << " pz " << mom.z() << G4endl;
   }
@@ -229,12 +188,22 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom) const {
     if (verboseLevel > 2)
       G4cout << " rotating to align with reference z axis " << G4endl;
 
-    G4ThreeVector vscm = velocity - gbpp*scm_momentum.vect();
-    G4ThreeVector vxcm = scm_momentum.vect().cross(velocity);
+    G4ThreeVector vscm = velocity - valong*scm_direction;
+    G4ThreeVector vxcm = scm_direction.cross(velocity);
 
-    mom_rot.setVect(mom.x()*vscm/ga + mom.y()*vxcm/gapp +
-		    mom.z()*scm_momentum.vect().unit() );
-  };
+    if (vscm.mag() > small && vxcm.mag() > small) {	// Double check
+      if (verboseLevel > 3) {
+	G4cout << " reference z axis " << scm_direction
+	       << " vscm " << vscm << " vxcm " << vxcm << G4endl;
+      }
+      
+      mom_rot.setVect(mom.x()*vscm.unit() + mom.y()*vxcm.unit() +
+		      mom.z()*scm_direction);
+    } else {
+      if (verboseLevel) 
+	G4cerr << ">>> G4LorentzVector::rotate zero with !degenerated" << G4endl;
+    }
+  }
 
   if (verboseLevel > 3) {
     G4cout << " after rotation: px " << mom_rot.x() << " py " << mom_rot.y()
@@ -255,36 +224,36 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom1,
 	   << " pz " << mom.z() << G4endl;
   }
 
-  G4double pp = mom1.vect().mag2();
-  G4double pv = mom1.vect().dot(velocity);
+  G4ThreeVector mom1_dir = mom1.vect().unit();
+  G4double pv = velocity.dot(mom1_dir);
 
-  G4double ga1 = v2 - pv * pv / pp;
+  G4double vperp = v2 - pv*pv;		// velocity perpendicular to mom1
   if (verboseLevel > 3) {
-    G4cout << " ga1 " << ga1 << " small? " << (ga1 <= small) << G4endl;
+    G4cout << " vperp " << vperp << " small? " << (vperp <= small) << G4endl;
   }
 
   G4LorentzVector mom_rot = mom;
 
-  if (ga1 > small) {
-    ga1 = std::sqrt(ga1);
-    G4double gb1 = pv / pp;
-
-    pp = std::sqrt(pp);
-    G4double ga1pp = ga1 * pp;
-
-    if (verboseLevel > 3) {
-      G4cout << " gb1 " << gb1 << " ga1pp " << ga1pp << G4endl;
-    }
-
+  if (vperp > small) {
     if (verboseLevel > 2)
       G4cout << " rotating to align with first z axis " << G4endl;
 
-    G4ThreeVector vmom1 = velocity - gb1*mom1;
-    G4ThreeVector vxm1  = mom1.vect().cross(velocity);
+    G4ThreeVector vmom1 = velocity - pv*mom1_dir;
+    G4ThreeVector vxm1  = mom1_dir.cross(velocity);
 
-    mom_rot.setVect(mom.x()*vmom1/ga1 + mom.y()*vxm1/ga1pp +
-		    mom.z()*mom1.vect().unit() );
-  };
+    if (vmom1.mag() > small && vxm1.mag() > small) {	// Double check
+      if (verboseLevel > 3) {
+	G4cout << " first z axis " << mom1_dir << G4endl
+	       << " vmom1 " << vmom1 << " vxm1 " << vxm1 << G4endl;
+      }
+      
+      mom_rot.setVect(mom.x()*vmom1.unit() + mom.y()*vxm1.unit() +
+		      mom.z()*mom1_dir );
+    } else {
+      if (verboseLevel) 
+	G4cerr << ">>> G4LorentzVector::rotate zero with !degenerated" << G4endl;
+    }
+  }
 
   if (verboseLevel > 3) {
     G4cout << " after rotation: px " << mom_rot.x() << " py " << mom_rot.y()

@@ -23,23 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.hh,v 1.2 2009/10/21 10:47:02 pandola Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PenelopePhotoElectricModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
-// 08 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
-//                            to EM model
-// 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle
-//                            AtomicDeexcitationFlag - now demanded to G4VEmModel
+// 08 Jan 2010   L. Pandola   1st implementation. 
+// 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
 //
 // -------------------------------------------------------------------
 //
 // Class description:
 // Low Energy Electromagnetic Physics, Photo-electric effect
-// with Penelope Model
+// with Penelope Model, version 2008
 // -------------------------------------------------------------------
 
 #ifndef G4PENELOPEPHOTOELECTRICMODEL_HH
@@ -49,13 +48,13 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
-class G4VCrossSectionHandler;
 
 class G4PenelopePhotoElectricModel : public G4VEmModel 
 {
@@ -63,7 +62,7 @@ class G4PenelopePhotoElectricModel : public G4VEmModel
 public:
   
   G4PenelopePhotoElectricModel(const G4ParticleDefinition* p=0,
-			 const G4String& processName ="PenPhotoElec");
+			       const G4String& processName ="PenPhotoElec");
   
   virtual ~G4PenelopePhotoElectricModel();
 
@@ -86,7 +85,10 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
+  //testing purposes
+  size_t GetNumberOfShellXS(G4int);
+  G4double GetShellCrossSection(G4int Z,size_t shellID,G4double energy);
+
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
@@ -104,10 +106,20 @@ private:
   G4int verboseLevel;
   G4bool isInitialised;
 
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VCrossSectionHandler* shellCrossSectionHandler;
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
 
-  G4AtomicDeexcitation deexcitationManager;
+  void ReadDataFile(G4int Z);
+
+  //For each Z, the PhysicsTable contains nShell+1 physics vectors
+  //with log(E) vs. log(XS)
+  //Element [0] of the table is the total XS, element [iS] is the 
+  //partial cross section for shell iS-1
+  std::map<const G4int,G4PhysicsTable*> *logAtomicShellXS;
+
+  size_t SelectRandomShell(G4int Z,G4double energy);
+  G4String WriteTargetShell(size_t shellID);
+
 
 };
 

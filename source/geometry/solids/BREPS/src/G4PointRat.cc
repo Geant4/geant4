@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PointRat.cc,v 1.6 2006/06/29 18:42:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PointRat.cc,v 1.6 2006-06-29 18:42:30 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -52,6 +52,8 @@ G4PointRat::~G4PointRat()
 
 G4PointRat& G4PointRat::operator=(const G4PointRat& a)
 {
+    if (this == &a)  { return *this; }
+
     pt3d.setX(a.x());
     pt3d.setY(a.y());
     pt3d.setZ(a.z());

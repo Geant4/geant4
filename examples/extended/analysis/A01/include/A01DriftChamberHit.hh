@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DriftChamberHit.hh,v 1.5 2006/06/29 16:30:55 gunter Exp $
+// $Id: A01DriftChamberHit.hh,v 1.5 2006-06-29 16:30:55 gunter Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01DriftChamberHit_h

@@ -23,15 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4He3GEMProbability.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4He3GEMProbability.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-
-
 
 #ifndef G4He3GEMProbability_h
 #define G4He3GEMProbability_h 1
@@ -43,41 +40,19 @@
 class G4He3GEMProbability : public G4GEMProbability
 {
 public:
-    // Only available constructor
-    G4He3GEMProbability();
+  // Only available constructor
+  G4He3GEMProbability();
     
-    ~G4He3GEMProbability() {}
+  ~G4He3GEMProbability();
+
 private:  
-    // Copy constructor
-    G4He3GEMProbability(const G4He3GEMProbability &right);
+  // Copy constructor
+  G4He3GEMProbability(const G4He3GEMProbability &right);
     
-    const G4He3GEMProbability & operator=(const G4He3GEMProbability &right);
-    G4bool operator==(const G4He3GEMProbability &right) const;
-    G4bool operator!=(const G4He3GEMProbability &right) const;
+  const G4He3GEMProbability & operator=(const G4He3GEMProbability &right);
+  G4bool operator==(const G4He3GEMProbability &right) const;
+  G4bool operator!=(const G4He3GEMProbability &right) const;
   
-
-private:
-    
-    virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-        {
-            return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));
-        }
-	
-    virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
-        {
-            return -GetCoulombBarrier(fragment);
-        }
-
-    G4double CCoeficient(const G4double aZ) const;
-
-    
-    // Excitation energy levels 
-    std::vector<G4double> ExcitEnergies;
-    // Spin of excitation energy levels 
-    std::vector<G4double> ExcitSpins;
-
-    std::vector<G4double> ExcitLifetimes;
-    
 };
 
 

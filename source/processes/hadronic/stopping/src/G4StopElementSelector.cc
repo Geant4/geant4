@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StopElementSelector.cc,v 1.16 2007/10/02 18:27:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StopElementSelector.cc,v 1.16 2007-10-02 18:27:43 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4StopElementSelector
 //

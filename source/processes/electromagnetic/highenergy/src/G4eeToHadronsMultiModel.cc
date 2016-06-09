@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.9 2010/10/26 14:15:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.9 2010-10-26 14:15:40 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,8 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name
 {
   thKineticEnergy  = DBL_MAX;
   maxKineticEnergy = 1.2*GeV;
+  fParticleChange  = 0;
+  cross = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

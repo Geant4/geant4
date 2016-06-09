@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.18 2006/06/29 19:54:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEnergyLoss.hh,v 1.18 2006-06-29 19:54:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -70,9 +70,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 {
   public:
 
-      G4VEnergyLoss(const G4String& ,
-				   G4ProcessType   aType = fNotDefined );
-      G4VEnergyLoss(G4VEnergyLoss &);
+      G4VEnergyLoss(const G4String&,G4ProcessType   aType = fNotDefined );
 
       virtual ~G4VEnergyLoss();
 
@@ -144,10 +142,6 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                            G4double Tmin,G4double Tmax,G4int nbin);
 
    private:
-
-  // hide default constructor and assignment operator as private
-      G4VEnergyLoss();
-      G4VEnergyLoss & operator=(const G4VEnergyLoss &right);
 
       void BuildRangeVector(G4PhysicsTable* theDEDXTable,
                      G4double Tmin,G4double Tmax,G4int nbin,

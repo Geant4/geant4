@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.14 2010/10/20 09:14:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BREPSolidBox.cc,v 1.14 2010-10-20 09:14:11 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

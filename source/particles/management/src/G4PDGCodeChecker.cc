@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.16 2010/12/15 07:39:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PDGCodeChecker.cc,v 1.16 2010-12-15 07:39:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -134,11 +134,20 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   } else if (std::abs(tempPDGcode)%10000 == 4122) { 
     // Lambda_c
     quark2=2;  quark3 = 1; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5122) { 
+    // Lambda_b
+    quark2=2;  quark3 = 1; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 4132) { 
     // Xi_c0
     quark2=3;  quark3 = 1; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 4232) { 
     // Xi_c+
+    quark2=3;  quark3 = 2; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5132) { 
+    // Xi_b0
+    quark2=3;  quark3 = 1; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5232) { 
+    // Xi_b+
     quark2=3;  quark3 = 2; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 2122) { 
     // Delta+ (spin 1/2) 
@@ -380,7 +389,9 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   pcode -= 10000*Z;
   G4int A = pcode/10;
   
-  if (A < 2 || Z > A-L || L>A || Z<=0 ) {
+  // Allow neutron balls
+  // if (A < 2 || Z > A-L || L>A || Z<=0 ) {
+  if (A < 2 || Z > A-L || L>A ) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << " G4PDGCodeChecker::CheckPDGCode : ";

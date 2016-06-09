@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElastic.cc,v 1.2 2010/11/19 11:12:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CrossSectionElastic.cc,v 1.2 2010-11-19 11:12:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -48,52 +48,55 @@
 #include "G4CrossSectionElastic.hh"
 #include "G4VComponentCrossSection.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4DynamicParticle.hh"
+#include "G4Element.hh"
+#include "G4NistManager.hh"
 
-G4CrossSectionElastic::G4CrossSectionElastic(const G4ParticleDefinition* p, 
-					     G4VComponentCrossSection* c,
+G4CrossSectionElastic::G4CrossSectionElastic(G4VComponentCrossSection* c,
 					     G4int zmin, G4int zmax, 
 					     G4double Emin, G4double Emax)
-  : G4VCrossSectionDataSet(c->GetName()),particle(p), component(c),
+  : G4VCrossSectionDataSet(c->GetName()), component(c),
     Zmin(zmin),Zmax(zmax)
 {
+  nist = G4NistManager::Instance();
   SetMinKinEnergy(Emin);
   SetMaxKinEnergy(Emax);
 }
 
 G4CrossSectionElastic::~G4CrossSectionElastic()
-{
-  delete component;
-}
+{}
    
-G4bool G4CrossSectionElastic::IsApplicable(const G4DynamicParticle* p, 
-					   const G4Element* elm)
-{
-  return IsIsoApplicable(p, G4int(elm->GetZ()), 0); 
-}
-
-G4bool 
-G4CrossSectionElastic::IsIsoApplicable(const G4DynamicParticle* p, 
-				       G4int Z, G4int)
+G4bool G4CrossSectionElastic::IsElementApplicable(const G4DynamicParticle* p, 
+						  G4int Z, const G4Material*)
 {
   G4double e = p->GetKineticEnergy();
   return 
     (Z >= Zmin && Z <= Zmax && e >= GetMinKinEnergy() && e <= GetMaxKinEnergy()); 
 }
 
-
 G4double 
-G4CrossSectionElastic::GetCrossSection(const G4DynamicParticle* p, 
-				       const G4Element* elm, G4double)
+G4CrossSectionElastic::GetElementCrossSection(const G4DynamicParticle* p, 
+					      G4int Z, 
+					      const G4Material*)
 {
-  return component->GetElasticCrossSection(p->GetDefinition(), 
-					   p->GetKineticEnergy(), elm);
+  return component->GetElasticElementCrossSection(p->GetDefinition(), 
+						  p->GetKineticEnergy(), 
+						  Z, nist->GetAtomicMassAmu(Z));
 }
 
-G4double 
-G4CrossSectionElastic::GetZandACrossSection(const G4DynamicParticle* p, G4int Z,
-					      G4int A, G4double)
+void G4CrossSectionElastic::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  return component->GetElasticZandACrossSection(p->GetDefinition(), 
-						p->GetKineticEnergy(), 
-						Z, A);
+  component->BuildPhysicsTable(p);
 }
+
+void G4CrossSectionElastic::DumpPhysicsTable(const G4ParticleDefinition& p)
+{
+  component->DumpPhysicsTable(p);
+}
+
+void G4CrossSectionElastic::CrossSectionDescription(std::ostream& /*outFile*/) const
+{
+  component->Description();
+}
+
+

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.27 2009/11/27 16:34:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Region.cc,v 1.27 2009-11-27 16:34:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Region Implementation
@@ -48,16 +48,18 @@
 G4Region::G4Region(const G4String& pName)
   : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
     fFieldManager(0), fFastSimulationManager(0), fWorldPhys(0),
-    fRegionalSteppingAction(0)
+    fRegionalSteppingAction(0),
+    fInMassGeometry(false), fInParallelGeometry(false)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
   {
-    G4cerr << "WARNING - G4Region::G4Region()" << G4endl
-           << "          Region " << pName << " already existing in store !"
-           << G4endl;
-    G4Exception("G4Region::G4Region()", "InvalidSetup", JustWarning,
-                "The region has NOT been registered !");
+    std::ostringstream message;
+    message << "The region has NOT been registered !" << G4endl
+            << "          Region " << pName << " already existing in store !"
+            << G4endl;
+    G4Exception("G4Region::G4Region()", "GeomMgt1001",
+                JustWarning, message);
   }
   else
   {
@@ -73,7 +75,8 @@ G4Region::G4Region(const G4String& pName)
 G4Region::G4Region( __void__& )
   : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
     fFieldManager(0), fFastSimulationManager(0), fWorldPhys(0),
-    fRegionalSteppingAction(0)
+    fRegionalSteppingAction(0),
+    fInMassGeometry(false), fInParallelGeometry(false)
 {
   // Register to store
   //
@@ -108,20 +111,20 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   G4Region* currentRegion = 0;
   size_t noDaughters = lv->GetNoDaughters();
   G4Material* volMat = lv->GetMaterial();
-  if(!volMat)
+  if(!volMat && fInMassGeometry)
   {
-    G4String errmsg = "Logical volume <";
-    errmsg += lv->GetName();
-    errmsg += "> does not have a valid material pointer.\n";
-    errmsg += "A logical volume belonging to the (tracking) world volume ";
-    errmsg += "must have a valid material.\nCheck your geometry construction.";
-    G4Exception("G4Region::ScanVolumeTree()", "SetupError",
-                FatalException, errmsg);
+    std::ostringstream message;
+    message << "Logical volume <" << lv->GetName() << ">" << G4endl
+            << "does not have a valid material pointer." << G4endl
+            << "A logical volume belonging to the (tracking) world volume "
+            << "must have a valid material.";
+    G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
+                FatalException, message, "Check your geometry construction.");
   }
   if (region)
   {
     currentRegion = this;
-    AddMaterial(volMat);
+    if(volMat) { AddMaterial(volMat); }
   }
 
   // Set the LV region to be either the current region or NULL,
@@ -147,17 +150,18 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       for (register size_t mat=0; mat<matNo; mat++)
       {
         volMat = pParam->GetMaterialScanner()->GetMaterial(mat);
-        if(!volMat)
+        if(!volMat && fInMassGeometry)
         {
-          G4String errmsg = "The parameterisation for the physical volume <";
-          errmsg += daughterPVol->GetName();
-          errmsg += ">\n does not return a valid material pointer.\n";
-          errmsg += "A volume belonging to the (tracking) world volume must ";
-          errmsg += "have a valid material.\nCheck your parameterisation.";
-          G4Exception("G4Region::ScanVolumeTree()",
-                      "SetupError", FatalException, errmsg);
+          std::ostringstream message;
+          message << "The parameterisation for the physical volume <"
+                  << daughterPVol->GetName() << ">" << G4endl
+                  << "does not return a valid material pointer." << G4endl
+                  << "A volume belonging to the (tracking) world volume must "
+                  << "have a valid material.";
+          G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
+                      FatalException, message, "Check your parameterisation.");
         }
-        AddMaterial(volMat);
+        if(volMat) { AddMaterial(volMat); }
       }
     }
     else
@@ -166,17 +170,18 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       for (register size_t rep=0; rep<repNo; rep++)
       {
         volMat = pParam->ComputeMaterial(rep, daughterPVol);
-        if(!volMat)
+        if(!volMat && fInMassGeometry)
         {
-          G4String errmsg = "The parameterisation for the physical volume <";
-          errmsg += daughterPVol->GetName();
-          errmsg += ">\n does not return a valid material pointer.\n";
-          errmsg += "A volume belonging to the (tracking) world volume must ";
-          errmsg += "have a valid material.\nCheck your parameterisation.";
-          G4Exception("G4Region::ScanVolumeTree()",
-                      "SetupError", FatalException, errmsg);
+          std::ostringstream message;
+          message << "The parameterisation for the physical volume <"
+                  << daughterPVol->GetName() << ">" << G4endl
+                  << "does not return a valid material pointer." << G4endl
+                  << "A volume belonging to the (tracking) world volume must "
+                  << "have a valid material.";
+          G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
+                      FatalException, message, "Check your parameterisation.");
         }
-        AddMaterial(volMat);
+        if(volMat) { AddMaterial(volMat); }
       }
     }
     G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
@@ -344,14 +349,14 @@ void G4Region::ClearFastSimulationManager()
     }
     else
     {
-      G4cout << "WARNING - G4Region::GetParentRegion()" << G4endl
-             << "          Region <" << fName << "> belongs to more than"
-             << " one parent region !" << G4endl;
-      G4String message =
-           "A region (" + fName + ") cannot belong to more than one \n"
-         + "direct parent region, to have fast-simulation assigned.";
+      std::ostringstream message;
+      message << "Region <" << fName << "> belongs to more than"
+              << " one parent region !" << G4endl
+              << "A region cannot belong to more than one direct parent region,"
+              << G4endl
+              << "to have fast-simulation assigned.";
       G4Exception("G4Region::ClearFastSimulationManager()",
-                  "InvalidSetup", JustWarning, message);
+                  "GeomMgt1002", JustWarning, message);
       fFastSimulationManager = 0;
     }
   }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearBuilder.cc,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectroNuclearBuilder.cc,v 1.1 2006-10-31 11:35:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,7 +50,12 @@
 #include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 
-G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : wasActivated(false)
+G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : 
+    thePhotoNuclearProcess(0), theElectronNuclearProcess(0), 
+    thePositronNuclearProcess(0), theElectroReaction(0), 
+    theGammaReaction(0), theModel(0), theCascade(0), 
+    theStringModel(0), theFragmentation(0), theStringDecay(0), 
+   wasActivated(false)
 {
 }
 

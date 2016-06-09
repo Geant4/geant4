@@ -243,7 +243,6 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    G4Parton* pAntiColorParton = NULL;   
    GetValenceQuarkFlavors(GetDefinition(), pColorParton, pAntiColorParton);
    G4int ColorEncoding = pColorParton->GetPDGcode();
-   G4int AntiColorEncoding = pAntiColorParton->GetPDGcode();
    
    pts   =  sigmaPt*std::sqrt(-std::log(G4UniformRand()));
    phi   = 2.*pi*G4UniformRand();
@@ -274,7 +273,6 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    G4double SumX = 0;
    G4double aBeta = beta;
    G4double ColorX, AntiColorX;
-   G4double HPWtest = 0;
    if (GetDefinition() == G4PionMinus::PionMinusDefinition()) aBeta = 1.;        
    if (GetDefinition() == G4Gamma::GammaDefinition()) aBeta = 1.;        
    if (GetDefinition() == G4PionPlus::PionPlusDefinition()) aBeta = 1.;     
@@ -286,11 +284,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      SumX = 0;
      nAttempt++;
      G4int    NumberOfUnsampledSeaQuarks = 2*nSeaPair;
-     G4double beta1 = beta;
-     if (std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000) beta1 = 1.; //...  in a meson
      ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-     HPWtest = ColorX;
-     while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin) {;} 
      Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
      for(G4int aPair = 0; aPair < nSeaPair; aPair++) 
      {
@@ -306,14 +300,10 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      }
    } 
    while (1. - SumX <= Xmin); 
+
    (*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
-   /// and here is the bug ;-) @@@@@@@@@@@@@
-   if(getenv("debug_QGSMSplitableHadron") )G4cout << "particle energy at split = "<<Get4Momentum().t()<<G4endl;
-   G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
-    G4double lightCone2 = ((!Direction) ? Get4Momentum().plus() : Get4Momentum().minus());
-  // lightCone -= 0.5*Get4Momentum().m();
-   // hpw testing @@@@@ lightCone = 2.*Get4Momentum().t();
-   if(getenv("debug_QGSMSplitableHadron") )G4cout << "Light cone = "<<lightCone<<G4endl;
+   G4double lightCone  = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
+   G4double lightCone2 = ((!Direction) ? Get4Momentum().plus() : Get4Momentum().minus());
    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
    {
      G4Parton* aParton = Color[aSeaPair];
@@ -322,7 +312,6 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      aParton = AntiColor[aSeaPair]; 
      aParton->DefineMomentumInZ(lightCone, lightCone2, Direction);
    }  
-//--DEBUG--   cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
    return;
 } 
 

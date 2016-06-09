@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.hh,v 1.4 2007/05/22 07:48:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AuxiliaryNavServices.hh,v 1.4 2007-05-22 07:48:08 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4AuxiliaryNavServices

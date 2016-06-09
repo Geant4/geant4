@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.45 2010/05/30 10:28:02 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HepRepSceneHandler.hh,v 1.45 2010-05-30 10:28:02 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 /**

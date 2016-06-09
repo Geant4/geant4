@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.hh,v 1.7 2010/04/08 14:12:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: F03PhysicsList.hh,v 1.7 2010-04-08 14:12:20 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef F03PhysicsList_h

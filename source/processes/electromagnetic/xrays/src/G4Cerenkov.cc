@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.27 2010/06/16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4Cerenkov.cc,v 1.27 2010-06-16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -167,7 +167,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                                aMaterial->GetMaterialPropertiesTable();
         if (!aMaterialPropertiesTable) return pParticleChange;
 
-	const G4MaterialPropertyVector* Rindex = 
+	G4MaterialPropertyVector* Rindex = 
                 aMaterialPropertiesTable->GetProperty("RINDEX"); 
         if (!Rindex) return pParticleChange;
 
@@ -218,11 +218,11 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	
 	////////////////////////////////////////////////////////////////
 
-	G4double Pmin = Rindex->GetMinPhotonEnergy();
-	G4double Pmax = Rindex->GetMaxPhotonEnergy();
+	G4double Pmin = Rindex->GetMinLowEdgeEnergy();
+	G4double Pmax = Rindex->GetMaxLowEdgeEnergy();
 	G4double dp = Pmax - Pmin;
 
-	G4double nMax = Rindex->GetMaxProperty();
+	G4double nMax = Rindex->GetMaxValue();
 
         G4double BetaInverse = 1./beta;
 
@@ -250,7 +250,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		do {
 			rand = G4UniformRand();	
 			sampledEnergy = Pmin + rand * dp; 
-			sampledRI = Rindex->GetProperty(sampledEnergy);
+			sampledRI = Rindex->Value(sampledEnergy);
 			cosTheta = BetaInverse / sampledRI;  
 
 			sin2Theta = (1.0 - cosTheta)*(1.0 + cosTheta);
@@ -395,19 +395,15 @@ void G4Cerenkov::BuildThePhysicsTable()
 		      // Retrieve the first refraction index in vector
 		      // of (photon energy, refraction index) pairs 
 
-		      theRefractionIndexVector->ResetIterator();
-		      ++(*theRefractionIndexVector);	// advance to 1st entry 
-
-		      G4double currentRI = theRefractionIndexVector->
-		  			   GetProperty();
+                      G4double currentRI = (*theRefractionIndexVector)[0];
 
 		      if (currentRI > 1.0) {
 
 			 // Create first (photon energy, Cerenkov Integral)
 			 // pair  
 
-			 G4double currentPM = theRefractionIndexVector->
-			 			 GetPhotonEnergy();
+                         G4double currentPM = theRefractionIndexVector->
+                                                 Energy(0);
 			 G4double currentCAI = 0.0;
 
 			 aPhysicsOrderedFreeVector->
@@ -422,13 +418,12 @@ void G4Cerenkov::BuildThePhysicsTable()
 			 // loop over all (photon energy, refraction index)
 			 // pairs stored for this material  
 
-			 while(++(*theRefractionIndexVector))
+                         for (size_t i = 1;
+                              i < theRefractionIndexVector->GetVectorLength();
+                              i++)
 			 {
-				currentRI=theRefractionIndexVector->	
-						GetProperty();
-
-				currentPM = theRefractionIndexVector->
-						GetPhotonEnergy();
+                                currentRI = (*theRefractionIndexVector)[i];
+                                currentPM = theRefractionIndexVector->Energy(i);
 
 				currentCAI = 0.5*(1.0/(prevRI*prevRI) +
 					          1.0/(currentRI*currentRI));
@@ -494,14 +489,14 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
                             aMaterial->GetMaterialPropertiesTable();
 
-        const G4MaterialPropertyVector* Rindex = NULL;
+        G4MaterialPropertyVector* Rindex = NULL;
 
         if (aMaterialPropertiesTable)
                      Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 
         G4double nMax;
         if (Rindex) {
-           nMax = Rindex->GetMaxProperty();
+           nMax = Rindex->GetMaxValue();
         } else {
            return StepLimit;
         }
@@ -582,7 +577,7 @@ G4double
 G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
                               const G4double beta, 
 			      const G4Material* aMaterial,
-			      const G4MaterialPropertyVector* Rindex) const
+			      G4MaterialPropertyVector* Rindex) const
 {
 	const G4double Rfact = 369.81/(eV * cm);
 
@@ -604,12 +599,12 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
         if(!(CerenkovAngleIntegrals->IsFilledVectorExist()))return 0.0;
 
 	// Min and Max photon energies 
-	G4double Pmin = Rindex->GetMinPhotonEnergy();
-	G4double Pmax = Rindex->GetMaxPhotonEnergy();
+	G4double Pmin = Rindex->GetMinLowEdgeEnergy();
+	G4double Pmax = Rindex->GetMaxLowEdgeEnergy();
 
 	// Min and Max Refraction Indices 
-	G4double nMin = Rindex->GetMinProperty();	
-	G4double nMax = Rindex->GetMaxProperty();
+	G4double nMin = Rindex->GetMinValue();	
+	G4double nMax = Rindex->GetMaxValue();
 
 	// Max Cerenkov Angle Integral 
 	G4double CAImax = CerenkovAngleIntegrals->GetMaxValue();
@@ -632,12 +627,12 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4double charge,
 
 	// If n(Pmin) < 1/Beta, and n(Pmax) >= 1/Beta, then
 	// we need to find a P such that the value of n(P) == 1/Beta.
-	// Interpolation is performed by the GetPhotonEnergy() and
-	// GetProperty() methods of the G4MaterialPropertiesTable and
+	// Interpolation is performed by the GetEnergy() and
+	// Value() methods of the G4MaterialPropertiesTable and
 	// the GetValue() method of G4PhysicsVector.  
 
 	else {
-		Pmin = Rindex->GetPhotonEnergy(BetaInverse);
+		Pmin = Rindex->GetEnergy(BetaInverse);
 		dp = Pmax - Pmin;
 
 		// need boolean for current implementation of G4PhysicsVector

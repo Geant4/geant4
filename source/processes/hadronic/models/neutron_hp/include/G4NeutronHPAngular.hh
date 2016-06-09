@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngular.hh,v 1.12 2007/06/22 09:23:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPAngular.hh,v 1.12 2007-06-22 09:23:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070613 fix memory leaking by T. Koi
 //
@@ -46,12 +46,15 @@ class G4NeutronHPAngular
     
   G4NeutronHPAngular()
   {
-    theAngularDistributionType = 0;
-    theIsoFlag = false;
+//TKDB110511
+    //theAngularDistributionType = 0;
+    //theIsoFlag = false;
+    theIsoFlag = true;
 // TKDB
       theCoefficients = 0;
       theProbArray = 0;
   } 
+
   ~G4NeutronHPAngular()
    {
 // TKDB
@@ -92,6 +95,7 @@ class G4NeutronHPAngular
 
   G4ReactionProduct theTarget;
   G4ReactionProduct theNeutron;
+
 };
 
 #endif

@@ -28,8 +28,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.11 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -123,7 +123,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.11 2010/10/20 08:54:18 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

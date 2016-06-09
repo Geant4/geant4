@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010/10/26 09:45:09 gcosmo Exp $
+# $Id: sources.cmake,v 1.4 2010-10-26 09:45:09 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -44,8 +44,10 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emutils
     HEADERS
         G4AtomicShell.hh
+        G4AtomicShellEnumerator.hh
         G4DummyModel.hh
         G4ElectronIonPair.hh
+        G4EmBiasingManager.hh
         G4EmCalculator.hh
         G4EmConfigurator.hh
         G4EmCorrections.hh
@@ -76,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc
+        G4EmBiasingManager.cc
         G4EmCalculator.cc
         G4EmConfigurator.cc
         G4EmCorrections.cc

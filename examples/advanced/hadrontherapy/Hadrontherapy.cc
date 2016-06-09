@@ -216,6 +216,7 @@ int main(int argc ,char ** argv)
   delete geometryController;
   delete pInteraction; 
   delete runManager;
+  delete analysis;
   return 0;
   
 }

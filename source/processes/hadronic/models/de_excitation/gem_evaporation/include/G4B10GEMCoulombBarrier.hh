@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4B10GEMCoulombBarrier.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4B10GEMCoulombBarrier.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -40,12 +39,10 @@
 #include "G4GEMCoulombBarrier.hh"
 #include "globals.hh"
 //JMQ 200709 now derives from new class G4GEMCoulombBarrier
-//class G4B10GEMCoulombBarrier : public G4GEMCoulombBarrierHE
 class G4B10GEMCoulombBarrier : public G4GEMCoulombBarrier
 {
 public:
-//JMQ 200709
-//  G4B10GEMCoulombBarrier() : G4GEMCoulombBarrierHE(10,5) {};
+  //JMQ 200709
   G4B10GEMCoulombBarrier() : G4GEMCoulombBarrier(10,5) {};
   ~G4B10GEMCoulombBarrier() {};
 
@@ -56,7 +53,6 @@ private:
   G4bool operator==(const G4B10GEMCoulombBarrier & right) const;
   G4bool operator!=(const G4B10GEMCoulombBarrier & right) const;
   
-
 };
 
 #endif

@@ -85,8 +85,8 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
   }
   
   // Create target
-  G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
-  G4Nucleus aTargetNucleus(theTarget->GetN() ,theTarget->GetZ());
+  G4Element* theTarget = theSelector.GetElement(aTrack.GetMaterial());
+  G4Nucleus aTargetNucleus(theTarget->GetA_asInt(), theTarget->GetZ_asInt());
   
   // Call chips
   return theModel.ApplyYourself(aTrack, aTargetNucleus);

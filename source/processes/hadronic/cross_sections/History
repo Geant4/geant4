@@ -14,6 +14,196 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 November 2011 Vladimir Uzhinsky  (hadr-cross-V09-04-34)
+- G4ComponentAntiNuclNuclearXS - Plab/baryon was introdused
+------------------------------------------------------------
+
+24 November 2011 Vladimir Uzhinsky  (hadr-cross-V09-04-33)
+------------------------------------------------------------
+- G4ComponentAntiNuclNuclearXS - fixed typo in previous tag
+
+24 November 2011 Vladimir Uzhinsky  (hadr-cross-V09-04-32)
+------------------------------------------------------------
+- G4ComponentAntiNuclNuclearXS
+  AntiBaryon-Nucleon cross sections at low energies are fixed
+  at value they have at 100 MeV/c of projectile/antinucleon.
+
+12 October 2011 Vladimir Ivanchenko  (hadr-cross-V09-04-31)
+------------------------------------------------------------
+- G4UPiNuclearCrossSection - fixed Barashenkov data for pi+
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS - fixed x-section 
+    off Hydrogen - use PDG and GHEISHA parameterisations
+- G4BGGPionInelasticXS - fixed pi+ cross sections and x-section
+    off Hydrogen 
+- G4TripathiLightCrossSection - added protections against artifact 
+    values of cross section below Coulomb barrier
+
+10 October 2011 Vladimir Ivanchenko  (hadr-cross-V09-04-30)
+------------------------------------------------------------
+- G4GlauberGribovCrossSection and G4HadronNucleonXsc extended for kaons
+    (V.Grichine)
+- G4NucleonNuclearCrossSection - fixed typo in data for Al
+- G4BGGNucleonInelasticXS - fixed cross section on Hydrogen
+
+6 November 2011 D.H. Wright  (hadr-cross-V09-04-29)
+---------------------------------------------------
+- provide descriptions for nearly all cross section classes in method
+  CrossSectionDescription()
+
+26 October 2011 D.H. Wright  (hadr-cross-V09-04-28)
+---------------------------------------------------
+- switch from Description() to CrossSectionDescription(std::ostream&)
+
+24 October 2011 D.H. Wright for Vladimir Grichine  (hadr-cross-V09-04-27)
+-------------------------------------------------------------------------
+- modified p-p cross sections in G4GGNuclNuclCrossSection.hh, .cc,  
+  G4GlauberGribovCrossSection.cc and G4HadronNucleonXsc.cc to include 
+  latest TOTEM data at 7 TeV
+
+21 October 2011 Vladimir Ivanchenko   (hadr-cross-V09-04-26)
+------------------------------------------------------------
+- G4ElectroNuclearCrossSection - removed not needed G4Exception
+- G4PiData - use G4HadronicException instead of G4Exception
+- G4HadronCrossSection - moved constructor, destructor and other 
+    inline methods to the source; make singleton patern classical;
+    substitute G4Exception by G4hadronicException
+
+20 October 2011 Vladimir Ivanchenko   (hadr-cross-V09-04-25)
+------------------------------------------------------------
+- G4BGGNucleonInelasticXS - improved cout
+- G4ElectroNuclearCrossSection - removed check of "tolarance"; added
+    numerical protections in methods computing equivavalent photon
+    energy, Q^2, and virtual factor; FPE crash is not seen anymore;
+
+16 September 2011 Gunter Folger       (hadr-cross-V09-04-24)
+------------------------------------------------------------
+-  G4NeutronInelasticCrossSection.cc: fix passing double for int
+     argument; gcc4.1 did warn about this
+      
+14 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-23)
+------------------------------------------------------------
+- G4CrossSectionPairGG - protect cout at initialisation by
+    verbosityLevel
+
+13 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-22)
+------------------------------------------------------------
+- Use G4lrint instead of lrint utility
+
+13 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-21)
+------------------------------------------------------------
+- G4VCrossSectionDataSet - added extra include file G4HadTmpUtil.hh
+
+12 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-20)
+------------------------------------------------------------
+- G4IonsShenCrossSection - method GetIsoCrossSection is added
+
+12 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-19)
+-----------------------------------------------------------
+- G4CrossSectionDataStore - fixed logic in SampleZandA 
+
+10 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-18)
+------------------------------------------------------------
+- G4CrossSectionDataStore - fixed selection of isotope when element 
+  cross section is used but isotope composition is defined by the user 
+
+6 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-17)
+----------------------------------------------------------
+- G4TripathiLightCrossSection - fixed integer Z and A; 
+- G4VCrossSectionDataSet - fixed inline method for CHIPS 
+  electro-nuclear cross section computation
+
+6 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-16)
+----------------------------------------------------------
+- Fixed signature of Description method in several classes
+
+30 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-15)
+----------------------------------------------------------
+- Fixed number of run time problems connected with the migration to the 
+  new interface
+
+24 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-14)
+----------------------------------------------------------
+- G4CrossSectionDataStore - add forgotten return statement
+
+23 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-13)
+----------------------------------------------------------
+- G4NeutronInelasticCrossSection, G4EMDissociationCrossSection 
+  modified to compile model sub-directories
+
+23 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-12)
+----------------------------------------------------------
+- Redesign G4VCrossSectionDataSet interface - all classes are affected
+
+03 August 2011 Dennis Wright (hadr-cross-V09-04-11)
+---------------------------------------------------
+- remove unused parameter aParticleType from DumpHtml() method in
+  G4CrossSectionDataStore
+
+02 August 2011 Dennis Wright (hadr-cross-V09-04-10)
+---------------------------------------------------
+- add G4VCrossSectionDataSet::GetName() to be used with documentation 
+    reporting
+- add Description() method to all classes derived from G4VCrossSectionDataSet
+- remove test directory from trunk.  It remains in tag hadr-cross-V09-04-09. 
+   
+04 June 2011 Vladimir Ivanchenko (hadr-cross-V09-04-09)
+----------------------------------------------------------
+- G4IonProtonCrossSection - implement all virtual IfApplicable methods
+- G4ComponentAntiNuclNuclearXS - added name
+
+19 May 2011 Dennis Wright (hadr-cross-V09-04-08)
+------------------------------------------------
+- fix gcc-4.6 warnings (variable Delta set but not used) in
+  G4GGNuclNuclCrossSection.cc, G4GlauberGribovCrossSection.cc, G4HadronNucleonXsc.cc
+
+16 May 2011 Vladimir Ivanchenko (hadr-cross-V09-04-07)
+----------------------------------------------------------
+- G4CrossSectionElastic, G4CrossSectionInelastic - do not delete
+  component cross section in destructor to avoid double deletion
+
+5 May 2011 Dennis Wright (hadr-cross-V09-04-06)
+-----------------------------------------------
+- G4TripathiLightCrossSection::GetZandACrossSection: return 0 cross section
+  when E_cm <= DBL_MIN, in response to bug report #1174
+ 
+14 March 2011 Vladimir Ivanchenko (hadr-cross-V09-04-05)
+----------------------------------------------------------
+- G4CrossSectionDataStore - fixed DumpPhysicsTable method, ion cross
+  sections become wrong if this method is invocated
+- G4IonsShenCrossSection - extended energy range up to 100 TeV
+- G4IonsShenCrossSection, G4IonsSihverCrossSection, G4IonsKoxCrossSection
+  moved constructor, destructor and virtual methods to source
+
+24 February 2011 Vladimir Ivanchenko (hadr-cross-V09-04-04)
+----------------------------------------------------------
+- G4CrossSectionElastic,  G4CrossSectionInelastic - fixed usage in 
+  Physics List
+
+24 February 2011 Vladimir Ivanchenko (hadr-cross-V09-04-03)
+----------------------------------------------------------
+- G4VComponentCrossSection - change method names to 
+     GetTotalElementCrossSection and  GetTotalIsotopeCrossSection
+- G4CrossSectionElastic,  G4CrossSectionInelastic, 
+  G4ComponentAntiNuclNuclearXS - use modified names
+
+17 February 2011 Dennis Wright (hadr-cross-V09-04-02)
+-----------------------------------------------------
+- new class G4KokoulinMuonNuclearXS added.  This class was created from
+  code in the direct-implementation process G4MuNuclearInteraction.  This
+  was done to replace the old-style implementation with one conforming to
+  the hadronic framework design of process, model, cross section.  The
+  new class is now the default cross section for the new
+  G4MuonNuclearProcess class.  
+
+ 2 February 2011 Vladimir Ivanchenko (hadr-cross-V09-04-01)
+----------------------------------------------------------
+- G4NeutronCaptureXS - added protection for the case Ekin = 0
+
+ 8 January 2011 Dennis Wright (hadr-cross-V09-04-00)
+----------------------------------------------------
+- add cross section name to constructors:  G4VCrossSectionDataSet("CSname")
+  so that they can be retrieved for physics list print out
+
  9 December 2010 Dennis Wright (hadr-cross-V09-03-21)
 -----------------------------------------------------
 - G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy() : remove

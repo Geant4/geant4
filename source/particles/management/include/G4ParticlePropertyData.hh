@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyData.hh,v 1.3 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticlePropertyData.hh,v 1.3 2007-03-11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4ParticlePropertyData
  
   virtual ~G4ParticlePropertyData();
       
-  const G4ParticlePropertyData & operator=(const G4ParticlePropertyData &right);
+  G4ParticlePropertyData & operator=(const G4ParticlePropertyData &right);
   
   G4int operator==(const G4ParticlePropertyData &right) const;
   G4int operator!=(const G4ParticlePropertyData &right) const;

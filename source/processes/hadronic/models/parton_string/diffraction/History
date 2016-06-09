@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2010/11/15 10:10:16 vuzhinsk Exp $
+$Id: History,v 1.34 2010-11-15 10:10:16 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,57 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22-November 2011, V. Uzhinsky& G.Folger (hadr-string-diff-V09-04-10)
+   Fix memory leak in G4FTFParticipants.cc
+
+1 November 2011, V. Uzhinsky (hadr-string-diff-V09-04-09)
+   AjustNucleusFor Annih was closed in Get String. It is need to think 
+   a little bit.
+
+27 October 2011, V. Uzhinsky (hadr-string-diff-V09-04-08)
+   2 bugs are fixed in FTFmodel and FTFparameters for anti-baryon.
+
+--------------------------------------------------------------------
+18 October 2011, A.Ribon  (hadr-string-diff-V09-04-07)
+---------------------------------------------------------------------
+   Added protection in G4FTFModel to avoid crash when using Fritiof
+   for nuclear capture of anti-protons at rest.
+
+2 July 2011, V. Uzhinsky (hadr-string-diff-V09-04-06)
+-----------------------------------------------------
+   Huge excitation energy is erased. It was connected with energetic
+   nucleons produced at the Reggeon cascading.
+
+17 June 2011, G.Folger    (hadr-string-diff-V09-04-05)
+---------------------------------------------------------------------
+   In G4DiffractiveExcitation, fix warning from gcc 4.6 on "unused" 
+    variable TestParticle from line 514 onwards; this is only assigned, 
+    but never used
+   
+10 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-04)
+   Low energy limit of FTF is decreased.
+---------------------------------------------------------------------
+
+7 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-03)
+  cmake is corrected.
+---------------------------------------------------------------------
+7 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-02)
+  Some mistakes are erased with the cross-sections.
+---------------------------------------------------------------------
+
+2 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-01)
+  Parameters of Kaon-Proton interactions are tuned in FTF.
+  CHIPS cross sections are used now in FTF for needed X's.
+  The corresponding class is created - G4ComponentCHIPShadronNuclearXS
+---------------------------------------------------------------------
+
+19 February 2011, V. Uzhinsky (hadr-string-diff-V09-04-00)
+    Energy-momentum conservation is improved in FTF annihilation.
+    A new method - "void G4FTFModel::AjustTargetNucleonForAnnihilation(
+                    G4VSplitableHadron *SelectedTargetNucleon) 
+    has been addded.
+-------------------------------------------------------
 15 Nov. 2010, V. Uzhinsky (hadr-string-diff-V09-03-04)
 FTF with tuned parameters for pA and PiA interactions.
     Quark exchange is tuned.

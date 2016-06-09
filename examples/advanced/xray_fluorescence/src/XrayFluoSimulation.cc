@@ -32,6 +32,7 @@
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
 // 24 Ago 2002 Splitted in a separet class  Alfonso Mantero
+// 18 Jan 2011 adapted to new deexcitation design
 //
 // -------------------------------------------------------------------
 #include "G4RunManager.hh"
@@ -83,7 +84,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   // set mandatory initialization 
 
-  XrayFluoPhysicsList* xrayList = 0;
+  XrayFluoPhysicsList* xrayList = new   XrayFluoPhysicsList();
 
   // chosing Geometry setup
 
@@ -116,17 +117,14 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
       testBeamDetector->PhaseSpaceOn();
     }
     runManager->SetUserInitialization(testBeamDetector);
-    xrayList = new   XrayFluoPhysicsList(testBeamDetector);
   }
   else if (geometryNumber == 2) {
     planeDetector = XrayFluoPlaneDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(planeDetector);
-    xrayList = new   XrayFluoPhysicsList(planeDetector);
   }
   else if (geometryNumber == 3) {
     mercuryDetector = XrayFluoMercuryDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(mercuryDetector);
-    xrayList = new   XrayFluoPhysicsList(mercuryDetector);
   }
 
 
@@ -166,28 +164,31 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   }
 
   else if (geometryNumber == 3) {
-   stepAction->SetMercuryFlag(true);
-   eventAction = new XrayFluoEventAction(mercuryDetector);
-   runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
-      }
+    stepAction->SetMercuryFlag(true);
+    eventAction = new XrayFluoEventAction(mercuryDetector);
+    runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
+  }
  
   runManager->SetUserAction(eventAction); 
   runManager->SetUserAction(runAction);
   runManager->SetUserAction(stepAction);
   
   //Initialize G4 kernel
-  runManager->Initialize();
+  //runManager->Initialize();
   
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
+  if (getenv("G4VIS_USE")) {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+  }     
+
   if (argc == 1)   // Define UI session for interactive mode.
     {
+      UImanager->ApplyCommand("/control/execute initInter.mac");     
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute initInter.mac");     
-#endif
+
       if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");     
       ui->SessionStart();

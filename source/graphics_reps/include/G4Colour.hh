@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.14 2007/01/05 14:06:28 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Colour.hh,v 1.14 2007-01-05 14:06:28 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 20th October 1996
@@ -80,8 +80,6 @@
 #include <iostream>
 #include <map>
 
-using std::map;
-
 class G4Colour {
   friend std::ostream& operator << (std::ostream& os, const G4Colour& c);
 
@@ -115,16 +113,18 @@ public: // With description
   // Add user defined colour to colour map with given key. Standard
   // colours are added to map by default.
 
-  static bool GetColour(const G4String& key, G4Colour& result);
+  static G4bool GetColour(const G4String& key, G4Colour& result);
   // Get colour for given key. Returns false if key doesn't exist 
   // in colour map, leaving result unchanged. Colour map
   // is not sensitive to key case.
+
+  static const std::map<G4String, G4Colour>& GetMap();
   
 private:
   G4double red, green, blue, alpha;
 
-  static map<G4String, G4Colour> fColourMap;
-  static bool fInitColourMap;
+  static std::map<G4String, G4Colour> fColourMap;
+  static G4bool fInitColourMap;
 
   static void InitialiseColourMap();
     

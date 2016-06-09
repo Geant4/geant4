@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.10 2010/10/30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4KL3DecayChannel.cc,v 1.10 2010-10-30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -42,6 +42,15 @@
 #include "Randomize.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
+
+G4KL3DecayChannel::G4KL3DecayChannel()
+  :G4VDecayChannel(),
+   massK(0.0), pLambda(0.0), pXi0(0.0)
+{
+  daughterM[idPi] = 0.0;
+  daughterM[idLepton] = 0.0;
+  daughterM[idNutrino] = 0.0;
+}
 
 
 G4KL3DecayChannel::G4KL3DecayChannel(
@@ -105,6 +114,51 @@ G4KL3DecayChannel::G4KL3DecayChannel(
 G4KL3DecayChannel::~G4KL3DecayChannel()
 {
 }
+
+G4KL3DecayChannel::G4KL3DecayChannel(const G4KL3DecayChannel &right):
+  G4VDecayChannel(right),
+  massK(right.massK), 
+  pLambda(right.pLambda), 
+  pXi0(right.pXi0)
+{
+  daughterM[idPi] = right.daughterM[idPi];
+  daughterM[idLepton] = right.daughterM[idLepton];
+  daughterM[idNutrino] = right.daughterM[idNutrino];
+}
+
+G4KL3DecayChannel & G4KL3DecayChannel::operator=(const G4KL3DecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+    massK = right.massK; 
+    pLambda = right.pLambda; 
+    pXi0 = right.pXi0;
+    daughterM[idPi] = right.daughterM[idPi];
+    daughterM[idLepton] = right.daughterM[idLepton];
+    daughterM[idNutrino] = right.daughterM[idNutrino];
+  }
+  return *this;
+}
+
 
 G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double) 
 {

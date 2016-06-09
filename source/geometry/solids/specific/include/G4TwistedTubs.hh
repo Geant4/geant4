@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.16 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistedTubs.hh,v 1.16 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -255,6 +255,7 @@ class G4TwistedTubs : public G4VSolid
       LastState(const LastState& r) : p(r.p), inside(r.inside){}
       LastState& operator=(const LastState& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; inside = r.inside;
         return *this;
       }
@@ -368,13 +369,10 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
    fInnerRadius2 = fInnerRadius * fInnerRadius;
    fOuterRadius2 = fOuterRadius * fOuterRadius;
    
-   G4int    maxi; 
    if (std::fabs(fEndZ[0]) >= std::fabs(fEndZ[1])) {
       fZHalfLength = std::fabs(fEndZ[0]);
-      maxi = 0;
    } else {
       fZHalfLength = std::fabs(fEndZ[1]);
-      maxi = 1;
    }
 
    G4double parity         = (fPhiTwist > 0 ? 1 : -1); 

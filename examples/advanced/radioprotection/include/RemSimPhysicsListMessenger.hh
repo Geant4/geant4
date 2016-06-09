@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsListMessenger.hh,v 1.4 2006/06/29 16:23:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimPhysicsListMessenger.hh,v 1.4 2006-06-29 16:23:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 

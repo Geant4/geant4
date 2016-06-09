@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorCylSurfaceTarget.cc,v 1.4 2007/06/20 12:50:48 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorCylSurfaceTarget.cc,v 1.4 2007-06-20 12:50:48 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
@@ -92,7 +92,7 @@ GetDistanceFromPoint( const G4ThreeVector& point,
   if( dir.mag() == 0. )
   {
     G4Exception("G4ErrorCylSurfaceTarget::GetDistanceFromPoint()",
-                "InvalidSetup", FatalException, "Direction is zero !");
+                "GeomMgt0003", FatalException, "Direction is zero !");
   }
 
   //----- Get intersection point
@@ -166,13 +166,13 @@ IntersectLocal( const G4ThreeVector& localPoint,
     }
     else
     {
-      G4cerr << "WARNING - G4ErrorCylSurfaceTarget::IntersectLocal()" << G4endl
-             << "          Point: " << localPoint << ", direction: "
-             << localDir << G4endl;
+      std::ostringstream message;
+      message << "Intersection not possible !" << G4endl
+              << "          Point: " << localPoint << ", direction: "
+              << localDir;
       Dump( " CylSurface: " ); 
       G4Exception("G4ErrorCylSurfaceTarget::IntersectLocal()",
-                  "IllegalCondition",
-                  JustWarning, "Intersection not possible !");
+                  "GeomMgt1002", JustWarning, message);
       lambda = kInfinity;
     }
   }
@@ -181,7 +181,9 @@ IntersectLocal( const G4ThreeVector& localPoint,
 
 #ifdef G4VERBOSE
   if(G4ErrorPropagatorData::verbose() >= 4 ) { 
-    G4cout << " G4ErrorCylSurfaceTarget::IntersectLocal " << inters << " " << inters.perp() << " localPoint " << localPoint << " localDir " << localDir << G4endl;
+    G4cout << " G4ErrorCylSurfaceTarget::IntersectLocal " << inters << " "
+           << inters.perp() << " localPoint " << localPoint << " localDir "
+           << localDir << G4endl;
   } 
 #endif
 
@@ -200,14 +202,14 @@ GetTangentPlane( const G4ThreeVector& point ) const
   if( std::fabs( localPoint.perp() - fradius )
       > 1000.*G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() )
   {
-    G4cerr << "WARNING - G4ErrorCylSurfaceTarget::GetTangentPlane()" << G4endl
-           << "          Point: " << point << ", local: " << localPoint
-           << G4endl
-           << "          is not at surface, but far away by: "
-           << localPoint.perp() - fradius << " !" << G4endl;
+    std::ostringstream message;
+    message << "Local point not at surface !" << G4endl
+            << "          Point: " << point << ", local: " << localPoint
+            << G4endl
+            << "          is not at surface, but far away by: "
+            << localPoint.perp() - fradius << " !";
     G4Exception("G4ErrorCylSurfaceTarget::GetTangentPlane()",
-                "IllegalCondition", JustWarning,
-                "Local point not at surface !");
+                "GeomMgt1002", JustWarning, message);
   }
 
   G4Normal3D normal = localPoint - ftransform.NetTranslation();

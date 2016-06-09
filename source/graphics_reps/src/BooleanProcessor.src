@@ -13,11 +13,12 @@
 
 #ifdef BP_GEANT4 //G.Barrand
 
-#include <CLHEP/Geometry/Plane3D.h>
-#include <CLHEP/Geometry/Plane3D.h>
-typedef HepGeom::Plane3D<double> HVPlane3D;
-typedef HepGeom::Point3D<double> HVPoint3D;
-typedef HepGeom::Normal3D<double> HVNormal3D;
+#include "G4Plane3D.hh"
+#include "G4Point3D.hh"
+#include "G4Normal3D.hh"
+typedef G4Plane3D HVPlane3D;
+typedef G4Point3D HVPoint3D;
+typedef G4Normal3D HVNormal3D;
 
 #else //BP_HEPVIS
 
@@ -119,6 +120,7 @@ class ExtNode {
   ExtNode(const ExtNode & node) : v(node.v), s(node.s) {}
 
   ExtNode & operator=(const ExtNode & node) {
+    if (&node == this) return *this;
     v = node.v;
     s = node.s;
     return *this;
@@ -145,6 +147,7 @@ class ExtEdge {
     ivis(edge.ivis), inext(edge.inext) {}
 
   ExtEdge & operator=(const ExtEdge & edge) {
+    if (&edge == this) return *this;
     i1     = edge.i1;
     i2     = edge.i2;
     iface1 = edge.iface1;
@@ -194,6 +197,7 @@ class ExtFace {
   }
 
   ExtFace & operator=(const ExtFace & face) {
+    if (&face == this) return *this;
     //FIXME : edges(face.edges) ???? //G.Barrand
     int i;
     for (i=0; i<4; i++) { iedges[i] = face.iedges[i]; }
@@ -325,11 +329,24 @@ class BooleanProcessor {
  public:
   //G.Barrand : BooleanProcessor() {}
   BooleanProcessor() //G.Barrand
-  :result_faces(faces)
+  :processor_error(0)  // The next few fields are work space, initialised
+  ,operation(0)        // here to prevent Coverity warnings.
+  ,ifaces1(0)          // "
+  ,ifaces2(0)          // "
+  ,iout1(0)            // "
+  ,iout2(0)            // "
+  ,iunk1(0)            // "
+  ,iunk2(0)            // "
+  ,del(0.)             // "
+  ,result_faces(faces)
   ,suitable_faces(faces)
   ,unsuitable_faces(faces)
   ,unknown_faces(faces)
-  {
+  {  // rmin, rmax also initialised here to prevent Coverity warnings.
+    for (int i = 0; i < 3; i++) {
+      rmin[i] = 0.;
+      rmax[i] = 0.;
+    }
   }
 
   ~BooleanProcessor() {}
@@ -444,17 +461,17 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
       if (iNodes[i] < 1 || iNodes[i] > p.GetNoVertices()) { //G.Barrand
         processor_error = 1;
 #ifdef BP_DEBUG
-        std::cerr
+        G4cerr
           << "BooleanProcessor::takePolyhedron : problem 1."
-          << std::endl;
+          << G4endl;
 #endif
       }
       if (iFaces[i] < 1 || iFaces[i] > p.GetNoFacets()) { //G.Barrand
         processor_error = 1;
 #ifdef BP_DEBUG
-        std::cerr
+        G4cerr
           << "BooleanProcessor::takePolyhedron : problem 2."
-          << std::endl;
+          << G4endl;
 #endif
       }
       iNodes[i] += dnode;
@@ -494,12 +511,12 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
 
     HVNormal3D n = (nodes[iNodes[2]].v-nodes[iNodes[0]].v).cross
                     (nodes[iNodes[3]].v-nodes[iNodes[1]].v);
-    HVPoint3D  p(0,0,0);
+    HVPoint3D  point(0,0,0);
     
-    for (i=0; i<nnode; i++) { p += nodes[iNodes[i]].v; }
-    p *= (1./nnode);
-    //G.Barrand : faces.back().plane = HVPlane3D(n.unit(), p);
-    faces.back().plane = HVPlane3D(n, p); //G.Barrand
+    for (i=0; i<nnode; i++) { point += nodes[iNodes[i]].v; }
+    if (nnode > 0) point *= (1./nnode);
+    //G.Barrand : faces.back().plane = HVPlane3D(n.unit(), point);
+    faces.back().plane = HVPlane3D(n, point); //G.Barrand
 
     //   S E T   R E F E R E N C E   T O   T H E   N E X T   F A C E
 
@@ -905,9 +922,9 @@ void BooleanProcessor::caseIE(ExtEdge &, ExtEdge &)
 {
   processor_error = 1;
 #ifdef BP_DEBUG
-  std::cout
+  G4cout
     << "BooleanProcessor::caseIE : unimplemented case"
-    << std::endl;
+    << G4endl;
 #endif
 }
 
@@ -923,9 +940,9 @@ void BooleanProcessor::caseEE(ExtEdge &, ExtEdge &)
 {
   processor_error = 1;
 #ifdef BP_DEBUG
-  std::cout
+  G4cout
     << "BooleanProcessor::caseEE : unimplemented case"
-    << std::endl;
+    << G4endl;
 #endif
 }
 
@@ -1085,10 +1102,10 @@ void BooleanProcessor::assembleFace(int what, int iface)
       }else{
         processor_error = 1;
 #ifdef BP_DEBUG
-        std::cerr
+        G4cerr
           << "BooleanProcessor::assembleFace(" << iface << ") : "
           << "could not find next edge of the contour"
-          << std::endl;
+          << G4endl;
 #endif
         face.inew = DEFECTIVE_FACE;
         return;
@@ -1611,7 +1628,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
  ***********************************************************************/
 {
    
-  //std::cout << "Next Countour" << std::endl;
+  //G4cout << "Next Countour" << G4endl;
   //int draw_flag = 0;
   //if (draw_flag) draw_contour(5, 3, ihead);
     
@@ -1630,7 +1647,7 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
 
   //   L O O P   A L O N G   C O N T O U R  
 
-  //std::cerr << "debug : contour : begin : =================" << std::endl;
+  //G4cerr << "debug : contour : begin : =================" << G4endl;
   //dump();//debug
 
   int iedge1, iedge2, iedge3, istart = 0;
@@ -1638,12 +1655,12 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     iedge1 = edges[ipnext].inext;
     iedge2 = edges[iedge1].inext;
 /*
-    std::cerr << "debug :"
+    G4cerr << "debug :"
               << " ipnext " << ipnext 
               << " iedge1 " << iedge1 
               << " iedge2 " << iedge2
               << " : istart " << istart
-              << std::endl;
+              << G4endl;
 */
     if (istart == 0) {
       istart = iedge1;
@@ -1664,10 +1681,10 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     }else if (istart == iedge1) {
       processor_error = 1;
 #ifdef BP_DEBUG
-      std::cerr
+      G4cerr
         << "BooleanProcessor::triangulateContour : "
         << "could not generate a triangle (infinite loop)"
-        << std::endl;
+        << G4endl;
 #endif
       break;
     }
@@ -1728,10 +1745,10 @@ void BooleanProcessor::modifyReference(int iface, int i1, int i2, int iref)
   }
   processor_error = 1;
 #ifdef BP_DEBUG
-  std::cerr
+  G4cerr
     << "BooleanProcessor::modifyReference : could not find the edge, "
     << "iface=" << iface << ", i1,i2=" << i1 << "," << i2 << ", iref=" << iref
-    << std::endl;
+    << G4endl;
 #endif
 }
 
@@ -1793,9 +1810,9 @@ void BooleanProcessor::triangulateFace(int iface)
           }else{  
             processor_error = 1;
 #ifdef BP_DEBUG
-            std::cerr
+            G4cerr
               << "BooleanProcessor::triangulateFace : too small contour"
-              << std::endl;
+              << G4endl;
 #endif
           }
           icontour = edges[iedge].inext;
@@ -1805,9 +1822,9 @@ void BooleanProcessor::triangulateFace(int iface)
       }else{
         processor_error = 1;
 #ifdef BP_DEBUG
-        std::cerr
+        G4cerr
           << "BooleanProcessor::triangulateFace : broken contour"
-          << std::endl;
+          << G4endl;
 #endif
         icontour = 0;
         break;
@@ -1826,10 +1843,10 @@ void BooleanProcessor::triangulateFace(int iface)
     if (kext == (int)external_contours.size()) {
       processor_error = 1;
 #ifdef BP_DEBUG
-      std::cerr
+      G4cerr
         << "BooleanProcessor::triangulateFace : "
         << "could not merge internal contour " << kint 
-        << std::endl;
+        << G4endl;
 #endif
     }      
   }
@@ -1841,10 +1858,10 @@ void BooleanProcessor::triangulateFace(int iface)
     triangulateContour(ix, iy, external_contours[kext]);
 #ifdef BP_DEBUG
     if(processor_error) { //G.Barrand
-      std::cerr
+      G4cerr
         << "BooleanProcessor::triangulateFace : "
         << "triangulateContour failed."
-        << std::endl;
+        << G4endl;
       break; //G.Barrand : ok ?
     }
 #endif      
@@ -1859,10 +1876,10 @@ void BooleanProcessor::triangulateFace(int iface)
       if (edges[iedge].iface1 != ifa) {
         processor_error = 1;
 #ifdef BP_DEBUG
-        std::cerr
+        G4cerr
           << "BooleanProcessor::triangulateFace : wrong reference to itself, "
           << "iface=" << ifa << ", iface1=" << edges[iedge].iface1
-          << std::endl;
+          << G4endl;
 #endif
       }else if (edges[iedge].iface2 > 0) {
         modifyReference(edges[iedge].iface2,
@@ -1929,9 +1946,9 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     iedge = faces[i].iold;
     while (iedge > 0) {
       if (k > 3) {
-        std::cerr
+        G4cerr
           << "BooleanProcessor::createPolyhedron : too many edges"
-          << std::endl;
+          << G4endl;
         break;
       }
       v[k]  = nodes[edges[iedge].i1].s;
@@ -1941,10 +1958,10 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
       k++;
     }
     if (k < 3) {
-      std::cerr
+      G4cerr
         << "BooleanProcessor::createPolyhedron : "
         << "face has only " << k << " edges"
-        << std::endl;
+        << G4endl;
     }
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]); 
@@ -1985,10 +2002,10 @@ HepPolyhedron BooleanProcessor::execute(int op,
   };           
 
 /*
-  std::cerr << "BooleanProcessor::execute : ++++++++++++++++++++++"
+  G4cerr << "BooleanProcessor::execute : ++++++++++++++++++++++"
             << a.getName().getString()
             << b.getName().getString()
-            << std::endl;
+            << G4endl;
 */
 
   //   I N I T I A T E   P R O C E S S O R
@@ -2005,9 +2022,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
   ifaces2 = faces.size(); takePolyhedron(b,0,0,0);
 
   if (processor_error) {             // corrapted polyhedron
-    std::cerr
+    G4cerr
       << "BooleanProcessor: corrapted input polyhedron"
-      << std::endl;
+      << G4endl;
     err = processor_error; //G.Barrand
     return HepPolyhedron();
   }
@@ -2017,14 +2034,14 @@ HepPolyhedron BooleanProcessor::execute(int op,
     case OP_UNION:
       return b;
     case OP_INTERSECTION:
-      std::cerr 
+      G4cerr 
         << "BooleanProcessor: intersection with empty polyhedron"
-        << std::endl;
+        << G4endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
-      std::cerr
+      G4cerr
         << "BooleanProcessor: subtraction from empty polyhedron"
-        << std::endl;
+        << G4endl;
       return HepPolyhedron();
     }
   }
@@ -2034,9 +2051,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
     case OP_UNION:
       return a;
     case OP_INTERSECTION:
-      std::cerr
+      G4cerr
         << "BooleanProcessor: intersection with empty polyhedron"
-        << std::endl;
+        << G4endl;
       return HepPolyhedron();
     case OP_SUBTRACTION:
       return a;
@@ -2051,9 +2068,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
           
 /*
 #define PROCESSOR_ERROR(a_what) \
-  std::cerr << "BooleanProcessor: boolean operation problem (" << a_what \
+  G4cerr << "BooleanProcessor: boolean operation problem (" << a_what \
             << "). Try again with other shifts."\
-            << std::endl;
+            << G4endl;
 */
 #define PROCESSOR_ERROR(a_what)
 
@@ -2128,17 +2145,14 @@ HepPolyhedron BooleanProcessor::execute(int op,
   //   A S S E M B L E   S U I T A B L E   F A C E S
 
   initiateLists();
-  for (;;) {
-    assemblePolyhedra();
-    if (unknown_faces.front() != 0) {
-      processor_error = 1;
+  assemblePolyhedra();
+  if (unknown_faces.front() != 0) {
+    processor_error = 1;
 #ifdef BP_DEBUG
-      std::cerr
-        << "BooleanProcessor::execute : unknown faces !!!"
-        << std::endl;
+    G4cerr
+      << "BooleanProcessor::execute : unknown faces !!!"
+      << G4endl;
 #endif
-    }
-    break;
   }
   if (processor_error) { PROCESSOR_ERROR(7) } //G.Barrand
 
@@ -2158,9 +2172,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
   if(!processor_error) {   
 #ifdef BP_DEBUG
     if(try_count!=1) {
-      std::cerr
+      G4cerr
          << "BooleanProcessor::execute : had converged."
-         << std::endl;
+         << G4endl;
     }
 #endif
     break;
@@ -2168,20 +2182,22 @@ HepPolyhedron BooleanProcessor::execute(int op,
 
   if((int)try_count>get_num_shift()) {
 #ifdef BP_DEBUG
-    std::cerr << "BooleanProcessor: "
+    /*** Commented out because HepPolyhedron does not have getName...?!
+    G4cerr << "BooleanProcessor: "
               << " all shifts tried. Boolean operation (" << op << ") failure."
               << " a name \"" << a.getName().getString() << "\""
               << " b name \"" << b.getName().getString() << "\""
-              << std::endl;
+              << G4endl;
+    ***/
 #endif
     err = processor_error;
     return a;
   }
 
 #ifdef BP_DEBUG
-  std::cerr
+  G4cerr
      << "BooleanProcessor::execute : try another tilt..."
-     << std::endl;
+     << G4endl;
 #endif
 
   try_count++;
@@ -2221,28 +2237,28 @@ HepPolyhedron BooleanProcessor::execute(int op,
 
   for (int i=0; i<4; i++) { 
 
-    if (i == 0) cout << "========= Ifaces_1" << endl;
-    if (i == 1) cout << "========= Ifaces_2" << endl;
-    if (i == 2) cout << "========= Iout_1" << endl;
-    if (i == 3) cout << "========= Iout_2" << endl;
+    if (i == 0) G4cout << "========= Ifaces_1" << G4endl;
+    if (i == 1) G4cout << "========= Ifaces_2" << G4endl;
+    if (i == 2) G4cout << "========= Iout_1" << G4endl;
+    if (i == 3) G4cout << "========= Iout_2" << G4endl;
 
     icol = i+1;
     iface = ilist[i];
     while (iface > 0) {
 
-      cout << "iface = " << iface << endl;
-      cout << "--- iold" << endl;
+      G4cout << "iface = " << iface << G4endl;
+      G4cout << "--- iold" << G4endl;
 
       iedge = faces[iface].iold;
       icol = 2;
 
       while (iedge > 0) {
 
-        cout << "  iegde = " << iedge
+        G4cout << "  iegde = " << iedge
              << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
              << " iface1,iface2 = "
              << edges[iedge].iface1 << "," << edges[iedge].iface2
-             << endl;
+             << G4endl;
 
         i1 = edges[iedge].i1;
         p1[0] = nodes[i1].v.x();
@@ -2259,18 +2275,18 @@ HepPolyhedron BooleanProcessor::execute(int op,
         iedge = edges[iedge].inext;
       }
       
-      cout << "--- inew" << endl;
+      G4cout << "--- inew" << G4endl;
 
       iedge = faces[iface].inew;
       icol = 3;
 
       while (iedge > 0) {
 
-        cout << "  iegde = " << iedge
+        G4cout << "  iegde = " << iedge
              << " i1,i2 =" << edges[iedge].i1 << "," << edges[iedge].i2
              << " iface1,iface2 = "
              << edges[iedge].iface1 << "," << edges[iedge].iface2
-             << endl;
+             << G4endl;
 
         i1 = edges[iedge].i1;
         p1[0] = nodes[i1].v.x();
@@ -2339,49 +2355,49 @@ BooleanProcessor::draw_contour(int i1col, int i2col, int ihead) {
 //--------------------------------------------------------------------
 void
 BooleanProcessor::print_face(int iface) {
-  cout.precision(3);
-  cout << "\n====== Face N " << iface << endl;
-  cout << "iedges[4] = "
+  G4cout.precision(3);
+  G4cout << "\n====== Face N " << iface << G4endl;
+  G4cout << "iedges[4] = "
        << faces[iface].iedges[0] << ", "
        << faces[iface].iedges[1] << ", "
        << faces[iface].iedges[2] << ", "
-       << faces[iface].iedges[3] << endl;
-  cout << "rmin[3] = "
+       << faces[iface].iedges[3] << G4endl;
+  G4cout << "rmin[3] = "
        << faces[iface].rmin[0] << ", "
        << faces[iface].rmin[1] << ", "
-       << faces[iface].rmin[2] << endl;
-  cout << "rmax[3] = "
+       << faces[iface].rmin[2] << G4endl;
+  G4cout << "rmax[3] = "
        << faces[iface].rmax[0] << ", "
        << faces[iface].rmax[1] << ", "
-       << faces[iface].rmax[2] << endl;
-  cout << "iprev,inext = "
+       << faces[iface].rmax[2] << G4endl;
+  G4cout << "iprev,inext = "
        << faces[iface].iprev << ", "
-       << faces[iface].inext << endl;
-  cout << "iold = " << faces[iface].iold << endl;
+       << faces[iface].inext << G4endl;
+  G4cout << "iold = " << faces[iface].iold << G4endl;
   for(int i = faces[iface].iold; i != 0;) {
     print_edge(i);
     i = edges[abs(i)].inext;
   }
 
-  cout << "inew = ";
+  G4cout << "inew = ";
   switch (faces[iface].inew) {
   case UNKNOWN_FACE:
-    cout << "UNKNOWN_FACE" << endl;
+    G4cout << "UNKNOWN_FACE" << G4endl;
     break;
   case ORIGINAL_FACE:
-    cout << "ORIGINAL_FACE" << endl;
+    G4cout << "ORIGINAL_FACE" << G4endl;
     break;
   case NEW_FACE:
-    cout << "NEW_FACE" << endl;
+    G4cout << "NEW_FACE" << G4endl;
     break;
   case UNSUITABLE_FACE:
-    cout << "UNSUITABLE_FACE" << endl;
+    G4cout << "UNSUITABLE_FACE" << G4endl;
     break;
   case DEFECTIVE_FACE:
-    cout << "DEFECTIVE_FACE" << endl;
+    G4cout << "DEFECTIVE_FACE" << G4endl;
     break;
   default:
-    cout << faces[iface].inew << endl;
+    G4cout << faces[iface].inew << G4endl;
     for(int k = faces[iface].inew; k != 0;) {
       print_edge(k);
       k = edges[abs(k)].inext;
@@ -2392,37 +2408,37 @@ BooleanProcessor::print_face(int iface) {
 //--------------------------------------------------------------------
 void
 BooleanProcessor::print_edge(int iedge) {
-  cout << "==== Edge N " << iedge << endl;
+  G4cout << "==== Edge N " << iedge << G4endl;
   int i = std::abs(iedge);
   int i1 = edges[i].i1;
   int i2 = edges[i].i2;
-  cout << "node[" << i1 << "] = " 
+  G4cout << "node[" << i1 << "] = " 
        << nodes[i1].v.x() << ", "
        << nodes[i1].v.y() << ", "
-       << nodes[i1].v.z() << endl;
+       << nodes[i1].v.z() << G4endl;
 
-  cout << "node[" << i2 << "] = " 
+  G4cout << "node[" << i2 << "] = " 
        << nodes[i2].v.x() << ", "
        << nodes[i2].v.y() << ", "
-       << nodes[i2].v.z() << endl;
+       << nodes[i2].v.z() << G4endl;
 
-  cout << "iface1,iface2,ivis,inext = "
+  G4cout << "iface1,iface2,ivis,inext = "
        << edges[i].iface1 << ", "
        << edges[i].iface2 << ", "
        << edges[i].ivis   << ", "
-       << edges[i].inext  << endl;
+       << edges[i].inext  << G4endl;
 }
 */
 
 void BooleanProcessor::dump() {//G.Barrand
   unsigned int number = nodes.size();
-  std::cout << "nodes : " << number << endl;
+  G4cout << "nodes : " << number << G4endl;
   for(unsigned int index=0;index<number;index++) { 
     const ExtNode& node = nodes[index];
-    std::cout << " " << index
-              << " x = " << node.v[0]
-              << " y = " << node.v[1]
-              << " z = " << node.v[2]
-              << std::endl;
+    G4cout << " " << index
+           << " x = " << node.v[0]
+           << " y = " << node.v[1]
+           << " z = " << node.v[2]
+           << G4endl;
   }
 }

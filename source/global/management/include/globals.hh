@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.27 2006/06/29 19:03:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: globals.hh,v 1.27 2006-06-29 19:03:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Global Constants and typedefs
@@ -73,13 +73,22 @@
 
 // Global error function
 #include "G4ExceptionSeverity.hh"
-void G4Exception(const char* issure,
-                 const char* errorCode,
+
+typedef std::ostringstream G4ExceptionDescription;
+
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
                              G4ExceptionSeverity severity,
                  const char* comments);
-void G4Exception(const char* s=0);
-void G4Exception(std::string s);
-void G4Exception(G4String s);
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 G4ExceptionDescription & description);
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 G4ExceptionDescription & description,
+                 const char* comments);
 
 #endif /* GLOBALS_HH */
 

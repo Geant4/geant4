@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KaonHypSampler.cc,v 1.2 2010/06/25 09:44:48 gunter Exp $
-// GEANT4 tag: $Name: geant4-09-04-beta-01 $
+// $Id: G4KaonHypSampler.cc,v 1.2 2010-06-25 09:44:48 gunter Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100512  M. Kelsey -- Replaces (old, untemplated) G4CascadeSampler
 

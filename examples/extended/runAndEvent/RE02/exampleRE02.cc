@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleRE02.cc,v 1.5 2010/11/08 18:48:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: exampleRE02.cc,v 1.5 2010-11-08 18:48:54 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
@@ -91,10 +91,14 @@ int main(int argc,char** argv) {
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
   { 
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    UI->ApplyCommand("/control/execute vis.mac");    
-    ui->SessionStart();
-    delete ui;
+#ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+     UI->ApplyCommand("/control/execute vis.mac");    
+#endif
+     ui->SessionStart();
+     delete ui;
+#endif
   }
   else
   // Batch mode

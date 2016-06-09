@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,13 +13,13 @@
 
 ***** Table : Nb of materials = 3 *****
 
- Material: Beryllium     density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
+ Material: Beryllium    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Carbon     density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.410 cm   Imean:  81.000 eV 
+ Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.410 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -51,61 +51,60 @@ GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=          1 PeV
+       PhotoElectric :  Emin=        0 eV    Emax=        1 PeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=          1 PeV
+       Klein-Nishina :  Emin=        0 eV    Emax=        1 PeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=          1 PeV
+        BetheHeitler :  Emin=        0 eV    Emax=        1 PeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=        100 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=          1 PeV
+        MollerBhabha :  Emin=        0 eV    Emax=        1 PeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=          1 PeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=        1 PeV   AngularGenUrban
 
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
 ee2hadr:   for  e+, integral: 1     SubType= 7
-      Lambda tables from 100 eV  to 10 TeV in 91 bins, spline: 1
       e+ annihilation into hadrons active from 76.2411 GeV to 1409 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons :   Emin=        0 eV       Emax=         10 TeV
+         eeToHadrons :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=        100 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=          1 PeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=        1 PeV
 
 hhIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
@@ -113,113 +112,120 @@ hhIoni:   for  anti_proton    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta-ray will not be produced; 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggNoD :   Emin=        0 eV       Emax=          2 MeV
-       BetheBlochNoD :   Emin=        2 MeV      Emax=          1 PeV
+            BraggNoD :  Emin=        0 eV    Emax=        2 MeV
+       BetheBlochNoD :  Emin=        2 MeV   Emax=        1 PeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=        100 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=          1 PeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=        1 PeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=          1 PeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=        1 PeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=        100 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=          1 PeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=        1 PeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=          1 PeV
+              MuBrem :  Emin=        0 eV    Emax=        1 PeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=          1 PeV
+          muPairProd :  Emin=        0 eV    Emax=        1 PeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=          1 PeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=        1 PeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=          1 PeV
+              MuBrem :  Emin=        0 eV    Emax=        1 PeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=          1 PeV
+          muPairProd :  Emin=        0 eV    Emax=        1 PeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=          1 PeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=        1 PeV
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=        100 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=          1 PeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=        1 PeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
- Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 0 fm 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -245,40 +251,40 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   3.71 cm   3.71 cm         Iron        conv
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   3.71 cm   3.71 cm       Iron         conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   3.62 cm   3.62 cm         Iron        conv
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   3.62 cm   3.62 cm       Iron         conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.97 mm   2.97 mm         Iron        conv
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.97 mm   2.97 mm       Iron         conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.62 cm   2.62 cm         Iron        conv
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.62 cm   2.62 cm       Iron         conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.16 cm   2.16 cm         Iron        conv
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.16 cm   2.16 cm       Iron         conv
 Run terminated.
 Run Summary
   Number of events processed : 5
@@ -301,18 +307,25 @@ The cross section for AnnihiToMuPair is artificially increased by the CrossSecFa
 #
 /run/beamOn 5
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
- Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 0 fm 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -333,44 +346,44 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV     52 cm     52 cm         Iron  AnnihiToMuPair
+    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -249 m       0 fm      0 fm      0 eV      0 eV     52 cm     52 cm       Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV   85.5 cm   85.5 cm         Iron  AnnihiToMuPair
+    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -249 m       0 fm      0 fm      0 eV      0 eV   85.5 cm   85.5 cm       Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -245 m       0 fm      0 fm      0 eV      0 eV   4.64 m    4.64 m          Iron  AnnihiToMuPair
+    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -245 m       0 fm      0 fm      0 eV      0 eV   4.64 m    4.64 m        Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -238 m       0 fm      0 fm      0 eV      0 eV   12.5 m    12.5 m          Iron  AnnihiToMuPair
+    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -238 m       0 fm      0 fm      0 eV      0 eV   12.5 m    12.5 m        Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -248 m       0 fm      0 fm      0 eV      0 eV   1.56 m    1.56 m          Iron  AnnihiToMuPair
+    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -248 m       0 fm      0 fm      0 eV      0 eV   1.56 m    1.56 m        Iron   AnnihiToMuPair
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -383,18 +396,25 @@ Run Summary
 /gun/energy 1 GeV
 /run/beamOn 2
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
- Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 0 fm 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -415,126 +435,126 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m     592 um    563 um    925 MeV  74.9 MeV  5.77 cm   5.77 cm         Iron      hhIoni
-    2   -250 m    98.9 um   1.17 mm    863 MeV  62.6 MeV  5.17 cm   10.9 cm         Iron      hhIoni
-    3   -250 m    -718 um   1.36 mm    808 MeV    55 MeV  4.69 cm   15.6 cm         Iron      hhIoni
-    4   -250 m    -245 um    705 um    747 MeV  60.3 MeV  4.27 cm   19.9 cm         Iron      hhIoni
-    5   -250 m     450 um   6.55 um    695 MeV  52.4 MeV  3.81 cm   23.7 cm         Iron      hhIoni
-    6   -250 m    1.67 mm    1.3 mm    650 MeV  44.9 MeV  3.43 cm   27.1 cm         Iron      hhIoni
-    7   -250 m    2.64 mm   2.34 mm    608 MeV    42 MeV  3.11 cm   30.2 cm         Iron      hhIoni
-    8   -250 m    3.56 mm   3.06 mm    569 MeV  38.5 MeV  2.81 cm   33.1 cm         Iron      hhIoni
-    9   -250 m    4.21 mm   3.12 mm    531 MeV  38.3 MeV  2.55 cm   35.6 cm         Iron      hhIoni
-   10   -250 m    4.63 mm   4.31 mm    495 MeV  36.5 MeV  2.29 cm   37.9 cm         Iron      hhIoni
-   11   -250 m     4.9 mm   4.57 mm    464 MeV  30.7 MeV  2.06 cm     40 cm         Iron      hhIoni
-   12   -250 m    6.19 mm    4.4 mm    432 MeV  31.6 MeV  1.86 cm   41.8 cm         Iron      hhIoni
-   13   -250 m    7.32 mm   3.94 mm    405 MeV    27 MeV  1.67 cm   43.5 cm         Iron      hhIoni
-   14   -250 m    8.13 mm   4.01 mm    380 MeV  25.3 MeV  1.51 cm     45 cm         Iron      hhIoni
-   15   -250 m    8.57 mm   4.64 mm    355 MeV  25.1 MeV  1.36 cm   46.4 cm         Iron      hhIoni
-   16   -250 m     9.2 mm   5.51 mm    333 MeV  21.7 MeV  1.22 cm   47.6 cm         Iron      hhIoni
-   17   -250 m    9.64 mm   6.05 mm    313 MeV  20.4 MeV   1.1 cm   48.7 cm         Iron      hhIoni
-   18   -250 m    1.02 cm   6.96 mm    293 MeV  19.7 MeV  9.98 mm   49.7 cm         Iron      hhIoni
-   19   -249 m    1.08 cm   7.64 mm    274 MeV  18.7 MeV  8.99 mm   50.6 cm         Iron      hhIoni
-   20   -249 m    1.14 cm   8.54 mm    256 MeV    18 MeV  8.08 mm   51.4 cm         Iron      hhIoni
-   21   -249 m    1.18 cm   9.55 mm    240 MeV  16.6 MeV  7.24 mm   52.1 cm         Iron      hhIoni
-   22   -249 m    1.23 cm   1.04 cm    225 MeV  14.5 MeV   6.5 mm   52.8 cm         Iron      hhIoni
-   23   -249 m    1.25 cm   1.11 cm    211 MeV  14.2 MeV  5.87 mm   53.4 cm         Iron      hhIoni
-   24   -249 m    1.25 cm   1.17 cm    198 MeV  12.7 MeV  5.28 mm   53.9 cm         Iron      hhIoni
-   25   -249 m    1.26 cm   1.21 cm    186 MeV  12.3 MeV  4.77 mm   54.4 cm         Iron      hhIoni
-   26   -249 m    1.25 cm   1.26 cm    175 MeV  11.2 MeV  4.29 mm   54.8 cm         Iron      hhIoni
-   27   -249 m    1.25 cm    1.3 cm    162 MeV  12.5 MeV  3.88 mm   55.2 cm         Iron      hhIoni
-   28   -249 m    1.25 cm   1.33 cm    153 MeV  9.72 MeV  3.44 mm   55.5 cm         Iron      hhIoni
-   29   -249 m    1.24 cm   1.35 cm    144 MeV   9.2 MeV  3.11 mm   55.8 cm         Iron      hhIoni
-   30   -249 m    1.23 cm   1.38 cm    134 MeV  9.37 MeV  2.81 mm   56.1 cm         Iron      hhIoni
-   31   -249 m    1.22 cm    1.4 cm    126 MeV  8.37 MeV  2.52 mm   56.4 cm         Iron      hhIoni
-   32   -249 m    1.22 cm   1.44 cm    118 MeV  8.17 MeV  2.28 mm   56.6 cm         Iron      hhIoni
-   33   -249 m    1.21 cm   1.47 cm    110 MeV  7.23 MeV  2.04 mm   56.8 cm         Iron      hhIoni
-   34   -249 m     1.2 cm   1.49 cm    103 MeV  7.68 MeV  1.85 mm     57 cm         Iron      hhIoni
-   35   -249 m    1.19 cm   1.52 cm   95.7 MeV  7.11 MeV  1.65 mm   57.1 cm         Iron      hhIoni
-   36   -249 m    1.18 cm   1.55 cm     89 MeV  6.64 MeV  1.48 mm   57.3 cm         Iron      hhIoni
-   37   -249 m    1.18 cm   1.58 cm     83 MeV  5.97 MeV  1.32 mm   57.4 cm         Iron      hhIoni
-   38   -249 m    1.17 cm   1.61 cm   76.8 MeV  6.26 MeV  1.19 mm   57.5 cm         Iron      hhIoni
-   39   -249 m    1.17 cm   1.62 cm   71.4 MeV  5.34 MeV  1.06 mm   57.6 cm         Iron      hhIoni
-   40   -249 m    1.16 cm   1.64 cm   66.2 MeV  5.22 MeV   955 um   57.7 cm         Iron      hhIoni
-   41   -249 m    1.15 cm   1.65 cm   61.7 MeV  4.54 MeV   858 um   57.8 cm         Iron      hhIoni
-   42   -249 m    1.14 cm   1.66 cm     57 MeV   4.7 MeV   778 um   57.9 cm         Iron      hhIoni
-   43   -249 m    1.14 cm   1.67 cm   52.3 MeV  4.66 MeV   700 um     58 cm         Iron      hhIoni
-   44   -249 m    1.14 cm   1.69 cm   47.8 MeV  4.48 MeV   627 um     58 cm         Iron      hhIoni
-   45   -249 m    1.13 cm    1.7 cm   43.6 MeV  4.29 MeV   561 um   58.1 cm         Iron      hhIoni
-   46   -249 m    1.13 cm   1.71 cm   39.5 MeV  4.01 MeV   502 um   58.1 cm         Iron      hhIoni
-   47   -249 m    1.13 cm   1.71 cm   35.7 MeV  3.82 MeV   451 um   58.2 cm         Iron      hhIoni
-   48   -249 m    1.12 cm   1.72 cm   32.2 MeV  3.54 MeV   406 um   58.2 cm         Iron      hhIoni
-   49   -249 m    1.11 cm   1.72 cm   28.8 MeV  3.34 MeV   366 um   58.3 cm         Iron      hhIoni
-   50   -249 m    1.11 cm   1.73 cm   25.3 MeV   3.6 MeV   332 um   58.3 cm         Iron      hhIoni
-   51   -249 m    1.11 cm   1.73 cm   21.6 MeV  3.68 MeV   298 um   58.3 cm         Iron      hhIoni
-   52   -249 m     1.1 cm   1.73 cm   17.8 MeV  3.77 MeV   266 um   58.4 cm         Iron      hhIoni
-   53   -249 m     1.1 cm   1.74 cm     14 MeV  3.78 MeV   235 um   58.4 cm         Iron      hhIoni
-   54   -249 m     1.1 cm   1.74 cm   9.81 MeV  4.22 MeV   205 um   58.4 cm         Iron      hhIoni
-   55   -249 m     1.1 cm   1.75 cm   4.95 MeV  4.86 MeV   168 um   58.4 cm         Iron      hhIoni
-   56   -249 m    1.09 cm   1.75 cm      0 eV   4.95 MeV  79.1 um   58.4 cm         Iron      hhIoni
+    0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m     607 um    577 um    925 MeV  75.3 MeV  5.86 cm   5.86 cm       Iron       hhIoni
+    2   -250 m     101 um    1.2 mm    862 MeV  62.9 MeV  5.26 cm   11.1 cm       Iron       hhIoni
+    3   -250 m    -737 um    1.4 mm    807 MeV  55.2 MeV  4.76 cm   15.9 cm       Iron       hhIoni
+    4   -250 m    -252 um    722 um    746 MeV  60.6 MeV  4.34 cm   20.2 cm       Iron       hhIoni
+    5   -250 m     462 um   4.74 um    693 MeV  52.6 MeV  3.88 cm   24.1 cm       Iron       hhIoni
+    6   -250 m    1.72 mm   1.34 mm    648 MeV    45 MeV  3.49 cm   27.6 cm       Iron       hhIoni
+    7   -250 m    2.71 mm    2.4 mm    606 MeV  42.1 MeV  3.16 cm   30.7 cm       Iron       hhIoni
+    8   -250 m    3.66 mm   3.14 mm    568 MeV  38.6 MeV  2.86 cm   33.6 cm       Iron       hhIoni
+    9   -250 m    4.33 mm   3.21 mm    529 MeV  38.4 MeV  2.59 cm   36.2 cm       Iron       hhIoni
+   10   -250 m    4.76 mm   4.43 mm    493 MeV  36.6 MeV  2.33 cm   38.5 cm       Iron       hhIoni
+   11   -250 m    5.03 mm    4.7 mm    462 MeV  30.7 MeV  2.09 cm   40.6 cm       Iron       hhIoni
+   12   -250 m    6.36 mm   4.52 mm    430 MeV  31.7 MeV  1.89 cm   42.5 cm       Iron       hhIoni
+   13   -250 m    7.52 mm   4.05 mm    403 MeV  26.9 MeV   1.7 cm   44.2 cm       Iron       hhIoni
+   14   -250 m    8.35 mm   4.12 mm    378 MeV  25.3 MeV  1.53 cm   45.7 cm       Iron       hhIoni
+   15   -250 m    8.81 mm   4.77 mm    353 MeV  25.1 MeV  1.38 cm   47.1 cm       Iron       hhIoni
+   16   -250 m    9.45 mm   5.66 mm    331 MeV  21.7 MeV  1.24 cm   48.4 cm       Iron       hhIoni
+   17   -250 m     9.9 mm   6.21 mm    311 MeV  20.4 MeV  1.12 cm   49.5 cm       Iron       hhIoni
+   18   -249 m    1.05 cm   7.15 mm    291 MeV  19.6 MeV  1.01 cm   50.5 cm       Iron       hhIoni
+   19   -249 m    1.11 cm   7.85 mm    273 MeV  18.6 MeV  9.14 mm   51.4 cm       Iron       hhIoni
+   20   -249 m    1.17 cm   8.78 mm    255 MeV  17.9 MeV  8.22 mm   52.2 cm       Iron       hhIoni
+   21   -249 m    1.21 cm   9.82 mm    238 MeV  16.5 MeV  7.36 mm     53 cm       Iron       hhIoni
+   22   -249 m    1.26 cm   1.07 cm    224 MeV  14.5 MeV   6.6 mm   53.6 cm       Iron       hhIoni
+   23   -249 m    1.28 cm   1.14 cm    210 MeV  14.2 MeV  5.96 mm   54.2 cm       Iron       hhIoni
+   24   -249 m    1.29 cm    1.2 cm    197 MeV  12.6 MeV  5.36 mm   54.8 cm       Iron       hhIoni
+   25   -249 m     1.3 cm   1.25 cm    185 MeV  12.3 MeV  4.85 mm   55.2 cm       Iron       hhIoni
+   26   -249 m    1.29 cm   1.29 cm    174 MeV  11.1 MeV  4.36 mm   55.7 cm       Iron       hhIoni
+   27   -249 m    1.28 cm   1.34 cm    161 MeV  12.4 MeV  3.94 mm   56.1 cm       Iron       hhIoni
+   28   -249 m    1.29 cm   1.36 cm    152 MeV  9.66 MeV   3.5 mm   56.4 cm       Iron       hhIoni
+   29   -249 m    1.28 cm   1.38 cm    142 MeV  9.14 MeV  3.16 mm   56.7 cm       Iron       hhIoni
+   30   -249 m    1.27 cm   1.42 cm    133 MeV  9.31 MeV  2.86 mm     57 cm       Iron       hhIoni
+   31   -249 m    1.26 cm   1.45 cm    125 MeV  8.31 MeV  2.56 mm   57.3 cm       Iron       hhIoni
+   32   -249 m    1.25 cm   1.48 cm    117 MeV  8.11 MeV  2.31 mm   57.5 cm       Iron       hhIoni
+   33   -249 m    1.24 cm   1.51 cm    109 MeV  7.18 MeV  2.08 mm   57.7 cm       Iron       hhIoni
+   34   -249 m    1.23 cm   1.54 cm    102 MeV  7.62 MeV  1.88 mm   57.9 cm       Iron       hhIoni
+   35   -249 m    1.22 cm   1.57 cm   94.8 MeV  7.06 MeV  1.68 mm   58.1 cm       Iron       hhIoni
+   36   -249 m    1.22 cm    1.6 cm   88.2 MeV  6.59 MeV   1.5 mm   58.2 cm       Iron       hhIoni
+   37   -249 m    1.21 cm   1.63 cm   82.3 MeV  5.92 MeV  1.34 mm   58.4 cm       Iron       hhIoni
+   38   -249 m     1.2 cm   1.65 cm   76.1 MeV  6.21 MeV  1.21 mm   58.5 cm       Iron       hhIoni
+   39   -249 m     1.2 cm   1.67 cm   70.8 MeV  5.29 MeV  1.08 mm   58.6 cm       Iron       hhIoni
+   40   -249 m    1.19 cm   1.69 cm   65.6 MeV  5.17 MeV   970 um   58.7 cm       Iron       hhIoni
+   41   -249 m    1.18 cm    1.7 cm   61.2 MeV  4.48 MeV   872 um   58.8 cm       Iron       hhIoni
+   42   -249 m    1.17 cm   1.71 cm   56.5 MeV  4.64 MeV   790 um   58.9 cm       Iron       hhIoni
+   43   -249 m    1.17 cm   1.72 cm   51.9 MeV  4.61 MeV   711 um   58.9 cm       Iron       hhIoni
+   44   -249 m    1.17 cm   1.73 cm   47.5 MeV  4.42 MeV   637 um     59 cm       Iron       hhIoni
+   45   -249 m    1.16 cm   1.75 cm   43.2 MeV  4.23 MeV   570 um     59 cm       Iron       hhIoni
+   46   -249 m    1.16 cm   1.76 cm   39.3 MeV  3.95 MeV   510 um   59.1 cm       Iron       hhIoni
+   47   -249 m    1.16 cm   1.76 cm   35.5 MeV  3.76 MeV   458 um   59.1 cm       Iron       hhIoni
+   48   -249 m    1.15 cm   1.77 cm   32.1 MeV  3.48 MeV   412 um   59.2 cm       Iron       hhIoni
+   49   -249 m    1.14 cm   1.77 cm   28.8 MeV  3.27 MeV   372 um   59.2 cm       Iron       hhIoni
+   50   -249 m    1.14 cm   1.78 cm   25.3 MeV  3.52 MeV   338 um   59.3 cm       Iron       hhIoni
+   51   -249 m    1.13 cm   1.78 cm   21.7 MeV   3.6 MeV   303 um   59.3 cm       Iron       hhIoni
+   52   -249 m    1.13 cm   1.78 cm     18 MeV  3.68 MeV   271 um   59.3 cm       Iron       hhIoni
+   53   -249 m    1.13 cm   1.79 cm   14.3 MeV  3.65 MeV   240 um   59.3 cm       Iron       hhIoni
+   54   -249 m    1.13 cm   1.79 cm   10.3 MeV  4.05 MeV   210 um   59.4 cm       Iron       hhIoni
+   55   -249 m    1.12 cm    1.8 cm    5.7 MeV   4.6 MeV   175 um   59.4 cm       Iron       hhIoni
+   56   -249 m    1.12 cm    1.8 cm      0 eV    5.7 MeV   101 um   59.4 cm       Iron       hhIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_proton,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    -722 um   -383 um    925 MeV  74.8 MeV  5.77 cm   5.77 cm         Iron      hhIoni
-    2   -250 m   -3.05 mm    193 um    858 MeV  67.6 MeV  5.18 cm   10.9 cm         Iron      hhIoni
-    3   -250 m   -5.77 mm   2.54 mm    793 MeV  64.9 MeV  4.65 cm   15.6 cm         Iron      hhIoni
-    4   -250 m   -9.23 mm   4.92 mm    735 MeV  57.3 MeV  4.15 cm   19.7 cm         Iron      hhIoni
-    5   -250 m   -1.31 cm    6.6 mm    683 MeV  52.2 MeV  3.73 cm   23.5 cm         Iron      hhIoni
-    6   -250 m   -1.62 cm    8.2 mm    635 MeV  47.9 MeV  3.34 cm   26.8 cm         Iron      hhIoni
-    7   -250 m    -1.5 cm    9.1 mm    591 MeV  44.1 MeV     3 cm   29.8 cm         Iron      hhIoni
-    8   -250 m   -1.29 cm    9.7 mm    551 MeV    40 MeV   2.7 cm   32.5 cm         Iron      hhIoni
-    9   -250 m   -1.13 cm   1.01 cm    518 MeV  33.5 MeV  2.43 cm   34.9 cm         Iron      hhIoni
-   10   -250 m   -9.27 mm   1.03 cm    484 MeV  33.7 MeV   2.2 cm   37.1 cm         Iron      hhIoni
-   11   -250 m   -7.77 mm   9.91 mm    452 MeV    32 MeV  1.99 cm   39.1 cm         Iron      hhIoni
-   12   -250 m   -6.59 mm   9.35 mm    422 MeV  29.6 MeV  1.79 cm   40.9 cm         Iron      hhIoni
-   13   -250 m   -5.19 mm   8.73 mm    395 MeV  27.8 MeV  1.61 cm   42.5 cm         Iron      hhIoni
-   14   -250 m   -4.01 mm   8.75 mm    369 MeV  25.4 MeV  1.45 cm     44 cm         Iron      hhIoni
-   15   -250 m   -2.93 mm   8.61 mm    346 MeV  23.3 MeV   1.3 cm   45.3 cm         Iron      hhIoni
-   16   -250 m   -1.84 mm   8.58 mm    324 MeV  21.9 MeV  1.17 cm   46.4 cm         Iron      hhIoni
-   17   -250 m    -913 um   8.31 mm    303 MeV    21 MeV  1.06 cm   47.5 cm         Iron      hhIoni
-   18   -250 m     252 um   8.11 mm    284 MeV  19.3 MeV  9.48 mm   48.5 cm         Iron      hhIoni
-   19   -250 m    1.19 mm   8.02 mm    267 MeV    17 MeV  8.52 mm   49.3 cm         Iron      hhIoni
-   20   -250 m    2.01 mm   7.91 mm    249 MeV  17.7 MeV  7.71 mm   50.1 cm         Iron      hhIoni
-   21   -249 m    2.97 mm   7.82 mm    234 MeV  15.1 MeV   6.9 mm   50.8 cm         Iron      hhIoni
-   22   -249 m    3.74 mm    7.8 mm    221 MeV  13.1 MeV  6.23 mm   51.4 cm         Iron      hhIoni
-   23   -249 m    4.55 mm   7.75 mm    207 MeV  13.7 MeV  5.67 mm     52 cm         Iron      hhIoni
-   24   -249 m    5.33 mm   7.53 mm    194 MeV  13.3 MeV   5.1 mm   52.5 cm         Iron      hhIoni
-   25   -249 m    5.93 mm    7.3 mm    182 MeV    12 MeV  4.58 mm   52.9 cm         Iron      hhIoni
-   26   -249 m    6.35 mm   7.05 mm    169 MeV  12.3 MeV  4.13 mm   53.3 cm         Iron      hhIoni
-   27   -249 m    6.66 mm   6.79 mm    159 MeV  10.4 MeV  3.68 mm   53.7 cm         Iron      hhIoni
-   28   -249 m    6.95 mm   6.53 mm    149 MeV  10.1 MeV  3.32 mm     54 cm         Iron      hhIoni
-   29   -249 m    7.31 mm   6.28 mm    139 MeV  9.44 MeV  2.99 mm   54.3 cm         Iron      hhIoni
-   30   -249 m    7.65 mm   6.16 mm    131 MeV  8.72 MeV  2.69 mm   54.6 cm         Iron      hhIoni
-   31   -249 m    7.92 mm   6.02 mm    123 MeV  8.11 MeV  2.42 mm   54.8 cm         Iron      hhIoni
-   32   -249 m     8.1 mm   5.99 mm    114 MeV   8.3 MeV  2.18 mm   55.1 cm         Iron      hhIoni
-   33   -249 m    8.22 mm   5.97 mm    107 MeV  7.51 MeV  1.95 mm   55.3 cm         Iron      hhIoni
-   34   -249 m    8.28 mm   6.01 mm   99.6 MeV  7.25 MeV  1.75 mm   55.4 cm         Iron      hhIoni
-   35   -249 m    8.33 mm   6.07 mm   92.7 MeV  6.88 MeV  1.57 mm   55.6 cm         Iron      hhIoni
-   36   -249 m    8.42 mm   6.12 mm   86.3 MeV  6.38 MeV  1.41 mm   55.7 cm         Iron      hhIoni
-   37   -249 m    8.53 mm   6.18 mm   80.2 MeV  6.13 MeV  1.26 mm   55.9 cm         Iron      hhIoni
-   38   -249 m    8.64 mm   6.23 mm   74.6 MeV   5.6 MeV  1.13 mm     56 cm         Iron      hhIoni
-   39   -249 m    8.77 mm   6.29 mm   69.6 MeV     5 MeV  1.02 mm   56.1 cm         Iron      hhIoni
-   40   -249 m     8.9 mm   6.32 mm   64.6 MeV  4.96 MeV   920 um   56.2 cm         Iron      hhIoni
-   41   -249 m    9.05 mm   6.35 mm   59.9 MeV  4.74 MeV   830 um   56.2 cm         Iron      hhIoni
-   42   -249 m    9.16 mm   6.37 mm   55.4 MeV  4.52 MeV   748 um   56.3 cm         Iron      hhIoni
-   43   -249 m    9.25 mm   6.43 mm   51.1 MeV  4.29 MeV   674 um   56.4 cm         Iron      hhIoni
-   44   -249 m    9.34 mm   6.47 mm     47 MeV  4.09 MeV   608 um   56.5 cm         Iron      hhIoni
-   45   -249 m    9.43 mm   6.51 mm   42.9 MeV  4.05 MeV   549 um   56.5 cm         Iron      hhIoni
-   46   -249 m    9.49 mm   6.55 mm   39.2 MeV  3.75 MeV   494 um   56.6 cm         Iron      hhIoni
-   47   -249 m    9.52 mm   6.59 mm   35.4 MeV   3.8 MeV   447 um   56.6 cm         Iron      hhIoni
-   48   -249 m    9.57 mm   6.62 mm   31.7 MeV  3.69 MeV   402 um   56.6 cm         Iron      hhIoni
-   49   -249 m    9.62 mm   6.64 mm     28 MeV  3.75 MeV   361 um   56.7 cm         Iron      hhIoni
-   50   -249 m    9.65 mm   6.67 mm   24.5 MeV  3.45 MeV   323 um   56.7 cm         Iron      hhIoni
-   51   -249 m    9.66 mm   6.69 mm   20.8 MeV  3.73 MeV   291 um   56.7 cm         Iron      hhIoni
-   52   -249 m    9.67 mm   6.69 mm   17.1 MeV  3.65 MeV   259 um   56.8 cm         Iron      hhIoni
-   53   -249 m    9.67 mm   6.69 mm   13.1 MeV  4.01 MeV   230 um   56.8 cm         Iron      hhIoni
-   54   -249 m    9.66 mm   6.69 mm   8.82 MeV   4.3 MeV   198 um   56.8 cm         Iron      hhIoni
-   55   -249 m    9.66 mm    6.7 mm   3.51 MeV   5.3 MeV   157 um   56.8 cm         Iron      hhIoni
-   56   -249 m    9.66 mm   6.71 mm      0 eV   3.51 MeV  45.5 um   56.8 cm         Iron      hhIoni
+    0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm       Iron   initStep
+    1   -250 m    -748 um    378 um    925 MeV  74.6 MeV  5.86 cm   5.86 cm       Iron       hhIoni
+    2   -250 m    -559 um    347 um    863 MeV  62.5 MeV  5.26 cm   11.1 cm       Iron       hhIoni
+    3   -250 m    -246 um    220 um    802 MeV  60.8 MeV  4.77 cm   15.9 cm       Iron       hhIoni
+    4   -250 m     420 um    420 um    745 MeV  57.2 MeV   4.3 cm   20.2 cm       Iron       hhIoni
+    5   -250 m     831 um   1.26 mm    690 MeV  55.2 MeV  3.87 cm   24.1 cm       Iron       hhIoni
+    6   -250 m     524 um   1.71 mm    643 MeV  46.3 MeV  3.46 cm   27.5 cm       Iron       hhIoni
+    7   -250 m    -255 um   1.93 mm    600 MeV  43.8 MeV  3.12 cm   30.6 cm       Iron       hhIoni
+    8   -250 m   -1.49 mm    2.5 mm    558 MeV  41.2 MeV  2.81 cm   33.5 cm       Iron       hhIoni
+    9   -250 m   -1.38 mm   3.07 mm    522 MeV  36.2 MeV  2.53 cm     36 cm       Iron       hhIoni
+   10   -250 m    -897 um   3.21 mm    487 MeV    35 MeV  2.28 cm   38.3 cm       Iron       hhIoni
+   11   -250 m     190 um   3.73 mm    457 MeV  29.7 MeV  2.05 cm   40.3 cm       Iron       hhIoni
+   12   -250 m    1.18 mm   3.96 mm    426 MeV    31 MeV  1.86 cm   42.2 cm       Iron       hhIoni
+   13   -250 m    1.74 mm   4.33 mm    397 MeV    29 MeV  1.67 cm   43.9 cm       Iron       hhIoni
+   14   -250 m    2.39 mm   4.29 mm    372 MeV  25.9 MeV   1.5 cm   45.4 cm       Iron       hhIoni
+   15   -250 m    2.82 mm    4.1 mm    349 MeV  22.2 MeV  1.35 cm   46.7 cm       Iron       hhIoni
+   16   -250 m    2.92 mm   3.87 mm    326 MeV  23.8 MeV  1.22 cm   47.9 cm       Iron       hhIoni
+   17   -250 m    2.99 mm   3.59 mm    304 MeV    22 MeV  1.09 cm     49 cm       Iron       hhIoni
+   18   -250 m    3.06 mm   3.23 mm    284 MeV  19.9 MeV  9.76 mm     50 cm       Iron       hhIoni
+   19   -249 m    3.72 mm   2.89 mm    266 MeV  17.4 MeV  8.75 mm   50.9 cm       Iron       hhIoni
+   20   -249 m    4.55 mm   2.53 mm    249 MeV  17.6 MeV   7.9 mm   51.7 cm       Iron       hhIoni
+   21   -249 m    5.27 mm   2.16 mm    233 MeV  15.2 MeV  7.07 mm   52.4 cm       Iron       hhIoni
+   22   -249 m    6.04 mm   1.81 mm    219 MeV  14.7 MeV  6.38 mm     53 cm       Iron       hhIoni
+   23   -249 m    6.71 mm   1.43 mm    205 MeV  13.6 MeV  5.74 mm   53.6 cm       Iron       hhIoni
+   24   -249 m    7.38 mm    1.3 mm    193 MeV  12.3 MeV  5.17 mm   54.1 cm       Iron       hhIoni
+   25   -249 m    8.01 mm    990 um    180 MeV  12.6 MeV  4.68 mm   54.6 cm       Iron       hhIoni
+   26   -249 m    9.14 mm    859 um    170 MeV  10.5 MeV  4.19 mm     55 cm       Iron       hhIoni
+   27   -249 m    1.01 cm    747 um    159 MeV    11 MeV   3.8 mm   55.4 cm       Iron       hhIoni
+   28   -249 m    1.08 cm    625 um    149 MeV  9.77 MeV  3.41 mm   55.7 cm       Iron       hhIoni
+   29   -249 m    1.14 cm    489 um    140 MeV   8.9 MeV  3.08 mm     56 cm       Iron       hhIoni
+   30   -249 m    1.21 cm    298 um    131 MeV   8.8 MeV  2.79 mm   56.3 cm       Iron       hhIoni
+   31   -249 m    1.26 cm   94.2 um    123 MeV  8.16 MeV  2.51 mm   56.5 cm       Iron       hhIoni
+   32   -249 m    1.31 cm  -2.55 um    115 MeV  8.07 MeV  2.26 mm   56.8 cm       Iron       hhIoni
+   33   -249 m    1.34 cm   -163 um    107 MeV  7.75 MeV  2.03 mm     57 cm       Iron       hhIoni
+   34   -249 m    1.38 cm   -340 um    100 MeV     7 MeV  1.82 mm   57.1 cm       Iron       hhIoni
+   35   -249 m    1.41 cm   -456 um   93.9 MeV  6.44 MeV  1.64 mm   57.3 cm       Iron       hhIoni
+   36   -249 m    1.44 cm   -515 um   87.4 MeV  6.44 MeV  1.48 mm   57.5 cm       Iron       hhIoni
+   37   -249 m    1.46 cm   -531 um   81.7 MeV  5.69 MeV  1.33 mm   57.6 cm       Iron       hhIoni
+   38   -249 m    1.48 cm   -584 um     76 MeV  5.71 MeV   1.2 mm   57.7 cm       Iron       hhIoni
+   39   -249 m    1.49 cm   -624 um   70.7 MeV   5.3 MeV  1.08 mm   57.8 cm       Iron       hhIoni
+   40   -249 m    1.49 cm   -634 um   65.7 MeV  5.06 MeV   969 um   57.9 cm       Iron       hhIoni
+   41   -249 m     1.5 cm   -642 um   60.8 MeV  4.89 MeV   872 um     58 cm       Iron       hhIoni
+   42   -249 m    1.51 cm   -665 um   56.3 MeV  4.52 MeV   784 um   58.1 cm       Iron       hhIoni
+   43   -249 m    1.51 cm   -709 um   51.7 MeV  4.57 MeV   707 um   58.2 cm       Iron       hhIoni
+   44   -249 m    1.52 cm   -727 um   47.4 MeV   4.3 MeV   634 um   58.2 cm       Iron       hhIoni
+   45   -249 m    1.52 cm   -777 um   43.7 MeV  3.66 MeV   569 um   58.3 cm       Iron       hhIoni
+   46   -249 m    1.53 cm   -804 um   39.7 MeV  4.08 MeV   517 um   58.3 cm       Iron       hhIoni
+   47   -249 m    1.53 cm   -840 um   35.9 MeV  3.78 MeV   463 um   58.4 cm       Iron       hhIoni
+   48   -249 m    1.53 cm   -872 um   32.2 MeV  3.71 MeV   416 um   58.4 cm       Iron       hhIoni
+   49   -249 m    1.53 cm   -917 um   28.5 MeV  3.69 MeV   374 um   58.4 cm       Iron       hhIoni
+   50   -249 m    1.53 cm   -952 um     25 MeV  3.52 MeV   334 um   58.5 cm       Iron       hhIoni
+   51   -249 m    1.53 cm   -985 um   21.5 MeV  3.47 MeV   300 um   58.5 cm       Iron       hhIoni
+   52   -249 m    1.53 cm  -1.02 mm   17.8 MeV  3.66 MeV   269 um   58.5 cm       Iron       hhIoni
+   53   -249 m    1.53 cm  -1.04 mm   13.9 MeV   3.9 MeV   238 um   58.6 cm       Iron       hhIoni
+   54   -249 m    1.53 cm  -1.08 mm   9.99 MeV  3.93 MeV   207 um   58.6 cm       Iron       hhIoni
+   55   -249 m    1.53 cm   -1.1 mm   5.68 MeV  4.31 MeV   172 um   58.6 cm       Iron       hhIoni
+   56   -249 m    1.54 cm   -1.1 mm      0 eV   5.68 MeV   101 um   58.6 cm       Iron       hhIoni
 Run terminated.
 Run Summary
   Number of events processed : 2
@@ -542,7 +562,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1754181475, 972707921
+ Current couple of seeds = 1965205658, 2060720655
 ----------------------------------------
 
  Number of process calls --->	hhIoni : 112

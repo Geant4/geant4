@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisStateDependent.hh,v 1.5 2006/06/29 21:29:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisStateDependent.hh,v 1.5 2006-06-29 21:29:12 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // A "state dependent" service class for G4VisManager.
 // John Allison  29th November 1999

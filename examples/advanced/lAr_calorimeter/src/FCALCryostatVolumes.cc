@@ -105,7 +105,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
     new G4LogicalVolume(SolidInsulation, FCALMaterials->Material("Air"),
 			"InsulationLogical");
 //  G4VPhysicalVolume * PhysicalInsulation = 
-    new G4PVPlacement(0, 0, LogicalInsulation, "InsulationPhysical",
+    new G4PVPlacement(0, G4ThreeVector(), LogicalInsulation, "InsulationPhysical",
 		      LogicalCryostat, 0, 0);
   
   LogicalInsulation->SetVisAttributes(ColorOfAir);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVDivisionFactory.hh,v 1.2 2006/06/29 18:32:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPVDivisionFactory.hh,v 1.2 2006-06-29 18:32:31 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4VPVDivisionFactory

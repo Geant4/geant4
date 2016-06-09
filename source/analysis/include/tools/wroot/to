@@ -1,0 +1,61 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_to
+#define tools_wroot_to
+
+#include "directory"
+#include "streamers"
+#include "bufobj"
+
+namespace tools {
+namespace wroot {
+
+inline bool to(directory& a_dir,
+               const histo::h1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TH1D");
+  if(!TH1D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH1D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,
+               const histo::h2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TH2D");
+  if(!TH2D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,
+               const histo::p1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TProfile");
+  if(!TProfile_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TProfile_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+}}
+
+#endif

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionStore.hh,v 1.12 2010/12/15 07:39:52 gunter Exp $
+// $Id: G4FissionStore.hh,v 1.12 2010-12-15 07:39:52 gunter Exp $
 //
 // 20100728  Move ::addConfig() to .cc file, add setVerboseLevel(), clear()
+// 20110801  Make configuration probs a data member array, reduce memory churn
 
 #ifndef G4FISSION_STORE_HH
 #define G4FISSION_STORE_HH
@@ -43,7 +44,7 @@ public:
 
   void clear() { configurations.clear(); }
 
-  G4int size() const { return configurations.size(); }
+  size_t size() const { return configurations.size(); }
 
   G4FissionConfiguration generateConfiguration(G4double amax, 
 					       G4double rand) const;
@@ -51,6 +52,7 @@ public:
 private:
   G4int verboseLevel;
   std::vector<G4FissionConfiguration> configurations;
+  mutable std::vector<G4double> configProbs;
 };
 
 #endif // G4FISSION_STORE_HH 

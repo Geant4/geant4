@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,11 +13,11 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    G4_Be     density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
    --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     G4_W     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
+ Material:     G4_W    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
    --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
    --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
    --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
@@ -25,7 +25,7 @@
    --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
    --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_He     density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
    --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
    --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -39,7 +39,7 @@
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
- Material:   G4_AIR     density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
    --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
    --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
@@ -55,7 +55,7 @@
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material: G4_MYLAR     density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
    --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
    --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
@@ -129,43 +129,43 @@ Absorber R= 200 dz= 2.5 posZ= -77.5
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Be
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.05172 keV    e-  109.289 keV    e+  107.83 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  1.05172 keV    e-  109.289 keV    e+  107.83 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_He
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : G4_W
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  36.0599 keV    e-  351.877 keV    e+  337.972 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  36.0599 keV    e-  351.877 keV    e+  337.972 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : G4_MYLAR
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.21113 keV    e-  99.4755 keV    e+  98.1475 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  1.21113 keV    e-  99.4755 keV    e+  98.1475 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -181,22 +181,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.56s Real=6.6s Sys=0s
+  User=5.86s Real=5.87s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.13
-Average number of gamma                      21.18
-Average number of e+                         0.7932
+Average number of e-                         13.47
+Average number of gamma                      19.4
+Average number of e+                         0.7438
 Average number of neutrons                   0
-Average number of steps in absorber          32.13
-Average number of e- steps in target         18.61
-Average number of g  produced in the target  20.35
-Average number of e- produced in the target  7.174
-Average number of g produced in the phantom  0.5292
-Average number of e- produced in the phantom 2.799
-Total gamma fluence in front of phantom      8.752 MeV 
+Average number of steps in absorber          31.32
+Average number of e- steps in target         18.12
+Average number of g  produced in the target  18.54
+Average number of e- produced in the target  7.021
+Average number of g produced in the phantom  0.495
+Average number of e- produced in the phantom 2.766
+Total gamma fluence in front of phantom      8.294 MeV 
 ========================================================
 
 

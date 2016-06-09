@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.35 2010/11/29 10:56:53 cirrone Exp $
+$Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,15 @@ $Id: History,v 1.35 2010/11/29 10:56:53 cirrone Exp $
                       Category History file
                       ---------------------
 
-29.11.2010 -  G.A.P. Cirron; tag brachy-V09-03-05
+16.09.2011 -  S. Guatelli; tag brachy-V09-04-01
+
+14.09.2011 -  S. Guatelli; G4 Analysis module substitutes the analysis 
+              done with PI-AIDA. macro.C added.
+
+02.09.2011 -  S. Guatelli; scoring mesh introduced. 
+              Sensitive detector and ReadOutGeometry components deleted.
+           
+29.11.2010 -  G.A.P. Cirrone; tag brachy-V09-03-05
    	      Compilation warnigs removed
 
 26.11.2010 -  G.A.P. Cirrone & S. Guatelli; tag brachy-V09-03-04

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.34 2009/08/11 10:29:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmModelManager.hh,v 1.34 2009-08-11 10:29:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 // 08-04-08 Simplify Select method for only one G4RegionModel (VI)
 // 03-08-09 Removed unused members and simplify model search if only one
 //          model is used (VI)
+// 14-07-11 Use pointer to the vector of cuts and not local copy (VI)
 //
 // Class Description:
 //
@@ -118,6 +119,9 @@ private:
     return theRegion;
   };
 
+  G4RegionModels(G4RegionModels &);
+  G4RegionModels & operator=(const G4RegionModels &right);
+
   const G4Region*    theRegion;
   G4int              nModelsForRegion;
   G4int*             theListOfModelIndexes;
@@ -171,6 +175,8 @@ public:
 
   inline const G4DataVector* SubCutoff() const;
 
+  inline void SetFluoFlag(G4bool val);
+
   inline G4int NumberOfModels() const;
 
 private:
@@ -190,8 +196,8 @@ private:
 
 private:
 
-  G4DataVector                theCuts;
-  G4DataVector                theSubCuts;
+  const G4DataVector*          theCuts;
+  G4DataVector*                theSubCuts;
 
   std::vector<G4VEmModel*>                models;
   std::vector<G4VEmFluctuationModel*>     flucModels;
@@ -211,6 +217,7 @@ private:
 
   G4int                       verboseLevel;
   G4bool                      severalModels;
+  G4bool                      fluoFlag;
 
   // may be changed in run time
   G4RegionModels*             currRegionModel;
@@ -236,14 +243,21 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy,
 
 inline const G4DataVector* G4EmModelManager::Cuts() const
 {
-  return &theCuts;
+  return theCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline const G4DataVector* G4EmModelManager::SubCutoff() const
 {
-  return &theSubCuts;
+  return theSubCuts;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4EmModelManager::SetFluoFlag(G4bool val)
+{
+  fluoFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2010/10/26 15:40:03 vnivanch Exp $
+$Id: History,v 1.37 2010-10-26 15:40:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 2011: V.Ivant (emhighenergy-V09-04-02)
+- G4hPairProduction, G4eeToHadronsMultiModel, G4hhIonisation, 
+  G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed 
+    initialisation problems reported by the Coverity tool
+
+3 November 2011: V.Ivant (emhighenergy-V09-04-01)
+- G4hBremsstrahlung, G4hPairProduction - improved initialisation
+    allowing to used model instantiated in Physics List (potential
+    saving initialisation time)
+
+12 July 11: V.Ivanchenko (emhighenergy-V09-04-00)
+- G4GammaConversionToMuons - removed include of unused header
 
 26 October 10: V.Ivanchenko (emhighenergy-V09-03-02)
 - Fixed problem reported by the Coverity tools (mainly pedantic 

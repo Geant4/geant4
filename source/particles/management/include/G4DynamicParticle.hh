@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.22 2010/08/11 17:14:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DynamicParticle.hh,v 1.22 2010-08-11 17:14:02 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

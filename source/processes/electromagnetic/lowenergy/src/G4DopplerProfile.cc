@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DopplerProfile.cc,v 1.3 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DopplerProfile.cc,v 1.3 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -90,7 +90,9 @@ size_t G4DopplerProfile::NumberOfProfiles(G4int Z) const
 const G4VEMDataSet* G4DopplerProfile::Profiles(G4int Z) const
 {
   std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) G4Exception("G4DopplerProfile::Profiles - Z outside boundaries");
+  if (Z < zMin || Z > zMax) 
+    G4Exception("G4DopplerProfile::Profiles",
+		    "em1005",FatalException,"Z outside boundaries");
   pos = profileMap.find(Z);
   G4VEMDataSet* dataSet = (*pos).second;
   return dataSet;
@@ -124,8 +126,9 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4Exception("G4DopplerProfile::LoadBiggsP",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
+      return;
     }
   
   G4String pathString(path);
@@ -135,10 +138,11 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 
   if (! (lsdp->is_open()) )
     {
-      G4String s1("G4DopplerProfile::LoadBiggsP data file: ");
+      G4String s1("data file: ");
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
+      G4Exception("G4DopplerProfile::LoadBiggsP",
+		    "em0003",FatalException,excep);
     }
 
   G4double p;
@@ -150,7 +154,8 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 
   // Make sure that the number of data loaded corresponds to the number in Biggs' paper
   if (biggsP.size() != nBiggs)
-    G4Exception("G4DopplerProfile::LoadBiggsP - Number of momenta read in is not 31");
+    G4Exception("G4DopplerProfile::LoadBiggsP",
+		    "em1006",FatalException,"Number of momenta read in is not 31");
 }
 
 
@@ -163,8 +168,10 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set");
+      G4Exception("G4DopplerProfile::LoadProfile",
+		    "em0006",FatalException,excep);
+      return;
     }
   
   G4String pathString(path);
@@ -174,10 +181,11 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 
   if (! (lsdp->is_open()) )
     {
-      G4String s1("G4DopplerProfile::LoadProfile data file: ");
+      G4String s1("data file: ");
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
+      G4Exception("G4DopplerProfile::LoadProfile",
+		    "em0003",FatalException,excep);
     }
 
   G4double p;

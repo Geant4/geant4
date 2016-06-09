@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InelasticInteraction.cc,v 1.12 2009/01/24 11:56:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4InelasticInteraction.cc,v 1.12 2009-01-24 11:56:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Inelastic Interaction 
 // original by H.P. Wellisch
@@ -229,7 +229,7 @@ void
       
       const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass();
       if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
-      const G4double atomicWeight = targetNucleus.GetN();
+      const G4double atomicWeight = targetNucleus.GetA_asInt();
       ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
       G4double tkin = targetNucleus.Cinema(ek);
       ek += tkin;
@@ -412,7 +412,7 @@ void
       {
         if( G4UniformRand() > 0.5 )vec[i]->SetDefinition( aKaonZL );
       }
-    }      
+    }
     if( incidentHasChanged )
     {
       G4DynamicParticle* p0 = new G4DynamicParticle;
@@ -435,7 +435,6 @@ void
       if (std::fabs(aE)<.1*eV) aE=.1*eV;
       theParticleChange.SetEnergyChange( aE );
     }
-
     if( targetParticle.GetMass() > 0.0 )  // targetParticle can be eliminated in TwoBody
     {
       G4DynamicParticle *p1 = new G4DynamicParticle;
@@ -449,9 +448,11 @@ void
     G4DynamicParticle *p;
     for( i=0; i<vecLen; ++i )
     {
-      p = new G4DynamicParticle();
-      p->SetDefinition( vec[i]->GetDefinition() );
-      p->SetMomentum( vec[i]->GetMomentum() );
+      // p = new G4DynamicParticle();
+      p = new G4DynamicParticle(vec[i]->GetDefinition(), vec[i]->GetMomentum() );
+
+      // p->SetDefinition( vec[i]->GetDefinition() );
+      // p->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( p );
       delete vec[i];
     }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.18 2010/10/25 10:15:41 witoldp Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLEvaluator.hh,v 1.18 2010-10-25 10:15:41 witoldp Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLEvaluator
@@ -41,10 +41,9 @@
 #ifndef _G4GDMLEVALUATOR_INCLUDED_
 #define _G4GDMLEVALUATOR_INCLUDED_
 
-#include <CLHEP/Evaluator/Evaluator.h>
 #include <vector>
 
-#include "G4Types.hh"
+#include "G4Evaluator.hh"
 
 class G4GDMLEvaluator
 {
@@ -67,7 +66,7 @@ class G4GDMLEvaluator
 
  private:
 
-   HepTool::Evaluator eval;
+   G4Evaluator eval;
    std::vector<G4String> variableList;
 };
 

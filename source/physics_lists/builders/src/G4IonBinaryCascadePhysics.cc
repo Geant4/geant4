@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2010/07/30 14:20:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2010-07-30 14:20:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 
 // Nuclei
 #include "G4IonConstructor.hh"
+#include "G4BuilderType.hh"
 
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
@@ -65,6 +66,7 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
 }
 
@@ -75,6 +77,7 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name,
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
 }
 

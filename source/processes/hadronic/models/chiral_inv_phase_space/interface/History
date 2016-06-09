@@ -1,7 +1,7 @@
 
-       ==========================================================
+       =--------------------------------------------------------=
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+       =--------------------------------------------------------=
 
         History file for hadronic/models/chiral_inv_phase_space/interface 
 	
@@ -11,6 +11,50 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+04-Oct-2011 Dennis Wright                      (hadr-chips-inter-V09-04-04)
+---------------------------------------------------------------------------
+- integer Z and A migration:  change GetZ to GetZ_asInt and GetN to
+  GetA_asInt for instances of G4Nucleus, for the following files:
+     G4ProtonAntiProtonAtRestChips.hh
+     G4ElectroNuclearReaction.hh
+     G4ProtonAntiProtonReaction.hh
+     G4PionMinusNuclearAtRestChips.hh
+
+09-Sep-2011 M.Kelsey                           (hadr-chips-inter-V09-04-03)
+---------------------------------------------------------------------------
+- G4ElectroNuclearReaction.hh: Follow migration of G4HadFinalState interface
+  in hadr-util-V09-04-02 when merging output of HE and LE models.
+
+06-Sep-2011 J.Apostolakis                      (hadr-chips-inter-V09-04-02)
+---------------------------------------------------------------------------
+- Deleted dead-code, which existed since version 8.0 in
+  G4StringChipsParticleLevelInterface and
+ G4QStringChipsParticleLevelInterface
+
+- G4StringChipsInterface: Removed 'new' of G4ReactionProduct which was 
+  not used (overwritten before use).  The old code, as a result, leaked 
+  memory. This leak is fixed. 
+
+ Note: The classes were used in physics lists as follows:
+  G4QStringChipsParticleLevelInterface: FTFC, QGSC_EFLOW, QGSC_CHIPS.
+  G4QStringChipsParticleLevelInterface: QGSC and QGSC_QGSC.
+  G4StringChipsInterface:               Not used
+    (only in tests 19/29/39/49)
+
+02-Aug-2011 Dennis Wright                      (hadr-chips-inter-V09-04-01)
+---------------------------------------------------------------------------
+- Add Description() method to classes 
+    G4ElectroNuclearReaction
+    G4GammaNuclearReaction
+    G4QHadronElasticDataSet
+    G4QHadronInelasticDataSet
+  for html physics list documentation
+
+14-Apr-2011 J.Apostolakis + M.Kosov            (hadr-chips-inter-V09-04-00)
+---------------------------------------------------------------------------
+- G4QHadron(Elastic/Inelastic)DataSet: add "return 0" for missing hadrons
+- G4ElectronNuclearReaction.hh: destructor improvement (more delete's)
 
 18-Nov-2010 J.Apostolakis                      (hadr-chips-inter-V09-03-03)
 ---------------------------------------------------------------------------

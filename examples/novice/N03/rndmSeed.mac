@@ -1,4 +1,4 @@
-# $Id: rndmSeed.mac,v 1.2 2007/06/13 10:36:39 maire Exp $
+# $Id: rndmSeed.mac,v 1.2 2007-06-13 10:36:39 maire Exp $
 #
 # This macro illustrates how to save and reset the random number seed
 #

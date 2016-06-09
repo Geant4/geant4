@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.59 2010/05/30 09:53:05 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.60 2010-12-11 17:04:07 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -45,7 +45,6 @@
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLFontBaseStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -72,6 +71,10 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
   G4VSceneHandler (system, id, name),
   fPickName(0),
   fProcessing2D (false),
+  // glFlush take about 90% time.  Dividing glFlush number by 100 will
+  // change the first vis time from 100% to 10+90/100 = 10,9%.
+  fNbListsBeforeFlush(100),
+  fNbListsToBeFlush(0),
   fProcessingPolymarker(false)
 {}
 
@@ -104,6 +107,14 @@ void G4OpenGLSceneHandler::ClearAndDestroyAtts()
   std::map<GLuint, G4AttHolder*>::iterator i;
   for (i = fPickMap.begin(); i != fPickMap.end(); ++i) delete i->second;
   fPickMap.clear();
+}
+
+void G4OpenGLSceneHandler::ScaledFlush()
+{
+  fNbListsToBeFlush++;
+  if (fNbListsToBeFlush < fNbListsBeforeFlush) return;
+  glFlush();
+  fNbListsToBeFlush = 0;
 }
 
 void G4OpenGLSceneHandler::PreAddSolid
@@ -182,7 +193,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
     fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
@@ -232,7 +246,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         circleV.push_back(circle);
         //      G4OpenGLSceneHandler::AddPrimitive (circle);
       }
-      G4OpenGLSceneHandler::AddPrimitives (circleV);
+      G4OpenGLSceneHandler::AddPrimitivesCircle (circleV);
     }
     break;
   case G4Polymarker::squares:
@@ -244,7 +258,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         squareV.push_back(square);
         //      G4OpenGLSceneHandler::AddPrimitive (square);
       }
-      G4OpenGLSceneHandler::AddPrimitives (squareV);
+      G4OpenGLSceneHandler::AddPrimitivesSquare (squareV);
     }
     break;
   }
@@ -267,37 +281,21 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   G4ThreeVector position (text.GetPosition ());
   G4String textString = text.GetText();
 
-  G4int font_base = G4OpenGLFontBaseStore::GetFontBase(fpViewer,size);
-  if (font_base < 0) {
-    static G4int callCount = 0;
-    ++callCount;
-    if (callCount <= 10 || callCount%100 == 0) {
-      G4cout <<
-	"G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
-	     << callCount <<
-	"\n  No fonts available."
-	"\n  Called with text \""
-	     << text.GetText ()
-	     << "\"\n  at " << position
-	     << ", size " << size
-	     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-	     << ", type " << G4int(sizeType)
-	     << ", colour " << c
-	     << G4endl;
-    }
-    return;
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    const char* textCString = textString.c_str();
+    GLfloat color[4]; /* Ask OpenGL for the current color */
+    glGetFloatv(GL_CURRENT_COLOR, color);
+    
+    // Change to new color
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    
+    // set position
+    glRasterPos3d( position.x(),position.y(),position.z() );
+
+    pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
+    glColor3d (color[0], color[1], color[2]);
   }
-  const char* textCString = textString.c_str();
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-  glDisable (GL_DEPTH_TEST);
-  glDisable (GL_LIGHTING);
-  
-  glRasterPos3d(position.x(),position.y(),position.z());
-  // No action on offset or layout at present.
-   glPushAttrib(GL_LIST_BIT);
-   glListBase(font_base);
-   glCallLists(strlen(textCString), GL_UNSIGNED_BYTE, (GLubyte *)textCString);
-   glPopAttrib();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -310,9 +308,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   AddCircleSquare (square, G4OpenGLBitMapStore::square);
 }
 
-void G4OpenGLSceneHandler::AddPrimitives (std::vector <G4VMarker> square) {
+void G4OpenGLSceneHandler::AddPrimitivesCircle (const std::vector <G4VMarker>& marker) {
+  glEnable (GL_POINT_SMOOTH);
+  AddCircleSquareVector (marker, G4OpenGLBitMapStore::square);
+}
+
+void G4OpenGLSceneHandler::AddPrimitivesSquare (const std::vector <G4VMarker>& marker) {
   glDisable (GL_POINT_SMOOTH);
-  AddCircleSquareVector (square, G4OpenGLBitMapStore::square);
+  AddCircleSquareVector (marker, G4OpenGLBitMapStore::circle);
 }
 
 void G4OpenGLSceneHandler::AddCircleSquare
@@ -325,7 +328,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
 }
  
 void G4OpenGLSceneHandler::AddCircleSquareVector
-(std::vector <G4VMarker> marker,
+(const std::vector <G4VMarker>& marker,
  G4OpenGLBitMapStore::Shape shape) {
 
   if (marker.size() == 0) {
@@ -356,17 +359,20 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     fpViewer -> GetApplicableVisAttributes (marker[0].GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   G4VMarker::FillStyle style = marker[0].GetFillStyle();
 
-  G4bool filled = false;
+  // G4bool filled = false;  Not actually used - comment out to prevent compiler warnings (JA).
   static G4bool hashedWarned = false;
   
   switch (style) {
   case G4VMarker::noFill: 
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    filled = false;
+    //filled = false;
     break;
     
   case G4VMarker::hashed:
@@ -382,7 +388,7 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     
   case G4VMarker::filled:
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    filled = true;
+    //filled = true;
     break;
     
   }
@@ -402,19 +408,21 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
      }
    } else { // Size specified in screen (window) coordinates.
      // A few useful quantities...
-     glPointSize (size);
+     G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+     if ( pGLViewer ) {
+       pGLViewer->ChangePointSize(size);
+     }
+     //Antialiasing only for circles
+     //Transparency
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          
      glBegin (GL_POINTS);
      for (unsigned int a=0;a<marker.size();a++) {
        G4Point3D centre = marker[a].GetPosition();
        glVertex3f(centre.x(),centre.y(),centre.z());
      }
-     glEnd();
-     //Antialiasing
-     glEnable (GL_POINT_SMOOTH);
-     //Transparency
-     glEnable(GL_BLEND);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+     glEnd();     
      // L. GARNIER 1 March 2009
      // Old method, we draw a bitmap instead of a GL_POINT. 
      // I remove it because it cost in term of computing performances
@@ -490,10 +498,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
-  //Get colour, etc...
-  G4bool transparency_enabled = true;
+  // Get colour, etc...
+  // Need access to data in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.  No need to test
+  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
   G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+  const G4bool& transparency_enabled = pViewer->transparency_enabled;
   const G4Colour& c = pVA->GetColour();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
@@ -506,7 +516,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);

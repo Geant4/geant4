@@ -23,48 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4UnstableFermiFragment.hh,v 1.3 2006/06/29 20:12:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UnstableFermiFragment.hh,v 1.3 2006-06-29 20:12:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko: integer Z and A, constructor
 
 #ifndef G4UnstableFermiFragment_h
 #define G4UnstableFermiFragment_h 1
 
 #include "G4VFermiFragment.hh"
-#include "Randomize.hh"
+#include "G4FermiPhaseSpaceDecay.hh"
 
 class G4UnstableFermiFragment : public G4VFermiFragment
 {
 public:
+
+  G4UnstableFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
+
   virtual ~G4UnstableFermiFragment();
+
+  virtual G4FragmentVector * GetFragment(const G4LorentzVector&) const;
   
-protected:
-  G4UnstableFermiFragment(const G4int anA, const G4int aZ, const G4int Pol, const G4double ExE)
-    : G4VFermiFragment(anA,aZ,Pol,ExE)
-  {
-  } 
-
-  G4UnstableFermiFragment();
-
 private:
-  G4UnstableFermiFragment(const G4UnstableFermiFragment &right);
-  
+
+  G4UnstableFermiFragment(const G4UnstableFermiFragment &right);  
   const G4UnstableFermiFragment & operator=(const G4UnstableFermiFragment &right);
   G4bool operator==(const G4UnstableFermiFragment &right) const;
   G4bool operator!=(const G4UnstableFermiFragment &right) const;
+
+  G4FermiPhaseSpaceDecay thePhaseSpace;
   
-public:
-
-  G4FragmentVector * GetFragment(const G4LorentzVector&) const;
-
 protected:
 
   std::vector<G4double> Masses;
-  std::vector<G4double> Charges;
-  std::vector<G4double> AtomNum;
+  std::vector<G4int> Charges;
+  std::vector<G4int> AtomNum;
 
 };
 

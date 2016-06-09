@@ -32,8 +32,8 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.hh,v 1.3 2006/06/29 16:05:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMagRunAction.hh,v 1.3 2006-06-29 16:05:59 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef PurgMagRunAction_h

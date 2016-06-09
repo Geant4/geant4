@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: AntiSigmaPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 18-Feb-1997
- // Last modified: 03-Apr-1997
- 
- // Note:  there is no .cc file
+// Hadronic Process: AntiSigmaPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 18-Feb-1997
+//
  
 #ifndef G4AntiSigmaPlusInelasticProcess_h
 #define G4AntiSigmaPlusInelasticProcess_h 1
@@ -40,19 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
  
 
- class G4AntiSigmaPlusInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4AntiSigmaPlusInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AntiSigmaPlusInelasticProcess(
-     const G4String& processName = "AntiSigmaPlusInelastic" ) :
-      G4HadronInelasticProcess( processName, G4AntiSigmaPlus::AntiSigmaPlus() )
-    { }
+    G4AntiSigmaPlusInelasticProcess(const G4String& processName = "AntiSigmaPlusInelastic");
     
-    ~G4AntiSigmaPlusInelasticProcess()
-    { }
- };
- 
-#endif
- 
+    ~G4AntiSigmaPlusInelasticProcess() {}
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
+};
+
+#endif

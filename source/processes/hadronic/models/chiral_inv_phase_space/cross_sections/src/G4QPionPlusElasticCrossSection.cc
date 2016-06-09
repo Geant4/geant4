@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPionPlusElasticCrossSection.cc,v 1.3 2010/02/16 07:53:05 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QPionPlusElasticCrossSection.cc,v 1.3 2010-02-16 07:53:05 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QPionPlusElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 21-Jan-10
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 21-Jan-10
 // 
-//================================================================================
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -169,7 +169,7 @@ G4double G4QPionPlusElasticCrossSection::GetCrossSection(G4bool fCS, G4double pM
 #endif
   if(pPDG!= 211)
   {
-    G4cout<<"*Warning*G4QPionPlusElCS::GetCS:**> Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"*Warning*G4QPionPlusElCS::GetCS:**> Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -364,7 +364,7 @@ G4double G4QPionPlusElasticCrossSection::CalculateCrossSection(G4bool CS, G4int 
     S4T.push_back(lastS4T);             // Fill Tabulated 4-th mantissa to AMDB 
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
+  // =-----------= NOW Update (if necessary) and Calculate the Cross Section =----------=
 #ifdef debug
   G4cout<<"G4QElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
 #endif
@@ -721,9 +721,14 @@ G4double G4QPionPlusElasticCrossSection::GetPTables(G4double LP, G4double ILP, G
   }
   else
   {
-    G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=211"<<G4endl;
-    throw G4QException("G4QPionPlusElasticCrossSection::GetPTables:only pipA implemented");
+    // G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=211"<<G4endl;
+    // throw G4QException("G4QPionPlusElasticCrossSection::GetPTables:only pipA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=211 (pi+)" << G4endl;
+    G4Exception("G4QPionPlusElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -930,9 +935,14 @@ G4double G4QPionPlusElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PD
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG != 211)
   {
-    G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=211"<<G4endl;
-    throw G4QException("G4QPionPlusElasticCrossSection::GetSlope: pipA are implemented");
+    // G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=211"<<G4endl;
+    // throw G4QException("G4QPionPlusElasticCrossSection::GetSlope: pipA are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=211 (pi-)" << G4endl;
+    G4Exception("G4QPionPlusElasticCrossSection::GetSlope()", "HAD_CHPS_000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QElasticCrossSect::Getslope:"<<theB1<<G4endl;
@@ -1094,8 +1104,14 @@ G4double G4QPionPlusElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tg
   }
   else
   {
-    G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetQ2max:PDG="<<PDG<<", Z="<<tgZ<<",N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QPionPlusElasticCrossSection::GetQ2max: only pipA implemented");
+    // G4cout<<"*Error*G4QPionPlusElasticCrossSection::GetQ2max:PDG="<<PDG<<", Z="<<tgZ<<",N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QPionPlusElasticCrossSection::GetQ2max: only pipA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ",N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QPionPlusElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.hh,v 1.5 2009/09/16 16:56:52 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RayTracerXViewer.hh,v 1.5 2009-09-16 16:56:52 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
 

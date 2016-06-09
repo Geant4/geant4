@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.69 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLWriteSolids.cc,v 1.69 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -59,6 +59,7 @@
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
@@ -722,6 +723,40 @@ TubeWrite(xercesc::DOMElement* solidsElement, const G4Tubs* const tube)
 }
 
 void G4GDMLWriteSolids::
+CutTubeWrite(xercesc::DOMElement* solidsElement, const G4CutTubs* const cuttube)
+{
+   const G4String& name = GenerateName(cuttube->GetName(),cuttube);
+
+   xercesc::DOMElement* cuttubeElement = NewElement("cutTube");
+   cuttubeElement->setAttributeNode(NewAttribute("name",name));
+   cuttubeElement->setAttributeNode(NewAttribute("rmin",
+                cuttube->GetInnerRadius()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("rmax",
+                cuttube->GetOuterRadius()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("z",
+                2.0*cuttube->GetZHalfLength()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("startphi",
+                cuttube->GetStartPhiAngle()/degree));
+   cuttubeElement->setAttributeNode(NewAttribute("deltaphi",
+                cuttube->GetDeltaPhiAngle()/degree));
+   cuttubeElement->setAttributeNode(NewAttribute("lowX",
+                cuttube->GetLowNorm().getX()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("lowY",
+                cuttube->GetLowNorm().getY()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("lowZ",
+                cuttube->GetLowNorm().getZ()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("highX",
+                cuttube->GetHighNorm().getX()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("highY",
+                cuttube->GetHighNorm().getY()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("highZ",
+                cuttube->GetHighNorm().getZ()/mm));
+   cuttubeElement->setAttributeNode(NewAttribute("aunit","deg"));
+   cuttubeElement->setAttributeNode(NewAttribute("lunit","mm"));
+   solidsElement->appendChild(cuttubeElement);
+}
+
+void G4GDMLWriteSolids::
 TwistedboxWrite(xercesc::DOMElement* solidsElement,
                 const G4TwistedBox* const twistedbox)
 {
@@ -936,6 +971,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4Tubs* const tubePtr
      = dynamic_cast<const G4Tubs*>(solidPtr))
      { TubeWrite(solidsElement,tubePtr); } else
+   if (const G4CutTubs* const cuttubePtr
+     = dynamic_cast<const G4CutTubs*>(solidPtr))
+     { CutTubeWrite(solidsElement,cuttubePtr); } else
    if (const G4TwistedBox* const twistedboxPtr
      = dynamic_cast<const G4TwistedBox*>(solidPtr))
      { TwistedboxWrite(solidsElement,twistedboxPtr); } else

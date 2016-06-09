@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.14 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4LPhysicsFreeVector.hh,v 1.14 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------------
@@ -61,25 +61,14 @@ public: // with description
 
    ~G4LPhysicsFreeVector();
 
-   G4LPhysicsFreeVector(const G4LPhysicsFreeVector&);
-   G4LPhysicsFreeVector& operator=(const G4LPhysicsFreeVector&);
-     // Copy constructor and assignment operator.
-
    void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
      // G4PhysicsVector has PutValue() but it is inconvenient.
      // Want to simultaneously fill the bin and data vectors.
 
-   void SetVerboseLevel(G4int value);
-
-   G4int GetVerboseLevel(G4int);
-
    void DumpValues();
 
 private:
-
-   G4int verboseLevel;
-
-   size_t FindBinLocation(G4double theEnergy) const;
+   virtual size_t FindBinLocation(G4double theEnergy) const;
      // Pure virtual in G4PhysicsVector
 };
 

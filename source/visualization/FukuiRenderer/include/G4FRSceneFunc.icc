@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.16 2010/11/11 01:13:42 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FRSceneFunc.icc,v 1.16 2010-11-11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VisManager.hh"
@@ -303,10 +303,10 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 		G4int notLastEdge;
 		G4int index = -1; // initialization
 		G4int edgeFlag = 1;
-		G4int preedgeFlag = 1;
+		//G4int preedgeFlag = 1;  Not used - comment out to prevent warnings (JA).
 		G4int work[4], i = 0;
 		do {
-			preedgeFlag = edgeFlag;
+			//preedgeFlag = edgeFlag;  Not used - comment out to prevent warnings (JA).
 			notLastEdge = polyhedron.GetNextVertexIndex(index, edgeFlag);
 			work[i++] = index;
 		}while (notLastEdge);

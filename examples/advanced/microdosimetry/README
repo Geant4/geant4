@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.9 2010/10/08 10:01:35 sincerti Exp $
+$Id: README,v 1.9 2010-10-08 10:01:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,14 +18,14 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 
 ---->0. INTRODUCTION.                                                    
                                                                        
-The microdosimetry example simulates the track of a 50 MeV Helium+ (positive
-charge is +e) in liquid water. Geant4 standard EM models are used in
-the World volume while Geant4-DNA models are used in a Target volume.
+The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
+Geant4 standard EM models are used in the World volume while Geant4-DNA models
+are used in a Target volume, declared as a Region.
 
 ---->1. GEOMETRY SET-UP.
  
 The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
-water, which dimensions are ten times smaller than the dimensions of the World volume.
+water, which dimensions are twenty times smaller than the dimensions of the World volume.
 
 ---->2. SET-UP 
                                                                         

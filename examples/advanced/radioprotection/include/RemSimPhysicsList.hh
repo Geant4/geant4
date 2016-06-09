@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.hh,v 1.6 2006/06/29 16:23:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimPhysicsList.hh,v 1.6 2006-06-29 16:23:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Susanna Guatelli, guatelli@ge.infn.it
+// Author: Susanna Guatelli, susanna@uow.edu.au
 
 #ifndef REMSIMPHYSICSLIST_HH
 #define REMSIMPHYSICSLIST_HH 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4EmConfigurator.hh"
+
+class G4VPhysicsConstructor;
 
 class RemSimPhysicsListMessenger;
 
@@ -43,20 +46,27 @@ public:
 
   virtual ~RemSimPhysicsList();
 
+  void ConstructParticle();
+
+  void ConstructProcess();
+
   //register the threshold of production of secondaries
-  virtual void SetCuts();
+  void SetCuts();
   
   // Register PhysicsList chunks
   void AddPhysicsList(const G4String& name);
 
 private:
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool ionIsRegistered;
-  G4bool hadronicIsRegistered; 
-  G4bool decayIsRegistered;
-  G4bool muonIsRegistered;
+  G4EmConfigurator em_config;
+  G4bool helIsRegistered;// hadronic elastic scattering flag
+  G4bool bicIsRegistered;// binary cascade inleastic scattering flag
+  G4bool bicIonIsRegistered; // binary ion cascade inelastic scattering flag
+  G4bool radioactiveDecayIsRegistered;// radioactive decay module flag
+
+  G4VPhysicsConstructor*               emPhysicsList;
+  G4VPhysicsConstructor*               decPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+
   RemSimPhysicsListMessenger* messenger;
 };
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2010/11/03 17:11:31 gunter Exp $
+$Id: History,v 1.18 2010-11-03 17:11:31 gunter Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,38 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+08 Nov 2011, Alberto Ribon              (had-hadronization-V09-04-03)
+- Tagged the improvements in the code structure of the class
+  G4LundStringFragmentation. Results remain exactly the same
+  as before these code improvements.
+
+08 Nov 2011, Alberto Ribon, svn rev 54374
+- Factorized the method  G4LundStringFragmentation::FragmentString
+  to make the code easier to understand and maintain.
+  Also put at the end of the .cc file all newly added methods.
+
+04 Nov 2011, Alberto Ribon, svn rev 54124
+- Factorized the method  G4LundStringFragmentation::SplitLast
+  to make the code easier to understand and maintain.
+
+02 Nov 2011, Alberto Ribon, svn rev 53955
+- Made public the virtual method G4LundStringFragmentation::FragmentString. 
+  Clean up also old commented lines in two G4LundStringFragmentation
+  methods: StopFragmenting and FragmentString.
+
+1 Nov 2011, Gunter Folger, svn rev 53895
+- G4LundStringFragmentation: simplify GetLightConeZ()
+
+29 Sep 2011, Gunter Folger, svn rev 52604 
+- G4LundStringFragmentation: Cleanup indentation
+
+19 Jul 2011, Gunter Folger              (had-hadronization-V09-04-02)
+- Correct mistake in tagging made for had-hadronization-V09-04-00/01
+
+19 Jul 2011, Gunter Folger         bad tag (had-hadronization-V09-04-00)
+- Address coverity warnings.
+   One outstanding warning in G4LundStringFragmentation::Splitlast().
 
 3 Nov 2010, Gunter Folger               (had-hadronization-V09-03-02)
 - fix minor coverity warnings in G4HadronBuilder 

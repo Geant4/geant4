@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ElectronNuclearProcess.cc,v 1.3 2009/03/31 19:16:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ElectronNuclearProcess.cc,v 1.3 2009-03-31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ElectronNuclearProcess.hh" 
 #include "G4Electron.hh"
 #include "G4ElectroNuclearCrossSection.hh"
+#include <iostream>
 
 G4ElectronNuclearProcess::
 G4ElectronNuclearProcess(const G4String& processName)
@@ -39,8 +39,15 @@ G4ElectronNuclearProcess(const G4String& processName)
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
   theStore->AddDataSet(new G4ElectroNuclearCrossSection);
 } 
+
     
 G4ElectronNuclearProcess::~G4ElectronNuclearProcess()
-{
-}
+{}
 
+
+void G4ElectronNuclearProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process handles inelastic electron scattering from\n" 
+          << "nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
+}

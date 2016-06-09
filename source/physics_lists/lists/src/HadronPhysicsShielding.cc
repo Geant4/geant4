@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsShielding.cc,v 1.1 2010/06/08 16:06:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsShielding.cc,v 1.1 2010-06-08 16:06:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,15 +52,18 @@
 #include "G4QHadronInelasticDataSet.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4NeutronHPJENDLHEInelasticData.hh"
-HadronPhysicsShielding::HadronPhysicsShielding(G4int)
+HadronPhysicsShielding::HadronPhysicsShielding( G4int )
                     :  G4VPhysicsConstructor("hInelastic Shielding")
 		     , QuasiElastic(false)
+                    , useLEND(false)
 {}
 
 HadronPhysicsShielding::HadronPhysicsShielding(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+                    , useLEND(false)
 {}
 
+#include "G4NeutronLENDBuilder.hh"
 void HadronPhysicsShielding::CreateModels()
 {
 
@@ -74,8 +77,14 @@ void HadronPhysicsShielding::CreateModels()
   theLEPNeutron->SetMinEnergy(19.9*MeV);
   theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
   theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
+  //theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
 
-  theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
+  if ( useLEND != true )
+     theNeutrons->RegisterMe(theLENeutron=new G4NeutronHPBuilder);
+  else
+  {
+     theNeutrons->RegisterMe(theLENeutron=new G4NeutronLENDBuilder(evaluation));
+  }
 
   thePro=new G4ProtonBuilder;
   theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
@@ -97,7 +106,8 @@ HadronPhysicsShielding::~HadronPhysicsShielding()
   delete theNeutrons;
   delete theBertiniNeutron;
   delete theFTFPNeutron;
-  delete theHPNeutron;
+  //delete theHPNeutron;
+  delete theLENeutron;
     
   delete thePiK;
   delete theBertiniPiK;
@@ -152,6 +162,7 @@ void HadronPhysicsShielding::ConstructProcess()
 
   theMiscCHIPS->Build();
 }
+
 G4HadronicProcess* 
 HadronPhysicsShielding::FindInelasticProcess(const G4ParticleDefinition* p)
 {

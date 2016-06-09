@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gspos.cc,v 1.13 2006/06/29 18:14:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gspos.cc,v 1.13 2006-06-29 18:14:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -39,7 +39,7 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
               G4double pars[], G4int npar, G4int num,
               G4double x, G4double y, G4double z, G4int irot, G4String vonly);
 
-void PG4gspos(G4String tokens[])
+void PG4gspos(G4String *tokens)
 {
         // fill the parameter containers
     G3fillParams(tokens,PTgspos);
@@ -70,10 +70,14 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
 
   if (vte == 0) {
-    G4Exception("G4gspos: '" + vname + "' has no VolTableEntry");
+    G4String text = "G4gspos: '" + vname + "' has no VolTableEntry";
+    G4Exception("G4gspos()", "G3toG40017", FatalException, text);
+    return;
   } 
   else if (mvte == 0) {
-    G4Exception("G4gspos: '" + vmoth + "' has no VolTableEntry");
+    G4String text = "G4gspos: '" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4gspos()", "G3toG40018", FatalException, text);
+    return;
   } 
   else { 
     if (!vte->HasNegPars()) {

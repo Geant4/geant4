@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.14 2007/03/07 02:44:16 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Event.cc,v 1.14 2007-03-07 02:44:16 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // G4Event

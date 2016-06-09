@@ -1,0 +1,95 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  SVN log-message one should put at every
+committal in the SVN repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 30th 2011 B.Morgan (analysis-V09-04-15)
+- CMakeLists.txt : Updated to build G4analysis in granular as well as global
+  mode.
+
+November 24 2001 I.Hrivnacova (analysis-V09-04-14)
+- Updated to g4tools-1.0.5 (G. Barrand): 
+  - wroot : streamers, buffer, wbuf, named :
+            arrange to avoid the usage of the std::vector<>::data() method 
+            which is quite not portable for the moment.
+ - remove the no more needed (and problematic) tools/vdata file. 
+
+November 24 2001 I.Hrivnacova (analysis-V09-04-13)
+- tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__
+  which got lost with update to  g4tools-1.0.4
+ 
+November 24 2001 I.Hrivnacova (analysis-V09-04-12)
+- Updated to g4tools-1.0.4 (G. Barrand): 
+  - Fix in tools/vdata:
+    Adding a protection against an empty vector 
+ 
+November 19 2001 I.Hrivnacova (analysis-V09-04-11)
+- Updated to g4tools-1.0.3 (G. Barrand): 
+  - Removed warning in CHBOOK/CHPWDF
+  - Remove #ifdef WIN32 in wroot/date.
+
+November 8 2011 G.Cosmo (analysis-V09-04-10)
+- tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__ to use of
+  std::vector<>::data() feature, to allow compilation on Leopard systems.
+
+October 27 2011 G.Cosmo (analysis-V09-04-09)
+- Added workaround to use 'this' pointer for internal calls in histo/b1,
+  to allow for compilation on Xcode on MacOX Lion.
+
+October 18 2011 I.Hrivnacova (analysis-V09-04-08)
+- Fix in CMakeLists.txt - adding new G4AnalysisVerbose.* files
+
+October 17 2011 I.Hrivnacova (analysis-V09-04-07)
+- Added support for H2 histograms
+- Added verbose printing (for levels: 0,1,2)
+- Updated to g4tools-1.0.2 (G. Barrand): 
+  - Removed "inline" keyword for the methods having code implementation
+    within classes. Dixit C++ docs, this kind of method is treated defacto 
+    as "inline". The keyword "inline" remains or for functions or for the 
+    few methods having their implementation outside the class.
+  - Fixed some warnings (coming from Coverity or some specific version of g++) 
+    about the lacking of calling the copy constructor of an inherited interface 
+    in some copy constructors.
+  - wroot/tree : have the streaming of the list of leaves. This permits to have
+    the ROOT/TTree::Scan() method working when looking for a ntuple
+    stored in a .root file as a TTree.
+
+September 15 2011 I.Hrivnacova (analysis-V09-04-06)
+- Added static access to specific manager classes.
+- Migration to G4Exception for all warning/error messages.
+
+August 4 2011 G.Cosmo (analysis-V09-04-05)
+- Extended fix in tools/vdata for compilation error on olders GCC compiler
+  versions (MacOSX 10.5, SLC4, ...). Addressing problem report #1238.
+
+July 29 2011 G.Cosmo (analysis-V09-04-04)
+- Fix in tools/vdata for compilation error in Intel ICC compiler.
+
+July 28 2011 B.Morgan (analysis-V09-04-02)
+- Creating new tag because previous ones were not documented here!!
+
+July 28 2011 B.Morgan (analysis-V09-04-01.5)
+- CMakeLists.txt : Added to provide CMake build for G4Analysis. Implemented
+  without using a sources.cmake because we only have one library, and tools
+  headers need a specialized install to retain their nested structure.
+
+July 28 2011 G. Cosmo
+- Fix in tools/wroot/file to avoid gcc dependency error on WIN32 with CygWin.
+
+
+July 28, 2011 B.Morgan
+- Created History file for analysis module.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.hh,v 1.3 2006/06/29 15:37:11 gunter Exp $
+// $Id: PhysicsListEMstd.hh,v 1.3 2006-06-29 15:37:11 gunter Exp $
 // ====================================================================
 //   PhysicsListEMstd.hh
 //

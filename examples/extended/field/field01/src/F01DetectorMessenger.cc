@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorMessenger.cc,v 1.5 2006/06/29 17:16:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F01DetectorMessenger.cc,v 1.5 2006-06-29 17:16:27 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

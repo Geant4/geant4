@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fissioner.cc,v 1.38 2010/12/15 07:41:07 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4Fissioner.cc,v 1.38 2010-12-15 07:41:07 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100318  M. Kelsey -- Bug fix setting mass with G4LV
@@ -39,6 +39,9 @@
 // 20100728  M. Kelsey -- Make fixed arrays static, move G4FissionStore to data
 //		member and reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110801  M. Kelsey -- Replace constant-size std::vector's w/C arrays
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -69,10 +72,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  if (verboseLevel > 1) {
-    G4cout << " Fissioner input " << G4endl;
-    nuclei_target->printParticle();
-  }
+  if (verboseLevel > 1) 
+    G4cout << " Fissioner input\n" << *nuclei_target << G4endl;
 
   // Initialize buffer for fission possibilities
   fissionStore.setVerboseLevel(verboseLevel);
@@ -83,7 +84,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
   G4double EEXS = nuclei_target->getExitationEnergy();
   G4double mass_in = nuclei_target->getMass();
-  G4double e_in = mass_in; /**** + 0.001 * EEXS; ****/	// Mass includes EEXS
+  G4double e_in = mass_in; 		// Mass includes excitation
   G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A-Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
   G4double TETA = 0.494 * G4cbrt(A) * TEM;
@@ -104,8 +105,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   
   TEM += DTEM;
   
-  static std::vector<G4double> AL1(2, -0.15);
-  static std::vector<G4double> BET1(2, 0.05);
+  static G4double AL1[2] = { -0.15, -0.15 };
+  static G4double BET1[2] = { 0.05, 0.05 };
 
   G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   
@@ -115,7 +116,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4double X3 = 1.0 / G4cbrt(A1);
     G4double X4 = 1.0 / G4cbrt(A2);
     Z1 = G4lrint(getZopt(A1, A2, Z, X3, X4, R12) - 1.);
-    std::vector<G4double> EDEF1(2);
+    G4double EDEF1[2];
     G4int Z2 = Z - Z1;
     G4double VPOT, VCOUL;
     
@@ -176,8 +177,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4double EEXS1 = EV*A1;
   G4double EEXS2 = EV*A2;
 
-  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, 7);        
-  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, 7);        
+  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, G4InuclParticle::Fissioner);
+  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, G4InuclParticle::Fissioner);
 
   // Pass only last two nuclear fragments
   static std::vector<G4InuclNuclei> frags(2);		// Always the same size!
@@ -223,14 +224,14 @@ G4double G4Fissioner::getZopt(G4int A1,
 }	     
 
 void G4Fissioner::potentialMinimization(G4double& VP, 
-					std::vector<G4double> & ED,
+					G4double( &ED)[2],
 					G4double& VC, 
 					G4int AF, 
 					G4int AS, 
 					G4int ZF, 
 					G4int ZS,
-					std::vector<G4double>& AL1, 
-					std::vector<G4double>& BET1, 
+					G4double AL1[2], 
+					G4double BET1[2], 
 					G4double& R12) const {
 
   if (verboseLevel > 3) {

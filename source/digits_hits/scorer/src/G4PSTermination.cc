@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSTermination.cc,v 1.5 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSTermination
 #include "G4PSTermination.hh"
@@ -37,6 +37,7 @@
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2011-09-09   Modify comment in PrintAll().
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -85,7 +86,7 @@ void G4PSTermination::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  collisions: " << *(itr->second)
+	   << "  terminations: " << *(itr->second)
 	   << G4endl;
   }
 }
@@ -96,8 +97,8 @@ void G4PSTermination::SetUnit(const G4String& unit)
     unitName = unit;
     unitValue = 1.0;
   }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-      G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+      G4Exception("G4PSTermination::SetUnit","DetPS0017",JustWarning,msg);
   }
 
 }

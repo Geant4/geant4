@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.22 2009/11/05 10:06:54 allison Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.22 2009-11-05 10:06:54 allison Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -34,6 +34,14 @@ ifdef G4VIS_BUILD_OPENGLQT_DRIVER
   G4INTY_BUILD_QT = 1
   INC_QT   = 1
   CPPFLAGS += -DG4VIS_BUILD_OPENGLQT_DRIVER
+endif
+ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  G4VIS_BUILD_OPENGL_DRIVER = 1
+  G4INTY_BUILD_WT = 1
+  INC_WT   = 1
+  G4INTY_BUILD_QT = 1
+  INC_QT   = 1
+  CPPFLAGS += -DG4VIS_BUILD_OPENGLWT_DRIVER
 endif
 ifdef G4VIS_BUILD_OPENGLX_DRIVER
   G4VIS_BUILD_OPENGL_DRIVER = 1
@@ -99,6 +107,10 @@ ifdef G4LIB_BUILD_SHARED
 
   ifdef G4VIS_BUILD_OPENGLQT_DRIVER
     G4VIS_USE_OPENGLQT = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+    G4VIS_USE_OPENGLWT = 1
   endif
 
   ifdef G4VIS_BUILD_OPENGL_DRIVER

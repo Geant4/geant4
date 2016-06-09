@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.30 2009/01/21 16:59:22 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ViewParameters.hh,v 1.30 2009-01-21 16:59:22 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996
@@ -103,6 +103,11 @@ public: // With description
   enum CutawayMode {
     cutawayUnion,       // Union (addition) of result of each cutaway plane.
     cutawayIntersection // Intersection (multiplication) " .
+  };
+
+  enum RotationStyle {
+    constrainUpDirection,  // Standard, HEP convention.
+    freeRotation           // Free, Google-like rotation, using mouse-grab.
   };
 
   friend std::ostream& operator << (std::ostream&,
@@ -187,6 +192,7 @@ public: // With description
   G4double GetFarDistance     (G4double cameraDistance,
 			       G4double nearDistance, G4double radius) const;
   G4double GetFrontHalfHeight (G4double nearDistance, G4double radius) const;
+  RotationStyle GetRotationStyle() const;
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
@@ -240,6 +246,7 @@ public: // With description
   void SetAutoRefresh          (G4bool);
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
+  void SetRotationStyle        (RotationStyle);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -304,6 +311,7 @@ private:
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
+  RotationStyle fRotationStyle;  // Rotation style.
 };
 
 #include "G4ViewParameters.icc"

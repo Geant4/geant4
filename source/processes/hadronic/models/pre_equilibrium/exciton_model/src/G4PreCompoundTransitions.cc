@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.27 2010/10/20 00:47:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PreCompoundTransitions.cc,v 1.27 2010-10-20 00:47:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:     G4PreCompoundIon
+// File name:     G4PreCompoundTransitions
 //
 // Author:         V.Lara
 //
@@ -44,7 +44,7 @@
 //                       (IAEA benchmark)
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source and 
 //                         optimise the code
-//
+// 30.08.2011 M.Kelsey - Skip CalculateProbability if no excitons
 
 #include "G4PreCompoundTransitions.hh"
 #include "G4HadronicException.hh"
@@ -83,7 +83,7 @@ CalculateProbability(const G4Fragment & aFragment)
 
   //G4cout << aFragment << G4endl;
   
-  if(U < 10*eV) { return 0.0; }
+  if(U < 10*eV || 0==N) { return 0.0; }
   
   //J. M. Quesada (Feb. 08) new physics
   // OPT=1 Transitions are calculated according to Gudima's paper 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.8 2010/06/15 16:34:30 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.8 2010-06-15 16:34:30 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -593,6 +593,29 @@ void G4VisCommandGeometrySetVisibility::SetNewValue
 
   G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
   if (pViewer) {
+    const G4ViewParameters& viewParams = pViewer->GetViewParameters();
+    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+      if (!viewParams.IsCulling() ||
+	  !viewParams.IsCullingInvisible()) {
+	G4cout <<
+	  "Culling must be on - \"/vis/viewer/set/culling global true\" and"
+	  "\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
+	       << G4endl;
+      }
+    }
+  }
+}
+
+void G4VisCommandGeometrySetVisibility::SetNewValueOnLV
+(G4LogicalVolume* pLV, G4int requestedDepth,G4bool visibility)
+{
+  if (!pLV) return;
+  G4VisCommandGeometrySetVisibilityFunction setVisibility(visibility);
+  SetLVVisAtts(pLV, setVisibility, 0, requestedDepth);
+
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (pViewer) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
     const G4ViewParameters& viewParams = pViewer->GetViewParameters();
     if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
       if (!viewParams.IsCulling() ||

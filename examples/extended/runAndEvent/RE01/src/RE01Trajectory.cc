@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.cc,v 1.5 2010/11/08 22:16:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RE01Trajectory.cc,v 1.5 2010-11-08 22:16:28 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 

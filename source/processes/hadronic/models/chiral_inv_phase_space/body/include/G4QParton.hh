@@ -27,8 +27,8 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.8 2009/07/17 16:54:57 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QParton.hh,v 1.8 2009-07-17 16:54:57 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.hh,v 1.2 2008/04/08 15:41:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QuasiElasticChannel.hh,v 1.2 2008-04-08 15:41:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Author : Gunter Folger March 2007
@@ -35,17 +35,20 @@
 // Class Description - End
 //
 // Modified:
+// 20110808  M. Kelsey -- Remove unnecessary #includes, use forward decls,
+//		Change 3D nucleus to (owned) pointer to base.
 
 #ifndef G4QuasiElasticChannel_h
 #define G4QuasiElasticChannel_h
 
-#include "G4Nucleus.hh"
-#include "G4HadProjectile.hh"
-#include "G4KineticTrackVector.hh"
+#include "globals.hh"
 
-#include "G4QuasiFreeRatios.hh"
+class G4KineticTrackVector;
+class G4Nucleus;
+class G4QuasiElRatios;
+class G4DynamicParticle;
+class G4V3DNucleus;
 
-#include "G4Fancy3DNucleus.hh"
 
 class G4QuasiElasticChannel
 {
@@ -54,10 +57,10 @@ class G4QuasiElasticChannel
 	~G4QuasiElasticChannel();
 	
 	G4double GetFraction(G4Nucleus &theNucleus,
-				const G4DynamicParticle & thePrimary);
+			     const G4DynamicParticle& thePrimary);
 
-	G4KineticTrackVector * Scatter(G4Nucleus &theNucleus,
-					const G4DynamicParticle & thePrimary);
+	G4KineticTrackVector* Scatter(G4Nucleus &theNucleus,
+				      const G4DynamicParticle& thePrimary);
 					
   private:
         G4QuasiElasticChannel(const G4QuasiElasticChannel &);
@@ -66,8 +69,8 @@ class G4QuasiElasticChannel
 	int operator!=(const G4QuasiElasticChannel &) const;
 
    private:
-   	G4QuasiFreeRatios * theQuasiElastic;
-	G4Fancy3DNucleus  the3DNucleus;
+   	G4QuasiElRatios* theQuasiElastic;
+	G4V3DNucleus* the3DNucleus;
 };
 
 #endif

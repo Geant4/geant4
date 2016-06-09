@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFCFissionFS.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPFCFissionFS.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFCFissionFS_h
 #define G4NeutronHPFCFissionFS_h 1
@@ -41,7 +41,7 @@ class G4NeutronHPFCFissionFS : public G4NeutronHPFissionBaseFS
   
   G4NeutronHPFCFissionFS(){ hasXsec = false; }
   ~G4NeutronHPFCFissionFS(){}
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4DynamicParticleVector * ApplyYourself(G4int nNeutrons);
   G4NeutronHPFinalState * New() 
   {

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCuts.cc,v 1.6 2009/08/01 07:57:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
 // --------------------------------------------------------------
@@ -34,6 +34,7 @@
 // --------------------------------------------------------------
 
 #include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
 const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
@@ -67,7 +68,6 @@ G4ProductionCuts & G4ProductionCuts::operator=(const G4ProductionCuts &right)
     fRangeCuts[i] = right.fRangeCuts[i];
   }
   isModified = right.isModified;
-
   return *this;
 }
 
@@ -122,3 +122,26 @@ G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
   return index;
 }
 
+
+void  G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
+{  
+  G4int vSize = cut.size();
+  if (vSize != NumberOfG4CutIndex) {
+#ifdef G4VERBOSE
+    if ( G4ProductionCutsTable::GetProductionCutsTable()->GetVerboseLevel()>1) {
+      G4cerr << "G4ProductionCuts::SetProductionCuts ";
+      G4cerr << " The size of given cut value vector [=" << vSize << "]  "
+	     << " is not consitent with number of CutIndex [="  
+	     << NumberOfG4CutIndex << G4endl;
+    }
+#endif
+    G4Exception( "G4ProductionCuts::SetProductionCuts ",
+		 "ProcCuts108",
+		 JustWarning, "Given vector size is inconsitent ");
+    if (NumberOfG4CutIndex<vSize) vSize = NumberOfG4CutIndex;
+  }
+  for(G4int i = 0; (i<vSize ); i++) {
+    fRangeCuts[i] = cut[i];
+  }
+  isModified = true;
+}

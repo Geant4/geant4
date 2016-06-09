@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.20 2010/09/06 16:02:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Surface.cc,v 1.20 2010-09-06 16:02:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -172,7 +172,7 @@ G4int G4Surface::Intersect(const G4Ray&)
 {
   G4int Result = 0;
 
-  G4Exception("G4Surface::Intersect()", "NotImplemented",
+  G4Exception("G4Surface::Intersect()", "GeomSolids0001",
               FatalException, "Sorry, not yet implemented.");
 
 #ifdef NEW_IMPLEMENTATION

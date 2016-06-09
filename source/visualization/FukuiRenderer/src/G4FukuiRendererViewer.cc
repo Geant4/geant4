@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.12 2010/11/11 01:13:42 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FukuiRendererViewer.cc,v 1.12 2010-11-11 01:13:42 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 12:09:11 JST 1996

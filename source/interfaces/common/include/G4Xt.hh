@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.hh,v 1.6 2006/06/29 19:10:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Xt.hh,v 1.6 2006-06-29 19:10:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.

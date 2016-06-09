@@ -58,45 +58,7 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
    theXSection = new G4NeutronHPThermalScatteringData();
    theXSection->BuildPhysicsTable( *(G4Neutron::Neutron()) );
 
-//  Check Elements
-   std::vector< G4int > indexOfThermalElement; 
-   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
-   size_t numberOfElements = G4Element::GetNumberOfElements();
-   for ( size_t i = 0 ; i < numberOfElements ; i++ )
-   {
-      if ( names.IsThisThermalElement ( (*theElementTable)[i]->GetName() ) )
-      {
-         indexOfThermalElement.push_back( i ); 
-      }
-   }
-
-   if ( !getenv("G4NEUTRONHPDATA") ) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-   dirName = getenv("G4NEUTRONHPDATA");
-
-//  Read data
-//  Element (id)  -> FS Type -> read file
-   for ( size_t i = 0 ; i < indexOfThermalElement.size() ; i++ )
-   {
-      //G4cout << "G4NeutronHPThermalScattering " << (*theElementTable)[i]->GetName() << G4endl; 
-      G4String tsndlName = names.GetTS_NDL_Name ( (*theElementTable)[ indexOfThermalElement[ i ] ]->GetName() );
-      //G4cout << "G4NeutronHPThermalScattering " << tsndlName << std::endl; 
-
-      // coherent elastic 
-      G4String fsName = "/ThermalScattering/Coherent/FS/";
-      G4String fileName = dirName + fsName + tsndlName;
-      coherentFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* > ( indexOfThermalElement[ i ] , readACoherentFSDATA( fileName ) ) ); 
-
-      // incoherent elastic 
-      fsName = "/ThermalScattering/Incoherent/FS/";
-      fileName = dirName + fsName + tsndlName;
-      incoherentFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > ( indexOfThermalElement[ i ] , readAnIncoherentFSDATA( fileName ) ) ); 
-
-      // inelastic 
-      fsName = "/ThermalScattering/Inelastic/FS/";
-      fileName = dirName + fsName + tsndlName;
-      inelasticFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* > ( indexOfThermalElement[ i ] , readAnInelasticFSDATA( fileName ) ) ); 
-   } 
+   buildPhysicsTable();
 
 }
  
@@ -346,21 +308,32 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
    const G4Material * theMaterial = aTrack.GetMaterial();
    G4double aTemp = theMaterial->GetTemperature();
    G4int n = theMaterial->GetNumberOfElements();
-   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
+   //static const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
    G4bool findThermalElement = false;
    G4int ielement;
+   const G4Element* theElement = NULL;
    for ( G4int i = 0; i < n ; i++ )
    {
-      G4int index = theMaterial->GetElement(i)->GetIndex();
-      if ( aNucleus.GetZ() == (*theElementTable)[index]->GetZ() && ( names.IsThisThermalElement ( (*theElementTable)[index]->GetName() ) ) ) 
+      theElement = theMaterial->GetElement(i);
+      //Select target element 
+      if ( aNucleus.GetZ_asInt() == (G4int)(theElement->GetZ() + 0.5 ) )
       {
-         ielement = index;
-         findThermalElement = true;
-         break;
+         //Check Applicability of Thermal Scattering 
+         if (  getTS_ID( NULL , theElement ) != -1 )
+         {
+            ielement = getTS_ID( NULL , theElement );
+            findThermalElement = true;
+            break;
+         }
+         else if (  getTS_ID( theMaterial , theElement ) != -1 )
+         {
+            ielement = getTS_ID( theMaterial , theElement );
+            findThermalElement = true;
+            break;
+         }
       }       
    } 
-
 
    if ( findThermalElement == true )
    {
@@ -369,9 +342,10 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
       G4ParticleDefinition* pd = const_cast< G4ParticleDefinition* >( aTrack.GetDefinition() );
       G4DynamicParticle* dp = new G4DynamicParticle ( pd , aTrack.Get4Momentum() );
-      G4double total = theXSection->GetCrossSection( dp , (*theElementTable)[ ielement ] , aTemp );
-      G4double inelastic = theXSection->GetInelasticCrossSection( dp , (*theElementTable)[ ielement ] , aTemp );
+      G4double total = theXSection->GetCrossSection( dp , theElement , theMaterial );
+      G4double inelastic = theXSection->GetInelasticCrossSection( dp , theElement , theMaterial );
    
+
       G4double random = G4UniformRand();
       if ( random <= inelastic/total ) 
       {
@@ -449,7 +423,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
 
       } 
-      else if ( random <= ( inelastic + theXSection->GetCoherentCrossSection( dp , (*theElementTable)[ ielement ] , aTemp ) ) / total )
+      //else if ( random <= ( inelastic + theXSection->GetCoherentCrossSection( dp , (*theElementTable)[ ielement ] , aTemp ) ) / total )
+      else if ( random <= ( inelastic + theXSection->GetCoherentCrossSection( dp , theElement , theMaterial ) ) / total )
       {
          // Coherent Elastic 
 
@@ -530,9 +505,12 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
              }
          }
 
-         G4double Ei = vE_T[ j ];
+         //G4double Ei = vE_T[ j ];
+         G4double Ei = vE_T[ k ];
 
          G4double mu = 1 - 2 * Ei / (E/eV) ;  
+         //111102
+         if ( mu < -1.0 ) mu = -1.0;
 
          theParticleChange.SetEnergyChange( E );
          theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
@@ -891,3 +869,130 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
    return std::pair< G4double , E_isoAng >( sE , anE_isoAng); 
 }
 
+void G4NeutronHPThermalScattering::buildPhysicsTable()
+{
+
+   dic.clear();   
+   std::map < G4String , G4int > co_dic;   
+
+   //Searching Nist Materials
+   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+   for ( size_t i = 0 ; i < numberOfMaterials ; i++ )
+   {
+      G4Material* material = (*theMaterialTable)[i];
+      size_t numberOfElements = material->GetNumberOfElements();
+      for ( size_t j = 0 ; j < numberOfElements ; j++ )
+      {
+         const G4Element* element = material->GetElement(j);
+         if ( names.IsThisThermalElement ( material->GetName() , element->GetName() ) )
+         {                                    
+            G4int ts_ID_of_this_geometry; 
+            G4String ts_ndl_name = names.GetTS_NDL_Name( material->GetName() , element->GetName() ); 
+            if ( co_dic.find ( ts_ndl_name ) != co_dic.end() )
+            {
+               ts_ID_of_this_geometry = co_dic.find ( ts_ndl_name ) -> second;
+            }
+            else
+            {
+               ts_ID_of_this_geometry = co_dic.size();
+               co_dic.insert ( std::pair< G4String , G4int >( ts_ndl_name , ts_ID_of_this_geometry ) );
+            }
+
+            //G4cout << "Neutron HP Thermal Scattering: Registering a material-element pair of " 
+            //       << material->GetName() << " " << element->GetName() 
+            //       << " as internal thermal scattering id of  " <<  ts_ID_of_this_geometry << "." << G4endl;
+
+            dic.insert( std::pair < std::pair < G4Material* , const G4Element* > , G4int > ( std::pair < G4Material* , const G4Element* > ( material , element ) , ts_ID_of_this_geometry ) );
+         }
+      }
+   }
+
+   //Searching TS Elements 
+   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
+   size_t numberOfElements = G4Element::GetNumberOfElements();
+   //size_t numberOfThermalElements = 0; 
+   for ( size_t i = 0 ; i < numberOfElements ; i++ )
+   {
+      const G4Element* element = (*theElementTable)[i];
+      if ( names.IsThisThermalElement ( element->GetName() ) )
+      {
+         if ( names.IsThisThermalElement ( element->GetName() ) )
+         {                                    
+            G4int ts_ID_of_this_geometry; 
+            G4String ts_ndl_name = names.GetTS_NDL_Name( element->GetName() ); 
+            if ( co_dic.find ( ts_ndl_name ) != co_dic.end() )
+            {
+               ts_ID_of_this_geometry = co_dic.find ( ts_ndl_name ) -> second;
+            }
+            else
+            {
+               ts_ID_of_this_geometry = co_dic.size();
+               co_dic.insert ( std::pair< G4String , G4int >( ts_ndl_name , ts_ID_of_this_geometry ) );
+            }
+
+            //G4cout << "Neutron HP Thermal Scattering: Registering an element of " 
+            //       << material->GetName() << " " << element->GetName() 
+            //       << " as internal thermal scattering id of  " <<  ts_ID_of_this_geometry << "." << G4endl;
+
+            dic.insert( std::pair < std::pair < const G4Material* , const G4Element* > , G4int > ( std::pair < const G4Material* , const G4Element* > ( (G4Material*)NULL , element ) ,  ts_ID_of_this_geometry ) );
+         }
+      }
+   }
+
+   G4cout << G4endl;
+   G4cout << "Neutron HP Thermal Scattering: Following material-element pairs or elements are registered." << G4endl;
+   for ( std::map < std::pair < const G4Material* , const G4Element* > , G4int >::iterator it = dic.begin() ; it != dic.end() ; it++ )   
+   {
+      if ( it->first.first != NULL ) 
+      {
+         G4cout << "Material " << it->first.first->GetName() << " - Element " << it->first.second->GetName() << ",  internal thermal scattering id " << it->second << G4endl;
+      }
+      else
+      {
+         G4cout << "Element " << it->first.second->GetName() << ",  internal thermal scattering id " << it->second << G4endl;
+      }
+   }
+   G4cout << G4endl;
+
+   // Read Cross Section Data files
+
+   G4String dirName;
+   if ( !getenv( "G4NEUTRONHPDATA" ) ) 
+      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+   dirName = getenv( "G4NEUTRONHPDATA" );
+
+   //dirName = baseName + "/ThermalScattering";
+
+   G4String name;
+
+   for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
+   {
+      G4String tsndlName = it->first;
+      G4int ts_ID = it->second;
+
+      // Coherent
+      G4String fsName = "/ThermalScattering/Coherent/FS/";
+      G4String fileName = dirName + fsName + tsndlName;
+      coherentFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* > ( ts_ID , readACoherentFSDATA( fileName ) ) ); 
+
+      // incoherent elastic 
+      fsName = "/ThermalScattering/Incoherent/FS/";
+      fileName = dirName + fsName + tsndlName;
+      incoherentFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > ( ts_ID , readAnIncoherentFSDATA( fileName ) ) ); 
+
+      // inelastic 
+      fsName = "/ThermalScattering/Inelastic/FS/";
+      fileName = dirName + fsName + tsndlName;
+      inelasticFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* > ( ts_ID , readAnInelasticFSDATA( fileName ) ) ); 
+   } 
+}
+ 
+
+G4int G4NeutronHPThermalScattering::getTS_ID ( const G4Material* material , const G4Element* element )
+{
+   G4int result = -1;
+   if ( dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) ) != dic.end() ) 
+      result = dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) )->second; 
+   return result; 
+}

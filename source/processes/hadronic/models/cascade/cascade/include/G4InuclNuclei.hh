@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.27 2010/09/25 04:35:02 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4InuclNuclei.hh,v 1.27 2010-09-25 04:35:02 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -44,6 +44,13 @@
 // 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 // 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
 //		functions to create G4Fragment.
+// 20110214  M. Kelsey -- Replace integer "model" with enum
+// 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+// 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
+// 20110722  M. Kelsey -- BUG FIX:  Deleted excitation energy in one ctor
+// 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
+// 20110919  M. Kelsey -- Add clear() to restore completely empty state
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -54,38 +61,36 @@
 
 class G4Fragment;
 class G4ParticleDefinition;
+class G4V3DNucleus;
 
 
 class G4InuclNuclei : public G4InuclParticle {
 public:
   G4InuclNuclei() : G4InuclParticle() {}
 
-  G4InuclNuclei(const G4DynamicParticle& dynPart, G4int model=0)
-    : G4InuclParticle(dynPart) {
-    setModel(model);
-  }
+  G4InuclNuclei(const G4DynamicParticle& dynPart, Model model=DefaultModel)
+    : G4InuclParticle(dynPart, model) {}
 
-  G4InuclNuclei(G4int a, G4int z, G4double exc=0., G4int model=0)
-    : G4InuclParticle(makeDefinition(a,z)) {
+  G4InuclNuclei(G4int a, G4int z, G4double exc=0., Model model=DefaultModel)
+    : G4InuclParticle(makeDefinition(a,z), model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
   G4InuclNuclei(const G4LorentzVector& mom, G4int a, G4int z,
-		G4double exc=0., G4int model=0)
-    : G4InuclParticle(makeDefinition(a,z), mom) {
+		G4double exc=0., Model model=DefaultModel)
+    : G4InuclParticle(makeDefinition(a,z), mom, model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
   G4InuclNuclei(G4double ekin, G4int a, G4int z, G4double exc,
-		G4int model=0) 
-    : G4InuclParticle(makeDefinition(a,z), ekin) {
+		Model model=DefaultModel)
+    : G4InuclParticle(makeDefinition(a,z), ekin, model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
-  G4InuclNuclei(const G4Fragment& aFragment, G4int model=0);
+  G4InuclNuclei(const G4Fragment& aFragment, Model model=DefaultModel);
+
+  G4InuclNuclei(G4V3DNucleus* a3DNucleus, Model model=DefaultModel);
 
   virtual ~G4InuclNuclei() {}
 
@@ -96,16 +101,28 @@ public:
 
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
+  // Equality (comparison) operator -- NOT SORTING
+  bool operator==(const G4InuclNuclei& right) {
+    return ( G4InuclParticle::operator==(right) && 
+	     theExitonConfiguration == right.theExitonConfiguration );
+  }
+
   // Overwrite data structure (avoids creating/copying temporaries)
-  void fill(G4int a, G4int z, G4double exc=0., G4int model=0) {
+  void fill(G4int a, G4int z, G4double exc=0., Model model=DefaultModel) {
     fill(0., a, z, exc, model);
   }
 
   void fill(const G4LorentzVector& mom, G4int a, G4int z,
-	    G4double exc=0., G4int model=0);
+	    G4double exc=0., Model model=DefaultModel);
 
   void fill(G4double ekin, G4int a, G4int z, G4double exc,
-	    G4int model=0);
+	    Model model=DefaultModel);
+
+  void copy(const G4Fragment& aFragment, Model model=DefaultModel);
+
+  void copy(G4V3DNucleus* a3DNucleus, Model model=DefaultModel);
+
+  void clear();			// Discard all information (including A,Z)
 
   // Excitation energy is stored as dynamical mass of particle
   void setExitationEnergy(G4double e);
@@ -135,7 +152,7 @@ public:
 
   static G4double getNucleiMass(G4int a, G4int z, G4double exc=0.);
 
-  virtual void printParticle() const;
+  virtual void print(std::ostream& os) const;
 
   // Convert contents to G4Fragment for use outside package
   G4Fragment makeG4Fragment() const;

@@ -6,20 +6,36 @@
                              README
                       ---------------------
 
+
+The brachytherapy example is currently maintained by Susanna Guatelli (1), with the support of
+Pablo Cirrone (2), Dean Cutajar (1) and Stuart P. George (3)
+
+1. Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia.
+2. LNS, INFN, Catania, Italy.
+3. University of Sheffield, England.
 ------------------------------------------------------------------------
+
+Contact: susanna@uow.edu.au
+         geant4-advanced-examples@cern.ch
+        
+------------------------------------------------------------------------
+
+List of authors: 
+S. Agostinelli, F. Foppiano, S. Garelli, S. Guatelli, M. G. Pia, M. Tropeano
+
+-----------------------------------------------------------------
 ----> Introduction.                                                     
                                                                        
-Brachytherapy example simulates energy deposit in a Phantom filled with 
-soft tissue for: 
+Brachytherapy example simulates  the energy deposit in a water phantom, produced by: 
 1) Iridium source (endocavitary brachytherapy).                         
 2) Iodium  source (interstitial brachytherapy).                         
 3) Leipzig Applicator (superficial brachytherapy).                      
 ------------------------------------------------------------------------
 ----> 1.Experimental set-up.                                            
 
-The default source is an Ir-131 source put in the center of the Phantom.
-The Phantom is a box (dimension:30cm), it is gridded in 
-voxels (1.mm dimension)                                                 
+The default source is an Ir-131 source set in the center of the phantom.
+The phantom is a box with size 30 cm. The phantom is set in the World volume filled 
+with air.                           
 -------------------------------------------------------------------------
 ----> 2.SET-UP 
                                           
@@ -32,26 +48,25 @@ The following environment variables need to be set:
 
 G4LEDATA: points to low energy database             
 
-setup for analysis: AIDA 3.2.1, PI 1.3.3 (PI is Obsolete)
-
-Users can download the analysis tools from:  
-                                                                        
-http://aida.freehep.org/
-http://cern.ch/pfeiffer
-http://www.cern.ch/PI  (OBSOLETE)
+Setup for analysis: macro.C is provided to plot the results of the simulation, contained
+in the brachytherapy.root file. If the user intends to use this macro, ROOT must be installed 
+(http://root.cern.ch/drupal/).
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         
 
-- batch mode:
+- Batch mode:
   $G4WORKDIR/bin/Linux-g++/Brachy IridiumSourceMacro.mac                
   $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac       
   $G4WORKDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
                                                                         
 - Interative mode:                                                      
   3) $G4WORKDIR/bin/Linux-g++/Brachy
-     The VisualisationMacro.mac is loaded automatically                 
-
--->possible different configurations for interactive mode:              
+     VisualisationMacro.mac is loaded automatically. 
+     WARNING: In this configuration the energy deposition is not 
+              calculated. The user has to set-up the scoring mesh.
+              Look at the IridiumSourceMacro.mac as example.            
+   
+--> Possible different configurations for interactive mode:              
 
 1)Ir source:                                                            
 idle>/run/beamOn NumberOfEvents      ...and then
@@ -68,37 +83,26 @@ idle>/primary/energy Iodium
 idle>/run/beamOn NumberOfEvents     ...and then                          
 idle>exit
                                                                          
-*Before the run you can also change the absorber material of the 
-Phantom:                                                                 
+* How to change the absorber material of the phantom:                                                                 
 idle>/phantom/selectMaterial  materialName
-                                                                         
-- batch mode: executable Brachy macroFile.mac 
-  macros are provided as example: IodiumSourceMacro.mac,
-  IridiumSourceMacro.mac, LeipzigSourceMacro.mac                         
-  (ex. $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac)   
-------------------------------------------------------------------------
-----> 4. Simulation output                                               
 
-if G4ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.hbk      
-
- It contains:
- 1)1Dhistogram with the primary particle energy                          
- 2)2Dhistogram with the distribution of energy in the plane 
-   (x,z,energy) containing the source (YThickness = 1. mm)   
- 3)1Dhistogram with the energy deposit along the X axis in the plane     
-   containing the source.
- 4)Ntuple with the 3D energy deposit in the Phantom                    
-                                                                         
-Units:   the energy deposit is in MeV;
-         x, y, z in mm for histograms and ntuple                         
 ------------------------------------------------------------------------
-----> 5.Visualisation                                                     
+----> 4. Scoring mesh
+
+The scoring mesh is used to calculate the energy deposition in the voxels of the phantom,
+integrated over the whole run. The scoring mesh is defined in the input macro file (see IridiumSourceMacro.mac).
+The user can change the default output format of the scoring in the class BrachyUserScoreWriter.
+                                                                         
+------------------------------------------------------------------------
+----> 5. Simulation output                                               
+
+The output is:
+- ASCII file EnergyDeposition.out, with xx (mm), yy(mm), zz(mm), and energy deposition (keV), in the phantom.
+- brachytherapy.root, containing an ntuple with the 3D energy deposition in the phantom. The macro macro.C is provided as example to open brachytherapy.root in ROOT interactive session and to plot the results of the simulation.                    
+                                                                         
+-------------------------------------------------------------------------------
+----> 6.Visualisation                                                     
 
 a macro is provided ad example of visualisation:  VisualisationMacro.mac 
-
-------------------------------------------------------------------------
-
-Further information at http://www.ge.infn.it/geant4/examples/index.html
-Contact: geant4-advanced-examples@cern.ch
 
 

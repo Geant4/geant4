@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.cc,v 1.9 2010/06/25 09:41:03 gunter Exp $
+// $Id: MicrobeamPhantomConfiguration.cc,v 1.9 2010-06-25 09:41:03 gunter Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
@@ -53,7 +53,6 @@ MicrobeamPhantomConfiguration::~MicrobeamPhantomConfiguration()
 
 G4int MicrobeamPhantomConfiguration::Initialize() {
 
-  G4int ncols;
   G4float vx, vy, vz, tmp, density;
   G4int den, mat;
   G4float denCyto1, denCyto2, denCyto3, denNucl1, denNucl2, denNucl3;
@@ -72,11 +71,11 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
   // READ PHANTOM PARAMETERS
   fMap = fopen("phantom.dat","r");
 
-  ncols = fscanf(fMap,"%i %i %i",&phantomTotalPixels, &nucleusTotalPixels, &cytoplasmTotalPixels);
-  ncols = fscanf(fMap,"%f %f %f",&dx, &dy, &dz);
-  ncols = fscanf(fMap,"%f %f %f",&tmp, &tmp, &tmp);
-  ncols = fscanf(fMap,"%f %f %f",&denCyto1, &denCyto2, &denCyto3);
-  ncols = fscanf(fMap,"%f %f %f",&denNucl1, &denNucl2, &denNucl3);
+  fscanf(fMap,"%i %i %i",&phantomTotalPixels, &nucleusTotalPixels, &cytoplasmTotalPixels);
+  fscanf(fMap,"%f %f %f",&dx, &dy, &dz);
+  fscanf(fMap,"%f %f %f",&tmp, &tmp, &tmp);
+  fscanf(fMap,"%f %f %f",&denCyto1, &denCyto2, &denCyto3);
+  fscanf(fMap,"%f %f %f",&denNucl1, &denNucl2, &denNucl3);
   dx = dx * micrometer;
   dy = dy * micrometer;
   dz = dz * micrometer;
@@ -84,7 +83,7 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
 
   for (G4int i=0; i<phantomTotalPixels; i++) 
   { 
-    ncols = fscanf(fMap,"%f %f %f %i %i %f",&vx, &vy, &vz, &mat, &den, &tmp);
+   fscanf(fMap,"%f %f %f %i %i %f",&vx, &vy, &vz, &mat, &den, &tmp);
 
     if (std::abs(mat-2)<1.e-30) // NUCLEUS
     	{
@@ -110,5 +109,4 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
 
   return 0;
 }
-
 

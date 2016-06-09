@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2010/06/12 09:48:36 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.4 2010-06-12 09:48:36 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,7 +42,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   // default gun parameters
   particleGun->SetParticleEnergy(10.*keV);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-0.499*mm));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-0.1*mm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

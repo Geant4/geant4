@@ -25,8 +25,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrangularFacet.cc,v 1.9 2010/09/23 10:27:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QuadrangularFacet.cc,v 1.9 2010-09-23 10:27:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

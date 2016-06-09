@@ -57,16 +57,17 @@ void G4InclInput::printProjectileTargetInfo(const G4HadProjectile &aTrack, const
 
 
 G4bool G4InclInput::canUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
-  G4int targetA = theNucleus.GetA_asInt();
+  G4int tA = theNucleus.GetA_asInt();
+  G4int tZ = theNucleus.GetZ_asInt();
   const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
   G4int projectileA = projectileDef->GetAtomicMass();
   //    G4int projectileZ = projectileDef->GetAtomicNumber();
-  if(targetA > 0 && targetA < 18 && (projectileDef != G4Proton::Proton() &&
-				     projectileDef != G4Neutron::Neutron() &&
-				     projectileDef != G4PionPlus::PionPlus() &&
-				     projectileDef != G4PionZero::PionZero() &&
-				     projectileDef != G4PionMinus::PionMinus()) &&
-			      projectileA > 1) {
+  if(tA > 0 && tA <= 18 && tZ <= 8 && (projectileDef != G4Proton::Proton() &&
+				      projectileDef != G4Neutron::Neutron() &&
+				      projectileDef != G4PionPlus::PionPlus() &&
+				      projectileDef != G4PionZero::PionZero() &&
+				      projectileDef != G4PionMinus::PionMinus()) &&
+     projectileA > 1) {
     return true;
   } else {
     return false;

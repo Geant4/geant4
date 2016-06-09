@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT11pizNChannel.cc,v 1.3 2010/08/04 05:28:24 mkelsey Exp $
-// GEANT4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeT11pizNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadePiZeroPChannel.hh"
 #include "G4CascadePiZeroNChannel.hh"
@@ -686,10 +689,10 @@ G4CascadePiZeroPChannelData::data_t
 G4CascadePiZeroPChannelData::data(pizP2bfs, pizP3bfs, pizP4bfs,
 				  pizP5bfs, pizP6bfs, pizP7bfs,
 				  pizP8bfs, pizP9bfs, pizPCrossSections,
-				  pizPtotXSec, "PiZeroP");
+				  pizPtotXSec, pi0*pro, "PiZeroP");
 
 G4CascadePiZeroNChannelData::data_t
 G4CascadePiZeroNChannelData::data(pizN2bfs, pizN3bfs, pizN4bfs,
 				  pizN5bfs, pizN6bfs, pizN7bfs,
 				  pizN8bfs, pizN9bfs, pizPCrossSections,
-				  pizPtotXSec, "PiZeroN");
+				  pizPtotXSec, pi0*neu, "PiZeroN");

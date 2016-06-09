@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoder.cc,v 1.6 2006/06/29 21:23:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RTJpegCoder.cc,v 1.6 2006-06-29 21:23:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //
@@ -56,10 +56,7 @@ G4JpegCoder::G4JpegCoder(u_char* colorR,u_char* colorG,u_char* colorB)
 }
 
 G4JpegCoder::~G4JpegCoder(void)
-{
-  if(mOBSP != 0)
-                delete mOBSP;
-}
+{}
 
 void
 G4JpegCoder::GetJpegData(char** aJpegData, int& size)

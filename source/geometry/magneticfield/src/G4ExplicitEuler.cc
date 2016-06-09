@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.cc,v 1.8 2006/06/29 18:23:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ExplicitEuler.cc,v 1.8 2006-06-29 18:23:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Explicit Euler: x_1 = x_0 + h * dx_0

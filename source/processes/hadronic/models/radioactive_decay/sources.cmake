@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010/11/29 17:54:52 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:54:52 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
@@ -54,6 +55,8 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
         G4AlphaDecayChannel.hh
+        G4BetaDecayCorrections.hh
+        G4BetaDecayType.hh
         G4BetaFermiFunction.hh
         G4BetaMinusDecayChannel.hh
         G4BetaPlusDecayChannel.hh
@@ -73,6 +76,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
+        G4BetaDecayCorrections.cc
+        G4BetaDecayType.cc
         G4BetaFermiFunction.cc
         G4NuclearDecayChannel.cc
         G4NucleusLimits.cc

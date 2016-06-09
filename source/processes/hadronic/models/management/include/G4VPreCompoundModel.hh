@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.7 2010/08/20 07:43:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VPreCompoundModel.hh,v 1.7 2010-08-20 07:43:28 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4VPreCompoundModel_h

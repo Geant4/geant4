@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.cc,v 1.3 2006/06/29 18:33:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VCurvedTrajectoryFilter.cc,v 1.3 2006-06-29 18:33:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------------
 
 #include "G4VCurvedTrajectoryFilter.hh"

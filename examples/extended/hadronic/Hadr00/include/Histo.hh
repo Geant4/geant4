@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.2 2010/10/11 11:02:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: Histo.hh,v 1.2 2010-10-11 11:02:36 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
 #define Histo_h 1

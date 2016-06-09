@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.8 2010/05/20 13:02:41 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PhysicsList.cc,v 1.8 2010-05-20 13:02:41 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,8 +34,6 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardGS.hh"
-#include "PhysListEmStandardWVI.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -193,7 +191,7 @@ void PhysicsList::ConstructProcess()
   //
   G4EmProcessOptions emOptions;
   emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(8*20);
+  emOptions.SetDEDXBinningForCSDARange(8*10);
     
   // decay process
   //
@@ -249,18 +247,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
-
-  } else if (name == "standardGS") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardGS(name);
-
-  } else if (name == "standardWVI") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardWVI(name);
                             
   } else if (name == "emlivermore") {
     emName = name;
@@ -335,9 +321,8 @@ void PhysicsList::AddStepMax()
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{
-
-  if (verboseLevel >0){
+{ 
+  if (verboseLevel >0) {
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }

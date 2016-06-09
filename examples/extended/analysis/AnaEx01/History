@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2010/11/08 10:38:44 maire Exp $
+$Id: History,v 1.19 2010-11-08 10:38:44 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-06-11 mma (AnaEx01-V09-04-01)     
+PhysicsList migrated to new scheme G4PhysListHelper
+     
+03 February 2011 mma (AnaEx01-V09-04-00)
+- delete subdirectory analysis
      
 08 November 2010 Michel Maire (AnaEx01-V09-03-00)
 - revised version of example :

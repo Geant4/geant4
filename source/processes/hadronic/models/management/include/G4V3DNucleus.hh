@@ -24,17 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.8 2010/09/08 16:39:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4V3DNucleus.hh,v 1.8 2010-09-08 16:39:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 20110805  M. Kelsey -- Change nucleon vector to use objects, not pointers
+
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
 
 class G4Nucleon;
 class G4VNuclearDensity;
 #include "G4DynamicParticle.hh"
-#include <utility>  
 #include "Randomize.hh"
+#include <utility>  
 #include <vector>
 
 class G4V3DNucleus 
@@ -54,7 +56,7 @@ class G4V3DNucleus
       virtual void Init(G4int theA, G4int theZ) = 0;
       virtual G4bool StartLoop() = 0;
       virtual G4Nucleon * GetNextNucleon() = 0;
-      virtual const std::vector<G4Nucleon *> & GetNucleons() = 0;
+      virtual const std::vector<G4Nucleon> & GetNucleons() = 0;
       virtual G4int GetMassNumber() = 0;
       virtual G4double GetMass() = 0;
       virtual G4int GetCharge() = 0;

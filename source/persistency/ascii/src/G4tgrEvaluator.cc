@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrEvaluator.cc,v 1.1 2008/10/23 14:43:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrEvaluator.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgrEvaluator
@@ -60,7 +60,7 @@ void G4tgrEvaluator::print_error( G4int status ) const
       G4cerr << "G4tgrEvaluator: syntax error!" << G4endl;
       return;
     default:
-      HepTool::Evaluator::print_error();    
+      G4Evaluator::print_error();    
     return;
   }
 } 

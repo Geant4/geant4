@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGainServer.hh,v 1.5 2006/06/29 19:09:21 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: G4UIGainServer.hh,v 1.5 2006-06-29 19:09:21 gunter Exp $
+// $Name: not supported by cvs2svn $
 //
 
 

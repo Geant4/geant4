@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.86 2010/10/26 10:42:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4hIonisation.cc,v 1.86 2010-10-26 10:42:04 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -109,9 +109,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     isInitialised(false)
 {
-  //SetStepFunction(0.2, 1.0*mm);
-  //SetIntegral(true);
-  //SetVerboseLevel(1);
+  SetStepFunction(0.2, 0.1*mm);
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
@@ -209,11 +207,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisation::PrintInfo()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hIonisation::ActivateNuclearStopping(G4bool)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

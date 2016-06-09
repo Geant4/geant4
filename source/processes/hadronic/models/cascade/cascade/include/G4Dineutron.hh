@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Dineutron.hh,v 1.4 2010/06/25 09:43:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4Dineutron.hh,v 1.4 2010-06-25 09:43:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      Bertini Cascade dineutron class header file

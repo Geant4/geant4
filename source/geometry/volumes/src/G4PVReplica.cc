@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.8 2010/07/05 13:29:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PVReplica.cc,v 1.8 2010-07-05 13:29:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVReplica Implementation
@@ -47,17 +47,17 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
   if ((!pMother) || (!pMother->GetLogicalVolume()))
   {
-    G4cerr << "ERROR - NULL pointer specified as mother volume." << G4endl
-           << "        The world volume cannot be sliced or parameterised !"
-           << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
-                "NULL pointer to mother. World volume cannot be sliced !");
+    std::ostringstream message;
+    message << "NULL pointer specified as mother volume." << G4endl
+            << "The world volume cannot be sliced or parameterised !";
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
+                FatalException, message);
     return;
   }
   G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
   if (pLogical == motherLogical)
   {
-    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup",
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
                 FatalException, "Cannot place a volume inside itself!");
     return;
   }
@@ -65,12 +65,13 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   motherLogical->AddDaughter(this);
   if (motherLogical->GetNoDaughters() != 1)
   {
-    G4cerr << "ERROR - A replica or parameterised volume must be" << G4endl
-           << "        the only daughter of a given mother volume !" << G4endl
-           << "           Mother physical volume: " << pMother->GetName() << G4endl
-           << "           Replicated volume: " << pName << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
-                "Replica or parameterised volume must be the only daughter !");
+    std::ostringstream message;
+    message << "Replica or parameterised volume must be the only daughter !"
+            << G4endl
+            << "     Mother physical volume: " << pMother->GetName() << G4endl
+            << "     Replicated volume: " << pName;
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
+                FatalException, message);
     return;
   }
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
@@ -88,15 +89,16 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4cerr << "ERROR - NULL pointer specified as mother volume for "
-           << pName << "." << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica()", "NullPointer", FatalException,
-                "Invalid setup. NULL pointer specified as mother !");
+    std::ostringstream message;
+    message << "NULL pointer specified as mother volume for "
+            << pName << ".";
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
+                FatalException, message);
     return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup",
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
                 FatalException, "Cannot place a volume inside itself!");
     return;
   }
@@ -104,12 +106,14 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical->GetNoDaughters() != 1)
   {
-    G4cerr << "ERROR - A replica or parameterised volume must be" << G4endl
-           << "        the only daughter of a given mother volume !" << G4endl
-           << "           Mother logical volume: " << pMotherLogical->GetName() << G4endl
-           << "           Replicated volume: " << pName << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
-                "Replica or parameterised volume must be the only daughter !");
+    std::ostringstream message;
+    message << "Replica or parameterised volume must be the only daughter !"
+            << G4endl
+            << "     Mother logical volume: " << pMotherLogical->GetName()
+            << G4endl
+            << "     Replicated volume: " << pName;
+    G4Exception("G4PVReplica::G4PVReplica()", "GeomVol0002",
+                FatalException, message);
     return;
   }
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
@@ -122,13 +126,13 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
 {    
   if (nReplicas<1)
   {
-    G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+    G4Exception("G4PVReplica::CheckAndSetParameters()", "GeomVol0002",
                 FatalException, "Illegal number of replicas.");
   }
   fnReplicas=nReplicas;
   if (width<0)
   {
-    G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+    G4Exception("G4PVReplica::CheckAndSetParameters()", "GeomVol0002",
                 FatalException, "Width must be positive.");
   }
   fwidth  = width;
@@ -144,7 +148,7 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
       pRMat=new G4RotationMatrix();
       if (!pRMat)
       {
-        G4Exception("G4PVReplica::CheckAndSetParameters()", "FatalError",
+        G4Exception("G4PVReplica::CheckAndSetParameters()", "GeomVol0003",
                     FatalException, "Rotation matrix allocation failed.");
       }
       SetRotation(pRMat);
@@ -156,7 +160,7 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
     case kUndefined:
       break;
     default:
-      G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+      G4Exception("G4PVReplica::CheckAndSetParameters()", "GeomVol0002",
                   FatalException, "Unknown axis of replication.");
       break;
   }

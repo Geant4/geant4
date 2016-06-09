@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.20 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.20 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -48,7 +48,8 @@
 
 G4ParticleChangeForTransport::G4ParticleChangeForTransport()
   : G4ParticleChange(), isMomentumChanged(false), theMaterialChange(0),
-    theMaterialCutsCoupleChange(0), theSensitiveDetectorChange(0)
+    theMaterialCutsCoupleChange(0), theSensitiveDetectorChange(0),
+    fpVectorOfAuxiliaryPointsPointer(0)
 {
   if (verboseLevel>2) {
     G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() "
@@ -66,7 +67,8 @@ G4ParticleChangeForTransport::~G4ParticleChangeForTransport()
 
 G4ParticleChangeForTransport::
 G4ParticleChangeForTransport(const G4ParticleChangeForTransport &r)
-  : G4ParticleChange(r)
+  : G4ParticleChange(r),
+    fpVectorOfAuxiliaryPointsPointer(0)
 {
   if (verboseLevel>0) {
     G4cout << "G4ParticleChangeForTransport::  copy constructor is called "
@@ -102,6 +104,7 @@ G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport &r)
       thePositionChange = r.thePositionChange;
       theTimeChange = r.theTimeChange;
       theEnergyChange = r.theEnergyChange;
+      theVelocityChange        = r.theVelocityChange;
       theTrueStepLength = r.theTrueStepLength;
       theLocalEnergyDeposit = r.theLocalEnergyDeposit;
       theSteppingControlFlag = r.theSteppingControlFlag;
@@ -176,6 +179,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetMomentumDirection(direction);
     pPostStepPoint->SetKineticEnergy( energy );
   }
+  if (isVelocityChanged)  pPostStepPoint->SetVelocity(theVelocityChange);
 
   // stop case should not occur
   //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
@@ -189,9 +193,9 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddPosition( thePositionChange
 			       - pPreStepPoint->GetPosition() );
   pPostStepPoint->AddGlobalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
+				 - pPreStepPoint->GetLocalTime());
   pPostStepPoint->AddLocalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
+				 - pPreStepPoint->GetLocalTime());
   pPostStepPoint->AddProperTime( theProperTimeChange
 				 - pPreStepPoint->GetProperTime());
 
@@ -239,6 +243,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
   return pStep;
 }
 
+
 //----------------------------------------------------------------
 // methods for printing messages
 //
@@ -253,3 +258,4 @@ void G4ParticleChangeForTransport::DumpInfo() const
          << std::setw(20) << theTouchableHandle() << G4endl; 
   G4cout.precision(oldprc);
 }
+

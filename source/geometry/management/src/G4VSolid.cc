@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.40 2010/10/19 15:19:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VSolid.cc,v 1.40 2010-10-19 15:19:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
 //
@@ -139,10 +139,11 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
                                  const G4int,
                                  const G4VPhysicalVolume*)
 {
-    G4cerr << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
-           << "        Method not overloaded by derived class !" << G4endl;
-    G4Exception("G4VSolid::ComputeDimensions()", "NotApplicable",
-                FatalException, "Illegal call to case class.");
+    std::ostringstream message;
+    message << "Illegal call to G4VSolid::ComputeDimensions()" << G4endl
+            << "Method not overloaded by derived class !";
+    G4Exception("G4VSolid::ComputeDimensions()", "GeomMgt0003",
+                FatalException, message);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -151,11 +152,12 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
 
 G4ThreeVector G4VSolid::GetPointOnSurface() const
 {
-    G4cerr << "WARNING - G4VSolid::GetPointOnSurface()" << G4endl
-           << "          Not implemented for solid: "
-           << this->GetEntityType() << " !" << G4endl;
-    G4Exception("G4VSolid::GetPointOnSurface()", "NotImplemented",
-        JustWarning, "Not implemented for this solid ! Returning origin.");
+    std::ostringstream message;
+    message << "Not implemented for solid: "
+            << this->GetEntityType() << " !" << G4endl
+            << "Returning origin.";
+    G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
+                JustWarning, message);
     return G4ThreeVector(0,0,0);
 }
 
@@ -203,7 +205,6 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 {
   G4int iInside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,volume;
-  G4bool yesno;
   G4ThreeVector p;
   EInside in;
 
@@ -214,9 +215,9 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
 
@@ -262,7 +263,6 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 {
   G4int inside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,surf;
-  G4bool yesno;
   G4ThreeVector p;
   EInside in;
 
@@ -273,9 +273,9 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
 
@@ -322,10 +322,11 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 
 G4VSolid* G4VSolid::Clone() const
 {
-  G4String ErrMessage = "Clone() method not implemented for type: "
-                      + GetEntityType() + "! Returning NULL pointer!";
-  G4Exception("G4VSolid::Clone()", "NotImplemented",
-              JustWarning, ErrMessage);
+  std::ostringstream message;
+  message << "Clone() method not implemented for type: "
+          << GetEntityType() << "!" << G4endl
+          << "Returning NULL pointer!";
+  G4Exception("G4VSolid::Clone()", "GeomMgt1001", JustWarning, message);
   return 0;
 }
 

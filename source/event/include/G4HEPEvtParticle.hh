@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.hh,v 1.11 2010/10/27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEPEvtParticle.hh,v 1.11 2010-10-27 07:21:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -53,7 +53,7 @@ class G4HEPEvtParticle
         G4int isthep, G4int jdahep1, G4int jdahep2);
       ~G4HEPEvtParticle();
 
-      const G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
+      G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
       G4int operator==(const G4HEPEvtParticle &right) const;
       G4int operator!=(const G4HEPEvtParticle &right) const;
 

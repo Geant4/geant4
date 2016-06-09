@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.7 2009/02/20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BraggNoDeltaModel.hh,v 1.7 2009-02-20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

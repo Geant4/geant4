@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALSteppingAction.cc,v 1.7 2006/06/29 16:03:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FCALSteppingAction.cc,v 1.7 2006-06-29 16:03:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -146,16 +146,17 @@ void FCALSteppingAction::UserSteppingAction(const G4Step* astep)
 	  // calculate DCA of secondries to primary particle
 	  Distance = PrimaryVertex - SecondaryVertex ;
 	  VectorProduct = PrimaryDirection.cross(SecondaryDirection);
-	  if(VectorProduct == 0. &&  
-	     PrimaryDirection != 0. && SecondaryDirection != 0.) 
+	  if(VectorProduct == G4ThreeVector() &&  
+	     PrimaryDirection != G4ThreeVector() && SecondaryDirection != G4ThreeVector()) 
 	    {
 	      G4ThreeVector Temp = Distance.cross(PrimaryDirection);
 	      VectorProduct = Temp.cross(PrimaryDirection);
 	    };	  
-	  VectorProductMagnitude = VectorProduct.mag();
+	  	  
+VectorProductMagnitude = VectorProduct.mag();
 	  if(VectorProductMagnitude == 0.) 
 	    {
-	      VectorProductNorm = 0.;
+	      VectorProductNorm = G4ThreeVector();
 	    } else {
 	      VectorProductNorm = (1./VectorProduct.mag()) * VectorProduct ;
 	    };	  

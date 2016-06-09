@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteractionVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QInteractionVector.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -36,8 +36,8 @@
 #define G4QInteractionVector_h 1
 
 //
-// $Id: G4QInteractionVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QInteractionVector.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------
 //      GEANT 4 class implementation file

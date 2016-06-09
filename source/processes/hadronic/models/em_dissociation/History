@@ -1,0 +1,21 @@
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+      History file for the Electromagnetic Dissociation model
+      -------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+   ---------------------------------------------------------------
+   * Please list in reverse chronological order (last date on top)
+   ---------------------------------------------------------------
+
+27 Sep 2011 - Dennis Wright (hadr-emd-V09-04-00)
+------------------------------------------------
+Migrate to integer Z and A.  Files affected:
+  G4EMDissociation.cc
+

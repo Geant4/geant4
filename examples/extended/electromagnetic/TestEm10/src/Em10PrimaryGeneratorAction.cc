@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PrimaryGeneratorAction.cc,v 1.6 2006/06/29 16:38:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Em10PrimaryGeneratorAction.cc,v 1.6 2006-06-29 16:38:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -95,6 +95,7 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // 
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
                                                 GetParticleName() ;
+  /* ****************************************************
   G4double x0,y0,z0 ;
   if(vertexdefined)
   {
@@ -108,7 +109,6 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     y0 = 0. ;
     z0 = 0. ; // -0.5*(Em10Detector->GetWorldSizeZ()) ;
   }
-  /* ****************************************************
   G4double r0,phi0 ;
   if (rndmFlag == "on")
   {

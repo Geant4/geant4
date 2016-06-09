@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.25 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4LPhysicsFreeVector.cc,v 1.25 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,7 @@
 // --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : G4PhysicsVector(), verboseLevel(0)
+   : G4PhysicsVector()
 {
    type = T_G4LPhysicsFreeVector;
 }
@@ -56,7 +56,7 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
                                            G4double binmin,
                                            G4double binmax)
-  : G4PhysicsVector(), verboseLevel(0)
+  : G4PhysicsVector()
 {
    type = T_G4LPhysicsFreeVector;
    
@@ -80,34 +80,35 @@ G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 
 // --------------------------------------------------------------------
 
-G4LPhysicsFreeVector::G4LPhysicsFreeVector(const G4LPhysicsFreeVector& right)
-  : G4PhysicsVector(right)
-{
-  verboseLevel = right.verboseLevel;
-}
-
-// --------------------------------------------------------------------
-
-G4LPhysicsFreeVector& 
-G4LPhysicsFreeVector::operator=(const G4LPhysicsFreeVector& right)
-{
-  // Check assignment to self
-  //
-  if(this == &right) { return *this; }
-
-  DeleteData();
-  CopyData(right);
-
-  verboseLevel = right.verboseLevel;
-  return *this;
-}
-
-// --------------------------------------------------------------------
-
 void G4LPhysicsFreeVector::DumpValues()
 {
    for (size_t i = 0; i < numberOfNodes; i++)
    {
       G4cout << binVector[i] << "   " << dataVector[i]/millibarn << G4endl;
    }
+}
+
+// --------------------------------------------------------------------
+
+size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
+{
+   G4int n1 = 0;
+   G4int n2 = numberOfNodes/2;
+   G4int n3 = numberOfNodes - 1;
+   while (n1 != n3 - 1)
+   {
+      if (theEnergy > binVector[n2])
+         { n1 = n2; }
+      else
+         { n3 = n2; }
+      n2 = n1 + (n3 - n1 + 1)/2;
+   }
+#ifdef G4VERBOSE
+   if (verboseLevel > 1)
+   {
+     G4cout << "G4LPhysicsFreeVector::FindBinLocation:  returning "
+            << n1 << G4endl;
+   }
+#endif
+   return (size_t)n1;
 }

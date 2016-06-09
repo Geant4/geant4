@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh,v 1.5 2010/10/14 17:02:52 mkelsey Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FPEDetection.hh,v 1.5 2010-10-14 17:02:52 mkelsey Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // -*- C++ -*-

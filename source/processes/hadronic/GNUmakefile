@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.28 2010/05/28 18:58:17 dennis Exp $
+# $Id: GNUmakefile,v 1.31 2010-11-23 13:32:16 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -37,7 +37,11 @@ SUBDIRS += models/em_dissociation
 SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/incl
+SUBDIRS += models/inclxx/utils
+SUBDIRS += models/inclxx/incl_physics
+SUBDIRS += models/inclxx/interface
 SUBDIRS += models/isotope_production
+SUBDIRS += models/lend
 SUBDIRS += models/lll_fission
 SUBDIRS += models/low_energy
 SUBDIRS += models/management
@@ -50,6 +54,7 @@ SUBDIRS += models/parton_string/qgsm
 SUBDIRS += models/pre_equilibrium/exciton_model
 SUBDIRS += models/radioactive_decay
 SUBDIRS += models/rpg
+SUBDIRS += models/quasi_elastic
 SUBDIRS += models/qmd
 SUBDIRS += models/theo_high_energy
 SUBDIRS += models/util
@@ -70,6 +75,7 @@ SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
+SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
@@ -78,6 +84,9 @@ SUBLIBS +=  G4hadronic_bert_cascade
 SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_incl_cascade
+SUBLIBS +=  G4hadronic_inclxx_utils
+SUBLIBS +=  G4hadronic_inclxx_physics
+SUBLIBS +=  G4hadronic_inclxx_interface
 SUBLIBS +=  G4hadronic_body_ci
 SUBLIBS +=  G4hadronic_crosec_ci
 SUBLIBS +=  G4hadronic_fragm_ci
@@ -99,6 +108,7 @@ SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff
 SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
+SUBLIBS +=  G4hadronic_quasi_elastic
 SUBLIBS +=  G4hadronic_qgstring
 
 ifndef G4INSTALL

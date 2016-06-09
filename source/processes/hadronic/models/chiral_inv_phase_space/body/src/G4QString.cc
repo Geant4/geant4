@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.17 2009/09/04 14:38:00 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QString.cc,v 1.17 2009-09-04 14:38:00 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -63,32 +63,34 @@ G4double G4QString::SmoothParam=0.9;      // QGS model parameter
 G4double G4QString::StrangeSuppress=0.435;// Strangeness suppression (u:d:s=1:1:0.3 ?M.K.)
 G4double G4QString::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
 
-G4QString::G4QString() : theDirection(0), thePosition(G4ThreeVector(0.,0.,0.)) {}
+G4QString::G4QString() : theDirection(0), thePosition(G4ThreeVector(0.,0.,0.)),
+                         theStableParton(0), theDecayParton(0){}
 
 G4QString::G4QString(G4QParton* Color, G4QParton* AntiColor, G4int Direction)
+  : SideOfDecay(0)
 {
 #ifdef debug
   G4cout<<"G4QString::PPD-Constructor: Direction="<<Direction<<G4endl;
 #endif
   ExciteString(Color, AntiColor, Direction);
 #ifdef debug
-  G4cout<<"G4QString::PPD-Constructor: >>> String is excited"<<G4endl;
+  G4cout<<"G4QString::PPD-Constructor: ------>> String is excited"<<G4endl;
 #endif
 }
 
-G4QString::G4QString(G4QPartonPair* CAC)
+G4QString::G4QString(G4QPartonPair* CAC): SideOfDecay(0)
 {
 #ifdef debug
   G4cout<<"G4QString::PartonPair-Constructor: Is CALLED"<<G4endl;
 #endif
   ExciteString(CAC->GetParton1(), CAC->GetParton2(), CAC->GetDirection());
 #ifdef debug
-  G4cout<<"G4QString::PartonPair-Constructor: >>> String is excited"<<G4endl;
+  G4cout<<"G4QString::PartonPair-Constructor: ------>> String is excited"<<G4endl;
 #endif
 }
 
-G4QString::G4QString(G4QParton* QCol,G4QParton* Gluon,G4QParton* QAntiCol,G4int Direction):
-  theDirection(Direction), thePosition(QCol->GetPosition())
+G4QString::G4QString(G4QParton* QCol,G4QParton* Gluon,G4QParton* QAntiCol,G4int Direction)
+ : theDirection(Direction), thePosition(QCol->GetPosition()), SideOfDecay(0)
 {
   thePartons.push_back(QCol);
   G4LorentzVector sum=QCol->Get4Momentum();
@@ -102,7 +104,7 @@ G4QString::G4QString(G4QParton* QCol,G4QParton* Gluon,G4QParton* QAntiCol,G4int 
 }
 
 G4QString::G4QString(const G4QString &right) : theDirection(right.GetDirection()),
-thePosition(right.GetPosition())
+					       thePosition(right.GetPosition()), SideOfDecay(0)
 {
   //LeftParton=right.LeftParton;
   //RightParton=right.RightParton;
@@ -175,7 +177,7 @@ void G4QString::Boost(G4ThreeVector& Velocity)
 // Fill parameters
 void G4QString::SetParameters(G4double mCut, G4double sigQT, G4double DQSup, G4double DQBU,
                               G4double smPar, G4double SSup, G4double SigPt)
-{//  =============================================================================
+{
   MassCut         = mCut;           // minimum mass cut for the string
   SigmaQT         = sigQT;          // quark transverse momentum distribution parameter 
   DiquarkSuppress = DQSup;          // is Diquark suppression parameter  
@@ -563,7 +565,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
           delete RightHadron;
         }
 #ifdef debug
-        G4cout<<">>>G4QStr::FragString:HFilled (L) PDG="<<LeftHadron->GetPDGCode()<<", 4M="
+        G4cout<<"->>G4QStr::FragString:HFilled (L) PDG="<<LeftHadron->GetPDGCode()<<", 4M="
               <<Lh4M<<", (R) PDG="<<RightHadron->GetPDGCode()<<", 4M="<<Rh4M<<G4endl;
 #endif
 #ifdef edebug
@@ -896,7 +898,7 @@ G4QHadron* G4QString::Splitup(G4bool QL)
   if(HadronMomentum) // The decay succeeded, now the new 4-mon can be set to NewStringEnd
   {    
 #ifdef pdebug
-    G4cout<<">>>>>G4QString::Splitup: HFilled 4M="<<*HadronMomentum<<",PDG="
+    G4cout<<"---->>G4QString::Splitup: HFilled 4M="<<*HadronMomentum<<",PDG="
           <<Hadron->GetPDGCode()<<",s4M-h4M="<<Get4Momentum()-*HadronMomentum<<G4endl;
 #endif 
     newStringEnd->Set4Momentum(theDecayParton->Get4Momentum()-*HadronMomentum);

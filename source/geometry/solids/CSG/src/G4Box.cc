@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.53 2010/10/19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Box.cc,v 1.53 2010-10-19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
@@ -68,11 +68,10 @@ G4Box::G4Box(const G4String& pName,
     && (pY < 2*kCarTolerance)
     && (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
   {
-    G4cerr << "ERROR - G4Box()::G4Box(): " << GetName() << G4endl
-           << "        Dimensions too small ! - "
-           << pX << ", " << pY << ", " << pZ << G4endl;
-    G4Exception("G4Box::G4Box()", "InvalidSetup",
-                FatalException, "Invalid dimensions. Too small.");
+    std::ostringstream message;
+    message << "Dimensions too small for Solid: " << GetName() << "!" << G4endl
+            << "     hX, hY, hZ = " << pX << ", " << pY << ", " << pZ;
+    G4Exception("G4Box::G4Box()", "GeomSolids0002", FatalException, message);
   }
 }
 
@@ -136,11 +135,12 @@ void G4Box::SetXHalfLength(G4double dx)
   }
   else
   {
-    G4cerr << "ERROR - G4Box()::SetXHalfLength(): " << GetName() << G4endl
-           << "        Dimension X too small ! - "
-           << dx << G4endl;
-    G4Exception("G4Box::SetXHalfLength()", "InvalidSetup",
-                FatalException, "Invalid dimensions. Too small.");
+    std::ostringstream message;
+    message << "Dimension X too small for solid: " << GetName() << "!"
+            << G4endl
+            << "       hX = " << dx;
+    G4Exception("G4Box::SetXHalfLength()", "GeomSolids0002",
+                FatalException, message);
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
@@ -155,11 +155,12 @@ void G4Box::SetYHalfLength(G4double dy)
   }
   else
   {
-    G4cerr << "ERROR - G4Box()::SetYHalfLength(): " << GetName() << G4endl
-           << "        Dimension Y too small ! - "
-           << dy << G4endl;
-    G4Exception("G4Box::SetYHalfLength()", "InvalidSetup",
-                FatalException, "Invalid dimensions. Too small.");
+    std::ostringstream message;
+    message << "Dimension Y too small for solid: " << GetName() << "!"
+            << G4endl
+            << "       hY = " << dy;
+    G4Exception("G4Box::SetYHalfLength()", "GeomSolids0002",
+                FatalException, message);
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
@@ -174,11 +175,12 @@ void G4Box::SetZHalfLength(G4double dz)
   }
   else
   {
-    G4cerr << "ERROR - G4Box()::SetZHalfLength(): " << GetName() << G4endl
-           << "        Dimension Z too small ! - "
-           << dz << G4endl;
-    G4Exception("G4Box::SetZHalfLength()", "InvalidSetup",
-                FatalException, "Invalid dimensions. Too small.");
+    std::ostringstream message;
+    message << "Dimension Z too small for solid: " << GetName() << "!"
+            << G4endl
+            << "       hZ = " << dz;
+    G4Exception("G4Box::SetZHalfLength()", "GeomSolids0002",
+                FatalException, message);
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
@@ -837,22 +839,25 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         *n=G4ThreeVector(0,0,-1);
         break;
       default:
-        G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(6);
-        G4Exception("G4Box::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
+        G4Exception("G4Box::DistanceToOut(p,v,..)", "GeomSolids1002",
+                    JustWarning, message);
         break;
     }
   }
@@ -879,8 +884,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc) ;
-     G4Exception("G4Box::DistanceToOut(p)", "Notification", JustWarning, 
-                 "Point p is outside !?" );
+     G4Exception("G4Box::DistanceToOut(p)", "GeomSolids1002",
+                 JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -943,7 +948,7 @@ G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Box::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -964,6 +969,7 @@ G4GeometryType G4Box::GetEntityType() const
 
 std::ostream& G4Box::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -973,6 +979,7 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
      << "    half length Y: " << fDy/mm << " mm \n"
      << "    half length Z: " << fDz/mm << " mm \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

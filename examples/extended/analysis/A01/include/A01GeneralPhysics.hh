@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.hh,v 1.5 2006/06/29 16:31:08 gunter Exp $
+// $Id: A01GeneralPhysics.hh,v 1.5 2006-06-29 16:31:08 gunter Exp $
 // --------------------------------------------------------------
 //
 

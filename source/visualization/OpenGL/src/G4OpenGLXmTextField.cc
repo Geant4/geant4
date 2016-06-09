@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.9 2009/02/04 16:48:41 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLXmTextField.cc,v 1.9 2009-02-04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
+#include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
-#include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmTextField.hh"
 
 #include <X11/Intrinsic.h>

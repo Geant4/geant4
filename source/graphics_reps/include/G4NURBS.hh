@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.10 2006/06/29 19:05:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NURBS.hh,v 1.11 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -60,7 +60,7 @@ class G4NURBS : public G4Visible
   // this string is *not* yours (const char)
   virtual const char* Whoami() const = 0;
 
-  // the copy constructor is private.
+  // the copy constructor and assignment opertor are private.
 
   // destructor. 
   virtual ~G4NURBS();
@@ -404,6 +404,10 @@ class G4NURBS : public G4Visible
   // Not really necessary for geant. A warning is issued when used.
   G4NURBS(const G4NURBS &);
 
+  // Private assignment operator - don't use, doesn't exist.
+  // (Added to satisfy Coverity, JA 11/11/11.)
+  G4NURBS& operator= (const G4NURBS&);
+
 };
 
 // external representation for t_KnotVectorGenFlag
@@ -462,7 +466,7 @@ inline G4int G4NURBS::GetnbrCtrlPts(G4NURBS::t_direction in_dir) const {
 } 
 
 inline char G4NURBS::Tochar(G4NURBS::t_direction in_dir) {
-  return (in_dir?'V':'U');
+  return (in_dir != U? 'V': 'U');
 }
 
 /***********************************************************************
@@ -494,7 +498,7 @@ G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp)
 inline G4NURBS::t_doubleCtrlPt* 
 G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp)
 {
-  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [1];
+  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [4];
   for (G4int indCoord = X; indCoord < NofC; indCoord++)
     (*pcopy)[indCoord] = (G4double)in_krcp[indCoord];
   return pcopy;

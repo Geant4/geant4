@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTable.hh,v 1.9 2006/06/29 18:11:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3DetTable.hh,v 1.9 2006-06-29 18:11:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G3DetTable class
 
@@ -33,6 +33,7 @@
 #define G3DETTABLE_HH 1
 
 #include <map>
+#include "G3toG4Defs.hh"
 #include "globals.hh"
 #include "G3DetTableEntry.hh"
 
@@ -50,5 +51,5 @@ public:
   void PrintAll();
 };
 
-extern G3DetTable G3Det;
+extern G3G4DLL_API G3DetTable G3Det;
 #endif

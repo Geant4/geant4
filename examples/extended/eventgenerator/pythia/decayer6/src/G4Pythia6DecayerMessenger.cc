@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6DecayerMessenger.cc,v 1.1 2008/11/03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Pythia6DecayerMessenger.cc,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Messenger class that defines commands for G4Pythia6Decayer.
 //

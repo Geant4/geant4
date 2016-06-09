@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.10 2008/03/13 09:35:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DataInterpolation.cc,v 1.10 2008-03-13 09:35:56 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4DataInterpolation.hh"
 

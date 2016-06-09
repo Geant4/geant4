@@ -14,37 +14,67 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31-October 2011 V.Ivanchenko hadr-pre-V09-04-06
+20-October 2011 V.Ivanchenko hadr-pre-V09-04-05
+----------------------------------------------
+G4PreCompoundModel - set low limit for excitation 1 MeV;
+      set maxZ = 3 and maxA = 5 allowing pre-compound emission 
+      for light fragments (old formulation of the model) 
+
+30-August-2011 M. Kelsey    hadr-pre-V09-04-04
+----------------------------------------------
+G4PreCompoundTransitions.cc:  Return zero probability if no excitons.
+
+08-July 2011 V.Ivanchenko   hadr-pre-V09-04-03
+----------------------------------------------
+G4PreCompoundModel - restore soft-cutoff option and use "go_ahead"
+
+16-June-2011 D.H. Wright    hadr-pre-V09-04-02
+----------------------------------------------
+G4PrecompoundModel.cc - fix unused variable warning for "go_ahead"
+
+06-June 2011 V.Ivanchenko   hadr-pre-V09-04-01
+----------------------------------------------
+G4PreCompoundModel - add limit on nucleon number maxZ=9, maxA=17,
+  low fragments with lower Z and A directly call equilibrium emission
+G4VPreCompoundFragment - fixed Coverty warning
+
+20-May 2011 V.Ivanchenko   hadr-pre-V09-04-00
+---------------------------------------------
+G4PreCompoundProton, G4PreCompoundNeutron - fixed compillation
+  warnings for gcc-4.6.0
+
 23-November 2010 V.Ivanchenko   hadr-pre-V09-03-17
----------------------------------------------------
+--------------------------------------------------
 G4PreCompoundFragment, G4PreCompoundEmission, G4PreCompoundModel -
   return back ref-09 computations
 
 18-November 2010 V.Ivanchenko   hadr-pre-V09-03-16
----------------------------------------------------
+--------------------------------------------------
 G4PreCompoundModel - change number of excitons to be as in 9.3
   affects tail of neutron stectrum for low-energy projectile
 
 17-November 2010 V.Ivanchenko   hadr-pre-V09-03-15
----------------------------------------------------
+--------------------------------------------------
 G4PreCompoundProton, G4PreCompoundNeutron, G4PreCompoundHe3 - fixed
   usage of integer Z and A
 
 02-November 2010 V.Ivanchenko   hadr-pre-V09-03-14
----------------------------------------------------
+--------------------------------------------------
 - Fixed Coverity warnings - pedantic initialisation in constructors
 
 28-October 2010 V.Ivanchenko   hadr-pre-V09-03-13
----------------------------------------------------
+-------------------------------------------------
 G4PreCompoundModel - use more safe constructor of G4DynamicParticle
 G4LowEIonFragmentation - complete transition to integar Z and A, 
                          use of updated methods for G4Fragment
 
 20-October 2010 V.Ivanchenko   hadr-pre-V09-03-12
----------------------------------------------------
+-------------------------------------------------
 G4PreCompoundTransitions - fixed compillation warning introduced in previous tag
 
 11-October 2010 V.Ivanchenko   hadr-pre-V09-03-11
----------------------------------------------------
+-------------------------------------------------
 G4PreCompoundTransitions - JMQ fixed bug in the PerformTransition method
                        (use number of particles instead of number of excitons)
 G4PreCompoundModel - disabled upper limit on excitation energy

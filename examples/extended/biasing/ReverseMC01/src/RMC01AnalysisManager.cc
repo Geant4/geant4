@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.7 2010/11/11 14:39:42 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: RMC01AnalysisManager.cc,v 1.7 2010-11-11 14:39:42 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01AnalysisManager
@@ -311,13 +311,13 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
    //Test convergence. The error is already computed
    //--------------------------------------
    G4int nb_event=anEvent->GetEventID()+1;
-   G4double factor=1.;
+   //G4double factor=1.;
    if (adjoint_sim_mode) {
    	G4double  n_adj_evt= nb_event/nb_evt_per_adj_evt;
 	// nb_event/nb_evt_per_adj_evt;
 	if (n_adj_evt*nb_evt_per_adj_evt == nb_event) {
 		nb_event =static_cast<G4int>(n_adj_evt);
-		factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
+		//factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
 	}	
 	else nb_event=0;
 	
@@ -628,7 +628,10 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(const G4Event* anEvent,G4doub
 	  G4double mean_x2 =accumulated_edep2/nb_event;
   	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(G4double(nb_event));
 	  mean *=factor;
-   }
+   } else {
+          mean=0;
+          error=0;
+  }
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

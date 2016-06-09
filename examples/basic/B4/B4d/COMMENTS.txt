@@ -1,0 +1,2 @@
+- Keep magnetic field ? (Will be in tracker)
+- What to do with vis.tutor?

@@ -41,7 +41,7 @@
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     dirName = getenv("G4NEUTRONHPDATA");
-    G4String tString = "/Elastic/";
+    G4String tString = "/Elastic";
     dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<G4endl;
     numEle = G4Element::GetNumberOfElements();

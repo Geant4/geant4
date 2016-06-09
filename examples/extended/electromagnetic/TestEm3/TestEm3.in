@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.27 2009/09/17 20:06:26 maire Exp $
+# $Id: TestEm3.in,v 1.27 2009-09-17 20:06:26 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/phys/addPhysics  emstandard_opt0
 #
 /run/initialize
-/process/eLoss/verbose 1
+/process/em/verbose 1
 /process/msc/Skin 1
 #
 /gun/particle e-
@@ -29,3 +29,9 @@
 /testem/event/printModulo 50
 #
 /run/beamOn 100
+#
+/process/em/setSecBiasing eIoni World 0.3 2 MeV
+/process/em/setSecBiasing eBrem World 0.2 1 MeV
+/run/physicsModified
+/run/beamOn 100
+#

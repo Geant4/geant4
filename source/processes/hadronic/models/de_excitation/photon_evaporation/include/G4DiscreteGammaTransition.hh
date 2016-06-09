@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.hh,v 1.6 2010/11/17 19:17:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DiscreteGammaTransition.hh,v 1.6 2010-11-17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -48,7 +48,7 @@
 //
 //        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
 //              i) added G4int _nucleusZ initialise it through the constructor
-//              ii) modified SelectGamma() to allow the generation of conversion electrons      
+//              ii) modified SelectGamma() to allow the generation of conversion electrons
 //              iii) added #include G4AtomicShells.hh
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
@@ -61,6 +61,9 @@
 //   
 //	  6 October 2010, M. Kelsey
 //		Store NuclearLevel as const-reference, not as copied value.
+//
+//	  5 May 2011, V.Ivanchenko removed unused constructor
+//
 // -------------------------------------------------------------------
 
 #ifndef G4DiscreteGammaTransition_hh
@@ -78,10 +81,7 @@ class G4DiscreteGammaTransition : public G4VGammaTransition
 {
 public:
 
-  // Constructor
-  G4DiscreteGammaTransition(const G4NuclearLevel& level);
   //JMQ 180410
-  //  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
   G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A);
 
   // Destructor
@@ -96,10 +96,11 @@ public:
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
 
-  inline void SetICM(G4bool ic) { _icm = ic;};
+  inline void SetICM(G4bool ic)    { _icm = ic; };
+  inline G4bool GetICM() const     { return _icm;};
   inline G4double GetBondEnergy () {return _bondE;};
-  inline G4int GetOrbitNumber () {return _orbitE;};
-  inline G4bool IsAGamma() {return _aGamma;};
+  inline G4int GetOrbitNumber ()   {return _orbitE;};
+  inline G4bool IsAGamma()         {return _aGamma;};
  
 private:
   

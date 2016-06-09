@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.hh,v 1.5 2006/06/29 19:22:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DalitzDecayChannel.hh,v 1.5 2006-06-29 19:22:43 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -56,6 +56,14 @@ class G4DalitzDecayChannel :public G4VDecayChannel
 			   const G4String& theAntiLeptonName);
     //  Destructor
       virtual ~G4DalitzDecayChannel();
+
+  protected:
+    // Copy constructor and assignment operator
+      G4DalitzDecayChannel(const G4DalitzDecayChannel &);
+      G4DalitzDecayChannel & operator=(const G4DalitzDecayChannel &);
+
+  private:
+      G4DalitzDecayChannel();
 
   public: // With Description
      virtual G4DecayProducts *DecayIt(G4double);     

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.14 2008/07/27 10:49:24 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.14 2008-07-27 10:49:24 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  10th August 1998.

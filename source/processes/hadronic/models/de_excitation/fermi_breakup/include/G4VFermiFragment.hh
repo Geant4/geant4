@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VFermiFragment.hh,v 1.4 2010/10/29 17:35:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VFermiFragment.hh,v 1.4 2010-10-29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko
 
 #ifndef G4VFermiFragment_h
 #define G4VFermiFragment_h 1
@@ -39,17 +41,14 @@
 class G4VFermiFragment 
 {
 public:
+
   G4VFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
 
   virtual ~G4VFermiFragment();
   
-protected:
-  G4VFermiFragment();
-
 private:
 
-  G4VFermiFragment(const G4VFermiFragment &right);
-  
+  G4VFermiFragment(const G4VFermiFragment &right);  
   const G4VFermiFragment & operator=(const G4VFermiFragment &right);
   G4bool operator==(const G4VFermiFragment &right) const;
   G4bool operator!=(const G4VFermiFragment &right) const;
@@ -88,7 +87,14 @@ public:
     return (GetFragmentMass() + GetExcitationEnergy());
   }
 
+  inline G4bool IsStable() const
+  {
+    return isStable;
+  }
+
 protected:
+
+  G4bool isStable;
 
   G4int A;
 

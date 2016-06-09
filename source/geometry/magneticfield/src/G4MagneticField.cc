@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.cc,v 1.3 2006/06/29 18:24:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagneticField.cc,v 1.3 2006-06-29 18:24:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
 
 G4MagneticField::G4MagneticField()
+  : G4ElectroMagneticField()
 {
 }
 
@@ -39,12 +40,14 @@ G4MagneticField::~G4MagneticField()
 {
 }
 
-G4MagneticField::G4MagneticField(const G4MagneticField &)
-  : G4ElectroMagneticField()
+G4MagneticField::G4MagneticField(const G4MagneticField &MagField)
+  : G4ElectroMagneticField( MagField )
 {
 }
 
 G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
 {
-  if (&p == this) return *this; *this = p; return *this;
+  if (&p == this) return *this; 
+  *this = p; 
+  return *this;
 }

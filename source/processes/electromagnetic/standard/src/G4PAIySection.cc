@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc,v 1.8 2010/11/23 15:31:10 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PAIySection.cc,v 1.8 2010-11-23 15:31:10 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -72,8 +72,23 @@ const G4int G4PAIySection::fMaxSplineSize = 500;  // Max size of output spline
 G4PAIySection::G4PAIySection()
 {
   fSandia = 0;
-  fDensity = fElectronDensity = fNormalizationCof = 0.0;
+  fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
+  fVerbose = 0;
+  for(G4int i=0; i<500; ++i) {
+    fSplineEnergy[i] = 0.0;
+    fRePartDielectricConst[i] = 0.0;
+    fImPartDielectricConst[i] = 0.0;
+    fIntegralTerm[i] = 0.0;
+    fDifPAIySection[i] = 0.0;
+    fdNdxCerenkov[i] = 0.0;
+    fdNdxPlasmon[i] = 0.0;
+    fIntegralPAIySection[i] = 0.0;
+    fIntegralPAIdEdx[i] = 0.0;
+    fIntegralCerenkov[i] = 0.0;
+    fIntegralPlasmon[i] = 0.0;
+    for(G4int j=0; j<112; ++j) { fPAItable[i][j] = 0.0; }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -91,12 +106,12 @@ void G4PAIySection::Initialize( const G4Material* material,
 				G4double maxEnergyTransfer,
 				G4double betaGammaSq)
 {
-  G4int i, j, numberOfElements;
+  G4int i, j;
   G4double energy;   
   // fVerbose = 1;   
   fDensity         = material->GetDensity();
   fElectronDensity = material->GetElectronDensity();
-  numberOfElements = material->GetNumberOfElements();
+  //G4int numberOfElements = material->GetNumberOfElements();
 
   fSandia = material->GetSandiaTable();
 
@@ -173,7 +188,8 @@ void G4PAIySection::Initialize( const G4Material* material,
       
   G4double   betaGammaSqRef = 
      fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
-
+      
+  ComputeLowEnergyCof(material);            
   NormShift(betaGammaSqRef);             
   SplainPAI(betaGammaSqRef);
       
@@ -189,6 +205,42 @@ void G4PAIySection::Initialize( const G4Material* material,
   IntegralCerenkov();
   IntegralPlasmon();
 }
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Compute low energy cof. It reduces PAI xsc for Lorentz factors less than 4.
+//
+
+void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
+{    
+  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4double sumZ = 0., sumCof = 0.; 
+
+  const G4double p0 =  1.20923e+00; 
+  const G4double p1 =  3.53256e-01; 
+  const G4double p2 = -1.45052e-03; 
+  
+  G4double* thisMaterialZ   = new G4double[numberOfElements];
+  G4double* thisMaterialCof = new G4double[numberOfElements];
+   
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    thisMaterialZ[i] = material->GetElement(i)->GetZ();
+    sumZ += thisMaterialZ[i];
+    thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
+  }
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
+  }
+  fLowEnergyCof = sumCof;
+  delete [] thisMaterialZ;
+  delete [] thisMaterialCof;
+  // G4cout<<"fLowEnergyCof = "<<fLowEnergyCof<<G4endl;
+}
+
+
+
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -505,14 +557,15 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
 G4double G4PAIySection::DifPAIySection( G4int              i ,
                                         G4double betaGammaSq  )
 {        
-   G4double be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
+  G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
    //G4double beta, be4;
-   G4double be4;
-   G4double betaBohr2 = fine_structure_const*fine_structure_const;
-   G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
+   //G4double be4;
+   G4double betaBohr = fine_structure_const;
+   // G4double betaBohr2 = fine_structure_const*fine_structure_const;
+   // G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
    be2 = betaGammaSq/(1 + betaGammaSq);
-   be4 = be2*be2;
-   //  beta = sqrt(be2);
+   //be4 = be2*be2;
+   beta = sqrt(be2);
    cof = 1;
    x1 = log(2*electron_mass_c2/fSplineEnergy[i]);
 
@@ -547,9 +600,15 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
    result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i]);
    if(result < 1.0e-8) result = 1.0e-8;
    result *= fine_structure_const/be2/pi;
+   // low energy correction
+
+   G4double lowCof = fLowEnergyCof; // 6.0 ; // Ar ~ 4.; -> fLowCof as f(Z1,Z2)? 
+
+   result *= (1 - exp(-beta/betaBohr/lowCof));
+
    //   result *= (1-exp(-beta/betaBohr))*(1-exp(-beta/betaBohr));
    //  result *= (1-exp(-be2/betaBohr2));
-   result *= (1-exp(-be4/betaBohr4));
+   // result *= (1-exp(-be4/betaBohr4));
    //   if(fDensity >= 0.1)
    if(x8 > 0.)
    { 
@@ -566,10 +625,10 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
 G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
                                          G4double betaGammaSq  )
 {        
-   G4double cof, logarithm, x3, x5, argument, modul2, dNdxC; 
+   G4double logarithm, x3, x5, argument, modul2, dNdxC; 
    G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr;
 
-   cof         = 1.0;
+   //G4double cof         = 1.0;
    cofBetaBohr = 4.0;
    betaBohr2   = fine_structure_const*fine_structure_const;
    betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
@@ -860,13 +919,13 @@ G4double G4PAIySection::SumOverInterCerenkov( G4int i )
 
 G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 {         
-   G4double x0,x1,y0,yy1,a,c,result;
+  G4double x0,x1,y0,yy1,a,c,result;
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
    y0  = fdNdxPlasmon[i];
    yy1 = fdNdxPlasmon[i+1];
-   c =x1/x0;
+   c = x1/x0;
    a = log10(yy1/y0)/log10(c);
 
    G4double b = 0.0;
@@ -892,7 +951,7 @@ G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 G4double G4PAIySection::SumOverBorder( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,c,d,e0,result;
+  G4double x0,x1,y0,yy1,a,/*c,*/d,e0,result;
 
    e0 = en0;
    x0 = fSplineEnergy[i];
@@ -900,7 +959,7 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
 
@@ -930,7 +989,7 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
    y0 = fDifPAIySection[i - 1];
    yy1 = fDifPAIySection[i - 2];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    //  b0 = log10(y0) - a*log10(x0);
@@ -962,7 +1021,7 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
 G4double G4PAIySection::SumOverBorderdEdx( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,c,d,e0,result;
+  G4double x0,x1,y0,yy1,a,/*c,*/d,e0,result;
 
    e0 = en0;
    x0 = fSplineEnergy[i];
@@ -970,7 +1029,7 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    
@@ -991,7 +1050,7 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIySection[i - 1];
    yy1 = fDifPAIySection[i - 2];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
 
@@ -1243,7 +1302,16 @@ G4double G4PAIySection::GetStepPlasmonLoss( G4double step )
   return loss;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
 
+void G4PAIySection::CallError(G4int i, const G4String& methodName) const
+{
+  G4String head = "G4PAIySection::" + methodName + "()";
+  G4ExceptionDescription ed;
+  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber << G4endl;
+  G4Exception(head,"pai001",FatalException,ed);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //

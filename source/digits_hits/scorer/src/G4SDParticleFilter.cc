@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.cc,v 1.2 2010/07/23 00:59:58 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SDParticleFilter.cc,v 1.2 2010-07-23 00:59:58 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleFilter.hh"
@@ -63,8 +63,8 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
     G4String msg = "Particle <";
     msg += particleName;
     msg += "> not found.";
-    G4Exception("G4SDParticleFilter::G4SDParticleFilter()",
-                "DetUtil0000",FatalException,msg);
+    G4Exception("G4SDParticleFilter::G4SDParticleFilter",
+                "DetPS0101",FatalException,msg);
   }
   thePdef.push_back(pd);
   theIonZ.clear();
@@ -83,8 +83,8 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
      G4String msg = "Particle <";
      msg += particleNames[i];
      msg += "> not found.";
-     G4Exception("G4SDParticleFilter::G4SDParticleFilter()",
-                "DetUtil0000",FatalException,msg);
+     G4Exception("G4SDParticleFilter::G4SDParticleFilter",
+                "DetPS0102",FatalException,msg);
    }
    thePdef.push_back(pd);
    theIonZ.clear();
@@ -97,7 +97,8 @@ G4SDParticleFilter::G4SDParticleFilter(G4String name,
     :G4VSDFilter(name), thePdef(particleDef)
 {
   for ( size_t i = 0; i < particleDef.size(); i++){
-    if(!particleDef[i]) G4Exception("G4SDParticleFilter::G4SDParticleFilter()","DetUtil0001",FatalException,
+    if(!particleDef[i]) G4Exception("G4SDParticleFilter::G4SDParticleFilter",
+       "DetPS0103",FatalException,
        "NULL pointer is found in the given particleDef vector.");
   }
   theIonZ.clear();
@@ -139,7 +140,7 @@ void G4SDParticleFilter::add(const G4String& particleName)
      msg += particleName;
      msg += "> not found.";
      G4Exception("G4SDParticleFilter::add()",
-                "DetUtil0002",FatalException,msg);
+                "DetPS0104",FatalException,msg);
   }
   for ( size_t i = 0; i < thePdef.size(); i++){
     if ( thePdef[i] == pd ) return;

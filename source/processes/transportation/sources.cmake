@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:10:00 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:10:00 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -51,6 +51,7 @@ GEANT4_DEFINE_MODULE(NAME G4transportation
         G4Transportation.icc
         G4UserSpecialCuts.hh
         G4VTrackTerminator.hh
+	G4TransportationProcessType.hh
     SOURCES
         G4CoupledTransportation.cc
         G4NeutronKiller.cc

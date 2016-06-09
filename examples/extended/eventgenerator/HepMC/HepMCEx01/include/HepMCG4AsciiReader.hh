@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   HepMCG4AsciiReader.hh
-//   $Id: HepMCG4AsciiReader.hh,v 1.4 2010/12/10 06:21:34 kmura Exp $
+//   $Id: HepMCG4AsciiReader.hh,v 1.4 2010-12-10 06:21:34 kmura Exp $
 //
 // ====================================================================
 #ifndef HEPMC_G4_ASCII_READER_H

@@ -80,8 +80,8 @@ CexmcSimpleTrackPointInfoStore::operator CexmcTrackPointInfo() const
         throw CexmcException( CexmcWeirdException );
 
     return CexmcTrackPointInfo( positionLocal, positionWorld, directionLocal,
-                        directionWorld, momentumAmp, particleDefinition,
-                        trackId, trackType );
+                                directionWorld, momentumAmp, particleDefinition,
+                                trackId, trackType );
 }
 
 #endif

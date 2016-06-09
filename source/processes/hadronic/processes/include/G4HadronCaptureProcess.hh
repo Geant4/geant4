@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4 Neutron capture process -- header file
 // F.W. Jones, TRIUMF, 03-DEC-96
 //  
@@ -53,13 +51,14 @@
 
 class G4HadronCaptureProcess : public G4HadronicProcess
 {
-public:
+  public:
 
-  G4HadronCaptureProcess(const G4String& processName ="nCapture");
+    G4HadronCaptureProcess(const G4String& processName ="nCapture");
   
-  virtual ~G4HadronCaptureProcess();
+    virtual ~G4HadronCaptureProcess();
  
-  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+    virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
+    virtual void ProcessDescription(std::ostream& outFile) const;
 };
 #endif

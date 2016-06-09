@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.hh,v 1.10 2006/06/29 21:07:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessVector.hh,v 1.10 2006-06-29 21:07:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -48,14 +48,15 @@ class G4ProcessVector
 {
   public:
     //  Constructors
-    G4ProcessVector(size_t dummy=0);
+    G4ProcessVector();
+    explicit G4ProcessVector(size_t);
     G4ProcessVector(const G4ProcessVector &);
 
     //  Destructor.
     virtual ~G4ProcessVector();
 
     //assignment operator
-    G4ProcessVector & operator=(G4ProcessVector &right);
+    G4ProcessVector & operator=(const G4ProcessVector &right);
  
     // equal operator
     G4bool operator==(const G4ProcessVector &right) const;

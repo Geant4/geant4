@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiLevelLocator.hh,v 1.3 2010/07/13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MultiLevelLocator.hh,v 1.3 2010-07-13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class G4MultiLevelLocator 
@@ -73,7 +73,7 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
 
    private:
 
-     static const G4int max_depth=4;
+     static const G4int max_depth=10;
 
      G4FieldTrack* ptrInterMedFT[max_depth+1];
        // Used to store intermediate tracks values in case of too slow progress

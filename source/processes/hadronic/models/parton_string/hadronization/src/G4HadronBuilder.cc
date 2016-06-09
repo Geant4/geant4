@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.12 2010/11/03 17:11:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronBuilder.cc,v 1.12 2010-11-03 17:11:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

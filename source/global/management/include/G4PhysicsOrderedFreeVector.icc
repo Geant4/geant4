@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.11 2010/05/28 05:13:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4PhysicsOrderedFreeVector.icc,v 1.11 2010-05-28 05:13:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Inline Functions Definitions
@@ -76,21 +76,4 @@ void G4PhysicsOrderedFreeVector::DumpValues()
    {
       G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
    }
-}
-
-inline
-size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
-{
-   G4int n1 = 0;
-   G4int n2 = numberOfNodes/2;
-   G4int n3 = numberOfNodes - 1;
-   while (n1 != n3 - 1)
-   {
-      if (theEnergy > binVector[n2])
-         { n1 = n2; }
-      else
-         { n3 = n2; }
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-   return (size_t)n1;
 }

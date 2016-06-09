@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlung.cc,v 1.3 2007/05/23 08:52:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ePolarizedBremsstrahlung.cc,v 1.3 2007-05-23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -62,12 +62,11 @@ G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name):
 {}
 
 
-void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
+void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                                              const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 

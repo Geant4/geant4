@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.17 2010/07/05 13:29:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PVPlacement.cc,v 1.17 2010-07-05 13:29:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVPlacement Implementation
@@ -57,7 +57,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
     {
-      G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+      G4Exception("G4PVPlacement::G4PVPlacement()", "GeomVol0002",
                   FatalException, "Cannot place a volume inside itself!");
     }
     SetMotherLogical(motherLogical);
@@ -85,7 +85,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
-      G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+      G4Exception("G4PVPlacement::G4PVPlacement()", "GeomVol0002",
                   FatalException, "Cannot place a volume inside itself!");
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
@@ -111,7 +111,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
 {
   if (pCurrentLogical == pMotherLogical)
   {
-    G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+    G4Exception("G4PVPlacement::G4PVPlacement()", "GeomVol0002",
                 FatalException, "Cannot place a volume inside itself!");
   }
   SetMotherLogical(pMotherLogical);
@@ -135,7 +135,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 {
   if (pCurrentLogical == pMotherLogical)
   {
-    G4Exception("G4PVPlacement::G4PVPlacement()", "InvalidSetup",
+    G4Exception("G4PVPlacement::G4PVPlacement()", "GeomVol0002",
                 FatalException, "Cannot place a volume inside itself!");
   }
   SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
@@ -278,17 +278,17 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
       G4double distin = motherSolid->DistanceToIn(mp);
       if (distin > tol)
       {
-        G4cout << G4endl;
-        G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
-               << "          Overlap is detected for volume "
-               << GetName() << G4endl
-               << "          with its mother volume "
-               << motherLog->GetName() << G4endl
-               << "          at mother local point " << mp << ", "
-               << "overlapping by at least: " << G4BestUnit(distin, "Length")
-               << G4endl;
-        G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
-                    JustWarning, "Overlap with mother volume !");
+        std::ostringstream message;
+        message << "Overlap with mother volume !" << G4endl
+                << "          Overlap is detected for volume "
+                << GetName() << G4endl
+                << "          with its mother volume "
+                << motherLog->GetName() << G4endl
+                << "          at mother local point " << mp << ", "
+                << "overlapping by at least: "
+                << G4BestUnit(distin, "Length");
+        G4Exception("G4PVPlacement::CheckOverlaps()",
+                    "GeomVol1002", JustWarning, message);
         return true;
       }
     }
@@ -313,17 +313,17 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
         G4double distout = daughterSolid->DistanceToOut(md);
         if (distout > tol)
         {
-          G4cout << G4endl;
-          G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
-                 << "          Overlap is detected for volume "
-                 << GetName() << G4endl
-                 << "          with " << daughter->GetName() << " volume's"
-                 << G4endl
-                 << "          local point " << md << ", "
-                 << "overlapping by at least: " << G4BestUnit(distout,"Length")
-                 << G4endl;
-          G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
-                      JustWarning, "Overlap with volume already placed !");
+          std::ostringstream message;
+          message << "Overlap with volume already placed !" << G4endl
+                  << "          Overlap is detected for volume "
+                  << GetName() << G4endl
+                  << "          with " << daughter->GetName() << " volume's"
+                  << G4endl
+                  << "          local point " << md << ", "
+                  << "overlapping by at least: "
+                  << G4BestUnit(distout,"Length");
+          G4Exception("G4PVPlacement::CheckOverlaps()",
+                      "GeomVol1002", JustWarning, message);
           return true;
         }
       }
@@ -346,15 +346,15 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
 
         if (solid->Inside(ms)==kInside)
         {
-           G4cout << G4endl;
-           G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
+          std::ostringstream message;
+          message << "Overlap with volume already placed !" << G4endl
                   << "          Overlap is detected for volume "
                   << GetName() << G4endl
                   << "          apparently fully encapsulating volume "
                   << daughter->GetName() << G4endl
-                  << "          at the same level !" << G4endl;
-           G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
-                       JustWarning, "Overlap with volume already placed !");
+                  << "          at the same level !";
+          G4Exception("G4PVPlacement::CheckOverlaps()",
+                      "GeomVol1002", JustWarning, message);
           return true;
         }
       }

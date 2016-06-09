@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003/10/08 15:44:10 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2003-10-08 15:44:10 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  JPW, 2003.
 # -----------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
@@ -20,9 +21,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
+            -I$(G4BASE)/processes/hadronic/cross_sections/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
+	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc,v 1.2 2009/11/10 19:25:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ICRU49NuclearStoppingModel.cc,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam)
 {
   theZieglerFactor = eV*cm2*1.0e-15;
   g4pow = G4Pow::GetInstance();
-  if(ad[0] == 0.0) InitialiseNuclearStopping();
+  if(ad[0] == 0.0) { InitialiseNuclearStopping(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

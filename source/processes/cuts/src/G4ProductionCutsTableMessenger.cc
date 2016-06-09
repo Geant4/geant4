@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTableMessenger.cc,v 1.3 2009/11/12 00:20:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ProductionCutsTableMessenger.cc,v 1.3 2009-11-12 00:20:03 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------

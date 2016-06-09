@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.31 2010/10/20 08:54:18 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.31 2010-10-20 08:54:18 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -82,11 +82,12 @@ G4Hype::G4Hype(const G4String& pName,
   //
   if (newHalfLenZ<=0)
   {
-    G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-           << "        Invalid Z half-length: "
-           << newHalfLenZ/mm << " mm" << G4endl;
-    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
-                "Invalid Z half-length.");
+    std::ostringstream message;
+    message << "Invalid Z half-length - " << GetName() << G4endl
+            << "        Invalid Z half-length: "
+            << newHalfLenZ/mm << " mm";
+    G4Exception("G4Hype::G4Hype()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
   halfLenZ=newHalfLenZ;   
 
@@ -94,23 +95,25 @@ G4Hype::G4Hype(const G4String& pName,
   //
   if (newInnerRadius<0 || newOuterRadius<0)
   {
-    G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-           << "        Invalid radii !  Inner radius: "
-           << newInnerRadius/mm << " mm" << G4endl
-           << "                         Outer radius: "
-           << newOuterRadius/mm << " mm" << G4endl;
-    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
-                "Invalid radii.");
+    std::ostringstream message;
+    message << "Invalid radii - " << GetName() << G4endl
+            << "        Invalid radii !  Inner radius: "
+            << newInnerRadius/mm << " mm" << G4endl
+            << "                         Outer radius: "
+            << newOuterRadius/mm << " mm";
+    G4Exception("G4Hype::G4Hype()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
   if (newInnerRadius >= newOuterRadius)
   {
-    G4cerr << "ERROR - G4Hype::G4Hype(): " << GetName() << G4endl
-           << "        Invalid radii !  Inner radius: "
-           << newInnerRadius/mm << " mm" << G4endl
-           << "                         Outer radius: "
-           << newOuterRadius/mm << " mm" << G4endl;
-    G4Exception("G4Hype::G4Hype()", "InvalidSetup", FatalException,
-                "Error: outer > inner radius.");
+    std::ostringstream message;
+    message << "Outer > inner radius - " << GetName() << G4endl
+            << "        Invalid radii !  Inner radius: "
+            << newInnerRadius/mm << " mm" << G4endl
+            << "                         Outer radius: "
+            << newOuterRadius/mm << " mm";
+    G4Exception("G4Hype::G4Hype()", "GeomSolids0002",
+                FatalErrorInArgument, message);
   }
 
   innerRadius=newInnerRadius;
@@ -1400,6 +1403,7 @@ G4double G4Hype::GetSurfaceArea()
 //
 std::ostream& G4Hype::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1411,6 +1415,7 @@ std::ostream& G4Hype::StreamInfo(std::ostream& os) const
      << "    inner stereo angle : " << innerStereo/degree << " degrees \n"
      << "    outer stereo angle : " << outerStereo/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

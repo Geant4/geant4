@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALSteppingVerbose.cc,v 1.7 2006/06/29 16:03:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FCALSteppingVerbose.cc,v 1.7 2006-06-29 16:03:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------

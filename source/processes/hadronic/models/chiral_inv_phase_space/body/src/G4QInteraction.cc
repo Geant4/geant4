@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.cc,v 1.6 2009/08/28 14:49:10 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QInteraction.cc,v 1.6 2009-08-28 14:49:10 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------
 //      GEANT 4 class implementation file

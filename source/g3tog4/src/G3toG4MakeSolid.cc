@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4MakeSolid.cc,v 1.10 2006/06/29 18:13:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4MakeSolid.cc,v 1.10 2006-06-29 18:13:29 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 

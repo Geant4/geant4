@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2010/12/01 05:56:40 allison Exp $
+$Id: History,v 1.132 2010-12-01 05:56:40 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-11-11 2011 Ben Morgan (exampleN03-V09-04-05)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
+03-06-11 mma (exampleN03-V09-04-04)     
+PhysicsList migrated to new scheme G4PhysListHelper
+     
+30-05-11 mma (exampleN03-V09-04-03)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+10-05-11 mma (exampleN03-V09-04-02)
+- get pointers to UserAction classes via G4RunManager
+     
+10-02-11 mma (exampleN03-V09-04-01)
+- update SteppingVerbose
+     
+01-02-11 mma (exampleN03-V09-04-00)
+- /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
      
 01-12-10 John Allison (exampleN03-V09-03-05)
 - First attempt at rationalising visTutor:

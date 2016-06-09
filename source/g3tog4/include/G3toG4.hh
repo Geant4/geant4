@@ -24,23 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4.hh,v 1.9 2006/06/29 18:12:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3toG4.hh,v 1.9 2006-06-29 18:12:33 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 
 #ifndef G3TOG4_HH
 #define G3TOG4_HH 1
 
+#include "G3toG4Defs.hh"
 #include "globals.hh"
 
-extern char gSeparator; 
-
-extern G4int Ipar[1000];
-extern G4double Rpar[1000];
-extern G4String Spar[1000];
-
-//extern G4double min(G4double, G4double);
+extern G3G4DLL_API char gSeparator;
+extern G3G4DLL_API G4int Ipar[1000];
+extern G3G4DLL_API G4double Rpar[1000];
+extern G3G4DLL_API G4String Spar[1000];
 
 void G3fillParams(G4String *tokens, const char *ptypes);
 // G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.9 2006/06/29 17:47:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02ChamberParameterisation.cc,v 1.9 2006-06-29 17:47:58 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,9 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {
-       G4Exception("ExN02ChamberParameterisation construction: Width>Spacing");
+       G4Exception("ExN02ChamberParameterisation::ExN02ChamberParameterisation()",
+                   "InvalidSetup", FatalException,
+                   "Width>Spacing");
       }
    }
    

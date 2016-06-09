@@ -1,0 +1,109 @@
+                         The g4/tools license
+                         -----------------
+
+                            2011-Feb-9
+
+                    Copyright 2010, by Guy Barrand
+
+
+
+Introduction
+============
+
+  This license applies to all files found in this package which
+  do not fall under their own explicit license.
+
+  This license was inspired by the FreeType license, itself inspired
+  by th BSD, Artistic, and IJG (Independent JPEG  Group) licenses,
+  which all encourage inclusion and use of free software in commercial
+  and freeware products alike. As a consequence, its main points
+  are that :
+
+    o We don't promise that this software works. However, we will be
+      interested in any kind of bug reports. (`as is' distribution)
+
+    o You can use this software for whatever you want, in parts or
+      full form, without having to pay us. (`royalty-free' usage)
+
+    o You may not pretend that you wrote this software. If you use
+      it, or  only parts of it, in a program, you must acknowledge
+      somewhere in your documentation that you have used the g4/tools
+      code. (`credits')
+
+  We specifically permit and encourage the inclusion of this
+  software, with or without modifications, in commercial products.
+  We disclaim all warranties covering g4/tools and assume no liability
+  related to g4/tools.
+
+Legal Terms
+===========
+
+0. Definitions
+--------------
+
+  `You' refers to the licensee, or person using g4/tools, where `using'
+  is a generic term including compiling the project's source code as
+  well as linking it to form a 'program' or `executable'.
+
+  This license applies to all files distributed in the original g4/tools
+  archive, including all source code, binaries and documentation,
+  unless otherwise stated in a file in its original, unmodified form
+  as distributed in the original archive.
+
+  The g4/tools is copyright (C) 2010 by Guy Barrand. All rights reserved
+  except as specified below.
+
+1. No Warranty
+--------------
+
+  G4/TOOLS IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND, EITHER
+  EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT
+  WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  DAMAGES CAUSED BY THE USE OR THE INABILITY TO USE G4/TOOLS.
+
+2. Redistribution
+-----------------
+
+  This license grants a worldwide, royalty-free, perpetual and
+  irrevocable right and license to use, execute, perform, compile,
+  display, copy, create derivative works of, distribute and
+  sublicense g4/tools (in both source and object code forms) and
+  derivative works thereof for any purpose, and to authorize
+  others to exercise some or all of the rights granted herein,
+  subject to the following conditions:
+
+    o Redistribution of source code must retain this license file
+      (g4/tools.license) unaltered; any  additions, deletions or changes to
+      the original files must be clearly indicated in accompanying
+      documentation. The copyright notices of the unaltered, original
+      files must be preserved in all copies of source files.
+
+    o Redistribution in binary form must provide a disclaimer that
+      states that the software is based in part of the work of the
+      author, in the distribution documentation.
+
+  These conditions apply to any software derived from or based on
+  g4/tools, not just the unmodified files. If you use our work, you must
+  acknowledge us. However, no fee need be paid to us.
+
+3. Advertising
+--------------
+
+  Neither the author and contributors nor you shall use the name
+  of the other for commercial, advertising, or promotional purposes
+  without specific prior written permission.
+
+  As you have not signed this license, you are not required to
+  accept it. However, as the g4/tools is copyrighted material, only
+  this license, or another one contracted with the author, grants
+  you the right to use, distribute, and modify it. Therefore, by using,
+  distributing, or modifying g4/tools, you indicate that you understand
+  and accept all the terms of this license.
+
+4. Contacts
+-----------
+
+  Our home page can be found at
+
+    http://inexlib.lal.in2p3.fr

@@ -1,0 +1,11 @@
+#
+# Definition of the hadronic physics component of the physics list
+# The electromagnetic physics and decay are activated by default 
+# in the RemSimPhysicsList class
+#
+# Add components of hadronic physics
+/physics/addPhysics QElastic                            # Hadronic elastic model
+/physics/addPhysics binary                              # Hadronic inelastic model
+/physics/addPhysics binary_ion                          # Hadronic inelastic model for ions
+/physics/addPhysics radioactive_decay                   # Radioactive decay
+

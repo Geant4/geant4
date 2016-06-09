@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpSpNugDistData.cc,v 1.1 2007/05/30 01:00:12 dennis Exp $
+// $Id: G4SmpSpNugDistData.cc,v 1.1 2007-05-30 01:00:12 dennis Exp $
 //
 
 #include "G4fissionEvent.hh"

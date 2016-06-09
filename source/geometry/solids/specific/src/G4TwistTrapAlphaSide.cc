@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapAlphaSide.cc,v 1.9 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTrapAlphaSide.cc,v 1.9 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -472,7 +472,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
       else  // kDontValidate
       {
         G4Exception("G4TwistTrapAlphaSide::DistanceToSurface()",
-                    "NotImplemented kDontValidate", FatalException,
+                    "GeomSolids0001", FatalException,
                     "Feature NOT implemented !");
       }
     } 
@@ -619,7 +619,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
         else  // kDontValidate
         {
           G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-                      "NotImplemented kDontValidate", FatalException,
+                      "GeomSolids0001", FatalException,
                       "Feature NOT implemented !");
         }
       } 
@@ -918,7 +918,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector &xx, G4bool withTol)
    else
    {
       G4Exception("G4TwistTrapAlphaSide::GetAreaCode()",
-                  "NotImplemented", FatalException,
+                  "GeomSolids0001", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -988,7 +988,7 @@ void G4TwistTrapAlphaSide::SetCorners()
   else
   {
     G4Exception("G4TwistTrapAlphaSide::SetCorners()",
-                "NotImplemented", FatalException,
+                "GeomSolids0001", FatalException,
                 "Method NOT implemented !");
   }
 }
@@ -1033,7 +1033,7 @@ void G4TwistTrapAlphaSide::SetBoundaries()
   else
   {
     G4Exception("G4TwistTrapAlphaSide::SetCorners()",
-                "NotImplemented", FatalException,
+                "GeomSolids0001", FatalException,
                 "Feature NOT implemented !");
   }
 }

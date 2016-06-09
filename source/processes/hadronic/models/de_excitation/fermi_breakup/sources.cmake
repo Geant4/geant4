@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:59:42 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:59:42 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -19,8 +19,6 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
@@ -33,11 +31,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -52,14 +48,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4Be8FermiFragment.hh
         G4FermiBreakUp.hh
         G4FermiConfiguration.hh
-        G4FermiConfiguration.icc
         G4FermiConfigurationList.hh
         G4FermiFragmentsPool.hh
-        G4FermiIntegerPartition.hh
-        G4FermiIntegerPartition.icc
         G4FermiPhaseSpaceDecay.hh
-        G4FermiSplitter.hh
-        G4FermiSplitter.icc
         G4He5FermiFragment.hh
         G4Li5FermiFragment.hh
         G4StableFermiFragment.hh
@@ -73,9 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4FermiConfiguration.cc
         G4FermiConfigurationList.cc
         G4FermiFragmentsPool.cc
-        G4FermiIntegerPartition.cc
         G4FermiPhaseSpaceDecay.cc
-        G4FermiSplitter.cc
         G4He5FermiFragment.cc
         G4Li5FermiFragment.cc
         G4StableFermiFragment.cc
@@ -85,12 +74,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
-        G4emlowenergy
-        G4geometrymng
         G4globman
         G4had_mod_util
         G4hadronic_mgt
-        G4hadronic_proc
         G4hadronic_util
         G4hadronic_xsect
         G4hepnumerics
@@ -102,9 +88,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4procman
         G4shortlived
         G4track
-        G4volumes
     GLOBAL_DEPENDENCIES
-        G4geometry
         G4global
         G4materials
         G4particles

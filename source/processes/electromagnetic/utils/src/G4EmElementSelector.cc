@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.12 2010/04/27 16:59:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4EmElementSelector.cc,v 1.12 2010-04-27 16:59:52 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -72,7 +72,6 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
     v0->SetSpline(spline);
     for(G4int i=1; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
-      v->SetSpline(spline);
       xSections.push_back(v);
     }
   }
@@ -96,7 +95,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 				     G4double cut)
 {
   //G4cout << "G4EmElementSelector initialise for " << material->GetName() << G4endl;
-  if(0 == nElmMinusOne || cut == cutEnergy) return;
+  if(0 == nElmMinusOne || cut == cutEnergy) { return; }
 
   cutEnergy = cut;
   //G4cout << "cut(keV)= " << cut/keV << G4endl;
@@ -141,6 +140,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
+  //G4cout << "======== G4EmElementSelector for the " << model->GetName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

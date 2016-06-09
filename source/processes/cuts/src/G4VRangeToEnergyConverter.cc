@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.15 2009/09/14 07:27:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.16 2010-12-23 06:00:42 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -55,8 +55,9 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
   fMaxEnergyCut = 0.;
 }
 
-G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) : TotBin(right.TotBin)
+G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) :  theParticle(right.theParticle), theLossTable(0), TotBin(right.TotBin)
 {
+  fMaxEnergyCut = 0.;
   *this = right;
 }
 
@@ -70,7 +71,6 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
  }
 
   NumberOfElements = right.NumberOfElements;
-  //TotBin = right.TotBin;
   theParticle = right.theParticle;
   verboseLevel = right.verboseLevel;
   
@@ -100,6 +100,7 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     G4RangeVector* rangeVector = 0; 
     if (vector !=0 ) {
       rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin);
+      fMaxEnergyCut = MaxEnergyCut;   
       for (size_t i=0; i<size_t(TotBin); i++) {
 	G4double Value = (*vector)[i];
 	rangeVector->PutValue(i,Value);
@@ -210,9 +211,14 @@ void G4VRangeToEnergyConverter::SetEnergyRange(G4double lowedge,
 {
   // check LowestEnergy/ HighestEnergy 
   if ( (lowedge<0.0)||(highedge<=lowedge) ){
+#ifdef G4VERBOSE
     G4cerr << "Error in G4VRangeToEnergyConverter::SetEnergyRange";
     G4cerr << " :  illegal energy range" << "(" << lowedge/GeV;
     G4cerr << "," << highedge/GeV << ") [GeV]" << G4endl;
+#endif
+    G4Exception( "G4VRangeToEnergyConverter::SetEnergyRange()",
+		 "ProcCuts101",
+		 JustWarning, "Illegal energy range ");
   } else {
     LowestEnergy = lowedge;
     HighestEnergy = highedge;

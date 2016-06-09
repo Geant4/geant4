@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.16 2010/09/23 10:27:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TriangularFacet.cc,v 1.16 2010-09-23 10:27:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -58,6 +58,10 @@
 // 12 April 2010    P R Truscott, QinetiQ, bug fixes to treat optical
 //                  photon transport, in particular internal reflection
 //                  at surface.
+//
+// 22 August 2011   I Hrivnacova, Orsay, fix in Intersect() to take into
+//                  account geometrical tolerance and cases of zero distance
+//                  from surface.
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #include "G4TriangularFacet.hh"
@@ -104,17 +108,16 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
   if (Emag1 <= kCarTolerance || Emag2 <= kCarTolerance ||
       Emag3 <= kCarTolerance)
   {
-    G4Exception("G4TriangularFacet::G4TriangularFacet()", "InvalidSetup",
-                JustWarning, "Length of sides of facet are too small.");
-    G4cerr << G4endl;
-    G4cerr << "P0 = " << P0   << G4endl;
-    G4cerr << "P1 = " << P[0] << G4endl;
-    G4cerr << "P2 = " << P[1] << G4endl;
-    G4cerr << "Side lengths = P0->P1" << Emag1 << G4endl;    
-    G4cerr << "Side lengths = P0->P2" << Emag2 << G4endl;    
-    G4cerr << "Side lengths = P1->P2" << Emag3 << G4endl;    
-    G4cerr << G4endl;
-    
+    std::ostringstream message;
+    message << "Length of sides of facet are too small." << G4endl
+            << "P0 = " << P0   << G4endl
+            << "P1 = " << P[0] << G4endl
+            << "P2 = " << P[1] << G4endl
+            << "Side lengths = P0->P1" << Emag1 << G4endl
+            << "Side lengths = P0->P2" << Emag2 << G4endl
+            << "Side lengths = P1->P2" << Emag3;
+    G4Exception("G4TriangularFacet::G4TriangularFacet()",
+                "GeomSolids1001", JustWarning, message);
     isDefined     = false;
     geometryType  = "G4TriangularFacet";
     surfaceNormal = G4ThreeVector(0.0,0.0,0.0);
@@ -449,7 +452,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Distance (G4ThreeVector, G4double, G4double)
+// Distance (G4ThreeVector, G4double, G4bool)
 //
 // Determine the distance to point p.  kInfinity is returned if either:
 // (1) outgoing is TRUE and the dot product of the normal vector to the facet
@@ -483,7 +486,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
     G4double dist1   = std::sqrt(sqrDist);
     G4double dir     = v.dot(surfaceNormal);
     G4bool wrongSide = (dir > 0.0 && !outgoing) || (dir < 0.0 && outgoing);
-    if (dist1 <= kCarTolerance*0.5)
+    if (dist1 <= kCarTolerance)
     {
 //
 //
@@ -591,7 +594,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 // enough using a precise distance calculation.
 //
     G4ThreeVector u = Distance(p);
-    if (std::sqrt(sqrDist) <= 0.5*kCarTolerance)
+    if ( sqrDist <= kCarTolerance*kCarTolerance )
     {
 //
 //
@@ -658,7 +661,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
       G4double normDist1 = surfaceNormal.dot(s1*v) - distFromSurface;
 
       if ((normDist0 < 0.0 && normDist1 < 0.0) ||
-          (normDist0 > 0.0 && normDist1 > 0.0))
+          (normDist0 > 0.0 && normDist1 > 0.0) ||
+          (normDist0 == 0.0 && normDist1 == 0.0) ) 
       {
         distance        = kInfinity;
         distFromSurface = kInfinity;
@@ -736,7 +740,15 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   G4double s       = b*e - c*d;
   G4double t       = b*d - a*e;
 
-  if (s < 0.0 || t < 0.0 || s+t > det)
+  G4double sTolerance = (std::fabs(b)+ std::fabs(c) + std::fabs(d)
+                       + std::fabs(e)) *kCarTolerance;
+  G4double tTolerance = (std::fabs(a)+ std::fabs(b) + std::fabs(d)
+                       + std::fabs(e)) *kCarTolerance;
+  G4double detTolerance = (std::fabs(a)+ std::fabs(c)
+                       + 2*std::fabs(b) ) *kCarTolerance;
+
+  //if (s < 0.0 || t < 0.0 || s+t > det)
+  if (s < -sTolerance || t < -tTolerance || ( s+t - det ) > detTolerance)
   {
 //
 //
@@ -767,8 +779,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double alpha = CLHEP::RandFlat::shoot(0.,1.);
-  G4double beta = CLHEP::RandFlat::shoot(0.,1);
+  G4double alpha = G4RandFlat::shoot(0.,1.);
+  G4double beta = G4RandFlat::shoot(0.,1);
   G4double lambda1=alpha*beta;
   G4double lambda0=alpha-lambda1;
   

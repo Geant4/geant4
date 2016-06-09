@@ -72,13 +72,13 @@ class  CexmcHadronicProcess : public G4HadronicProcess
         G4bool  IsApplicable( const G4ParticleDefinition &  particle );
 
     public:
-        void  RegisterProductionModel( CexmcProductionModel *  model );
+        void    RegisterProductionModel( CexmcProductionModel *  model );
 
     private:
-        void  CalculateTargetNucleus( const G4Material *  material );
+        void    CalculateTargetNucleus( const G4Material *  material );
 
-        void  FillTotalResult( G4HadFinalState *  hadFinalState,
-                               const G4Track &  track );
+        void    FillTotalResult( G4HadFinalState *  hadFinalState,
+                                 const G4Track &  track );
 
     private:
         CexmcProductionModel *   productionModel;

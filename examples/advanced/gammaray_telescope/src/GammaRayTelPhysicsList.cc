@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.8 2009/11/18 15:59:05 flongo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: GammaRayTelPhysicsList.cc,v 1.9 2010-11-12 08:28:54 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -110,7 +110,7 @@ GammaRayTelPhysicsList::GammaRayTelPhysicsList():  G4VModularPhysicsList()
 GammaRayTelPhysicsList::~GammaRayTelPhysicsList()
 {
   delete pMessenger;
-  delete emPhysicsList;
+  //  delete emPhysicsList;
 }
 
 #include "G4Region.hh"

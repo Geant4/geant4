@@ -23,54 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEAntiProtonInelastic.hh,v 1.11 2007/02/24 05:07:32 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LEAntiProtonInelastic.hh,v 1.11 2007-02-24 05:07:32 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: Low Energy AntiProton Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Feb-1997
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy AntiProton Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Feb-1997
+//
  
 #ifndef G4LEAntiProtonInelastic_h
 #define G4LEAntiProtonInelastic_h 1
  
 // Class Description
-// Final state production model for AntiProton inelastic scattering below 20 GeV; 
-// To be used in your physics list in case you need this physics.
+// Final state production model for AntiProton inelastic scattering below
+// 20 GeV;  To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with 
 // the corresponding process.
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
- 
- class G4LEAntiProtonInelastic : public G4InelasticInteraction
- {
- public:
+
+
+class G4LEAntiProtonInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LEAntiProtonInelastic():G4InelasticInteraction("G4LEAntiProtonInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
-    }
+    G4LEAntiProtonInelastic(const G4String& name = "G4LEAntiProtonInelastic");
     
-    ~G4LEAntiProtonInelastic() { }
+    ~G4LEAntiProtonInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    virtual void ModelDescription(std::ostream& outFile) const;
+
+  private:
     
- private:
-    
-    void
-     Cascade(                               // derived from CASPB
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
-    
- };
- 
+    void Cascade(                          // derived from CASPB
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
+};
+
 #endif
- 

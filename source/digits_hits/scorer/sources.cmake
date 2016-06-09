@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 18:38:59 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 18:38:59 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -44,6 +44,7 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSCellCharge3D.hh
         G4PSCellFlux.hh
         G4PSCellFlux3D.hh
+        G4PSCellFluxForCylinder3D.hh
         G4PSCylinderSurfaceCurrent.hh
         G4PSCylinderSurfaceCurrent3D.hh
         G4PSCylinderSurfaceFlux.hh
@@ -51,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSDirectionFlag.hh
         G4PSDoseDeposit.hh
         G4PSDoseDeposit3D.hh
+        G4PSDoseDepositForCylinder3D.hh
         G4PSEnergyDeposit.hh
         G4PSEnergyDeposit3D.hh
         G4PSFlatSurfaceCurrent.hh
@@ -69,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSPassageCellCurrent3D.hh
         G4PSPassageCellFlux.hh
         G4PSPassageCellFlux3D.hh
+        G4PSPassageCellFluxForCylinder3D.hh
         G4PSPassageTrackLength.hh
         G4PSPassageTrackLength3D.hh
         G4PSPopulation.hh
@@ -77,6 +80,8 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSSphereSurfaceCurrent3D.hh
         G4PSSphereSurfaceFlux.hh
         G4PSSphereSurfaceFlux3D.hh
+        G4PSStepChecker.hh
+        G4PSStepChecker3D.hh
         G4PSTermination.hh
         G4PSTermination3D.hh
         G4PSTrackCounter.hh
@@ -93,12 +98,14 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSCellCharge3D.cc
         G4PSCellFlux.cc
         G4PSCellFlux3D.cc
+        G4PSCellFluxForCylinder3D.cc
         G4PSCylinderSurfaceCurrent.cc
         G4PSCylinderSurfaceCurrent3D.cc
         G4PSCylinderSurfaceFlux.cc
         G4PSCylinderSurfaceFlux3D.cc
         G4PSDoseDeposit.cc
         G4PSDoseDeposit3D.cc
+        G4PSDoseDepositForCylinder3D.cc
         G4PSEnergyDeposit.cc
         G4PSEnergyDeposit3D.cc
         G4PSFlatSurfaceCurrent.cc
@@ -117,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSPassageCellCurrent3D.cc
         G4PSPassageCellFlux.cc
         G4PSPassageCellFlux3D.cc
+        G4PSPassageCellFluxForCylinder3D.cc
         G4PSPassageTrackLength.cc
         G4PSPassageTrackLength3D.cc
         G4PSPopulation.cc
@@ -125,6 +133,8 @@ GEANT4_DEFINE_MODULE(NAME G4detscorer
         G4PSSphereSurfaceCurrent3D.cc
         G4PSSphereSurfaceFlux.cc
         G4PSSphereSurfaceFlux3D.cc
+        G4PSStepChecker.cc
+        G4PSStepChecker3D.cc
         G4PSTermination.cc
         G4PSTermination3D.cc
         G4PSTrackCounter.cc

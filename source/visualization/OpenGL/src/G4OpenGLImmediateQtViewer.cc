@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.22 2010/06/23 13:29:23 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.22 2010-06-23 13:29:23 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -47,11 +47,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   G4OpenGLImmediateViewer (sceneHandler)
 {
 
-#if QT_VERSION < 0x040000
-  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
-#else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
-#endif
   fHasToRepaint = false;
   fIsRepainting = false;
 
@@ -77,16 +73,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
   InitializeGLView ();
 
-
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-  //   glDrawBuffer (GL_FRONT); // FIXME : Ne marche pas avec cette ligne, mais affiche le run correctement...
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
+  //  glDrawBuffer (GL_FRONT); // FIXME : Ne marche pas avec cette ligne, mais affiche le run correctement...
 
   if (fSceneHandler.GetScene() == 0) {
     fHasToRepaint =false;
@@ -170,11 +159,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
 
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !fHasToRepaint) {
-#if QT_VERSION < 0x040000
-    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
-      return;
-    }
-#else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
     int sw = 0;
@@ -194,7 +178,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
         return;
       }
     }
-#endif
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
@@ -280,10 +263,6 @@ void G4OpenGLImmediateQtViewer::ShowView (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   fHasToRepaint = true;
-#if QT_VERSION < 0x040000
-  setActiveWindow();
-#else
   activateWindow();
-#endif
 }
 #endif

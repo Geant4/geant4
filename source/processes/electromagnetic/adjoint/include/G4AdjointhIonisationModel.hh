@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhIonisationModel.hh,v 1.2 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointhIonisationModel.hh,v 1.2 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointhIonisationModel
@@ -118,16 +118,13 @@ private: //Methods
   G4double ratio, ratio2; 
   G4double one_plus_ratio_2;
   G4double formfact;
-  G4double twoln10;
-  G4double bg2lim;
-  G4double taulim;
-  G4double corrFactor;
   G4bool   isIon;
   G4double one_minus_ratio_2;
   
   
+
   G4VEmModel* theBraggDirectEMModel;	
-  G4double term_Cross1, term_Cross2;			    
+  //G4double term_Cross1, term_Cross2;
 
 
 

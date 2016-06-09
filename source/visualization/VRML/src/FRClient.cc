@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: FRClient.cc,v 1.8 2010/11/11 00:14:50 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: FRClient.cc,v 1.8 2010-11-11 00:14:50 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // FRClient.cc
 // FukuiRenderer Client

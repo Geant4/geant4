@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.cc,v 1.5 2009/01/19 16:53:42 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLBitMapStore.cc,v 1.5 2009-01-19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  6th January 2007

@@ -29,12 +29,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticlePropertyReporter.cc,v 1.2 2006/06/29 19:28:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VParticlePropertyReporter.cc,v 1.2 2006-06-29 19:28:06 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4VParticlePropertyReporter.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 
 ////////////////////////////
 G4VParticlePropertyReporter::G4VParticlePropertyReporter()

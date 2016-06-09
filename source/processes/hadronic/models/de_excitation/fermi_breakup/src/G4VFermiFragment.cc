@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiFragment.cc,v 1.6 2010/10/29 17:35:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VFermiFragment.cc,v 1.6 2010-10-29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -33,27 +33,17 @@
 #include "G4NucleiProperties.hh"
 
 G4VFermiFragment::G4VFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE):
-    A(anA),
-    Z(aZ),
-    Polarization(Pol),
-    ExcitEnergy(ExE)
+  isStable(true),
+  A(anA),
+  Z(aZ),
+  Polarization(Pol),
+  ExcitEnergy(ExE)
 {
   fragmentMass = 0.0;
   if(A > 0) { fragmentMass = G4NucleiProperties::GetNuclearMass(A, Z); }
 }
 
-G4VFermiFragment::G4VFermiFragment():
-    A(0),
-    Z(0),
-    Polarization(0),
-    ExcitEnergy(0.0)
-{
-  fragmentMass = 0.0;
-}
-
 G4VFermiFragment::~G4VFermiFragment()
 {}
-
-
 
 

@@ -38,6 +38,57 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 
+G4NeutronHPFissionData::G4NeutronHPFissionData()
+:G4VCrossSectionDataSet("NeutronHPFissionXS")
+{
+   SetMinKinEnergy( 0*MeV );                                   
+   SetMaxKinEnergy( 20*MeV );                                   
+
+   ke_cache = 0.0;
+   xs_cache = 0.0;
+   element_cache = NULL;
+   material_cache = NULL;
+
+   theCrossSections = 0;
+   BuildPhysicsTable(*G4Neutron::Neutron());
+}
+   
+G4NeutronHPFissionData::~G4NeutronHPFissionData()
+{
+   if ( theCrossSections != NULL ) theCrossSections->clearAndDestroy();
+   delete theCrossSections;
+}
+
+G4bool G4NeutronHPFissionData::IsIsoApplicable( const G4DynamicParticle* dp , 
+                                                G4int /*Z*/ , G4int /*A*/ ,
+                                                const G4Element* /*elm*/ ,
+                                                const G4Material* /*mat*/ )
+{
+   G4double eKin = dp->GetKineticEnergy();
+   if ( eKin > GetMaxKinEnergy() 
+     || eKin < GetMinKinEnergy() 
+     || dp->GetDefinition() != G4Neutron::Neutron() ) return false;                                   
+
+   return true;
+}
+
+G4double G4NeutronHPFissionData::GetIsoCrossSection( const G4DynamicParticle* dp ,
+                                   G4int /*Z*/ , G4int /*A*/ ,
+                                   const G4Isotope* /*iso*/  ,
+                                   const G4Element* element ,
+                                   const G4Material* material )
+{
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
+   G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
+   return xs;
+}
+
+/*
 G4bool G4NeutronHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
 {
   G4bool result = true;
@@ -45,24 +96,8 @@ G4bool G4NeutronHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G4
   if(eKin>20*MeV||aP->GetDefinition()!=G4Neutron::Neutron()) result = false;
   return result;
 }
+*/
 
-G4NeutronHPFissionData::G4NeutronHPFissionData()
-{
-  theCrossSections = 0;
-  BuildPhysicsTable(*G4Neutron::Neutron());
-}
-   
-G4NeutronHPFissionData::~G4NeutronHPFissionData()
-{
-
-// TKDB
-   if ( theCrossSections != NULL )
-   {
-      theCrossSections->clearAndDestroy();
-      delete theCrossSections;
-   }
-}
-   
 void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 

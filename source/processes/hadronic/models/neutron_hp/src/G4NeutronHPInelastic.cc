@@ -32,8 +32,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.24 2008/12/03 22:28:48 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPInelastic.cc,v 1.24 2008-12-03 22:28:48 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard (and T. Koi)
 // 081203 limit maximum trial for creating final states add protection for 1H isotope case by T. Koi
@@ -50,7 +50,7 @@
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     dirName = getenv("G4NEUTRONHPDATA");
-    G4String tString = "/Inelastic/";
+    G4String tString = "/Inelastic";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
     theInelastic = new G4NeutronHPChannelList[numEle];

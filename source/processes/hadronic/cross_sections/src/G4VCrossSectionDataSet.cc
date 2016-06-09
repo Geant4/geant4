@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.11 2010/11/19 08:15:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VCrossSectionDataSet.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -37,14 +37,22 @@
 //
 // Modifications:
 // 23.01.2009 V.Ivanchenko move constructor and destructor to source
+// 12.08.2011 G.Folger, V.Ivanchenko, T.Koi, D.Wright redesign the class
 //
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
-#include "G4Pow.hh"
+#include "G4DynamicParticle.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4Isotope.hh"
+#include "G4NistManager.hh"
+#include "G4HadronicException.hh"
+#include "G4HadTmpUtil.hh"
+
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
-  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(DBL_MAX),name(nam) 
+  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),name(nam) 
 {
   G4CrossSectionDataSetRegistry::Instance()->Register(this);
 }
@@ -54,63 +62,117 @@ G4VCrossSectionDataSet::~G4VCrossSectionDataSet()
   G4CrossSectionDataSetRegistry::Instance()->DeRegister(this);
 }
 
-// Override these methods to test for particle and isotope applicability
 G4bool 
-G4VCrossSectionDataSet::IsZAApplicable(const G4DynamicParticle*,
-                                       G4double /*ZZ*/, G4double /*AA*/)
-{ //obsolete method, should not be used
-  static G4bool onceOnly(true);
-  if ( onceOnly )
-  {
-      G4cerr << 
-      "Warning: G4VCrossSectionDataSet::IsZAApplicable() is obsolete, invoked by " 
-      <<  GetName() << G4endl;
-      onceOnly=false;
-  }
-  return true;
+G4VCrossSectionDataSet::IsElementApplicable(const G4DynamicParticle*, 
+					    G4int,
+					    const G4Material*)
+{
+  return false;
 }
 
 G4bool 
-G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle* aPart,
-					G4int Z, G4int A)
+G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle*, 
+                                        G4int, G4int,
+                                        const G4Element*,  
+                                        const G4Material*)
 {
-//  return true;
-    return IsZAApplicable(aPart, Z, A);
+  return false;
 }
 
 G4double 
-G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* aParticle,
-                                           const G4Isotope* anIsotope,
-                                           G4double aTemperature)
+G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part, 
+					    const G4Element* elm,
+					    const G4Material* mat)
 {
-  G4int ZZ = anIsotope->GetZ();
-  G4int AA = anIsotope->GetN();
-  return GetZandACrossSection(aParticle, ZZ, AA, aTemperature);
-}
+  G4int Z = G4lrint(elm->GetZ());
 
-// Override this method to get real isotopic cross sections
-
-G4double 
-G4VCrossSectionDataSet::GetIsoZACrossSection(const G4DynamicParticle*,
-                                             G4double /*ZZ*/, G4double AA,
-                                             G4double /*aTemperature*/)
-{ //obsolete method, should not be used
-  static G4bool onceOnly(true);
-  if ( onceOnly )
-  {
-      G4cerr << 
-      "Warning: G4VCrossSectionDataSet::GetIsoZACrossSection() is obsolete, invoked by " 
-      <<  GetName() << G4endl;
-      onceOnly=false;
+  if (IsElementApplicable(part, Z, mat)) { 
+    return GetElementCrossSection(part, Z, mat);
   }
-  return 62*G4Pow::GetInstance()->A23(AA)*millibarn;
+
+  // isotope-wise cross section making sum over available
+  // isotope cross sections, which may be incomplete, so
+  // the result is corrected 
+  G4int nIso = elm->GetNumberOfIsotopes();    
+  G4double fact = 0.0;
+  G4double xsec = 0.0;
+  G4Isotope* iso = 0;
+
+  if (0 < nIso) { 
+
+    // user-defined isotope abundances        
+    G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+    G4double* abundVector = elm->GetRelativeAbundanceVector();
+
+    for (G4int j = 0; j<nIso; ++j) {
+      iso = (*isoVector)[j];
+      G4int A = iso->GetN();
+      if(abundVector[j] > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
+        fact += abundVector[j];
+	xsec += abundVector[j]*GetIsoCrossSection(part, Z, A, iso, elm, mat);
+      }
+    }
+
+  } else {
+
+    // natural isotope abundances
+    G4NistManager* nist = G4NistManager::Instance();
+    G4int n0 = nist->GetNistFirstIsotopeN(Z);
+    G4int nn = nist->GetNumberOfNistIsotopes(Z);
+    for (G4int A = n0; A < n0+nn; ++A) {
+      G4double abund = nist->GetIsotopeAbundance(Z, A);
+      if(abund > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
+        fact += abund;
+	xsec += abund*GetIsoCrossSection(part, Z, A, iso, elm, mat);
+      }
+    }
+  }
+  if(fact > 0.0) { xsec /= fact; }
+  return xsec;
 }
 
 G4double 
-G4VCrossSectionDataSet::GetZandACrossSection(const G4DynamicParticle* aPart,
-                                             G4int Z, G4int N,
-                                             G4double aTemperature)
+G4VCrossSectionDataSet::GetElementCrossSection(const G4DynamicParticle* dynPart,
+					       G4int Z,
+					       const G4Material* mat)
 {
-//GF  return 62*G4Pow::GetInstance()->Z23(N)*millibarn;
-  return GetIsoZACrossSection(aPart, G4double(Z), G4double(N), aTemperature);
+  G4cout << "G4VCrossSectionDataSet::GetCrossSection per element ERROR: "
+	 << " there is no cross section for "
+	 << dynPart->GetDefinition()->GetParticleName()
+	 << "  E(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
+  if(mat) { G4cout << "  inside " << mat->GetName(); }
+  G4cout << " for Z= " << Z << G4endl;
+  throw G4HadronicException(__FILE__, __LINE__,
+        "G4VCrossSectionDataSet::GetElementCrossSection is absent");
+  return 0.0;
+}
+
+G4double 
+G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* dynPart,
+					   G4int Z, G4int A,
+					   const G4Isotope*,
+					   const G4Element* elm,
+					   const G4Material* mat)
+{
+  G4cout << "G4VCrossSectionDataSet::GetCrossSection per isotope ERROR: "
+	 << " there is no cross section for "
+	 << dynPart->GetDefinition()->GetParticleName()
+	 << "  E(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
+  if(mat) { G4cout << "  inside " << mat->GetName(); }
+  if(elm) { G4cout << " for " << elm->GetName(); }
+  G4cout << "  Z= " << Z << " A= " << A << G4endl;
+  throw G4HadronicException(__FILE__, __LINE__,
+        "G4VCrossSectionDataSet::GetIsoCrossSection is absent");
+  return 0.0;
+}
+
+void G4VCrossSectionDataSet::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4VCrossSectionDataSet::DumpPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4VCrossSectionDataSet::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this cross section data set has not been written yet.\n";
 }

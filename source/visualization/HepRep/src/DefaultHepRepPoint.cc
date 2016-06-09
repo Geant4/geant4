@@ -11,7 +11,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepPoint.cc,v 1.5 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepPoint.cc,v 1.5 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.17 2007/11/09 15:39:20 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Transportation.hh,v 1.17 2007-11-09 15:39:20 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -122,6 +122,9 @@ class G4Transportation : public G4VProcess
      inline void EnableShortStepOptimisation(G4bool optimise=true); 
      // Whether short steps < safety will avoid to call Navigator (if field=0)
 
+     inline G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
+     // Whether to deflect particles with force due to magnetic moment
+
   public:  // without description
 
      G4double AtRestGetPhysicalInteractionLength(
@@ -204,6 +207,9 @@ class G4Transportation : public G4VProcess
   // Whether to avoid calling G4Navigator for short step ( < safety)
   //   If using it, the safety estimate for endpoint will likely be smaller.
      G4bool   fShortStepOptimisation; 
+
+  // Whether to track state change from magnetic moment in a B-field
+     G4bool   fUseMagneticMoment; 
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 

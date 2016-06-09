@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2010/07/02 11:02:40 gcosmo Exp $
+$Id: History,v 1.20 2010-07-02 11:02:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 21st, 2011 Alex Howard (procbiasing-V09-04-01)
+- G4ProcessPlacer: Migrated to new G4Exception
+
+May 30th, 2011 Alex Howard (procbiasing-V09-04-00)
+- G4ProcessPlacer: Using SetProcessOrderingToSecond for biasing process, and 
+leaving transportation where it is (hopefully first). Previously biasing was 
+moved first, then transportation moved back to first.
 
 June 2nd, 2010 Gabriele Cosmo (procbiasing-V09-03-00)
 - G4WeightWindowProcess: corrected call to G4WeightWindowStore::GetLowerWeight()

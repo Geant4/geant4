@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DimensionedType.hh,v 1.3 2006/12/13 15:44:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DimensionedType.hh,v 1.3 2006-12-13 15:44:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic dimensioned type.
 //

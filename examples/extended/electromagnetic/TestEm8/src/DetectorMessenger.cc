@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.2 2010/10/27 14:52:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: DetectorMessenger.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //

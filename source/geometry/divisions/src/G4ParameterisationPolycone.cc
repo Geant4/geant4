@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.17 2009/05/18 19:30:29 ivana Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ParameterisationPolycone.cc,v 1.17 2009-05-18 19:30:29 ivana Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
 //
@@ -52,11 +52,11 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
   G4Polycone* msol = (G4Polycone*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
-    G4String message =
-        "Sorry, generic construct for G4Polycone NOT supported.\n Solid: "
-      + msol->GetName();
+    std::ostringstream message;
+    message << "Generic construct for G4Polycone NOT supported." << G4endl
+            << "Sorry! Solid: " << msol->GetName() << ".";
     G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
-                "NotSupported", FatalException, message);
+                "GeomDiv0001", FatalException, message);
   }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
@@ -144,25 +144,24 @@ void G4ParameterisationPolyconeRho::CheckParametersValidity()
 
   if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyconeRho::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along R will be done with a width "
-           << "different for each solid section." << G4endl
-           << "          WIDTH will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << "Division along R will be done with a width "
+            << "different for each solid section." << G4endl
+            << "WIDTH will not be used !";
+    G4Exception("G4VParameterisationPolycone::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
   if( foffset != 0. )
   {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyconeRho::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along  R will be done with a width "
-           << "different for each solid section." << G4endl
-           << "          OFFSET will not be used !" << G4endl;
+    std::ostringstream message;
+    message << "In solid " << msol->GetName() << G4endl
+            << "Division along  R will be done with a width "
+            << "different for each solid section." << G4endl
+            << "OFFSET will not be used !";
+    G4Exception("G4VParameterisationPolycone::CheckParametersValidity()",
+                "GeomDiv1001", JustWarning, message);
   }
-
 }
 
 //------------------------------------------------------------------------
@@ -443,18 +442,15 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
   // Division will be following the mother polycone segments
   if( fDivisionType == DivNDIV ) {
     if( fnDiv > fOrigParamMother->Num_z_planes-1 ) { 
-      G4cerr << "ERROR - "
-             << "G4ParameterisationPolyconeZ::CheckParametersValidity()"
+      std::ostringstream error;
+      error  << "Configuration not supported." << G4endl
+             << "Division along Z will be done by splitting in the defined"
              << G4endl
-             << "        Division along Z will be done splitting in the defined"
-             << G4endl
-             << "        z_planes, i.e, the number of division would be :"
-             << "        " << fOrigParamMother->Num_z_planes-1
-             << " instead of " << fnDiv << " !"
-             << G4endl; 
+             << "Z planes, i.e, the number of division would be: "
+             << fOrigParamMother->Num_z_planes-1
+             << ", instead of: " << fnDiv << " !"; 
       G4Exception("G4ParameterisationPolyconeZ::CheckParametersValidity()",
-                "IllegalConstruct", FatalException,
-                "Not supported configuration.");
+                  "GeomDiv0001", FatalException, error);
     }
   }  
      
@@ -514,17 +510,13 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
       
   
     if ( isegstart != isegend ) {
-      G4cerr << "WARNING - "
-             << "G4ParameterisationPolyconeZ::CheckParametersValidity()"
-             << G4endl
-             << "          Division with user defined width." << G4endl
-             << "          Solid " << fmotherSolid->GetName() << G4endl
-             << "          Divided region is not between two z planes." 
-             << G4endl;
- 
+      std::ostringstream message;
+      message << "Condiguration not supported." << G4endl
+              << "Division with user defined width." << G4endl
+              << "Solid " << fmotherSolid->GetName() << G4endl
+              << "Divided region is not between two z planes.";
       G4Exception("G4ParameterisationPolyconeZ::CheckParametersValidity()",
-                  "IllegalConstruct", FatalException,
-                  "Not supported configuration.");
+                  "GeomDiv0001", FatalException, message);
     }
   
     fNSegment = isegstart;

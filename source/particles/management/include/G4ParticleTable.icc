@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.icc,v 1.11 2007/09/14 07:04:09 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleTable.icc,v 1.11 2007-09-14 07:04:09 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -81,18 +81,6 @@ inline
 }
 
 inline 
- G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
-{
-  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
-  if (it != fDictionary->end()) {
-    return (*it).second;
-  }else {
-    return 0;
-  }
-}
-
-
-inline 
  G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
 {
   return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
@@ -123,17 +111,6 @@ inline
  G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
 {
  return contains(GetKey(particle));
-}
-
-inline 
- const G4String& G4ParticleTable::GetParticleName(G4int index)
-{
-  G4ParticleDefinition* aParticle =GetParticle(index);
-  if (aParticle != 0) {
-    return aParticle->GetParticleName();
-  } else {
-    return noName;
-  }
 }
 
 inline 

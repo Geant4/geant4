@@ -62,7 +62,9 @@
 
 //G4SPSRandomGenerator* G4SPSRandomGenerator::instance = 0;
 
-G4SPSRandomGenerator::G4SPSRandomGenerator() {
+G4SPSRandomGenerator::G4SPSRandomGenerator()
+  : alpha(0.)
+{
 	// Initialise all variables
 
 	// Bias variables

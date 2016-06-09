@@ -11,8 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010/11/29 17:04:04 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: sources.cmake,v 1.4 2010-11-29 17:04:04 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ set(G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES )
 
 
 #
-# Tcsh only on UNIX style systems
+# Tcsh only on UNIX style systems, but always built here
 #
 if(UNIX)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UItcsh.hh)
@@ -58,11 +58,16 @@ endif()
 
 
 #
-# Win32 terminal only on Win32 and if selected.
+# Win32 terminal only for MSVC builds, but always built here
 #
-if(WIN32 AND GEANT4_USE_WIN32TERMINAL)
+if(MSVC)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIWin32.hh)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIWin32.cc)
+
+    GEANT4_ADD_COMPILE_DEFINITIONS(
+        SOURCES G4UIWin32.cc
+        COMPILE_DEFINITIONS G4UI_BUILD_WIN32_SESSION;G4INTY_BUILD_WIN32
+    )
 endif()
 
 
@@ -101,21 +106,27 @@ endif()
 
 
 #
-# Xm and Xaw only on UNIX and if selected
+# Xm and only on UNIX and if selected
 #
 if(UNIX)
     if(GEANT4_USE_XM)
         list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIXm.hh)
         list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIXm.cc)
 
-        # Any other includes, libraries here
-    endif()
+        # Need the X11 and XM headers
+        include_directories(${X11_INCLUDE_DIR})
+        include_directories(${MOTIF_INCLUDE_DIR})
 
-    if(GEANT4_USE_XAW)
-        list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIXaw.hh)
-        list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIXaw.cc)
+        # Add the compile definitions - also need INTY versions
+        GEANT4_ADD_COMPILE_DEFINITIONS(
+            SOURCES G4UIXm.cc
+            COMPILE_DEFINITIONS G4UI_BUILD_XM_SESSION;G4INTY_BUILD_XT
+        )
 
-        # Any other includes, libraries here
+        # Need the X11 and Motif libraries
+        list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES
+            "${MOTIF_LIBRARIES};${X11_LIBRARIES}"
+        )
     endif()
 endif()
 

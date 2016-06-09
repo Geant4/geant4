@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeDataSet.cc,v 1.2 2010/11/19 17:16:20 pia Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CompositeDataSet.cc,v 1.2 2010-11-19 17:16:20 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -56,7 +56,10 @@ G4CompositeDataSet::G4CompositeDataSet(G4IInterpolator* algo,
   maxZ(zMax)
 {
   if (algorithm == 0) 
-    G4Exception("G4CompositeDataSet::G4CompositeDataSet - interpolation == 0");
+    G4Exception("G4CompositeDataSet::G4CompositeDataSet",
+		"pii00000001",
+                FatalException,
+		"Interpolation == 0");
 }
 
 
@@ -77,7 +80,10 @@ G4double G4CompositeDataSet::FindValue(G4double energy, G4int componentId) const
   std::ostringstream message;
   message << "G4CompositeDataSet::FindValue - component " << componentId << " not found";
  
-  G4Exception(message.str().c_str());
+   G4Exception("G4CompositeDataSet::FindValue",
+	      "pii00000010",
+	      FatalException,
+	      message.str().c_str());
  
   return 0.;
 }
@@ -112,7 +118,11 @@ void G4CompositeDataSet::SetEnergiesData(G4DataVector* energies, G4DataVector* d
   std::ostringstream message;
   message << "G4CompositeDataSet::SetEnergiesData - component " << componentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CompositeDataSet::SetEnergiesData",
+	      "pii00000020",
+	      FatalException,
+	      message.str().c_str());
+
 }
 
 G4bool G4CompositeDataSet::LoadData(const G4String& argFileName)
@@ -144,7 +154,10 @@ G4bool G4CompositeDataSet::SaveData(const G4String& argFileName) const
 	{
 	  std::ostringstream message;
 	  message << "G4CompositeDataSet::SaveData - component " << (z-minZ) << " not found";
-	  G4Exception(message.str().c_str());
+	  G4Exception("G4CompositeDataSet::SaveData",
+		      "pii00000030",
+		      FatalException,
+		      message.str().c_str());
 	}
 
       if (!component->SaveData(argFileName))

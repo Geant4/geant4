@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.49 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Trap.cc,v 1.49 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
 //
@@ -94,14 +94,14 @@ G4Trap::G4Trap( const G4String& pName,
   if ( pDz <= 0 || pDy1 <= 0 || pDx1 <= 0 ||
        pDx2 <= 0 || pDy2 <= 0 || pDx3 <= 0 || pDx4 <= 0 )
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl
-           << "          X - "
-           << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
-           << "          Y - " << pDy1 << ", " << pDy2 << G4endl
-           << "          Z - " << pDz << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Invalid length G4Trap parameters.");
+    std::ostringstream message;
+    message << "Invalid length parameters for Solid: " << GetName() << G4endl
+            << "        X - "
+            << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
+            << "          Y - " << pDy1 << ", " << pDy2 << G4endl
+            << "          Z - " << pDz;
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   fDz=pDz;
@@ -149,9 +149,10 @@ G4Trap::G4Trap( const G4String& pName,
         && std::fabs( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() + 
            pt[2].x() + pt[3].x() + pt[6].x() + pt[7].x() ) < kCarTolerance ) )
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                  "Invalid vertice coordinates.");
+    std::ostringstream message;
+    message << "Invalid vertice coordinates for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
     
   // Bottom side with normal approx. -Y
@@ -161,7 +162,7 @@ G4Trap::G4Trap( const G4String& pName,
   if (!good)
   {
     DumpInfo();
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002", FatalException,
                 "Face at ~-Y not planar.");
   }
 
@@ -171,9 +172,10 @@ G4Trap::G4Trap( const G4String& pName,
 
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~+Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Front side with normal approx. -X
@@ -182,9 +184,10 @@ G4Trap::G4Trap( const G4String& pName,
 
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-X not planar.");
+    std::ostringstream message;
+    message << "Face at ~-X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Back side iwth normal approx. +X
@@ -192,9 +195,10 @@ G4Trap::G4Trap( const G4String& pName,
   good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+X not planar.");
+    std::ostringstream message;
+    message << "Face at ~+X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
   fDz = (pt[7]).z() ;
       
@@ -226,9 +230,10 @@ G4Trap::G4Trap( const G4String& pName,
 
   if ( pZ<=0 || pY<=0 || pX<=0 || pLTX<=0 || pLTX>pX )
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Invalid length G4Trap parameters.");
+    std::ostringstream message;
+    message << "Invalid length parameters for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   fDz = 0.5*pZ ;
@@ -269,9 +274,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~-Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Top side with normal approx. +Y
@@ -279,9 +285,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~+Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Front side with normal approx. -X
@@ -289,9 +296,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-X not planar.");
+    std::ostringstream message;
+    message << "Face at ~-X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Back side iwth normal approx. +X
@@ -299,9 +307,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+X not planar.");
+    std::ostringstream message;
+    message << "Face at ~+X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 }
 
@@ -319,9 +328,10 @@ G4Trap::G4Trap( const G4String& pName,
 
   if ( pDz<=0 || pDy1<=0 || pDx1<=0 || pDx2<=0 || pDy2<=0 )
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Invalid length G4Trap parameters.");
+    std::ostringstream message;
+    message << "Invalid length parameters for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   fDz = pDz;
@@ -362,9 +372,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~-Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Top side with normal approx. +Y
@@ -372,9 +383,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~+Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Front side with normal approx. -X
@@ -382,9 +394,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-X not planar.");
+    std::ostringstream message;
+    message << "Face at ~-X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Back side iwth normal approx. +X
@@ -392,9 +405,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+X not planar.");
+    std::ostringstream message;
+    message << "Face at ~+X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 }
 
@@ -413,9 +427,10 @@ G4Trap::G4Trap( const G4String& pName,
 
   if ( pDz<=0 || pDy<=0 || pDx<=0 )
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Invalid length G4Trap parameters.");
+    std::ostringstream message;
+    message << "Invalid length parameters for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   fDz = pDz ;
@@ -456,9 +471,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~-Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Top side with normal approx. +Y
@@ -466,9 +482,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~+Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Front side with normal approx. -X
@@ -476,9 +493,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~-X not planar.");
+    std::ostringstream message;
+    message << "Face at ~-X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Back side iwth normal approx. +X
@@ -486,9 +504,10 @@ G4Trap::G4Trap( const G4String& pName,
   good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
-    G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
-                "Face at ~+X not planar.");
+    std::ostringstream message;
+    message << "Face at ~+X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::G4Trap()", "GeomSolids0002",
+                FatalException, message);
   }
 }
 
@@ -596,14 +615,14 @@ void G4Trap::SetAllParameters ( G4double pDz,
 {
   if ( pDz<=0 || pDy1<=0 || pDx1<=0 || pDx2<=0 || pDy2<=0 || pDx3<=0 || pDx4<=0 )
   {
-    G4cerr << "ERROR - G4Trap()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid dimensions !" << G4endl
-           << "          X - "
-           << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
-           << "          Y - " << pDy1 << ", " << pDy2 << G4endl
-           << "          Z - " << pDz << G4endl;
-    G4Exception("G4Trap::SetAllParameters()", "InvalidSetup",
-                FatalException, "Invalid Length Parameters.");
+    std::ostringstream message;
+    message << "Invalid Length Parameters for Solid: " << GetName() << G4endl
+            << "        X - "
+            << pDx1 << ", " << pDx2 << ", " << pDx3 << ", " << pDx4 << G4endl
+            << "          Y - " << pDy1 << ", " << pDy2 << G4endl
+            << "          Z - " << pDz;
+    G4Exception("G4Trap::SetAllParameters()", "GeomSolids0002",
+                FatalException, message);
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
@@ -657,9 +676,10 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]) ;
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
-    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                "Face at ~-Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~-Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::MakePlanes()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Top side with normal approx. +Y
@@ -667,9 +687,10 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
-    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                "Face at ~+Y not planar.");
+    std::ostringstream message;
+    message << "Face at ~+Y not planar for Solid: " << GetName();
+    G4Exception("G4Trap::MakePlanes()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Front side with normal approx. -X
@@ -677,9 +698,10 @@ G4bool G4Trap::MakePlanes()
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
   if (!good)
   {
-    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
-    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                "Face at ~-X not planar.");
+    std::ostringstream message;
+    message << "Face at ~-X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::MakePlanes()", "GeomSolids0002",
+                FatalException, message);
   }
    
   // Back side iwth normal approx. +X
@@ -687,9 +709,10 @@ G4bool G4Trap::MakePlanes()
   good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
   if ( !good )
   {
-    G4cerr << "ERROR - G4Trap()::MakePlanes(): " << GetName() << G4endl;
-    G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                "Face at ~+X not planar");
+    std::ostringstream message;
+    message << "Face at ~+X not planar for Solid: " << GetName();
+    G4Exception("G4Trap::MakePlanes()", "GeomSolids0002",
+                FatalException, message);
   }
 
   return good;
@@ -759,9 +782,11 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     }
     else
     {
-      G4cerr << "ERROR - G4Trap()::MakePlane(): " << GetName() << G4endl;
-      G4Exception("G4Trap::MakePlanes()", "InvalidSetup", FatalException,
-                  "Invalid parameters: norm.mod() <= 0") ;
+      std::ostringstream message;
+      message << "Invalid parameters: norm.mod() <= 0, for Solid: "
+              << GetName();
+      G4Exception("G4Trap::MakePlanes()", "GeomSolids0002",
+                  FatalException, message) ;
     }
     // Calculate D: p1 in in plane so D=-n.p1.Vect()
     
@@ -1124,7 +1149,7 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4int i, imin = 0, noSurfaces = 0;
+  G4int i, noSurfaces = 0;
   G4double dist, distz, distx, disty, distmx, distmy, safe = kInfinity;
   G4double delta    = 0.5*kCarTolerance;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -1136,7 +1161,6 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
     if ( dist < safe )
     {
       safe = dist;
-      imin = i;
     }
   }
   distz  = std::fabs( std::fabs( p.z() ) - fDz );
@@ -1188,8 +1212,8 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Trap::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -1650,22 +1674,25 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         *n=G4ThreeVector(0,0,1);
         break;
       default:
-        G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(6);
-        G4Exception("G4Trap::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
+        G4Exception("G4Trap::DistanceToOut(p,v,..)","GeomSolids1002",
+                    JustWarning, message);
         break;
     }
   }
@@ -1694,7 +1721,7 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc) ;
      G4Exception("G4Trap::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+                 "GeomSolids1002", JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -1760,7 +1787,7 @@ G4Trap::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   {
     DumpInfo();
     G4Exception("G4Trap::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -1790,6 +1817,7 @@ G4VSolid* G4Trap::Clone() const
 
 std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1816,6 +1844,7 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
      << "        " << fPlanes[3].a << " X + " << fPlanes[3].b << " Y + "
                    << fPlanes[3].c << " Z + " << fPlanes[3].d << " = 0\n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

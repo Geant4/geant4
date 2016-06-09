@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc,v 1.10 2006/11/17 21:34:12 perl Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RTMessenger.cc,v 1.10 2006-11-17 21:34:12 perl Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //

@@ -13,6 +13,117 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
+- G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
+------------------------------------------------------
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-20)
+- G4AntiNuclElastic - bug at very low energy is fixed
+------------------------------------------------------
+31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
+-  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+--------------------------------------------------------------
+21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-18)
+------------------------------------------------------
+- G4CHIPSElasticXS - used G4HadronicException; added cross sections for neutral
+                     kaons; use "case" instead of "if"
+
+21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-17)
+------------------------------------------------------
+- G4HadronElastic - lowest limit is set to 1.e-6 eV
+- G4WHadronElasticProcess - moved to hadronic/processes
+- G4LEpp, G4LEnp - fixed extraction of A from G4Nucleaus
+
+04 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-16)
+------------------------------------------------------
+- G4AntiNuclElastic - removed internal low and high energy limits
+- G4WHadronElasticProcess - added protection for very low primary enegry 
+    after scattering
+
+29 September 2011 - V.Ivanchenko (hadr-cohe-V09-04-15)
+------------------------------------------------------
+- G4NuclNuclDiffuseElastic - fixed compillation warning.
+
+28 September 2011 - V.Ivanchenko (hadr-cohe-V09-04-14)
+------------------------------------------------------
+- G4LEpp, G4LEnp: complete migration to integer Z and A;
+  G4NuclNuclDiffuseElastic, G4DiffuseElastic - fixed Coverity report.
+
+9 September 2011 - V.Ivanchenko (hadr-cohe-V09-04-13)
+----------------------------------------------------
+- G4WHadronElasticProcess.cc - follow migration of G4HadFinalState constness.
+
+6 September 2011 - V.Ivanchenko (hadr-cohe-V09-04-12)
+----------------------------------------------------
+- Fixed signature of Description method in several classes.
+
+23 August 2011 - V.Ivanchenko (hadr-cohe-V09-04-11)
+--------------------------------------------------
+- G4WHadronElasticProcess - lowestNeutronEnergy is set to 1.e-12*eV
+
+23 August 2011 - V.Ivanchenko (hadr-cohe-V09-04-10)
+--------------------------------------------------
+- G4ChargeExchangeProcess, G4CHIPSElasticXS - migration to new design of the
+    G4VCrossSectionDataSet interface
+
+28 July 2011 - V.Ivanchenko (hadr-cohe-V09-04-09)
+-------------------------------------------------
+18 July 2011 - V. Grichine
+- G4NuclNuclDiffuseElastic V.Grichine updated the class using G4HadronElastic 
+  as the base class and to follow its interface.
+
+13 July 2011 - V.Ivanchenko (hadr-cohe-V09-04-08)
+-------------------------------------------------
+- G4DiffuseElastic V.Grichine updated the class using G4HadronElastic 
+  as the base class and to follow its interface.
+
+- G4AntiNuclElastic, G4CHIPSElasticXS, G4ChargeExchange, 
+  G4ChargeExchangeProcess, G4ElasticHadrNucleusHE - fixed Coverity tool 
+                                                    warnings
+- G4HadronElastic - added LowestEnergyLimit access method
+- G4VHadronElastic - removed obsolete class
+
+20 May 2011 - V.Ivanchenko (hadr-cohe-V09-04-07)
+-------------------------------------------------
+- G4AntiNuclElastic - fixed gcc-4.6.0 compillation warning 
+
+31 May 2011 - V. Uzhinsky (hadr-cohe-V09-04-06)
+-------------------------------------------------
+- G4CHIPSElasticXS - added calculations of anti-baryons, Pi+, Pi-, K+, K-
+  nucleus elastic cross sections.
+
+20 May 2011 - V.Ivanchenko (hadr-cohe-V09-04-05)
+-------------------------------------------------
+- G4ElasticHadrNucleusHE, G4NuclNuclDiffuseElastic - fixed compillation
+  warnings at gcc-4.6.0
+
+18 May 2011 - V.Ivanchenko (hadr-cohe-V09-04-04)
+-------------------------------------------------
+- G4HadronElastic - fixed SampleInvariantT default implementation
+    to be used unit tests; removed protected member of the class;
+    do not create an ion if the recoil energy is below the threshold
+- G4WHadronElasticProcess - improved comments; added NIEL energy
+    deposition if recoil is below the threshold
+
+16 May 2011 - V.Ivanchenko (hadr-cohe-V09-04-03)
+-------------------------------------------------
+- G4AntiNuclElastic - added access method to cross section, 
+	              removed unused headers
+- G4UHadronElasticProcess - removed as obsolete
+- G4VHadronElastic is copied to G4HadronElastic (it will be the main interface)
+
+8 May 2011 - A. Galoyan (hadr-cohe-V09-04-02)
+-----------------------------------------------
+- G4AntiNuclElastic  Bugs are fixed.
+
+3 May 2011 - A. Galoyan (hadr-cohe-V09-04-01)
+-----------------------------------------------
+- G4AntiNuclElastic - new class for simulation of elastic anti-A - A scattering
+is added  
+
+24 February 2011 - V.Ivanchenko (hadr-cohe-V09-04-00)
+------------------------------------------------------
+- G4WHadronElasticProcess - added light anti-nuclei, used
+        particle names in the IfApplicable method
 
 19 November 2010 - V.Ivanchenko (hadr-cohe-V09-03-07)
 ------------------------------------------------------

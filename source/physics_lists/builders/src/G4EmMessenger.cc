@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmMessenger.cc,v 1.1 2006-10-31 11:35:02 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   // command for synchrotron radiation.
   theSynch = new G4UIcmdWithAString("/physics_engine/tailor/SyncRadiation",this);
   theSynch->SetGuidance("Switching on/off synchrotron radiation.");
-  theSynch->SetParameterName("status","off");
+  theSynch->SetParameterName("status",false);
   theSynch->SetCandidates("on off");
   theSynch->SetDefaultValue("off");
   theSynch->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -63,7 +63,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   // command for gamma nuclear physics.
   theGN = new G4UIcmdWithAString("/physics_engine/tailor/GammaNuclear",this);
   theGN->SetGuidance("Switching on gamma nuclear physics.");
-  theGN->SetParameterName("status","off");
+  theGN->SetParameterName("status",false);
   theGN->SetCandidates("on off");
   theGN->SetDefaultValue("on");
   theGN->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -71,7 +71,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   // command for muon nuclear physics.
   theMUN = new G4UIcmdWithAString("/physics_engine/tailor/MuonNuclear",this);
   theMUN->SetGuidance("Switching on muon nuclear physics.");
-  theMUN->SetParameterName("status","off");
+  theMUN->SetParameterName("status",false);
   theMUN->SetCandidates("on off");
   theMUN->SetDefaultValue("off");
   theMUN->AvailableForStates(G4State_PreInit,G4State_Idle);

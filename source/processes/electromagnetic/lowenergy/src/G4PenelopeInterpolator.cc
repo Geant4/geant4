@@ -53,7 +53,8 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
   if (nOfData < 4 )
     {
       G4String excep = "Spline interpolation cannot be performed with less than 4 points";
-      G4Exception(excep);
+      G4Exception("G4PenelopeInterpolator::G4PenelopeInterpolator()",
+		  "em2021",FatalException,excep);
     }
 
   G4int N1=nOfData-1;
@@ -68,7 +69,8 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
     if ((pX[i+1]-pX[i]) < 1.0e-13) 
       {
 	G4String excep = "Spline x values not in increasing order";
-	G4Exception(excep);
+	G4Exception("G4PenelopeInterpolator::G4PenelopeInterpolator()",
+		    "em2022",FatalException,excep);
       }
     A.push_back(pX[i+1]-pX[i]);
     D.push_back((pY[i+1]-pY[i])/A[i]);
@@ -172,13 +174,28 @@ G4double G4PenelopeInterpolator::CalculateMomentum(G4double UpperLimit,
   G4int i;
   G4int nOfData = (G4int) x->size();
   const G4double eps=1.0e-35;
-  if (MomentumOrder < -1) G4Exception("Calculate Momentum: error 0");
-  if (nOfData < 2) G4Exception("Calculate Momentum: error 1");
-  if ((*x)[0]<0) G4Exception("Calculate Momentum: error 2");
+  if (MomentumOrder < -1) 
+    G4Exception("G4PenelopeInterpolator::CalculateMomentum()",
+		"em2023",FatalException,
+		"Calculate Momentum: error 0 (invalid order)");
+  if (nOfData < 2) 
+    G4Exception("G4PenelopeInterpolator::CalculateMomentum()",
+		"em2024",FatalException,
+		"Calculate Momentum: error 1 (invalid number of data)");
+  if ((*x)[0]<0) 
+    G4Exception("G4PenelopeInterpolator::CalculateMomentum()",
+		"em2025",FatalException,
+		"Calculate Momentum: error 2 (first point is negative)");
   for (i=1;i<nOfData;i++)
     {
-      if ((*x)[i]<0) G4Exception("Calculate Momentum: error 3");
-      if ((*x)[i] < (*x)[i-1]) G4Exception ("Calculate Momentum: error 4");
+      if ((*x)[i]<0)
+	G4Exception("G4PenelopeInterpolator::CalculateMomentum()",
+		"em2026",FatalException,
+		"Calculate Momentum: error 3 (negative point)");	  
+      if ((*x)[i] < (*x)[i-1]) 
+	G4Exception("G4PenelopeInterpolator::CalculateMomentum()",
+		"em2027",FatalException,
+		"Calculate Momentum: error 4 (points not in increasing order)");
     }
 
   G4double RMom=0.0;

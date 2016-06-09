@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CylindricalSurface.cc,v 1.9 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CylindricalSurface.cc,v 1.9 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -63,9 +63,11 @@ G4CylindricalSurface::G4CylindricalSurface( const G4Vector3D& o,
   }
   else 
   {
-    G4cerr << "Error in G4CylindricalSurface::G4CylindricalSurface--axis "
-           <<"has zero length\n"
-           << "\tDefault axis ( 1.0, 0.0, 0.0 ) is used.\n";
+    std::ostringstream message;
+    message << "Axis has zero length." << G4endl
+	    << "Default axis ( 1.0, 0.0, 0.0 ) is used.";    
+    G4Exception("G4CylindricalSurface::G4CylindricalSurface()",
+                "GeomSolids1001", JustWarning, message);
     
     axis = G4Vector3D( 1.0, 0.0, 0.0 );
   }
@@ -78,10 +80,12 @@ G4CylindricalSurface::G4CylindricalSurface( const G4Vector3D& o,
   }
   else 
   {
-    G4cerr << "Error in G4CylindricalSurface::G4CylindricalSurface"
-           << "--asked for negative radius\n"
-           << "\tDefault radius of 1.0 is used.\n";
-  
+    std::ostringstream message;
+    message << "Negative radius." << G4endl
+	    << "Default radius of 1.0 is used.";    
+    G4Exception("G4CylindricalSurface::G4CylindricalSurface()",
+                "GeomSolids1001", JustWarning, message);
+
     radius = 1.0;
   }
 
@@ -944,9 +948,11 @@ void G4CylindricalSurface::SetRadius( G4double r )
   if ( r >= 0.0 )  { radius = r; }
   else   // Use old value (do not change radius) if out of the range, 
   {      // but print warning message
-    G4cerr << "Error in G4CylindricalSurface::SetRadius"
-           << "--asked for negative radius\n"
-           << "\tDefault radius of " << radius << " is used.\n";
+    std::ostringstream message;
+    message << "Negative radius." << G4endl
+	    << "Default radius of " << radius << " is used.";    
+    G4Exception("G4CylindricalSurface::SetRadius()",
+                "GeomSolids1001", JustWarning, message);
   }
 }
 

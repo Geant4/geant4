@@ -67,8 +67,10 @@
       {
 //        G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
+        G4int M = theElement->GetIsotope(i1)->Getm();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
-        UpdateData(A, Z, count++, frac);
+        //UpdateData(A, Z, count++, frac);
+        UpdateData(A, Z, M, count++, frac);
       }
     }else{
 //      G4cout <<" Init: theStableOnes case: Z="<<Z<<G4endl;
@@ -91,11 +93,13 @@
     theFissionData->ThinOut(precision);
   }
   
-  void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
+  //void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
+  void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance)
   {
     //Reads in the Data, using G4NeutronHPIsoData[], and its Init
 //    G4cout << "entered: ElementWiseData::UpdateData"<<G4endl;
-    theIsotopeWiseData[index].Init(A, Z, abundance);
+    //theIsotopeWiseData[index].Init(A, Z, abundance);
+    theIsotopeWiseData[index].Init(A, Z, M, abundance);
 //    G4cout << "ElementWiseData::UpdateData Init finished"<<G4endl;
 
     theBuffer = theIsotopeWiseData[index].MakeElasticData();

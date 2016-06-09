@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.hh,v 1.3 2006/06/29 15:55:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTelDigi.hh,v 1.3 2006-06-29 15:55:15 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.11 2010/11/10 09:15:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParameterisationCons.cc,v 1.11 2010-11-10 09:15:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file
 //
@@ -91,10 +91,11 @@ G4ParameterisationConsRho( EAxis axis, G4int nDiv,
   G4Cons* msol = (G4Cons*)(fmotherSolid);
   if( msol->GetInnerRadiusPlusZ() == 0. )
   {
-    G4cerr << "WARNING - G4ParameterisationConsRho, OuterRadiusMinusZ = 0. "
-           << G4endl 
-           << "          Width is calculated as that of OuterRadiusMinusZ !"
-           << G4endl;
+    std::ostringstream message;
+    message << "OuterRadiusMinusZ = 0" << G4endl 
+            << "Width is calculated as that of OuterRadiusMinusZ !";
+    G4Exception("G4ParameterisationConsRho::G4ParameterisationConsRho()",
+                "GeomDiv1001", JustWarning, message);
   } 
 
   if( divType == DivWIDTH )
@@ -198,7 +199,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   cons.SetInnerRadiusPlusZ( pRMin2 + d_half_gap );
   cons.SetOuterRadiusPlusZ( pRMax2 - d_half_gap );
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -304,7 +305,7 @@ ComputeDimensions( G4Cons& cons, const G4int,
   cons.SetInnerRadiusPlusZ( pRMin2 );
   cons.SetOuterRadiusPlusZ( pRMax2 );
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -418,7 +419,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   G4double pDPhi = msol->GetDeltaPhiAngle();
 
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG

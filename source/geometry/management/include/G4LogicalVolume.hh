@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.27 2008/07/10 09:40:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalVolume.hh,v 1.27 2008-07-10 09:40:08 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalVolume

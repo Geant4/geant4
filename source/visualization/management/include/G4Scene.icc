@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.icc,v 1.15 2009/11/04 12:49:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Scene.icc,v 1.15 2009-11-04 12:49:16 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -75,6 +75,10 @@ inline G4int G4Scene::GetMaxNumberOfKeptEvents() const {
 
 inline G4bool G4Scene::GetRefreshAtEndOfRun () const {
   return fRefreshAtEndOfRun;
+}
+
+inline void G4Scene::SetName (const G4String& name) {
+  fName = name;
 }
 
 inline std::vector<G4VModel*>& G4Scene::SetRunDurationModelList ()

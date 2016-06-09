@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.6 2010/08/28 15:53:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.6 2010-08-28 15:53:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -39,7 +39,8 @@
 
 G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modName) 
   : G4HadronicInteraction(modName),
-    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0)
+    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0),
+    thePrimaryProjectile(0)
 {}
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()

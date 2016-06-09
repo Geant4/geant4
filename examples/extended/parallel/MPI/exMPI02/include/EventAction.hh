@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.2 2007/12/10 16:28:34 gunter Exp $
-// $Name: geant4-09-02 $
+// $Id: EventAction.hh,v 1.2 2007-12-10 16:28:34 gunter Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   EventAction.hh
 //

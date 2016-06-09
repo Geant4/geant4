@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.9 2010/10/06 12:16:59 sincerti Exp $
+$Id: README,v 1.9 2010-10-06 12:16:59 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -71,12 +71,15 @@ Visualization has not been implemented.
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
 
-The variable G4ANALYSIS_USE must be set to 1.
+1) You must have compiled your Geant4 installation with the full version of the
+CLHEP library which can handle matrix operations.
 
-In order to generate histograms, at least one of the AIDA implementations should be 
+2) The variable G4ANALYSIS_USE must be set to 1.
+
+3) In order to generate histograms, at least one of the AIDA implementations should be 
  available.
   
-The code should be compiled with gmake and run with :
+4) The code should be compiled with gmake and run with :
 
 > $G4WORDIR/bin/$G4SYSTEM/Nanobeam 
 

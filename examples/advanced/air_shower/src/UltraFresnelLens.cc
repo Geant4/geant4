@@ -64,7 +64,8 @@ UltraFresnelLens::UltraFresnelLens( G4double Diameter, G4int nGrooves, G4Materia
  LensPosition    = Pos ;
 
  if( GrooveWidth <= 0 ){
-       G4Exception("UltraFresnelLens constructor: GrooveWidth<=0");
+   G4Exception("UltraFresnelLens::UltraFresnelLens()","AirSh001",FatalException,
+	       "UltraFresnelLens constructor: GrooveWidth<=0");
    }
 
 
@@ -141,7 +142,9 @@ G4double UltraFresnelLens::GetSagita(G4double radius)
   G4double ArgSqrt = 1.0-(1.0+Conic)*std::pow(Curvature,2)*std::pow(radius,2) ; 
 
   if (ArgSqrt < 0.0){
-     G4Exception("UltraFresnelLensParameterisation::Sagita: Square Root of <0 !");
+    G4Exception("UltraFresnelLens::GetSagita()","AirSh002",
+		FatalException,
+		"UltraFresnelLensParameterisation::Sagita: Square Root of <0 !");
   }
   G4double Sagita_value = Curvature*std::pow(radius,2)/(1.0+std::sqrt(ArgSqrt)) + TotAspher;
 

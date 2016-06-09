@@ -35,8 +35,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.15 2010/11/24 15:56:19 cirrone Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: BrachyPhysicsList.cc,v 1.15 2010-11-24 15:56:19 cirrone Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
 

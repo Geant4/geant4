@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.10 2010/07/27 01:44:54 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VScoreWriter.cc,v 1.10 2010-07-27 01:44:54 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VScoreWriter.hh"
@@ -40,7 +40,7 @@
 
 G4VScoreWriter::G4VScoreWriter()
   : fScoringMesh(0), verboseLevel(0) {
-  ;
+  fNMeshSegments[0] = fNMeshSegments[1] = fNMeshSegments[2] = 0;
 }
 
 G4VScoreWriter::~G4VScoreWriter() {

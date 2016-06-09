@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // !!! Was used in QBBC PL, NOW it is not. Must be absolete !!!
-// ============================================================
+// =----------------------------------------------------------=
 
 //#define debug
 //#define pdebug
@@ -259,8 +259,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
   
   // construct the quasmon
+  G4int nop = 85; // clusters up to Alpha cluster (Reduced)
   //  G4int nop = 122; // clusters up to Alpha cluster
-  G4int nop = 152; // V.Ivanchenko set the same parameter as for all CHIPS models
+  //  G4int nop = 152; // not reduced upto Li6
   G4double fractionOfSingleQuasiFreeNucleons = 0.5; // It is A-dependent (C=.85, U=.40)
   G4double fractionOfPairedQuasiFreeNucleons = 0.05;
   G4double clusteringCoefficient = 5.;
@@ -390,7 +391,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       delete output->operator[](particle);
       continue;
     }
-    theSec = new G4ReactionProduct;  
+    //  theSec = new G4ReactionProduct;   // JA - not used, and memory leaked (Coverity)
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei

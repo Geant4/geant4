@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.cc,v 1.6 2010/11/12 10:38:56 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PolarizedMollerCrossSection.cc,v 1.6 2010-11-12 10:38:56 schaelic Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file

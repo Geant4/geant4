@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.hh,v 1.4 2010/11/17 20:22:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4FissionLevelDensityParameter.hh,v 1.4 2010-11-17 20:22:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 

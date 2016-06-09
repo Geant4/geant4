@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:05:57 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:05:57 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -36,9 +36,27 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/utils/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
@@ -54,16 +72,14 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4LeptonHadronInteractionModel.hh
         G4LeptonHadronProcess.hh
         G4MuNuclearInteraction.hh
-        G4MuonNucleusInteractionModel.hh
-        G4MuonNucleusProcess.hh
         G4ParametrizedHadronicVertex.hh
+        G4VDMuonNuclearModel.hh
     SOURCES
         G4LeptonHadronInteractionModel.cc
         G4LeptonHadronProcess.cc
         G4MuNuclearInteraction.cc
-        G4MuonNucleusInteractionModel.cc
-        G4MuonNucleusProcess.cc
         G4ParametrizedHadronicVertex.cc
+        G4VDMuonNuclearModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -72,7 +88,25 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4globman
         G4had_mod_man
         G4had_mod_util
+        G4had_preequ_exciton
+        G4had_string_diff
+        G4had_string_frag
+        G4had_string_man
+        G4had_theo_max
+        G4hadronic_bert_cascade
+        G4hadronic_binary
+        G4hadronic_body_ci
+        G4hadronic_crosec_ci
+        G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
+        G4hadronic_deex_management
+        G4hadronic_deex_multifragmentation
+        G4hadronic_deex_photon_evaporation
+        G4hadronic_deex_util
         G4hadronic_HE
+        G4hadronic_hetcpp_evaporation
+        G4hadronic_hetcpp_utils
         G4hadronic_LE
         G4hadronic_mgt
         G4hadronic_proc

@@ -1,0 +1,20 @@
+
+# e+ 300MeV 
+/gun/particle e+
+/gun/energy 300 MeV
+/run/beamOn 1
+#
+# list the existing physics processes
+/process/list
+#
+# switch off MultipleScattering
+/process/inactivate msc
+/run/beamOn 1
+#
+# switch on MultipleScattering
+/process/activate msc 
+#
+# change detector parameter
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 1

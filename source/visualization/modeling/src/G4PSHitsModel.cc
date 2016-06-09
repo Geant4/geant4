@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.cc,v 1.4 2009/11/04 12:44:39 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PSHitsModel.cc,v 1.4 2009-11-04 12:44:39 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura

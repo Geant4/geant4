@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QPhotonNuclearCrossSection for gamma+A cross sections
@@ -105,7 +105,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   if(!pPDG)
   {
 #ifdef debug
-    G4cout<<"G4QPhCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QPhCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -350,7 +350,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   G4double A=targN+targZ;
   if(F<=0)                           // This isotope was not the last used isotop
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
+    if(F<0)                          // This isotope was found in DAMDB =-------=> RETRIEVE
     {
       lastGDR=(*GDR)[I];             // Pointer to prepared GDR cross sections
       lastHEN=(*HEN)[I];             // Pointer to prepared High Energy cross sections
@@ -382,14 +382,14 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       spA.push_back(lastSP);         // Pomeron Shadowing
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW the Magic Formula =================================
+  // =-------------------= NOW the Magic Formula =--------------------------=
   if (Energy<lastTH) return 0.;             // It must be already checked in the interface
   else if (Energy<=Emin)                    // GDR region (approximated in E, not in lnE)
   {
 #ifdef debug
     G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
 #endif
-    if(A<=1. || dE <= THmin) sigma=0.;
+    if(A<=1. || dE <= THmin) sigma=0.;      // No GDR for A=1
     else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
     if(sigma<0.)

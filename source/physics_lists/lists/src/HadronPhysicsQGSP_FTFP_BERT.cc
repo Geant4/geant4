@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.4 2010/06/19 11:12:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.4 2010-06-19 11:12:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,8 +46,11 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4IonConstructor.hh"
 
 #include "G4QHadronInelasticDataSet.hh"
+
+#include "G4PhysListUtil.hh"
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
                     :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
@@ -108,7 +111,6 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePro->RegisterMe(theFTFPPro=new G4FTFPProtonBuilder(quasiElasFTF));
   theFTFPPro->SetMinEnergy(minFTFP);   // was (9.5*GeV);
   theFTFPPro->SetMaxEnergy(maxFTFP);   // was (25*GeV); 
-
   thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
   theBertiniPro->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
@@ -118,28 +120,37 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePiK->RegisterMe(theFTFPPiK=new G4FTFPPiKBuilder(quasiElasFTF));
   theFTFPPiK->SetMaxEnergy(maxFTFP);   // was (25*GeV); 
   theFTFPPiK->SetMinEnergy(minFTFP);   // was (9.5*GeV);
-
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
-  theMiscCHIPS=new G4MiscCHIPSBuilder;
+  // Hyperons use FTF
+  theHyperon=new G4HyperonFTFPBuilder;
+
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasFTF));
 }
 
 HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
 {
-   delete theMiscCHIPS;
    delete theQGSPNeutron;
    delete theFTFPNeutron;
    delete theBertiniNeutron;
    delete theNeutrons;
+
    delete theQGSPPro;
    delete theFTFPPro;
    delete thePro;
    delete theBertiniPro;
+
    delete theQGSPPiK;
    delete theFTFPPiK;
    delete theBertiniPiK;
    delete thePiK;
+
+   delete theHyperon;
+   delete theAntiBaryon;
+   delete theFTFPAntiBaryon;
+
    delete theCHIPSInelastic;
 }
 
@@ -152,7 +163,10 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()
   pBaryonConstructor.ConstructParticle();
 
   G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
+  pShortLivedConstructor.ConstructParticle();
+  
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 }
 
 #include "G4ProcessManager.hh"
@@ -165,30 +179,11 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   // use CHIPS cross sections also for Kaons
   theCHIPSInelastic = new G4QHadronInelasticDataSet();
   
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
 
-  theMiscCHIPS->Build();
-}
-
-
-G4HadronicProcess* 
-HadronPhysicsQGSP_FTFP_BERT::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
+  theHyperon->Build(); 
+  theAntiBaryon->Build(); 
 }

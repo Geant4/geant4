@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.77 2010/11/07 11:14:07 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VisCommandsViewer.cc,v 1.77 2010-11-07 11:14:07 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -51,9 +51,14 @@ G4VVisCommandViewer::~G4VVisCommandViewer () {}
 
 void G4VVisCommandViewer::SetViewParameters
 (G4VViewer* viewer, const G4ViewParameters& viewParams) {
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   viewer->SetViewParameters(viewParams);
+  RefreshIfRequired(viewer);
+}
+
+void G4VVisCommandViewer::RefreshIfRequired(G4VViewer* viewer) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  const G4ViewParameters& viewParams = viewer->GetViewParameters();
   if (sceneHandler && sceneHandler->GetScene()) {
     if (viewParams.IsAutoRefresh()) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
@@ -1078,9 +1083,8 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
   viewer->ClearView();
   viewer->DrawView();
 
-  // Check auto-refresh and print confirmations, but without changing
-  // view paramters...
-  SetViewParameters(viewer, viewer->GetViewParameters());
+  // Check auto-refresh and print confirmations.
+  RefreshIfRequired(viewer);
 }
 
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
@@ -1218,7 +1222,8 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
+  viewer->ResetView();
+  RefreshIfRequired(viewer);
 }
 
 ////////////// /vis/viewer/scale and scaleTo ////////////////////////////
@@ -1347,7 +1352,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   fpVisManager -> SetCurrentViewer (viewer);  // Prints confirmation.
 
-  SetViewParameters(viewer, viewer->GetViewParameters());
+  RefreshIfRequired(viewer);
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////

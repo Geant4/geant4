@@ -37,8 +37,8 @@
 class G4DeuteronGEMCoulombBarrier : public G4GEMCoulombBarrier
 {
 public:
-  G4DeuteronGEMCoulombBarrier() : G4GEMCoulombBarrier(2,1) {}
-  ~G4DeuteronGEMCoulombBarrier() {}
+  G4DeuteronGEMCoulombBarrier() : G4GEMCoulombBarrier(2,1) {};
+  ~G4DeuteronGEMCoulombBarrier() {};
   
 private:
   G4DeuteronGEMCoulombBarrier(const G4DeuteronGEMCoulombBarrier & right);
@@ -47,8 +47,9 @@ private:
   G4bool operator==(const G4DeuteronGEMCoulombBarrier & right) const;
   G4bool operator!=(const G4DeuteronGEMCoulombBarrier & right) const;
   
-private:
-  G4double BarrierPenetrationFactor(const G4double aZ) const
+public:
+
+  G4double BarrierPenetrationFactor(G4double aZ) const
   {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

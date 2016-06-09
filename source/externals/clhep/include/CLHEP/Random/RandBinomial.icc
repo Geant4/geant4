@@ -1,0 +1,46 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                        --- RandBinomial ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 18th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandBinomial::RandBinomial(HepRandomEngine & anEngine, long n,
+                                                              double p )
+: HepRandom  ( ), localEngine( &anEngine, do_nothing_deleter() ),
+  defaultN(n), defaultP(p) {}
+
+inline RandBinomial::RandBinomial(HepRandomEngine * anEngine, long n,
+                                                              double p )
+: HepRandom  ( ), localEngine( anEngine),
+  defaultN(n), defaultP(p) {}
+
+inline double RandBinomial::shoot() {
+  return shoot( 1, 0.5 );
+}
+
+inline double RandBinomial::shoot( HepRandomEngine* anEngine ) {
+  return shoot( anEngine, 1, 0.5 );
+}
+
+inline double RandBinomial::operator()() {
+  return fire( defaultN, defaultP );
+}
+
+inline double RandBinomial::operator()( long n, double p ) {
+  return fire( n, p );
+}
+
+inline double RandBinomial::fire() {
+  return fire( defaultN, defaultP );
+}
+
+}  // namespace CLHEP

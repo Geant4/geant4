@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.8 2010/07/26 03:52:33 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VScoreColorMap.cc,v 1.8 2010-07-26 03:52:33 akimura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VScoreColorMap.hh"
@@ -41,7 +41,7 @@
 #include "G4Colour.hh"
 
 G4VScoreColorMap::G4VScoreColorMap(G4String mName)
-:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX)
+:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX),fVisManager(0)
 {;}
 
 G4VScoreColorMap::~G4VScoreColorMap()

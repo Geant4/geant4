@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2010/06/06 04:33:02 perl Exp $
+$Id: History,v 1.26 2010-06-06 04:33:02 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-10-11 G.Folger (testem10-V09-04-00)
+- Fix gcc46 compilation warning in Em10PrimaryGeneratorAction.cc 
+    and src/Em10Materials.cc
 
 03-06-10 J.Perl (testem10-V09-03-01)
 - Updated vis usage 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.cc,v 1.7 2006/06/29 17:16:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F01FieldSetup.cc,v 1.7 2006-06-29 17:16:36 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   User Field setup class implementation.
 //

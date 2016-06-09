@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.16 2009/09/16 18:07:30 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysicsList.cc,v 1.16 2009-09-16 18:07:30 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -299,8 +299,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-
-  if (verboseLevel >0){
+  if (verboseLevel >0) {
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }

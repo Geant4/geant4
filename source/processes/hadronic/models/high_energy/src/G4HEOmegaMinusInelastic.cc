@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEOmegaMinusInelastic.cc,v 1.17 2010/11/29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEOmegaMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
@@ -37,9 +37,23 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-// Last modified: 29-July-1998 
  
 #include "G4HEOmegaMinusInelastic.hh"
+
+
+void G4HEOmegaMinusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4HEOmegaMinusInelastic is one of the High Energy\n"
+          << "Parameterized (HEP) models used to implement inelastic\n"
+          << "Omega- scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to Omega- with initial energies\n"
+          << "above 20 GeV.\n";
+}
+
 
 G4HadFinalState*
 G4HEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
@@ -47,8 +61,8 @@ G4HEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 {
   G4HEVector* pv = new G4HEVector[MAXPART];
   const G4HadProjectile* aParticle = &aTrack;
-  const G4double A = targetNucleus.GetN();
-  const G4double Z = targetNucleus.GetZ();
+  const G4double A = targetNucleus.GetA_asInt();
+  const G4double Z = targetNucleus.GetZ_asInt();
   G4HEVector incidentParticle(aParticle);
      
   G4double atomicNumber = Z;
@@ -57,7 +71,10 @@ G4HEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   G4int incidentCode = incidentParticle.getCode();
   G4double incidentMass = incidentParticle.getMass();
   G4double incidentTotalEnergy = incidentParticle.getEnergy();
-  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+
+  // G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  // DHW 19 may 2011: variable set but not used
+
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 
   if (incidentKineticEnergy < 1.)
@@ -93,8 +110,9 @@ G4HEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 
   incidentKineticEnergy -= excitation;
   incidentTotalEnergy = incidentKineticEnergy + incidentMass;
-  incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)                    
-                                    *(incidentTotalEnergy+incidentMass));
+  // incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)                    
+  //                                   *(incidentTotalEnergy+incidentMass));
+  //  DHW 19 May 2011:  variable set but not used
 
   G4HEVector targetParticle;
   if (G4UniformRand() < atomicNumber/atomicWeight) { 

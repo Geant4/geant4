@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.27 2008/11/26 13:01:28 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.28 2011-01-05 00:59:03 asaim Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -46,10 +46,13 @@
 // =======================================================================
 
 #include "G4CoupledTransportation.hh"
+#include "G4TransportationProcessType.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
+#include "G4Field.hh"
 #include "G4FieldManagerStore.hh"
+
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,8 +71,12 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
     fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
+    fUseMagneticMoment(false),  
     fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 )  // or 4
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(COUPLED_TRANSPORTATION));
+
   G4TransportationManager* transportMgr ; 
 
   transportMgr = G4TransportationManager::GetTransportationManager() ; 
@@ -182,9 +189,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //   startFullSafety = fPathFinder->ComputeSafety( startPosition ); 
   }
 
-  // Is the particle charged ?
+  // Is the particle charged or has it a magnetic moment?
   //
-  G4double              particleCharge = pParticle->GetCharge() ; 
+  G4double particleCharge = pParticle->GetCharge() ;
+  G4double magneticMoment = pParticle->GetMagneticMoment() ;
+  G4double       restMass = pParticleDef->GetPDGMass() ; 
 
   fMassGeometryLimitedStep = false ; //  Set default - alex
   fAnyGeometryLimitedStep = false; 
@@ -194,22 +203,40 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
   //   By the tracking, after all AlongStepDoIts, in "Relocation"
-  // Check whether the particle has an (EM) field force exerted upon it
+
+  // Check if the particle has a force, EM or gravitational, exerted on it
   //
   G4FieldManager* fieldMgr=0;
-  G4bool fieldExertsForce = false; 
-  if( (particleCharge != 0.0) ) // ||  (magneticMoment != 0.0 ) )
+  G4bool          fieldExertsForce = false ;
+
+  G4bool gravityOn = false;
+  const G4Field* ptrField= 0;
+
+  fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
+  if( fieldMgr != 0 )
   {
-     fieldMgr= fFieldPropagator->FindAndSetFieldManager( currentVolume ); 
-     if (fieldMgr != 0) {
-	// Message the field Manager, to configure it for this track
-	fieldMgr->ConfigureForTrack( &track );
-        fieldExertsForce = (fieldMgr->GetDetectorField() != 0); 
-     } 
-     // the PathFinder will recognise whether the field exerts force
+     // Message the field Manager, to configure it for this track
+     fieldMgr->ConfigureForTrack( &track );
+     // Here it can transition from a null field-ptr to a finite field 
+
+     // If the field manager has no field ptr, the field is zero 
+     //     by definition ( = there is no field ! )
+     ptrField= fieldMgr->GetDetectorField();
+ 
+     if( ptrField != 0)
+     { 
+        gravityOn= ptrField->IsGravityActive();
+
+	if(  (particleCharge != 0.0) 
+             || (fUseMagneticMoment && (magneticMoment != 0.0) )
+	     || (gravityOn && (restMass != 0.0))
+	  )
+	{
+	   fieldExertsForce = true;
+	}
+     }
   }
   G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
-  G4double       restMass = pParticleDef->GetPDGMass() ;
  
   fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
 					   momentumMagnitude, // in Mev/c 
@@ -462,9 +489,6 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
   static G4int noCalls=0;
-  static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -502,16 +526,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      if( initialVelocity > 0.0 ) { initialInverseVel= 1.0 / initialVelocity; }
      G4double stepLength      = track.GetStepLength() ;
 
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so Peter says it has the final velocity.
-        deltaTime = stepLength * finalInverseVel ;
-	// G4cout << " dt = s / finalV "  << "  s = "   << stepLength
-	//        << " 1 / finalV= " << finalInverseVel << G4endl; 
-     }
-     else if (finalVelocity > 0.0)
+     if (finalVelocity > 0.0)
      {
         // deltaTime = stepLength/finalVelocity ;
         G4double meanInverseVelocity = 0.5 * ( initialInverseVel + finalInverseVel );
@@ -527,6 +542,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      }  //  Could do with better estimate for final step (finalVelocity = 0) ?
 
      fCandidateEndGlobalTime   = startTime + deltaTime ;
+     fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
 
      // G4cout << " Calculated global time from start = " << startTime << " and "
      //        << " delta time = " << deltaTime << G4endl;
@@ -534,6 +550,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   else
   {
      deltaTime = fCandidateEndGlobalTime - startTime ;
+     fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
      // G4cout << " Calculated global time from candidate end time = "
      //    << fCandidateEndGlobalTime << " and start time = " << startTime << G4endl;
   }
@@ -541,7 +558,6 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   // G4cout << " G4CoupledTransportation::AlongStepDoIt  "
   // << " flag whether computed time = " << fEndGlobalTimeComputed  << " and " 
   // << " is proposes end time " << fCandidateEndGlobalTime << G4endl; 
-  fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   
@@ -849,6 +865,12 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();  
+}
+
+void 
+G4CoupledTransportation::EndTracking()
+{
+  G4TransportationManager::GetTransportationManager()->InactivateAll();
 }
 
 void

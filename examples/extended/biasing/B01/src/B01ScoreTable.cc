@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01ScoreTable.cc,v 1.2 2007/06/22 13:15:29 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: B01ScoreTable.cc,v 1.2 2007-06-22 13:15:29 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

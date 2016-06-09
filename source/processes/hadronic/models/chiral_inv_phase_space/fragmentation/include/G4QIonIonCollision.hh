@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.hh,v 1.1 2009/11/16 18:16:04 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QIonIonCollision.hh,v 1.1 2009-11-16 18:16:04 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

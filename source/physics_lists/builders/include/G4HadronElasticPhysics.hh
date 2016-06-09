@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.9 2010/08/25 16:49:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronElasticPhysics.hh,v 1.9 2010-08-25 16:49:51 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 // 29.07.2010 V.Ivanchenko rename this class from G4HadronHElasticPhysics to
 //                         G4HadronElasticPhysics, old version of the class
 //                         is renamed to G4HadronElasticPhysics93
+// 03.06.2011 V.Ivanchenko change design - added access to pointers of the
+//                         neutron process and model
 //
 //----------------------------------------------------------------------------
 //
@@ -45,6 +47,8 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4HadronElastic.hh"
+#include "G4HadronicProcess.hh"
 
 class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
@@ -68,12 +72,29 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
+  inline G4HadronElastic* GetNeutronModel();
+
+  inline G4HadronicProcess* GetNeutronProcess();
+
 private:
 
   G4int    verbose;
   G4bool   wasActivated;
+
+  G4HadronElastic*   neutronModel;
+  G4HadronicProcess* neutronProcess;
+
 };
 
+inline G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
+{
+  return neutronModel;
+}
+
+inline G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
+{
+  return neutronProcess;
+}
 
 #endif
 

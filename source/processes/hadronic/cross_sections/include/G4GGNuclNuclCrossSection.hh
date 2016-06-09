@@ -40,6 +40,7 @@
 #include "globals.hh"
 #include "G4Proton.hh"
 #include "G4Nucleus.hh"
+#include "G4NistManager.hh"
 
 #include "G4VCrossSectionDataSet.hh"
 
@@ -53,20 +54,15 @@ public:
   virtual ~G4GGNuclNuclCrossSection ();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle*, 
+			     G4int Z, const G4Material*);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
-  virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
-			   G4double aTemperature = 0.0);
-
-  virtual
   G4double GetZandACrossSection(const G4DynamicParticle*, 
-				G4int Z, G4int A, 
-				G4double aTemperature = 0.0);
+				G4int Z, G4int A);
 
   G4double GetCoulombBarier(const G4DynamicParticle*, 
 			    G4double Z, G4double A, G4double pR, G4double tR);
@@ -79,14 +75,16 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&) 
   {G4cout << "G4NuclNuclCrossSection: uses Glauber-Gribov formula"<<G4endl;}
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
   G4double GetRatioSD(const G4DynamicParticle*, G4double At, G4double Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4double At, G4double Zt);
 
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4int At, G4int Zt);
 
-  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
+ 
+  G4double GetHadronNucleonXscPDG(G4ParticleDefinition*,G4double sMand, G4ParticleDefinition*);
   G4double GetHadronNucleonXscNS(G4ParticleDefinition*,G4double pTkin, G4ParticleDefinition*);
 
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);

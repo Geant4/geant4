@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorMessenger.cc,v 1.2 2009/11/27 14:43:25 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: RMC01DetectorMessenger.cc,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01DetectorMessenger

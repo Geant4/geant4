@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNEngCf252.cc,v 1.4 2007/06/01 18:30:38 dennis Exp $
+// $Id: G4SmpNEngCf252.cc,v 1.4 2007-06-01 18:30:38 dennis Exp $
 //
 
 #include <cmath>

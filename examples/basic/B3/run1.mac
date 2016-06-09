@@ -1,0 +1,11 @@
+# $Id: run1.mac,v 1.6 2002-12-16 16:37:25 maire Exp $
+#
+# Macro file of "exampleB3.cc"
+#
+/control/verbose 2
+/tracking/verbose 2
+#
+/run/beamOn 1
+#
+/tracking/verbose 0
+/run/beamOn 20

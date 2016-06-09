@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010/09/29 20:47:19 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-12-13 12:05:20 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -33,61 +33,38 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4brep
     HEADERS
-        G4PlacedSolid.icc
         G4Assembly.hh
-        G4Hyperbola.icc
         G4Assembly.icc
-        G4PlacedSolid.hh
         G4Axis2Placement3D.hh
-        G4PlacementVector.hh
         G4Axis2Placement3D.icc
-        G4Plane.hh
-        G4BREPSolid.hh
-        G4Point3DVector.hh
-        G4BREPSolid.icc
-        G4PointRat.hh
-        G4BREPSolidBox.hh
-        G4PointRat.icc
-        G4BREPSolidCone.hh
-        G4ProjectedSurface.hh
-        G4BREPSolidCylinder.hh
-        G4Ray.icc
-        G4Ray.hh
-        G4BREPSolidOpenPCone.hh
-        G4Sort.hh
-        G4BREPSolidPCone.hh
-        G4STEPEntity.hh
-        G4BREPSolidPolyhedra.hh
-        G4SphericalSurface.hh
-        G4BREPSolidSphere.hh
-        G4Surface.icc
-        G4BREPSolidTorus.hh
-        G4Surface.hh
-        G4BSplineCurve.hh
-        G4SurfaceBoundary.hh
-        G4BSplineCurve.icc
-        G4SurfaceBoundary.icc
-        G4BSplineCurveWithKnots.hh
-        G4SurfaceList.hh
-        G4BSplineSurface.hh
-        G4ThreeMat.hh
-        G4BSplineSurface.icc
-        G4ToroidalSurface.hh
-        G4BSplineSurfaceWithKnots.hh
-        G4ToroidalSurface.icc
         G4BezierSurface.hh
-        G4UVHit.hh
         G4BezierSurface.icc
         G4BoundingBox3D.hh
         G4BoundingBox3D.icc
+        G4BREPSolidBox.hh
+        G4BREPSolidCone.hh
+        G4BREPSolidCylinder.hh
+        G4BREPSolid.hh
+        G4BREPSolid.icc
+        G4BREPSolidOpenPCone.hh
+        G4BREPSolidPCone.hh
+        G4BREPSolidPolyhedra.hh
+        G4BREPSolidSphere.hh
+        G4BREPSolidTorus.hh
+        G4BSplineCurve.hh
+        G4BSplineCurve.icc
+        G4BSplineCurveWithKnots.hh
+        G4BSplineSurface.hh
+        G4BSplineSurface.icc
+        G4BSplineSurfaceWithKnots.hh
         G4CircularCurve.hh
         G4CircularCurve.icc
         G4CompositeCurve.hh
         G4CompositeCurve.icc
-        G4Conic.hh
-        G4Conic.icc
         G4ConicalSurface.hh
         G4ConicalSurface.icc
+        G4Conic.hh
+        G4Conic.icc
         G4ControlPoints.hh
         G4ControlPoints.icc
         G4ConvexHull.hh
@@ -110,6 +87,7 @@ GEANT4_DEFINE_MODULE(NAME G4brep
         G4FPlane.icc
         G4Globals.hh
         G4Hyperbola.hh
+        G4Hyperbola.icc
         G4KnotVector.hh
         G4KnotVector.icc
         G4Line.hh
@@ -118,16 +96,40 @@ GEANT4_DEFINE_MODULE(NAME G4brep
         G4OsloMatrix.icc
         G4Parabola.hh
         G4Parabola.icc
+        G4PlacedSolid.hh
+        G4PlacedSolid.icc
+        G4PlacementVector.hh
+        G4Plane.hh
+        G4Point3DVector.hh
+        G4PointRat.hh
+        G4PointRat.icc
+        G4ProjectedSurface.hh
         G4ProjectedSurface.icc
+        G4Ray.hh
+        G4Ray.icc
         G4RectangularTrimmedSurface.hh
+        G4Sort.hh
+        G4SphericalSurface.hh
         G4SphericalSurface.icc
+        G4STEPEntity.hh
+        G4SurfaceBoundary.hh
+        G4SurfaceBoundary.icc
+        G4Surface.hh
+        G4Surface.icc
+        G4SurfaceList.hh
         G4SurfaceOfLinearExtrusion.hh
         G4SurfaceOfRevolution.hh
+        G4ThreeMat.hh
+        G4ToroidalSurface.hh
+        G4ToroidalSurface.icc
+        G4UVHit.hh
     SOURCES
         G4Assembly.cc
         G4Axis2Placement3D.cc
-        G4BREPSolid.cc
+        G4BezierSurface.cc
+        G4BoundingBox3D.cc
         G4BREPSolidBox.cc
+        G4BREPSolid.cc
         G4BREPSolidCone.cc
         G4BREPSolidCylinder.cc
         G4BREPSolidOpenPCone.cc
@@ -139,12 +141,10 @@ GEANT4_DEFINE_MODULE(NAME G4brep
         G4BSplineCurveWithKnots.cc
         G4BSplineSurface.cc
         G4BSplineSurfaceWithKnots.cc
-        G4BezierSurface.cc
-        G4BoundingBox3D.cc
         G4CircularCurve.cc
         G4CompositeCurve.cc
-        G4Conic.cc
         G4ConicalSurface.cc
+        G4Conic.cc
         G4ControlPoints.cc
         G4Curve.cc
         G4CurvePoint.cc
@@ -166,8 +166,8 @@ GEANT4_DEFINE_MODULE(NAME G4brep
         G4RectangularTrimmedSurface.cc
         G4Sort.cc
         G4SphericalSurface.cc
-        G4Surface.cc
         G4SurfaceBoundary.cc
+        G4Surface.cc
         G4SurfaceList.cc
         G4SurfaceOfLinearExtrusion.cc
         G4SurfaceOfRevolution.cc

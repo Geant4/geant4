@@ -24,17 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.5 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSNofSecondary.cc,v 1.5 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofSecondary
 #include "G4PSNofSecondary.hh"
 
 // (Description)
-//   This is a primitive scorer class for scoring number of steps in the
-//  Cell.
+//   This is a primitive scorer class for scoring number of secondaries 
+// in the Cell.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// Modify:  2011-09-09  T.Aso modify comment in PrintAll().
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
@@ -70,8 +71,8 @@ void G4PSNofSecondary::SetParticle(const G4String& particleName){
       G4String msg = "Particle <";
       msg += particleName;
       msg += "> not found.";
-      G4Exception("G4SDParticleFilter::add()",
-		  "DetUtil0002",FatalException,msg);
+      G4Exception("G4PSNofSecondary::SetParticle",
+		  "DetPS0101",FatalException,msg);
   }
   particleDef = pd;
 }
@@ -100,7 +101,7 @@ void G4PSNofSecondary::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of step: " << *(itr->second)/GetUnitValue()
+	   << "  num of secondaries: " << *(itr->second)/GetUnitValue()
 	   << G4endl;
   }
 }
@@ -111,8 +112,8 @@ void G4PSNofSecondary::SetUnit(const G4String& unit)
     unitName = unit;
     unitValue = 1.0;
   }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+    G4Exception("G4PSNofSecondary::SetUnit","DetPS0010",JustWarning,msg);
   }
 }
 

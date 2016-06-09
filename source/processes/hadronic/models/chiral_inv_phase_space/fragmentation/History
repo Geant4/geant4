@@ -1,7 +1,7 @@
 
-       ==========================================================
+       =--------------------------------------------------------=
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+       =--------------------------------------------------------=
 
 History file for  hadronic/models/chiral_inv_phase_space/fragmentation  
 directory.
@@ -12,6 +12,20 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+
+28-Sep-2011 D.H. Wright                     (hadr_chips-frag-V09-04-00)
+-----------------------------------------------------------------------
+G4Exception migration:  use new G4Exception in files
+  G4QFragmentation.cc
+  G4QIonIonCollision.cc
+
+14-Dec-2010 M.Kosov                         (hadr-chips-frag-V09-03-09)
+-----------------------------------------------------------------------
+Photon nuclear environment is fixed for 1 Quasmon. Thanks to Andrea.
+
+11-Dec-2010 M.Kosov                         (hadr-chips-frag-V09-03-08)
+-----------------------------------------------------------------------
+Zero nuclear residual correction candidate. Thanks to Andrea.
 
 10 Nov 2010  Dennis Wright                  (hadr-chips-frag-V09-03-07)
 -----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2010/11/11 01:13:42 akimura Exp $
+$Id: History,v 1.30 2011-01-03 14:35:09 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+17th May 2010  John Allison  (DAWN-V09-04-00)
+- G4FRSceneFunc.icc: Fixed gcc-4.6.0 warning.
+
+23, December L. Garnier
+- GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 11 November 2010  Akinori Kimura (DAWN-V09-03-01)
 - Replaced G4cerr with G4cout and added the following line before G4cout.

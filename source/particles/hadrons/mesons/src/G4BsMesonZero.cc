@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.cc,v 1.20 2010/10/01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BsMesonZero.cc,v 1.20 2010-10-01 02:41:43 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -33,8 +33,7 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  New impelemenataion as an utility class  M.Asai, 26 July 2004
-// ----------------------------------------------------------------------
+//
 
 #include "G4BsMesonZero.hh"
 #include "G4ParticleTable.hh"

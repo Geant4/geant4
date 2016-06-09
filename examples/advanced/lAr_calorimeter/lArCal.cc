@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.13 2010/11/16 17:54:39 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: lArCal.cc,v 1.13 2010-11-16 17:54:39 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -55,7 +55,6 @@
 #include "FCALPrimaryGeneratorAction.hh"
 #include "LHEP.hh"
 #include "QGSP.hh"
-#include "QGSC.hh"
 #include "QGSP_BIC_EMY.hh"
 
 

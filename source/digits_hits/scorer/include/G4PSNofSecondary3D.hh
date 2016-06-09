@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary3D.hh,v 1.2 2007/08/28 10:11:29 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSNofSecondary3D.hh,v 1.2 2007-08-28 10:11:29 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4PSNofSecondary3D_h

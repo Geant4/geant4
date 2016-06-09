@@ -23,44 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 20110922  M. Kelsey -- Replace print() with stream operator<<
+
 #ifndef G4FISSION_CONFIGURATION_HH
 #define G4FISSION_CONFIGURATION_HH
 
 #include "globals.hh"
-#include <iostream>
+#include <iosfwd>
 
 class G4FissionConfiguration {
-
 public:
-
-  G4FissionConfiguration() {
-  };
-
-  G4FissionConfiguration(G4double a, 
-			 G4double z, 
-			 G4double ez, 
-			 G4double ek, 
-			 G4double ep) 
-    : afirst(a), 
-    zfirst(z), 
-    ezet(ez), 
-    ekin(ek), 
-    epot(ep) {
-};
-
-  void print() {
-    G4cout << " new configuration " << G4endl
-	   << " a1 " << afirst << " z1 " << zfirst << " ez " << ezet <<
-      " ekin " << ekin << " epot " << epot << G4endl;
-  };
+  G4FissionConfiguration() {}
+  G4FissionConfiguration(G4double a, G4double z, G4double ez, 
+			 G4double ek, G4double ep) 
+    : afirst(a), zfirst(z), ezet(ez), ekin(ek), epot(ep) {}
 
   G4double afirst;
   G4double zfirst;
   G4double ezet;
   G4double ekin;
   G4double epot;
-
 };        
+
+std::ostream& operator<<(std::ostream& os, const G4FissionConfiguration& fis);
 
 #endif // G4FISSION_CONFIGURATION_HH 
 

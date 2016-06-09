@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2010/11/13 10:37:57 allison Exp $
+$Id: History,v 1.23 2010-12-27 13:27:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th November 2011  Laurent Garnier  (visexternal-V09-04-03)
+- G4OpenGL2PSAction : Back to old buffer size (cause sometime problems
+  on Qt viewer)
+
+9th November 2011  Laurent Garnier
+- G4OpenGL2PSAction : Best control on G4gl2psBeginPage
+
+21st October 2011  John Allison  (visexternal-V09-04-02)
+- Tagged.
+
+21th October 2011  Laurent Garnier
+- G4OpenGL2PSAction : Reset fFile after use, force wb writing
+
+20th October 2011 L.Garnier
+- Add methods to extend buffer size up to a limit if needed
+
+27th January 2011 L.Garnier
+- Restored GNUmakefile and fix the bug introduce the 23th december
+
+26th January 2011  Gabriele Cosmo  (visexternal-V09-04-01)
+- Restored GNUmakefile as it was in tag "visexternal-V09-03-03", as it
+  breaks compilation !
+
+27th December 2010  John Allison  (visexternal-V09-04-00)
+- Tagged.
+
+23, December L. Garnier 
+- GNUmakefile : Remove Qt stuff from Makefile
 
 13th November 2010, John Allison  (visexternal-V09-03-03)
 - Geant4_gl2ps.h: Added #ifdef _WIN32, #define _USE_MATH_DEFINE.

@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.19 2010/09/17 18:45:43 maire Exp $
+# $Id: proton.mac,v 1.19 2010-09-17 18:45:43 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -7,13 +7,12 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_WATER
+/testem/det/setMat Water
 /testem/det/setSizeX  10 cm
 /testem/det/setSizeYZ 10 cm
-/testem/det/tallyMat G4_WATER
 #
-#/testem/phys/addPhysics  local
-/testem/phys/addPhysics  emstandard_opt3
+/testem/phys/addPhysics  local
+##/testem/phys/addPhysics  emstandard_opt3
 #
 /run/initialize
 #

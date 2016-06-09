@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.10 2009/05/15 17:12:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4KleinNishinaCompton.cc,v 1.10 2009-05-15 17:12:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +66,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   lowestGammaEnergy = 1.0*eV;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,6 +142,15 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   // Note : Effects due to binding of atomic electrons are negliged.
  
   G4double gamEnergy0 = aDynamicGamma->GetKineticEnergy();
+
+  // extra protection
+  if(gamEnergy0 < lowestGammaEnergy) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy0);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    return;
+  }
+
   G4double E0_m = gamEnergy0 / electron_mass_c2 ;
 
   G4ThreeVector gamDirection0 = aDynamicGamma->GetMomentumDirection();
@@ -176,25 +186,25 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   // scattered gamma angles. ( Z - axis along the parent gamma)
   //
 
+  if(sint2 < 0.0) { sint2 = 0.0; }
   G4double cosTeta = 1. - onecost; 
   G4double sinTeta = sqrt (sint2);
   G4double Phi     = twopi * G4UniformRand();
-  G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
 
   //
   // update G4VParticleChange for the scattered gamma
   //
    
-  G4ThreeVector gamDirection1 ( dirx,diry,dirz );
+  G4ThreeVector gamDirection1(sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
-  fParticleChange->SetProposedKineticEnergy(gamEnergy1);
   if(gamEnergy1 > lowestGammaEnergy) {
     fParticleChange->ProposeMomentumDirection(gamDirection1);
+    fParticleChange->SetProposedKineticEnergy(gamEnergy1);
   } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-    gamEnergy1 += fParticleChange->GetLocalEnergyDeposit();
     fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
+    fParticleChange->SetProposedKineticEnergy(0.0);
   }
 
   //

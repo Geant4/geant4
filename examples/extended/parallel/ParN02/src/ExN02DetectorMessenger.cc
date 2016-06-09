@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.4 2006/06/29 17:34:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02DetectorMessenger.cc,v 1.12 2008-09-22 16:41:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,9 +63,14 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in X direction.");
   FieldCmd->SetParameterName("Bx",false);
-  FieldCmd->SetDefaultUnit("tesla");
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+        
+  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/N02/det/stepMax",this);  
+  StepMaxCmd->SetGuidance("Define a step max");
+  StepMaxCmd->SetParameterName("stepMax",false);
+  StepMaxCmd->SetUnitCategory("Length");
+  StepMaxCmd->AvailableForStates(G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +80,7 @@ ExN02DetectorMessenger::~ExN02DetectorMessenger()
   delete TargMatCmd;
   delete ChamMatCmd;
   delete FieldCmd;
+  delete StepMaxCmd;  
   delete detDir;
   delete N02Dir;
 }
@@ -91,6 +97,9 @@ void ExN02DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   
   if( command == FieldCmd )
    { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
+      
+  if( command == StepMaxCmd )
+   { myDetector->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

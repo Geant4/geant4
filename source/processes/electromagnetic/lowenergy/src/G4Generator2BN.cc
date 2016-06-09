@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BN.cc,v 1.9 2010/10/14 14:01:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Generator2BN.cc,v 1.9 2010-10-14 14:01:02 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -362,8 +362,9 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
 {
 
   G4double Eel;
-  G4double kmin2; 
-  G4double kmax, t;
+  //G4double kmin2; 
+  //G4double kmax; 
+  G4double t;
   G4double cte2;
   G4double y, u;
   G4double fk, ft;
@@ -378,8 +379,8 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
   index = G4int(std::log10(Ek)*100) - index_min;
   Eel = Ek + electron_mass_c2;
 
-  kmax = Ek;
-  kmin2 = kcut;
+  //kmax = Ek;
+  //kmin2 = kcut;
 
   c = ctab[index];
   A = Atab[index];

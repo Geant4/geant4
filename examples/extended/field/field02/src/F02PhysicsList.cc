@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.15 2010/08/16 08:24:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: F02PhysicsList.cc,v 1.15 2010-08-16 08:24:39 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
 #include "G4Timer.hh"

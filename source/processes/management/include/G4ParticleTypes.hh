@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTypes.hh,v 1.6 2006/06/29 21:07:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleTypes.hh,v 1.6 2006-06-29 21:07:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4UnknownParticle.hh"
 
 // Leptons
 #include "G4MuonPlus.hh"
@@ -88,6 +89,7 @@
 #include "G4DsMesonPlus.hh"
 #include "G4DsMesonMinus.hh"
 #include "G4JPsi.hh"
+#include "G4Etac.hh"
 
 #include "G4BMesonPlus.hh"
 #include "G4BMesonMinus.hh"
@@ -95,6 +97,7 @@
 #include "G4AntiBMesonZero.hh"
 #include "G4BsMesonZero.hh"
 #include "G4AntiBsMesonZero.hh"
+#include "G4Upsiron.hh"
 
 
 // Barions
@@ -135,11 +138,32 @@
 #include "G4AntiXicZero.hh"
 #include "G4AntiOmegacZero.hh"
 
+#include "G4Lambdab.hh"
+#include "G4SigmabPlus.hh"
+#include "G4SigmabZero.hh"
+#include "G4SigmabMinus.hh"
+#include "G4XibZero.hh"
+#include "G4XibMinus.hh"
+#include "G4OmegabMinus.hh"
+
+#include "G4AntiLambdab.hh"
+#include "G4AntiSigmabPlus.hh"
+#include "G4AntiSigmabZero.hh"
+#include "G4AntiSigmabMinus.hh"
+#include "G4AntiXibZero.hh"
+#include "G4AntiXibMinus.hh"
+#include "G4AntiOmegabMinus.hh"
+
 // Nuclei
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4He3.hh"
 #include "G4Triton.hh"
+
+#include "G4AntiAlpha.hh"
+#include "G4AntiDeuteron.hh"
+#include "G4AntiHe3.hh"
+#include "G4AntiTriton.hh"
 
 //ions
 #include "G4GenericIon.hh"

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4He3GEMProbability.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4He3GEMProbability.cc,v 1.5 2009-09-15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -37,48 +36,12 @@
 
 G4He3GEMProbability::G4He3GEMProbability() :
     G4GEMProbability(3,2,1.0/2.0) // A,Z,Gamma
-{
-    SetExcitationEnergiesPtr(&ExcitEnergies);
-    SetExcitationSpinsPtr(&ExcitSpins);
-    SetExcitationLifetimesPtr(&ExcitLifetimes);
-}
+{}
 
+G4He3GEMProbability::~G4He3GEMProbability()
+{}
 
-G4He3GEMProbability::G4He3GEMProbability(const G4He3GEMProbability &) : G4GEMProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3GEMProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4He3GEMProbability & G4He3GEMProbability::
-operator=(const G4He3GEMProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3GEMProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4He3GEMProbability::operator==(const G4He3GEMProbability &) const
-{
-    return false;
-}
-
-G4bool G4He3GEMProbability::operator!=(const G4He3GEMProbability &) const
-{
-    return true;
-}
-
-//JMQ 190709 C's values from Furihata's paper 
-//(notes added on proof in Dostrovskii's paper) 
-G4double G4He3GEMProbability::CCoeficient(const G4double/* aZ*/) const
-{
-    return 0.;
-}
-
-
-//G4double G4He3GEMProbability::CCoeficient(const G4double aZ) const
+//G4double G4He3GEMProbability::CCoeficient(G4int aZ) const
 //{
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

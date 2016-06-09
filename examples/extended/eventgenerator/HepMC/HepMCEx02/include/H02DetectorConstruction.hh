@@ -26,7 +26,7 @@
 // ====================================================================
 //
 //   H02DetectorConstruction.hh
-//   $Id: H02DetectorConstruction.hh,v 1.3 2006/06/29 17:09:38 gunter Exp $
+//   $Id: H02DetectorConstruction.hh,v 1.3 2006-06-29 17:09:38 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_DETECTOR_CONSTRUCTION_H

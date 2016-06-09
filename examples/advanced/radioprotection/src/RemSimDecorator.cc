@@ -30,8 +30,8 @@
 //    *                         *          
 //    ***************************
 //
-// $Id: RemSimDecorator.cc,v 1.6 2006/06/29 16:23:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimDecorator.cc,v 1.6 2006-06-29 16:23:37 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:09:27 bmorgan Exp $
+# $Id: sources.cmake,v 1.1 2010-09-29 19:09:27 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4parameterisation
         G4FastSimulationManager.hh
         G4FastSimulationManagerProcess.hh
         G4FastSimulationMessenger.hh
+        G4FastSimulationProcessType.hh
         G4FastSimulationVector.hh
         G4FastSimulationVector.icc
         G4FastStep.hh

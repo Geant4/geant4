@@ -190,8 +190,9 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 	  }
       
     }
-  return builder->GetPhantom(); 
+  G4VPhysicalVolume* result=builder->GetPhantom(); 
   delete builder;
+  return result; 
 }
 
 void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, G4bool bodyPartSensitivity)

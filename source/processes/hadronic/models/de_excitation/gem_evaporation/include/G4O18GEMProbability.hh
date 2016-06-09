@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4O18GEMProbability.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4O18GEMProbability.hh,v 1.4 2009-09-15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
@@ -46,7 +46,8 @@ public:
   // Only available constructor
   G4O18GEMProbability();
     
-  ~G4O18GEMProbability() {}
+  ~G4O18GEMProbability();
+
 private:  
   // Copy constructor
   G4O18GEMProbability(const G4O18GEMProbability &right);
@@ -54,22 +55,6 @@ private:
   const G4O18GEMProbability & operator=(const G4O18GEMProbability &right);
   G4bool operator==(const G4O18GEMProbability &right) const;
   G4bool operator!=(const G4O18GEMProbability &right) const;
-  
-
-private:
-  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
-  {
-    return -GetCoulombBarrier(fragment);
-  }
-  
-  
-  // Excitation energy levels 
-  std::vector<G4double> ExcitEnergies;
-  // Spin of excitation energy levels 
-  std::vector<G4double> ExcitSpins;
-  
-  std::vector<G4double> ExcitLifetimes;
   
 };
 

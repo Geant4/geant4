@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.13 2006/06/29 18:12:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3MedTable.hh,v 1.13 2006-06-29 18:12:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
 // Class description:
@@ -43,6 +43,7 @@
 #define G3MEDTABLE_HH 1
 
 #include "G3MedTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -74,5 +75,5 @@ class G3MedTable
     G3MediumVector*  fMedVector;
 };
 
-extern G3MedTable G3Med;
+extern G3G4DLL_API G3MedTable G3Med;
 #endif

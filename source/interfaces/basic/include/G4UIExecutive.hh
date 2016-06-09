@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIExecutive.hh,v 1.4 2009/11/20 22:10:31 kmura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4UIExecutive.hh,v 1.4 2009-11-20 22:10:31 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   G4UIExecutive.hh

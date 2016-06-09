@@ -55,31 +55,36 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4GeneralSpaceNNCrossSection.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
+#include "G4TripathiLightCrossSection.hh"
+#include "G4TripathiCrossSection.hh"
+#include "G4IonsShenCrossSection.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Proton.hh"
 
 #include <iomanip>
 
 
 G4GeneralSpaceNNCrossSection::G4GeneralSpaceNNCrossSection ()
+ : G4VCrossSectionDataSet("General Space NN")
 {
   protonInelastic = new G4ProtonInelasticCrossSection();
   ionProton       = new G4IonProtonCrossSection();
   TripathiGeneral = new G4TripathiCrossSection();
   TripathiLight   = new G4TripathiLightCrossSection();
   Shen            = new G4IonsShenCrossSection();
-  
-  return;
+  theProton       = G4Proton::Proton();  
 }
-
 
 G4GeneralSpaceNNCrossSection::~G4GeneralSpaceNNCrossSection ()
 {
@@ -89,152 +94,90 @@ G4GeneralSpaceNNCrossSection::~G4GeneralSpaceNNCrossSection ()
   delete TripathiLight;
   delete Shen;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 
-G4bool G4GeneralSpaceNNCrossSection::IsIsoApplicable
- (const G4DynamicParticle* theProjectile, G4int ZZ, G4int AA)
+G4bool G4GeneralSpaceNNCrossSection::IsElementApplicable
+  (const G4DynamicParticle* theProjectile, G4int, const G4Material*)
 {
-  G4bool result = protonInelastic->IsIsoApplicable(theProjectile, ZZ, AA);
-  if (!result)
-  {
-    result = ionProton->IsIsoApplicable(theProjectile, ZZ, AA);
-    if (!result)
-    {
-      result = TripathiGeneral->IsIsoApplicable(theProjectile, ZZ, AA);
-      if (!result)
-        result = Shen->IsIsoApplicable(theProjectile, ZZ, AA);
-    }
-  }
-  return result;
+  return (1 <= theProjectile->GetDefinition()->GetBaryonNumber());
 }
 
-G4bool G4GeneralSpaceNNCrossSection::IsApplicable
-  (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
-{
-  G4bool result = protonInelastic->IsApplicable(theProjectile, theTarget);
-  if (!result)
-  {
-    result = ionProton->IsApplicable(theProjectile, theTarget);
-    if (!result)
-    {
-      result = TripathiGeneral->IsApplicable(theProjectile, theTarget);
-      if (!result)
-        result = Shen->IsApplicable(theProjectile, theTarget);
-    }
-  }
-  return result;
-}
 ///////////////////////////////////////////////////////////////////////////////
 //
 
-G4double G4GeneralSpaceNNCrossSection::GetCrossSection
-  (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
-  G4double theTemperature)
-{
-  G4int nIso = theTarget->GetNumberOfIsotopes();
-  G4double xsection = 0;
-     
-  if (nIso) {
-    G4double sig;
-    G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
-    G4double* abundVector = theTarget->GetRelativeAbundanceVector();
-    G4int ZZ;
-    G4int AA;
-     
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ = (*isoVector)[i]->GetZ();
-      AA = (*isoVector)[i]->GetN();
-      sig = GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
-      xsection += sig*abundVector[i];
-    }
-   
-  } else {
-    G4int ZZ = G4lrint(theTarget->GetZ());
-    G4int AA = G4lrint(theTarget->GetN());
-    xsection = GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
-  }
-    
-  return xsection;
-}
-
-
-G4double
-G4GeneralSpaceNNCrossSection::GetZandACrossSection(const G4DynamicParticle* theProjectile,
-                                                   G4int ZZ, G4int AA, G4double theTemperature)
+G4double G4GeneralSpaceNNCrossSection::GetElementCrossSection
+  (const G4DynamicParticle* theProjectile, G4int ZT, const G4Material* mat)
 {
   G4double result = 0.0;
-
-  const G4double AT = AA;
-  const G4double ZT = ZZ;
-  const G4double AP = theProjectile->GetDefinition()->GetBaryonNumber();
-  const G4double ZP = theProjectile->GetDefinition()->GetPDGCharge();
+  G4int ZP = G4lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
 
   if (verboseLevel >= 2)
   {
+    G4int AP = theProjectile->GetDefinition()->GetBaryonNumber();
     G4cout <<"In G4GeneralSpaceNNCrossSection::GetCrossSection" <<G4endl;
     G4cout <<"Projectile A = " <<std::setw(8) <<AP 
            <<" Z = "           <<std::setw(8) <<ZP
            <<" Energy = "      <<theProjectile->GetKineticEnergy()/AP
            <<" MeV/nuc" <<G4endl;
-    G4cout <<"Target     A = " <<std::setw(8) <<AT
-           <<" Z = "           <<std::setw(8) <<ZT
+    G4cout <<"Target     Z = " <<std::setw(8) <<ZT
            <<G4endl;
   }
-  if (theProjectile->GetDefinition()==G4Proton::Proton())
+  if (theProjectile->GetDefinition()==theProton)
   {
     if (ZT>5)
     {
       result = protonInelastic->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4ProtonInelasticCrossSection" <<G4endl;
     }
     else
     {
       result = TripathiLight->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
   }
-  else if (AT==1 && ZT==1)
+  else if (ZT==1)
   {
     if (ZP>5)
     {
       result = ionProton->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4IonProtonCrossSection" <<G4endl;
     }
     else
     {
       result = TripathiLight->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
   }
   else
   {
-    if (TripathiLight->IsIsoApplicable(theProjectile, ZZ, AA))
+    if (TripathiLight->IsElementApplicable(theProjectile, ZT, mat))
     {
       result = TripathiLight->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiLightCrossSection" <<G4endl;
     }
-    else if (TripathiGeneral->IsIsoApplicable(theProjectile, ZZ, AA))
+    else if (TripathiGeneral->IsElementApplicable(theProjectile, ZT, mat))
     {
       result = TripathiGeneral->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4TripathiCrossSection" <<G4endl;
     }
-    else if (Shen->IsIsoApplicable(theProjectile, ZZ, AA))
+    else if (Shen->IsElementApplicable(theProjectile, ZT, mat))
     {
       result = Shen->
-        GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
+        GetElementCrossSection(theProjectile, ZT, mat);
       if (verboseLevel >= 2)
         G4cout <<"Selecting G4IonsShenCrossSection" <<G4endl;
     }

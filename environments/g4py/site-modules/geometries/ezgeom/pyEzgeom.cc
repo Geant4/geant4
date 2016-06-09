@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyEzgeom.cc,v 1.1 2008/12/01 07:07:34 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyEzgeom.cc,v 1.1 2008-12-01 07:07:34 kmura Exp $
+// $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyEZgeom.cc
 //

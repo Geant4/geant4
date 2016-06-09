@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.34 2010/06/23 13:56:30 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QCHIPSWorld.cc,v 1.34 2010-06-23 13:56:30 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -70,7 +70,6 @@ G4QCHIPSWorld::~G4QCHIPSWorld()      // The CHIPS World is destructed only in th
 
 // Standard output for CHIPS World
 std::ostream& operator<<(std::ostream& lhs, G4QCHIPSWorld& rhs)
-//       ============================================
 {
   // @@ Later make a list of activated particles and clusters
   lhs << "[ Currently a#of particles in the CHIPS World = " << rhs.GetQPEntries() << "]";
@@ -79,7 +78,6 @@ std::ostream& operator<<(std::ostream& lhs, G4QCHIPSWorld& rhs)
 
 // Returns Pointer to the CHIPS World
 G4QCHIPSWorld* G4QCHIPSWorld::Get()
-//             ====================
 {
   static G4QCHIPSWorld theWorld;                // *** Static body of the CHIPS World *** 
 // Returns Pointer to the CHIPS World
@@ -96,7 +94,6 @@ G4QParticleVector & G4QCHIPSWorld::GetQWorld()
 
 // Return pointer to Particles of the CHIPS World
 G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
-//                 ===========================================
 {
   //static const G4int mnofParts = 486;           // max number of particles (up to A=80)
   //static const G4int mnofParts = 494;           // max number of particles (up to A=80)

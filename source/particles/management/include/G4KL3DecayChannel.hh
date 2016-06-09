@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.hh,v 1.6 2010/10/30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4KL3DecayChannel.hh,v 1.6 2010-10-30 07:55:00 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -52,6 +52,14 @@ class G4KL3DecayChannel :public G4VDecayChannel
 			const G4String& theNutrinoName);
     //  Destructor
       virtual ~G4KL3DecayChannel();
+ 
+  protected:
+    // Copy constructor and assignment operator
+      G4KL3DecayChannel(const G4KL3DecayChannel &);
+      G4KL3DecayChannel & operator=(const G4KL3DecayChannel &);
+
+  private:
+      G4KL3DecayChannel();
 
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     

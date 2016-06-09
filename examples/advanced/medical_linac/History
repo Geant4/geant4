@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2010/11/30 14:51:57 allison Exp $
+$Id: History,v 1.39 2010-11-30 14:51:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,18 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.11.2011    G.Folger,                 medical_linac-V09-04-03
+	      - Warning removed for gcc41: correct return type of 
+	        ML2PrimaryGenerationAction::getNrecycling to G4int.
+
+22.11.2011    C.Andenna, G.A.P.Cirrone, medical_linac-V09-04-02
+	      - Warnings removed
+
+04.11.2011    F.Romano, tag medical_linac-V09-04-01
+             - Migration to new G4Exception scheme
+
+06.06.2011    V.Ivanchenko, tag medical_linac-V09-04-00
+             - removed obsolete hadron elastic builders
 
 30.11.2010    J.Allison, tag medical_linac-V09-03-11
              - vis.mac: Bug fix:

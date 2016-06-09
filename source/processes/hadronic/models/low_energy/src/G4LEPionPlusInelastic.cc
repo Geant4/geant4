@@ -23,57 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEPionPlusInelastic.cc,v 1.15 2007-02-24 06:28:52 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: G4LEPionPlusInelastic.cc,v 1.15 2007/02/24 06:28:52 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
- // Hadronic Process: PionPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
- // fixing charge exchange - HPW Sep 2002.
+// Hadronic Process: PionPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 19-Nov-1996
+
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// fixing charge exchange - HPW Sep 2002.
  
 #include "G4LEPionPlusInelastic.hh"
 #include "Randomize.hh"
+#include <iostream>
 
- G4HadFinalState *
-  G4LEPionPlusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                        G4Nucleus &targetNucleus )
-  {
-    const G4HadProjectile *originalIncident = &aTrack;
-    if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
-    {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
-      return &theParticleChange;      
-    }
 
-    // create the target particle
+G4LEPionPlusInelastic::G4LEPionPlusInelastic(const G4String& name)
+ :G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(55.*GeV);
+}
+
+
+void G4LEPionPlusInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LEPionPlusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic pi+ scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to pions with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LEPionPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                     G4Nucleus& targetNucleus)
+{
+  const G4HadProjectile *originalIncident = &aTrack;
+  if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+    return &theParticleChange;      
+  }
+
+  // create the target particle
     
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-//    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
-    G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
+  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+  G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEPionPlusInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material* targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEPionPlusInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    G4ReactionProduct currentParticle( 
-    const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
-    currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
-    currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
+  }
+  G4ReactionProduct currentParticle( 
+  const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
+  currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
+  currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    
-    G4double ek = originalIncident->GetKineticEnergy();
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass();
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been Done  
+  G4double ek = originalIncident->GetKineticEnergy();
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass();
     
     G4double tkin = targetNucleus.Cinema( ek );
     ek += tkin;
@@ -112,27 +131,26 @@
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
-    const G4double cutOff = 0.1*MeV;
-    if( currentParticle.GetKineticEnergy() > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
+  const G4double cutOff = 0.1*MeV;
+  if (currentParticle.GetKineticEnergy() > cutOff)
+    Cascade(vec, vecLen,
+            originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen,
+                   originalIncident, originalTarget, modifiedOriginal,
+                   targetNucleus, currentParticle, targetParticle,
+                   incidentHasChanged, targetHasChanged, quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
+  SetUpChange(vec, vecLen,
+              currentParticle, targetParticle,
+              incidentHasChanged);
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
+  delete originalTarget;
+  return &theParticleChange;
+}
  
- void
-  G4LEPionPlusInelastic::Cascade(
+void G4LEPionPlusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
@@ -140,8 +158,8 @@
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,
    G4bool &targetHasChanged,
-   G4bool &quasiElastic )
-  {
+   G4bool &quasiElastic)
+{
     // derived from original FORTRAN code CASPIP by H. Fesefeldt (18-Sep-1987)
     //
     // pi+  undergoes interaction with nucleon within nucleus.
@@ -373,9 +391,6 @@
          break;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
-    return;
-  }
-
- /* end of file */
- 
+  SetUpPions( np, nm, nz, vec, vecLen );
+  return;
+}

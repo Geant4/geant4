@@ -97,9 +97,9 @@ namespace  CexmcCustomFilter
 
     struct  Compiler
     {
-        template < typename  A, typename  B = boost::fusion::unused_type,
-                   typename  C = boost::fusion::unused_type,
-                   typename  D = boost::fusion::unused_type >
+        template  < typename  A, typename  B = boost::fusion::unused_type,
+                    typename  C = boost::fusion::unused_type,
+                    typename  D = boost::fusion::unused_type >
         struct  result { typedef void  type; };
 
         void  operator()( ParseResult &  parseResult, Action  value ) const;
@@ -185,8 +185,8 @@ namespace  CexmcCustomFilter
                 ( lit( "tpt" )[ _val = KeepTPT ] |
                   lit( "edt" )[ _val = KeepEDT ] ) |
                 lit( "delete" ) >>
-                ( lit ( "tpt" )[ _val = DeleteTPT ] |
-                  lit ( "edt" )[ _val = DeleteEDT ] );
+                ( lit( "tpt" )[ _val = DeleteTPT ] |
+                  lit( "edt" )[ _val = DeleteEDT ] );
 
         condition = lit( "if" ) >> expression[ op( _val, _1 ) ];
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.32 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChange.cc,v 1.32 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -51,12 +51,13 @@
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChange::G4ParticleChange()
-  : G4VParticleChange(), theEnergyChange(0.), theTimeChange(0.),
-    theProperTimeChange(0.), theMassChange(0.), theChargeChange(0.),
+  : G4VParticleChange(), theEnergyChange(0.), 
+    theVelocityChange(0.), isVelocityChanged(false),
+    theGlobalTime0(0.),    theLocalTime0(0.),
+    theTimeChange(0.),     theProperTimeChange(0.), 
+    theMassChange(0.), theChargeChange(0.),
     theMagneticMomentChange(0.), theCurrentTrack(0)
 {
-  G4VParticleChange::SetSecondaryWeightByProcess(false);
-  G4VParticleChange::SetParentWeightByProcess(false);
 }
 
 G4ParticleChange::~G4ParticleChange() 
@@ -69,49 +70,74 @@ G4ParticleChange::~G4ParticleChange()
 }
 
 // copy constructor
-G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleChange(right)
+G4ParticleChange::G4ParticleChange(const G4ParticleChange &right)
+  : G4VParticleChange(right)
 {
    if (verboseLevel>1) {
     G4cout << "G4ParticleChange::  copy constructor is called " << G4endl;
    }
+   theCurrentTrack = right.theCurrentTrack;
+
    theMomentumDirectionChange = right.theMomentumDirectionChange;
    thePolarizationChange = right.thePolarizationChange;
-   thePositionChange = right.thePositionChange;
-   theTimeChange = right.theTimeChange;
-   theEnergyChange = right.theEnergyChange;
-   theMassChange = right.theMassChange;
-   theChargeChange = right.theChargeChange;
-   theMagneticMomentChange = right.theMagneticMomentChange;
-   //   theWeightChange = right.theWeightChange;
+   thePositionChange   = right.thePositionChange;
+   theGlobalTime0      = right.theGlobalTime0;
+   theLocalTime0       = right.theLocalTime0;
+   theTimeChange       = right.theTimeChange;
    theProperTimeChange = right.theProperTimeChange;
+   theEnergyChange     = right.theEnergyChange;
+   theVelocityChange   = right.theVelocityChange;
+   isVelocityChanged   = true;
+   theMassChange       = right.theMassChange;
+   theChargeChange     = right.theChargeChange;
+   theMagneticMomentChange = right.theMagneticMomentChange;
 }
 
 // assignemnt operator
 G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
 {
+#ifdef G4VERBOSE
    if (verboseLevel>1) {
     G4cout << "G4ParticleChange:: assignment operator is called " << G4endl;
    }
-   if (this != &right)
-   {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-
-      theMomentumDirectionChange = right.theMomentumDirectionChange;
-      thePolarizationChange = right.thePolarizationChange;
-      thePositionChange = right.thePositionChange;
-      theTimeChange = right.theTimeChange;
-      theEnergyChange = right.theEnergyChange;
-      theMassChange = right.theMassChange;
-      theChargeChange = right.theChargeChange;
-      theMagneticMomentChange = right.theMagneticMomentChange;
-      // theWeightChange = right.theWeightChange;
-
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
+#endif
+   if (this != &right){
+     if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+       if (verboseLevel>0) {
+	 G4cout << "G4ParticleChange: assignment operator Warning  ";
+	 G4cout << "theListOfSecondaries is not empty ";
+       }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+     }
+     delete theListOfSecondaries; 
+     
+     theListOfSecondaries = right.theListOfSecondaries;
+     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+     theNumberOfSecondaries = right.theNumberOfSecondaries;
+     theStatusChange = right.theStatusChange;
+     theCurrentTrack = right.theCurrentTrack;
+     
+     theMomentumDirectionChange = right.theMomentumDirectionChange;
+     thePolarizationChange = right.thePolarizationChange;
+     thePositionChange = right.thePositionChange;
+     theGlobalTime0      = right.theGlobalTime0;
+     theLocalTime0       = right.theLocalTime0;
+     theTimeChange       = right.theTimeChange;
+     theProperTimeChange = right.theProperTimeChange;
+     theEnergyChange     = right.theEnergyChange;
+     theVelocityChange   = right.theVelocityChange;
+     isVelocityChanged   = true;
+     theMassChange       = right.theMassChange;
+     theChargeChange     = right.theChargeChange;
+     theMagneticMomentChange = right.theMagneticMomentChange;
+     
+     theTrueStepLength = right.theTrueStepLength;
+     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+     theSteppingControlFlag = right.theSteppingControlFlag;
    }
    return *this;
 }
@@ -199,21 +225,28 @@ void G4ParticleChange::Initialize(const G4Track& track)
 
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-  theEnergyChange          = pParticle->GetKineticEnergy();
-  theMomentumDirectionChange        = pParticle->GetMomentumDirection();
-  thePolarizationChange    = pParticle->GetPolarization();
-  theProperTimeChange      = pParticle->GetProperTime();
+  theEnergyChange            = pParticle->GetKineticEnergy();
+  theVelocityChange          = track.GetVelocity();
+  isVelocityChanged          = false;
+  theMomentumDirectionChange = pParticle->GetMomentumDirection();
+  thePolarizationChange      = pParticle->GetPolarization();
+  theProperTimeChange        = pParticle->GetProperTime();
 
   // Set mass/charge/MagneticMoment  of DynamicParticle
   theMassChange = pParticle->GetMass();
   theChargeChange = pParticle->GetCharge();
   theMagneticMomentChange = pParticle->GetMagneticMoment();
 
-  // set Position/Time etc. equal to those of the parent track
+  // set Position  equal to those of the parent track
   thePositionChange      = track.GetPosition();
-  theTimeChange          = track.GetGlobalTime();
 
-  // theWeightChange        = track.GetWeight();
+  // set TimeChange equal to local time of the parent track
+  theTimeChange                = track.GetLocalTime();
+
+  // set initial Local/Global time of the parent track
+  theLocalTime0           = track.GetLocalTime();
+  theGlobalTime0          = track.GetGlobalTime();
+
 }
 
 //----------------------------------------------------------------
@@ -266,6 +299,9 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
+
   // update polarization
   pPostStepPoint->AddPolarization( thePolarizationChange
 				   - pPreStepPoint->GetPolarization());
@@ -273,18 +309,25 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   // update position and time
   pPostStepPoint->AddPosition( thePositionChange 
 			       - pPreStepPoint->GetPosition() );
-  pPostStepPoint->AddGlobalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - pPreStepPoint->GetGlobalTime()); 
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->AddLocalTime( theTimeChange - theLocalTime0 );	       
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  // update weight
-  if (!fSetParentWeightByProcess){
+  if (isParentWeightProposed) {
+    // update weight
     G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
-                        * (pPostStepPoint->GetWeight());
-    pPostStepPoint->SetWeight( newWeight );
+      * (pPostStepPoint->GetWeight());
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
+    
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+	}
+      }
+    }
   }
 
 #ifdef G4VERBOSE
@@ -315,22 +358,30 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
-
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
+ 
    // update polarization
   pPostStepPoint->SetPolarization( thePolarizationChange );
       
   // update position and time
   pPostStepPoint->SetPosition( thePositionChange  );
-  pPostStepPoint->SetGlobalTime( theTimeChange  );
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight
-  if (!fSetParentWeightByProcess){
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed) {
+    // update weight
+    if( isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
   }
-
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
@@ -356,20 +407,29 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
 
   // update polarization
   pPostStepPoint->SetPolarization( thePolarizationChange );
       
   // update position and time
   pPostStepPoint->SetPosition( thePositionChange  );
-  pPostStepPoint->SetGlobalTime( theTimeChange  );
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight 
-  if (!fSetParentWeightByProcess){
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed ) {
+    // update weight 
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
   }
 
 #ifdef G4VERBOSE
@@ -430,6 +490,9 @@ void G4ParticleChange::DumpInfo() const
   G4cout << "        Kinetic Energy (MeV): " 
        << std::setw(20) << theEnergyChange/MeV
        << G4endl;
+  G4cout << "        Velocity  (/c): " 
+       << std::setw(20) << theVelocityChange/c_light
+       << G4endl;
   G4cout << "        Polarization - x    : " 
        << std::setw(20) << thePolarizationChange.x()
        << G4endl;
@@ -469,11 +532,11 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 
   // Both global and proper time should not go back
   G4bool itsOKforGlobalTime = true;  
-  accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;
+  accuracy = (aTrack.GetLocalTime()- theTimeChange)/ns;
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the global time goes back  !!" << G4endl;
+    G4cout << "the local time goes back  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
 #endif
     itsOKforGlobalTime = false;
@@ -505,7 +568,29 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
-  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime && itsOKforGlobalTime;
+  // Velocity  should not be less than c_light
+  G4bool itsOKforVelocity = true;
+  if (theVelocityChange < 0.) {
+#ifdef G4VERBOSE
+    G4cout << "  G4ParticleChange::CheckIt    : ";
+    G4cout << "the velocity is negative  !!" << G4endl;
+    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+#endif
+    itsOKforVelocity = false;
+    exitWithError = true;
+  }
+  accuracy = theVelocityChange/c_light - 1.0;
+  if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
+    G4cout << "  G4ParticleChange::CheckIt    : ";
+    G4cout << "the velocity is greater than c_light  !!" << G4endl;
+    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+#endif
+    itsOKforVelocity = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+   }
+
+  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforVelocity && itsOKforProperTime && itsOKforGlobalTime;
   // dump out information of this particle change
 #ifdef G4VERBOSE
   if (!itsOK) { 
@@ -517,8 +602,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   // Exit with error
   if (exitWithError) {
     G4Exception("G4ParticleChange::CheckIt",
-		"200",
-		EventMustBeAborted,
+		"TRACK003", EventMustBeAborted,
 		"momentum, energy, and/or time was illegal");
   }
   //correction
@@ -534,6 +618,9 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   }
   if (!itsOKforEnergy) {
     theEnergyChange = 0.0;
+  }
+  if (!itsOKforVelocity) {
+    theVelocityChange = c_light;
   }
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);

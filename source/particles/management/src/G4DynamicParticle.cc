@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.30 2010/08/10 15:47:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4DynamicParticle.cc,v 1.30 2010-08-10 15:47:42 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
@@ -409,7 +409,8 @@ G4double  G4DynamicParticle::GetElectronMass() const
   if (electronMass<=0.0) {
     G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
     if (electron == 0) {
-      G4Exception("G4DynamicParticle: G4Electron is not defined !!");
+      G4Exception("G4DynamicParticle::GetElectronMass()","PART021",
+ 		  FatalException,"G4DynamicParticle: G4Electron is not defined !!");
     }
     electronMass = electron->GetPDGMass();
   }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.23 2010/07/19 13:41:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TrackingManager.cc,v 1.23 2010-07-19 13:41:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -117,13 +117,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
 
   // Track the particle Step-by-Step while it is alive
-  G4StepStatus stepStatus;
+  //  G4StepStatus stepStatus;
 
   while( (fpTrack->GetTrackStatus() == fAlive) ||
          (fpTrack->GetTrackStatus() == fStopButAlive) ){
 
     fpTrack->IncrementCurrentStepNumber();
-    stepStatus = fpSteppingManager->Stepping();
+    fpSteppingManager->Stepping();
 #ifdef G4_STORE_TRAJECTORY
     if(StoreTrajectory) fpTrajectory->
                         AppendStep(fpSteppingManager->GetStep()); 

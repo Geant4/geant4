@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.27 2010/11/10 17:53:22 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenInventorWinViewer.cc,v 1.27 2010-11-10 17:53:22 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010/11/10 17:11:20 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010-11-10 17:11:20 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -85,6 +85,37 @@ fTopPODL (0)
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 {}
 
+void G4OpenGLStoredSceneHandler::BeginPrimitives
+(const G4Transform3D& objectTransformation)
+{  
+  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
+  if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+  // Display list setup moved to AddPrimitivePreamble.  See notes there.
+}
+
+void G4OpenGLStoredSceneHandler::EndPrimitives ()
+{
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
+  glDrawBuffer (GL_BACK);
+  G4OpenGLSceneHandler::EndPrimitives ();
+}
+
+void G4OpenGLStoredSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
+{
+  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
+  if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+}
+
+void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
+{
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
+  glDrawBuffer (GL_BACK);
+  G4OpenGLSceneHandler::EndPrimitives2D ();
+}
+
 void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
   // Track nesting depth to avoid recursive calls, for example, from a
@@ -126,8 +157,8 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
+      ExtraTOProcessing(fTOList.size());  // Pass TO list index of next item.
       fTOList.push_back(to);
-      glDrawBuffer (GL_FRONT);
       glPushMatrix();
       G4OpenGLTransform3D oglt (*fpObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
@@ -137,6 +168,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     else {
       PO po(fDisplayListId, *fpObjectTransformation);
       po.fPickName = fPickName;
+      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
       glNewList (fDisplayListId, GL_COMPILE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
@@ -193,8 +225,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
-    glFlush ();
-    glDrawBuffer (GL_BACK);
   }
   fAddPrimitivePreambleNestingDepth--;
 }
@@ -261,30 +291,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
   AddPrimitivePreamble(nurbs);
   G4OpenGLSceneHandler::AddPrimitive(nurbs);
   AddPrimitivePostamble();
-}
-
-void G4OpenGLStoredSceneHandler::BeginPrimitives
-(const G4Transform3D& objectTransformation)
-{  
-  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
-
-  // Display list setup moved to AddPrimitivePreamble.  See notes there.
-}
-
-void G4OpenGLStoredSceneHandler::EndPrimitives ()
-{
-  G4OpenGLSceneHandler::EndPrimitives ();
-}
-
-void G4OpenGLStoredSceneHandler::BeginPrimitives2D
-(const G4Transform3D& objectTransformation)
-{
-  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
-}
-
-void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
-{
-  G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
@@ -457,6 +463,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	fPickMap[++fPickName] = holder;
 	po.fPickName = fPickName;
       }
+      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
     }
     else {

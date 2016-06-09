@@ -51,28 +51,21 @@ public:
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
 
-  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                              const G4Element* anElement);
+  virtual G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
+				     G4int Z, 
+				     const G4Material* mat = 0);
 
-  virtual G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                                 G4int Z, G4int A);
+  virtual G4double GetElementCrossSection(const G4DynamicParticle* aParticle, 
+					  G4int Z, 
+					  const G4Material* mat = 0);
 
-  G4double GetCrossSection(const G4DynamicParticle* aParticle, 
-                           const G4Element* anElement,
-                           G4double T=0.);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-  G4double GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                                G4int ZZ, G4int AA, G4double T=0. );
+  inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
+					 G4int Z);
 
-  G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
-				  G4int ZZ, G4int AA);
-
-  G4double GetTotalXsc()  { return fTotalXsc;   };
-  G4double GetElasticXsc(){ return fElasticXsc; };
-
-
-  void BuildPhysicsTable(const G4ParticleDefinition&) {}
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
+  inline G4double GetTotalXsc()  { return fTotalXsc;   };
+  inline G4double GetElasticXsc(){ return fElasticXsc; };
   
 private:
 
@@ -156,11 +149,7 @@ static const G4double w_m_t[48];
 static const G4double w_m_in[48];
 static const G4double w_p_in[48];
 
-
-
-
 static const G4double e6[46];
-
 
 // static const G4double e7[46];
 
@@ -191,9 +180,9 @@ std::vector< G4PiData* > thePimData;
 
 inline
 G4double G4NucleonNuclearCrossSection::GetElasticCrossSection(
-         const G4DynamicParticle* dp, G4int ZZ, G4int AA)
+         const G4DynamicParticle* dp, G4int Z)
 {
-  GetZandACrossSection(dp, ZZ, AA);
+  GetElementCrossSection(dp, Z);
   return fElasticXsc;
 }
 

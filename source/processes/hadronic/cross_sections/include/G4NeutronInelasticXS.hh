@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.hh,v 1.6 2010/10/15 22:33:22 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NeutronInelasticXS.hh,v 1.6 2010-10-15 22:33:22 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -66,20 +66,28 @@ public:
   virtual ~G4NeutronInelasticXS();
 
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+			     const G4Material*);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+			 const G4Element*, const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, 
-	 		   G4double aTemperature = 0.);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material* mat=0);
+  /*
+  virtual
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                              const G4Isotope* iso,
+                              const G4Element* elm,
+                              const G4Material* mat);
+  */
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 private: 
 

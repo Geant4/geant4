@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.hh,v 1.1 2010/06/08 16:05:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: Shielding.hh,v 1.1 2010-06-08 16:05:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +48,9 @@ template<class T>
 class TShielding: public T
 {
 public:
-  TShielding(G4int ver = 1);
+  //TShielding(G4int ver = 1);
+  //TShielding(G4int ver = 1, G4bool rad=true, G4bool lend=false);
+  TShielding( G4int verbose = 1 , G4String low_energy_neutron_model = "HP" );
   virtual ~TShielding();
   
 public:

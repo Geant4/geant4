@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.5 2010/11/18 11:48:21 allison Exp $
+// $Id: Microdosimetry.cc,v 1.5 2010-11-18 11:48:21 allison Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,7 +80,7 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
     
-  system ("rm -rf microbeam.root");  
+  remove ("microbeam.root");  
     
   // Get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  

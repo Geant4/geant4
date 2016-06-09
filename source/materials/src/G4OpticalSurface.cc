@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpticalSurface.cc,v 1.17 2010/10/25 15:16:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpticalSurface.cc,v 1.17 2010-10-25 15:16:02 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -52,8 +52,7 @@
         // Operators
         //////////////
 
-const G4OpticalSurface& 
-      G4OpticalSurface::operator=(const G4OpticalSurface& right)
+G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
 {
   if (this != &right)
     {
@@ -96,7 +95,8 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
                 polish = 0.0;
         }
 	else {
-		G4Exception("G4OpticalSurface::G4OpticalSurface ==> " 
+                G4Exception("G4OpticalSurface::G4OpticalSurface()", "mat309",
+                            FatalException,
 			    "Constructor called with INVALID model.");
 	}
 
@@ -253,7 +253,8 @@ void G4OpticalSurface::ReadFile()
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
-     G4Exception(excep);
+     G4Exception("G4OpticalSurface::ReadFile()", "mat310",
+                 FatalException, excep);
      return;
   }
   G4String pathString(path);
@@ -274,7 +275,8 @@ void G4OpticalSurface::ReadFile()
   }
   else {
      G4String excep = "LUT - data file: " + readFileName + " not found";
-     G4Exception(excep);
+     G4Exception("G4OpticalSurface::ReadFile()", "mat311",
+                 FatalException, excep);
      return;
   }
   fclose(readFileHandle);

@@ -90,6 +90,8 @@ class  CexmcRunManager : public G4RunManager
 
         void  SetEventDataVerboseLevel( CexmcEventDataVerboseLevel  value );
 
+        void  RegisterScenePrimitives( void );
+
 #ifdef CEXMC_USE_PERSISTENCY
         void  ReadProject( void );
 
@@ -113,6 +115,10 @@ class  CexmcRunManager : public G4RunManager
 #endif
 
         void  EnableLiveHistograms( G4bool  on = true );
+
+        void  BeamParticleChangeHook( void );
+
+        void  SetupConstructionHook( void );
 
     public:
         CexmcPhysicsManager *     GetPhysicsManager( void );
@@ -142,8 +148,6 @@ class  CexmcRunManager : public G4RunManager
         G4bool                    AreLiveHistogramsEnabled( void ) const;
 
         CexmcEventDataVerboseLevel  GetEventDataVerboseLevel( void ) const;
-
-        void                      BeamParticleChangeHook( void );
 
     protected:
         void  DoEventLoop( G4int  nEvent, const char *  macroFile,

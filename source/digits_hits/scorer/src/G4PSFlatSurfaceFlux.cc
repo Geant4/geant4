@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.6 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.6 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux
 #include "G4PSFlatSurfaceFlux.hh"
@@ -58,8 +58,8 @@
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     weighted(true),divideByArea(true)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -69,7 +69,8 @@ G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name,
 					 G4int direction, 
 					 const G4String& unit,
 					 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);
@@ -208,8 +209,8 @@ void G4PSFlatSurfaceFlux::SetUnit(const G4String& unit)
 	    unitName = unit;
 	    unitValue = 1.0;
 	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+	    G4Exception("G4PSFlatSurfaceFlux::SetUnit","DetPS0008",JustWarning,msg);
 	}
     }
 }

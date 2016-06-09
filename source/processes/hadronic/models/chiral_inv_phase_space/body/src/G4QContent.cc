@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.50 2010/11/22 07:08:01 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QContent.cc,v 1.50 2010-11-22 07:08:01 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -83,10 +83,13 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(
   G4int P2=PP.second;
   if(!P1 || !P2)
   {
-    G4cerr<<"***G4QContent::Constr(pair): Zero parton P1="<<P1<<", P2="<<P2<<G4endl;
-    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"WrongPartonPair");
+    // G4cerr<<"***G4QContent::Constr(pair): Zero parton P1="<<P1<<", P2="<<P2<<G4endl;
+    // G4Exception("G4QContent::Constructor(pair):","72",FatalException,"WrongPartonPair");
+    G4ExceptionDescription ed;
+    ed << "Wrong parton pair: zero parton P1=" << P1 << ", P2=" << P2 << G4endl;
+    G4Exception("G4QContent::G4QContent()", "HAD_CHPS_0072", FatalException, ed);
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QContent::PairConstr: P1="<<P1<<", P2="<<P2<<G4endl;
 #endif
   G4bool suc=true;
@@ -143,7 +146,7 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(
       else            suc=false;
     }
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QContent::PCo:1:"<<nD<<","<<nU<<","<<nS<<","<<nAD<<","<<nAU<<","<<nAS<<G4endl;
 #endif
   G4int A2=P2;
@@ -201,10 +204,13 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(
   }
   if(!suc)
   {
-    G4cerr<<"***G4QContent::Constr(pair): Impossible partons, P1="<<P1<<",P2="<<P2<<G4endl;
-    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
+    // G4cerr<<"***G4QContent::Constr(pair): Impossible partons, P1="<<P1<<",P2="<<P2<<G4endl;
+    // G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
+    G4ExceptionDescription ed;
+    ed << "Impossible parton pair, P1=" << P1 << ",P2=" << P2 << G4endl;
+    G4Exception("G4QContent::G4QContent()", "HAD_CHPS_0073", FatalException, ed);
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QContent::PCo:2:"<<nD<<","<<nU<<","<<nS<<","<<nAD<<","<<nAU<<","<<nAS<<G4endl;
 #endif
 }
@@ -231,7 +237,7 @@ G4QContent::G4QContent(G4QContent* right)
 
 // Assignment operator (copy stile for possible Vector extention)
 const G4QContent& G4QContent::operator=(const G4QContent &right)
-{//               ==============================================
+{
   if(this != &right)                          // Beware of self assignment
   {
     nU  = right.nU;
@@ -246,7 +252,7 @@ const G4QContent& G4QContent::operator=(const G4QContent &right)
 
 // Standard output for QC {d,u,s,ad,au,as}
 ostream& operator<<(ostream& lhs, G4QContent& rhs)
-{//      =========================================
+{
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
   return lhs;
@@ -254,7 +260,7 @@ ostream& operator<<(ostream& lhs, G4QContent& rhs)
 
 // Standard output for const QC {d,u,s,ad,au,as}
 ostream& operator<<(ostream& lhs, const G4QContent& rhs)
-{//      ===============================================
+{
   lhs << "{" << rhs.GetD() << "," << rhs.GetU() << "," << rhs.GetS() << ","
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
   return lhs;
@@ -262,7 +268,6 @@ ostream& operator<<(ostream& lhs, const G4QContent& rhs)
 
 // Subtract Quark Content
 G4QContent G4QContent::operator-=(const G4QContent& rhs)
-//         =============================================
 {
 #ifdef debug
   G4cout<<"G4QC::-=(const): is called:"<<G4endl;
@@ -385,7 +390,6 @@ G4QContent G4QContent::operator-=(const G4QContent& rhs)
 
 // Subtract Quark Content
 G4QContent G4QContent::operator-=(G4QContent& rhs)
-//         =======================================
 {
 #ifdef debug
   G4cout<<"G4QC::-=: is called:"<<G4endl;
@@ -505,28 +509,28 @@ G4QContent G4QContent::operator-=(G4QContent& rhs)
 
 // Overloading of QC addition
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs)
-{//        =======================================================
+{
   G4QContent s  = lhs;
   return     s += rhs;
 }
 
 // Overloading of QC subtraction
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs)
-{//        =======================================================
+{
   G4QContent s  = lhs;
   return     s -= rhs;
 }
 
 // Overloading of QC multiplication by Int
 G4QContent operator*(const G4QContent& lhs, const G4int&      rhs)
-{//        =======================================================
+{
   G4QContent s  = lhs;
   return     s *= rhs;
 }
 
 // Overloading of Int times QC multiplication
 G4QContent operator*(const G4int&      lhs, const G4QContent& rhs)
-{//        =======================================================
+{
   G4QContent s  = rhs;
   return     s *= lhs;
 }
@@ -536,7 +540,7 @@ G4QContent::~G4QContent() {}
 
 // Subtract neutral pion from Quark Content (with possible hidden strangeness)
 G4bool G4QContent::SubtractPi0()
-{//    =========================
+{
 #ifdef debug
   G4cout<<"G4QC::SubtractPi0: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<G4endl;
 #endif
@@ -562,7 +566,7 @@ G4bool G4QContent::SubtractPi0()
 
 // Subtract charged pion from Quark Content
 G4bool G4QContent::SubtractPion()
-{//    ==========================
+{
 #ifdef debug
   G4cout<<"G4QC::SubtractPion: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<G4endl;
 #endif
@@ -588,7 +592,7 @@ G4bool G4QContent::SubtractPion()
 
 // Subtract Hadron from Quark Content
 G4bool G4QContent::SubtractHadron(G4QContent h)
-{//    ========================================
+{
 #ifdef debug
   G4cout<<"G4QC::SubtractHadron "<<h<<" is called for QC="<<GetThis()<<G4endl;
 #endif
@@ -599,7 +603,7 @@ G4bool G4QContent::SubtractHadron(G4QContent h)
 
 // Subtract Kaon from Quark Content
 G4bool G4QContent::SubtractKaon(G4double mQ)
-{//    =====================================
+{
 #ifdef debug
   G4cout<<"G4QC::SubtractKaon is called: QC="<<GetThis()<<G4endl;
 #endif
@@ -631,7 +635,7 @@ G4bool G4QContent::SubtractKaon(G4double mQ)
 
 // Split any hadronic system in two hadrons
 G4QContent G4QContent::SplitChipo (G4double mQ)
-{//        ====================================
+{
   G4QContent Pi(0,1,0,1,0,0);
   if      (nU>0&&nAU>0) Pi=G4QContent(0,1,0,0,1,0);
   else if (nD>0&&nAD>0) Pi=G4QContent(1,0,0,1,0,0);
@@ -867,7 +871,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
 
 // Return one-quark QC using index (a kind of iterator)
 G4QContent G4QContent::IndQ (G4int index)
-{//        ==============================
+{
 #ifdef debug
   G4cout << "G4QC::IndQ is called"<<G4endl;
 #endif
@@ -883,7 +887,7 @@ G4QContent G4QContent::IndQ (G4int index)
 
 // Return one-antiquark QC using index (a kind of iterator)
 G4QContent G4QContent::IndAQ (G4int index)
-{//        ==============================
+{
 #ifdef debug
   G4cout << "G4QC::IndAQ is called"<<G4endl;
 #endif
@@ -899,7 +903,7 @@ G4QContent G4QContent::IndAQ (G4int index)
 
 // Reduces number (if nQAQ<0:all) of valence Q-Qbar pairs, returns #of pairs to reduce more
 G4int G4QContent::DecQAQ(const G4int& nQAQ)
-{//   =====================================
+{
 #ifdef debug
   G4cout<<"G4QCont::DecQC: n="<<nQAQ<<","<<GetThis()<<G4endl;
 #endif
@@ -1024,14 +1028,14 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
                <<",T="<<nTotP<<",nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
   }
 #ifdef debug
-  G4cout<<"G4QC::DecQC: >>>OUT<<< nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
+  G4cout<<"G4QC::DecQC: >->-> OUT <-<-< nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
 #endif
   return nRet;
 }
 
 // Increment quark pairs
 void G4QContent::IncQAQ(const G4int& nQAQ, const G4double& sProb)
-{//  ============================================================
+{
   G4int tot = GetTot();
   G4QContent mQC = GetThis();
   for (int i=0; i<nQAQ; i++)
@@ -1096,7 +1100,7 @@ void G4QContent::IncQAQ(const G4int& nQAQ, const G4double& sProb)
 
 // Calculate a#of protons in the QC (for nuclei)
 G4int G4QContent::GetP() const
-{//   ========================
+{
   G4int rD=nD-nAD;                                   // Constituent d-quarks
   G4int rU=nU-nAU;                                   // Constituent u-quarks
   G4int rS=nS-nAS;                                   // Constituent s-quarks
@@ -1107,7 +1111,7 @@ G4int G4QContent::GetP() const
 
 // Calculate a#of neutrons in the QC (for nuclei)
 G4int G4QContent::GetN() const
-{//   ========================
+{
   G4int rD=nD-nAD;                                   // Constituent d-quarks
   G4int rU=nU-nAU;                                   // Constituent u-quarks
   G4int rS=nS-nAS;                                   // Constituent s-quarks
@@ -1118,14 +1122,14 @@ G4int G4QContent::GetN() const
 
 // Calculate a#of lambdas in the QC (for nuclei)
 G4int G4QContent::GetL() const
-{//   ========================
+{
   G4int rS=nS-nAS;                                   // Constituent s-quarks
   return rS;
 }
 
 // Calculate a#of anti-protons in the QC (for anti-nuclei)
 G4int G4QContent::GetAP() const
-{//   =========================
+{
   G4int rD=nAD-nD;                                   // Constituent anti-d-quarks
   G4int rU=nAU-nU;                                   // Constituent anti-u-quarks
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
@@ -1136,7 +1140,7 @@ G4int G4QContent::GetAP() const
 
 // Calculate a#of anti-neutrons in the QC (for anti-nuclei)
 G4int G4QContent::GetAN() const
-{//   =========================
+{
   G4int rD=nAD-nD;                                   // Constituent anti-d-quarks
   G4int rU=nAU-nU;                                   // Constituent anti-u-quarks
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
@@ -1147,14 +1151,14 @@ G4int G4QContent::GetAN() const
 
 // Calculate a#of anti-lambdas in the QC (for anti-nuclei)
 G4int G4QContent::GetAL() const
-{//   =========================
+{
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
   return rS;
 }
 
 // Calculate charge for the QC
 G4int G4QContent::GetCharge() const
-{//   =============================
+{
   static const G4int cU  = 2;
   static const G4int cD  =-1;
   static const G4int cS  =-1;
@@ -1177,13 +1181,21 @@ G4int G4QContent::GetCharge() const
 
 // Calculate a Baryon Number for the QC
 G4int G4QContent::GetBaryonNumber() const
-{//   ===================================
+{
+#ifdef pdebug
+  G4cout<<"G4QContent::GetBarNum: U="<<nU<<", D="<<nD<<", S="<<nS<<", AU="<<nAU<<", AD="
+        <<nAD<<", AS="<<nAS<<G4endl;
+#endif
   G4int b=nU+nD+nS-nAU-nAD-nAS;
   //#ifdef erdebug
   if(b%3)
   {
-     G4cerr<<"-Warning-G4QContent::GetBaryonNumber="<<b<<"/3 isn't anIntegerValue"<<G4endl;
-     G4Exception("G4QContent::GetBaryonNumber:","72",FatalException,"Wrong Baryon Number");
+     // G4cerr<<"-Warning-G4QContent::GetBaryonNumber="<<b<<"/3 isn't anIntegerValue"<<G4endl;
+     // G4Exception("G4QContent::GetBaryonNumber:","72",FatalException,"Wrong Baryon Number");
+     G4ExceptionDescription ed;
+     ed << "Wrong Baryon Number: warning " << b << "/3 isn't an integer"
+        << G4endl;
+     G4Exception("G4QContent::GetBaryonNumber()", "HAD_CHPS_0072", FatalException, ed);
   }
   //#endif
   return b/3;
@@ -1191,7 +1203,7 @@ G4int G4QContent::GetBaryonNumber() const
 
 // Gives the PDG of the lowest (in mass) S-wave hadron or Chipolino (=10) for double hadron
 G4int G4QContent::GetSPDGCode() const
-{//   ===============================
+{
   G4int p = 0;           // Prototype of output SPDG
   G4int n = GetTot();    // Total number of quarks
   if(!n) return 22;      // Photon does not have any Quark Content
@@ -1303,7 +1315,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
   G4cout<<"G4QC::SPDGC:bef. b="<<b<<",n="<<n<<",c="<<c<<",s="<<s<<",Q="<<GetThis()<<G4endl;
 #endif
-  if (b)                                         // ==================== Baryon case
+  if (b)                                         // =---------------------= Baryon case
   {
     
     G4int ab=abs(b);
@@ -1389,7 +1401,7 @@ G4int G4QContent::GetSPDGCode() const
     }
     if (b<0) p=-p;
   }
-  else             // ====================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Meson case
+  else             // ------------------------->>------------------------>> Meson case
   {
 #ifdef debug
     G4cout<<"G4QC::SPDG:mDUS="<<mD<<","<<mU<<","<<mS<<",b,c,s="<<b<<","<<c<<","<<s<<G4endl;
@@ -1461,7 +1473,7 @@ G4int G4QContent::GetSPDGCode() const
 
 // === Calculate a number of combinations of rhc out of lhc ==
 G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
-{//   ========================================================
+{
   G4int c=1; // Default number of combinations?
 #ifdef ppdebug
   G4cout<<"G4QContent::NOfComb: This="<<GetThis()<<", selectQC="<<rhs<<G4endl;
@@ -1790,24 +1802,24 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (HBN<0)                      // ....... Hadron is an Anti-Baryon
       {
-        if     (AD) return -1;            // >>>>>>> Answer is anti-d
-        else if(AU) return -2;            // >>>>>>> Answer is anti-u
-        else        return -3;            // >>>>>>> Answer is anti-s
+        if     (AD) return -1;            // ----->> Answer is anti-d
+        else if(AU) return -2;            // ----->> Answer is anti-u
+        else        return -3;            // ----->> Answer is anti-s
       }
       else                                // ... Hadron is aMeson with annihilatedAntiQuark
       {					      
         if    (QS)                       // --------- There is an s-quark
         {					      
-          if  (QS==2) return 3303;       // >>>>>>> Answer is ss (3301 does not exist)
-          else if(QU) return 3201;       // >>>>>>> Answer is su (@@ only lightest)
-          else        return 3101;       // >>>>>>> Answer is sd (@@ only lightest)
+          if  (QS==2) return 3303;       // ----->> Answer is ss (3301 does not exist)
+          else if(QU) return 3201;       // ----->> Answer is su (@@ only lightest)
+          else        return 3101;       // ----->> Answer is sd (@@ only lightest)
         }
         else if(QU)                      // --------- There is an u quark
         {					      
-          if  (QU==2) return 2203;       // >>>>>>> Answer is uu (2201 does not exist)
-          else        return 2101;       // >>>>>>> Answer is ud (@@ only lightest)
+          if  (QU==2) return 2203;       // ----->> Answer is uu (2201 does not exist)
+          else        return 2101;       // ----->> Answer is ud (@@ only lightest)
         }
-        else          return 1103;       // >>>>>>> Answer is dd (1101 does not exist)
+        else          return 1103;       // ----->> Answer is dd (1101 does not exist)
       }
     }
     else                                  // -- antiDiQuark
@@ -1917,24 +1929,24 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (HBN>0)                      // ....... Hadron is an Baryon
       {
-        if     (QD) return 1;             // >>>>>>> Answer is d
-        else if(QU) return 2;             // >>>>>>> Answer is u
-        else        return 3;             // >>>>>>> Answer is s
+        if     (QD) return 1;             // ----->> Answer is d
+        else if(QU) return 2;             // ----->> Answer is u
+        else        return 3;             // ----->> Answer is s
       }
       else                                // ....... Meson with annihilated Anti-Quark
       {					      
         if    (AS)                       // --------- There is an anti-s quark
         {					      
-          if  (AS==2) return -3303;      // >>>>>>> Answer is anti-ss (3301 does not exist)
-          else if(AU) return -3201;      // >>>>>>> Answer is anti-su (@@ only lightest)
-          else        return -3101;      // >>>>>>> Answer is anti-sd (@@ only lightest)
+          if  (AS==2) return -3303;      // ----->> Answer is anti-ss (3301 does not exist)
+          else if(AU) return -3201;      // ----->> Answer is anti-su (@@ only lightest)
+          else        return -3101;      // ----->> Answer is anti-sd (@@ only lightest)
         }
         else if(AU)                      // --------- There is an anti-u quark
         {					      
-          if  (AU==2) return -2203;      // >>>>>>> Answer is anti-uu (2201 does not exist)
-          else        return -2101;      // >>>>>>> Answer is anti-ud (@@ only lightest)
+          if  (AU==2) return -2203;      // ----->> Answer is anti-uu (2201 does not exist)
+          else        return -2101;      // ----->> Answer is anti-ud (@@ only lightest)
         }
-        else          return -1103;      // >>>>>>> Answer is anti-dd (1101 does not exist)
+        else          return -1103;      // ----->> Answer is anti-dd (1101 does not exist)
       }
     }
   }
@@ -1947,17 +1959,17 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (aPDG==1)                    // ----> d quark
       {
-        if(HBN<0 && AD) AD--;             // ====> Annihilation of d-quark with anti-Baryon
+        if(HBN<0 && AD) AD--;             // ****> Annihilation of d-quark with anti-Baryon
         else if(HBN || (!HBN && !AD)) return 0;
       }
       else if(aPDG==2)                    // ----> u quark
       {
-        if(HBN<0 && AU) AU--;             // ====> Annihilation of u-quark with anti-Baryon
+        if(HBN<0 && AU) AU--;             // ****> Annihilation of u-quark with anti-Baryon
         else if(HBN || (!HBN && !AU)) return 0;
       }
       else                                // ----> s quark
       {
-        if(HBN<0 && AS) AS--;             // ====> Annihilation of s-quark with anti-Baryon
+        if(HBN<0 && AS) AS--;             // ****> Annihilation of s-quark with anti-Baryon
         else if(HBN || (!HBN && !AS)) return 0;
       }
 #ifdef debug
@@ -1966,24 +1978,24 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (!HBN)                       // ....... Hadron is a Meson (passingThrougAbove)
       {					      
-        if     (QD) return 1;             // >>>>>>> Answer is d
-        else if(QU) return 2;             // >>>>>>> Answer is u
-        else        return 3;             // >>>>>>> Answer is s
+        if     (QD) return 1;             // ----->> Answer is d
+        else if(QU) return 2;             // ----->> Answer is u
+        else        return 3;             // ----->> Answer is s
       }					      
       else                                // ....... AntiBaryon with annihilated AntiQuark
       {					      
         if    (AS)                        // --------- There is an anti-s quark
         {					      
-          if  (AS==2) return -3303;       // >>>>>>> Answer is ss (3301 does not exist)
-          else if(AU) return -3201;       // >>>>>>> Answer is su (@@ only lightest)
-          else        return -3101;       // >>>>>>> Answer is sd (@@ only lightest)
+          if  (AS==2) return -3303;       // ----->> Answer is ss (3301 does not exist)
+          else if(AU) return -3201;       // ----->> Answer is su (@@ only lightest)
+          else        return -3101;       // ----->> Answer is sd (@@ only lightest)
         }					      
         else if(AU)			      
         {					      
-          if  (AU==2) return -2203;       // >>>>>>> Answer is uu (2201 does not exist)
-          else        return -2101;       // >>>>>>> Answer is ud (@@ only lightest)
-        }					      
-        else          return -1103;       // >>>>>>> Answer is dd (1101 does not exist)
+          if  (AU==2) return -2203;       // ----->> Answer is uu (2201 does not exist)
+          else        return -2101;       // ----->> Answer is ud (@@ only lightest)
+        }
+        else          return -1103;       // ----->> Answer is dd (1101 does not exist)
       }					      
     }
     else                                  // -- antiQuark
@@ -1991,19 +2003,19 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #ifdef debug
       G4cout<<"G4QContent::AddParton: antiQ, Q="<<QD<<","<<QU<<","<<QS<<",B="<<HBN<<G4endl;
 #endif
-      if     (aPDG==1)                    // ----> anti-d quark
+      if     (aPDG==1)                    // ---->> anti-d quark
       {
-        if(HBN>0 && QD) QD--;             // ====> Annihilation of anti-d-quark with Baryon
+        if(HBN>0 && QD) QD--;             // ****> Annihilation of anti-d-quark with Baryon
         else if(HBN || (!HBN && !QD)) return 0;
       }
       else if(aPDG==2)                    // ----> anti-u quark
       {
-        if(HBN>0 && QU) QU--;             // ====> Annihilation of anti-u-quark with Baryon
+        if(HBN>0 && QU) QU--;             // ****> Annihilation of anti-u-quark with Baryon
         else if(HBN || (!HBN && !QU)) return 0;
       }
       else                                // ----> anti-s quark
       {
-        if(HBN>0 && QS) QS--;             // ====> Annihilation of anti-s-quark with Baryon
+        if(HBN>0 && QS) QS--;             // ****> Annihilation of anti-s-quark with Baryon
         else if(HBN || (!HBN && !QS)) return 0;
       }
 #ifdef debug
@@ -2012,24 +2024,24 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (!HBN)                       // ....... Hadron is a Meson (passingThrougAbove)
       {					      
-        if     (AD) return -1;            // >>>>>>> Answer is anti-d
-        else if(AU) return -2;            // >>>>>>> Answer is anti-u
-        else        return -3;            // >>>>>>> Answer is anti-s
+        if     (AD) return -1;            // ----->> Answer is anti-d
+        else if(AU) return -2;            // ----->> Answer is anti-u
+        else        return -3;            // ----->> Answer is anti-s
       }					      
       else                                // ....... Baryon with annihilated Quark
       {					      
         if    (QS)                        // --------- There is an anti-s quark
         {					      
-          if  (QS==2) return 3303;        // >>>>>>> Answer is ss (3301 does not exist)
-          else if(QU) return 3201;        // >>>>>>> Answer is su (@@ only lightest)
-          else        return 3101;        // >>>>>>> Answer is sd (@@ only lightest)
+          if  (QS==2) return 3303;        // ----->> Answer is ss (3301 does not exist)
+          else if(QU) return 3201;        // ----->> Answer is su (@@ only lightest)
+          else        return 3101;        // ----->> Answer is sd (@@ only lightest)
         }					      
         else if(QU)			      
         {					      
-          if  (QU==2) return 2203;        // >>>>>>> Answer is uu (2201 does not exist)
-          else        return 2101;        // >>>>>>> Answer is ud (@@ only lightest)
+          if  (QU==2) return 2203;        // ----->> Answer is uu (2201 does not exist)
+          else        return 2101;        // ----->> Answer is ud (@@ only lightest)
         }					      
-        else          return 1103;        // >>>>>>> Answer is dd (1101 does not exist)
+        else          return 1103;        // ----->> Answer is dd (1101 does not exist)
       }					      
     }
   }

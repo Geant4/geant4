@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02RunAction.cc,v 1.3 2006/11/18 01:37:24 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RE02RunAction.cc,v 1.3 2006-11-18 01:37:24 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 #include "RE02RunAction.hh"
 #include "RE02Run.hh"

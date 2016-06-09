@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: eRosita.cc,v 1.3 2010/11/30 11:59:44 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: eRosita.cc,v 1.3 2010-11-30 11:59:44 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

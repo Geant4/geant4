@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.hh,v 1.11 2010/07/07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Hyperbola.hh,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4Hyperbola
@@ -55,8 +55,7 @@ public:  // with description
   G4Hyperbola& operator=(const G4Hyperbola& right);
     // Copy constructor and assignment operator.
 
-  G4Curve* Project(const G4Transform3D& tr=
-                   HepGeom::Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr= G4Transform3D::Identity);
     // Transforms and projects the curve.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

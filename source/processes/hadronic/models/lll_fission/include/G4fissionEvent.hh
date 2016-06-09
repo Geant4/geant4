@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4fissionEvent.hh,v 1.1 2007/05/30 00:41:48 dennis Exp $
+// $Id: G4fissionEvent.hh,v 1.1 2007-05-30 00:41:48 dennis Exp $
 //
 
 #include "globals.hh"

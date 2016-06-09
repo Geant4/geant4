@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.cc,v 1.15 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4InclCascadeInterface.cc,v 1.14 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,7 +33,6 @@
 //#define DEBUGINCL 1
 
 #include "G4InclCascadeInterface.hh"
-#include "G4FermiBreakUp.hh"
 #include "math.h"
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
@@ -52,7 +51,6 @@ G4InclCascadeInterface::G4InclCascadeInterface(const G4String& nam)
   incl = new G4Incl(hazard, calincl, ws, mat, varntp);
 
   theExcitationHandler = new G4ExcitationHandler;
-  thePrecoModel = new G4PreCompoundModel(theExcitationHandler);
 
   if(!getenv("G4INCLABLANOFERMIBREAKUP")) { // Use Fermi Break-up by default if it is NOT explicitly disabled
     incl->setUseFermiBreakUp(true);
@@ -63,7 +61,6 @@ G4InclCascadeInterface::G4InclCascadeInterface(const G4String& nam)
 
 G4InclCascadeInterface::~G4InclCascadeInterface()
 {
-  delete thePrecoModel;
   delete theExcitationHandler;
 
   delete hazard;
@@ -401,7 +398,7 @@ G4HadFinalState* G4InclCascadeInterface::ApplyYourself(const G4HadProjectile& aT
       }
 
       G4Fragment theCascadeRemnant(G4int(varntp->massini), G4int(varntp->mzini), p4rest);
-      thePrecoResult = thePrecoModel->DeExcite(theCascadeRemnant);
+      thePrecoResult = theExcitationHandler->BreakItUp(theCascadeRemnant);
       if(thePrecoResult != 0) {
       G4ReactionProductVector::iterator fragment;
       for(fragment = thePrecoResult->begin(); fragment != thePrecoResult->end(); fragment++) {

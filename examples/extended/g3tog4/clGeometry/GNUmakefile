@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006/03/14 10:13:55 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2006-03-14 10:13:55 vnivanch Exp $
 # ----------------------------------------------------------------
 
 name := clGeometry

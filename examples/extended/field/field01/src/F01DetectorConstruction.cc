@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.16 2009/11/05 01:07:41 gum Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: F01DetectorConstruction.cc,v 1.16 2009-11-05 01:07:41 gum Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

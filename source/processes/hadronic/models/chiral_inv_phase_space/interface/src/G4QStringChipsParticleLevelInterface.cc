@@ -366,41 +366,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
   std::vector<G4QContent> theFinalContents;
   std::vector<G4LorentzVector*> theFinalMomenta;
-  if(theContents.size()<hitCount || 1) // Looks like the "else" is closed by "|| 1"
+
+  for(unsigned int hp = 0; hp<theContents.size(); hp++)
   {
-    for(unsigned int hp = 0; hp<theContents.size(); hp++)
-    {
-      G4QHadron* aHadron = new G4QHadron(theContents[hp], *(theMomenta[hp]) );
-      projHV.push_back(aHadron);
-    }
+    G4QHadron* aHadron = new G4QHadron(theContents[hp], *(theMomenta[hp]) );
+    projHV.push_back(aHadron);
   }
-  else                                 // Never come here (!?)
-  {
-    unsigned int hp;
-    for(hp=0; hp<hitCount; hp++)       // Initialize the arrays
-    {
-      G4QContent co(0, 0, 0, 0, 0, 0);
-      theFinalContents.push_back(co);
-      G4LorentzVector* mo = new G4LorentzVector(0,0,0,0);
-      theFinalMomenta.push_back(mo);
-    }
-    unsigned int running = 0;
-    while (running<theContents.size())
-    {
-      for(hp = 0; hp<hitCount; hp++)
-      {
-        theFinalContents[hp] +=theContents[running];
-        *(theFinalMomenta[hp])+=*(theMomenta[running]);
-        running++;
-        if(running == theContents.size()) break;
-      }
-    }
-    for(hp = 0; hp<hitCount; hp++)
-    {
-      G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], *theFinalMomenta[hp]);
-      projHV.push_back(aHadron);
-    }
-  }
+ 
   // construct the quasmon
   size_t i;
   for (i=0; i<theFinalMomenta.size(); i++) delete theFinalMomenta[i];

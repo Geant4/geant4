@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.9 2007/06/22 13:15:29 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: B01DetectorConstruction.hh,v 1.9 2007-06-22 13:15:29 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef B01DetectorConstruction_hh

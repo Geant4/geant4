@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StoppingHadronBuilder.cc,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StoppingHadronBuilder.cc,v 1.1 2006-10-31 11:35:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,7 +47,11 @@
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
 
-G4StoppingHadronBuilder::G4StoppingHadronBuilder(): wasActivated(false)
+G4StoppingHadronBuilder::G4StoppingHadronBuilder():
+ theMuonMinusAbsorption(0),thePionMinusAbsorption(0),
+ theKaonMinusAbsorption(0), theAntiProtonAnnihilation(0),
+ theAntiNeutronAnnihilation(0),
+ wasActivated(false)
 {}
 
 G4StoppingHadronBuilder::~G4StoppingHadronBuilder()

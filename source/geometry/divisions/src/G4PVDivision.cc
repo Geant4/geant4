@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.24 2010/09/06 09:28:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PVDivision.cc,v 1.24 2010-09-06 09:28:24 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
 //
@@ -57,17 +57,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4String message_1 =
-      "NULL pointer specified as mother,\n for volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_1);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother for volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
     return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Cannot place a volume inside itself! Volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -89,16 +92,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4String message_1 = "NULL pointer specified as mother! Volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_1);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother! Volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
     return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Cannot place a volume inside itself! Volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -118,16 +125,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4String message_1 = "NULL pointer specified as mother! Volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_1);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
     return;
   }
   if (pLogical == pMotherLogical)
   {
-    G4String message_2 = "Cannot place a volume inside itself! Volume: "+ pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Cannot place a volume inside itself! Volume: "+ pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
@@ -154,7 +165,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   }
   if (fnReplicas < 1 )
   {
-    G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+    G4Exception("G4PVDivision::CheckAndSetParameters()", "GeomDiv0002",
                 FatalException, "Illegal number of replicas!");
   }
 
@@ -168,7 +179,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   }
   if( fwidth < 0 )
   {
-    G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+    G4Exception("G4PVDivision::CheckAndSetParameters()", "GeomDiv0002",
                 FatalException, "Width must be positive!");
   }
   
@@ -203,7 +214,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
     case kZAxis:
       break;
     default:
-      G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
+      G4Exception("G4PVDivision::CheckAndSetParameters()", "GeomDiv0002",
                   FatalException, "Unknown axis of replication.");
       break;
   }
@@ -217,11 +228,13 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
   if( msolType != dsolType && ( msolType != "G4Trd" || dsolType != "G4Trap" ) )
   {
-    G4String message =
-      "Incorrect solid type for division of volume " + GetName()
-    + "    It is: " + msolType + ", while it should be: " + dsolType;
+    std::ostringstream message;
+    message << "Incorrect solid type for division of volume "
+            << GetName() << "." << G4endl
+            << "It is: " << msolType
+            << ", while it should be: " << dsolType << "!";
     G4Exception("G4PVDivision::CheckAndSetParameters()",
-                "IllegalConstruct", FatalException, message );
+                "GeomDiv0002", FatalException, message );
   }
 }
 
@@ -468,11 +481,10 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
   }
   else
   {
-    G4cerr << "ERROR - G4PVDivision::SetParameterisation()" << G4endl
-           << "        Divisions for " << mSolidType
-           << " not implemented." << G4endl;
-    G4String message = "Solid type not supported: " + mSolidType;
-    G4Exception("G4PVDivision::SetParameterisation()", "IllegalConstruct",
+    std::ostringstream message;
+    message << "Solid type " << mSolidType << " not supported!"  << G4endl
+            << "Divisions for " << mSolidType << " are not implemented.";
+    G4Exception("G4PVDivision::SetParameterisation()", "GeomDiv0001",
                 FatalException, message);
   }
 }
@@ -505,7 +517,7 @@ void G4PVDivision::ErrorInAxis( EAxis axis, G4VSolid* solid )
     default:
       break;
   }
-  G4Exception("G4PVDivision::ErrorInAxis()", "IllegalConstruct",
+  G4Exception("G4PVDivision::ErrorInAxis()", "GeomDiv0002",
               FatalException, error);
 }
 // The next methods are for specialised repeated volumes 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.27 2010/06/03 08:26:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.27 2010-06-03 08:26:55 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -69,12 +69,17 @@ void G4OpenGLStoredXViewer::Initialise () {
 
   InitializeGLView ();
 
-// clear the buffers and window.
-  ClearView ();
-  FinishView ();
+  glDrawBuffer (GL_BACK);
+}
 
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
+void G4OpenGLStoredXViewer::ShowView () {
+  // Some X servers fail to draw all trajectories, particularly Mac
+  // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
+  // extra...
+  ClearView();
+  DrawView();
+  // ..then call parent method.
+  G4OpenGLXViewer::ShowView();
 }
 
 void G4OpenGLStoredXViewer::DrawView () {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EventActionMessenger.cc,v 1.7 2006/06/29 17:53:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN05EventActionMessenger.cc,v 1.7 2006-06-29 17:53:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN05EventActionMessenger.hh"

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProduction.cc,v 1.4 2009/02/20 16:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4hPairProduction.cc,v 1.4 2009-02-20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -99,12 +99,12 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Positron::Positron());
     SetIonisation(false);
 
-    G4hPairProductionModel* em = new G4hPairProductionModel();
-    em->SetLowestKineticEnergy(lowestKinEnergy);
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
-    AddEmModel(1, em, fm);
+    if (!EmModel()) { SetEmModel(new G4hPairProductionModel()); }
+
+    G4VEmFluctuationModel* fm = 0;
+    EmModel()->SetLowEnergyLimit(MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(), fm);
   }
 }
 

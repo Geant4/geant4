@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunAction.hh,v 1.11 2006/06/29 15:48:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyRunAction.hh,v 1.11 2006-06-29 15:48:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //
@@ -43,11 +43,8 @@
 #include "globals.hh"
 
 class G4Run;
-class BrachyAnalysisManager;
 class BrachyRunMessenger;
-//class BrachyFactory;
-//class BrachyFactoryIr;
-//class BrachyFactoryI;
+
 
 class BrachyRunAction : public G4UserRunAction
 {
@@ -58,12 +55,6 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run* );
-  //void SelectEnergy(G4int); 
-
-private:
-  // BrachyRunMessenger* runMessenger;
-  //BrachyFactory *factory; 
-  //G4int sourceChoice; //select primary particle 
 };
 #endif
 

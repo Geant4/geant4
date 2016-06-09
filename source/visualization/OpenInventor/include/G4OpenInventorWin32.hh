@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin32.hh,v 1.7 2006/06/29 21:20:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorWin32.hh,v 1.7 2006-06-29 21:20:32 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.cc,v 1.5 2008/06/23 08:58:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessVector.cc,v 1.5 2008-06-23 08:58:26 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -39,14 +39,27 @@
 
 /////// Constructors
 //
-G4ProcessVector::G4ProcessVector(size_t)
+G4ProcessVector::G4ProcessVector()
 {
   pProcVector = new G4ProcVector();
 }
 
-G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
+G4ProcessVector::G4ProcessVector(size_t s)
 {
-  *this == right;
+  pProcVector = new G4ProcVector(s);
+}
+
+G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
+  :pProcVector(0)
+{
+  pProcVector = new G4ProcVector();
+  
+  // copy all contents in  pProcVector
+  //
+  G4ProcVector::iterator i;
+  for (i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i){
+    pProcVector->push_back(*i);
+  }
 }
 
 /////// destructor
@@ -55,8 +68,7 @@ G4ProcessVector::~G4ProcessVector()
 {
   // delete pProcVector
   //
-  if (pProcVector != 0 )
-  {
+  if (pProcVector != 0 ){
     pProcVector->clear();
     delete pProcVector;
   }
@@ -64,14 +76,11 @@ G4ProcessVector::~G4ProcessVector()
 
 ////// assignment oeprator
 //
-G4ProcessVector & G4ProcessVector::operator=(G4ProcessVector &right)
+G4ProcessVector & G4ProcessVector::operator=(const G4ProcessVector & right)
 {
-  if (this != &right)
-  {
+  if (this != &right){
     // delete pProcVector
-    //
-    if (pProcVector != 0 )
-    {
+    if (pProcVector != 0 ){
       pProcVector->clear();
       delete pProcVector;
     }
@@ -81,8 +90,7 @@ G4ProcessVector & G4ProcessVector::operator=(G4ProcessVector &right)
     // copy all contents in  pProcVector
     //
     G4ProcVector::iterator i;
-    for (i = pProcVector->begin(); i!= pProcVector->end(); ++i)
-    {
+    for (i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i){
       pProcVector->push_back(*i);
     }
   }

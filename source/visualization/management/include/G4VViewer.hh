@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.18 2006/06/29 21:28:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VViewer.hh,v 1.18 2006-06-29 21:28:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  27th March 1996
@@ -64,6 +64,14 @@ public: // With description
 
   //////////////////////////////////////////////////////////////
   // View manipulation functions.
+
+  virtual void ResetView ();
+  // Reset view parameters to default, including sub-class parameters, if any.
+  // The sub-class should always invoke the base class implementation, i.e:
+  // virtual void SubClass::ResetView () {
+  //   G4VViewer::ResetView();
+  //   // Then reset sub-class parameters
+  //   ...
 
   virtual void SetView () = 0;
   // Take view parameters and work out model/view transformation,

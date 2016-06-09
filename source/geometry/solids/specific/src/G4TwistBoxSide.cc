@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistBoxSide.cc,v 1.8 2010/07/16 15:58:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistBoxSide.cc,v 1.8 2010-07-16 15:58:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -80,11 +80,12 @@ G4TwistBoxSide::G4TwistBoxSide(const G4String     &name,
   // this is an overhead. But the parameter naming scheme fits to the other surfaces.
  
   if ( ! (fDx1 == fDx2 && fDx3 == fDx4 ) ) {
-    G4cerr << "ERROR - G4TwistBoxSide::G4TwistBoxSide(): "
-           << GetName() << G4endl
-           << "        Not a box ! - " << G4endl ;
-    G4Exception("G4TwistBoxSide::G4TwistBoxSide()", "InvalidSetup",
-                FatalException, "TwistedTrapBoxSide is not used as a the side of a box.");
+    std::ostringstream message;
+    message << "TwistedTrapBoxSide is not used as a the side of a box: "
+            << GetName() << G4endl
+            << "        Not a box !";
+    G4Exception("G4TwistBoxSide::G4TwistBoxSide()", "GeomSolids0002",
+                FatalException, message);
   }
  
   fDy1   = pDy1 ;
@@ -450,7 +451,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
         }
       } else { // kDontValidate
         G4Exception("G4TwistBoxSide::DistanceToSurface()",
-                    "NotImplemented kDontValidate", FatalException,
+                    "GeomSolids0001", FatalException,
                     "Feature NOT implemented !");
       }
 
@@ -591,7 +592,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
           }
         } else { // kDontValidate
           G4Exception("G4TwistedBoxSide::DistanceToSurface()",
-                      "NotImplemented kDontValidate", FatalException,
+                      "GeomSolids0001", FatalException,
                       "Feature NOT implemented !");
         }
         
@@ -870,7 +871,7 @@ G4int G4TwistBoxSide::GetAreaCode(const G4ThreeVector &xx,
       return areacode;
    } else {
       G4Exception("G4TwistBoxSide::GetAreaCode()",
-                  "NotImplemented", FatalException,
+                  "GeomSolids0001", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -923,7 +924,7 @@ void G4TwistBoxSide::SetCorners()
   } else {
 
     G4Exception("G4TwistBoxSide::SetCorners()",
-                "NotImplemented", FatalException,
+                "GeomSolids0001", FatalException,
                 "Method NOT implemented !");
   }
 }
@@ -967,7 +968,7 @@ void G4TwistBoxSide::SetBoundaries()
   } else {
     
   G4Exception("G4TwistBoxSide::SetCorners()",
-              "NotImplemented", FatalException,
+              "GeomSolids0001", FatalException,
               "Feature NOT implemented !");
   }
 }

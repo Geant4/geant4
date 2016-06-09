@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Plane3D.hh,v 1.5 2006/06/29 18:59:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Plane3D.hh,v 1.5 2006-06-29 18:59:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4PLANE3D_HH
 #define G4PLANE3D_HH

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.hh,v 1.1 2009/09/01 14:48:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VHadronPhysics.hh,v 1.1 2009-09-01 14:48:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,7 +54,7 @@ class G4VHadronPhysics : public G4VPhysicsConstructor
 public: 
 
   G4VHadronPhysics(const G4String& name ="hInelastic", 
-			    G4int verbose = 0);
+		   G4int verbose = 0);
 
   virtual ~G4VHadronPhysics();
 
@@ -105,7 +105,7 @@ private:
   G4VHadronPhysics & operator=(const G4VHadronPhysics &right);
 
   std::vector<G4VHadronModelBuilder*> builders;
- 
+
 };
 
 #endif

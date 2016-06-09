@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2010/11/23 15:15:11 gcosmo Exp $
+$Id: History,v 1.79 2010-11-23 15:15:11 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10/11/2011 : G.Cosmo           breps-V09-04-04
+- Fixed trivial Coverity defect on assignment operators to G4PointRat.
+
+25/08/2011 : G.Cosmo           breps-V09-04-03
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+
+12/05/2011 : G.Cosmo           breps-V09-04-02
+- G4BREPSolid: fixed compilation warnings on gcc-4.6.0.
+
+06/05/2011 : G.Cosmo           breps-V09-04-01
+- Use G4 typedefs for CLHEP types also in internal unit tests.
+
+24/03/2011 : G.Cosmo           breps-V09-04-00
+- Use G4Transform3D type in place of native CLHEP type.
 
 23/11/2010 : G.Cosmo           breps-V09-03-07 and V09-03-06
 - Fixed remaining cases of pointer handling in experimental G4BezierSurface

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointInterpolator.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4AdjointInterpolator.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
@@ -155,6 +155,7 @@ size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vec
 {  //most rapid nethod could be used probably
    //It is important to put std::vector<G4double>& such that the vector itself is used and not a copy
   return FindPosition(log_x, log_x_vec);
+  /*
   if (log_x_vec.size()>3){ 
   	size_t ind=0;
   	G4double log_x1=log_x_vec[1];
@@ -167,6 +168,7 @@ size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vec
 	
   }
   else 	return FindPosition(log_x, log_x_vec);
+  */
   
  
 }

@@ -263,18 +263,18 @@ void  HadrontherapyDetectorConstruction::ParametersCheck()
 		phantomSizeZ,
 		detectorToPhantomPosition
 		))
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector is not fully inside Phantom!");
+      G4Exception("HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0001", FatalException, "Error: Detector is not fully inside Phantom!");
 
     // Check Detector sizes respect to the voxel ones
 
     if ( detectorSizeX < sizeOfVoxelAlongX) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector X size must be bigger or equal than that of Voxel X");
+      G4Exception("HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0002", FatalException, "Error:  Detector X size must be bigger or equal than that of Voxel X!");
     }
     if ( detectorSizeY < sizeOfVoxelAlongY) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector Y size must be bigger or equal than that of Voxel Y");
+      G4Exception(" HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0003", FatalException, "Error:  Detector Y size must be bigger or equal than that of Voxel Y!");
     }
     if ( detectorSizeZ < sizeOfVoxelAlongZ) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector Z size must be bigger or equal than that of Voxel Z");
+      G4Exception(" HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0004", FatalException, "Error:  Detector Z size must be bigger or equal than that of Voxel Z!");
     }
 
 }
@@ -373,16 +373,15 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     else    ConstructDetector();
 
     // Round to nearest integer number of voxel 
-    numberOfVoxelsAlongX = lrint(detectorSizeX / sizeOfVoxelAlongX);
+    numberOfVoxelsAlongX = G4lrint(detectorSizeX / sizeOfVoxelAlongX);
     sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
 
-    numberOfVoxelsAlongY = lrint(detectorSizeY / sizeOfVoxelAlongY);
+    numberOfVoxelsAlongY = G4lrint(detectorSizeY / sizeOfVoxelAlongY);
     sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
 
-    numberOfVoxelsAlongZ = lrint(detectorSizeZ / sizeOfVoxelAlongZ);
+    numberOfVoxelsAlongZ = G4lrint(detectorSizeZ / sizeOfVoxelAlongZ);
     sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
 
-    //G4cout << "*************** DetectorToWorldPosition " << GetDetectorToWorldPosition()/cm << "\n";
     ConstructSensitiveDetector(GetDetectorToWorldPosition());
 
     volumeOfVoxel = sizeOfVoxelAlongX * sizeOfVoxelAlongY * sizeOfVoxelAlongZ;
@@ -394,8 +393,8 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
 	    massOfVoxel);
 
     // Initialize analysis
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #ifdef G4ANALYSIS_USE_ROOT
+        HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     analysis -> flush();     // Finalize the root file 
     analysis -> book();
 #endif

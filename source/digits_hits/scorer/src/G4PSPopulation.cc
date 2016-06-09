@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPopulation.cc,v 1.3 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSPopulation.cc,v 1.3 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPopulation
 #include "G4PSPopulation.hh"
@@ -103,8 +103,8 @@ void G4PSPopulation::SetUnit(const G4String& unit)
     unitName = unit;
     unitValue = 1.0;
   }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+    G4Exception("G4PSPopulation::SetUnit","DetPS0014",JustWarning,msg);
   }
 
 }

@@ -39,7 +39,6 @@
 #include "G4ParticleGun.hh"
 
 #include <fstream>
-#include <unistd.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -83,7 +82,7 @@ HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxel
 		numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ <<
 		" voxels has been allocated " << G4endl;
 	}
-	else G4Exception(" HadrontherapyMatrix::HadrontherapyMatrix. Can't allocate memory to store physical dose!");
+	else G4Exception("HadrontherapyMatrix::HadrontherapyMatrix()", "Hadrontherapy0005", FatalException, "Can't allocate memory to store physical dose!");
 		// Hit voxel (TrackID) marker
 		// This array mark the status of voxel, if a hit occur, with the trackID of the particle
 		// Must be initialized
@@ -167,9 +166,9 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
     {
 		if (ionStore[l].PDGencoding == PDGencoding ) 
 		{   // Is it a primary or a secondary particle? 
-			if ( trackID ==1 && ionStore[l].isPrimary || trackID !=1 && !ionStore[l].isPrimary)
+		  if ( (trackID ==1 && ionStore[l].isPrimary) || (trackID !=1 && !ionStore[l].isPrimary))
 			{
-				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit;
 				
 					// Fill a matrix per each ion with the fluence
 				if (fluence) ionStore[l].fluence[Index(i, j, k)]++;
@@ -203,7 +202,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 			newIon.dose[m] = 0.;
 			newIon.fluence[m] = 0;
 		}
-		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit;
 		if (fluence) newIon.fluence[Index(i, j, k)]++;
 		
 		ionStore.push_back(newIon);
@@ -394,16 +393,18 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
     // Convert energy deposited to dose.
     // Store the information of the matrix in a ntuple and in 
     // a 1D Histogram
+#ifdef G4ANALYSIS_USE_ROOT
+      HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+#endif
 
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     if (matrix)
     {  
 	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
 	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
 		for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 		{
-		    G4int n = Index(i,j,k);
 #ifdef G4ANALYSIS_USE_ROOT
+		    G4int n = Index(i,j,k);
 		    if (analysis -> IsTheTFile() )
 		    {
 			analysis -> FillEnergyDeposit(i, j, k, matrix[n]/massOfVoxel/doseUnit);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIsotopeTable.hh,v 1.6 2006/06/29 19:24:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIsotopeTable.hh,v 1.6 2006-06-29 19:24:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
@@ -48,7 +48,11 @@ class G4VIsotopeTable
 
  public:
   // constructor
-  G4VIsotopeTable(const G4String& name = "");
+  G4VIsotopeTable();
+  explicit G4VIsotopeTable(const G4String& );
+
+  G4VIsotopeTable(const G4VIsotopeTable& );
+  G4VIsotopeTable & operator=(const G4VIsotopeTable&);
 
  public:
   // destructor
@@ -82,9 +86,31 @@ class G4VIsotopeTable
 };
 
 inline
+ G4VIsotopeTable::G4VIsotopeTable()
+  : fName(""), verboseLevel(0)
+{
+}
+
+inline
  G4VIsotopeTable::G4VIsotopeTable(const G4String& name)
   : fName(name), verboseLevel(0)
 {
+}
+
+inline
+ G4VIsotopeTable::G4VIsotopeTable(const G4VIsotopeTable & right)
+  : fName(right.fName), verboseLevel(right.verboseLevel)
+{
+}
+
+inline
+ G4VIsotopeTable& G4VIsotopeTable::operator=(const G4VIsotopeTable & right)
+{
+  if (this != &right){
+    fName = right.fName;
+    verboseLevel = right.verboseLevel;
+  }
+  return *this;
 }
 
 inline

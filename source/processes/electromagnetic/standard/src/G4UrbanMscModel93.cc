@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.9 2010/11/13 18:48:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UrbanMscModel93.cc,v 1.11 2010-12-23 18:31:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //   
@@ -173,6 +173,9 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
     = zPathLength = par1 = par2 = par3 = 0;
 
   currentMaterialIndex = -1;
+  fParticleChange = 0;
+  theLambdaTable = 0;
+  couple = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,7 +202,6 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
   }
 
   fParticleChange = GetParticleChangeForMSC();
-  InitialiseSafetyHelper();
 
   isInitialized = true;
 }
@@ -470,8 +472,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   couple = track.GetMaterialCutsCouple();
   currentMaterialIndex = couple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
-  currentRange = 
-    theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,couple);
+  currentRange = GetRange(particle,currentKinEnergy,couple);
   lambda0 = GetLambda(currentKinEnergy);
 
   // stop here if small range particle
@@ -704,7 +705,7 @@ G4double G4UrbanMscModel93::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda0*(1.-exp(-tau));
-  } else if(currentKinEnergy < mass)  {
+  } else if(currentKinEnergy < mass || tPathLength == currentRange)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
@@ -713,7 +714,7 @@ G4double G4UrbanMscModel93::ComputeGeomPathLength(G4double)
     else
       zmean = 1./(par1*par3) ;
   } else {
-    G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,couple);
+    G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
     G4double lambda1 = GetLambda(T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength) ;
@@ -827,6 +828,20 @@ void G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // protection against 'bad' cth values
   if(std::abs(cth) > 1.) return;
+
+  const G4double checkEnergy = GeV;
+  if(kineticEnergy > checkEnergy && cth < 0.0 
+     && tPathLength < taulim*lambda0) {
+    G4ExceptionDescription ed;
+    ed << dynParticle->GetDefinition()->GetParticleName()
+       << " E(MeV)= " << kineticEnergy/MeV
+       << " Step(mm)= " << tPathLength/mm
+       << " in " << CurrentCouple()->GetMaterial()->GetName()
+       << " scattering angle is set to zero" << G4endl;
+    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
+                ed,"Please, send bug report in the case of this message");
+    return;
+  }
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
@@ -960,7 +975,7 @@ G4double G4UrbanMscModel93::SampleCosineTheta(G4double trueStepLength,
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       // protection for very small angles
-      if(theta0 < tausmall) return cth;
+      if(theta0*theta0 < tausmall) return cth;
     
       if(theta0 > theta0max)
         return SimpleScattering(xmeanth,x2meanth);

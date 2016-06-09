@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.10 2009/01/19 16:26:40 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4OpenGLStoredQt.cc,v 1.10 2009-01-19 16:26:40 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // OpenGLStoredQt graphics system factory.
@@ -37,6 +37,7 @@
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredQt.hh"
+#include "G4OpenGLStoredQtSceneHandler.hh"
 #include "G4OpenGLStoredQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -51,7 +52,7 @@ G4OpenGLStoredQt::G4OpenGLStoredQt ():
 
 G4VSceneHandler* G4OpenGLStoredQt::CreateSceneHandler
 (const G4String& name) {
-  G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
+  G4VSceneHandler* pScene = new G4OpenGLStoredQtSceneHandler (*this, name);
   return    pScene;
 }
 
@@ -62,7 +63,7 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
 #endif
   G4VViewer* pView =
     new G4OpenGLStoredQtViewer
-    ((G4OpenGLStoredSceneHandler&) scene, name);
+    ((G4OpenGLStoredQtSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLStoredQt::CreateViewer: error flagged by negative"

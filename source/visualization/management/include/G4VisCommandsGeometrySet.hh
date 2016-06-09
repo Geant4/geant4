@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.hh,v 1.4 2010/06/15 16:33:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VisCommandsGeometrySet.hh,v 1.4 2010-06-15 16:33:55 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -300,6 +300,7 @@ public:
   virtual ~G4VisCommandGeometrySetVisibility ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
+  void SetNewValueOnLV (G4LogicalVolume* pLV, G4int,G4bool);
 private:
   G4VisCommandGeometrySetVisibility (const G4VisCommandGeometrySetVisibility&);
   G4VisCommandGeometrySetVisibility& operator = (const G4VisCommandGeometrySetVisibility&);

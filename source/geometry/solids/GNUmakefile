@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2003/10/01 14:51:39 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2003-10-01 14:51:39 gcosmo Exp $
 # --------------------------------------------------------------
 # Makes libraries for each subdomain: 
 #         CSG, specific, Boolean, BREPS, STEP, STEPinterface.

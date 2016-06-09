@@ -1,0 +1,38 @@
+# Macro file for example B2
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+# Default kinematics: 
+# proton 3 GeV in direction (0.,0.,1.)
+# 1 event with tracking/verbose
+#
+/tracking/verbose 1
+/run/beamOn 1
+#
+# 1 event with printing hits
+#
+/tracking/verbose 0
+/hits/verbose 2
+/run/beamOn 1
+#
+# set target and chamber material
+#
+/B2/det/setTargetMaterial G4_WATER
+/B2/det/setChamberMaterial G4_Ar
+/run/beamOn 3
+# 
+# set a magnetic field and max allowed step length
+# 3 event with printing hits
+#
+/B2/det/setField 0.2 tesla
+/B2/det/stepMax 1.0 mm
+/gun/energy 0.3 GeV
+/run/beamOn 3
+#
+# muon 300 MeV in the direction (0.,0.,1.)
+# 3 event with detailed printing
+#
+/gun/particle mu-
+/gun/energy 300 MeV
+/run/beamOn 3

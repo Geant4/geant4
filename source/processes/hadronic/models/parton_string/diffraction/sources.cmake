@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010/09/29 19:04:44 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-12-13 12:11:08 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -34,7 +34,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -53,17 +56,21 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4DiffractiveHHScatterer.hh
         G4DiffractiveSplitableHadron.hh
         G4ElasticHNScattering.hh
+        G4FTFAnnihilation.hh
         G4FTFModel.hh
         G4FTFParameters.hh
         G4FTFParticipants.hh
+        G4ComponentCHIPShadronNuclearXS.hh
     SOURCES
         G4DiffractiveExcitation.cc
         G4DiffractiveHHScatterer.cc
         G4DiffractiveSplitableHadron.cc
         G4ElasticHNScattering.cc
+        G4FTFAnnihilation.cc
         G4FTFModel.cc
         G4FTFParameters.cc
         G4FTFParticipants.cc
+        G4ComponentCHIPShadronNuclearXS.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

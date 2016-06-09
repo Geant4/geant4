@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,7 +43,25 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4MiscLHEPBuilder::G4MiscLHEPBuilder(): wasActivated(false) {}
+G4MiscLHEPBuilder::G4MiscLHEPBuilder(): 
+  theHEAntiNeutronModel(0),
+  theLambdaInelastic(0), theLELambdaModel(0), theHELambdaModel(0),
+  theAntiLambdaInelastic(0), theLEAntiLambdaModel(0), theHEAntiLambdaModel(0),
+  theSigmaMinusInelastic(0), theLESigmaMinusModel(0), theHESigmaMinusModel(0),
+  theAntiSigmaMinusInelastic(0), theLEAntiSigmaMinusModel(0), theHEAntiSigmaMinusModel(0),
+  theSigmaPlusInelastic(0), theLESigmaPlusModel(0), theHESigmaPlusModel(0),
+  theAntiSigmaPlusInelastic(0), theLEAntiSigmaPlusModel(0), theHEAntiSigmaPlusModel(0),
+  theXiZeroInelastic(0), theLEXiZeroModel(0), theHEXiZeroModel(0),
+  theAntiXiZeroInelastic(0), theLEAntiXiZeroModel(0), theHEAntiXiZeroModel(0),
+  theXiMinusInelastic(0), theLEXiMinusModel(0), theHEXiMinusModel(0),
+  theAntiXiMinusInelastic(0), theLEAntiXiMinusModel(0), theHEAntiXiMinusModel(0),
+  theOmegaMinusInelastic(0), theLEOmegaMinusModel(0), theHEOmegaMinusModel(0),
+  theAntiOmegaMinusInelastic(0), theLEAntiOmegaMinusModel(0), theHEAntiOmegaMinusModel(0),
+  wasActivated(false)
+
+{}
+
+
 G4MiscLHEPBuilder::~G4MiscLHEPBuilder()
 {
 }

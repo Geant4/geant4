@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.7 2010/07/13 15:59:42 gcosmo Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.7 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -198,35 +198,30 @@ CheckVoxelsFillContainer( G4double contX, G4double contY, G4double contZ ) const
    || std::fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForError  
    || std::fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForError )
   {
-    G4cerr << "ERROR - G4PhantomParameterisation::CheckVoxelsFillContainer()"
-           << G4endl
-           << "        Voxels do not fully fill the container: "
-           << fContainerSolid->GetName() << G4endl
-           << "        DiffX= " << contX-fNoVoxelX*fVoxelHalfX << G4endl
-           << "        DiffY= " << contY-fNoVoxelY*fVoxelHalfY << G4endl
-           << "        DiffZ= " << contZ-fNoVoxelZ*fVoxelHalfZ << G4endl
-           << "        Maximum difference is: " << toleranceForError << G4endl;
+    std::ostringstream message;
+    message << "Voxels do not fully fill the container: "
+            << fContainerSolid->GetName() << G4endl
+            << "        DiffX= " << contX-fNoVoxelX*fVoxelHalfX << G4endl
+            << "        DiffY= " << contY-fNoVoxelY*fVoxelHalfY << G4endl
+            << "        DiffZ= " << contZ-fNoVoxelZ*fVoxelHalfZ << G4endl
+            << "        Maximum difference is: " << toleranceForError;
     G4Exception("G4PhantomParameterisation::CheckVoxelsFillContainer()",
-                "InvalidSetup", FatalException,
-                "Voxels do not fully fill the container!");
+                "GeomNav0002", FatalException, message);
 
   }
   else if( std::fabs(contX-fNoVoxelX*fVoxelHalfX) >= toleranceForWarning
         || std::fabs(contY-fNoVoxelY*fVoxelHalfY) >= toleranceForWarning  
         || std::fabs(contZ-fNoVoxelZ*fVoxelHalfZ) >= toleranceForWarning )
   {
-    G4cerr << "WARNING - G4PhantomParameterisation::CheckVoxelsFillContainer()"
-           << G4endl
-           << "          Voxels do not fully fill the container: "
-           << fContainerSolid->GetName() << G4endl
-           << "          DiffX= " << contX-fNoVoxelX*fVoxelHalfX << G4endl
-           << "          DiffY= " << contY-fNoVoxelY*fVoxelHalfY << G4endl
-           << "          DiffZ= " << contZ-fNoVoxelZ*fVoxelHalfZ << G4endl
-           << "          Maximum difference is: " << toleranceForWarning
-           << G4endl;
+    std::ostringstream message;
+    message << "Voxels do not fully fill the container: "
+            << fContainerSolid->GetName() << G4endl
+            << "          DiffX= " << contX-fNoVoxelX*fVoxelHalfX << G4endl
+            << "          DiffY= " << contY-fNoVoxelY*fVoxelHalfY << G4endl
+            << "          DiffZ= " << contZ-fNoVoxelZ*fVoxelHalfZ << G4endl
+            << "          Maximum difference is: " << toleranceForWarning;
     G4Exception("G4PhantomParameterisation::CheckVoxelsFillContainer()",
-                "InvalidSetup", JustWarning,
-                "Voxels do not fully fill the container!");
+                "GeomNav1002", JustWarning, message);
   }
 }
   
@@ -240,12 +235,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   //
   if( fContainerSolid->Inside( localPoint ) == kOutside )
   {
-    G4cerr << "ERROR - G4PhantomParameterisation::GetReplicaNo()" << G4endl
-           << "        localPoint - " << localPoint
-           << " - is outside container solid: "
-           << fContainerSolid->GetName() << G4endl;
-    G4Exception("G4PhantomParameterisation::GetReplicaNo()", "InvalidSetup",
-                FatalErrorInArgument, "Point outside voxels!");
+    std::ostringstream message;
+    message << "Point outside voxels!" << G4endl
+            << "        localPoint - " << localPoint
+            << " - is outside container solid: "
+            << fContainerSolid->GetName() << G4endl;
+    G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
+                FatalErrorInArgument, message);
   }
   
   // Check the voxel numbers corresponding to localPoint
@@ -365,18 +361,18 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   if( !isOK )
   {
-    G4cerr << "WARNING - G4PhantomParameterisation::GetReplicaNo()" << G4endl
-           << "          LocalPoint: " << localPoint << G4endl
-           << "          LocalDir: " << localDir << G4endl
-           << "          Voxel container size: " << fContainerWallX
-           << " " << fContainerWallY << " " << fContainerWallZ << G4endl
-           << "          LocalPoint - wall: "
-           << localPoint.x()-fContainerWallX << " "
-           << localPoint.y()-fContainerWallY << " "
-           << localPoint.z()-fContainerWallZ << G4endl;
+    std::ostringstream message;
+    message << "Corrected the copy number! It was negative or too big" << G4endl
+            << "          LocalPoint: " << localPoint << G4endl
+            << "          LocalDir: " << localDir << G4endl
+            << "          Voxel container size: " << fContainerWallX
+            << " " << fContainerWallY << " " << fContainerWallZ << G4endl
+            << "          LocalPoint - wall: "
+            << localPoint.x()-fContainerWallX << " "
+            << localPoint.y()-fContainerWallY << " "
+            << localPoint.z()-fContainerWallZ;
     G4Exception("G4PhantomParameterisation::GetReplicaNo()",
-                "Wrong-copy-number", JustWarning,
-                "Corrected the copy number! It was negative or too big");
+                "GeomNav1002", JustWarning, message);
     copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
   }
 
@@ -391,11 +387,11 @@ void G4PhantomParameterisation::CheckCopyNo( const G4int copyNo ) const
 { 
   if( copyNo < 0 || copyNo >= G4int(fNoVoxel) )
   {
-    G4cerr << "ERROR - G4PhantomParameterisation::CheckCopyNo()" << G4endl
-           << "        Copy number: " << copyNo << G4endl
-           << "        Total number of voxels: " << fNoVoxel << G4endl;
+    std::ostringstream message;
+    message << "Copy number is negative or too big!" << G4endl
+            << "        Copy number: " << copyNo << G4endl
+            << "        Total number of voxels: " << fNoVoxel;
     G4Exception("G4PhantomParameterisation::CheckCopyNo()",
-                "Wrong-copy-number", FatalErrorInArgument,
-                "Copy number is negative or too big!");
+                "GeomNav0002", FatalErrorInArgument, message);
   }
 }

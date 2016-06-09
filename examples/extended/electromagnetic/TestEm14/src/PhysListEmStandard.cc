@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.5 2010/04/02 13:22:02 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PhysListEmStandard.cc,v 1.6 2011-01-07 14:19:59 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -34,9 +34,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
+#include "G4RayleighScattering.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering.hh"
+#include "G4KleinNishinaModel.hh"
+#include "G4GammaConversion.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -49,6 +51,9 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
+#include "G4EmProcessOptions.hh"
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,9 +79,12 @@ void PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      // gamma         
+      // gamma
+      ////pmanager->AddDiscreteProcess(new G4RayleighScattering);               
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      G4ComptonScattering* cs   = new G4ComptonScattering;
+      cs->SetModel(new G4KleinNishinaModel());
+      pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
     } else if (particleName == "e-") {
@@ -107,6 +115,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1,-1,1);
     }
   }
+  
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);  
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

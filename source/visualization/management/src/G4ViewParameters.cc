@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.38 2010/11/05 16:00:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ViewParameters.cc,v 1.38 2010-11-05 16:00:11 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996
@@ -87,7 +87,8 @@ G4ViewParameters::G4ViewParameters ():
   fWindowLocationHintYNegative(false),
   fAutoRefresh (false),
   fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
-  fPicking (false)
+  fPicking (false),
+  fRotationStyle (constrainUpDirection)
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
@@ -293,7 +294,8 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     || 
-      (fPicking              != v.fPicking)
+      (fPicking              != v.fPicking)              ||
+      (fRotationStyle        != v.fRotationStyle)
       )
     G4cout << "Difference in 1st batch." << G4endl;
 
@@ -341,7 +343,18 @@ std::ostream& operator << (std::ostream& os,
 std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "View parameters and options:";
 
-  os << "\n  Drawing style: " << v.fDrawingStyle;
+  os << "\n  Drawing style: ";
+  switch (v.fDrawingStyle) {
+  case G4ViewParameters::wireframe:
+    os << "edges, wireframe"; break;
+  case G4ViewParameters::hlr:
+    os << "edges, hidden line removal"; break;
+  case G4ViewParameters::hsr:
+    os << "surfaces, hidden surface removal"; break;
+  case G4ViewParameters::hlhsr:
+    os << "surfaces and edges, hidden line and surface removal"; break;
+  default: os << "unrecognised"; break;
+  }
 
   os << "\n  Auxiliary edges: ";
   if (!v.fAuxEdgeVisible) os << "in";
@@ -465,6 +478,15 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   if (v.fPicking) os << "true";
   else os << "false";
 
+  os << "\n  Rotation style: ";
+  switch (v.fRotationStyle) {
+  case G4ViewParameters::constrainUpDirection:
+    os << "constrainUpDirection (conventional HEP view)"; break;
+  case G4ViewParameters::freeRotation:
+    os << "freeRotation (Google-like rotation, using mouse-grab)"; break;
+  default: os << "unrecognised"; break;
+  }
+
   return os;
 }
 
@@ -506,7 +528,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     ||
-      (fPicking              != v.fPicking)
+      (fPicking              != v.fPicking)              ||
+      (fRotationStyle        != v.fRotationStyle)
       )
     return true;
 

@@ -8,7 +8,7 @@ using namespace std;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: IndentPrintWriter.cc,v 1.14 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: IndentPrintWriter.cc,v 1.14 2005-06-02 21:28:45 duns Exp $
  */
 namespace cheprep {
 

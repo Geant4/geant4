@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.cc,v 1.15 2010/11/17 20:19:09 kaitanie Exp $ 
+// $Id: G4InclLightIonInterface.cc,v 1.14 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -46,7 +46,6 @@ G4InclLightIonInterface::G4InclLightIonInterface()
   hazard->ial = (*table_entry);
 
   theExcitationHandler = new G4ExcitationHandler;
-  thePrecoModel = new G4PreCompoundModel(theExcitationHandler);
 
   varntp = new G4VarNtp();
   calincl = 0;
@@ -68,7 +67,6 @@ G4InclLightIonInterface::G4InclLightIonInterface()
 
 G4InclLightIonInterface::~G4InclLightIonInterface()
 {
-  delete thePrecoModel;
   delete theExcitationHandler;
 
   delete hazard;
@@ -113,7 +111,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
   G4LorentzRotation toBreit = aTrack.Get4Momentum().boostVector();
 
   if(theNucleus.GetZ_asInt() == 1 && theNucleus.GetA_asInt() == 1 && G4InclInput::canUseInverseKinematics(aTrack, theNucleus)) {
-    G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt(), 0.0);
+    G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 
     if(oldTargetDef != 0 && oldProjectileDef != 0) {
@@ -453,7 +451,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
 	G4cout <<" E = " << p4rest.e() << G4endl;
       }
       G4Fragment theSpectatorNucleus(G4int(varntp->masp), G4int(varntp->mzsp), p4rest);
-      theSpectatorPrecoResult = thePrecoModel->DeExcite(theSpectatorNucleus);
+      theSpectatorPrecoResult = theExcitationHandler->BreakItUp(theSpectatorNucleus);
       if(theSpectatorPrecoResult != 0) {
       G4ReactionProductVector::iterator fragment;
       for(fragment = theSpectatorPrecoResult->begin(); fragment != theSpectatorPrecoResult->end(); fragment++) {
@@ -545,7 +543,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
       }
 
       G4Fragment theCascadeRemnant(G4int(varntp->massini), G4int(varntp->mzini), p4rest);
-      thePrecoResult = thePrecoModel->DeExcite(theCascadeRemnant);
+      thePrecoResult = theExcitationHandler->BreakItUp(theCascadeRemnant);
       if(thePrecoResult != 0) {
       G4ReactionProductVector::iterator fragment;
       for(fragment = thePrecoResult->begin(); fragment != thePrecoResult->end(); fragment++) {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.15 2006/06/29 21:16:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.15 2006-06-29 21:16:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ---------------------------------------------------------------

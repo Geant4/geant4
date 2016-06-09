@@ -89,6 +89,7 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
 	heavycorr =0;
   	particle = 0;
 	mass=0;
+	currentMaterialIndex = -1;
 
   	ioncross = new G4IonCoulombCrossSection(); 
 
@@ -107,6 +108,7 @@ void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 {
   	SetupParticle(p);
   	currentCouple = 0;
+	currentMaterialIndex = -1;
   	cosThetaMin = cos(PolarAngleLimit());
   	ioncross->Initialise(p,cosThetaMin);
  
@@ -114,9 +116,9 @@ void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 
 
   	if(!isInitialised) {
-    		isInitialised = true;
-    		fParticleChange = GetParticleChangeForGamma();
-  		}
+	  isInitialised = true;
+	  fParticleChange = GetParticleChangeForGamma();
+	}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,7 +135,7 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
   	SetupParticle(p);
  
   	G4double xsec =0.0;
-  		if(kinEnergy < lowEnergyLimit) return xsec;
+	if(kinEnergy < lowEnergyLimit) return xsec;
 
   	DefineMaterial(CurrentCouple());
 
@@ -144,7 +146,6 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 
         ioncross->SetupTarget(Z, kinEnergy, heavycorr);
-
 
   	xsec = ioncross->NuclearCrossSection();
 
@@ -242,7 +243,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 			}
  
   	if(trec > tcut) {
-    		G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    		G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     		G4double plab = sqrt(finalT*(finalT + 2.0*mass));
     		G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     		G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.8 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTubsFlatSide.cc,v 1.8 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
@@ -62,8 +62,9 @@ G4TwistTubsFlatSide::G4TwistTubsFlatSide(const G4String         &name,
                axis0min, axis1min, axis0max, axis1max)
 {   
    if (axis0 == kPhi && axis1 == kRho) {
-      G4Exception("G4TwistTubsFlatSide::G4TwistTubsFlatSide()", "InvalidSetup",
-                  FatalException, "Should swap axis0 and axis1!");
+      G4Exception("G4TwistTubsFlatSide::G4TwistTubsFlatSide()",
+                  "GeomSolids0002", FatalErrorInArgument,
+                  "Should swap axis0 and axis1!");
    }
    
    G4ThreeVector normal = rot.inverse()*n;
@@ -404,11 +405,12 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
       return areacode;
    } else {
 
-      G4cerr << "ERROR - G4TwistTubsFlatSide::GetAreaCode()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistTubsFlatSide::GetAreaCode()", "NotImplemented",
-                  FatalException, "Feature NOT implemented !");
+      std::ostringstream message;
+      message << "Feature NOT implemented !" << G4endl
+              << "        fAxis[0] = " << fAxis[0] << G4endl
+              << "        fAxis[1] = " << fAxis[1];
+      G4Exception("G4TwistTubsFlatSide::GetAreaCode()", "GeomSolids0001",
+                  FatalException, message);
    }
    return areacode;
 }
@@ -449,11 +451,12 @@ void G4TwistTubsFlatSide::SetCorners()
          SetCorner(sC0Min1Max, x, y, z);
        
    } else {
-      G4cerr << "ERROR - G4TwistTubsFlatSide::SetCorners()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistTubsFlatSide::SetCorners()", "NotImplemented",
-                  FatalException, "Feature NOT implemented !");
+      std::ostringstream message;
+      message << "Feature NOT implemented !" << G4endl
+              << "        fAxis[0] = " << fAxis[0] << G4endl
+              << "        fAxis[1] = " << fAxis[1];
+      G4Exception("G4TwistTubsFlatSide::SetCorners()", "GeomSolids0001",
+                  FatalException, message);
    }
 }
 
@@ -492,11 +495,12 @@ void G4TwistTubsFlatSide::SetBoundaries()
       SetBoundary(sAxis1 & (sAxisRho | sAxisMax), direction,
                   GetCorner(sC0Min1Max), sAxisPhi);
    } else {
-      G4cerr << "ERROR - G4TwistTubsFlatSide::SetBoundaries()" << G4endl
-             << "        fAxis[0] = " << fAxis[0] << G4endl
-             << "        fAxis[1] = " << fAxis[1] << G4endl;
-      G4Exception("G4TwistTubsFlatSide::SetBoundaries()", "NotImplemented",
-                  FatalException, "Feature NOT implemented !");
+      std::ostringstream message;
+      message << "Feature NOT implemented !" << G4endl
+              << "        fAxis[0] = " << fAxis[0] << G4endl
+              << "        fAxis[1] = " << fAxis[1];
+      G4Exception("G4TwistTubsFlatSide::SetBoundaries()", "GeomSolids0001",
+                  FatalException, message);
    }
 }
 

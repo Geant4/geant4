@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TransitionRadiation.hh,v 1.9 2006/06/29 19:55:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TransitionRadiation.hh,v 1.9 2006-06-29 19:55:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -60,96 +59,71 @@ class G4TransitionRadiation : public   G4VDiscreteProcess
 {
 public:
 
-// Constructors
-
-
   G4TransitionRadiation( const G4String& processName = "TR",
-                                  G4ProcessType type = fElectromagnetic) ;
-
-
-//  G4TransitionRadiation(const G4TransitionRadiation& right) ;
-
-// Destructor
+			 G4ProcessType type = fElectromagnetic) ;
 
   virtual ~G4TransitionRadiation() ;
 
-// Operators
-// G4TransitionRadiation& operator=(const G4TransitionRadiation& right) ;
-// G4int operator==(const G4TransitionRadiation& right)const ;
-// G4int operator!=(const G4TransitionRadiation& right)const ;
+  // Methods
 
-// Methods
+  G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
-        G4bool IsApplicable(const G4ParticleDefinition& aParticleType)
-        {
-          return ( aParticleType.GetPDGCharge() != 0.0 );
-        }
+  G4double GetMeanFreePath(const G4Track&, G4double,
+			   G4ForceCondition* condition);
 
-	G4double GetMeanFreePath(const G4Track&,
-				 G4double,
-				 G4ForceCondition* condition)
-        {
-          *condition = Forced;
-	  return DBL_MAX;      // so TR doesn't limit mean free path
-        }
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-	G4VParticleChange* PostStepDoIt(const G4Track&,
-				        const G4Step&)
-        {
-          ClearNumberOfInteractionLengthLeft();
-          return &aParticleChange;
-        }
-
-
-
-
-virtual
-G4double SpectralAngleTRdensity( G4double energy,
+  virtual
+  G4double SpectralAngleTRdensity( G4double energy,
                                  G4double varAngle ) const = 0 ;
 
-G4double IntegralOverEnergy( G4double energy1,
-                             G4double energy2,
-                             G4double varAngle     ) const ;
+  G4double IntegralOverEnergy( G4double energy1,
+			       G4double energy2,
+			       G4double varAngle     ) const ;
 
-G4double IntegralOverAngle( G4double energy,
-                            G4double varAngle1,
-                            G4double varAngle2     ) const ;
+  G4double IntegralOverAngle( G4double energy,
+			      G4double varAngle1,
+			      G4double varAngle2     ) const ;
 
-G4double AngleIntegralDistribution( G4double varAngle1,
-                                    G4double varAngle2     ) const ;
+  G4double AngleIntegralDistribution( G4double varAngle1,
+				      G4double varAngle2     ) const ;
 
-G4double EnergyIntegralDistribution( G4double energy1,
-                                     G4double energy2     )  const   ;
+  G4double EnergyIntegralDistribution( G4double energy1,
+				       G4double energy2     )  const   ;
 
 
 
-// Access functions
-
+  // Access functions
 
 protected :
 
-G4int fMatIndex1 ;                   // index of the 1st material
-G4int fMatIndex2 ;                   // index of the 2nd material
+  G4int fMatIndex1 ;                   // index of the 1st material
+  G4int fMatIndex2 ;                   // index of the 2nd material
 
-// private :
+  // private :
 
-G4double fGamma ;
-G4double fEnergy ;
-G4double fVarAngle ;
+  G4double fGamma ;
+  G4double fEnergy ;
+  G4double fVarAngle ;
 
-// Local constants
-static const G4int fSympsonNumber ; // Accuracy of Sympson integration 10
-static const G4int fGammaNumber   ; // = 15
-static const G4int fPointNumber   ; // = 100
+  // Local constants
+  static const G4int fSympsonNumber ; // Accuracy of Sympson integration 10
+  static const G4int fGammaNumber   ; // = 15
+  static const G4int fPointNumber   ; // = 100
 
-G4double fMinEnergy ;                //  min TR energy
-G4double fMaxEnergy ;                //  max TR energy
-G4double fMaxTheta  ;                //  max theta of TR quanta
+  G4double fMinEnergy ;                //  min TR energy
+  G4double fMaxEnergy ;                //  max TR energy
+  G4double fMaxTheta  ;                //  max theta of TR quanta
 
-G4double fSigma1 ;                   // plasma energy Sq of matter1
-G4double fSigma2 ;                   // plasma energy Sq of matter2
+  G4double fSigma1 ;                   // plasma energy Sq of matter1
+  G4double fSigma2 ;                   // plasma energy Sq of matter2
 
+private:
 
-} ;
+// Operators
+  G4TransitionRadiation(const G4TransitionRadiation& right) ;
+  G4TransitionRadiation& operator=(const G4TransitionRadiation& right) ;
+
+};
 
 #endif   // G4TransitionRadiation_h

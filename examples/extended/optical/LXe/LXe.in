@@ -4,10 +4,18 @@
 #** a single event with the default configuration
 #**
 #**************
+/run/verbose 1
 #/LXe/detector/MainScintYield 100
 /LXe/eventVerbose 1
-#/tracking/verbose 1
+/tracking/verbose 1
+#/optics_engine/selectOpProcess Scintillation
+#/optics_engine/setOpProcessUse false
+#/optics_engine/setOpProcessVerbose 1
+#/optics_engine/setTrackSecondariesFirst false
 /run/initialize
 #/optics_engine/selectOpProcess OpBoundary
-#/optics_engine/setOpProcessVerbose 1
+#/optics_engine/setOpProcessVerbose 0
+/optics_engine/selectOpProcess Scintillation
+#/optics_engine/setOpProcessVerbose 0
+/optics_engine/setTrackSecondariesFirst false
 /run/beamOn 3

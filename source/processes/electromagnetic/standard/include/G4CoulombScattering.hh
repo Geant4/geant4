@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.15 2010/10/25 19:13:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CoulombScattering.hh,v 1.15 2010-10-25 19:13:23 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -64,15 +64,6 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  inline void SetThetaMin(G4double);
-
-  inline void SetThetaMax(G4double);
-
-  inline void SetQ2Max(G4double);
-
-  // Set energy above which high energy model will be used
-  inline void SetHEModelLimit(G4double);
-
   // Print out of the class parameters
   virtual void PrintInfo();
 
@@ -86,45 +77,9 @@ private:
   G4CoulombScattering & operator=(const G4CoulombScattering &right);
   G4CoulombScattering(const G4CoulombScattering&);
   
-  G4double thetaMin;
-  G4double thetaMax;
   G4double q2Max;
-  G4double thEnergy;
-  G4double thEnergyElec;
   G4bool isInitialised;
-  const G4ParticleDefinition* aParticle;
-
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SetThetaMin(G4double val)
-{
-  thetaMin = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SetThetaMax(G4double val)
-{
-  thetaMax = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SetQ2Max(G4double val)
-{
-  q2Max = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SetHEModelLimit(G4double val)
-{
-  thEnergy = val;
-  thEnergyElec = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.2 2010/06/02 09:08:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.2 2010-06-02 09:08:25 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QElectronNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
-// 
-//=================================================================================
+//
+// --------------------------------------------------------------------------------
 // Short description: reaction cross-sections for electron-nuclear reactions, which
 // are integrals over virtual equivalent photons photons.
 // --------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ G4double G4QElectronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=std::sqrt(pMom*pMom+mel2)-mel; // ==> electron/positron kinEnergy
 #ifdef pdebug
-  G4cout<<"G4QENCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
+  G4cout<<"G4QENCS::GetCS:->> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
@@ -113,7 +113,7 @@ G4double G4QElectronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
   if(std::abs(pPDG)!=11)
   {
 #ifdef pdebug
-    G4cout<<"G4QENCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"G4QENCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -351,8 +351,8 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
   G4double A=targN+targZ;            // New A (can differ from G4double targetAtomicNumber)
   if(F<=0)                           // This isotope was not the last used isotop
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-    {                                // ...........................................========
+    if(F<0)                          // This isotope was found in DAMDB =-------=> RETRIEVE
+    {                                // ...........................................=------=
       if (lastE<=EMi)                // Energy is below the minimum energy in the table
       {
         lastE=0.;
@@ -391,7 +391,7 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
       colH.push_back(lastH);
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW Calculate the Cross Section =====================
+  // =----------------= NOW Calculate the Cross Section =--------------------=
   if (lastE<=lastTH || lastE<=EMi)   // Check that muKiE is higher than ThreshE
   {
     lastE=0.;
@@ -451,7 +451,7 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
   }
   if(lastSig<0.) lastSig = 0.;
 #ifdef pdebug
-  if(J3->size()) G4cout<<">>>>>>>>G4QElNucCS::CalculateCrossSection: p="<<(*J3)[0]<<G4endl;
+  if(J3->size()) G4cout<<"-->>->> G4QElNucCS::CalculateCrossSection: p="<<(*J3)[0]<<G4endl;
 #endif
   return lastSig;
 }

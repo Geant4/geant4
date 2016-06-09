@@ -36,7 +36,8 @@
 // Creation date:
 //
 // Modifications: 
-// 10 January 2006       
+// 10 January 2006      
+// 06 May 2011, Replace FILE with std::ifstream
 //
 // Class Description: 
 //
@@ -67,7 +68,8 @@
 
 //    
 
-G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized(const G4String& name):G4VPhotoElectricAngularDistribution(name)
+G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized(const G4String& name)
+  :G4VPhotoElectricAngularDistribution(name)
 {
   const G4int arrayDim = 980;
 
@@ -92,28 +94,31 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
-        G4Exception(excep);
+        G4Exception("G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
+	return;
       }
 
     G4String pathString(path);
     G4String dirFile = pathString + "/photoelectric_angular/" + filename;
-    FILE *infile;
-    infile = fopen(dirFile,"r"); 
-    if (infile == 0)
+    std::ifstream infile(dirFile);
+    if (!infile.is_open())
       {
-	G4String excep = "G4PhotoElectricAngularGeneratorPolarized - data file: " + dirFile + " not found";
-	G4Exception(excep);
+	G4String excep = "data file: " + dirFile + " not found";
+        G4Exception("G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized",
+		    "em0003",FatalException,excep);
+	return;
       }
 
     // Read parameters into tables. The parameters are function of incident electron energy and shell level
-    G4float aRead,cRead, beta;
+    G4float aRead=0,cRead=0, beta=0;
     for(G4int i=0 ; i<arrayDim ;i++){
-      fscanf(infile,"%f\t %e\t %e",&beta,&aRead,&cRead);
+      //fscanf(infile,"%f\t %e\t %e",&beta,&aRead,&cRead);
+      infile >> beta >> aRead >> cRead;    
       aMajorantSurfaceParameterTable[i][level] = aRead;    
       cMajorantSurfaceParameterTable[i][level] = cRead;
     }
-    fclose(infile);
-
+    infile.close();
   }
 }
 

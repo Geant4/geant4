@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_GS.cc,v 1.2 2010/01/19 17:28:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: PhysListEmStandard_GS.cc,v 1.2 2010-01-19 17:28:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -131,7 +131,22 @@ void PhysListEmStandard_GS::ConstructProcess()
   // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
-           
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(10*GeV);	//default  
+  emOptions.SetDEDXBinning(8*20);	//default=8*7
+  emOptions.SetLambdaBinning(8*20);	//default=8*7
+      
+  //multiple coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+      
+  //energy loss
+  //
+  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)
+                
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);		//default=false

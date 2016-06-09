@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.8 2010/11/04 12:13:30 japost Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VoxelNavigation.hh,v 1.8 2010-11-04 12:13:30 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4VoxelNavigation

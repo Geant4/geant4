@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RegionModel.cc,v 1.18 2010/10/19 19:49:12 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4RegionModel.cc,v 1.18 2010-10-19 19:49:12 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Eliminate unnecessary use of std::pow()
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor

@@ -82,7 +82,6 @@ ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VToucha
     }
     std::map<G4String,G4VisAttributes*>::const_iterator ite = fColours.find(mateName);
     if( ite != fColours.end() ){
-      const G4Colour col = ((*ite).second)->GetColour();
       physVol->GetLogicalVolume()->SetVisAttributes( (*ite).second ); 
     } else {
       physVol->GetLogicalVolume()->SetVisAttributes( (*(fColours.begin()) ).second ); // set it as unseen

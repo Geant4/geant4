@@ -32,9 +32,6 @@
 // Waiting for permission to use namespaces in geant4.....
 // namespace G4Had_Tmp_Util
 // {
-G4int G4lrint(double ad);
-G4int G4lint(double ad);
-G4int G4rint(double ad);
 G4String G4inttostring(int ai);
   template <class A> class G4SortHelperPtr
   {

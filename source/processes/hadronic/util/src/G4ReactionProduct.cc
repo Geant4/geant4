@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
- // J.L. Chuma, TRIUMF, 31-Oct-1996
- // last modified: 19-Dec-1996
- // Modified by J.L.Chuma, 05-May-97
- 
+// J.L. Chuma, TRIUMF, 31-Oct-1996
+// last modified: 19-Dec-1996
+// Modified by J.L.Chuma, 05-May-97
+// M. Kelsey 29-Aug-2011 -- Use G4Allocator for better memory management
+
 #include "G4ReactionProduct.hh"
+
+G4Allocator<G4ReactionProduct> aRPAllocator;
+
 
  G4ReactionProduct::G4ReactionProduct() :
     theParticleDefinition(NULL),

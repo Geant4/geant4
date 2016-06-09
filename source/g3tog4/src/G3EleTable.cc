@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.cc,v 1.16 2006/06/29 18:12:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G3EleTable.cc,v 1.16 2006-06-29 18:12:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Types.hh"

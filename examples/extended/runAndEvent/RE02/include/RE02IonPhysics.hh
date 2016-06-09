@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE02IonPhysics.hh,v 1.3 2010/04/07 01:29:00 asaim Exp $
+// $Id: RE02IonPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //

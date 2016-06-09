@@ -62,7 +62,7 @@ class  CexmcParticleGunMessenger : public G4UImessenger
         ~CexmcParticleGunMessenger();
 
     public:
-        void  SetNewValue( G4UIcommand *  cnd, G4String  value );
+        void  SetNewValue( G4UIcommand *  cmd, G4String  value );
 
     private:
         CexmcParticleGun *           particleGun;

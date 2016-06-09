@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009/11/27 17:26:44 gunter Exp $
+# $Id: GNUmakefile,v 1.11 2009-11-27 17:26:44 gunter Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/builders library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -10,6 +10,13 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += -DG4PROCESSES_EXPORT
+
+ifeq ($(G4SYSTEM), WIN32-VC)
+CPPFLAGS += -I$(G4BASE)/externals/expat/include
+endif
+
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
@@ -40,6 +47,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/electromagnetic/xrays/include \
             -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/management/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/molecules/management/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/molecules/types/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/models/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/processes/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/utils/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \
@@ -66,7 +79,10 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/incl/include \
-            -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+            -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
+            -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
+            -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
+            -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \

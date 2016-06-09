@@ -25,15 +25,20 @@
 //
 #ifndef G4CASCADE_COLLIDER_BASE_HH
 #define G4CASCADE_COLLIDER_BASE_HH
-// $Id: G4CascadeColliderBase.hh,v 1.4 2010/12/15 07:39:32 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeColliderBase.hh,v 1.4 2010-12-15 07:39:32 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
 //		and control flag.
 // 20100720  M. Kelsey -- Change G4CascadeCheckBalance to pointer member
-// 20010925  M. Kelsey -- Add explosion(A,Z,Eex) and explosion(G4Fragment)
+// 20100925  M. Kelsey -- Add explosion(A,Z,Eex) and explosion(G4Fragment)
 //		interfaces
+// 20110225  M. Kelsey -- Add setVerboseLevel(), calls through to members
+// 20110304  M. Kelsey -- Add dummy rescatter() interface here, to enforce
+//		consistency in subclass colliders.
+// 20110321  M. Kelsey -- Hide names of arguments to rescatter(), to avoid
+//		compiler warnings on some GCC versions.
 
 #include "G4VCascadeCollider.hh"
 
@@ -47,11 +52,22 @@ class G4InuclParticle;
 class G4CollisionOutput;
 class G4CascadeCheckBalance;
 class G4Fragment;
+class G4KineticTrackVector;
+class G4V3DNucleus;
+
 
 class G4CascadeColliderBase : public G4VCascadeCollider {
 public:
   G4CascadeColliderBase(const char* name, G4int verbose=0);
   virtual ~G4CascadeColliderBase();
+
+  // For use with top-level Propagate to preload a set of secondaries
+  virtual void rescatter(G4InuclParticle* /*bullet*/,
+			 G4KineticTrackVector* /*theSecondaries*/,
+			 G4V3DNucleus* /*theNucleus*/,
+			 G4CollisionOutput& /*globalOutput*/) { ; }
+
+  virtual void setVerboseLevel(G4int verbose=0);
 
   virtual void setConservationChecks(G4bool doBalance=true) {
     doConservationChecks = doBalance;

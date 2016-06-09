@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2008/11/20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class RunAction implementation
 //

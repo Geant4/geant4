@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.14 2009/04/24 09:35:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4MaterialPropertyVector.hh,v 1.14 2009-04-24 09:35:14 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -38,12 +38,11 @@
 
 // File:        G4MaterialPropertyVector.hh
 //
-// Version:     1.0
+// Version:     2.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
-//              1997-03-25 by Peter Gumplinger
-//              > value.h -> templates.hh
+// Updated:     2011-10-13 by Peter Gumplinger
+//              remove the class: simply typedef to G4PhysicsOrderedFreeVector
 // mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
@@ -55,112 +54,12 @@
 // Includes
 /////////////
 
-#include "G4MPVEntry.hh"
-#include <vector>
-#include <functional>
+#include "G4PhysicsOrderedFreeVector.hh"
 
 /////////////////////
 // Class Definition
 /////////////////////
 
-class G4MaterialPropertyVector
-{
-  struct MPVEntry_less
-    : public std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
-  {
-    G4bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
-  };
-
-  public: // Without description
-
-    //////////////
-    // Operators
-    //////////////
-
-    inline G4bool operator ++();
-    G4MaterialPropertyVector& operator =(const G4MaterialPropertyVector &right);
-
-    /////////////////
-    // Constructors
-    /////////////////
-
-    G4MaterialPropertyVector() : MPV(0) 
-    {
-      CurrentEntry = -1;
-      NumEntries   = 0;
-    };
-
-  public: // With description
-  
-    G4MaterialPropertyVector(G4double *PhotonEnergies, 
-                             G4double *PropertyValues,
-                             G4int     NumElements);
-      // Constructor of G4MaterialPropertyVector object.
-
-    inline void ResetIterator();
-    inline G4int Entries() const;
-
-    inline void AddElement(G4double aPhotonEnergy, G4double aPropertyValue);
-      // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
-    void RemoveElement(G4double aPhotonEnergy);
-      // Remove the element with given x-value.
-
-    G4double GetProperty(G4double aPhotonEnergy) const;
-      // Returns the y-value for given x-value (with interpolation).
-    G4double GetPhotonEnergy(G4double aProperty) const;
-      // Returns the x-value for given y-value (with interpolation).
-      // NOTE: Assumes that the y-value is an increasing function of 
-      //       the x-value. Returns the x-value corresponding to the 
-      //       y-value passed in. If several x-values correspond to 
-      //       the y-value passed in, the method returns the first 
-      //       x-value in the vector that corresponds to that value.
-      // For use with G4MaterialPropertyVector iterator: return
-      // property (or Photon Energy) at current point of iterator.
-
-    inline G4double GetProperty() const;
-    inline G4double GetPhotonEnergy() const;
-    inline G4double GetMaxProperty() const;
-    inline G4double GetMinProperty() const;
-    inline G4double GetMaxPhotonEnergy() const;
-    inline G4double GetMinPhotonEnergy() const;
-    
-  public: // Without description
-
-    G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
-   ~G4MaterialPropertyVector();
-
-    //////////
-    // Tests
-    //////////
-
-    void DumpVector();
-
-    /////////////////////
-    // Helper Functions
-    /////////////////////
-
-    inline G4MPVEntry GetEntry(G4int i) const;
-
-  private:
-
-    void GetAdjacentBins(G4double aPhotonEnergy,
-                         G4int *left, G4int *right) const;
-
-  private:
-
-    /////////////////////////
-    // Private Data Members
-    /////////////////////////
-
-    std::vector<G4MPVEntry*> MPV;
-    G4int NumEntries;
-    G4int CurrentEntry;
-};
-
-///////////////////
-// Inline methods
-///////////////////
-
-#include "G4MaterialPropertyVector.icc"
+typedef G4PhysicsOrderedFreeVector G4MaterialPropertyVector;
 
 #endif /* G4MaterialPropertyVector_h */
