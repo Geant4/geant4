@@ -1,0 +1,74 @@
+
+                 Geant4 8.3 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           17 August 2007
+
+List of fixes included in this public patch since the public release 8.3:
+
+  o Configuration:
+    -------------
+    + liblist.c: fixed problem affecting recent CygWin installations on
+      Windows in parsing the buffer for the generation of libname.map.
+    + binmake.gmk: defined OUT internal variable specifying the proper
+      compilation/linking option to Unix or Windows compilers: '-o '
+      and '/Fe' respectively. Cleared <TAB> characters where not necessary.
+    + SUN-CC.gmk: forced -xO2 as optimisation level.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Relaxed 'FatalException' to 'Warning' in method
+        G4MagIntegratorDriver::AccurateAdvance() for case of step zero and
+        return previous value. This fixes problem observed by ATLAS and CMS
+        in release 8.3 when using very conservative values for field
+        parameters.
+    + solids/specific:
+      o Fixes in G4Polyhedra::GetPointOnSurface():
+        Correctly treat 'totalPhi' instead of 'endPhi' for the case of open
+        shapes and 'twopi' for not open shapes.
+        Introduced fix for the case when number of sectors (numSide) is equal
+        to 1. At the origin of problems observed when checking overlaps for
+        polyhedra solids defined as such.
+
+  o Global:
+    ------
+    + Changed date for patch-01 to release 8.3.
+
+  o Materials:
+    ---------
+    + G4NistElementBuilder: added protection (Z>=limitNumElements) inside
+      method BuildElement().
+
+  o Hadronic Processes:
+    ------------------
+    + models/chiral_inv_phase_space:
+      o G4QuasiFreeRatios: fixed DB filling (ID update), responsible for
+        excessive growth of memory in long runs. Corrected indexing and
+        computation of cos(theta).
+    + util:
+      o Three bug fixes in G4ReactionDynamics::TwoCluster(): removed a sharp
+        peak at 180 degrees by fixing a units error and fixed an error in
+        sampling the momentum transfer. Fixed array bound violation which
+        caused in some rare occasions an infinite loop.
+
+  o Physics Lists:
+    -------------
+    + Correct use of QElasticPhysics in QGSP_QEL list.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.3
+  o  Technical notes distributed for release 8.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.3 are available
+through our "Archive of Previous Releases" Web page:
+   http://cern.ch/geant4/support/source_archive.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

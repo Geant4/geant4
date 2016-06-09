@@ -1,4 +1,4 @@
-$Id: History,v 1.289 2007/02/28 15:35:31 gcosmo Exp $
+$Id: History,v 1.289.2.1 2007/08/13 14:30:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th August 2007  Gabriele Cosmo (config-V08-03-00a)
+- SUN-CC.gmk: forced -xO2 as optimisation level.
+
+18th July 2007  Gabriele Cosmo
+- liblist.c: fixed problem affecting recent CygWin installations on
+  Windows in parsing the buffer for the generation of libname.map.
+- binmake.gmk: defined OUT internal variable specifying the proper
+  compilation/linking option to Unix or Windows compilers: '-o '
+  and '/Fe' respectively. Cleared <TAB> characters where not necessary.
+
 28th February 2007  Gabriele Cosmo (config-V08-02-00)
 - Protected generation of dependencies using internal 'make' variable
   MAKECMDGOALS in binmake.gmk and common.gmk, following suggestion made
@@ -24,7 +34,8 @@ committal in the CVS repository !
   issueing the 'clean' target.
 
 3rd November 2006  Gunter Folger (config-V08-01-07)
-- architecture.gmk: added G4LIB_BUILD_LISTS with default value 1 to build physics lists.
+- architecture.gmk: added G4LIB_BUILD_LISTS with default value 1 to build
+  physics lists.
 - binmake.gmk: added physics lists include directories to INCFLAGS.
 
 15th October 2006  Makoto Asai (config-V08-01-06)

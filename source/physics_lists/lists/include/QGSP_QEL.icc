@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_QEL.icc,v 1.2 2007/04/26 14:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: QGSP_QEL.icc,v 1.2.2.1 2007/08/15 08:13:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,7 +58,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"

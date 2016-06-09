@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2007/05/10 10:11:08 japost Exp $
+$Id: History,v 1.117.2.1 2007/08/13 13:23:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 8th, 2007 T. Nikitina - field-V08-03-00a
+--------------------------
+- Relax FatalException to Warning in G4MagIntegratorDriver::AccurateAdvance()
+  for case of step zero and return previous value. This fixes problem observed
+  by ATLAS in release 8.3 when using very conservative values for field
+  parameters.
+
 May 10th, 2007    J.Apostolakis - field-V08-02-01
 -------------------------------
 - G4MagIntegratorDriver: 
-    * added protections against zero initial or internal step h=0, (exceptions)
-    * revised (re)calculation of h, and quit loop if h/length < smallest-fraction (~ 10^-12) 
+  * added protections against zero initial or internal step h=0, (exceptions)
+  * revised (re)calculation of h, and quit loop if h/length < smallest-fraction
+    (~ 10^-12) 
 
 April 26th, 2007  T.Nikitina - field-V08-02-00
 ----------------------------

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007/05/07 14:37:57 gunter Exp $
+$Id: History,v 1.25.2.1 2007/08/15 08:15:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,34 +15,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-08-2008, A.Ribon      phys-lists-V08-03-00a
+- Corrected use of QElasticPhysics in QGSP_QEL list.
+
 07-05-2007, G.Folger     phys-lists-V08-02-12
--  Add QGSP_BERT_TRV; copy of QGSP_BERT, but change to BERT occurs at
-    (5.0 - 5.4) GeV for proton/neutron/pion/Kaon
--  Increase Pack version number to 5.2    
+- Add QGSP_BERT_TRV; copy of QGSP_BERT, but change to BERT occurs at
+  (5.0 - 5.4) GeV for proton/neutron/pion/Kaon
+- Increase Pack version number to 5.2    
 
 02-05-2007, V.Ivanchenko phys-lists-V08-02-11
--  Fix bug in EMV seria of Physics Lists - restore high performance
+- Fix bug in EMV seria of Physics Lists - restore high performance
 
 26-04-2007, G.Folger     phys-lists-V08-02-10
- - For QGSC, QGSC_EMV, and QGSC_EFLOW enable use of G4QCaptureAtRest() 
-   also for muons. Mods needed in G4QStoppingPhysics as well.
+- For QGSC, QGSC_EMV, and QGSC_EFLOW enable use of G4QCaptureAtRest() 
+  also for muons. Mods needed in G4QStoppingPhysics as well.
 
 26-04-2007, G.Folger     phys-lists-V08-02-09
- - Modifications for Quasielastic. Added to all QGS physics lists execpt 
-    the two obsolete QGSC_LEAD/QGSC_LEAD_HP. This also required adapting of
-    - HadronsPhysicsXYZ
-    - {QGSP;QGSC;QGSC_EFLOW}{Neutron,Proton,PiK}Builder
- - removed unneeded HadronPhysics...{EMV,EMX}; HadronPhysicsLHEP_EMV stays, 
-    as this differs in stopping     
+- Modifications for Quasielastic. Added to all QGS physics lists execpt 
+  the two obsolete QGSC_LEAD/QGSC_LEAD_HP. This also required adapting of
+   - HadronsPhysicsXYZ
+   - {QGSP;QGSC;QGSC_EFLOW}{Neutron,Proton,PiK}Builder
+- Removed unneeded HadronPhysics...{EMV,EMX}; HadronPhysicsLHEP_EMV stays, 
+  as this differs in stopping     
 
 16-04-2007, V.Ivanchenko phys-lists-V08-02-08
--  QBBC Physics Lists adopt recent upgrades in QGS and FTF
+- QBBC Physics Lists adopt recent upgrades in QGS and FTF
 
 02-04-2007, G.Folger     phys-lists-V08-02-07
--  Correct compilation problem with QGSP.icc
+- Correct compilation problem with QGSP.icc
 
 30-03-2007, G. Folger    phys-lists-V08-02-06
--  Add quasielastic in QGSP; this requiredchanges to 
+- Add quasielastic in QGSP; this requiredchanges to 
    - QGSP{proton,Neutron,PiK}Builder adds QuasiElasticChannel on conditional
      flag
    - HadronPhysicsQGSP passes flag (default=false) to Builders
@@ -75,7 +78,7 @@ track of all tags.
 -  Fix in QGSP_BIC_HP: use HP elastic in this list ( thanks to Alex) 
 
 05.12.2006, G.Folger  -    phys-lists-V08-01-13
- - add QGSC_EFLOW, using new energy flow method for CHIPS; consequently, 
+-  Add QGSC_EFLOW, using new energy flow method for CHIPS; consequently, 
    HadronPhysicsQGSC_EFLOW and builders G4QGSCEflow{Proton,Neutron,PiK}Builder 
    added as well.
    QGSC changed to use G4QStringChipsParticleLevelInterface via the builders

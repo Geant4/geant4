@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2007/04/26 13:27:37 gcosmo Exp $
+$Id: History,v 1.109.2.1 2007/08/13 14:00:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-Jul-2007, T.Nikitina (geom-specific-V08-03-00a)
+- Fix in G4Polyhedra::GetPointOnSurface() to correctly treat 'totalPhi'
+  instead of 'endPhi' for the case of open shapes and 'twopi' for not open
+  shapes.
+
+05-Jul-2007, T.Nikitina
+- Fix in G4Polyhedra::GetPointOnSurface() for the case when number of sectors
+  (numSide) is equal to 1. At the origin of problems observed when checking
+  overlaps for polyhedra solids defined as such.
 
 26-Apr-2007, T.Nikitina (geom-specific-V08-02-05)
 - Fix in GetPointOnSurface() for G4Polycone to consider also points laying

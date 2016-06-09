@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 August 2007 Dennis Wright (hadr-util-V08-03-00a)
+---------------------------------------------------
+- special CMS tag: geant4-08-03-ref-00 + hadr-util-V08-03-02.
+  On top of geant4-08-03-ref-00, this contains only array bounds, units 
+  and backward peak fixes in G4ReactionDynamics
+
 16 April 2007 Dennis Wright (hadr-util-V08-02-01)
 -------------------------------------------------
 - G4HadronicWhiteboard.hh, .cc : add methods to set process and model names
