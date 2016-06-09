@@ -21,54 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionPN.cc,v 1.2 2003/11/03 17:53:28 hpw Exp $ //
-// -------------------------------------------------------------------
-//      GEANT4 Class file
-//
-//      For information related to this code contact:
-//
-//      File name:     G4CollisionNN
-//
-//      Author:        Maria Grazia Pia
-// 
-//      Creation date: 15 April 1999
-//
-//      Modifications: 
-//      
-// -------------------------------------------------------------------
-
 
 #include "globals.hh"
 #include "G4CollisionPN.hh"
-#include "G4CollisionComposite.hh"
-#include "G4VCollision.hh"
-#include "G4CollisionVector.hh"
-#include "G4KineticTrack.hh"
-#include "G4VCrossSectionSource.hh"
 #include "G4XnpTotal.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
 #include "G4CollisionnpElastic.hh"
 #include "G4CollisionNNToNDelta.hh"
+#include "G4Pair.hh"
 
+// J.P. Wellisch, Dec 2004.
+
+typedef GROUP2(G4CollisionnpElastic, G4CollisionNNToNDelta) theChannels;
 
 G4CollisionPN::G4CollisionPN()
 { 
 
   crossSectionSource = new G4XnpTotal();
-
-  // Components vector to be filled
-  components = new G4CollisionVector;
-  components->push_back(new G4CollisionnpElastic());
-  components->push_back(new G4CollisionNNToNDelta());
-
-  // Subtype of interacting particles
-  G4String subType1 = G4Proton::ProtonDefinition()->GetParticleSubType();
-  G4String subType2 = G4Neutron::NeutronDefinition()->GetParticleSubType();
-
-  colliders1.push_back(subType1);
-  colliders2.push_back(subType2);
-
+  Register aR;
+  G4ForEach<theChannels>::Apply(&aR, this);
 }
 
 
@@ -76,39 +46,12 @@ G4CollisionPN::~G4CollisionPN()
 { 
   delete crossSectionSource;
   crossSectionSource = 0;
-
-  if (components != 0)
-    {
-      G4int nComponents = components->size();
-      for (G4int i = 0; i < nComponents; i++)
-	{
-	  G4CollisionPtr componentPtr = (*components)[i];
-	  G4VCollision* component = componentPtr();
-	  delete component;
-	  component = 0;
-	}
-    }
-  delete components;
-  components = 0; 
 }
 
 
-const std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int ) const
 {
-  if (whichOne == 1) 
-    {
-      return colliders1;
-    }
-  else 
-    {
-      if (whichOne == 2) 
-	{ return colliders2; }
-      else 
-	{
-	  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
-	  return colliders1;
-	}
-    }
+  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionNN:: GetListOfColliders called");
+  return colliders1;
 }
-
 

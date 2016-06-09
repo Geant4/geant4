@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPSCFissionFS.hh,v 1.8 2003/07/01 15:58:37 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #ifndef G4NeutronHPSCFissionFS_h
 #define G4NeutronHPSCFissionFS_h 1

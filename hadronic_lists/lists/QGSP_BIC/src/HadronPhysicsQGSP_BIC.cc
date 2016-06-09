@@ -39,15 +39,15 @@ HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(const G4String& name)
   theNeutrons.RegisterMe(&theLEPNeutron);
   theNeutrons.RegisterMe(&theBinaryNeutron);
   theLEPNeutron.SetMaxInelasticEnergy(25*GeV);
-  theLEPNeutron.SetMinInelasticEnergy(2.8*GeV);
-  theBinaryNeutron.SetMaxEnergy(3.2*GeV);
+  theLEPNeutron.SetMinInelasticEnergy(9.5*GeV);
+  theBinaryNeutron.SetMaxEnergy(9.9*GeV);
 
   thePro.RegisterMe(&theQGSPPro);
   thePro.RegisterMe(&theLEPPro);
   thePro.RegisterMe(&theBinaryPro);
   theLEPPro.SetMaxEnergy(25*GeV);
-  theLEPPro.SetMinEnergy(2.8*GeV);
-  theBinaryPro.SetMaxEnergy(3.2*GeV);
+  theLEPPro.SetMinEnergy(9.5*GeV);
+  theBinaryPro.SetMaxEnergy(9.9*GeV);
   
   thePiK.RegisterMe(&theQGSPPiK);
   thePiK.RegisterMe(&theLEPPiK);

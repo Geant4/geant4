@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Hyperbola.cc,v 1.9 2003/10/28 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

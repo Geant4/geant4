@@ -81,7 +81,7 @@ void FCALHadModule::InitializeGeometry() {
   ifstream File
    ("geom_data/FCal2Electrodes.dat");
    
-   if(!File)  G4cerr << "Failed to open file FCal2Electrode data file" << endl;
+   if(!File)  G4cerr << "Failed to open file FCal2Electrode data file" << G4endl;
    File.seekg(0);
 
    NF2LarGap = 0;
@@ -91,7 +91,7 @@ void FCALHadModule::InitializeGeometry() {
 	  >> F2LArIX[NF2LarGap] >>  F2LArJY[NF2LarGap] >> F2LArITile[NF2LarGap];
    };
    
-   G4cout << "*********" << " Number of Rods in FCAL2 : " << NF2LarGap-1 << endl;
+   G4cout << "*********" << " Number of Rods in FCAL2 : " << NF2LarGap-1 << G4endl;
 };
 
 

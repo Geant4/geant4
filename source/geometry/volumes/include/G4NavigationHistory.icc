@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.10 2003/12/04 15:58:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NavigationHistory.icc,v 1.11 2004/03/04 08:06:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 // class G4NavigationHistory Inline implementation
@@ -191,8 +191,8 @@ void G4NavigationHistory::NewLevel( G4VPhysicalVolume *pNewMother,
                                     EVolume vType,
                                     G4int nReplica )
 {
-  EnlargeHistory();  // Enlarge if required
   fStackDepth++;
+  EnlargeHistory();  // Enlarge if required
   fNavHistory[fStackDepth] =
     G4NavigationLevel( pNewMother, 
                        fNavHistory[fStackDepth-1].GetTransform(),

@@ -1,6 +1,6 @@
 # $Id: envCommon.csh,v 1.8 2003/12/08 17:53:26 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-00 $
+# GEANT4 tag $Name: geant4-06-00-patch-01 $
 # -------------------------------------------------------------------
 # Before sourcing this script make sure you have set the 
 # environment variables according to the description in README.

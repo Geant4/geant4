@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.10 2003/06/19 14:45:09 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ParticleChangeForMSC.cc,v 1.11 2004/01/20 15:29:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -32,12 +32,12 @@
 //	
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
+//   Update for model variant of msc                16 Jan  2004  V.Ivanchenko
 // --------------------------------------------------------------
 
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
@@ -50,7 +50,7 @@ G4ParticleChangeForMSC::G4ParticleChangeForMSC():G4VParticleChange()
 #endif
 }
 
-G4ParticleChangeForMSC::~G4ParticleChangeForMSC() 
+G4ParticleChangeForMSC::~G4ParticleChangeForMSC()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -65,9 +65,8 @@ G4ParticleChangeForMSC::G4ParticleChangeForMSC(
    if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForMSC::  copy constructor is called " << G4endl;
    }
-      theMomentumDirectionChange = right.theMomentumDirectionChange;
-      thePositionChange = right.thePositionChange;
-      theTrueStepLength = right.theTrueStepLength;
+      theMomentumDirection = right.theMomentumDirection;
+      thePosition = right.thePosition;
 }
 
 // assignment operator
@@ -78,86 +77,51 @@ G4ParticleChangeForMSC & G4ParticleChangeForMSC::operator=(
     G4cout << "G4ParticleChangeForMSC:: assignment operator is called " << G4endl;
    }
    if (this != &right)
-   {  
+   {
       theListOfSecondaries = right.theListOfSecondaries;
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
-
-
-      theMomentumDirectionChange = right.theMomentumDirectionChange;
-      thePositionChange = right.thePositionChange;
       theTrueStepLength = right.theTrueStepLength;
+
+      theMomentumDirection = right.theMomentumDirection;
+      thePosition = right.thePosition;
    }
    return *this;
 }
 
 //----------------------------------------------------------------
-// functions for Initialization
-//
-
-void G4ParticleChangeForMSC::Initialize(const G4Track& track)
-{
-  // use base class's method at first
-  G4VParticleChange::Initialize(track);
-
-  // set Energy/Momentum etc. equal to those of the parent particle
-  const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-  theMomentumDirectionChange        = pParticle->GetMomentumDirection();
-
-  // set Position equal to those of the parent track
-  thePositionChange      = track.GetPosition();
-}
-
-//----------------------------------------------------------------
-// methods for updating G4Step 
+// methods for updating G4Step
 //
 
 G4Step* G4ParticleChangeForMSC::UpdateStepForAlongStep(G4Step* pStep)
 {
-  
-  //  Update the G4Step specific attributes 
-  pStep->SetStepLength(theTrueStepLength) ;
-
+  //  Update the G4Step specific attributes
+  pStep->SetStepLength(theTrueStepLength);
+  theStatusChange = pStep->GetTrack()->GetTrackStatus();
   return pStep;
 }
 
 G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
-{ 
+{
   // A physics process always calculates the final state of the particle
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
-  // Take note that the return type of GetMomentumChange is a
-  // pointer to G4ParticleMometum. Also it is a normalized 
-  // momentum vector.
-
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
- 
   // update  momentum direction
-  pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
+  pPostStepPoint->SetMomentumDirection(theMomentumDirection);
 
-  // update position 
-  pPostStepPoint->SetPosition( thePositionChange  );
+  // update position
+  pPostStepPoint->SetPosition( thePosition );
 
-#ifdef G4VERBOSE
-  if (debugFlag) CheckIt(*aTrack);
-#endif
-
-  //  Update the G4Step specific attributes 
-  return UpdateStepInfo(pStep);
+  //  Update the G4Step specific attributes
+  return pStep;
 }
 
-G4Step* G4ParticleChangeForMSC::UpdateStepForAtRest(G4Step* pStep)
-{ 
-
-  //  Update the G4Step specific attributes 
-  return UpdateStepInfo(pStep);
-}
 
 //----------------------------------------------------------------
-// methods for printing messages  
+// methods for printing messages
 //
 
 void G4ParticleChangeForMSC::DumpInfo() const
@@ -166,23 +130,23 @@ void G4ParticleChangeForMSC::DumpInfo() const
   G4VParticleChange::DumpInfo();
 
   G4cout.precision(3);
-  G4cout << "        Position - x (mm)   : " 
-       << std::setw(20) << thePositionChange.x()/mm
-       << G4endl; 
-  G4cout << "        Position - y (mm)   : " 
-       << std::setw(20) << thePositionChange.y()/mm
-       << G4endl; 
-  G4cout << "        Position - z (mm)   : " 
-       << std::setw(20) << thePositionChange.z()/mm
+  G4cout << "        Position - x (mm)   : "
+       << std::setw(20) << thePosition.x()/mm
        << G4endl;
-  G4cout << "     Momentum Direction - x : " 
-       << std::setw(20) << theMomentumDirectionChange.x()
+  G4cout << "        Position - y (mm)   : "
+       << std::setw(20) << thePosition.y()/mm
        << G4endl;
-  G4cout << "     Momentum Direction - y : " 
-       << std::setw(20) << theMomentumDirectionChange.y()
+  G4cout << "        Position - z (mm)   : "
+       << std::setw(20) << thePosition.z()/mm
        << G4endl;
-  G4cout << "     Momentum Direction - z : " 
-       << std::setw(20) << theMomentumDirectionChange.z()
+  G4cout << "        Momentum Direct - x : "
+       << std::setw(20) << theMomentumDirection.x()
+       << G4endl;
+  G4cout << "        Momentum Direct - y : "
+       << std::setw(20) << theMomentumDirection.y()
+       << G4endl;
+  G4cout << "        Momentum Direct - z : "
+       << std::setw(20) << theMomentumDirection.z()
        << G4endl;
 }
 
@@ -194,10 +158,10 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
 
   G4double  accuracy;
 
-  // check     
+  // check
 
   // MomentumDirection should be unit vector
-  accuracy = abs(theMomentumDirectionChange.mag2()-1.0);
+  accuracy = abs(theMomentumDirection.mag2()-1.0);
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";
@@ -210,7 +174,7 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) { 
+  if (!itsOK) {
     G4cout << " G4ParticleChangeForMSC::CheckIt " <<G4endl;
     DumpInfo();
   }
@@ -225,10 +189,9 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
   }
   //correction
   if (!itsOK) {
-    G4double vmag = theMomentumDirectionChange.mag();
-    theMomentumDirectionChange = (1./vmag)*theMomentumDirectionChange;
+    G4double vmag = theMomentumDirection.mag();
+    theMomentumDirection = (1./vmag)*theMomentumDirection;
   }
-
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;

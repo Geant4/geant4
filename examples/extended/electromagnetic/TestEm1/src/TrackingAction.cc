@@ -22,7 +22,7 @@
 //
 //
 // $Id: TrackingAction.cc,v 1.5 2003/10/28 10:27:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

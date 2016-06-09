@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.38 2003/11/12 16:18:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuIonisation.cc,v 1.40 2004/02/15 17:46:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 // 04-08-03 Set integral=false to be default (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -112,17 +113,16 @@ void G4MuIonisation::InitialiseProcess()
     flucModel = new G4UniversalFluctuation();
   }
 
-  G4double massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.*MeV*massFactor);
+  em->SetHighEnergyLimit(0.2*MeV);
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.*MeV*massFactor);
-  em1->SetHighEnergyLimit(10.0*GeV);
+  em1->SetLowEnergyLimit(0.2*MeV);
+  em1->SetHighEnergyLimit(1.0*GeV);
   AddEmModel(2, em1, flucModel);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
-  em2->SetLowEnergyLimit(10.0*GeV);
+  em2->SetLowEnergyLimit(1.0*GeV);
   em2->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(3, em2, flucModel);
 
@@ -147,9 +147,10 @@ void G4MuIonisation::PrintInfoDefinition()
 {
   G4VEnergyLossProcess::PrintInfoDefinition();
 
-  G4cout << "      Bether-Bloch model for E > 0.2 MeV "
-         << "parametrisation of Bragg peak below."
+  G4cout << "      Bether-Bloch model for E > 0.2 MeV, "
+         << "parametrisation of Bragg peak below, "
          << G4endl;
+  G4cout << "      radiative corrections for E > 1 GeV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -44,10 +44,10 @@
 PadHpdPhotoElectricEffect::PadHpdPhotoElectricEffect(const G4String& processName ,
    RichTbRunConfig* RConfig)
   :G4VDiscreteProcess(processName),
-   DemagnificationFactor(vector<G4double>(NumHpdTot)),
-   DemagnificationQuadFactor(vector<G4double>(NumHpdTot)),
-   HpdQE(NumHpdTot, vector<G4double>( NumQEbins)),
-   HpdWabin(NumHpdTot, vector<G4double>( NumQEbins))
+   DemagnificationFactor(std::vector<G4double>(NumHpdTot)),
+   DemagnificationQuadFactor(std::vector<G4double>(NumHpdTot)),
+   HpdQE(NumHpdTot, std::vector<G4double>( NumQEbins)),
+   HpdWabin(NumHpdTot, std::vector<G4double>( NumQEbins))
 {
   rConfig=RConfig;
   PrePhotoElectricVolName="PadHpdWindowQuartz";
@@ -78,8 +78,8 @@ PadHpdPhotoElectricEffect::PadHpdPhotoElectricEffect(const G4String& processName
     DemagnificationFactor[ihpdq] = DemagnificationFactor[ihpdq]*(1.0+DemagError);
 
 
-    vector<G4double>qeCurHpd =  InitializeHpdQE(ihpdq);
-    vector<G4double>waCurHpd =  InitializeHpdWaveL(ihpdq);
+    std::vector<G4double>qeCurHpd =  InitializeHpdQE(ihpdq);
+    std::vector<G4double>waCurHpd =  InitializeHpdWaveL(ihpdq);
     if(qeCurHpd.size() != waCurHpd.size() ) {
       G4cout<<"Wrong size for Hpd QE "<<ihpdq<<" "<<qeCurHpd.size()
 	    <<"  "<< waCurHpd.size()<<G4endl;

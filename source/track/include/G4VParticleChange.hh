@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.9 2003/06/11 07:16:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VParticleChange.hh,v 1.10 2003/12/12 13:12:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -245,8 +245,8 @@ class G4VParticleChange
     // CheckSecondary method is provided for debug
     G4bool CheckSecondary(G4Track&);
  
-    const G4double GetAccuracyForWarning() const;
-    const G4double GetAccuracyForException() const;
+    G4double GetAccuracyForWarning() const;
+    G4double GetAccuracyForException() const;
 
   protected: 
     G4bool   debugFlag;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImportanceAlgorithm.cc,v 1.12 2003/10/22 13:52:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

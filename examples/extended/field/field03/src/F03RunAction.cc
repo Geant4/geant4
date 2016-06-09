@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03RunAction.cc,v 1.7 2003/06/25 17:19:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 
 #include "F03RunAction.hh"

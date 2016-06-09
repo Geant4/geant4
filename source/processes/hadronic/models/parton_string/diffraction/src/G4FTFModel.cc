@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.3 2003/11/03 17:54:53 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4FTFModel.cc,v 1.4 2003/12/11 10:50:49 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 
 // ------------------------------------------------------------
@@ -164,6 +164,25 @@ G4bool G4FTFModel::ExciteParticipants()
 	   G4VSplitableHadron * target=collision.GetTarget();
 	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
 	   {
+//           give up, clean up
+		std::vector<G4VSplitableHadron *> primaries;
+		std::vector<G4VSplitableHadron *> targets;
+		theParticipants.StartLoop();    // restart a loop 
+		while ( theParticipants.Next() ) 
+		{
+		    const G4InteractionContent & interaction=theParticipants.GetInteraction();
+                	 //  do not allow for duplicates ...
+		    if ( primaries.end() == std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
+	    		primaries.push_back(interaction.GetProjectile());
+
+		    if ( targets.end() == std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
+	    		targets.push_back(interaction.GetTarget());
+		}
+		std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
+		primaries.clear();
+		std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
+		targets.clear();
+
 	   	return false;
 	   }
 

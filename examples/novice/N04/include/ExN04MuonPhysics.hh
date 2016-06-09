@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04MuonPhysics.hh,v 1.5 2003/09/27 13:27:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------

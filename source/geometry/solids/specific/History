@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2003/11/22 10:11:57 gcosmo Exp $
+$Id: History,v 1.34 2004/01/12 10:30:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-Jan-2004, G.Cosmo (geom-specific-V06-00-00)
+- G4PolyhedraSide.cc: fixed bug in which particles could "leak" out the
+  center of a face if inner radius = 0.
+  Fixes problem report #547. (D.Williams)
 
 22-Nov-2003, G.Cosmo (geom-specific-V05-02-07)
 - Fixed upper bound for protection check introduced in G4Polycone and

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiDMesonZero.cc,v 1.12 2003/06/16 16:57:28 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiDMesonZero.cc,v 1.13 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ G4AntiDMesonZero::G4AntiDMesonZero(
 
 // In this version, charged pions are set to stable
 G4AntiDMesonZero G4AntiDMesonZero::theAntiDMesonZero(
-	    "anti_D0",      1.8645*GeV,  1.586e-9*MeV,          0., 
+	    "anti_D0",      1.8645*GeV,  1.599e-9*MeV,          0., 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,        -421,

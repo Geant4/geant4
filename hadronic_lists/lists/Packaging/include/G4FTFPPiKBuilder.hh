@@ -60,7 +60,7 @@ class G4FTFPPiKBuilder : public G4VPiKBuilder
 
   private:
     G4PiNuclearCrossSection thePiData;
-     G4TheoFSGenerator * theModel;
+    G4TheoFSGenerator * theModel;
     G4ExcitationHandler theHandler;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;

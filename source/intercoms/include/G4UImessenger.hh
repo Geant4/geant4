@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UImessenger.hh,v 1.6 2001/10/11 13:29:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 
 #ifndef G4UImessenger_h

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.10 2003/07/21 12:52:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuPairProductionModel.hh,v 1.11 2004/02/10 18:07:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,8 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 
 //
@@ -54,6 +56,7 @@
 #define G4MuPairProductionModel_h 1
 
 #include "G4VEmModel.hh"
+#include <vector>
 
 class G4Element;
 
@@ -75,6 +78,8 @@ public:
   void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
 
   void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
+
+  void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
@@ -112,7 +117,8 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
     				            G4double kineticEnergy);
 
-private:
+//private:
+public:
 
   G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut);
 
@@ -123,18 +129,17 @@ private:
   G4double ComputeDMicroscopicCrossSection(G4double tkin,
                                            G4double Z,
                                            G4double pairEnergy);
+private:
 
-  G4double ComputeDDMicroscopicCrossSection(G4double tkin,
-                                           G4double Z,
-                                           G4double pairEnergy,
-                                           G4double asymmetry);
-
-  G4DataVector* ComputePartialSumSigma(const G4Material* material,
-                                             G4double tkin, G4double cut);
-
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
+  const G4Element* SelectRandomAtom(G4double dt, G4int it, G4int iy,
+                              const G4MaterialCutsCouple* couple);
 
   void MakeSamplingTables();
+
+  void SetCurrentElement(G4double Z);
+
+  G4double InterpolatedIntegralCrossSection(G4double dt, G4double dz,
+                                            G4int iz, G4int it, G4int iy, G4double z);
 
   // hide assignment operator
   G4MuPairProductionModel & operator=(const  G4MuPairProductionModel &right);
@@ -143,34 +148,82 @@ private:
   G4double minPairEnergy;
   G4double highKinEnergy;
   G4double lowKinEnergy;
+  G4double lowestKinEnergy;
+
+  G4double factorForCross;
+  G4double sqrte;
+  G4double particleMass;
+  G4double currentZ;
+  G4double z13;
+  G4double z23;
+  G4double lnZ;
+
+
+  const G4ParticleDefinition* particle;
 
   // tables for sampling
-  G4int nzdat,ntdat,NBIN;
-  static G4double zdat[5],adat[5],tdat[8];
+  G4int nzdat;
+  G4int ntdat;
+  G4int nbiny;
+  size_t nmaxElements;
+  static G4double zdat[5],adat[5],tdat[8],xgi[8],wgi[8];
   G4double ya[1001],proba[5][8][1001];
 
-  std::vector<G4DataVector*> partialSumSigma;
+  G4double ymin;
+  G4double ymax;
+  G4double dy;
+
   G4bool  samplingTablesAreFilled;
+  std::vector<G4double>   partialSum;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
+inline
 G4double G4MuPairProductionModel::MaxSecondaryEnergy(
 				 const G4DynamicParticle* dynParticle)
 {
-  return dynParticle->GetKineticEnergy();
-} 
+  G4double e = dynParticle->GetKineticEnergy();
+  G4double maxPairEnergy = e + particleMass*(1.0 - 0.75*sqrte*z13);
+  return maxPairEnergy;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
+inline
 G4double G4MuPairProductionModel::MaxSecondaryEnergy(
                                  const G4ParticleDefinition*,
     				       G4double kineticEnergy)
 {
-  return kineticEnergy;
+  G4double maxPairEnergy = kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
+  return maxPairEnergy;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline
+void G4MuPairProductionModel::SetCurrentElement(G4double Z)
+{
+  if(Z != currentZ) {
+    currentZ = Z;
+    z13 = pow(Z,0.333333333);
+    z23 = z13*z13;
+    lnZ = log(Z);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline
+G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(G4double dt, G4double dz,
+                                                                  G4int iz, G4int it, G4int iy, G4double z)
+{
+  G4double fac =  1./(zdat[iz]  *(zdat[iz]  +1.));
+  G4double fac1 = 1./(zdat[iz-1]*(zdat[iz-1]+1.));
+  G4double f0 = fac1*proba[iz-1][it-1][iy] + (fac*proba[iz][it-1][iy]-fac1*proba[iz-1][it-1][iy])*dz;
+  G4double f1 = fac1*proba[iz-1][it  ][iy] + (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
+  return (f0 + (f1-f0)*dt)*z*(z+1.);
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

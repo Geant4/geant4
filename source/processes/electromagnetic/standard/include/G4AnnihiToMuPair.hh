@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh,v 1.2 2003/02/04 11:08:41 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AnnihiToMuPair.hh,v 1.3 2004/03/10 16:48:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -56,7 +56,8 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair");
+     G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
+		            G4ProcessType type = fElectromagnetic);
 
     ~G4AnnihiToMuPair();
 

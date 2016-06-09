@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.2 2003/02/04 11:08:42 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AnnihiToMuPair.cc,v 1.3 2004/03/10 16:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -50,8 +50,8 @@
 
 // constructor
 
-G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName)
-  : G4VDiscreteProcess (processName)
+G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
+    G4ProcessType type):G4VDiscreteProcess (processName, type)
 {
  //e+ Energy threshold
  const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();

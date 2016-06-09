@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.2 2003/08/27 17:18:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: TrackingAction.cc,v 1.3 2004/02/19 18:18:54 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -128,13 +128,13 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     histoManager->GetHisto(id)->fill(atan(momentum.z()/abs(momentum.x()))/unit);
   }
             
-  //radial dispersion at exit
+  //projected position at exit
   //
   if (transmit && charged) id =  7;
   if (histoManager->GetHisto(id)) {
-    G4double radius = sqrt(position.y()*position.y()+position.z()*position.z());
     G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(radius/unit);
+    histoManager->GetHisto(id)->fill(position.y()/unit);
+    histoManager->GetHisto(id)->fill(position.z()/unit);    
   }  
 #endif    
 }

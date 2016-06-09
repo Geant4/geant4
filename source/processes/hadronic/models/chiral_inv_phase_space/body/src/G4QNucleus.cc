@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.42 2003/12/09 15:38:24 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QNucleus.cc,v 1.44 2004/03/25 10:45:00 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -88,6 +88,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 
 G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
 {
+  static const G4double mPi0 = G4QPDGCode(111).GetMass();
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
@@ -104,11 +105,17 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByQC: N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
 #endif
-  G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N);
+  G4int nucPDG=90000000+S*1000000+Z*1000+N;
+  G4QPDGCode nQPDG(nucPDG);
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByQC: nQPDG="<<nQPDG<<G4endl;
 #endif
   G4double mass=nQPDG.GetNuclMass(Z,N,S);
+  if(nucPDG==90000000)
+  {
+    if(nucQC.GetTot()) mass=mPi0;
+    else               mass=0.;
+  }
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByQC: mass="<<mass<<G4endl;
 #endif
@@ -121,7 +128,8 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
   SetNFragments(0);
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p): G4QHadron(nucQC,p), maxClust(0)
+G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
+  G4QHadron(nucQC,p), maxClust(0)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
@@ -222,11 +230,11 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs)
 {//      =========================================
-  lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< ",M="<<rhs.GetGSMass()<<"}";
-  return lhs;
+ lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<<",M="<<rhs.GetGSMass()<<"}";
+ return lhs;
 }
 
-// Standard output for const QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
+// Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
 std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs)
 {//      ===============================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< "}";
@@ -241,61 +249,35 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
   G4cout<<"G4QNucleus::InitByPDG: >Called< PDG="<<nucPDG<<G4endl;
 #endif
   probVect[0]=mediRatio;                        // init Vacuum/Medium probability
-  if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Try to convert to NucPDGCode
-  if(nucPDG>80000000)                           // including 90000000 (OK)
+  if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Convert HadrPDGCode to NucPDGCode
+  G4int s=0;
+  G4int z=0;
+  G4int n=0;
+  if(nucPDG>80000000&&nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
   {
-    G4int szn=nucPDG-NUCPDG;
-    G4int ds=0;
-    G4int dz=0;
-    G4int dn=0;
-    if(szn<-100000)
-    {
-      G4int ns=(-szn)/1000000+1;
-      szn+=ns*1000000;
-      ds+=ns;
-    }
-    else if(szn<-100)
-    {
-      G4int nz=(-szn)/1000+1;
-      szn+=nz*1000;
-      dz+=nz;
-    }
-    else if(szn<0)
-    {
-      G4int nn=-szn;
-      szn=0;
-      dn+=nn;
-    }
-    G4int sz =szn/1000;
-    G4int n  =szn%1000;
-    if(n>700)
-    {
-      n-=1000;
-      dz--;
-    }
-    G4int z  =sz%1000-dz;
-    if(z>700)
-    {
-      z-=1000;
-      ds--;
-    }
+    G4QPDGCode(22).ConvertPDGToZNS(nucPDG, z, n, s);
     Z  =z;
     N  =n;
-    S  =sz/1000-ds;
-    SetZNSQC(Z,N,S);
+    S  =s;
+#ifdef debug
+    G4cout<<"G4QNucleus::InitByPDG:Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
+#endif
+    SetZNSQC(Z,N,S);  // @@ ??
     G4QPDGCode nPDG(nucPDG);
+    G4double PDGMass=0.;
+    if(nucPDG!=NUCPDG) PDGMass=nPDG.GetMass();
     SetQPDG(nPDG);
-    G4LorentzVector p(0.,0.,0.,nPDG.GetMass());
+    G4LorentzVector p(0.,0.,0.,PDGMass);
     Set4Momentum(p);
     SetNFragments(0);
 #ifdef debug
-	G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": Z="<<Z<<",N="<<N<<",S="<<S<<",4M="<<p<<G4endl;
+	G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": 4M="<<p<<G4endl;
 #endif
   }
   else
   {
-    G4cerr<<"***G4QNucleus::InitByPDG: Initialized by not nuclear PDGCode="<<nucPDG<<G4endl;
-    //throw G4QException("G4QNucleus::InitByPDG: HadronicPDGCode can't be converted to NuclearPDGCode");
+    G4cerr<<"***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode="<<nucPDG<<G4endl;
+    //throw G4QException("G4QNucleus::InitByPDG:PDGCode can't be converted to NucPDGCode");
   }
 }
 // End of "InitByPDG"
@@ -303,46 +285,46 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
 // Calculate probabilities of clusters and return the maximum baryon number of clusters
 G4int G4QNucleus::UpdateClusters(G4bool din)
 {//   ======================================
-  //static const G4double r0 = 1.1;               // fm, for nuclear radius: r=r0*A^(1/3)
-  //static const G4double del= .55;               // fm, for a difused surface of the nucleus
-  //static const G4double rCl= 2.0;               // clusterization radius @@??
-  //static const G4double freeibuc = 0.10;        // probab. of the quasi-free baryon on surface
-  //static const G4double freeDib = 0.05;         // probab. of the quasi-free dibar. on surface
-  //static const G4double clustProb = 4.0;        // clusterization probability in dense region
-  //static const G4double prQ = 1.0;              // relative probability for a Quasmon
-  //static const G4double prQ = 0.;               //@@for pi@@relative probability for Quasmon
-  G4double probSInt[254];                         // integrated static probabilities
-  for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinitialization to avoid the postinitial.
-  probSInt[0]=0;                                  // integrated static probabilities
-  G4int a = Z + N + S;                            // atomic number
+  //static const G4double r0 = 1.1;          // fm, for nuclear radius: r=r0*A^(1/3)
+  //static const G4double del= .55;          // fm, for a difused surface of the nucleus
+  //static const G4double rCl= 2.0;          // clusterization radius @@??
+  //static const G4double freeibuc = 0.10;   // probab. of the quasi-free baryon on surface
+  //static const G4double freeDib = 0.05;    // probab. of the quasi-free dibar. on surface
+  //static const G4double clustProb = 4.0;   // clusterization probability in dense region
+  //static const G4double prQ = 1.0;         // relative probability for a Quasmon
+  //static const G4double prQ = 0.;          //@@for pi@@relative probability for Quasmon
+  G4double probSInt[254];                    // integrated static probabilities
+  for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinit to avoid the postinit
+  probSInt[0]=0;                             // integrated static probabilities
+  G4int a = Z + N + S;                       // atomic number
 #ifdef pdebug
-  G4cout<<"G4QNucl::UpdateClust:A="<<a<<" (Z="<<Z<<",N="<<N<<",S="<<S<<"),  mR="<<mediRatio<<G4endl;
+  G4cout<<"G4QN::UpdateCl:A="<<a<<"(Z="<<Z<<",N="<<N<<",S="<<S<<"),mR="<<mediRatio<<G4endl;
 #endif
   G4double A=a;
   if(A<=0.)
   {
 #ifdef debug
-    G4cout<<"***G4QNucleus::UpdateClusters: no clusters can be calculated as A="<<A<<G4endl;
+    G4cout<<"***G4QNucleus::UpdateClusters:No clusters can be calculated as A="<<A<<G4endl;
 #endif
     return 0;
   }
-  G4double surf=freeNuc+freeDib;                 // surface relative population
-  G4double surA=A*surf;                          // surface absolute population
+  G4double surf=freeNuc+freeDib;             // surface relative population
+  G4double surA=A*surf;                      // surface absolute population
   G4int sA=static_cast<G4int>(surA);
-  if(surf>0.||surf<1.)sA=RandomizeBinom(surf,a); // randomize surface nucleons using Binomial Law
+  if(surf>0.||surf<1.)sA=RandomizeBinom(surf,a); // randomize SurfaceNucleons by Binomial
 #ifdef pdebug
-  G4cout<<"G4QNucl::UpdateClust:surf="<<surf<<"= N="<<freeNuc<<" + D="<<freeDib<<",sA="<<sA<<G4endl;
+  G4cout<<"G4QN::UpdateCl:surf="<<surf<<"= N="<<freeNuc<<"+D="<<freeDib<<",A="<<sA<<G4endl;
 #endif
-  G4int dA=a-sA;                                 // a#of nucleons in a dense part of the nucleus
+  G4int dA=a-sA;                             // a#of nucleons in dense part of the nucleus
   if (din && dA<2 && a>2)
   {
 	dA=2;
     sA=a-2;
   }
 #ifdef pdebug
-  G4cout<<"G4QNucl::UpdateClust:dA="<<dA<<",A="<<A<<",s="<<surf<<",S="<<sA<<",C="<<maxClust<<G4endl;
+  G4cout<<"G4QN::UpdtC:dA="<<dA<<",A="<<A<<",s="<<surf<<",S="<<sA<<",C="<<maxClust<<G4endl;
 #endif
-  G4int maxi=1;                                  // A#of elements filled by the progran
+  G4int maxi=1;                              // A#of elements filled by the progran
   G4double pA=0.;
   G4double uA=0.;
   G4double dpA=0.;
@@ -350,32 +332,32 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   {
     pA=0.5*freeDib*sA/surf; //@@Randomize(?)// a#of quasi-free Nucleon Pairs on the surface
     dpA=pA+pA;
-    uA=sA-pA-pA;                                 // a#of quasi-free nucleons on the nuclear surface
+    uA=sA-pA-pA;                             // a#of quasi-free nucleons on Nuclear Surface
   }
-  uA=uA/A;                                       // Normalization of probability
+  uA=uA/A;                                   // Normalization of probability
   pA=pA/A;
   G4double sum =0.;
-  if(dA<2)                                       // There is no dense phase at all
+  if(dA<2)                                   // There is no dense phase at all
   {
-    //probVect[1]= dA/A;                           // a#of quasi-free nucleons (only dense)
-    //probVect[1]= (uA+dA)/A;                      // a#of quasi-free nucleons (different norm)
-    probVect[1]= uA+dA/A;                        // a#of quasi-free nucleons (correct)
+    //probVect[1]= dA/A;                       // a#of quasi-free nucleons (only dense)
+    //probVect[1]= (uA+dA)/A;                  // a#of quasi-free nucleons (different norm)
+    probVect[1]= uA+dA/A;                    // a#of quasi-free nucleons (correct)
     sum = probVect[1];
-    probSInt[1]=sum;                             // integrated static probabilities
+    probSInt[1]=sum;                         // integrated static probabilities
     maxi=2;
-    probVect[254]= 0;                            // a#of dense nucleons (correct)
+    probVect[254]= 0;                        // a#of dense nucleons (correct)
     if(A>1 && pA>0.)
     {
-      //probVect[2]= (pA+pA)/A/(A-1);              // a#of quasi-free "dibaryons" (correct)
-      probVect[2]= pA;                           // a#of quasi-free "dibaryons" (correct)
-      //probVect[2]= 0;                            // a#of quasi-free "dibaryons" (only dense)
+      //probVect[2]= (pA+pA)/A/(A-1);          // a#of quasi-free "dibaryons" (correct)
+      probVect[2]= pA;                       // a#of quasi-free "dibaryons" (correct)
+      //probVect[2]= 0;                        // a#of quasi-free "dibaryons" (only dense)
       sum+= probVect[2]+probVect[2];
-      probSInt[2]=sum;                           // integrated static probabilities
+      probSInt[2]=sum;                       // integrated static probabilities
       maxi=3;
-      probVect[255]= 0;                          // a#of dense "dibaryons" (correct)
+      probVect[255]= 0;                      // a#of dense "dibaryons" (correct)
     }
 #ifdef pdebug
-    G4cout<<"G4QNucleus::UpdateClusters: only quasi-free nucleons pV[1]="<<probVect[1]<<G4endl;
+    G4cout<<"G4QNucleus::UpdateClust:Only quasi-free nucleons pV[1]="<<probVect[1]<<G4endl;
 #endif
     dZ=0;
     dN=0;
@@ -383,8 +365,8 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   }
   else
   {
-    G4double wrd=clustProb/dA;                   // relative volume of clusterization (omega)
-    G4double sud=pow(1.+wrd,dA-1);               // normalization factor for the dense region
+    G4double wrd=clustProb/dA;               // relative volume of clusterization (omega)
+    G4double sud=pow(1.+wrd,dA-1);           // normalization factor for the dense region
     // dA=C*Sum_k=1-A[n*C^A_k*wrd^(k-1)]=C*dA*(1+wrd)^(dA-1) => C=1/sud, sud=(1+wrd)^(dA-1)
     // =1
     G4double rd= dA/sud/A;
@@ -393,27 +375,27 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
     G4double prb=rd+uA;
     sum =prb;
 #ifdef pdebug
-	G4cout<<"G4QNucleus::UpdateClusters:sud="<<sud<<",v[1]=s="<<sum<<",dA="<<dA<<",uA="<<uA<<G4endl;
+	G4cout<<"G4QNucl::UpdateCl:sud="<<sud<<",v[1]=s="<<sum<<",dA="<<dA<<",uA="<<uA<<G4endl;
 #endif
-    //probVect[1]= prb/comb;                       // a#of quasi-free nucleons (correct)
-    //probVect[254]= rd/comb;                      // a#of dense nucleons (correct)
-    probVect[1]= prb;                            // a#of quasi-free nucleons (correct)
-    probVect[254]= rd;                           // a#of dense nucleons (correct)
-    probSInt[1]=sum;                             // integrated static probabilities
+    //probVect[1]= prb/comb;                   // a#of quasi-free nucleons (correct)
+    //probVect[254]= rd/comb;                  // a#of dense nucleons (correct)
+    probVect[1]= prb;                        // a#of quasi-free nucleons (correct)
+    probVect[254]= rd;                       // a#of dense nucleons (correct)
+    probSInt[1]=sum;                         // integrated static probabilities
     // =2
     rd*=wrd*(dA-1.)/2;
     //comb*=(A-1.)/2;
-    //prb=rd;                                      // (only dense)
+    //prb=rd;                                  // (only dense)
     prb=rd+pA;
     sum+=prb+prb;
 #ifdef pdebug
-	G4cout<<"G4QNucleus::UpdateClusters:sud="<<sud<<",v[2]="<<prb<<", s="<<sum<<", pA="<<pA<<G4endl;
+	G4cout<<"G4QNucl::UpdateCl:sud="<<sud<<",v[2]="<<prb<<",s="<<sum<<",pA="<<pA<<G4endl;
 #endif
-    //probVect[2]= prb/comb;                       // a#of quasi-free "dibaryons" (correct)
-    //probVect[255]= rd/comb;                      // a#of dense "dibaryons" (correct)
-    probVect[2]= prb;                            // a#of quasi-free "dibaryons" (correct)
-    probVect[255]= rd;                           // a#of dense "dibaryons" (correct)
-    probSInt[2]=sum;                             // integrated static probabilities
+    //probVect[2]= prb/comb;                   // a#of quasi-free "dibaryons" (correct)
+    //probVect[255]= rd/comb;                  // a#of dense "dibaryons" (correct)
+    probVect[2]= prb;                        // a#of quasi-free "dibaryons" (correct)
+    probVect[255]= rd;                       // a#of dense "dibaryons" (correct)
+    probSInt[2]=sum;                         // integrated static probabilities
     // >2
     maxi=3;
 #ifdef debug
@@ -431,19 +413,19 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
         rd*=wrd*(idA-i)/i;
         sum+=rd*i;
 #ifdef pdebug
-	    G4cout<<"G4QNucleus::UpdateClusters:sud="<<sud<<", v["<<i<<"]="<<rd<<", s="<<sum<<G4endl;
+	    G4cout<<"G4QNucleus::UpdateCl:sud="<<sud<<", v["<<i<<"]="<<rd<<", s="<<sum<<G4endl;
 #endif
         //comb*=(itA-i)/i;
-        //probVect[i]=rd/comb;                     // Divide by sum of combinations for N+Z+S
-        probVect[i]=rd;                          // Comb's for N,Z,&S are canceled later(G4QNucl)
-        probSInt[i]=sum;                         // integrated static probabilities
+        //probVect[i]=rd/comb;                 // Divide by sum of combinations for N+Z+S
+        probVect[i]=rd;                      // Comb's for N,Z,S are canceled later(G4QNuc)
+        probSInt[i]=sum;                     // integrated static probabilities
         maxi=i+1;
 #ifdef debug
-        G4cout<<"G4QNucleus::UpdateClusters: cluster of "<<i<<" baryons, pV="<<probVect[i]<<G4endl;
+        G4cout<<"G4QNucleus::UpdateCl:Cluster of "<<i<<" baryons,pV="<<probVect[i]<<G4endl;
 #endif
       }
 	}
-    dS = S;                                      // @@ Lambdas are always in the dense region
+    dS = S;                                  // @@ Lambdas are always in the dense region
     dZ = static_cast<int>(static_cast<double>((dA-dS)*Z)/(Z+N) + 0.5);
     dN = dA - dZ;
   }
@@ -451,22 +433,24 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   G4cout<<"G4QNucleus::UpdateClusters: Sum of weighted probabilities s="<<sum<<G4endl;
 #endif
   maxClust=maxi-1;
-  //for (G4int j=maxi; j<255; j++) probVect[j]=0.; // Make the rest to be 0 [preinitialized above]
+  //for (G4int j=maxi; j<255; j++) probVect[j]=0.;//Make the rest to be 0 [preinited above]
   // ===================== From here probability randomization starts ===============
-  //  G4int rA=a;                                    // Residual number of nucleons
+  //  G4int rA=a;                              // Residual number of nucleons
   //#ifdef pdebug
-  //G4cout<<"G4QNuc::UpdateClust:A="<<A<<",M="<<k<<",P1="<<probVect[1]<<",P2="<<probVect[2]<<G4endl;
+  //G4cout<<"G4QNuc::UpdateClust:A="<<A<<",M="<<k<<",P1="<<probVect[1]<<",P2="<<probVect[2]
+  //      <<G4endl;
   //#endif
-  //if (k>1) for (j=k; j>1; j--)                   // nucleons are not randomized
+  //if (k>1) for (j=k; j>1; j--)               // nucleons are not randomized
   //{
-  //  G4int jmax=rA/j;                             // Max number of this kind of clusters
+  //  G4int jmax=rA/j;                         // Max number of this kind of clusters
   //  if (jmax)
   //  {
-  //    G4double prob=probVect[j]/probSInt[j];     // Probability of the cluster in the dest nucleus
+  //    G4double prob=probVect[j]/probSInt[j]; // Probab of the cluster in the dest nucleus
   //#ifdef pdebug
-  //    G4cout<<"G4QNucl::UpdateClusters: j="<<j<<",sP="<<probVect[j]<<",iP="<<probSInt[j]<<G4endl;
+  //    G4cout<<"G4QNucl::UpdateClusters: j="<<j<<",sP="<<probVect[j]<<",iP="<<probSInt[j]
+  //          <<G4endl;
   //#endif
-  //	G4int m=RandomizeBinom(prob,jmax);         // A#of clusters of this type
+  //	G4int m=RandomizeBinom(prob,jmax);     // A#of clusters of this type
   //    if(m)
   //    {
   //      probVect[j]=m;
@@ -478,7 +462,8 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   //      if(j==maxClust) maxClust--;
   //    }
   //#ifdef pdebug
-  //    G4cout<<"G4QNucl::UpdateClust:p="<<prob<<",r="<<rA<<",m="<<jmax<<",P="<<probVect[j]<<G4endl;
+  //    G4cout<<"G4QNucl::UpdateClust:p="<<prob<<",r="<<rA<<",m="<<jmax<<",P="<<probVect[j]
+  //          <<G4endl;
   //#endif
   //  }
   //  else
@@ -506,13 +491,14 @@ void G4QNucleus::Reduce(G4int cPDG)
     {
       //if(abs(newPDG)<NUCPDG)
 	  //{
-      //  G4cerr<<"***G4QNucleus::Reduce:iPDG="<<curPDG<<" = newPDG="<<newPDG<<"+cPDG="<<cPDG<<G4endl;
+      //  G4cerr<<"***G4QNucleus::Reduce:iPDG="<<curPDG<<"=newPDG="<<newPDG<<"+cPDG="<<cPDG
+      //        <<G4endl;
       //  throw G4QException("*E*:::G4QNucleus::Reduce: Abnormal Nuclear Reduction");
 	  //}
       InitByPDG(newPDG);                         // Reinit the Nucleus
 	}
   }
-  else if(cPDG!=NUCPDG) G4cerr<<"***G4QNucl::Reduce:Subtracting not nuclear PDGCode="<<cPDG<<G4endl;
+  else if(cPDG!=NUCPDG) G4cerr<<"***G4QN::Reduce:Subtract not nuclear PDGC="<<cPDG<<G4endl;
   // in case of cPDG=90000000 - subtract nothing
 }
 
@@ -621,7 +607,7 @@ G4int G4QNucleus::SplitBaryon()
     if(sM<totM+.001) return 3122;
   }
   G4int AQ=NQ+PQ+LQ;
-  if(NQ>0&&PQ>0&&AQ>2)                            // ===> "Can try to split a deuteron" case
+  if(NQ>0&&PQ>0&&AQ>2)                            // ===> "Can try to split deuteron" case
   {
     G4QContent resQC=valQC-deutQC;                // QC of Residual for the Deuteron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Deuteron
@@ -659,19 +645,19 @@ G4bool G4QNucleus::Split2Baryons()
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mLamb= G4QPDGCode(3122).GetMass();
-  G4int     baryn=GetA();                         // Baryon Number of the Nucleus
+  G4int     baryn=GetA();                        // Baryon Number of the Nucleus
   if(baryn<3) return false;
-  G4double   totM=Get4Momentum().m();             // Real Mass value of the Nucleus
-  G4QContent valQC=GetQCZNS();                    // Quark Content of the Nucleus
+  G4double   totM=Get4Momentum().m();            // Real Mass value of the Nucleus
+  G4QContent valQC=GetQCZNS();                   // Quark Content of the Nucleus
 #ifdef pdebug
   G4cout<<"G4QNucleus::Split2Baryons: B="<<baryn<<", M="<<totM<<valQC<<G4endl;
 #endif
   G4int NQ=valQC.GetN();
-  if(NQ>1)                                        // ===> "Can try to split two neutrons" case
+  if(NQ>1)                                       // ===> "Can try to split 2 neutrons" case
   {
-    G4QContent resQC=valQC-neutQC-neutQC;         // QC of Residual Nucleus for the Two Neutrons
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Neutrons
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-neutQC-neutQC;        // QC of ResidNucleus for the Two Neutrons
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of ResidNucleus for 2 Neutrons
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mNeut+mNeut;
 #ifdef pdebug
     G4cout<<"G4QNucleus::Split2Baryons: (2 neutrons), sM="<<sM<<", d="<<totM-sM<<G4endl;
@@ -679,56 +665,56 @@ G4bool G4QNucleus::Split2Baryons()
     if(sM<totM) return true;
   }
   G4int PQ=valQC.GetP();
-  if(PQ>1)                                        // ===> "Can try to split two protons" case
+  if(PQ>1)                                       // ===> "Can try to split 2 protons" case
   {
-    G4QContent resQC=valQC-protQC-protQC;         // QC of Residual Nucleus for the Two Protons
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Proton
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-protQC-protQC;        // QC of ResidualNucleus for 2 Protons
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of Residual Nucleus for 2 Proton
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mProt;
 #ifdef pdebug
     G4cout<<"G4QNucleus::Split2Baryons: (2 protons), sM="<<sM<<", d="<<totM-sM<<G4endl;
 #endif
     if(sM<totM) return true;
   }
-  if(PQ&&NQ)                                      // ===> "Can try to split proton+neutron" case
+  if(PQ&&NQ)                                     // ===> "Can try to split proton+neutron"
   {
-    G4QContent resQC=valQC-protQC-neutQC;         // QC of Residual Nucleus for the Proton+Neutron
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Proton+Neutron
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-protQC-neutQC;        // QC of ResidNucleus for Proton+Neutron
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of ResidNucleus for Proton+Neutron
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mNeut;
 #ifdef pdebug
-    G4cout<<"G4QNucleus::Split2Baryons: (proton+neutron), sM="<<sM<<", d="<<totM-sM<<G4endl;
+    G4cout<<"G4QNucleus::Split2Baryons:(proton+neutron), sM="<<sM<<", d="<<totM-sM<<G4endl;
 #endif
     if(sM<totM) return true;
   }
   G4int LQ=valQC.GetL();
-  if(LQ&&NQ)                                      // ===> "Can try to split lambda+neutron" case
+  if(LQ&&NQ)                                     // ===> "Can try to split lambda+neutron"
   {
-    G4QContent resQC=valQC-lambQC-neutQC;         // QC of Residual Nucleus for the Lambda+Neutron
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Lambda+Neutron
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-lambQC-neutQC;        // QC of ResidNucleus for Lambda+Neutron
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of ResidNucleus for Lambda+Neutron
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mLamb+mNeut;
 #ifdef pdebug
-    G4cout<<"G4QNucleus::Split2Baryons: (lambda+neutron), sM="<<sM<<", d="<<totM-sM<<G4endl;
+    G4cout<<"G4QNucleus::Split2Baryons:(lambda+neutron), sM="<<sM<<", d="<<totM-sM<<G4endl;
 #endif
     if(sM<totM) return true;
   }
-  if(LQ&&PQ)                                      // ===> "Can try to split lambda+proton" case
+  if(LQ&&PQ)                                     // ===> "Can try to split lambda+proton"
   {
-    G4QContent resQC=valQC-protQC-lambQC;         // QC of Residual Nucleus for the Proton+Lambda
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Proton+Lambda
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-protQC-lambQC;        // QC of ResidNucleus for Proton+Lambda
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of ResidNucleus for Proton+Lambda
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mProt+mLamb;
 #ifdef pdebug
     G4cout<<"G4QNucleus::Split2Baryons: (proton+lambda), sM="<<sM<<", d="<<totM-sM<<G4endl;
 #endif
     if(sM<totM) return true;
   }
-  if(LQ>1)                                        // ===> "Can try to split two lambdas" case
+  if(LQ>1)                                       // ===> "Can try to split 2 lambdas" case
   {
-    G4QContent resQC=valQC-lambQC-lambQC;         // QC of Residual Nucleus for the Two Lambdas
-    G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual Nucleus for the Two Lambdas
-    G4double resMas=G4QPDGCode(resPDG).GetMass(); // GS Mass of the Residual Nucleus
+    G4QContent resQC=valQC-lambQC-lambQC;        // QC of ResidNucleus for the Two Lambdas
+    G4int    resPDG=resQC.GetSPDGCode();         // PDG of ResidNucleus for the Two Lambdas
+    G4double resMas=G4QPDGCode(resPDG).GetMass();// GS Mass of the Residual Nucleus
     G4double sM=resMas+mLamb+mLamb;
 #ifdef pdebug
     G4cout<<"G4QNucleus::Split2Baryons: (two lambdas), sM="<<sM<<", d="<<totM-sM<<G4endl;
@@ -741,18 +727,18 @@ G4bool G4QNucleus::Split2Baryons()
 // Evaporate one Baryon (n,p,Lambda) (h1) from the Nucleus & get Residual Nucleus (h2)
 G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 {//  ===========================================================
-  //static const G4double   uWell=2.7;              // EffectiveDepth of potential well B (Boltsman)
-  //static const G4double   uWell=2.;               // EffectiveDepth of potential well B (Boltsman)
-  static const G4double   uWell=1.7;              // EffectiveDepth of potential well B (Boltsman)
-  //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B (Boltsman)
+  //static const G4double   uWell=2.7;              // EffectiveDepth of potential well B
+  //static const G4double   uWell=2.;               // EffectiveDepth of potential well B
+  static const G4double   uWell=1.7;              // EffectiveDepth of potential well B
+  //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B
   //static const G4double   alpha=7.2;              // Probability for alpha to evaporate
-  //////////static const G4double   gunA=80.;               // Switch A-parameter for BaryonGun
+  //////////static const G4double   gunA=80.;       // Switch A-parameter for BaryonGun
   //static const G4double   gunB=exp(1)/gunA;
   ///////////////////static const G4double   gunB=exp(2)/4/gunA/gunA;
-  //////////////static const G4double   gunP2=200000.;          // Switch P2-parameter for BaryonGun
-  //////////////static const G4double   maSht=1.2;              // shift for maximal x approximation
-  ///////////static const G4double   coSht=.19;              // multiple for maximal x approximation
-  //////////////static const G4double   third=1./3.;            // power for maximal x approximation
+  //////////////static const G4double   gunP2=200000.; // Switch P2-parameter for BaryonGun
+  //////////////static const G4double   maSht=1.2;  // shift for maximal x approximation
+  ///////////static const G4double   coSht=.19;     // multiple for maximal x approximation
+  //////////////static const G4double   third=1./3.;// power for maximal x approximation
   static const G4int      gPDG =   22;            // PDGCode of gamma
   static const G4QPDGCode gQPDG(gPDG);            // QPDGCode of gamma
   static const G4int      nPDG = 2112;            // PDGCode of neutron
@@ -799,29 +785,29 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4double alpha=1.;
   //G4double alpha=clustProb*clustProb*clustProb;
 #ifdef ppdebug
-  G4cout<<"G4QNucleus::EvaporateBaryon: Called with a="<<a<<GetThis()<<",alpha="<<alpha<<G4endl;
+  G4cout<<"G4QNucleus::EvaporBaryon:Called with a="<<a<<GetThis()<<",alph="<<alpha<<G4endl;
 #endif
   G4double a1= a-1;
   //////////G4double z = Z;
   //////////G4double zn= Z+N;
-  G4double PBarr= CoulombBarrier(1,1);            // Coulomb Barrier for proton
-  G4double PPBarr= CoulombBarrier(1,1,1,1);       // Coulomb Barrier for proton (after proton)
-  G4double PABarr= CoulombBarrier(1,1,2,4);       // Coulomb Barrier for proton (after alpha)
-  G4double APBarr= CoulombBarrier(2,4,1,1);       // Coulomb Barrier for alpha (after proton)
-  G4double ABarr= CoulombBarrier(2,4);            // Coulomb Barrier for alpha
-  G4double AABarr= CoulombBarrier(2,4,2,4);       // Coulomb Barrier for alpha (after alpha)
-  G4double PPPBarr= CoulombBarrier(1,1,2,2);      // Coulomb Barrier for proton (after 2 protons)
-  G4double AAABarr= CoulombBarrier(2,4,4,8);      // Coulomb Barrier for alpha (after 2 alphas)
-  //////G4double APABarr= CoulombBarrier(2,4,3,5);      // Coulomb Barrier for alpha (after p+alpha)
-  G4double PPABarr= CoulombBarrier(1,1,3,5);      // Coulomb Barrier for proton (after p+alpha)
-  G4double SPPBarr=PBarr+PPBarr;                  // Summed Coulomb Barrier for p+p pair
-  G4double SAABarr=ABarr+AABarr;                  // Summed Coulomb Barrier for alpha+alpha pair
-  G4double SPPPBarr=SPPBarr+PPPBarr;              // Summed Coulomb Barrier for 3 protons
-  G4double SAAABarr=SAABarr+AAABarr;              // Summed Coulomb Barrier for 3 alphas
-  G4double SAPBarr=PABarr+ABarr;                  // Summed Coulomb Barrier for alpha+p pair
-  G4double DAPBarr=APBarr+PBarr;                  // Another summed Coulomb Barrier for alpha+p pair
-  if(DAPBarr>SAPBarr)SAPBarr=DAPBarr;             // Get maximum to make possible both sequences
-  ///////G4double SAPABarr=APABarr+SAPBarr;              // Summed Coulomb Barrier for alpha+p+alpha
+  G4double PBarr= CoulombBarrier(1,1);            // CoulombBarrier for proton
+  G4double PPBarr= CoulombBarrier(1,1,1,1);       // CoulombBarrier for proton (after prot)
+  G4double PABarr= CoulombBarrier(1,1,2,4);       // CoulombBarrier for proton (after alph)
+  G4double APBarr= CoulombBarrier(2,4,1,1);       // CoulombBarrier for alpha (after prot)
+  G4double ABarr= CoulombBarrier(2,4);            // CoulombBarrier for alpha
+  G4double AABarr= CoulombBarrier(2,4,2,4);       // CoulombBarrier for alpha (after alpha)
+  G4double PPPBarr= CoulombBarrier(1,1,2,2);      // CoulombBarrier for proton (after 2 pr)
+  G4double AAABarr= CoulombBarrier(2,4,4,8);      // CoulombBarrier for alpha (after 2alph)
+  //////G4double APABarr= CoulombBarrier(2,4,3,5);// CoulombBarrier for alpha (after p+al)
+  G4double PPABarr= CoulombBarrier(1,1,3,5);      // CoulombBarrier for proton (after p+al)
+  G4double SPPBarr=PBarr+PPBarr;                  // SummedCoulombBarrier for p+p pair
+  G4double SAABarr=ABarr+AABarr;                  // SummedCoulombBarrier for 2 alpha pair
+  G4double SPPPBarr=SPPBarr+PPPBarr;              // SummedCoulombBarrier for 3 protons
+  G4double SAAABarr=SAABarr+AAABarr;              // SummedCoulombBarrier for 3 alphas
+  G4double SAPBarr=PABarr+ABarr;                  // SummedCoulombBarrier for alpha+p pair
+  G4double DAPBarr=APBarr+PBarr;                  // Other SummedCoulombBarrier for alph+2p
+  if(DAPBarr>SAPBarr)SAPBarr=DAPBarr;             // Get max to make possible BothSequences
+  ///////G4double SAPABarr=APABarr+SAPBarr;       // Summed Coulomb Barrier for alph+p+alph
   G4double SPPABarr=PPABarr+SAPBarr;              // Summed Coulomb Barrier for p+p+alpha
   G4LorentzVector h1mom;
   G4LorentzVector h2mom;
@@ -868,7 +854,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 	  {
         G4cerr<<"***G4QNucleus::EvaporateBaryon: M="<<totMass
               <<", M="<<totMass<<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
-        //throw G4QException("***G4QNucl::EvaporateBaryon: ISO-dibaryon is under a Mass Shell");
+        //throw G4QException("***G4QNucl::EvaporateBaryon: ISO-dibaryon under Mass Shell");
         return false;
 	  }      
 	}
@@ -893,7 +879,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       if(totMass<=mNP)
 	  {
 #ifdef ppdebug
-        G4cout<<"G4QNucleus::EvaporateBaryon: Photon ### d+g ###, dM="<<totMass-mNP<<G4endl;
+        G4cout<<"G4QNucl::EvaporateBaryon: Photon ### d+g ###, dM="<<totMass-mNP<<G4endl;
 #endif
         h1mom=G4LorentzVector(0.,0.,0.,0.);
         h2mom=G4LorentzVector(0.,0.,0.,mDeut);
@@ -931,20 +917,20 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   }
   else if(a>2)
   {
-    G4bool nFlag    = false;                   // Flag of possibility to radiate neutron
-    G4bool pFlag    = false;                   // Flag of possibility to radiate proton
-    G4bool lFlag    = false;                   // Flag of possibility to radiate lambda
-    G4bool aFlag    = false;                   // Flag of possibility to radiate alpha
-    G4bool nnFlag   = false;                   // Flag of possibility to radiate 2 neutrons
-    G4bool npFlag   = false;                   // Flag of possibility to radiate neutron+proton
-    G4bool nlFlag   = false;                   // Flag of possibility to radiate neutron+lambda
-    G4bool ppFlag   = false;                   // Flag of possibility to radiate 2 protons
-    G4bool plFlag   = false;                   // Flag of possibility to radiate proton+lambda
-    G4bool llFlag   = false;                   // Flag of possibility to radiate 2 lambdas
-    G4bool paFlag   = false;                   // Flag of possibility to radiate proton+alpha
-    G4bool naFlag   = false;                   // Flag of possibility to radiate neutron+alpha
-    G4bool laFlag   = false;                   // Flag of possibility to radiate lambda+alpha
-    G4bool aaFlag   = false;                   // Flag of possibility to radiate alpha+alpha
+    G4bool nFlag    = false;               // Flag of possibility to radiate neutron
+    G4bool pFlag    = false;               // Flag of possibility to radiate proton
+    G4bool lFlag    = false;               // Flag of possibility to radiate lambda
+    G4bool aFlag    = false;               // Flag of possibility to radiate alpha
+    G4bool nnFlag   = false;               // Flag of possibility to radiate 2 neutrons
+    G4bool npFlag   = false;               // Flag of possibility to radiate neutron+proton
+    G4bool nlFlag   = false;               // Flag of possibility to radiate neutron+lambda
+    G4bool ppFlag   = false;               // Flag of possibility to radiate 2 protons
+    G4bool plFlag   = false;               // Flag of possibility to radiate proton+lambda
+    G4bool llFlag   = false;               // Flag of possibility to radiate 2 lambdas
+    G4bool paFlag   = false;               // Flag of possibility to radiate proton+alpha
+    G4bool naFlag   = false;               // Flag of possibility to radiate neutron+alpha
+    G4bool laFlag   = false;               // Flag of possibility to radiate lambda+alpha
+    G4bool aaFlag   = false;               // Flag of possibility to radiate alpha+alpha
     G4bool nnnF     = false;
     G4bool nnpF     = false;
     G4bool nppF     = false;
@@ -1363,14 +1349,15 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       // @@ Here one can put a condition for the Baryon Gun
       G4int    cntr= 0;
       //G4int    cntm= 27;
-      //G4int    cntm= 72;                         // Important difference !!DOn't change
-      G4int    cntm= 80;                         // Important difference !!DOn't change "IsoNuclei"
+      //G4int    cntm= 72;                 // Important difference !!DOn't change
+      //G4int    cntm= 80;                 // Important difference !!DOn'tChange"IsoNuclei"
+      G4int    cntm= 90;                 // Important difference !!DOn'tChange "Lept/Hyper"
       if((pFlag&&pExcess>pMin ||nFlag&&nExcess>nMin ||lFlag&&lExcess>lMin ||aFlag&&aExcess>aMin)
          && minE<maxE)
       {
-        G4double mi=uWell+minE;                  // Minimum Kinetic Energy for minimal nucleon
-        G4double mm=uWell+maxE;                  // Personal maximum
-        G4double ma=uWell*a+maxE;                // Total Kinetic Energy of baryons
+        G4double mi=uWell+minE;          // Minimum Kinetic Energy for minimal nucleon
+        G4double mm=uWell+maxE;          // Personal maximum
+        G4double ma=uWell*a+maxE;        // Total Kinetic Energy of baryons
         if(mi<0.)
 	    {
           uW-=mi;
@@ -2626,6 +2613,12 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
       if(cPDG==90001001) G4cout<<"G4QNucleus::PrepareCand: piF/gaF fragments are blocked"<<G4endl;
 #endif
     }
+    else if((index>2&&index<8)||index==14||index==15||index==23) // Hyperons, Not Lambda
+    {
+      curCand->SetPreProbability(0.);  
+      curCand->SetDenseProbability(0.); 
+	  curCand->SetPossibility(false);    
+	}
     else
 	{
       G4double tnM=GetQPDG().GetMass();
@@ -2658,7 +2651,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 #ifdef pdebug
 	      G4cout<<"G4QNucleus::PrepC: cPDG="<<cPDG<<",norm="<<pos<<",zc="<<zc<<",nc="<<nc
                 <<",sc="<<sc<<",ac="<<ac<<",ze1="<<ze1<<",ne1="<<ne1<<",se1="<<se1<<G4endl;
-            G4double mp=pos;
+          G4double mp=pos;
 #endif
           if     (ac==1)
 	      {

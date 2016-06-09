@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RToEConvForProton.hh,v 1.1 2003/09/19 14:44:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // ------------------------------------------------------------

@@ -1,33 +1,31 @@
 export HEPREP=$FREEHEP/hep/graphics/heprep
 cp $FREEHEP/org/freehep/jni/FreeHepTypes.h          include/ref
-cp $FREEHEP/org/freehep/zip/zipios++/*.h            include/zipios++
-cp $FREEHEP/org/freehep/zip/*.h                     include/zipios++
-cp $FREEHEP/org/freehep/zip/*.cpp                   src
-mv src/appendzip.cpp			            src/appendzip.cc
-mv src/basicentry.cpp			            src/basicentry.cc
-mv src/collcoll.cpp			            src/collcoll.cc
-mv src/deflateoutputstreambuf.cpp		    src/deflateoutputstreambuf.cc
-mv src/fcoll.cpp			            src/fcoll.cc
-mv src/fcollexceptions.cpp		            src/fcollexceptions.cc
-mv src/fileentry.cpp			            src/fileentry.cc
-mv src/filepath.cpp			            src/filepath.cc
-mv src/filterinputstreambuf.cpp			    src/filterinputstreambuf.cc
-mv src/filteroutputstreambuf.cpp		    src/filteroutputstreambuf.cc
-mv src/inflateinputstreambuf.cpp		    src/inflateinputstreambuf.cc
-mv src/zipfile.cpp			    	    src/zipfile.cc
-mv src/ziphead.cpp			    	    src/ziphead.cc
-mv src/zipheadio.cpp			    	    src/zipheadio.cc
-mv src/zipinputstream.cpp			    src/zipinputstream.cc
-mv src/zipinputstreambuf.cpp			    src/zipinputstreambuf.cc
-mv src/zipoutputstream.cpp			    src/zipoutputstream.cc
-mv src/zipoutputstreambuf.cpp			    src/zipoutputstreambuf.cc
-cp $HEPREP/geant4/include/*.hh                      include
+#cp $FREEHEP/org/freehep/zip/zipios++/*.h            include/zipios++
+#cp $FREEHEP/org/freehep/zip/*.h                     include/zipios++
+#cp $FREEHEP/org/freehep/zip/*.cpp                   src
+#rm src/appendzip.cpp
+#mv src/basicentry.cpp			            src/basicentry.cc
+#mv src/collcoll.cpp			            src/collcoll.cc
+#mv src/deflateoutputstreambuf.cpp		    src/deflateoutputstreambuf.cc
+#mv src/fcoll.cpp			            src/fcoll.cc
+#mv src/fcollexceptions.cpp		            src/fcollexceptions.cc
+#mv src/fileentry.cpp			            src/fileentry.cc
+#mv src/filepath.cpp			            src/filepath.cc
+#mv src/filterinputstreambuf.cpp			    src/filterinputstreambuf.cc
+#mv src/filteroutputstreambuf.cpp		    src/filteroutputstreambuf.cc
+#mv src/inflateinputstreambuf.cpp		    src/inflateinputstreambuf.cc
+#mv src/zipfile.cpp			    	    src/zipfile.cc
+#mv src/ziphead.cpp			    	    src/ziphead.cc
+#mv src/zipheadio.cpp			    	    src/zipheadio.cc
+#mv src/zipinputstream.cpp			    src/zipinputstream.cc
+#mv src/zipinputstreambuf.cpp			    src/zipinputstreambuf.cc
+#mv src/zipoutputstream.cpp			    src/zipoutputstream.cc
+#mv src/zipoutputstreambuf.cpp			    src/zipoutputstreambuf.cc
 cp $HEPREP/c++/include/*.h                          include/ref
 cp $HEPREP/include/HEPREP/*.h                       include/HEPREP
-cp $HEPREP/geant4/*.cc                              src
 cp $HEPREP/c++/*.cc                                 src
 rm src/MultiWriteTest.cc
 rm src/HepRepTest.cc
 rm src/HepRepExample.cc
-rm src/test_zipoutputstream.cpp
-rm src/test_gzipoutputstream.cpp
+#rm src/test_zipoutputstream.cpp
+#rm src/test_gzipoutputstream.cpp

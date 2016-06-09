@@ -32,25 +32,25 @@ G4PiKBuilder::
 ~G4PiKBuilder(){
   if(wasActivated)
   {
-  G4ProcessManager * theProcMan;
-  theProcMan = G4PionPlus::PionPlus()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&thePionPlusElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&thePionPlusInelastic);
-  theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&thePionMinusElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&thePionMinusInelastic);
-  theProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonPlusElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonPlusInelastic);
-  theProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonMinusElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonMinusInelastic);
-  theProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroLElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroLInelastic);
-  theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroSElasticProcess);
-  if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroSInelastic);
+    G4ProcessManager * theProcMan;
+    theProcMan = G4PionPlus::PionPlus()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&thePionPlusElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&thePionPlusInelastic);
+    theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&thePionMinusElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&thePionMinusInelastic);
+    theProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonPlusElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonPlusInelastic);
+    theProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonMinusElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonMinusInelastic);
+    theProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroLElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroLInelastic);
+    theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroSElasticProcess);
+    if(theProcMan) theProcMan->RemoveProcess(&theKaonZeroSInelastic);
   }
 }
 

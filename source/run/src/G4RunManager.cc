@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RunManager.cc,v 1.83 2003/08/01 19:30:14 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.cc,v 1.7 2003/12/09 15:30:26 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: FCALEMModuleSD.cc,v 1.8 2004/01/27 09:08:04 ribon Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -116,21 +116,21 @@ void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent*)
 
   // Write in File
   //--------------
-  G4String FileName = "EmModule_802_1mm.dat";
-  G4int iostemp;
+  const char * FileName = "EmModule_802_1mm.dat";
+  std::ios::openmode iostemp;
   if(Init_state == 1) {
-    iostemp = ios::out;
+    iostemp = std::ios::out;
     Init_state++;
   } else {
-    iostemp = ios::out|ios::app; // ios::app;  
+    iostemp = std::ios::out|std::ios::app; // std::ios::app;  
   }
   
-  ofstream EmDatafile(FileName, iostemp);
+  std::ofstream EmDatafile(FileName, iostemp);
   // EmDatafile.precision(5);
 
-  EmDatafile << NF1Tile << endl;
+  EmDatafile << NF1Tile << std::endl;
   for (i=1; i <= NF1Tile; i++) {
-    EmDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << endl;
+    EmDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
   }
   EmDatafile.close();
 

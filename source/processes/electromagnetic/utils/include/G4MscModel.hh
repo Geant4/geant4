@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.6 2003/11/26 10:01:13 urban Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MscModel.hh,v 1.9 2004/03/10 08:38:39 urban Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,8 @@
 //
 // 05-08-03 angle distribution has been modified (L.Urban)
 // 26-11-03 new data member currentRange (L.Urban)
+// 01-03-04 changes in data members + signature changed in SampleCosineTheta
+// 11-03-04 changes in data members (L.Urban)
 //
 // Class Description:
 //
@@ -55,6 +57,7 @@
 #define G4MscModel_h 1
 
 #include "G4VEmModel.hh"
+
 class G4MscModel : public G4VEmModel
 {
 
@@ -112,7 +115,8 @@ public:
 
   G4double TrueStepLength(G4double geomStepLength);
 
-  G4double SampleCosineTheta(G4double trueStepLength);
+  G4double SampleCosineTheta(G4double trueStepLength,G4double KineticEnergy,
+                             G4double lambda);
 
   G4double SampleDisplacement();
 
@@ -155,11 +159,7 @@ private:
   G4double xsi;
 
   G4double lambda0;
-  G4double lambda1;
-  G4double lambdam;
-  G4double alam;
-  G4double zm;
-  G4double cthm;
+  G4double parlowen ;
   G4double tPathLength;
 
   G4bool   samplez;

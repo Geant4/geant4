@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HepRepMessenger.hh,v 1.3 2003/12/11 21:55:54 duns Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 #ifndef G4HepRepMessenger_HH

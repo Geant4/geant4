@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PAIxSection.hh,v 1.10 2003/10/19 15:21:22 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // G4PAIxSection.hh -- header file

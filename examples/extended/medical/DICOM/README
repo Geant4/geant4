@@ -1,5 +1,5 @@
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                        DicomG4                          |
+|                        Dicom                            |
 +                                                         +
 |                        README                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -18,11 +18,12 @@ web : thomson.phy.ulaval.ca/phys_med
 
 This example illustrates a preliminary version of a Geant4 interface
 to the DICOM image format.
-The example consists in creating an image from dicom files.
+The example consists in modeling a phantom inside a Geant4 application,
+given the dicom files describing the phantom.
 
 --->1) Introduction
 
-DICOM images are read and used as Geometry for simulation. 
+DICOM images are read and used to model the geometry set-up for simulation. 
 
 Three file .dcm give the experimental set-up 
 (in terms of tissues and  tissue geometry position) are read. 
@@ -42,7 +43,7 @@ compiler = gcc-3.2
 G4SYSTEM = linux-g++  
 
 The following environment variables need to be set:            
-G4LEDATA: points to low energy data base - G4EMLOW2.2      
+G4LEDATA: points to low energy data base - G4EMLOW2.3     
 
 visualisation package: OpenGL
 

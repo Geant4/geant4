@@ -27,6 +27,7 @@
 // History:
 // -----------
 // 17 Feb 2003   LP        Created
+// 17 Dec 2003   LP        Bug fixed (removed memory leak)
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -46,7 +47,7 @@ public:
 
   G4PenelopeInterpolator(G4double* pX, G4double* pY, G4int nbOfData, G4double S1=0, G4double SN=0);
 
-  ~G4PenelopeInterpolator(){;}
+  ~G4PenelopeInterpolator();
  
   G4double CubicSplineInterpolation(G4double xx);
   G4double FirstDerivative(G4double xx);

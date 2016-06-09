@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.icc,v 1.2 2003/11/03 17:15:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NormalNavigation.icc,v 1.3 2004/03/10 18:21:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // G4NormalNavigation Inline Implementation
@@ -53,36 +53,57 @@ G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
   targetLogical = targetPhysical->GetLogicalVolume();
   targetNoDaughters = targetLogical->GetNoDaughters();
   
-  if (targetNoDaughters==0) return false;
-  
-  //
-  // Search daughters in volume
-  //
+  G4bool found = false;
 
-  for ( register int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+  if (targetNoDaughters!=0)
   {
-    samplePhysical = targetLogical->GetDaughter(sampleNo);
-    if ( samplePhysical!=blockedVol )
+    //
+    // Search daughters in volume
+    //
+    for ( register int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
     {
-      // Setup history
-      //
-      history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
-      sampleSolid = samplePhysical->GetLogicalVolume()->GetSolid();
-      samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
-      if( G4AuxiliaryNavServices::
-          CheckPointOnSurface(sampleSolid, samplePoint, globalDirection, 
-                              history.GetTopTransform(), pLocatedOnEdge) )
+      samplePhysical = targetLogical->GetDaughter(sampleNo);
+      if ( samplePhysical!=blockedVol )
       {
-        // Enter this daughter
+        // Setup history
         //
-        localPoint = samplePoint;
-        return true;
-      }
-      else
-      {
-        history.BackLevel();
+        history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
+        sampleSolid = samplePhysical->GetLogicalVolume()->GetSolid();
+        samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
+        if( G4AuxiliaryNavServices::
+            CheckPointOnSurface(sampleSolid, samplePoint, globalDirection, 
+                                history.GetTopTransform(), pLocatedOnEdge) )
+        {
+          // Enter this daughter
+          //
+          localPoint = samplePoint;
+          found = true;
+          break;
+        }
+        else
+        {
+          history.BackLevel();
+        }
       }
     }
   }
-  return false;
+  return found;
+}
+
+inline
+G4int G4NormalNavigation::GetVerboseLevel()
+{
+  return fVerbose;
+}
+
+inline
+void G4NormalNavigation::SetVerboseLevel(G4int level)
+{
+  fVerbose = level;
+}
+
+inline
+void G4NormalNavigation::CheckMode(G4bool mode)
+{
+  fCheck = mode;
 }

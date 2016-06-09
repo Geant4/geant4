@@ -49,9 +49,9 @@ public:
   G4double GetCurTransTotValue(G4int BinNumv ) {return TransTotValue[BinNumv];}
   
   G4double GetCurFilterThickness() {return FilterThickness; }
-  vector<G4double> GetTransWL() { return TransWaveL ; }
-  vector<G4double> GetTransValue() {return TransValue ; }
-  vector<G4double> GetTransTotValue() {return TransTotValue ; }
+  std::vector<G4double> GetTransWL() { return TransWaveL ; }
+  std::vector<G4double> GetTransValue() {return TransValue ; }
+  std::vector<G4double> GetTransTotValue() {return TransTotValue ; }
   FilterType GetFilterTypeIndex() {return FilterTypeIndex ; }
 
 private:
@@ -61,9 +61,9 @@ private:
   G4int NumberOfTrBins;
   G4double FilterThickness;
   G4double FilterRefIndexNominal;
-  vector<G4double>TransWaveL ;
-  vector<G4double>TransValue ;
-  vector<G4double>TransTotValue;
+  std::vector<G4double>TransWaveL ;
+  std::vector<G4double>TransValue ;
+  std::vector<G4double>TransTotValue;
   G4double CurNeighbourRefIndexNominal;
   G4String FilterTransDataFileName;
 

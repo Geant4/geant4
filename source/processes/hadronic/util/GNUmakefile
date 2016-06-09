@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2003/06/18 13:20:41 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2004/01/23 16:39:53 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -45,6 +45,11 @@ $(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
 	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
 	  src/G4ReactionDynamics.cc
 
+$(G4TMPDIR)/G4HadronicWhiteBoard.o: src/G4HadronicWhiteBoard.cc
+	@$(ECHO) Compiling G4HadronicWhiteBoard.cc ...
+	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	  src/G4HadronicWhiteBoard.cc
+
 else
 
   CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
@@ -54,5 +59,11 @@ $(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
 	@$(ECHO) Compiling G4ReactionDynamics.cc ...
 	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
 	  src/G4ReactionDynamics.cc
+
+$(G4TMPDIR)/G4HadronicWhiteBoard.o: src/G4HadronicWhiteBoard.cc
+	@$(ECHO) Compiling G4HadronicWhiteBoard.cc ...
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
+	  src/G4HadronicWhiteBoard.cc
+
 
 endif

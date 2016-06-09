@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.17 2003/12/11 01:30:47 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PropagatorInField.cc,v 1.19 2004/02/09 12:02:22 japost Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -217,10 +217,8 @@ G4PropagatorInField::ComputeStep(
   { 
     G4FieldTrack SubStepStartState = CurrentState;
     G4ThreeVector SubStartPoint = CurrentState.GetPosition(); 
-      // WAS = G4Navigator::Locate...
 
-    if( !first_substep)
-    {
+    if( !first_substep) {
       fNavigator->LocateGlobalPointWithinVolume( SubStartPoint );
     }
 
@@ -290,8 +288,7 @@ G4PropagatorInField::ComputeStep(
     first_substep = false;
 
 #ifdef G4DEBUG_FIELD
-    if( fNoZeroStep > fActionThreshold_NoZeroSteps )
-    {
+    if( fNoZeroStep > fActionThreshold_NoZeroSteps ) {
       printStatus( SubStepStartState,  // or OriginalState,
                    CurrentState,  CurrentProposedStepLength, 
                    NewSafety,     do_loop_count,  pPhysVol );
@@ -483,6 +480,17 @@ G4PropagatorInField::LocateIntersectionPoint(
                                            fEpsilonStep );
     //  The above method is the key & most intuitive part ...
 
+#ifdef G4DEBUG_FIELD
+    if( ApproxIntersecPointV.GetCurveLength() > 
+        CurrentB_PointVelocity.GetCurveLength() * (1.0 + kAngTolerance) ) {
+      G4cerr << "Error - Intermediate F point is more advanced than endpoint B." 
+	     << G4endl;
+      G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
+		  "IntermediatePointConfusion",
+		  FatalException, "Intermediate F point is past end B point" ); 
+    }
+#endif
+
     G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
 
     // First check whether EF is small - then F is a good approx. point 
@@ -624,8 +632,12 @@ G4PropagatorInField::LocateIntersectionPoint(
        {
          G4cerr << "G4PropagatorInField::LocateIntersectionPoint():" << G4endl
                 << "Error in advancing propagation." << G4endl;
+	 fVerboseLevel= 5; // Print out a maximum of information
          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                       -1.0, NewSafety,  substep_no, 0);
+	 G4cerr << " Point A (start) is " << CurrentA_PointVelocity << G4endl;
+	 G4cerr << " Point B (end)   is " << CurrentB_PointVelocity << G4endl;
+	 G4cerr << " curveDist is " << curveDist << G4endl;
          G4cerr << G4endl
                 << "The final curve point is not further along"
                 << " than the original!" << G4endl;
@@ -697,6 +709,8 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 7) << " N_x " << " "
            << std::setw( 7) << " N_y " << " "
            << std::setw( 7) << " N_z " << " "
+	   << std::setw( 7) << " Delta|N|" << " "
+      //   << std::setw( 7) << " Delta(N_z) " << " "
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
            << std::setw( 9) << "PhsStep" << " "  
@@ -721,6 +735,9 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
             << std::setw( 7) << CurrentUnitVelocity.x() << " "
             << std::setw( 7) << CurrentUnitVelocity.y() << " "
             << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+      G4cout.precision(2); 
+     G4cout << std::setw( 7) << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag() << " "; 
+     //   << std::setw( 7) << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
      G4cout << std::setw( 9) << step_len << " "; 
      G4cout << std::setw(12) << safety << " ";
      if( requestStep != -1.0 ) 
@@ -851,7 +868,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     return intersects;
 }
 
-
+// --------------------- oooo000000000000oooo ----------------------------
 
 G4FieldTrack G4PropagatorInField::
 ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
@@ -860,24 +877,68 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
                           G4double      curveDist
                   )
 {
+  // G4double checkCurveDist= EstimatedEndStateB.GetCurveLength()
+  //   - CurrentStateA.GetCurveLength();
+  // G4double checkLinDistSq= (EstimatedEndStateB.GetPosition()
+  //		    - CurrentStateA.GetPosition() ).mag2();
+
   G4FieldTrack newEndPoint( CurrentStateA );
   G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
 
-  G4bool goodAdvance= 
-             integrDriver->AccurateAdvance(newEndPoint, curveDist, fEpsilonStep);
+  G4FieldTrack retEndPoint( CurrentStateA );
+  G4bool goodAdvance;
+  G4int  itrial=0;
+  const G4int no_trials= 20;
 
+  G4double endCurveLen= EstimatedEndStateB.GetCurveLength();
+  do
+  {
+     G4double currentCurveLen= newEndPoint.GetCurveLength();
+     G4double advanceLength= endCurveLen - currentCurveLen ; 
+
+     goodAdvance= 
+       integrDriver->AccurateAdvance(newEndPoint, advanceLength, fEpsilonStep);
+     //              ***************
+  }
+  while( !goodAdvance && (++itrial < no_trials) );
+
+  if( goodAdvance ) {
+    retEndPoint= newEndPoint; 
+  }else{
+    retEndPoint= EstimatedEndStateB; // Could not improve without major work !!
+  }
+
+  //  All the work is done
+  //   below are some diagnostics only -- before the return!
+  // 
+  static const G4String MethodName("G4PropagatorInField::ReEstimateEndpoint");
+#ifdef G4VERBOSE
+  G4int  latest_good_trials=0;
+  if( itrial > 1) {
+    if( fVerboseLevel > 0 ) {
+      G4cout << MethodName << " called - goodAdv= " << goodAdvance
+	 << " trials = " << itrial << " previous good= " << latest_good_trials
+	 << G4endl;
+    }
+    latest_good_trials=0; 
+  }else{   
+    latest_good_trials++; 
+  }
+#endif
+
+#ifdef G4DEBUG_FIELD
+  G4double lengthDone=  newEndPoint.GetCurveLength() 
+                           - CurrentStateA.GetCurveLength(); 
   if( !goodAdvance ) {
-    newEndPoint= EstimatedEndStateB; // Could not improve without major work !!
-
     if( fVerboseLevel >= 3 ){
-      G4cout << "G4PropagatorInField::ReEstimateEndpoint> AccurateAdvance failed!" << G4endl;
-      G4cout << "  went only " << newEndPoint.GetCurveLength() - CurrentStateA.GetCurveLength()
-	     << " instead of " << curveDist << G4endl;
-      G4cout << " G4PropagatorInField::ReEstimateEndpoint> Reset endPoint to original value!" << G4endl;
+      G4cout << MethodName << "> AccurateAdvance failed " ;
+      G4cout << " in " << itrial << " integration trials/steps. " << G4endl
+      G4cout << " It went only " << lengthDone << " instead of " << curveDist 
+	     << " -- a difference of " << curveDist - lengthDone  << G4endl;
+      G4cout << " ReEstimateEndpoint> Reset endPoint to original value!" << G4endl;
     }
   }
 
-#ifdef G4DEBUG_FIELD
   static G4int noInaccuracyWarnings = 0; 
   G4int maxNoWarnings = 10;
   if (  (noInaccuracyWarnings < maxNoWarnings ) 
@@ -907,7 +968,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   linearDistSq -= curveDist; // To use linearDistSq ... !
 #endif
 
-  return newEndPoint;
+  return retEndPoint;
 }
 
 // Access the points which have passed through the filter. The
@@ -962,4 +1023,17 @@ G4PropagatorInField::FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysical
   fSetFieldMgr= true;
 
   return currentFieldMgr;
+}
+
+G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
+{
+  G4int oldval= fVerboseLevel;
+  fVerboseLevel= Verbose;
+
+  // Forward the verbose level 'reduced' to ChordFinder, MagIntegratorDriver ... ? 
+  G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
+  integrDriver->SetVerboseLevel( Verbose - 2 ); 
+  G4cout << "Set Driver verbosity to " << Verbose - 2 << G4endl;
+
+  return oldval;
 }

@@ -42,6 +42,7 @@ void G4LEADPiKBuilder::
 Build(G4PionPlusInelasticProcess & aP)
 {
   aP.RegisterMe(theModel);
+  aP.AddDataSet(&thePiData);
   theModel->SetMinEnergy(theMin);
 }
 
@@ -57,7 +58,6 @@ void G4LEADPiKBuilder::
 Build(G4KaonPlusInelasticProcess & aP)
 {
   aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
   theModel->SetMinEnergy(theMin);
 }
 

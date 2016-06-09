@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003/10/08 14:04:05 hpw Exp $
+# $Id: GNUmakefile,v 1.6 2004/03/23 12:22:39 stesting Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -31,3 +31,18 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
+
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+
+  CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
+
+else 
+
+  CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+  CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
+$(G4TMPDIR)/G4HadronicInteractionWrapper.o: src/G4HadronicInteractionWrapper.cc
+	@$(ECHO) Compiling G4HadronicInteractionWrapper.cc ...
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -g -c -o $@ \
+	  src/G4HadronicInteractionWrapper.cc
+endif

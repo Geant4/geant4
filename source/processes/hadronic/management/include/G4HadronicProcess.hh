@@ -93,7 +93,7 @@ class G4ParticleChange;
     { 
       G4IsoParticleChange * anIsoResult = theIsoResult;
       if(theIsoResult) theOldIsoResult = theIsoResult;
-      theIsoResult = NULL;
+      theIsoResult = 0;
       return anIsoResult;
     }
 
@@ -123,6 +123,7 @@ class G4ParticleChange;
     {
       G4VProcess::theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
       theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
+      // hpw ReStarted = true;
     }
 
     G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 
@@ -227,6 +228,8 @@ class G4ParticleChange;
     G4double aScaleFactor;
     G4bool xBiasOn;
     G4double theLastCrossSection;
+
+    G4int ModelingState;
  };
  
 #endif

@@ -42,6 +42,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
+#include "G4VModularPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.10 2003/11/19 15:35:30 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.13.2.1 2004/03/24 13:18:45 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -38,36 +38,24 @@
 
 #include "G4CollisionInitialState.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Pair.hh"
+
+
+// Declare the categories of collisions the Scatterer can handle
+typedef GROUP2(G4CollisionNN, G4CollisionMesonBaryon) theChannels;
+
 
 G4Scatterer::G4Scatterer()
 {
-  // Set-up the categories of collisions the Scatterer can handle
-  
-  // NN collisions
-  G4VCollision* collisionNN = new G4CollisionNN; 
-  G4CollisionPtr collisionNNPtr = G4CollisionPtr(collisionNN);
-  collisions.push_back(collisionNNPtr);
-  
-  // all 2->1 reactions 
-  // elastic channel is in at high energies only; no elastic for Kaons
-  G4VCollision* collisionMB = new G4CollisionMesonBaryon;
-  G4CollisionPtr collisionMBPtr = G4CollisionPtr(collisionMB);
-  collisions.push_back(collisionMBPtr);
-
+  Register aR;
+  G4ForEach<theChannels>::Apply(&aR, &collisions);
 }
 
 
 G4Scatterer::~G4Scatterer()
 {
-  size_t i;
-  
-  for (i=0; i<collisions.size(); i++)
-    {
-      G4CollisionPtr collisionPtr = collisions[i];
-      G4VCollision* component = collisionPtr();
-      delete component;
-      component = 0;
-    }
+  std::for_each(collisions.begin(), collisions.end(), G4Delete());
+  collisions.clear();
 }
 
 
@@ -376,8 +364,7 @@ G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
   size_t i;
   for (i=0; i<collisions.size(); i++)
     {
-      G4CollisionPtr collisionPtr = collisions[i];
-      G4VCollision* component = collisionPtr();
+      G4VCollision* component = collisions[i];
       if (component->IsInCharge(trk1,trk2))
 	{
 	  collisionInCharge = component;

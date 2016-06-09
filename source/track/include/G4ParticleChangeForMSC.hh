@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.5 2001/07/11 10:08:36 gunter Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.6 2004/01/20 15:29:41 vnivanch Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -34,7 +34,8 @@
 //
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
-//   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
+//   Add Get/SetMomentumDirectionChange              6 Feb. 1999  H.Kurashige 
+//   Update for model variant of msc                16 Jan  2004  V.Ivanchenko
 //
 // -------------------------------------------------------------
 #ifndef G4ParticleChangeForMSC_h
@@ -64,63 +65,109 @@ class G4ParticleChangeForMSC: public G4VParticleChange
 
   public: // with description
     // ----------------------------------------------------
-    // --- the following methods are for updating G4Step -----   
+    // --- the following methods are for updating G4Step -----
     // Return the pointer to the G4Step after updating the Step information
     // by using final state information of the track given by a physics
-    // process    
+    // process
     virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
-    virtual G4Step* UpdateStepForAtRest(G4Step* Step);
     virtual G4Step* UpdateStepForPostStep(G4Step* Step);
-    // A physics process gives the final state of the particle 
+    // A physics process gives the final state of the particle
     // based on information of G4Track (or equivalently the PreStepPoint)
- 
+
     virtual void Initialize(const G4Track&);
     // Initialize all propoerties by using G4Track information
-       
-    
+
     // ----------------------------------------------------
     //--- methods to keep information of the final state--
     //  IMPORTANT NOTE: Although the name of the class and methods are
-    //   "Change", what it stores (and returns in get) are the "FINAL" 
+    //   "Change", what it stores (and returns in get) are the "FINAL"
     //   values of the Position, Momentum, etc.
 
-    const G4ThreeVector* GetMomentumChange() const;
-    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
     void SetMomentumChange(const G4ThreeVector& Pfinal);
-    const G4ThreeVector* GetMomentumDirectionChange() const;
-    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
-    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
+    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
+    const G4ThreeVector* GetProposedMomentumDirection() const;
+    void SetProposedMomentumDirection(const G4ThreeVector& Pfinal);
     // Get/Set theMomentumDirectionChange vector: it is the final momentum direction.
 
     const G4ThreeVector* GetPositionChange() const;
-    void SetPositionChange(G4double x, G4double y, G4double z);
     void SetPositionChange(const G4ThreeVector& finalPosition);
+    const G4ThreeVector* GetProposedPosition() const;
+    void SetProposedPosition(const G4ThreeVector& finalPosition);
     //  Get/Set the final position of the current particle.
 
   public:
     virtual void DumpInfo() const;
+    // for Debug
+    virtual G4bool CheckIt(const G4Track&);
 
-  protected:
-    G4ThreeVector theMomentumDirectionChange;
+  private:
+    G4ThreeVector theMomentumDirection;
     //  It is the vector containing the final momentum direction
     //  after the invoked process. The application of the change
     //  of the momentum direction of the particle is not Done here.
     //  The responsibility to apply the change is up the entity
     //  which invoked the process.
-    
-    G4ThreeVector thePositionChange;
+
+    G4ThreeVector thePosition;
     //  The changed (final) position of a given particle.
 
-  public:
-    // for Debug 
-    virtual G4bool CheckIt(const G4Track&);
-  
 };
 
-#include "G4ParticleChangeForMSC.icc"
+inline
+ void G4ParticleChangeForMSC::SetMomentumChange(const G4ThreeVector& P)
+{
+  theMomentumDirection = P;
+}
+
+inline
+ void G4ParticleChangeForMSC::SetProposedMomentumDirection(const G4ThreeVector& P)
+{
+  theMomentumDirection = P;
+}
+
+inline
+ void G4ParticleChangeForMSC::SetMomentumChange(G4double Px, G4double Py, G4double Pz)
+{
+  theMomentumDirection.setX(Px);
+  theMomentumDirection.setY(Py);
+  theMomentumDirection.setZ(Pz);
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetProposedMomentumDirection() const
+{
+  return &theMomentumDirection;
+}
+
+inline
+ void G4ParticleChangeForMSC::SetProposedPosition(const G4ThreeVector& P)
+{
+  thePosition = P;
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetProposedPosition() const
+{
+  return &thePosition;
+}
+
+inline
+ void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& P)
+{
+  thePosition = P;
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetPositionChange() const
+{
+  return &thePosition;
+}
+
+inline void G4ParticleChangeForMSC::Initialize(const G4Track& track)
+{
+  theStatusChange = track.GetTrackStatus();
+  theMomentumDirection = track.GetMomentumDirection();
+  thePosition = track.GetPosition();
+}
 
 #endif
-
-
-
-

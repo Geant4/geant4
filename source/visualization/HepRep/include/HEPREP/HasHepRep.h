@@ -28,7 +28,7 @@ public:
      * Returns the associated HepRep to this object.
      *
      */
-    virtual HepRep getHepRep() = 0;
+    virtual HepRep & getHepRep() = 0;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HASHEPREP_H */

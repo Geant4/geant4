@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpticalSurface.hh,v 1.7 2003/12/01 15:13:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

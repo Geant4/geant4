@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.11 2003/09/21 19:27:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ShortLivedConstructor.cc,v 1.12 2004/02/13 05:54:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -366,7 +366,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
   // delta baryons
   //  delta(1232)++
   particle = new G4ExcitedBaryons(            
-	    "delta++",       1.232*GeV,     115.0*MeV,    +2.0*eplus, 
+	    "delta++",       1.232*GeV,     120.0*MeV,    +2.0*eplus, 
                     3,              +1,             0,          
                     3,              +3,             0,             
              "baryon",               0,            +1,          2224,
@@ -385,7 +385,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)+
   particle = new G4ExcitedBaryons(            
-	     "delta+",       1.232*GeV,     115.0*MeV,    +1.0*eplus, 
+	     "delta+",       1.232*GeV,     120.0*MeV,    +1.0*eplus, 
                     3,              +1,             0,          
                     3,              +1,             0,             
              "baryon",               0,            +1,          2214,
@@ -415,7 +415,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)0
   particle = new G4ExcitedBaryons(            
-	     "delta0",       1.232*GeV,     115.0*MeV,    +0.0*eplus, 
+	     "delta0",       1.232*GeV,     120.0*MeV,    +0.0*eplus, 
                     3,              +1,             0,          
                     3,              -1,             0,             
              "baryon",               0,            +1,          2114,
@@ -443,7 +443,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  delta(1232)-
   particle = new G4ExcitedBaryons(            
-	     "delta-",       1.232*GeV,     115.0*MeV,    -1.0*eplus, 
+	     "delta-",       1.232*GeV,     120.0*MeV,    -1.0*eplus, 
                     3,              +1,             0,          
                     3,              -3,             0,             
              "baryon",               0,            +1,          1114,
@@ -464,7 +464,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
   // anti_delta baryons
   //  anti_delta(1232)++
   particle = new G4ExcitedBaryons(            
-       "anti_delta++",       1.232*GeV,     115.0*MeV,    -2.0*eplus, 
+       "anti_delta++",       1.232*GeV,     120.0*MeV,    -2.0*eplus, 
                     3,              +1,             0,          
                     3,              -3,             0,             
              "baryon",               0,            -1,         -2224,
@@ -483,7 +483,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)+
   particle = new G4ExcitedBaryons(            
-	"anti_delta+",       1.232*GeV,     115.0*MeV,    -1.0*eplus, 
+	"anti_delta+",       1.232*GeV,     120.0*MeV,    -1.0*eplus, 
                     3,              +1,             0,          
                     3,              -1,             0,             
              "baryon",               0,            -1,         -2214,
@@ -506,7 +506,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)0
   particle = new G4ExcitedBaryons(            
-	"anti_delta0",       1.232*GeV,     115.0*MeV,    +0.0*eplus, 
+	"anti_delta0",       1.232*GeV,     120.0*MeV,    +0.0*eplus, 
                     3,              +1,             0,          
                     3,              +1,             0,             
              "baryon",               0,            -1,         -2114,
@@ -529,7 +529,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 
   //  anti_delta(1232)-
   particle = new G4ExcitedBaryons(            
-	"anti_delta-",       1.232*GeV,     115.0*MeV,    +1.0*eplus, 
+	"anti_delta-",       1.232*GeV,     120.0*MeV,    +1.0*eplus, 
                     3,              +1,             0,          
                     3,              +3,             0,             
              "baryon",               0,            -1,         -1114,
@@ -566,7 +566,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   // vector mesons
   // omega
   particle = new G4ExcitedMesons(            
-	      "omega",      781.94*MeV,      8.41*MeV,    +0.0*eplus, 
+	      "omega",      782.57*MeV,      8.44*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           223,
@@ -586,7 +586,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // phi
   particle = new G4ExcitedMesons(            
-	        "phi",      1019.4*MeV,      4.43*MeV,    +0.0*eplus, 
+	        "phi",      1019.4*MeV,      4.26*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           333,
@@ -655,7 +655,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // rho0
   particle = new G4ExcitedMesons(            
-               "rho0",       770.0*MeV,     150.7*MeV,         0.0, 
+               "rho0",       771.1*MeV,     149.2*MeV,         0.0, 
                     2,              -1,            -1,          
                     2,               0,            +1,             
               "meson",               0,             0,         113,
@@ -675,7 +675,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // a0(980)+
   particle = new G4ExcitedMesons(            
-	   "a0(980)+",       984.8*MeV,      60.0*MeV,    +1.0*eplus, 
+	   "a0(980)+",       984.7*MeV,      60.0*MeV,    +1.0*eplus, 
                     0,              +1,            +1,          
                     2,              +2,            -1,             
               "meson",               0,             0,       9000211,
@@ -694,7 +694,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // a0(980)-
   particle = new G4ExcitedMesons(            
-	   "a0(980)-",       984.8*MeV,      60.0*MeV,    -1.0*eplus, 
+	   "a0(980)-",       984.7*MeV,      60.0*MeV,    -1.0*eplus, 
                     0,              +1,            +1,          
                     2,              -2,            -1,             
               "meson",               0,             0,      -9000211,
@@ -713,7 +713,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // a0(980)0
   particle = new G4ExcitedMesons(            
-	   "a0(980)0",       984.8*MeV,      60.0*MeV,           0.0,
+	   "a0(980)0",       984.7*MeV,      60.0*MeV,           0.0,
                     0,              +1,            +1,          
                     2,               0,            -1,             
               "meson",               0,             0,       9000111,
@@ -733,19 +733,38 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // f0(400-1200)
   particle = new G4ExcitedMesons(            
-       "f0(400-1200)",       470.0*MeV,     400.0*MeV,           0.0,
+            "f0(600)",       470.0*MeV,     400.0*MeV,           0.0,
                     0,              +1,            +1,          
                     0,               0,            +1,             
               "meson",               0,             0,       9000221,
 		false,             0.0,          NULL);
   particle->SetAntiPDGEncoding(9000221);
   // set sub type
-  particle->SetMultipletName("f0(400-1200)");
+  particle->SetMultipletName("f0(600)");
   // create decay table
   decayTable =  new G4DecayTable();
-  // create decay channel of f0(400-1200) -> pi + pi
+  // create decay channel of f0(600) -> pi + pi
   //                                   parent    BR     #daughters
-  mode  = new G4PhaseSpaceDecayChannel("f0(400-1200)",1.000, 2,
+  mode  = new G4PhaseSpaceDecayChannel("f0(600)",1.000, 2,
+				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+  // f0(400-1200)
+  particle = new G4ExcitedMesons(            
+            "f0(600)",       470.0*MeV,     400.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    0,               0,            +1,             
+              "meson",               0,             0,       9000221,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(9000221);
+  // set sub type
+  particle->SetMultipletName("f0(600)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of f0(600) -> pi + pi
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(600)",1.000, 2,
 				                    "pi+","pi-");
   // add decay table
   decayTable->Insert(mode);
@@ -768,6 +787,62 @@ void G4ShortLivedConstructor::ConstructMesons()
   //                                   parent    BR     #daughters
   mode  = new G4PhaseSpaceDecayChannel("f0(980)",1.000, 2,
 				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+
+  // f0(1500)
+  particle = new G4ExcitedMesons(            
+           "f0(1500)",      1507.0*MeV,     109.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    0,               0,            +1,             
+              "meson",               0,             0,       9020221,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(9020221);
+  // set sub type
+  particle->SetMultipletName("f0(1500)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of f0(1500) -> eta + eta
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(1500)",1.000, 2,
+				                    "eta","eta");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+  // f0(1710)
+  particle = new G4ExcitedMesons(            
+           "f0(1710)",      1713.0*MeV,     125.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    0,               0,            +1,             
+              "meson",               0,             0,         10331,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(10331);
+  // set sub type
+  particle->SetMultipletName("f0(1710)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+
+  // create decay channel of f0(1710) -> k0 + k0
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(1710)",0.40, 2,
+				                    "kaon0S","kaon0S");
+  // add decay table
+  decayTable->Insert(mode);
+ 
+  // create decay channel of f0(1710) -> k+ + k+
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(1710)",0.40, 2,
+				                    "kaon+","kaon-");
+  // add decay table
+  decayTable->Insert(mode);
+  
+  // create decay channel of f0(1710) -> eta + eta
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(1710)",0.20, 2,
+				                    "eta","eta");
   // add decay table
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);
@@ -800,7 +875,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // k_star0
   particle = new G4ExcitedMesons(            
-	    "k_star0",       896.1*MeV,      50.5*MeV,     0.0*eplus, 
+	    "k_star0",       896.1*MeV,      50.7*MeV,     0.0*eplus, 
                     2,              -1,             0,          
                     1,              -1,             0,             
               "meson",               0,             0,           313,
@@ -851,7 +926,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // anti_k_star0
   particle = new G4ExcitedMesons(            
-       "anti_k_star0",       896.1*MeV,      50.5*MeV,     0.0*eplus, 
+       "anti_k_star0",       896.1*MeV,      50.7*MeV,     0.0*eplus, 
                     2,              -1,             0,          
                     1,              -1,             0,             
               "meson",               0,             0,          -313,

@@ -20,62 +20,62 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "G4BertiniPiKBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
+ #include "G4BertiniPiKBuilder.hh"
+ #include "G4ParticleDefinition.hh"
+ #include "G4ParticleTable.hh"
+ #include "G4ProcessManager.hh"
 
-G4BertiniPiKBuilder::
-G4BertiniPiKBuilder() 
-{
-  theMin = 0*GeV;
-  theMax = 5*GeV;
-  theModel = new G4CascadeInterface;
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax); 
-}
+ G4BertiniPiKBuilder::
+ G4BertiniPiKBuilder() 
+ {
+   theMin = 0*GeV;
+   theMax = 9.9*GeV;
+   theModel = new G4CascadeInterface;
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax); 
+ }
 
-G4BertiniPiKBuilder::
-~G4BertiniPiKBuilder() {}
+ G4BertiniPiKBuilder::
+ ~G4BertiniPiKBuilder() {}
 
-void G4BertiniPiKBuilder::
-Build(G4HadronElasticProcess & ) {}
+ void G4BertiniPiKBuilder::
+ Build(G4PionPlusInelasticProcess & aP)
+ {
+   aP.RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-void G4BertiniPiKBuilder::
-Build(G4PionPlusInelasticProcess & aP)
-{
-  aP.RegisterMe(theModel);
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-}
+ void G4BertiniPiKBuilder::
+ Build(G4PionMinusInelasticProcess & aP)
+ {
+   aP.RegisterMe(theModel);
+   aP.AddDataSet(&thePiData);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-void G4BertiniPiKBuilder::
-Build(G4PionMinusInelasticProcess & aP)
-{
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&thePiData);
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-}
+ void G4BertiniPiKBuilder::
+ Build(G4HadronElasticProcess & ) {}
 
-void G4BertiniPiKBuilder::
-Build(G4KaonPlusInelasticProcess & )
-{
-}
+ void G4BertiniPiKBuilder::
+ Build(G4KaonPlusInelasticProcess & )
+ {
+ }
 
-void G4BertiniPiKBuilder::
-Build(G4KaonMinusInelasticProcess & )
-{
-}
+ void G4BertiniPiKBuilder::
+ Build(G4KaonMinusInelasticProcess & )
+ {
+ }
 
-void G4BertiniPiKBuilder::
-Build(G4KaonZeroLInelasticProcess & )
-{
-}
+ void G4BertiniPiKBuilder::
+ Build(G4KaonZeroLInelasticProcess & )
+ {
+ }
 
-void G4BertiniPiKBuilder::
-Build(G4KaonZeroSInelasticProcess & )
-{
-}
+ void G4BertiniPiKBuilder::
+ Build(G4KaonZeroSInelasticProcess & )
+ {
+ }
 
-// 2002 by J.P. Wellisch
+ // 2002 by J.P. Wellisch

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4XicPlus.hh,v 1.6 2001/10/15 10:09:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

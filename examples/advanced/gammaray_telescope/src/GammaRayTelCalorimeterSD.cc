@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelCalorimeterSD.cc,v 1.6 2003/11/14 14:59:48 flongo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

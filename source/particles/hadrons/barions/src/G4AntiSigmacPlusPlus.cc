@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlusPlus.cc,v 1.7 2003/06/16 16:56:59 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiSigmacPlusPlus.cc,v 1.8 2004/02/13 05:53:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4AntiSigmacPlusPlus::G4AntiSigmacPlusPlus(
 //             stable         lifetime    decay table 
 
 G4AntiSigmacPlusPlus G4AntiSigmacPlusPlus::theAntiSigmacPlusPlus(
-     "anti_sigma_c++",      2.4529*GeV,       0.0*MeV,  -2.0*eplus, 
+     "anti_sigma_c++",      2.4526*GeV,       2.0*MeV,  -2.0*eplus, 
 		    1,              +1,             0,          
 		    2,              -2,             0,             
 	     "baryon",               0,            -1,       -4222,

@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2003/11/26 16:09:26 vnivanch Exp $
+$Id: History,v 1.141 2004/03/15 12:15:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,59 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15 March 04: mma  (utils-V06-00-08)
+ 
+12 March 04: V.Ivant
+- G4VEnergyLossProcess: put back lowestKinEnergy = 1.*eV;
+  
+10 March 04: V.Ivant
+- G4LossTableManager.cc: fix a problem of Precise Range table
+- G4VEnergyLossProcess: fix problem of step limit calculation
+  
+10 March 04: L.Urban
+- G4MscModel: changes in data members,
+  corrections in GeomPathLength,TrueStepLength, SampleCosineTheta
+  
+06 March 04: V.Ivant (utils-V06-00-07)
+- fix a bug in link at SUN
+
+01 March 04: V.Ivant (utils-V06-00-06)
+- fixes of bugs coming with transition to model variant of msc 
+  and simplifications of calculation of energy dependence of internal
+  parameters (L.Urban)
+
+
+27 Feb 04: V.Ivant (utils-V06-00-05)
+- fix problem of ionisation in air with low pressure 10^-4 Atm
+- add G4EmProcessOptions class
+- update calculation of energy from range
+
+17 Feb 04: V.Ivant (utils-V06-00-04)
+- murge the patch and development tag
+- minor cleanup in ionisation models
+
+06 Feb 04: V.Ivant (utils-a-V06-00-00)
+- The tag on top of utils-V06-00-00 for the patch include:
+- Fix problem of destruction of PAI model
+- Fix a bug responsibile for mess in cross section of delta-electron
+  production by muons
+- Add protection for small edep in G4UniversalFluctuations
+
+27 Jan 04: V.Ivant (utils-V06-00-03)
+- Fix problem of destruction of PAI model
+
+26 Jan 04: V.Ivant (utils-V06-00-02)
+- Fix a bug responsibile for mess in cross section of delta-electron
+  production by muons
+
+22 Jan 04: V.Ivant (utils-V06-00-01)
+- Migrade to G4ParticleChangeForLoss
+
+14 Jan 04: V.Ivant (utils-V06-00-00)
+- Activate precise range calculation
+- Add Set methods to G4LossTablemanager to define: binning, maxEnergy for muon
+  tables, maxEnergy for precise range.
 
 26 Nov 03: V.Ivant (utils-V05-02-17)
 - Close precise range feature for the time being

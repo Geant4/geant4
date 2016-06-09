@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003/10/08 14:53:20 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2004/02/08 14:02:44 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic stopping library.  G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -25,6 +25,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
@@ -34,6 +37,17 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/util/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+              -I$(G4BASE)/processes/hadronic/models/util/include \
+              -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk

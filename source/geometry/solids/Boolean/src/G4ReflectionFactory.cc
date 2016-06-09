@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReflectionFactory.cc,v 1.11 2003/11/03 17:48:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
 

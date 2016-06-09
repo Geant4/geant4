@@ -22,7 +22,7 @@
 //
 //
 // $Id: RunAction.cc,v 1.3 2003/11/07 15:38:28 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

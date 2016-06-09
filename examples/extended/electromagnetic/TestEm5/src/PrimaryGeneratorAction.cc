@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003/08/11 10:21:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004/02/19 18:18:54 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -35,7 +35,6 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"

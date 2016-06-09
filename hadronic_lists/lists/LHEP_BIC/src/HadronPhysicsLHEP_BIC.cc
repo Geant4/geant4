@@ -37,13 +37,13 @@ HadronPhysicsLHEP_BIC::HadronPhysicsLHEP_BIC(const G4String& name)
 {
   theNeutrons.RegisterMe(&theLHEPNeutron);
   theNeutrons.RegisterMe(&theBinaryNeutron);
-  theLHEPNeutron.SetMinInelasticEnergy(2.8*GeV);
-  theBinaryNeutron.SetMaxEnergy(3.2*GeV);
+  theLHEPNeutron.SetMinInelasticEnergy(9.5*GeV);
+  theBinaryNeutron.SetMaxEnergy(9.9*GeV);
 
   thePro.RegisterMe(&theLHEPPro);
   thePro.RegisterMe(&theBinaryPro);
-  theLHEPPro.SetMinEnergy(2.8*GeV);
-  theBinaryPro.SetMaxEnergy(3.2*GeV);
+  theLHEPPro.SetMinEnergy(9.5*GeV);
+  theBinaryPro.SetMaxEnergy(9.9*GeV);
   
   thePiK.RegisterMe(&theLHEPPiK);
   

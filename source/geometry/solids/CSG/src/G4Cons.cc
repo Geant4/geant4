@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.29 2003/11/03 18:17:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Cons.cc,v 1.31 2004/01/26 09:03:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // class G4Cons
 //
@@ -30,17 +30,18 @@
 //
 // History:
 //
-// ~1994    P.Kent: main part of geometry functions
-// 13.09.96 V.Grichine: final modifications to commit
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
+// 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
+// 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
+// 17.08.00 V.Grichine: if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
+// 08.08.00 V.Grichine: more stable roots 2-equation in DistanceToOut(p,v,...)
+// 06.03.00 V.Grichine: modifications in DistanceToOut(p,v,...) 
+// 18.11.99 V.Grichine: side = kNull initialisation in DistanceToOut(p,v,...)
 // 28.04.99 V.Grichine: bugs fixed in  Distance ToOut(p,v,...) and  
 //                      Distance ToIn(p,v)
-// 18.11.99 V.Grichine: side = kNull initialisation in DistanceToOut(p,v,...)
-// 06.03.00 V.Grichine: modifications in DistanceToOut(p,v,...) 
-// 08.08.00 V.Grichine: more stable roots 2-equation in DistanceToOut(p,v,...)
-// 17.08.00 V.Grichine: if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
-// 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
-// 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
+// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 13.09.96 V.Grichine: final modifications to commit
+// ~1994    P.Kent: main part of geometry functions
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"
@@ -157,169 +158,49 @@ G4Cons::G4Cons( const G4String& pName,
 EInside G4Cons::Inside(const G4ThreeVector& p) const
 {
   G4double r2, rl, rh, pPhi, tolRMin, tolRMax ;
-  EInside in = kOutside ;
+  EInside in;
 
-  if (fabs(p.z()) <= fDz - kCarTolerance*0.5 )
-  {
-    r2 = p.x()*p.x() + p.y()*p.y() ;
-    rl = 0.5*(fRmin2*(p.z() + fDz) + fRmin1*(fDz - p.z()))/fDz ;
+  if (fabs(p.z()) > fDz + kCarTolerance*0.5 ) return in = kOutside;
+  else if(fabs(p.z()) >= fDz - kCarTolerance*0.5 )   in = kSurface;
+  else                                               in = kInside;
 
-    // inner radius at z of point
+  r2 = p.x()*p.x() + p.y()*p.y() ;
+  rl = 0.5*(fRmin2*(p.z() + fDz) + fRmin1*(fDz - p.z()))/fDz ;
+  rh = 0.5*(fRmax2*(p.z()+fDz)+fRmax1*(fDz-p.z()))/fDz;
 
-    rh = 0.5*(fRmax2*(p.z()+fDz)+fRmax1*(fDz-p.z()))/fDz;
+  tolRMin = rl - kRadTolerance*0.5 ;
+  if ( tolRMin < 0 ) tolRMin = 0 ;
+  tolRMax = rh + kRadTolerance*0.5 ;
 
-    // outer radius at z of point
+  if ( r2 < tolRMin*tolRMin || r2 > tolRMax*tolRMax ) return in = kOutside;
 
-    if (rl) tolRMin = rl + kRadTolerance*0.5 ;
-    else    tolRMin = 0.0 ;
-
-    tolRMax = rh - kRadTolerance*0.5 ;
+  if (rl) tolRMin = rl + kRadTolerance*0.5 ;
+  else    tolRMin = 0.0 ;
+  tolRMax         = rh - kRadTolerance*0.5 ;
       
-    if ( r2 >= tolRMin*tolRMin && r2 <= tolRMax*tolRMax )
-    {
-      if ( fDPhi == 2*M_PI || r2 == 0 ) in = kInside ;
-      else
-      {
-        // Try inner tolerant phi boundaries (=>inside)
-        // if not inside, try outer tolerant phi boundaries
-
-        pPhi = atan2(p.y(),p.x()) ;
-
-        if (pPhi < -kAngTolerance*0.5 )   pPhi += 2*M_PI ; // 0<=pPhi<2pi
-        if ( fSPhi >= 0 )
-        {
-          if ( (abs(pPhi) < kAngTolerance*0.5)
-            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
-          { 
-            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
-          }
-          if ( (pPhi >= fSPhi + kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
-          {
-            in = kInside ;
-          }
-          else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-                 && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-          {
-            in = kSurface ;
-          }
-        }
-        else  // fSPhi < 0
-        {
-          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) ;
-          else if ( (pPhi <= fSPhi + 2*M_PI + kAngTolerance*0.5)
-                 && (pPhi >= fSPhi + fDPhi  - kAngTolerance*0.5) )
-          {
-            in = kSurface ;
-          }
-          else
-          {
-            in = kInside ;
-          }
-        }                    
-      }
-    }
-    else   // Try generous boundaries
-    {
-      tolRMin = rl - kRadTolerance*0.5 ;
-      tolRMax = rh + kRadTolerance*0.5 ;
-
-      if ( tolRMin < 0 ) tolRMin = 0 ;
-
-      if (r2 >= tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
-      {
-        if (fDPhi == 2*M_PI || r2 == 0) // Continuous in phi or on z-axis
-        {
-          in = kSurface ;
-        }
-        else  // Try outer tolerant phi boundaries only
-        {
-          pPhi = atan2(p.y(),p.x()) ;
-
-          if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
-          if ( fSPhi >= 0 )
-          {
-            if ( (abs(pPhi) < kAngTolerance*0.5)
-              && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
-            { 
-              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
-            }
-            if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-              && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-            {
-              in = kSurface ;
-            }
-          }
-          else  // fSPhi < 0
-          {
-            if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
-              && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
-            else
-            {
-              in = kSurface ;
-            }
-          }
-
-       }
-      }
-    }
-  }
-  else if (fabs(p.z()) <= fDz + kCarTolerance*0.5 )
+  if (in == kInside) // else it's kSurface already
   {
-    // Check within tolerant r limits
+    if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
+  }
+  if ( ( fDPhi < 2*M_PI - kAngTolerance ) &&
+       ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
+  {
+    pPhi = atan2(p.y(),p.x()) ;
 
-    r2 = p.x()*p.x() + p.y()*p.y() ;
-    rl = 0.5*(fRmin2*(p.z() + fDz) + fRmin1*(fDz - p.z()))/fDz ;
-
-    // inner radius at z of point
-
-    rh = 0.5*(fRmax2*(p.z() + fDz) + fRmax1*(fDz - p.z()))/fDz;
-
-    // outer radius at z of point
-
-    tolRMin = rl - kRadTolerance*0.5 ;
-
-    if (tolRMin < 0 ) tolRMin = 0 ;
-
-    tolRMax = rh + kRadTolerance*0.5 ;
-
-    if (r2 >= tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
+    if ( pPhi < fSPhi - kAngTolerance*0.5  )             pPhi += 2*M_PI ; 
+    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 ) pPhi -= 2*M_PI; 
+    
+    if ( (pPhi < fSPhi - kAngTolerance*0.5) ||          
+         (pPhi > fSPhi + fDPhi + kAngTolerance*0.5) )   return in = kOutside;
+      
+    else if (in == kInside)  // else it's kSurface anyway already
     {
-      if ( fDPhi == 2*M_PI || r2 == 0 ) // Continuous in phi or on z-axis
-      {
-        in = kSurface ;
-      }
-      else // Try outer tolerant phi boundaries
-      {
-        pPhi = atan2(p.y(),p.x()) ;
-        if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
-        if ( fSPhi >= 0 )
-        {
-          if ( (abs(pPhi) < kAngTolerance*0.5)
-            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
-          { 
-            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
-          }
-          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-          {
-            in = kSurface;
-          }
-        }
-        else  // fSPhi < 0
-        {
-          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
-          else
-          {
-            in = kSurface ;
-          }
-        }      
-
-      }
+        if ( (pPhi < fSPhi + kAngTolerance*0.5) || 
+             (pPhi > fSPhi + fDPhi - kAngTolerance*0.5) )  in = kSurface ;
     }
   }
+  else if( fDPhi < 2*M_PI - kAngTolerance )  in = kSurface ;
+
   return in ;
 }
 
@@ -650,8 +531,7 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       break ;
     default:
       DumpInfo();
-      G4Exception("G4Cons::SurfaceNormal()",
-                  "LogicError", FatalException,
+      G4Exception("G4Cons::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.") ;
       break ;    
   }
@@ -804,7 +684,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
     cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
 
-    if (cosPsi >= cosHDPhiOT) return s ;
+    if (cosPsi >= cosHDPhiIT) return s ;
   }
   else return s ;
       }
@@ -817,7 +697,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
     cosPsi = (xi*cosCPhi + yi*sinCPhi)/sqrt(rhoi2) ;
 
-    if (cosPsi >= cosHDPhiOT) return s ;
+    if (cosPsi >= cosHDPhiIT) return s ;
   }
   else return s ;
       }
@@ -916,7 +796,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
               ri     = rMaxAv + zi*tanRMax ;
               cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-              if ( cosPsi >= cosHDPhiOT ) return s ;
+              if ( cosPsi >= cosHDPhiIT ) return s ;
             }
           }
         }                // end if (s>0)
@@ -967,7 +847,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             ri     = rMaxAv + zi*tanRMax ;
             cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-            if (cosPsi >= cosHDPhiOT) return s ;
+            if (cosPsi >= cosHDPhiIT) return s ;
           }
         }
       }
@@ -1003,11 +883,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         b = nt2/nt1 ;
         c = nt3/nt1 ;
         d = b*b-c ;
-        if (d > 0)
+        if (d >= 0)   // > 0
         {
           s = -b + sqrt(d) ;
 
-          if ( s > 0 )
+          if ( s >= 0 )   // > 0
           {
             zi = p.z() + s*v.z() ;
 
@@ -1020,7 +900,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 ri     = rMinAv + zi*tanRMin ;
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                if (cosPsi >= cosHDPhiOT) snxt = s ; 
+                if (cosPsi >= cosHDPhiIT) snxt = s ; 
               }
               else return s ;
             }
@@ -1038,7 +918,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         c = nt3/nt1 ;
         d = b*b - c ;
 
-        if ( d > 0 )
+        if ( d >= 0 )  // > 0
         {
           s  = -b + sqrt(d) ;
           zi = p.z() + s*v.z() ;
@@ -1046,7 +926,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           if ( ri >= 0 )
           {
-            if ( s > 0 && fabs(zi) <= tolODz )
+            if ( s >= 0 && fabs(zi) <= tolODz )  // s > 0
             {
               if ( seg )
               {
@@ -1065,7 +945,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             zi = p.z() + s*v.z() ;
             ri = rMinAv + zi*tanRMin ;
 
-            if ( s > 0 && ri >= 0 && fabs(zi) <= tolODz )
+            if ( s >= 0 && ri >= 0 && fabs(zi) <= tolODz ) // s>0
             {
               if ( seg )
               {
@@ -1073,7 +953,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 yi     = p.y() + s*v.y() ;
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                if (cosPsi >= cosHDPhiOT) snxt = s ;
+                if (cosPsi >= cosHDPhiIT) snxt = s ;
               }
               else  return s ;
             }
@@ -1110,7 +990,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             c = nt3/nt1 ;
             d = b*b - c ;
 
-            if ( d > 0 )
+            if ( d >= 0 )   // > 0
             {
               s  = -b - sqrt(d) ;
               zi = p.z() + s*v.z() ;
@@ -1121,15 +1001,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 s  = -b + sqrt(d) ;
                 zi = p.z() + s*v.z() ;
 
-                if ( s > 0 && fabs(zi) <= tolODz )
+                if ( s >= 0 && fabs(zi) <= tolODz )  // s>0
                 {
                   if ( seg )
                   {
                     xi     = p.x() + s*v.x() ;
                     yi     = p.y() + s*v.y() ;
+                    ri     = rMinAv + zi*tanRMin ;
                     cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                    if ( cosPsi >= cosHDPhiOT )  snxt = s ; 
+                    if ( cosPsi >= cosHDPhiIT )  snxt = s ; 
                   }
                   else return s ;
                 }
@@ -1149,15 +1030,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             s  = -b + sqrt(d) ;
             zi = p.z() + s*v.z() ;
 
-            if ( s > 0 && fabs(zi) <= tolODz )
+            if ( s >= 0 && fabs(zi) <= tolODz )  // s>0
             {
               if ( seg )
               {
-                xi     = p.x() + s*v.x() ;
-                yi     = p.y() + s*v.y() ;
-                cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
+                xi     = p.x() + s*v.x();
+                yi     = p.y() + s*v.y();
+                ri     = rMinAv + zi*tanRMin ;
+                cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri;
 
-                if (cosPsi >= cosHDPhiOT) snxt = s ; 
+                if (cosPsi >= cosHDPhiIT) snxt = s ; 
               }
               else  return s ;
             }
@@ -2001,14 +1883,20 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
         G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
         G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+        G4cout << "pho at z = "   << sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm"
+               << G4endl << G4endl ;
+        if( p.x() != 0. || p.x() != 0.)
+        {
+           G4cout << "point phi = "   << atan2(p.y(),p.x())/degree << " degree" 
+                  << G4endl << G4endl ; 
+        }
         G4cout << "Direction:" << G4endl << G4endl ;
         G4cout << "v.x() = "   << v.x() << G4endl ;
         G4cout << "v.y() = "   << v.y() << G4endl ;
         G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
         G4cout << "Proposed distance :" << G4endl<< G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4Exception("G4Cons::DistanceToOut()",
-                    "LogicError", FatalException,
+        G4Exception("G4Cons::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.") ;
         break ;
     }
@@ -2040,8 +1928,13 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
     G4cout << "pho at z = "   << sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm" 
            << G4endl << G4endl ;
-    G4Exception("G4Cons::DistanceToOut(p)",
-                "Notification", JustWarning, "Point p is outside !?" );
+    if( p.x() != 0. || p.x() != 0.)
+    {
+      G4cout << "point phi = "   << atan2(p.y(),p.x())/degree << " degree" 
+             << G4endl << G4endl ; 
+    }
+    G4Exception("G4Cons::DistanceToOut(p)", "Notification", JustWarning, 
+                "Point p is outside !?" );
   }
 #endif
 

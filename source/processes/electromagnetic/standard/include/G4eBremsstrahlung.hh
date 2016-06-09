@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.20 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4eBremsstrahlung.hh,v 1.21 2004/01/21 18:05:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 17-10-03 PrintInfoDefinition - virtual (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -130,8 +131,8 @@ inline void G4eBremsstrahlung::SecondariesPostStep(
                                                       G4double& kinEnergy)
 {
   G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(gamma);
+  fParticleChange.SetNumberOfSecondaries(1);
+  fParticleChange.AddSecondary(gamma);
   kinEnergy -= gamma->GetKineticEnergy();
 }
 

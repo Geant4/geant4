@@ -22,7 +22,7 @@
 //
 //
 // $Id: PhysListParticles.cc,v 1.1 2003/08/11 10:21:16 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $ 
+// GEANT4 tag $Name: geant4-06-00-patch-01 $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

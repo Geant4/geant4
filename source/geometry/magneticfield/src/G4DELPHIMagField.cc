@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DELPHIMagField.cc,v 1.4 2003/10/31 14:35:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // -------------------------------------------------------------------
 
 #include "G4DELPHIMagField.hh"

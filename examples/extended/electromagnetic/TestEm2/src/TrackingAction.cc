@@ -22,7 +22,7 @@
 //
 //
 // $Id: TrackingAction.cc,v 1.1 2003/10/08 17:28:48 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

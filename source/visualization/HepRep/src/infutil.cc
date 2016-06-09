@@ -1,9 +1,9 @@
 /* inflate_util.c -- data and routines common to blocks and codes
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  */
 
-#include "zutil.h"
+#include "HepRep-zutil.h"
 #include "infblock.h"
 #include "inftrees.h"
 #include "infcodes.h"

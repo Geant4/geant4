@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.5 2003/11/10 08:58:42 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.8 2004/03/11 13:09:29 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
 //
-// Author: Paul Kent, July 95/96
+// Original author: Paul Kent, July 95/96
 //
 // --------------------------------------------------------------------
 
@@ -41,7 +41,8 @@
 // ********************************************************************
 //
 G4Navigator::G4Navigator()
-  : fWasLimitedByGeometry(false), fTopPhysical(0), fVerbose(0)
+  : fWasLimitedByGeometry(false), fTopPhysical(0),
+    fCheck(false), fVerbose(0)
 {
   ResetStackAndState();
 }
@@ -105,23 +106,23 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   }
 
 #ifdef G4DEBUG_NAVIGATION
-  G4cerr << "Upon entering LocateGlobalPointAndSetup " << G4endl;
-  G4cerr << "  History = " << G4endl << fHistory << G4endl << G4endl;
+  G4cerr << "Upon entering LocateGlobalPointAndSetup():" << G4endl;
+  G4cerr << "    History = " << G4endl << fHistory << G4endl << G4endl;
 #endif
 
 #ifdef G4VERBOSE
-  if( fVerbose > 0 ) 
+  G4int oldcoutPrec = G4cout.precision(8);
+  if( fVerbose > 2 )
   {
     G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << G4endl; 
-    G4cout.precision(8);
-    G4cout << " I was called with the following arguments: " << G4endl
-           << " Globalpoint = " << globalPoint << G4endl
-           << " relativeSearch   = " <<  relativeSearch  << G4endl;
-  }
-  if( fVerbose > 1 )
-  {
-    G4cout << " Upon entering my state is: " << G4endl;
-    PrintState();
+    G4cout << "    Called with arguments: " << G4endl
+           << "    Globalpoint = " << globalPoint << G4endl
+           << "    RelativeSearch = " << relativeSearch  << G4endl;
+    if( fVerbose == 4 )
+    {
+      G4cout << "    ----- Upon entering:" << G4endl;
+      PrintState();
+    }
   }
 #endif
 
@@ -381,28 +382,36 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       //
       fEntering = false;
       fEnteredDaughter = true;
+#ifdef G4VERBOSE
+      if( fVerbose > 1 )
+      { 
+         G4VPhysicalVolume* enteredPhysical = fHistory.GetTopVolume();
+         G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << G4endl; 
+         G4cout << "    Entering volume: " << enteredPhysical->GetName()
+                << G4endl;
+      }
+#endif
     }
   } while (noResult);
 
   fLastLocatedPointLocal = localPoint;
 
 #ifdef G4VERBOSE
-  if( fVerbose > 1 )
+  if( fVerbose == 4 )
   {
     G4cout.precision(6);
     G4String curPhysVol_Name("None");
     if (targetPhysical!=0)
       curPhysVol_Name = targetPhysical->GetName();
-    G4cout << " Return value = new volume = "
-           << curPhysVol_Name  << G4endl;
-    G4cout << " Upon exiting my state is: " << G4endl;
+    G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
+    G4cout << "    ----- Upon exiting:" << G4endl;
     PrintState();
-  }
-#endif
-
 #ifdef G4DEBUG_NAVIGATION
-  G4cerr << "Upon exiting LocateGlobalPointAndSetup " << G4endl;
-  G4cerr << "  History = " << G4endl << fHistory << G4endl << G4endl;
+    G4cerr << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
+    G4cerr << "    History = " << G4endl << fHistory << G4endl << G4endl;
+#endif
+  }
+  G4cout.precision(oldcoutPrec);
 #endif
 
   return targetPhysical;
@@ -472,35 +481,6 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    fEnteredDaughter = false;  // Boundary not encountered, did not enter
    fExiting = false;
    fExitedMother = false;     // Boundary not encountered, did not exit
-
-#ifdef OLD_LOCATE
-   //  An alternative implementation using LocateGlobalPointAndSetup.
-   //  It can also be used to check the method's assumptions. 
-   // 
-   G4VPhysicalVolume  *pOldVol, *pNewVol;
-
-   pOldVol = fHistory.GetTopVolume(); 
-   pNewVol = LocateGlobalPointAndSetup(pGlobalpoint, 0); 
-
-   if( pOldVol != pNewVol )
-   {
-     // This is abnormal behaviour.
-     G4cerr << " ERROR in G4Navigator::LocateGlobalPointWithinVolume "
-            << G4endl;
-     G4cerr << " A volume change has occured - this is not expected & illegal"
-            << G4endl; 
-     G4cerr << " Old volume name = " << pOldVol->GetName() << G4endl;
-     G4cerr << " New volume name = " << pNewVol->GetName() << G4endl;
-
-     G4VPhysicalVolume* pNewVol2 = LocateGlobalPointAndSetup(pGlobalpoint, 0); 
-     G4cerr << " Tried again & found volume = " << pNewVol2->GetName()
-            << G4endl;
-   }
-
-   // Check that the new volume located is same as the old one
-   //
-   assert( pOldVol == pNewVol );
-#endif
 }
 
 // ********************************************************************
@@ -565,31 +545,35 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                    const G4double pCurrentProposedStepLength,
                                          G4double &pNewSafety)
 {
-  G4double Step = DBL_MAX;
   G4ThreeVector localDirection = ComputeLocalAxis(pDirection);
+  G4double Step = DBL_MAX;
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
 #ifdef G4VERBOSE
-  std::cout.precision(8);
-  if( fVerbose > 1 ) 
+  G4int oldcoutPrec= G4cout.precision(8);
+  G4int oldcerrPrec= G4cerr.precision(10);
+  if( fVerbose > 0 )
   {
     G4cout << "*** G4Navigator::ComputeStep: ***" << G4endl; 
-    std::cout.precision(8);
-    G4cout << " I was called with the following arguments: " << G4endl
-           << " Globalpoint = " << std::setw(25) << pGlobalpoint  << G4endl
-           << " Direction   = " << std::setw(25) << pDirection    << G4endl
-           << " ProposedStepLength= " << pCurrentProposedStepLength << G4endl;
+    G4cout << "    Volume = " << motherPhysical->GetName() 
+           << " - Proposed step length = " << pCurrentProposedStepLength
+           << G4endl; 
+    if( fVerbose == 4 ) 
+    {
+      G4cout << "    Called with the arguments: " << G4endl
+             << "    Globalpoint = " << std::setw(25) << pGlobalpoint
+             << G4endl
+             << "    Direction   = " << std::setw(25) << pDirection
+             << G4endl;
+      G4cout << "    ----- Upon entering :" << G4endl;
+      PrintState();
+    }
   }
-  if( fVerbose > 2 )
-  {
-    G4cout << " Upon entering my state is: " << G4endl;
-    PrintState();
-  }
-#endif
 
   static G4double fAccuracyForWarning   = kCarTolerance,
                   fAccuracyForException = 1000*kCarTolerance;
+#endif
 
   G4ThreeVector newLocalPoint = ComputeLocalPoint(pGlobalpoint);
   if( newLocalPoint != fLastLocatedPointLocal )
@@ -601,6 +585,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 
     if ( moveLenSq >= kCarTolerance*kCarTolerance )
     {
+#ifdef G4VERBOSE
       //  The following checks only make sense if the move is larger
       //  than the tolerance.
       // 
@@ -620,18 +605,12 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       {
         G4double shiftOrigin = sqrt(shiftOriginSafSq);
         G4double diffShiftSaf = shiftOrigin - fPreviousSafety;
-        G4bool isError; 
 
         if( diffShiftSaf > fAccuracyForWarning )
         {
-          isError = ( diffShiftSaf >= fAccuracyForException );
-          G4cerr.precision(10);
-          if ( isError )
-            G4cerr << "Accuracy ERROR found in G4Navigator::ComputeStep: "
-                   << G4endl;
-          else
-            G4cerr << "Warning G4Navigator::ComputeStep found slightly "
-                   << "inaccurate position:" << G4endl;
+          G4Exception("G4Navigator::ComputeStep()",
+                      "UnexpectedPositionShift", JustWarning,
+                      "Accuracy ERROR or slightly inaccurate position shift.");
           G4cerr << "     The Step's starting point has moved " 
                  << sqrt(moveLenSq)/mm << " mm " << G4endl
                  << "     since the last call to a Locate method." << G4endl;
@@ -642,9 +621,10 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
           G4cerr << "     which is more than the computed safety= " 
                  << fPreviousSafety/mm << " mm  at that point." << G4endl;
           G4cerr << "     This difference is " 
-                 << diffShiftSaf /mm << " mm." << G4endl;
+                 << diffShiftSaf/mm << " mm." << G4endl
+                 << "     The tolerated accuracy is "
+                 << fAccuracyForException/mm << " mm." << G4endl;
 
-#ifdef G4VERBOSE
           static G4int warnNow = 0;
           if( ((++warnNow % 100) == 1) )
           {
@@ -653,36 +633,45 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                    << " larger than the current safety , or" << G4endl;
             G4cerr << "    - inaccuracy in the computation of the safety"
                    << G4endl;
-            G4cerr << "    - if you are using a magnetic field,"
-                   << " a known conflict about the safety exists in this case."
-                   << G4endl;
             G4cerr << "  We suggest that you " << G4endl
                    << "   - find i) what particle is being tracked, and "
                    << " ii) through what part of your geometry " << G4endl
-                   << "      for example by reruning this event with "
+                   << "      for example by re-running this event with "
                    << G4endl
                    << "         /tracking/verbose 1 "  << G4endl
                    << "    - check which processes you declare for"
-                   << " this particle (and look at non-standard ones)" << G4endl
-                   << "   - if possible create a detailed logfile"
+                   << " this particle (and look at non-standard ones)"
+                   << G4endl
+                   << "   - in case, create a detailed logfile"
                    << " of this event using:" << G4endl
                    << "         /tracking/verbose 6 "
                    << G4endl;
           }
-#endif 
         }
 #ifdef G4DEBUG_NAVIGATION
         else
         {
-          G4cerr << " Warning in G4Navigator::ComputeStep: " << G4endl
-                 << "The Step's starting point has moved " << sqrt(moveLenSq)
-                 << " which has taken it to the limit of the current safety. "
-                 << G4endl;
+          G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
+                 << "          The Step's starting point has moved "
+                 << sqrt(moveLenSq) << "," << G4endl
+                 << "          which has taken it to the limit of"
+                 << " the current safety. " << G4endl;
         }
 #endif
       }
-      G4double safetyPlus = fPreviousSafety+ fAccuracyForException;
-      assert( shiftOriginSafSq <= sqr(safetyPlus) );
+      G4double safetyPlus = fPreviousSafety + fAccuracyForException;
+      if ( shiftOriginSafSq > sqr(safetyPlus) )
+      {
+        G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
+               << "        Position has shifted considerably without"
+               << " notifying the navigator !" << G4endl
+               << "        Tolerated safety: " << safetyPlus << G4endl
+               << "        Computed shift  : " << shiftOriginSafSq << G4endl;
+        G4Exception("G4Navigator::ComputeStep()",
+                    "SignificantPositionShift", JustWarning,
+                    "May lead to a crash or unreliable results.");
+      }
+#endif  // end G4VERBOSE
 
       // Relocate the point within the same volume
       //
@@ -765,14 +754,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     fExiting= exitingReplica;                          // still ok to set it ??
   }
 
-  if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
-  {
-    // This if Step is not really limited by the geometry.
-    // The Navigator is obliged to return "infinity"
-    //
-    Step = kInfinity;
-  }
-
   // Remember last safety origin & value.
   //
   fPreviousSftOrigin = pGlobalpoint;
@@ -819,8 +800,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // (in order to have it if requested)
       //
       G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
-      finalGlobalPoint = fLastLocatedPointLocal + localDirection*Step;
-      finalLocalPoint  = ComputeLocalPoint(finalGlobalPoint);
+      finalLocalPoint = fLastLocatedPointLocal + localDirection*Step;
       localExitNormal  = motherLogical->GetSolid()->
                          SurfaceNormal(finalLocalPoint);
       const G4RotationMatrix* mRot = motherPhysical->GetRotation();
@@ -840,12 +820,30 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #endif
   }
 
-#ifdef G4VERBOSE
-  if( fVerbose > 2 ) 
+  if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
   {
-    G4cout << "Upon exiting my state is: " << G4endl;
-    PrintState();
+    // This if Step is not really limited by the geometry.
+    // The Navigator is obliged to return "infinity"
+    //
+    Step = kInfinity;
   }
+
+#ifdef G4VERBOSE
+  if( fVerbose > 1 )
+  {
+    if( fVerbose == 4 ) 
+    {
+      G4cout << "    ----- Upon exiting :" << G4endl;
+      PrintState();
+    }
+    G4cout <<"    Returned step = " << Step << G4endl;
+    if( Step == kInfinity )
+      G4cout << "    Original proposed step = "
+             << pCurrentProposedStepLength << G4endl;
+    G4cout << "    Safety = " << pNewSafety << G4endl;
+  }
+  G4cout.precision(oldcoutPrec);
+  G4cerr.precision(oldcerrPrec);
 #endif
 
   return Step;
@@ -974,14 +972,20 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   G4double newSafety = 0.0;
 
 #ifdef G4VERBOSE
-  if( fVerbose > 1 ) 
+  G4int oldcoutPrec = G4cout.precision(8);
+  if( fVerbose > 0 )
   {
+    G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
     G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
-    G4cout.precision(8);
-    G4cout << " I was called with the following arguments: " << G4endl
-           << " Globalpoint = " << pGlobalpoint << G4endl;
-    G4cout << " Upon entering my state is: " << G4endl;
-    PrintState();
+    G4cout << "    Volume = " << motherPhysical->GetName() 
+           << " - Maximum length = " << pMaxLength << G4endl; 
+    if( fVerbose == 4 ) 
+    {
+      G4cout << "    Called with the arguments: " << G4endl
+             << "    Globalpoint = " << pGlobalpoint << G4endl;
+      G4cout << "    ----- Upon entering :" << G4endl;
+      PrintState();
+    }
   }
 #endif
 
@@ -1033,11 +1037,11 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
   {
-    std::cout.precision(8);
-    G4cout << "Upon exiting my state is: " << G4endl;
+    G4cout << "    ----- Upon exiting :" << G4endl;
     PrintState();
-    G4cout << " and I return a value of Safety = " << newSafety << G4endl;
+    G4cout << "    Returned value of Safety = " << newSafety << G4endl;
   }
+  G4cout.precision(oldcoutPrec);
 #endif
 
   return newSafety;
@@ -1058,9 +1062,9 @@ G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
 //
 void  G4Navigator::PrintState()
 {
-  if( fVerbose >= 4 )
+  G4int oldcoutPrec = G4cout.precision(4);
+  if( fVerbose == 4 )
   {
-    G4cout.precision(3);
     G4cout << "The current state of G4Navigator is: " << G4endl;
     G4cout << "  ValidExitNormal= " << fValidExitNormal << G4endl
            << "  ExitNormal     = " << fExitNormal      << G4endl
@@ -1078,8 +1082,7 @@ void  G4Navigator::PrintState()
   }
   if( ( 1 < fVerbose) && (fVerbose < 4) )
   {
-    G4cout.precision(3);
-    G4cout << std::setw(24) << " ExitNormal "  << " "     
+    G4cout << std::setw(30) << " ExitNormal "  << " "     
            << std::setw( 5) << " Valid "       << " "     
            << std::setw( 9) << " Exiting "     << " "      
            << std::setw( 9) << " Entering"     << " " 
@@ -1087,11 +1090,13 @@ void  G4Navigator::PrintState()
            << std::setw( 9) << " ReplicaNo"        << " "  
            << std::setw( 8) << " LastStepZero  "   << " "   
            << G4endl;   
-    G4cout << std::setw(24)  << fExitNormal       << " "
+    G4cout << "( " << std::setw(7) << fExitNormal.x() 
+           << ", " << std::setw(7) << fExitNormal.y()
+           << ", " << std::setw(7) << fExitNormal.z() << " ) "
            << std::setw( 5)  << fValidExitNormal  << " "   
            << std::setw( 9)  << fExiting          << " "
            << std::setw( 9)  << fEntering         << " ";
-    if (fBlockedPhysicalVolume==0 )
+    if ( fBlockedPhysicalVolume==0 )
       G4cout << std::setw(15) << "None";
     else
       G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
@@ -1106,6 +1111,7 @@ void  G4Navigator::PrintState()
     G4cout << " PreviousSftOrigin  = " << fPreviousSftOrigin << G4endl;
     G4cout << " PreviousSafety     = " << fPreviousSafety << G4endl; 
   }
+  G4cout.precision(oldcoutPrec);
 }
 
 // ********************************************************************

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StatMFMicroPartition.cc,v 1.4 2003/11/04 11:31:16 lara Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // by V. Lara
 // --------------------------------------------------------------------

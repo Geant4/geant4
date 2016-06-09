@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.9 2003/06/16 17:00:23 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PenelopeRayleigh.cc,v 1.11 2004/03/18 13:40:36 pandola Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
@@ -33,6 +33,8 @@
 //                            from SUN
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
 // 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
+// 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
+// 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -72,8 +74,8 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
       G4Exception("G4PenelopeRayleigh::G4PenelopeRayleigh - energy limit outside intrinsic process validity range");
     }
 
-  samplingFunction_x = new G4DataVector();
-  samplingFunction_y = new G4DataVector();
+  samplingFunction_x = 0;
+  samplingFunction_y = 0;
   meanFreePathTable = 0;
   material = 0;
 
@@ -89,10 +91,15 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
 
 G4PenelopeRayleigh::~G4PenelopeRayleigh()
 {
-  delete meanFreePathTable;
-  delete samplingFunction_x;
-  delete samplingFunction_y;
+	delete meanFreePathTable;
+	
+	SamplingTablePair::iterator i;
+	for(i=SamplingTables.begin(); i != SamplingTables.end(); i++) {
+		delete (*i).second.first;
+		delete (*i).second.second;
+	}
 }
+
 
 void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 {
@@ -140,16 +147,17 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	{
 	  energies->push_back(energyVector[bin]);
 	  G4double ec=std::min(energyVector[bin],0.5*IZZ);
-	  facte=k1*pow(ec/electron_mass_c2,2);
+	  G4double energyRatio = ec/electron_mass_c2;
+	  facte = k1*energyRatio*energyRatio;
 	  G4double cs=0;
 	  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
 	  cs =
 	    theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,-1.0,0.90,1e-06);
 	  cs += theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
-	  cs = cs*pow((ec/energyVector[bin]),2)*pi*pow(classic_electr_radius,2);
+	  cs = cs*(ec/energyVector[bin])*(ec/energyVector[bin])*pi*classic_electr_radius*classic_electr_radius;
 	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	  const G4int* stechiometric = material->GetAtomsVector();
-	  G4double density;
+	  G4double density=0.;
 	  if (stechiometric)
 	    {
 	      density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume
@@ -317,33 +325,42 @@ G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
 
 void G4PenelopeRayleigh::InizialiseSampling()
 {
+  SamplingTablePair::iterator theTable=SamplingTables.find(material);
   const G4int points=241;
-  samplingFunction_x->clear();
-  samplingFunction_y->clear();
-  G4double sum = 0.0;
-  G4double Xlow=0;
+  G4double Xlow = 0.;
   G4double Xhigh=1e-04;
   G4double fact = pow((1e06/Xhigh),(1/240.0));
-  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
-  sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
-				Xlow,Xhigh,1e-10); 
-  samplingFunction_x->push_back(Xhigh);
-  samplingFunction_y->push_back(sum);
-  G4int i;
-  for (i=1;i<points;i++){
-    Xlow=Xhigh;
-    Xhigh=Xhigh*fact;
-    sum = theIntegrator.Calculate(this,
-				  &G4PenelopeRayleigh::MolecularFormFactor,
-				  Xlow,Xhigh,1e-10);
-    samplingFunction_x->push_back(Xhigh);
-    samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
-  }
-  for (i=0;i<points;i++){
-    (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
-    (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
-  }
   samplingConstant=log(fact);
+  
+  if (theTable==SamplingTables.end()) { //material not inizialized yet
+    samplingFunction_x = new G4DataVector();
+    samplingFunction_y = new G4DataVector();
+    G4double sum = 0.0;
+    G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
+    sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
+				  Xlow,Xhigh,1e-10); 
+    samplingFunction_x->push_back(Xhigh);
+    samplingFunction_y->push_back(sum);
+    G4int i;
+    for (i=1;i<points;i++){
+      Xlow=Xhigh;
+      Xhigh=Xhigh*fact;
+      sum = theIntegrator.Calculate(this,
+				    &G4PenelopeRayleigh::MolecularFormFactor,
+				    Xlow,Xhigh,1e-10);
+      samplingFunction_x->push_back(Xhigh);
+      samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
+    }
+    for (i=0;i<points;i++){
+      (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
+      (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
+    }
+    SamplingTables[material] = std::pair<G4DataVector*,G4DataVector*> (samplingFunction_x,samplingFunction_y);
+  }
+  else { //material already inizialized
+    samplingFunction_x=(*theTable).second.first;
+    samplingFunction_y=(*theTable).second.second;
+  }
 }
 
 
@@ -463,7 +480,8 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
   for (G4int i=0;i<nElements;i++){
     G4int Z = (G4int) (*elementVector)[i]->GetZ();
     if (Z>ntot) Z=95;
-    fa=Z*(1+y*(RA1[Z-1]+x*(RA2[Z-1]+x*RA3[Z-1])))/pow((1+y*(RA4[Z-1]+y*RA5[Z-1])),2);
+    G4double denomin = 1+y*(RA4[Z-1]+y*RA5[Z-1]);
+    fa=Z*(1+y*(RA1[Z-1]+x*(RA2[Z-1]+x*RA3[Z-1])))/(denomin*denomin);
     G4bool a = ((Z>10) && (fa>2.0));
     if (a) 
       {
@@ -471,7 +489,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 	G4double k1=0.3125;
 	G4double k2=2.426311e-02;
 	Pa=(Z-k1)*fine_structure_const;
-	Pg=sqrt(1-pow(Pa,2));
+	Pg=sqrt(1-(Pa*Pa));
 	Pq=k2*x/Pa;
 	fb=sin(2*Pg*atan(Pq))/(Pg*Pq*pow((1+Pq*Pq),Pg));
 	fa=std::max(fa,fb);

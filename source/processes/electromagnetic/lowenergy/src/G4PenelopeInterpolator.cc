@@ -27,6 +27,8 @@
 // History:
 // -----------
 // 17 Feb 2003   LP        Created
+// 17 Dec 2003   LP        Removed memory leak
+// 17 Mar 2004   LP        Removed unnecessary calls to pow(a,b)
 //
 // -------------------------------------------------------------------
 
@@ -97,15 +99,20 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
   G4double SI1=S1;
   G4double SI=0,H=0,HI=0;
   G4double store=0;
+  G4double help1=0;
+  G4double help2=0;
+
   for (i=0;i<N1;i++){
     SI=SI1;
     SI1=D[i+1];
     H=A[i];
     HI=1.0/H;
-    store=HI*(SI*pow(pX[i+1],3)-SI1*pow(pX[i],3))/6.0+HI*(pY[i]*pX[i+1]-pY[i+1]*pX[i])+
+    help1 = pX[i+1]*pX[i+1]*pX[i+1];
+    help2 = pX[i]*pX[i]*pX[i];
+    store=HI*(SI*help1-SI1*help2)/6.0+HI*(pY[i]*pX[i+1]-pY[i+1]*pX[i])+
       H*(SI1*pX[i]-SI*pX[i+1])/6.0;
     a->push_back(store);
-    store=(HI/2.0)*(SI1*pow(pX[i],2)-SI*pow(pX[i+1],2))+HI*(pY[i+1]-pY[i])+(H/6.0)*(SI-SI1);
+    store=(HI/2.0)*(SI1*(pX[i]*pX[i])-SI*(pX[i+1]*pX[i+1]))+HI*(pY[i+1]-pY[i])+(H/6.0)*(SI-SI1);
     b->push_back(store);
     store=(HI/2.0)*(SI*pX[i+1]-SI1*pX[i]);
     c->push_back(store);
@@ -128,6 +135,16 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
     y->push_back(pY[i]);
   }
   return;
+}
+
+G4PenelopeInterpolator::~G4PenelopeInterpolator()
+{
+  delete a;
+  delete b;
+  delete c;
+  delete d;
+  delete x;
+  delete y;
 }
 
 G4double G4PenelopeInterpolator::CubicSplineInterpolation(G4double xx)

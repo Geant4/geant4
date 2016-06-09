@@ -22,7 +22,7 @@
 //
 //
 // $Id: SteppingAction.hh,v 1.2 2003/10/28 10:27:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

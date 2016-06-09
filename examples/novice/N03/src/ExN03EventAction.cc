@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN03EventAction.cc,v 1.23 2003/11/12 16:15:48 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

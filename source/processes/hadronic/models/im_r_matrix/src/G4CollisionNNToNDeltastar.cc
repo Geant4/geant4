@@ -21,23 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDeltastar.cc,v 1.1 2003/10/07 12:37:36 hpw Exp $ //
+
+#include "G4CollisionNNToNDeltastar.hh"
 
 #include "globals.hh"
-#include "G4CollisionNNToNDeltastar.hh"
-#include "G4KineticTrack.hh"
-#include "G4VCrossSectionSource.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4XAqmElastic.hh"
-#include "G4AngularDistribution.hh"
-#include "G4ThreeVector.hh"
-#include "G4LorentzVector.hh"
-#include "G4LorentzRotation.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4ParticleTable.hh"
-#include "G4CollisionVector.hh"
-#include "G4CollisionNNToNDeltastar.hh"
 #include "G4ConcreteNNToNDeltaStar.hh"
 #include "G4CollisionNNToNDelta1600.hh"
 #include "G4CollisionNNToNDelta1620.hh"
@@ -49,26 +36,20 @@
 #include "G4CollisionNNToNDelta1930.hh"
 #include "G4CollisionNNToNDelta1950.hh"
 
+typedef
+GROUP9(G4CollisionNNToNDelta1600, 
+      G4CollisionNNToNDelta1620,
+      G4CollisionNNToNDelta1700,
+      G4CollisionNNToNDelta1900,
+      G4CollisionNNToNDelta1905,
+      G4CollisionNNToNDelta1910,
+      G4CollisionNNToNDelta1920,
+      G4CollisionNNToNDelta1930,
+      G4CollisionNNToNDelta1950) theChannels;
+      
 G4CollisionNNToNDeltastar::G4CollisionNNToNDeltastar()
 { 
-  //1600
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1600()); 
-  //1620 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1620()); 
-  //1700 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1700()); 
-  //1900 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1900()); 
-  //1905 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1905()); 
-  //1910 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1910()); 
-  //1920 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1920()); 
-  //1930 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1930()); 
-  //1950 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta1950()); 
-
+  Register aR;
+  G4ForEach<theChannels>::Apply(&aR, this); 
 }
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FermiConfiguration.cc,v 1.6 2003/11/24 13:11:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)

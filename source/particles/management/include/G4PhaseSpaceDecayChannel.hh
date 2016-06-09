@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhaseSpaceDecayChannel.hh,v 1.5 2001/10/15 09:58:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //
 // ------------------------------------------------------------

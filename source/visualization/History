@@ -1,4 +1,4 @@
-$Id: History,v 1.238 2003/11/27 11:51:56 johna Exp $
+$Id: History,v 1.241 2004/03/16 08:46:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14 March 2004 Joseph Perl (vis-V06-00-01)
+- HepRepFile handle duplicate ShowView.
+- HepRepFile improve layering and hierarchy for hits.
+
+1st December 2003  John Allison
+- Added checks and minor improvment of behaviour at end of event and run:
+  o G4VisManager::EndOfRun: added check on MarkForClearingTransientStore.
+  o G4VisCommandsScene.cc: For "/vis/scene/endOf[Event|Run]Action refresh",
+    SetMarkForClearingTransientStore(true).
 
 27th November 2003  John Allison  (vis-V05-02-06)
 - Added /vis/scene/endOfRunAction.

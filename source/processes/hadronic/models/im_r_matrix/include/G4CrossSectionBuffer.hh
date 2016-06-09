@@ -25,7 +25,7 @@
 
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-#include "G4Pair.hh"
+#include <utility>
 #include <vector>
 
 class G4CrossSectionBuffer
@@ -51,7 +51,7 @@ class G4CrossSectionBuffer
     
     void push_back(G4double s, G4double x)
     {
-      G4Pair<G4double, G4double> aNew;
+      std::pair<G4double, G4double> aNew;
       aNew.first = s;
       aNew.second = x;
       theData.push_back(aNew);
@@ -109,7 +109,7 @@ class G4CrossSectionBuffer
     }
   
   private:
-  std::vector<G4Pair<G4double, G4double> > theData;
+  std::vector<std::pair<G4double, G4double> > theData;
   
   const G4ParticleDefinition * theA;
   const G4ParticleDefinition * theB;

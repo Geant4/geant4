@@ -21,37 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDelta1910.cc,v 1.1 2003/10/07 12:37:36 hpw Exp $ //
+// $Id: G4CollisionNNToNDelta1910.cc,v 1.2.2.1 2004/03/24 13:18:38 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNDelta1910.hh"
 #include "G4ConcreteNNToNDeltaStar.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4ParticleTable.hh"
-#include "G4ShortLivedConstructor.hh"
-
-// complete hpw
 
 G4CollisionNNToNDelta1910::G4CollisionNNToNDelta1910()
 { 
-  // Subtype of interacting particles
-  G4ShortLivedConstructor ShortLived;
-  ShortLived.ConstructParticle();
-
-  G4ParticleDefinition * aProton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition * aNeutron = G4Neutron::NeutronDefinition();
-  
-  G4ParticleDefinition * aDm_1910 = G4ParticleTable::GetParticleTable()->FindParticle(21112); 
-  G4ParticleDefinition * aD0_1910 = G4ParticleTable::GetParticleTable()->FindParticle(21212); 
-  G4ParticleDefinition * aDp_1910 = G4ParticleTable::GetParticleTable()->FindParticle(22122); 
-  G4ParticleDefinition * aDpp_1910 = G4ParticleTable::GetParticleTable()->FindParticle(22222); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aNeutron, aNeutron, aNeutron, aD0_1910));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aNeutron, aNeutron, aProton, aDm_1910));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aNeutron, aProton, aProton, aD0_1910));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aNeutron, aProton, aNeutron, aDp_1910));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aProton, aProton, aNeutron, aDpp_1910));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNDeltaStar(aProton, aProton, aProton, aDp_1910));
+  MakeNNToNDelta<Dm_1910PC, D0_1910PC, Dp_1910PC, Dpp_1910PC, G4ConcreteNNToNDeltaStar>::Make(this);
 }
 
 

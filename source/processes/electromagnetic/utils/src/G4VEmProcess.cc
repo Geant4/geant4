@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.3 2003/10/14 07:50:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEmProcess.cc,v 1.4 2004/03/01 13:06:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -69,7 +69,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-                      G4VDiscreteProcess(name, type),
+                      G4VRestDiscreteProcess(name, type),
   theLambdaTable(0),
   particle(0),
   secondaryParticle(0),
@@ -221,7 +221,7 @@ void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
-                                                  const G4Step& step)
+                                              const G4Step& step)
 {
   aParticleChange.Initialize(track);
   G4double finalT = track.GetKineticEnergy();
@@ -233,7 +233,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
              (((*theLambdaTable)[currentMaterialIndex])->GetValue(finalT,b));
 
     if(preStepLambda*G4UniformRand() > postStepLambda)
-      return G4VDiscreteProcess::PostStepDoIt(track,step);
+      return G4VRestDiscreteProcess::PostStepDoIt(track,step);
   }
 
   G4VEmModel* currentModel = SelectModel(finalT);
@@ -289,20 +289,17 @@ void G4VEmProcess::PrintInfoDefinition()
 G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4double cut  = (*theCuts)[couple->GetIndex()];
-  G4int nbins = 3;
-  if( couple->IsUsed() ) nbins = nLambdaBins;
   G4double tmin = std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
-  //  G4double xmax = maxKinEnergy*exp(log(maxKinEnergy/tmin)/((G4double)(nbins-1)) );
-  G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nbins);
+  G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nLambdaBins);
   return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
-                                                 const G4MaterialCutsCouple* couple)
+                                         const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
@@ -321,8 +318,8 @@ G4double G4VEmProcess::MicroscopicCrossSection(G4double kineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEmProcess::MeanFreePath(const G4Track& track,
-                                              G4double s,
-                                              G4ForceCondition* cond)
+                                          G4double s,
+                                          G4ForceCondition* cond)
 {
   return GetMeanFreePath(track, s, cond);
 }

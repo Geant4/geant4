@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: FCALTestbeamSetupSD.hh,v 1.5 2003/12/09 15:30:21 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

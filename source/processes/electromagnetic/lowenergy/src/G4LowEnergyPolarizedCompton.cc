@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LowEnergyPolarizedCompton.cc,v 1.17 2003/11/18 16:39:21 pia Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

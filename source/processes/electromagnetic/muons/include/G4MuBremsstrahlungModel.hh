@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.8 2003/07/21 12:52:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.9 2004/02/10 18:07:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 
 //
@@ -75,6 +76,8 @@ public:
 
   void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
+  void SetLowestKineticEnergy(G4double e) {lowestKinEnergy = e;};
+
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
@@ -110,7 +113,7 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
     				            G4double kineticEnergy);
 
-private:
+public:
 
   G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
 
@@ -123,6 +126,8 @@ private:
                                            G4double Z,
                                            G4double A,
                                            G4double gammaEnergy);
+
+private:
 
   G4DataVector* ComputePartialSumSigma(const G4Material* material,
                                              G4double tkin, G4double cut);
@@ -138,6 +143,7 @@ private:
 
   G4double highKinEnergy;
   G4double lowKinEnergy;
+  G4double lowestKinEnergy;
   G4double minThreshold;
 
   // tables for sampling
@@ -158,7 +164,7 @@ G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
 				 const G4DynamicParticle* dynParticle)
 {
   return dynParticle->GetKineticEnergy();
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

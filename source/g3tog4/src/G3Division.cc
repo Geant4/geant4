@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3Division.cc,v 1.15 2003/06/16 16:50:48 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 

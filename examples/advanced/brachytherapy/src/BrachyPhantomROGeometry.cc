@@ -30,8 +30,8 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.7 2003/11/18 13:31:46 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyPhantomROGeometry.cc,v 1.8 2004/03/11 15:38:43 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"
@@ -77,19 +77,14 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
   G4double worldDimensionY = 4.0*m;
   G4double worldDimensionZ = 4.0*m;
 
-  G4double halfPhantomDimensionX = phantomDimensionX/2;
-  G4double halfPhantomDimensionZ = phantomDimensionZ/2;
-  G4double halfPhantomDimensionY = phantomDimensionX/2 ;
+  G4double halfPhantomDimensionX = phantomDimensionX;
+  G4double halfPhantomDimensionZ = phantomDimensionZ;
+  G4double halfPhantomDimensionY = phantomDimensionX;
 
   // variables for x division ...
   G4double halfXVoxelDimensionX = halfPhantomDimensionX/numberOfVoxelsAlongX;
   G4double halfXVoxelDimensionZ = halfPhantomDimensionZ;
   G4double voxelXThickness = 2*halfXVoxelDimensionX;
-
-  // variables for z and y division ...
-  G4double halfZVoxelDimensionX = halfPhantomDimensionX; 
-  G4double halfZVoxelDimensionZ = halfPhantomDimensionZ/numberOfVoxelsAlongZ;
-  G4double voxelZThickness = 2*halfZVoxelDimensionZ;
 
   // world volume of ROGeometry ...
   G4Box *ROWorld = new G4Box("ROWorld",
@@ -148,9 +143,9 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
   // ...then Z division
   
   G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
-					halfZVoxelDimensionX,
-					halfZVoxelDimensionX, 
-					halfZVoxelDimensionZ);
+					halfXVoxelDimensionX,
+					halfXVoxelDimensionZ, 
+					halfXVoxelDimensionX);
 
   G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
 							       dummyMat,
@@ -162,13 +157,13 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      ROPhantomXDivisionPhys,
 							      kZAxis,
 							      numberOfVoxelsAlongZ,
-							      voxelZThickness);
+							      voxelXThickness);
   // ...then Y  division
 
   G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
-					halfZVoxelDimensionZ, 
-					halfZVoxelDimensionZ,
-					halfZVoxelDimensionZ);
+					halfXVoxelDimensionX, 
+					halfXVoxelDimensionX,
+					halfXVoxelDimensionX);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
 							       dummyMat,
@@ -180,7 +175,7 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      ROPhantomZDivisionPhys,
 							      kYAxis,
 							      numberOfVoxelsAlongZ,
-							      voxelZThickness);
+							      voxelXThickness);
   BrachyDummySD *dummySD = new BrachyDummySD;
   ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
 

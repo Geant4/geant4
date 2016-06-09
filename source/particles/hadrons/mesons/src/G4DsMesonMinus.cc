@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonMinus.cc,v 1.7 2003/06/16 16:57:37 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4DsMesonMinus.cc,v 1.8 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4DsMesonMinus::G4DsMesonMinus(
 
 // In this version, charged pions are set to stable
 G4DsMesonMinus G4DsMesonMinus::theDsMesonMinus(
-	        "Ds-",      1.9685*GeV,   1.41e-9*MeV,    -1.*eplus, 
+	        "Ds-",      1.9685*GeV,  1.342e-9*MeV,    -1.*eplus, 
 		    0,              -1,             0,          
 		    0,               0,             0,             
 	      "meson",               0,             0,         -431,

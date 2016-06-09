@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListBinaryCascade.hh,v 1.4 2003/12/05 11:17:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file

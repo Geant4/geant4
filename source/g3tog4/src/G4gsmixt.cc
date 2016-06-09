@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsmixt.cc,v 1.10 2003/06/16 16:50:56 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

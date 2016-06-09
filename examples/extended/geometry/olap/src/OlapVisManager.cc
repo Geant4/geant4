@@ -22,7 +22,7 @@
 //
 //
 // $Id: OlapVisManager.cc,v 1.2 2003/11/13 15:11:34 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------

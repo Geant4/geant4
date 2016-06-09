@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.9 2003/06/16 16:58:00 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4TauMinus.cc,v 1.10 2004/02/13 05:53:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -115,7 +115,7 @@ G4TauMinus::G4TauMinus(
 //             stable         lifetime    decay table 
 
 G4TauMinus G4TauMinus::theTauMinus(
-		"tau-",    1.77705*GeV,   2.27e-9*MeV,    -1.*eplus, 
+		"tau-",    1.77705*GeV,  2.265e-9*MeV,    -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          15,

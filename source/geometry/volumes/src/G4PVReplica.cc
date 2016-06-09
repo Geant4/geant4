@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PVReplica.cc,v 1.4 2003/11/17 11:29:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // class G4PVReplica Implementation

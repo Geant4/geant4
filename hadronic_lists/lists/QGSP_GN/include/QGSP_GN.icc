@@ -47,7 +47,7 @@ template<class T> TQGSP_GN<T>::TQGSP_GN():  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: QGSP_GN 2.5"<<G4endl;
+  G4cout << "You are using the simulation engine: QGSP_GN 2.6"<<G4endl;
   G4cout <<G4endl<<G4endl;
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(1);

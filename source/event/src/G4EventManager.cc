@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.18 2003/09/09 20:09:18 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4EventManager.cc,v 1.19 2004/03/16 00:04:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 //
@@ -36,6 +36,9 @@
 #include "G4SDManager.hh"
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
+
 
 G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
@@ -102,6 +105,13 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
   stateManager->SetNewState(G4State_EventProc);
 
+  // Reseting Navigator has been moved to G4Eventmanager, so that resetting
+  // is now done for every event.
+  G4ThreeVector center(0,0,0);
+  G4Navigator* navigator =
+      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->LocateGlobalPointAndSetup(center,0,false);
+                                                                                      
   currentEvent = anEvent;
   G4Track * track;
   G4TrackStatus istop;

@@ -47,11 +47,24 @@
 #include "G4HadLeadBias.hh"
 #include "G4HadronicException.hh"
 #include "G4HadReentrentException.hh"
+#include "G4HadronicInteractionWrapper.hh"
+
+#ifndef G4HadSignalHandler_off
+  #include "G4HadSignalHandler.hh"
+#endif
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
+
+  namespace G4HadronicProcess_local
+  {
+    extern "C" void G4HadronicProcessHandler_1(int)
+    {
+      G4HadronicWhiteBoard::Instance().Dump();
+    }
+  } 
  
- G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
- G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
+ G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
+ G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
  G4bool G4HadronicProcess::isoIsEnabled = true;
  
  void G4HadronicProcess::
@@ -63,6 +76,7 @@
  G4HadronicProcess::G4HadronicProcess( const G4String &processName) :
       G4VDiscreteProcess( processName )
  { 
+   ModelingState = 0;
    isoIsOnAnyway = 0;
    theTotalResult = new G4ParticleChange();
    theCrossSectionDataStore = new G4CrossSectionDataStore();
@@ -80,6 +94,10 @@
    std::for_each(theBias.begin(), 
             theBias.end(), 
 	    G4Delete());
+   if(theOldIsoResult) delete theOldIsoResult;
+   if(theIsoResult) delete theIsoResult;
+   theOldIsoResult=0;
+   theIsoResult=0;
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -96,6 +114,22 @@
 G4double G4HadronicProcess::
 GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 { 
+/*
+  if(ReStarted)
+  {
+    if(trackIdCache == aTrack.GetTrackId())
+    {
+      theInitialNumberOfInteractionLength += G4VProcess::theNumberOfInteractionLengthLeft;
+      
+    }
+    else
+    {
+      theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
+    }
+    trackIdCache = aTrack.GetTrackId();
+    ReStarted = false;
+  }
+*/ 
   G4double sigma = 0.0;
   try
   {
@@ -120,6 +154,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     }
     G4Material *aMaterial = aTrack.GetMaterial();
     G4int nElements = aMaterial->GetNumberOfElements();
+    ModelingState = 1;
     
     // returns the mean free path in GEANT4 internal units
     
@@ -282,6 +317,9 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   const G4Track &aTrack, const G4Step &)
   {
     // G4cout << theNumberOfInteractionLengthLeft<<G4endl;
+    #ifndef G4HadSignalHandler_off
+    G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
+    #endif
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double originalEnergy = aParticle->GetKineticEnergy();
@@ -329,7 +367,8 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     {
       try
       {
-         result = theInteraction->ApplyYourself( thePro, targetNucleus);
+	 G4HadronicInteractionWrapper aW;
+	 result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction);
       }
       catch(G4HadReentrentException aR)
       {
@@ -359,6 +398,11 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       }
     }
     while(!result);
+    if(!ModelingState && !getenv("BypassAllSafetyChecks") ) 
+    {
+      G4cout << "ERROR IN EXECUTION -- HADRONIC PROCESS STATE NOT VALID"<<G4endl;
+      G4cout << "Result will be of undefined quality."<<G4endl;
+    }
     if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
     {
       G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
@@ -405,6 +449,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     }
     
     G4double e=aTrack.GetKineticEnergy();
+    ModelingState = 0;
     if(e<5*GeV)
     {
       for(size_t i=0; i<theBias.size(); i++)
@@ -422,15 +467,19 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
                     const G4Nucleus & aNucleus)
   {
     // get the PC from iso-production
-    if(theOldIsoResult) delete theOldIsoResult;
+    if(theOldIsoResult) 
+    {
+       delete theOldIsoResult;
+       theOldIsoResult=0;
+    }
     if(theIsoResult) delete theIsoResult;
     theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
-    G4IsoResult * anIsoResult = NULL;
+    G4IsoResult * anIsoResult = 0;
     for(unsigned int i=0; i<theProductionModels.size(); i++)
     {
       anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
-      if(anIsoResult!=NULL)
+      if(anIsoResult!=0)
       {
         done = true;
         break;
@@ -519,6 +568,8 @@ XBiasSecondaryWeight()
   return result;
 }
 
+struct G4Nancheck{ bool operator()(G4double aV){return (!(aV<1))&&(!(aV>-1));}};
+
 void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
 //          G4cout << "############# Entry debug "
@@ -528,6 +579,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
  //                <<aScaleFactor<<" "
 //		 <<aT.GetWeight()<<" "
 //		 <<G4endl;
+      G4Nancheck go_wild;
       theTotalResult->Clear();
       theTotalResult->SetLocalEnergyDeposit(0.);
       theTotalResult->Initialize(aT);
@@ -557,21 +609,33 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
           theTotalResult->SetEnergyChange( 0.0 );
 	}
       }
-      else if(aR->GetStatusChange()==suspend)
-      {
-        theTotalResult->SetStatusChange(fSuspend);
-	if(xBiasOn)
-	{
-          G4Exception("G4HadronicProcess", "007", FatalException,
-	              "Cannot cross-section bias a process that suspends tracks.");
-	}
-      }
       else if(aR->GetStatusChange()!=stopAndKill )
       {
+        if(aR->GetStatusChange()==suspend)
+        {
+          theTotalResult->SetStatusChange(fSuspend);
+	  if(xBiasOn)
+   	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "Cannot cross-section bias a process that suspends tracks.");
+	  }
+        }
 	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
 	{
  	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
+	  if(go_wild(aR->GetEnergyChange()))
+	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "surviving track received NaN energy.");  
+	  }
+	  if(go_wild(aR->GetMomentumChange().x()) || 
+	     go_wild(aR->GetMomentumChange().y()) || 
+	     go_wild(aR->GetMomentumChange().z()))
+	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "survivine track received NaN momentum.");  
+	  }
           G4DynamicParticle * aNew = new G4DynamicParticle(aT.GetDefinition(),
 	                                                   aR->GetEnergyChange(),
 							   aR->GetMomentumChange());
@@ -582,7 +646,15 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	{
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
 	  theTotalResult->SetWeightChange(newWeight); // This is multiplicative
-	  if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	  if(aR->GetEnergyChange()>-.5) 
+	  {
+  	    if(go_wild(aR->GetEnergyChange()))
+	    {
+              G4Exception("G4HadronicProcess", "007", FatalException,
+	                  "track received NaN energy.");  
+	    }
+	    theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	  }
 	  G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
 	  newDirection*=aR->GetTrafoToLab();
 	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
@@ -603,6 +675,18 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
         theM.rotate(rotation, it);
 	theM*=aR->GetTrafoToLab();
+	if(go_wild(theM.e()))
+	{
+          G4Exception("G4HadronicProcess", "007", FatalException,
+	              "secondary track received NaN energy.");  
+	}
+	if(go_wild(theM.x()) || 
+	   go_wild(theM.y()) || 
+	   go_wild(theM.z()))
+	{
+          G4Exception("G4HadronicProcess", "007", FatalException,
+	              "secondary track received NaN momentum.");  
+	}
 	aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
 	G4double time = aR->GetSecondary(i)->GetTime();
 	if(time<0) time = aT.GetGlobalTime();

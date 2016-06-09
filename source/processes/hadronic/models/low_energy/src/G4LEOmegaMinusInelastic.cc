@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LEOmegaMinusInelastic.cc,v 1.9 2003/10/31 18:04:17 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HepRepFile.hh,v 1.7 2003/07/12 19:48:15 duns Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // John Allison  5th April 2001

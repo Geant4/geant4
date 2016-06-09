@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UniformElectricField.cc,v 1.10 2003/11/05 10:41:00 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 //

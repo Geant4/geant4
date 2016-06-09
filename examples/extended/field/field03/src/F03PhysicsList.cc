@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03PhysicsList.cc,v 1.7 2003/08/27 17:50:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: fieldex-V05-02-00 $
 // 
 
 #include "G4Timer.hh"

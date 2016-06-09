@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4WeightWindowAlgorithm.hh,v 1.6 2003/08/19 15:44:57 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowAlgorithm

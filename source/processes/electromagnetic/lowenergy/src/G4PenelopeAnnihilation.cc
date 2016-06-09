@@ -25,6 +25,7 @@
 // History:
 // --------
 // 02 Jul 2003   L.Pandola    First implementation
+// 16 Mar 2004   L.Pandola    Removed unnecessary calls to pow(a,b)
 
 #include "G4PenelopeAnnihilation.hh"
 #include "Randomize.hh"
@@ -126,10 +127,10 @@ G4double G4PenelopeAnnihilation::calculateCrossSectionPerElectron
   //Heitler dcs formula for annihilation with free electrons at rest
   G4double crossSection=0.0;
   G4double gamma = 1.0+std::max(ene,1.0*eV)/electron_mass_c2;
-  G4double gamma2 = pow(gamma,2);
+  G4double gamma2 = gamma*gamma;
   G4double f2 = gamma2-1.0;
   G4double f1 = sqrt(f2);
-  G4double pielr2 = pi*pow(classic_electr_radius,2);
+  G4double pielr2 = pi*classic_electr_radius*classic_electr_radius;
   crossSection = pielr2*((gamma2+4.0*gamma+1.0)*log(gamma+f1)/f2
 			 - (gamma+3.0)/f1)/(gamma+1.0);
   return crossSection;
@@ -157,7 +158,7 @@ G4VParticleChange* G4PenelopeAnnihilation::PostStepDoIt(const G4Track& aTrack,
    G4double ani = 1.0+gamma;
    G4double chimin = 1.0/(ani+gamma21);
    G4double rchi = (1.0-chimin)/chimin;
-   G4double gt0 = pow(ani,2)-2.0;
+   G4double gt0 = ani*ani-2.0;
    G4double epsilon=0.0, reject=0.0, test=0.0;
    do{
      epsilon = chimin*pow(rchi,G4UniformRand());

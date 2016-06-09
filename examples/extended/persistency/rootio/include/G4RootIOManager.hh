@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4RootIOManager.hh,v 1.3 2002/12/13 14:45:41 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // File: G4RootIOManager.hh
 //

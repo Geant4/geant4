@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationPolycone.hh,v 1.5 2003/11/18 12:15:30 arce Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 // classes G4ParameterisationPolyconeRho,
 //         G4ParameterisationPolyconePhi,

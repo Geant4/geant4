@@ -20,8 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.hh,v 1.4 2003/10/11 02:59:59 tkoi Exp $
+// $Id: A01IonPhysics.hh,v 1.5 2004/01/06 02:53:22 tkoi Exp $
 // --------------------------------------------------------------
+// 05-Jan-2004 Add G4ionIonisation T. Koi
 //
 
 #ifndef A01IonPhysics_h
@@ -45,6 +46,7 @@
 #include "G4LEAlphaInelastic.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 #include "G4MultipleScattering.hh"
 
 class A01IonPhysics : public G4VPhysicsConstructor

@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelAnalysisMessenger.hh,v 1.3 2001/11/23 17:44:54 santin Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

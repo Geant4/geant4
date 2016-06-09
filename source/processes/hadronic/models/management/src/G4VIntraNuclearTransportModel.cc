@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.2 2003/12/09 09:04:23 jwellisc Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

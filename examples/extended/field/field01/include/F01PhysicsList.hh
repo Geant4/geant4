@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01PhysicsList.hh,v 1.3 2003/08/27 17:38:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: fieldex-V05-02-00 $
 //
 
 #ifndef F01PhysicsList_h

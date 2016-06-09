@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalVolume.hh,v 1.16 2003/11/04 15:11:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // class G4LogicalVolume

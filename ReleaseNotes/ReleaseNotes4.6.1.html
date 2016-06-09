@@ -1,0 +1,520 @@
+<HTML>
+<HEAD>
+<TITLE>Geant4 6.1 Release Notes</TITLE>
+</HEAD>
+<BODY BGCOLOR='F0F0F0'>
+
+<P> </P>
+<BR>
+<P> </P>
+
+<P ALIGN="Center">
+<FONT SIZE="+4" COLOR="#238E23">
+<B>Geant4 6.1 Release Notes</B>
+</FONT>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN="Right">
+<FONT SIZE="-1" COLOR="#5C3317">
+<B><I>March 25<SUP>th</SUP>, 2004</I></B>
+</FONT>
+</TD></TR>
+</TABLE>
+
+<BR><BR>
+<HR ALIGN="Center" SIZE="7%">
+<P>
+The code and binary libraries for the supported systems are available
+through our <A TARGET="ext" HREF="http://cern.ch/geant4">Source Code Web page</A>.
+</P>
+<P>
+Please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/G4UsersDocuments/Overview/html">Geant4
+User Documentation</A> for further information about using Geant4.
+</P>
+
+<H2><I>Contents</I></H2>
+<OL>
+<LI><A HREF="#1.">Supported and Tested Platforms</A></LI>
+<LI><A HREF="#2.">AIDA and CLHEP</A></LI>
+<LI><A HREF="#3.">Compiler Specific Problems</A></LI>
+<LI><A HREF="#4.">Known Run-Time Problems</A></LI>
+<LI><A HREF="#5.">Compilation Warnings</A></LI>
+<LI><A HREF="#6.">Known Run-Time Warnings</A></LI>
+<LI><A HREF="#7.">Major items for migration of user code</A></LI>
+<LI><A HREF="#8.">Detailed list of changes and fixes</A></LI>
+</OL>
+
+<P> </P>
+<A NAME="1."></a>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>1. Supported and Tested Platforms</H2>
+
+Official platforms:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.4 Patch 111715-02.</LI>
+<LI>Linux, gcc 2.95.2, gcc 3.2.<BR>
+    This configuration was tested with the RedHat 7.3 distribution,
+    versions of Geant4 have also been compiled successfully on other
+    Linux distributions, like Debian, Suse or more recent RedHat systems.
+    The default RedHat compiler gcc-2.96 distributed in RedHat 7.X is NOT
+    supported. It has been verified that it produces incorrect binaries,
+    therefore is not reliable. See also <A HREF="#note-1">note below</A>.</LI>
+<LI>Windows/2000 and CygWin Tools with: Visual C++ 6.0 Service Pack 5</LI>
+</UL>
+
+More verified configurations:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
+<LI>Linux, gcc 3.3.3.</LI>
+<LI>Linux, Intel-icc 8.0.</LI>
+<LI>MacOS 10.3, gcc-3.3</LI>
+<LI>Windows/XP and CygWin Tools, .NET Visual Studio 2003 C++ 7.1</LI>
+</UL>
+
+Platforms configured but not tested and not supported:
+<UL>
+<LI>AIX 4.3.2, xlC 6.0</LI>
+<LI>DEC V4.0, cxx C++ V6.1-027</LI>
+<LI>HP 10.20, aCC C++ B3910B A.01.23</LI>
+<LI>SGI V6.5.5, CC 7.2.1</LI>
+</UL>
+
+<P> </P>
+<A NAME="2."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>2. AIDA and CLHEP</H2>
+
+Geant4 6.1 requires the <A TARGET="ext"
+HREF="http://cern.ch/clhep/INSTALLATION/clhep.html">installation
+of CLHEP</A>.<BR>
+Tests have been performed with <B>CLHEP-1.8.1.0</B>.
+<P> </P>
+Geant4 6.1 examples with histogramming cowork with AIDA 3
+implementations. These include:
+<UL>
+<LI><A TARGET="ext" HREF="http://cern.ch/anaphe">ANAPHE</A> and included components</LI>
+<LI><A TARGET="ext" HREF="http://jas.freehep.org">JAS (Java Analysis Studio)</A></LI>
+<LI><A TARGET="ext" HREF="http://www.lal.in2p3.fr/OpenScientist">Open Scientist</A></LI>
+</UL>
+
+AIDA headers can be downloaded from:
+<A TARGET="ext" HREF="http://aida.freehep.org">http://aida.freehep.org</A>
+
+
+<P> </P>
+<A NAME="3."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>3. Compiler Specific Problems</H2>
+
+<UL>
+<LI><A NAME="note-1"><B>Linux Red Hat 7.X, gcc-2.96</B></A>.
+<UL>
+<LI>The default compiler distributed by Red Hat since release 7.0 is
+    NOT supported and not considered reliable for running a Geant4-based
+    application. In more than one test case, binaries produced by gcc-2.96
+    have shown incorrect behavior, either due to wrong order of
+    initialisation of static data in memory or to bugs in the system
+    <TT>iostream</TT> classes, problems which apparently have all been
+    solved in more recent versions of the compiler (3.X series).<BR>
+    For information, gcc-2.96 is a compiler that has never been
+    officially released, nor supported by the GNU team itself and is not
+    considered reliable by the authors (for more information, see also
+    <A TARGET="ext" HREF="http://gcc.gnu.org/gcc-2.96.html">http://gcc.gnu.org/gcc-2.96.html</A>).</LI>
+</UL></LI>
+</UL>
+
+<P> </P>
+<A NAME="4."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>4. Known Run-Time Problems and Limitations</H2>
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem Reporting
+System</A>.
+
+
+<P> </P>
+<A NAME="5."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>5. Compilation Warnings</H2>
+
+There may be compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour.
+
+
+<P> </P>
+<A NAME="6."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>6. Known Run-Time Warnings</H2>
+
+The following messages can be written to error output while tracking.
+We believe none give rise to incorrect behaviour.
+<PRE>
+    G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 1000 steps in Field while a maximum of 1000
+       are allowed. 
+</PRE>
+
+
+<P> </P>
+<A NAME="7."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>7. Major items for migration of user code</H2>
+
+There not known migrations necessary if upgrading from release 6.0,
+other than recompilation and/or reinstallation of libraries and user
+applications.
+
+<P> </P>
+<A NAME="8."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>8. Detailed list of changes and fixes</H2>
+
+These are the main new features/fixes included in this release since the
+last patched public release (for the detailed list of fixes/additions,
+please refer to the related History files provided in most packages):
+
+<P> </P>
+
+<A NAME="conf-notes">
+<H3><I>Configuration</I></H3></A>
+<UL>
+<LI>Fixes in the experimental configuration file <TT>Linux-icc.gmk</TT>
+    for Intel/icc compiler on Linux systems.</LI>
+<LI><TT>WIN32-VC7.gmk</TT>: added material to build shared-libs for
+    Windows (DLLs), for future use.<BR>
+    Added program <TT>win32def.c</TT> to help building DLLs, for
+    future use.</LI>
+</UL>
+
+<A NAME="dgt-notes">
+<H3><I>Digitization & Hits</I></H3></A>
+<UL>
+<LI>Added methods to <TT>G4HCtable</TT> for additional verbosity.</LI>
+</UL>
+
+<A NAME="evt-notes">
+<H3><I>Event</I></H3></A>
+<UL>
+<LI><TT>LocateGlobalPointAndSetup()</TT> method of <TT>G4Navigator</TT>
+    is now invoked at the beginning of each new event to reset the
+    navigation history.</LI>
+<LI>Bug Fix in the destructor of <TT>G4ParticleGunMessenger</TT>.</LI>
+</UL>
+
+<A NAME="emlow-notes">
+<H3><I>Electromagnetic Processes (Low-energy)</I></H3></A>
+<UL>
+<LI>Implemented optimization of Bremsstrahlung angular generators.</LI>
+<LI>Bug fixes in <TT>G4IonisationParameters</TT>, <TT>G4PenelopeCompton</TT>
+    and <TT>G4PenelopeIonisation</TT>.</LI>
+<LI>Fixed some compilation warnings on Intel/icc compiler.</LI>
+<LI>Bug fix in <TT>G4PenelopeRayleigh</TT>, related to problem report #605.</LI>
+<LI>Performance improvement in <TT>G4Generator2BN</TT> and Penelope
+    processes.</LI>
+</UL>
+
+<A NAME="emstd-notes">
+<H3><I>Electromagnetic Processes (Standard)</I></H3></A>
+<UL>
+<LI>Bug Fixes in model variant of multiple-scattering; simplified calculation
+    of energy dependence of internal parameters.<BR>
+    <TT>G4MscModel</TT>: corrections to path length conversion and theta angle.</LI>
+<LI>Updated parameterizations in G4MuPairProductionModel for energies
+    over ~100 GeV. Precision of differential cross section parameterization is
+    improved from 30% to 5%.</LI>
+<LI>Updated radiative corrections calculation for <TT>G4MuBetheBlochModel</TT>
+    for muon energy above 1 GeV. Accuracy of energy loss of high energy muons
+    updated from 10% to 2%.</LI>
+<LI>Fixed problem of ionisation in air with low pressure less than
+    <TT>10<SUP>-4</SUP> Atm</TT>. Setting <TT>lowestKinEnergy</TT> to <TT>1.*eV</TT>,
+    in <TT>G4VEnergyLossProcess</TT>.</LI>
+<LI>Fixed problem of simulation of fluctuation of energy losses in very
+    small steps.</LI>
+<LI>Activated new optional feature, <I>PreciseRange</I> option, which 
+    provides ranges of particles calculated from total (not-truncated 
+    by cut) energy loss. Relevant for energies less than <TT>1 MeV</TT>
+    and effect sampling calorimeter results.</LI>
+<LI>Added new class <TT>G4EmProcessOptions</TT> to be used in physics lists.
+<LI>Fixes in constructor of discrete processes for setting of process type.</LI>
+</UL>
+
+<A NAME="gen-notes">
+<H3><I>General Processes, Parameterisation, Cuts, Decay, Optical</I></H3></A>
+<UL>
+<LI><B>Decay</B>:
+    <UL>
+    <LI>Fixed bug in <TT>PostStepGPIL()</TT> in case of stopping
+        during AlongStep actions.</LI>
+    </UL></LI>
+<LI><B>Optical</B>:
+    <UL>
+    <LI><TT>G4OpBoundaryProcess</TT>:
+        <UL>
+        <LI>Added process status <TT>NotAtBoundary</TT>, <TT>SameMaterial</TT>,
+            <TT>StepTooSmall</TT>, <TT>NoRINDEX</TT>. Allowing for a
+            skin-surface between mother and daughter volumes, with the
+            daughter skin taking precedence.</LI>
+        <LI>Initialise all class members in constructor.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<A NAME="geo-notes">
+<H3><I>Geometry</I></H3></A>
+<UL>
+<LI><B>Navigation</B>
+    <UL>
+    <LI><TT>G4Navigator</TT>: fixed old outstanding bug in
+        <TT>ComputeStep()</TT> for the location of the local point in
+        the calculation of a valid exit normal.</LI>
+    <LI>Added <I>check_mode</I> state for navigators. The state can be
+        activated by a new UI command
+        (<TT>geometry/navigator/check_mode [true/false]</TT>) and will
+        force more strict and less tolerant checks in step/safety computation
+        to verify the correctness of solids' response in the geometry.</LI>
+    <LI>Reorganised verbosity levels. Added more useful information activated
+        when in <TT>G4VERBOSE</TT> mode and verbosity level selected.<BR>
+        Fixed output formatting when entering/exiting verbose blocks.</LI>
+    </UL></LI>
+<LI><B>Solids</B>
+    <UL>
+    <LI><I>Boolean solids</I>:
+        <UL>
+        <LI><TT>G4UnionSolid</TT>, <TT>G4SubtractionSolid</TT>: fix in debug
+            printout for <TT>SurfaceNomal()</TT>.</LI>
+        </UL></LI>
+    <LI><I>CSG solids</I>:
+        <UL>
+        <LI><TT>G4Torus</TT>: fixed bug in <TT>Inside(p)</TT>, fixing warnings
+            of '<TT>point p is outside</TT>' observed when running in
+            debug-mode.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<A NAME="glob-notes">
+<H3><I>Global</I></H3></A>
+<UL>
+<LI>Removed obsolete "<TT>includes</TT>" target in <TT>management/GNUmakefile</TT>.</LI>
+<LI>Corrected comments in <TT>G4UserLimits</TT> header.</LI>
+</UL>
+
+<A NAME="had-notes">
+<H3><I>Hadronic Processes</I></H3></A>
+<UL>
+<LI><B>management & utils</B>
+    <UL>
+    <LI>Added a white-board functionality to allow for in-core inspection
+        of reaction conditions in optimized.</LI>
+    <LI>Added a signal-handler (for SIGSEGV) that prints the reaction 
+        conditions before handling it over to the experiment (or default)
+        signal handler.</LI>
+    <LI>Fixed cases of double deletion of memory in cases when
+        isotope-production models are used.</LI>
+    <LI>Run-time checking for <TT>NaN</TT> values of energies of
+        secondaries.</LI>
+    <LI>Fix for suspended particles (only neutron_hp model has these).</LI>
+    <LI>Rudimentary verification of consistancy of hadronic physics.</LI>
+    <LI>Transition to <TT>std::pair</TT> in <TT>G4Pair</TT>.</LI>
+    </UL></LI>
+<LI><B>models/binary_cascade</B>
+    <UL>
+    <LI>Fixed a few memory leaks in <TT>G4BinaryLightIonReaction</TT>.</LI>
+    <LI>Fix for single nucleon spectator, resulting in occasional
+        momentum non-conservation.</LI>
+    <LI>Removed one recurring run time warning from <TT>G4RKPropagation</TT>.
+        Relates to problem report #593.</LI>
+    </UL></LI>
+<LI><B>models/chiral_inv_phase_space</B>
+    <UL>
+    <LI>Major improvement of the CHIPS nuclear fragmentation model: in
+        addition to Lambdas, now Sigmas, Xi, and Omega hyperons are added to
+        the fragmentation algorithm (together with N+Sigma and NN+Sigma nuclear
+        fragments); Delta isobars together with iso-nuclei are implemented
+        as an intermediate states of fragmentation; all leptons are added to
+        the CHIPSWorld of particles, so that now the CHIPS model is ready for
+        nuclear muon-minus capture at rest process and for the neutrino-nuclear
+        reactions.</LI>
+    <LI>Implemented new debug system of step by step energy/momentum and
+        charge/baryon_number conservation control.</LI>
+    <LI>Resolved en/mom conflicts in the Sigma+Delta++ and Sigma-Delta-
+        final states.</LI>
+    <LI>Corrected baryon number and charge non conservation observed in some
+        decays.</lI>
+    <LI>Cleared unnecessary run-time warnings, for which it was tested that
+        the conflict situation is successfully resolved.</LI>
+    <LI>Fixed bug for Delta-,Delta-,n under 3n+2pi- together with all possible
+        Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,
+        (k*p) under (k+2)*p+2pi+ threshold possible fragmentation states.</LI>
+    <LI>Bug fixes and porting in the interface classses.</LI>
+    </UL></LI>
+<LI><B>models/im_r_matrix</B>
+    <UL>
+    <LI>Improved configuration and configurability, using TMPs.</LI>
+    </UL></LI>
+<LI><B>models/leading_particle</B>
+    <UL>
+    <LI>Added constructor message, specifying what code is used.</LI>
+    </UL></LI>
+<LI><B>models/neutron_hp</B>
+    <UL>
+    <LI>Bug fix concerning Mandrake/Linux (CSTOP enum replaced).</LI>
+    <LI>Fixed Valgrind run-time error on <TT>G4NeutronHPVector</TT>.</LI>
+    </UL></LI>
+<LI><B>models/qgsm</B>
+    <UL>
+    <LI>Introduced minimal transverse mass for diffractive
+        scattering of gammas.</LI>
+    </UL></LI>
+<LI><B>stopping</B>
+    <UL>
+    <LI>Updated implementation of mu-nuclear absorption at rest.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="part-notes">
+<H3><I>Particles</I></H3></A>
+<UL>
+<LI>Updated mass and width to meet with PDG 2002 data.</LI>
+<LI>Added classes for retrieving particle properties from file:
+    <UL>
+    <LI>Base class <TT>G4VParticlePropertyRetriever</TT>.</LI>
+    <LI>Classes <TT>G4TextPPReporter</TT> and <TT>G4TextPPRetriever</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="readout-notes">
+<H3><I>Readout</I></H3></A>
+<UL>
+<LI>Added some methods in <TT>G4DCtable</TT> to enhance a verbosity.</LI>
+</UL>
+
+<A NAME="run-notes">
+<H3><I>Run, Intercoms and Interfaces</I></H3></A>
+<UL>
+<LI><TT>G4RunManager</TT>:
+    <UL>
+    <LI>Invocation of <TT>G4Navigator::LocateGlobalPointAndSetup()</TT> is now
+        moved to <TT>G4EventManager</TT> so that the navigation history is
+        reset for every new event.</LI>
+    <LI>Added reference and WWW information to run-time header.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="vis-notes">
+<H3><I>Visualization</I></H3></A>
+<UL>
+<LI><B>HepRep</B>
+    <UL>
+    <LI>HepRepFile handle duplicate <TT>ShowView</TT>.</LI>
+    <LI>HepRepFile improve layering and hierarchy for hits.</LI>
+    <LI>Fixed compilation warnings for the Linux-icc (8.0) compiler.</LI>
+    <LI>Removed appendzip.cc file, not strictly necessary.
+        Fixes problem report #570.</LI>
+    <LI>Renamed the HepRep schema locator to new web URL.</LI>
+    </UL></LI>
+<LI><B>OpenGL</B>
+    <UL>
+    <LI>Fixed wrong order of statements in <TT>G4OpenGLXViewer</TT>
+        destructor. Fixes bug report #581.</LI>
+    </UL></LI>
+<LI><B>management</B>
+    <UL>
+    <LI>Added checks and minor improvement of behaviour at end of event
+        and run.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="hlst-notes">
+<H3><I>Hadronic physics-lists</I></H3></A>
+<UL>
+<LI>Updates to package 4.1 (QGSP_BIC, QGSP_BERT).</LI>
+</UL>
+
+<A NAME="ex-notes">
+<H3><I>Examples</I></H3></A>
+<UL>
+<LI>Updated reference outputs.</LI>
+<LI><B>advanced</B>
+    <UL>
+    <LI><I>brachytherapy</I>
+       <UL>
+         <LI>Added a new histogram and some code cleanup.</LI>
+       </UL></LI>
+    <LI><I>composite_calorimeter</I>
+       <UL>
+         <LI>Removed redefinition of streaming operator for
+             <TT>G4LorentzVector</TT> in <TT>CCalRotationMatrixFactory</TT>,
+             causing compilation problems on some compiler/system
+             configurations.</LI>
+       </UL></LI>
+    <LI><I>Rich</I>
+       <UL>
+         <LI>Fixed compilation errors and warnings for gcc-3.2.</LI>
+       </UL></LI>
+    </UL></LI>
+<LI><B>extended</B>
+    <UL>
+    <LI><I>biasing/B01</I>
+        <UL>
+        <LI>Open the geometry to cleanly clear biasing stores
+            at the end of the application.</LI>
+        </UL></LI>
+    <LI><I>electromagnetic/TestEm5</I>
+        <UL>
+        <LI>Modified histo 7: projected position at exit.</LI>
+        <LI>RunAction: removed UI commands for visualisation,
+            added a function <TT>ComputeMscHighland()</TT>.</LI>
+        </UL></LI>
+    <LI><I>field</I>
+        <UL>
+        <LI>Fixed methods that change the field to update the equation and
+            field-manager in field01 and field03.</LI>
+        </UL></LI>
+    <LI><I>medical/DICOM</I>
+        <UL>
+        <LI>Added History file, changed README.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>novice</B>
+    <UL>
+    <LI><I>N06</I>
+        <UL>
+        <LI>DetectorConstruction: changed surface model between
+            <TT>OpWaterSurface</TT> and <TT>OpAirSurface</TT>.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<HR>
+
+</BODY>
+</HTML>

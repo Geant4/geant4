@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.9 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BetheBlochModel.cc,v 1.11 2004/02/15 17:08:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -82,7 +82,6 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     spin = particle->GetPDGSpin();
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
-    lowKinEnergy *= mass/proton_mass_c2;
     ratio = electron_mass_c2/mass;
     if(particle->GetParticleName() == "GenericIon") isIon = true;
   }
@@ -133,17 +132,17 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 G4double G4BetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                         const G4ParticleDefinition* p,
                                               G4double kineticEnergy,
-                                              G4double cutEnergy)
+                                              G4double cut)
 {
-  const G4Material* material = couple->GetMaterial();
-  G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double tau   = kineticEnergy/mass;
-  G4double x     = 1.0;
-  if(cutEnergy < tmax) x = cutEnergy/tmax;
-  G4double gam   = tau + 1.0;
-  G4double beta2 = 1. - 1./(gam*gam);
-  G4double bg2   = tau * (tau+2.0);
+  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double cutEnergy = std::min(cut,tmax);
 
+  G4double tau   = kineticEnergy/mass;
+  G4double gam   = tau + 1.0;
+  G4double bg2   = tau * (tau+2.0);
+  G4double beta2 = bg2/(gam*gam);
+
+  const G4Material* material = couple->GetMaterial();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
   G4double taul  = material->GetIonisation()->GetTaul();
@@ -156,15 +155,15 @@ G4double G4BetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
             material->GetIonisation()->GetShellCorrectionVector();
   G4double eDensity = material->GetElectronDensity();
 
-  G4double dedx = log(2.0*electron_mass_c2*bg2*tmax*x/eexc2)-(1.0 + x)*beta2;
+  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
 
   if(0.5 == spin) {
-    G4double del = 0.5*x*tmax/(kineticEnergy + mass);
+    G4double del = 0.5*cutEnergy/(kineticEnergy + mass);
     dedx += del*del;
   }
 
   // density correction
-  x = log(bg2)/twoln10;
+  G4double x = log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx -= twoln10*x - cden ;
     if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
@@ -204,35 +203,26 @@ G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
                                          const G4ParticleDefinition* p,
                                                G4double kineticEnergy,
                                                G4double cutEnergy,
-                                               G4double maxEnergy)
+                                               G4double maxKinEnergy)
 {
   G4double cross = 0.0;
-  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
-  if(cutEnergy < tmax) {
+  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  if(cutEnergy < maxEnergy) {
 
-    G4double x      = cutEnergy/tmax;
-    G4double energy = kineticEnergy + mass;
-    G4double gam    = energy/mass;
-    G4double beta2  = 1. - 1./(gam*gam);
-    cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
+    G4double totEnergy = kineticEnergy + mass;
+    G4double energy2   = totEnergy*totEnergy;
+    G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
     // +term for spin=1/2 particle
-    if( 0.5 == spin ) {
-      cross +=  0.5 * (tmax - cutEnergy) / (energy*energy);
-
-    // +term for spin=1 particle
-    } else if( 0.9 < spin ) {
-
-      G4double qc = mass/ratio;
-      cross += -log(x)/(3.0*qc) +
-	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/qc)/(energy*energy)
-	- beta2 / (tmax * qc) )/3.0;
-    }
+    if( 0.5 == spin ) cross += 0.5*(maxEnergy - cutEnergy)/energy2;
 
     cross *= twopi_mc2_rcl2*chargeSquare*
              (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
+  //  G4cout << "BB: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
   //       << " cross= " << cross << G4endl;
   return cross;
 }
@@ -242,59 +232,42 @@ G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
 G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double tmin,
+                                   G4double minEnergy,
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double xmin = tmin/tmax;
-  G4double xmax = std::min(tmax, maxEnergy)/tmax;
-  if(xmin >= xmax) return 0;
-
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4double maxKinEnergy = std::min(maxEnergy,tmax);
+  G4double minKinEnergy = std::min(minEnergy,maxKinEnergy);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double energy = kineticEnergy + mass;
-  G4double beta2 = 1. - mass*mass/(energy*energy);
-  G4double totMomentum = sqrt(energy*energy - mass*mass);
-  G4double x = 0.0;
-  G4double y = 0.0;
-  G4double grej = 1.0 - beta2*xmin;
-  if(spin > 0.0) {
-    x = 0.5*tmax*tmax/(energy*energy);
-    if(spin < 0.9) {
-      grej += xmax*xmax*x;
-    } else {
-      G4double qc = mass/ratio;
-      y = tmax/(3.0*qc);
-      grej += (1.0 - beta2*xmin)*xmin*y + x*xmin*xmin*(2.0/3.0 + xmin*y);
-    }
-  }
-  G4double z, f;
+  G4double totEnergy     = kineticEnergy + mass;
+  G4double etot2         = totEnergy*totEnergy;
+  G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
+
+  G4double deltaKinEnergy, f;
 
   // sampling follows ...
   do {
     G4double q = G4UniformRand();
-    z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+    deltaKinEnergy = minKinEnergy*maxKinEnergy/(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
 
-    f = 1.0 - z * (beta2 - z*x);
 
-    if (spin > 0.9) {
-      f += (1.0 - beta2*z)*z*y + x*z*z*(2.0/3.0 + z*y);
-    }
-    if(f > grej) {
+    f = 1.0 - beta2*deltaKinEnergy/tmax;
+    if( 0.5 == spin ) f += 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
+
+    if(f > 1.0) {
         G4cout << "G4BetheBlochModel::SampleSecondary Warning! "
-               << "Majorant " << grej << " < "
-               << f << " for x= " << z
+               << "Majorant 1.0 < "
+               << f << " for Edelta= " << deltaKinEnergy
                << G4endl;
     }
 
-  } while( grej*G4UniformRand() > f );
+  } while( G4UniformRand() > f );
 
-  G4double deltaKinEnergy = z * tmax;
-
+  G4double totMomentum = totEnergy*sqrt(beta2);
   G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+  G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
   G4double sint = sqrt(1.0 - cost*cost);
 
@@ -302,13 +275,12 @@ G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
 
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(momentum);
+  G4ThreeVector direction = dp->GetMomentumDirection();
+  deltaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle();
-  delta->SetDefinition(G4Electron::Electron());
-  delta->SetKineticEnergy(deltaKinEnergy);
-  delta->SetMomentumDirection(deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
+                                                   deltaDirection,deltaKinEnergy);
 
   return delta;
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: SteppingAction.cc,v 1.1 2003/08/11 10:22:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

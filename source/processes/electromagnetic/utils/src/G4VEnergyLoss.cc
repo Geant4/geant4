@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VEnergyLoss.cc,v 1.44 2003/11/06 17:19:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 // --------------------------------------------------------------

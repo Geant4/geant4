@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReduciblePolygon.hh,v 1.6 2003/11/03 18:39:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------

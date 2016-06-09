@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionPN.hh,v 1.1 2003/10/07 12:37:27 hpw Exp $ //
+// $Id: G4CollisionPN.hh,v 1.2 2003/12/15 16:40:11 hpw Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -65,16 +65,14 @@ public:
 
 protected:
 
-  virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return crossSectionSource; }
-  virtual const G4VAngularDistribution* GetAngularDistribution() const { return 0; }
-
-  virtual const G4CollisionVector* GetComponents() const { return components; } 
+  virtual const G4VCrossSectionSource* GetCrossSectionSource() const 
+  { return crossSectionSource; }
+  virtual const G4VAngularDistribution* GetAngularDistribution() const 
+  { return 0; }
 
   virtual const std::vector<G4String>& GetListOfColliders(G4int whichOne) const;  
 
 private:  
-
-  G4CollisionVector* components;
 
   G4VCrossSectionSource* crossSectionSource;
 

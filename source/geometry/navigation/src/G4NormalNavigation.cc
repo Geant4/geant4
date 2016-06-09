@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.2 2003/11/03 17:15:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NormalNavigation.cc,v 1.3 2004/03/10 18:21:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 // class G4NormalNavigation Implementation
@@ -33,6 +33,22 @@
 
 #include "G4NormalNavigation.hh"
 #include "G4AffineTransform.hh"
+
+// ********************************************************************
+// Constructor
+// ********************************************************************
+//
+G4NormalNavigation::G4NormalNavigation()
+  : fCheck(false), fVerbose(0)
+{
+}
+
+// ********************************************************************
+// Destructor
+// ********************************************************************
+//
+G4NormalNavigation::~G4NormalNavigation()
+{;}
 
 // ********************************************************************
 // ComputeStep
@@ -67,6 +83,40 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety; // Working isotropic safety
   
+#ifdef G4VERBOSE
+  if ( fCheck )
+  {
+    if ( motherSafety < 0.0 )
+    {
+      G4cerr << "ERROR - G4NormalNavigation::ComputeStep()" << G4endl
+             << "        Current solid " << motherSolid->GetName()
+             << " gave negative safety: " << motherSafety << G4endl
+             << "        for the current (local) point " << localPoint
+             << G4endl;
+      G4Exception("G4NormalNavigation::ComputeStep()",
+                  "NegativeSafetyMotherVol", FatalException,
+                  "Negative Safety In Voxel Navigation !" );
+    }
+    if( motherSolid->Inside(localPoint)==kOutside )
+    {
+      G4cout << "WARNING - G4NormalNavigation::ComputeStep()" << G4endl
+             << "          Point " << localPoint
+             << " is outside current volume " << motherPhysical->GetName()
+             << G4endl;
+      G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
+      G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
+             << estDistToSolid << G4endl;
+      if( estDistToSolid > 100.0 * kCarTolerance ) 
+        G4Exception("G4NormalNavigation::ComputeStep()",
+                    "FarOutsideCurrentVolume", FatalException,
+                    "Point is far outside Current Volume !" ); 
+      else
+        G4Exception("G4NormalNavigation::ComputeStep()", "OutsideCurrentVolume", 
+                    JustWarning, "Point is a little outside Current Volume."); 
+    }
+  }
+#endif
+
   //
   // Compute daughter safeties & intersections
   //
@@ -117,6 +167,47 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
           exiting  = false;
           *pBlockedPhysical = samplePhysical;
           blockedReplicaNo  = -1;
+
+#ifdef G4VERBOSE
+          // Check to see that the resulting point is indeed in/on volume.
+          // This check could eventually be made only for successful candidate.
+
+          if ( ( fCheck ) && ( sampleStep < kInfinity ) )
+          {
+            G4ThreeVector intersectionPoint;
+            intersectionPoint= samplePoint + sampleStep * sampleDirection;
+            EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
+            if ( insideIntPt != kSurface )
+            {
+              G4int oldcoutPrec = G4cout.precision(16); 
+              G4cout << "WARNING - G4NormalNavigation::ComputeStep()" << G4endl
+                     << "          Inaccurate DistanceToIn for solid "
+                     << sampleSolid->GetName() << G4endl;
+              G4cout << "          Solid gave DistanceToIn = " << sampleStep
+                     << " yet returns " ;
+              if ( insideIntPt == kInside )
+                G4cout << "-kInside-"; 
+              else if ( insideIntPt == kOutside )
+                G4cout << "-kOutside-";
+              else
+                G4cout << "-kSurface-"; 
+              G4cout << " for this point !" << G4endl; 
+              G4cout << "          Point = " << intersectionPoint << G4endl;
+              if ( insideIntPt != kInside )
+                G4cout << "        DistanceToIn(p) = " 
+                       << sampleSolid->DistanceToIn(intersectionPoint)
+                       << G4endl;
+              if ( insideIntPt != kOutside ) 
+                G4cout << "        DistanceToOut(p) = " 
+                       << sampleSolid->DistanceToOut(intersectionPoint)
+                       << G4endl;
+              G4Exception("G4NormalNavigation::ComputeStep()", 
+                          "InaccurateDistanceToIn", JustWarning,
+                          "Navigator gets conflicting response from Solid."); 
+              G4cout.precision(oldcoutPrec);
+            }
+          }
+#endif
         }
       }
     }
@@ -141,6 +232,22 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
                                                        true,
                                                        &validExitNormal,
                                                        &exitNormal);
+#ifdef G4VERBOSE
+      if ( fCheck ) 
+        if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
+        {
+          G4cerr << "ERROR - G4NormalNavigation::ComputeStep()" << G4endl
+                 << "        Problem in Navigation"  << G4endl
+                 << "        Point (local coordinates): "
+                 << localPoint << G4endl
+                 << "        Local Direction: " << localDirection << G4endl
+                 << "        Solid: " << motherSolid->GetName() << G4endl; 
+          G4Exception("G4NormalNavigation::ComputeStep()",
+                      "PointDistOutInvalid", FatalException,
+                      "Current point is outside the current solid !");
+        }
+#endif
+
       if ( motherStep<=ourStep )
       {
         ourStep  = motherStep;

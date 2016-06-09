@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MinEkineCuts.cc,v 1.2 2003/12/04 16:25:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -50,8 +49,7 @@ MinEkineCuts::MinEkineCuts(const G4String& aName)
 MinEkineCuts::~MinEkineCuts()
 {}
 
-MinEkineCuts::MinEkineCuts(MinEkineCuts&)
-  : SpecialCuts()
+MinEkineCuts::MinEkineCuts(MinEkineCuts& ) : SpecialCuts()
 {}
 
  

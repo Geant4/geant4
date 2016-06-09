@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.3 2003/11/25 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: DetectorConstruction.cc,v 1.7 2004/01/21 17:29:27 maire Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

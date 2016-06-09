@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.16 2003/06/16 17:00:19 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PenelopeCompton.cc,v 1.19 2004/03/23 12:44:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: Luciano Pandola
 //
@@ -37,6 +37,9 @@
 // 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
 // 26 Mar 2003 L.Pandola      Added fluorescence
 // 24 May 2003 MGP            Removed memory leak
+// 09 Mar 2004 L.Pandola      Bug fixed in the generation of final state 
+//                            (bug report # 585)
+// 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
 //
 // -------------------------------------------------------------------
 
@@ -108,11 +111,17 @@ G4PenelopeCompton::~G4PenelopeCompton()
 {
   delete meanFreePathTable;
   delete rangeTest;
+
+  for (size_t i1=0;i1<matCrossSections->size();i1++)
+    {
+      delete (*matCrossSections)[i1];
+    }
+
   delete matCrossSections;
 
-   for (size_t i=0; i<ionizationEnergy->size(); i++)
+   for (size_t i2=0; i2<ionizationEnergy->size(); i2++)
     {
-      delete (*ionizationEnergy)[i];
+      delete (*ionizationEnergy)[i2];
     }
   delete ionizationEnergy;
 
@@ -186,6 +195,8 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
       matCrossSections->push_back(setForMat);
     }
 
+
+  //Build the mean free path table! 
   G4double matCS = 0.0;
   G4VEMDataSet* matCrossSet = new G4CompositeEMDataSet(algo,1.,1.);
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
@@ -311,14 +322,14 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
 	    occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
 	    pzomc = harFunc*(aux-electron_mass_c2*ionEnergy)/
-	      (electron_mass_c2*sqrt(2.0*aux+pow(ionEnergy,2)));
+	       (electron_mass_c2*sqrt(2.0*aux+ionEnergy*ionEnergy));
 	    if (pzomc > 0) 
 	      {
-		rni = 1.0-0.5*exp(0.5-pow(sqrt(0.5)+sqrt(2.0)*pzomc,2));
+		rni = 1.0-0.5*exp(0.5-(sqrt(0.5)+sqrt(2.0)*pzomc)*(sqrt(0.5)+sqrt(2.0)*pzomc));
 	      }
 	    else
 	      {
-		rni = 0.5*exp(0.5-pow(sqrt(0.5)-sqrt(2.0)*pzomc,2));
+		rni = 0.5*exp(0.5-(sqrt(0.5)-sqrt(2.0)*pzomc)*(sqrt(0.5)-sqrt(2.0)*pzomc));
 	      }
 	    s0 = s0 + occupNb*rni;
 	  }
@@ -347,14 +358,14 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 		harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
 		occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
 		pzomc = harFunc*(aux-electron_mass_c2*ionEnergy)/
-		  (electron_mass_c2*sqrt(2.0*aux+pow(ionEnergy,2)));
+		  (electron_mass_c2*sqrt(2.0*aux+ionEnergy*ionEnergy));
 		if (pzomc > 0) 
 		  {
-		    rn[i] = 1.0-0.5*exp(0.5-pow(sqrt(0.5)+sqrt(2.0)*pzomc,2));
+		    rn[i] = 1.0-0.5*exp(0.5-(sqrt(0.5)+sqrt(2.0)*pzomc)*(sqrt(0.5)+sqrt(2.0)*pzomc));
 		  }
 		else
 		  {
-		    rn[i] = 0.5*exp(0.5-pow(sqrt(0.5)-sqrt(2.0)*pzomc,2));
+		    rn[i] = 0.5*exp(0.5-(sqrt(0.5)-sqrt(2.0)*pzomc)*(sqrt(0.5)-sqrt(2.0)*pzomc));
 		  }
 		S = S + occupNb*rn[i];
 		pac[i] = S;
@@ -409,7 +420,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	}while ((fpzmax*G4UniformRand())>fpz);
   
       //Energy of the scattered photon
-      G4double T = pow(pzomc,2);
+      G4double T = pzomc*pzomc;
       G4double b1 = 1.0-T*tau*tau;
       G4double b2 = 1.0-T*tau*cosTheta;
       if (pzomc > 0.0)
@@ -423,7 +434,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   
 
-  G4double sinTheta = sqrt(1-pow(cosTheta,2));
+  G4double sinTheta = sqrt(1-cosTheta*cosTheta);
   G4double phi = twopi * G4UniformRand() ;
   G4double dirx = sinTheta * cos(phi);
   G4double diry = sinTheta * sin(phi);
@@ -453,7 +464,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
   //G4double eKineticEnergy = diffEnergy - ionEnergy;
-  G4double Q2 = pow(photonEnergy0,2)+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
+  G4double Q2 = photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
     {
@@ -463,7 +474,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     {
       cosThetaE = 1.0;
     }
-  G4double sinThetaE = sqrt(1-pow(cosThetaE,2));
+  G4double sinThetaE = sqrt(1-cosThetaE*cosThetaE);
 
  
  
@@ -527,7 +538,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double yEl = sinThetaE * sin(phi+pi);
       G4double zEl = cosThetaE;
       G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
-   
+      eDirection.rotateUz(photonDirection0);
       electron = new G4DynamicParticle (G4Electron::Electron(),
 					eDirection,eKineticEnergy) ;
       nbOfSecondaries++;
@@ -693,23 +704,23 @@ G4double G4PenelopeCompton::DifferentialCrossSection(G4double cosTheta)
     if (energy > ionEnergy)
       {
 	G4double aux = energy * (energy-ionEnergy)*cdt1;
-	Pzimax = (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*sqrt(2*aux+pow(ionEnergy,2)));
+	Pzimax = (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*sqrt(2*aux+ionEnergy*ionEnergy));
 	harFunc = (*((*hartreeFunction)[Z-1]))[i]/fine_structure_const;
 	occupNb = (G4int) (*((*occupationNumber)[Z-1]))[i];
 	x = harFunc*Pzimax;
 	if (x > 0) 
 	  {
-	    siap = 1.0-0.5*exp(k12-pow((k1+k2*x),2));
+	    siap = 1.0-0.5*exp(k12-(k1+k2*x)*(k1+k2*x));
 	  }
 	else
 	  {
-	    siap = 0.5*exp(k12-pow((k1-k2*x),2));
+	    siap = 0.5*exp(k12-(k1-k2*x)*(k1-k2*x));
 	  }
 	sia = sia + occupNb*siap; //sum of all contributions;
       }
   }
   XKN = EOEC+ECOE-1+cosTheta*cosTheta;
-  diffCS = pi*pow(classic_electr_radius,2)*pow(ECOE,2)*XKN*sia;
+  diffCS = pi*classic_electr_radius*classic_electr_radius*ECOE*ECOE*XKN*sia;
   return diffCS;
 }
 

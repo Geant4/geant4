@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RTMessenger.hh,v 1.5 2003/09/18 11:13:24 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 

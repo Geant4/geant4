@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChange.cc,v 1.24 2003/11/24 10:27:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------

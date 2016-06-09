@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.16 2003/06/16 16:56:26 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4SandiaTable.cc,v 1.17 2004/02/03 11:09:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 03.02.04 Update distructor V.Ivanchenko
 // 10.07.01 Migration to STL. M. Verderi.
 // 03.04.01 fnulcof returned if energy < emin
 // 22.02.01 GetsandiaCofForMaterial(energy) return 0 below lowest interval  mma  
@@ -78,8 +79,8 @@ G4SandiaTable::~G4SandiaTable()
   
   if(fPhotoAbsorptionCof)
   {
-    for(G4int i = 0 ; i < fMaxInterval ; i++)  delete[] fPhotoAbsorptionCof[i];
-    delete fPhotoAbsorptionCof ;
+    //    for(G4int i = 0 ; i < fMaxInterval ; i++)  delete[] fPhotoAbsorptionCof[i];
+    delete [] fPhotoAbsorptionCof ;
   }
 }
 						 	

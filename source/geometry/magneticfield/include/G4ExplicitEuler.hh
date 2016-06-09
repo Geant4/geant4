@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExplicitEuler.hh,v 1.8 2003/11/05 16:30:55 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // class G4ExplicitEuler

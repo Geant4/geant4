@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2003/11/12 16:44:06 johna Exp $
+$Id: History,v 1.7 2004/03/11 15:38:41 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,8 @@ $Id: History,v 1.6 2003/11/12 16:44:06 johna Exp $
 
                       Category History file
                       ---------------------
+11.3.2003  - Susanna Guatelli
+             Add a histogram, maintenance of the code
 
 12.11.2003 - John Allison
              Updated Vis Manager.

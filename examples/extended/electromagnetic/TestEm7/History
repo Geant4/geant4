@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003/12/05 11:18:40 vnivanch Exp $
+$Id: History,v 1.14 2004/02/06 17:12:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-02-04 V.Ivanchenko (testem7-V06-00-00)
+- Remove "add binary" from TestEm7.in macro
 
 05-12-03 V.Ivanchenko (testem7-V05-02-05)
 - Update hadronic physics according to the hadronics_lists

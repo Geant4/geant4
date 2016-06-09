@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1.1.1 2003/12/01 10:50:22 hpw Exp $
+# $Id: GNUmakefile,v 1.1.1.2 2004/03/25 16:42:11 hpw Exp $
 # -----------------------------------------------------------------
 
 SUBDIR1 = FTFC FTFP LBE LHEP LHEP_GN LHEP_HP LHEP_LEAD LHEP_LEAD_HP LHEP_PRECO QGSP_BERT

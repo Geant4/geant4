@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ElectricField.cc,v 1.1 2003/11/05 10:40:59 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // --------------------------------------------------------------------
 

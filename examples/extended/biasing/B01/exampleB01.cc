@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.19 2003/08/25 12:32:29 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: exampleB01.cc,v 1.20 2004/03/24 10:11:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4GeometryManager.hh"
 
 #include "B01DetectorConstruction.hh"
 #include "B01PhysicsList.hh"
@@ -67,18 +68,13 @@
 
 
 int main(int argc, char **argv)
-{  
-
+{
   G4int mode = 0;
-  if (argc>1) {
-    mode = atoi(argv[1]);
-  }
+  if (argc>1)  mode = atoi(argv[1]);
 
   std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;
-
   G4long myseed = 345354;
-
   HepRandom::setTheSeed(myseed);
 
   G4RunManager *runManager = new G4RunManager;
@@ -91,28 +87,31 @@ int main(int argc, char **argv)
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
   runManager->Initialize();
 
-  // pointers for importance store, weight window sotre
-  // and weight window algorithm
+  // pointers for importance store, weight-window store
+  // and weight-window algorithm
+  //
   G4VIStore *aIstore = 0;
   G4VWeightWindowStore *aWWstore = 0;
   G4VWeightWindowAlgorithm *wwAlg = 0;
 
-
   // use a scorer
+  //
   G4Scorer scorer; 
 
-  // create sampler for biasing and scoring 
-  // in the mass geometry
-
+  // create sampler for biasing and scoring in the mass geometry
+  //
   G4MassGeometrySampler mgs("neutron");
   mgs.PrepareScoring(&scorer);
 
-  if (mode == 0) { 
+  if (mode == 0)
+  { 
     // prepare for importance sampling
+    //
     aIstore = detector->CreateImportanceStore();
     mgs.PrepareImportanceSampling(aIstore, 0);
   }
-  else {
+  else
+  {
     // prepare for weight window technique
     // in this case the algoritm is initialized such that
     // the weight window tehcnique does exactly the same as
@@ -120,23 +119,28 @@ int main(int argc, char **argv)
     // the place of action ( the locations where 
     // splitting and Russian roulette are to be applied)
     // is chosen to be on the boundary between cells.
+    //
     aWWstore = detector->CreateWeightWindowStore();
 
-    wwAlg = new G4WeightWindowAlgorithm(1, // upper limit factor
-					1, // survival factor 
+    wwAlg = new G4WeightWindowAlgorithm(1,    // upper limit factor
+					1,    // survival factor 
 					100); // max. number of splitting
       
-    mgs.PrepareWeightWindow(aWWstore, wwAlg, 
-			    onBoundary); // place of action
+    mgs.PrepareWeightWindow(aWWstore, wwAlg, onBoundary);  // place of action
   }
   mgs.Configure();
 
   runManager->BeamOn(numberOfEvent);
 
   // print a table of the scores
+  //
   G4ScoreTable sp(aIstore);
   sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
-  
+
+  // open geometry for clean biasing stores clean-up
+  //
+  G4GeometryManager::GetInstance()->OpenGeometry();
+
   if (aIstore) {
     delete aIstore;
   }
@@ -146,5 +150,6 @@ int main(int argc, char **argv)
   if (wwAlg) {
     delete wwAlg;
   }
+
   return 0;
 }

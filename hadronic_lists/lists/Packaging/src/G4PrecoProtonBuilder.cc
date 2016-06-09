@@ -29,7 +29,7 @@ G4PrecoProtonBuilder::
 G4PrecoProtonBuilder() 
 {
   theMin = 0;
-  theMax = 150.*MeV;
+  theMax = 170.*MeV;
   theModel = new G4PreCompoundModel(&theHandler);
 }
 

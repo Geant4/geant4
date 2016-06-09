@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003/12/01 16:31:52 japost Exp $
+$Id: History,v 1.14 2004/03/23 14:58:01 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,11 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 23rd, 2003 John Apostolakis (fieldex01-V06-00-00)
+-----------------------------------------------------
+- F01FieldSetup corrections
+   o fixed SetFieldValue(double) method (along Z) to update field mgr & eq
+   o fixed SetFieldValue(vector) method to update equation as well
+
 Dec  1st, 2003 John Apostolakis (fieldex01-V05-02-01)
 -----------------------------------------------------
 - F01FieldSetup corrections
    o deleting forgotten inheritance from G4MagneticField
-   o fixing SetFieldValue method
+   o fixing SetFieldValue(vector) method to update field manager
 - F01SteppingVerbose: New output format.
 - Fully deleted F01ElectroMagneticField.
 - field01.in: different energies, 1 track each in place of 100 events of 1 energy.

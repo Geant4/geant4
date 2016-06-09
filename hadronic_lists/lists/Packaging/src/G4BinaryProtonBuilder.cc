@@ -28,8 +28,18 @@
 G4BinaryProtonBuilder::
 G4BinaryProtonBuilder() 
 {
-  theMin = 0;
   theModel = new G4BinaryCascade;
+  theMin = 0;
+  theMax = 9.9*GeV;
+}
+
+void G4BinaryProtonBuilder::
+Build(G4ProtonInelasticProcess & aP)
+{
+  aP.AddDataSet(&theXSec);  
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP.RegisterMe(theModel);
 }
 
 G4BinaryProtonBuilder::
@@ -38,15 +48,6 @@ G4BinaryProtonBuilder::
 void G4BinaryProtonBuilder::
 Build(G4HadronElasticProcess & )
 {
-}
-
-void G4BinaryProtonBuilder::
-Build(G4ProtonInelasticProcess & aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

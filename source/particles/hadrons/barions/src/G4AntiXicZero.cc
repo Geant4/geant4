@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicZero.cc,v 1.13 2003/06/16 16:57:04 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiXicZero.cc,v 1.14 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4AntiXicZero::G4AntiXicZero(
 //             stable         lifetime    decay table 
 
 G4AntiXicZero G4AntiXicZero::theAntiXicZero(
-         "anti_xi_c0",      2.4703*GeV,    6.7e-9*MeV,         0.0, 
+         "anti_xi_c0",      2.4718*GeV,    6.7e-9*MeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -4132,

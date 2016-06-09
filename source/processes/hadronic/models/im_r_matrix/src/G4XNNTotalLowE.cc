@@ -56,7 +56,7 @@ G4XNNTotalLowE::G4XNNTotalLowE()
   G4int i;
   for (i=0; i<tableSize; i++)
     {
-      G4Pair<double,double> it;
+      std::pair<double,double> it;
       it.first=ss[i];
       it.second=ppTot[i]; pp->push_back(it);
       it.second=npTot[i]; np->push_back(it);

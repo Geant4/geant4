@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4LowEnergyCompton.hh,v 1.20 2003/12/09 15:36:37 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

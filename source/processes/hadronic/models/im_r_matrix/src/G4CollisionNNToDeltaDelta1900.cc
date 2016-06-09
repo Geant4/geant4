@@ -21,48 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta1900.cc,v 1.2 2003/11/19 15:35:29 hpw Exp $ //
+// $Id: G4CollisionNNToDeltaDelta1900.cc,v 1.3.2.1 2004/03/24 13:18:31 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDelta1900.hh"
 #include "G4ConcreteNNToDeltaDeltastar.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4ParticleTable.hh"
-#include "G4ShortLivedConstructor.hh"
-
-// complete hpw
 
 G4CollisionNNToDeltaDelta1900::G4CollisionNNToDeltaDelta1900()
 { 
-  // Subtype of interacting particles
-  G4ShortLivedConstructor ShortLived;
-  ShortLived.ConstructParticle();
-
-  G4ParticleDefinition * aNeutron = G4Neutron::NeutronDefinition();
-  G4ParticleDefinition * aProton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition * aDeltapp = G4ParticleTable::GetParticleTable()->FindParticle(2224); // D++
-  G4ParticleDefinition * aDeltap = G4ParticleTable::GetParticleTable()->FindParticle(2214); // D+
-  G4ParticleDefinition * aDelta0 = G4ParticleTable::GetParticleTable()->FindParticle(2114); // D0
-  G4ParticleDefinition * aDeltam = G4ParticleTable::GetParticleTable()->FindParticle(1114); // D-
-  
-  G4ParticleDefinition * aDm_1900 = G4ParticleTable::GetParticleTable()->FindParticle(11112); 
-  G4ParticleDefinition * aD0_1900 = G4ParticleTable::GetParticleTable()->FindParticle(11212); 
-  G4ParticleDefinition * aDp_1900 = G4ParticleTable::GetParticleTable()->FindParticle(12122); 
-  G4ParticleDefinition * aDpp_1900 = G4ParticleTable::GetParticleTable()->FindParticle(12222); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aNeutron, aDeltam, aDp_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aNeutron, aDelta0, aD0_1900));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aNeutron, aDeltap, aDm_1900));
-  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltap, aD0_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDelta0, aDp_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltam, aDpp_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltapp, aDm_1900));
-  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aProton, aProton, aDelta0, aDpp_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aProton, aProton, aDeltap, aDp_1900));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aProton, aProton, aDeltapp, aD0_1900));
+  MakeNNToDeltaDelta<Dm_1900PC, D0_1900PC, Dp_1900PC, Dpp_1900PC, 
+                     G4ConcreteNNToDeltaDeltastar>::Make(this);
 }
-
-
-

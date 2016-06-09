@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ConvexHull.hh,v 1.6 2002/02/26 11:16:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConvexHull

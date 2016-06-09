@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.7 2003/12/09 15:30:37 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: FCALTestbeamSetupSD.cc,v 1.8 2004/01/27 09:08:05 ribon Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -144,22 +144,22 @@ void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent*)
 // Write data in File
   //-------------------
   G4String FileName = "Beam_802_1mm.dat";
-  G4int iostemp;
+  std::ios::openmode iostemp;
   if(InitBeam == 0) {
-    iostemp = ios::out;
+    iostemp = std::ios::out;
     InitBeam++;
   } else {
-    iostemp = ios::out|ios::app;   
+    iostemp = std::ios::out|std::ios::app;   
   };
   
   ofstream BeamDatafile(FileName, iostemp);
   // BeamDatafile.precision(5);
 
-  BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << G4endl;
-  BeamDatafile << EBeamHole/MeV << G4endl;
-  BeamDatafile << EBeamDead/MeV << G4endl;
-  for (j=1; j<8 ; j++) { BeamDatafile << ETailVis[j]/MeV << " " ;} ; BeamDatafile << G4endl;
-  for (j=1; j<7 ; j++) { BeamDatafile << ETailDep[j]/MeV << " " ;} ; BeamDatafile << G4endl;
+  BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << std::endl;
+  BeamDatafile << EBeamHole/MeV << std::endl;
+  BeamDatafile << EBeamDead/MeV << std::endl;
+  for (j=1; j<8 ; j++) { BeamDatafile << ETailVis[j]/MeV << " " ;} ; BeamDatafile << std::endl;
+  for (j=1; j<7 ; j++) { BeamDatafile << ETailDep[j]/MeV << " " ;} ; BeamDatafile << std::endl;
  
   BeamDatafile.close();
 

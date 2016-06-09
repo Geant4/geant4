@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicsTable.hh,v 1.13 2003/11/04 10:38:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------

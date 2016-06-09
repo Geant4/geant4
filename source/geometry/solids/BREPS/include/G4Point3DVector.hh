@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Point3DVector.hh,v 1.7 2003/06/16 16:52:40 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Point3DVector

@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04VisManager.hh,v 1.1 2003/12/03 14:28:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

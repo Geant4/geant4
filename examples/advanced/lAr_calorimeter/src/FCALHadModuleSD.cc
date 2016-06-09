@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALHadModuleSD.cc,v 1.5 2003/12/09 15:30:28 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: FCALHadModuleSD.cc,v 1.6 2004/01/27 09:08:05 ribon Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -113,20 +113,20 @@ void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
   // Write data in File
   //-------------------
   G4String FileName = "HadModule_802_1mm.dat";
-  G4int iostemp;
+  std::ios::openmode iostemp;
   if(InitF2 == 1) {
-    iostemp = ios::out;
+    iostemp = std::ios::out;
     InitF2++;
   } else {
-    iostemp = ios::out|ios::app; // ios::app;  
+    iostemp = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
   ofstream HadDatafile(FileName, iostemp);
   // EmDatafile.precision(5);
 
-  HadDatafile << NF2Tile << endl;
+  HadDatafile << NF2Tile << std::endl;
   for (i=1; i <= NF2Tile; i++) {
-    HadDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << endl;
+    HadDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
   }
   HadDatafile.close();
 

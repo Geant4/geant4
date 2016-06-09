@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.9 2003/12/09 09:13:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4RunManagerKernel.cc,v 1.13 2004/03/18 08:47:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 
@@ -34,7 +34,7 @@
 #include "G4EventManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4Navigator.hh"
+//#include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserPhysicsList.hh"
@@ -79,12 +79,15 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: geant4-06-00 $\n                                (12-December-2003)";
-  G4cout
-    << "**********************************************" << G4endl
+    = " Geant4 version $Name: geant4-06-01 $   (25-March-2004)";
+  G4cout << G4endl
+    << "*************************************************************" << G4endl
     << versionString << G4endl
-    << "             Copyright : Geant4 Collaboration" << G4endl
-    << "**********************************************" << G4endl;
+    << "                      Copyright : Geant4 Collaboration" << G4endl
+    << "                      Reference : NIM A 506 (2003), 250-303." << G4endl
+    << "                            WWW : http://cern.ch/geant4" << G4endl
+    << "*************************************************************" << G4endl
+    << G4endl;
 }
 
 G4RunManagerKernel::~G4RunManagerKernel()
@@ -278,11 +281,13 @@ void G4RunManagerKernel::ResetNavigator()
   if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
   geomManager->OpenGeometry();
   geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
-  
-  G4ThreeVector center(0,0,0);
-  G4Navigator* navigator =
-      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(center,0,false);
+ 
+  // Reseting Navigator has been moved to G4Eventmanager, so that resetting
+  // is now done for every event.  
+  // G4ThreeVector center(0,0,0);
+  // G4Navigator* navigator =
+  //     G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  // navigator->LocateGlobalPointAndSetup(center,0,false);
 
   geometryNeedsToBeClosed = false;
 }

@@ -103,7 +103,7 @@ private:
   G4Material* RichTbH2O;
   G4Material* RichTbMirrorQuartz;
   G4Material* RichTbQuartzWindowMaterial;
-  vector<G4Material*> RichTbAerogelMaterial;
+  std::vector<G4Material*> RichTbAerogelMaterial;
 
   G4Material* RichTbAerogelTypeA;
   G4Material* RichTbAerogelTypeB;
@@ -120,7 +120,7 @@ private:
   G4Material* HpdQuartzWindowMaterial;
   G4Material* PadHpdQuartzWindowMaterial;
 
-  vector<G4Material*> RichTbFilterMaterial;
+  std::vector<G4Material*> RichTbFilterMaterial;
   G4Material* GlassD263FilterMaterial;
   G4Material* PadHpdPhCathodeMaterial;
   G4Material* RichTbPlasticAg;

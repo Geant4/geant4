@@ -40,14 +40,13 @@ GeneralPhysics::~GeneralPhysics()
 {
   if(wasActivated)
   {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess.IsApplicable(*particle)) { 
-      if(pmanager) pmanager ->RemoveProcess(&fDecayProcess);
+    theParticleIterator->reset();
+    while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      if (fDecayProcess.IsApplicable(*particle) && pmanager) pmanager ->RemoveProcess(&fDecayProcess);
     }
-  }
   }
 }
 
@@ -62,17 +61,21 @@ void GeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess.IsApplicable(*particle)) { 
-      pmanager ->AddProcess(&fDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
+  G4ParticleDefinition* particle=0;
+  G4ProcessManager* pmanager=0;
+  while( (*theParticleIterator)() )
+  {
+    particle = theParticleIterator->value();
+    pmanager = particle->GetProcessManager();
+    if( fDecayProcess.IsApplicable(*particle) ) 
+    { 
+      pmanager -> AddProcess(&fDecayProcess);
+      pmanager -> SetProcessOrdering(&fDecayProcess, idxPostStep);
+      pmanager -> SetProcessOrdering(&fDecayProcess, idxAtRest);
     }
   }
 }
 
 
 // 2002 by J.P. Wellisch
+

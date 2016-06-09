@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02ScoringDetectorConstruction.cc,v 1.6 2003/02/19 08:24:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 
 #include "globals.hh"

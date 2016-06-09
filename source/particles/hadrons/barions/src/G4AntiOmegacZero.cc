@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegacZero.cc,v 1.13 2003/06/16 16:56:53 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiOmegacZero.cc,v 1.14 2004/02/13 05:53:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4AntiOmegacZero::G4AntiOmegacZero(
 //             stable         lifetime    decay table 
 
 G4AntiOmegacZero G4AntiOmegacZero::theAntiOmegacZero(
-      "anti_omega_c0",       2.704*GeV,   1.02e-8*MeV,    0.*eplus, 
+      "anti_omega_c0",      2.6975*GeV,   1.02e-8*MeV,    0.*eplus, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            -1,       -4332,

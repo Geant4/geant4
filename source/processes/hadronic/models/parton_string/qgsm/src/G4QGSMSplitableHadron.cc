@@ -61,6 +61,7 @@ void G4QGSMSplitableHadron::InitParameters()
 		    // to be revised.
   widthOfPtSquare = 0.01*GeV*GeV;
   Direction = FALSE;
+  minTransverseMass = 1*keV;
 } 
 
 G4QGSMSplitableHadron::G4QGSMSplitableHadron() 
@@ -131,31 +132,38 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   Right->SetPosition(GetPosition());
   
   G4LorentzVector HadronMom = Get4Momentum();
+  //std::cout << "DSU 1 - "<<HadronMom<<std::endl;
 
   // momenta of string ends 
   G4double pt2 = HadronMom.perp2();
   G4double transverseMass2 = HadronMom.plus()*HadronMom.minus();
   G4double maxAvailMomentum2 = sqr(sqrt(transverseMass2) - sqrt(pt2));
-  G4ThreeVector pt(0.,0.,0.);
+  G4ThreeVector pt(minTransverseMass, minTransverseMass, 0);
   if(maxAvailMomentum2/widthOfPtSquare>0.01) pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
+  //std::cout << "DSU 1.1 - "<< maxAvailMomentum2<< pt <<std::endl;
 
   G4LorentzVector LeftMom(pt, 0.);
   G4LorentzVector RightMom;
   RightMom.setPx(HadronMom.px() - pt.x());
   RightMom.setPy(HadronMom.py() - pt.y());
+  //std::cout << "DSU 2 - "<<RightMom<<" "<< LeftMom <<std::endl;
 
   G4double Local1 = HadronMom.minus() + (RightMom.perp2() - LeftMom.perp2())/HadronMom.plus();
   G4double Local2 = sqrt(std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
+  //std::cout << "DSU 3 - "<< Local1 <<" "<< Local2 <<std::endl;
   if (Direction) Local2 = -Local2;
   G4double RightMinus   = 0.5*(Local1 + Local2);
   G4double LeftMinus = HadronMom.minus() - RightMinus;
+  //std::cout << "DSU 4 - "<< RightMinus <<" "<< LeftMinus << " "<<HadronMom.minus() <<std::endl;
 
   G4double LeftPlus  = LeftMom.perp2()/LeftMinus;
   G4double RightPlus = HadronMom.plus() - LeftPlus;
+  //std::cout << "DSU 5 - "<< RightPlus <<" "<< LeftPlus <<std::endl;
   LeftMom.setPz(0.5*(LeftPlus - LeftMinus));
   LeftMom.setE (0.5*(LeftPlus + LeftMinus));
   RightMom.setPz(0.5*(RightPlus - RightMinus));
   RightMom.setE (0.5*(RightPlus + RightMinus));
+  //std::cout << "DSU 6 - "<< LeftMom <<" "<< RightMom <<std::endl;
   Left->Set4Momentum(LeftMom);
   Right->Set4Momentum(RightMom);
   Color.push_back(Left);

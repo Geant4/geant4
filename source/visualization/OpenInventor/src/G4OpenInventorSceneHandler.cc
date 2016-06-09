@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorSceneHandler.cc,v 1.15 2003/10/29 10:01:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

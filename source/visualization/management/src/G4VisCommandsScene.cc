@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.36 2003/11/27 11:48:20 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VisCommandsScene.cc,v 1.37 2003/12/01 11:12:59 johna Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -250,6 +250,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   }
   else if (action == "refresh") {
     pScene->SetRefreshAtEndOfEvent(true);
+    pSceneHandler->SetMarkForClearingTransientStore(true);
   }
   else {
     if (verbosity >= G4VisManager::errors) {
@@ -325,6 +326,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   }
   else if (action == "refresh") {
     pScene->SetRefreshAtEndOfRun(true);
+    pSceneHandler->SetMarkForClearingTransientStore(true);
   }
   else {
     if (verbosity >= G4VisManager::errors) {

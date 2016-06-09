@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.22 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ionIonisation.hh,v 1.23 2004/01/21 18:05:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 // 03-08-03 Add effective charge and saturation of tmax (V.Ivanchenko)
 // 12-11-03 Fix problem of negative effective charge (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -139,7 +140,7 @@ private:
 inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
-          (p.GetParticleType() == "nucleus" || p.GetParticleType() == "static_nucleus"));
+         (p.GetParticleType() == "nucleus" || p.GetParticleType() == "static_nucleus"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -199,7 +200,7 @@ inline std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
     }
   }
   G4double e = step.GetTrack()->GetKineticEnergy() - eloss;
-  aParticleChange.SetChargeChange(EffectiveCharge(currentParticle,theMaterial,e));
+  fParticleChange.SetProposedCharge(EffectiveCharge(currentParticle,theMaterial,e));
   return newp;
 }
 
@@ -216,14 +217,14 @@ inline void G4ionIonisation::SecondariesPostStep(
 {
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   if(delta) {
-    aParticleChange.SetNumberOfSecondaries(1);
-    aParticleChange.AddSecondary(delta);
+    fParticleChange.SetNumberOfSecondaries(1);
+    fParticleChange.AddSecondary(delta);
     G4ThreeVector finalP = dp->GetMomentum();
     kinEnergy -= delta->GetKineticEnergy();
-    aParticleChange.SetChargeChange(EffectiveCharge(currentParticle,theMaterial,kinEnergy));
+    fParticleChange.SetProposedCharge(EffectiveCharge(currentParticle,theMaterial,kinEnergy));
     finalP -= delta->GetMomentum();
     finalP = finalP.unit();
-    aParticleChange.SetMomentumDirectionChange(finalP);
+    fParticleChange.SetProposedMomentumDirection(finalP);
   }
 }
 

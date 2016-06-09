@@ -1,11 +1,11 @@
 /* compress.c -- compress a memory buffer
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h
  */
 
-/* @(#) $Id: compress.cc,v 1.1 2003/07/11 06:01:44 duns Exp $ */
+/* @(#) $Id: compress.cc,v 1.2 2004/02/03 19:34:44 duns Exp $ */
 
-#include "zlib.h"
+#include "HepRep-zlib.h"
 
 /* ===========================================================================
      Compresses the source buffer into the destination buffer. The level

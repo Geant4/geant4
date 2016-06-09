@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.6 2003/12/09 15:30:04 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: lArCal.cc,v 1.7 2004/01/28 17:58:59 ribon Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -49,9 +49,11 @@
 #endif
 
 #include "FCALTestbeamSetup.hh"
-#include "FCALPhysicsList.hh"
 #include "FCALSteppingVerbose.hh"
 #include "FCALPrimaryGeneratorAction.hh"
+#include "LHEP.hh"
+#include "QGSP.hh"
+#include "QGSC.hh"
 
 
 #ifdef G4ANALYSIS_USE
@@ -78,7 +80,12 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   FCALTestbeamSetup* detector = new FCALTestbeamSetup;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new FCALPhysicsList);
+
+  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
+  // runManager->SetUserInitialization(new LHEP);     // LHEP     
+  runManager->SetUserInitialization(new QGSP);     // QGSP   
+  // runManager->SetUserInitialization(new QGSC);     // QGSC
+  //***endLOOKHERE***
   
  G4UIsession* session=0;
   

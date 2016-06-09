@@ -29,6 +29,7 @@ G4BertiniProtonBuilder::
 G4BertiniProtonBuilder() 
 {
   theMin = 0;
+  theMax=9.9*GeV;
   theModel = new G4CascadeInterface;
 }
 

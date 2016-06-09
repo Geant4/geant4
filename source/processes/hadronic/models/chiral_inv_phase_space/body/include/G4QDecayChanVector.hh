@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.15 2003/12/09 15:38:02 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QDecayChanVector.hh,v 1.17 2004/03/25 10:44:36 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.

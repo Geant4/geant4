@@ -46,7 +46,7 @@ template<class T> TLHEP_BERT_HP<T>::TLHEP_BERT_HP():  T()
 {
 
   G4DataQuestionaire it(photon);
-  G4cout << "You are using the simulation engine: LHEP_BERT_HP 1.0"<<G4endl;
+  G4cout << "You are using the simulation engine: LHEP_BERT_HP 1.1"<<G4endl;
   G4cout <<G4endl<<G4endl;
 
   defaultCutValue = 0.7*mm;  
@@ -77,7 +77,7 @@ template<class T> TLHEP_BERT_HP<T>::~TLHEP_BERT_HP()
 template<class T> void TLHEP_BERT_HP<T>::SetCuts()
 {
   if (verboseLevel >1){
-    G4cout << "LHEP_BIC::SetCuts:";
+    G4cout << "LHEP_BERT_HP::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 

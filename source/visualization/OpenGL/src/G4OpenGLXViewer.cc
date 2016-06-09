@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.19 2003/09/22 10:37:50 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4OpenGLXViewer.cc,v 1.20 2004/02/17 18:17:34 johna Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -347,8 +347,8 @@ vi_stored (0)
 G4OpenGLXViewer::~G4OpenGLXViewer () {
   if (fViewId >= 0) {
     //Close a window from here
-    glXDestroyContext (dpy, cx);
     glXMakeCurrent (dpy, None, NULL);
+    glXDestroyContext (dpy, cx);
     if (win) XDestroyWindow (dpy, win); // ...if already deleted in
     // sub-class G4OpenGLXmViewer.
     XFlush (dpy);

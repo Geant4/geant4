@@ -1,5 +1,5 @@
 
-$Id: History,v 1.44 2003/12/01 09:32:26 gcosmo Exp $
+$Id: History,v 1.45 2004/02/27 14:22:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Feb 27, 2004   V.Grichine                geom-bool-V06-00-00
+  - G4UnionSolid.cc, G4SubtractionSolid.cc: fix in debug printout for
+    SurfaceNomal().
 
  Dec 01, 2003   G.Cosmo                   geom-bool-V05-02-04
   - G4ReflectedSolid.cc: fixed trivial leak in constructor.

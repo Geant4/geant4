@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th March 2004 Peter Gumplinger (op-V06-00-03)
+                Assign all class members in constructor.
+
+24th February 2004 Gabriele Cosmo (op-V06-00-02)
+                Added EOL at end of file in G4OpBoundaryProcess.cc to clear
+                compilation warning in Linux-g++.
+
+19th February 2004 Peter Gumplinger (op-V06-00-01)
+                Add process status: NotAtBoundary, SameMaterial, 
+                                    StepTooSmall, NoRINDEX
+                Allow for a skin-surface between mother and daughter
+                volumes, with the daughter skin taking precedence.
+
+2nd February 2004 Peter Gumplinger (op-V06-00-00)
+                Set theStatus = Undefined at start of DoIt
+                Replace usage of 0 with NULL.
+ 
 1st December 2003 Peter Gumplinger (op-V05-02-02)
                 G4OpBoundaryProcess.cc: modified to adopt G4SurfaceProperty.
                 Requires tag "materials-V05-02-00".

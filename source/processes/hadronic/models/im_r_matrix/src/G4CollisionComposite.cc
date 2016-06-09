@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.2 2003/11/03 17:53:28 hpw Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.4 2004/02/05 10:48:48 stesting Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -30,6 +30,7 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4VCrossSectionSource.hh"
+#include "G4HadTmpUtil.hh"
 
 const G4int G4CollisionComposite::nPoints = 32;
 
@@ -43,8 +44,7 @@ G4CollisionComposite::G4CollisionComposite()
 
 G4CollisionComposite::~G4CollisionComposite()
 { 
-  for (size_t i=0; i<components.size(); i++)
-    delete components[i]();
+  std::for_each(components.begin(), components.end(), G4Delete());
 }
 
 
@@ -80,9 +80,9 @@ G4KineticTrackVector* G4CollisionComposite::FinalState(const G4KineticTrack& trk
   {
     G4double partialCx;
 //    cout << "comp" << i << " " << components[i]()->GetName();
-    if (components[i]()->IsInCharge(trk1,trk2)) 
+    if (components[i]->IsInCharge(trk1,trk2)) 
     {
-      partialCx = components[i]()->CrossSection(trk1,trk2);
+      partialCx = components[i]->CrossSection(trk1,trk2);
     } 
     else 
     {
@@ -100,7 +100,7 @@ G4KineticTrackVector* G4CollisionComposite::FinalState(const G4KineticTrack& trk
     running += cxCache[i];
     if (running > random) 
     {
-      return components[i]()->FinalState(trk1, trk2);
+      return components[i]->FinalState(trk1, trk2);
     }
   }
 //  G4cerr <<"in charge = "<<IsInCharge(trk1, trk2)<<G4endl;
@@ -124,7 +124,7 @@ G4bool G4CollisionComposite::IsInCharge(const G4KineticTrack& trk1,
       G4CollisionVector::const_iterator iter;
       for (iter = components->begin(); iter != components->end(); ++iter)
 	{
-	 if ( ((*iter)())->IsInCharge(trk1,trk2) ) isInCharge = true;
+	 if ( ((*iter))->IsInCharge(trk1,trk2) ) isInCharge = true;
 	}
     }
 
@@ -168,9 +168,9 @@ BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition *
      
      for (i=0; i<components.size(); i++)
      {
-       if(components[i]()->IsInCharge(a,b))
+       if(components[i]->IsInCharge(a,b))
        {
-	 crossSect += components[i]()->CrossSection(a,b);
+	 crossSect += components[i]->CrossSection(a,b);
        }
      }
      G4double sqrts = (a4Momentum+b4Momentum).mag();

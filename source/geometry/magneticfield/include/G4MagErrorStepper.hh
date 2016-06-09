@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagErrorStepper.hh,v 1.10 2003/11/05 12:50:00 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // class G4MagErrorStepper

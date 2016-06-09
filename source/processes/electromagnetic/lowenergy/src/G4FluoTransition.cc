@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FluoTransition.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -63,7 +63,7 @@ const G4DataVector& G4FluoTransition::TransitionProbabilities() const
   return transitionProbabilities;
 }
 
-const G4int G4FluoTransition::FinalShellId() const
+G4int G4FluoTransition::FinalShellId() const
 { 
   return finalShellId;
 }

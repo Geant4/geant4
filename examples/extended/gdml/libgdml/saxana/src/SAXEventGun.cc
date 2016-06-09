@@ -22,7 +22,7 @@
 //
 //
 // $Id: SAXEventGun.cc,v 1.4 2003/10/27 10:55:48 radoone Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------

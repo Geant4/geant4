@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2003/12/02 14:58:26 gcosmo Exp $
+$Id: History,v 1.6 2004/01/28 17:58:58 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.5 2003/12/02 14:58:26 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+28.01.2004 - A.Ribon (lAr_calorimeter-V06-00-01)
+             Clean up. Fixes for g++ 3.2 . New Physics Lists.
 
 02.12.2003 - G.Cosmo (lAr_calorimeter-V05-02-01)
              Fixed compilation errors if histograms disabled.

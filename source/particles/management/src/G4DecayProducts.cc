@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DecayProducts.cc,v 1.10 2003/09/12 19:21:07 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: particles-V05-02-02 $
 //
 // 
 // ------------------------------------------------------------

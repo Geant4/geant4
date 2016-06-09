@@ -22,7 +22,7 @@
 //
 //
 // $Id: IonC12.hh,v 1.4 2003/09/22 14:09:00 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one

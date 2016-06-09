@@ -3,15 +3,19 @@
 #
 # MacOS 10.1 GNU-gcc 2.92.2
 # MacOS 10.2 there is g++2 and g++3, choose consistently one,
-#            like g++2 which is 2.95.2
-# use   echo -n    (there is not the echo -e option of Linux)
+#            like g++2 which is 2.95.2, g++3 for 3.X.
+# MacOS 10.3 use default MacOS-X compiler (g++) as the default.
+#            Have commands to build the .dylib (MacOS-X shared libs)
 # 
-# Helmut Burkhardt - CERN
+# Use   echo -n    (there is not the 'echo -e' option of Linux)
+#
+# Author: Helmut Burkhardt - CERN
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
-# choice of GNU compilers:
-  CXX       := g++2
-# CXX       := g++3
+# choice of compiler (take, as default, the MacOS default) :
+#  CXX       := g++2
+#  CXX       := g++3
+  CXX       := g++
   CXXFLAGS  := -Wall -ansi -pedantic -pipe
 # optionally add verbose flag
 # CXXFLAGS  += -v
@@ -36,12 +40,12 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Wl,-rpath 
+#  G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
   ECHO    := /bin/echo -n
-  SHEXT   := so
+  SHEXT   := dylib
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   XMFLAGS   := -I/usr/X11R6/include
@@ -60,13 +64,12 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) *.o
+     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
-    @libdir=`(cd $(@D);/bin/pwd)`; \
+    libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) \
-                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 
 endif

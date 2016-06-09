@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.12 2003/08/25 12:32:29 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: B01DetectorConstruction.cc,v 1.13 2004/03/24 10:10:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 
 #include "G4Types.hh"
@@ -117,20 +117,6 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   Concrete->AddElement(elCa , fractionmass= 0.044);
   Concrete->AddElement(elFe , fractionmass= 0.014);
   Concrete->AddElement(elC , fractionmass= 0.001);
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   /////////////////////////////
   // world cylinder volume
@@ -164,8 +150,6 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   fPhysicalVolumeVector.push_back(pWorldVolume);
 
-
-
   // creating 18 slabs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
@@ -183,11 +167,10 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   
   // logical shield
 
-  G4LogicalVolume *aShield_log = 
+  G4LogicalVolume *aShield_log =
     new G4LogicalVolume(aShield, Concrete, "aShield_log");
 
-  G4VisAttributes* pShieldVis = new 
-    G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  G4VisAttributes* pShieldVis = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
   pShieldVis->SetForceSolid(true);
   aShield_log->SetVisAttributes(pShieldVis);
 
@@ -195,9 +178,9 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   G4int i;
   G4double startz = -85*cm; 
-  for (i=1; i<=18; i++) {
+  for (i=1; i<=18; i++)
+  {
     name = GetCellName(i);
-
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
     G4double pos_z = startz + (i-1) * (2*hightShield);
@@ -212,9 +195,10 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
     fPhysicalVolumeVector.push_back(pvol);
   }
 
-  // filling the rest of the world volumr behind the concrete with
+  // filling the rest of the world volume behind the concrete with
   // another slab which should get the same importance value 
   // or lower weight bound as the last slab
+  //
   innerRadiusShield = 0*cm;
   outerRadiusShield = 100*cm;
   hightShield       = 5*cm;
@@ -228,7 +212,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 			     startAngleShield,
 			     spanningAngleShield);
   
-  G4LogicalVolume *aRest_log = 
+  G4LogicalVolume *aRest_log =
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
   name = "rest";
     
@@ -246,14 +230,14 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   fPhysicalVolumeVector.push_back(pvol_rest);
   return pWorldVolume;
-
 }
 
 
-G4VIStore *B01DetectorConstruction::CreateImportanceStore() {
-
-  if (!fPhysicalVolumeVector.size()) {
-    G4Exception("B01DetectorConstruction::CreateImportanceStore: no physical volumes created yet!");
+G4VIStore *B01DetectorConstruction::CreateImportanceStore()
+{
+  if (!fPhysicalVolumeVector.size())
+  {
+    G4Exception("B01-DetectorConstruction: no physical volumes created yet!");
   }
 
   G4VPhysicalVolume *pWorldVolume = fPhysicalVolumeVector[0];
@@ -262,12 +246,11 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore() {
   
   G4IStore *istore = new G4IStore(*pWorldVolume);
 
-
   G4int n = 0;
   G4double imp =1;
   istore->AddImportanceGeometryCell(1,  *pWorldVolume);
-  for (std::vector<G4VPhysicalVolume *>::iterator it =
-	 fPhysicalVolumeVector.begin();
+  for (std::vector<G4VPhysicalVolume *>::iterator
+       it =  fPhysicalVolumeVector.begin();
        it != fPhysicalVolumeVector.end() - 1; it++)
   {
     if (*it != pWorldVolume)
@@ -281,20 +264,18 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore() {
 
   // the remaining part pf the geometry (rest) gets the same
   // importance as the last conrete cell
-  istore->
-    AddImportanceGeometryCell(imp, 
-			      *(fPhysicalVolumeVector[fPhysicalVolumeVector
-						     .size()-1]));
+  //
+  istore->AddImportanceGeometryCell(imp, 
+          *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]));
   
   return istore;
 }
 
-
-
-G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore() {
-
-  if (!fPhysicalVolumeVector.size()) {
-    G4Exception("B01DetectorConstruction::CreateWeightWindowStore: no physical volumes created yet!");
+G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
+{
+  if (!fPhysicalVolumeVector.size())
+  {
+    G4Exception("B01-CreateWeightWindowStore: no physical volumes created yet!");
   }
 
   G4VPhysicalVolume *pWorldVolume = fPhysicalVolumeVector[0];
@@ -304,10 +285,10 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore() {
   G4WeightWindowStore *wwstore = new G4WeightWindowStore(*pWorldVolume);
   
   // create one energy region covering the energies of the problem
+  //
   std::set<G4double, std::less<G4double> > enBounds;
   enBounds.insert(1 * GeV);
   wwstore->SetGeneralUpperEnergyBounds(enBounds);
-
 
   G4int n = 0;
   G4double lowerWeight =1;
@@ -317,8 +298,8 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore() {
   G4GeometryCell gWorldCell(*pWorldVolume,0);
   wwstore->AddLowerWeights(gWorldCell, lowerWeights);
 
-  for (std::vector<G4VPhysicalVolume *>::iterator it =
-	 fPhysicalVolumeVector.begin();
+  for (std::vector<G4VPhysicalVolume *>::iterator
+       it =  fPhysicalVolumeVector.begin();
        it != fPhysicalVolumeVector.end() - 1; it++)
   {
     if (*it != pWorldVolume)
@@ -336,21 +317,21 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore() {
 
   // the remaining part pf the geometry (rest) gets the same
   // lower weight bound  as the last conrete cell
-  G4GeometryCell gRestCell(*(fPhysicalVolumeVector[fPhysicalVolumeVector
-					      .size()-1]), 0);
+  //
+  G4GeometryCell
+    gRestCell(*(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]), 0);
   wwstore->AddLowerWeights(gRestCell,  lowerWeights);
-  
-  
+
   return wwstore;
 }
 
-
-
-G4String B01DetectorConstruction::GetCellName(G4int i) {
+G4String B01DetectorConstruction::GetCellName(G4int i)
+{
   char st[200];
   std::ostrstream os(st,200);
   os << "cell_";
-  if (i<10) {
+  if (i<10)
+  {
     os << "0";
   }
   os << i 

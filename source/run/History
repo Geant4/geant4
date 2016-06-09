@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2003/12/09 09:14:48 gcosmo Exp $
+$Id: History,v 1.109 2004/03/18 08:48:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 18, 2004, M.Asai (run-V06-00-02)
+- Added NIM reference to header and WWW info.
+- Changed date for release 6.1.
+
+March 15, 2004, M.Asai (run-V06-00-01)
+- Invokation of G4Navigator::LocateGlobalPointAndSetup() is now moved to
+  G4EventManager so that the navigator is reset for every event.
+
+February 09, 2004, G.Cosmo (run-V06-00-00)
+- Changed date for patch-01 to release 6.0.
 
 December 09, 2003, G.Cosmo (run-V05-02-10)
 - Changed date for release 6.0.

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PScoreProcess.hh,v 1.8 2003/11/26 14:51:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PIScoreProcess

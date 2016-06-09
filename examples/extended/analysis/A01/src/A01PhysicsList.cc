@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.cc,v 1.5 2003/10/11 03:00:00 tkoi Exp $
+// $Id: A01PhysicsList.cc,v 1.6 2004/01/30 00:56:55 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi
 
 
 #include "A01PhysicsList.hh"
@@ -46,6 +47,9 @@
 #include "A01HadronPhysics.hh"
 #include "A01IonPhysics.hh"
 
+#include "HadronPhysicsQGSP_BERT.hh"
+#include "HadronPhysicsQGSP_BIC.hh"
+
 A01PhysicsList::A01PhysicsList():  G4VModularPhysicsList()
 {
   // default cut value  (1.0mm)
@@ -62,11 +66,12 @@ A01PhysicsList::A01PhysicsList():  G4VModularPhysicsList()
   RegisterPhysics(  new A01MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new A01HadronPhysics("hadron"));
+  //RegisterPhysics(  new A01HadronPhysics("hadron"));
+  RegisterPhysics(  new HadronPhysicsQGSP_BERT("hadron"));
+  //RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron"));
 
   // Ion Physics
   RegisterPhysics( new A01IonPhysics("ion"));
-
 
 }
 

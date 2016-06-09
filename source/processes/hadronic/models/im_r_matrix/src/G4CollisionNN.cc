@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNN.cc,v 1.2 2003/11/03 17:53:28 hpw Exp $ //
+// $Id: G4CollisionNN.cc,v 1.3.2.1 2004/03/24 13:18:29 hpw Exp $ //
 
 
 #include "globals.hh"
@@ -42,21 +42,18 @@
 #include "G4CollisionNNToDeltaDeltastar.hh"
 #include "G4CollisionNNToNNstar.hh"
 #include "G4CollisionNNToDeltaNstar.hh"
+#include "G4Pair.hh"
+
+typedef GROUP8(G4CollisionnpElastic, G4CollisionNNElastic, 
+              G4CollisionNNToNDelta, G4CollisionNNToDeltaDelta, 
+	      G4CollisionNNToNDeltastar, G4CollisionNNToDeltaDeltastar,
+	      G4CollisionNNToNNstar, G4CollisionNNToDeltaNstar) theChannels;
 
 G4CollisionNN::G4CollisionNN()
 { 
-
   crossSectionSource = new G4XNNTotal();
-
-  G4CollisionComposite::AddComponent(new G4CollisionnpElastic()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNElastic()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDelta()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNDeltastar()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDeltastar()); // ok
-  G4CollisionComposite::AddComponent(new G4CollisionNNToNNstar()); // done
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaNstar()); // done
-
+  G4CollisionComposite::Register aR;
+  G4ForEach<theChannels>::Apply(&aR, this);
 }
 
 

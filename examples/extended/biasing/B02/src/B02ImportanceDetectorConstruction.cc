@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02ImportanceDetectorConstruction.cc,v 1.6 2003/07/31 08:28:16 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "globals.hh"

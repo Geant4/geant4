@@ -1,0 +1,153 @@
+
+                 Geant4 6.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           11 February 2004
+
+List of fixes included in this public patch since release 6.0:
+
+  o Configuration:
+    -------------
+    + Configure:
+      o Corrected defaults for shared-libs build.
+    + architecture.gmk:
+      o Protect OGLFLAGS against containing include path to /usr/include.
+        This may cause wrong includes to be picked up.
+    + Darwin-g++.gmk:
+      o Adopt "g++" as the default as compiler.
+      o Corrected procedure for building .dylib shared libs.
+        Previous default Linux commands do not work on MacOSX.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o G4UniformMagField: added missing implementation for
+        GetConstantFieldValue(). Fixes bug report #575.
+    + navigation:
+      o Modified G4PropagatorInField::ReEstimateEndpoint() to cope with
+        a failure of AccurateAdvance(), by calling it iteratively up maximum
+        20 times.
+      o Fix in G4PropagatorInField::SetVerboseLevel(): now forwarding the
+        verbosity to integration driver.
+    + solids/CSG:
+      o Converted strong exceptions in warning notifications for rare
+        anomalous conditions in DistanceToOut(p,v,..).
+      o G4Cons: bug fix in DistanceToIn(p,v) to resolve situations of calls
+        to DistanceToOut() for points outside.
+    + solids/specific:
+      o G4PolyhedraSide: fixed bug in which particles could "leak" out the
+        center of a face if inner radius = 0. Fixes problem report #547.
+    + volumes:
+      o G4AssemblyVolume: fixed initial value for 'numberOfDaughters' of
+        imprinted volumes copy-numbers. Fixes problem report #566.
+
+  o Global:
+    ------
+    + G4UnitsTable: corrected signatures to consider 'const G4String&'
+      wherever applicable.
+
+  o Materials:
+    ---------
+    + G4Material: proper STL handling of 'theElementVector'.
+    + Fixed problem in destructor of G4SandiaTable.
+
+  o Particles:
+    ---------
+    + Fixed initialization problems in G4NuclearPropertiesTable:
+      o Added initialization of 'indexArray'.
+      o Removed internal static member 'theInstance'.
+
+  o Electromagnetic low-energy processes:
+    ------------------------------------
+    + Fixed memory leaks in G4PenelopeInterpolator and G4PenelopeIonisation.
+
+  o Electromagnetic standard processes:
+    ----------------------------------
+    + standard:
+      o Minor fixes in G4PAIonisation and G4PAIModel.
+    + utils:
+      o Activated precise range calculation.
+      o Added Set methods to G4LossTablemanager to define: binning,
+        'maxEnergy' for muon tables, 'maxEnergy' for precise range.
+      o Fixed problem in destruction of PAI model.
+      o Fixed bug responsible for problems in cross section of
+        delta-electron production from muons.
+
+  o Hadronic Processes:
+    ------------------
+    + management:
+      o Fix for suspended particles. Solves a problem seen in neutron_hp
+        elastic scattering.
+    + chiral_inv_phase_space:
+      o Porting of experimental interface classes.
+      o Provided implementation of missing cases which was cause of 
+        crashes in ATLAS production.
+    + neutron_hp:
+      o Fixed conflict with system variable name.
+    + parton_string:
+      o Lower bound added to transverse mass distribution, to enable
+        diffractive scattering for gammas. Was cause of a crash in ATLAS
+        productions.
+
+  o Optical processes:
+    -----------------
+    + Fix in the initialization of the G4OpBoundaryProcessStatus at the 
+      beginning of its DoIt(), now set to "Undefined". This should allow
+      a user to correctly get the process flag from the UserSteppingAction()
+      through the public function G4OpBoundaryProcess::GetStatus()
+      even when the (forced) DoIt() was called when the optical photon
+      track was not at a boundary, or when medium1 == medium2.
+
+  o Parameterised processes:
+    -----------------------
+    + G4FastSimulationVector: use std_pvector:: scope for calls to
+      base class. Fixes compilation problem on Intel-icc compiler.
+
+  o Transportation processes:
+    ------------------------
+    + Fixed a bug in G4UserSpecialCuts related to 'charged-geantino'.
+
+  o Run:
+    ---
+    + Updated date to run-manager.
+
+  o Track:
+    -----
+    + G4VParticleChange: removed unnecessary 'const' qualifier to return
+      value in GetAccuracyForWarning() and GetAccuracyForException()
+      causing noisy compilation warnings on Intel-icc compiler.
+
+  o Visualization:
+    -------------
+    + management:
+      o Fixed compilation problems on Intel-icc compiler. Added missing
+        forward declaration of G4VisStateDependent to G4VisManager. 
+    + HepRep:
+      o Fixed handling of symbols zcalloc and zcfree of the zlib library
+        being called as C++ mangled names. 
+      o Renamed zutil.h, zlib.h and zconf.h into HepRep-zutil.h, ... to
+        avoid conflicts with those files on Unix systems if /usr/include
+        or /usr/local/include is on the include search path.
+      o Fixed compilation problems on Intel-icc compiler.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/analysis/A01
+      o Fixed physics lists for EM processes.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 6.0.
+  o  Technical notes distributed for release 6.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 6.0 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

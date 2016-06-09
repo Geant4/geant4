@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.15 2003/06/16 16:57:07 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Neutron.cc,v 1.16 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4Neutron::G4Neutron(
 //             stable         lifetime    decay table 
 
 G4Neutron G4Neutron::theNeutron(
-            "neutron",  0.93956563*GeV,       0.0*MeV,         0.0, 
+            "neutron",  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,

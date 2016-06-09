@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImportanceAlgorithm.hh,v 1.6 2002/10/14 12:36:00 dressel Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceAlgorithm

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KaonZeroLong.hh,v 1.9 2002/12/16 11:15:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

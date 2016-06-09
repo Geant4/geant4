@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BMesonMinus.hh,v 1.5 2001/10/15 10:06:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

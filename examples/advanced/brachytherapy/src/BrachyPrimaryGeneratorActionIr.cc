@@ -34,8 +34,8 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.7 2003/12/09 15:30:02 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.8 2004/03/11 15:38:43 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #include "BrachyPrimaryGeneratorActionIr.hh"
 
@@ -83,7 +83,7 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
     y = (G4UniformRand()-0.5)*(radius)/0.5;
   }while(x*x+y*y > radius*radius);
  
-  z = (G4UniformRand()-0.5)*1.75*mm/0.5 ;
+  z = (G4UniformRand()-0.5)*1.75*mm/0.5 -1.975*mm  ;
 
   G4ThreeVector position(x,y,z);
   particleGun->SetParticlePosition(position);

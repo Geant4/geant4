@@ -28,7 +28,7 @@
 G4QGSPPiKBuilder::
 G4QGSPPiKBuilder() 
 {
-  theMin = 15*GeV;
+  theMin = 12*GeV;
   theModel = new G4TheoFSGenerator;
   theCascade = new G4GeneratorPrecompoundInterface;
   thePreEquilib = new G4PreCompoundModel(&theHandler);

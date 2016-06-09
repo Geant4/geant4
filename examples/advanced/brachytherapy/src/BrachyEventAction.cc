@@ -29,8 +29,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.17 2003/05/27 08:37:54 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyEventAction.cc,v 1.19 2004/03/11 16:05:03 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #include "BrachyEventAction.hh"
 #include "BrachyPhantomHit.hh"
@@ -54,72 +54,22 @@
 
 // Retrieve information about the energy deposit in the phantom ...
 
-BrachyEventAction::BrachyEventAction(G4String &SDName) :
+BrachyEventAction::BrachyEventAction() :
   drawFlag("all" )
 {
-  hitsCollectionID = -1;
-
-  G4String sensitiveDetectorName = SDName;
-  
-  detector=new BrachyDetectorConstruction(sensitiveDetectorName);
-  numberOfVoxelZ = detector->GetNumVoxelZ();
-  voxelWidthZ = 0.1*cm;  
 }
 
 BrachyEventAction::~BrachyEventAction()
 {
-  delete detector;
+
 }
 
 void BrachyEventAction::BeginOfEventAction(const G4Event*)
 {
-  G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
-  if(hitsCollectionID == -1)
-     hitsCollectionID = 
-           sensitiveDetectorManager->GetCollectionID("PhantomHitsCollection");
 }
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {  
-  if(hitsCollectionID < 0) return; 
-
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  BrachyPhantomHitsCollection* CHC = NULL; 
- 
-  if(HCE)
-     CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(hitsCollectionID));
-
-  if(CHC)
-    {
-      G4int hitCount = CHC->entries();
-      for (G4int h = 0; h < hitCount; h++)
-	{
-#ifdef G4ANALYSIS_USE	  
-          //Store information about energy deposit in a 2DHistogram and in
-	  // a ntuple ... 
-	  BrachyAnalysisManager* analysis = 
-                                      BrachyAnalysisManager::getInstance();   
-	  
-          G4int i=((*CHC)[h])->GetZID();
-	  G4int k=((*CHC)[h])->GetXID();
-	  G4int j=((*CHC)[h])->GetYID();                       
-
-	  G4double EnergyDep=((*CHC)[h]->GetEdep());
-                      
-	  G4double x = (-numberOfVoxelZ+1+2*k)*voxelWidthZ/2; 
-	  G4double z = (- numberOfVoxelZ+1+2*i)*voxelWidthZ/2;
-	  G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
-
-	  if(EnergyDep != 0)                       
-	    { 
-             if (y<1.*mm){if (y> -1.*mm) 
-	      {analysis->FillHistogramWithEnergy(x,z,EnergyDep/MeV);}}
-	     }
-			 
-	  if(EnergyDep != 0)analysis->FillNtupleWithEnergy(x,y,z,EnergyDep/MeV);
-#endif 	       
-	}
-    }
   // extract the trajectories and draw them ...
 
   if (G4VVisManager::GetConcreteInstance())

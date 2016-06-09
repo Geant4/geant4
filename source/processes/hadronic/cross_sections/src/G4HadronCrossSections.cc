@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections

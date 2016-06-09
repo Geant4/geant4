@@ -22,7 +22,7 @@
 //
 //
 // $Id: TiaraPhysicsList.cc,v 1.4 2003/11/20 08:31:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "globals.hh"

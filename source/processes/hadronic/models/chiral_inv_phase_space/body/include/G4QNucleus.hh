@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.22 2003/12/09 15:38:07 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QNucleus.hh,v 1.25 2004/03/25 10:44:42 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -215,7 +215,7 @@ inline G4int G4QNucleus::HadrToNucPDG(G4int hPDG)
   G4int  nPDG=hPDG;
   if     (hPDG==2212) nPDG=90001000; // p
   else if(hPDG==2112) nPDG=90000001; // n
-  else if(hPDG==3122) nPDG=91000000; // Lambda
+  else if(hPDG==3122||hPDG==3212) nPDG=91000000; // Lambda
   else if(hPDG== 211) nPDG=90000999; // pi+
   else if(hPDG==-211) nPDG=89999001; // pi-
   else if(hPDG== 213) nPDG=89001000; // K0 (anti-strange)

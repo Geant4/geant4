@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4MultipleScattering52.hh,v 1.2 2003/09/25 04:29:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //------------- G4MultipleScattering52 physics process --------------------------
 //               by Laszlo Urban, March 2001

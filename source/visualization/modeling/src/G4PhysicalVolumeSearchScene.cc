@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicalVolumeSearchScene.cc,v 1.7 2003/05/30 13:01:32 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // John Allison  10th August 1998.

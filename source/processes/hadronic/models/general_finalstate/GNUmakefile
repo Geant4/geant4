@@ -1,0 +1,36 @@
+# $Id: GNUmakefile,v 1.1 2003/10/08 15:14:06 hpw Exp $
+# -----------------------------------------------------------
+# GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
+# -----------------------------------------------------------
+
+name := G4hadronic_gen_hp
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../../..
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/track/include \
+            -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/solids/CSG/include \
+            -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/hadronic/management/include/ \
+            -I$(G4BASE)/processes/hadronic/models/general_finalstate/include/ \
+            -I$(G4BASE)/processes/hadronic/models/management/include/ \
+            -I$(G4BASE)/processes/hadronic/models/util/include/ \
+            -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include/ \
+            -I$(G4BASE)/processes/hadronic/util/include/ \
+            -I$(G4BASE)/particles/management/include \
+            -I$(G4BASE)/particles/leptons/include \
+            -I$(G4BASE)/particles/bosons/include \
+            -I$(G4BASE)/particles/hadrons/mesons/include \
+            -I$(G4BASE)/particles/hadrons/barions/include \
+            -I$(G4BASE)/particles/hadrons/ions/include \
+            -I$(G4BASE)/materials/include
+           
+include $(G4INSTALL)/config/common.gmk

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.20 2003/12/09 15:38:12 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QParticle.hh,v 1.22 2004/03/25 10:44:47 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -40,12 +40,13 @@ class G4QParticle
 {
 public:
   // Constructors
-  G4QParticle();                                // Default Constructor
-  G4QParticle(G4int thePDG);                    // PDGCode Constructor
-  G4QParticle(const G4QParticle& right);        // Copy Constructor by value
-  G4QParticle(G4QParticle* right);              // Copy Constructor by pointer
+  G4QParticle();                             // Default Constructor
+  G4QParticle(G4bool f, G4int theQCode);     // QCode Constructor, f-verbose
+  G4QParticle(G4int thePDG);                 // PDGCode Constructor
+  G4QParticle(const G4QParticle& right);     // Copy Constructor by value
+  G4QParticle(G4QParticle* right);           // Copy Constructor by pointer
 
-  ~G4QParticle();                               // Public Destructor
+  ~G4QParticle();                            // Public Destructor
 
   // Operators
   const G4QParticle& operator=(const G4QParticle& right);

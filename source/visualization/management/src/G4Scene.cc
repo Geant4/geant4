@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Scene.cc,v 1.14 2003/11/27 11:48:14 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // Scene data  John Allison  19th July 1996.

@@ -26,7 +26,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
+#include <iostream>
 #include "globals.hh"
 #include "RichTbDetectorConstruction.hh"
 #include "RichTbGeometryParameters.hh"
@@ -50,12 +50,12 @@ RichTbComponent::RichTbComponent(){ ; }
 RichTbComponent::RichTbComponent(RichTbMaterial* RMaterial, 
   RichTbHall* RTbHall , RichTbRunConfig* RConfig, 
   G4bool ConstructTrackingSwitch):
-  RichTbAgelLVol(vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
-  RichTbAgelPVol(vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles)),
-  RichTbAgelWrapTopLVol(vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
-  RichTbAgelWrapTopPVol(vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles)),
-  RichTbAgelWrapBotLVol(vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
- RichTbAgelWrapBotPVol(vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles))
+  RichTbAgelLVol(std::vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
+  RichTbAgelPVol(std::vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles)),
+  RichTbAgelWrapTopLVol(std::vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
+  RichTbAgelWrapTopPVol(std::vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles)),
+  RichTbAgelWrapBotLVol(std::vector<G4LogicalVolume*>(MaxNumberOfAerogelTiles)),
+ RichTbAgelWrapBotPVol(std::vector<G4VPhysicalVolume*>(MaxNumberOfAerogelTiles))
  {  
 
     ConstructTrackingGeometrySwitch=ConstructTrackingSwitch;

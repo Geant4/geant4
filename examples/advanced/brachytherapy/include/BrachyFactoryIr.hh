@@ -22,7 +22,7 @@
 //
 //
 // $Id: BrachyFactoryIr.hh,v 1.4 2003/05/22 17:20:41 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //    **********************************
 //    *                                *

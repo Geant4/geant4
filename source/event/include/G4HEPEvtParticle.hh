@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEPEvtParticle.hh,v 1.5 2001/07/13 15:01:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //
 

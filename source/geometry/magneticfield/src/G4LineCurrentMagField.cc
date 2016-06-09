@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4LineCurrentMagField.cc,v 1.4 2003/10/31 14:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // -------------------------------------------------------------------
 
 #include "G4LineCurrentMagField.hh"

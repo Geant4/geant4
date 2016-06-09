@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.2 2003/11/03 17:53:27 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.6.2.2 2004/03/24 13:42:14 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -45,6 +45,8 @@
 #include "G4CollisionVector.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4CrossSectionBuffer.hh"
+#include "G4Pair.hh"
+#include "G4ParticleTable.hh"
 
 class G4KineticTrack;
 class G4VCrossSectionSource;
@@ -64,14 +66,43 @@ public:
 
   virtual G4bool IsInCharge(const G4KineticTrack& trk1, 
 			    const G4KineticTrack& trk2) const;
+  void AddComponent(G4VCollision * aC) {components.push_back(aC);}
 
-protected:
+public:
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return 0; }
   virtual const G4VAngularDistribution* GetAngularDistribution() const { return 0; }
 
-  void AddComponent(G4VCollision * aC) {components.push_back(aC);}
-  virtual const G4CollisionVector* GetComponents() const 
-  { return &components;}
+  virtual const G4CollisionVector* GetComponents() const  { return &components;}
+  struct Register
+  {
+    template <class T> void operator()(T*, G4CollisionComposite * aC)
+    {
+      aC->AddComponent(new T());
+    }
+  };
+  struct Resolve
+  {
+//     template <class t1, int t2, int t3, int t4, int t5> 
+    template <class T> 
+    void operator()(T * , G4CollisionComposite * aC)
+    {
+      G4ParticleDefinition * p2, *p3, *p4, *p5;
+      G4int pdg = 0;
+      pdg = T::i1;
+      p2=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i2;
+      p3=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i3;
+      p4=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      pdg = T::i4;
+      p5=G4ParticleTable::GetParticleTable()->FindParticle(pdg);
+      if(p2->GetPDGCharge()+p3->GetPDGCharge() != p4->GetPDGCharge()+p5->GetPDGCharge())
+      {
+        G4cerr << "charge-unbalance in collision composite"<<G4endl;
+      }
+      aC->AddComponent(new typename T::it(p2, p3, p4, p5));  
+    }
+  };
 
 private:  
 

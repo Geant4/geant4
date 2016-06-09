@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.14 2003/10/13 17:57:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEmModel.hh,v 1.17 2004/03/01 14:16:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // 25-02-03 Add sample theta and displacement (V.Ivanchenko)
 // 23-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
 //          calculation (V.Ivanchenko)
+// 01-03-04 L.Urban signature changed in SampleCosineTheta 
 //
 
 //
@@ -114,7 +115,7 @@ public:
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;
 
-  G4String GetName() const {return name;};
+  const G4String& GetName() const {return name;};
 
   // Methods for msc simulation
   virtual G4double GeomPathLength(G4PhysicsTable*,
@@ -129,8 +130,8 @@ public:
 
   virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
 
-  virtual G4double SampleCosineTheta(G4double ) {return 1.0;};
-  // G4double parameter trueStepLength
+  virtual G4double SampleCosineTheta(G4double,G4double,G4double ) {return 1.0;};
+  //  trueStepLength + Tkin + lambda   
 
   virtual G4double SampleDisplacement() {return 0.0;};
 

@@ -28,7 +28,7 @@
 G4QGSCProtonBuilder::
 G4QGSCProtonBuilder() 
 {
-  theMin = 15*GeV;
+  theMin = 8*GeV;
   theModel = new G4TheoFSGenerator;
   theCascade = new G4StringChipsParticleLevelInterface;
   theModel->SetTransport(theCascade);

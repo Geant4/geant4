@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta.cc,v 1.1 2003/10/07 12:37:34 hpw Exp $ //
+// $Id: G4CollisionNNToDeltaDelta.cc,v 1.2.2.1 2004/03/24 13:18:30 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDelta.hh"
@@ -38,22 +38,22 @@
 #include "G4ParticleTable.hh"
 #include "G4CollisionVector.hh"
 #include "G4ConcreteNNToDeltaDelta.hh"
+#include "G4Pair.hh"
+#include "G4HadParticleCodes.hh"
+
+typedef G4ConcreteNNToDeltaDelta channelType;
+typedef INT4<channelType, NeutronPC, NeutronPC, Delta0PC, Delta0PC>  theC1;
+typedef INT4<channelType, NeutronPC, NeutronPC, DeltamPC, DeltapPC>  theC2;
+typedef INT4<channelType, NeutronPC, ProtonPC,  Delta0PC, DeltapPC>  theC3;
+typedef INT4<channelType, NeutronPC, ProtonPC,  DeltamPC, DeltappPC> theC4;
+typedef INT4<channelType, ProtonPC,  ProtonPC,  DeltapPC, DeltapPC>  theC5;
+typedef INT4<channelType, ProtonPC,  ProtonPC,  Delta0PC, DeltappPC> theC6;
+
+typedef GROUP6(theC1, theC2, theC3, theC4, theC5, theC6) theChannels;
 
 G4CollisionNNToDeltaDelta::G4CollisionNNToDeltaDelta()
 { 
-  G4ParticleDefinition * aProton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition * aNeutron = G4Neutron::NeutronDefinition();
-  G4ParticleDefinition * aDeltapp = G4ParticleTable::GetParticleTable()->FindParticle(2224); 
-  G4ParticleDefinition * aDeltap = G4ParticleTable::GetParticleTable()->FindParticle(2214); 
-  G4ParticleDefinition * aDelta0 = G4ParticleTable::GetParticleTable()->FindParticle(2114); 
-  G4ParticleDefinition * aDeltam = G4ParticleTable::GetParticleTable()->FindParticle(1114); 
-  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aNeutron, aNeutron, aDelta0, aDelta0));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aNeutron, aNeutron, aDeltam, aDeltap));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aNeutron, aProton, aDelta0, aDeltap));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aNeutron, aProton, aDeltam, aDeltapp));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aProton,  aProton, aDeltap, aDeltap));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDelta(aProton,  aProton, aDelta0, aDeltapp));  
-
+  Resolve aR;
+  G4ForEach<theChannels>::Apply(&aR, this);
 }
 

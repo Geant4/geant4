@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MultipleScattering52.cc,v 1.1 2003/08/08 11:31:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban

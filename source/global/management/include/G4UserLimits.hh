@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserLimits.hh,v 1.7 2001/07/11 10:00:52 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UserLimits.hh,v 1.8 2004/01/23 02:23:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 // 
 //
 // class G4UserLimits
@@ -30,8 +30,15 @@
 // Class description:
 //
 // Simple placeholder for user Step limitations
-//
-
+// In order to activate these limitations, users need to register
+// their "special" processes to each particle they want. 
+// Sample processes below can be found under processes/transportation 
+//   MaxAllowedStep    : UserStepLimit
+//   other limitation  : UserSpecialCuts
+// In addition, users can add their own Step limitations by creating 
+// new class derived from G4UserLimits. In these case, fType member
+// is supposed to be used to identify class. 
+//  
 // Author: Paul Kent August 96
 // 
 // 01-11-97: change GetMaxAllowedStep(), Hisaya Kurashige
@@ -65,10 +72,10 @@ public:  // with description
 public:  // with description
   
   virtual G4double GetMaxAllowedStep(const G4Track&);  
-  // If a Logical Volume has a G4UserLimits object, the Step length should
+  // If a Logical Volume has a G4UserLimits object, the Step length can
   // be limited as shorter than MaxAllowedStep in the volume.
-  // In the current design, the other limits are irrelevant in tracking
-
+ 
+  // 
   virtual G4double GetUserMaxTrackLength(const G4Track&) ;
   virtual G4double GetUserMaxTime (const G4Track&);
   virtual G4double GetUserMinEkine(const G4Track&);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.20 2003/12/09 15:37:56 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QCHIPSWorld.hh,v 1.22 2004/03/25 10:44:30 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.

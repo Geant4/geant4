@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.8 2003/08/11 10:02:45 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: TestEm5.cc,v 1.9 2004/02/19 18:18:42 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,8 +81,11 @@ int main(int argc,char** argv) {
   // set user action classes
   //
   //primaryGenerator
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
-  RunAction* runaction = new RunAction(histo);
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(primary);
+  
+  //runAction
+  RunAction* runaction = new RunAction(detector,primary,histo);
   runManager->SetUserAction(runaction);
 
   //eventAction

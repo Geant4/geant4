@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.17 2003/11/12 16:18:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuIonisation.hh,v 1.19 2004/02/10 18:07:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -142,19 +143,18 @@ inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                           G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double y = electron_mass_c2/mass;
-  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
-  return mass*(g - 1.0); 
+  G4double g = x*ratio + sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
-  G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+  G4double tau  = dynParticle->GetKineticEnergy()/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.0)/
+                  (1. + 2.0*(tau + 1.0)*ratio + ratio*ratio);
+
   return tmax;
 }
 
@@ -163,7 +163,7 @@ inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynP
 #include "G4VSubCutoffProcessor.hh"
 
 inline std::vector<G4Track*>*  G4MuIonisation::SecondariesAlongStep(
-                           const G4Step&   step, 
+                           const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
@@ -191,13 +191,13 @@ inline void G4MuIonisation::SecondariesPostStep(
                                                    G4double& kinEnergy)
 {
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(delta);
+  fParticleChange.SetNumberOfSecondaries(1);
+  fParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);
+  fParticleChange.SetProposedMomentumDirection(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -39,14 +39,14 @@ HadronPhysicsLHEP_BERT_HP::HadronPhysicsLHEP_BERT_HP(const G4String& name)
   theNeutrons.RegisterMe(&theBertiniNeutron);
   theNeutrons.RegisterMe(&theHPNeutron);
   theLHEPNeutron.SetMinEnergy(19.9*MeV);
-  theLHEPNeutron.SetMinInelasticEnergy(2.8*GeV);
-  theBertiniNeutron.SetMaxEnergy(3.2*GeV);
+  theLHEPNeutron.SetMinInelasticEnergy(9.5*GeV);
+  theBertiniNeutron.SetMaxEnergy(9.9*GeV);
   theBertiniNeutron.SetMinEnergy(19.9*MeV);
 
   thePro.RegisterMe(&theLHEPPro);
   thePro.RegisterMe(&theBertiniPro);
-  theLHEPPro.SetMinEnergy(2.8*GeV);
-  theBertiniPro.SetMaxEnergy(3.2*GeV);
+  theLHEPPro.SetMinEnergy(9.5*GeV);
+  theBertiniPro.SetMaxEnergy(9.9*GeV);
   
   thePiK.RegisterMe(&theLHEPPiK);
   

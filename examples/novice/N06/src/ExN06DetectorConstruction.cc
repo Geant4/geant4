@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.13 2003/11/28 00:48:16 gum Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: ExN06DetectorConstruction.cc,v 1.14 2004/03/17 22:41:12 gum Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -200,8 +200,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 //
   G4OpticalSurface* OpWaterSurface = new G4OpticalSurface("WaterSurface");
   OpWaterSurface->SetType(dielectric_dielectric);
-  OpWaterSurface->SetFinish(polished);
-  OpWaterSurface->SetModel(glisur);
+  OpWaterSurface->SetFinish(ground);
+  OpWaterSurface->SetModel(unified);
 
   G4LogicalBorderSurface* WaterSurface = 
                                  new G4LogicalBorderSurface("WaterSurface",
@@ -214,8 +214,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 //
   G4OpticalSurface* OpAirSurface = new G4OpticalSurface("AirSurface");
   OpAirSurface->SetType(dielectric_dielectric);
-  OpAirSurface->SetFinish(ground);
-  OpAirSurface->SetModel(unified);
+  OpAirSurface->SetFinish(polished);
+  OpAirSurface->SetModel(glisur);
 
   G4LogicalSkinSurface* AirSurface = 
 	  new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);

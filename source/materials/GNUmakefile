@@ -1,9 +1,11 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:09:39 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2004/01/30 09:57:20 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile for materials library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------
 
 name := G4materials
+
+GLOBLIBS = libG4global.lib
 
 ifndef G4INSTALL
   G4INSTALL = ../..

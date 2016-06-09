@@ -1,3 +1,6 @@
+      CHARACTER*25 fileName
+      COMMON/HISTO1/fileName
+      
       COMMON/HISTO2/idhist,nbBins,valmin,valmax,valunit
       
       PARAMETER (MaxHist = 10)

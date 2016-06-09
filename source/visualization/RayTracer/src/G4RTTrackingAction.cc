@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RTTrackingAction.cc,v 1.4 2003/05/30 13:01:21 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //
 //

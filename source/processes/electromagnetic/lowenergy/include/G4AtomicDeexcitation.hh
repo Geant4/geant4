@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -72,7 +72,7 @@ private:
   
   // Decides wether a radiative transition is possible and, if it is,
   // returns the identity of the starting shell for the transition
-  const G4int SelectTypeOfTransition(G4int Z, G4int shellId);
+  G4int SelectTypeOfTransition(G4int Z, G4int shellId);
   
   // Generates a particle from a radiative transition and returns it
   G4DynamicParticle* GenerateFluorescence(G4int Z, G4int shellId,G4int provShellId);

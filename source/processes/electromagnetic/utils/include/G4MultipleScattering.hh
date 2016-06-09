@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4MultipleScattering.hh,v 1.17 2003/08/08 11:31:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -49,7 +49,7 @@
 //------------------------------------------------------------------------------
 //
 // $Id: G4MultipleScattering.hh,v 1.17 2003/08/08 11:31:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 
 // class description
 //

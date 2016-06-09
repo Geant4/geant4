@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EqMagElectricField.cc,v 1.11 2003/11/05 17:31:59 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //  This is the standard right-hand side for equation of motion.

@@ -1,0 +1,54 @@
+class PNullType
+{
+};
+
+template <class T0, 
+         class T1=PNullType, class T2=PNullType, class T3=PNullType, class T4=PNullType, class T5=PNullType,
+         class T6=PNullType, class T7=PNullType, class T8=PNullType, class T9=PNullType, class T10=PNullType, 
+         class T11=PNullType, class T12=PNullType, class T13=PNullType, class T14=PNullType, class T15=PNullType,
+         class T16=PNullType, class T17=PNullType, class T18=PNullType, class T19=PNullType, class T20=PNullType, 
+         class T21=PNullType, class T22=PNullType, class T23=PNullType, class T24=PNullType, class T25=PNullType,
+         class T26=PNullType, class T27=PNullType, class T28=PNullType, class T29=PNullType, class T30=PNullType, 
+         class T31=PNullType, class T32=PNullType, class T33=PNullType, class T34=PNullType, class T35=PNullType,
+         class T36=PNullType, class T37=PNullType, class T38=PNullType, class T39=PNullType, class T40=PNullType, 
+         class T41=PNullType, class T42=PNullType, class T43=PNullType, class T44=PNullType, class T45=PNullType,
+         class T46=PNullType, class T47=PNullType, class T48=PNullType, class T49=PNullType, class T50=PNullType, 
+         class T51=PNullType, class T52=PNullType, class T53=PNullType, class T54=PNullType, class T55=PNullType,
+         class T56=PNullType, class T57=PNullType, class T58=PNullType, class T59=PNullType, class T60=PNullType, 
+         class T61=PNullType, class T62=PNullType, class T63=PNullType
+	>
+struct Plist
+{
+  typedef T0 first;
+  typedef Plist<
+                  T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,
+                  T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,
+                  T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,
+                  T31,T32,T33,T34,T35,T36,T37,T38,T39,T40,
+                  T41,T42,T43,T44,T45,T46,T47,T48,T49,T50,
+                  T51,T52,T53,T54,T55,T56,T57,T58,T59,T60,
+                  T61,T62,T63
+                 > rest;
+};
+
+template <class functor>
+struct Apply
+{
+  template <class current, class Rest> struct CallBack {
+    static void Call_Back() {
+      typedef typename functor::Fun<current> it;
+      it aF; aF();
+      typedef typename Rest::first first;
+      typedef typename Rest::rest second;
+      Apply::CallBack<first, second>::Call_Back();
+    }
+  };
+  template <class Rest> struct CallBack<PNullType, Rest > {
+    static void Call_Back(){}
+  };
+  template <class group> static void ForEachIn() {
+    CallBack<typename group::first, typename group::rest>::Call_Back();
+  }
+};
+
+

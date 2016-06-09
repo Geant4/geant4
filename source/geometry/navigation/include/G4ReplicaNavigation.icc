@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.icc,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ReplicaNavigation.icc,v 1.3 2004/03/10 18:21:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // class G4ReplicaNavigation Inline implementation
@@ -193,4 +193,34 @@ G4ReplicaNavigation::SetPhiTransformation( const G4double ang,
   rm.rotateZ(ang);
   if ( pVol )
     *pVol->GetRotation() = rm;
+}
+
+// ********************************************************************
+// GetVerboseLevel
+// ********************************************************************
+//
+inline
+G4int G4ReplicaNavigation::GetVerboseLevel() const
+{
+  return fVerbose;
+}
+
+// ********************************************************************
+// SetVerboseLevel
+// ********************************************************************
+//
+inline
+void  G4ReplicaNavigation::SetVerboseLevel(G4int level)
+{
+  fVerbose = level;
+}
+
+// ********************************************************************
+// CheckMode
+// ********************************************************************
+//
+inline
+void  G4ReplicaNavigation::CheckMode(G4bool mode)
+{
+  fCheck = mode;
 }

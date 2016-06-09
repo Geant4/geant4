@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GRSVolume.cc,v 1.7 2003/11/02 16:06:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // class G4GRSVolume Implementation

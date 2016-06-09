@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.4 2003/11/10 08:58:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Navigator.hh,v 1.5 2004/03/10 18:21:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 // class G4Navigator
@@ -245,10 +245,15 @@ class G4Navigator
     // This function takes full care about how to calculate this normal,
     // but if the surfaces are not convex it will return valid=false.
 
-  inline G4int GetVerboseLevel();
+  inline G4int GetVerboseLevel() const;
   inline void  SetVerboseLevel(G4int level);
     // Get/Set Verbose(ness) level.
     // [if level>0 && G4VERBOSE, printout can occur]
+
+  inline void  CheckMode(G4bool mode);
+    // Run navigation in "check-mode", therefore using additional
+    // verifications and more strict correctness conditions.
+    // Is effective only with G4VERBOSE set.
 
   void PrintState();      
     // Print the internal state of the Navigator (for debugging).
@@ -386,6 +391,8 @@ class G4Navigator
   // BEGIN Utility information
   //
 
+  G4bool fCheck;
+    // Check-mode flag  [if true, more strict checks are performed].
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
 

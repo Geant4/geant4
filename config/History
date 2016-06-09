@@ -1,5 +1,5 @@
-$Id: History,v 1.231 2003/11/18 09:08:10 gcosmo Exp $
-$Name: geant4-06-00 $
+$Id: History,v 1.238 2004/02/24 09:49:45 gcosmo Exp $
+$Name: geant4-06-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th February 2004  Gabriele Cosmo (config-V06-00-03)
+- Fixed link rpath definition in Linux-icc.gmk.
+
+11th February 2004  Gabriele Cosmo (config-V06-00-02)
+- Added configuration file Linux-icc.gmk for Intel/icc compiler
+  on Linux systems.
+
+10th February 2004  Guy Barrand
+- WIN32-VC7.gmk: added material to build shared libs for Windows (DLLs).
+- Added program win32def.c to help building DLLs, built from
+  source/GNUmakefile through a specialised target and placed in
+  $G4LIB/$G4SYSTEM.
+- source/materials/GNUmakefile: modified to provide an example of macro
+  GLOBLIBS used by the DLL builder in order to have global lib dependencies.
+
+9th February 2004  Gunter Folger (config-V06-00-01)
+- architecture.gmk:
+  o Protect OGLFLAGS against containing -I/usr/include; this may cause 
+    wrong includes to be picked up.
+   
+26th January 2004  Guy Barrand (config-V06-00-00)
+- Darwin-g++.gmk:
+  o Use "g++" as a default compiler (in order to take the MacOSX
+    default compiler).
+  o Corrected procedure for building .dylib shared libs.
+    Previous default Linux commands do not work on MacOSX.
 
 18th November 2003  Gabriele Cosmo (config-V05-02-05)
 - Updated binmake.gmk to include new hadronics modules.

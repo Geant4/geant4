@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.cc,v 1.9 2003/06/16 16:57:12 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4SigmaPlus.cc,v 1.10 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4SigmaPlus::G4SigmaPlus(
 //             stable         lifetime    decay table 
 
 G4SigmaPlus G4SigmaPlus::theSigmaPlus(
-             "sigma+",     1.18937*GeV,  8.24e-12*MeV,       eplus, 
+             "sigma+",     1.18937*GeV, 8.209e-12*MeV,       eplus, 
 		    1,              +1,             0,          
 		    2,              +2,             0,             
 	     "baryon",               0,            +1,        3222,

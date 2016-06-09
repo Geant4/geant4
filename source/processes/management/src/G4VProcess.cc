@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VProcess.cc,v 1.10 2003/11/03 03:27:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------

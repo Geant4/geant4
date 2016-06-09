@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.11 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BraggModel.cc,v 1.14 2004/02/15 17:47:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     massRate     = mass/proton_mass_c2;
-    highKinEnergy *= massRate;
+//    highKinEnergy *= massRate;
     ratio = electron_mass_c2/mass;
     if(particle->GetParticleName() == "GenericIon") isIon = true;
   }
@@ -148,10 +148,11 @@ G4double G4BraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
   if (cutEnergy < tmax) {
 
-    G4double x   = cutEnergy/tmax;
-    G4double tau = kineticEnergy/mass;
-    G4double gam = tau + 1.0;
-    G4double beta2 = 1. - 1./(gam*gam);
+    G4double tau   = kineticEnergy/mass;
+    G4double gam   = tau + 1.0;
+    G4double bg2   = tau * (tau+2.0);
+    G4double beta2 = bg2/(gam*gam);
+    G4double x     = cutEnergy/tmax;
 
     dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
@@ -172,24 +173,28 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double cutEnergy,
-                                          G4double maxEnergy)
+                                          G4double maxKinEnergy)
 {
 
-  G4double cross = 0.0;
-  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  G4double cross     = 0.0;
+  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < tmax) {
 
-    G4double x      = cutEnergy/tmax;
-    G4double energy = kineticEnergy + mass;
-    G4double gam    = energy/mass;
-    G4double beta2  = 1. - 1./(gam*gam);
-    cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
+    G4double energy  = kineticEnergy + mass;
+    G4double energy2 = energy*energy;
+    G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
 
+// +term for spin=1/2 particle
+//    if( 0.5 == spin ) {
+//      cross        +=  0.5 * (tmax - cutEnergy) / energy2;
+//    }
     cross *= twopi_mc2_rcl2*chargeSquare*
              (couple->GetMaterial()->GetElectronDensity())/beta2;
   }
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
-  //         << " cross= " << cross << G4endl;
+ //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
+ //        << " cross= " << cross << G4endl;
   return cross;
 }
 
@@ -202,39 +207,37 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double xmin = tmin/tmax;
-  G4double xmax = std::min(tmax, maxEnergy)/tmax;
-  if(xmin >= xmax) return 0;
+  G4double xmax = std::min(tmax, maxEnergy);
+  G4double xmin = std::min(xmax,tmin);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double energy = kineticEnergy + mass;
-  G4double beta2 = 1. - mass*mass/(energy*energy);
-  G4double grej = 1.0 - beta2*xmin;
-  G4double z, f;
+  G4double energy  = kineticEnergy + mass;
+  G4double energy2 = energy*energy;
+  G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+  G4double grej    = 1.0;
+  G4double deltaKinEnergy, f;
 
   G4ThreeVector momentum = dp->GetMomentumDirection();
 
   // sampling follows ...
   do {
     G4double q = G4UniformRand();
-    z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+    deltaKinEnergy = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
 
-    f = 1.0 - beta2 * z;
-    /*
+    f = 1.0 - beta2*deltaKinEnergy/tmax;
+
     if(f > grej) {
         G4cout << "G4BraggModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
-               << f << " for x= " << z
+               << f << " for e= " << deltaKinEnergy
                << G4endl;
     }
-    */
-  } while( grej*G4UniformRand() >= f );
 
-  G4double deltaKinEnergy = z * tmax;
+  } while( grej*G4UniformRand() >= f );
 
   G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = sqrt(energy*energy - mass*mass);
+  G4double totMomentum = sqrt(energy2 - mass*mass);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
   G4double sint = sqrt(1.0 - cost*cost);
@@ -245,10 +248,8 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
   deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle();
-  delta->SetDefinition(G4Electron::Electron());
-  delta->SetKineticEnergy(deltaKinEnergy);
-  delta->SetMomentumDirection(deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
+                                                   deltaDirection,deltaKinEnergy);
 
   return delta;
 }

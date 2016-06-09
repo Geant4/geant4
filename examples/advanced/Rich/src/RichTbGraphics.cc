@@ -26,7 +26,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
+#include <iostream>
 #include "RichTbDetectorConstruction.hh"
 #include "RichTbHall.hh"
 #include "RichTbComponent.hh"

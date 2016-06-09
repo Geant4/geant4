@@ -123,12 +123,12 @@ private:
   G4LogicalVolume* RichTbRadDnWLVol;
   G4VPhysicalVolume* RichTbRadDnWPVol;
   G4int NumAerogelTiles;
-  vector<G4LogicalVolume*> RichTbAgelLVol;
-  vector<G4VPhysicalVolume*> RichTbAgelPVol;
-  vector<G4LogicalVolume*> RichTbAgelWrapTopLVol;
-  vector<G4VPhysicalVolume*> RichTbAgelWrapTopPVol;
-  vector<G4LogicalVolume*> RichTbAgelWrapBotLVol;
-  vector<G4VPhysicalVolume*> RichTbAgelWrapBotPVol;
+  std::vector<G4LogicalVolume*> RichTbAgelLVol;
+  std::vector<G4VPhysicalVolume*> RichTbAgelPVol;
+  std::vector<G4LogicalVolume*> RichTbAgelWrapTopLVol;
+  std::vector<G4VPhysicalVolume*> RichTbAgelWrapTopPVol;
+  std::vector<G4LogicalVolume*> RichTbAgelWrapBotLVol;
+  std::vector<G4VPhysicalVolume*> RichTbAgelWrapBotPVol;
   G4LogicalVolume* RichTbFilterLVol;
   G4VPhysicalVolume* RichTbFilterPVol;
   G4bool ConstructTrackingGeometrySwitch;

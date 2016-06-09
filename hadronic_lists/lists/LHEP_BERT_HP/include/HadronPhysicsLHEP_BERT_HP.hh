@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef HadronPhysicsLHEP_BIC_h
-#define HadronPhysicsLHEP_BIC_h 1
+#ifndef HadronPhysicsLHEP_BERT_HP_h
+#define HadronPhysicsLHEP_BERT_HP_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"

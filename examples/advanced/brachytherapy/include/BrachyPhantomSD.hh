@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomSD.hh,v 1.5 2003/05/26 09:20:13 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyPhantomSD.hh,v 1.6 2004/03/11 16:05:02 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //    ********************************
 //    *                              *  
@@ -43,7 +43,7 @@ class G4TouchableHistory;
 class BrachyPhantomSD : public G4VSensitiveDetector
 {
 public:
-  BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
+  BrachyPhantomSD(G4String name);
   ~BrachyPhantomSD();
 
   void Initialize(G4HCofThisEvent*);
@@ -52,12 +52,6 @@ public:
   void clear();
   void DrawAll();
   void PrintAll();
-
-private: 
-  const G4int numberOfVoxelsX;
-  const G4int numberOfVoxelsZ;
-  G4int *voxelID;
-  BrachyPhantomHitsCollection *phantomHitsCollection;
 };
 #endif
 

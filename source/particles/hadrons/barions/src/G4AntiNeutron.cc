@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.13 2003/06/16 16:56:51 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiNeutron.cc,v 1.14 2004/02/13 05:53:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4AntiNeutron::G4AntiNeutron(
 //             stable         lifetime    decay table 
 //
 G4AntiNeutron G4AntiNeutron::theAntiNeutron(
-       "anti_neutron",  0.93956563*GeV,       0.0*MeV,         0.0, 
+       "anti_neutron",  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

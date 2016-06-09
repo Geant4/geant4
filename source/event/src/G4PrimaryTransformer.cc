@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryTransformer.cc,v 1.18 2003/10/01 13:17:34 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "G4PrimaryTransformer.hh"

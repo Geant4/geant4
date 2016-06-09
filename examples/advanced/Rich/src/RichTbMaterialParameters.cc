@@ -26,8 +26,8 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include "globals.hh"
 #include "RichTbGeometryParameters.hh"
 #include "RichTbMaterialParameters.hh"
@@ -41,20 +41,20 @@ void InitializeRichTbMaterial(){
 
 }
 
-vector<G4double> InitializePhotonMomentumVector() {
+std::vector<G4double> InitializePhotonMomentumVector() {
 
   G4double PhotonEnergyStep=(PhotonMaxEnergy-PhotonMinEnergy)/
                             NumPhotWaveLengthBins;
-  vector<G4double>PhotMomVect(NumPhotWaveLengthBins);
+  std::vector<G4double>PhotMomVect(NumPhotWaveLengthBins);
   for (G4int ibin=0; ibin<NumPhotWaveLengthBins; ibin++){
     PhotMomVect[ibin]=PhotonMinEnergy+PhotonEnergyStep*ibin;
   }
   return PhotMomVect;
 }
-vector<G4double> InitN2RefIndex(G4double pressure, G4double temperature){
+std::vector<G4double> InitN2RefIndex(G4double pressure, G4double temperature){
  
-  vector<G4double> PmV=InitN2RefPhotW();
-  vector<G4double> RefN2(NumPhotWaveLengthBins);
+  std::vector<G4double> PmV=InitN2RefPhotW();
+  std::vector<G4double> RefN2(NumPhotWaveLengthBins);
   G4double GasRhoN2Cur=GasRhoN2atSTP*(GasTemperature_STP/temperature)*
                                      (pressure/ GasPressure_STP);
   G4double epho,pfe,cpfe;
@@ -68,20 +68,20 @@ vector<G4double> InitN2RefIndex(G4double pressure, G4double temperature){
   }
   return RefN2;
 }
-vector<G4double> InitN2RefPhotW() {
+std::vector<G4double> InitN2RefPhotW() {
   return InitializePhotonMomentumVector() ; 
 } 
-vector<G4double> InitAgelPhotW() {
+std::vector<G4double> InitAgelPhotW() {
   return InitializePhotonMomentumVector() ; 
 }
-vector<G4double> InitializeHpdQE(G4int ihpdqe) {
+std::vector<G4double> InitializeHpdQE(G4int ihpdqe) {
   // Initialize the HPD QE
    G4int iqb;
    if(ihpdqe >= NumHpdTot ) {
      G4cout<<"Wrong HPD Number for QE " <<ihpdqe<<"  vs "
 	 <<NumHpdTot <<G4endl;
    }
-   vector<G4double>qeCurPerCent(NumQEbins);
+   std::vector<G4double>qeCurPerCent(NumQEbins);
    if(ihpdqe == 0 ){
     for(iqb=0; iqb<NumQEbins; iqb++){
       qeCurPerCent[iqb] =  Hpd0QEPerCent[iqb]* HpdQEReductionFactor;
@@ -105,14 +105,14 @@ vector<G4double> InitializeHpdQE(G4int ihpdqe) {
 
  return  qeCurPerCent;
 }
-vector<G4double> InitializeHpdWaveL(G4int ihpdqe) {
+std::vector<G4double> InitializeHpdWaveL(G4int ihpdqe) {
   G4int iqb;
  if(ihpdqe >= NumHpdTot ) {
    G4cout<<"Wrong HPD Number for QE wavelength " <<ihpdqe<<"  vs "
 	 <<NumHpdTot <<G4endl;
  }
  // for now all HPDs have the same wavelength bins.
- vector<G4double>HpdQEW(NumQEbins);
+ std::vector<G4double>HpdQEW(NumQEbins);
  for (iqb=0; iqb<NumQEbins; iqb++){
    HpdQEW[iqb]= HpdQEWaveL[iqb];
  }  
@@ -156,16 +156,16 @@ void  HistoRichTbMaterialProperties(RichTbRunConfig* RConfig) {
 
   G4int ihpdqa;
   ihpdqa=0;
-  vector<G4double>WaveL1 = InitializeHpdWaveL(ihpdqa); 
-  vector<G4double>QEff1 = InitializeHpdQE(ihpdqa);
+  std::vector<G4double>WaveL1 = InitializeHpdWaveL(ihpdqa); 
+  std::vector<G4double>QEff1 = InitializeHpdQE(ihpdqa);
 
 
 
 }
   
 
-vector<G4int> getDeadPixelList(G4int ihpdNum,  G4int){
-  vector<G4int>DeadPixelList;
+std::vector<G4int> getDeadPixelList(G4int ihpdNum,  G4int){
+  std::vector<G4int>DeadPixelList;
   // G4int isc,ipsc;
 
 
@@ -176,10 +176,10 @@ vector<G4int> getDeadPixelList(G4int ihpdNum,  G4int){
 
   return DeadPixelList;
 }
-vector<G4double>GetAerogelRScatLength(AerogelType CurrentAerogelType) {
+std::vector<G4double>GetAerogelRScatLength(AerogelType CurrentAerogelType) {
 
-  vector<G4double>AgelRayleighScatLength(NumPhotWaveLengthBins);
-  vector<G4double>AgelPhotW = InitAgelPhotW();
+  std::vector<G4double>AgelRayleighScatLength(NumPhotWaveLengthBins);
+  std::vector<G4double>AgelPhotW = InitAgelPhotW();
   G4double aClarity=0.;
   if(CurrentAerogelType == AerogelTypeA ) {
     aClarity=AerogelTypeAClarity/(micrometer*micrometer*micrometer*micrometer);
@@ -196,7 +196,7 @@ vector<G4double>GetAerogelRScatLength(AerogelType CurrentAerogelType) {
   }else if (CurrentAerogelType == AerogelTypeE ) {
     aClarity=AerogelTypeEClarity/(micrometer*micrometer*micrometer*micrometer);
 
-  }else {G4cout<<"Unknown Aerogel Type for Rayleigh Scat Length "<<endl; }
+  }else {G4cout<<"Unknown Aerogel Type for Rayleigh Scat Length "<<G4endl; }
 
   if(aClarity != 0.0 ) {    
     for(G4int ibinw=0; ibinw<NumPhotWaveLengthBins; ibinw++ ){

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.cc,v 1.8 2003/06/16 16:56:50 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiLambdacPlus.cc,v 1.9 2004/02/13 05:53:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4AntiLambdacPlus::G4AntiLambdacPlus(
 //             stable         lifetime    decay table 
 
 G4AntiLambdacPlus G4AntiLambdacPlus::theAntiLambdacPlus(
-     "anti_lambda_c+",      2.2849*GeV,   3.19e-9*MeV,   -1.*eplus,
+     "anti_lambda_c+",      2.2849*GeV,   3.30e-9*MeV,   -1.*eplus,
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            +1,       -4122,

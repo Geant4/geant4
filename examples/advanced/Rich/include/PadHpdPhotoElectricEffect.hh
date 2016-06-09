@@ -78,10 +78,10 @@ public:
   G4double HpdPhElectronKE;
   G4double PhCathodeToSilDetDist;
   G4double PSFsigma;
-  vector<G4double>DemagnificationFactor;
-  vector<G4double>DemagnificationQuadFactor;
-  vector<vector<G4double> >HpdQE;
-  vector<vector<G4double> >HpdWabin;
+  std::vector<G4double>DemagnificationFactor;
+  std::vector<G4double>DemagnificationQuadFactor;
+  std::vector<std::vector<G4double> >HpdQE;
+  std::vector<std::vector<G4double> >HpdWabin;
 
 };
 

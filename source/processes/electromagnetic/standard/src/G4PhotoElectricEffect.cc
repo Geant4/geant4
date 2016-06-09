@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.29 2003/06/16 17:02:11 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PhotoElectricEffect.cc,v 1.30 2004/03/10 16:48:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,8 +68,8 @@
  
 // constructor
  
-G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
-  : G4VDiscreteProcess (processName), 
+G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
+    G4ProcessType type):G4VDiscreteProcess (processName, type),
     fminimalEnergy(1*eV)
     
 { PrintInfoDefinition();}

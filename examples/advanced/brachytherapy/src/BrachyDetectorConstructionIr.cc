@@ -34,8 +34,8 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionIr.cc,v 1.7 2003/12/09 15:29:57 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyDetectorConstructionIr.cc,v 1.8 2004/03/11 15:38:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #include "globals.hh"
 #include "BrachyDetectorConstructionIr.hh"
@@ -93,7 +93,7 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
   capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
   capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
   capsulePhys= new G4PVPlacement(0,
-                                 G4ThreeVector(0,0,-1.975),
+                                 G4ThreeVector(0,0,-1.975*mm),
                                  "CapsulePhys",
                                  capsuleLog,
                                  mother,

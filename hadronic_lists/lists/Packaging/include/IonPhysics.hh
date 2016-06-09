@@ -44,6 +44,7 @@
 #include "G4LEAlphaInelastic.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 #include "G4MultipleScattering.hh"
 
 class IonPhysics : public G4VPhysicsConstructor
@@ -69,7 +70,7 @@ class IonPhysics : public G4VPhysicsConstructor
    // Generic Ion physics
    G4HadronElasticProcess theIonElasticProcess;
    G4MultipleScattering   fIonMultipleScattering;
-   G4hIonisation          fIonIonisation;
+   G4ionIonisation          fIonIonisation;
 
    // Deuteron physics
    G4HadronElasticProcess      theDElasticProcess;

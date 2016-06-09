@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionInitialState.hh,v 1.4 2003/11/19 17:52:59 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4CollisionInitialState.hh,v 1.4.4.1 2004/03/24 13:18:28 hpw Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

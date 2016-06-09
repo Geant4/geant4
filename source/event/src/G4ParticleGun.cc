@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleGun.cc,v 1.7 2003/11/19 19:28:43 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 // G4ParticleGun

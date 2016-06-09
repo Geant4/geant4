@@ -49,8 +49,8 @@ class G4LEADNeutronBuilder : public G4VNeutronBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4Mars5GeV * theModel;    
     G4NeutronInelasticCrossSection theXSec;
+    G4Mars5GeV * theModel;    
     G4double theMin;
 
 };

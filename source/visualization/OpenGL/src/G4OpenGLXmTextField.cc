@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmTextField.cc,v 1.6 2001/07/11 10:08:58 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 

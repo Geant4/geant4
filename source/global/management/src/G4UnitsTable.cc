@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.20 2003/11/24 11:34:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UnitsTable.cc,v 1.21 2004/01/21 13:17:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -45,8 +45,8 @@ G4UnitsTable      G4UnitDefinition::theUnitsTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
-                                   G4String category, G4double value)
+G4UnitDefinition::G4UnitDefinition(const G4String& name, const G4String& symbol,
+                                   const G4String& category, G4double value)
   : Name(name),SymbolName(symbol),Value(value)				   
 {
     //
@@ -63,7 +63,6 @@ G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
     //update string max length for name and symbol
     theUnitsTable[i]->UpdateNameMxLen((G4int)name.length());
     theUnitsTable[i]->UpdateSymbMxLen((G4int)symbol.length());
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -78,7 +77,7 @@ G4UnitDefinition::~G4UnitDefinition()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4UnitDefinition::G4UnitDefinition(G4UnitDefinition& right)
+G4UnitDefinition::G4UnitDefinition(const G4UnitDefinition& right)
 {
     *this = right;
 }
@@ -120,7 +119,7 @@ G4UnitsTable& G4UnitDefinition::GetUnitsTable()
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4double G4UnitDefinition::GetValueOf(G4String string)
+G4double G4UnitDefinition::GetValueOf(const G4String& str)
 {
   if(theUnitsTable.size()==0) BuildUnitsTable();
   G4String name,symbol;
@@ -128,19 +127,19 @@ G4double G4UnitDefinition::GetValueOf(G4String string)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
-            if(string==name||string==symbol) 
+            if(str==name||str==symbol) 
                return units[j]->GetValue();
           }
      }
-  G4cout << "Warning from G4UnitDefinition::GetValueOf(" << string << ")."
-       << " The unit " << string << " does not exist in UnitsTable."
+  G4cout << "Warning from G4UnitDefinition::GetValueOf(" << str << ")."
+       << " The unit " << str << " does not exist in UnitsTable."
        << " Return Value = 0." << G4endl;     
   return 0.;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4String G4UnitDefinition::GetCategory(G4String string)
+G4String G4UnitDefinition::GetCategory(const G4String& str)
 {
   if(theUnitsTable.size()==0) BuildUnitsTable();
   G4String name,symbol;
@@ -148,12 +147,12 @@ G4String G4UnitDefinition::GetCategory(G4String string)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
-            if(string==name||string==symbol) 
+            if(str==name||str==symbol) 
                return theUnitsTable[i]->GetName();
           }
      }
-  G4cout << "Warning from G4UnitDefinition::GetCategory(" << string << ")."
-       << " The unit " << string << " does not exist in UnitsTable."
+  G4cout << "Warning from G4UnitDefinition::GetCategory(" << str << ")."
+       << " The unit " << str << " does not exist in UnitsTable."
        << " Return category = None" << G4endl;
   name = "None";     
   return name;             
@@ -300,8 +299,8 @@ void G4UnitDefinition::PrintUnitsTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
-G4UnitsCategory::G4UnitsCategory(G4String name)
-:Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
+G4UnitsCategory::G4UnitsCategory(const G4String& name)
+  : Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
 {
 }
 
@@ -313,7 +312,7 @@ G4UnitsCategory::~G4UnitsCategory()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4UnitsCategory::G4UnitsCategory(G4UnitsCategory& right)
+G4UnitsCategory::G4UnitsCategory(const G4UnitsCategory& right)
 {
   *this = right;
 }
@@ -357,7 +356,7 @@ void G4UnitsCategory::PrintCategory()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
        
-G4BestUnit::G4BestUnit(G4double value,G4String category)
+G4BestUnit::G4BestUnit(G4double value, const G4String& category)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
@@ -378,7 +377,7 @@ G4BestUnit::G4BestUnit(G4double value,G4String category)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
        
-G4BestUnit::G4BestUnit(const G4ThreeVector& value,G4String category)
+G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();

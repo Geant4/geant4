@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.8 2003/10/31 14:35:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UniformMagField.cc,v 1.9 2004/02/09 14:43:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // Class for creation of uniform Magnetic Field
@@ -94,4 +94,12 @@ void G4UniformMagField::GetFieldValue (const G4double [4],
    B[0]= fFieldComponents[0] ;
    B[1]= fFieldComponents[1] ;
    B[2]= fFieldComponents[2] ;
+}
+
+G4ThreeVector G4UniformMagField::GetConstantFieldValue() const
+{
+   G4ThreeVector B(fFieldComponents[0],
+                   fFieldComponents[1],
+                   fFieldComponents[2]);
+  return B;
 }

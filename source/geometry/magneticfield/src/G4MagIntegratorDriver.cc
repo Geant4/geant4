@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagIntegratorDriver.cc,v 1.41 2003/10/31 14:35:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 //

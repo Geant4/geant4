@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04IonPhysics.cc,v 1.5 2003/09/27 13:27:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

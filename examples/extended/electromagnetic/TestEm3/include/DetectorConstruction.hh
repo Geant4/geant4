@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003/09/22 14:06:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: DetectorConstruction.hh,v 1.5 2004/01/16 14:14:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,6 +88,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
      
      const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
+     const G4Material*        GetWorldMaterial()     {return defaultMaterial;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
                  
   private:

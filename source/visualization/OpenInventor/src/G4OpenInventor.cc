@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventor.cc,v 1.9 2003/10/29 10:02:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 

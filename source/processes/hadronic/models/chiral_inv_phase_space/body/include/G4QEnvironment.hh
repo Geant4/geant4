@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.19 2003/12/09 15:38:03 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QEnvironment.hh,v 1.21.2.1 2004/03/25 10:44:38 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -32,10 +32,6 @@
 #ifndef G4QEnvironment_h
 #define G4QEnvironment_h 1
 
-// Standard G4-headers
-//#include "G4HadronicException.hh"
-
-// CHIPS headers
 #include "G4QuasmonVector.hh"
 
 class G4QEnvironment 
@@ -55,58 +51,65 @@ public:
   G4QNucleus       GetEnvironment() const;
   G4QuasmonVector* GetQuasmons();
   G4QHadronVector* GetQHadrons();
+  G4QHadronVector* GetProjectiles();
 
   // Modifiers
-  G4QHadronVector* Fragment();                        // User must clear and destroy the G4QHadronVec
+  G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
 
   // Static functions
-  static void SetParameters( G4double solAn=0.4, G4bool efFlag=false, G4double piThresh=141.4,
+  static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
-  // General functions
-  G4ThreeVector    RndmDir();                         // Randomize 3D direction (@@subst by libFunc)
+  // General purpose functions
+  G4ThreeVector    RndmDir();               // Randomize 3D direction (@@subst by libFunc)
 
 private:  
-  G4QHadronVector* FSInteraction();                   // Final State Interaction after Hadronization
-  G4QHadronVector  HadronizeQEnvironment();           // Main HadronizationFunction used in Fragment
-  void             CopyAndDeleteHadronVector(G4QHadronVector* HV);// Copy theHadrVect to theOutputHV
+  G4QHadronVector* FSInteraction();         // Final State Interaction after Hadronization
+  G4QHadronVector  HadronizeQEnvironment(); // Main HadronizationFunction used in Fragment
+  void             CopyAndDeleteHadronVector(G4QHadronVector* HV);//Copy HadrVect to Output
   void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
-  void             InitClustersVector(G4int maxC, G4int maxA); // Init.NucCclusters for 1st interact
-  void             CleanUp();                         // Makes theEnvironment=vacuum & kill Quasmons
+  void             InitClustersVector(G4int maxC, G4int maxA);//Init.NucClust's for 1st int
+  void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
-  void             EvaporateResidual(G4QHadron* evap, G4bool corFlag = false);// Final Evaporation
-  void             DecayDibaryon(G4QHadron* dB);      // Decay of any di-baryon (deuteron is kept)
-  void             DecayIsonucleus(G4QHadron* dB);    // Decay nP+(Pi+) or nN+(Pi-) system
-  void             DecayMultyBaryon(G4QHadron* dB);   // Decay of Ap, An or AL states
-  void             DecayAntiStrange(G4QHadron* dB);   // Decay of the nucleus, containing K+/K0
-  void             DecayAlphaBar(G4QHadron* dB);      // Decay of alpha+p or alpha+n states
-  void             DecayAlphaDiN(G4QHadron* dB);      // Decay of alpha+p+p states
-  void             DecayAlphaAlpha(G4QHadron* dB);    // Decay of alpha+alpha state
-  G4bool           CheckGroundState(G4Quasmon* quasm, G4bool corFlag = false);// as G4Q for TotHadrV
-  G4bool           DecayInEnvQ(G4Quasmon* quasm);     // Use befor evaporation in PANIC case
+  void             EvaporateResidual(G4QHadron* evap, G4bool corFlag=false);// Final Evap.
+  void             DecayDibaryon(G4QHadron* dB);   // Decay di-baryon (deuteron is kept)
+  void             DecayIsonucleus(G4QHadron* dB); // Decay nP+(Pi+) or nN+(Pi-) system
+  void             DecayMultyBaryon(G4QHadron* dB);// Decay of Ap, An or AL states
+  void             DecayAntiStrange(G4QHadron* dB);// Decay nuclei containing K+/K0
+  void             DecayAlphaBar(G4QHadron* dB);   // Decay of alpha+p or alpha+n states
+  void             DecayAlphaDiN(G4QHadron* dB);   // Decay of alpha+p+p states
+  void             DecayAlphaAlpha(G4QHadron* dB); // Decay of alpha+alpha state
+  G4bool           CheckGroundState(G4Quasmon* quasm,G4bool corFlag=false);//as G4Q for QHV
+  G4bool           DecayInEnvQ(G4Quasmon* quasm);  // Use befor evaporation in PANIC case
 
 // Body
 private:
   // Static Parameters
-  static G4bool      EnergyFlux;      // Flag for Energy Flux use instead of Multy Quasmon
-  static G4double    SolidAngle;      // Part of Solid Angle to capture secondaries (@@A-dep)
-  static G4double    PiPrThresh;      // Pion Production Threshold for gammas
-  static G4double    M2ShiftVir;      // Shift for M2=-Q2=m_pi^2 of the virtual gamma
-  static G4double    DiNuclMass;      // Double Nucleon Mass for virtual normalization
+  static G4bool      EnergyFlux;     // Flag for Energy Flux use instead of Multy Quasmon
+  static G4double    SolidAngle;     // Part of Solid Angle to capture secondaries(@@A-dep)
+  static G4double    PiPrThresh;     // Pion Production Threshold for gammas
+  static G4double    M2ShiftVir;     // Shift for M2=-Q2=m_pi^2 of the virtual gamma
+  static G4double    DiNuclMass;     // Double Nucleon Mass for virtual normalization
   // Output hadrons
-  G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons
+  G4QHadronVector    theQHadrons;    // Vector of generated secondary hadrons
   // Internal working parameters
-  G4QCHIPSWorld*     theWorld;        // the CHIPS World
-  G4int              nBarClust;       // Maximum barion number of clusters (Calc. @ Interaction)
-  G4double           f2all;           // Ratio of free nucleons to free+dense nucleons (do we need it in Quasmon?)
-  G4QuasmonVector    theQuasmons;     // Intermediate vector of Quasmons before fragmentation (***delete***)
-  G4QCandidateVector theQCandidates;  // Vector of possible candidates to clusters (***delete***)
-  G4QNucleus         theEnvironment;  // Initial Nucleus & later Residual Nuclear Environment
-  G4LorentzVector    tot4Mom;         // Total 4-momentum in the reaction
+  G4QCHIPSWorld*     theWorld;       // the CHIPS World
+  G4int              nBarClust;      // Maximum BarionNumber of clusters (To optimize calc)
+  G4double           f2all;          // Ratio of freeNucleons to free+denseNucleons
+  G4QuasmonVector    theQuasmons;    // Intermediate vectorOfQuasmons before fragmentation
+  G4QCandidateVector theQCandidates; // Vector of possible candidates to clusters
+  G4QNucleus         theEnvironment; // InitialNucleus (later ResidualNuclearEnvironment)
+  G4LorentzVector    tot4Mom;        // Total 4-momentum in the reaction
+  G4int              totCharge;      // Total charge in the reaction (for current control)
+  G4int              totBaryoN;      // Total baryon number in the reaction (for cur.cont)
+  G4QHadronVector    theProjectiles; // Vector of projectiles in the interaction
+  G4int              theTargetPDG;   // PDG of the target nucleus in the interaction
 };
 
-inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const {return this == &rhs;}
-inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const {return this != &rhs;}
-inline G4QNucleus G4QEnvironment::GetEnvironment()                  const {return theEnvironment;}
+inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const
+                                                                     {return this == &rhs;}
+inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const
+                                                                     {return this != &rhs;}
+inline G4QNucleus G4QEnvironment::GetEnvironment() const {return theEnvironment;}
 #endif
 
 

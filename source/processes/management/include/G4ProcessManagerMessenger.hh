@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProcessManagerMessenger.hh,v 1.6 2003/04/01 16:43:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //
 //---------------------------------------------------------------

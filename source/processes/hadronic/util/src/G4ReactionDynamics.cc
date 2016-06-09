@@ -54,6 +54,7 @@
 #include "Randomize.hh"
 #include <iostream>
 #include "G4HadReentrentException.hh"
+#include <signal.h>
 
 // #include "DumpFrame.hh"
 
@@ -161,6 +162,7 @@
       *vec[i] = pTemp;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
+
     if( currentMass == 0.0 && targetMass == 0.0 )       // annihilation
     {
       // no kinetic energy in target .....
@@ -1453,6 +1455,11 @@
     //  A simple two cluster model is used.
     //  This should be sufficient for low energy interactions.
     //
+
+    // + debugging
+    // raise(SIGSEGV);
+    // - debugging
+
     G4int i;
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aProton = G4Proton::Proton();

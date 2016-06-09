@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSensitiveDetector.cc,v 1.1 2003/10/03 10:12:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"

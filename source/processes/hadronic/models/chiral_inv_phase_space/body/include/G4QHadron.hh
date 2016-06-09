@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.26 2003/12/09 15:38:05 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QHadron.hh,v 1.28 2004/03/25 10:44:40 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -44,14 +44,14 @@ public:
   // Constructors
   G4QHadron();                                      // Default Constructor
   G4QHadron(G4LorentzVector p);                     // Kinematical Constructor
-  G4QHadron(G4int PDGcode, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// CHIPS World Hadron
-  G4QHadron(G4QPDGCode QPDG, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// CHIPS World Had.
-  G4QHadron(G4QContent QC, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// QC defined Hadron
-  G4QHadron(G4int PDG, G4double m, G4QContent QC);  // Constructor for a Chipolino or a Quasmon
-  G4QHadron(G4QPDGCode QPDG, G4double m, G4QContent QC);  // Con. for a Chipolino or a Quasmon
-  G4QHadron(G4int PDG, G4LorentzVector p, G4QContent QC);// Constructor for Chipolino or Quasmon
-  G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC);// Con. for Chipolino or Quasmon
-  G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for a resonance with RANDOM m
+  G4QHadron(G4int PDGcode, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));//CHIPS-W Hadron
+  G4QHadron(G4QPDGCode QPDG, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));//CHIPS-W Had.
+  G4QHadron(G4QContent QC, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));//QC C-W Hadron
+  G4QHadron(G4int PDG, G4double m, G4QContent QC); // Constructor for Chipolino or Quasmon
+  G4QHadron(G4QPDGCode QPDG, G4double m, G4QContent QC);// Constr. for Chipolino or Quasmon
+  G4QHadron(G4int PDG, G4LorentzVector p, G4QContent QC);// Constr for Chipolino or Quasmon
+  G4QHadron(G4QPDGCode QPDG, G4LorentzVector p, G4QContent QC);// Con. for Chipo or Quasmon
+  G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for Res with RANDOM mass
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
   G4QHadron(const G4QHadron* right);                // Copy constructor by pointer
   virtual ~G4QHadron();                             // Destructor
@@ -83,8 +83,8 @@ public:
   G4double RandomizeMass(G4QParticle* pPart, G4double maxM); // Randomize a mass value
   G4bool TestRealNeutral();
   G4bool DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom);
-  G4bool CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom);//->This(new mass corM)+fr4Mom(correct)
-  G4bool CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom);//->This(E+=corE,P)+fr4Mom(fE-=corE,fP)
+  G4bool CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom);// This(newMass corM)+fr4Mom
+  G4bool CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom);// This(E+=cE,P)+f(fE-=cE,fP)
   G4bool RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& dir,
                   G4double maxCost = 1., G4double minCost = -1.);
   G4bool DecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom);
@@ -96,28 +96,28 @@ private:
 private:  
   G4QPDGCode            theQPDG;                    // Instance of QPDG for the Hadron
   G4LorentzVector       theMomentum;                // The 4-mom of Hadron
-  G4QContent            valQ;                       // QC ( @@ ?? for Quasmon and Chipolino)
-  G4int                 nFragm;                     // =0 - stable, =N - decayed in N particles
+  G4QContent            valQ;                       // QC (@@ for Quasmon and Chipolino?)
+  G4int                 nFragm;                     // 0 - stable, N - decayed in N part's
 };
 
 inline G4bool G4QHadron::operator==(const G4QHadron &rhs) const {return this==&rhs;}
 inline G4bool G4QHadron::operator!=(const G4QHadron &rhs) const {return this!=&rhs;}
  
-inline G4int           G4QHadron::GetPDGCode()      const   {return theQPDG.GetPDGCode();}
-inline G4int           G4QHadron::GetQCode()        const   {return theQPDG.GetQCode();}
-inline G4QPDGCode      G4QHadron::GetQPDG()         const   {return theQPDG;}
-inline G4QContent      G4QHadron::GetQC()           const   {return valQ;}
-inline G4LorentzVector G4QHadron::Get4Momentum()    const   {return theMomentum;}
-inline G4int           G4QHadron::GetNFragments()   const   {return nFragm;}
+inline G4int           G4QHadron::GetPDGCode()      const  {return theQPDG.GetPDGCode();}
+inline G4int           G4QHadron::GetQCode()        const  {return theQPDG.GetQCode();}
+inline G4QPDGCode      G4QHadron::GetQPDG()         const  {return theQPDG;}
+inline G4QContent      G4QHadron::GetQC()           const  {return valQ;}
+inline G4LorentzVector G4QHadron::Get4Momentum()    const  {return theMomentum;}
+inline G4int           G4QHadron::GetNFragments()   const  {return nFragm;}
 //@@ This is an example how to make other inline selectors for the 4-Momentum of the Hadron
-inline G4double        G4QHadron::GetMass()         const   {return theMomentum.m();}
-inline G4double        G4QHadron::GetMass2()        const   {return theMomentum.m2();}
+inline G4double        G4QHadron::GetMass()         const  {return theMomentum.m();}
+inline G4double        G4QHadron::GetMass2()        const  {return theMomentum.m2();}
 //@@ This is an example how to make other inline selectors for the Hadron
-inline G4int           G4QHadron::GetCharge()       const   {return valQ.GetCharge();}
-inline G4int           G4QHadron::GetStrangeness()  const   {return valQ.GetStrangeness();}
-inline G4int           G4QHadron::GetBaryonNumber() const   {return valQ.GetBaryonNumber();}
+inline G4int           G4QHadron::GetCharge()       const  {return valQ.GetCharge();}
+inline G4int           G4QHadron::GetStrangeness()  const  {return valQ.GetStrangeness();}
+inline G4int           G4QHadron::GetBaryonNumber() const  {return valQ.GetBaryonNumber();}
 
-inline void            G4QHadron::MakeAntiHadron()          {if(TestRealNeutral()) NegPDGCode();}
+inline void            G4QHadron::MakeAntiHadron()    {if(TestRealNeutral()) NegPDGCode();}
 inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
 {
   theQPDG  = newQPDG;
@@ -125,6 +125,13 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   G4int Q  = newQPDG.GetQCode();
   //G4cout<<"G4QHadron::SetQPDG is called with PDGCode="<<PDG<<", QCode="<<Q<<G4endl;
   if     (Q>-1) valQ=theQPDG.GetQuarkContent();
+  //else if(!PDG)
+  //{
+  //  PDG=22;
+  //  Q=6;
+  //  theQPDG=G4QPDGCode(22);
+  //  valQ=G4QContent(0,0,0,0,0,0);    
+  //}
   else if(PDG>80000000)DefineQC(PDG);
   else
   {
@@ -135,8 +142,8 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}
 inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)   {theMomentum=aMom;}
 inline void   G4QHadron::SetNFragments(const G4int& nf)              {nFragm=nf;}
-inline void   G4QHadron::NegPDGCode()                   {theQPDG.NegPDGCode(); valQ.Anti();}
-inline G4bool G4QHadron::TestRealNeutral()              { return theQPDG.TestRealNeutral();}
+inline void   G4QHadron::NegPDGCode()                  {theQPDG.NegPDGCode(); valQ.Anti();}
+inline G4bool G4QHadron::TestRealNeutral()             { return theQPDG.TestRealNeutral();}
 inline void   G4QHadron::DefineQC(G4int PDGCode)
 {
   //G4cout<<"G4QHadron::DefineQC is called with PDGCode="<<PDGCode<<G4endl;

@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10DetectorConstruction.hh,v 1.5 2002/02/05 11:06:37 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 

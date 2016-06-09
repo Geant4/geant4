@@ -6,32 +6,32 @@
                              lArCal 
                             --------
 
-This example is intended to simulate the Forward Liquid Argon Calorimeter
-(FCAL) of the ATLAS Detector at LHC. The goal of the FCAL is to provide
-a good missing energy determination in the region of very small angles 
-from the beam direction. 
+ This example is intended to simulate the Forward Liquid Argon Calorimeter
+ (FCAL) of the ATLAS Detector at LHC. The goal of the FCAL is to provide
+ a good missing energy determination in the region of very small angles 
+ from the beam direction. 
 
 
-1. GEOMETRY DEFINITION
-------------------------
+ 1. GEOMETRY DEFINITION
+ ------------------------
 
-The liquid Argon calorimeter consists of three modules with the same
-nominal outer dimensions: an electromagnetic module (made
-of copper) followed by two hadronic ones (made of tungsten alloy). 
-The corresponding parameters of these modules are defined inside the
-FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
-The package contains as well a FCALTestbemSetup class whose geometry is given by 
-FCALTestbeamSetupParameters.input. See these files for details concerning to
-radius, lenght and angles of the different components. 
+ The liquid Argon calorimeter consists of three modules with the same
+ nominal outer dimensions: an electromagnetic module (made
+ of copper) followed by two hadronic ones (made of tungsten alloy). 
+ The corresponding parameters of these modules are defined inside the
+ FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
+ The package contains as well a FCALTestbemSetup class whose geometry is given by 
+ FCALTestbeamSetupParameters.input. See these files for details concerning to
+ radius, lenght and angles of the different components. 
 
 
-2.  AN EVENT : THE PRIMARY GENERATOR
------------------------------------- 
+ 2.  AN EVENT : THE PRIMARY GENERATOR
+ ------------------------------------ 
     
  The primary kinematic consists of a single particle which hits the
  geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
  class gives the particle and its energy (by default it is an electron of
- 80 GeV). Theses parameters can be changed in commands of ParticleGun class
+ 80 GeV). These parameters can be changed in commands of ParticleGun class
  inside the macros given in this example. 
  
  The subdirectory data-tracks contains the kinematic files 
@@ -43,8 +43,8 @@ radius, lenght and angles of the different components.
   A RUN is a set of events.
  	
 
-3. VISUALIZATION
-------------------
+ 3. VISUALIZATION
+ ------------------
 
  The Visualization Manager is set in the main().
  The initialisation of the drawing is done via the command
@@ -57,18 +57,12 @@ radius, lenght and angles of the different components.
  TBEVentActionMessenger class.  
 
 
- 4. PHYSICS DEMO
- -----------------
+ 4. PHYSICS
+ ----------
 
- The particle's type and the physic processes which will be available
- in this example are set in FCALPhysicsList class.
-
- In addition a build-in interactive command (/process/inactivate proname)
- allows to activate/inactivate the processes one by one.
-
- The threshold for producing secondaries can be changed.
- eg: /run/particle/setCut 100 micrometer
-     /run/initialize
+ You can select between 3 Physics Lists: QGSP (default), LHEP, QGSC.
+ The selection is done simply by comment/uncomment a line in the main
+ lArCal.cc  (look for the keyword  ***LOOKHERE***).
 
 
  5. HOW TO START ?
@@ -79,30 +73,26 @@ radius, lenght and angles of the different components.
       % gmake
  		
  - execute the program  in 'batch' mode from macro files
-      % lArcal    prerunlAr.mac
+      % lArCal prerunlArcal.mac
  		
  - execute Test  in 'interactive mode' with visualization
-      %  lArcal 
-         ....
-  
- Idle> type your commands
-         ....
- 	
-  Idle> exit
+      %  lArCal 
+         ...
+      Idle> type your commands
+         ...
+      Idle> exit
 
-6. HISTOGRAMS
---------------
+
+ 6. HISTOGRAMS
+ --------------
  
- lArcal produces 4 histograms (saved as fcal.paw) which illustrate
+ lArCal produces 4 histograms (saved as fcal.his) which illustrate
  the final state of the most important variables of the example:
 
  Histo1 --> Number of tracks out of World
  Histo2 --> Number of secondary particles
- Histo3 --> Electromagnetic Energy deposit in the EMModule
- Histo4 --> Hadronic Energy deposit in the HadModule
-
- The example generates 3 ntuples too which contains the same information 
- than the histograms. 
+ Histo3 --> Total energy deposited (in MeV) in the electromagnetic module
+ Histo4 --> Total energy deposited (in MeV) in the hadronic module
 
  See their definitions in FCALAnalysisManager.cc
 
@@ -116,15 +106,16 @@ radius, lenght and angles of the different components.
  prepare some environment variables by source-ing one of the following 
  startup scripts.
 
- # This example has been developed and tested with the gcc-2.95.2 compiler:
-                                                       ----------
-
+ # This example has been developed and tested in the platform 
+ # Linux Red-Hat 7.3 with compilers gcc-2.95.2 and gcc-3.2
+ # (the setup below refers to gcc-2.95.2)
+ 
  o Set up the environment variable: G4ANALYSIS_USE    1
- o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-2.95.2/5.0.5/bin
+ o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-2.95.2/5.0.6/bin
 
-  o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/install/sharedstart.csh or .ch
-  o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/* ~/bin/. 
-    (This has to be made only once)
+ o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/install/sharedstart.csh or .ch
+ o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/* ~/bin/. 
+   (This has to be made only once)
      
  After this, you will have access to the last 'aida-config' command which
  is used in the GNUmakefile.

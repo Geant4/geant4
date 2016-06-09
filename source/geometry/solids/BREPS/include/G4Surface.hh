@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Surface.hh,v 1.8 2002/11/21 16:52:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Surface

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01FieldSetup.hh,v 1.2 2003/12/01 15:47:52 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

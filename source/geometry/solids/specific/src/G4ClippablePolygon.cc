@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ClippablePolygon.cc,v 1.9 2003/10/28 17:15:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------

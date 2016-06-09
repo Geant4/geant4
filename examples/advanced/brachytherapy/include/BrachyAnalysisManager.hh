@@ -25,8 +25,8 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.8 2003/06/16 16:44:59 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyAnalysisManager.hh,v 1.9 2004/03/11 15:38:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //    **********************************
 //    *                                *
@@ -68,8 +68,9 @@ public:
   static BrachyAnalysisManager* getInstance();
   void book();
   void FillNtupleWithEnergy(G4double,G4double,G4double,G4float);
-  void FillHistogramWithEnergy(G4double,G4double,G4float);
+  void FillHistogramWithEnergy(G4double,G4double,G4double);
   void PrimaryParticleEnergySpectrum(G4double);
+  void DoseDistribution(G4double,G4double);
   void finish();
 
   
@@ -89,6 +90,7 @@ private:
   AIDA::ITreeFactory      *treeFact;
   AIDA::IHistogram2D *h1;
   AIDA::IHistogram1D *h2;
+  AIDA::IHistogram1D *h3;
   AIDA::ITuple *ntuple;
 };
 

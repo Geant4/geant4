@@ -49,8 +49,7 @@
     G4Nucleus aNucleus;
     G4double eps = 0.0001;
     if(targetMass<500*MeV)
-      targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
-                       theBaseZ* G4Electron::Electron()->GetPDGMass() ) /
+      targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
                      G4Neutron::Neutron()->GetPDGMass();
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
     G4double temperature = theTrack.GetMaterial()->GetTemperature();

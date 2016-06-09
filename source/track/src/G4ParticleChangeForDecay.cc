@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChangeForDecay.cc,v 1.9 2003/06/19 14:45:07 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------

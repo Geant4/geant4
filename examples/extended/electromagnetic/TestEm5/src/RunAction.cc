@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003/08/11 10:21:32 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: RunAction.cc,v 1.2 2004/02/19 18:18:54 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -30,21 +30,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4ParticleGun.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
+                     HistoManager* histo)
+:detector(det), primary(kin), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,9 +74,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
-
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,14 +165,38 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	
  G4cout << " Number of events with at least  1 particle reflected " 
         << "(same charge as primary) = " << reflect[0] << " %" << G4endl;
+	
+ // compute width of the Gaussian central part of the MultipleScattering
+ //
+ G4cout << "\n MultipleScattering: theta0 Highland = "	
+	<< ComputeMscHighland()/mrad << " mrad" << G4endl;
 					
  G4cout.precision(prec);
-  
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
    
   // show Rndm status
   HepRandom::showEngineStatus();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double RunAction::ComputeMscHighland()
+{
+  //compute the width of the Gaussian central part of the MultipleScattering
+  //projected angular distribution.
+  //Eur. Phys. Jour. C15 (2000) page 166, formule 23.9
+  
+  G4double t = (detector->GetAbsorberThickness())
+              /(detector->GetAbsorberMaterial()->GetRadlen());
+  if (t < DBL_MIN) return 0.;
+  
+  G4ParticleGun* particle = primary->GetParticleGun(); 
+  G4double T = particle->GetParticleEnergy();
+  G4double M = particle->GetParticleDefinition()->GetPDGMass();
+  G4double z = particle->GetParticleDefinition()->GetPDGCharge()/eplus;
+  
+  G4double bpc = T*(T+2*M)/(T+M);
+  G4double teta0 = 13.6*MeV*z*sqrt(t)*(1.+0.038*log(t))/bpc;
+  return teta0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

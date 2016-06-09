@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.20 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4eIonisation.hh,v 1.23 2004/01/21 18:05:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -187,13 +188,13 @@ inline void G4eIonisation::SecondariesPostStep(
                                                   G4double& kinEnergy)
 {
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);
+  fParticleChange.SetNumberOfSecondaries(1);
+  fParticleChange.AddSecondary(delta);
+  fParticleChange.SetProposedMomentumDirection(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

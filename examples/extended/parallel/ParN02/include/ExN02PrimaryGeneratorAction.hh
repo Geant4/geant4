@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02PrimaryGeneratorAction.hh,v 1.1 2002/03/05 15:21:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

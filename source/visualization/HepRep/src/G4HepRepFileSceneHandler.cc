@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.17 2003/12/09 15:39:26 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.18 2004/03/15 08:00:22 perl Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -59,6 +59,7 @@ G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
 G4int G4HepRepFileSceneHandler::fSceneCount = 0;
 // No. of extanct scene handlers.
 
+
 G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 					 const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name),
@@ -72,7 +73,9 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
   fileCounter = 0;
 }
 
+
 G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
+
 
 void G4HepRepFileSceneHandler::EstablishSpecials
 (G4PhysicalVolumeModel& pvModel) {
@@ -81,13 +84,16 @@ void G4HepRepFileSceneHandler::EstablishSpecials
 					&fpCurrentLV);
 }
 
+
 void G4HepRepFileSceneHandler::BeginModeling() {
   G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
 }
 
+
 void G4HepRepFileSceneHandler::EndModeling() {
   G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }
+
 
 #ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::PrintThings() {
@@ -107,6 +113,7 @@ void G4HepRepFileSceneHandler::PrintThings() {
 }
 #endif
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -117,6 +124,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
 #endif
   G4VSceneHandler::AddThis(box);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
 #ifdef G4HEPREPFILEDEBUG
@@ -129,6 +137,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
   G4VSceneHandler::AddThis(cons);  // Invoke default action.
 }
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -139,6 +148,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
 #endif
   G4VSceneHandler::AddThis(tubs);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
 #ifdef G4HEPREPFILEDEBUG
@@ -151,6 +161,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
   G4VSceneHandler::AddThis(trd);  // Invoke default action.
 }
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -161,6 +172,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
 #endif
   G4VSceneHandler::AddThis(trap);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
 #ifdef G4HEPREPFILEDEBUG
@@ -173,6 +185,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
   G4VSceneHandler::AddThis(sphere);  // Invoke default action.
 }
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -183,6 +196,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
 #endif
   G4VSceneHandler::AddThis(para);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
 #ifdef G4HEPREPFILEDEBUG
@@ -195,6 +209,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
   G4VSceneHandler::AddThis(torus);  // Invoke default action.
 }
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -205,6 +220,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
 #endif
   G4VSceneHandler::AddThis(polycone);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
 #ifdef G4HEPREPFILEDEBUG
@@ -217,6 +233,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
   G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
 }
 
+
 void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -227,6 +244,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
 #endif
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
 #ifdef G4HEPREPFILEDEBUG
@@ -243,7 +261,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   CheckFileOpen();
 
   // Add the Event Data Type if it hasn't already been added.
-  // If this is the first trajectory, add the Event Data type and define attributes.
+  // If this is the first trajectory or hit, add the Event Data type and define attributes.
   if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
     hepRepXMLWriter->addType("Event Data",0);
     hepRepXMLWriter->addInstance();
@@ -412,12 +430,14 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   }
 }
 
+
 void G4HepRepFileSceneHandler::AddThis (const G4VHit& hit) {
 #ifdef G4HEPREPFILEDEBUG
     G4cout << "G4HepRepFileSceneHandler::AddThis(G4VHit&) " << G4endl;
 #endif
-    G4VSceneHandler::AddThis (hit);
+    G4VSceneHandler::AddThis(hit);  // Invoke default action.
 }
+
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 #ifdef G4HEPREPFILEDEBUG
@@ -437,6 +457,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
       hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
   }
 }
+
 
 
 void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
@@ -460,6 +481,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   }
 }
 
+
 #ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 #else
@@ -474,6 +496,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
 #endif
   G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4Text : not yet implemented. " << G4endl;
 }
+
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 #ifdef G4HEPREPFILEDEBUG
@@ -495,6 +518,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
   hepRepXMLWriter->addPoint(center.x(), center.y(), center.z());
 }
 
+
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -514,6 +538,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
   G4Point3D center = (*fpObjectTransformation) * square.GetPosition();
   hepRepXMLWriter->addPoint(center.x(), center.y(), center.z());
 }
+
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 #ifdef G4HEPREPFILEDEBUG
@@ -545,6 +570,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);
 }
 
+
 void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
@@ -555,9 +581,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
     G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
 }
 
+
 G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
     return hepRepXMLWriter;
 }
+
 
 void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 						 const G4Visible visible) {
@@ -570,7 +598,6 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   // Open the HepRep output file if it is not already open.
   CheckFileOpen();
 
-  // Handle Type declaration for Event Data.
   // Should be able to just test on fReadyForTransients, but this seems to
   // be falsely false if no geometry has yet been drawn.
   // So I test on both !fpCurrentPV (means no geometry has yet been drawn)
@@ -581,14 +608,45 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
       hepRepXMLWriter->addInstance();
     }
 
-    if (strcmp("Line",primName)==0)
+    // Applications have the option of either calling AddThis(G4VTrajectory&) and
+    // AddThis(G4VHits&), or of just decomposing these into simpler primitives.
+    // In the former case, drawing will be handled above and will include setting of
+    // physics attributes.
+    // In the latter case, which is an older style of working, we end up drawing the
+    // trajectories and hits here, where we have no access to physics attributes. 
+    // We receive primitives here.  We can figure out that these are transients, but we
+    // have to guess exactly what these transients represent.
+    // We assume the primitives are being used as in G4VTrajectory, hence we assume:
+    // Lines are Trajectories
+    // Squares that come after we've seen trajectories are Auxiliary Points
+    // Circles that come after we've seen trajectories are Step Points
+    // Other primitives are Hits
+
+    int layer;
+
+    if (strcmp("Line",primName)==0) {
       hepRepXMLWriter->addType("Trajectories",1);
-    else {
-      if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0)
-	hepRepXMLWriter->addType("Trajectory Points",2);
-      else
-	hepRepXMLWriter->addType("Trajectory Points",1);
+      layer = 100;
+    } else {
+      if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+	  strcmp("Square",primName)==0)
+      {
+	hepRepXMLWriter->addType("AuxiliaryPoints",2);
+	layer = 110;
+      } else {
+        if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+	    strcmp("Circle",primName)==0)
+	{
+	  hepRepXMLWriter->addType("StepPoints",2);
+	  layer = 120;
+	} else {
+	  hepRepXMLWriter->addType("Hits",1);
+	  layer = 130;
+	}
+      }
     }
+
+    hepRepXMLWriter->addAttValue("Layer",layer);
 
     hepRepXMLWriter->addInstance();
 
@@ -614,6 +672,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     }
 
     // Additional attributes.
+    hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
     hepRepXMLWriter->addAttValue("LVol", fpCurrentLV->GetName());
     hepRepXMLWriter->addAttValue("Solid", fpCurrentLV->GetSolid()->GetName());
     hepRepXMLWriter->addAttValue("EType", fpCurrentLV->GetSolid()->GetEntityType());
@@ -624,7 +683,6 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   }
 
   hepRepXMLWriter->addAttValue("DrawAs",primName);
-  hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 
   // Handle color attribute, avoiding drawing anything black on black.
   G4Colour colour = GetColour(visible);
@@ -650,6 +708,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   else
     hepRepXMLWriter->addAttValue("Visibility",true);
 }
+
 
 void G4HepRepFileSceneHandler::CheckFileOpen() {
 #ifdef G4HEPREPFILEDEBUG
@@ -680,6 +739,7 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
     hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
   }
 }
+
 
 void G4HepRepFileSceneHandler::ClearTransientStore () {
   G4VSceneHandler::ClearTransientStore ();

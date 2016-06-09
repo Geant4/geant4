@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.8 2002/02/12 02:14:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Decay.hh,v 1.9 2004/03/12 04:46:31 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //
 // ------------------------------------------------------------
@@ -41,6 +41,8 @@
 //   PreAssignedDecayTime         18 Jan. 2001 H.Kurashige
 //   Add External Decayer         23 Feb. 2001  H.Kurashige
 //   Remove PhysicsTable          12 Feb. 2002 H.Kurashige
+//   Fixed bug in PostStepGPIL 
+//    in case of stopping during AlongStepDoIt 12 Mar. 2004 H.Kurashige
 //
 #ifndef G4Decay_h
 #define G4Decay_h 1
@@ -160,17 +162,22 @@ class G4Decay : public G4VRestDiscreteProcess
     G4VExtDecayer*    pExtDecayer;
 };
 
-inline G4double G4Decay::PostStepGetPhysicalInteractionLength(
+inline 
+ G4double G4Decay::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
                             )
 {
+  // reset fRemainderLifeTime
+  fRemainderLifeTime = 0.0;
+
   // pre-assigned Decay time
   G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
 
   if (pTime < 0.) {
     // normal case 
+    fRemainderLifeTime = 0.0;
     return G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
   }
 
@@ -178,12 +185,12 @@ inline G4double G4Decay::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
   
   // reminder proper time
-  fRemainderLifeTime = pTime - track.GetProperTime();
-  if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  G4double remainder = pTime - track.GetProperTime();
+  if (remainder <= 0.0) remainder = DBL_MIN;
   
   // use pre-assigned Decay time to determine PIL
   G4double tau = track.GetDefinition()->GetPDGLifeTime();
-  return (fRemainderLifeTime/tau)*GetMeanFreePath(track, previousStepSize, condition);
+  return (remainder/tau)*GetMeanFreePath(track, previousStepSize, condition);
 
 }
 inline

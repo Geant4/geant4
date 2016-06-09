@@ -27,7 +27,7 @@
 // and all its terms.
 //
 // $Id: G4SimplePPReporter.cc,v 1.1 2003/09/21 19:38:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ---------------------------------------------------------------

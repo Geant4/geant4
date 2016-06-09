@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTreeViewer.cc,v 1.5 2003/06/16 17:13:53 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 
 #include "G4VTreeViewer.hh"
 

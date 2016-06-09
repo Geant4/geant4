@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.35 2003/11/06 12:25:05 pia Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.36 2003/11/10 17:50:46 trindade Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Author: A. Forti
 //
@@ -111,6 +111,8 @@ private:
   G4VEnergySpectrum* energySpectrum;
   G4DataVector  energyBins;
   G4VBremAngularDistribution* angularDistribution;
+  G4VBremAngularDistribution* TsaiAngularDistribution;
+  G4String generatorName;
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;

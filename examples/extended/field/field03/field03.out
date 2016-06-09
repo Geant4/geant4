@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 
 ***** Table : Nb of materials = 11 *****
 
@@ -136,7 +139,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -153,7 +157,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -187,13 +192,13 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     4          0 fm  81.240793 cm   21.58699 m         500 MeV         0 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 mum   605.81447 mum
     5          0 fm  94.603131 cm      21.74 m         500 MeV         0 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 mum   869.93596 mum
     6          0 fm  98.923943 cm      21.84 m         500 MeV         0 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 mum   955.34163 mum
-    7          0 fm  1.0118328 m     21.9895 m         500 MeV         0 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1926163 Ang        1000 mum
+    7          0 fm  1.0118328 m     21.9895 m         500 MeV         0 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1926162 Ang        1000 mum
     8          0 fm  1.0118318 m     21.9905 m         500 MeV         0 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 mum   999.99805 mum
     9          0 fm  1.0117238 m          22 m         500 MeV         0 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 mum   999.78461 mum
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -215,7 +220,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.82s Real=0.82s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

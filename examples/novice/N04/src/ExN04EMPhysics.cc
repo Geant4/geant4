@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04EMPhysics.cc,v 1.6 2003/10/24 12:36:14 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

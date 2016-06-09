@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: FCALRunAction.hh,v 1.8 2003/12/09 15:30:14 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

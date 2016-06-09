@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VHighEnergyGenerator.cc,v 1.3 2003/11/03 17:54:18 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"

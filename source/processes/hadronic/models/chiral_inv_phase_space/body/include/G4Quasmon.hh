@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.32 2003/12/09 15:38:14 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Quasmon.hh,v 1.34 2004/03/25 10:44:49 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -67,13 +67,16 @@ public:
   static void SetEtaSup(G4double etaetap);
 
   //Selectors
-  G4double          GetTemper()    const;
-  G4double          GetSOverU()    const;
-  G4double          GetEtaSup()    const;
-  G4LorentzVector   Get4Momentum() const;
-  G4QContent        GetQC()        const;
-  G4QPDGCode        GetQPDG()      const;
-  G4int             GetStatus()    const;
+  G4double          GetTemper()       const;
+  G4double          GetSOverU()       const;
+  G4double          GetEtaSup()       const;
+  G4LorentzVector   Get4Momentum()    const;
+  G4QContent        GetQC()           const;
+  G4QPDGCode        GetQPDG()         const;
+  G4int             GetStatus()       const;
+  G4int             GetCharge()       const;
+  G4int             GetBaryonNumber() const;
+  G4int             GetStrangeness()  const;
 
   //Modifiers
   // Public wrapper for HadronizeQuasmon(,)
@@ -139,6 +142,9 @@ inline G4double        G4Quasmon::GetSOverU()    const {return SSin2Gluons;}
 inline G4double        G4Quasmon::GetEtaSup()    const {return EtaEtaprime;}
 inline G4LorentzVector G4Quasmon::Get4Momentum() const {return q4Mom;}
 inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
+inline G4int           G4Quasmon::GetCharge()       const{return valQ.GetCharge();}
+inline G4int           G4Quasmon::GetBaryonNumber() const{return valQ.GetBaryonNumber();}
+inline G4int           G4Quasmon::GetStrangeness()  const{return valQ.GetStrangeness();}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        

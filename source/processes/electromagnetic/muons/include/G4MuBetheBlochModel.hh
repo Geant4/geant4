@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.8 2003/07/21 12:52:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuBetheBlochModel.hh,v 1.9 2004/02/10 18:07:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add Nama (V.Ivanchenko)
+// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
 //
 
 //
@@ -113,30 +114,23 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double CrossSectionPerAtom(G4double Z,
-                               G4double kineticEnergy,
-                               G4double tmin,
-                               G4double tmax,
-                               G4double tmaxSecondary);
-
-  G4double DifCrossSectionPerAtom(G4double kineticEnergy,
-                                  G4double knockonEnergy,
-                                  G4double tmaxSecondary);
-
-  // hide assignment operator 
+  // hide assignment operator
   G4MuBetheBlochModel & operator=(const  G4MuBetheBlochModel &right);
   G4MuBetheBlochModel(const  G4MuBetheBlochModel&);
 
   const G4ParticleDefinition* particle;
+  G4double limitKinEnergy;
+  G4double logLimitKinEnergy;
   G4double mass;
-  G4double chargeSquare;
+  G4double massSquare;
   G4double ratio;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
-  G4double qc;
+  G4double alphaprime;
+  static G4double xgi[8],wgi[8];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,11 +139,9 @@ inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
           const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
-
-  G4double gamma= kinEnergy/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return tmax;
 }
 
@@ -157,12 +149,9 @@ inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
 
 inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
-
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double gamma= kineticEnergy/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+  G4double tau  = dp->GetKineticEnergy()/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return tmax;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file

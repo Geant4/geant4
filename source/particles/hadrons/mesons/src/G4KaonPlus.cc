@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.cc,v 1.8 2003/06/16 16:57:43 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4KaonPlus.cc,v 1.9 2004/02/13 05:53:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -101,7 +101,7 @@ G4KaonPlus::G4KaonPlus(
 
 // In this version, charged pions are set to stable
 G4KaonPlus G4KaonPlus::theKaonPlus(
-	      "kaon+",    0.493677*GeV,  5.314e-14*MeV,    +1.*eplus, 
+	      "kaon+",    0.493677*GeV,  5.315e-14*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,         321,

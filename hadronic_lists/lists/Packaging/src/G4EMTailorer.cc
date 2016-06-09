@@ -27,13 +27,11 @@ void G4EMTailorer::SetNewValue(G4UIcommand* aComm, G4String aS)
 { 
   if(aComm==theSynch) 
   {
-    //cout <<" ############### synched ############## "<<endl;
     theB->Synch(aS);
   }
   if(aComm==theGN) 
   {
     theB->GammaNuclear(aS);
-    //cout <<" ############### GN'ed ############## "<<endl;
   }
 }
 

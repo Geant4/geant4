@@ -20,42 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "G4LEADNeutronBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
+ #include "G4LEADNeutronBuilder.hh"
+ #include "G4ParticleDefinition.hh"
+ #include "G4ParticleTable.hh"
+ #include "G4ProcessManager.hh"
 
-G4LEADNeutronBuilder::
-G4LEADNeutronBuilder() 
-{
-  theMin = 0;
-  theModel = new G4Mars5GeV;
-}
+ G4LEADNeutronBuilder::
+ G4LEADNeutronBuilder() 
+ {
+   theMin = 0;
+   theModel = new G4Mars5GeV;
+ }
 
-G4LEADNeutronBuilder::
-~G4LEADNeutronBuilder() {}
+ G4LEADNeutronBuilder::
+ ~G4LEADNeutronBuilder() {}
 
-void G4LEADNeutronBuilder::
-Build(G4HadronElasticProcess & )
-{
-}
+ void G4LEADNeutronBuilder::
+ Build(G4NeutronInelasticProcess & aP)
+ {
+   aP.AddDataSet(&theXSec);  
+   theModel->SetMinEnergy(theMin);
+   aP.RegisterMe(theModel);
+ }
 
-void G4LEADNeutronBuilder::
-Build(G4HadronFissionProcess & )
-{
-}
+ void G4LEADNeutronBuilder::
+ Build(G4HadronElasticProcess & ){}
 
-void G4LEADNeutronBuilder::
-Build(G4HadronCaptureProcess & )
-{
-}
+ void G4LEADNeutronBuilder::
+ Build(G4HadronFissionProcess & ){}
 
-void G4LEADNeutronBuilder::
-Build(G4NeutronInelasticProcess & aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
-}
+ void G4LEADNeutronBuilder::
+ Build(G4HadronCaptureProcess & ){}
 
-// 2002 by J.P. Wellisch
+ // 2002 by J.P. Wellisch

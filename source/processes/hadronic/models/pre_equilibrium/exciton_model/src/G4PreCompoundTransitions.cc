@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PreCompoundTransitions.cc,v 1.4 2003/11/04 11:36:26 lara Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // by V. Lara
 

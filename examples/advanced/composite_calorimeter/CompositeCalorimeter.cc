@@ -58,8 +58,8 @@ int main(int argc,char** argv) {
 
   //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
   // runManager->SetUserInitialization(new LHEP);     // LHEP     
-  // runManager->SetUserInitialization(new QGSP);     // QGSP   
-  runManager->SetUserInitialization(new QGSC);     // QGSC
+  runManager->SetUserInitialization(new QGSP);     // QGSP   
+  // runManager->SetUserInitialization(new QGSC);     // QGSC
   //***endLOOKHERE***
 
   ////////////////////////////

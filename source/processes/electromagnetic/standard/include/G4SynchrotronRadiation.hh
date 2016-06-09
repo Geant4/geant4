@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.8 2003/05/26 16:13:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4SynchrotronRadiation.hh,v 1.9 2004/03/10 16:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -65,7 +65,8 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
   public:
  
      G4SynchrotronRadiation(const G4String& processName = 
-                                                   "SynchrotronRadiation");
+			                    "SynchrotronRadiation",
+		                  G4ProcessType type = fElectromagnetic);
  
     ~G4SynchrotronRadiation();
 

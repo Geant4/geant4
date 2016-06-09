@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2003/12/11 01:41:21 japost Exp $
+$Id: History,v 1.22 2004/03/11 13:17:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,13 +13,36 @@ and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
 
-     ----------------------------------------------------------
+     --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 11th, 2004 - G.Cosmo  (geomnav-V06-00-02)
+------------------------
+- Added "check_mode" state for navigators. The state can be activated by
+  a new UI command (geometry/navigator/check_mode [true/false]) and will
+  force more strict and less tolerant checks in step/safety computation to
+  verify the correctness of solids' response in the geometry.
+- Reorganised verbosity levels. Added more useful information activated
+  when in G4VERBOSE mode and verbosity level selected.
+  Fixed output formatting when entering/exiting verbose blocks.
+
+Feb 27th, 2004 - G.Cosmo  (geomnav-V06-00-01)
+------------------------
+- G4Navigator.cc:
+  o Fixed old outstanding bug in ComputeStep() for the location of the
+    the local point in the calculation of a valid exit normal. (V.Grichine)
+
+Feb  9th, 2004 - J.Apostolakis  (geomnav-V06-00-00)
+------------------------------
+- G4PropagatorInField.cc:
+  o ReEstimateEndpoint:  Changed to cope with a failure of AccurateAdvance,
+                         by calling it iteratively up maximum 20 times.
+  o SetVerboseLevel, now forwards the verbosity (minus 3) to integration driver
+
 Dec 11th, 2003 - J.Apostolakis  (geomnav-V05-02-15)
 ------------------------------
-- G4PropagatorInField.cc
+- G4PropagatorInField.cc:
   o LocateIntersectionPoint: Refined re-setting of finalSection.
     --> Endpoint recalculation is returned only for final section.
     (trial fix in -14 is replaced by above code)
@@ -38,7 +61,7 @@ Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-14)
 
 Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-13)
 ------------------------------
-- G4PropagatorInField.cc
+- G4PropagatorInField.cc:
   o Gone back to version 1.7, without the fix in LocateIntersectionPoint 
       for the "long-standing error".
 

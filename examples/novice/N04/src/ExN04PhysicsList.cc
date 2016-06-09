@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04PhysicsList.cc,v 1.15 2003/11/19 09:26:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

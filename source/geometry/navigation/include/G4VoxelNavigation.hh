@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VoxelNavigation.hh,v 1.3 2004/03/10 18:21:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // class G4VoxelNavigation
@@ -92,6 +92,17 @@ class G4VoxelNavigation
     virtual G4double ComputeSafety( const G4ThreeVector& globalpoint,
                                     const G4NavigationHistory& history,
                                     const G4double pMaxLength=DBL_MAX );
+
+    inline G4int GetVerboseLevel() const;
+    inline void  SetVerboseLevel(G4int level);
+      // Get/Set Verbose(ness) level.
+      // [if level>0 && G4VERBOSE, printout can occur]
+
+    inline void  CheckMode(G4bool mode);
+      // Run navigation in "check-mode", therefore using additional
+      // verifications and more strict correctness conditions.
+      // Is effective only with G4VERBOSE set.
+
   protected:
 
     G4double ComputeVoxelSafety( const G4ThreeVector& localPoint ) const;
@@ -132,6 +143,8 @@ class G4VoxelNavigation
     //  END Voxel Stack information
     //
 
+    G4bool fCheck; 
+    G4int  fVerbose; 
 };
 
 #include "G4VoxelNavigation.icc"

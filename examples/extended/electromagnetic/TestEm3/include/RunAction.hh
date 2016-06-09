@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003/11/03 16:42:50 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: RunAction.hh,v 1.8 2004/01/21 17:29:26 maire Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 
@@ -67,24 +67,30 @@ class RunAction : public G4UserRunAction
     G4double GetHistoUnit(G4int id) {return histoUnit[id];}
 #endif
 
+    void SetFileName(const G4String& s) {fileName = s;};
     void SetHisto (G4int, G4int, G4double, G4double, G4String);
 
     void PrintDedxTables();
     
   private:
-    
+
     G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
     G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
-    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];       
+    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];           
 
     DetectorConstruction* Detector;    
-    RunActionMessenger*   runMessenger;        
+    RunActionMessenger*   runMessenger;
+            
+    G4String fileName;
+    G4String hid  [MaxAbsor],  htitle[MaxAbsor];
+    G4int    hbins[MaxAbsor];
+    G4double hmin [MaxAbsor],  hmax  [MaxAbsor];
+    G4double histoUnit[MaxAbsor];
     
 #ifdef G4ANALYSIS_USE    
     AIDA::ITree* tree;
-    AIDA::IHistogramFactory* hf;    
+    AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D* histo[MaxAbsor];
-    G4double histoUnit[MaxAbsor];    
 #endif      
              
 };

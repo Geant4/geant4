@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -115,7 +118,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -132,7 +136,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -195,21 +200,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=92s Real=9.1e+02s Sys=90s
+  User=46.49s Real=1044.02s Sys=104.53s
 
  ======================== run summary ======================
 
  Number of Events = 100000
 
- Total energy deposit in absorber per event = 6.694 keV +- 21.58 eV 
+ Total energy deposit in absorber per event = 6.698 keV +- 21.79 eV 
 
- Total track length (charged) in absorber per event = 20.96 mum +- 14.68 nm 
- Total track length (neutral) in absorber per event = 9.447 Ang +- 5.645 Ang
+ Total track length (charged) in absorber per event = 20.97 mum +- 15.28 nm 
+ Total track length (neutral) in absorber per event = 3.612 nm  +- 3.107 nm 
 
- Number of steps (charged) in absorber per event = 1.079 +- 1.211e-05
- Number of steps (neutral) in absorber per event = 4e-05 +- 1.211e-05
+ Number of steps (charged) in absorber per event = 1.079 +- 1.236e-05
+ Number of steps (neutral) in absorber per event = 3e-05 +- 1.236e-05
 
- Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03761;   positrons = 0
+ Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03757;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -217,9 +222,11 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
+ MultipleScattering: theta0 Highland = 0.02663 mrad
+
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1827733351, 2092347044
+ Current couple of seeds = 1147184665, 872245730
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

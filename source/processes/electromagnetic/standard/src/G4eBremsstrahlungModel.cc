@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.14 2003/07/21 12:52:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.15 2003/11/20 18:22:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -624,7 +624,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
-                                   G4double tmax)
+                                   G4double maxEnergy)
 // The emitted gamma energy is sampled using a parametrized formula from L. Urban.
 // This parametrization is derived from :
 //    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
@@ -638,8 +638,8 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 //    (Nuc Phys 20(1960),15).
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  //  G4double tmax = std::min(maxEnergy, kineticEnergy);
-  //  if(tmin >= tmax) tmin = tmax;
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  if(tmin > tmax) tmin = tmax;
 
 //
 // GEANT4 internal units.
@@ -822,10 +822,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle();
-  g->SetDefinition(G4Gamma::Gamma());
-  g->SetKineticEnergy(gammaEnergy);
-  g->SetMomentumDirection(gammaDirection);
+  G4DynamicParticle* g = new G4DynamicParticle(G4Gamma::Gamma(),gammaDirection,gammaEnergy);
 
   return g;
 }

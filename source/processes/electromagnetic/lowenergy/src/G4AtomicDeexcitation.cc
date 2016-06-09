@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -110,7 +110,7 @@ do
   return vectorOfParticles;
 }
 
-const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
+G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}

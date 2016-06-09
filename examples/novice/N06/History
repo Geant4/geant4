@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2003/12/01 16:25:27 gcosmo Exp $
+$Id: History,v 1.20 2004/03/17 22:40:58 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 17, 2004 Peter Gumplinger (exampleN06-V06-00-00)
+- DetectorConstruction: change surface model between OpWaterSurface
+                        and OpAirSurface
 
 December 1, 2003 Peter Gumplinger (exampleN06-V05-02-02)
 - DetectorConstruction: use G4SurfaceProperty.

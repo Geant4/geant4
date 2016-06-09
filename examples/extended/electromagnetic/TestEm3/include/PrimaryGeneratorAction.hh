@@ -22,7 +22,7 @@
 //
 //
 // $Id: PrimaryGeneratorAction.hh,v 1.1 2003/09/22 14:06:43 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003/10/03 10:27:10 gcosmo Exp $
+$Id: History,v 1.4 2004/03/15 19:16:05 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 15, 2004, M.Asai (digits_hits-V06-00-01)
+- Fix errors in the previous tag.
+
+Mar 09, 2004, M.Asai (digits_hits-V06-00-00)
+- Some methods are added to G4HCtable for additional verbosity.
 
 Oct 04, 2003, G.Cosmo (digits_hits-V05-02-00)
 - Imported files from directory digits+hits.

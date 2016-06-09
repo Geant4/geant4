@@ -21,25 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.33 2003/11/03 18:17:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Torus.cc,v 1.36 2004/03/18 10:53:22 grichine Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // class G4Torus
 //
 // Implementation
 //
-// 30.10.96 V.Grichine: first implementation with G4Tubs elements in Fs
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 19.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 26.05.00 V.Grichine: new fuctions developed by O.Cremonesi were added
+// 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
+// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
+// 03.10.00 E.Medernach: SafeNewton added
 // 31.08.00 E.Medernach: numerical computation of roots wuth bounding
 //                       volume technique
-// 03.10.00 E.Medernach: SafeNewton added
-// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
+// 26.05.00 V.Grichine: new fuctions developed by O.Cremonesi were added
+// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 19.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
+// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 30.10.96 V.Grichine: first implementation with G4Tubs elements in Fs
 //
-// --------------------------------------------------------------------
+//
 
 #include "G4Torus.hh"
 
@@ -75,6 +76,10 @@ G4Torus::G4Torus( const G4String &pName,
 {
   SetAllParameters(pRmin, pRmax, pRtor, pSPhi, pDPhi);
 }
+
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 void
 G4Torus::SetAllParameters( G4double pRmin,
@@ -475,7 +480,9 @@ G4int G4Torus::SolveCubic( G4double c[], G4double s[] ) const
   return num;
 }
 
-// ---------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 G4int G4Torus::SolveBiQuadraticNew( G4double c[], G4double s[] ) const
 {
@@ -593,7 +600,9 @@ G4int G4Torus::SolveBiQuadraticNew( G4double c[], G4double s[] ) const
   return num ;
 }
 
-// -------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////
+//
+//
 
 G4int G4Torus::SolveCubicNew( G4double c[], G4double s[],
                               G4double& cubic_discr ) const
@@ -985,26 +994,28 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
       pPhi = atan2(p.y(),p.x()) ;
 
-      if ( pPhi  <  0 ) pPhi += 2*M_PI ; // 0<=pPhi<2*M_PI
+      if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
       if ( fSPhi >= 0 )
       {
-        if ( (pPhi >= fSPhi+kAngTolerance*0.5)
-          && (pPhi <= fSPhi+fDPhi-kAngTolerance*0.5) )
-          in = kInside ;
-        else if ( (pPhi >= fSPhi-kAngTolerance*0.5)
-               && (pPhi <= fSPhi+fDPhi+kAngTolerance*0.5) )
-          in = kSurface ;
+          if ( (abs(pPhi) < kAngTolerance*0.5)
+            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
+          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+          {
+            in = kSurface;
+          }
       }
-      else
+      else  // fSPhi < 0
       {
-        if (pPhi < fSPhi+2*M_PI) pPhi += 2*M_PI ;
-
-        if ( (pPhi >= fSPhi+2*M_PI+kAngTolerance*0.5)
-          && (pPhi <= fSPhi+fDPhi+2*M_PI-kAngTolerance*0.5) )
-          in = kInside ;
-        else if ( (pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5)
-               && (pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) )
-          in = kSurface ;
+          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+          else
+          {
+            in = kSurface ;
+          }
       }
     }
   }
@@ -1025,22 +1036,29 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       {
         pPhi = atan2(p.y(),p.x()) ;
 
-        if ( pPhi < 0 ) pPhi += 2*M_PI ; // 0<=pPhi<2*M_PI
-
-        if (fSPhi >= 0 )
+        if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
+        if ( fSPhi >= 0 )
         {
-          if ( (pPhi >= fSPhi-kAngTolerance*0.5)
-            && (pPhi <= fSPhi+fDPhi+kAngTolerance*0.5) )
-            in = kSurface ;
+          if ( (abs(pPhi) < kAngTolerance*0.5)
+            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
+          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+          {
+            in = kSurface;
+          }
         }
-        else
+        else  // fSPhi < 0
         {
-          if (pPhi < fSPhi + 2*M_PI) pPhi += 2*M_PI ;
-
-          if ( (pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5)
-            && (pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) )
-            in = kSurface ; 
-        }        
+          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+          else
+          {
+            in = kSurface ;
+          }
+        }
       }
     }
   }
@@ -1128,8 +1146,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Torus::SurfaceNormal()",
-                  "LogicError", FatalException,
+      G4Exception("G4Torus::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
   } 
@@ -2071,8 +2088,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Torus::DistanceToOut()",
-                    "LogicError", FatalException,
+        G4Exception("G4Torus::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -2110,8 +2126,8 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4Exception("G4Torus::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+     G4Exception("G4Torus::DistanceToOut(p)", "Notification",
+                 JustWarning, "Point p is outside !?" );
   }
 #endif
 #if DEBUGTORUS

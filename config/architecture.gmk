@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.90 2003/10/17 10:17:11 gbarrand Exp $
+# $Id: architecture.gmk,v 1.91 2004/02/09 15:22:49 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -260,6 +260,15 @@ GREP := grep
 #
 include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
 
+#  make certain that OGLFLAGS does NOT contain -I/usr/include
+#   caused by OGLHOME being /usr, as e.g. on Linux
+#
+ifdef OGLFLAGS
+  OGLFLAGS:= $(filter-out -I/usr/include,$(OGLFLAGS))
+  OGLFLAGS:= $(filter-out -I/usr//include,$(OGLFLAGS))
+endif
+	
+	
 # If there is no cbrt() function...
 #
 ifdef G4_NO_CBRT

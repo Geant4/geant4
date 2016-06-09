@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LFission.hh,v 1.9 2003/07/01 15:49:03 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // G4 Low-energy Model: Fission -- header file

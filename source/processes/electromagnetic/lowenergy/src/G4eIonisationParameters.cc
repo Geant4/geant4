@@ -21,21 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.20 2003/06/16 17:00:34 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4eIonisationParameters.cc,v 1.21 2004/02/17 11:17:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created, with dummy implementation
-// 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
-// 04.10.01 V.Ivanchenko    Add BindingEnergy method  
-// 25.10.01 MGP             Many bug fixes, mostly related to the 
+// 12.09.01 V.Ivanchenko    Add param and interpolation of parameters
+// 04.10.01 V.Ivanchenko    Add BindingEnergy method
+// 25.10.01 MGP             Many bug fixes, mostly related to the
 //                          management of pointers
-// 29.11.01 V.Ivanchenko    New parametrisation + Excitation  
+// 29.11.01 V.Ivanchenko    New parametrisation + Excitation
 // 30.05.02 V.Ivanchenko    Format and names of the data files were
-//                          chenged to "ion-..."  
+//                          chenged to "ion-..."
+// 17.02.04 V.Ivanchenko    Increase buffer size
 //
 // -------------------------------------------------------------------
 
@@ -185,14 +186,14 @@ void G4eIonisationParameters::LoadData()
   for (size_t i=0; i<nZ; i++) {
     
     G4int Z = (G4int)activeZ[i];
-    char nameChar[100] = {""};
-    std::ostrstream ost(nameChar, 100, std::ios::out);
+    char nameChar[1000] = {""};
+    std::ostrstream ost(nameChar, 1000, std::ios::out);
     ost << pathString << Z << ".dat";
-    G4String name(nameChar);  
-    
+    G4String name(nameChar);
+
     std::ifstream file(name);
     std::filebuf* lsdp = file.rdbuf();
-  
+
     if (! (lsdp->is_open()) ) {
       G4String excep = G4String("G4IonisationParameters - data file: ")
       + name + G4String(" not found. The version 1.# of G4LEDATA should be used");
@@ -202,7 +203,7 @@ void G4eIonisationParameters::LoadData()
     // The file is organized into:
     // For each shell there are two lines:
     //    1st line:
-    // 1st column is the energy of incident e-, 
+    // 1st column is the energy of incident e-,
     // 2d  column is the parameter of screan term;
     //    2d line:
     // 3 energy (MeV) subdividing different approximation area of the spectrum
@@ -321,7 +322,7 @@ void G4eIonisationParameters::LoadData()
              << " ener1= " << ener1
              << G4endl;
     }
-    
+
     // End of file
     if (ener == -2) {
       break;

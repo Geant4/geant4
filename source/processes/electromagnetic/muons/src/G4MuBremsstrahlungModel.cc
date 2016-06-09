@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.11 2003/07/21 12:52:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.12 2004/02/10 18:07:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 24-01-03 Fix for compounds (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 
 //
@@ -77,6 +78,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
   : G4VEmModel(nam),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*keV),
+  lowestKinEnergy(1.0*GeV),
   minThreshold(1.0*keV),
   nzdat(5),
   ntdat(8),
@@ -87,7 +89,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel() 
+G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 {
   size_t n = partialSumSigma.size();
   if(n > 0) {
@@ -159,15 +161,15 @@ G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4MaterialCutsCouple* couple
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
 {
-  if(kineticEnergy < lowKinEnergy) return 0.0;
+  G4double dedx = 0.0;
+  if (kineticEnergy <= lowestKinEnergy) return dedx;
 
-  G4double cut = std::min(cutEnergy, kineticEnergy);
-  
+  G4double tmax = kineticEnergy;
+  G4double cut  = std::min(cutEnergy,tmax);
+
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
-
-  G4double dedx = 0.0;
 
   //  loop for elements in the material
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
@@ -336,9 +338,10 @@ G4double G4MuBremsstrahlungModel::CrossSection(const G4MaterialCutsCouple* coupl
                                                      G4double maxEnergy)
 {
   G4double cross = 0.0;
+  if (cutEnergy >= maxEnergy || kineticEnergy <= lowestKinEnergy) return cross;
+  
   G4double tmax = std::min(maxEnergy, kineticEnergy);
-  G4double cut  = cutEnergy;
-  if(cut >= tmax) return cross;
+  G4double cut  = std::min(cutEnergy, tmax);
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector() ;
@@ -460,13 +463,13 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
-                                   G4double tmin,
+                                   G4double minEnergy,
                                    G4double maxEnergy)
 {
   G4double kineticEnergy     = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = std::min(kineticEnergy, maxEnergy);
-  if(tmin >= tmax) return 0;
+  G4double tmin = std::min(tmax, minEnergy);
 
   static G4double ysmall = -100. ;
   static G4double ytablelow = -5. ;

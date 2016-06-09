@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02ElectricFieldSetup.cc,v 1.1 2003/11/12 16:36:16 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //  
 //   User Field class implementation.

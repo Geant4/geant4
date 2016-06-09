@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Box.hh,v 1.10 2003/11/03 18:17:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

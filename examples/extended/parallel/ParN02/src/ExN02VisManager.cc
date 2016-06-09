@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02VisManager.cc,v 1.3 2003/11/13 15:11:38 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // John Allison 24th January 1998.

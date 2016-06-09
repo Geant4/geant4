@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.15 2002/05/02 11:37:22 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PhotoElectricEffect.hh,v 1.16 2004/03/10 16:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -78,7 +78,8 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
 {
   public:  // with description
  
-     G4PhotoElectricEffect(const G4String& processName ="phot");
+     G4PhotoElectricEffect(const G4String& processName ="phot",
+		                 G4ProcessType type = fElectromagnetic);
  
     ~G4PhotoElectricEffect();
 

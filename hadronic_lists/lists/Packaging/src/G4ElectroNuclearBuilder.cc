@@ -37,7 +37,7 @@ G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : wasActivated(false)
   theElectroReaction = new G4ElectroNuclearReaction;
   theGammaReaction = new G4GammaNuclearReaction;
   theModel = new G4TheoFSGenerator;
-  theCascade = new G4StringChipsParticleLevelInterface;
+  theCascade = new G4GeneratorPrecompoundInterface;
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(&theStringModel);
   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);

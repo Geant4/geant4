@@ -22,7 +22,7 @@
 //
 // Taken after
 // $Id: MomoRunAction.hh,v 1.1 2003/11/04 09:02:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 
 #ifndef MomoRunAction_h

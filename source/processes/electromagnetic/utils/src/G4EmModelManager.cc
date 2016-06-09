@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.20 2003/11/03 19:37:59 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4EmModelManager.cc,v 1.22 2004/01/27 11:21:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 //          calculation (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
+// 26-01-04 Fix in energy range conditions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -130,7 +131,8 @@ G4EmModelManager::~G4EmModelManager()
       for(j = i+1; j<nEmModels; j++) {
         if(models[i] == models[j]) orderOfModels[j] = 0;
       }
-      delete models[i];
+      G4String nam = models[i]->GetName();
+      if(nam != "PAI" && nam != "PAIModel" ) delete models[i];
     }
   }
   for(i = 0; i<nEmModels; i++) {
@@ -472,7 +474,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       do {
         k++;
         fac *= (1.0 + factor[k]*upperEkin[regModels->ModelIndex(k-1)]/e);
-      } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
+      } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
     G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,cut)*fac;
@@ -570,7 +572,7 @@ void G4EmModelManager::FillDEDXVectorForPreciseRange(
       do {
         k++;
         fac *= (1.0 + factor[k]*upperEkin[regModels->ModelIndex(k-1)]/e);
-      } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
+      } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
     G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(couple,particle,e,e)*fac;
@@ -632,6 +634,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   sigmaLow[0]  = 0.0;
 
   e = upperEkin[regModels->ModelIndex(0)];
+  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,cut,e);
 
   if(1 < verboseLevel) {
       G4cout << "### For material " << couple->GetMaterial()->GetName()
@@ -641,9 +644,9 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
              << " Emax(MeV)= " << e/MeV
              << " nbins= "  << totBinsLambda
              << G4endl;
+      G4cout << " model #0   eUp= " << e << "  sigmaUp= " << sigmaHigh[0] << G4endl;
   }
 
-  sigmaHigh[0] = models[regModels->ModelIndex(0)]->CrossSection(couple,particle,e,cut,e);
 
   if(nmod > 1) {
 
@@ -653,6 +656,12 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       sigmaLow[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
       e  = upperEkin[regModels->ModelIndex(j)];
       sigmaHigh[j] = models[regModels->ModelIndex(j)]->CrossSection(couple,particle,e,cut,e);
+      if(1 < verboseLevel) {
+        G4cout << " model #" << j << "   eUp= " << e 
+	       << "  sigmaUp= " << sigmaHigh[j]
+	       << "  sigmaDown= " << sigmaLow[j]
+	       << G4endl;
+      }
     }
     for(j=1; j<nmod; j++) {
       if(sigmaLow[j] > 0.0) factor[j] = (sigmaHigh[j-1]/sigmaLow[j] - 1.0);
@@ -672,7 +681,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       do {
         k++;
         fac *= (1.0 + factor[k]*upperEkin[regModels->ModelIndex(k-1)]/e);
-      } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
+      } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
     G4double cross = models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,cut,e)*fac;
@@ -681,7 +690,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     if(1 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
                << "  cross(1/mm)= " << cross*mm
-               << " fac= " << fac
+               << " fac= " << fac << " k= " << k << " model= " << regModels->ModelIndex(k)
                << G4endl;
     }
     if(cross < 0.0) cross = 0.0;
@@ -773,7 +782,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
       do {
         k++;
         fac *= (1.0 + factor[k]*upperEkin[regModels->ModelIndex(k-1)]/e);
-      } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
+      } while (k<nmod-1 && e > upperEkin[regModels->ModelIndex(k)] );
     }
 
     G4double cross=models[regModels->ModelIndex(k)]->CrossSection(couple,particle,e,subcut,cut)*fac;

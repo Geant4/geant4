@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2003/11/28 12:29:59 vnivanch Exp $
+$Id: History,v 1.43 2004/01/21 17:29:22 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-01-04 mma
+- possibility to have one histograms file per run.
+- RunAction: removed ApplyCommand("/vis/...") statements.
 
 28-11-03 V.Ivanchenko (testem3-V05-02-08)
 

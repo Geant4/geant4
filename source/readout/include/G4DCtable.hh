@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.hh,v 1.7 2003/06/16 17:12:45 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4DCtable.hh,v 1.8 2004/03/15 19:18:53 asaim Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 
 #ifndef G4DCtable_H
 #define G4DCtable_H 1
 
+class G4VDigitizerModule;
 #include "globals.hh"
 //#include "g4rw/tvordvec.h"
 #include <vector>
@@ -52,7 +53,8 @@ class G4DCtable
 
   public:
     G4int Registor(G4String SDname,G4String DCname);
-    G4int GetCollectionID(G4String DCname);
+    G4int GetCollectionID(G4String DCname) const;
+    G4int GetCollectionID(G4VDigitizerModule* aDM) const;
 
   private:
     std::vector<G4String> DMlist;
@@ -61,6 +63,16 @@ class G4DCtable
   public:
     inline G4int entries() const
     { return DClist.size(); }
+    inline G4String GetDMname(G4int i) const
+    {
+      if(i<0||i>entries()) return "***Not Defined***";
+      return DMlist[i];
+    }
+    inline G4String GetDCname(G4int i) const
+    {
+      if(i<0||i>entries()) return "***Not Defined***";
+      return DClist[i];
+    }
 
 };
 

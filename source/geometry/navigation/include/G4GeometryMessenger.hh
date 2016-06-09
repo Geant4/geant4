@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.2 2003/11/03 17:15:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4GeometryMessenger.hh,v 1.3 2004/03/10 18:21:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -73,6 +73,7 @@ class G4GeometryMessenger : public G4UImessenger
     void CheckGeometry();
     void ResetNavigator();
     void SetVerbosity(G4String newValue);
+    void SetCheckMode(G4String newValue);
     void LineTest();
     void RecursiveLineTest();
     void GridTest();
@@ -83,7 +84,7 @@ class G4GeometryMessenger : public G4UImessenger
     G4UIdirectory             *geodir, *navdir, *testdir;
     G4UIcmdWith3VectorAndUnit *posCmd, *dirCmd;
     G4UIcmdWith3Vector        *grzCmd, *cyzCmd;
-    G4UIcmdWithABool          *linCmd, *grdCmd, *cylCmd, *runCmd;
+    G4UIcmdWithABool          *chkCmd, *linCmd, *grdCmd, *cylCmd, *runCmd;
     G4UIcmdWithoutParameter   *recCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
     G4UIcmdWithAnInteger      *verbCmd, *rcsCmd, *rcdCmd;

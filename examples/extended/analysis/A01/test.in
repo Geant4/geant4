@@ -4,8 +4,8 @@
 #    reference input test.in
 #    reference output test.out 
 #    test.out was created with RH9.0, gcc3.2.2
-#                 geant4.5.2.ref05,clhep 1.8.0.2 
-#                 on 10-Nov-2003 T. Koi SLAC
+#                 geant4.6.0, clhep 1.8.1.0, HadronPhysicsQGSP_BERT 
+#                 on 29-Jan-2004 T. Koi SLAC
 #
 #  turn off randomization 
 #

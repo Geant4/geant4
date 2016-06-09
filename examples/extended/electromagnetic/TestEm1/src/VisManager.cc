@@ -22,7 +22,7 @@
 //
 //
 // $Id: VisManager.cc,v 1.1 2003/10/06 10:02:34 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // John Allison 24th January 1998.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.4 2002/08/07 10:53:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4GammaConversionToMuons.cc,v 1.5 2004/03/10 16:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -41,8 +41,8 @@
 
 // constructor
 
-G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName)
-  : G4VDiscreteProcess (processName),
+G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
+    G4ProcessType type):G4VDiscreteProcess (processName, type),
     LowestEnergyLimit (4*G4MuonPlus::MuonPlus()->GetPDGMass()), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)

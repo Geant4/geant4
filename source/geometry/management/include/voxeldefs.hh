@@ -22,7 +22,7 @@
 //
 //
 // $Id: voxeldefs.hh,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //

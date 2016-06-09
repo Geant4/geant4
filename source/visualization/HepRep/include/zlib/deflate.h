@@ -1,19 +1,19 @@
 /* deflate.h -- internal compression state
  * Copyright (C) 1995-1998 Jean-loup Gailly
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in HepRep-zlib.h 
  */
 
 /* WARNING: this file should *not* be used by applications. It is
    part of the implementation of the compression library and is
-   subject to change. Applications should only use zlib.h.
+   subject to change. Applications should only use HepRep-zlib.h.
  */
 
-/* @(#) $Id: deflate.h,v 1.1 2003/07/11 06:01:41 duns Exp $ */
+/* @(#) $Id: deflate.h,v 1.2 2004/02/03 19:34:43 duns Exp $ */
 
 #ifndef _DEFLATE_H
 #define _DEFLATE_H
 
-#include "zutil.h"
+#include "HepRep-zutil.h"
 
 /* ===========================================================================
  * Internal compression state.

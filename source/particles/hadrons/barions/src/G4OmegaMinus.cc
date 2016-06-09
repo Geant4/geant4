@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinus.cc,v 1.9 2003/06/16 16:57:08 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4OmegaMinus.cc,v 1.10 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ G4OmegaMinus::G4OmegaMinus(
 //             stable         lifetime    decay table 
 
 G4OmegaMinus G4OmegaMinus::theOmegaMinus(
-             "omega-",     1.67245*GeV,  8.01e-12*MeV,    -1*eplus, 
+             "omega-",     1.67245*GeV,  8.02e-12*MeV,    -1*eplus, 
 		    3,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            +1,        3334,

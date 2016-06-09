@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02PrimaryGeneratorMessenger.cc,v 1.4 2002/12/05 01:06:57 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 

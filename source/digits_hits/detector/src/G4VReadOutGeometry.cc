@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VReadOutGeometry.cc,v 1.1 2003/10/03 10:12:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "G4VReadOutGeometry.hh"

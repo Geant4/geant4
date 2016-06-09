@@ -39,14 +39,14 @@ extern void InitializeRichTbMaterial();
 extern void HistoRichTbMaterialProperties(RichTbRunConfig* RConfig);
 
 
-extern vector<G4double> InitializeHpdQE(G4int);
-extern vector<G4double> InitializeHpdWaveL(G4int);
-extern vector<G4double> InitN2RefIndex(G4double, G4double);
-extern vector<G4double> InitN2RefPhotW();
-extern vector<G4double> InitAgelPhotW();
-extern vector<G4double> InitializePhotonMomentumVector();
-extern vector<G4int> getDeadPixelList(G4int ihpdNum , G4int IsectNum);
-extern vector<G4double>GetAerogelRScatLength(AerogelType);
+extern std::vector<G4double> InitializeHpdQE(G4int);
+extern std::vector<G4double> InitializeHpdWaveL(G4int);
+extern std::vector<G4double> InitN2RefIndex(G4double, G4double);
+extern std::vector<G4double> InitN2RefPhotW();
+extern std::vector<G4double> InitAgelPhotW();
+extern std::vector<G4double> InitializePhotonMomentumVector();
+extern std::vector<G4int> getDeadPixelList(G4int ihpdNum , G4int IsectNum);
+extern std::vector<G4double>GetAerogelRScatLength(AerogelType);
 extern G4double GetCurrentBulkTrans(G4double currentMatRefIndex,
 				       G4double currentNeighbourRefIndex, 
 				       G4double MaxTotMeasuredTransmission);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2003/10/07 11:58:31 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: PhysicsList.cc,v 1.5 2004/02/19 18:18:53 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,7 +202,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 G4double PhysicsList::GetRange(G4double val)
 {
   G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  const G4MaterialCutsCouple* couple = pDet->GetAbsorberMaterial();
+  const G4MaterialCutsCouple* couple = pDet->GetAbsorbMaterialCut();
 
   G4ParticleDefinition* part = theParticleTable->FindParticle("e-");
   G4double range = G4LossTableManager::Instance()->GetRange(part,val,couple);

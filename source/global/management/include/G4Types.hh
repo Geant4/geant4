@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Types.hh,v 1.7 2003/06/17 08:14:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // GEANT4 native types

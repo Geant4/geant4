@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProductionCuts.cc,v 1.2 2003/09/19 14:45:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // --------------------------------------------------------------

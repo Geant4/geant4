@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.1 2003/11/12 16:18:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEnergyLossProcess.hh,v 1.9 2004/03/11 14:43:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,8 @@
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 14-01-04 Activate precise range calculation (V.Ivanchenko)
+// 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -70,13 +72,14 @@
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 class G4Step;
 class G4ParticleDefinition;
 class G4VEmModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
-class G4VParticleChange;
+//class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4VSubCutoffProcessor;
@@ -193,8 +196,11 @@ public:
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
 
-  void SetRangeTable(G4PhysicsTable* p);
-  G4PhysicsTable* RangeTable() const {return theRangeTable;};
+  void SetRangeTable(G4PhysicsTable* pRange);
+  G4PhysicsTable* RangeTable() const {return thePreciseRangeTable;};
+
+  void SetRangeTableForLoss(G4PhysicsTable* p);
+  G4PhysicsTable* RangeTableForLoss() const {return theRangeTableForLoss;};
 
   void SetInverseRangeTable(G4PhysicsTable* p);
   G4PhysicsTable* InverseRangeTable() const {return theInverseRangeTable;};
@@ -308,12 +314,24 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
+  G4double GetDEDXForLoss(G4double kineticEnergy);
+
+  G4double GetRangeForLoss(G4double kineticEnergy);
+
+  G4double GetPreciseRange(G4double kineticEnergy);
+
+  G4double GetKineticEnergyForLoss(G4double range);
+
   // hide  assignment operator
 
   G4VEnergyLossProcess(G4VEnergyLossProcess &);
   G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
 
 // =====================================================================
+
+protected:
+
+  G4ParticleChangeForLoss               fParticleChange;
 
 private:
 
@@ -325,7 +343,8 @@ private:
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
-  G4PhysicsTable*  theRangeTable;
+  G4PhysicsTable*  theRangeTableForLoss;
+  G4PhysicsTable*  thePreciseRangeTable;
   G4PhysicsTable*  theSecondaryRangeTable;
   G4PhysicsTable*  theInverseRangeTable;
   G4PhysicsTable*  theLambdaTable;
@@ -349,12 +368,10 @@ private:
   G4int    nDEDXBinsForRange;
   G4int    nLambdaBins;
 
-  G4double faclow;
+  G4double lowestKinEnergy;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyForRange;
-  G4double lowKinEnergy;
-  G4double highKinEnergyForRange;
 
   G4double massRatio;
   G4double reduceFactor;
@@ -398,41 +415,112 @@ inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* cou
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
-                                    const G4MaterialCutsCouple* couple)
+                                        const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4bool b;
-  return ((*theDEDXTable)[currentMaterialIndex]->
-          GetValue(kineticEnergy*massRatio, b))*chargeSqRatio;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetDEDXForLoss(G4double kineticEnergy)
+{
+  G4bool b;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
-                                            const G4MaterialCutsCouple* couple)
+                                         const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
+  G4double x = DBL_MAX;
+  if(thePreciseRangeTable)      x = GetPreciseRange(kineticEnergy);
+  else if(theRangeTableForLoss) x = GetRangeForLoss(kineticEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetPreciseRange(G4double kineticEnergy)
+{
   G4bool b;
   G4double x;
   G4double e = kineticEnergy*massRatio;
-  if (e < highKinEnergyForRange) {
-    x = ((*theRangeTable)[currentMaterialIndex])->GetValue(e, b);
+
+  if (e < maxKinEnergyForRange) {
+    x = ((*thePreciseRangeTable)[currentMaterialIndex])->GetValue(e, b);
+    if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
-      (e - highKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
+         (e - maxKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
   }
   return x*reduceFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
-                                             const G4MaterialCutsCouple* couple)
+inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double kineticEnergy)
 {
-  DefineMaterial(couple);
   G4bool b;
-  return ((*theInverseRangeTable)[currentMaterialIndex]->
-         GetValue(range/reduceFactor, b))/massRatio;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  return x*reduceFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
+                                                 const G4MaterialCutsCouple* couple)
+{
+  G4double del = fRange - range;
+  G4double e   = minKinEnergy;
+  if(couple == currentCouple && del > 0.0 && del < fRange*linLossLimit) {
+    e = preStepKinEnergy - del*GetDEDXForLoss(preStepKinEnergy);
+    if(e < 0.0) e = 0.0;
+  } else {
+    DefineMaterial(couple);
+    G4double r = range/reduceFactor;
+    G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
+    G4double rmin = v->GetLowEdgeEnergy(0);
+    if(r <= rmin) {
+      r /= rmin;
+      e *= r*r;
+    } else {
+      G4bool b;
+      e = v->GetValue(r, b);
+    }
+    e /= massRatio;
+  }
+  return e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetKineticEnergyForLoss(G4double range)
+{
+  G4double r = range/reduceFactor;
+  G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
+  G4double rmin = v->GetLowEdgeEnergy(0);
+  G4double e = minKinEnergy;
+  if(r <= rmin) {
+    r /= rmin;
+    e *= r*r;
+  } else {
+    G4bool b;
+    e = v->GetValue(r, b);
+  }
+  return e/massRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -452,11 +540,8 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
-                                                        G4double,
-                                                        G4ForceCondition* cond)
+                                                            G4double, G4ForceCondition*)
 {
-  *cond = NotForced;
-
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
@@ -475,27 +560,22 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
-                                  G4double, G4double currentMinStep, G4double&)
+                                      G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
-
-  if (theRangeTable) {
-    G4bool b;
-    fRange = ((*theRangeTable)[currentMaterialIndex])->
-            GetValue(preStepScaledEnergy, b)*reduceFactor;
+  if(theRangeTableForLoss) {
+    fRange = GetRange(preStepKinEnergy, currentCouple);
 
     x = fRange;
     G4double y = x*dRoverRange;
+
     if(x > minStepLimit && y < currentMinStep ) {
-      if (integral) x = std::max(y,minStepLimit);
-      else {
-        x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-        if(x > fRange) x = fRange;
-        if(rndmStepFlag) x = minStepLimit + (x-minStepLimit)*G4UniformRand();
-      }
+
+      x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
+      if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
+      if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
     }
   }
-
   return x;
 }
 
@@ -551,26 +631,11 @@ inline void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline G4int G4VEnergyLossProcess::DEDXBinning() const
-{
-  return nDEDXBins;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::SetLambdaBinning(G4int nbins)
 {
   nLambdaBins = nbins;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline G4int G4VEnergyLossProcess::LambdaBinning() const
-{
-  return nLambdaBins;
-}
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -584,7 +649,6 @@ inline G4double G4VEnergyLossProcess::MinKinEnergy() const
 inline void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
 {
   minKinEnergy = e;
-  lowKinEnergy = minKinEnergy*faclow;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -612,7 +676,7 @@ inline G4double G4VEnergyLossProcess::MaxKinEnergy() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetLambda(G4double kineticEnergy,
-                                      const G4MaterialCutsCouple* couple)
+                                          const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;

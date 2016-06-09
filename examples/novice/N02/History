@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2003/11/10 14:31:24 gcosmo Exp $
+$Id: History,v 1.34 2004/03/08 15:14:46 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08-03-04 mma (exampleN02-V06-00-00)
+- ExN02RunAction: removed ApplyCommand("/vis/...") statements.
 
 10-11-03 G.Cosmo (exampleN02-V05-02-03)
 - Removed OPACS driver from vis-manager.

@@ -517,10 +517,12 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
 //    G4cout << "currTimeStep = " << currTimeStep << G4endl;
     if(!driver->AccurateAdvance(track, timeStep, eps))
     {  // cannot track this particle
+#ifdef debug_1_RKPropagation
       std::cerr << "G4RKPropagation::FieldTransport() warning: integration error."
          << G4endl << "position " << kt->GetPosition() << " 4mom " <<kt->GetTrackingMomentum()
 	 <<G4endl << " timestep " <<timeStep
 		  << G4endl;
+#endif
       delete driver;
       delete stepper;
       return false;

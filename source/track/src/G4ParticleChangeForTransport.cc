@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.15 2003/06/16 17:13:04 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.16 2004/01/20 15:29:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
 //	
-//	
+//
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 10 May. 1998  H.Kurahige
 //   Correct tratment of fpNextTouchable            12 May. 1998  H.Kurashige
+//   Change to the next volume only if energy>0     19 Jan. 2004  V.Ivanchenko
 // --------------------------------------------------------------
 
 #include "G4ParticleChangeForTransport.hh"
@@ -93,17 +94,17 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
 }
 
 //----------------------------------------------------------------
-// methods for updating G4Step 
+// methods for updating G4Step
 //
 
 G4Step* G4ParticleChangeForTransport::UpdateStepForAtRest(G4Step* pStep)
-{ 
+{
   // Nothing happens for AtRestDoIt
   if (verboseLevel>0) {
-    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called" << G4endl; 
-    G4cout << " Nothing happens for this method " << G4endl; 
+    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called" << G4endl;
+    G4cout << " Nothing happens for this method " << G4endl;
   }
-  //  Update the G4Step specific attributes 
+  //  Update the G4Step specific attributes
   return UpdateStepInfo(pStep);
 }
 
@@ -120,39 +121,39 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   // A physics process always calculates the final state of the
   // particle relative to the initial state at the beginning
   // of the Step, i.e., based on information of G4Track (or
-  // equivalently the PreStepPoint). 
+  // equivalently the PreStepPoint).
   // So, the differences (delta) between these two states have to be
-  // calculated and be accumulated in PostStepPoint. 
-  
+  // calculated and be accumulated in PostStepPoint.
+
   // Take note that the return type of GetMomentumChange is a
-  // pointer to G4ThreeVector. Also it is a normalized 
+  // pointer to G4ThreeVector. Also it is a normalized
   // momentum vector.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint();
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
   G4Track*     aTrack  = pStep->GetTrack();
   G4double     mass = aTrack->GetDynamicParticle()->GetMass();
- 
+
   // uodate kinetic energy
   //  now assume that no energy change in transportation
   //  However it is not true in electric fields
   //  Case for changing energy will be implemented in future
 
-  
+
   // update momentum direction and energy
   if (isMomentumChanged) {
     G4double energy;
-    energy= pPostStepPoint->GetKineticEnergy() 
-                 + (theEnergyChange - pPreStepPoint->GetKineticEnergy()); 
+    energy= pPostStepPoint->GetKineticEnergy()
+                 + (theEnergyChange - pPreStepPoint->GetKineticEnergy());
 
     // calculate new momentum
-    G4ThreeVector pMomentum =  pPostStepPoint->GetMomentum() 
+    G4ThreeVector pMomentum =  pPostStepPoint->GetMomentum()
                      + ( CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass)
 	                  - pPreStepPoint->GetMomentum());
     G4double      tMomentum = pMomentum.mag();
-    G4ThreeVector direction(1.0,0.0,0.0); 
+    G4ThreeVector direction(1.0,0.0,0.0);
     if( tMomentum > 0. ){
-      G4double  inv_Momentum= 1.0 / tMomentum; 
+      G4double  inv_Momentum= 1.0 / tMomentum;
       direction= pMomentum * inv_Momentum;
     }
     pPostStepPoint->SetMomentumDirection(direction);
@@ -166,22 +167,22 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   // update polarization
   pPostStepPoint->AddPolarization( thePolarizationChange
   				   - pPreStepPoint->GetPolarization());
-      
+
   // update position and time
-  pPostStepPoint->AddPosition( thePositionChange 
+  pPostStepPoint->AddPosition( thePositionChange
 			       - pPreStepPoint->GetPosition() );
   pPostStepPoint->AddGlobalTime( theTimeChange
 				 - pPreStepPoint->GetGlobalTime());
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - pPreStepPoint->GetGlobalTime()); 
-  pPostStepPoint->AddProperTime( theProperTimeChange 
+  pPostStepPoint->AddLocalTime( theTimeChange
+				 - pPreStepPoint->GetGlobalTime());
+  pPostStepPoint->AddProperTime( theProperTimeChange
 				 - pPreStepPoint->GetProperTime());
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
-  //  Update the G4Step specific attributes 
+  //  Update the G4Step specific attributes
   //pStep->SetStepLength( theTrueStepLength );
   //  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetControlFlag( theSteppingControlFlag );
@@ -190,31 +191,33 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
 }
 
 G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
-{ 
+{
   // A physics process always calculates the final state of the particle
 
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+  // Change volume if any kinetic energy remanes
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  if(pPostStepPoint->GetKineticEnergy() > 0.0) {
 
-  // update next touchable 
-  // (touchable can be changed only at PostStepDoIt) 
-  pPostStepPoint->SetTouchableHandle( theTouchableHandle );
+    // update next touchable
+    // (touchable can be changed only at PostStepDoIt)
+    pPostStepPoint->SetTouchableHandle( theTouchableHandle );
 
-  pPostStepPoint->SetMaterial( theMaterialChange );
-  pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
-
-  // It used to call base class's method 
+    pPostStepPoint->SetMaterial( theMaterialChange );
+    pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
+  }
+  // It used to call base class's method
   //   - but this would copy uninitialised data members
   // return G4ParticleChange::UpdateStepForPostStep(pStep);
 
-  // Copying what the base class does would instead 
+  // Copying what the base class does would instead
   //   - also not useful
   // return G4VParticleChange::UpdateStepInfo(pStep);
 
-  return pStep; 
+  return pStep;
 }
 
 //----------------------------------------------------------------
-// methods for printing messages  
+// methods for printing messages
 //
 
 void G4ParticleChangeForTransport::DumpInfo() const

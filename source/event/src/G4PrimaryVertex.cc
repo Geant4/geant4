@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryVertex.cc,v 1.7 2003/09/12 21:51:34 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "G4PrimaryVertex.hh"

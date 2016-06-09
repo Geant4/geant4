@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventActionMessenger.cc,v 1.1 2003/09/22 14:06:19 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: EventActionMessenger.cc,v 1.2 2004/01/16 11:13:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 
@@ -47,13 +47,13 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
+  DrawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);    
+  PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

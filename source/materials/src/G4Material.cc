@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.24 2003/06/18 08:12:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Material.cc,v 1.25 2004/01/22 17:50:38 maire Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -56,6 +56,7 @@
 // 16-04-02, G4Exception put in constructor with chemical formula
 // 06-05-02, remove the check of the ideal gas state equation
 // 06-08-02, remove constructors with chemical formula (mma)
+// 22-01-04, proper STL handling of theElementVector (Hisaya)
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,8 +98,8 @@ G4Material::G4Material(const G4String& name, G4double z,
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
   fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1,(G4Element*)0);
-  (*theElementVector)[0] = new G4Element(name, " ", z, a);
+  theElementVector       = new G4ElementVector();
+  theElementVector->push_back( new G4Element(name, " ", z, a));  
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
   
@@ -147,7 +148,8 @@ G4Material::G4Material(const G4String& name, G4double density,
   maxNbComponents     = nComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents,(G4Element*)0);
+  theElementVector    = new G4ElementVector();
+  theElementVector->reserve(maxNbComponents);  
     
   if (fState == kStateUndefined) 
     {
@@ -170,7 +172,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 
   // filling ...
   if ( G4int(fNumberOfElements) < maxNbComponents ) {
-     (*theElementVector)[fNumberOfElements] = element;
+     theElementVector->push_back(element);     
      fAtomsVector       [fNumberOfElements] = nAtoms;
      fNumberOfComponents = ++fNumberOfElements;
      element->increaseCountUse();
@@ -225,10 +227,9 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
       while ((el<fNumberOfElements)&&(element!=(*theElementVector)[el])) el++;
       if (el<fNumberOfElements) fMassFractionVector[el] += fraction;
       else {
-        if(el>=theElementVector->size()) theElementVector->resize(el+1);
-        (*theElementVector)[el] = element;
+	theElementVector->push_back(element); 
         fMassFractionVector[el] = fraction;
-        fNumberOfElements ++;
+        fNumberOfElements++;
 	element->increaseCountUse();
       }
       fNumberOfComponents++;  
@@ -285,11 +286,10 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
         if (el < fNumberOfElements) fMassFractionVector[el] += fraction
                                           *(material->GetFractionVector())[elm];
         else {
-          if (el >= theElementVector->size()) theElementVector->resize(el+1);
-          (*theElementVector)[el] = element;
+	  theElementVector->push_back(element); 
           fMassFractionVector[el] = fraction
 	                                  *(material->GetFractionVector())[elm];
-          fNumberOfElements ++;
+          fNumberOfElements++;
 	  element->increaseCountUse();
         }
        } 

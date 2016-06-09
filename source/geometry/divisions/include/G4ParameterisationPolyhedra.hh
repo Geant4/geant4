@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationPolyhedra.hh,v 1.6 2003/11/18 12:15:30 arce Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,

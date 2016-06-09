@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DynamicParticle.hh,v 1.13 2003/10/21 20:56:13 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SensitiveVolumeList.cc,v 1.1 2003/10/03 10:12:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file

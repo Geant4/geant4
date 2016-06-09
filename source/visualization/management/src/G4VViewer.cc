@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VViewer.cc,v 1.17 2003/06/16 17:14:18 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // John Allison  27th March 1996

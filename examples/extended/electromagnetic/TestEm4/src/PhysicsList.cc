@@ -22,7 +22,7 @@
 //
 //
 // $Id: PhysicsList.cc,v 1.4 2003/10/24 12:14:34 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

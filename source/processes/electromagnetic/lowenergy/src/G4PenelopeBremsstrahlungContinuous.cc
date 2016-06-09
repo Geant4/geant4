@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.5 2003/06/16 17:00:18 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.6 2004/03/17 08:57:26 pandola Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 // 
 // --------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // 20 Feb 2003  L. Pandola       1st implementation
 // 17 Mar 2003  L. Pandola       Added the correction for positrons
 // 19 Mar 2003  L. Pandola       Bugs fixed
+// 17 Mar 2004  L. Pandola       Removed unnecessary calls to pow(a,b)
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungContinuous.hh"
@@ -135,7 +136,7 @@ void G4PenelopeBremsstrahlungContinuous::PrepareInterpolationTable()
    
     delete interpolator;
     G4double Fact = (millibarn/cm2)*(Energies[i]+electron_mass_c2)*(1.0/fine_structure_const)/
-      (pow(classic_electr_radius,2)*(Energies[i]+2.0*electron_mass_c2));
+      (classic_electr_radius*classic_electr_radius*(Energies[i]+2.0*electron_mass_c2));
     G4double Normalization = TotalCS[i]/(Rsum*Fact);
     G4double TST = abs(Normalization-100.0);
     if (TST > 1.0) {
@@ -209,10 +210,8 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   G4double Xek = Xe-Ke; 
   
   //Global x-section factor
-  G4double Fact=pow((G4double) Zmat,2)*(pow(e1+electron_mass_c2,2)/(e1*(e1+2.0*electron_mass_c2)))
-    *(millibarn/cm2);
-  //G4cout << "Particella: " << partName << ";Z: " << Zmat << ";Energia: " << e1 << "; fattore di correzione: " 
-  // << PositronCorrection(e1) << G4endl;
+  G4double Fact=Zmat*Zmat*(e1+electron_mass_c2)*(e1+electron_mass_c2)/(e1*(e1+2.0*electron_mass_c2))
+  *(millibarn/cm2);
   Fact=Fact*PositronCorrection(e1);
 
   //Moments of the scaled bremss x-section
@@ -263,7 +262,7 @@ G4double G4PenelopeBremsstrahlungContinuous::PositronCorrection(G4double en)
     return 1.0; //no correction for electrons
   }
   else if (partName == "e+"){
-    T=log(1+((1e6*en)/(pow( (G4double) Zmat,2)*electron_mass_c2)));
+    T=log(1+((1e6*en)/(Zmat*Zmat*electron_mass_c2)));
     for (G4int i=0;i<7;i++){
       correct += Coeff[i]*pow(T,i+1);
     }

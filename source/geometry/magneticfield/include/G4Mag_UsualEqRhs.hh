@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_UsualEqRhs.hh,v 1.6 2003/10/31 14:35:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // class G4Mag_UsualEqRhs

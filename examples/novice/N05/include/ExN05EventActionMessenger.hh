@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05EventActionMessenger.hh,v 1.4 2002/01/09 17:24:18 ranjard Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 
 #ifndef ExN05EventActionMessenger_h

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FieldTrack.hh,v 1.10 2003/10/31 14:35:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // class G4FieldTrack

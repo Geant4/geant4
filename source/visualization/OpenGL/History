@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2003/10/03 15:06:56 gcosmo Exp $
+$Id: History,v 1.30 2004/02/17 18:17:20 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+17th February 2004  John Allison  (opengl-V06-00-00)
+- Fixed bug #581: wrong order of statements in
+  G4OpenGLXViewer::~G4OpenGLXViewer (see bug report).
 
 4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
 - GNUmakefile:

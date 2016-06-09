@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4eBremsstrahlung52.cc,v 1.1 2003/08/08 11:30:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //      ------------ G4eBremsstrahlung52 physics process --------

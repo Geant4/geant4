@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsdvn.cc,v 1.9 2003/04/03 11:30:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 

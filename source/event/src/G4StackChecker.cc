@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StackChecker.cc,v 1.1 2003/06/12 15:14:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "G4StackChecker.hh"

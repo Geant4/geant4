@@ -26,7 +26,7 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
+#include <iostream>
 #include "globals.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"
@@ -122,7 +122,7 @@ RichTbSiPixel::RichTbSiPixel(RichTbMaterial* RMaterial,
     // This just flags the pixel as active.
     //First Get the deadPixel List
     G4bool thisPixelisAlive=true;
-    vector<G4int>DeadPxL = getDeadPixelList(IHpdNum,Isector);
+    std::vector<G4int>DeadPxL = getDeadPixelList(IHpdNum,Isector);
     for(size_t ideadP=0; ideadP<DeadPxL.size(); ideadP++){
       if(ipixel == DeadPxL[ideadP] )thisPixelisAlive=false;
     }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RegularXrayTRmodel.hh,v 1.4 2003/01/23 11:30:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

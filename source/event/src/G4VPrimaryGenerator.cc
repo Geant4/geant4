@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPrimaryGenerator.cc,v 1.4 2003/08/02 00:18:30 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 // G4VPrimaryGenerator

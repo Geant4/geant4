@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05PionShowerModel.cc,v 1.10 2003/11/10 14:41:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"

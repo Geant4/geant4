@@ -23,7 +23,7 @@
 #include "globals.hh"
 #include "G4HeavyIonParticipants.hh"
 #include "G4LorentzVector.hh"
-#include "G4Pair.hh"
+#include <utility>
 #include <algorithm>
 
 // Class G4HeavyIonParticipants 
@@ -71,7 +71,7 @@ void G4HeavyIonParticipants::BuildInteractions(const G4ReactionProduct  &thePrim
   while(theInteractions.empty())
   {
     // choose random impact parameter HPW
-    G4Pair<G4double, G4double> theImpactParameter;
+    std::pair<G4double, G4double> theImpactParameter;
     theImpactParameter = theNucleus->ChooseImpactXandY(outerRadiusA+outerRadiusB+theNucleonRadius);
     G4double impactX = theImpactParameter.first; 
     G4double impactY = theImpactParameter.second;

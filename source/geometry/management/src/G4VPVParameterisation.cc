@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPVParameterisation.cc,v 1.4 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.

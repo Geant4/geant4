@@ -78,7 +78,7 @@ void FCALEMModule::InitializeGeometry() {
   ifstream File
     ("geom_data/FCal1Electrodes.dat");
   
-  if(!File)  G4cerr << "Failed to open file FCal1Electrodes data file  " << endl;
+  if(!File)  G4cerr << "Failed to open file FCal1Electrodes data file  " << G4endl;
   File.seekg(0);
   
   NF1LarGap = 0;

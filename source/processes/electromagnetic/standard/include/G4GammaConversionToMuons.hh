@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.3 2003/05/26 16:13:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4GammaConversionToMuons.hh,v 1.4 2004/03/10 16:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -58,7 +58,8 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4GammaConversionToMuons(const G4String& processName ="GammaToMuPair");
+     G4GammaConversionToMuons(const G4String& processName ="GammaToMuPair",
+                                    G4ProcessType type = fElectromagnetic);
 
     ~G4GammaConversionToMuons();
 

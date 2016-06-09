@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.40 2003/11/12 16:18:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuPairProduction.cc,v 1.41 2004/02/10 18:07:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 27-09-03 e+ set to be a secondary particle (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -73,10 +74,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuPairProduction::G4MuPairProduction(const G4String& name) 
+G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
+    lowestKinEnergy(1.*GeV),
     subCutoff(false)
 {
   InitialiseProcess();
@@ -91,7 +93,6 @@ G4MuPairProduction::~G4MuPairProduction()
 
 void G4MuPairProduction::InitialiseProcess()
 {
-  //  SetSecondaryParticle(G4Electron::Electron());
   SetSecondaryParticle(G4Positron::Positron());
 
   SetDEDXBinning(120);
@@ -99,7 +100,8 @@ void G4MuPairProduction::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmModel* em = new G4MuPairProductionModel();
+  G4MuPairProductionModel* em = new G4MuPairProductionModel();
+  em->SetLowestKineticEnergy(lowestKinEnergy);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
@@ -123,7 +125,6 @@ void G4MuPairProduction::PrintInfoDefinition()
 
   G4cout << "      Parametrised model "
          << G4endl;
-//  G4cout << *(LambdaTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

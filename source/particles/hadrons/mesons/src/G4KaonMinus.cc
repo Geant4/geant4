@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.9 2003/06/16 16:57:42 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4KaonMinus.cc,v 1.10 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -99,7 +99,7 @@ G4KaonMinus::G4KaonMinus(
 //             stable         lifetime    decay table 
 //
 G4KaonMinus G4KaonMinus::theKaonMinus(
-	      "kaon-",    0.493677*GeV,   5.314e-14*MeV,    -1.*eplus, 
+	      "kaon-",    0.493677*GeV,   5.315e-14*MeV,    -1.*eplus, 
 		    0,              -1,             0,          
 		    1,              -1,             0,             
 	      "meson",               0,             0,        -321,
@@ -108,3 +108,6 @@ G4KaonMinus G4KaonMinus::theKaonMinus(
 
 G4KaonMinus* G4KaonMinus::KaonMinusDefinition(){return &theKaonMinus;}
 G4KaonMinus* G4KaonMinus::KaonMinus(){return &theKaonMinus;}
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: TiaraSim.cc,v 1.5 2003/11/07 12:39:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "TiaraSim.hh"

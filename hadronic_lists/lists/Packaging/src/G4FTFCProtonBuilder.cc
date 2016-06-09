@@ -24,28 +24,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "TheoModelFactory.hh"
 
 G4FTFCProtonBuilder::
 G4FTFCProtonBuilder() 
 {
   theMin = 15*GeV;
-  theModel = new G4TheoFSGenerator;
-  theCascade = new G4StringChipsParticleLevelInterface;
-  theModel->SetTransport(theCascade);
-  theModel->SetHighEnergyGenerator(&theStringModel);
-  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
-}
-
-G4FTFCProtonBuilder::
-~G4FTFCProtonBuilder() 
-{
-  delete theStringDecay;
-}
-
-void G4FTFCProtonBuilder::
-Build(G4HadronElasticProcess & )
-{
+  theModel = TheoModelFactory<G4StringChipsParticleLevelInterface,
+                              G4FTFModel, G4LundStringFragmentation>::New();
 }
 
 void G4FTFCProtonBuilder::

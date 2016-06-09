@@ -13,7 +13,7 @@
      4	  '(transmit, charged) : kinetic energy at exit',		 
      5	  '(transmit, charged) : space angle at exit',			 
      6	  '(transmit, charged) : projected angle at exit',		 
-     7	  '(transmit, charged) : radial dispersion at exit',		 
+     7	  '(transmit, charged) : projected position at exit',		 
      8	  '(transmit, neutral) : kinetic energy at exit',		 
      9	  '(transmit, neutral) : space angle at exit',
      +	  '(transmit, neutral) : projected angle at exit',		 

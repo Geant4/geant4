@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Chips.hh,v 1.15 2003/12/09 15:37:55 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Chips.hh,v 1.17 2004/03/25 10:44:29 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4Chips ----------------
 //          by Mikhail Kossov, September 1999.

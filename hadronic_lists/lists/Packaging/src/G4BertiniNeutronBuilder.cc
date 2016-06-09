@@ -29,8 +29,17 @@ G4BertiniNeutronBuilder::
 G4BertiniNeutronBuilder() 
 {
   theMin = 0;
-  theMax = 5*GeV;
+  theMax = 9.9*GeV;
   theModel = new G4CascadeInterface;
+}
+
+void G4BertiniNeutronBuilder::
+Build(G4NeutronInelasticProcess & aP)
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP.RegisterMe(theModel);
+  aP.AddDataSet(&theXSec);  
 }
 
 G4BertiniNeutronBuilder::
@@ -49,15 +58,6 @@ Build(G4HadronFissionProcess & )
 void G4BertiniNeutronBuilder::
 Build(G4HadronCaptureProcess & )
 {
-}
-
-void G4BertiniNeutronBuilder::
-Build(G4NeutronInelasticProcess & aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
 }
 
 // 2002 by J.P. Wellisch

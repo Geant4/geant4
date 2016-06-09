@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StepPoint.icc,v 1.8 2003/05/07 20:08:37 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 //
    inline const G4ThreeVector& G4StepPoint::GetPosition() const

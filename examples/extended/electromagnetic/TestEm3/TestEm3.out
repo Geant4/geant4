@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 553.1 eV;
 Visualization Manager instantiating...
@@ -56,9 +59,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/energy 1 GeV
 #
 /testem/run/setHisto 0 100 700. 1000. MeV
----->SetHisto: Edep in absorber 0 (MeV) ; 100 bins from 700 MeV to 1000MeV
 /testem/run/setHisto 1 100   0.  300. MeV
----->SetHisto: Edep in absorber 1 (MeV) ; 100 bins from 0 MeV to 300MeV
 #
 /testem/event/printModulo 50
 #
@@ -122,7 +123,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -139,7 +141,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -205,19 +208,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=103.82s Real=118.72s Sys=6.18s
+  User=37.72s Real=48.71s Sys=6.2s
 
 -------------------------------------------------------------
                                    total energy dep                total tracklen       mean energy leaving per layer 
  
- Absorber0 (        Lead) : 810.30 MeV +- 18.33 MeV       56.15 cm  +-  1.36 cm                 264.31 MeV +- 44.43 MeV
- Absorber1 ( liquidArgon) : 177.37 MeV +- 15.49 MeV       87.83 cm  +-  7.90 cm                 260.64 MeV +- 44.53 MeV
+ Absorber0 (        Lead) : 815.52 MeV +- 17.55 MeV       56.69 cm  +-  1.37 cm                 267.36 MeV +- 45.80 MeV
+ Absorber1 ( liquidArgon) : 174.13 MeV +- 15.78 MeV       86.03 cm  +-  8.19 cm                 263.78 MeV +- 45.88 MeV
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1185474782, 972042352
+ Current couple of seeds = 1809837985, 1683402677
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

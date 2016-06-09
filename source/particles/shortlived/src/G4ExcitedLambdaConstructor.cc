@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.cc,v 1.7 2003/05/20 10:05:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ExcitedLambdaConstructor.cc,v 1.8 2004/02/13 05:54:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -353,13 +353,13 @@ const char* G4ExcitedLambdaConstructor::name[] = {
 };
 
 const G4double G4ExcitedLambdaConstructor::mass[] = {
-  1.407*GeV, 1.520*GeV, 1.600*GeV, 1.670*GeV,  1.690*GeV, 
+  1.407*GeV,1.5195*GeV, 1.600*GeV, 1.670*GeV,  1.690*GeV, 
   1.800*GeV, 1.810*GeV, 1.820*GeV, 1.830*GeV,  1.890*GeV, 
   2.100*GeV, 2.110*GeV
 };
 
 const G4double G4ExcitedLambdaConstructor::width[] = {
-   50.0*MeV,  16.0*MeV, 150.0*MeV,  35.0*MeV,  60.0*MeV,
+   50.0*MeV,  15.6*MeV, 150.0*MeV,  35.0*MeV,  60.0*MeV,
   300.0*MeV, 150.0*MeV,  80.0*MeV,  95.0*MeV, 100.0*MeV,
   200.0*MeV, 200.0*MeV
 };

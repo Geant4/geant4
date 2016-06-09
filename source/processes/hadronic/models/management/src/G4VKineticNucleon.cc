@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VKineticNucleon.cc,v 1.1 2003/10/07 12:38:35 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #include "G4VKineticNucleon.hh"
 

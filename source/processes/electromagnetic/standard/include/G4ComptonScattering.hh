@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.9 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ComptonScattering.hh,v 1.10 2004/03/10 16:48:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -70,8 +70,9 @@ class G4ComptonScattering : public G4VDiscreteProcess
 { 
   public:  // with description
  
-     G4ComptonScattering(const G4String& processName ="compt");
- 
+  G4ComptonScattering(const G4String& processName ="compt",
+		            G4ProcessType type = fElectromagnetic);
+
     ~G4ComptonScattering();
 
      G4bool IsApplicable(const G4ParticleDefinition&);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StatMFMacroCanonical.cc,v 1.3 2003/11/06 18:11:44 lara Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // by V. Lara
 // --------------------------------------------------------------------

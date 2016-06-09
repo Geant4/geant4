@@ -20,11 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.cc,v 1.5 2003/10/11 03:00:00 tkoi Exp $
+// $Id: A01EMPhysics.cc,v 1.6 2004/01/06 02:53:22 tkoi Exp $
 // --------------------------------------------------------------
 //
 //
-// 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
+// 09-Oct-2003 Change gamma, electron, positorn process T. Koi
+// 10-Jan-2004 Add Brems. of AlongStepDoIt for e+- T. Koi
 
 
 #include "A01EMPhysics.hh"
@@ -94,6 +95,7 @@ void A01EMPhysics::ConstructProcess()
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(theeminusMultipleScattering, idxAlongStep,1);
    pManager->SetProcessOrdering(theeminusIonisation,         idxAlongStep,2);
+   pManager->SetProcessOrdering(theeminusBremsstrahlung,     idxAlongStep,3);
    //
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
@@ -118,6 +120,7 @@ void A01EMPhysics::ConstructProcess()
    // set ordering for AlongStepDoIt
    pManager->SetProcessOrdering(theeplusMultipleScattering, idxAlongStep,1);
    pManager->SetProcessOrdering(theeplusIonisation,         idxAlongStep,2);
+   pManager->SetProcessOrdering(theeplusBremsstrahlung,     idxAlongStep,3);
    //
    // set ordering for PostStepDoIt
    pManager->SetProcessOrdering(theeplusMultipleScattering, idxPostStep,1);

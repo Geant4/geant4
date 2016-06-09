@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.13 2003/10/21 13:30:05 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuPairProductionModel.cc,v 1.17 2004/03/02 17:45:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,7 +43,9 @@
 // 13-02-03 Add model (V.Ivanchenko)
 // 06-06-03 Fix in cross section calculation for high energy (V.Ivanchenko)
 // 20-10-03 2*xi in ComputeDDMicroscopicCrossSection   (R.Kokoulin)
-//          8 integration points in ComputeDMicroscopicCrossSection 
+//          8 integration points in ComputeDMicroscopicCrossSection
+// 12-01-04 Take min cut of e- and e+ not its sum (V.Ivanchenko)
+// 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
 
 //
 // Class Description:
@@ -71,9 +73,11 @@
 //
 G4double G4MuPairProductionModel::zdat[]={1.,4.,13.,29.,92.};
 G4double G4MuPairProductionModel::adat[]={1.01,9.01,26.98,63.55,238.03};
-G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,
-                                          1.e9,1.e10};
+G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
+G4double G4MuPairProductionModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
+G4double G4MuPairProductionModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
 
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
@@ -82,23 +86,27 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
   minPairEnergy(4.*electron_mass_c2),
   highKinEnergy(1000000.*TeV),
   lowKinEnergy(minPairEnergy),
+  lowestKinEnergy(1.*GeV),
+  factorForCross(4.*fine_structure_const*fine_structure_const
+                   *classic_electr_radius*classic_electr_radius/(3.*pi)),
+  sqrte(sqrt(exp(1.))),
+  particleMass(G4MuonPlus::MuonPlus()->GetPDGMass()),
+  currentZ(0),
+  particle(G4MuonPlus::MuonPlus()),
   nzdat(5),
   ntdat(8),
-  NBIN(1000),
+  nbiny(1000),
+  nmaxElements(0),
+  ymin(-5.),
+  ymax(0.),
+  dy((ymax-ymin)/nbiny),
   samplingTablesAreFilled(false)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuPairProductionModel::~G4MuPairProductionModel()
-{
-  size_t n = partialSumSigma.size();
-  if(n > 0) {
-    for(size_t i=0; i<n; i++) {
-      delete partialSumSigma[i];
-    }
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,25 +125,9 @@ G4double G4MuPairProductionModel::LowEnergyLimit(const G4ParticleDefinition*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
-                                            const G4MaterialCutsCouple* couple)
+                                               const G4MaterialCutsCouple* )
 {
-
-  size_t index = couple->GetIndex();
-  const G4ProductionCutsTable* theCoupleTable =
-        G4ProductionCutsTable::GetProductionCutsTable();
-
-  G4double eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-  G4double pCut = (*(theCoupleTable->GetEnergyCutsVector(2)))[index];
-  G4double x = 2*electron_mass_c2 + eCut + pCut;
-  if(x < minPairEnergy) x = minPairEnergy;
-
- //// if (eCut < highKinEnergy && pCut < highKinEnergy) {
- ////   x +=  eCut + pCut;
- //// } else {
- ////   x = 0.5*highKinEnergy;
- //// }
-
-  return x;
+  return minPairEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,43 +140,27 @@ G4bool G4MuPairProductionModel::IsInCharge(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
-                                         const G4DataVector& cuts)
+                                         const G4DataVector&)
 {
-  const G4ProductionCutsTable* theCoupleTable =
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  G4double fixedEnergy = sqrt(lowKinEnergy*highKinEnergy);
-
-  for (size_t ii=0; ii<partialSumSigma.size(); ii++) {
-    G4DataVector* a=partialSumSigma[ii];
-    if ( a )  delete a;
-  }
-  partialSumSigma.clear();
-  for (size_t i=0; i<numOfCouples; i++) {
-    const G4MaterialCutsCouple* couple=theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = couple->GetMaterial();
-    G4DataVector* dv = ComputePartialSumSigma(material, fixedEnergy,
-                             std::min(cuts[i], 0.25*highKinEnergy));
-    partialSumSigma.push_back(dv);
-  }
   if (!samplingTablesAreFilled) MakeSamplingTables();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
-                                     const G4ParticleDefinition*,
-                                     G4double kineticEnergy, G4double cutEnergy)
+G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+                                              const G4ParticleDefinition*,
+                                                    G4double kineticEnergy,
+                                                    G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (minPairEnergy >= cutEnergy) return dedx;
-  G4double cut = cutEnergy;
-  if (kineticEnergy <= cutEnergy) cut = kineticEnergy;
+  if (minPairEnergy >= cutEnergy || kineticEnergy <= lowestKinEnergy) return dedx;
+
+  G4double tmax = MaxSecondaryEnergy(particle, kineticEnergy);
+  G4double cut  = std::min(cutEnergy,tmax);
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomicNumDensityVector = 
+  const G4double* theAtomicNumDensityVector =
                                    material->GetAtomicNumDensityVector();
 
   //  loop for elements in the material
@@ -199,24 +175,12 @@ G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
-                                          G4double tkin, G4double cutEnergy)
+G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
+                                                   G4double tkin, G4double cutEnergy)
 {
-  static const
-  G4double xgi[] ={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801};
-  static const
-  G4double wgi[] ={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506};
-  static const G4double ak1=6.9;
-  static const G4double ak2=1.0;
-  static const G4double sqrte = sqrt(exp(1.));
-  static const G4double aaa = log(minPairEnergy);
-  G4double z13 = pow(Z,0.333333333);
-
+  SetCurrentElement(Z);
   G4double loss = 0.0;
-
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
-  G4double tmax = tkin + particleMass*(1.-0.75*sqrte*z13);
+  G4double tmax = MaxSecondaryEnergy(particle, tkin);
 
   G4double cut = cutEnergy;
   if(tmax <= cutEnergy) cut = tmax;
@@ -224,6 +188,9 @@ G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
 
   // calculate the rectricted loss
   // numerical integration in log(PairEnergy)
+  G4double ak1=6.9;
+  G4double ak2=1.0;
+  G4double aaa = log(minPairEnergy);
   G4double bbb = log(cut);
   G4int    kkk = (G4int)((bbb-aaa)/ak1+ak2);
   if (kkk > 8) kkk = 8;
@@ -253,22 +220,15 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
                                            G4double cut)
 
 {
-  static const G4double ak1=6.9 ;
-  static const G4double ak2=1.0 ;
-  static const G4double sqrte = sqrt(exp(1.));
-  static const G4double
-  xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
-  static const G4double
-  wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
-  G4double z13 = pow(Z,0.333333333);
-
   G4double cross = 0. ;
 
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
-  G4double tmax = tkin + particleMass*(1.-0.75*sqrte*z13);
+  SetCurrentElement(Z);
+  G4double tmax = MaxSecondaryEnergy(particle, tkin);
 
   if (tmax <= cut) return cross;
 
+  G4double ak1=6.9 ;
+  G4double ak2=1.0 ;
   G4double aaa = log(cut);
   G4double bbb = log(tmax);
   G4int kkk = (G4int)((bbb-aaa)/ak1 + ak2);
@@ -291,56 +251,14 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   return cross;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
                                            G4double pairEnergy)
  // Calculates the  differential (D) microscopic cross section
  // using the cross section formula of R.P. Kokoulin (18/01/98)
+ // Code modified by R.P. Kokoulin, V.N. Ivanchenko (27/01/04)
 {
-  static const G4double
-  xgi[] ={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
-
-  static const G4double
-  wgi[] ={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
-
-  G4double cross = 0.;
-
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
-  G4double totalEnergy  = tkin + particleMass;
-  G4double energyLoss   = totalEnergy - pairEnergy;
-  G4double a = 6.*particleMass*particleMass/(totalEnergy*energyLoss) ;
-  G4double b = 4.*electron_mass_c2/pairEnergy;
-
-  G4double tmn = (b+2.*a*(1.-b))/(1.+(1.-a)*sqrt(1.-b));
-  if(tmn <= 0.) return cross;
-  tmn = log(tmn);
-
-  // Gaussian integration in ln(1-ro) ( with 8 points)
-  for (G4int i=0; i<8; i++)
-  {
-    G4double ro = 1.-exp(tmn*xgi[i]);
-    cross += wgi[i]*(1.-ro)*ComputeDDMicroscopicCrossSection(
-                                                         tkin,Z,pairEnergy,ro);
-  }
-  cross *= -tmn;
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MuPairProductionModel::ComputeDDMicroscopicCrossSection(
-                                           G4double tkin,
-                                           G4double Z,
-                                           G4double pairEnergy,
-                                           G4double asymmetry)
- // Calculates the  differential (D) microscopic cross section
- // using the cross section formula of R.P. Kokoulin (18/01/98)
-{
-  static const G4double sqrte = sqrt(exp(1.)) ;
-
   G4double bbbtf= 183. ;
   G4double bbbh = 202.4 ;
   G4double g1tf = 1.95e-5 ;
@@ -348,115 +266,111 @@ G4double G4MuPairProductionModel::ComputeDDMicroscopicCrossSection(
   G4double g1h  = 4.4e-5 ;
   G4double g2h  = 4.8e-5 ;
 
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   G4double totalEnergy  = tkin + particleMass;
-  G4double energyLoss   = totalEnergy - pairEnergy;
+  G4double residEnergy  = totalEnergy - pairEnergy;
   G4double massratio    = particleMass/electron_mass_c2 ;
   G4double massratio2   = massratio*massratio ;
+  G4double cross = 0.;
 
-  G4double z13 = pow(Z,0.333333333);
-  G4double z23 = z13*z13 ;
+  SetCurrentElement(Z);
 
-  G4double c3 = 3.*sqrte*particleMass/4. ;
-
-  G4double DDCrossSection = 0. ;
-  if (energyLoss <= c3*z13) return DDCrossSection;
+  G4double c3 = 0.75*sqrte*particleMass;
+  if (residEnergy <= c3*z13) return cross;
 
   G4double c7 = 4.*electron_mass_c2;
   G4double c8 = 6.*particleMass*particleMass;
   G4double alf = c7/pairEnergy;
   G4double a3 = 1. - alf;
-  if (a3 <= 0.) return DDCrossSection;
+  if (a3 <= 0.) return cross;
 
  // zeta calculation
-  G4double bbb,g1,g2,zeta1,zeta2,zeta,z2;
+  G4double bbb,g1,g2;
   if( Z < 1.5 ) { bbb = bbbh ; g1 = g1h ; g2 = g2h ; }
   else          { bbb = bbbtf; g1 = g1tf; g2 = g2tf; }
-  zeta1 = 0.073 * log(totalEnergy/(particleMass+g1*z23*totalEnergy))-0.26 ;
+
+  G4double zeta = 0;
+  G4double zeta1 = 0.073 * log(totalEnergy/(particleMass+g1*z23*totalEnergy))-0.26 ;
   if ( zeta1 > 0.)
   {
-    zeta2 = 0.058*log(totalEnergy/(particleMass+g2*z13*totalEnergy))-0.14 ;
+    G4double zeta2 = 0.058*log(totalEnergy/(particleMass+g2*z13*totalEnergy))-0.14 ;
     zeta  = zeta1/zeta2 ;
   }
-  else
-  {
-    zeta = 0. ;
-  }
 
-  z2 = Z*(Z+zeta);
-
+  G4double z2 = Z*(Z+zeta);
   G4double screen0 = 2.*electron_mass_c2*sqrte*bbb/(z13*pairEnergy);
-  G4double a0 = totalEnergy*energyLoss;
+  G4double a0 = totalEnergy*residEnergy;
   G4double a1 = pairEnergy*pairEnergy/a0;
   G4double bet = 0.5*a1;
   G4double xi0 = 0.25*massratio2*a1;
   G4double del = c8/a0;
 
-  G4double romin = 0. ;
-  G4double romax = (1.-del)*sqrt(1.-c7/pairEnergy);
+  G4double tmnexp = (alf+2.*del*a3)/(1.+(1.-del)*sqrt(a3));
+  if(tmnexp <= 0.) return cross;
+  G4double tmn = log(tmnexp);
+  G4double sum = 0.;
 
-  if((asymmetry < romin) || (asymmetry > romax)) return DDCrossSection;
-
-  G4double a4 = 1.-asymmetry ;
-  G4double a5 = a4*(2.-a4) ;
-  G4double a6 = 1.-a5 ;
-  G4double a7 = 1.+a6 ;
-  G4double a9 = 3.+a6 ;
-  G4double xi = xi0*a5 ;
-  G4double xii = 1./xi ;
-  G4double xi1 = 1.+xi ;
-  G4double screen = screen0*xi1/a5 ;
-
-  G4double yeu = 5.-a6+4.*bet*a7 ;
-  G4double yed = 2.*(1.+3.*bet)*log(3.+xii)-a6-a1*(2.-a6) ;
-  G4double yel = 1.+yeu/yed ;
-  G4double ale=log(bbb/z13*sqrt(xi1*yel)/(1.+screen*yel)) ;
-  G4double cre = 0.5*log(1.+2.25/(massratio2*z23)*xi1*yel) ;
-  G4double be;
-  if (xi <= 1.e3) be = ((2.+a6)*(1.+bet)+xi*a9)*log(1.+xii)+(a5-bet)/xi1-a9;
-  else            be = (3.-a6+a1*a7)/(2*xi);
-  G4double fe = (ale-cre)*be;
-  if ( fe < 0.) fe = 0. ;
-
-  G4double ymu = 4.+a6 +3.*bet*a7 ;
-  G4double ymd = a7*(1.5+a1)*log(3.+xi)+1.-1.5*a6 ;
-  G4double ym1 = 1.+ymu/ymd ;
-  G4double alm_crm = log(bbb*massratio/(1.5*z23*(1.+screen*ym1)));
-  G4double a10,bm;
-  if ( xi >= 1.e-3)
+  // Gaussian integration in ln(1-ro) ( with 8 points)
+  for (G4int i=0; i<8; i++)
   {
-    a10 = (1.+a1)*a5 ;
-    bm  = (a7*(1.+1.5*bet)-a10*xii)*log(xi1)+xi*(a5-bet)/xi1+a10;
+    G4double a4 = exp(tmn*xgi[i]);     // a4 = (1.-asymmetry)
+    G4double a5 = a4*(2.-a4) ;
+    G4double a6 = 1.-a5 ;
+    G4double a7 = 1.+a6 ;
+    G4double a9 = 3.+a6 ;
+    G4double xi = xi0*a5 ;
+    G4double xii = 1./xi ;
+    G4double xi1 = 1.+xi ;
+    G4double screen = screen0*xi1/a5 ;
+    G4double yeu = 5.-a6+4.*bet*a7 ;
+    G4double yed = 2.*(1.+3.*bet)*log(3.+xii)-a6-a1*(2.-a6) ;
+    G4double ye1 = 1.+yeu/yed ;
+    G4double ale=log(bbb/z13*sqrt(xi1*ye1)/(1.+screen*ye1)) ;
+    G4double cre = 0.5*log(1.+2.25*z23*xi1*ye1/massratio2) ;
+    G4double be;
+
+    if (xi <= 1.e3) be = ((2.+a6)*(1.+bet)+xi*a9)*log(1.+xii)+(a5-bet)/xi1-a9;
+    else            be = (3.-a6+a1*a7)/(2.*xi);
+
+    G4double fe = (ale-cre)*be;
+    if ( fe < 0.) fe = 0. ;
+
+    G4double ymu = 4.+a6 +3.*bet*a7 ;
+    G4double ymd = a7*(1.5+a1)*log(3.+xi)+1.-1.5*a6 ;
+    G4double ym1 = 1.+ymu/ymd ;
+    G4double alm_crm = log(bbb*massratio/(1.5*z23*(1.+screen*ym1)));
+    G4double a10,bm;
+    if ( xi >= 1.e-3)
+    {
+      a10 = (1.+a1)*a5 ;
+      bm  = (a7*(1.+1.5*bet)-a10*xii)*log(xi1)+xi*(a5-bet)/xi1+a10;
+    } else {
+      bm = (5.-a6+bet*a9)*(xi/2.);
+    }
+
+    G4double fm = alm_crm*bm;
+    if ( fm < 0.) fm = 0. ;
+
+    sum += wgi[i]*a4*(fe+fm/massratio2);
   }
-  else
-    bm = (5.-a6+bet*a9)*(xi/2.);
-    
-  G4double fm = alm_crm*bm;
-  if ( fm < 0.) fm = 0. ;
 
-  DDCrossSection = (fe+fm/massratio2);
+  cross = -tmn*sum*factorForCross*z2*residEnergy/(totalEnergy*pairEnergy);
 
-  DDCrossSection *= 4.*fine_structure_const*fine_structure_const
-                   *classic_electr_radius*classic_electr_radius/(3.*pi);
-
-  DDCrossSection *= z2*energyLoss/(totalEnergy*pairEnergy);
-
-  return DDCrossSection;
-
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* couple,
-                                      const G4ParticleDefinition*,
-                                      G4double kineticEnergy,
-                                      G4double cutEnergy, G4double maxEnergy)
+G4double G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* couple,
+                                               const G4ParticleDefinition*,
+                                                     G4double kineticEnergy,
+                                                     G4double cutEnergy,
+						     G4double maxEnergy)
 {
   G4double cross = 0.0;
+  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(particle, kineticEnergy));
+  G4double cut  = std::max(cutEnergy, minPairEnergy);
 
-  G4double tmax = std::min(maxEnergy, kineticEnergy);
-  if (cutEnergy >= tmax) return cross;
+  if (cut >= tmax || kineticEnergy <= lowestKinEnergy) return cross;
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -464,11 +378,9 @@ G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* couple,
 
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cutEnergy);
+    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cut)
+                - ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
 
-    if (maxEnergy < kineticEnergy) {
-      cr -= ComputeMicroscopicCrossSection(kineticEnergy, Z, maxEnergy);
-    }
     cross += theAtomNumDensityVector[i] * cr;
   }
   return cross;
@@ -476,53 +388,19 @@ G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4DataVector* G4MuPairProductionModel::ComputePartialSumSigma(
-                                       const G4Material* material,
-                                             G4double kineticEnergy,
-                                             G4double cut)
-
-// Build the table of cross section per element. 
-// This table is used by DoIt to select randomly an element in the material.
-{
-  G4int nElements = material->GetNumberOfElements();
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector=material->GetAtomicNumDensityVector();
-
-  G4DataVector* dv = new G4DataVector();
-
-  G4double cross = 0.0;
-
-  for (G4int i=0; i<nElements; i++ ) {
-    G4double Z = (*theElementVector)[i]->GetZ();
-    cross += theAtomNumDensityVector[i] * ComputeMicroscopicCrossSection(
-                                          kineticEnergy, Z, cut);
-    dv->push_back(cross);
-  }
-  return dv;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4MuPairProductionModel::MakeSamplingTables()
 {
-  static const G4double sqrte = sqrt(exp(1.)) ;
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
-
   for (G4int iz=0; iz<nzdat; iz++)
   {
-    G4double atomicNumber = zdat[iz];
-    G4double z13 = exp(log(atomicNumber)/3.) ;
+    G4double Z = zdat[iz];
+    SetCurrentElement(Z);
 
     for (G4int it=0; it<ntdat; it++)
     {
       G4double kineticEnergy = tdat[it];
-      G4double maxPairEnergy = kineticEnergy+particleMass*(1.-0.75*sqrte*z13) ;
+      G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
 
       G4double CrossSection = 0.0 ;
-
-      G4double ymin = -5. ;
-      G4double ymax = 0. ;
-      G4double dy = (ymax-ymin)/NBIN ;
 
       G4double y = ymin - 0.5*dy ;
       G4double yy = ymin - dy ;
@@ -530,40 +408,26 @@ void G4MuPairProductionModel::MakeSamplingTables()
       G4double fac = exp(dy);
       G4double dx = exp(yy)*(fac - 1.0);
 
-      if (maxPairEnergy > minPairEnergy) {
-        G4double c = log(maxPairEnergy/minPairEnergy);
-        for (G4int i=0 ; i<NBIN; i++)
-        {
-          y += dy ;
-          x *= fac;
+      G4double c = log(maxPairEnergy/minPairEnergy);
+
+      for (G4int i=0 ; i<nbiny; i++)
+      {
+        y += dy ;
+        if(c > 0.0) {
+	  x *= fac;
           dx*= fac;
           G4double ep = minPairEnergy*exp(c*x) ;
           CrossSection += ep*dx*ComputeDMicroscopicCrossSection(
-                                      kineticEnergy, atomicNumber, ep);
-          ya[i] = y;
-          proba[iz][it][i] = CrossSection;
+                                      kineticEnergy, Z, ep);
         }
-      } else {
-        for (G4int i=0 ; i<NBIN; i++)
-	  {
-           y += dy ;
-           ya[i] = y ;
-           proba[iz][it][i] = 0.0 ;
-	  }
+        ya[i] = y;
+        proba[iz][it][i] = CrossSection;
       }
 
-      ya[NBIN]=0. ;
+      ya[nbiny]=ymax;
 
-      proba[iz][it][NBIN] = CrossSection;
+      proba[iz][it][nbiny] = CrossSection;
 
-      if(CrossSection > 0.)
-      {
-        for(G4int ib=0; ib<=NBIN; ib++)
-        {
-          proba[iz][it][ib] /= CrossSection ;
-
-        }
-      }
     }
   }
   samplingTablesAreFilled = true;
@@ -585,129 +449,104 @@ G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
 std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
-                                   G4double minEnergy,
-                                   G4double maxEnergy)
+                                   G4double cut,
+                                   G4double tmax)
 {
-   static const G4double esq = sqrt(exp(1.));
-   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
-   G4double particleMass  = aDynamicParticle->GetDefinition()->GetPDGMass();
-   G4ParticleMomentum ParticleDirection =
-                                      aDynamicParticle->GetMomentumDirection();
+  G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
+  G4double totalEnergy   = kineticEnergy + particleMass ;
+  G4ParticleMomentum ParticleDirection = aDynamicParticle->GetMomentumDirection();
 
-   // select randomly one element constituing the material
-   const G4Element* anElement = SelectRandomAtom(couple);
+  G4int it;
+  for(it=1; it<ntdat; it++) {if(kineticEnergy <= tdat[it]) break;}
+  if(it == ntdat) it--;
+  G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
 
-   // limits of the energy sampling
-   G4double totalEnergy = kineticEnergy + particleMass ;
-   //G4double TotalMomentum = sqrt(KineticEnergy*(TotalEnergy+particleMass)) ;
-   G4double Z3 = anElement->GetIonisation()->GetZ3() ;
-   G4double maxPairEnergy = totalEnergy-0.75*esq*particleMass*Z3 ;
-   if(maxPairEnergy > maxEnergy) maxPairEnergy = maxEnergy;
+  G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
+  G4double maxEnergy     = std::min(tmax, maxPairEnergy);
+  G4double minEnergy     = std::min(maxEnergy, cut);
 
-   // check against insufficient energy
-   if(minEnergy >= maxPairEnergy) return 0;
-
-   // sample e-e+ energy, pair energy first
-   G4double PairEnergy,x,yc,y ;
-   // G4int iZ,iT;
-   G4int iy ;
-
-   // select sampling table ;
-   G4double lnZ = log(anElement->GetZ()) ;
-   G4double delmin = 1.e10 ;
-   G4double del ;
-   G4int izz = 0;
-   G4int itt = 0;
-   G4int NBINminus1 = NBIN-1;
-   for (G4int iz=0; iz<nzdat; iz++)
-   {
-     del = abs(lnZ-log(zdat[iz])) ;
-     if(del<delmin)
-     {
-        delmin=del ;
-        izz=iz ;
-     }
-   }
-   delmin = 1.e10 ;
-   for (G4int it=0; it<ntdat; it++)
-   {
-     del = abs(log(kineticEnergy)-log(tdat[it])) ;
-     if(del<delmin)
-     {
-       delmin=del;
-       itt=it ;
-     }
-   }
-
-   if( minEnergy <= minPairEnergy)
-     iy = 0 ;
-   else
-   {
+  G4int iymin = 0;
+  G4int iymax = nbiny;
+  if( minEnergy > minPairEnergy)
+  {
     G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
-    yc = log(xc) ;
-    iy = -1 ;
-    do { iy += 1;} while ((ya[iy] < yc )&&(iy < NBINminus1));
-   }
+    iymin = (G4int)((log(xc) - ymin)/dy);
+    xc = log(maxEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+    iymax = (G4int)((log(xc) - ymin)/dy) + 1;
+    if(iymax > nbiny) iymax = nbiny;
+  }
 
-   G4double norm = proba[izz][itt][iy];
+  // select randomly one element constituing the material
+  const G4Element* anElement = SelectRandomAtom(dt, it, iymin, couple);
+  SetCurrentElement(anElement->GetZ());
 
-   G4double r = norm+G4UniformRand()*(1.-norm);
 
-   iy -= 1;
-   do { iy += 1;} while ((proba[izz][itt][iy] < r)&&(iy < NBINminus1));
+  // sample e-e+ energy, pair energy first
+  G4int iz, iy;
 
-   //sampling is uniformly in y in the bin
-   if( iy < NBIN ) y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy]);
-   else            y = ya[iy];
+  for(iz=1; iz<nzdat; iz++) {if(currentZ <= zdat[iz]) break;}
+  if(iz == nzdat) iz--;
 
-   x = exp(y);
+  G4double dz = log(currentZ/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
 
-   PairEnergy = minPairEnergy*exp(x*log(maxPairEnergy/minPairEnergy));
+  G4double pmin = InterpolatedIntegralCrossSection(dt, dz, iz, it, iymin, currentZ);
+  G4double pmax = InterpolatedIntegralCrossSection(dt, dz, iz, it, iymax, currentZ);
+
+  G4double p = pmin+G4UniformRand()*(pmax - pmin);
+
+  // interpolate sampling vector;
+  G4double p1 = pmin;
+  G4double p2 = pmin;
+  for(iy=iymin+1; iy<=iymax; iy++) {
+    p1 = p2;
+    p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, currentZ);
+    if(p <= p2) break;
+  }
+  G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
+
+  G4double PairEnergy = minPairEnergy*exp(exp(y)*log(maxPairEnergy/minPairEnergy));
+  if(PairEnergy < minEnergy) PairEnergy = minEnergy;
+  if(PairEnergy > maxEnergy) PairEnergy = maxEnergy;
 
   // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
-   G4double rmax = (1.-6.*particleMass*particleMass/(totalEnergy*
+  G4double rmax = (1.-6.*particleMass*particleMass/(totalEnergy*
                                                (totalEnergy-PairEnergy)))
                                        *sqrt(1.-minPairEnergy/PairEnergy);
-   r = rmax * (-1.+2.*G4UniformRand()) ;
+  G4double r = rmax * (-1.+2.*G4UniformRand()) ;
 
   // compute energies from PairEnergy,r
-   G4double ElectronEnergy=(1.-r)*PairEnergy/2. ;
-   G4double PositronEnergy=(1.+r)*PairEnergy/2. ;
+  G4double ElectronEnergy=(1.-r)*PairEnergy/2. ;
+  G4double PositronEnergy=(1.+r)*PairEnergy/2. ;
 
-   //  angles of the emitted particles ( Z - axis along the parent particle)
-   //      (mean theta for the moment)
-   G4double Teta = electron_mass_c2/totalEnergy ;
+  //  angles of the emitted particles ( Z - axis along the parent particle)
+  //      (mean theta for the moment)
+  G4double Teta = electron_mass_c2/totalEnergy ;
 
-   G4double Phi  = twopi * G4UniformRand() ;
-   G4double dirx = sin(Teta)*cos(Phi) , diry = sin(Teta)*sin(Phi) ,
-            dirz = cos(Teta) ;
+  G4double Phi  = twopi * G4UniformRand() ;
+  G4double dirx = sin(Teta)*cos(Phi);
+  G4double diry = sin(Teta)*sin(Phi);
+  G4double dirz = cos(Teta) ;
 
-   G4double ElectronMomentum , PositronMomentum ;
-   //G4double finalPx,finalPy,finalPz ;
-   G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
+  //G4double finalPx,finalPy,finalPz ;
+  G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
 
-   ElectronMomentum = sqrt(ElectKineEnergy*(ElectronEnergy+electron_mass_c2));
-   G4ThreeVector ElectDirection ( dirx, diry, dirz );
-   ElectDirection.rotateUz(ParticleDirection);
+  G4ThreeVector ElectDirection ( dirx, diry, dirz );
+  ElectDirection.rotateUz(ParticleDirection);
 
-   // create G4DynamicParticle object for the particle1
-   G4DynamicParticle* aParticle1= new G4DynamicParticle();
-   aParticle1->SetDefinition(G4Electron::Electron());
-   aParticle1->SetMomentumDirection(ElectDirection);
-   aParticle1->SetKineticEnergy(ElectKineEnergy);
+  // create G4DynamicParticle object for the particle1
+  G4DynamicParticle* aParticle1= new G4DynamicParticle(G4Electron::Electron(),
+                                                       ElectDirection,
+						       ElectKineEnergy);
 
+  G4double PositKineEnergy = PositronEnergy - electron_mass_c2 ;
 
-   G4double PositKineEnergy = PositronEnergy - electron_mass_c2 ;
-   PositronMomentum = sqrt(PositKineEnergy*(PositronEnergy+electron_mass_c2));
+  G4ThreeVector PositDirection ( -dirx, -diry, dirz );
+  PositDirection.rotateUz(ParticleDirection);
 
-   G4ThreeVector PositDirection ( -dirx, -diry, dirz );
-   PositDirection.rotateUz(ParticleDirection);
-
-   // create G4DynamicParticle object for the particle2
-   G4DynamicParticle* aParticle2= new G4DynamicParticle();
-   aParticle2->SetDefinition(G4Positron::Positron());
-   aParticle2->SetMomentumDirection(PositDirection);
-   aParticle2->SetKineticEnergy(PositKineEnergy);
+  // create G4DynamicParticle object for the particle2
+  G4DynamicParticle* aParticle2= new G4DynamicParticle(G4Positron::Positron(),
+                                                       PositDirection,
+						       PositKineEnergy);
 
 
   std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
@@ -719,23 +558,43 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4Element* G4MuPairProductionModel::SelectRandomAtom(
-           const G4MaterialCutsCouple* couple) const
+const G4Element* G4MuPairProductionModel::SelectRandomAtom(G4double dt, G4int it, G4int iy,
+           const G4MaterialCutsCouple* couple)
 {
   // select randomly 1 element within the material
 
   const G4Material* material = couple->GetMaterial();
-  G4int nElements = material->GetNumberOfElements();
+  size_t nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
   if (nElements == 1) return (*theElementVector)[0];
-  else if (nElements < 1) return 0;
 
-  G4DataVector* dv = partialSumSigma[couple->GetIndex()];
-  G4double rval = G4UniformRand()*((*dv)[nElements-1]);
-  for (G4int i=0; i<nElements; i++) {
-    if (rval <= (*dv)[i]) return (*theElementVector)[i];
+  if(nElements > nmaxElements) {
+    nmaxElements = nElements;
+    partialSum.resize(nmaxElements);
   }
-  return (*theElementVector)[nElements-1];
+
+  const G4double* theAtomNumDensityVector=material->GetAtomicNumDensityVector();
+
+  G4double sum = 0.0;
+
+  size_t i;
+  for (i=0; i<nElements; i++) {
+    G4double Z = ((*theElementVector)[i])->GetZ();
+    G4int iz;
+    for(iz=1; iz<nzdat; iz++) {if(Z <= zdat[iz]) break;}
+    if(iz == nzdat) iz--;
+    G4double dz = log(Z/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
+
+    G4double sigtot = InterpolatedIntegralCrossSection(dt, dz, iz, it, nbiny, Z);
+    G4double sigcut = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, Z);
+    sum += (sigtot - sigcut)*theAtomNumDensityVector[i];
+    partialSum[i] = sum;
+  }
+
+  G4double rval = G4UniformRand()*sum;
+  for (i=0; i<nElements; i++) {if(rval<=partialSum[i]) break;}
+  return (*theElementVector)[i];
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

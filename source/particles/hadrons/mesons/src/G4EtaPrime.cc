@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.13 2003/06/16 16:57:40 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4EtaPrime.cc,v 1.14 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------
@@ -96,7 +96,7 @@ G4EtaPrime::G4EtaPrime(
 //             stable         lifetime    decay table 
 
 G4EtaPrime G4EtaPrime::theEtaPrime(
-	  "eta_prime",     0.95777*GeV,     0.203*MeV,         0.0, 
+	  "eta_prime",     0.95777*GeV,     0.202*MeV,         0.0, 
 		    0,              -1,            +1,          
 		    0,               0,            +1,             
 	      "meson",               0,             0,         331,

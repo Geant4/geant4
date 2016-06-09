@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SDmessenger.hh,v 1.1 2003/10/03 10:09:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #ifndef G4SDmessenger_h

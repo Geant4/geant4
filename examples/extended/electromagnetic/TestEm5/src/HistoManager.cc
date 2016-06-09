@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.5 2003/11/03 12:58:55 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: HistoManager.cc,v 1.6 2004/02/19 18:18:53 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +114,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "(transmit, charged) : kinetic energy at exit",	//4
 		  "(transmit, charged) : space angle at exit",		//5
 		  "(transmit, charged) : projected angle at exit",	//6
-		  "(transmit, charged) : radial dispersion at exit",	//7
+		  "(transmit, charged) : projected position at exit",	//7
 		  "(transmit, neutral) : kinetic energy at exit",	//8
 		  "(transmit, neutral) : space angle at exit",		//9
 		  "(transmit, neutral) : projected angle at exit",	//10

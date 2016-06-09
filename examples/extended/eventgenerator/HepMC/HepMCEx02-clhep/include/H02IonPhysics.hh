@@ -22,7 +22,7 @@
 //
 //
 // $Id: H02IonPhysics.hh,v 1.1 2002/11/19 10:35:49 murakami Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4GeometryMessenger.cc,v 1.4 2004/03/11 13:09:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -80,15 +80,27 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   verbCmd = new G4UIcmdWithAnInteger( "/geometry/navigator/verbose", this );
   verbCmd->SetGuidance( "Set run-time verbosity for the navigator." );
   verbCmd->SetGuidance(" 0 : Silent (default)");
-  verbCmd->SetGuidance(" 1 : Display positioning and relative states");
+  verbCmd->SetGuidance(" 1 : Display volume positioning and step lengths");
   verbCmd->SetGuidance(" 2 : Display step/safety info on point location");
-  verbCmd->SetGuidance(" 3 : Display state at -every- step!");
+  verbCmd->SetGuidance(" 3 : Display minimal state at -every- step");
   verbCmd->SetGuidance(" 4 : Maximum verbosity (very detailed!)");
   verbCmd->SetGuidance( "NOTE: this command has effect -only- if Geant4 has" );
   verbCmd->SetGuidance( "      been installed with the G4VERBOSE flag set!" );
   verbCmd->SetParameterName("level",true);
   verbCmd->SetDefaultValue(0);
   verbCmd->SetRange("level >=0 && level <=4");
+
+  chkCmd = new G4UIcmdWithABool( "/geometry/navigator/check_mode", this );
+  chkCmd->SetGuidance( "Set navigator in -check_mode- state." );
+  chkCmd->SetGuidance( "This will cause extra checks to be applied during" );
+  chkCmd->SetGuidance( "navigation. More strict and less tolerant conditions" );
+  chkCmd->SetGuidance( "are applied. A run-time performance penalty may be" );
+  chkCmd->SetGuidance( "observed when the -check_mode- state is activated." );
+  chkCmd->SetGuidance( "NOTE: this command has effect -only- if Geant4 has" );
+  chkCmd->SetGuidance( "      been installed with the G4VERBOSE flag set!" );
+  chkCmd->SetParameterName("checkFlag",true);
+  chkCmd->SetDefaultValue(false);
+  chkCmd->AvailableForStates(G4State_Idle);
 
   //
   // Geometry verification test commands
@@ -228,7 +240,7 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete rcsCmd; delete rcdCmd;
   delete cyzCmd; delete cfzCmd; delete cfrCmd; delete cylCmd;
   delete tolCmd;
-  delete resCmd; delete verbCmd;
+  delete resCmd; delete verbCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
   delete tvolume; delete tlogger;
 }
@@ -269,6 +281,9 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   }
   else if (command == verbCmd) {
     SetVerbosity( newValues );
+  }
+  else if (command == chkCmd) {
+    SetCheckMode( newValues );
   }
   else if (command == posCmd) {
     x = posCmd->GetNew3VectorValue( newValues );
@@ -393,6 +408,17 @@ G4GeometryMessenger::SetVerbosity(G4String input)
   G4int level = verbCmd->GetNewIntValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
   navigator->SetVerboseLevel(level);
+}
+
+//
+// Set navigator mode
+//
+void
+G4GeometryMessenger::SetCheckMode(G4String input)
+{
+  G4bool mode = chkCmd->GetNewBoolValue(input);
+  G4Navigator* navigator = tmanager->GetNavigatorForTracking();
+  navigator->CheckMode(mode);
 }
 
 //

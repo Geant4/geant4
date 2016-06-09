@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StepPoint.hh,v 1.13 2003/09/19 19:08:14 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 //---------------------------------------------------------------

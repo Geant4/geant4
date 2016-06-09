@@ -59,4 +59,4 @@
 #endif
 #endif
 
-#include <assert.h>
+#include <cassert>

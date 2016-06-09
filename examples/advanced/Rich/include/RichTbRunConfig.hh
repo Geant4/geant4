@@ -36,7 +36,7 @@
 #include "AerogelRefData.hh"
 #include "FilterTrData.hh"
 #include <math.h>
-#include <fstream.h>
+#include <fstream>
 class RichTbRunConfig{
  public:
   RichTbRunConfig();
@@ -143,8 +143,8 @@ private:
   G4int FilterTNumber;
   FilterType CurFilterType;
   G4int NumberOfAerogelTiles;
-  vector<G4int>CurAerogelTNumber;
-  vector<AerogelType>CurAerogelType;
+  std::vector<G4int>CurAerogelTNumber;
+  std::vector<AerogelType>CurAerogelType;
   G4int WriteOutputFile;
   G4String OutputFileName;
   G4String OutputHistoDirName;

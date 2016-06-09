@@ -49,6 +49,7 @@
 //                           moved E2_perp, E2_parl and E2_total out of 'if'
 //              2003-11-27 - Modified line 168-9 to reflect changes made to
 //                           G4OpticalSurface class ( by Fan Lei)
+//              2004-02-02 - Set theStatus = Undefined at start of DoIt
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -85,6 +86,13 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName)
 	theStatus = Undefined;
 	theModel = glisur;
 	theFinish = polished;
+        theReflectivity = 1.;
+        theEfficiency   = 0.;
+                                                                                
+        prob_sl = 0.;
+        prob_ss = 0.;
+        prob_bs = 0.;
+
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
@@ -107,16 +115,22 @@ G4OpBoundaryProcess::~G4OpBoundaryProcess(){}
 G4VParticleChange*
 G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
+        theStatus = Undefined;
+
         aParticleChange.Initialize(aTrack);
 
         G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
         G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
 
-        if (pPostStepPoint->GetStepStatus() != fGeomBoundary)
-		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+        if (pPostStepPoint->GetStepStatus() != fGeomBoundary){
+	        theStatus = NotAtBoundary;
+	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	}
 
-	if (aTrack.GetStepLength()<=kCarTolerance/2)
-                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	if (aTrack.GetStepLength()<=kCarTolerance/2){
+	        theStatus = StepTooSmall;
+	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	}
 
 	Material1 = pPreStepPoint ->GetPhysicalVolume()->
 				    GetLogicalVolume()->GetMaterial();
@@ -137,6 +151,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 	}
 	else {
+	        theStatus = NoRINDEX;
 		aParticleChange.SetStatusChange(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -145,6 +160,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		Rindex1 = Rindex->GetProperty(thePhotonMomentum);
 	}
 	else {
+	        theStatus = NoRINDEX;
 		aParticleChange.SetStatusChange(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -154,19 +170,40 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4SurfaceType type = dielectric_dielectric;
 
-        Rindex = 0;
-        OpticalSurface = 0;
+        Rindex = NULL;
+        OpticalSurface = NULL;
 
         G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
 				    (pPreStepPoint ->GetPhysicalVolume(),
 				     pPostStepPoint->GetPhysicalVolume());
 
-        if (Surface == 0) Surface = G4LogicalSkinSurface::GetSurface
-				       (pPreStepPoint->GetPhysicalVolume()->
-						GetLogicalVolume());
+        if (Surface == NULL){
+	  G4bool enteredDaughter=(pPostStepPoint->GetPhysicalVolume()
+				  ->GetMotherLogical() == 
+				  pPreStepPoint->GetPhysicalVolume()
+				  ->GetLogicalVolume());
+	  if(enteredDaughter){
+	    Surface = G4LogicalSkinSurface::GetSurface
+	      (pPostStepPoint->GetPhysicalVolume()->
+	       GetLogicalVolume());
+	    if(Surface == NULL)
+	      Surface = G4LogicalSkinSurface::GetSurface
+	      (pPreStepPoint->GetPhysicalVolume()->
+	       GetLogicalVolume());
+	  }
+	  else{
+	    Surface = G4LogicalSkinSurface::GetSurface
+	      (pPreStepPoint->GetPhysicalVolume()->
+	       GetLogicalVolume());
+	    if(Surface == NULL)
+	      Surface = G4LogicalSkinSurface::GetSurface
+	      (pPostStepPoint->GetPhysicalVolume()->
+	       GetLogicalVolume());
+	  }
+	}
 
-	//	if (Surface != 0) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
-	if (Surface != 0) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
+	//	if (Surface) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
+	if (Surface) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
 
 	if (OpticalSurface) {
 
@@ -181,12 +218,12 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
               if (theFinish == polishedbackpainted ||
                   theFinish == groundbackpainted ) {
-                  Rindex = 
-                  aMaterialPropertiesTable->GetProperty("RINDEX");
+                  Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 	          if (Rindex) {
                      Rindex2 = Rindex->GetProperty(thePhotonMomentum);
                   }
                   else {
+		     theStatus = NoRINDEX;
                      aParticleChange.SetStatusChange(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
@@ -231,9 +268,10 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if (type == dielectric_dielectric ) {
            if (theFinish == polished || theFinish == ground ) {
 
-              if (Material1 == Material2)
-                 return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-
+	      if (Material1 == Material2){
+		 theStatus = SameMaterial;
+		 return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	      }
               aMaterialPropertiesTable = 
                      Material2->GetMaterialPropertiesTable();
               if (aMaterialPropertiesTable)
@@ -242,6 +280,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  Rindex2 = Rindex->GetProperty(thePhotonMomentum);
               }
               else {
+		 theStatus = NoRINDEX;
                  aParticleChange.SetStatusChange(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
@@ -281,8 +320,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
 	                                TransformAxis(theLocalNormal);
 
-	theStatus = Undefined;
-
 	if (type == dielectric_metal) {
 
 	  DielectricMetal();
@@ -307,7 +344,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 
-	  G4cout << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
+	  G4cerr << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
 	  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 	}
@@ -687,3 +724,4 @@ G4double G4OpBoundaryProcess::GetMeanFreePath(const G4Track& ,
 
 	return DBL_MAX;
 }
+

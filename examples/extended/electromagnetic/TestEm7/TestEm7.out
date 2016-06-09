@@ -1,8 +1,11 @@
-**********************************************
- Geant4 version $Name: geant4-06-00 $
-                                (12-December-2003)
-             Copyright : Geant4 Collaboration
-**********************************************
+
+*************************************************************
+ Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303.
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 3 *****
@@ -49,8 +52,7 @@ Current available graphics systems are:
 /testem/phys/addPhysics  standard	# em physics     
 PhysicsList::AddPhysicsList: <standard>
 ###/testem/phys/addPhysics  g4v52	# em physics
-/testem/phys/addPhysics  binary		# hadronic physics
-PhysicsList::AddPhysicsList: <binary>
+#/testem/phys/addPhysics  binary		# hadronic physics
 #
 /run/initialize
 userDetector->Construct() start.
@@ -71,8 +73,6 @@ physicsList->Construct() start.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -143,7 +143,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -160,7 +161,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -207,7 +209,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 55312060, 333625511
+ Current couple of seeds = 9876, 54321
 ----------------------------------------
 Start Run processing.
 
@@ -233,20 +235,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=476.55s Real=864.12s Sys=75.98s
+  User=157.8s Real=351.83s Sys=76.83s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.4962 GeV	0.656011 % 	0.000210209 Gy
-tally 1: 	 	7.50598 GeV	0.469124 % 	0.000150324 Gy
-tally 2: 	 	3.04074 GeV	0.190046 % 	6.08976e-05 Gy
-tally 3: 	 	1.39586 GeV	0.0872414 % 	2.79552e-05 Gy
+tally 0: 	 	10.392776 GeV	0.64954851 % 	0.00020813838 Gy
+tally 1: 	 	7.8411972 GeV	0.49007483 % 	0.00015703736 Gy
+tally 2: 	 	3.5135969 GeV	0.2195998 % 	7.0367565e-05 Gy
+tally 3: 	 	1.7251868 GeV	0.10782418 % 	3.4550691e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 595184325, 961500994
+ Current couple of seeds = 1526069608, 646338923
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

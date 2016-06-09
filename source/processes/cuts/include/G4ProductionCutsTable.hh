@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProductionCutsTable.hh,v 1.2 2003/11/03 02:18:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------

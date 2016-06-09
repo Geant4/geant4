@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2003/08/11 10:14:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2004/02/19 18:18:51 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -33,9 +33,9 @@
 #define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class G4ParticleGun;
 class G4Event;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
@@ -52,11 +52,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetDefaultKinematic();
     void SetRndmBeam(G4double val) {rndmBeam = val;};   
     void GeneratePrimaries(G4Event*);
+    G4ParticleGun* GetParticleGun() {return particleGun;};
 
   private:
-    G4ParticleGun*                particleGun;
-    DetectorConstruction*      Detector;
-    G4double                      rndmBeam;
+    G4ParticleGun*         particleGun;
+    DetectorConstruction*  Detector;
+    G4double               rndmBeam;
     
     PrimaryGeneratorMessenger* gunMessenger;     
 };

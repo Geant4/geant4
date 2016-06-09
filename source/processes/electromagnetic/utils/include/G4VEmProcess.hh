@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.1 2003/10/13 10:52:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VEmProcess.hh,v 1.3 2004/03/06 13:47:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -30,7 +30,7 @@
 //
 // File name:     G4VEmProcess
 //
-// Author:        Vladimir Ivanchenko on base of Laszlo Urban code
+// Author:        Vladimir Ivanchenko
 //
 // Creation date: 01.10.2003
 //
@@ -39,7 +39,7 @@
 //
 // Class Description:
 //
-// It is the unified process for e+ annililation at rest and in fly.
+// It is the unified Rest and/or Discrete process
 
 // -------------------------------------------------------------------
 //
@@ -47,7 +47,7 @@
 #ifndef G4VEmProcess_h
 #define G4VEmProcess_h 1
 
-#include "G4VDiscreteProcess.hh"
+#include "G4VRestDiscreteProcess.hh"
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -66,19 +66,33 @@ class G4PhysicsVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4VEmProcess : public G4VDiscreteProcess
+class G4VEmProcess : public G4VRestDiscreteProcess
 {
 public:
 
   G4VEmProcess(const G4String& name,
-                         G4ProcessType type = fElectromagnetic);
+                     G4ProcessType type = fElectromagnetic);
 
  ~G4VEmProcess();
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
+  G4double GetMeanLifeTime(const G4Track& aTrack,
+                                 G4ForceCondition* condition);
+       // It is invoked by the ProcessManager of the Positron if this
+       // e+ has a kinetic energy null. Then it return 0 to force the
+       // call of AtRestDoIt.
+       // This function overloads a virtual function of the base class.
+
+  virtual G4VParticleChange* AtRestDoIt(const G4Track& aTrack,
+                                        const G4Step& aStep);
+       // It computes the final state of the process:
+       //          e+ (at rest) e- (at rest)  ---> gamma gamma,
+       // returned as a ParticleChange object.
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the ProcessManager of the Particle.
+
+  virtual void SecondariesPostStep(G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double& tcut,
@@ -109,14 +123,14 @@ public:
   // Max kinetic energy for tables
 
   G4bool StorePhysicsTable(G4ParticleDefinition*,
-                                 const G4String& directory,
-                                          G4bool ascii = false);
+                     const G4String& directory,
+                           G4bool ascii = false);
     // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
 
   G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                                      const G4String& directory,
-                                               G4bool ascii);
+                        const G4String& directory,
+                              G4bool ascii);
     // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
@@ -124,14 +138,11 @@ public:
     // should be placed under the directory specifed by the argument.
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
-                                const G4Region* region = 0);
+                   const G4Region* region = 0);
   // Add EM model coupled with fluctuation model for the region
 
   void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
-
-  //  void SetLambdaTable(G4PhysicsTable* p);
-  //  G4PhysicsTable* LambdaTable() {return theLambdaTable;};
 
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
@@ -157,8 +168,8 @@ protected:
 
   virtual
   G4double GetMeanFreePath(const G4Track& track,
-                                         G4double previousStepSize,
-                                         G4ForceCondition* condition);
+                                 G4double previousStepSize,
+                                 G4ForceCondition* condition);
 
   virtual
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
@@ -191,28 +202,28 @@ private:
   G4EmModelManager*           modelManager;
 
   // tables and vectors
-  G4PhysicsTable*                  theLambdaTable;
+  G4PhysicsTable*             theLambdaTable;
 
-  const G4ParticleDefinition*  particle;
-  const G4ParticleDefinition*  baseParticle;
-  const G4ParticleDefinition*  secondaryParticle;
-  const G4DataVector*            theCuts;
+  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* baseParticle;
+  const G4ParticleDefinition* secondaryParticle;
+  const G4DataVector*         theCuts;
 
   // cash
-  const G4Material*                   currentMaterial;
+  const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
-  size_t                                     currentMaterialIndex;
+  size_t                      currentMaterialIndex;
 
-  G4int                            nLambdaBins;
+  G4int                       nLambdaBins;
 
-  G4double                     minKinEnergy;
-  G4double                     maxKinEnergy;
+  G4double                    minKinEnergy;
+  G4double                    maxKinEnergy;
 
-  G4double                     preStepLambda;
-  G4double                     preStepKinEnergy;
+  G4double                    preStepLambda;
+  G4double                    preStepKinEnergy;
 
-  G4bool                         integral;
-  G4bool                         meanFreePath;
+  G4bool                      integral;
+  G4bool                      meanFreePath;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -230,12 +241,9 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
-                                                            G4double,
-                                                            G4ForceCondition* cond)
+inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track, G4double,
+                                                    G4ForceCondition*)
 {
-  *cond = NotForced;
-
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   if (meanFreePath) {
@@ -317,7 +325,7 @@ inline G4double G4VEmProcess::MaxKinEnergy() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambda(G4double kineticEnergy,
-                                      const G4MaterialCutsCouple* couple)
+                                  const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
@@ -327,6 +335,22 @@ inline G4double G4VEmProcess::GetLambda(G4double kineticEnergy,
     if(y > 0.0) x = 1.0/y;
   }
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetMeanLifeTime(const G4Track&,
+                                                    G4ForceCondition*)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* G4VEmProcess::AtRestDoIt(const G4Track&, 
+                                                   const G4Step&)
+{
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

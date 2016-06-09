@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2003/11/24 11:34:50 gcosmo Exp $
+$Id: History,v 1.121 2004/03/15 11:23:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 15, 2004  G.Cosmo (global-V06-00-01)
+- Removed obsolete "includes" target in management/GNUmakefile.
+- Corrected comments in G4UserLimits.hh.
+
+January 21, 2004  G.Cosmo (global-V06-00-00)
+- G4UnitsTable[.hh.cc]: corrected signatures to consider
+  'const G4String&' wherever applicable.
 
 November 24, 2003  G.Cosmo (global-V05-02-03)
 - G4UnitsTable.cc: fixed units initialisation and deletion of objects in

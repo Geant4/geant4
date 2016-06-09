@@ -55,8 +55,7 @@ MaxTimeCuts::MaxTimeCuts(const G4String& aName)
 MaxTimeCuts::~MaxTimeCuts()
 {}
 
-MaxTimeCuts::MaxTimeCuts(MaxTimeCuts&)
- : SpecialCuts()
+MaxTimeCuts::MaxTimeCuts(MaxTimeCuts& ) : SpecialCuts()
 {}
 
  

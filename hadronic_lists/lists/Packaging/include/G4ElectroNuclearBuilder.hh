@@ -27,7 +27,7 @@
 #include "G4ios.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4GammaParticipants.hh"
 #include "G4QGSMFragmentation.hh"
@@ -56,7 +56,7 @@ class G4ElectroNuclearBuilder
     G4GammaNuclearReaction * theGammaReaction;  
     
     G4TheoFSGenerator * theModel;
-    G4StringChipsParticleLevelInterface * theCascade;
+    G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4GammaParticipants > theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;

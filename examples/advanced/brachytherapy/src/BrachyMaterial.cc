@@ -29,8 +29,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc,v 1.4 2003/05/27 08:37:54 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyMaterial.cc,v 1.5 2004/03/11 15:38:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 
 #include "G4MaterialPropertiesTable.hh"
@@ -153,6 +153,8 @@ void BrachyMaterial::DefineMaterials()
   matH2O = new G4Material("Water",d,2);
   matH2O->AddElement(elH,2);
   matH2O->AddElement(elO,1);
+  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;

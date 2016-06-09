@@ -22,7 +22,7 @@
 //
 //
 // $Id: B02CellScorer.hh,v 1.2 2003/06/16 16:47:12 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class B02CellScorer

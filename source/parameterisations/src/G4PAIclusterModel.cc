@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PAIclusterModel.cc,v 1.6 2001/09/18 09:30:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 
 #include "G4Timer.hh"

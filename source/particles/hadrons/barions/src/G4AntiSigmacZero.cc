@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacZero.cc,v 1.12 2003/06/16 16:57:00 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiSigmacZero.cc,v 1.13 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4AntiSigmacZero::G4AntiSigmacZero(
 //             stable         lifetime    decay table 
 
 G4AntiSigmacZero G4AntiSigmacZero::theAntiSigmacZero(
-      "anti_sigma_c0",      2.4521*GeV,       0.0*MeV,  +0.0*eplus, 
+      "anti_sigma_c0",      2.4521*GeV,       1.5*MeV,  +0.0*eplus, 
 		    1,              +1,             0,          
 		    2,               0,             0,             
 	     "baryon",               0,            -1,       -4112,

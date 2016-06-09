@@ -24,6 +24,7 @@
 #define G4VProtonBuilder_h
 
 class G4ProtonInelasticProcess;
+class G4HadronElasticProcess;
 
 class G4VProtonBuilder
 {

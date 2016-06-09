@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.3 2003/09/15 16:54:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: DetectorConstruction.hh,v 1.4 2004/02/19 18:18:51 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -74,8 +74,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void PrintCalorParameters();
 
-     const G4MaterialCutsCouple* GetAbsorberMaterial()  const
-                             {return logicAbsorber->GetMaterialCutsCouple();};
+     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};	     
      G4double    GetAbsorberThickness() {return AbsorberThickness;};
      G4double    GetAbsorberSizeYZ()    {return AbsorberSizeYZ;};
 
@@ -89,7 +88,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};
      const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
-
+     const G4MaterialCutsCouple* GetAbsorbMaterialCut()  const
+                             {return logicAbsorber->GetMaterialCutsCouple();};
   private:
 
      G4Material*        AbsorberMaterial;

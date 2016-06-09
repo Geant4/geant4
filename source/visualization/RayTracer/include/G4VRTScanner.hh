@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VRTScanner.hh,v 1.1 2003/09/18 11:14:03 johna Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 

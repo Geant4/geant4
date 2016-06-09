@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCollision.cc,v 1.1 2003/10/07 12:37:40 hpw Exp $ //
+// $Id: G4VCollision.cc,v 1.2 2003/12/15 16:40:11 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -86,7 +86,7 @@ void G4VCollision::Print() const
   for (iter = components->begin(); iter != components->end(); ++iter)
     {
       G4cout << "---- " << name << " ---- Component " << i << G4endl;
-      ((*iter)())->Print();
+      ((*iter))->Print();
       i++;
     }
   
@@ -133,7 +133,7 @@ G4int i = 0;
   for (iter = components->begin(); iter != components->end(); ++iter)
     {
       G4cout << "Component " << i << G4endl;
-      ((*iter)())->Print();
+      ((*iter))->Print();
       i++;
     }
 }

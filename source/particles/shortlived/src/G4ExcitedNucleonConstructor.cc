@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.6 2002/11/19 11:49:24 jwellisc Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.7 2004/02/13 05:54:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -545,15 +545,15 @@ const char* G4ExcitedNucleonConstructor::name[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
-  1.440*GeV, 1.515*GeV, 1.550*GeV, 1.650*GeV,  1.675*GeV, 
-  1.680*GeV, 1.730*GeV, 1.710*GeV, 1.720*GeV,  1.850*GeV, 
-  1.950*GeV, 2.000*GeV, 2.150*GeV, 2.220*GeV,  2.250*GeV
+  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.650*GeV,  1.675*GeV, 
+  1.680*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.850*GeV, 
+  1.950*GeV, 2.000*GeV, 2.190*GeV, 2.220*GeV,  2.250*GeV
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  350.0*MeV, 120.0*MeV, 140.0*MeV, 150.0*MeV, 140.0*MeV,
-  120.0*MeV, 120.0*MeV, 110.0*MeV, 150.0*MeV, 500.0*MeV,
-  550.0*MeV, 350.0*MeV, 500.0*MeV, 550.0*MeV, 470.0*MeV
+  350.0*MeV, 120.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
+  130.0*MeV, 100.0*MeV, 100.0*MeV, 150.0*MeV, 500.0*MeV,
+  550.0*MeV, 350.0*MeV, 450.0*MeV, 550.0*MeV, 470.0*MeV
 };
 
 const G4int G4ExcitedNucleonConstructor::iSpin[] = {

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.10 2003/11/03 17:54:38 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"

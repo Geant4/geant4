@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.21 2003/11/11 14:05:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4VMultipleScattering.cc,v 1.22 2004/03/01 12:17:07 urban Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,7 +41,7 @@
 // 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
-//
+// 01-03-04 SampleCosineTheta signature changed
 //
 // Class Description:
 //
@@ -180,8 +180,12 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
   G4double kineticEnergy = track.GetKineticEnergy();
   G4double truestep = step.GetStepLength();
 
+  G4double lambda = GetLambda(track.GetDynamicParticle()->GetDefinition(),
+                               kineticEnergy) ;
+
+
   if (kineticEnergy > 0.0) {
-    G4double cth  = currentModel->SampleCosineTheta(truestep);
+    G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy,lambda);
     G4double sth  = sqrt(1.-cth*cth);
     G4double phi  = twopi*G4UniformRand();
     G4double dirx = sth*cos(phi);
@@ -191,7 +195,6 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
     G4ThreeVector newDirection(dirx,diry,cth);
     newDirection.rotateUz(oldDirection);
     fParticleChange.SetMomentumChange(newDirection);
-
 
   /*
   if(0 < verboseLevel) {

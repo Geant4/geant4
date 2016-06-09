@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisToOldVisCommands.hh,v 1.6 2001/07/11 10:09:17 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // Implements some /vis/ commands as /vis~/ temporarily.

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.30 2003/11/12 16:18:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4MuBremsstrahlung.cc,v 1.31 2004/02/10 18:07:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -69,7 +70,8 @@
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
-    theBaseParticle(0)
+    theBaseParticle(0),
+    lowestKinEnergy(1.*GeV)
 {
   InitialiseProcess();
 }
@@ -90,7 +92,9 @@ void G4MuBremsstrahlung::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmModel* em = new G4MuBremsstrahlungModel();
+  G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
+  em->SetLowestKineticEnergy(lowestKinEnergy);
+
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
@@ -108,7 +112,7 @@ const G4ParticleDefinition* G4MuBremsstrahlung::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlung::PrintInfoDefinition() 
+void G4MuBremsstrahlung::PrintInfoDefinition()
 {
   G4VEnergyLossProcess::PrintInfoDefinition();
 
@@ -116,7 +120,7 @@ void G4MuBremsstrahlung::PrintInfoDefinition()
          << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

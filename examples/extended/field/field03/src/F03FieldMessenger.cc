@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldMessenger.cc,v 1.5 2003/12/01 17:28:54 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: F03FieldMessenger.cc,v 1.6 2004/03/23 15:40:39 japost Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -109,6 +109,12 @@ void F03FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   if( command == MagFieldCmd )
   { 
     fEMfieldSetup->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
+    // Check the value
+    // fEMfieldSetup->GetConstantFieldValue();
+      // GetLocalFieldManager()
+    G4cout << "Set field value to " <<     
+      fEMfieldSetup->GetConstantFieldValue() / gauss << " Gauss " << G4endl;
+
   }
   if( command == MinStepCmd )
   { 

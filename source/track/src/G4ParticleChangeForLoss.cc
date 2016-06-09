@@ -21,28 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.8 2003/06/19 14:45:08 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.9 2004/01/20 15:29:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
-// 
+//
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
-//	
-//	
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
 // --------------------------------------------------------------
-
+//
+//   Modified:
+//   16.01.04 V.Ivanchenko update for model variant of energy loss
+//
+// ------------------------------------------------------------
+//
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
 {
+  theSteppingControlFlag = NormalCondition;
   debugFlag = false;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -51,7 +54,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
 #endif
 }
 
-G4ParticleChangeForLoss::~G4ParticleChangeForLoss() 
+G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
@@ -60,17 +63,21 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 #endif
 }
 
-// copy constructor
-G4ParticleChangeForLoss::G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right): G4VParticleChange(right)
+G4ParticleChangeForLoss::G4ParticleChangeForLoss(
+             const G4ParticleChangeForLoss &right): G4VParticleChange(right)
 {
    if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << G4endl;
    }
-   theEnergyChange = right.theEnergyChange;
+      currentTrack = right.currentTrack;
+      kinEnergy = right.kinEnergy;
+      currentCharge = right.currentCharge;
+      proposedMomentumDirection = right.proposedMomentumDirection;
 }
 
-// assignemnt operator
-G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(const G4ParticleChangeForLoss &right)
+// assignment operator
+G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
+                                   const G4ParticleChangeForLoss &right)
 {
    if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << G4endl;
@@ -81,33 +88,19 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(const G4ParticleCha
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
-      theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
-     
-      theEnergyChange = right.theEnergyChange;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit ;
+
+      currentTrack = right.currentTrack;
+      kinEnergy = right.kinEnergy;
+      currentCharge = right.currentCharge;
+      proposedMomentumDirection = right.proposedMomentumDirection;
    }
    return *this;
 }
 
-
 //----------------------------------------------------------------
-// functions for Initialization
-//
-
-void G4ParticleChangeForLoss::Initialize(const G4Track& track)
-{
-  // use base class's method at first
-  G4VParticleChange::Initialize(track);
-
-  // set Energy equal to those of the parent particle
-  const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-  theEnergyChange          = pParticle->GetKineticEnergy();
-}
-
-//----------------------------------------------------------------
-// methods for updating G4Step 
+// methods for updating G4Step
 //
 
 G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
@@ -115,37 +108,59 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   // A physics process always calculates the final state of the
   // particle relative to the initial state at the beginning
   // of the Step, i.e., based on information of G4Track (or
-  // equivalently the PreStepPoint). 
+  // equivalently the PreStepPoint).
   // So, the differences (delta) between these two states have to be
-  // calculated and be accumulated in PostStepPoint. 
-  
+  // calculated and be accumulated in PostStepPoint.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
- 
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
   // calculate new kinetic energy
-  G4double energy = pPostStepPoint->GetKineticEnergy() 
-                    + (theEnergyChange - pPreStepPoint->GetKineticEnergy()); 
+  G4double energy = pPostStepPoint->GetKineticEnergy()
+                    + (kinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
 
   // update kinetic energy and momentum direction
-  if (energy > 0.0) {
-    pPostStepPoint->SetKineticEnergy( energy );
-  } else {
-    // stop case
-    pPostStepPoint->SetKineticEnergy(0.0);
-  }
+  if (energy < 0.0) energy = 0.0;
 
-#ifdef G4VERBOSE
-  if (debugFlag) CheckIt(*aTrack);
-#endif
+  pPostStepPoint->SetKineticEnergy( energy );
+  pPostStepPoint->SetCharge( currentCharge );
 
-  //  Update the G4Step specific attributes 
-  return UpdateStepInfo(pStep);
+// Not necessary to check now
+//#ifdef G4VERBOSE
+//  if (debugFlag) CheckIt(*aTrack);
+//#endif
+
+  //  Update the G4Step specific attributes
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  return pStep;
+}
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+{
+  // A physics process always calculates the final state of the
+  // particle relative to the initial state at the beginning
+  // of the Step, i.e., based on information of G4Track (or
+  // equivalently the PreStepPoint).
+  // So, the differences (delta) between these two states have to be
+  // calculated and be accumulated in PostStepPoint.
+
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+
+// Not necessary to check now
+//#ifdef G4VERBOSE
+//  if (debugFlag) CheckIt(*aTrack);
+//#endif
+
+  //  Update the G4Step specific attributes
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  return pStep;
 }
 
 //----------------------------------------------------------------
-// methods for printing messages  
+// methods for printing messages
 //
 
 void G4ParticleChangeForLoss::DumpInfo() const
@@ -154,8 +169,20 @@ void G4ParticleChangeForLoss::DumpInfo() const
   G4VParticleChange::DumpInfo();
 
   G4cout.precision(3);
-  G4cout << "        Kinetic Energy (MeV): " 
-       << std::setw(20) << theEnergyChange/MeV
+  G4cout << "        Charge (eplus)   : "
+       << std::setw(20) << currentCharge/eplus
+       << G4endl;
+  G4cout << "        Kinetic Energy (MeV): "
+       << std::setw(20) << kinEnergy/MeV
+       << G4endl;
+  G4cout << "        Momentum Direct - x : "
+       << std::setw(20) << proposedMomentumDirection.x()
+       << G4endl;
+  G4cout << "        Momentum Direct - y : "
+       << std::setw(20) << proposedMomentumDirection.y()
+       << G4endl;
+  G4cout << "        Momentum Direct - z : "
+       << std::setw(20) << proposedMomentumDirection.z()
        << G4endl;
 }
 
@@ -167,11 +194,11 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   G4double  accuracy;
 
   // Energy should not be lager than initial value
-  accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
+  accuracy = ( kinEnergy - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
-    G4cout << "  G4ParticleChangeForLoss::CheckIt    : ";
-    G4cout << "the energy becoes larger than the initial value !!" << G4endl;
+    G4cout << "G4ParticleChangeForLoss::CheckIt: ";
+    G4cout << "KinEnergy become larger than the initial value!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
 #endif
     itsOK = false;
@@ -180,8 +207,8 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) { 
-    G4cout << " G4ParticleChangeForLoss::CheckIt " <<G4endl;
+  if (!itsOK) {
+    G4cout << "G4ParticleChangeForLoss::CheckIt " << G4endl;
     DumpInfo();
   }
 #endif
@@ -196,21 +223,9 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 
   //correction
   if (!itsOK) {
-    theEnergyChange = aTrack.GetKineticEnergy();
+    kinEnergy = aTrack.GetKineticEnergy();
   }
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
-
-
-
-
-
-
-
-
-
-
-
-

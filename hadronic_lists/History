@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2003/12/05 07:33:05 gcosmo Exp $
+$Id: History,v 1.4 2004/03/25 17:34:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.04.2004, G.Cosmo - ghad-lists-V06-00-00
+- Updated lists to package 4.1 (H.P.Wellisch).
 
 05.12.2003, G.Cosmo - ghad-lists-V05-02-01
 - Changed LISTS_BASE to G4LISTS_BASE.

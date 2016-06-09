@@ -22,7 +22,7 @@
 //
 //
 // $Id: DetectorConstruction.cc,v 1.4 2003/11/25 15:19:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 /////////////////////////////////////////////////////////////////////////

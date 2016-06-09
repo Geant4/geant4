@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MassImportanceProcess.cc,v 1.16 2003/11/26 14:51:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

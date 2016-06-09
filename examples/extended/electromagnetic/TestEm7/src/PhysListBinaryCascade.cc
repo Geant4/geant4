@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: PhysListBinaryCascade.cc,v 1.5 2003/12/05 11:17:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 
 #include "PhysListBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"

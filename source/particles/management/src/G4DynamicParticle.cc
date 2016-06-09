@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.17 2003/08/22 00:03:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4DynamicParticle.cc,v 1.18 2003/12/01 15:15:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -70,7 +70,7 @@ static const G4double EnergyMomentumRelationAllowance = keV;
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle():
-		   theMomentumDirection(),
+		   theMomentumDirection(G4ThreeVector(0.0,0.0,1.0)),
 		   theParticleDefinition(0),
 		   theKineticEnergy(0.0),
  		   theProperTime(0.0),

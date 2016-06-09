@@ -20,44 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "G4BinaryNeutronBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
+ #include "G4BinaryNeutronBuilder.hh"
+ #include "G4ParticleDefinition.hh"
+ #include "G4ParticleTable.hh"
+ #include "G4ProcessManager.hh"
 
-G4BinaryNeutronBuilder::
-G4BinaryNeutronBuilder() 
-{
-  theMin = 0;
-  theMax = 3*GeV;
-  theModel = new G4BinaryCascade;
-}
+ G4BinaryNeutronBuilder::
+ G4BinaryNeutronBuilder() 
+ {
+   theMin = 0;
+   theMax = 9.9*GeV;
+   theModel = new G4BinaryCascade;
+ }
 
-G4BinaryNeutronBuilder::
-~G4BinaryNeutronBuilder() {}
+ void G4BinaryNeutronBuilder::
+ Build(G4NeutronInelasticProcess & aP)
+ {
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+   aP.RegisterMe(theModel);
+   aP.AddDataSet(&theXSec);  
+ }
 
-void G4BinaryNeutronBuilder::
-Build(G4HadronElasticProcess & )
-{
-}
+ G4BinaryNeutronBuilder::
+ ~G4BinaryNeutronBuilder() {}
 
-void G4BinaryNeutronBuilder::
-Build(G4HadronFissionProcess & )
-{
-}
+ void G4BinaryNeutronBuilder::
+ Build(G4HadronElasticProcess & )
+ {
+ }
 
-void G4BinaryNeutronBuilder::
-Build(G4HadronCaptureProcess & )
-{
-}
+ void G4BinaryNeutronBuilder::
+ Build(G4HadronFissionProcess & )
+ {
+ }
 
-void G4BinaryNeutronBuilder::
-Build(G4NeutronInelasticProcess & aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP.RegisterMe(theModel);
-  aP.AddDataSet(&theXSec);  
-}
+ void G4BinaryNeutronBuilder::
+ Build(G4HadronCaptureProcess & )
+ {
+ }
 
-// 2002 by J.P. Wellisch
+ // 2002 by J.P. Wellisch

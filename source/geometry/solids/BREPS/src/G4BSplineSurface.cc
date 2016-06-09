@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BSplineSurface.cc,v 1.12 2003/03/28 13:11:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

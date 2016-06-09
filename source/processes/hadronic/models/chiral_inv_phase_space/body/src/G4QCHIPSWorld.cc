@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.28 2003/12/09 15:38:16 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4QCHIPSWorld.cc,v 1.30 2004/03/25 10:44:51 gunter Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -84,6 +84,7 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
 {
   //static const G4int mnofParts = 486;           // max number of particles (up to A=80)
   static const G4int mnofParts = 494;           // max number of particles (up to A=80) IN
+  static const G4bool cf = true;                // verbose=true G4QPDG construction flag
 #ifdef debug
   G4cout<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<" particles"<<G4endl;
 #endif
@@ -104,12 +105,18 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
       }
       if (nOfParts<10) nOfParts=10;            // Minimal number of particles for Vacuum(?)
 #ifdef debug
-      G4cerr<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<",c="<<curNP<<G4endl;
+      G4cout<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<",c="<<curNP<<G4endl;
 #endif
       for (G4int i=curNP; i<nOfParts; i++) 
       {
-        G4QParticle* curPart = new G4QParticle;// Created
-        curPart->InitQParticle(i);             //   ||
+#ifdef debug
+		G4cout<<"G4QCHIPSWorld::GetParticles: Create particle QCode="<<i<<G4endl;
+#endif
+        G4QParticle* curPart = new G4QParticle(cf,i); // Created with QCode=i
+#ifdef debug
+		G4cout<<"G4QCHIPSWorld::GetParticles: Particle QCode="<<i<<" is created."<<G4endl;
+#endif
+        //curPart->InitQParticle(i);             //
         //if(!i) G4cout<<"G4QCHIPSWorld::GetParticles:Pt#0="<<curPart<<G4endl;
         GetQWorld().push_back(curPart);           // Filled (forever but only once)
 #ifdef debug

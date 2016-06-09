@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003/12/02 09:17:20 japost Exp $
+$Id: History,v 1.14 2004/03/23 15:44:19 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 23rd, 2004 John Apostolakis (fieldex03-V06-00-00)
+-----------------------------------------------------
+- F03FieldSetup: fixed SetFieldValue methods to update equation, fld-manager
+- F03FieldMessenger: added printout of value after Set Command
+
 Dec  1st, 2003 John Apostolakis (fieldex03-V05-02-00)
 -----------------------------------------------------
 - Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator, 

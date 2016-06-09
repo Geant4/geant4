@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicsTable.cc,v 1.10 2003/11/04 12:17:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------

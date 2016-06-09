@@ -43,16 +43,9 @@ class G4StoppingHadronBuilder
 
   private:
 
-   // Pi -
    G4PionMinusAbsorptionAtRest thePionMinusAbsorption;
-
-   // K -
    G4KaonMinusAbsorption theKaonMinusAbsorption;
- 
-   // anti-proton
    G4AntiProtonAnnihilationAtRest  theAntiProtonAnnihilation;
-    
-   // anti-neutron
    G4AntiNeutronAnnihilationAtRest  theAntiNeutronAnnihilation;
          
    G4bool wasActivated;

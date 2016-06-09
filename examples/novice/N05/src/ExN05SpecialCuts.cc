@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05SpecialCuts.cc,v 1.6 2003/05/28 11:20:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

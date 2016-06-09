@@ -37,18 +37,18 @@ HadronPhysicsLHEP_BERT::HadronPhysicsLHEP_BERT(const G4String& name)
 {
   theNeutrons.RegisterMe(&theLHEPNeutron);
   theNeutrons.RegisterMe(&theBertiniNeutron);
-  theLHEPNeutron.SetMinInelasticEnergy(2.8*GeV);
-  theBertiniNeutron.SetMaxEnergy(3.2*GeV);
+  theLHEPNeutron.SetMinInelasticEnergy(9.5*GeV);
+  theBertiniNeutron.SetMaxEnergy(9.9*GeV);
 
   thePro.RegisterMe(&theLHEPPro);
   thePro.RegisterMe(&theBertiniPro);
-  theLHEPPro.SetMinEnergy(2.8*GeV);
-  theBertiniPro.SetMaxEnergy(3.2*GeV);
+  theLHEPPro.SetMinEnergy(9.5*GeV);
+  theBertiniPro.SetMaxEnergy(9.9*GeV);
   
   thePiK.RegisterMe(&theLHEPPiK);
   thePiK.RegisterMe(&theBertiniPiK);
-  theLHEPPiK.SetMinPionEnergy(2.8*GeV);
-  theBertiniPiK.SetMaxEnergy(3.2*GeV);
+  theLHEPPiK.SetMinPionEnergy(9.5*GeV);
+  theBertiniPiK.SetMaxEnergy(9.9*GeV);
   
 }
 

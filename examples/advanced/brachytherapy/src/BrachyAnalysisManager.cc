@@ -29,8 +29,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.12 2003/12/09 15:29:54 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyAnalysisManager.cc,v 1.13 2004/03/11 15:38:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>
@@ -102,6 +102,9 @@ void BrachyAnalysisManager::book()
   //creating a 2D histogram ...
   h2 = histFact->createHistogram1D("20","Initial Energy", //histoID,histo name 
 				  100,0.,1.); //bins' number, xmin, xmax
+  
+  h3 = histFact->createHistogram1D("30","Dose Distribution", 
+				  300,-150.,150.); //bins' number, xmin, xmax
 
   //defining the ntuple columns' name ...
   std::string columnNames = "float energy; float x; float y; float z";
@@ -138,7 +141,7 @@ void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
 
 void BrachyAnalysisManager::FillHistogramWithEnergy(G4double x,
                                                     G4double z, 
-                                                    G4float energyDeposit)
+                                                    G4double energyDeposit)
 {
   //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
   h1->fill(x,z,energyDeposit);
@@ -148,6 +151,11 @@ void BrachyAnalysisManager::PrimaryParticleEnergySpectrum(G4double primaryPartic
 {
   //1DHisotgram: energy spectrum of primary particles  
   h2->fill(primaryParticleEnergy);
+}
+void BrachyAnalysisManager::DoseDistribution(G4double x,G4double energy)
+{
+  //1DHisotgram: energy spectrum of primary particles  
+  h3->fill(x, energy);
 }
 
 void BrachyAnalysisManager::finish() 

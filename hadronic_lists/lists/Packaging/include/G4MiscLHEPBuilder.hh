@@ -85,93 +85,93 @@ class G4MiscLHEPBuilder
 
   private:
  
-   G4LElastic* theElasticModel;
+    G4LElastic* theElasticModel;
 
-   // anti-proton
-   G4HadronElasticProcess theAntiProtonElasticProcess;
-   G4AntiProtonInelasticProcess theAntiProtonInelastic;
-   G4LEAntiProtonInelastic* theLEAntiProtonModel;
-   G4HEAntiProtonInelastic* theHEAntiProtonModel;
-    
-   // anti-neutron
-   G4HadronElasticProcess theAntiNeutronElasticProcess;
-   G4AntiNeutronInelasticProcess  theAntiNeutronInelastic;
-   G4LEAntiNeutronInelastic* theLEAntiNeutronModel;
-   G4HEAntiNeutronInelastic* theHEAntiNeutronModel;
-   
-   // Lambda
-   G4HadronElasticProcess theLambdaElasticProcess;
-   G4LambdaInelasticProcess  theLambdaInelastic;
-   G4LELambdaInelastic*  theLELambdaModel;
-   G4HELambdaInelastic*  theHELambdaModel;
-  
-   // AntiLambda
-   G4HadronElasticProcess theAntiLambdaElasticProcess;
-   G4AntiLambdaInelasticProcess  theAntiLambdaInelastic;
-   G4LEAntiLambdaInelastic*  theLEAntiLambdaModel;
-   G4HEAntiLambdaInelastic*  theHEAntiLambdaModel;
-  
-   // SigmaMinus
-   G4HadronElasticProcess theSigmaMinusElasticProcess;
-   G4SigmaMinusInelasticProcess  theSigmaMinusInelastic;
-   G4LESigmaMinusInelastic*  theLESigmaMinusModel;
-   G4HESigmaMinusInelastic*  theHESigmaMinusModel;
-  
-   // AntiSigmaMinus
-   G4HadronElasticProcess theAntiSigmaMinusElasticProcess;
-   G4AntiSigmaMinusInelasticProcess  theAntiSigmaMinusInelastic;
-   G4LEAntiSigmaMinusInelastic*  theLEAntiSigmaMinusModel;
-   G4HEAntiSigmaMinusInelastic*  theHEAntiSigmaMinusModel;
-   
-   // SigmaPlus
-   G4HadronElasticProcess theSigmaPlusElasticProcess;
-   G4SigmaPlusInelasticProcess  theSigmaPlusInelastic;
-   G4LESigmaPlusInelastic*  theLESigmaPlusModel;
-   G4HESigmaPlusInelastic*  theHESigmaPlusModel;
-  
-   // AntiSigmaPlus
-   G4HadronElasticProcess theAntiSigmaPlusElasticProcess;
-   G4AntiSigmaPlusInelasticProcess  theAntiSigmaPlusInelastic;
-   G4LEAntiSigmaPlusInelastic*  theLEAntiSigmaPlusModel;
-   G4HEAntiSigmaPlusInelastic*  theHEAntiSigmaPlusModel;
-  
-   // XiZero
-   G4HadronElasticProcess theXiZeroElasticProcess;
-   G4XiZeroInelasticProcess  theXiZeroInelastic;
-   G4LEXiZeroInelastic*  theLEXiZeroModel;
-   G4HEXiZeroInelastic*  theHEXiZeroModel;
-  
-   // AntiXiZero
-   G4HadronElasticProcess theAntiXiZeroElasticProcess;
-   G4AntiXiZeroInelasticProcess  theAntiXiZeroInelastic;
-   G4LEAntiXiZeroInelastic*  theLEAntiXiZeroModel;
-   G4HEAntiXiZeroInelastic*  theHEAntiXiZeroModel;
-  
-   // XiMinus
-   G4HadronElasticProcess theXiMinusElasticProcess;
-   G4XiMinusInelasticProcess  theXiMinusInelastic;
-   G4LEXiMinusInelastic*  theLEXiMinusModel;
-   G4HEXiMinusInelastic*  theHEXiMinusModel;
+    // anti-proton
+    G4HadronElasticProcess theAntiProtonElasticProcess;
+    G4AntiProtonInelasticProcess theAntiProtonInelastic;
+    G4LEAntiProtonInelastic* theLEAntiProtonModel;
+    G4HEAntiProtonInelastic* theHEAntiProtonModel;
 
-   // AntiXiMinus
-   G4HadronElasticProcess theAntiXiMinusElasticProcess;
-   G4AntiXiMinusInelasticProcess  theAntiXiMinusInelastic;
-   G4LEAntiXiMinusInelastic*  theLEAntiXiMinusModel;
-   G4HEAntiXiMinusInelastic*  theHEAntiXiMinusModel;
-  
-   // OmegaMinus
-   G4HadronElasticProcess theOmegaMinusElasticProcess;
-   G4OmegaMinusInelasticProcess  theOmegaMinusInelastic;
-   G4LEOmegaMinusInelastic*  theLEOmegaMinusModel;
-   G4HEOmegaMinusInelastic*  theHEOmegaMinusModel;
-   
-   // AntiOmegaMinus
-   G4HadronElasticProcess theAntiOmegaMinusElasticProcess;
-   G4AntiOmegaMinusInelasticProcess  theAntiOmegaMinusInelastic;
-   G4LEAntiOmegaMinusInelastic*  theLEAntiOmegaMinusModel;
-   G4HEAntiOmegaMinusInelastic*  theHEAntiOmegaMinusModel;
-   
-   G4bool wasActivated;
+    // anti-neutron
+    G4HadronElasticProcess theAntiNeutronElasticProcess;
+    G4AntiNeutronInelasticProcess  theAntiNeutronInelastic;
+    G4LEAntiNeutronInelastic* theLEAntiNeutronModel;
+    G4HEAntiNeutronInelastic* theHEAntiNeutronModel;
+
+    // Lambda
+    G4HadronElasticProcess theLambdaElasticProcess;
+    G4LambdaInelasticProcess  theLambdaInelastic;
+    G4LELambdaInelastic*  theLELambdaModel;
+    G4HELambdaInelastic*  theHELambdaModel;
+
+    // AntiLambda
+    G4HadronElasticProcess theAntiLambdaElasticProcess;
+    G4AntiLambdaInelasticProcess  theAntiLambdaInelastic;
+    G4LEAntiLambdaInelastic*  theLEAntiLambdaModel;
+    G4HEAntiLambdaInelastic*  theHEAntiLambdaModel;
+
+    // SigmaMinus
+    G4HadronElasticProcess theSigmaMinusElasticProcess;
+    G4SigmaMinusInelasticProcess  theSigmaMinusInelastic;
+    G4LESigmaMinusInelastic*  theLESigmaMinusModel;
+    G4HESigmaMinusInelastic*  theHESigmaMinusModel;
+
+    // AntiSigmaMinus
+    G4HadronElasticProcess theAntiSigmaMinusElasticProcess;
+    G4AntiSigmaMinusInelasticProcess  theAntiSigmaMinusInelastic;
+    G4LEAntiSigmaMinusInelastic*  theLEAntiSigmaMinusModel;
+    G4HEAntiSigmaMinusInelastic*  theHEAntiSigmaMinusModel;
+
+    // SigmaPlus
+    G4HadronElasticProcess theSigmaPlusElasticProcess;
+    G4SigmaPlusInelasticProcess  theSigmaPlusInelastic;
+    G4LESigmaPlusInelastic*  theLESigmaPlusModel;
+    G4HESigmaPlusInelastic*  theHESigmaPlusModel;
+
+    // AntiSigmaPlus
+    G4HadronElasticProcess theAntiSigmaPlusElasticProcess;
+    G4AntiSigmaPlusInelasticProcess  theAntiSigmaPlusInelastic;
+    G4LEAntiSigmaPlusInelastic*  theLEAntiSigmaPlusModel;
+    G4HEAntiSigmaPlusInelastic*  theHEAntiSigmaPlusModel;
+
+    // XiZero
+    G4HadronElasticProcess theXiZeroElasticProcess;
+    G4XiZeroInelasticProcess  theXiZeroInelastic;
+    G4LEXiZeroInelastic*  theLEXiZeroModel;
+    G4HEXiZeroInelastic*  theHEXiZeroModel;
+
+    // AntiXiZero
+    G4HadronElasticProcess theAntiXiZeroElasticProcess;
+    G4AntiXiZeroInelasticProcess  theAntiXiZeroInelastic;
+    G4LEAntiXiZeroInelastic*  theLEAntiXiZeroModel;
+    G4HEAntiXiZeroInelastic*  theHEAntiXiZeroModel;
+
+    // XiMinus
+    G4HadronElasticProcess theXiMinusElasticProcess;
+    G4XiMinusInelasticProcess  theXiMinusInelastic;
+    G4LEXiMinusInelastic*  theLEXiMinusModel;
+    G4HEXiMinusInelastic*  theHEXiMinusModel;
+
+    // AntiXiMinus
+    G4HadronElasticProcess theAntiXiMinusElasticProcess;
+    G4AntiXiMinusInelasticProcess  theAntiXiMinusInelastic;
+    G4LEAntiXiMinusInelastic*  theLEAntiXiMinusModel;
+    G4HEAntiXiMinusInelastic*  theHEAntiXiMinusModel;
+
+    // OmegaMinus
+    G4HadronElasticProcess theOmegaMinusElasticProcess;
+    G4OmegaMinusInelasticProcess  theOmegaMinusInelastic;
+    G4LEOmegaMinusInelastic*  theLEOmegaMinusModel;
+    G4HEOmegaMinusInelastic*  theHEOmegaMinusModel;
+
+    // AntiOmegaMinus
+    G4HadronElasticProcess theAntiOmegaMinusElasticProcess;
+    G4AntiOmegaMinusInelasticProcess  theAntiOmegaMinusInelastic;
+    G4LEAntiOmegaMinusInelastic*  theLEAntiOmegaMinusModel;
+    G4HEAntiOmegaMinusInelastic*  theHEAntiOmegaMinusModel;
+
+    G4bool wasActivated;
 };
 // 2002 by J.P. Wellisch
 

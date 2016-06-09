@@ -36,7 +36,7 @@
 //    *******************************
 //
 // $Id: BrachyRunAction.cc,v 1.13 2003/12/09 15:30:03 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 
 #include "BrachyRunAction.hh"

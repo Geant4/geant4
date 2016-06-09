@@ -37,7 +37,7 @@ HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name)
 {
   theNeutrons.RegisterMe(&theQGSPNeutron);
   theNeutrons.RegisterMe(&theLEPNeutron);
-  theLEPNeutron.SetMaxInelasticEnergy(25*GeV);
+  theLEPNeutron.SetMaxInelasticEnergy(25*GeV);  
 
   thePro.RegisterMe(&theQGSPPro);
   thePro.RegisterMe(&theLEPPro);

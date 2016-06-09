@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.8 2003/11/03 17:53:49 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4Mars5GeV.cc,v 1.9 2004/03/14 14:14:05 hpw Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,11 +57,19 @@
 
 #include "globals.hh"
 #include "G4Mars5GeV.hh"
+#include <iostream>
 
 G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
                            maxWeight(1000.0),
                            minWeight(perMillion)
 {
+  std::cout << "     MARS13(98)"<<std::endl;
+  std::cout << std::endl;
+  std::cout << " INCLUSIVE HADRON(photon)-NUCLEUS VERTEX AT E < 5 GEV !!! "<<std::endl;
+  std::cout << " THREE WEIGHTED HADRONS IN FINAL STATE:     !!!"<<std::endl;
+  std::cout << " IP+A -> N/P(CASC)+ PI+/PI-(K+/K-) + PI0 "<<std::endl;
+  std::cout << std::endl;
+
   SetMinEnergy( 1.0*MeV );
   SetMaxEnergy( 5.0*GeV );
 

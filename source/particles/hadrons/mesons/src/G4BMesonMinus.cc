@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonMinus.cc,v 1.7 2003/06/16 16:57:30 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BMesonMinus.cc,v 1.8 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4BMesonMinus::G4BMesonMinus(
 // In this version, charged pions are set to stable
 G4BMesonMinus G4BMesonMinus::theBMesonMinus
 (
-	         "B-",      5.2789*GeV,   3.99e-10*MeV,    -1.*eplus, 
+	         "B-",      5.2789*GeV,   3.93e-10*MeV,    -1.*eplus, 
 		    0,              -1,             0,          
 		    1,              -1,             0,             
 	      "meson",               0,             0,         -521,

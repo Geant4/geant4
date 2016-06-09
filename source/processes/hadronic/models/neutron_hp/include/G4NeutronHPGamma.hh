@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPGamma.hh,v 1.10 2003/06/16 17:10:44 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 #ifndef G4NeutronHPGamma_h
 #define G4NeutronHPGamma_h 1

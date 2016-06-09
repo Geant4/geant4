@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldSetup.cc,v 1.2 2003/12/01 17:29:57 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: F03FieldSetup.cc,v 1.3 2004/03/23 15:41:38 japost Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 //  
 //   Field Setup class implementation.
@@ -190,11 +190,12 @@ void F03FieldSetup::SetStepper()
 // Set the value of the Global Field to fieldValue along Z
 //
 
-void F03FieldSetup::SetFieldValue(G4double fieldValue)
+void F03FieldSetup::SetFieldValue(G4double fieldStrength)
 {
-  if(fMagneticField) delete fMagneticField;
-  fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldValue));
-  //  UpdateField();
+  G4ThreeVector fieldSetVec(0.0, 0.0, fieldStrength);
+  this->SetFieldValue( fieldSetVec ); 
+  //    *************
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -204,9 +205,6 @@ void F03FieldSetup::SetFieldValue(G4double fieldValue)
 
 void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
-  // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
-    
   if(fMagneticField) delete fMagneticField;
 
   if(fieldVector != G4ThreeVector(0.,0.,0.))
@@ -215,13 +213,20 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
   }
   else 
   {
-    // If the new field's value is Zero, then it is best to
-    //  insure that it is not used for propagation.
+    // If the new field's value is Zero, then 
+    //  setting the pointer to zero ensures 
+    //  that it is not used for propagation.
     fMagneticField = 0; 
   }
-  fieldMgr->SetDetectorField(fMagneticField);
 
-  // UpdateField();
+  // Either  
+  //   - UpdateField() to reset all (ChordFinder, Equation);
+     // UpdateField();
+  //   or simply update the field manager & equation of motion 
+  //      with pointer to new field
+  GetGlobalFieldManager()->SetDetectorField(fMagneticField);
+  fEquation->SetFieldObj( fMagneticField ); 
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -234,3 +239,16 @@ G4FieldManager*  F03FieldSetup::GetGlobalFieldManager()
 	                        ->GetFieldManager();
 }
 
+
+// In place of G4UniformField::GetConstantFieldValue ...
+// 
+G4ThreeVector F03FieldSetup::GetConstantFieldValue()
+{
+  static G4double fieldValue[6],  position[4]; 
+  position[0] = position[1] = position[2] = position[3] = 0.0; 
+
+  fMagneticField->GetFieldValue( position, fieldValue);
+  G4ThreeVector fieldVec(fieldValue[0], fieldValue[1], fieldValue[2]); 
+
+  return fieldVec;
+}

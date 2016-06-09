@@ -23,7 +23,7 @@
 #include "globals.hh"
 #include "G4GammaParticipants.hh"
 #include "G4LorentzVector.hh"
-#include "G4Pair.hh"
+#include <utility>
 
 // Class G4GammaParticipants 
 
@@ -38,6 +38,11 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
 
   const std::vector<G4Nucleon *> & theTargetNuc = theNucleus->GetNucleons();
   G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
+  if((!(aPrimaryMomentum.e()>-1)) && (!(aPrimaryMomentum.e()<1)) )
+  {
+    throw G4HadronicException(__FILE__, __LINE__, 
+                 "G4GammaParticipants::SelectInteractions: primary nan energy.");
+  }
   G4double s = (aPrimaryMomentum + theTargetNuc[0]->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0]->GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;

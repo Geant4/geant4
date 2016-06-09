@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01VisManager.cc,v 1.7 2003/10/17 10:19:57 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // John Allison 24th January 1998.

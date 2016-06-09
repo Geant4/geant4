@@ -21,23 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDeltastar.cc,v 1.1 2003/10/07 12:37:35 hpw Exp $ //
+// $Id: G4CollisionNNToDeltaDeltastar.cc,v 1.2.2.1 2004/03/24 13:18:33 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDeltastar.hh"
-#include "G4KineticTrack.hh"
-#include "G4VCrossSectionSource.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4XAqmElastic.hh"
-#include "G4AngularDistribution.hh"
-#include "G4ThreeVector.hh"
-#include "G4LorentzVector.hh"
-#include "G4LorentzRotation.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4ParticleTable.hh"
-#include "G4CollisionVector.hh"
-#include "G4CollisionNNToDeltaDeltastar.hh"
+
 #include "G4CollisionNNToDeltaDelta1600.hh"
 #include "G4CollisionNNToDeltaDelta1620.hh"
 #include "G4CollisionNNToDeltaDelta1700.hh"
@@ -48,27 +36,20 @@
 #include "G4CollisionNNToDeltaDelta1930.hh"
 #include "G4CollisionNNToDeltaDelta1950.hh"
 
+typedef
+GROUP9(G4CollisionNNToDeltaDelta1600, 
+      G4CollisionNNToDeltaDelta1620,
+      G4CollisionNNToDeltaDelta1700,
+      G4CollisionNNToDeltaDelta1900,
+      G4CollisionNNToDeltaDelta1905,
+      G4CollisionNNToDeltaDelta1910,
+      G4CollisionNNToDeltaDelta1920,
+      G4CollisionNNToDeltaDelta1930,
+      G4CollisionNNToDeltaDelta1950) theChannels;
+      
 G4CollisionNNToDeltaDeltastar::G4CollisionNNToDeltaDeltastar()
 { 
-  
-  // 1600
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1600()); 
-  //1620 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1620()); 
-  //1700 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1700()); 
-  //1900 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1900()); 
-  //1905 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1905()); 
-  //1910 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1910()); 
-  //1920 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1920()); 
-  //1930 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1930()); 
-  //1950 
-  G4CollisionComposite::AddComponent(new G4CollisionNNToDeltaDelta1950()); 
-
+  Register aR;
+  G4ForEach<theChannels>::Apply(&aR, this); 
 }
 

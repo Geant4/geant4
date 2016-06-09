@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003/11/27 03:51:13 kurasige Exp $
+$Id: History,v 1.63 2004/01/20 15:29:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov. 26, 03 H.Kurashige(track-V05-02-03)
+Jan. 20, 04 V.Ivanchenko (track-V06-00-01)
+- Update G4ParticleChangeForLoss for utilisation in G4VEnergyLossProcess
+- Minor update G4ParticleChangeForMSC for utilisation in model design of msc
+- Change of volume in G4ParticleChangeForTransportation only if kinEnergy>0
+
+Dec. 12, 03 G.Cosmo (track-V06-00-00)
+- G4VParticleChange[.hh.cc]: removed unnecessary 'const' qualifier to
+  return value in GetAccuracyForWarning() and GetAccuracyForException()
+  causing noisy warnings on Intel-icc compiler.
+
+Nov. 26, 03 H.Kurashige (track-V05-02-03)
 - Fixed problem of setting  momentum direction for stoppped particle in G4ParticleChange (Vladimir) 
 
 Oct. 4, 03 G.Cosmo (track-V05-02-02)

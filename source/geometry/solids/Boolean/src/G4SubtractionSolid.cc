@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.20 2003/11/03 17:48:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4SubtractionSolid.cc,v 1.21 2004/02/27 08:38:09 grichine Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -182,14 +182,17 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
         normal = -fPtrSolidB->SurfaceNormal(p) ;
       }
 #ifdef G4BOOLDEBUG
-      G4cout << "WARNING - Invalid call [2] in "
+      if(Inside(p) == kInside)
+      {
+        G4cout << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-      G4cout << "          p = " << p << G4endl;
-      G4cerr << "WARNING - Invalid call [2] in "
+        G4cout << "          p = " << p << G4endl;
+        G4cerr << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-      G4cerr << "          p = " << p << G4endl;
+        G4cerr << "          p = " << p << G4endl;
+      }
 #endif
     }
   }

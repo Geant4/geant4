@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EventManager.hh,v 1.12 2003/09/09 20:09:17 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 

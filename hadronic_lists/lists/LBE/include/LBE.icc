@@ -64,7 +64,7 @@ template<class T> TLBE<T>::TLBE() : G4VUserPhysicsList()
 {
 
   G4DataQuestionaire it(photon, lowenergy, neutron, radioactive);
-  G4cout << "You are using the simulation engine: LBE 5.2"<<G4endl;
+  G4cout << "You are using the simulation engine: LBE 5.3"<<G4endl;
   G4cout <<G4endl<<G4endl;
   defaultCutValue     = 1.0*micrometer; //
   cutForGamma         = defaultCutValue;

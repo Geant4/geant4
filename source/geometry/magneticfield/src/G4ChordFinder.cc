@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ChordFinder.cc,v 1.45 2003/11/13 19:46:56 japost Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 

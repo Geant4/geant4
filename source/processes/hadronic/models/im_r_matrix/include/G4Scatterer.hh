@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.hh,v 1.2 2003/10/10 14:08:22 hpw Exp $ //
+// $Id: G4Scatterer.hh,v 1.4 2003/12/15 16:40:11 hpw Exp $ //
 //
 //
 // removing a auther spec that was part of a template.
@@ -69,6 +69,15 @@ private:
   G4VCollision* FindCollision(const G4KineticTrack& trk1, 
 			      const G4KineticTrack& trk2);
   
+  struct Register
+  {
+    template<class T> void operator()(T*, G4CollisionVector * aC)
+    {
+      G4VCollision* aT = new T; 
+      aC->push_back(aT);
+    }
+  };
+
   G4CollisionVector collisions;
   std::vector<G4CollisionInitialState *> theCollisions;
 

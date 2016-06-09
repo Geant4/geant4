@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HadronCaptureDataSet.cc,v 1.6 2003/07/01 15:08:46 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // G4 Physics class: HadronCaptureDataSet for cross sections

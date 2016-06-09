@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.3 2003/11/27 18:20:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: SteppingAction.cc,v 1.9 2004/01/21 17:29:27 maire Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,14 +51,15 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4Track* track = aStep->GetTrack();
-  G4VPhysicalVolume* volume = track->GetVolume();
-  if (volume == detector->GetphysiWorld()) return;
+  G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
+  if (mat == detector->GetWorldMaterial()) return;
   
   G4int absorNo = volume->GetCopyNo();
-  
+
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
+
   G4double stepl = 0.;
   if (track->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();

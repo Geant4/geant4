@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003/10/03 14:42:43 gcosmo Exp $
+$Id: History,v 1.7 2004/03/15 19:18:52 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 15, 2004, M.Asai (readout-V06-00-00)
+- Add some methods in G4DCtable to enhance a verbosity
 
 Oct 4, 2003, G.Cosmo (readout-V05-02-00)
 - GNUmakefile:

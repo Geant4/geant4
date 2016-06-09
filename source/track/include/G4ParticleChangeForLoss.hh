@@ -21,16 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.4 2001/07/11 10:08:35 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.5 2004/01/20 15:29:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
-// 
+//
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//	GEANT 4 class header file
 //
-// 
+//
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
+//
+//   Modified:
+//   16.01.04 V.Ivanchenko update for model variant of energy loss
+//
+// ------------------------------------------------------------
 //
 //  Class Description
 //  This class is a concrete class for ParticleChange for EnergyLoss
@@ -40,80 +45,132 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-class G4DynamicParticle;
 #include "G4VParticleChange.hh"
 
+class G4DynamicParticle;
+
 class G4ParticleChangeForLoss: public G4VParticleChange
-{ 
-  public:
-    // default constructor
-    G4ParticleChangeForLoss();
+{
+public:
+  // default constructor
+  G4ParticleChangeForLoss();
 
-    // destructor
-    virtual ~G4ParticleChangeForLoss();
+  // destructor
+  virtual ~G4ParticleChangeForLoss();
 
-  protected:
-    // hide copy constructor and assignment operaor as protected
-    G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right);
-    G4ParticleChangeForLoss & operator=(const G4ParticleChangeForLoss &right);
+  // with description
+  // ----------------------------------------------------
+  // --- the following methods are for updating G4Step -----
 
-  public:
-    // equal/unequal operator
-    G4bool operator==(const G4ParticleChangeForLoss &right) const;
-    G4bool operator!=(const G4ParticleChangeForLoss &right) const;
+  virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
+  virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+  // A physics process gives the final state of the particle
+  // based on information of G4Track
 
+  void InitializeForAlongStep(const G4Track&);
+  void InitializeForPostStep(const G4Track&);
+  //Initialize all propoerties by using G4Track information
 
-public: // with description
-    // ----------------------------------------------------
-    // --- the following methods are for updating G4Step -----   
-    virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
- 
-    virtual void Initialize(const G4Track&);
-    // Initialize all propoerties by using G4Track information
+  void AddSecondary(G4DynamicParticle* aParticle);
+  // Add next secondary
 
-    G4double GetEnergyChange() const;
-    void SetEnergyChange(G4double theEnergyChange);
-    // Get/Set the final kinetic energy of the current particle.
+  G4double GetProposedCharge() const;
+  void SetProposedCharge(G4double theCharge);
+  //   Get/Set theCharge
 
-       
-  public:
-    virtual void DumpInfo() const;
+  G4double GetProposedKineticEnergy() const;
+  void SetProposedKineticEnergy(G4double kinEnergy);
+  // Get/Set the final kinetic energy of the current particle.
 
-  protected:
-    G4double theEnergyChange;
-    //  The final kinetic energy of the current particle.
-    
-  public:
-    // for Debug 
-    virtual G4bool CheckIt(const G4Track&);
+  const G4ThreeVector& GetProposedMomentumDirection() const;
+  void SetProposedMomentumDirection(const G4ThreeVector& dir);
+
+  virtual void DumpInfo() const;
+
+  // for Debug
+  virtual G4bool CheckIt(const G4Track&);
+
+protected:
+  // hide copy constructor and assignment operaor as protected
+  G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right);
+  G4ParticleChangeForLoss & operator=(const G4ParticleChangeForLoss &right);
+
+private:
+
+  const G4Track* currentTrack;
+  // The pointer to G4Track
+  G4double kinEnergy;
+  //  The final kinetic energy of the current particle.
+  G4double currentCharge;
+  //  The final charge of the current particle.
+  G4ThreeVector proposedMomentumDirection;
+  //  The final momentum direction of the current particle.
 };
 
-inline
- G4double G4ParticleChangeForLoss::GetEnergyChange() const
+inline G4double G4ParticleChangeForLoss::GetProposedKineticEnergy() const
 {
-  return theEnergyChange;
+  return kinEnergy;
+}
+
+inline void G4ParticleChangeForLoss::SetProposedKineticEnergy(G4double energy)
+{
+  kinEnergy = energy;
+}
+
+inline G4double G4ParticleChangeForLoss::GetProposedCharge() const
+{
+  return currentCharge;
+}
+
+inline void G4ParticleChangeForLoss::SetProposedCharge(G4double theCharge)
+{
+  currentCharge = theCharge;
 }
 
 inline
- void G4ParticleChangeForLoss::SetEnergyChange(G4double Energy)
+ const G4ThreeVector& G4ParticleChangeForLoss::GetProposedMomentumDirection() const
 {
-  theEnergyChange = Energy;
+  return proposedMomentumDirection;
+}
+
+inline
+ void G4ParticleChangeForLoss::SetProposedMomentumDirection(const G4ThreeVector& dir)
+{
+  proposedMomentumDirection = dir;
+}
+
+inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track)
+{
+  theStatusChange = track.GetTrackStatus();
+  theLocalEnergyDeposit = 0.0;
+  InitializeSecondaries(track);
+  kinEnergy = track.GetKineticEnergy();
+  currentCharge = track.GetDynamicParticle()->GetCharge();
+}
+
+inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
+{
+  theStatusChange = track.GetTrackStatus();
+  theLocalEnergyDeposit = 0.0;
+  InitializeSecondaries(track);
+  kinEnergy = track.GetKineticEnergy();
+  currentCharge = track.GetDynamicParticle()->GetCharge();
+  proposedMomentumDirection = track.GetMomentumDirection();
+  currentTrack = &track;
+}
+
+inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
+{
+  //  create track
+  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
+                                           currentTrack->GetPosition());
+
+  //   Touchable handle is copied to keep the pointer
+  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
+
+  //  add a secondary
+  G4VParticleChange::AddSecondary(aTrack);
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

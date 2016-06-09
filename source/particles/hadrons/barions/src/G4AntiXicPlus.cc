@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.8 2003/06/16 16:57:03 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4AntiXicPlus.cc,v 1.9 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4AntiXicPlus::G4AntiXicPlus(
 //             stable         lifetime    decay table 
 
 G4AntiXicPlus G4AntiXicPlus::theAntiXicPlus(
-         "anti_xi_c+",      2.4656*GeV,   1.86e-9*MeV,   -1.*eplus, 
+         "anti_xi_c+",      2.4663*GeV,   1.49e-9*MeV,   -1.*eplus, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -4232,

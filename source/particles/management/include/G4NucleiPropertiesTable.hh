@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.10 2001/10/15 09:58:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NucleiPropertiesTable.hh,v 1.11 2003/12/12 06:48:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -43,6 +43,7 @@
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
 // Subtract electron mass by H.Kurashige
 // Avoid substraction of electron mass in Atomic masses by V.Lara (12 May 99)
+// Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 // -------------------------------------------------------------------
 #include "globals.hh"
 
@@ -67,16 +68,14 @@ class G4NucleiPropertiesTable
 private:
   
   // Default constructor - this class should exist only once!
-  G4NucleiPropertiesTable(G4double dummy);
-
-  static G4NucleiPropertiesTable theInstance;
+  G4NucleiPropertiesTable(){};
 
 public:
 
   // Destructor (generated)
   ~G4NucleiPropertiesTable() { };
 
-  enum  {nEntries = 2931,MaxA = 273}; // for SUN 
+  enum  {nEntries = 2931,MaxA = 273}; 
 
   // Other Operations 
  public: // With Description
@@ -111,12 +110,6 @@ private:
 
   // Data Members for Class Attributes
   //----------------------------------  
-
-
-  // Number of Entries in the Table
-//  const G4int nEntries;
-
-
 
   // The following arrays are static for allow inicialization.
   // The inicialization is Done in G4NucleiPropertiesTable.cc

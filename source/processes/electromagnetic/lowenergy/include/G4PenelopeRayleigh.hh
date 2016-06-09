@@ -21,15 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeRayleigh.hh,v 1.3 2003/03/13 16:53:50 pandola Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4PenelopeRayleigh.hh,v 1.4 2004/03/18 13:40:13 pandola Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: Luciano Pandola
 //
 // History:
 // -----------
-// 01 Dec 2002   L.Pandola  1st implementation
-// 14 Feb 2003   MG Pia     Removed data member material
+// 01 Dec 2002   L.Pandola      1st implementation
+// 14 Feb 2003   MG Pia         Removed data member material
+// 18 Mar 2004   M.Mendenhall   Introduced SamplingTable 
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -54,7 +55,10 @@ class G4DataVector;
 class G4PenelopeRayleigh : public G4VDiscreteProcess {
 
 public:
-  
+
+  typedef std::map<const G4Material *,std::pair<G4DataVector *, G4DataVector *> >
+  SamplingTablePair;
+
   G4PenelopeRayleigh(const G4String& processName ="PenRayleigh");
   
   ~G4PenelopeRayleigh();
@@ -96,6 +100,8 @@ private:
 
   G4DataVector* samplingFunction_x;
   G4DataVector* samplingFunction_y;
+
+  SamplingTablePair SamplingTables;
 
   G4double samplingConstant;
   G4double facte; //cross section factor

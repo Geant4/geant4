@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RToEConvForPositron.cc,v 1.2 2003/11/08 06:10:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 //
 // --------------------------------------------------------------

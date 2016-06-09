@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegacZero.cc,v 1.13 2003/06/16 16:57:09 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4OmegacZero.cc,v 1.14 2004/02/13 05:53:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4OmegacZero::G4OmegacZero(
 //             stable         lifetime    decay table 
 
 G4OmegacZero G4OmegacZero::theOmegacZero(
-           "omega_c0",       2.704*GeV,   1.02e-8*MeV,    0.*eplus, 
+           "omega_c0",      2.6975*GeV,   1.02e-8*MeV,    0.*eplus, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            +1,        4332,
@@ -85,5 +85,13 @@ G4OmegacZero G4OmegacZero::theOmegacZero(
 
 G4OmegacZero* G4OmegacZero::OmegacZeroDefinition(){return &theOmegacZero;}
 G4OmegacZero* G4OmegacZero::OmegacZero(){return &theOmegacZero;}
+
+
+
+
+
+
+
+
 
 

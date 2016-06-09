@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh,v 1.2 2003/11/03 17:15:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4NormalNavigation.hh,v 1.3 2004/03/10 18:21:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // class G4NormalNavigation
@@ -48,6 +48,12 @@
 class G4NormalNavigation
 {
   public:  // with description
+
+    G4NormalNavigation();
+      // Constructor
+
+    ~G4NormalNavigation();
+      // Destructor
 
     G4bool LevelLocate( G4NavigationHistory &history,
                   const G4VPhysicalVolume *blockedVol,
@@ -78,6 +84,21 @@ class G4NormalNavigation
     G4double ComputeSafety( const G4ThreeVector &globalpoint,
                             const G4NavigationHistory &history,
                             const G4double pMaxLength=DBL_MAX );
+
+    inline G4int GetVerboseLevel();
+    inline void  SetVerboseLevel(G4int level);
+      // Get/Set Verbose(ness) level.
+      // [if level>0 && G4VERBOSE, printout can occur]
+
+    inline void  CheckMode(G4bool mode);
+      // Run navigation in "check-mode", therefore using additional
+      // verifications and more strict correctness conditions.
+      // Is effective only with G4VERBOSE set.
+
+  private:
+
+    G4bool fCheck; 
+    G4int  fVerbose; 
 };
 
 #include "G4NormalNavigation.icc"

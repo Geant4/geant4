@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.cc,v 1.7 2003/06/16 17:12:48 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4DCtable.cc,v 1.8 2004/03/15 19:18:53 asaim Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 
 #include "G4DCtable.hh"
+#include "G4VDigitizerModule.hh"
 
 G4DCtable::G4DCtable() {;}
 
@@ -40,7 +41,7 @@ G4int G4DCtable::Registor(G4String DMname,G4String DCname)
   return DClist.size();
 }
 
-G4int G4DCtable::GetCollectionID(G4String DCname)
+G4int G4DCtable::GetCollectionID(G4String DCname) const
 {
   G4int i = -1;
   if(DCname.index("/")==std::string::npos) // DCname only
@@ -71,4 +72,28 @@ G4int G4DCtable::GetCollectionID(G4String DCname)
   return i;
 }
 
+G4int G4DCtable::GetCollectionID(G4VDigitizerModule* aDM) const
+{
+  if(aDM->GetNumberOfCollections()<1)
+  {
+    G4cerr << "Digitizer Module <" << aDM->GetName()
+           << "> does not have a registered digits collection."
+           << G4endl;
+    return -1;
+  }
+  if(aDM->GetNumberOfCollections()>1)
+  {
+    G4cerr << "Digitizer Module <" << aDM->GetName()
+           << "> has more than one registered digits collections."
+           << G4endl;
+    G4cerr << "Candidates are : ";
+    for(G4int j=0;j<aDM->GetNumberOfCollections();j++)
+    { G4cerr << aDM->GetCollectionName(j) << " "; }
+    G4cerr << G4endl;
+    return -1;
+  }
+  for(size_t k=0;k<DMlist.size();k++)
+  { if(DMlist[k]==aDM->GetName()) return k; }
+  return -1;
+}
 

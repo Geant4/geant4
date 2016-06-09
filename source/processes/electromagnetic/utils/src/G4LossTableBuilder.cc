@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.9 2003/11/25 18:01:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4LossTableBuilder.cc,v 1.10 2004/02/27 09:41:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -114,8 +114,8 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
     G4double dedx1  = pv->GetValue(elow, b);
-       G4double range  = 0.5*elow/dedx1;
-    // G4double range  = elow/dedx1;
+    G4double range  = 2.*elow/dedx1;
+    //G4double range  = elow/dedx1;
     v->PutValue(0,range);
     G4double energy1 = elow;
 

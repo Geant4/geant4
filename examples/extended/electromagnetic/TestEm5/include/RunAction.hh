@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2003/08/11 10:14:54 maire Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: RunAction.hh,v 1.2 2004/02/19 18:18:51 maire Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 
@@ -43,6 +43,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
+class DetectorConstruction;
+class PrimaryGeneratorAction;
 class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +52,7 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
    ~RunAction();
 
   public:
@@ -75,16 +77,18 @@ class RunAction : public G4UserRunAction
     void CountParticles (G4ParticleDefinition* part)
                  {     if (part == G4Gamma::Gamma())       nbGamma++ ;
 		  else if (part == G4Electron::Electron()) nbElect++ ;
-		  else if (part == G4Positron::Positron()) nbPosit++ ; }
+		  else if (part == G4Positron::Positron()) nbPosit++ ; };
 		  
     void CountTransmit (G4int flag)
                  {     if (flag == 1)  Transmit[0]++;
-		  else if (flag == 2) {Transmit[0]++; Transmit[1]++; }}	  
+		  else if (flag == 2) {Transmit[0]++; Transmit[1]++; }};	  
 		   		 
     void CountReflect (G4int flag)
                  {     if (flag == 1)  Reflect[0]++;
-		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }}	  
-		  		 		     
+		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }};	  
+    
+    G4double ComputeMscHighland();
+    		  		 		     
   private:
     G4double EnergyDeposit,  EnergyDeposit2;
     G4double TrakLenCharged, TrakLenCharged2;
@@ -94,7 +98,9 @@ class RunAction : public G4UserRunAction
     G4int    nbGamma, nbElect, nbPosit;
     G4int    Transmit[2],   Reflect[2];
     
-    HistoManager* histoManager;
+    DetectorConstruction*   detector;
+    PrimaryGeneratorAction* primary;
+    HistoManager*           histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

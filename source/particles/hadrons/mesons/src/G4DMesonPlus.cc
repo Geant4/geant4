@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonPlus.cc,v 1.7 2003/06/16 16:57:35 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4DMesonPlus.cc,v 1.8 2004/02/13 05:53:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4DMesonPlus::G4DMesonPlus(
 
 // In this version, charged pions are set to stable
 G4DMesonPlus G4DMesonPlus::theDMesonPlus(
-	         "D+",      1.8693*GeV,   6.23e-10*MeV,    +1.*eplus, 
+	         "D+",      1.8693*GeV,   6.26e-10*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,         411,

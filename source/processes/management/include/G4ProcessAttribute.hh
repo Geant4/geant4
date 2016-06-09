@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProcessAttribute.hh,v 1.4 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 // ------------------------------------------------------------

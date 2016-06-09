@@ -30,7 +30,7 @@ G4LEPNeutronBuilder()
 {
   theMin = 0;
   theIMin = theMin;
-  theMax = 100*TeV;
+  theMax = 20*TeV;
   theIMax = 55*GeV;
 }
 

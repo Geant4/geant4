@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01AnalysisManager.hh,v 1.6 2003/06/20 14:55:44 gbarrand Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 

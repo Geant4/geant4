@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.hh,v 1.13 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4UnitsTable.hh,v 1.14 2004/01/21 13:17:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-00-patch-01 $
 //
 // 
 // -----------------------------------------------------------------
@@ -64,8 +64,8 @@ class G4UnitDefinition
 {
 public:  // with description
 
-    G4UnitDefinition(G4String name, G4String symbol,
-                     G4String category, G4double value);
+    G4UnitDefinition(const G4String& name, const G4String& symbol,
+                     const G4String& category, G4double value);
 	    
 public:  // without description
 	    
@@ -75,14 +75,14 @@ public:  // without description
     
 private:
 
-    G4UnitDefinition(G4UnitDefinition&);
+    G4UnitDefinition(const G4UnitDefinition&);
     G4UnitDefinition& operator=(const G4UnitDefinition&);
    
 public:  // with description
 
-    G4String      GetName()   const {return Name;}
-    G4String      GetSymbol() const {return SymbolName;}
-    G4double      GetValue()  const {return Value;}
+    const G4String& GetName()   const {return Name;}
+    const G4String& GetSymbol() const {return SymbolName;}
+    G4double        GetValue()  const {return Value;}
     
     void          PrintDefinition();
     
@@ -91,8 +91,8 @@ public:  // with description
     
     static G4UnitsTable& GetUnitsTable();
 
-    static G4double GetValueOf (G4String);
-    static G4String GetCategory(G4String);
+    static G4double GetValueOf (const G4String&);
+    static G4String GetCategory(const G4String&);
 
 private:
 
@@ -115,19 +115,19 @@ class G4UnitsCategory
 {
 public:  // without description
 
-    G4UnitsCategory(G4String name);
+    G4UnitsCategory(const G4String& name);
    ~G4UnitsCategory();
     G4int operator==(const G4UnitsCategory&) const;
     G4int operator!=(const G4UnitsCategory&) const;
     
 private:
 
-    G4UnitsCategory(G4UnitsCategory&);
+    G4UnitsCategory(const G4UnitsCategory&);
     G4UnitsCategory& operator=(const G4UnitsCategory&);
    
 public:  // without description
 
-    G4String          GetName()      const {return Name;}
+    const G4String&   GetName()      const {return Name;}
     G4UnitsContainer& GetUnitsList()       {return UnitsList;}
     G4int             GetNameMxLen() const {return NameMxLen;}
     G4int             GetSymbMxLen() const {return SymbMxLen;}
@@ -149,8 +149,8 @@ class G4BestUnit
 {
 public:  // with description
 
-    G4BestUnit(G4double internalValue, G4String category);
-    G4BestUnit(const G4ThreeVector& internalValue, G4String category);    
+    G4BestUnit(G4double internalValue, const G4String& category);
+    G4BestUnit(const G4ThreeVector& internalValue, const G4String& category);    
       // These constructors convert a physical quantity from its internalValue
       // into the most appropriate unit of the same category.
       // In practice it builds an object VU = (newValue, newUnit)
@@ -160,7 +160,7 @@ public:  // with description
 public:  // without description
 
     G4double*  GetValue()                 {return Value;}
-    G4String   GetCategory()        const {return Category;}
+    const G4String&   GetCategory() const {return Category;}
     size_t     GetIndexOfCategory() const {return IndexOfCategory;}
     
 public:  // with description 

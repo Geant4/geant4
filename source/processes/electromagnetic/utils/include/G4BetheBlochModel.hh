@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.9 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: G4BetheBlochModel.hh,v 1.10 2004/02/15 17:08:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -136,10 +136,10 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
                 G4double kinEnergy) 
 {
   if(isIon) SetParticle(pd);
-  G4double gamma= kinEnergy/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+
   return tmax;
 }
 
@@ -151,11 +151,10 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4DynamicParticle* d
     mass =  dp->GetMass();
     ratio = electron_mass_c2/mass;
   }
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double gamma= kineticEnergy/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+  G4double tau  = dp->GetKineticEnergy()/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+
   return tmax;
 }
 

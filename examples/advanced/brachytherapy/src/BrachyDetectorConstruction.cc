@@ -34,8 +34,8 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.22 2003/12/09 15:29:55 gunter Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// $Id: BrachyDetectorConstruction.cc,v 1.24 2004/03/11 16:05:02 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyPhantomSD.hh"
@@ -82,9 +82,9 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
   Phantom(0), PhantomLog(0), PhantomPhys(0),
   phantomAbsorberMaterial(0)
 {
-  phantomDimensionX=30*cm ;
-  phantomDimensionY=30*cm;
-  phantomDimensionZ=30*cm;
+  phantomDimensionX=15.*cm ;
+  phantomDimensionY=15.*cm;
+  phantomDimensionZ=15.*cm;
 
   numberOfVoxelsAlongX=300;
   numberOfVoxelsAlongZ=300;
@@ -177,7 +177,7 @@ void BrachyDetectorConstruction::ConstructPhantom()
   G4Colour  lblue   (0.0, 0.0, .75);
 
   G4Material* air=pMaterial->GetMat("Air") ;
-  G4Material* soft=pMaterial->GetMat("tissue");
+  G4Material* water=pMaterial->GetMat("Water");
 
   ComputeDimVoxel();
 
@@ -187,8 +187,8 @@ void BrachyDetectorConstruction::ConstructPhantom()
   WorldPhys = new G4PVPlacement(0,G4ThreeVector(),"WorldPhys",WorldLog,0,false,0);
 
   // Water Box
-  Phantom = new G4Box("Phantom",phantomDimensionX/2,phantomDimensionY/2,phantomDimensionZ/2);
-  PhantomLog = new G4LogicalVolume(Phantom,soft,"PhantomLog",0,0,0);
+  Phantom = new G4Box("Phantom",phantomDimensionX,phantomDimensionY,phantomDimensionZ);
+  PhantomLog = new G4LogicalVolume(Phantom,water,"PhantomLog",0,0,0);
   PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),"PhantomPhys",PhantomLog,WorldPhys,false,0); 
 
   WorldLog->SetVisAttributes (G4VisAttributes::Invisible);
@@ -207,7 +207,7 @@ void  BrachyDetectorConstruction::ConstructSensitiveDetector()
 
   if(!phantomSD)
   {
-    phantomSD = new BrachyPhantomSD(sensitiveDetectorName,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
+    phantomSD = new BrachyPhantomSD(sensitiveDetectorName);
     G4String ROGeometryName = "PhantomROGeometry";
     phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,phantomDimensionX,phantomDimensionZ,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
     phantomROGeometry->BuildROGeometry();

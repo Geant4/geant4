@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VFastSimulationModel.hh,v 1.5 2003/05/21 16:32:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-05-02-patch-01 $
 //
 // 
 //---------------------------------------------------------------

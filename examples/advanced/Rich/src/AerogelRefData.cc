@@ -26,17 +26,17 @@
 // Created: Sajan Easo (Sajan.Easo@cern.ch)
 // Revision and changes: Patricia Mendez (Patricia.Mendez@cern.ch)
 /////////////////////////////////////////////////////////////////////////////
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include "AerogelRefData.hh"
 #include "RichTbGeometryParameters.hh"
 #include "RichTbMaterialParameters.hh" 
 AerogelRefData::AerogelRefData(G4String AgelRefIndFile)
    :NumberOfRefIndBins(NumAerogelRefIndexPhotonEnergyBins),
-    StdAerogelRefphotE(vector<G4double>(NumAerogelRefIndexPhotonEnergyBins)),
-    StdAerogelRefIndexValue(vector<G4double>(NumAerogelRefIndexPhotonEnergyBins)),
-    AerogelRefIndShift(vector<G4double>( MaxNumberOfAerogelTypes)),
- AerogelWavelengthRef(vector<G4double>( MaxNumberOfAerogelTypes)) {
+    StdAerogelRefphotE(std::vector<G4double>(NumAerogelRefIndexPhotonEnergyBins)),
+    StdAerogelRefIndexValue(std::vector<G4double>(NumAerogelRefIndexPhotonEnergyBins)),
+    AerogelRefIndShift(std::vector<G4double>( MaxNumberOfAerogelTypes)),
+ AerogelWavelengthRef(std::vector<G4double>( MaxNumberOfAerogelTypes)) {
   
   AerogelRefIndexFileName=AgelRefIndFile;
 
@@ -101,7 +101,7 @@ void AerogelRefData::ReadStdAerogelRefIndex() {
 
       G4cout<<"Now reading Std Aerogel Ref Index from "
 	    <<StdAerogelRefIndFile<<G4endl; 
-      ifstream finpga(StdAerogelRefIndFile);
+      std::ifstream finpga(StdAerogelRefIndFile);
       G4double ephot,rind;
       for (G4int fbin=0; fbin< NumberOfRefIndBins  ; fbin++){
       finpga>>ephot;
@@ -116,9 +116,9 @@ void AerogelRefData::ReadStdAerogelRefIndex() {
       }
 }
 
-vector<G4double> AerogelRefData::GetCurAerogelRefIndValueVect (G4int AerogelTnum ) {
+std::vector<G4double> AerogelRefData::GetCurAerogelRefIndValueVect (G4int AerogelTnum ) {
   // no  test for tdr rich. now put back to TB conditions.
-  vector<G4double>CAgel(NumberOfRefIndBins);
+  std::vector<G4double>CAgel(NumberOfRefIndBins);
   // AerogelType Ctype;
   G4double CRn = GetRefnominal( AerogelTnum );
   for (G4int ib=0; ib < NumberOfRefIndBins; ib++ ){

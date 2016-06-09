@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FluoTransition.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-06-00 $
+// GEANT4 tag $Name: geant4-06-01 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -70,7 +70,7 @@ public:
   const G4DataVector& TransitionProbabilities() const;
   
   // Return the identity if the vacancy
-  const G4int FinalShellId() const;
+  G4int FinalShellId() const;
 
   // Given the index of the originating shells returns its identity
   G4int OriginatingShellId(G4int index) const;
