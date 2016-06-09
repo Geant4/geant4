@@ -15,6 +15,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 November 2011 Michael Kelsey (hadr-casc-V09-03-92)
+-----------------------------------------------------
+- G4CascadeInterface.cc:  Add John A's protection for proton target
+  conservation failures in 9.4-patch-02.  These happen due to elastic
+  scattering near threshold, and are eliminated in 9.5 by returning a
+  "no-interaction" final state.
+- G4LorentzConvertor.cc:  Revert change below; doesn't compile without
+  matching .hh file (my working repository may have been inconsistent), and
+  introduces too many changes.
+
+18 July 2011 Michael Kelsey (hadr-casc-V09-03-91)
+-------------------------------------------------
+- G4LorentzConvertor.cc:  Copy HEAD version, which includes protections for
+  ::rotate() applied to at-rest system (i.e., z-axis ~ (0,0,0)), and
+  simplifies calculations to avoid similar errors elsewhere.
+
 29 April 2011 Michael Kelsey (hadr-casc-V09-03-90)
 --------------------------------------------------
 - G4InuclNuclei.cc: Remove prefatory message about PDGencoding; requires

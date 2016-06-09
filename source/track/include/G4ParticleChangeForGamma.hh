@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.9 2008/01/11 19:57:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForGamma.hh,v 1.9 2008-01-11 19:57:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -184,55 +184,13 @@ inline void G4ParticleChangeForGamma::InitializeForPostStep(const G4Track& track
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
+  isParentWeightProposed = false;
   proposedKinEnergy = track.GetKineticEnergy();
   proposedMomentumDirection = track.GetMomentumDirection();
   proposedPolarization = track.GetPolarization();
   currentTrack = &track;
 }
 
-//----------------------------------------------------------------
-// method for updating G4Step
-//
-
-inline G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
-{
-  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
-  pStep->SetStepLength( 0.0 );
-  if (!fSetParentWeightByProcess)
-    pStep->GetPostStepPoint()->SetWeight( theParentWeight );
-  return pStep;
-}
-
-inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
-{
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
-  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
-  pPostStepPoint->SetPolarization( proposedPolarization );
-
-  // update weight
-  // this feature is commented out, it should be overwritten in case
-  // if energy loss processes will use biasing
-  if (!fSetParentWeightByProcess)
-    pPostStepPoint->SetWeight( theParentWeight );
-  
-  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
-  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
-  return pStep;
-}
-
-inline void G4ParticleChangeForGamma::AddSecondary(G4DynamicParticle* aParticle)
-{
-  //  create track
-  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
-                                           currentTrack->GetPosition());
-
-  //   Touchable handle is copied to keep the pointer
-  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
-
-  //  add a secondary
-  G4VParticleChange::AddSecondary(aTrack);
-}
 
 #endif
 

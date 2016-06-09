@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 6, 2011  G.Cosmo                 geom-csg-V09-03-17
+- Fixed Coverity defect for uninitialised static data in G4Sphere.
+
+October 3, 2011  G.Cosmo
+- Fix in G4Sphere for setting of relative radial tolerances when setters
+  for radiuses are explicitely called.
+- Relaxed validity condition in construction for the minimum size of the
+  outer radius.
+
 June 1, 2011  G.Cosmo                    geom-csg-V09-03-16
 - Made radial tolerance a local constant instead of a static data member
   in G4Orb and G4Sphere.

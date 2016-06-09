@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.93 2010/12/01 02:04:39 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HadronicProcess.cc,v 1.93 2010-12-01 02:04:39 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -188,13 +188,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     "PostStepDoIt failed on element selection.");
   }
 
-  if (GetMicroscopicCrossSection(aParticle, anElement, aTemp) <= 0.0) {
-    // No interaction
-    theTotalResult->Clear();
-    theTotalResult->Initialize(aTrack);
-    return theTotalResult;
-  }    
-
   // Next check for illegal track status
   //
   if (aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) {
@@ -212,6 +205,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
+
+  if (GetMicroscopicCrossSection(aParticle, anElement, aTemp) <= 0.0) {
+    // No interaction
+    theTotalResult->Clear();
+    theTotalResult->Initialize(aTrack);
+    return theTotalResult;
+  }    
 
   // Go on to regular case
   //

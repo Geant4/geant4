@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4MagErrorStepper.hh,v 1.12 2010-09-10 15:52:53 japost Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4MagErrorStepper

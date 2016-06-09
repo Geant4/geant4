@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HEAntiKaonZeroInelastic.cc,v 1.18 2010-11-27 00:06:50 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"

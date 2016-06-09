@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VEmAdjointModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"

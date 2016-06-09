@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GoudsmitSaundersonMscModel.cc,v 1.27 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

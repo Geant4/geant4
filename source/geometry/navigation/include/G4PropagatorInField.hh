@@ -25,7 +25,7 @@
 //
 // 
 // $Id: G4PropagatorInField.hh,v 1.19 2009-11-13 17:34:26 japost Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class G4PropagatorInField 

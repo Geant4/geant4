@@ -49,6 +49,7 @@ G4Navigator::G4Navigator()
     fTopPhysical(0), fCheck(false), fPushed(false), fWarnPush(true)
 {
   fActive= false; 
+  fLastTriedStepComputation= false;
   ResetStackAndState();
 
   fActionThreshold_NoZeroSteps  = 10; 
@@ -58,6 +59,10 @@ G4Navigator::G4Navigator()
   fregularNav.SetNormalNavigation( &fnormalNav );
 
   fStepEndPoint = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
+  fLastStepEndPointLocal = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
+
+  // this->SetVerboseLevel(3);
+  // this->CheckMode(true);
 }
 
 // ********************************************************************
@@ -79,6 +84,7 @@ G4Navigator::ResetHierarchyAndLocate(const G4ThreeVector &p,
   ResetState();
   fHistory = *h.GetHistory();
   SetupHierarchy();
+  fLastTriedStepComputation= false;  // Redundant, but best
   return LocateGlobalPointAndSetup(p, &direction, true, false);
 }
 
@@ -112,19 +118,12 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   EInside insideCode;
   
   G4bool considerDirection = (!ignoreDirection) || fLocatedOnEdge;
-  
+  fLastTriedStepComputation= false;   
+
   if( considerDirection && pGlobalDirection != 0 )
   {
     globalDirection=*pGlobalDirection;
   }
-
-#ifdef G4DEBUG_NAVIGATION
-  if( fVerbose > 2 )
-  {
-    G4cout << "Upon entering LocateGlobalPointAndSetup():" << G4endl;
-    G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
-  }
-#endif
 
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
@@ -489,6 +488,7 @@ void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 {  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
+   fLastTriedStepComputation= false;
 
 #ifdef G4DEBUG_NAVIGATION
    if( fVerbose > 2 )
@@ -632,6 +632,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   static G4int sNavCScalls=0;
   sNavCScalls++;
 
+  fLastTriedStepComputation= true; 
+
 #ifdef G4VERBOSE
   if( fVerbose > 0 )
   {
@@ -668,6 +670,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // Relocate the point within the same volume
       //
       LocateGlobalPointWithinVolume( pGlobalpoint );
+      fLastTriedStepComputation= true;     // Ensure that this is set again !!
     }
   }
   if ( fHistory.GetTopVolumeType()!=kReplica )
@@ -709,6 +712,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
           else  // Regular (non-voxelised) structure
           {
             LocateGlobalPointAndSetup( pGlobalpoint, &pDirection, true, true );
+            fLastTriedStepComputation= true;     // Ensure that this is set again !!
             //
             // if physical process limits the step, the voxel will not be the
             // one given by ComputeStepSkippingEqualMaterials() and the local
@@ -722,7 +726,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
             if(fHistory.GetTopVolume()->GetRegularStructureId() == 0 )
             { 
               G4Exception("G4Navigator::ComputeStep()",
-                          "Bad-location-of-point", JustWarning,
+                          "InvalidSetup", JustWarning,
                 "Point is relocated in voxels, while it should be outside!");
               Step = fnormalNav.ComputeStep(fLastLocatedPointLocal,
                                             localDirection,
@@ -856,16 +860,20 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
        if ((!fPushed) && (fWarnPush))
        {
-         G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
-                << "          Track stuck, not moving for " 
-                << fNumberZeroSteps << " steps" << G4endl
-                << "          in volume -" << motherPhysical->GetName()
-                << "- at point " << pGlobalpoint << G4endl
-                << "          direction: " << pDirection << "." << G4endl
-                << "          Potential geometry or navigation problem !"
-                << G4endl
-                << "          Trying pushing it of " << Step << " mm ..."
-                << G4endl;
+         std::ostringstream message;
+         message << "Track stuck or not moving." << G4endl
+                 << "          Track stuck, not moving for " 
+                 << fNumberZeroSteps << " steps" << G4endl
+                 << "          in volume -" << motherPhysical->GetName()
+                 << "- at point " << pGlobalpoint << G4endl
+                 << "          direction: " << pDirection << "." << G4endl
+                 << "          Potential geometry or navigation problem !"
+                 << G4endl
+                 << "          Trying pushing it of " << Step << " mm ..."
+                 << G4endl
+                 << "Potential overlap in geometry!";
+         G4Exception("G4Navigator::ComputeStep()", "StuckTrack",
+                     JustWarning, G4String(message.str()));
        }
 #endif
        fPushed = true;
@@ -874,16 +882,17 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     {
       // Must kill this stuck track
       //
-      G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-             << "        Track stuck, not moving for " 
-             << fNumberZeroSteps << " steps" << G4endl
-             << "        in volume -" << motherPhysical->GetName()
-             << "- at point " << pGlobalpoint << G4endl
-             << "        direction: " << pDirection << "." << G4endl;
+      std::ostringstream message;
+      message << "Stuck Track: potential geometry or navigation problem."
+              << G4endl
+              << "        Track stuck, not moving for " 
+              << fNumberZeroSteps << " steps" << G4endl
+              << "        in volume -" << motherPhysical->GetName()
+              << "- at point " << pGlobalpoint << G4endl
+              << "        direction: " << pDirection << ".";
       motherPhysical->CheckOverlaps(5000, false);
-      G4Exception("G4Navigator::ComputeStep()",
-                  "StuckTrack", EventMustBeAborted, 
-                  "Stuck Track: potential geometry or navigation problem.");
+      G4Exception("G4Navigator::ComputeStep()", "StuckTrack",
+                  EventMustBeAborted, G4String(message.str()));
     }
   }
   else
@@ -893,6 +902,9 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
+
+  fStepEndPoint = pGlobalpoint + Step * pDirection; 
+  fLastStepEndPointLocal = fLastLocatedPointLocal + Step * localDirection; 
 
   if( fExiting )
   {
@@ -928,6 +940,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       { 
         fGrandMotherExitNormal *= (*mRot).inverse();
       }
+      //  Do not set fValidExitNormal -- this signifies that the solid is convex!
     }
   }
   fStepEndPoint= pGlobalpoint+Step*pDirection; 
@@ -1082,30 +1095,235 @@ void G4Navigator::SetupHierarchy()
 //
 G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 {
-  G4ThreeVector ExitNormal(0.,0.,0.);
+  G4ThreeVector    ExitNormal(0.,0.,0.);
+  G4VSolid        *currentSolid=0;
+  G4LogicalVolume *candidateLogical;
+  if ( fLastTriedStepComputation ) 
+  {
+    // use fLastLocatedPointLocal
+    // and next candidate volume
+    G4ThreeVector nextSolidExitNormal(0.,0.,0.);
 
-  if ( EnteredDaughterVolume() )
-  {
-    ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()->
-                  GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
-    *valid = true;
-  }
-  else
-  {
-    if( fExitedMother )
+    if( fEntering && (fBlockedPhysicalVolume!=0) ) 
+    { 
+      candidateLogical= fBlockedPhysicalVolume->GetLogicalVolume();
+      if( candidateLogical ) 
+      {
+        // fLastStepEndPointLocal is in the coordinates of the mother
+        // we need it in the daughter's coordinate system.
+
+        if( CharacteriseDaughters(candidateLogical) != kReplica )
+        {
+          // First transform fLastLocatedPointLocal to the new daughter
+          // coordinates
+          G4AffineTransform MotherToDaughterTransform=
+            GetMotherToDaughterTransform( fBlockedPhysicalVolume, 
+                                          fBlockedReplicaNo,
+                                          VolumeType(fBlockedPhysicalVolume) ); 
+          G4ThreeVector daughterPointOwnLocal= 
+            MotherToDaughterTransform.TransformPoint( fLastStepEndPointLocal ); 
+
+          // OK if it is a parameterised volume
+          //
+          EInside  inSideIt; 
+          G4bool   onSurface;
+          G4double safety= -1.0; 
+          currentSolid= candidateLogical->GetSolid(); 
+          inSideIt  =  currentSolid->Inside(daughterPointOwnLocal); 
+          onSurface =  (inSideIt == kSurface); 
+          if( ! onSurface ) 
+          {
+            if( inSideIt == kOutside )
+            { 
+              safety = (currentSolid->DistanceToIn(daughterPointOwnLocal)); 
+              onSurface = safety < 100.0 * kCarTolerance; 
+            }
+            else if (inSideIt == kInside ) 
+            {
+              safety = (currentSolid->DistanceToOut(daughterPointOwnLocal)); 
+              onSurface = safety < 100.0 * kCarTolerance; 
+            }
+          }
+
+          if( onSurface ) 
+          {
+            nextSolidExitNormal =
+              currentSolid->SurfaceNormal(daughterPointOwnLocal); 
+ 
+            // Entering the solid ==> opposite
+            //
+            ExitNormal = -nextSolidExitNormal;
+          }
+          else
+          {
+#ifdef G4VERBOSE
+            if(( fVerbose == 1 ) && ( fCheck ))
+            {
+              std::ostringstream message;
+              message << "Point not on surface ! " << G4endl
+                      << "  Point           = "
+                      << daughterPointOwnLocal << G4endl 
+                      << "  Physical volume = "
+                      << fBlockedPhysicalVolume->GetName() << G4endl
+                      << "  Logical volume  = "
+                      << candidateLogical->GetName() << G4endl
+                      << "  Solid           = " << currentSolid->GetName() 
+                      << "  Type            = "
+                      << currentSolid->GetEntityType() << G4endl
+                      << *currentSolid << G4endl;
+              if( inSideIt == kOutside )
+              { 
+                message << "Point is Outside. " << G4endl
+                        << "  Safety (from outside) = " << safety << G4endl;
+              }
+              else // if( inSideIt == kInside ) 
+              {
+                message << "Point is Inside. " << G4endl
+                        << "  Safety (from inside) = " << safety << G4endl;              
+              }
+              G4Exception("G4Navigator::GetLocalExitNormal()",
+                          "InvalidCondition", JustWarning,
+                          G4String(message.str()));
+            }
+#endif
+          }
+          *valid = onSurface;   //   was =true;
+        }
+        else
+        {
+          *valid = false;  // TODO: Need Separate code for replica!!!!
+#ifdef G4DEBUG_NAVIGATION
+          G4Exception("G4Navigator::GetLocalExitNormal()", "NotImplemented",
+                      FatalException, 
+                      "Local normal not available for replica volumes.");
+#endif 
+        }
+      }
+    }
+    else if ( fExiting ) 
     {
-      ExitNormal = fGrandMotherExitNormal;
+        ExitNormal = fGrandMotherExitNormal;
+        *valid = true;
+    }
+    else  // ie  ( fBlockedPhysicalVolume == 0 )
+    {
+      *valid = false;
+    }
+  }
+  else 
+  {
+    if ( EnteredDaughterVolume() )
+    {
+      ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()->
+                    GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
       *valid = true;
     }
     else
     {
-      // We are not at a boundary.
-      // ExitNormal remains (0,0,0)
-      //
-      *valid = false;
+      if( fExitedMother )
+      {
+        ExitNormal = fGrandMotherExitNormal;
+        *valid = true;
+      }
+      else  // We are not at a boundary. ExitNormal remains (0,0,0)
+      {
+        *valid = false;
+      }
     }
   }
   return ExitNormal;
+}
+
+// ********************************************************************
+// GetMotherToDaughterTransform
+//
+// Obtains the mother to daughter affine transformation
+// ********************************************************************
+//
+G4AffineTransform
+G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,   // not Const 
+                                           G4int   enteringReplicaNo,
+                                           EVolume enteringVolumeType ) 
+{
+  switch (enteringVolumeType)
+  {
+    case kNormal:  // Nothing is needed to prepare the transformation
+      break;       // It is stored already in the physical volume (placement)
+    case kReplica: // Sets the transform in the Replica - tbc
+      G4Exception("G4Navigator::GetMotherToDaughterTransform()",
+                  "NotImplemented", FatalException,
+                  "Method NOT Implemented yet for replica volumes.");
+      break;
+    case kParameterised:
+      if( pEnteringPhysVol->GetRegularStructureId() == 0 )
+      {
+        G4VPVParameterisation *pParam =
+          pEnteringPhysVol->GetParameterisation();
+        G4VSolid* pSolid =
+          pParam->ComputeSolid(enteringReplicaNo, pEnteringPhysVol);
+        pSolid->ComputeDimensions(pParam, enteringReplicaNo, pEnteringPhysVol);
+
+        // Sets the transform in the Parameterisation
+        //
+        pParam->ComputeTransformation(enteringReplicaNo, pEnteringPhysVol);
+
+        // Set the correct solid and material in Logical Volume
+        //
+        G4LogicalVolume* pLogical = pEnteringPhysVol->GetLogicalVolume();
+        pLogical->SetSolid( pSolid );
+      }
+      break;
+  }
+  return G4AffineTransform(pEnteringPhysVol->GetRotation(), 
+                           pEnteringPhysVol->GetTranslation()).Invert(); 
+}
+
+// ********************************************************************
+// GetLocalExitNormalAndCheck
+//
+// Obtains the Normal vector to a surface (in local coordinates)
+// pointing out of previous volume and into current volume, and
+// checks the current point against expected 'local' value.
+// ********************************************************************
+//
+G4ThreeVector G4Navigator::
+GetLocalExitNormalAndCheck(const G4ThreeVector& ExpectedBoundaryPointGlobal,
+                                 G4bool*        pValid)
+{
+  G4ThreeVector ExpectedBoundaryPointLocal;
+
+  // Check Current point against expected 'local' value
+  //
+  if ( fLastTriedStepComputation ) 
+  {
+     const G4AffineTransform& GlobalToLocal= GetGlobalToLocalTransform(); 
+     ExpectedBoundaryPointLocal =
+       GlobalToLocal.TransformPoint( ExpectedBoundaryPointGlobal ); 
+  }
+
+  return GetLocalExitNormal( pValid); 
+}
+
+// ********************************************************************
+// GetGlobalExitNormal
+//
+// Obtains the Normal vector to a surface (in global coordinates)
+// pointing out of previous volume and into current volume
+// ********************************************************************
+//
+G4ThreeVector 
+G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
+                                       G4bool*        pValidNormal)
+{
+  G4bool         validNormal;
+  G4ThreeVector  localNormal, globalNormal;
+
+  localNormal = GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
+  *pValidNormal = validNormal; 
+  G4AffineTransform localToGlobal = GetLocalToGlobalTransform(); 
+  globalNormal = localToGlobal.TransformAxis( localNormal );
+  
+  return globalNormal;
 }
 
 // ********************************************************************
@@ -1142,6 +1360,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 #endif
 
   if (keepState)  { SetSavedState(); }
+  //  fLastTriedStepComputation= true;   -- this method is NOT computing the Step size
 
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool   stayedOnEndpoint  = distEndpointSq < kCarTolerance*kCarTolerance; 
@@ -1344,32 +1563,32 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
     {
       G4int oldcoutPrec= G4cout.precision(8);
       G4int oldcerrPrec= G4cerr.precision(10);
-      G4Exception("G4Navigator::ComputeStep()",
-                  "UnexpectedPositionShift", JustWarning,
-                  "Accuracy error or slightly inaccurate position shift.");
-      G4cerr << "     The Step's starting point has moved " 
-             << std::sqrt(moveLenSq)/mm << " mm " << G4endl
-             << "     since the last call to a Locate method." << G4endl;
-      G4cerr << "     This has resulted in moving " 
-             << shiftOrigin/mm << " mm " 
-             << " from the last point at which the safety " 
-             << "     was calculated " << G4endl;
-      G4cerr << "     which is more than the computed safety= " 
-             << fPreviousSafety/mm << " mm  at that point." << G4endl;
-      G4cerr << "     This difference is " 
-             << diffShiftSaf/mm << " mm." << G4endl
-             << "     The tolerated accuracy is "
-             << fAccuracyForException/mm << " mm." << G4endl;
+      std::ostringstream message;
+      message << "Accuracy error or slightly inaccurate position shift."
+              << G4endl
+              << "     The Step's starting point has moved " 
+              << std::sqrt(moveLenSq)/mm << " mm " << G4endl
+              << "     since the last call to a Locate method." << G4endl
+              << "     This has resulted in moving " 
+              << shiftOrigin/mm << " mm " 
+              << " from the last point at which the safety " 
+              << "     was calculated " << G4endl
+              << "     which is more than the computed safety= " 
+              << fPreviousSafety/mm << " mm  at that point." << G4endl
+              << "     This difference is " 
+              << diffShiftSaf/mm << " mm." << G4endl
+              << "     The tolerated accuracy is "
+              << fAccuracyForException/mm << " mm.";
 
       static G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
-        G4cerr << "  This problem can be due to either " << G4endl;
-        G4cerr << "    - a process that has proposed a displacement"
-               << " larger than the current safety , or" << G4endl;
-        G4cerr << "    - inaccuracy in the computation of the safety"
-                   << G4endl;
-        G4cerr << "  We suggest that you " << G4endl
+        message << G4endl
+               << "  This problem can be due to either " << G4endl
+               << "    - a process that has proposed a displacement"
+               << " larger than the current safety , or" << G4endl
+               << "    - inaccuracy in the computation of the safety" << G4endl
+               << "We suggest that you " << G4endl
                << "   - find i) what particle is being tracked, and "
                << " ii) through what part of your geometry " << G4endl
                << "      for example by re-running this event with "
@@ -1380,9 +1599,10 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
                << G4endl
                << "   - in case, create a detailed logfile"
                << " of this event using:" << G4endl
-               << "         /tracking/verbose 6 "
-               << G4endl;
+               << "         /tracking/verbose 6 ";
       }
+      G4Exception("G4Navigator::ComputeStep()",
+                  "InvalidCondition", JustWarning, G4String(message.str()));
       G4cout.precision(oldcoutPrec);
       G4cerr.precision(oldcerrPrec);
     }
@@ -1400,14 +1620,14 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   G4double safetyPlus = fPreviousSafety + fAccuracyForException;
   if ( shiftOriginSafSq > sqr(safetyPlus) )
   {
-    G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-           << "        Position has shifted considerably without"
-           << " notifying the navigator !" << G4endl
-           << "        Tolerated safety: " << safetyPlus << G4endl
-           << "        Computed shift  : " << shiftOriginSafSq << G4endl;
-    G4Exception("G4Navigator::ComputeStep()",
-                "SignificantPositionShift", JustWarning,
-                "May lead to a crash or unreliable results.");
+    std::ostringstream message;
+    message << "May lead to a crash or unreliable results." << G4endl
+            << "        Position has shifted considerably without"
+            << " notifying the navigator !" << G4endl
+            << "        Tolerated safety: " << safetyPlus << G4endl
+            << "        Computed shift  : " << shiftOriginSafSq;
+    G4Exception("G4Navigator::ComputeStep()", "InvalidCondition",
+                JustWarning, G4String(message.str()));
   }
 }
 

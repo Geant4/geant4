@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.11 2009/05/13 11:23:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Sphere.icc,v 1.11 2009-05-13 11:23:00 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -122,11 +122,11 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
 {
   if ( (sTheta<0) || (sTheta>pi) )
   {
-    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles()" << G4endl
-           << "        Invalid starting Theta angle for solid: " << GetName()
-           << G4endl;
-    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
-                FatalException, "sTheta outside 0-PI range.");
+    std::ostringstream message;
+    message << "sTheta outside 0-PI range." << G4endl
+            << "Invalid starting Theta angle for solid: " << GetName();
+    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidParameters",
+                FatalException, G4String(message.str()));
   }
   else
   {
@@ -142,11 +142,12 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
   }
   else
   {
-    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles(): " << G4endl
-           << "        Negative delta-Theta (" << dTheta << "), for solid: "
-           << GetName() << G4endl;
-    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
-                FatalException, "Invalid dTheta.");
+    std::ostringstream message;
+    message << "Invalid dTheta." << G4endl
+            << "Negative delta-Theta (" << dTheta << "), for solid: "
+            << GetName();
+    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidParameters",
+                FatalException, G4String(message.str()));
   }
   if ( fDTheta-fSTheta < pi ) { fFullThetaSphere = false; }
   else                        { fFullThetaSphere = true ; }
@@ -192,11 +193,12 @@ void G4Sphere::CheckDPhiAngle(G4double dPhi)
     }
     else
     {
-      G4cerr << "ERROR - G4Sphere()::CheckDPhiAngle(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << dPhi << G4endl;
-      G4Exception("G4Sphere::CheckDPhiAngle()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
+      std::ostringstream message;
+      message << "Invalid dphi." << G4endl
+              << "Negative delta-Phi (" << dPhi << "), for solid: "
+              << GetName();
+      G4Exception("G4Sphere::CheckDPhiAngle()", "InvalidParameters",
+                  FatalException, G4String(message.str()));
     }
   }
 }
@@ -215,20 +217,21 @@ inline
 void G4Sphere::SetInsideRadius(G4double newRmin)
 {
   fRmin= newRmin;
+  fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   Initialize();
 }
 
 inline
 void G4Sphere::SetInnerRadius(G4double newRmin)
 {
-  fRmin= newRmin;
-  Initialize();
+  SetInsideRadius(newRmin);
 }
 
 inline
 void G4Sphere::SetOuterRadius(G4double newRmax)
 {
   fRmax= newRmax;
+  fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
   Initialize();
 }
 

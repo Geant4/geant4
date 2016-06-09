@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: HistoManager.hh,v 1.13 2011-01-06 15:56:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1

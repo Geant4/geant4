@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizedAnnihilationModel.cc,v 1.10 2010-11-12 10:38:56 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

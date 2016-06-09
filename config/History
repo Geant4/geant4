@@ -16,6 +16,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th December 2011 Gabriele Cosmo (config-V09-03-23)
+- Corrected condition for determining QT_AS_FRAMEWORK flag depending on
+  how QTHOME is defined in Darwin setups. Addresses problem report #1267.
+
+8th December 2011 Gabriele Cosmo
+- Removed unnecessary 'gcov' linkage for dynamic libraries in Darwin-g++.gmk.
+
+22nd November 2011 Gabriele Cosmo
+- Corrected path in Darwin-g++ setup introduced in previously.
+
+10th November 2011 Gunter Folger
+- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.
+
+21st september 2011 John Allison (config-V09-03-22)
+- G4UI_BUILD.gmk: Added G4INTY_BUILD_XT = 1 for G4VIS_BUILD_OPENGLXM_DRIVER
+  and G4VIS_BUILD_OIX_DRIVER.  The vis drivers need Xt, so this covers
+  the case when the user does not build Xt from G4UI_BUILD flags.
+
+3rd August 2011 Gabriele Cosmo
+- Darwin-g++.gmk: modified OGLLIBS settings to support MacOSX 10.7 Lion
+  for proper configuration of OpenGL libraries in combination with Qt.
+
 9th May 2011 Gabriele Cosmo (config-V09-03-21)
 - Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
   user's environment beforehand.

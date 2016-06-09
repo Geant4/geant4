@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SubtractionSolid.cc,v 1.35 2010-10-20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -36,6 +36,7 @@
 // 02.08.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
 //                      while -> do-while & surfaceA limitations
 // 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
+// 22.07.11 T.Nikitina: add detection of Infinite Loop in DistanceToIn(p,v)
 //
 // --------------------------------------------------------------------
 
@@ -299,10 +300,18 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             if( count1 > 1000 )  // Infinite loop detected
             {
 	      G4String err_message = "Illegal condition caused by solids: ";
-              err_message += fPtrSolidA->GetName() + " and "
-                           + fPtrSolidB->GetName();
+              G4String nameB = fPtrSolidB->GetName();
+                if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid"){
+                   nameB=(dynamic_cast<G4DisplacedSolid*>
+		  (fPtrSolidB))->GetConstituentMovedSolid()->GetName();}
+              err_message += fPtrSolidA->GetName() + " and " + nameB;
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "InfiniteLoop", EventMustBeAborted, err_message);
+                          "InfiniteLoop", JustWarning, err_message);
+              G4cout.precision(16);
+              G4cout << "G4SubtractionSolid: Looping detected in" << G4endl
+                     << " point "<< p << " and direction " << v << G4endl;
+              G4cout.precision(6);
+              return 0.0;
             }
           }    
         }
@@ -338,10 +347,19 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             if( count2 > 1000 )  // Infinite loop detected
             {
 	      G4String err_message = "Illegal condition caused by solids: ";
-              err_message += fPtrSolidA->GetName() + " and "
-                           + fPtrSolidB->GetName();
+              G4String nameB = fPtrSolidB->GetName();
+              if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid"){
+                 nameB=(dynamic_cast<G4DisplacedSolid*>
+	      (fPtrSolidB))->GetConstituentMovedSolid()->GetName();}
+              err_message += fPtrSolidA->GetName() + " and " + nameB;
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "InfiniteLoop", EventMustBeAborted, err_message);
+                          "InfiniteLoop", JustWarning, err_message);
+              G4cout.precision(16);
+              G4cout<<"G4SubtractionSolid::Looping detected in :"<<G4endl
+		    <<" Point p="<<p<<" and Dir="<<v<<G4endl;
+              G4cout.precision(6);
+              return 0.0;         
+
             }
           }
         }

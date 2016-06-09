@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParallelWorldScoringProcess.cc,v 1.11 2008-09-06 06:18:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

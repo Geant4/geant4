@@ -39,7 +39,7 @@
 # pointing up one directory level.
 #
 # $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.10 2010-12-13 19:03:34 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04-patch-02 $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 

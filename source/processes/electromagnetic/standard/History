@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 November 2011: V.Ivant (emstand-V09-03-35)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93: added
+  protection for sampling of angle for very small steps and high
+  energy e-. Fixing rare cases of back-reflection.
+
+28 October 2011: V.Ivant
+- G4CoulombScatteringModel, G4eCoulombScatteringModel: increased
+  low-energy threshold from 1 eV to 1 keV, below this threshold
+  particle energy is set to zero
+
 07 April 2011: V.Ivant (emstand-V09-03-34)
 - G4IonFluctuation - replaced Gauss sampling by Gamma function sampling
 

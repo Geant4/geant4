@@ -1,4 +1,4 @@
-# $Id: G4UI_BUILD.gmk,v 1.5 2007/10/03 12:15:05 lgarnier Exp $
+# $Id: G4UI_BUILD.gmk,v 1.5 2007-10-03 12:15:05 lgarnier Exp $
 # -------------------------------------------------------------
 # Interfaces-specific CPPFLAGS for BUILD phase.
 #   John Allison, 6th July 1998.
@@ -14,8 +14,17 @@ ifndef G4UI_NONE
 # GAG_SESSION
 # TERMINAL_SESSION
 
+# Special case: if OPENGLXM vis driver requested, G4Xt must be built.
+ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+  G4INTY_BUILD_XT = 1
+endif
+
+# Special case: if OIX vis driver requested, G4Xt must be built.
+ifdef G4VIS_BUILD_OIX_DRIVER
+  G4INTY_BUILD_XT  = 1
+endif
+
 ifdef G4UI_BUILD_XM_SESSION
-  G4UI_BUILD = 1
   G4UI_BUILD_BASIC_SESSION = 1
   G4INTY_BUILD_XT = 1
   INC_XM = 1
@@ -23,7 +32,6 @@ ifdef G4UI_BUILD_XM_SESSION
 endif
 
 ifdef G4UI_BUILD_QT_SESSION
-  G4UI_BUILD = 1
   G4UI_BUILD_BASIC_SESSION = 1
   G4INTY_BUILD_QT = 1
   INC_QT   = 1
@@ -31,7 +39,6 @@ ifdef G4UI_BUILD_QT_SESSION
 endif
 
 ifdef G4UI_BUILD_XAW_SESSION
-  G4UI_BUILD = 1
   G4UI_BUILD_BASIC_SESSION = 1
   G4INTY_BUILD_XT = 1
   INC_XAW = 1
@@ -39,7 +46,6 @@ ifdef G4UI_BUILD_XAW_SESSION
 endif
 
 ifdef G4UI_BUILD_WIN32_SESSION
-  G4UI_BUILD = 1
   G4UI_BUILD_BASIC_SESSION = 1
   G4INTY_BUILD_WIN32 = 1
   CPPFLAGS += -DG4UI_BUILD_WIN32_SESSION

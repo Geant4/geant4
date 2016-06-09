@@ -55,8 +55,6 @@ G4ParticleChange::G4ParticleChange()
     theProperTimeChange(0.), theMassChange(0.), theChargeChange(0.),
     theMagneticMomentChange(0.), theCurrentTrack(0)
 {
-  G4VParticleChange::SetSecondaryWeightByProcess(false);
-  G4VParticleChange::SetParentWeightByProcess(false);
 }
 
 G4ParticleChange::~G4ParticleChange() 
@@ -281,11 +279,20 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  // update weight
-  if (!fSetParentWeightByProcess){
+  if (isParentWeightProposed) {
+    // update weight
     G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
-                        * (pPostStepPoint->GetWeight());
-    pPostStepPoint->SetWeight( newWeight );
+      * (pPostStepPoint->GetWeight());
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
+    
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+        }
+      }
+    }
   }
 
 #ifdef G4VERBOSE
@@ -327,11 +334,18 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight
-  if (!fSetParentWeightByProcess){
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed) {
+    // update weight
+    if( isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
   }
-
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
@@ -368,9 +382,17 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight 
-  if (!fSetParentWeightByProcess){
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed ) {
+    // update weight 
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
   }
 
 #ifdef G4VERBOSE

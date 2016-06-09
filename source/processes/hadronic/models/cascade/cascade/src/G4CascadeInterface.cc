@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.cc,v 1.105 2010/12/15 07:40:15 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4CascadeInterface.cc,v 1.105 2010-12-15 07:40:15 gunter Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -60,6 +60,8 @@
 // 20100919  M. Kelsey -- Fix incorrect logic in retryInelasticNucleus()
 // 20100922  M. Kelsey -- Add functions to select de-excitation method
 // 20100924  M. Kelsey -- Migrate to "OutgoingNuclei" names in CollisionOutput 
+// 20111117  J. Apostolakis -- Reduce use of Fatal Exception for bad E/p on
+//		Hydrogen 
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -203,6 +205,44 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	numberOfTries++;
       } while(retryInelasticProton());
     }
+    // Check whether repeated attempts have all failed; 
+    if (numberOfTries >= maximumTries && !balance->okay()) {
+      // If E/p problem only report - this is a known issue for Hydrogen
+
+      if(!(balance->momentumOkay() || balance->energyOkay()) 
+	 && balance->baryonOkay() && balance->chargeOkay()) {
+	const  G4double minDiffEP= 0.001;  // GeV or GeV/c
+	static G4double EmaxDiffFound = -100.00; // 
+	static G4double PmaxDiffFound = -100.00; // 
+        static int      countBadEP=0;
+	G4bool badEnergy=   (!balance->energyOkay()) && (balance->deltaE() > minDiffEP);
+	G4bool badMomentum= (!balance->momentumOkay()) && (balance->deltaP() > minDiffEP);
+
+        countBadEP++;
+	if (badEnergy || badMomentum) {
+	  G4cerr << "Warning: " << __FILE__ << ":" 
+		 << " In Bertini model - problem with conservation law for H target. " 
+		 << G4endl;
+	  if (badEnergy) {
+	    G4double diffE= balance->deltaE();
+	    if ((diffE > EmaxDiffFound) || ((countBadEP%100)==1)) {
+	      G4cerr << " Energy conservation violated by " << balance->deltaE()
+		     << " GeV (" << balance->relativeE() << ")" << G4endl;
+	    }
+	    EmaxDiffFound = std::max( diffE, EmaxDiffFound); 
+	  }
+	  if (badMomentum) {
+	    G4double diffP= balance->deltaP();
+	    if ((diffP > PmaxDiffFound) || ((countBadEP%100)==1)) {	  
+	      G4cerr << " Momentum conservation violated by " << balance->deltaP()
+		     << " GeV/c (" << balance->relativeP() << ")" << G4endl;
+	    }
+	    PmaxDiffFound = std::max( diffP, EmaxDiffFound); 
+	  }
+	}
+      } else
+	throwNonConservationFailure();	// This terminates the job
+    }
   } else {  			// treat all other targets excepet H(1,1)
     do { 			// we try to create inelastic interaction
       if (verboseLevel > 1)
@@ -214,11 +254,11 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
       numberOfTries++;
     } while (retryInelasticNucleus());
-  }
 
-  // Check whether repeated attempts have all failed; report and exit
-  if (numberOfTries >= maximumTries && !balance->okay()) {
-    throwNonConservationFailure();	// This terminates the job
+    // Check whether repeated attempts have all failed; report and exit
+    if (numberOfTries >= maximumTries && !balance->okay()) {
+      throwNonConservationFailure();	// This terminates the job
+    }
   }
 
   // Successful cascade -- clean up and return

@@ -53,6 +53,6 @@ void ExN04TrackerParametrisation::ComputeDimensions
   trackerLayer.SetInnerRadius(tracker_radius[copyNo]);
   trackerLayer.SetOuterRadius(tracker_radius[copyNo]+tracker_thick);
   trackerLayer.SetZHalfLength(tracker_length[copyNo]);
-  trackerLayer.SetStartPhiAngle(trkTubs_sphi);
+  trackerLayer.SetStartPhiAngle(trkTubs_sphi,false);
   trackerLayer.SetDeltaPhiAngle(trkTubs_dphi);
 }

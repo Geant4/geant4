@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RayTracerXViewer.cc,v 1.8 2009-09-16 16:56:52 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 

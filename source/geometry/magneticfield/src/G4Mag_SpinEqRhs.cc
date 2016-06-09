@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.16 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -59,7 +59,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
    //  To set fCof_val 
    G4Mag_EqRhs::SetChargeMomentumMass(particleCharge, MomentumXc, particleMass);
 
-   omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
+   omegac = (eplus/particleMass)*c_light;
 
    pcharge = particleCharge;
 
@@ -67,6 +67,8 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
    beta  = MomentumXc/E;
    gamma = E/particleMass;
 
+   G4double neutronAnomaly = -2.913042725;
+   if (pcharge==0.) SetAnomaly(neutronAnomaly);
 }
 
 void
@@ -81,9 +83,16 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
    dydx[0] = y[3] * inv_momentum_magnitude;       //  (d/ds)x = Vx/V
    dydx[1] = y[4] * inv_momentum_magnitude;       //  (d/ds)y = Vy/V
    dydx[2] = y[5] * inv_momentum_magnitude;       //  (d/ds)z = Vz/V
-   dydx[3] = cof*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
-   dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
-   dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
+
+   if (pcharge == 0.) {
+      dydx[3] = 0.;
+      dydx[4] = 0.;
+      dydx[5] = 0.;
+   } else {
+      dydx[3] = cof*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
+      dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
+      dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
+   }
 
    G4ThreeVector u(y[3], y[4], y[5]);
    u *= inv_momentum_magnitude; 
@@ -100,7 +109,12 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 
    G4ThreeVector dSpin;
 
-   dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   if (pcharge == 0.) {
+      // dSpin = (3.8260837/2.)*omegac*(Spin.cross(BField));
+      dSpin = omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   } else {
+      dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   }
 
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

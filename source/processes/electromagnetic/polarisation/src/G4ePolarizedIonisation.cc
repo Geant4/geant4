@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ePolarizedIonisation.cc,v 1.8 2010-06-16 11:20:54 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file

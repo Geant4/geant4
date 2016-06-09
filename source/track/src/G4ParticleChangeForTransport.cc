@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleChangeForTransport.cc,v 1.20 2010-07-21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashHomoShowerParameterisation.hh,v 1.4 2006/06/29 19:13:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashHomoShowerParameterisation.hh,v 1.4 2006-06-29 19:13:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ---------------------------------------------------------------
@@ -93,6 +93,7 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
 
     // parametrization parameters
     GVFlashHomoShowerTuning * thePar;
+    G4bool owning;
 
     // Cashed parameters:  
     // Longitudinal Coefficients for a homogeneous calo
@@ -129,7 +130,7 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
     G4double NSpot,AlphaNSpot,TNSpot,BetaNSpot;
 
     //Radial
-    G4double RadiusCore, WeightCore,RadiusTail; 
+    G4double RadiusCore, WeightCore,RadiusTail;
 };
 
 #endif

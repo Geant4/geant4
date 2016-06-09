@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4gsmate.cc,v 1.12 2006-06-29 18:14:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 

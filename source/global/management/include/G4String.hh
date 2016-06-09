@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.15 2009/08/10 10:18:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4String.hh,v 1.15 2009-08-10 10:18:09 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -140,8 +140,8 @@ public:
   inline operator const char*() const;
   inline G4SubString operator()(str_size, str_size);
 
-  inline G4int compareTo(const char*, caseCompare mode=exact);
-  inline G4int compareTo(const G4String&, caseCompare mode=exact);
+  inline G4int compareTo(const char*, caseCompare mode=exact) const;
+  inline G4int compareTo(const G4String&, caseCompare mode=exact) const;
 
   inline G4String& prepend (const char*);
   inline G4String& append (const G4String&);

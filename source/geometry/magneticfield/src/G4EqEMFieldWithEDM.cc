@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.cc,v 1.3 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EqEMFieldWithEDM.cc,v 1.3 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -60,7 +60,7 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4double particleCharge, // e+ units
    fElectroMagCof =  eplus*particleCharge*c_light ;
    fMassCof = particleMass*particleMass ;
 
-   omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
+   omegac = (eplus/particleMass)*c_light;
 
    pcharge = particleCharge;
 

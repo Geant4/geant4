@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 November 2011 Gabriele Cosmo (gdml-V09-03-13)
+- Additional fix on G4EllipticalTube, to not consider units in import for
+  semi-axes ratios.
+
+23 November 2011 Gabriele Cosmo
+- Same fix for G4TessellatedSolid and G4Tet, to consider units in import
+  for vertices.
+
+23 November 2011 Gabriele Cosmo
+- Fix in reader for G4GenericTrap shape to consider units in import for
+  vertices.
+
 23 May 2010 Gabriele Cosmo (gdml-V09-03-12)
 - G4GDMLWriteMaterials: avoid dereferencing of null pointer in PropertyWrite()
   for materials without property assigned; issue a warning message.

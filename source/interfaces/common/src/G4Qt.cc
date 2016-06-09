@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Qt.cc,v 1.17 2010-05-20 07:01:03 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 

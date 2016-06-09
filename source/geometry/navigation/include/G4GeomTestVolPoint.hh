@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolPoint.hh,v 1.3 2006/06/29 18:35:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeomTestVolPoint.hh,v 1.3 2006-06-29 18:35:55 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -64,6 +64,9 @@ class G4GeomTestVolPoint : public G4GeomTestPoint
     G4GeomTestVolPoint( const G4GeomTestVolPoint &other );
     virtual ~G4GeomTestVolPoint();
       // Constructors and virtual destructor
+
+    G4GeomTestVolPoint& operator=(const G4GeomTestVolPoint& other);
+      // Assignment operator
 
     G4int GetDaughterIndex() const;
       // Accessors

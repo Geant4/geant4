@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TransitionRadiation.cc,v 1.10 2010-10-14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation class -- implementation file
 
@@ -62,9 +62,9 @@ G4TransitionRadiation( const G4String& processName, G4ProcessType type )
   : G4VDiscreteProcess(processName, type)
 {
   SetProcessSubType(fTransitionRadiation);
-  fMatIndex1 = fMatIndex2;
+  fMatIndex1 = fMatIndex2 = 0;
 
-  fGamma = fEnergy = fVarAngle = fMinEnergy = fMaxEnergy = fMaxTheta = fSigma1 = fSigma2;
+  fGamma = fEnergy = fVarAngle = fMinEnergy = fMaxEnergy = fMaxTheta = fSigma1 = fSigma2 = 0.0;
 }
 
 //////////////////////////////////////////////////////////////////////

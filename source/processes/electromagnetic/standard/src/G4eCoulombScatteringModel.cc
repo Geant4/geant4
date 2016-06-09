@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010/11/13 18:45:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010-11-13 18:45:55 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4LossTableManager.hh"
+#include "G4ProcessManager.hh"
 #include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,7 +86,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
   currentElement  = 0;
-  lowEnergyLimit  = 1*eV;
+  lowEnergyLimit = 1*keV;
   recoilThreshold = 0.*keV;
   particle = 0;
   currentCouple = 0;
@@ -149,7 +150,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(p != particle) { SetupParticle(p); }
 
   // cross section is set to zero to avoid problems in sample secondary
-  if(kinEnergy < lowEnergyLimit) { return xsec; }
+  if(kinEnergy <= 0.0) { return xsec; }
   DefineMaterial(CurrentCouple());
   cosTetMinNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < cosTetMinNuc) {
@@ -185,8 +186,17 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) { return; }
+  if(kinEnergy < lowEnergyLimit) {
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
+    if(particle->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { fParticleChange->ProposeTrackStatus(fStopButAlive); }
+    else { fParticleChange->ProposeTrackStatus(fStopAndKill); }
+    return;
+  }
   SetupParticle(dp->GetDefinition());
+  DefineMaterial(couple);
 
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   //	 << kinEnergy << "  " << particle->GetParticleName() 
@@ -224,6 +234,9 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(finalT <= lowEnergyLimit) { 
     trec = kinEnergy;  
     finalT = 0.0;
+    if(particle->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { fParticleChange->ProposeTrackStatus(fStopButAlive); }
+    else { fParticleChange->ProposeTrackStatus(fStopAndKill); }
   } 
 
   fParticleChange->SetProposedKineticEnergy(finalT);

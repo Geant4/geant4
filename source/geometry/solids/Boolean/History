@@ -20,6 +20,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ July 22, 2011  T.Nikitina                geom-bool-V09-03-05
+  - Corrected protection in G4SubtractionSolid::DistanceToIn(p,v) introduced
+    in previous tag and relaxed to not cause event abortion.
+
  May 27, 2011  T.Nikitina                 geom-bool-V09-03-04
   - Added protection for potential cases of infinite loop in DistanceToIn(p,v)
     and related error message with event abortion.

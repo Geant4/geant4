@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSSphereSurfaceFlux.cc,v 1.7 2010-07-23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"

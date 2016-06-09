@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UrbanMscModel93.cc,v 1.11 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //   
@@ -960,7 +960,7 @@ G4double G4UrbanMscModel93::SampleCosineTheta(G4double trueStepLength,
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       // protection for very small angles
-      if(theta0 < tausmall) return cth;
+      if(theta0*theta0 < tausmall) return cth;
     
       if(theta0 > theta0max)
         return SimpleScattering(xmeanth,x2meanth);

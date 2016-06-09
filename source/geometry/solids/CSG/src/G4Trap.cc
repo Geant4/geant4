@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Trap.cc,v 1.49 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
 //

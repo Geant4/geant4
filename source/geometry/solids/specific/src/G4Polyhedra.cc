@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Polyhedra.cc,v 1.45 2010-10-20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------

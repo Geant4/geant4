@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
+ Geant4 version Name: geant4-09-04-patch-03    (9-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -4880,10 +4880,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0   44.5 um  -12.5 cm   1.17 mm   6.21 keV     0 eV      0 fm      0 fm      World   initStep
     1   38.4 um  -12.6 cm   1.21 mm   11.2 MeV  5.59 keV  1.05 mm   1.05 mm      World     eIoni
-    2   35.9 um  -13.2 cm   1.22 mm   75.2 MeV  1.29 keV   6.4 mm   7.46 mm      WorldTransportation
-    3   35.9 um  -13.2 cm   1.22 mm   75.2 MeV1.78e-13 eV 0.000901 fm   7.46 mm      World     eIoni
-    4   34.7 um  -14.4 cm   1.23 mm    195 MeV  1.74 keV   1.2 cm   1.94 cm      World     eIoni
-    5   29.9 um    -20 cm   1.24 mm    755 MeV  12.2 keV   5.6 cm   7.55 cm OutOfWorldTransportation
+    2   35.9 um  -13.2 cm   1.22 mm   75.2 MeV  1.29 keV   6.4 mm   7.46 mm      World     eIoni
+    3   34.7 um  -14.4 cm   1.23 mm    195 MeV  1.74 keV   1.2 cm   1.94 cm      World     eIoni
+    4   29.9 um    -20 cm   1.24 mm    755 MeV  12.2 keV   5.6 cm   7.55 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 22
@@ -5838,8 +5837,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -19.1 um  -18.3 cm   2.55 mm   3.88 keV     0 eV      0 fm      0 fm      World   initStep
     1  -13.1 um  -18.4 cm   2.57 mm   4.95 MeV  3.88 keV   462 um    462 um      World     eIoni
-    2  -7.71 um  -19.5 cm   2.59 mm    113 MeV  1.17 keV  1.08 cm   1.13 cm      World     eIoni
-    3  -7.01 um    -20 cm   2.59 mm    168 MeV  2.01 keV  5.43 mm   1.67 cm OutOfWorldTransportation
+    2  -7.71 um  -19.5 cm   2.59 mm    113 MeV  1.17 keV  1.08 cm   1.13 cm      WorldTransportation
+    3  -7.71 um  -19.5 cm   2.59 mm    113 MeV3.5e-13 eV 0.00174 fm   1.13 cm      World     eIoni
+    4  -7.01 um    -20 cm   2.59 mm    168 MeV  2.01 keV  5.43 mm   1.67 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 22,   Parent ID = 20
@@ -7420,7 +7420,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.08s Real=0.08s Sys=0.01s
+  User=0.07s Real=0.08s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

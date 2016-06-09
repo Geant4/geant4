@@ -492,44 +492,23 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   
   if (!fEndGlobalTimeComputed)
   {
-     G4double finalInverseVel= DBL_MAX, initialInverseVel=DBL_MAX; 
-
-     // The time was not integrated .. make the best estimate possible
-     //
-     G4double finalVelocity   = track.GetVelocity() ;
-     if( finalVelocity > 0.0 ) { finalInverseVel= 1.0 / finalVelocity; }
-     G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
-     if( initialVelocity > 0.0 ) { initialInverseVel= 1.0 / initialVelocity; }
-     G4double stepLength      = track.GetStepLength() ;
-
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so Peter says it has the final velocity.
-        deltaTime = stepLength * finalInverseVel ;
-	// G4cout << " dt = s / finalV "  << "  s = "   << stepLength
-	//        << " 1 / finalV= " << finalInverseVel << G4endl; 
-     }
-     else if (finalVelocity > 0.0)
-     {
-        // deltaTime = stepLength/finalVelocity ;
-        G4double meanInverseVelocity = 0.5 * ( initialInverseVel + finalInverseVel );
-        deltaTime = stepLength * meanInverseVelocity ;
-	// G4cout << " dt = s * mean(1/v) , with " << "  s = " << stepLength
-	//     << "  mean(1/v)= "  << meanInverseVelocity << G4endl;
-     }
-     else
-     {
-        deltaTime = stepLength * initialInverseVel ;
-	// G4cout << " dt = s / initV "  << "  s = "   << stepLength
-	//        << " 1 / initV= " << initialInverseVel << G4endl; 
-     }  //  Could do with better estimate for final step (finalVelocity = 0) ?
-
-     fCandidateEndGlobalTime   = startTime + deltaTime ;
-
-     // G4cout << " Calculated global time from start = " << startTime << " and "
-     //        << " delta time = " << deltaTime << G4endl;
+    // The time was not integrated .. make the best estimate possible
+    //
+    G4double stepLength      = track.GetStepLength();
+    
+    deltaTime= 0.0;  // in case initialVelocity = 0 
+    
+    const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
+    if (fpDynamicParticle->GetDefinition()== fOpticalPhoton){
+      //  A photon is in the medium of the final point
+      //  during the step, so it has the final velocity.
+      G4double finalVelocity   = track.GetVelocity();
+      deltaTime = stepLength/finalVelocity ;
+    } else {
+      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity();
+      if ( initialVelocity > 0.0 ) deltaTime = stepLength/initialVelocity ;
+    }
+    fCandidateEndGlobalTime   = startTime + deltaTime ;
   }
   else
   {

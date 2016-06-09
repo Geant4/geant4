@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 October 2011 - G.Cosmo (ascii-V09-03-08)
+- Fixed trivial compilation warning from Xcode in G4tgbVolume.
+
+1 September 2011 - P.Arce
+- Fixed bug on the usage of units. Addressing problem report #1240.
+
+1 July 2011 - G.Cosmo
+- Fixed case of dereferencing null pointer in G4tgbGeometryDumper
+  DumpRotationMatrix() method.
+
 13 May 2011 - G.Cosmo (ascii-V09-03-07)
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 

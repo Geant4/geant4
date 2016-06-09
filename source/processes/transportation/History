@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 8th, 2011, H.Kurashige  transport-V09-03-05
+-----------------------------
+- Modified calculation of deltaTime for optical photon in Transportation
+  (and G4CoupledTransportation). The final velocity should be used instead
+  of the initial velocity of the step. Addressing problem report #1239.
+
 June 10th, 2011, J.Apostolakis  transport-V09-03-03
 ------------------------------
 - Fix G4Transportation::AlongStepDoIt

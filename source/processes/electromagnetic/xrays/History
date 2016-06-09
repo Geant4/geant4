@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 July 11: V.Ivant (xrays-V09-03-08)
+- G4SynchrotronRadiation, G4SynchrotronRadiationInMat - fixed 
+  length of C-arrays for the interface with EM field (addressed 
+  bug report #1236)
+
+12 July 11: V.Ivant
+- G4VXTRenergyLoss, G4TransitionRadiation, G4SynchrotronRadiation,
+  G4ForwardXrayTR - fixed the Coverity tool warnings
+
 16 May 11: V.Ivant (xrays-V09-03-07)
 - G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator, 
   G4VXTRenergyLoss - fixed gcc-4.6.0 warnings

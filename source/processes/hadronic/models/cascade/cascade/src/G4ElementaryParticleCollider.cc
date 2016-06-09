@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ElementaryParticleCollider.cc,v 1.75 2010-10-19 19:48:35 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04-patch-02 $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100316  D. Wright (restored by M. Kelsey) -- Replace original (incorrect)

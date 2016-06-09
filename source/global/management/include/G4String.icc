@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.19 2009/08/10 10:30:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4String.icc,v 1.19 2009-08-10 10:30:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -257,16 +257,15 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   return res;
 }
 
-G4int G4String::compareTo(const char* s, caseCompare mode)
+G4int G4String::compareTo(const char* s, caseCompare mode) const
 {
   return (mode==exact) ? strcmp(c_str(),s)
                        : strcasecompare(c_str(),s);
 }
 
-G4int G4String::compareTo(const G4String& s, caseCompare mode)
+G4int G4String::compareTo(const G4String& s, caseCompare mode) const
 {
-  return (mode==exact) ? strcmp(c_str(),s.c_str())
-                       : strcasecompare(c_str(),s.c_str());
+  return compareTo(s.c_str(), mode);
 }
 
 G4String& G4String::prepend (const char* str)

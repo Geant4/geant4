@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2011 - P.Arce (error_propagation-V09-03-01)
+- Add GetTranfMat in G4ErrorFreeTrajectoryState.hh
+
 13 May 2011 - G.Cosmo (error_propagation-V09-03-00)
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 

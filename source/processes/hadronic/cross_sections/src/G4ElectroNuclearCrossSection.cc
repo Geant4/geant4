@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ElectroNuclearCrossSection.cc,v 1.33 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -203,7 +203,8 @@ G4ElectroNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPar
 	  } // End of creation of the new set of parameters
     } // End of parameters udate
 
-    else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
+    //else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
+    else if(lastE == Energy) return lastSig*millibarn; // Don't calc. same CS twice
     // ============================== NOW Calculate the Cross Section ==========================
     lastE=Energy;                          // lastE - the electron energy
     if (Energy<=lastTH)                    // Once more check that the eE is higher than the ThreshE
@@ -211,6 +212,10 @@ G4ElectroNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPar
       lastSig=0.;
       return 0.;
     }
+    //G4cout << "E-NUC Energy= " << Energy << " lastTH= " << lastTH
+    //	   << " lastZ= " << lastZ << " lastN= " << lastN  
+    //	   << " Z= " << targZ << " N= " << targN
+    //	   << G4endl;  
     G4double lE=std::log(Energy);               // std::log(eE) (it is necessary at this point for the fit)
     lastG=lE-lmel;                         // Gamma of the electron (used to recover std::log(eE))
     G4double dlg1=lastG+lastG-1.;
@@ -218,7 +223,7 @@ G4ElectroNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPar
     if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
 	{
       G4double shift=(lE-lEMi)/dlnE;
-      G4int    blast=static_cast<int>(shift);
+      G4int    blast=static_cast<G4int>(shift);
       if(blast<0)   blast=0;
       if(blast>=mL) blast=mL-1;
       shift-=blast;
@@ -248,6 +253,7 @@ G4ElectroNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPar
   else return 0.;
   if(lastSig<0.) lastSig = 0.;
   lastE=Energy;
+  //G4cout << "Sig(mb)= " << lastSig << G4endl;
   return lastSig*millibarn;
 }
 
@@ -2405,6 +2411,8 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 {
+  if(lastSig <= 0.0) { return 0.0; }  // VI
+
   // All constants are the copy of that from GetCrossSection funct.
   //  => Make them general.
   static const G4int nE=336; // !!  If you change this, change it in 
@@ -2439,7 +2447,8 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   {
     G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
            << ",l=" << lastL << ">" << mL << G4endl;
-    return 3.0*MeV; // quick and dirty workaround @@@ HP.
+    return 0.0; // VI
+    //return 3.0*MeV; // quick and dirty workaround @@@ HP.
                     // (now can be not necessary M.K.)
   }
   G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it
@@ -2532,6 +2541,9 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 {
+  if(lastG <= 0.0 || lastE <= 0.0) { return 0.; } // VI
+  if(lastSig <= 0.0) { return 0.0; }  // VI
+
   static const G4double mel=0.5109989;    // Mass of electron in MeV
   static const G4double mel2=mel*mel;     // Squared Mass of electron in MeV
   G4double y=nu/lastE;                    // Part of energy carried by the equivalent pfoton
@@ -2585,6 +2597,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 
 G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
 {
+  if(nu <= 0.0 || Q2 <= 0.0) { return 0.0; }
   static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
   static const G4double Q02=Q0*Q0;        // Squared coefficient of the dipole nucleonic form-factor
@@ -2594,7 +2607,7 @@ G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2
   static const G4double cp=3.;            // Power of the c-function
   //G4double x=Q2/dM/nu;                  // Direct x definition
   G4double K=nu-Q2/dM;                    // K=nu*(1-x)
-  if(K<0.)
+  if(K <= 0.) 
   {
 #ifdef edebug
     G4cerr<<"**G4ElectroNucCrossSec::GetVirtFact:K="<<K<<",nu="<<nu<<",Q2="<<Q2<<",dM="<<dM<<G4endl;

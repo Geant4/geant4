@@ -64,6 +64,7 @@
 
 class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
+class G4VelocityTable;
 
 //////////////
 class G4Track
@@ -244,14 +245,11 @@ public: // With description
   static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
   static G4double GetMaxTOfVelocityTable();
   static G4double GetMinTOfVelocityTable();
-  static G4double GetNbinOfVelocityTable();
+  static G4int    GetNbinOfVelocityTable();
 
 //---------
    private:
 //---------
-  // prepare velocity table
-  void PrepareVelocityTable();
-
 // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
    G4ThreeVector fPosition;        // Current positon
@@ -300,11 +298,8 @@ public: // With description
    mutable G4double                  prev_velocity;
    mutable G4double                  prev_momentum;
 
-   static G4PhysicsLogVector* velTable;
-   static G4double maxT;
-   static G4double minT;
-   static G4int    NbinT;
    G4bool              is_OpticalPhoton; 
+   static G4VelocityTable*  velTable;
 };
 
 #include "G4Track.icc"

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
 //

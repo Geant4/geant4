@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.23 2010/11/05 08:58:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbVolume.cc,v 1.23 2010-11-05 08:58:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4tgbVolume
@@ -145,7 +145,7 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
   G4bool bFirstCopy = false;
-  if( (logvol == 0) ) 
+  if( logvol == 0 ) 
   {
     bFirstCopy = true;
     if( theTgrVolume->GetType() != "VOLDivision" )

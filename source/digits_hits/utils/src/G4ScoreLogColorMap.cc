@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoreLogColorMap.cc,v 1.11 2010-11-14 14:18:36 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoreLogColorMap.hh"

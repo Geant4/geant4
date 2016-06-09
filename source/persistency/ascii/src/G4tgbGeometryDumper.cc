@@ -989,11 +989,11 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 //------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
 {
+  if (!rotm)  { rotm = new G4RotationMatrix(); } 
+
   G4double de = MatDeterminant(rotm);
   G4String rotName = LookForExistingRotation( rotm );
   if( rotName != "" )  { return rotName; }
-
-  if (!rotm)  { rotm = new G4RotationMatrix(); } 
 
   G4ThreeVector v(1.,1.,1.);
   if (de < -0.9 )  // a reflection ....

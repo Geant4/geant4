@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4gspos.cc,v 1.13 2006-06-29 18:14:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
 

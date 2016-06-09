@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCutsTable.cc,v 1.28 2010-12-23 06:00:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------

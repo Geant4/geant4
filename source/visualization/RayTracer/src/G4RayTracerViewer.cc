@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RayTracerViewer.cc,v 1.18 2009-08-19 08:39:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
 

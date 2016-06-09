@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.18 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.18 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------
@@ -99,6 +99,9 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;
     theParentWeight = right.theParentWeight;
+    isParentWeightProposed = right.isParentWeightProposed;
+    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
+    fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
 
     currentTrack = right.currentTrack;
     proposedKinEnergy = right.proposedKinEnergy;
@@ -178,4 +181,84 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
+}
+
+//----------------------------------------------------------------
+// methods for updating G4Step
+//
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // accumulate change of the kinetic energy
+  G4double kinEnergy = pPostStepPoint->GetKineticEnergy() +
+    (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+
+  // update kinetic energy and charge
+  if (kinEnergy < lowEnergyLimit) {
+    theLocalEnergyDeposit += kinEnergy;
+    kinEnergy = 0.0;
+  } else {
+    pPostStepPoint->SetCharge( currentCharge );
+  }
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
+
+  if (isParentWeightProposed) {
+    // update weight 
+    G4StepPoint* pPreStepPoint = pStep->GetPreStepPoint();
+    G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
+      * (pPostStepPoint->GetWeight());
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      //Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+        }
+      }
+    }
+  }
+
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  pPostStepPoint->SetPolarization( proposedPolarization );
+
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight( theParentWeight );
+        }
+      }
+    }
+  }
+
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+
+void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
+{
+  //  create track
+  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
+                                           currentTrack->GetPosition());
+
+  //   Touchable handle is copied to keep the pointer
+  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
+
+  //  add a secondary
+  G4VParticleChange::AddSecondary(aTrack);
 }

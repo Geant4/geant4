@@ -6,7 +6,7 @@
 # Specific UI/Vis options are also handled here.
 #
 # $Id: Geant4InterfaceOptions.cmake,v 1.5 2010-11-26 18:52:16 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04-patch-02 $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 if(UNIX)

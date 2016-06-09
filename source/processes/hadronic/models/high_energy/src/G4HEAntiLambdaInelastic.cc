@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEAntiLambdaInelastic.cc,v 1.17 2010-11-27 02:00:07 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"

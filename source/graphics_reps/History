@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd August 2011  John Allison  (greps-V09-03-05)
+- G4PolyhedronArbitrary:  Added SetReferences and InvertFacets.
+  SetReferences is necessary at the end to complete the polyhedron.
+  It particularly matters if the polyhedron suffers subsequent
+  boolean operations.
+  InvertFacets can be useful.
+
+1st March 2011  John Allison
+- BooleanProcessor.cc:
+  o Changed cout to G4cout, etc.
+  o Fixed Coverity warnings.
+
+24th March 2011  Gabriele Cosmo
+- Consistently make use of G4 types in HepPolyhedron and BooleanProcessor,
+  to allow for centralized control of CLHEP classes.
+
 1st March 2011  John Allison  (greps-V09-03-04)
 - Fixed Coverity warnings.
 

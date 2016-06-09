@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestPoint.hh,v 1.3 2006/06/29 18:35:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeomTestPoint.hh,v 1.3 2006-06-29 18:35:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -59,6 +59,7 @@ class G4GeomTestPoint
     virtual ~G4GeomTestPoint();
       // Constructors and virtual destructor
 
+    G4GeomTestPoint& operator=(const G4GeomTestPoint& other);
     G4bool operator==( const G4GeomTestPoint &other ) const;
     G4bool operator< ( const G4GeomTestPoint &other ) const;
     G4bool operator<=( const G4GeomTestPoint &other ) const;

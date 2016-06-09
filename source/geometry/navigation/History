@@ -17,6 +17,131 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24th, 2011 - J.Apostolakis (geomnav-V09-03-21)
+-----------------------------------
+- G4VIntersectionLocator: Use only 'last' Normal.
+  Disable fallback of using helper Navigator, as it appears 
+  to cause problems in the presence of additional geometries.
+
+November 23rd, 2011 - J.Apostolakis
+-----------------------------------
+- G4MultiNavigator: adapt to revisions of intersection logic, to provide
+  Exit Surface Normal for step ending on boundary.
+  First implementation of methods GetGlobalExitNormal(), GetLocalExitNormal()
+  and GetLocalExitNormalAndCheck().
+- The Local methods are not adapted for this case - they complain:
+    - warn if one navigator  limited the step;
+    - fail report error if multiple navigators limited the step.
+
+   Added data members to record number of Navigators which limited
+    the step in the last call to ComputeStep ( fNoLimitingStep ),
+    and the id in case of just one having limited it (fIdNavLimiting).
+
+November 18th, 2011 - J.Apostolakis (geomnav-V09-03-20)
+-----------------------------------
+- G4Navigator: fixed valid flag to mean correctly 'convexity' and
+ 'have-calculated' in its two use cases.
+- G4Navigator::ComputeStep():
+    Undid / corrected change to 'fValidExitNormal' (meaning = exited solid
+    is convex ) when it is recalculated for the case of exiting. 
+- Minor fix to GetLocalExitNormal() in G4Navigator:
+    Always set Valid=calculated for Local Normal.
+
+November 18th, 2011 - J.Apostolakis (geomnav-V09-03-19)
+-----------------------------------
+- G4SimpleLocator, G4BrentLocator & G4MultiLevelLocator:
+  Revised all Locator classes to use GetLastSurfaceNormal()
+  which first calls the robust GetLastSurfaceNormal() instead of calling
+  GetLocalSurfaceNormal(). Corrects ATLAS stuck track issues for hard test
+  cases.
+
+November 11th, 2011 - G.Cosmo
+-----------------------------
+- Trivial fixes for Coverity defects in G4GeomTestPoint and G4GeomTestVolPoint.
+- Some code cleanup...
+
+October 28th, 2011 - J.Apostolakis (geomnav-V09-03-18, geomnav-V09-03-17)
+----------------------------------
+- Fix in G4Navigator::GetLocalExitNormal() to use end-point of last
+  step (not start point) when calculating normal at end of step.
+- New method GetLocalExitNormalAndCheck(3-vec, *valid) for checking,
+  now used by GetGlobalExitNormal().
+- Added new state 'fLastStepEndPointLocal' to the state of G4Navigator. 
+
+October 26th, 2011 - J.Apostolakis (geomnav-V09-03-16)
+----------------------------------
+- Fix to G4Navigator::GetLocalExitNormal(): rewrote the case when ComputeStep()
+  has been called but not Locate.
+  If 'entering', must first transform 'fLastLocatedPointLocal' to the new
+  daughter coordinates before using them.
+  If 'exiting' use the stored values (as after Locate()).
+- Created new method GetMotherToDaughterTransform() in G4Navigator:
+  'fLastLocatedPointLocal' remains in the coordinates of current step's
+  volume, i.e. what is called mother (always) , until after the re-location
+  (i.e. call to LocateGlobalPointAndSetup()) 
+
+October 25th, 2011 - J.Apostolakis
+----------------------------------
+- G4Navigator: ComputeSafety() no longer sets flag meant for ComputeStep().
+
+October 24th, 2011 - J.Apostolakis (geomnav-V09-03-15)
+----------------------------------
+- Improvement in G4VIntersectionLocator (for use in GetLocalSurfaceNormal()):
+  make a data member of type G4TouchableHistoryHandle to replace interim use
+  of 'static' for local variable in GetLocalSurfaceNormal().
+- G4MultiLevelNavigator: put in missing change of threshold.
+
+October 21th, 2011 - J.Apostolakis (geomnav-V09-03-14)
+----------------------------------
+- Several fixes and improvements in G4VIntersectionLocator:
+  o Fix to GetSurfaceNormal(): fixed check in case of 'last computed' normal. 
+  o Fix to GetGlobalSurfaceNormal(): use correct navigator (helper) to transform
+    normal from local to global
+  o Optimisation to GetLocalSurfaceNormal(): reuse G4TouchableHistoryHandle
+    (via static ad interim), do not allocate for every call.
+    Note: *limitation* of using helper - cannot cope with coincident surfaces in
+          this version (need to use direction of trial *chord* when locating).
+  o GetLocalExitNormal(): call Surface Normal only if on Surface or near inside,
+    else return 'false' for validity.
+  o All 'Normal' methods: check Normal vector to make sure its magnitude is
+    within 0.001 of 1. 
+
+October 18th, 2011 - J.Apostolakis (geomnav-V09-03-13)
+----------------------------------
+- Locators (Simple, Brent, Multi-Level):
+  Refined the threshold for accepting a candidate intersection
+  The new criterion is much smaller (to capture more cases) : 
+        sagitta < tolerance    ~=   1e-9 mm
+  whereas it used to be
+        sagitta < geom_mean( tolerance, delta_intersection )
+        ie.  sagitta < 1e-6 mm.
+- Corrected compilation warning from gcc 4.6 (unused variables).
+- Corrected problem in G4Navigator::GetLocalExitNormal (not set variable).
+
+October 11th, 2011 - J.Apostolakis (geomnav-V09-03-12)
+----------------------------------
+- Created *fix* for ATLAS problem of tracks stuck on boundary of volumes: 
+  Improved the condition for accepting a candidate intersection with
+  a boundary in the Locator classes.
+  >> It now *checks* that the track will enter the new volume. <<
+  All three Locator classes were revised to use the new convergence 
+  condition ( ie G4SimpleLocator, G4BrentLocator and G4MultiLevelLocator).
+  Note: the check uses the dot product between the exiting normal and
+        the estimated momentum of the track at the approximate curve
+        point near the entry/intersection point.
+- Revised G4VIntersectionLocator:
+  * New method GetSurfaceNormal, to get last normal or, if not
+    available obtain new estimate from GetGlocalSurfaceNormal;
+  * Corrected AdjustmentOfFoundIntersection() to use GlobalExitNormal 
+    instead of Local(ExitNormal);
+  * Renamed arguments of IntersectChord (to no longer use fP prefix).
+- Revised G4Navigator::GetLocalExitNormal():
+  * improved GetLocalExitNormal() method, to allow it to be called
+    before Locate is called at the endpoint of the last ComputeStep;
+  * adding state to identify whether ComputeStep was called last 
+    (rather than a Locate method);
+  * adding a method to provide the Exit Normal in Global coordinates. 
+
 May 12th, 2011 - G.Cosmo (geomnav-V09-03-11)
 ------------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.

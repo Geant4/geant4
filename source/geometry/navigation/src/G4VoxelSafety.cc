@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.9 2010/11/11 16:15:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VoxelSafety.cc,v 1.9 2010-11-11 16:15:00 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
 //  First version:  31 May 2010
 // 
+// --------------------------------------------------------------------
 #include "G4VoxelSafety.hh"
 
 #include "G4GeometryTolerance.hh"
@@ -73,8 +74,8 @@ G4VoxelSafety::~G4VoxelSafety()
 //
 G4double
 G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
-			     const G4VPhysicalVolume& currentPhysical,
-			           G4double ) //          maxLength)
+                             const G4VPhysicalVolume& currentPhysical,
+                                   G4double ) //          maxLength)
 {
   // G4VPhysicalVolume *samplePhysical;
   G4LogicalVolume *motherLogical;
@@ -101,12 +102,13 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
   EInside  insideMother= motherSolid->Inside(localPoint); 
   if( insideMother != kInside  ) { 
     if( insideMother == kOutside ) {
-      G4cerr << " G4VoxelSafety>  Location for safety is Outside current volume. " << G4endl;
-      G4cerr << "     The approximate distance to the solid (safety from outside ) is " 
-	     << motherSolid->DistanceToIn( localPoint ) << G4endl; 
-      G4Exception("G4VoxelSafety::ComputeSafety()", 
-		  "IllegalLocationForSafetyCall", FatalException,
-		  "Method called for location outside current Volume.");
+      std::ostringstream message;
+      message << "Method called for location outside current Volume." << G4endl
+              << "Location for safety is Outside current volume. " << G4endl
+              << "The approximate distance to the solid (safety from outside) is: " 
+              << motherSolid->DistanceToIn( localPoint ); 
+      G4Exception("G4VoxelSafety::ComputeSafety()", "InvalidSetup",
+                  FatalException, G4String(message.str()));
     }
     return 0.0;
   }   
@@ -144,7 +146,7 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
 G4double
 G4VoxelSafety::
 SafetyForVoxelNode( G4SmartVoxelNode    *curVoxelNode, 
-		    const G4ThreeVector& localPoint )
+                    const G4ThreeVector& localPoint )
 {
    G4double ourSafety= DBL_MAX;
 
@@ -162,27 +164,27 @@ SafetyForVoxelNode( G4SmartVoxelNode    *curVoxelNode,
       sampleNo = curVoxelNode->GetVolume(contentNo);
       if ( !fBlockList.IsBlocked(sampleNo) ) 
       { 
-	fBlockList.BlockVolume(sampleNo);
+        fBlockList.BlockVolume(sampleNo);
 
-	samplePhysical = fpMotherLogical->GetDaughter(sampleNo);
-	G4AffineTransform sampleTf(samplePhysical->GetRotation(),
-				   samplePhysical->GetTranslation());
-	sampleTf.Invert();
-	samplePoint =  sampleTf.TransformPoint(localPoint);
-	ptrSolid =  samplePhysical->GetLogicalVolume()->GetSolid();
+        samplePhysical = fpMotherLogical->GetDaughter(sampleNo);
+        G4AffineTransform sampleTf(samplePhysical->GetRotation(),
+                                   samplePhysical->GetTranslation());
+        sampleTf.Invert();
+        samplePoint =  sampleTf.TransformPoint(localPoint);
+        ptrSolid =  samplePhysical->GetLogicalVolume()->GetSolid();
 
-	sampleSafety = ptrSolid->DistanceToIn(samplePoint);
-	ourSafety   = std::min( sampleSafety, ourSafety ); 
+        sampleSafety = ptrSolid->DistanceToIn(samplePoint);
+        ourSafety   = std::min( sampleSafety, ourSafety ); 
 #ifdef G4VERBOSE
-	if(( fCheck ) && ( fVerbose == 1 ))
-	{
-	  // ReportSolidSafetyToIn( MethodName, solid, value, point ); 
-	  G4cout << "*** G4VoxelSafety::SafetyForVoxelNode(): ***" << G4endl
-		 << "    Invoked DistanceToIn(p) for daughter solid: "
-		 << ptrSolid->GetName()
-		 << ". Solid replied: " << sampleSafety << G4endl
-		 << "    For local point p: " << samplePoint
-		 << ", to be considered as 'daughter safety'." << G4endl;
+        if(( fCheck ) && ( fVerbose == 1 ))
+        {
+          // ReportSolidSafetyToIn( MethodName, solid, value, point ); 
+          G4cout << "*** G4VoxelSafety::SafetyForVoxelNode(): ***" << G4endl
+                 << "    Invoked DistanceToIn(p) for daughter solid: "
+                 << ptrSolid->GetName()
+                 << ". Solid replied: " << sampleSafety << G4endl
+                 << "    For local point p: " << samplePoint
+                 << ", to be considered as 'daughter safety'." << G4endl;
         }
 #endif
       }
@@ -216,7 +218,7 @@ SafetyForVoxelNode( G4SmartVoxelNode    *curVoxelNode,
 //
 G4double
 G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
-		      const G4ThreeVector& localPoint )
+                      const G4ThreeVector& localPoint )
 {
   const G4SmartVoxelHeader *targetVoxelHeader=pHeader;
   G4SmartVoxelNode *targetVoxelNode=0;
@@ -240,17 +242,23 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
                           / targetHeaderNoSlices;
 
   const G4int pointNodeNo = G4int( (localPoint(targetHeaderAxis)-targetHeaderMin)
-    			  / targetHeaderNodeWidth);
+                              / targetHeaderNodeWidth);
   // Ensure that it is between 0 and targetHeader->GetMaxExtent() - 1
 
-  G4cout << " Calculated pointNodeNo= " << pointNodeNo
-	 << "  from position= " <<  localPoint(targetHeaderAxis)
-	 << "  min= "    << targetHeaderMin
-	 << "  max= "    << targetVoxelHeader->GetMaxExtent()
-	 << "  width= "  << targetHeaderNodeWidth 
-	 << "  no-slices= " << targetHeaderNoSlices
-	 << "  axis=  "  << targetHeaderAxis
-	 << G4endl;
+#ifdef G4VERBOSE  
+  if( fVerbose > 2 ){ 
+    G4cout << G4endl;
+    G4cout << "**** G4VoxelSafety::SafetyForVoxelHeader  " << G4endl;
+    G4cout << " Calculated pointNodeNo= " << pointNodeNo
+           << "  from position= " <<  localPoint(targetHeaderAxis)
+           << "  min= "    << targetHeaderMin
+           << "  max= "    << targetVoxelHeader->GetMaxExtent()
+           << "  width= "  << targetHeaderNodeWidth 
+           << "  no-slices= " << targetHeaderNoSlices
+           << "  axis=  "  << targetHeaderAxis
+           << G4endl;
+  }
+#endif
 
   // Stack info for stepping
   //
@@ -263,8 +271,6 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
 
 #ifdef G4VERBOSE  
   if( fVerbose > 2 ){ 
-    G4cout << G4endl;
-    G4cout << "**** G4VoxelSafety::SafetyForVoxelHeader  " << G4endl;
     G4cout << "   Depth            = " << fVoxelDepth ; // << G4endl;
     G4cout << "   Number of Slices = " << targetHeaderNoSlices ; // << G4endl;
     G4cout << "   Header (address) = " << targetVoxelHeader << G4endl;
@@ -293,70 +299,97 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
 
      sampleProxy = targetVoxelHeader->GetSlice(targetNodeNo);
 
-     G4cout << " -Checking node " << targetNodeNo
-            << " is proxy with address " << sampleProxy; //  << G4endl;
+#ifdef G4VERBOSE  
+    if( fVerbose > 2 ){ 
+      G4cout << " -Checking node " << targetNodeNo
+             << " is proxy with address " << sampleProxy << G4endl;
+    }
+#endif 
 
      if ( sampleProxy->IsNode() ) 
      {
-	targetVoxelNode = sampleProxy->GetNode();
-	G4cout << " -- It is a Node " << G4endl;
+        targetVoxelNode = sampleProxy->GetNode();
+#ifdef G4VERBOSE  
+     if( fVerbose > 2 ){ 
+        G4cout << " -- It is a Node " << G4endl;
+     }
+#endif 
 
-	// Deal with the node here [ i.e. the last level ] 
-	nodeSafety= SafetyForVoxelNode( targetVoxelNode, localPoint); 
+        // Deal with the node here [ i.e. the last level ] 
+        nodeSafety= SafetyForVoxelNode( targetVoxelNode, localPoint); 
         // if( targetHeaderNoSlices != numSlicesCheck ) 
-	//    G4cerr << "Number of slices changed - to " << targetHeaderNoSlices << G4endl;
+        //    G4cerr << "Number of slices changed - to " << targetHeaderNoSlices << G4endl;
         minSafety= std::min( minSafety, nodeSafety ); 
      }
      else  
      {
         G4SmartVoxelHeader *pNewVoxelHeader = sampleProxy->GetHeader();
-	// fVoxelDepth++;
+        // fVoxelDepth++;
 
-	G4cout << " -- It is a Header " << G4endl;
-	G4cout << "  Recurse to deal with next level, fVoxelDepth= " 
-	       << fVoxelDepth+1 << G4endl;
-	
-	// Recurse to deal with lower levels
-	levelSafety= SafetyForVoxelHeader( pNewVoxelHeader, localPoint); 
+#ifdef G4VERBOSE  
+        if( fVerbose > 2 ){ 
+          G4cout << " -- It is a Header " << G4endl;
+          G4cout << "  Recurse to deal with next level, fVoxelDepth= " 
+                 << fVoxelDepth+1 << G4endl;
+        }
+#endif 
+
+        // Recurse to deal with lower levels
+        levelSafety= SafetyForVoxelHeader( pNewVoxelHeader, localPoint); 
         // fVoxelDepth--;
 
-        // G4cout << "  Returned from SafetyForVoxelHeader. Depth=  "
-	//        << fVoxelDepth << G4endl;
-        //--G4cout << "  Decreased  fVoxelDepth to " << fVoxelDepth << G4endl;
-	//--G4cout << "  Header (address)= " << targetVoxelHeader << G4endl;
-        G4cout << " Level safety = " << levelSafety << G4endl;
-
-	minSafety= std::min( minSafety, levelSafety );
+#ifdef G4VERBOSE  
+        if( fVerbose > 2 ){ 
+          // G4cout << "  Returned from SafetyForVoxelHeader. Depth=  "
+          //        << fVoxelDepth << G4endl;
+          //--G4cout << "  Decreased  fVoxelDepth to " << fVoxelDepth << G4endl;
+          //--G4cout << "  Header (address)= " << targetVoxelHeader << G4endl;
+          G4cout << " Level safety = " << levelSafety << G4endl;
+       }
+#endif 
+        minSafety= std::min( minSafety, levelSafety );
      }
 
      // Find next closest Voxel 
      //    - first try: by simple subtraction
      //    - later:  using distance  (TODO - tbc)
-     G4cout << " Next: up " << nextUp  << " d= " << nextUp - pointNodeNo
-	    << " down " << nextDown << " d= " << pointNodeNo - nextDown
-	    << " cond " << ( nextUp < targetHeaderNoSlices ) 
-	    << " pointNodeNo= " << pointNodeNo
-	    << G4endl; 
+#ifdef G4VERBOSE  
+     if( fVerbose > 2 ){ 
+       G4cout << " Next: up " << nextUp  << " d= " << nextUp - pointNodeNo
+              << " down " << nextDown << " d= " << pointNodeNo - nextDown
+              << " cond " << ( nextUp < targetHeaderNoSlices ) 
+              << " pointNodeNo= " << pointNodeNo
+              << G4endl; 
+     }
+#endif 
      if( ((nextUp - pointNodeNo) < (pointNodeNo - nextDown)) 
-	 && (nextUp < targetHeaderNoSlices) )
+         && (nextUp < targetHeaderNoSlices) )
      {
         nextNode=nextUp;
-	++nextUp;
-	G4cout << " Chose Up:   next= " <<  nextNode << " new= " << nextUp << G4endl;
+        ++nextUp;
+#ifdef G4VERBOSE  
+       if( fVerbose > 2 ){ 
+          G4cout << " Chose Up:   next= " <<  nextNode << " new= " << nextUp << G4endl;
+       }
+#endif 
      }else{
         nextNode=nextDown;
-	--nextDown;
-	G4cout << " Chose Down: next= " <<  nextNode << " new= " << nextDown << G4endl;
+        --nextDown;
+#ifdef G4VERBOSE  
+        if( fVerbose > 2 ){ 
+          G4cout << " Chose Down: next= " <<  nextNode << " new= " << nextDown << G4endl;
+        }
+#endif 
      }
   } 
 
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) { 
     G4cout << " Ended for targetNodeNo -- checked "
-	   << targetHeaderNoSlices << " slices" << G4endl;
+           << targetHeaderNoSlices << " slices" << G4endl;
     G4cout << " ===== Returning from SafetyForVoxelHeader " 
-	   << "  Depth= " << fVoxelDepth << G4endl
-	   << G4endl;  
+           << "  Depth= " << fVoxelDepth << G4endl
+           << G4endl;  
   }
 #endif
 

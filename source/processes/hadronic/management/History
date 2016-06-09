@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 November 2011  Vladimir Ivantchenko  (hadr-man-V09-03-07)
+------------------------------------------------------------
+- G4HadronicProcess: changed order of checks, first track status,
+  second cross-section (avoid computation of cross-section for zero
+  energy particles).
+
 30 November 2010  Dennis Wright  (hadr-man-V09-03-06)
 -----------------------------------------------------
 - G4HadronicProcess.cc : in PostStepDoIt, check cross section value

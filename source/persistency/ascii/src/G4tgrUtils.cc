@@ -360,7 +360,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
           bWordOK = true;      
         //----- Check if it is a unit      
         }
-        else if( !G4tgrUtils::WordIsUnit( word ) )
+        else if( G4tgrUtils::WordIsUnit( word ) )
         {
           //--- It must be preceded by a *
           if( (*site == -1)

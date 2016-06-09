@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistedTubs.cc,v 1.30 2010-11-10 10:00:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------

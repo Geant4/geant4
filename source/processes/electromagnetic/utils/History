@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 August 11: V.Ivant (emutils-V09-03-33)
+- G4EmModelManager: fixed bug in algorithm to smooth cross-sections
+  between different models.
+
 01 June 11: V.Ivant (emutils-V09-03-32)
 - G4EmModelManager, G4EmCalculator - changed smoothing function
   between two models, effect is seen for protons in non-NIST water

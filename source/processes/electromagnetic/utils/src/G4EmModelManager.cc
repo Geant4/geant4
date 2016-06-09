@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4EmModelManager.cc,v 1.63 2010-10-15 10:22:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -545,6 +545,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 				     couple,elow,cut,emin);
 	G4double dedx2 = ComputeDEDX(models[regModels->ModelIndex(k)],
 				     couple,elow,cut,emin);
+	del = 0.0;
         if(dedx2 > 0.0) { del = (dedx1/dedx2 - 1.0)*elow; }
 	//G4cout << "elow= " << elow 
 	//       << " dedx1= " << dedx1 << " dedx2= " << dedx2 << G4endl;
@@ -552,7 +553,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
     }
     G4double dedx = 
       ComputeDEDX(models[regModels->ModelIndex(k)],couple,e,cut,emin);
-    if(del > 0.0) { dedx *= (1.0 + del/e); }
+    dedx *= (1.0 + del/e); 
 
     if(dedx < 0.0) { dedx = 0.0; }
     if(2 < verboseLevel) {
@@ -602,28 +603,30 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   size_t totBinsLambda = aVector->GetVectorLength();
   G4double del = 0.0;
   G4int    k0  = 0;
+  G4int k = 0;
+  G4VEmModel* mod = models[regModels->ModelIndex(0)]; 
+
   for(size_t j=0; j<totBinsLambda; ++j) {
 
     G4double e = aVector->Energy(j);
 
     // Choose a model 
-    G4int k = 0;
-    G4VEmModel* mod = models[regModels->ModelIndex(0)]; 
     if (nmod > 1) {
       k = nmod;
       do {--k;} while (k>0 && e <= regModels->LowEdgeEnergy(k));
       if(k > 0 && k != k0) {
         k0 = k;
         G4double elow = regModels->LowEdgeEnergy(k);
-        G4VEmModel* m = models[regModels->ModelIndex(k-1)]; 
-	G4double xs1  = m->CrossSection(couple,particle,elow,cut,tmax);
+        G4VEmModel* mod1 = models[regModels->ModelIndex(k-1)]; 
+	G4double xs1  = mod1->CrossSection(couple,particle,elow,cut,tmax);
         mod = models[regModels->ModelIndex(k)]; 
 	G4double xs2 = mod->CrossSection(couple,particle,elow,cut,tmax);
-        if(xs2 > 0.0) { del = (xs1 - xs2)*elow; }
+        del = 0.0;
+        if(xs2 > 0.0) { del = (xs1/xs2 - 1.0)*elow; }
       }
     }
     G4double cross = mod->CrossSection(couple,particle,e,cut,tmax);
-    if(del > 0.0) { cross *= (1.0 + del/e); }
+    cross *= (1.0 + del/e); 
     
     if(j==0 && startFromNull) { cross = 0.0; }
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QFragmentation.cc,v 1.19 2010-12-14 09:41:04 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

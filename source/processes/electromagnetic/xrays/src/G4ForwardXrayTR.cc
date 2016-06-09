@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ForwardXrayTR.cc,v 1.16 2010-11-01 10:22:18 grichine Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -53,12 +53,6 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4GeometryTolerance.hh"
 
-// Table initialization
-
-// G4PhysicsTable* G4ForwardXrayTR::fAngleDistrTable  = NULL;
-// G4PhysicsTable* G4ForwardXrayTR::fEnergyDistrTable = NULL;
-
-
 // Initialization of local constants
 
 G4int    G4ForwardXrayTR::fSympsonNumber =  100;
@@ -84,125 +78,6 @@ G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
 
 G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi;
 
-/*   ************************************************************************
-
-
-///////////////////////////////////////////////////////////////////////
-//
-// Constructor for preparation tables with angle and energy TR distributions
-// in all materials involved in test program. Lorentz factors correspond to
-// kinetic energies of protons between 100*GeV and 100*TeV, ~ 10^2-10^5
-//
-// Recommended only for use in applications with
-// few light materials involved                     !!!!!!!!!!!!!!
-
-G4ForwardXrayTR::G4ForwardXrayTR()
-  : G4TransitionRadiation("XrayTR")
-{
-  G4int iMat, jMat, iTkin, iTR, iPlace;
-  static
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMat = G4Material::GetNumberOfMaterials();
-  fGammaCutInKineticEnergy = new G4double[numOfMat];
-  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts();
-  fMatIndex1 = -1;
-  fMatIndex2 = -1;
-  fAngleDistrTable  = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin);
-  fEnergyDistrTable = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin);
-
-        G4PhysicsLogVector* aVector = new G4PhysicsLogVector(fMinProtonTkin,
-                                                             fMaxProtonTkin,
-                                                                    fTotBin  );
-
-  for(iMat=0;iMat<numOfMat;iMat++) // loop over pairs of different materials
-  {
-    for(jMat=0;jMat<numOfMat;jMat++)  // transition iMat -> jMat !!!
-    {
-      if(iMat == jMat)   continue;      // no TR !!
-      else
-      {
-        const G4Material* mat1 = (*theMaterialTable)[iMat];
-        const G4Material* mat2 = (*theMaterialTable)[jMat];
-
-        fSigma1 = fPlasmaCof*(mat1->GetElectronDensity());
-        fSigma2 = fPlasmaCof*(mat2->GetElectronDensity());
-
-//        fGammaTkinCut = fGammaCutInKineticEnergy[jMat]; // TR photon in jMat !
-          fGammaTkinCut = 0.0;
-
-        if(fGammaTkinCut > fTheMinEnergyTR) // setting of min/max TR energies
-	{
-          fMinEnergyTR = fGammaTkinCut;
-	}
-        else
-	{
-          fMinEnergyTR = fTheMinEnergyTR;
-	}
-        if(fGammaTkinCut > fTheMaxEnergyTR)
-	{
-          fMaxEnergyTR = 2.0*fGammaTkinCut;    // usually very low TR rate 
-	}
-        else
-	{
-          fMaxEnergyTR = fTheMaxEnergyTR;
-	}
-        for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
-	{
-          G4PhysicsLogVector* 
-                    energyVector = new G4PhysicsLogVector(fMinEnergyTR,
-                                                             fMaxEnergyTR,
-                                                                   fBinTR  );
-          G4PhysicsLinearVector* 
-                     angleVector = new G4PhysicsLinearVector(        0.0,
-                                                             fMaxThetaTR,
-                                                                  fBinTR  );
-          G4double energySum = 0.0;
-          G4double angleSum  = 0.0;
-          fGamma = 1.0 +   (aVector->GetLowEdgeEnergy(iTkin)/proton_mass_c2);
-          fMaxThetaTR = 10000.0/(fGamma*fGamma);
-          if(fMaxThetaTR > fTheMaxAngle)
-          {
-            fMaxThetaTR = fTheMaxAngle;
-	  }
-          else
-	  {
-            if(fMaxThetaTR < fTheMinAngle)
-	    {
-              fMaxThetaTR = fTheMinAngle;
-	    }
-	  }
-          energyVector->PutValue(fBinTR-1,energySum);
-          angleVector->PutValue(fBinTR-1,angleSum)  ;
-
-          for(iTR=fBinTR-2;iTR>=0;iTR--)
-	  {
-            energySum += fCofTR*EnergySum(energyVector->GetLowEdgeEnergy(iTR),
-                                        energyVector->GetLowEdgeEnergy(iTR+1));
-
-            angleSum  += fCofTR*AngleSum(angleVector->GetLowEdgeEnergy(iTR),
-                                         angleVector->GetLowEdgeEnergy(iTR+1));
-            energyVector->PutValue(iTR,energySum);
-            angleVector->PutValue(iTR,angleSum)  ;
-	  }
-          if(jMat < iMat)
-	  {
-            iPlace = (iMat*(numOfMat-1)+jMat)*fTotBin+iTkin;
-	  }
-          else   // jMat > iMat right part of matrices (jMat-1) !
-	  {
-            iPlace = (iMat*(numOfMat-1)+jMat-1)*fTotBin+iTkin;
-	  }
-          fEnergyDistrTable->insertAt(iPlace,energyVector);
-          fAngleDistrTable->insertAt(iPlace,angleVector);
-	}    //                      iTkin
-      }      //         jMat != iMat
-    }        //     jMat
-  }          // iMat
-}
-
-
-****************************************************************  */
-
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -226,8 +101,7 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
     fSigma1 = fSigma2 = 0.0; 
   fAngleDistrTable = 0;
   fEnergyDistrTable = 0;
-  //  fMatIndex1 = pMat1->GetIndex();
-  //  fMatIndex2 = pMat2->GetIndex();
+  fMatIndex1 = fMatIndex2 = 0;
   G4int iMat;
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -277,7 +151,15 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
 G4ForwardXrayTR::
 G4ForwardXrayTR( const G4String& processName  )
    :        G4TransitionRadiation(processName)
-{}
+{
+  fPtrGamma = 0;
+  fGammaCutInKineticEnergy = 0;
+  fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR =  fMaxThetaTR = fGamma = 
+    fSigma1 = fSigma2 = 0.0; 
+  fAngleDistrTable = 0;
+  fEnergyDistrTable = 0;
+  fMatIndex1 = fMatIndex2 = 0;
+}
 
 
 //////////////////////////////////////////////////////////////////////

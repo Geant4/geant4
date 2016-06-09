@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.49 2010/05/27 14:22:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4CoulombScatteringModel.cc,v 1.49 2010-05-27 14:22:05 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Proton.hh"
+#include "G4ProcessManager.hh"
 #include "G4NucleiProperties.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,7 +94,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   //	 <<" cut(MeV)= " << cutEnergy<< G4endl; 
   G4double xsec = 0.0;
   if(p != particle) { SetupParticle(p); }
-  if(kinEnergy < lowEnergyLimit) { return 0.0; }
+  if(kinEnergy <= 0.0) { return 0.0; }
   DefineMaterial(CurrentCouple());
 
   // Lab system
@@ -142,7 +143,16 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) { return; }
+  //  if(kinEnergy < lowEnergyLimit) { return; }
+  if(kinEnergy < lowEnergyLimit) {
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
+    if(particle->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { fParticleChange->ProposeTrackStatus(fStopButAlive); }
+    else { fParticleChange->ProposeTrackStatus(fStopAndKill); }
+    return;
+  }
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
 
@@ -188,6 +198,13 @@ void G4CoulombScatteringModel::SampleSecondaries(
     finalT = 0.0;
   } 
     
+  if(finalT <= lowEnergyLimit) { 
+    trec = kinEnergy;  
+    finalT = 0.0;
+    if(particle->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { fParticleChange->ProposeTrackStatus(fStopButAlive); }
+    else { fParticleChange->ProposeTrackStatus(fStopAndKill); }
+  } 
   fParticleChange->SetProposedKineticEnergy(finalT);
 
   //  G4cout << "sint= " << sint << " Erec(eV)= " << erec/eV << G4endl;

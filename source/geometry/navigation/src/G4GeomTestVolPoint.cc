@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolPoint.cc,v 1.3 2006/06/29 18:36:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GeomTestVolPoint.cc,v 1.3 2006-06-29 18:36:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -93,11 +93,32 @@ G4GeomTestVolPoint::G4GeomTestVolPoint()
 {;}
 
 
-
 //
 // Destructor
 //
 G4GeomTestVolPoint::~G4GeomTestVolPoint() {;}
+
+
+//
+// Assignment operator
+//
+G4GeomTestVolPoint&
+G4GeomTestVolPoint::operator=(const G4GeomTestVolPoint& other)
+{
+   // Check assignment to self
+   //
+   if (this == &other)  { return *this; }
+
+   // Copy base class data
+   //
+   G4GeomTestPoint::operator=(other);
+
+   // Copy data
+   //
+   daughterIndex = other.daughterIndex;
+
+   return *this;
+}
 
 
 //

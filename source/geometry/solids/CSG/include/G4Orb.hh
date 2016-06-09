@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Orb.hh,v 1.13 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------

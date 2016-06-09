@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GDMLReadSolids.cc,v 1.32 2010-10-14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -319,8 +319,6 @@ ElconeRead(const xercesc::DOMElement* const elconeElement)
       if (attName=="zcut") { zcut = eval.Evaluate(attValue); }
    }
 
-   dx *= lunit;
-   dy *= lunit;
    zmax *= lunit;
    zcut *= lunit;
 
@@ -847,6 +845,7 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = quadrangularElement->getAttributes();
@@ -879,11 +878,14 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
         { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex4")
         { vertex4 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4QuadrangularFacet(vertex1,vertex2,vertex3,vertex4,type);
+   return new G4QuadrangularFacet(vertex1*lunit,vertex2*lunit,
+                                  vertex3*lunit,vertex4*lunit,type);
 }
 
 void G4GDMLReadSolids::
@@ -1072,7 +1074,7 @@ TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateName(attValue); }
+      if (attName=="name")  { name = GenerateName(attValue); }
    }
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(name);
@@ -1108,6 +1110,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
+   G4double lunit = 1.0;
    
    const xercesc::DOMNamedNodeMap* const attributes
          = tetElement->getAttributes();
@@ -1134,6 +1137,8 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
 
       if (attName=="name")
         { name = GenerateName(attValue); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="vertex1")
         { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
@@ -1144,7 +1149,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
         { vertex4 = GetPosition(GenerateName(attValue)); }
    }
 
-   new G4Tet(name,vertex1,vertex2,vertex3,vertex4);
+   new G4Tet(name,vertex1*lunit,vertex2*lunit,vertex3*lunit,vertex4*lunit);
 }
 
 void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
@@ -1256,14 +1261,14 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 
    dz *= lunit;
    std::vector<G4TwoVector> vertices;
-   vertices.push_back(G4TwoVector(v1x,v1y));
-   vertices.push_back(G4TwoVector(v2x,v2y));
-   vertices.push_back(G4TwoVector(v3x,v3y));
-   vertices.push_back(G4TwoVector(v4x,v4y));
-   vertices.push_back(G4TwoVector(v5x,v5y));
-   vertices.push_back(G4TwoVector(v6x,v6y));
-   vertices.push_back(G4TwoVector(v7x,v7y));
-   vertices.push_back(G4TwoVector(v8x,v8y));
+   vertices.push_back(G4TwoVector(v1x*lunit,v1y*lunit));
+   vertices.push_back(G4TwoVector(v2x*lunit,v2y*lunit));
+   vertices.push_back(G4TwoVector(v3x*lunit,v3y*lunit));
+   vertices.push_back(G4TwoVector(v4x*lunit,v4y*lunit));
+   vertices.push_back(G4TwoVector(v5x*lunit,v5y*lunit));
+   vertices.push_back(G4TwoVector(v6x*lunit,v6y*lunit));
+   vertices.push_back(G4TwoVector(v7x*lunit,v7y*lunit));
+   vertices.push_back(G4TwoVector(v8x*lunit,v8y*lunit));
    new G4GenericTrap(name,dz,vertices);
 }
 
@@ -1395,6 +1400,7 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = triangularElement->getAttributes();
@@ -1425,11 +1431,13 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
         { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
         { vertex3 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4TriangularFacet(vertex1,vertex2,vertex3,type);
+   return new G4TriangularFacet(vertex1*lunit,vertex2*lunit,vertex3*lunit,type);
 }
 
 void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)

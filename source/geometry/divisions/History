@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2010/11/10 09:16:33 gcosmo Exp $
+$Id: History,v 1.35 2010-11-10 09:16:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July, 14th, 2011             G.Cosmo (geomdiv-V09-03-03)
+- Optimise initialization of phi angles in parameterisation for tubs and cons.
 
 November, 9th, 2010          M.Asai (geomdiv-V09-03-02)
 - Introducing G4ReplicatedSlice, allowing for gaps in between divided daughter

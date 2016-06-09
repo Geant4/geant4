@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashEnergySpot.cc,v 1.5 2006/06/29 19:14:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashEnergySpot.cc,v 1.5 2006-06-29 19:14:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "G4Step.hh"
 #include "GFlashEnergySpot.hh"
 
-GFlashEnergySpot::GFlashEnergySpot() {}
+GFlashEnergySpot::GFlashEnergySpot() : Energy (0.) {}
 
 GFlashEnergySpot::GFlashEnergySpot(const G4ThreeVector& point, G4double E)
 {

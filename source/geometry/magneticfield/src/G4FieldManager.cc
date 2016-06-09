@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FieldManager.cc,v 1.15 2007-12-07 15:34:10 japost Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ErrorFreeTrajState.cc,v 1.8 2009-05-14 13:53:06 arce Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -163,7 +163,7 @@ void G4ErrorFreeTrajState::Init()
   theTSType = G4eTS_FREE;
   BuildCharge();
   theTransfMat = G4ErrorMatrix(5,5,0);
-  //-  theFirstStep = true;
+  theFirstStep = true;
 }
 
 //------------------------------------------------------------------------
@@ -179,7 +179,6 @@ G4int G4ErrorFreeTrajState::Update( const G4Track* aTrack )
   fTrajParam.Update( aTrack );
   UpdatePosMom( aTrack->GetPosition(), aTrack->GetMomentum() );
   return ierr;
-
 }
 
 

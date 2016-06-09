@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoringBox.cc,v 1.61 2010-07-27 01:44:54 akimura Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ScoringBox.hh"

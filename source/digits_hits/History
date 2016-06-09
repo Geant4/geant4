@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 31, 2011, M.Asai (digits_hits-V09-03-09)
+- G4THitsMap.hh : removed the print-out of total value, avoiding the problem
+  caused by a class <T> which does not have += or cannot be initilized by = 0.
+- Addressing to the problem report #1258.
+
+Jul 07, 2011, G.Cosmo
+- Fixed some Coverity defects: mainly uninitialised static data.
+
 Mar 31, 2011, G.Cosmo (digits_hits-V09-03-08)
 - Replace use of M_PI with pi/twopi, fixing compilation errors on Windows...
 

@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 21st, 2011,  H.Kurashige (track-V09-03-14)
+- Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
+- ProposeParentWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag
+  is set true even when SetParentWeightByTracK is set to false
+
+September 17, 2011, H.Kurashige
+- Fix problems related to treatments of weight in ParticleChange (see problem #1243)
+  always set the parent track's weight to the value set by ProposeParentWeight() and  ProposeWeight()
+  methods for all particle change classes.
+- Remove fSetParentWeightByProcess and all related code.
+- SetSecondaryWeightByProcess() flag is set to true in default.
+
+August 22, 2011, H.Kurashige
+- G4VelocityTable is modified and it is not derived from G4PhysicsVector
+  (in order to avoid from creation of PhysicsVector as static objects)
+ 
+August 17, 2011, H.Kurashige
+- Add G4VelocityTable as singleton to avoid creation of G4PhysicsVector in event loop
+- Modify G4Step::InitializeStep to set correct velocity for the optical photon
+
 Apr. 2, 2011, H.Kurashige (track-V09-03-12)
 - Set maxT for Velocity Table to 1000.
 - Add SetVelocityTableProperties.

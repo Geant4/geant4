@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SynchrotronRadiation.cc,v 1.8 2010-10-14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -129,11 +129,12 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       pField = fieldMgr->GetDetectorField() ;
       G4ThreeVector  globPosition = trackData.GetPosition();
 
-      G4double  globPosVec[3], FieldValueVec[3];
+      G4double  globPosVec[4], FieldValueVec[6];
 
       globPosVec[0] = globPosition.x();
       globPosVec[1] = globPosition.y();
       globPosVec[2] = globPosition.z();
+      globPosVec[3] = trackData.GetGlobalTime();
 
       pField->GetFieldValue( globPosVec, FieldValueVec );
 
@@ -224,10 +225,11 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   {
     pField = fieldMgr->GetDetectorField() ;
     G4ThreeVector  globPosition = trackData.GetPosition() ;
-    G4double  globPosVec[3], FieldValueVec[3] ;
+    G4double  globPosVec[4], FieldValueVec[6] ;
     globPosVec[0] = globPosition.x() ;
     globPosVec[1] = globPosition.y() ;
     globPosVec[2] = globPosition.z() ;
+    globPosVec[3] = trackData.GetGlobalTime();
 
     pField->GetFieldValue( globPosVec, FieldValueVec ) ;
     FieldValue = G4ThreeVector( FieldValueVec[0],
@@ -383,11 +385,13 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perp
   if(verboseLevel > 0 && FirstTime)
   { G4double Emean=8./(15.*std::sqrt(3.))*Ecr; // mean photon energy
     G4double E_rms=std::sqrt(211./675.)*Ecr; // rms of photon energy distribution
+    G4int prec = G4cout.precision();
     G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' << std::setprecision(4)
 	<< "  Ecr   = "    << G4BestUnit(Ecr,"Energy") << '\n'
 	<< "  Emean = "    << G4BestUnit(Emean,"Energy") << '\n'
 	<< "  E_rms = "    << G4BestUnit(E_rms,"Energy") << G4endl;
     FirstTime=false;
+    G4cout.precision(prec); 
   }
 
   G4double energySR=Ecr*InvSynFracInt(G4UniformRand());

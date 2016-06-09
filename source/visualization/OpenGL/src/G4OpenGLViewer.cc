@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLViewer.cc,v 1.63 2010-10-05 15:45:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Andrew Walkden  27th March 1996

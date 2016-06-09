@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashHomoShowerParameterisation.cc,v 1.5 2006/06/29 19:14:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GFlashHomoShowerParameterisation.cc,v 1.5 2006-06-29 19:14:14 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ------------------------------------------------------------
@@ -46,10 +46,14 @@
 GFlashHomoShowerParameterisation::
 GFlashHomoShowerParameterisation(G4Material * aMat,
                                  GVFlashHomoShowerTuning * aPar)
-  : GVFlashShowerParameterisation()
+  : GVFlashShowerParameterisation(),
+    ConstantResolution(0.), NoiseResolution(0.), SamplingResolution(0.),
+    AveLogAlphah(0.), AveLogTmaxh(0.), SigmaLogAlphah(0.), SigmaLogTmaxh(0.),
+    Rhoh(0.), Alphah(0.), Tmaxh(0.), Betah(0.)
+
 {  
-  if(!aPar) { thePar = new GVFlashHomoShowerTuning; }
-  else      { thePar = aPar; }
+  if(!aPar) { thePar = new GVFlashHomoShowerTuning; owning = true; }
+  else      { thePar = aPar; owning = false; }
 
   SetMaterial(aMat);
   PrintMaterial(aMat);
@@ -144,7 +148,9 @@ void GFlashHomoShowerParameterisation::SetMaterial(G4Material *mat)
 }
 
 GFlashHomoShowerParameterisation::~GFlashHomoShowerParameterisation()
-{}
+{
+  if(owning) { delete thePar; }
+}
 
 void GFlashHomoShowerParameterisation::
 GenerateLongitudinalProfile(G4double Energy)

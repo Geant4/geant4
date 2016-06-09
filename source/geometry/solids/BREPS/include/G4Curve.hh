@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Curve.hh,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4Curve

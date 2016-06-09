@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.10 2010/11/10 09:16:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParameterisationTubs.cc,v 1.10 2010-11-10 09:16:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
 //
@@ -166,7 +166,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -275,7 +275,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -386,7 +386,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG

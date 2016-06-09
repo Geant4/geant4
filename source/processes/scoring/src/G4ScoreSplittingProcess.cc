@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoreSplittingProcess.cc,v 1.9 2010-12-15 13:55:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ios.hh"

@@ -76,12 +76,10 @@ ifeq ($(G4SYSTEM),Darwin-g++)
         # the following lines are for building on MacOSX 10.5 "Leopard"
         OGLLIBS := -Wl,$(QTGLPATH)/Versions/A/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGLU -lGL
       else
-        ifeq ($(DARWIN_VERSION),10)
-          # the following lines are for building on MacOSX > 10.5
-          OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
-          ifeq ($(G4VIS_USE_OPENGLX),1)
-            OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
-          endif
+        # the following lines are for building on MacOSX > 10.5
+        OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
+        ifeq ($(G4VIS_USE_OPENGLX),1)
+          OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
         endif
       endif
     else
@@ -89,7 +87,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     endif
   endif
 
-# ---- QT Setup block -------------------------------------------------------
+# ---- Qt Setup block -------------------------------------------------------
 
   ifndef QTHOME
     QTHOME := /Library/Frameworks
@@ -109,17 +107,29 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef QTLIBPATH
     ifeq ($(QTHOME),/Library/Frameworks)
-      QTLIBPATH  := -F$(QTHOME)
+      QTLPATH  := $(QTHOME)
     else
-      QTLIBPATH  := -F$(QTHOME)/lib
+      QTLPATH  := $(QTHOME)/lib
     endif
+    QTLIBPATH  := -F$(QTLPATH)
   endif
+
+  QT_AS_FRAMEWORK := $(shell test -d $(QTLPATH)/QtCore.framework && echo yes)
+
   ifndef QTLIBS
-    QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    ifdef QT_AS_FRAMEWORK
+       QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    else
+       QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
+    endif   
   endif
-  ifndef GLQTLIBS
-    GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-    GLQTLIBS    += -framework QtOpenGL
+  ifndef GLQTLIBS  
+    ifdef QT_AS_FRAMEWORK
+      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtOpenGL
+    else
+      GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+    endif   
   endif
 
 #----------------------------------------------------------------------------
@@ -127,13 +137,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

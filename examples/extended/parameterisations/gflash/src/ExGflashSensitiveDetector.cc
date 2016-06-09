@@ -50,9 +50,9 @@ void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
 	G4cout<<"::Initializing the sensitive detector"<<G4endl;
 	static G4int HCID = -1;
 	if(HCID<0){ HCID = GetCollectionID(0); }
-	HCE->AddHitsCollection( HCID, caloHitsCollection );
 	caloHitsCollection=new 
 	ExGflashHitsCollection(SensitiveDetectorName,collectionName[0]); // first collection
+	HCE->AddHitsCollection( HCID, caloHitsCollection );
 }
 
 void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)

@@ -8,7 +8,7 @@
 # known bindir as an executable.
 #
 # $Id: Geant4ConfigureConfigScript.cmake,v 1.4 2010-12-13 17:31:59 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04-patch-02 $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 #-----------------------------------------------------------------------------

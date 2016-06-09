@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScoreQuantityMessenger.hh,v 1.5 2010-07-22 22:14:40 taso Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.

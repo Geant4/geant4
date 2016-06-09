@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGFlashSensitiveDetector.hh,v 1.5 2006/06/29 19:13:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VGFlashSensitiveDetector.hh,v 1.5 2006-06-29 19:13:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
@@ -86,6 +86,7 @@ class G4VGFlashSensitiveDetector
           G4Exception("G4VGFlashSensitiveDetector::Hit()",
                       "InvalidSetup", FatalException,
                       "Needs also to inherit from G4VSensitiveDetector!");
+          return false;
         }
         if(This->isActive())
         { 

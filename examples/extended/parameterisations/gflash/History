@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-November 2010, Gunter Folger  (exgflash-V09-03-06)
+-  Fix bug in ExGflashSensitiveDetector::Initialize():
+    create/new Collection before adding it to HCE
+
 26-January 2010, Gunter Folger   (exgflash-V09-03-05)
 -  Finish correcting namespace problems on Windows, 
     removed using namespace, use G4cout,.. and few std::

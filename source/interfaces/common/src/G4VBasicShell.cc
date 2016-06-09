@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VBasicShell.cc,v 1.16 2010-06-08 04:39:22 kmura Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VBasicShell.hh"

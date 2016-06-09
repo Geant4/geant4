@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VProcess.hh,v 1.25 2007-11-15 04:09:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

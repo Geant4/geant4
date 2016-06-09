@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN02DetectorMessenger.hh,v 1.9 2008-09-22 16:41:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

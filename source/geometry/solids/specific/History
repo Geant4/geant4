@@ -17,6 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-Dec-2011  T.Nikitina (geom-specific-V09-03-23)
+- Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary solution
+  (virtual cone) when distance is calculated.
+
+25-Oct-2011  G.Cosmo (geom-specific-V09-03-22)
+- Fixed logic in G4VTwistSurface::GetEdgeVisibility() in treatment of corners.
+
+16-Sep-2011  G.Cosmo
+- Fix compilation error in code within G4SPECSDEBUG. No functional changes.
+
+13-Sep-2011  I.Hrivnacova
+- G4TriangularFacet: fixed tests where square root was compared to
+  half Cartesian tolerance; now compared to kCarTolerance.
+  Addressing problem report #1242.
+
+22-Aug-2011  I.Hrivnacova
+- Fix in G4TriangularFacet::Intersect() to take into account geometrical
+  tolerance and cases of zero distance from surface's facet.
+- Fix in G4TessellatedSolid::DistanceToOut(p) and DistanceToIn(p) to exactly
+  compute distance from facet avoiding use of 'outgoing' flag shortcut variant.
+- Addressing problem report #1242.
+
+17-Aug-2011  T.Nikitina
+- Fix in G4Paraboloid::DistanceToIn(p,v) and DistanceToIn(p) to properly
+  take into account tolerance and provide better estimation of distance
+  respectively. Addresses problem report #1234.
+
+04-Aug-2011  T.Nikitina
+- Added SetReferences() and InvertFacets() to G4GenericTrap::CreatePolyhedron()
+  for proper visualisation of Boolean compositions with G4GenericTrap.
+- Added SetReferences() to G4TessellatedSolid::CreatePolyhedron()
+  for proper visualisation of Boolean compositions with G4TessellatedSolid.
+- Requires tag "greps-V09-04-04", for addressing problem report #1235.
+
 17-May-2011  I.Hrivnacova (geom-specific-V09-03-21)
 - G4ExtrudedSolid: fix in Inside(p) for false overlap reporting.
   Addressing problem report #1211.

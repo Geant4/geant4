@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SteppingManager2.cc,v 1.38 2010-07-19 13:41:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //

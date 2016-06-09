@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 12th,  2011 P.Gumplinger - field-V09-03-05
+--------------------------------
+- Replaced: omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss)
+  with:     omegac = (eplus/particleMass)*c_light
+  in G4EqEMFieldWithEDM.cc, G4Mag_SpinEqRhs.cc, G4EqEMFieldWithSpin.cc
+  changed calculation: 
+     std::sqrt(kineticEnergy*kineticEnergy + 2.0*restMass_c2*kineticEnergy);
+  to:
+     std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2))
+  in G4FieldTrack.cc.
+
 May 12th,  2011 G.Cosmo - field-V09-03-04
 -----------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.

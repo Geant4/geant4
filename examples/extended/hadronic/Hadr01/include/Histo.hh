@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: Histo.hh,v 1.6 2007-05-24 13:52:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
 #define Histo_h 1

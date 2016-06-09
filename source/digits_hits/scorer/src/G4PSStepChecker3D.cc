@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PSStepChecker3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSStepChecker3D
 #include "G4PSStepChecker3D.hh"

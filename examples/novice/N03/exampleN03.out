@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
+ Geant4 version Name: geant4-09-04-patch-03    (9-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -612,7 +612,7 @@ hPairProd:   for  pi-    SubType= 4
 ----------------------------------------
 ---> End of event: 0
    Absorber: total energy: 282.268 MeV       total track length: 20.1718 cm 
-        Gap: total energy: 17.0016 MeV       total track length: 9.07565 cm 
+        Gap: total energy: 17.0016 MeV       total track length: 9.07564 cm 
 
 --------------------End of Run------------------------------
 
@@ -620,7 +620,7 @@ hPairProd:   for  pi-    SubType= 4
  mean Energy in Gap      : 17.0016 MeV +- 0 eV 
 
  mean trackLength in Absorber : 20.1718 cm  +- 0 fm 
- mean trackLength in Gap      : 9.07565 cm  +- 0 fm 
+ mean trackLength in Gap      : 9.07564 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -855,16 +855,16 @@ hPairProd:   for  pi-    SubType= 4
  Current couple of seeds = 77075894, 797815748
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 358.499 MeV       total track length: 82.9384 cm 
-        Gap: total energy: 83.0855 MeV       total track length: 2.26934 m  
+   Absorber: total energy: 400.822 MeV       total track length: 93.0984 cm 
+        Gap: total energy: 82.4498 MeV       total track length: 2.26692 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 358.499 MeV +- 0 eV 
- mean Energy in Gap      : 83.0855 MeV +- 0 eV 
+ mean Energy in Absorber : 400.822 MeV +- 0 eV 
+ mean Energy in Gap      : 82.4498 MeV +- 0 eV 
 
- mean trackLength in Absorber : 82.9384 cm  +- 0 fm 
- mean trackLength in Gap      : 2.26934 m   +- 0 fm 
+ mean trackLength in Absorber : 93.0984 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.26692 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

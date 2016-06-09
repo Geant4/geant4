@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EventManager.cc,v 1.32 2010-11-08 21:31:35 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //

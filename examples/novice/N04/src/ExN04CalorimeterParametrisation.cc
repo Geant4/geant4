@@ -53,6 +53,6 @@ void ExN04CalorimeterParametrisation::ComputeDimensions
   calorimeterLayer.SetInnerRadius(innerRad);
   calorimeterLayer.SetOuterRadius(innerRad+absorber_thick);
   calorimeterLayer.SetZHalfLength(caloTubs_dz);
-  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi);
+  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi,false);
   calorimeterLayer.SetDeltaPhiAngle(caloTubs_dphi);
 }
