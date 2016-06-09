@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.7 2005/05/13 09:34:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: DetectorConstruction.cc,v 1.8 2005/09/14 09:04:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -68,9 +68,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:logicC(0),
- logicA1(0),
- logicA2(0)
+  :logicC(0),logicA1(0),logicA2(0)
 {
   detectorMessenger = new DetectorMessenger(this);
 
@@ -110,7 +108,6 @@ void DetectorConstruction::DefineMaterials()
   vertMaterial  = man->FindOrBuildMaterial("G4_Si");
   yorkMaterial  = man->FindOrBuildMaterial("G4_Fe");
   calMaterial   = man->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -300,7 +297,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   logicY->SetVisAttributes(regMcolor);
 
   // always return world
-  //
+  G4cout << "### New geometry is constructed" << G4endl;
+
   return world;
 }
 
@@ -311,11 +309,7 @@ void DetectorConstruction::SetEcalMaterial(const G4String& mat)
   // search the material by its name
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
-  if (pttoMaterial)
-     {
-        calMaterial = pttoMaterial;
-        if(logicC) logicC->SetMaterial(calMaterial);
-     }
+  if (pttoMaterial) calMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -325,12 +319,7 @@ void DetectorConstruction::SetAbsMaterial(const G4String& mat)
   // search the material by its name
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
-  if (pttoMaterial)
-     {
-        absMaterial = pttoMaterial;
-        if(logicA1) logicA1->SetMaterial(absMaterial);
-        if(logicA2) logicA2->SetMaterial(absMaterial);
-     }
+  if (pttoMaterial) absMaterial = pttoMaterial;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

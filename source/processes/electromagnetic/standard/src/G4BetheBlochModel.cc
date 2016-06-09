@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.6 2005/04/12 18:12:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BetheBlochModel.cc,v 1.7 2005/08/18 15:05:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -93,7 +93,7 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 {
   if(!particle) SetParticle(p);
   G4String pname = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" && 
+  if(particle->GetParticleType() == "nucleus" &&
      pname != "deuteron" && pname != "triton") isIon = true;
 
   if(pParticleChange) 
@@ -193,14 +193,14 @@ G4double G4BetheBlochModel::CrossSectionPerVolume(const G4Material* material,
 vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double minKinEnergy,
                                    G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
   G4double maxKinEnergy = min(maxEnergy,tmax);
-  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
+  if(minKinEnergy >= maxKinEnergy) return 0;
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;

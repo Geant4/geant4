@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2005/05/18 11:02:10 vnivanch Exp $
+$Id: History,v 1.9 2005/08/05 13:43:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 August 05: V.Ivant (emhighenergy-V07-01-01)
+- Remove inline constructors and destructors
+
+30 June 05: V.Ivant (emhighenergy-V07-01-00)
+- Fix a misprint in G4BetheBlochNoDeltaModel
 
 18 May 05: V.Ivant (highenergy-V07-00-01)
 - Use optimised interfaces from utils - reorganise ee->hadrons models

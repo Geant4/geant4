@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.13 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Para.hh,v 1.15 2005/08/04 10:57:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -151,6 +151,11 @@ class G4Para : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3, 
+                                  G4double& area) const;
+      // Returns a random point on the surface of one of the faces.
 
  private:
 

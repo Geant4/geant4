@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/12/13 16:38:53 gcosmo Exp $
+$Id: History,v 1.2 2005/10/14 14:56:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.08.2005, G.Cosmo - phys-lists-V07-01-00
+- Corrected README of hadronic lists for build instructions.
 
 13.12.2004, G.Cosmo - phys-lists-V06-02-00
 - Imported hadronic lists and electromagnetic lists from top-level.

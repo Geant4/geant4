@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.72 2005/06/20 17:34:18 stesting Exp $
+# $Id: Configure,v 1.74 2005/10/25 22:28:19 stesting Exp $
 #
-# Generated on Mon Jun 20 19:30:06 CEST 2005 [metaconfig 3.0 PL70]
+# Generated on Wed Oct 26 00:25:52 CEST 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1898,25 +1898,66 @@ fi
 
 	fi #end of cxxflags
 
+
+
+	g4install_lib_AAA=`echo $g4install/lib|sed -e "s/\//AAA/g"`
+	g4final_install_lib_AAA=`echo $g4final_install/lib/geant4|sed -e "s/\//AAA/g"`
+	
+
+#############################################################################
 	if [ X$g4incflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_INSTALL_AAA=`grep 'G4INSTALL =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4INSTALL_AAA=`echo $G4INSTALL|sed -e "s/\//AAA/g"`
+###
+	INCFLAGS_AAA=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+
+#	echo INCFLAGS_AAA=$INCFLAGS_AAA
+#	echo G4INSTALL_AAA=$G4INSTALL_AAA
+#	echo G4FIRST_INSTALL_AAA=$G4FIRST_INSTALL_AAA
+
+	INCFLAGS_AAA_NEW=`echo $INCFLAGS_AAA| $sed -e "s/$G4FIRST_INSTALL_AAA/$G4INSTALL_AAA/g"`
+
+#	echo INCFLAGS_AAA_NEW=$INCFLAGS_AAA_NEW
+
+	INCFLAGS=`echo $INCFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo INCFLAGS=$INCFLAGS
+
+	if [ X$G4INCLUDE = X ] ; then
 	echo $INCFLAGS
+	else
+	echo -I$G4INCLUDE
+	fi
 	
 	$rm -rf .config/UU
 	exit 1
 
 	fi #end of incflags
+#############################################################################
 
+
+#############################################################################
 	if [ X$g4ldflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_LIB_AAA=`grep 'G4LIB =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4LIB_AAA=`echo $G4LIB|sed -e "s/\//AAA/g"`
+###
+#	G4FIRST_INSTALL_LIB_AAA=${G4FIRST_INSTALL_AAA}AAAlib
+#	G4INSTALL_LIB_AAA=${G4INSTALL_AAA}AAAlibAAAgeant4
+
+#	echo G4FIRST_INSTALL_LIB_AAA=$G4FIRST_INSTALL_LIB_AAA
+#	echo G4INSTALL_LIB_AAA=$G4INSTALL_LIB_AAA
+	
+	LDFLAGS_AAA=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+	LDFLAGS_AAA_NEW=`echo $LDFLAGS_AAA| $sed -e "s/$G4FIRST_LIB_AAA/$G4LIB_AAA/g"`
+	LDFLAGS=`echo $LDFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo LDFLAGS=$LDFLAGS
 	echo $LDFLAGS
@@ -1925,6 +1966,7 @@ fi
 	exit 1
 
 	fi #end of ldflags
+#############################################################################
 
 	if [ X$g4ldlibs = Xyes ] ; then
 

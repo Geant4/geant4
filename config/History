@@ -1,4 +1,4 @@
-$Id: History,v 1.267 2005/06/17 06:59:37 gcosmo Exp $
+$Id: History,v 1.269 2005/07/29 17:10:04 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th of July Mark Donszelmann (config-V07-01-01)
+- Synchronized CXXFLAGS warning options of WIN32-g++ with Linux-g++.
+
+18th July 2005 Gabriele Cosmo (config-V07-01-00)
+- Excluded usage of unnecessary 'ranlib' at creation of the libraries for
+  WIN32-VC system. Fixes an observed problem of debug-symbols corruption.
 
 16th June 2005 Sergey Sadilov (config-V07-00-05)
 - Updated Configure script and support files:

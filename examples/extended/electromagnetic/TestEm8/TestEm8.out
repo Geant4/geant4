@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -256,12 +256,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.01s Real=1.09s Sys=0.04s
+  User=1.08s Real=1.17s Sys=0.04s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.4269 +- 0.282241  mm  
+    mean charged track length   in absorber=23.4266 +- 0.282233  mm  
 
-            mean energy deposit in absorber=0.0169125 +- 0.000450572  MeV 
+            mean energy deposit in absorber=0.0169247 +- 0.000450718  MeV 
 
  mean number of steps in absorber (charged) =0.005 +- 0.00223047      
  mean number of steps in absorber (neutral) =0 +- 0      
@@ -282,11 +282,11 @@ Run Summary
     2         6          77       0.077
     3         9         264       0.264
     4        12         266       0.266
-    5        15         151       0.151
+    5        15         150        0.15
     6        18          72       0.072
     7        21          47       0.047
     8        24          28       0.028
-    9        27          15       0.015
+    9        27          16       0.016
    10        30          17       0.017
    11        33          10        0.01
    12        36          10        0.01

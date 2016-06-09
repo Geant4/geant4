@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.50 2005/03/24 16:06:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4QPDGCode.cc,v 1.51 2005/07/06 07:04:22 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -1897,7 +1897,7 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   if(A+S<1&&k==0.||Z<0||N<0)                // @@ Can be generalized to anti-nuclei
   {
 #ifdef debug
-    G4cout<<"***G4QPDGCode::CalcNuclMass:A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
+    G4cout<<"**G4QPDGCode::CalcNuclMass:A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@throw G4QException("***G4QPDGCode::GetNuclMass: Impossible nucleus");
 #endif
     return 0.;                              // @@ Temporary
@@ -1908,10 +1908,15 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
   else 
   {
     //G4double fA=A;
-    if(G4NucleiPropertiesTable::IsInTable(Z,A))m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    else if(A==256 && Z==128) m=256000.;
-    else
-						m=k+G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+    // IsInTable is inside G4NucleiProperties::GetNuclearMass
+    // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
+    if(A==256 && Z==128) m=256000.;
+    else                 m=k+G4NucleiProperties::GetNuclearMass(A,Z);
+    //if(G4NucleiPropertiesTable::IsInTable(Z,A))
+    //                                         m=k+G4NucleiProperties::GetNuclearMass(A,Z);
+    //else if(A==256 && Z==128) m=256000.;
+    //else
+				//		m=k+G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
 		 //m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
   }
   //@@//G4double maxM= k+Z*mP+N*mN+S*mL+eps;      // @@ eps -- Wings of the Mass parabola
@@ -1946,13 +1951,16 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
     //else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];// Geant4
     else 
     {
+      // IsInTable is inside G4NucleiProperties::GetNuclearMass
+      // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
+      mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
       //G4double fA=Am;
-      if(G4NucleiPropertiesTable::IsInTable(Zm,Am))
-        mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
-      else
-						  mm=km+G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm)->GetPDGMass();
-						  //mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))
-        //    +Zm*Zm*(b5*pow(fA,b9)+b6/Am);
+      //if(G4NucleiPropertiesTable::IsInTable(Zm,Am))
+      //  mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
+      //else
+						//  mm=km+G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm)->GetPDGMass();
+						//  //mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))
+      //  //    +Zm*Zm*(b5*pow(fA,b9)+b6/Am);
     }
     //@@//G4double mM= km+Zm*mP+Nm*mN+eps;
     //@@//if(mm>mM) mm=mM;

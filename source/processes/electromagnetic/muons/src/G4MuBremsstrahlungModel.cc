@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.16 2005/05/18 16:06:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.18 2005/08/18 14:38:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 03-08-05 Angular correlations according to PRM (V.Ivantchenko)
 //
 
 //
@@ -77,9 +78,10 @@ G4double G4MuBremsstrahlungModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 using namespace std;
 
-G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
+G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
+  particle(0),
   lowestKinEnergy(1.0*GeV),
   minThreshold(1.0*keV),
   nzdat(5),
@@ -88,7 +90,9 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
   cutFixed(0.98*keV),
   samplingTablesAreFilled(false)
 {
-  highKinEnergy = HighEnergyLimit();
+  theGamma = G4Gamma::Gamma();
+
+  if(p) SetParticle(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,27 +117,44 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
+void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 {
-  theGamma = G4Gamma::Gamma();
+  if(p) SetParticle(p);
 
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  highKinEnergy = HighEnergyLimit();
+
   G4double fixedEnergy = 0.5*highKinEnergy;
 //  G4double fixedEnergy = 500000.*TeV;
 
-  for (size_t ii=0; ii<partialSumSigma.size(); ii++){
-    G4DataVector* a=partialSumSigma[ii];
-    if ( a )  delete a;    
-  } 
-  partialSumSigma.clear();
-  for (size_t i=0; i<numOfCouples; i++) {
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = couple->GetMaterial();
-    G4DataVector* dv = ComputePartialSumSigma(material, fixedEnergy,cuts[i]);
-    partialSumSigma.push_back(dv);
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  if(theCoupleTable) {
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+
+    for (size_t ii=0; ii<partialSumSigma.size(); ii++){
+      G4DataVector* a=partialSumSigma[ii];
+      if ( a )  delete a;    
+    } 
+    partialSumSigma.clear();
+    if(numOfCouples>0) {
+      for (G4int i=0; i<numOfCouples; i++) {
+	const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+	const G4Material* material = couple->GetMaterial();
+	G4DataVector* dv = ComputePartialSumSigma(material, fixedEnergy,cuts[i]);
+	partialSumSigma.push_back(dv);
+      }
+    }
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
   if(pParticleChange)
@@ -178,7 +199,7 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
 G4double G4MuBremsstrahlungModel::ComputMuBremLoss(G4double Z, G4double A,
                                                    G4double tkin, G4double cut)
 {
-  G4double totalEnergy = (G4MuonPlus::MuonPlus())->GetPDGMass() + tkin;
+  G4double totalEnergy = mass + tkin;
   G4double ak1 = 0.05;
   G4int    k2=5;
   G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
@@ -218,7 +239,7 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
                                            G4double A,
                                            G4double cut)
 {
-  G4double totalEnergy = (G4MuonPlus::MuonPlus())->GetPDGMass() + tkin;
+  G4double totalEnergy = tkin + mass;
   G4double ak1 = 2.3;
   G4int    k2  = 4;
   G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
@@ -261,11 +282,9 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
                                            G4double gammaEnergy)
 //  differential cross section
 {
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
-
   static const G4double sqrte=sqrt(exp(1.)) ;
   static const G4double bh=202.4,bh1=446.,btf=183.,btf1=1429. ;
-  static const G4double rmass=particleMass/electron_mass_c2 ;
+  static const G4double rmass=mass/electron_mass_c2 ;
   static const G4double cc=classic_electr_radius/rmass ;
   static const G4double coeff= 16.*fine_structure_const*cc*cc/3. ;
 
@@ -273,9 +292,9 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
   if( gammaEnergy > tkin) return dxsection ;
 
-  G4double E = tkin + particleMass ;
+  G4double E = tkin + mass ;
   G4double v = gammaEnergy/E ;
-  G4double delta = 0.5*particleMass*particleMass*v/(E-gammaEnergy) ;
+  G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
   G4double rab0=delta*sqrte ;
 
   G4double z13 = exp(-log(Z)/3.) ;
@@ -299,15 +318,15 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   // nucleus contribution logarithm
   G4double rab1=b*z13;
   G4double fn=log(rab1/(dnstar*(electron_mass_c2+rab0*rab1))*
-              (particleMass+delta*(dnstar*sqrte-2.))) ;
+              (mass+delta*(dnstar*sqrte-2.))) ;
   if(fn <0.) fn = 0. ;
   // electron contribution logarithm
-  G4double epmax1=E/(1.+0.5*particleMass*rmass/E) ;
+  G4double epmax1=E/(1.+0.5*mass*rmass/E) ;
   G4double fe=0.;
   if(gammaEnergy<epmax1)
   {
     G4double rab2=b1*z13*z13 ;
-    fe=log(rab2*particleMass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
+    fe=log(rab2*mass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
                               (electron_mass_c2+rab0*rab2))) ;
     if(fe<0.) fe=0. ;
   }
@@ -386,8 +405,7 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 {
 
   G4double AtomicNumber,AtomicWeight,KineticEnergy,
-           TotalEnergy,Maxep ;
-  G4double particleMass = (G4MuonPlus::MuonPlus())->GetPDGMass();
+           TotalEnergy,Maxep;
 
   for (G4int iz=0; iz<nzdat; iz++)
    {
@@ -397,7 +415,7 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
      for (G4int it=0; it<ntdat; it++)
      {
        KineticEnergy = tdat[it];
-       TotalEnergy = KineticEnergy + particleMass;
+       TotalEnergy = KineticEnergy + mass;
        Maxep = KineticEnergy ;
 
        G4double CrossSection = 0.0 ;
@@ -451,23 +469,25 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
-                                   G4double minEnergy,
+                                   G4double tmin,
                                    G4double maxEnergy)
 {
+
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
-  G4double tmin = min(tmax, minEnergy);
+  if(tmin >= tmax) return 0;
 
-  static G4double ysmall = -100. ;
-  static G4double ytablelow = -5. ;
+  static const G4double ysmall = -100. ;
+  static const G4double ytablelow = -5. ;
 
-  G4ParticleMomentum ParticleDirection = dp->GetMomentumDirection();
+  G4ParticleMomentum partDirection = dp->GetMomentumDirection();
 
   // select randomly one element constituing the material
   const G4Element* anElement = SelectRandomAtom(couple);
 
-  G4double totalEnergy = kineticEnergy + dp->GetMass();
+  G4double totalEnergy   = kineticEnergy + mass;
+  G4double totalMomentum = sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
 
   G4double dy = 5./G4float(NBIN);
 
@@ -533,29 +553,37 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
     x = exp(y) ;
 
     v = cutFixed*exp(x*log(tmax/cutFixed)) ;
-    
+
   } while ( v <= 0.);
 
   // create G4DynamicParticle object for the Gamma
-  G4double GammaEnergy = v;
+  G4double gEnergy = v;
 
-  //  angles of the emitted gamma. ( Z - axis along the parent particle)
-  //  Teta = electron_mass_c2/TotalEnergy for the moment .....
+  // sample angle
+  G4double gam  = totalEnergy/mass;
+  G4double rmax = gam*min(1.0, totalEnergy/gEnergy - 1.0);
+  rmax *= rmax;
+  x = G4UniformRand()*rmax/(1.0 + rmax);
 
-  G4double Teta = electron_mass_c2/totalEnergy ;
-  G4double Phi  = twopi * G4UniformRand() ;
-  G4double dirx = sin(Teta)*cos(Phi) , diry = sin(Teta)*sin(Phi) ,
-           dirz = cos(Teta) ;
+  G4double theta = sqrt(x/(1.0 - x))/gam;
+  G4double sint  = sin(theta);
+  G4double phi   = twopi * G4UniformRand() ;
+  G4double dirx  = sint*cos(phi), diry = sint*sin(phi), dirz = cos(theta) ;
 
-  G4ThreeVector GammaDirection ( dirx, diry, dirz);
-  GammaDirection.rotateUz(ParticleDirection);
+  G4ThreeVector gDirection(dirx, diry, dirz);
+  gDirection.rotateUz(partDirection);
+
+  partDirection *= totalMomentum;
+  partDirection -= gEnergy*gDirection;
+  partDirection = partDirection.unit();
 
   // primary change
-  kineticEnergy -= GammaEnergy;
+  kineticEnergy -= gEnergy;
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedMomentumDirection(partDirection);
 
   // save secondary
-  G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,GammaDirection,GammaEnergy);
+  G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,gDirection,gEnergy);
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(aGamma);
 

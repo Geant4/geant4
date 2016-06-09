@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.14 2005/06/30 06:35:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VSurface.cc,v 1.15 2005/07/18 14:55:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -466,14 +466,16 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
    G4double      distance[G4VSURFACENXX]  ; 
    G4int         areacode[G4VSURFACENXX]  ;
    G4bool        isvalid[G4VSURFACENXX]   ; 
+   G4int         i;
    
-   for (G4int i = 0 ; i<G4VSURFACENXX ; i++ ) {
+   for ( i = 0 ; i<G4VSURFACENXX ; i++ )
+   {
      distance[i] = kInfinity ;
      areacode[i] = sOutside ;
      isvalid[i] = false ;
    }
 
-   G4int         i, nxx;
+   G4int         nxx;
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;
 

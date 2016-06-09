@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.39 2005/06/15 13:59:59 gunter Exp $
+# $Id: common.gmk,v 1.40 2005/07/18 15:09:14 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -50,7 +50,9 @@ $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a $(G4TMPDIR)/*.o
-	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
+	@if [ X$(G4SYSTEM) != XWIN32-VC ] ; then  \
+	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4LIBDIR)/lib$(name).a ; fi ; fi
 endif
 
 ###############################################################################

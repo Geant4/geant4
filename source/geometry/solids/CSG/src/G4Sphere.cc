@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.48 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Sphere.cc,v 1.52 2005/08/04 10:57:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // class G4Sphere
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 22.07.05 O.Link    : Added check for intersection with double cone
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
 // 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
@@ -55,6 +56,8 @@
 #include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
+
+#include "Randomize.hh"
 
 #include "meshdefs.hh"
 
@@ -2218,6 +2221,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
           {
+            // check against double cone solution
+            zi=p.z()+s*v.z();
+            if (fSTheta<pi*0.5 && zi<0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
+            if (fSTheta>pi*0.5 && zi>0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
             stheta = s ;
             sidetheta = kSTheta ;
           }
@@ -2245,6 +2258,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           }
           if (s > flexRadMaxTolerance*0.5 && s < stheta )
           {
+            // check against double cone solution
+            zi=p.z()+s*v.z();
+            if (fSTheta+fDTheta<pi*0.5 && zi<0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
+            if (fSTheta+fDTheta>pi*0.5 && zi>0)
+            {
+              s = kInfinity ;  // wrong cone
+            }
             stheta = s ;
             sidetheta = kETheta ;
           }
@@ -2897,6 +2920,92 @@ std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnSurface
+
+G4ThreeVector G4Sphere::GetPointOnSurface() const
+{
+  G4double zRand, aOne, aTwo, aThr, aFou, aFiv, chose, phi, sinphi, cosphi;
+  G4double height1, height2, slant1, slant2, costheta, sintheta,theta,rRand;
+
+  height1 = (fRmax-fRmin)*std::cos(fSTheta);
+  height2 = (fRmax-fRmin)*std::cos(fSTheta+fDTheta);
+  slant1  = std::sqrt(sqr((fRmax - fRmin)*std::sin(fSTheta))
+                      + height1*height1);
+  slant2  = std::sqrt(sqr((fRmax - fRmin)*std::sin(fSTheta+fDTheta))
+                      + height2*height2);
+  rRand   = RandFlat::shoot(fRmin,fRmax);
+  
+  aOne = fRmax*fRmax*fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta));
+  aTwo = fRmin*fRmin*fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta));
+  aThr = fDPhi*((fRmax + fRmin)*std::sin(fSTheta))*slant1;
+  aFou = fDPhi*((fRmax + fRmin)*std::sin(fSTheta+fDTheta))*slant2;
+  aFiv = 0.5*fDTheta*(fRmax*fRmax-fRmin*fRmin);
+  
+  phi = RandFlat::shoot(fSPhi, fSPhi + fDPhi); 
+  cosphi = std::cos(phi); 
+  sinphi = std::sin(phi);
+  theta = RandFlat::shoot(fSTheta,fSTheta+fDTheta);
+  costheta = std::cos(theta);
+  sintheta = std::sqrt(1.-sqr(costheta));
+
+  if( (fSPhi==0) && (fDPhi==2.*pi) || (fDPhi==2.*pi) ) {aFiv = 0;}
+  if(fSTheta == 0)  {aThr=0;}
+  if(fDTheta + fSTheta == pi) {aFou = 0;}
+  if(fSTheta == 0.5*pi) {aThr = pi*(fRmax*fRmax-fRmin*fRmin);}
+  if(fSTheta + fDTheta == 0.5*pi) { aFou = pi*(fRmax*fRmax-fRmin*fRmin);}
+
+  chose = RandFlat::shoot(0.,aOne+aTwo+aThr+aFou+2.*aFiv);
+  if( (chose>=0.) && (chose<aOne) )
+  {
+    return G4ThreeVector(fRmax*sintheta*cosphi,
+                         fRmax*sintheta*sinphi, fRmax*costheta);
+  }
+  else if( (chose>=aOne) && (chose<aOne+aTwo) )
+  {
+    return G4ThreeVector(fRmin*sintheta*cosphi,
+                         fRmin*sintheta*sinphi, fRmin*costheta);
+  }
+  else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThr) )
+  {
+    if (fSTheta != 0.5*pi)
+    {
+      zRand = RandFlat::shoot(fRmin*std::cos(fSTheta),fRmax*std::cos(fSTheta));
+      return G4ThreeVector(std::tan(fSTheta)*zRand*cosphi,
+                           std::tan(fSTheta)*zRand*sinphi,zRand);
+    }
+    else
+    {
+      return G4ThreeVector(rRand*cosphi, rRand*sinphi, 0.);
+    }    
+  }
+  else if( (chose>=aOne+aTwo+aThr) && (chose<aOne+aTwo+aThr+aFou) )
+  {
+    if(fSTheta + fDTheta != 0.5*pi)
+    {
+      zRand = RandFlat::shoot(fRmin*std::cos(fSTheta+fDTheta),
+                              fRmax*std::cos(fSTheta+fDTheta));
+      return G4ThreeVector  (std::tan(fSTheta+fDTheta)*zRand*cosphi,
+                             std::tan(fSTheta+fDTheta)*zRand*sinphi,zRand);
+    }
+    else
+    {
+      return G4ThreeVector(rRand*cosphi, rRand*sinphi, 0.);
+    }
+  }
+  else if( (chose>=aOne+aTwo+aThr+aFou) && (chose<aOne+aTwo+aThr+aFou+aFiv) )
+  {
+    return G4ThreeVector(rRand*sintheta*std::cos(fSPhi),
+                         rRand*sintheta*std::sin(fSPhi),rRand*costheta);
+  }
+  else
+  {
+    return G4ThreeVector(rRand*sintheta*std::cos(fSPhi+fDPhi),
+                         rRand*sintheta*std::sin(fSPhi+fDPhi),rRand*costheta);
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////

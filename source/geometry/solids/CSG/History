@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2005/06/08 16:14:41 gcosmo Exp $
+$Id: History,v 1.86.2.2 2005/10/23 16:29:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 23, 2005  G.Cosmo                     geom-csg-V07-01-02a
+- G4Para: fixed bug in DistanceToOut(p,v) for the case v.x()<0.
+  Following problem report from user posted on Hypernews (#452).
+  (V.Grichine)
+- Moved implementation for DistanceToIn/Out() in G4Torus to make use of
+  G4JTPolynomialSolver for precise calculation of the intersections.
+  (O.Link)
+- Reviewed unit tests and reduced statistics.
+
+Jul 25, 2005  O.Link
+- Fixed bug in G4Sphere::DistanceToOut(p,v):
+  added check for intersection with double cone.
 
 Jun 8, 2005  V.Grichine                  geom-csg-V07-00-09
 - Keep old specification for SurfaceNormal() to treat usage of the

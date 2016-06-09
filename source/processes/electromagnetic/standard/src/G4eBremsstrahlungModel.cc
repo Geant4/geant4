@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.25 2005/05/03 08:07:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.27 2005/08/18 15:05:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 // 09-05-03  Fix problem of supression function + optimise sampling (V.Ivanchenko)
 // 20-05-04  Correction to ensure unit independence (L.Urban)
 // 08-04-05  Major optimisation of internal interfaces (V.Ivantchenko)
+// 03-08-05  Add extra protection at initialisation (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -126,19 +127,25 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   lowKinEnergy  = LowEnergyLimit();
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  for (size_t ii=0; ii<partialSumSigma.size(); ii++){
-    G4DataVector* a=partialSumSigma[ii];
-    if ( a )  delete a;
-  }
-  partialSumSigma.clear();
-  for (size_t i=0; i<numOfCouples; i++) {
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = couple->GetMaterial();
-    G4DataVector* dv = ComputePartialSumSigma(material, 0.5*highKinEnergy,
+  if(theCoupleTable) {
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+
+    for (size_t ii=0; ii<partialSumSigma.size(); ii++){
+      G4DataVector* a=partialSumSigma[ii];
+      if ( a )  delete a;
+    }
+    partialSumSigma.clear();
+    
+    if(numOfCouples>0) {
+      for (G4int i=0; i<numOfCouples; i++) {
+	const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+	const G4Material* material = couple->GetMaterial();
+	G4DataVector* dv = ComputePartialSumSigma(material, 0.5*highKinEnergy,
                              min(cuts[i], 0.25*highKinEnergy));
-    partialSumSigma.push_back(dv);
+	partialSumSigma.push_back(dv);
+      }
+    }
   }
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
@@ -629,10 +636,9 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
 // A modified version of the random number techniques of Butcher & Messel is used
 //    (Nuc Phys 20(1960),15).
 {
-  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = min(maxEnergy, kineticEnergy);
-  if(tmin > tmax) tmin = tmax;
+  if(tmin >= tmax) return 0;
 
 //
 // GEANT4 internal units.
@@ -818,6 +824,7 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   
   // create G4DynamicParticle object for the Gamma
+  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
   newp->push_back(g);
   return newp;

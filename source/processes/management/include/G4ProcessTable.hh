@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: G4ProcessTable.hh,v 1.8 2003/06/16 17:12:29 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4ProcessTable.hh,v 1.9 2005/07/11 10:18:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -51,6 +51,7 @@
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
+class G4UImessenger;
 class G4ProcessTableMessenger;
 
 class G4ProcessTable

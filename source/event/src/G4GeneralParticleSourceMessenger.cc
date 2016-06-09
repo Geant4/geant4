@@ -166,7 +166,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
 
   ionCmd = new G4UIcommand("/gps/ion",this);
   ionCmd->SetGuidance("Set properties of ion to be generated.");
-  ionCmd->SetGuidance("[usage] /gun/ion Z A Q E");
+  ionCmd->SetGuidance("[usage] /gps/ion Z A Q E");
   ionCmd->SetGuidance("        Z:(int) AtomicNumber");
   ionCmd->SetGuidance("        A:(int) AtomicMass");
   ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");

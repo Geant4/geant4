@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.2 2005/05/18 11:02:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BraggNoDeltaModel.hh,v 1.3 2005/08/05 13:43:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,13 +81,6 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4BraggNoDeltaModel::G4BraggNoDeltaModel(G4double ch, const G4ParticleDefinition*p,
-                 const G4String& nam) : G4BraggIonModel(p, nam), mcharge2(ch*ch)
-{}
-
-inline G4BraggNoDeltaModel::~G4BraggNoDeltaModel()
-{}
 
 inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
                             const G4Material* material,

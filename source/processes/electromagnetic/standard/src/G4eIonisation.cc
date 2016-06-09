@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.41 2005/05/01 20:26:24 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4eIonisation.cc,v 1.45 2005/09/02 16:30:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,8 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
+// 02-09-05 Return SetStepLimits(1, 1*mm) (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -106,9 +108,12 @@ void G4eIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
     //flucModel = new G4BohrFluctuations();
 
     G4VEmModel* em = new G4MollerBhabhaModel();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
+    em->SetLowEnergyLimit(100*eV);
+    em->SetHighEnergyLimit(100*TeV);
     AddEmModel(1, em, flucModel);
+
+    SetStepLimits(1.0, 1.0*mm);
+
     isInitialised = true;
   }
 }

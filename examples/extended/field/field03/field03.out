@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -198,15 +198,15 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
-    1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049459459 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 mum   -920.6619 mum
-    2          0 fm  6.5801508 cm      21.74 m         500 MeV0.00014148327 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 mum  -869.93607 mum
-    3          0 fm  19.942498 cm   21.58699 m         500 MeV0.00049863047 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 mum  -605.81452 mum
-    4          0 fm  81.240793 cm   21.58699 m         500 MeV0.0016053718 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 mum   605.81447 mum
-    5          0 fm  94.603131 cm      21.74 m         500 MeV0.00049863047 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 mum   869.93596 mum
-    6          0 fm  98.923943 cm      21.84 m         500 MeV0.00026608404 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 mum   955.34163 mum
-    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.00036999381 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1925711 Ang        1000 mum
-    8          0 fm  1.0118318 m     21.9905 m         500 MeV2.444267e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 mum   999.99805 mum
-    9          0 fm  1.0117238 m          22 m         500 MeV2.3135271e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 mum   999.78461 mum
+    1          0 fm  4.0138452 cm   21.79201 m         500 MeV         1 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 mum   -920.6619 mum
+    2          0 fm  6.5801508 cm      21.74 m         500 MeV         1 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 mum  -869.93607 mum
+    3          0 fm  19.942498 cm   21.58699 m         500 MeV         1 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 mum  -605.81452 mum
+    4          0 fm  81.240793 cm   21.58699 m         500 MeV         1 eV  65.848986 cm  1.1239365 m       World  Transportation           0 fm    795.60595 mum   605.81447 mum
+    5          0 fm   94.60313 cm      21.74 m         500 MeV         1 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 mum   869.93596 mum
+    6          0 fm  98.923942 cm      21.84 m   499.99999 MeV         1 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 mum   955.34163 mum
+    7          0 fm  1.0118328 m     21.9895 m   499.99999 MeV         1 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1274155 Ang        1000 mum
+    8          0 fm  1.0118318 m     21.9905 m   499.99999 MeV         1 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763984 mum   999.99805 mum
+    9          0 fm  1.0117238 m          22 m   499.99999 MeV         1 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm   -20.754206 mum   999.78461 mum
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -232,7 +232,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.77s Real=0.77s Sys=0s
+  User=0.78s Real=0.78s Sys=0s
 Set field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ==============================
@@ -253,7 +253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.07s Real=0.07s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.12 2004/12/02 23:10:36 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpBoundaryProcess.hh,v 1.13 2005/07/28 22:26:59 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,8 @@
 //                                  optical interfaces
 // Version:     1.1
 // Created:     1997-06-18
-// Modified:    1999-10-29 add method and class descriptors
+// Modified:    2005-07-28 add G4ProcessType to constructor
+//              1999-10-29 add method and class descriptors
 //              1999-10-10 - Fill NewMomentum/NewPolarization in 
 //                           DoAbsorption. These members need to be
 //                           filled since DoIt calls 
@@ -105,7 +106,8 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpBoundaryProcess(const G4String& processName = "OpBoundary");
+        G4OpBoundaryProcess(const G4String& processName = "OpBoundary",
+                                     G4ProcessType type = fOptical);
 
 	~G4OpBoundaryProcess();
 

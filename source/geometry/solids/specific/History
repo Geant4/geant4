@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2005/05/09 14:15:37 gcosmo Exp $
+$Id: History,v 1.61.2.1 2005/10/14 14:05:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-Jul-2005, G.Cosmo (geom-specific-V07-01-01a)
+- Fixed compilation warning on WIN32-VC for G4VSurface.cc.
+
+06-Jul-2005, G.Cosmo
+- Corrected unit tests for twisted-box/trap.
 
 29-Apr-2005, O.Link (geom-specific-V07-00-04)
 - G4TwistedSurface: fixed bug in GetAreaCode() affecting G4TwistedTubs.

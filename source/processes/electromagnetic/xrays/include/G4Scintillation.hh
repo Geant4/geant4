@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.11 2002/11/25 18:48:51 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Scintillation.hh,v 1.12 2005/07/28 23:56:53 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,8 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     2002-11-21 change to user G4Poisson for small MeanNumPotons
+// Updated:     2005-07-28 add G4ProcessType to constructor
+//              2002-11-21 change to user G4Poisson for small MeanNumPotons
 //              2002-11-07 allow for fast and slow scintillation
 //              2002-11-05 make use of constant material properties
 //              2002-05-16 changed to inherit from VRestDiscreteProcess
@@ -93,7 +94,8 @@ public: // Without description
 	// Constructors and Destructor
 	////////////////////////////////
 
-	G4Scintillation(const G4String& processName = "Scintillation");
+	G4Scintillation(const G4String& processName = "Scintillation",
+                                 G4ProcessType type = fElectromagnetic);
 
 	// G4Scintillation(const G4Scintillation &right);
 

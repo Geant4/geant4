@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.3 2004/12/02 08:31:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VTransitionRadiation.cc,v 1.4 2005/07/28 23:57:37 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -31,6 +31,7 @@
 
 // History:
 // 29.02.04 V.Ivanchenko create
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 
 #include "G4VTransitionRadiation.hh"
 #include "G4ParticleDefinition.hh"
@@ -43,8 +44,9 @@
 
 using namespace std;
 
-G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName )
-  : G4VDiscreteProcess(processName),
+G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
+                                                      G4ProcessType type )
+  : G4VDiscreteProcess(processName, type),
   nSteps(0),
   gammaMin(100),
   cosDThetaMax(cos(0.1))

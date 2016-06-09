@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005/06/22 14:08:29 gcosmo Exp $
+$Id: History,v 1.6.2.1 2005/10/14 15:02:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 15th, 2005 J.Weng (gflash-V07-01-00a)
+---------------------
+- Added overflow protection in method GenerateRadius() for
+  GFlashHomoShowerParamterisation.
 
 Jun 22nd, 2005 G.Cosmo (gflash-V07-00-04) 
 ----------------------

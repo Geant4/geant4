@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2005/05/30 08:46:58 vnivanch Exp $
+$Id: History,v 1.179 2005/10/23 16:53:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,107 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 October 05: V.Ivant (emstand-V07-01-05b)
+- a tag included fixes in G4BraggModel.cc and  G4BraggIonModel.cc
+  on top of emstand-V07-01-05a; assumed for the patch-01
+
+17 October 05: V.Ivant (emstand-V07-01-19)
+- fix in G4BraggModel.cc in chemical formula correction
+
+17 October 05: L.Urban (emstand-V07-01-18)
+- G4UniversalFluctuation.cc: correction for very small loss
+  to avoid 0 energy loss
+- fix in G4BraggIonModel.cc in chemical formula correction
+
+13 October 05: mma (emstand-V07-01-17)
+- G4MultipleScattering.cc: remove SetFacrange(0.02) from InitialiseProcess
+
+12 October 05: L.Urban (emstand-V07-01-16)
+- G4MultipleScattering.cc: change in TruePathLengthLimit conditions,
+  slightly better timing and much weaker cut dependence
+
+10 October 05: V.Ivant (emstand-07-01-15)
+- Fix non-initilised variable in G4MultipleScattering
+
+7 October 05: L.Urban (emstand-V07-01-14)
+- G4MultipleScattering.cc: bug fixed in TruePathLengthLimit.
+  Must cowork with emutils-V07-01-05
+
+6 October 05: L.Urban (emstand-V07-01-13)
+- G4MultipleScattering: change in conditions limiting
+  the step --> better timing with the same physics
+
+4 October 05: L.Urban (emstand-V07-01-12)
+- G4MultipleScattering: upper limit for facrange 0.2,
+  facgeom =2 always, corr. in set function of facgeom
+
+4 October 05: V.Ivant (emstand-V07-01-11)
+- Move G4MultipleScattering80 and G4MscModel80 into
+  G4MultipleScattering and G4MscModel   
+
+3 October 05: L.Urban (emstand-V07-01-10)
+- G4MultipleScattering80 : weaker step limitation above 
+  Tkinlimit = 2 MeV for e+/e- (limit scaled with mass
+  for other particles).Soft limit: facrange increases
+  linearly with energy above Tkinlimit.
+- G4UniversalFluctuation : cut dependence of the en.loss
+  distribution has been reduced
+     
+2 October 05: mma (emstand-V07-01-09)
+- G4eIonisation, G4hIonisation : SetStepLimits (0.2, 1*mm) + integral on
+     
+2 October 05: L.Urban
+- conditions for step limit now are considered 'final' in
+  G4MultipleScattering80.cc + code cleaning
+- nuclear size correction has been removed from G4MscModel80,
+  the correction is already included in the (theoretical)
+  tabulated cross section values for Tkin > 10 MeV
+
+16 September 05: L.Urban
+- reordering of the conditions in TruePathLengthLimit of 
+  G4MultipleScattering80.cc (It gives the same result than
+  preceding version, but it is faster)
+
+12 September 05: L.Urban
+- new version of  G4MultipleScattering80, now the true pathlength
+  limit is determined by the physics (facrange) + geometry 
+
+2 September 05: V.Ivant. (emstand-V07-01-08)
+- G4hIonisation : SetStepLimits (0.2, 0.1*mm) + integral off
+
+2 September 05: V.Ivant. (emstand-V07-01-07)
+- G4eIonisation : integral off
+
+2 September 05: V.Ivant. (emstand-V07-01-06)
+- G4eIonisation : SetStepLimits (0.2, 0.1*mm) 
+- add G4MultipleScattering80 and G4MscModel80
+
+2 September 05: V.Ivant. (emstand-V07-01-05)
+- This tag is 7.1 + bug fixes
+- G4eIonisation : SetStepLimits (1, 1*mm)
+- G4hIonisation : SetStepLimits (0.2, 1*mm)
+     
+12 August 05: mma (emstand-V07-01-04)
+- G4eIonisation and G4hIonisation : SetStepLimits (0.2, 0.1*mm)
+     
+11 August 05: Laszlo + mma (emstand-V07-01-03)
+- add G4MultipleScattering80 and G4MscModel80
+ 
+03 August 05: V.Ivant (emstand-V07-01-02)
+- Fix intialisation G4eBremsstrahlungModel 
+
+25 July 05: V.Ivant (emstand-V07-01-01)
+- Fix in G4MollerBhabhaModel: add protection in calculation of recoil direction 
+  for the case of complete energy transfer from e+ to e-
+
+30 June 05: V.Ivant (emstand-V07-01-00)
+24 May 05: V.Ivant (stand-V07-00-12)
+- Change G4BaggIonModel and G4BaggModel in order to have parameterization
+  of chemical effect be independent on method of material definition (by
+  number of atoms or by mass fractions); 
+- Increase number of bins for internal table of G4BetheHeitlerModel
+- Add protection for (tmax < meanPot and pot0) in G4UniversalFluctuations
 
 30 May 05: V.Ivant (stand-V07-00-11)
 - Fix compilation warning at SUN in G4BaggIonModel; 

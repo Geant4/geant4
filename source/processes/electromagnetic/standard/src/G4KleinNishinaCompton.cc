@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.5 2005/04/18 17:31:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4KleinNishinaCompton.cc,v 1.6 2005/08/11 10:03:33 maire Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //

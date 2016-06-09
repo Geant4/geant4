@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.9 2005/07/05 13:25:26 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+Jul 5th, 2005  Gabriele Cosmo  (persistencyEx-V07-01-00)
+- Added missing ESTRALIBS to link list for specialised setup.
+
+May 3rd, 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
 May 27th, 2005  Gabriele Cosmo (persistencyEx-V07-00-01)

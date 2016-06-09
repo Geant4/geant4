@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.34 2005/05/11 08:06:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEmModel.hh,v 1.35 2005/07/25 18:13:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 15-04-05 optimize internal interface for msc (V.Ivanchenko)
 // 08-05-05 A -> N (V.Ivanchenko)
+// 25-07-05 Move constructor and destructor to the body (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -205,13 +206,6 @@ protected:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel::G4VEmModel(const G4String& nam): 
-  lowLimit(0.0), highLimit(0.0), fluc(0), name(nam), pParticleChange(0) 
-{}
-
-inline G4VEmModel::~G4VEmModel() 
-{}
-
 inline G4double G4VEmModel::HighEnergyLimit()
 {
   return highLimit;
@@ -274,26 +268,6 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
                                                G4double maxEnergy)
 {
   return CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
-}
-
-inline G4double G4VEmModel::CrossSectionPerVolume(
-                                        const G4Material* material,
-					const G4ParticleDefinition* p,
-					      G4double ekin,
-					      G4double emin,
-                                              G4double emax)
-{
-  G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
-  size_t nelm = material->GetNumberOfElements();
-  for (size_t i=0; i<nelm; i++) {
-    const G4Element* elm = (*theElementVector)[i];
-    cross += theAtomNumDensityVector[i]*
-             ComputeCrossSectionPerAtom(p,ekin,elm->GetZ(),elm->GetN(),emin,emax); 
-    xsec[i] = cross;
-  }
-  return cross;
 }
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(

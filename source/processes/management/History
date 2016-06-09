@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2005/02/15 04:38:56 kurasige Exp $
+$Id: History,v 1.38 2005/07/11 10:20:06 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- July 11, 2005  H.Kurashige (procman-V07-01-00)
+- Add forward declaration of G4UImessenger in G4ProcessTable.hh
+
 -Feb. 15, 2005  H.Kurashige (procman-V07-00-00)
 -  Modify G4ProcessVectorOrdering to fix FindInsedrtPosition
 

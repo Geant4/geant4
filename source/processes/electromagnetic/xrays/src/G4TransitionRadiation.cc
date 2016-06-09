@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.5 2005/06/27 15:29:44 gunter Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TransitionRadiation.cc,v 1.6 2005/07/28 23:58:01 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // G4TransitionRadiation class -- implementation file
 
@@ -34,6 +34,7 @@
 // History:
 // 1st version 11.09.97 V. Grichine (Vladimir.Grichine@cern.ch )
 // 2nd version 16.12.97 V. Grichine
+// 3rd version 28.07.05, P.Gumplinger add G4ProcessType to constructor
 
 
 #include <cmath>
@@ -61,8 +62,8 @@ using namespace std;
 //
 
 G4TransitionRadiation::
-G4TransitionRadiation( const G4String& processName )
-  : G4VDiscreteProcess(processName)
+G4TransitionRadiation( const G4String& processName, G4ProcessType type )
+  : G4VDiscreteProcess(processName, type)
 {
   //  fMatIndex1 = pMat1->GetIndex() ;
   //  fMatIndex2 = pMat2->GetIndex() ;

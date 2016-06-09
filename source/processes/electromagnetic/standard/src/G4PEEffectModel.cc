@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.2 2005/05/02 12:44:18 maire Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4PEEffectModel.cc,v 1.3 2005/08/11 10:03:33 maire Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.hh,v 1.7 2004/04/27 00:26:34 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpRayleigh.hh,v 1.8 2005/07/28 22:27:16 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,8 @@
 // Version:     1.0
 // Created:     1996-05-31
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2005-07-28 add G4ProcessType to constructor
+//              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 // mail:        gum@triumf.ca
@@ -87,7 +88,8 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
  
-        G4OpRayleigh(const G4String& processName = "OpRayleigh");
+        G4OpRayleigh(const G4String& processName = "OpRayleigh",
+                              G4ProcessType type = fOptical);
 
         // G4OpRayleigh(const G4OpRayleigh &right);
 

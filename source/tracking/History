@@ -1,4 +1,5 @@
-$Id: History,v 1.90 2005/05/04 09:07:05 allison Exp $
+$Id: History,v 1.92 2005/09/21 09:49:15 tsasaki Exp $
+$Name: geant4-07-01-patch-01 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+Last checked in at $Date: 2005/09/21 09:49:15 $ by $Author: tsasaki $ 
+21 September 2005 T. Sasaki(tracking-V07-01-01)
+- fix for fastsimulation problem in G4SteppingManager2.cc
+19 July 2005 T. Sasaki (tracking-V07-01-00)
+- fix for the bug in InvokeAlongStepDoItProcs()
 3rd May 2005  John Allison  (tracking-V07-00-01 - needs greps-V07-00-04)
 - Corrected AttDefs.
 - Made use of G4AttCheck.

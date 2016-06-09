@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-01 $   (27-July-2004)
+ Geant4 version Name: geant4-07-01-ref-01    (30-June-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,26 +9,26 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material: galactic     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element: galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
  Material:    CaCO3     density:  2.800 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.581 cm 
-   --->  Element:  Calcium Ca   Z = 20.0   N =  40.1   A =  40.08 g/mole  fractionMass:  40.04 %  Abundance  20.00 %
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  12.00 %  Abundance  20.00 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  47.96 %  Abundance  60.00 %
+   --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole  fractionMass:  40.04 %  Abundance  20.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  12.00 %  Abundance  20.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  47.96 %  Abundance  60.00 %
 
  Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.850 cm 
-   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:      Tin     density:  7.310 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.206 cm 
-   --->  Element:      Tin      Z = 50.0   N = 118.7   A = 118.70 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 Visualization Manager instantiating...
@@ -40,16 +40,11 @@ Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
   G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  FukuiRenderer (DAWN)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-  VRML1 (VRML1)
-  VRML2 (VRML2)
 /run/verbose 2
 #
 /testem/det/setMat Iron
@@ -64,6 +59,7 @@ userDetector->Construct() start.
  The Box is 1 m   of Iron
 Iron is registered to the default region.
 physicsList->Construct() start.
+physicsList->ConstructParticle() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -74,31 +70,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/event/printModulo 1000
 #
 /run/beamOn 10000
-
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 1000 PeV in 220 bins.
-      Lambda tables from threshold to 1000 PeV in 220 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 1000 PeV in 220 bins.
-      Lambda tables from threshold to 1000 PeV in 220 bins.
-      Parametrised model 
-
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 1000 PeV in 220 bins.
-      Lambda tables from threshold to 1000 PeV in 220 bins.
-      Parametrised model 
-### All dEdx and Range tables are built #####
-
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 1000 PeV in 220 bins.
-      Lambda tables from threshold to 1000 PeV in 220 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
 
 Region DefaultRegionForTheWorld
  Materials : Iron 
@@ -150,18 +121,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.08s Real=10.07s Sys=0.99s
+  User=157.19s Real=295.93s Sys=7.74s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 468098	muPairProd : 63605	muBrems : 651
+ Number of process calls --->	muIoni : 469718	muPairProd : 63465	muBrems : 659
 
- Simulation: total CrossSection = 0.53235 /cm	 MeanFreePath = 1.8784 cm 	 massicCrossSection = 0.067643 cm2/g
+ Simulation: total CrossSection = 0.53384 /cm	 MeanFreePath = 1.8732 cm 	 massicCrossSection = 0.067833 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1120087086, 1146531186
+ Current couple of seeds = 876554893, 585859518
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

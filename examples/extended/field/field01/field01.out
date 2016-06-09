@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -192,13 +192,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV0.00387485 eV    1.58938 m     1.58938 m       World  Transportation
-    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.44427e-06 eV          1 mm    1.59038 m    Absorber  Transportation
-    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31353e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV     1 eV    1.58938 m     1.58938 m       World  Transportation
+    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV     1 eV          1 mm    1.59038 m    Absorber  Transportation
+    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV     1 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.05s Sys=0s
+  User=0.02s Real=0.08s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -222,13 +222,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV0.00183027 eV    79.5502 cm    79.5502 cm      World  Transportation
-    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30216e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
-    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18563e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV     1 eV    79.5502 cm    79.5502 cm      World  Transportation
+    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV     1 eV          1 mm    79.6502 cm   Absorber  Transportation
+    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV     1 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -252,9 +252,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV0.00143692 eV    63.6725 cm    63.6725 cm      World  Transportation
-    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.24532e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
-    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14584e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV     1 eV    63.6725 cm    63.6725 cm      World  Transportation
+    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV     1 eV          1 mm    63.7725 cm   Absorber  Transportation
+    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV     1 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -282,9 +282,9 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m           0 9.91398e-09          1      100 MeV0.000676636 eV    31.9171 cm    31.9171 cm      World  Transportation
-    2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.11742e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
-    3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.01794e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
+    1          0 fm     20.319 cm    21.9895 m           0 9.91398e-09          1      100 MeV     1 eV    31.9171 cm    31.9171 cm      World  Transportation
+    2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV     1 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
+    3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV     1 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -312,13 +312,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m           0 -7.69218e-09          1       50 MeV0.000318174 eV    16.0391 cm    16.0391 cm      World  Transportation
-    2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98241e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
-    3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89928e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
+    1          0 fm    10.2108 cm    21.9895 m           0 -7.69218e-09          1       50 MeV     1 eV    16.0391 cm    16.0391 cm      World  Transportation
+    2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV     1 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
+    3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV     1 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
 Setting Field strength to 1000 Gauss. Magnetic field vector is (0,0,1000) G 
@@ -345,7 +345,7 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV0.107244 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
+    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV     1 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -387,7 +387,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.06s Real=0.06s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.4 2005/05/03 13:37:43 urban Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4UniversalFluctuation.cc,v 1.5 2005/06/28 09:13:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -190,7 +190,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     rate = 1. ;
   }
 
-  a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  if(tmax > ipotFluct) 
+    a3 = rate*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
 
   G4double suma = a1+a2+a3;
   
@@ -269,7 +270,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
-  a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+  if(tmax <= e0) a3 = 0.0;
+  else a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+
   if (a3 > alim)
   {
     siga=sqrt(a3);

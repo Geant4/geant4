@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.12 2004/12/02 23:10:57 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpRayleigh.cc,v 1.13 2005/07/28 22:28:37 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -35,11 +35,12 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
-// Updated:     2001-10-18 by Peter Gumplinger
+// Updated:     2005-07-28 - add G4ProcessType to constructor
+//              2001-10-18 by Peter Gumplinger
 //              eliminate unused variable warning on Linux (gcc-2.95.2)
-// Updated:     2001-09-18 by mma
+//              2001-09-18 by mma
 //		>numOfMaterials=G4Material::GetNumberOfMaterials() in BuildPhy
-// Updated:     2001-01-30 by Peter Gumplinger
+//              2001-01-30 by Peter Gumplinger
 //              > allow for positiv and negative CosTheta and force the
 //              > new momentum direction to be in the same plane as the
 //              > new and old polarization vectors
@@ -70,8 +71,8 @@
         // Constructors
         /////////////////
 
-G4OpRayleigh::G4OpRayleigh(const G4String& processName)
-           : G4VDiscreteProcess(processName)
+G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
+           : G4VDiscreteProcess(processName, type)
 {
 
         thePhysicsTable = 0;

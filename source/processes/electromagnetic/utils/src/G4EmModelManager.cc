@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.28 2005/05/13 16:54:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4EmModelManager.cc,v 1.29 2005/08/18 15:05:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 // 26-01-04 Fix in energy range conditions (V.Ivanchenko)
 // 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -355,6 +356,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       size_t idx = 1;
       if( secondaryParticle == G4Gamma::Gamma() ) idx = 0;
       cut = (*theCoupleTable->GetEnergyCutsVector(idx))[i];
+      if( secondaryParticle == G4Positron::Positron() )
+        cut += (*theCoupleTable->GetEnergyCutsVector(2))[i] + 2.0*electron_mass_c2;
       subcut = minSubRange*cut;
     }
 

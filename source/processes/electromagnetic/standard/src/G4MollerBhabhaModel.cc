@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.20 2005/04/12 18:12:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MollerBhabhaModel.cc,v 1.22 2005/08/18 15:05:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,8 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 25-07-05 Add protection in calculation of recoil direction for the case 
+//          of complete energy transfer from e+ to e- (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -250,9 +252,8 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
-  if(tmin > tmax) tmin = tmax;
+  if(tmin >= tmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
@@ -338,7 +339,8 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totalMomentum);
-  G4double sint = sqrt(1.0 - cost*cost);
+  G4double sint = 1.0 - cost*cost;
+  if(sint > 0.0) sint = sqrt(sint);
 
   G4double phi = twopi * G4UniformRand() ;
 
@@ -347,12 +349,16 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
 
   // primary change
   kineticEnergy -= deltaKinEnergy;
-  G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
-  direction = dir.unit();
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  fParticleChange->SetProposedMomentumDirection(direction);
+
+  if(kineticEnergy > DBL_MIN) {
+    G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
+    direction = dir.unit();
+    fParticleChange->SetProposedMomentumDirection(direction);
+  }
 
   // create G4DynamicParticle object for delta ray
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
 						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);

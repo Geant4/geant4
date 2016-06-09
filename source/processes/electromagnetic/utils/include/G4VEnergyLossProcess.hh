@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.39 2005/04/12 18:31:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEnergyLossProcess.hh,v 1.41 2005/09/04 17:03:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -392,6 +392,7 @@ private:
   G4int    nDEDXBins;
   G4int    nDEDXBinsForRange;
   G4int    nLambdaBins;
+  G4int    nWarnings;
 
   G4double lowestKinEnergy;
   G4double minKinEnergy;
@@ -412,8 +413,6 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
-  G4double defaultRoverRange;
-  G4double defaultIntegralRange;
   G4double lambdaFactor;
   G4double mfpKinEnergy;
 

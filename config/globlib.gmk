@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.26 2005/06/15 13:59:59 gunter Exp $
+# $Id: globlib.gmk,v 1.27 2005/07/18 15:09:14 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -68,8 +68,9 @@ $(G4LIBDIR)/lib$(name).a: \
 #
 #
 #
-	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
-	ranlib $(G4LIBDIR)/lib$(name).a ; fi
+	@if [ X$(G4SYSTEM) != XWIN32-VC ] ; then  \
+	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4LIBDIR)/lib$(name).a ; fi ; fi
 endif
 
 

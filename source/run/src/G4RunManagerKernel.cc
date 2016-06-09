@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.27 2005/06/17 21:07:13 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4RunManagerKernel.cc,v 1.27.2.2 2005/10/24 06:52:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //
 
@@ -80,11 +80,11 @@ G4RunManagerKernel::G4RunManagerKernel()
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
   // version banner
-  G4String vs = "$Name: geant4-07-01 $";
+  G4String vs = "$Name: geant4-07-01-patch-01 $";
   vs = vs.substr(1,vs.size()-2);
   versionString = " Geant4 version ";
   versionString += vs;
-  versionString += "   (30-June-2005)";
+  versionString += "   (25-October-2005)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl

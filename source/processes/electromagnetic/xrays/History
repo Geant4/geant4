@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2005/06/06 11:08:09 vnivanch Exp $
+$Id: History,v 1.41 2005/08/17 17:21:56 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Aug 05: P.Gumplinger (xrays-V07-01-01)
+- change variable name MeanNumPhotons to MeanNumberOfPhotons
+  in G4Scintillation.cc and G4Cerenkov.cc to conform with the
+  documentation in the ApplicationDevelopersGuide
+
+28 Jul 05: P.Gumplinger (xrays-V07-01-00)
+- add G4ProcessType to all constructors
+
+27 Jun 05: P.Gumplinger (xrays-V07-00-04)
+- Change IsApplicable for G4Cerenkov to exclude 'chargedgeantino'
 
 06 June 05: V.Ivant (xrays-V07-00-03)
 - V.Grichine fix in G4TransparentRegXTRadiator - low limit of integration 

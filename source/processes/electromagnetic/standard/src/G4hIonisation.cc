@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.56 2005/04/08 12:39:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4hIonisation.cc,v 1.59 2005/08/18 15:05:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -31,7 +31,7 @@
 // File name:     G4hIonisation
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1997
 //
 // Modifications:
@@ -69,6 +69,7 @@
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 24-03-05 Optimize internal interfaces (V.Ivantchenko)
+// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
 //
 // -------------------------------------------------------------------
 //

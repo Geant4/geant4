@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.7 2005/04/27 09:29:16 gcosmo Exp $
+# $Id: binmake.gmk,v 1.8 2005/07/05 13:23:07 gcosmo Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -64,7 +64,7 @@ ifneq ($(EXTLDFLAGS),)
 endif
 
 # libraries
-LDLIBS := $(libraries_to_build) \
+LDLIBS := $(EXTRALIBS) $(libraries_to_build) \
           -lG4ROOTIO
 
 g4libs := $(wildcard $(G4LIB)/$(G4SYSTEM)/*.so)

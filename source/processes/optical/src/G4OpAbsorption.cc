@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.5 2004/10/19 02:15:15 gum Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4OpAbsorption.cc,v 1.6 2005/07/28 22:28:04 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -33,7 +33,8 @@
 // Version:     1.0
 // Created:     1996-05-21
 // Author:      Juliet Armstrong
-// Updated:     2000-09-18 by Peter Gumplinger
+// Updated:     2005-07-28 - add G4ProcessType to constructor
+//              2000-09-18 by Peter Gumplinger
 //              > comment out warning - "No Absorption length specified" 
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
@@ -65,8 +66,8 @@
         // Constructors
         /////////////////
 
-G4OpAbsorption::G4OpAbsorption(const G4String& processName)
-              : G4VDiscreteProcess(processName)
+G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
+              : G4VDiscreteProcess(processName, type)
 {
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;

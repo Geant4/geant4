@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.57 2005/05/27 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VEnergyLossProcess.cc,v 1.66 2005/10/05 14:26:06 urban Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -81,6 +81,12 @@
 // 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
+// 25-07-05 Add extra protection PostStep for non-integral mode (V.Ivanchenko)
+// 12-08-05 Integral=false; SetStepFunction(0.2, 0.1*mm) (mma)
+// 18-08-05 Return back both AlongStep and PostStep from 7.0 (V.Ivanchenko)
+// 02-09-05 Default StepFunction 0.2 1 mm + integral (V.Ivanchenko)
+// 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
+// 05-10-05 protection against 0 energy loss added (L.Urban)
 //
 // Class Description:
 //
@@ -143,11 +149,10 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   nDEDXBins(90),
   nDEDXBinsForRange(70),
   nLambdaBins(90),
+  nWarnings(0),
   linLossLimit(0.05),
   minSubRange(0.1),
-  defaultRoverRange(0.2),
-  defaultIntegralRange(1.0),
-  lambdaFactor(0.1),
+  lambdaFactor(0.8),
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   lossFluctuationArePossible(true),
@@ -167,7 +172,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   pParticleChange = &fParticleChange;
 
   // default dRoverRange and finalRange
-  SetStepFunction(defaultIntegralRange, 1.0*mm);
+  SetStepFunction(0.2, 1.0*mm);
   SetVerboseLevel(1);
 
   modelManager = new G4EmModelManager();
@@ -614,10 +619,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << GetProcessName() << " and particle "
            << d->GetParticleName()
            << "  eScaled(MeV)= " << preStepScaledEnergy/MeV
-           << "  slim(mm)= " << fRange/mm
+           << "  range(mm)= " << fRange/mm
            << "  s(mm)= " << length/mm
            << "  q^2= " << chargeSqRatio
            << " md= " << d->GetPDGMass()
+           << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
   */
@@ -644,37 +650,44 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
     eloss = (ScaledKinEnergyForLoss(r) - ScaledKinEnergyForLoss(x))/massRatio;
 
-    /*
-    if(-1 < verboseLevel) {
+/*
+    if(-1 < verboseLevel && eloss == 0.0) {
       G4cout << "Long STEP: rPre(mm)= " << r/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
-             << " eloss0(MeV)= " 
+             << " eloss0(MeV)= "
              << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
              << G4endl;
     }
-    */
+*/
 
   }
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4VEmModel* currentModel = SelectModel(preStepScaledEnergy);
-  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
-  tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  G4double tmax = std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),
+                           (*theCuts)[currentMaterialIndex]);
 
-  /*  
-  G4double eloss0 = eloss;
-  if(-1 < verboseLevel) {
+/*
+  //  G4double eloss0 = eloss;
+  if(-1 < verboseLevel && eloss == 0.0) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
-           << "  fluct= " << lossFluctuationFlag 
+           << " step(mm)= " << length/mm
+           << " range(mm)= " << fRange/mm
+           << " fluct= " << lossFluctuationFlag
            << G4endl;
   }
-  */
+*/
+
+  // protection against 0 mean energy loss
+  if(eloss < lowestKinEnergy)
+    eloss =  std::min(lowestKinEnergy,preStepKinEnergy);
 
   // Sample fluctuations
+ // if (lossFluctuationFlag && eloss + lowestKinEnergy < preStepKinEnergy) {
   if (lossFluctuationFlag && eloss < preStepKinEnergy) {
 
     eloss = currentModel->GetModelOfFluctuations()->
@@ -690,9 +703,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
-  // Corrections, which cannot be tabulated 
+  // Corrections, which cannot be tabulated
   CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
- 
+
   G4double finalT = preStepKinEnergy - eloss;
   if (finalT <= lowestKinEnergy) finalT = 0.0;
   eloss = preStepKinEnergy-finalT;
@@ -700,70 +713,86 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  /*  
-  if(-1 < verboseLevel) {
+/*
+  if(-1 < verboseLevel && eloss == 0.0) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
            << " postStepKinEnergy= " << finalT
            << " lossFlag= " << lossFluctuationFlag
+           << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
-  */
+*/
 
   return &fParticleChange;
-  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
-                                                  const G4Step& step)
+                                                      const G4Step& step)
 {
   fParticleChange.InitializeForPostStep(track);
   G4double finalT = track.GetKineticEnergy();
-  G4double postStepScaledEnergy = finalT*massRatio;
+  if(finalT == 0.0) return &fParticleChange;
 
+  G4double postStepScaledEnergy = finalT*massRatio;
+  /*
+  if(-1 < verboseLevel) {
+    G4cout << GetProcessName()
+           << "::PostStepDoIt: E(MeV)= " << finalT/MeV
+	   << G4endl;
+  }
+  */
   // Integral approach
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
-    if(preStepLambda<lx && 1 < verboseLevel) {
-      G4cout << "WARING: for " << particle->GetParticleName()
+    /*
+    if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
+      G4cout << "WARNING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
 	     << G4endl;
+      nWarnings++;
     }
+    */
     if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
   G4VEmModel* currentModel = SelectModel(postStepScaledEnergy);
-  G4double tmax = (*theCuts)[currentMaterialIndex];
+  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  G4double tcut = (*theCuts)[currentMaterialIndex];
+  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
 
-  std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(
-       currentModel, currentCouple, track.GetDynamicParticle(), tmax);
+  if (tcut < tmax) {
+    std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(
+      currentModel, currentCouple, dynParticle, tcut);
 
-  if (newp) {
-    G4int num = newp->size();
-    fParticleChange.SetNumberOfSecondaries(num);
-    for (G4int i=0; i<num; i++) {
-      fParticleChange.AddSecondary((*newp)[i]);
+    if(newp) {
+      G4int num = newp->size();
+      fParticleChange.SetNumberOfSecondaries(num);
+      for (G4int i=0; i<num; i++) {
+        fParticleChange.AddSecondary((*newp)[i]);
+      }
+      delete newp;
     }
-    delete newp;
+
+    finalT = fParticleChange.GetProposedKineticEnergy();
   }
 
   /*
   if(-1 < verboseLevel) {
-    const G4ParticleDefinition* pd = track.GetDynamicParticle()->GetDefinition();
-    G4cout << GetProcessName()
-           << "::PostStepDoIt: Sample secondary; E= " << finalT/MeV
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
-           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+    G4cout << "::PostStepDoIt: Sample secondary; Efin= " << finalT/MeV
+           << " MeV; model= (" << currentModel->LowEnergyLimit()
+           << ", " <<  currentModel->HighEnergyLimit() << ")"
            << "  preStepLambda= " << preStepLambda
+           << "  dir= " << track.GetMomentumDirection()
+           << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
   */
-  
-  finalT = fParticleChange.GetProposedKineticEnergy();
   if (finalT <= lowestKinEnergy) {
     fParticleChange.SetProposedKineticEnergy(0.0);
     return &fParticleChange;
@@ -1050,10 +1079,6 @@ void G4VEnergyLossProcess::SetStepLimits(G4double v1, G4double v2)
 
 void G4VEnergyLossProcess::SetIntegral(G4bool val)
 {
-  if(integral != val) {
-    if(val) dRoverRange = defaultIntegralRange;
-    else    dRoverRange = defaultRoverRange;
-  }
   integral = val;
 }
 

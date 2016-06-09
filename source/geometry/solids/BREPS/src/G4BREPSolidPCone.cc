@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.35 2004/12/02 09:31:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4BREPSolidPCone.cc,v 1.36 2005/08/02 08:13:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -561,7 +561,7 @@ G4BREPSolidPCone::~G4BREPSolidPCone()
   {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
   }
 }
 

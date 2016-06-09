@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.22 2004/12/10 18:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Scintillation.cc,v 1.25 2005/08/17 17:30:25 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -33,10 +33,14 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2004-08-05 by Peter Gumplinger
+// Updated:     2005-08-17 by Peter Gumplinger
+//              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
+//              2005-07-28 by Peter Gumplinger
+//              > add G4ProcessType to constructor
+//              2004-08-05 by Peter Gumplinger
 //              > changed StronglyForced back to Forced in GetMeanLifeTime
 //              2002-11-21 by Peter Gumplinger
-//              > change to use G4Poisson for small MeanNumPhotons
+//              > change to use G4Poisson for small MeanNumberOfPhotons
 //              2002-11-07 by Peter Gumplinger
 //              > now allow for fast and slow scintillation component
 //              2002-11-05 by Peter Gumplinger
@@ -76,8 +80,9 @@ using namespace std;
         // Constructors
         /////////////////
 
-G4Scintillation::G4Scintillation(const G4String& processName)
-                  : G4VRestDiscreteProcess(processName)
+G4Scintillation::G4Scintillation(const G4String& processName,
+                                       G4ProcessType type)
+                  : G4VRestDiscreteProcess(processName, type)
 {
 	fTrackSecondariesFirst = false;
 
@@ -176,15 +181,15 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         ScintillationYield = YieldFactor * ScintillationYield;
 
-	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
+	G4double MeanNumberOfPhotons = ScintillationYield * TotalEnergyDeposit;
 
         G4int NumPhotons;
-        if (MeanNumPhotons > 10.) {
-           G4double sigma = ResolutionScale * sqrt(MeanNumPhotons);
-           NumPhotons = G4int(G4RandGauss::shoot(MeanNumPhotons,sigma)+0.5);
+        if (MeanNumberOfPhotons > 10.) {
+          G4double sigma = ResolutionScale * sqrt(MeanNumberOfPhotons);
+          NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
         else {
-           NumPhotons = G4int(G4Poisson(MeanNumPhotons));
+          NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
 	if (NumPhotons <= 0) {

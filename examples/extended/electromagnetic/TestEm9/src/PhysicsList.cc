@@ -180,10 +180,10 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-  G4cout << "world cuts are set" << G4endl;
+  SetCutValue(cutForGamma, "gamma", "DefaultRegionForTheWorld");
+  SetCutValue(cutForElectron, "e-", "DefaultRegionForTheWorld");
+  SetCutValue(cutForPositron, "e+", "DefaultRegionForTheWorld");
+  G4cout << "world cuts are set" << cutForGamma/mm << " " << cutForElectron/mm << G4endl;
 
   if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
@@ -203,6 +203,7 @@ void PhysicsList::SetCuts()
 void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -210,6 +211,7 @@ void PhysicsList::SetCutForGamma(G4double cut)
 void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,6 +219,7 @@ void PhysicsList::SetCutForElectron(G4double cut)
 void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

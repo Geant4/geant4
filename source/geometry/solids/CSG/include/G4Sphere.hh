@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.14 2005/06/08 16:14:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4Sphere.hh,v 1.16 2005/08/04 10:57:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -33,7 +33,7 @@
 // Class description:
 //
 //   A G4Sphere is, in the general case, section of a spherical shell,
-//   between specified phii and theta angles
+//   between specified phi and theta angles
 //
 //   The phi and theta segments are described by a starting angle,
 //   and the +ve delta angle for the shape.
@@ -131,6 +131,8 @@ class G4Sphere : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
  
+    G4ThreeVector GetPointOnSurface() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
@@ -138,7 +140,7 @@ class G4Sphere : public G4CSGSolid
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
     G4NURBS*      CreateNURBS() const;
-
+  
   public:  // without description
    
     // Old access functions

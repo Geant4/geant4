@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -229,7 +229,7 @@ fAlphaPlate = 10000 ; fAlphaGas = 1000
 48	fGamma = 8.085e+04	sumN = -NaN
 49	fGamma = 9.283e+04	sumN = -NaN
 
-total time for build X-ray TR energy loss tables = 235.1 s
+total time for build X-ray TR energy loss tables = 242.2 s
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -373,28 +373,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=12.31s Real=12.7s Sys=0.28s
+  User=11.17s Real=11.33s Sys=0.14s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.0495 +- 0.173853  mm  
+    mean charged track length   in absorber=16.0529 +- 0.197904  mm  
 
-            mean energy deposit in absorber=0.00501075 +- 0.000160406  MeV 
+            mean energy deposit in absorber=0.00477119 +- 0.000129782  MeV 
 
- mean number of steps in absorber (charged) =1.627 +- 0.0669766      
- mean number of steps in absorber (neutral) =0.114 +- 0.0105358      
+ mean number of steps in absorber (charged) =1.458 +- 0.0409419      
+ mean number of steps in absorber (neutral) =0.108 +- 0.0105989      
 
-   mean number of charged secondaries = 0.226 +- 0.0205164
+   mean number of charged secondaries = 0.205 +- 0.0186273
 
    mean number of neutral secondaries = 0.002 +- 0.0014128
 
-   mean number of e-s =0.226  and e+s =0
+   mean number of e-s =0.205  and e+s =0
 
-(number) transmission coeff=0.507  reflection coeff=0.008
+(number) transmission coeff=0.518  reflection coeff=0.002
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1654029929, 1433274685
+ Current couple of seeds = 1179282853, 1887762536
 ----------------------------------------
 
 ========= Table of registered couples ==============================

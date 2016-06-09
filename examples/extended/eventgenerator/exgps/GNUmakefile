@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004/10/28 11:18:27 flei Exp $
+# $Id: GNUmakefile,v 1.3 2005/07/19 08:35:49 flei Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -22,5 +22,5 @@ include $(G4INSTALL)/config/binmake.gmk
 
 ifdef G4ANALYSIS_USE
    CPPFLAGS += `aida-config --include`
-   LOADLIBS += `aida-config --lib`
+   LDLIBS += `aida-config --lib`
 endif

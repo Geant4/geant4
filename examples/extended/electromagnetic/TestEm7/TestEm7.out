@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: run-V07-00-05    (30-June-2005)
+ Geant4 version Name: geant4-07-01-patch-01-ref    (25-October-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -230,15 +230,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=314.43s Real=502.92s Sys=58.56s
+  User=312.49s Real=455.67s Sys=54.52s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.675 cm    rms= 1.9371 mm 
+ projected Range= 17.672 cm    rms= 2.5003 mm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 84919421, 1360973571
+ Current couple of seeds = 498226814, 345076851
 ----------------------------------------
 #
 /gun/particle ion
@@ -273,7 +273,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 84919421, 1360973571
+ Current couple of seeds = 498226814, 345076851
 ----------------------------------------
 Start Run processing.
 
@@ -281,15 +281,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=92.37s Real=117.7s Sys=10.78s
+  User=95.21s Real=118.47s Sys=10.33s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.371 cm    rms= 489.49 mum
+ projected Range= 16.372 cm    rms= 477.54 mum
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 621221464, 1897520327
+ Current couple of seeds = 78780029, 1696874670
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.12 2005/04/12 18:12:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.13 2005/08/04 08:19:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,8 @@ public:
   G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBrem");
 
   virtual ~G4MuBremsstrahlungModel();
+
+  void SetParticle(const G4ParticleDefinition*);
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -127,13 +129,15 @@ private:
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleChangeForLoss*  fParticleChange;
+  G4ParticleDefinition*       theGamma;
+  const G4ParticleDefinition* particle;
+  G4ParticleChangeForLoss*    fParticleChange;
 
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double lowestKinEnergy;
   G4double minThreshold;
+  G4double mass;
 
   // tables for sampling
   G4int nzdat,ntdat,NBIN;

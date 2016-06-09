@@ -22,14 +22,15 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.15 2005/04/12 09:10:55 grichine Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4VXTRenergyLoss.cc,v 1.16 2005/07/28 23:58:23 gum Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
 // 19.06.03 V. Grichine, modifications in BuildTable for the integration 
 //                       in respect of angle: range is increased, accuracy is
 //                       improved
+// 28.07.05, P.Gumplinger add G4ProcessType to constructor
 //
 
 #include "G4Timer.hh"
@@ -77,8 +78,9 @@ G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4Material* foilMat,G4Material* gasMat,
                                     G4double a, G4double b,
-                                    G4int n,const G4String& processName) :
-  G4VContinuousProcess(processName)
+                                    G4int n,const G4String& processName,
+                                    G4ProcessType type) :
+  G4VContinuousProcess(processName, type)
 {
   fEnvelope = anEnvelope ;
   //  fPlateNumber = fEnvelope->GetNoDaughters() ;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.14 2002/08/13 18:14:42 asaim Exp $
-// GEANT4 tag $Name: geant4-07-01 $
+// $Id: G4TrackingManager.hh,v 1.15 2005/04/22 10:08:58 tsasaki Exp $
+// GEANT4 tag $Name: geant4-07-01-patch-01 $
 //
 //
 //---------------------------------------------------------------
@@ -100,7 +100,7 @@ public: // without description
     
    G4TrackVector* GimmeSecondaries() const;
 
-   void SetNavigator(G4Navigator* apValue);
+  //   void SetNavigator(G4Navigator* apValue);
 
    void SetUserAction(G4UserTrackingAction* apAction);
    void SetUserAction(G4UserSteppingAction* apAction);

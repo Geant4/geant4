@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2005/05/19 07:37:32 gcosmo Exp $
+$Id: History,v 1.147.2.1 2005/10/14 13:56:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 04, 2005  G.Cosmo (global-V07-01-01a)
+- G4Allocator: initialise esplicitely data in copy-ctor.
+- G4AllocatorPool: added default dummy argument to ctor
+  to allow for default-ctor
 
 May 19, 2005  V.Grichine (global-V07-00-06)
 - Improved accuracy to G4AnalyticalPolSolver for quartic case.

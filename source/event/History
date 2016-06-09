@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2005/06/13 14:05:05 gcosmo Exp $
+$Id: History,v 1.91 2005/09/05 14:08:19 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Sep 05, 2005, F.Lei (event-V07-01-00)
+- Corrected typo in printout in G4GeneralParticleMessenger.cc (bug #786)
 
 Jun 13, 2005, G.Cosmo (event-V07-00-05)
 - Corrected typo in printout in G4GeneralParticleMessenger.cc.
