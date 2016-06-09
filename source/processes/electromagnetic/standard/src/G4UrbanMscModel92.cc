@@ -799,7 +799,18 @@ void G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // protection against 'bad' cth values
   if(std::abs(cth) > 1.) return;
-
+  
+  // extra protection agaist high energy particles backscattered 
+  if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
+    //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
+    //	   << " s(mm)= " << tPathLength/mm
+    //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
+    // do Gaussian central scattering
+    do {
+      cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
+    } while(cth < -1.0);
+  }
+  
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);

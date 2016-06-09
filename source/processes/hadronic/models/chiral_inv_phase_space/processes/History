@@ -12,6 +12,13 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+19-Mar-2012 V. Ivantchenko                 (hadr-chips-proc-V09-03-13)
+-----------------------------------------------------------------------
+G4QCaptureAtRest: added check on 4-momentum balance for violations
+of more than 2 GeV; repeat sampling again. Check baryon number of
+final state and take into account nuclear recoil at rest which is
+not produced as a final particle.
+
 20-Jan-2011 A. Dotti			   (hadr-chips-proc-V09-03-12)
 -----------------------------------------------------------------------
 Added correct handling of splitting of target for (A>=2,Z=0).

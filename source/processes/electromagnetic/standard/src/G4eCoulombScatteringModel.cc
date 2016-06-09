@@ -81,11 +81,15 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     cosThetaMax(-1.0),
     isInitialised(false)
 {
+  fParticleChange = 0; 
   fNistManager = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
   currentElement  = 0;
+
+  pCuts = 0;
+
   lowEnergyLimit = 1*keV;
   recoilThreshold = 0.*keV;
   particle = 0;
@@ -215,6 +219,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4int iz = G4int(Z);
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  wokvi->SetTargetMass(targetMass);
 
   G4ThreeVector newDirection = 
     wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);
@@ -244,7 +249,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);

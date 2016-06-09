@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.21 2006/11/13 18:24:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FieldTrack.hh,v 1.21 2006-11-13 18:24:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4FieldTrack
@@ -130,6 +130,7 @@ class  G4FieldTrack
      inline void SetKineticEnergy(G4double nEnergy);
        // Does not modify momentum.
 
+     inline void SetRestMass(G4double Mass_c2) { fRestMass_c2= Mass_c2; }
      inline void SetSpin(G4ThreeVector nSpin);
      inline void SetLabTimeOfFlight(G4double nTOF); 
      inline void SetProperTimeOfFlight(G4double nTOF);

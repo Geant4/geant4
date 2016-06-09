@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.28 2010/10/26 10:06:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4UniversalFluctuation.cc,v 1.28 2010-10-26 10:06:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -193,11 +193,12 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(tmax > ipotFluct) {
     G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
-    if(w2 > ipotLogFluct && w2 > e2LogFluct && tmax> ipotFluct)  {
+    if(w2 > ipotLogFluct)  {
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
       a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-         
+      if(w2 > e2LogFluct) {
+	a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+      }
 
   if(a1 < nmaxCont) 
   { 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.14 2010/11/13 19:08:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.14 2010-11-13 19:08:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +87,8 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      //      ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+      ScreenRSquare[j] = 0.5*alpha2*x*x;
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
@@ -134,6 +135,7 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
   charge3 = chargeSquare*q;
   tkin = 0.0;
   currentMaterial = 0;
+  targetZ = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -151,12 +153,10 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
-      G4double tau = tkin/mass;
-      screenZ *=std::min(Z*invbeta2,
-      	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
+      screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
     }
     if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
-      cosTetMaxNuc = 0.0;
+      cosTetMaxNuc2 = 0.0;
     }
     formfactA = FormFactor[targetZ]*mom2;
 
@@ -301,7 +301,8 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   G4double w2 = 1. - cost2 + screenZ;
   G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
   if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
-    G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
+    G4double fm =  1.0 + formf*z1;
+    // G4double fm =  1.0 + formf*z1*(1.0 + (mass + tkin)*z1/targetMass);
     G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
     if( G4UniformRand() > grej ) { return v; }
   }  

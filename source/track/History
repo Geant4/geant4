@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 3rd, 2012 J.Apostolakis  (track-V09-03-15)
+- G4FieldTrackUpdator::Update method must reset the RestMass, 
+  because it is used to Initialise each track by ParallelWorldScoringProcess,
+  (as well as update during stepping a track.)
+
 September 21st, 2011,  H.Kurashige (track-V09-03-14)
 - Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
 - ProposeParentWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag

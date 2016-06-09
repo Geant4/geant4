@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19, 2011 V.Ivantchenko (global-V09-03-28)
+- G4Pow: reduced vector for factorial from 512 to 170 (result should be
+  below DBL_MAX). Fixed computation of log(factorial).
+- Added protection in G4Pow::powN() method for high exponent values.
+- Updated date and version.
+
 July 12, 2011 G.Cosmo (global-V09-03-27)
 - Added missing post-const qualifier to G4String::compareTo() methods
   (M.Kelsey).

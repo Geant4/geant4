@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrackUpdator.cc,v 1.2 2006/12/13 15:49:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FieldTrackUpdator.cc,v 1.2 2006-12-13 15:49:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   M. Asai - first implementation Apr/28/2006
 //
@@ -66,12 +66,14 @@ void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
     trk->GetMomentumDirection(),
     trk->GetKineticEnergy()
     );
-  ftrk->SetChargeAndMoments(
-    trk->GetDynamicParticle()->GetCharge()
-    );
-  ftrk->SetSpin(
-    trk->GetDynamicParticle()->GetPolarization()
-    );
+  const G4DynamicParticle* ptDynamicParticle= trk->GetDynamicParticle();
+
+  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge() );
+   // The charge can change during tracking
+  ftrk->SetSpin( ptDynamicParticle->GetPolarization() );
+
+  // The following properties must be updated ONCE for each new track (at least)
+  ftrk->SetRestMass(ptDynamicParticle->GetMass());   
 }
 
 

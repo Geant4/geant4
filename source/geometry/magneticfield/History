@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February  2nd,  2012 J.Apostolakis - field-V09-03-06
+----------------------------------
+- G4FieldTrack: added new (inline) method to set the Rest Mass. Needed in
+  order to reset this - and keep reuse the same G4FieldTrack in a client
+  (across tracks).
+
 October 12th,  2011 P.Gumplinger - field-V09-03-05
 --------------------------------
 - Replaced: omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss)

@@ -17,6 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 March 2012: V.Ivanchenko (emstand-V09-03-37)
+- G4WentzelOKandVIxSection - fixed screening function for low Z materials.
+- G4eCoulombScatteringModel - fixed inline method SetLowEnergyLimit(); 
+  fixed cross section in compounds.
+
+12 March 2012: V.Ivanchenko (emstand-V09-03-36)
+- G4UrbanMscModel92, G4UrbanMscModel93 - a protection
+  against big scattering angles for e+- (E > 20 MeV) is added; the
+  protection cut tail of scattering angles to avoid artificial 
+  scattering of high energy e+-.
+
+10 February 12: V.Ivanchenko
+- G4WentzelVIModel - fixed algorithm of sampling of single scattering 
+  along step.
+
+26 January 12: V.Ivanchenko
+- G4WentzelOKandVIxSection - fixed incorrect angular limit for protons.
+
+12 January 12: V.Ivanchenko
+- G4UniversalFluctuation - (L.Urban) fixed sampling at small steps
+   (below 10 um) in heavy media reported at 8th Space User Workshop
+   (Tsukuba, December, 2012) about shift in range of 3 MeV muons.
+
 25 November 2011: V.Ivant (emstand-V09-03-35)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93: added
   protection for sampling of angle for very small steps and high

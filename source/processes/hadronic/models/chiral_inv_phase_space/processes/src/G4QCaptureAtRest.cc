@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.2 2010/06/25 09:46:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4QCaptureAtRest.cc,v 1.2 2010-06-25 09:46:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -189,6 +189,20 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: "<<nE<<" elements in the material."<<G4endl;
 #endif
+
+  //VI===== protection against super high energy - start of a loop
+  G4double primEnergy = 0.0; 
+  G4double secEnergy = 0.0;
+  G4bool productOK = true;
+  const G4double limEnergy = 2*GeV;
+  G4int counter = 0;
+  do {
+  secEnergy = 0.0;
+  ++counter;
+  G4int countA = particle->GetBaryonNumber();
+  //VI===== 
+
+
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
   if      (particle ==     G4MuonMinus::MuonMinus()    ) projPDG=   13;
   else if (particle ==      G4TauMinus::TauMinus()     ) projPDG=   15; // @@AtomicRad?
@@ -299,6 +313,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   }
   G4double mp=G4QPDGCode(projPDG).GetMass(); // Mass of the captured hadron
   G4int targPDG=90000000+Z*1000+N;           // PDG Code of the target nucleus
+
+  //VI===== save primary energy
+  primEnergy = mp+G4QPDGCode(targPDG).GetMass();
+  
   G4QHadronVector* output=new G4QHadronVector; // Prototype of the output G4QHadronVector
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
@@ -697,6 +715,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4QPDGCode targQPDG(targPDG);
     G4double tM=mp+targQPDG.GetMass();
     EnMomConservation=G4LorentzVector(0.,0.,0.,tM);         // Total 4-mom of the reaction
+
 #ifdef tdebug
     G4cout<<"====>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
           <<EnMomConservation<<G4endl;
@@ -736,6 +755,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: "<<tNH<<" particles are generated"<<G4endl;
 #endif
   // Deal with ParticleChange final state interface to GEANT4 output of the process
+
   for(i=0; i<tNH; i++)
   {
     // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)
@@ -750,6 +770,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       delete hadr;
       continue;
     }
+    //VI count Z and A
+    countA -= hadr->GetBaryonNumber();
+    //VI
+
     G4DynamicParticle* theSec = new G4DynamicParticle;  
     G4int PDGCode = hadr->GetPDGCode();
 #ifdef pdebug
@@ -805,6 +829,16 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     theSec->SetDefinition(theDefinition);
     G4LorentzVector h4M=hadr->Get4Momentum();
     EnMomConservation-=h4M;
+
+    //VI===== check on final energy
+    secEnergy += h4M.e();
+    if(h4M.e() > 200*GeV) {
+      G4cout<<"G4QCaptureAtRest: wrong product"<<i<<" imax= "<<tNH
+	    <<" " << theDefinition->GetParticleName() << "  4-mom= " 
+	    << h4M <<G4endl;
+    }
+    //VI===== 
+
 #ifdef tdebug
     G4cout<<"G4QCapAR::ARDoIt:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
 #endif
@@ -828,6 +862,28 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
+  //VI=====
+  productOK = true;
+  countA += Z + N;
+  secEnergy += neutron_mass_c2*countA;
+  if(EnergyDeposition > limEnergy || std::fabs(secEnergy - primEnergy) > limEnergy) {
+    productOK = false;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: Big energy non-concervation we need redo sampling"<<G4endl;
+    G4cout << " Z= " << Z << "  N= " << N << G4endl;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: the EnergyDeposition(GeV)="<<EnergyDeposition/GeV<<G4endl;
+    G4cout<<"  primEnergy(GeV)= " <<primEnergy/GeV << " secEnergy(GeV)="<< secEnergy/GeV <<G4endl;
+    for(i=0; i<tNH; i++)
+      {
+	delete aParticleChange.GetSecondary(i);
+      }
+    aParticleChange.Clear();
+    if(counter >= 100) {
+      G4cout<<"G4QCaptureAtRest::AtRestDoIt: Cannot sample final state after " 
+	    << counter << "  iterations" <<G4endl;
+      G4Exception("G4QCaptureAtRest::AtRestDoIt:","VI",FatalException,"Cannot sample final state");
+    }
+  }
+  } while(!productOK);
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: the EnergyDeposition="<<EnergyDeposition<<G4endl;
 #endif

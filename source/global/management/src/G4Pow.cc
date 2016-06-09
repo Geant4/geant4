@@ -63,26 +63,30 @@ G4Pow* G4Pow::GetInstance()
 G4Pow::G4Pow()
 {
   const G4int maxZ = 512; 
+  const G4int maxZfact = 170; 
 
   pz13.resize(maxZ,0.0);
   lz.resize(maxZ,0.0);
-  fact.resize(maxZ,0.0);
+  fact.resize(maxZfact,0.0);
   logfact.resize(maxZ,0.0);
 
   onethird = 1.0/3.0;
   G4double f = 1.0;
+  G4double logf = 0.0;
+  fact[0] = 1.0;
 
   for(G4int i=1; i<maxZ; ++i)
   {
     G4double x  = G4double(i);
     pz13[i] = std::pow(x,onethird);
     lz[i]   = std::log(x);
-    f      *= x;
-    fact[i] = f;
-    logfact[i] = std::log(f);
+    if(i < maxZfact) { 
+      f *= x; 
+      fact[i] = f;
+    }
+    logf += lz[i];
+    logfact[i] = logf;
   }
-  fact[0] = 1.0;
-  logfact[0] = 0.0;
 }
 
 // -------------------------------------------------------------------
@@ -94,6 +98,7 @@ G4Pow::~G4Pow()
 
 G4double G4Pow::powN(G4double x, G4int n)
 {
+  if(std::abs(n) > 8) { return std::pow(x, G4double(n)); }
   G4double res = 1.0;
   if(n >= 0) { for(G4int i=0; i<n; ++i) { res *= x; } }
   else if((n < 0) && (x != 0.0))

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.63 2010/11/05 19:15:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4WentzelVIModel.cc,v 1.63 2010-11-05 19:15:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -259,7 +259,7 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
   tPathLength  = truelength;
   zPathLength  = tPathLength;
 
-  if(lambdaeff > 0.0) {
+  if(lambdaeff > 0.0 && lambdaeff < DBL_MAX) {
     G4double tau = tPathLength/lambdaeff;
     //G4cout << "ComputeGeomPathLength: tLength= " << tPathLength
     //	 << " Leff= " << lambdaeff << " tau= " << tau << G4endl; 
@@ -279,8 +279,8 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
       cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
       lambdaeff = GetLambda(e1);
       zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
-    }
-  }
+    } 
+  } else { lambdaeff = DBL_MAX; }
   //G4cout<<"Comp.geom: zLength= "<<zPathLength<<" tLength= "<<tPathLength<<G4endl;
   return zPathLength;
 }
@@ -291,9 +291,10 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // initialisation of single scattering x-section
   xtsec = 0.0;
+  cosThetaMin = cosTetMaxNuc;
 
   // pathalogical case
-  if(lambdaeff <= 0.0) { 
+  if(lambdaeff == DBL_MAX) { 
     zPathLength = geomStepLength;
     tPathLength = geomStepLength;
     return tPathLength;
@@ -370,7 +371,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // ignore scattering for zero step length and energy below the limit
   if(dynParticle->GetKineticEnergy() < lowEnergyLimit || 
-     tPathLength <= DBL_MIN || lambdaeff <= DBL_MIN) 
+     tPathLength <= 0.0 || lambdaeff == DBL_MAX) 
     { return; }
   
   G4double invlambda = 0.0;
@@ -384,16 +385,19 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	 << " x1= " <<  tPathLength*invlambda << " safety= " << safety << G4endl;
   */
 
-  G4double length = tPathLength;
-  G4double lengthlim = tPathLength*1.e-6;
-
   // step limit due msc
-  G4double x0 = length;
-  // large scattering angle case - two step approach
-  if(tPathLength*invlambda > 0.5 && length > tlimitminfix) { x0 *= 0.5; } 
+  G4double x0 = tPathLength;
+  const G4double thinlimit = 0.1; 
+  G4int nMscSteps = 1;
+
+   // large scattering angle case - two step approach
+  if(tPathLength*invlambda > thinlimit && tPathLength > tlimitminfix) { 
+    x0 *= 0.5; 
+    nMscSteps = 2; 
+  } 
 
   // step limit due single scattering
-  G4double x1 = length;
+  G4double x1 = 2*tPathLength;
   if(xtsec > 0.0) { x1 = -log(G4UniformRand())/xtsec; }
 
   const G4ElementVector* theElementVector = 
@@ -413,51 +417,21 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double mscfac = zPathLength/tPathLength;
 
   // start a loop 
-  do {
-    G4double step = x0; 
-    G4bool singleScat = false;
-
+  G4double x2 = x0;
+  G4double step, z;
+  G4bool singleScat;
+   do {
     // single scattering case
-    if(x1 < x0) { 
+    if(x1 < x2) { 
       step = x1;
       singleScat = true;
+    } else {
+      step = x2;
+      singleScat = false;
     }
 
     // new position
     pos += step*mscfac*dir;
-
-    // added multiple scattering
-    G4double z; 
-    G4double tet2 = step*invlambda;  
-    do { z = -tet2*log(G4UniformRand()); } while (z >= 1.0); 
-
-    cost = 1.0 - 2.0*z;
-    sint = sqrt((1.0 - cost)*(1.0 + cost));
-    phi  = twopi*G4UniformRand();
-    G4double vx1 = sint*cos(phi);
-    G4double vy1 = sint*sin(phi);
-
-    // lateral displacement  
-    if (latDisplasment && safety > tlimitminfix) {
-      G4double rms = invsqrt12*sqrt(2.0*tet2);
-      G4double dx = step*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-      G4double dy = step*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
-      G4double dz;
-      G4double d = (dx*dx + dy*dy)/(step*step);
-      if(d < numlimit)  { dz = -0.5*step*d*(1.0 + 0.25*d); }
-      else if(d < 1.0)  { dz = -step*(1.0 - sqrt(1.0 - d));}
-      else              { dx = dy = dz = 0.0; }
-
-      // change position
-      temp.set(dx,dy,dz);
-      temp.rotateUz(dir); 
-      pos += temp;
-    }
-
-    // direction is changed
-    temp.set(vx1,vy1,cost);
-    temp.rotateUz(dir);
-    dir = temp;
 
     if(singleScat) {
 
@@ -466,27 +440,60 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       if(nelm > 1) {
 	G4double qsec = G4UniformRand()*xtsec;
 	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
-	if(i >= nelm) { i = nelm - 1; }
+	//if(i >= nelm) { i = nelm - 1; }
       }
       G4double cosTetM = 
 	wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
       temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetM, prob[i]);
-      temp.rotateUz(dir);
 
-      // renew direction
+      // direction is changed
+      temp.rotateUz(dir);
       dir = temp;
 
-      // new single scatetring
-      x1 = -log(G4UniformRand())/xtsec; 
+      // new proposed step length
+      x1  = -log(G4UniformRand())/xtsec; 
+      x2 -= step; 
+
+    } else if(step > 0.0) {
+      do { z = -step*invlambda*log(G4UniformRand()); } while (z >= 1.0); 
+
+      cost = 1.0 - 2.0*z/*factCM*/;
+      if(cost > 1.0)       { cost = 1.0; }
+      else if(cost < -1.0) { cost =-1.0; }
+      sint = sqrt((1.0 - cost)*(1.0 + cost));
+      phi  = twopi*G4UniformRand();
+      G4double vx1 = sint*cos(phi);
+      G4double vy1 = sint*sin(phi);
+
+      // lateral displacement  
+      if (latDisplasment && safety > tlimitminfix && step > tlimitminfix) {
+	G4double rms = invsqrt12*sqrt(2.0*step*invlambda);
+	G4double dx = step*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dy = step*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dz;
+	G4double d = step*step - dx*dx - dy*dy;
+	if(d >= 0.0)  { dz = sqrt(d) - step; }
+	else          { dx = dy = dz = 0.0; }
+
+	// change position
+	temp.set(dx,dy,dz);
+	temp.rotateUz(dir); 
+	pos += temp;
+      }
+
+      // direction is changed
+      temp.set(vx1,vy1,cost);
+      temp.rotateUz(dir);
+      dir = temp;
+
+      x1 -= step;
+      x2  = x0;
+      --nMscSteps;
     }
 
-    // update step
-    length -= step;
-
-  } while (length > lengthlim);
+  } while (0 < nMscSteps);
     
   dir.rotateUz(oldDirection);
-  pos.rotateUz(oldDirection);
 
   //G4cout << "G4WentzelVIModel sampling of scattering is done" << G4endl;
   // end of sampling -------------------------------
@@ -494,7 +501,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   fParticleChange->ProposeMomentumDirection(dir);
 
   // lateral displacement  
-  if (latDisplasment) {
+  if (latDisplasment && safety > tlimitminfix) {
+    pos.rotateUz(oldDirection);
     G4double r = pos.mag();
 
     /*    
