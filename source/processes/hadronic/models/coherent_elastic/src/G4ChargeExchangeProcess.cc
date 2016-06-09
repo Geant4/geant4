@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.4 2006/06/29 20:09:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ChargeExchangeProcess.cc,v 1.5 2006/07/06 18:11:08 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
+// 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 //
 //
 
@@ -277,6 +278,7 @@ G4VParticleChange* G4ChargeExchangeProcess::PostStepDoIt(
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
+  G4ThreeVector indir = track.GetMomentumDirection();
   G4int nsec = result->GetNumberOfSecondaries();
 
   if(verboseLevel>1)
@@ -293,6 +295,11 @@ G4VParticleChange* G4ChargeExchangeProcess::PostStepDoIt(
     aParticleChange.SetNumberOfSecondaries(nsec);
     for(G4int j=0; j<nsec; j++) {
       G4DynamicParticle* p = result->GetSecondary(j)->GetParticle();
+      G4ThreeVector pdir = p->GetMomentumDirection();
+      // G4cout << "recoil " << pdir << G4endl;
+      pdir = pdir.rotateUz(indir);
+      // G4cout << "recoil rotated " << pdir << G4endl;
+      p->SetMomentumDirection(pdir);
       aParticleChange.AddSecondary(p);
     }
   }

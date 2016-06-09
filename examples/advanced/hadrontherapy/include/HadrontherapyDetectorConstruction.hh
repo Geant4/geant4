@@ -109,7 +109,7 @@ public:
   // This method allows to change the material 
   // of the range shifter through UI command.
 
-  void ComputeVoxelSize() {phantomSizeX/numberOfVoxelsAlongX;}
+  G4double ComputeVoxelSize() {return phantomSizeX/numberOfVoxelsAlongX;};
   // Returns the size of the voxel along the X axis
  
 private:

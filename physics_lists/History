@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2006/06/24 14:41:50 vnivanch Exp $
+$Id: History,v 1.28 2006/07/26 09:45:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.07.2006, V.Ivanchenko - phys-lists-V08-01-03
+- Return pLimit= 20 MeV/c
+
+24.07.2006, V.Ivanchenko - phys-lists-V08-01-02
+- Fix - add G4NeutronHPElasticData in the PL, not inside the process
+- Use pLimit=60 MeV/c instead of 20 MeV/c
+
+14.07.06, G.Folger       - phys-lists-V08-01-01
+- Correct flag for HP in G4HadronElasticPhysics() to true for
+  LHEP_HP and QGSP_HP
+
+05.07.2006, V.Ivanchenko - phys-lists-V08-01-00
+- Fix initialisation problem for QBBC_HP
+- Fix HP regime for G4NadronElasticPhysics
+- Add cout of the list of processes and models for QBBC
 
 24.06.2006, V.Ivanchenko - phys-lists-V08-00-15
 - Fix typo in BinaryIon builder

@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 July 2006 Dennis Wright (radioactive_decay-V08-01-00)
+- G4NuclearDecayChannel::BetaDecayIt() : another check for negative sqrt 
+  argument in daughtermomentum[1].
+
 29 May 2006 Dennis Wright (radioactive_decay-V08-00-03)
    (tagging change by Fan Lei on 17 Feb 2006)
 -  G4RadioactiveDecay.cc : in method IsApplicable() add test for negative 

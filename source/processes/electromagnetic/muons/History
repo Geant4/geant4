@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2006/05/03 16:41:01 vnivanch Exp $
+$Id: History,v 1.92 2006/07/21 09:39:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 July 06: V.Ivant (emmuons-V08-01-00)
+- G4EnergyLossForExtrapolator - fix misprint in method name
 
 21 March 06: V.Ivant (emmuons-V08-00-03)
 - G4EnergyLossForExtrapolator - fix compilation warning - remove G4Material*

@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-01)
+-----------------------------------------------
+  Fix bug: remove 1 keV limit from G4UHadronElasticProcess 
+
+07 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-00)
+-----------------------------------------------
+  Fix bug: the rotation of final state need to be done in PostStep of
+  the process, not on the model level (V.Ivanchenko) 
+
 21 June 2006 - V.Ivanchenko (hadr-cohe-V08-00-09)
 -----------------------------------------------
   Fix - remove nan values  n scattering on deuteron (V.Ivanchenko) 

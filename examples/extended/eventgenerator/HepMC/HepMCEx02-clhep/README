@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2002/11/19 10:38:06 murakami Exp $
+$Id: README,v 1.2 2006/07/05 11:41:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -40,3 +40,5 @@ ExN04PhysicsList.
 
   All particles except muons are killed in the calorimeter section.
 
+NOTE: it requires the installation of CERNLIB 2005 in the system and proper
+      access to the "/cern/pro/bin" path included in $PATH.

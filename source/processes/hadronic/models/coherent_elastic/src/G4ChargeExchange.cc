@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.3 2006/06/29 20:09:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ChargeExchange.cc,v 1.4 2006/07/06 18:10:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
 //           28 May 2006 V.Ivanchenko
 //
 // Modified:
+// 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 //
 
 #include "G4ChargeExchange.hh"
@@ -253,7 +254,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   G4ThreeVector p1 = lv1.vect();
   G4double e1 = 0.5*etot*(1.0 + (m21*m21 - m11*m11)/(etot*etot));
-  G4double e2 = etot - e1;
+  //  G4double e2 = etot - e1;
   G4double ptot = std::sqrt(e1*e1 - m11*m11);
 
   G4double tmax = 4.0*ptot*ptot;
@@ -300,11 +301,9 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
-  p1 = p1.unit();
-  v1.rotateUz(p1);
   v1 *= ptot;
   G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),e1);
-  G4LorentzVector nlv0(-v1.x(),-v1.y(),-v1.z(),e2);
+  G4LorentzVector nlv0 = lv0 + lv1 - nlv1;
 
   nlv0.boost(bst);
   nlv1.boost(bst);

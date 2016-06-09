@@ -1,0 +1,85 @@
+
+                 Geant4 8.1 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           27 July 2006
+
+List of fixes included in this public patch since the public release 8.1:
+
+  o Geometry:
+    --------
+    + management
+      o Fixed problem in G4Region::ScanVolumeTree() for volume scanning
+        related to nested parameterisations.
+
+  o Particles:
+    ---------
+    + Code cleanup for G4PrimaryVertex class.
+
+  o Electromagnetic processes:
+    -------------------------
+    + muons:
+      o G4EnergyLossForExtrapolator: fixed misprint in name for method
+        EnergyDispersion().
+    + utils:
+      o Do not clear loss table map in G4LossTableManager to avoid crash
+        for activation/desactivation of regime with ion gun.
+        Propagating 'RandomStep' flag to processes.
+
+  o Hadronic Processes:
+    ------------------
+    + models/chiral_inv_phase_space/body:
+      o Bug fix in QGSC for redefenition of Chipolino.
+      o Fixed light Cone Boost bug, causing the error message from vectors.
+    + models/coherent_elastic:
+      o Fixed problem in rotation of final state which needs to be done in
+        PostStep of the process and not at model level.
+      o Removed 1 keV limit from G4UHadronElasticProcess.
+    + models/radioactive_decay
+      o G4NuclearDecayChannel::BetaDecayIt(): make additional check for
+        negative sqrt() argument in 'daughtermomentum[1]'.
+
+  o Physics Lists:
+    -------------
+    + Fixed initialisation problem for QBBC_HP
+    + Corrected flag for HP regime in G4HadronElasticPhysics() to be 'true'
+      for LHEP_HP and QGSP_HP.
+    + Added G4NeutronHPElasticData in HP physics lists for hadron elastic
+      physics.
+    + Added cout of list of processes and models for QBBC.
+
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/composite_calorimeter
+      o Updated hadronic physics list to be consistent with validation runs.
+    + advanced/lAr_calorimeter
+      o Updated hadronic physics list to be consistent with validation runs.
+      o Fixed few problems of use of non-initialised variables.
+      o Fixed compilation problems on gcc-4.X.
+    + advanced/hadrontherapy
+      o Corrected hadronic physics list for Precompund model.
+    + advanced/radioprotection
+      o Added missing inclusion of G4UItcsh.hh inside main().
+    + extended/eventgenerator/HepMC
+      o Updated physics lists to conform with non-static particles.
+    + extended/parallel/ParN02
+    + extended/parallel/ParN04
+      o Updated physics lists to conform with non-static particles.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.1.
+  o  Technical notes distributed for release 8.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.1 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

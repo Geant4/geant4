@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006/06/30 07:18:54 gcosmo Exp $
+$Id: History,v 1.112 2006/07/26 11:01:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th July 2006  Gabriele Cosmo (examples-V08-01-01)
+- Updated reference outputs according to reference tag geant4-08-01-ref-01.
+- Includes tags: ccal-V08-01-00, hadrontherapy-V08-01-01, exHepMC-V08-01-00,
+                 lAr_calorimeter-V08-01-00, radioprotection-V08-01-00,
+                 ParN02-V08-01-00, ParN04-V08-01-00.
+
 30th June 2006  Gabriele Cosmo (examples-V08-01-00)
 - Updated reference outputs according to reference tag geant4-08-01-ref-00.
 - Changed disclaimer on each file.
@@ -30,7 +36,7 @@ committal in the CVS repository !
                  exampleN01-V08-00-00, exampleN02-V08-00-03,
                  exampleN03-V08-00-06, exampleN04-V08-00-01,
                  exampleN05-V08-00-01, exampleN06-V08-00-02,
-                 exampleN07-V08-00-00
+                 exampleN07-V08-00-00.
 
 1st June 2006  Gabriele Cosmo (examples-V08-00-05)
 - Updated reference outputs according to reference tag geant4-08-00-ref-05.

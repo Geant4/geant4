@@ -649,8 +649,10 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 	  
     // the recoil neuleus
     daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
-    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
-			       2.0*daughterenergy[1] * daughtermass[1]);
+    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
+                               2.0*daughterenergy[1] * daughtermass[1];
+    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
+    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
   
     // output message
     if (GetVerboseLevel()>1) {

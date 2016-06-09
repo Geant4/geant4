@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2006/04/28 06:33:52 kurasige Exp $
+$Id: History,v 1.132 2006/06/27 23:33:31 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jun. 27, 2006    M.Asai (particles-V08-01-00)
+-  Code polish of G4PrimaryVertex
 
 - Apr. 28  , 2006  H.Kurashige (particles-V08-00-05)
 -  Fix memory leak in G4MuonDecayChannel.cc 

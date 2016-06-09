@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.112 2006/06/29 20:06:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QEnvironment.cc,v 1.113 2006/07/05 08:24:16 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -5170,7 +5170,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       if(ipo+1<theQHadrons.size())          // If ipo<Last, swap theCurHadr and theLastHadr
       {
         theLast = theQHadrons[theQHadrons.size()-1];// Pointer to theLastHadron (ipo<Last)
-        theCurr->SetQPDG(theLast->GetQPDG());// theCurHadron is substituted by the LastHadr
+        G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+        if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of LastHadr
+        else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
         theCurr->Set4Momentum(theLast->Get4Momentum()); // ... continue substitution
       }
       theQHadrons.pop_back();           // pointer to theLastHadron is excluded from OUTPUT
@@ -5338,7 +5340,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             if(ipo+1<theQHadrons.size())            // If ipo<Last, swap CurHadr & LastHadr
             {
               theLast = theQHadrons[theQHadrons.size()-1];//PointerTo theLastHadr(ipo<Last)
-              theCurr->SetQPDG(theLast->GetQPDG()); // CurHadrPDG instead of LastHadrPDG
+              G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+              if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of LastHadr
+              else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
               theCurr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
             }                                       //ELSE: it's already theLast -> no swap
             theQHadrons.pop_back();                 //exclude LastHadronPointer from OUTPUT
@@ -5402,7 +5406,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             if(ipo+1<theQHadrons.size())       // If ipo<Last, swap CurHadr and theLastHadr
             {
               theLast = theQHadrons[theQHadrons.size()-1];//Pointer to LastHadron(ipo<Last)
-              theCurr->SetQPDG(theLast->GetQPDG()); // CurHadrPDG instead of theLastHadrPDG
+              G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+              if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of LastHadr
+              else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
               theCurr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
             }
             theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -5582,11 +5588,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4int nhd1=theQHadrons.size()-1;
             theLast = theQHadrons[nhd1];// Pointer to theLastHadron (ipo<L)
             G4LorentzVector l4M=theLast->Get4Momentum();
-            G4QPDGCode lQPDG=theLast->GetQPDG();
+            G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of LastHadr
+            else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
 #ifdef pdebug
-			         G4cerr<<"---Warning---G4QE::FSI:l#"<<nhd1<<",4M="<<l4M<<",PDG="<<lQPDG<<G4endl;
+			         G4cerr<<"---Warning---G4QE::FSI:l#"<<nhd1<<",4M="<<l4M<<",PDG="<<lQP<<G4endl;
 #endif
-            theCurr->SetQPDG(theLast->GetQPDG());// CurHadrPDG is substituted by LastHadPDG
             theCurr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();              // exclude theLastHadron pointer from OUTPUT
@@ -5678,7 +5685,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(ipo+1<theQHadrons.size())       // If ipo<Last, swap CurHadr and theLastHadr
           {
             theLast = theQHadrons[theQHadrons.size()-1];// Ptr to theLastHadron (ipo<Last)
-            theCurr->SetQPDG(theLast->GetQPDG());// CurHadPDG is substituted by LastHadrPDG
+            G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of LastHadr
+            else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
             theCurr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();            // exclude theLastHadron pointer from OUTPUT
@@ -5824,7 +5833,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             if(hadron+1<theQHadrons.size())        // If hadr<Last,swap CurHadr & LastHadr
             {
               theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr (nh<Last)
-              curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+              G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+              if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of LastHadr
+              else curHadr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
               curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
             }
             theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -5912,7 +5923,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             if(hadron+1<theQHadrons.size())        // If hadr<Last, swap CurHadr & LastHadr
             {
               theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr (nh<Last)
-              curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+              G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+              if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of LastHadr
+              else curHadr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
               curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
             }
             theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -6587,8 +6600,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 	       {
           curHadr->SetNFragments(0);
           curHadr->Set4Momentum(theLast->Get4Momentum());
-          //curHadr->SetQC(theLast->GetQC());
-          curHadr->SetQPDG(theLast->GetQPDG());
+          G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+          if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of LastHadr
+          else curHadr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
 #ifdef pdebug
 	         G4cout<<"G4QE::FSI: Exchange with the last is done"<<G4endl;
 #endif
@@ -6639,7 +6653,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         G4QPDGCode   hQPDG = curHadr->GetQPDG();
         G4LorentzVector h4m= curHadr->Get4Momentum();
         curHadr->Set4Momentum(theLast->Get4Momentum());
-        curHadr->SetQPDG(theLast->GetQPDG());
+        G4QPDGCode lQP=theLast->GetQPDG();    // The QPDG of the last
+        if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of LastHadr
+        else curHadr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
         theLast->Set4Momentum(h4m);
         theLast->SetQPDG(hQPDG);
 	     }
@@ -6734,7 +6750,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 	           {
               G4QPDGCode   hQPDG = curHadr->GetQPDG();
               curHadr->Set4Momentum(l4M);
-              curHadr->SetQPDG(thePrev->GetQPDG());
+              G4QPDGCode lQP=thePrev->GetQPDG();    // The QPDG of the previous
+              if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+              else curHadr->SetQC(thePrev->GetQC());// CurHadrPDG instead of PrevHadrPDG
               thePrev->Set4Momentum(h4M);
               thePrev->SetQPDG(hQPDG);
 	           }
@@ -6897,7 +6915,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4QHadron* theCurr = theQHadrons[maxB];   // Pointer to the Current Hadron
       G4QHadron* theLast = theQHadrons[nHadr-1];// Pointer to the Last Hadron
       G4QHadron* curHadr = new G4QHadron(theCurr);//Remember theCurrentHadron to put on top
-      theCurr->SetQPDG(theLast->GetQPDG());     // theCurHadr is substituted by theLastHadr
+      G4QPDGCode lQP=theLast->GetQPDG();        // The QPDG of the last
+      if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+      else theCurr->SetQC(theLast->GetQC());    // CurHadrPDG instead of LastHadrPDG
       theCurr->Set4Momentum(theLast->Get4Momentum()); // ... continue substitution
       theQHadrons.pop_back();                   // Rnt to theLastHadron is excluded from HV
       delete theLast;//*!!When kill,DON'T forget to delete the last QHadron as an inst. !!*
@@ -6929,14 +6949,15 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         }
         if(nLast>gp)
         {
-          G4QPDGCode theLQPDG=theLast->GetQPDG();
-          theCurr->SetQPDG(theLQPDG);             // theCurHad is substituted by theLastHad
+          G4QPDGCode lQP=theLast->GetQPDG();      // The QPDG of the last
+          if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+          else theCurr->SetQC(theLast->GetQC());  // CurHadrPDG instead of LastHadrPDG
           theCurr->Set4Momentum(theLast->Get4Momentum()); // ... continue substitution
           theQHadrons.pop_back();                 // Pnt to theLastHadr.is excluded from HV
           delete theLast;//*!|When kill,DON'T forget to delete theLastQHadron as an inst!!*
           nHadr=theQHadrons.size();
 #ifdef pdebug
-          G4cout<<"G4QE::FSI:RepBy lPDG="<<theLQPDG<<",nH="<<nHadr<<",gS="<<gamSum<<G4endl;
+          G4cout<<"G4QE::FSI:RepBy lPDG="<<lQP<<",nH="<<nHadr<<",gS="<<gamSum<<G4endl;
 #endif
         }
 	     }
@@ -6960,9 +6981,13 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4QHadron* theEx=theQHadrons[nEx];         // A hadron to be exchanged with theLast
       G4LorentzVector ex4Mom=theEx->Get4Momentum();
       G4QPDGCode exQPDG=theEx->GetQPDG();
-      theEx->SetQPDG(theLast->GetQPDG());        // theExHadr is substituted by theLastHadr
+      G4QContent exQC=theEx->GetQC();
+      G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+      if(lQP.GetPDGCode()!=10) theEx->SetQPDG(lQP); //CurHadr instead of PrevHadr
+      else theEx->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
       theEx->Set4Momentum(theLast->Get4Momentum());
-      theLast->SetQPDG(exQPDG);                  // theLastHadr is substituted by theExHadr
+      if(exQPDG.GetPDGCode()!=10) theLast->SetQPDG(exQPDG);
+      else theLast->SetQC(exQC);                 // CurHadrPDG instead of LastHadrPDG
       theLast->Set4Momentum(ex4Mom);
       nEx--;
     }
@@ -7050,7 +7075,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4QHadron* theLast = theQHadrons[lin];// Pointer to theLastHadron in theQHadrVector
       if(lin>hd)
       {
-        curHadr->SetQPDG(theLast->GetQPDG());//theCurHadron is substituted by theLastHadron
+        G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+        if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+        else curHadr->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
         curHadr->Set4Momentum(theLast->Get4Momentum()); // ... continue substitution (4Mom)
       }
       //else break; // It's not necessary to delete: not copy to theFragments is enough
@@ -7135,7 +7162,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(hd+1<theQHadrons.size())            // If ipo<Last, swap CurHadr & LastHadr
           {
             theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr(ipo<Last)
-            curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+            G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+            else curHadr->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
             curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -7233,7 +7262,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(hd+1<theQHadrons.size())            // If ipo<Last, swap CurHadr & LastHadr
           {
             theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr(ipo<Last)
-            curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+            G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+            else curHadr->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
             curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -7319,7 +7350,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(hd+1<theQHadrons.size())            // If ipo<Last, swap CurHadr & LastHadr
           {
             theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr(ipo<Last)
-            curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+            G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+            else curHadr->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
             curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -7459,7 +7492,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(hd+1<theQHadrons.size())           // If ipo<Last, swap CurHadr & LastHadr
           {
             theLast = theQHadrons[theQHadrons.size()-1]; // Pointer to LastHadr(ipo<Last)
-            curHadr->SetQPDG(theLast->GetQPDG());// CurHadrPDG's substituted by LastHaPDG
+            G4QPDGCode lQP=theLast->GetQPDG();         // The QPDG of the last
+            if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP); //CurHadr instead of PrevHadr
+            else curHadr->SetQC(theLast->GetQC());       // CurHadrPDG instead of LastHadrPDG
             curHadr->Set4Momentum(theLast->Get4Momentum()); // ... 4Momentum substitution
           }
           theQHadrons.pop_back();        // exclude theLastHadron pointer from the OUTPUT
@@ -10800,7 +10835,9 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                           else     DecayMultyBaryon(tcH); // Decay Multibaryon
                           G4QHadron* theLast = theQHadrons[theQHadrons.size()-1];
                           curHadr->Set4Momentum(theLast->Get4Momentum());//4-Mom of CurHadr
-                          curHadr->SetQPDG(theLast->GetQPDG()); // QPDG of the Current Hadr
+                          G4QPDGCode lQP=theLast->GetQPDG();
+                          if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP);
+                          else curHadr->SetQC(theLast->GetQC());
                           theQHadrons.pop_back(); // theLastQHadron is excluded from OUTPUT
                           delete theLast;//*!!When kill, delete theLastQHadr asAnInstance!*
                         }

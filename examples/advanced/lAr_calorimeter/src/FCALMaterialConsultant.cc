@@ -248,7 +248,7 @@ FCALMaterialConsultant::FCALMaterialConsultant()
   StainlessSteel = new G4Material(name="StainlessSteel",density,nel=1);
   StainlessSteel->AddElement(elO, fractionmass = 1.);
 
-};
+}
 
 FCALMaterialConsultant * FCALMaterialConsultant::construct()
 {
@@ -256,7 +256,7 @@ FCALMaterialConsultant * FCALMaterialConsultant::construct()
     theFCALMaterialConsultant = new FCALMaterialConsultant();
   }
   return theFCALMaterialConsultant;
-};
+}
 
 G4Material * FCALMaterialConsultant::Material(G4String what)
 {
@@ -284,5 +284,5 @@ G4Material * FCALMaterialConsultant::Material(G4String what)
   if(what == "RhoaCell")          material = RhoaCell;
 
   return material;
-};
+}
 				  

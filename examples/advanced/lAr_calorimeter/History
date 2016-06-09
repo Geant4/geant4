@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2005/12/08 16:39:16 ribon Exp $
+$Id: History,v 1.14 2006/07/21 11:45:53 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.13 2005/12/08 16:39:16 ribon Exp $
 
                       Category History file
                       ---------------------
+
+21.07.2006 - A.Ribon (lAr_calorimeter-V08-01-00)
+             New hadronic_lists.gmk, consistent with composite_calorimeter.
+	     Fixed some uninitialization problems.
 
 08.12.2005 - A.Ribon (lAr_calorimeter-V07-01-00)
              Migration to CLHEP namespace. 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.19 2006/06/29 20:09:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HadronElastic.cc,v 1.20 2006/07/06 17:44:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -48,6 +48,7 @@
 //           charge exchange; remove limitation on incident momentum;
 //           add s-wave regim below some momentum        
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
+// 07-Jun-06 V.Ivanchenko fix problem of rotation
 //
 
 #include "G4HadronElastic.hh"
@@ -139,12 +140,13 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
  
   G4double m2 = theDef->GetPDGMass();
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv0(0.0,0.0,0.0,m2);
-   
+  G4LorentzVector lv0(0.0,0.0,0.0,m2);   
   G4LorentzVector lv  = lv0 + lv1;
+
   G4ThreeVector bst = lv.boostVector();
   lv1.boost(-bst);
   lv0.boost(-bst);
+
   G4ThreeVector p1 = lv1.vect();
   G4double ptot = p1.mag();
   G4double tmax = 4.0*ptot*ptot;
@@ -198,8 +200,6 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
-  p1 = p1.unit();
-  v1.rotateUz(p1);
   v1 *= ptot;
   G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
   G4LorentzVector nlv0 = lv0 + lv1 - nlv1;
@@ -211,7 +211,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   if (verboseLevel > 1) 
     G4cout << " P0= "<< nlv0 << "   P1= "
 	   << nlv1<<" m= " << m1 << " ekin0= " << eFinal 
-	   << " ekin1= " << nlv0.e() - m2 
+	   << " ekin1= " << nlv0.e() - m2
+	   << " 4-mom " << lv1 
 	   <<G4endl;
   if(eFinal < 0.0) {
     G4cout << "G4HadronElastic WARNING ekin= " << eFinal

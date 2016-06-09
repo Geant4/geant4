@@ -55,11 +55,12 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-FCALCryostatVolumes::FCALCryostatVolumes() {
+FCALCryostatVolumes::FCALCryostatVolumes()
+{
 #include "FCALCryostatVolumesParameters.input"
-};
+}
 
-FCALCryostatVolumes::~FCALCryostatVolumes() {;};
+FCALCryostatVolumes::~FCALCryostatVolumes() {;}
 
 G4LogicalVolume * FCALCryostatVolumes::Construct()
 {
@@ -247,4 +248,4 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 
   return LogicalCryostat;
 
-};
+}

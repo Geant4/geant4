@@ -57,15 +57,16 @@
 #include "G4ios.hh"
 
 
-FCALHadModule::FCALHadModule() {
-
+FCALHadModule::FCALHadModule() :
+  FcalHadModuleSD(0)
+{
   F2LArGapID = new G4int[2600];
   F2LArIX     = new G4int[2600];
   F2LArJY     = new G4int[2600];
   F2LArITile  = new G4int[2600];
   F2LArGapPosX = new G4double[2600];
   F2LArGapPosY = new G4double[2600];
-};
+}
 
 FCALHadModule::~FCALHadModule() {
   delete [] F2LArGapID;
@@ -74,7 +75,7 @@ FCALHadModule::~FCALHadModule() {
   delete [] F2LArIX;
   delete [] F2LArJY;
   delete [] F2LArITile;
-};
+}
 
 
 void FCALHadModule::InitializeGeometry() {
@@ -95,7 +96,7 @@ void FCALHadModule::InitializeGeometry() {
    };
    
    G4cout << "*********" << " Number of Rods in FCAL2 : " << NF2LarGap-1 << G4endl;
-};
+}
 
 
 G4LogicalVolume * FCALHadModule::Construct()
@@ -261,11 +262,12 @@ G4LogicalVolume * FCALHadModule::Construct()
 
    return LogicalHadModule;
 
-};
+}
 
 G4int FCALHadModule::GetF2TileID(G4int TileID) 
-{ return F2LArITile[TileID];
-};
+{
+  return F2LArITile[TileID];
+}
 
 
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.11 2004/05/18 14:57:48 ribon Exp $
+$Id: README,v 1.12 2006/07/25 11:02:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -253,17 +253,6 @@ $Id: README,v 1.11 2004/05/18 14:57:48 ribon Exp $
  for calorimetry studies. However, we prefer to use, as default, the
  more sophisticated (but slower) QGSC Physics List for the learning 
  purposes of this example.
-
- Please refer to the Web page:
-
-      http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/index.html
-
- for more information on these (and others) Physics Lists.
- Please notice that, for the time being, some classes, which can be
- downloaded from the above Web page, have to be included in the 
- include/ and src/ subdirectories of this example. However, hopefully
- soon, these classes will be distributed with Geant4 and therefore their 
- explicit inclusion in the example will no longer be necessary.
 
 
 5. Particle Generator

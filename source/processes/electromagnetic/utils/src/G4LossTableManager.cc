@@ -1,30 +1,27 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.72.2.1 2006/06/29 19:55:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4LossTableManager.cc,v 1.74 2006/07/05 17:44:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +61,7 @@
 // 23-03-06 Set flag isIonisation (VI)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
+// 05-06-06 Do not clear loss_table map between runs (VI)
 //
 // Class Description:
 //
@@ -197,6 +195,7 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
   if(subCutoffFlag)        p->ActivateSubCutoff(true);
+  if(rndmStepFlag)         p->SetRandomStep(true);
   if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
@@ -320,7 +319,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
     }
   }
 
-  if(!all_tables_are_built) loss_map.clear();
+  //  if(!all_tables_are_built) loss_map.clear();
   currentParticle = 0;
 
   SetParameters(p);
@@ -617,8 +616,13 @@ void G4LossTableManager::SetMinSubRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetRandomStep(G4bool)
-{}
+void G4LossTableManager::SetRandomStep(G4bool val)
+{
+  rndmStepFlag = val;
+  for(G4int i=0; i<n_loss; i++) {
+    if(loss_vector[i]) loss_vector[i]->SetRandomStep(val);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

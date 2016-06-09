@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.5 2006/06/29 17:58:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HadronElasticPhysics.hh,v 1.6 2006/07/05 16:12:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
+// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
 //
 //----------------------------------------------------------------------------
 //
@@ -69,7 +70,9 @@ public:
 
 private:
 
-  std::vector<G4HadronicProcess*> p_list;
+  G4HadronicInteraction* model;
+  G4HadronicInteraction* neutronModel;
+  G4HadronicInteraction* neutronHPModel;
 
   G4String mname;
 

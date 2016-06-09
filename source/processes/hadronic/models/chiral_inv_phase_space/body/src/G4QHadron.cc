@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.42 2006/06/29 20:07:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4QHadron.cc,v 1.43 2006/07/05 08:24:17 mkossov Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -166,12 +166,12 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   {
     G4cerr<<"***G4QHad::RelDecIn2: Tachionic 4-mom="<<theMomentum<<", E-p="<<dE-vP<<G4endl;
     G4double accuracy=.000001*vP;
-    G4double emodif=abs(dE-vP);
-    if(emodif<accuracy)
-				{
+    G4double emodif=std::fabs(dE-vP);
+    //if(emodif<accuracy)
+				//{
       G4cerr<<"G4QHadron::RelDecIn2: *Boost* E-p shift is corrected to "<<emodif<<G4endl;
-      theMomentum.setE(vP+emodif);
-    }
+      theMomentum.setE(vP+emodif+.01*accuracy);
+				//}
   }
   G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
   G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
@@ -315,7 +315,21 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   {
 	   G4cerr<<"*G4QH::DecIn2:*Boost* 4M="<<theMomentum<<",e-p="
           <<theMomentum.e()-theMomentum.rho()<<G4endl;
-	//throw G4QException("G4QHadron::DecayIn2: Decay of particle with zero mass");
+	   //throw G4QException("G4QHadron::DecayIn2: Decay of particle with zero mass")
+    theMomentum.setE(1.0000001*theMomentum.rho());
+  }
+  G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
+  G4double dE  = theMomentum.e();        // Energy of the decaying hadron
+  if(dE<vP)
+  {
+    G4cerr<<"***G4QHad::RelDecIn2: Tachionic 4-mom="<<theMomentum<<", E-p="<<dE-vP<<G4endl;
+    G4double accuracy=.000001*vP;
+    G4double emodif=std::fabs(dE-vP);
+    if(emodif<accuracy)
+				{
+      G4cerr<<"G4QHadron::DecayIn2: *Boost* E-p shift is corrected to "<<emodif<<G4endl;
+      theMomentum.setE(vP+emodif+.01*accuracy);
+    }
   }
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lor.Trans.
 #ifdef pdebug
@@ -373,7 +387,11 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   G4ThreeVector ltb = comp.boostVector();      // Boost vector for backward Lor.Trans.
   G4ThreeVector ltf = -ltb;                    // Boost vector for forward Lorentz Trans.
   G4LorentzVector cm4Mom=fr4Mom;               // Copy of fragment 4Mom to transform to CMS
-  if(cm4Mom.e()+.001<cm4Mom.rho())G4cerr<<"*G4QH::CorMDecIn2:*Boost* c4M="<<cm4Mom<<G4endl;
+  if(cm4Mom.e()<cm4Mom.rho())
+  {
+    G4cerr<<"*G4QH::CorMDecIn2:*Boost* c4M="<<cm4Mom<<G4endl;
+    cm4Mom.setE(1.0000001*cm4Mom.rho());
+  }
   cm4Mom.boost(ltf);                           // Now it is in CMS (Forward Lor.Trans.)
   G4double pfx= cm4Mom.px();
   G4double pfy= cm4Mom.py();
@@ -420,7 +438,11 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
 #endif
   if(fr4Mom.e()+.001<fr4Mom.rho())G4cerr<<"*G4QH::CorMDecIn2:*Boost*fr4M="<<fr4Mom<<G4endl;
   fr4Mom.boost(ltb);                        // Lor.Trans. of the Fragment back to LS
-  if(theMomentum.e()+.001<theMomentum.rho())G4cerr<<"*G4QH::CMDI2:4="<<theMomentum<<G4endl;
+  if(theMomentum.e()<theMomentum.rho())
+  {
+    G4cerr<<"*G4QH::CMDI2:4="<<theMomentum<<G4endl;
+    theMomentum.setE(1.0000001*theMomentum.rho());
+  }
   theMomentum.boost(ltb);                  // Lor.Trans. of the Hadron back to LS
 #ifdef pdebug
   G4LorentzVector dif3=comp-fr4Mom-theMomentum;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.33 2006/06/29 20:09:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.34 2006/07/06 18:11:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //G4ElasticHadrNucleusHE.cc
 //
 //
@@ -41,6 +41,7 @@
 //  23.11.05 int -> G4int, fabs -> abs (V.Ivanchenko)
 //  09.05.06 N.Starkov propose new method SampleT (V.Ivanchenko)
 //  30.05.06 Variant without use of elastic data files (N.Starkov)
+//  07.06.06 V.Ivanchenko fix problem of rotation of final state
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -560,8 +561,6 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
-  p1 = p1.unit();
-  v1.rotateUz(p1);
   v1 *= ptot;
   G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
   G4LorentzVector nlv0 = lv0 + lv1 - nlv1;

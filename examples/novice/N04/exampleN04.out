@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -245,7 +245,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.22s Real=1.41s Sys=0.06s
+  User=1.03s Real=1.18s Sys=0.04s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

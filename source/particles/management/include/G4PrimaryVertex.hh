@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.2.2.1 2006/06/29 19:24:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4PrimaryVertex.hh,v 1.4 2006/07/20 15:14:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01 $
 //
 //
 
@@ -71,6 +71,7 @@ class G4PrimaryVertex
       G4PrimaryParticle * theParticle;
       G4PrimaryParticle * theTail;
       G4PrimaryVertex* nextVertex;
+      G4PrimaryVertex* tailVertex;
       G4int numberOfParticle;
       G4double Weight0;
       G4VUserPrimaryVertexInformation* userInfo;
@@ -95,15 +96,10 @@ class G4PrimaryVertex
       inline void SetPrimary(G4PrimaryParticle * pp)
       { 
         if(theParticle == 0)
-        { 
-          theParticle = pp;
-          theTail = pp;
-        }
+        { theParticle = pp; }
         else
-        { 
-          theTail->SetNext(pp); 
-          theTail = pp;
-        }
+        { theTail->SetNext(pp); }
+        theTail = pp;
         numberOfParticle++;
       }
       inline G4PrimaryParticle* GetPrimary(G4int i=0) const
@@ -128,7 +124,8 @@ class G4PrimaryVertex
         if(nextVertex == 0)
         { nextVertex = nv; }
         else
-        { nextVertex->SetNext(nv); }
+        { tailVertex->SetNext(nv); }
+        tailVertex = nv;
       }
       inline G4PrimaryVertex* GetNext() const
       { return nextVertex; }

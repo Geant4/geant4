@@ -56,14 +56,16 @@
 #include <fstream>
 #include <cstdlib>
 
-FCALEMModule::FCALEMModule() {
+FCALEMModule::FCALEMModule() : 
+  FcalEmModuleSD(0)
+ {
   F1LArGapID   = new G4int[2400];
   F1LArIX      = new G4int[2400];
   F1LArJY      = new G4int[2400];
   F1LArITile   = new G4int[2400];
   F1LArGapPosX = new G4double[2400];
   F1LArGapPosY = new G4double[2400];
-};
+}
 
 
 FCALEMModule::~FCALEMModule(){
@@ -73,7 +75,7 @@ FCALEMModule::~FCALEMModule(){
   delete [] F1LArIX;
   delete [] F1LArJY;
   delete [] F1LArITile;
-};
+}
 
 
 void FCALEMModule::InitializeGeometry() {
@@ -91,7 +93,7 @@ void FCALEMModule::InitializeGeometry() {
 	 >> F1LArIX[NF1LarGap] >>  F1LArJY[NF1LarGap] >> F1LArITile[NF1LarGap];
   };   
   G4cout << "********" << " Number of Rods in FCAL1 : " << NF1LarGap-1 << G4endl;;
-};
+}
 
 
 
@@ -191,7 +193,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 
    return LogicalEmModule;
 
-};
+}
 
 
 G4int FCALEMModule::GetF1TileID(G4int GapID) 
