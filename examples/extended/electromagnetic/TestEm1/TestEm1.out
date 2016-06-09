@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -92,11 +92,11 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setHisto 3 100 0 10 mm
 ----> SetHisto 3: step length of charged particles (mm);  100 bins from 0 mm to 10 mm
 #
-/testem/histo/setFileType hbook		#for paw	
-###/testem/histo/setFileType root		#for root
-###/testem/histo/setFileType XML		#for jaida
+/testem/histo/setFileType hbook	
+###/testem/histo/setFileType root
+###/testem/histo/setFileType XML
 #
-/testem/histo/setFileName run0.aida 
+/testem/histo/setFileName run0 
 /run/beamOn 200
 G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
@@ -233,7 +233,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=51.9s Real=82.48s Sys=21.6s
+  User=59.12s Real=87.71s Sys=21.27s
 
  ======================== run summary ======================
 
@@ -241,33 +241,33 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.780 MeV
+ total energy deposit: 99.777 MeV
 
- nb tracks/event   neutral:     27.420   charged:    694.045
- nb  steps/event   neutral:    141.190   charged:   3490.830
+ nb tracks/event   neutral:     27.940   charged:    698.145
+ nb  steps/event   neutral:    145.760   charged:   3501.195
 
  nb of process calls per event: 
-          eIoni       brCMS       compt        phot        conv     annihilTransportation
-       3463.585      25.780     113.770      24.885       1.465       1.465       1.070
+          eIoni       brCMS       compt        photTransportation        conv     annihil
+       3473.600      26.110     117.820      25.400       1.065       1.480       1.480
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.895 cm    rms = 3.313 cm 
- proj Range = 9.153 cm    rms = 3.124 cm 
- proj/CSDA  = 0.840
- transverse dispersion at end = 1.931 cm 
+ CSDA Range = 10.806 cm    rms = 4.017 cm 
+ proj Range = 9.250 cm    rms = 3.657 cm 
+ proj/CSDA  = 0.856
+ transverse dispersion at end = 1.806 cm 
 
- mass CSDA Range from simulation = 29.417 g/cm2
+ mass CSDA Range from simulation = 29.176 g/cm2
                from PhysicsTable = 85.395 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1594375017, 1867574640
+ Current couple of seeds = 532674473, 525747510
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
-/testem/histo/setFileName run1.aida
+/testem/histo/setFileName run1
 /run/beamOn 200
 G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
@@ -391,7 +391,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1594375017, 1867574640
+ Current couple of seeds = 532674473, 525747510
 ----------------------------------------
 Start Run processing.
 
@@ -399,7 +399,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=18.2s Real=31.35s Sys=10.13s
+  User=19.64s Real=31.95s Sys=10.67s
 
  ======================== run summary ======================
 
@@ -407,29 +407,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.817 MeV
+ total energy deposit: 99.643 MeV
 
- nb tracks/event   neutral:     27.665   charged:    145.980
- nb  steps/event   neutral:    138.895   charged:   1085.740
+ nb tracks/event   neutral:     28.245   charged:    147.580
+ nb  steps/event   neutral:    140.540   charged:   1077.930
 
  nb of process calls per event: 
           brCMS       eIoni        phot       comptTransportation        conv     annihil
-         25.835    1058.460      25.245     111.230       0.975       1.445       1.445
+         26.395    1050.090      25.700     112.295       1.100       1.445       1.445
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 10.990 cm    rms = 3.796 cm 
- proj Range = 9.484 cm    rms = 3.465 cm 
- proj/CSDA  = 0.863
- transverse dispersion at end = 1.705 cm 
+ CSDA Range = 11.691 cm    rms = 3.709 cm 
+ proj Range = 9.970 cm    rms = 3.497 cm 
+ proj/CSDA  = 0.853
+ transverse dispersion at end = 1.961 cm 
 
- mass CSDA Range from simulation = 29.674 g/cm2
+ mass CSDA Range from simulation = 31.567 g/cm2
                from PhysicsTable = 67.818 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1639849691, 891174536
+ Current couple of seeds = 623673724, 405814321
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

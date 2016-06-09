@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -190,13 +190,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV     0 eV    1.58938 m     1.58938 m       World  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0 8.95106e-13          1      500 MeV0.00387485 eV    1.58938 m     1.58938 m       World  Transportation
     2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.44427e-06 eV          1 mm    1.59038 m    Absorber  Transportation
     3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31353e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -220,13 +220,13 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV     0 eV    79.5502 cm    79.5502 cm      World  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0 1.17461e-09          1      250 MeV0.00183027 eV    79.5502 cm    79.5502 cm      World  Transportation
     2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30216e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
     3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18563e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -250,7 +250,7 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV     0 eV    63.6725 cm    63.6725 cm      World  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0 -2.18037e-09          1      200 MeV0.00143692 eV    63.6725 cm    63.6725 cm      World  Transportation
     2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.24532e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
     3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14584e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
 Run terminated.
@@ -286,7 +286,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -316,7 +316,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
 Setting Field strength to 1000 Gauss. Magnetic field vector is (0,0,1000) G 
@@ -343,11 +343,11 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV     0 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
+    1          0 fm          0 fm        -22 m           0          0         -1      500 MeV0.107244 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 

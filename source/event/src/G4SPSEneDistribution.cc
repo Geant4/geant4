@@ -1164,7 +1164,9 @@ void G4SPSEneDistribution::ReSetHist(G4String atype)
 {
   if (atype == "energy"){
     UDefEnergyH = IPDFEnergyH = ZeroPhysVector ;
-    IPDFEnergyExist = false ;} 
+    IPDFEnergyExist = false ;
+    Emin = 0.;
+    Emax = 1e30;}  
   else if ( atype == "arb"){
     ArbEnergyH =IPDFArbEnergyH = ZeroPhysVector ;
     IPDFArbExist = false;} 

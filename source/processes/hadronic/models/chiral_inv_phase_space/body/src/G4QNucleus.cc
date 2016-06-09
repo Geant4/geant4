@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.47 2004/11/09 11:11:16 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QNucleus.cc,v 1.48 2005/02/21 18:47:56 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,6 +32,7 @@
 //#define debug
 //#define cldebug
 //#define pdebug 
+//#define pardeb
 //#define ppdebug
 
 #include "G4QNucleus.hh"
@@ -39,7 +40,14 @@
 //#include <cstdlib>
 using namespace std;
 
-G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0) {probVect[0]=mediRatio;}
+G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0)
+{
+  probVect[0]=mediRatio;
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(1) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
+}
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4QHadron(90000000+s*1000000+z*1000+n),Z(z),N(n),S(s),maxClust(0)
@@ -66,14 +74,29 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4LorentzVector p(0.,0.,0.,mass);
   Set4Momentum(p);
   SetNFragments(0);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(2) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
-G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0) {InitByPDG(nucPDG);}
+G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0)
+{
+  InitByPDG(nucPDG);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(3) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
+}
 
 G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),maxClust(0)
 {
   InitByPDG(nucPDG);
   Set4Momentum(p);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(4) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
@@ -88,6 +111,10 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   SetQPDG(nPDG);
   G4QContent nQC(N+ZNS,Z+ZNS,S,0,0,0);
   SetZNSQC(z,n,s);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(5) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
@@ -130,10 +157,13 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
   G4LorentzVector p(0.,0.,0.,mass);
   Set4Momentum(p);
   SetNFragments(0);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(6) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
-  G4QHadron(nucQC,p), maxClust(0)
+G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p), maxClust(0)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
@@ -155,10 +185,13 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
   G4QPDGCode nPDG(90000000+S*1000000+Z*1000+N);
   SetQPDG(nPDG);
   SetNFragments(0);
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(7) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
-G4QNucleus::G4QNucleus(const G4QNucleus& right) :
-  G4QHadron(&right)
+G4QNucleus::G4QNucleus(const G4QNucleus& right) : G4QHadron(&right)
 {
   Set4Momentum   (right.Get4Momentum());
   SetQPDG        (right.GetQPDG());
@@ -174,6 +207,10 @@ G4QNucleus::G4QNucleus(const G4QNucleus& right) :
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
   probVect[254] = right.probVect[254];
   probVect[255] = right.probVect[255];
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(8) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
 G4QNucleus::G4QNucleus(G4QNucleus* right)
@@ -192,6 +229,10 @@ G4QNucleus::G4QNucleus(G4QNucleus* right)
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right->probVect[i];
   probVect[254] = right->probVect[254];
   probVect[255] = right->probVect[255];
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(9) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
 }
 
 G4QNucleus::~G4QNucleus() {}

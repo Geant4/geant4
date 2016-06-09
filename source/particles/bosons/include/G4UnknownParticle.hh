@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownParticle.hh,v 1.1 2004/07/07 15:14:59 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4UnknownParticle.hh,v 1.4 2005/01/30 22:58:02 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -30,46 +30,35 @@
 //
 //  first implementation : M.Asai Jul 07, 2004
 // ----------------------------------------------------------------
+//  New impelemenataion as an utility class  H.Kurashige, 14 July 2004
+// ----------------------------------------------------------------
 
-// Each class inheriting from G4VBoson
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
 
 #ifndef G4UnknownParticle_h
 #define G4UnknownParticle_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4VBoson.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
 // ###                         UNKNOWN                                ###
 // ######################################################################
 
-class G4UnknownParticle : public G4VBoson
+class G4UnknownParticle : public G4ParticleDefinition
 {
  private:
-   static G4UnknownParticle theUnknownParticle;
+   static G4UnknownParticle* theInstance;
 
  private:
-   G4UnknownParticle(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
+  G4UnknownParticle(){}
 
  public:
-   virtual ~G4UnknownParticle(){}
+   ~G4UnknownParticle(){}
  
+   static G4UnknownParticle* Definition();
    static G4UnknownParticle* UnknownParticleDefinition();
    static G4UnknownParticle* UnknownParticle();
-
 };
 
 #endif

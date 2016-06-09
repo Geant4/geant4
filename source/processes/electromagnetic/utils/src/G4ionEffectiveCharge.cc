@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.6 2004/12/01 18:01:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ionEffectiveCharge.cc,v 1.8 2005/01/25 19:20:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 12.09.2004 Set low energy limit to 1 keV (V.Ivanchenko) 
+// 25.01.2005 Add protection - min Charge 0.1 eplus (V.Ivanchenko) 
 //
 
 // -------------------------------------------------------------------
@@ -53,12 +54,11 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  // energyHighLimit  = 1.*MeV;
   energyHighLimit  = 25.*MeV;
-  //  energyLowLimit   = 3.25*keV;
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);
+  minCharge        = 0.1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -152,6 +152,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
   reducedEnergy = std::max(reducedEnergy,energyLowLimit);
   G4double q;
+
   // Helium ion case
   if( Zi < 2.5 ) {
 
@@ -172,7 +173,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double zi13 = std::pow(Zi, 0.33333);
     G4double zi23 = zi13*zi13;
     reducedEnergy = std::max(reducedEnergy,energyBohr/z23);
-    
+   
     // v1 is ion velocity in vF unit
     G4double v1 = std::sqrt( reducedEnergy / energyBohr )/ vF ;
     G4double y ;
@@ -189,18 +190,21 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double y3 = std::pow(y, 0.3) ;
     //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
     q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
-    if(q < 0.0) q = 0.0;
+
+    G4double qmin = minCharge/Zi;
+
+    if(q < qmin) q = qmin;
 
     G4double tq = 7.6 - std::log(reducedEnergy/keV);
     G4double sq = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -tq*tq )/ (Zi*Zi);
+    //    G4cout << "sq= " << sq << G4endl;
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (zi13 * (6.0 + q)) ;
-    chargeCorrection = sq * (q + 0.5*(1.0 - q)*std::log(1.0 + lambda*lambda)/(vF*vF) );
-    if(q > 0.0) chargeCorrection /= q;
+    chargeCorrection = sq * (1.0 + (0.5/q - 0.5)*std::log(1.0 + lambda*lambda)/(vF*vF) );
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 

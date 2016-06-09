@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.9 2003/06/16 17:12:28 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ProcessManager.hh,v 1.10 2005/02/15 04:38:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,6 +60,7 @@
 //   Add copy constructor (deep copy)   28 June 1998 H.Kurashige
 //   Add GetProcessActivation     3 May. 1999 H.Kurashige
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//   Modify G4ProcessVectorOrdering to fix FindInsedrtPosition 15 Feb. 2005
 // ------------------------------------------------------------
 
 #ifndef G4ProcessManager_h
@@ -94,8 +95,8 @@ enum G4ProcessVectorDoItIndex
 enum G4ProcessVectorOrdering
 { 
    	ordInActive = -1,			// ordering parameter to indicate InActive DoIt
-   	ordDefault = INT_MAX/2,		// default ordering parameter
-   	ordLast    = INT_MAX		// ordering parameter to indicate the last DoIt
+   	ordDefault = 1000,		// default ordering parameter
+   	ordLast    = 99999 		// ordering parameter to indicate the last DoIt
 };
 
 class G4ProcessManager 

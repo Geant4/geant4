@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.23 2004/12/01 19:37:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4MultipleScattering.cc,v 1.24 2005/02/07 13:35:24 urban Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
@@ -63,7 +63,7 @@
 // 23-04-04 value of data member dtrl changed from 0.15 to 0.05 (L.Urban)
 // 17-08-04 name of facxsi changed to factail (L.Urban)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-//
+// 07-02-05 correction in order to have a working Setsamplez function (L.Urban)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,6 +97,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetBinning(totBins);
   SetMinKinEnergy(lowKineticEnergy);
   SetMaxKinEnergy(highKineticEnergy);
+  Setsamplez(true) ; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,7 +118,6 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particl
     SetBoundary(true);
     SetLateralDisplasmentFlag(true);
     SetBuildLambdaTable(true);
-    Setsamplez(true) ;
   }
   G4MscModel* em = new G4MscModel(dtrl,NuclCorrPar,FactPar,factail,samplez);
   em->SetLowEnergyLimit(lowKineticEnergy);

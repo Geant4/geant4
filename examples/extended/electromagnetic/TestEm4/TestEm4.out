@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -99,11 +99,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=15.2s Real=518.07s Sys=40.37s
+  User=15.59s Real=427.56s Sys=40.68s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1583561776, 1344410406
+ Current couple of seeds = 172857917, 520146721
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

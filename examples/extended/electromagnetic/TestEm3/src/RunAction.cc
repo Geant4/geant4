@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.23 2004/12/02 16:13:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: RunAction.cc,v 1.24 2004/12/17 11:36:18 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -234,14 +234,14 @@ void RunAction::PrintDedxTables()
   G4cout.setf(std::ios::scientific,std::ios::floatfield);
 
   G4ParticleDefinition*
-  part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
+  part = Primary->GetParticleGun()->GetParticleDefinition();
   
   G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
   const G4MaterialCutsCouple* couple = 0;
 
-  for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
+  for (G4int iab=1;iab <= Detector->GetNbOfAbsor(); iab++)
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
       G4int index = 0;

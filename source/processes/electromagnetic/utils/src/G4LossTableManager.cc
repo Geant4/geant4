@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.51 2004/12/09 10:38:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4LossTableManager.cc,v 1.53 2005/01/25 19:10:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,7 +52,9 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 13-01-04 Fix problem which takes place for inactivate eIoni (V.Ivanchenko)
+// 25-01-04 Fix initialisation problem for ions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -254,7 +256,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 {
   if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
     all_tables_are_built = true;
-    loss_map.clear();
+    
     for (G4int i=0; i<n_loss; i++) {
       G4VEnergyLossProcess* el = loss_vector[i];
 
@@ -423,7 +425,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
 
   for (G4int i=0; i<n_loss; i++) {
     if (aParticle == part_vector[i] && !tables_are_built[i] && loss_vector[i]) {
-      if (loss_vector[i]->IsIonisationProcess()) {
+      if (loss_vector[i]->IsIonisationProcess() || !em) {
         em = loss_vector[i];
         iem= i;
       }

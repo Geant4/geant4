@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-ref-00 $   (17-December-2004)
+ Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -228,7 +228,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 21.04
 49	fGamma = 9.283e+04	sumE = 21.05
 
-total time for build X-ray TR energy loss tables = 110.85 s
+total time for build X-ray TR energy loss tables = 107.8 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -370,28 +370,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.85s Real=9s Sys=0.64s
+  User=7.67s Real=8.3s Sys=0.63s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=16.445 +- 0.181467  mm  
+    mean charged track length   in absorber=16.8445 +- 0.210469  mm  
 
-            mean energy deposit in absorber=0.0118818 +- 0.000254325  MeV 
+            mean energy deposit in absorber=0.0134029 +- 0.000287725  MeV 
 
- mean number of steps in absorber (charged) =2.831 +- 0.0695445      
- mean number of steps in absorber (neutral) =3.657 +- 0.0585265      
+ mean number of steps in absorber (charged) =3.155 +- 0.0864464      
+ mean number of steps in absorber (neutral) =3.89 +- 0.0642954      
 
-   mean number of charged secondaries = 1.359 +- 0.0391423
+   mean number of charged secondaries = 1.574 +- 0.0438922
 
-   mean number of neutral secondaries = 0 +- 0
+   mean number of neutral secondaries = 0.002 +- 0.0014128
 
-   mean number of e-s =1.359  and e+s =0
+   mean number of e-s =1.574  and e+s =0
 
-(number) transmission coeff=0.487  reflection coeff=0.008
+(number) transmission coeff=0.51  reflection coeff=0.005
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 120471254, 1942528202
+ Current couple of seeds = 848103659, 2068856722
 ----------------------------------------
 
 ========= Table of registered couples ==============================

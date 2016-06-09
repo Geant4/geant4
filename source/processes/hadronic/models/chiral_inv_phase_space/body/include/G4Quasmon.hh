@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.34 2004/03/25 10:44:49 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4Quasmon.hh,v 1.36 2005/02/17 17:13:55 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -61,7 +61,7 @@ public:
   G4bool operator!=(const G4Quasmon &right) const;
 
   // Static functions
-  static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
+  static void SetParameters(G4double temper=180., G4double ssin2g=.3, G4double etaetap=.3);
   static void SetTemper(G4double temperature);
   static void SetSOverU(G4double ssin2g);
   static void SetEtaSup(G4double etaetap);
@@ -87,35 +87,35 @@ public:
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
   void              ClearQuasmon();                   // Clear Quasmon (status=0)
   void              KillQuasmon();                    // Kill Quasmon (status=0)
+  G4int             CalculateNumberOfQPartons(G4double qMass);
 
 private:  
-  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=1);// Returns newNeuclearEnv
-  G4double         GetRandomMass(G4int PDGCode, G4double maxM);
-  void             ModifyInMatterCandidates();
-  void             InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
-  void             CalculateNumberOfQPartons(G4double qMass);
-  //void           CalculateHadronizationProbabilities(G4double excE, G4double kQ,
+  G4QHadronVector   HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=1); // + new Neuclear Envir
+  G4double          GetRandomMass(G4int PDGCode, G4double maxM);
+  void              ModifyInMatterCandidates();
+  void              InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
+  //void            CalculateHadronizationProbabilities(G4double excE, G4double kQ,
   //                                                 G4double kLS, G4bool piF, G4bool gaF);
-  void             CalculateHadronizationProbabilities(G4double excE, G4double kQ,
-                                                       G4LorentzVector k4M,
-                                                       G4bool piF, G4bool gaF);
-  void             FillHadronVector(G4QHadron* qHadron);
-  G4int            RandomPoisson(G4double meanValue);
-  G4double         GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
-  G4bool           DecayOutHadron(G4QHadron* qHadron, G4int DFlag=0);
-  G4bool           CheckGroundState(G4bool corFlag = false);// Forbid correction by default
-  void             KillEnvironment(); // Kill Environment (Z,N,S=0,LV=0)
+  void              CalculateHadronizationProbabilities(G4double excE, G4double kQ,
+                                                        G4LorentzVector k4M,
+                                                        G4bool piF, G4bool gaF);
+  void              FillHadronVector(G4QHadron* qHadron);
+  G4int             RandomPoisson(G4double meanValue);
+  G4double          GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
+  G4bool            DecayOutHadron(G4QHadron* qHadron, G4int DFlag=0);
+  G4bool            CheckGroundState(G4bool corFlag = false);// Forbid correction by default
+  void              KillEnvironment(); // Kill Environment (Z,N,S=0,LV=0)
 
 // Body
 private:
   // Static Parameters
-  static G4double    Temperature;     // Quasmon Temperature
-  static G4double    SSin2Gluons;     // Percent of ssbar sea in a constituen gluon
-  static G4double    EtaEtaprime;     // Part of eta-prime in all etas
+  static G4double    Temperature;   // Quasmon Temperature
+  static G4double    SSin2Gluons;   // Percent of ssbar sea in a constituen gluon
+  static G4double    EtaEtaprime;   // Part of eta-prime in all etas
   // Hadronic input
-  G4LorentzVector    q4Mom;           // 4-momentum of the Quasmon +++++
-  G4QContent         valQ;            // Quark Content of the Quasmon  +++++
-  G4QNucleus         theEnvironment;  // Nuclear (or Vacuum) Environment around the Quasmon
+  G4LorentzVector    q4Mom;         // 4-momentum of the Quasmon +++++
+  G4QContent         valQ;          // Quark Content of the Quasmon  +++++
+  G4QNucleus         theEnvironment;// Nuclear (or Vacuum) Environment around the Quasmon
   // Output
   G4int status; // -1-Panic,0-Done,1-FilledSomething,2-DidNothing,3-StopedByCB,4-JustBorn
   G4QHadronVector    theQHadrons;   // Vector of generated secondary hadrons +++++

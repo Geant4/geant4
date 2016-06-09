@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.24 2004/05/11 15:17:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4ProcessManager.cc,v 1.25 2005/02/15 04:38:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -363,6 +363,7 @@ G4int G4ProcessManager::FindInsertPosition(G4int ord, G4int ivec)
   G4ProcessVector* pVector = theProcVector[ivec];
   G4int ip =  pVector->entries();
   G4int tmp = INT_MAX;
+  if (ord == ordLast) return ip;
 
   // find insert position
   for (G4int iproc=0; iproc<numberOfProcesses; iproc++) {
@@ -601,6 +602,7 @@ void G4ProcessManager::SetProcessOrdering(
     return;
   }
  
+  if (ordDoIt>ordLast) ordDoIt=ordLast;
   // get attribute 
   G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
   if (pAttr == 0) {

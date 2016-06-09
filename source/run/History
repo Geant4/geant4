@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2004/12/07 09:13:46 gcosmo Exp $
+$Id: History,v 1.124 2005/02/18 11:12:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 17th, 2005 G.Cosmo (run-V07-00-00)
+- Changed date in G4RunManagerKernel for patch-01 to release 7.0.
+
+December 30th, 2004 M.Asai
+- Reset static pointers for G4RunManager and G4RunManagerKernel when
+  RunManager is deleted.
 
 December 7th, 2004 G.Cosmo (run-V06-02-08)
 - Changed date in G4RunManagerKernel for release 7.0.

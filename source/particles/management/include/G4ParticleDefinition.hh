@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.25 2004/12/02 08:08:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ParticleDefinition.hh,v 1.27 2005/01/14 03:00:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -96,7 +96,9 @@ class G4ParticleDefinition
 			   G4bool           stable,
 			   G4double         lifetime,
 			   G4DecayTable     *decaytable,
-			   G4bool           shortlived = false);
+			   G4bool           shortlived = false,
+                           const G4String&  subType ="",
+                           G4int            anti_encoding =0);
 
        virtual ~G4ParticleDefinition();
       
@@ -173,6 +175,12 @@ class G4ParticleDefinition
 
       void   SetParticleSubType(const G4String& subtype);
 
+  public:
+    void SetAtomicNumber(G4int);
+    G4int GetAtomicNumber() const;
+    void SetAtomicMass(G4int);
+    G4int GetAtomicMass() const;
+
  public:
       void  SetVerboseLevel(G4int value);
       G4int GetVerboseLevel() const;
@@ -181,7 +189,7 @@ class G4ParticleDefinition
       //  1: Warning message
       //  2: More
 
-  private:
+  protected:
   //  !!!  can not use "copy constructor" nor "default constructor" !!!!
        G4ParticleDefinition(const G4ParticleDefinition &right);
        G4ParticleDefinition();
@@ -291,11 +299,15 @@ class G4ParticleDefinition
       //  Points to G4ProcessManager
 
       G4ParticleTable* theParticleTable;
+
+  private:
+    G4int theAtomicNumber;
+    G4int theAtomicMass;
  
- private:
+  private:
    G4int verboseLevel;
 
- private:
+  private:
    G4bool fApplyCutsFlag;
  public:
 

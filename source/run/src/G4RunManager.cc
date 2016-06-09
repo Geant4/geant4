@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.85 2004/11/25 19:01:13 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4RunManager.cc,v 1.86 2004/12/30 19:37:32 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 
@@ -115,6 +115,7 @@ G4RunManager::~G4RunManager()
   delete kernel;
 
   if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
+  fRunManager = 0;
 }
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)

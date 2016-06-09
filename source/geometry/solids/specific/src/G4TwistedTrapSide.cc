@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.14 2004/12/08 10:20:39 link Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4TwistedTrapSide.cc,v 1.16 2005/02/14 13:55:52 link Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -35,16 +35,19 @@
 //
 //   Oliver Link (Oliver.Link@cern.ch)
 //
+// History:
+//    14.2.05 Changed Polynom Solver to G4JTPolynomialSolver
+//
 // --------------------------------------------------------------------
 
 #include <cmath>
 
 #include "G4TwistedTrapSide.hh"
-//#include "G4PolynomialSolver.hh"
-#include "G4ApproxPolySolver.hh" 
+#include "G4JTPolynomialSolver.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
+
 
 G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
                                      G4double      PhiTwist,
@@ -148,6 +151,12 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 {
 
   static const G4double ctol = 0.5 * kCarTolerance;
+  static const G4double pihalf = pi/2 ;
+
+  G4bool IsParallel = false ;
+  G4bool IsConverged =  false ;
+
+  G4int nxx = 0 ;  // number of physical solutions
 
   fCurStatWithV.ResetfDone(validate, &gp, &gv);
 
@@ -164,7 +173,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
    
    // initialize
     G4int i;
-    for (i=0; i<4 ; i++) {
+    for (i=0; i<G4VSURFACENXX ; i++) {
       distance[i] = kInfinity;
       areacode[i] = sOutside;
       isvalid[i]  = false;
@@ -189,9 +198,6 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   G4int         tmpareacode = sOutside ;
   G4bool        tmpisvalid  = false ;
 
-  G4int nxx = 0 ;  // number of physical solutions
-  G4bool        IsConverged =  false ;
-
   std::vector<Intersection> xbuf ;
   Intersection xbuftmp ;
   
@@ -205,6 +211,15 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   G4double amd = a-d ;
   G4double apd = a+d ;
 
+  G4double phipzvx = fPhiTwist*p.z()*v.x() ;
+  G4double phipzvy = fPhiTwist*p.z()*v.y() ;
+
+  G4double phipyvz = fPhiTwist*p.y()*v.z() ;
+  G4double phipxvz = fPhiTwist*p.x()*v.z() ;
+
+  G4double phivz   = fPhiTwist*v.z();
+  G4double phiyz =   fPhiTwist * ( v.z()*p.y() - v.y()*p.z() )   ;
+
   // special case vz = 0
 
   if ( v.z() == 0. ) {         
@@ -217,8 +232,6 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
         (2.*((2*b*v.x() - amd *v.y())*std::cos(phi) 
 	     + ( amd * v.x() + 2*b*v.y())*std::sin(phi)));
 
-      nxx = 1 ;  // one solution only
-      
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
       xbuftmp.areacode = sOutside ;
@@ -251,25 +264,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
   else {
 
+    G4double c[8],sr[7],si[7] ;  
 
-    G4double phivz   = fPhiTwist*v.z();
-    G4double phipz   = fPhiTwist*p.z();
-
-    G4double phixz = phivz * p.x() - phipz*v.x() ;
-    G4double phiyz = phivz * p.y() - phipz*v.y() ;
-
-    G4double amd3 = 3*amd ;
-    G4double amd6 = 6*amd ;
-    G4double Lvx = L*v.x() ;
-    G4double Lvy = L*v.y() ;
-    G4double b2  = b*2 ;
-    G4double b6  = b*6 ;
-    G4double b12 = b*12 ;
-
-    G4double c[5],s[4] ;  
-
-    // calculation of coefficients c0 + c1 x + c2 x^2 + c3 x^3 + c4 x^4 
-    // with c4 = 1
 
 #ifdef G4SPECSDEBUG
     G4cout << " ---------------------------------- " << G4endl ;
@@ -283,79 +279,70 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     G4cout << " ---------------------------------- " << G4endl ;
 #endif
     
-    G4double ctmp =   - b2*Lvy       - amd*Lvx;
-    c[0] = ( b12*phixz - amd6*phiyz  - 3*b*apd*phivz          ) / ctmp ;
-    c[1] = ( b12*Lvx +   amd6*phixz  - amd6*Lvy  + b12*phiyz    ) / ctmp ;
-    c[2] = ( b12*Lvy +   amd3*phiyz  + amd6*Lvx  - b6 *phixz    ) / ctmp ;
-    c[3] = ( -b6*Lvx -   amd *phixz  + amd3*Lvy  - b2 *phiyz    ) / ctmp ;
-    c[4] = 1 ;
+    c[7] =  3600*fPhiTwist*(b*(4*p.z()*v.x() + (a + d - 4*p.x())*v.z()) - 2*amd*(p.z()*v.y() - p.y()*v.z())) ;
+    c[6] = -7200*(-(amd*(phipzvx + L*v.y() - phipxvz)) + 2*b*(L*v.x() - phipzvy + phipyvz)) ;
+    c[5] = 300*(-4*b*(5*phipzvx + 12*L*v.y() - 5*phipxvz) + 
+		d*(24*L*v.x() - 10*phipzvy + b*phivz + 10*phipyvz) + 
+		a*(-24*L*v.x() + fPhiTwist*(10*p.z()*v.y() + b*v.z() - 10*p.y()*v.z()))) ;
+    c[4] = 600*(-(amd*(phipzvx + 5*L*v.y() - phipxvz)) +  2*b*(5*L*v.x() - phipzvy + phipyvz)) ;
+    c[3] = 6*(100*amd*L*v.x() + 4*b*phipzvx + 200*b*L*v.y() - 2*amd*phipzvy + 
+	      a*b*fPhiTwist*v.z() + b*d*fPhiTwist*v.z() - 4*b*phipxvz + 2*amd*phipyvz) ;
+    c[2] = 4*(-(amd*(7*phipzvx - 3*L*v.y() - 7*phipxvz)) - 2*b*(3*L*v.x() + 7*phipzvy - 7*phipyvz)) ;
+    c[1] = 28*amd*L*v.x() + 18*b*phipzvx + 56*b*L*v.y() - 9*amd*phipzvy - 18*b*phipxvz + 9*amd*phipyvz ;
+    c[0] = -9*L*(2*b*v.x() -amd*v.y()) ;
 
 #ifdef G4SPECSDEBUG
     G4cout << "coef = " << c[0] << " " 
 	   <<  c[1] << " "  
 	   <<  c[2] << " "  
 	   <<  c[3] << " "  
-	   <<  c[4] << G4endl ;
+	   <<  c[4] << " "  
+	   <<  c[5] << " "  
+	   <<  c[6] << " "  
+	   <<  c[7] << G4endl ;
 #endif    
 
-  // solve the polynom analytically
-    G4ApproxPolySolver trapEq ;
-    G4int num = trapEq.SolveBiQuadratic(c,s);
-  
-  // calculate phi and psi of the surface equation
-  // and reduce the solution to the surface 
+    G4JTPolynomialSolver trapEq ;
 
-    G4double pi2 = 2*pi ;
-    //    G4double stmp ;
+    G4int num = trapEq.FindRoots(c,7,sr,si);
+  
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
+      if ( si[i]==0.0 ) {  // only real solutions
 #ifdef G4SPECSDEBUG
-      G4cout << "Solution " << i << " : " << s[i] << G4endl ;
+	G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
-      phi = std::fmod(s[i] , pi2) ;
-      if ( s[i] < 0 && phi > 0  ) { phi -= 2*pi ; }
-      
-      //      phi = stmp ;
-      u   = b * ( 4*phiyz + 4*Lvy*phi - apd*phivz*std::sin(phi) ) 
-	/ (2.*phivz*(2*b*std::cos(phi) + amd*std::sin(phi) )) ;
-      
-      xbuftmp.phi = phi ;
-      xbuftmp.u = u ;
-      xbuftmp.areacode = sOutside ;
-      xbuftmp.distance = kInfinity ;
-      xbuftmp.isvalid = false ;
-      
-      xbuf.push_back(xbuftmp) ;  // store it to xbuf
+	phi = std::fmod(sr[i] , pihalf)  ;
+
+	u   = b * ( 4*phiyz + 4*L*v.y()*phi - apd*phivz*std::sin(phi) ) 
+	  / (2.*phivz*(2*b*std::cos(phi) + amd*std::sin(phi) )) ;
+	
+	xbuftmp.phi = phi ;
+	xbuftmp.u = u ;
+	xbuftmp.areacode = sOutside ;
+	xbuftmp.distance = kInfinity ;
+	xbuftmp.isvalid = false ;
+	
+	xbuf.push_back(xbuftmp) ;  // store it to xbuf
       
 #ifdef G4SPECSDEBUG
-      G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
+	G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
 #endif
 
-	//      }
-    }
-
-    nxx = xbuf.size() ;  // save the number of  solutions
-
-    if ( nxx == 0 ) {  // no solution found
-      
-      distance[0] = kInfinity;
-      gxx[0].set(kInfinity,kInfinity,kInfinity);
-      isvalid[0] = false ;
-      areacode[0] = sOutside ;
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-                                     areacode[0], isvalid[0],
-                                     0, validate, &gp, &gv);
-      return 0;
-      
-    }
+      }  // end if real solution
+    }  // end loop i
     
   }    // end general case
 
 
+  nxx = xbuf.size() ;  // save the number of  solutions
+
   G4ThreeVector xxonsurface  ;       // point on surface
   G4ThreeVector surfacenormal  ;     // normal vector  
-  G4double deltaX  ;
-  G4int maxint = 20 ;
+  G4double deltaX  ;                 // distance between intersection point and point on surface
+  G4double theta  ;                  // angle between track and surfacenormal
+  G4double factor ;                  // a scaling factor
+  G4int maxint = 30 ;                // number of iterations
 
 
   for ( size_t k = 0 ; k<xbuf.size() ; k++ ) {
@@ -377,19 +364,27 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       surfacenormal = NormAng(phi,u) ;
       tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
       deltaX = ( tmpxx - xxonsurface ).mag() ; 
-      
+      theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
+      if ( theta < 0.001 ) { 
+	factor = 50 ;
+	IsParallel = true ;
+      }
+      else {
+	factor = 1 ;
+      }
+
 #ifdef G4SPECSDEBUG
       G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
       G4cout << "X = " << tmpxx << G4endl ;
 #endif
-
+      
       GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
       
 #ifdef G4SPECSDEBUG
       G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
 #endif
       
-      if ( deltaX <= ctol ) { IsConverged = true ; break ; }
+      if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
       
     }  // end iterative loop (i)
     
@@ -399,11 +394,11 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     G4cout << "distance = " << tmpdist << G4endl ;
     G4cout << "local X = " << tmpxx << G4endl ;
 #endif
-
+    
     tmpisvalid = false ;  // init 
 
     if ( IsConverged ) {
-
+      
       if (validate == kValidateWithTol) {
 	tmpareacode = GetAreaCode(tmpxx);
 	if (!IsOutside(tmpareacode)) {
@@ -436,79 +431,196 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
   }  // end loop over physical solutions (variable k)
 
-  if ( nxx == 1 ) {  // one solution, no sorting needed.
 
-    distance[0] = xbuf[0].distance;
-    tmpxx = xbuf[0].xx ;
-    gxx[0]      = ComputeGlobalPoint(tmpxx);
-    areacode[0] = xbuf[0].areacode;
-    isvalid[0]  = xbuf[0].isvalid;
-    
-    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-				   isvalid[0], 1, validate, &gp, &gv);
-    
-#ifdef G4SPECSDEBUG
-    G4cout << "G4TwistedTrapSide finished " << G4endl ;
-    G4cout << "1 possible physical solution found" << G4endl ;
-    G4cout << "local X = " << tmpxx << G4endl ;
-    G4cout << "intersection Point found: " << gxx[0] << G4endl ;
-    G4cout << "distance = " << distance[0] << G4endl ;
-    G4cout << "isvalid = " << isvalid[0] << G4endl ;
-#endif
-    
-    return 1;
-    
-    
-  }  // end single solution
-  
-  else  {  // if more than one solutions then sort them by distance 
-
-    std::sort(xbuf.begin() , xbuf.end(), DistanceSort ) ;  // sorting
+  std::sort(xbuf.begin() , xbuf.end(), DistanceSort ) ;  // sorting
 
 #ifdef G4SPECSDEBUG
-    G4cout << G4endl << "list xbuf after sorting : " << G4endl ;
-    G4cout << G4endl << G4endl ;
+  G4cout << G4endl << "list xbuf after sorting : " << G4endl ;
+  G4cout << G4endl << G4endl ;
 #endif
 
-    for ( size_t i = 0 ; i<xbuf.size() ; i++ ) {
 
-      distance[i] = xbuf[i].distance;
-      gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
-      areacode[i] = xbuf[i].areacode ;
-      isvalid[i]  = xbuf[i].isvalid ;
+  // erase identical intersection (within kCarTolerance) 
+  xbuf.erase( std::unique(xbuf.begin(), xbuf.end() , EqualIntersection ) , xbuf.end() ) ;
+
+
+  // add guesses
+
+  G4int nxxtmp = xbuf.size() ;
+
+  if ( nxxtmp<2 || IsParallel  ) {
+
+    // positive end
+#ifdef G4SPECSDEBUG
+    G4cout << "add guess at +z/2 .. " << G4endl ;
+#endif
+
+    phi = fPhiTwist/2 ;
+    u   = b * ( 4*phiyz + 4*L*v.y()*phi - apd*phivz*std::sin(phi) ) 
+      / (2.*phivz*(2*b*std::cos(phi) + amd*std::sin(phi) )) ;
+    
+    xbuftmp.phi = phi ;
+    xbuftmp.u = u ;
+    xbuftmp.areacode = sOutside ;
+    xbuftmp.distance = kInfinity ;
+    xbuftmp.isvalid = false ;
+    
+    xbuf.push_back(xbuftmp) ;  // store it to xbuf
+
+
+#ifdef G4SPECSDEBUG
+    G4cout << "add guess at -z/2 .. " << G4endl ;
+#endif
+
+    phi = -fPhiTwist/2 ;
+    u   = b * ( 4*phiyz + 4*L*v.y()*phi - apd*phivz*std::sin(phi) ) 
+      / (2.*phivz*(2*b*std::cos(phi) + amd*std::sin(phi) )) ;
+    
+    xbuftmp.phi = phi ;
+    xbuftmp.u = u ;
+    xbuftmp.areacode = sOutside ;
+    xbuftmp.distance = kInfinity ;
+    xbuftmp.isvalid = false ;
+    
+    xbuf.push_back(xbuftmp) ;  // store it to xbuf
+
+    for ( size_t k = nxxtmp ; k<xbuf.size() ; k++ ) {
+
+#ifdef G4SPECSDEBUG
+      G4cout << "Solution " << k << " : " 
+	     << "reconstructed phiR = " << xbuf[k].phi
+	     << ", uR = " << xbuf[k].u << G4endl ; 
+#endif
       
-      fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
+      phi = xbuf[k].phi ;  // get the stored values for phi and u
+      u   = xbuf[k].u ;
+
+      IsConverged = false ;   // no convergence at the beginning
+      
+      for ( G4int i = 1 ; i<maxint ; i++ ) {
+	
+	xxonsurface = SurfacePoint(phi,u) ;
+	surfacenormal = NormAng(phi,u) ;
+	tmpdist = DistanceToPlaneWithV(p, v, xxonsurface, surfacenormal, tmpxx); 
+	deltaX = ( tmpxx - xxonsurface ).mag() ; 
+	theta = std::fabs(std::acos(v*surfacenormal) - pihalf) ;
+	if ( theta < 0.001 ) { 
+	  factor = 50 ;    
+	}
+	else {
+	  factor = 1 ;
+	}
+	
+#ifdef G4SPECSDEBUG
+	G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
+	G4cout << "X = " << tmpxx << G4endl ;
+#endif
+
+	GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
+      
+#ifdef G4SPECSDEBUG
+	G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
+#endif
+      
+	if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
+      
+      }  // end iterative loop (i)
+    
+
+#ifdef G4SPECSDEBUG
+      G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
+      G4cout << "distance = " << tmpdist << G4endl ;
+      G4cout << "local X = " << tmpxx << G4endl ;
+#endif
+
+      tmpisvalid = false ;  // init 
+
+      if ( IsConverged ) {
+
+	if (validate == kValidateWithTol) {
+	  tmpareacode = GetAreaCode(tmpxx);
+	  if (!IsOutside(tmpareacode)) {
+	    if (tmpdist >= 0) tmpisvalid = true;
+	  }
+	} else if (validate == kValidateWithoutTol) {
+	  tmpareacode = GetAreaCode(tmpxx, false);
+	  if (IsInside(tmpareacode)) {
+	    if (tmpdist >= 0) tmpisvalid = true;
+	  }
+	} else { // kDontValidate
+	  G4Exception("G4TwistedBoxSide::DistanceToSurface()",
+		      "NotImplemented kDontValidate", FatalException,
+		      "Feature NOT implemented !");
+	}
+	
+      } 
+      else {
+	tmpdist = kInfinity;     // no convergence after 10 steps 
+	tmpisvalid = false ;     // solution is not vaild
+      }  
+	
+	
+      // store the found values 
+      xbuf[k].xx = tmpxx ;
+      xbuf[k].distance = tmpdist ;
+      xbuf[k].areacode = tmpareacode ;
+      xbuf[k].isvalid = tmpisvalid ;
+
+
+    }  // end loop over physical solutions 
+
+
+  }  // end less than 2 solutions
+
+
+  // sort again
+  std::sort(xbuf.begin() , xbuf.end(), DistanceSort ) ;  // sorting
+
+  // erase identical intersection (within kCarTolerance) 
+  xbuf.erase( std::unique(xbuf.begin(), xbuf.end() , EqualIntersection ) , xbuf.end() ) ;
+
+#ifdef G4SPECSDEBUG
+  G4cout << G4endl << "list xbuf after sorting : " << G4endl ;
+  G4cout << G4endl << G4endl ;
+#endif
+
+  nxx = xbuf.size() ;   // determine number of solutions again.
+
+  for ( size_t i = 0 ; i<xbuf.size() ; i++ ) {
+    
+    distance[i] = xbuf[i].distance;
+    gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
+    areacode[i] = xbuf[i].areacode ;
+    isvalid[i]  = xbuf[i].isvalid ;
+    
+    fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
 				     isvalid[i], nxx, validate, &gp, &gv);
 
 #ifdef G4SPECSDEBUG
-      G4cout << "element Nr. " << i 
-	     << ", local Intersection = " << xbuf[i].xx 
-	     << ", distance = " << xbuf[i].distance 
-	     << ", u = " << xbuf[i].u 
-	     << ", phi = " << xbuf[i].phi 
-	     << ", isvalid = " << xbuf[i].isvalid 
-	     << G4endl ;
-      
+    G4cout << "element Nr. " << i 
+	   << ", local Intersection = " << xbuf[i].xx 
+	   << ", distance = " << xbuf[i].distance 
+	   << ", u = " << xbuf[i].u 
+	   << ", phi = " << xbuf[i].phi 
+	   << ", isvalid = " << xbuf[i].isvalid 
+	   << G4endl ;
 #endif
 
-    }  // end for( i ) loop
+  }  // end for( i ) loop
 
     
-
 #ifdef G4SPECSDEBUG
-    G4cout << "G4TwistedTrapSide finished " << G4endl ;
-    G4cout << nxx << " possible physical solutions found" << G4endl ;
-    for ( G4int k= 0 ; k< nxx ; k++ ) {
-      G4cout << "global intersection Point found: " << gxx[k] << G4endl ;
-      G4cout << "distance = " << distance[k] << G4endl ;
-      G4cout << "isvalid = " << isvalid[k] << G4endl ;
-    }
+  G4cout << "G4TwistedTrapSide finished " << G4endl ;
+  G4cout << nxx << " possible physical solutions found" << G4endl ;
+  for ( G4int k= 0 ; k< nxx ; k++ ) {
+    G4cout << "global intersection Point found: " << gxx[k] << G4endl ;
+    G4cout << "distance = " << distance[k] << G4endl ;
+    G4cout << "isvalid = " << isvalid[k] << G4endl ;
+  }
 #endif
 
-    return nxx ;
+  return nxx ;
     
-  }  // end more than 1 solutions
-  
 }
 
 
@@ -538,7 +650,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
    } else {
       // initialize
       G4int i;
-      for (i=0; i<4; i++) {
+      for (i=0; i<G4VSURFACENXX; i++) {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
          gxx[i].set(kInfinity, kInfinity, kInfinity);

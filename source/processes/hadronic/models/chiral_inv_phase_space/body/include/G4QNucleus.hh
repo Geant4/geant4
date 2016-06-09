@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.26 2004/07/05 16:51:49 mkossov Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QNucleus.hh,v 1.27 2005/02/17 17:13:55 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -88,7 +88,7 @@ public:
   G4QNucleus operator-=(const G4QNucleus& rhs);     // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   // Static functions
-  static void SetParameters(G4double fN, G4double fD, G4double cP, G4double mR=1.);
+  static void SetParameters(G4double fN=0.,G4double fD=0., G4double cP=1., G4double mR=1.);
   // Specific General Functions
   G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law
   G4double CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0.,

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.22 2004/12/02 08:09:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4ParticleDefinition.cc,v 1.23 2005/01/14 03:00:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -71,7 +71,10 @@ G4ParticleDefinition::G4ParticleDefinition(
 		     G4bool              stable,
 		     G4double            lifetime,
 		     G4DecayTable        *decaytable,
-		     G4bool              shortlived)
+		     G4bool              shortlived,
+                     const G4String&     subType,
+                     G4int               anti_encoding)
+ 
 		 : theParticleName(aName), 
 		   thePDGMass(mass),
 		   thePDGWidth(width),
@@ -88,7 +91,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
 		   theParticleType(pType), 
-		   theParticleSubType(""), 
+		   theParticleSubType(subType), 
 		   thePDGEncoding(encoding),
 		   theAntiPDGEncoding(-1*encoding),
 		   fShortLivedFlag(shortlived),
@@ -96,12 +99,16 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
+                   theAtomicNumber(0),
+                   theAtomicMass(0),
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
    theParticleTable->Insert(this);
+
+   if (anti_encoding !=0) theAntiPDGEncoding = anti_encoding;
 
    // check quark contents
 #ifdef G4VERBOSE

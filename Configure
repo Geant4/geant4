@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.68 2004/12/17 15:36:11 stesting Exp $
+# $Id: Configure,v 1.70 2005/02/18 16:49:59 stesting Exp $
 #
-# Generated on Fri Dec 17 16:33:20 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Wed Feb  9 19:12:58 CET 2005 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2956,17 +2956,17 @@ gans=$ans
 	esac
 done
 
-if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
-g4clhep_base_dir=""
-fi
-
-if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
-g4clhep_include_dir=""
-fi
-
-if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
-g4clhep_lib_dir=""
-fi
+#if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+#g4clhep_base_dir=""
+#fi
+#
+#if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+#g4clhep_include_dir=""
+#fi
+#
+#if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+#g4clhep_lib_dir=""
+#fi
 
 echo " "
 

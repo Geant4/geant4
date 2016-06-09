@@ -606,23 +606,29 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
-  if(deltaTkin > kineticEnergy) deltaTkin = kineticEnergy;
+  if(deltaTkin > kineticEnergy && 
+     particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
+  if (deltaTkin > 0.5*kineticEnergy && 
+     dp->GetDefinition()->GetParticleName() == "e-") deltaTkin = 0.5*kineticEnergy;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
-  if (costheta < 0.) costheta = 0.;
-  if (costheta > +1.) costheta = +1.;
+  if( costheta >= 0.99999 ) costheta = 0.99999;
+  G4double sintheta, sin2 = 1. - costheta*costheta;
 
-    //  direction of the delta electron
+  if( sin2 <= 0.) sintheta = 0.;
+  else            sintheta = sqrt(sin2);
+
+  //  direction of the delta electron
   
-  G4double phi = twopi*G4UniformRand(); 
-  G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+  G4double phi  = twopi*G4UniformRand(); 
   G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
 
   G4ThreeVector deltaDirection(dirx,diry,dirz);
   deltaDirection.rotateUz(momentum);
+  deltaDirection.unit();
 
     // create G4DynamicParticle object for e- delta ray
  

@@ -5,7 +5,7 @@
  * Compile this file with -DNO_GZCOMPRESS to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.7 2004/11/22 19:08:59 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.8 2005/02/16 22:24:12 duns Exp $ */
 
 #include <stdio.h>
 
@@ -52,6 +52,9 @@ static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
 #define ORIG_NAME    0x08 /* bit 3 set: original file name present */
 #define COMMENT      0x10 /* bit 4 set: file comment present */
 #define RESERVED     0xE0 /* bits 5..7: reserved */
+
+// MD: compatibility with 2.95.2 compiler.
+#define NO_vsnprintf 1
 
 typedef struct gz_stream {
     z_stream stream;
@@ -175,7 +178,8 @@ local gzFile gz_open (const char *path, const char *mode, int fd)
     s->stream.avail_out = Z_BUFSIZE;
 
     errno = 0;
-    s->file = fd < 0 ? F_OPEN(path, fmode) : (FILE*)fdopen(fd, fmode);
+// MD: compatibility with 2.95.2 compiler.
+    s->file = fd < 0 ? F_OPEN(path, fmode) : NULL;
 
     if (s->file == NULL) {
         return destroy(s), (gzFile)Z_NULL;

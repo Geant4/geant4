@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.14 2004/11/23 14:05:31 maire Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: SteppingAction.cc,v 1.19 2005/02/02 16:42:45 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,48 +52,45 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4StepPoint* prePoint = aStep->GetPreStepPoint();
-  G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  
+  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
+      
   //if World, returns
   //
-  G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();
+  G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == detector->GetWorldMaterial()) return;
-  
+ 
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4Track*     track    = aStep->GetTrack();
+  const G4ParticleDefinition* particle = track->GetDefinition(); 
+ 
   //locate the absorber
   //
   G4int absorNum  = volume->GetCopyNo();
   G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
     
-  ////G4int absorNum  = prePoint->GetTouchable()->GetCopyNumber( );
-  ////G4int layerNum  = prePoint->GetTouchable()->GetCopyNumber(1);
-   
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   
   // collect step length of charged particles
   G4double stepl = 0.;
-  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-    stepl = aStep->GetStepLength();
+  if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
     
   // sum up per event
   eventAct->SumEnergy(absorNum,edep,stepl);
   
   //longitudinal profile of edep per absorber
-  histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
+  if (edep>0.) histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
   
   //energy flow
   //
   //leaving an absorber ?  in forward direction ?
-  const G4Track* track = aStep->GetTrack();
-  if ((endPoint->GetProcessDefinedStep()->GetProcessName() == "Transportation")
-      && (track->GetMomentumDirection().x() > 0.)) {
+  if ((endPoint->GetPhysicalVolume() != volume)
+     && (track->GetMomentumDirection().x() > 0.)) {
       G4int planNum = 1 + (detector->GetNbOfAbsor())*layerNum + absorNum;
       G4double EnLeaving = track->GetKineticEnergy();
-      if (track->GetDefinition() == G4Positron::Positron())
-       EnLeaving += 2*electron_mass_c2;
+      if (particle == G4Positron::Positron()) EnLeaving += 2*electron_mass_c2;
       G4int ih = 2*MaxAbsor + 1;
       if (track->GetTrackID() != 1) ih += 1;
       histoManager->FillHisto(ih, (G4double)planNum, EnLeaving);

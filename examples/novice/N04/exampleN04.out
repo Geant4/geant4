@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-07-00-cand-03 $   (25-June-2004)
+ Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,7 +15,7 @@ You are using the simulation engine: QGSP 2.8
 
 
 
-phot:  Total cross sections from Sandia parametrisation.
+phot:  Total cross sections from Sandia parametrisation. 
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -30,42 +30,23 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  FukuiRenderer (DAWN)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-  VRML1 (VRML1)
-  VRML2 (VRML2)
-0x8979380
-0x8979280
-0x8978e60
-0x8978d60
-0x897d7e0
-0x897ccc0
-0x897dbe0
-0x897cdc0
-0x897dce0
-0x897cec0
-0x897e0e0
-0x897d0c0
-0x897d6e0
-0x897cbc0
 /run/verbose      1
 /tracking/verbose 0
 /run/beamOn 3
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV.
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z.
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins.
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library.
+      Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e-
@@ -74,23 +55,23 @@ eIoni:   tables are built for  e-
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-msc:  Model variant of multiple scattering for e- 0
+msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library.
+      Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins.
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins.
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -104,7 +85,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
-msc:  Model variant of multiple scattering for proton 0
+msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
@@ -119,20 +100,20 @@ muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below,
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model
+      Parametrised model 
 
 muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model
+      Parametrised model 
 
-msc:  Model variant of multiple scattering for mu+ 0
+msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
@@ -140,58 +121,58 @@ muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below,
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model
+      Parametrised model 
 
 muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model
+      Parametrised model 
 
-msc:  Model variant of multiple scattering for pi- 0
+msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV
- Region(s) which use this couple :
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : ArgonGas
  Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV
- Region(s) which use this couple :
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No
+Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
  Energy thresholds :  gamma 5.84521 keV    e- 422.711 keV    e+ 407.385 keV
- Region(s) which use this couple :
+ Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : Yes     recalculation needed : No
+Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Scintillator
  Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
  Energy thresholds :  gamma 2.08499 keV    e- 281.588 keV    e+ 274.74 keV
- Region(s) which use this couple :
+ Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 4     used in the geometry : Yes     recalculation needed : No
+Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 700 mum    e- 700 mum    e+ 700 mum
  Energy thresholds :  gamma 94.7155 keV    e- 1.00067 MeV    e+ 940.93 keV
- Region(s) which use this couple :
+ Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
@@ -201,9 +182,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     129 hits are stored in ExN04TrackerHitsCollection.
-     59 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.90942701 (GeV)
+     104 hits are stored in ExN04TrackerHitsCollection.
+     55 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.84351061 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -216,14 +197,14 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     82 hits are stored in ExN04TrackerHitsCollection.
+     103 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.33049465 (GeV)
+     Total energy deposition in calorimeter : 0.32799176 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.69s Real=0.69s Sys=0s
+  User=4.15s Real=4.55s Sys=0.27s
 G4 kernel has come to Quit state.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.20 2004/12/07 09:12:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-07-00 $
+// $Id: G4RunManagerKernel.cc,v 1.22 2005/02/18 11:12:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //
 
@@ -81,7 +81,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: geant4-07-00 $   (17-December-2004)";
+    = " Geant4 version $Name: geant4-07-00-patch-01 $   (23-February-2005)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
@@ -120,6 +120,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
   if(verboseLevel>1) G4cout << "RunManagerKernel is deleted." << G4endl;
+  fRunManagerKernel = 0;
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,

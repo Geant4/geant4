@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.1 2004/12/01 17:36:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-03 $
+// $Id: G4UniversalFluctuation.hh,v 1.2 2005/02/07 14:37:50 maire Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
+// 07-02-05 define problim = 5.e-3 (mma)
 //
 // Class Description:
 //
@@ -108,13 +109,14 @@ private:
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minLoss;
+  G4double problim;
   G4double sumalim;
   G4double alim;
   G4double nmaxCont1;
   G4double nmaxCont2;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

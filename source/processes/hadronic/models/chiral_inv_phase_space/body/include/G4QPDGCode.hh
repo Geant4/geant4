@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.22 2004/03/25 10:44:43 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QPDGCode.hh,v 1.24 2005/02/21 18:47:56 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -37,6 +37,8 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
+#include "G4ParticleTypes.hh"
+
 #include "G4QContent.hh"
 
 class G4QPDGCode
@@ -65,6 +67,7 @@ public:
   G4QPDGCode        operator/=(const G4int& rhs);
 
   // Selectors
+  G4int      GetNQHadr();                              // Return # of predefined hadrons
   G4double   GetMass();                                // GS Mass for the QHadron
   G4double   GetMass2();                               // Squared GS Mass for the QHadron
   G4double   GetWidth();                               // Width for the QHadron
@@ -82,9 +85,9 @@ public:
   G4int      GetTotNumOfComb(G4int i)           const; // Get total#ofCombinations for q_i 
 
   // Modifiers
-  void  SetPDGCode(G4int newPDGCode);               // Set PDG code of the Hadron
-  void  InitByQCont(G4QContent QCont);              // Init existing QPDG by Quark Content
-  void  InitByQCode(G4int QCode);                   // Init existing QPDG by Q Code
+  void       SetPDGCode(G4int newPDGCode);             // Set PDG code of the Hadron
+  void       InitByQCont(G4QContent QCont);            // Init ExistingQPDG by QuarkContent
+  void       InitByQCode(G4int QCode);                 // Init ExistingQPDG by Q Code
 
   // General
   G4bool     TestRealNeutral();
@@ -94,10 +97,13 @@ public:
 private:
   // Encapsulated functions
   G4bool   TestRealNeutral(const G4int& PDGCode);
-  G4int    MakeQCode(const G4int& PDGCode);         // Make Q Code, using PDG Code
-  G4int    MakePDGCode(const G4int& QCode);         // Make PDG Code, using Q Code
-
+  G4int    MakeQCode(const G4int& PDGCode);              // Make Q Code, using PDG Code
+  G4int    MakePDGCode(const G4int& QCode);              // Make PDG Code, using Q Code
+  G4double CalculateNuclMass(G4int Z, G4int N, G4int S); // Nuclear Mass Calculation
+  G4double QHaM(G4int nQ);                      // Definition of hadronic masses in Q-order
 private:
+  // Static parameter
+  static const G4int nQHM=90;
   // the Body
   G4int              thePDGCode;
   G4int              theQCode;
@@ -126,6 +132,8 @@ inline G4bool G4QPDGCode::operator==(const G4QPDGCode& rhs) const {return this==
 inline G4bool G4QPDGCode::operator==(const G4int&      rhs) const {return thePDGCode==rhs;}
 inline G4bool G4QPDGCode::operator!=(const G4QPDGCode& rhs) const {return this!=&rhs;}
 inline G4bool G4QPDGCode::operator!=(const G4int&      rhs) const {return thePDGCode!=rhs;}
+
+inline G4int  G4QPDGCode::GetNQHadr() {return nQHM;} // Return # of predefined hadrons
 
 inline G4QPDGCode G4QPDGCode::operator+=(const G4QPDGCode& rhs)
 {

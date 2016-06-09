@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2004/12/08 12:30:48 gcosmo Exp $
+$Id: History,v 1.52 2005/02/14 14:04:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Feb-2005, O.Link (geom-specific-V07-00-00)
+- Use new polynom approximations based on new solver based on Jenkins-Traub
+  algorithm, for twisted-box and twisted-trap.
+- Fixed bug in the usage of 'fmod' and adopt special treatment for 'parallel'
+  events in G4TwistedBoxSide and G4TwistedTrapSide.
+- Coworks with tag "global-V07-00-00".
 
 08-Dec-2004, O.Link (geom-specific-V06-02-07)
 - Extensions to twisted box/trap shapes to consider all 4 solutions

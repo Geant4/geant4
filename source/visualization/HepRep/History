@@ -1,4 +1,4 @@
-.$Id: History,v 1.78 2004/11/22 19:31:37 duns Exp $
+.$Id: History,v 1.79 2005/02/16 22:24:37 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+16 February 2005 Mark Donszelmann (vis-HepRep-V07-00-00 agains geant4-07-00-ref-00)
+- Fix for g++ compiler 2.95.2 on Linux.
+
 22 November 2004 Mark Donszelmann (vis-HepRep-V06-02-02 against geant4-06-02-ref)
 - Upgraded to latest version C++ HepRep driver from FreeHEP.
 - Fixed GEANT-51, upgrade zlib to version 1.2.2 (for AMD64 compatibility).

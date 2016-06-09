@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.24 2004/06/18 09:19:26 gunter Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4QEnvironment.hh,v 1.25 2005/02/04 08:53:50 mkossov Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -68,6 +68,7 @@ private:
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
   void             EvaporateResidual(G4QHadron* evap, G4bool corFlag=false);// Final Evap.
+  void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
   void             DecayDibaryon(G4QHadron* dB);   // Decay di-baryon (deuteron is kept)
   void             DecayIsonucleus(G4QHadron* dB); // Decay nP+(Pi+) or nN+(Pi-) system
   void             DecayMultyBaryon(G4QHadron* dB);// Decay of Ap, An or AL states

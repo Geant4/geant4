@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2004/11/21 12:55:04 gbarrand Exp $
+$Id: History,v 1.86 2005/02/02 17:11:11 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02-02-05 mma(exampleN03-V07-00-00)
+- SteppingAction: sum stepLenght of charged particle even if edep=0.
      
 21-11-04 Guy Barrand
 - visTutor/exN03Vis[5,10].mac : reverse notifyHandler and viewer/update

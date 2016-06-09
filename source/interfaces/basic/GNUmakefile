@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:09:33 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2005/01/26 08:50:58 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/basic library.  John Allison, 6/7/98.
 
@@ -11,8 +11,6 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
-
-G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
 
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include

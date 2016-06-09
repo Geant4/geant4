@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.8 2004/08/10 23:59:37 asaim Exp $
-// GEANT4 tag $Name: geant4-07-00-cand-01 $
+// $Id: G4PrimaryTransformer.hh,v 1.9 2004/12/31 03:29:25 asaim Exp $
+// GEANT4 tag $Name: geant4-07-00-patch-01 $
 //
 
 #ifndef G4PromaryTransformer_h 
@@ -63,6 +63,21 @@ class G4PrimaryTransformer
     inline void SetVerboseLevel(G4int vl)
     { verboseLevel = vl; };
 
+  public: //with description
+    inline void SetUnknnownParticleDefined(G4bool vl)
+    {
+      unknownParticleDefined = vl;
+      if(unknownParticleDefined && !unknown) 
+      { G4cerr << "unknownParticleDefined cannot be set true because G4UnknownParticle is not defined in the physics list."
+               << G4endl << "Command ignored." << G4endl;
+        unknownParticleDefined = false;
+      }
+    }
+    // By invoking this Set method, the user can alter the treatment of unknown
+    // particle. The ideal place to invoke this method is in the BeginOfRunAction.
+    inline G4bool GetUnknownParticleDefined() const
+    { return unknownParticleDefined; }
+
   protected:
     void GenerateTracks(G4PrimaryVertex* primaryVertex);
     void GenerateSingleTrack(G4PrimaryParticle* primaryParticle,
@@ -72,8 +87,9 @@ class G4PrimaryTransformer
   protected: //with description
     virtual G4ParticleDefinition* GetDefinition(G4PrimaryParticle*pp);
     // virtual method to be overwritten. Return appropriate G4ParticleDefinition
-    // w.r.t. the primary particle. If NULL is return, the particle will not be
-    // treated as a track, but its daughters will be examined.
+    // w.r.t. the primary particle. If NULL is returned, the particle will not be
+    // treated as a track, but its daughters will be examined in case it has 
+    // "pre-assigned decay products".
 };
 
 #endif

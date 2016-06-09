@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2004/12/03 12:27:39 maire Exp $
+$Id: History,v 1.71 2005/02/22 09:30:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+22-02-05 V.Ivant (testem3-V07-00-03)
+- MaxStep : fix infinite loop
+     
+02-02-05 mma 
+- SteppingAction : sum charged stepLenght, even if edep=0.
+     
+11-01-05 mma (testem3-V07-00-02)
+- SteppingAction : corrections for energy flow
+- new macros linac.mac and geant3/linac.dat
+
+11-01-05 V.Ivant (testem3-V07-00-01)
+- Optimise StepMax and SteppingAction
+     
+07-01-05 mma (testem3-V07-00-00)
+- update RunAction::PrintDedxTables() and ug3g4.F
      
 03-12-04 mma (testem3-V06-02-06)
 - update macros tbhec and lhcb

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004/06/11 14:17:18 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004/12/17 16:34:55 link Exp $
 # ----------------------------------------------------------------------------
 # GNUmakefile for geometry/solids/specific library.  Gabriele Cosmo, 05/04/00.
 # ----------------------------------------------------------------------------
@@ -16,6 +16,7 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include
